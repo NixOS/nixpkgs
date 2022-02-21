@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.5.1";
+  version = "5.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "v${version}";
-    sha256 = "sha256-mtXGSd7Y+frT22EL3QmiBNatwc6IrJqGBRfsQlD8LLk=";
+    sha256 = "sha256-ZTjh9gtnJwFG2qWH6FBrvLHKsEuTjkcKL6j6Mdos6zo=";
   };
 
   propagatedBuildInputs = [
