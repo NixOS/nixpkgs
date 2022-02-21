@@ -479,6 +479,7 @@ mapAliases ({
   icedtea8_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   idea = jetbrains; # Added 2017-04-03
+  imapproxy = throw "imapproxy has been removed because it did not support a supported openssl version"; # added 2021-12-15
   imagemagick7Big = imagemagickBig; # Added 2021-02-22
   imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
@@ -1061,6 +1062,7 @@ mapAliases ({
   saneBackendsGit = sane-backends; # Added 2016-01-02
   saneFrontends = sane-frontends; # Added 2016-01-02
   scaff = throw "scaff is deprecated - replaced by https://gitlab.com/jD91mZM2/inc (not in nixpkgs yet)"; # Added 2020-03-01
+  scallion = throw "scallion has been removed, because it is currently unmaintained upstream"; # added 2021-12-15
   scim = sc-im; # Added 2016-01-22
   scollector = bosun; # Added 2018-04-25
   scyther = throw "scyther has been removed since it currently only supports Python 2, see https://github.com/cascremers/scyther/issues/20"; # Added 2021-10-07
