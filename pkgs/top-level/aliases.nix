@@ -849,6 +849,8 @@ mapAliases ({
   pgp-tools = signing-party; # Added 2017-03-26
   pg_tmp = ephemeralpg; # Added 2018-01-16
 
+  phantomjs = throw "phantomjs 1.9.8 has been dropped due to lack of maintenance and security issues"; # Added 2022-02-20
+
   # Obsolete PHP version aliases
   php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases."; # Added 2021-06-03
   php73Packages = php73; # Added 2021-06-03
@@ -1009,6 +1011,8 @@ mapAliases ({
   rdf4store = throw "rdf4store has been removed from nixpkgs."; # Added 2019-12-21
   rdiff_backup = rdiff-backup; # Added 2014-11-23
   rdmd = dtools; # Added 2017-08-19
+  readline5 = throw "readline-5 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2022-02-20
+  readline62 = throw "readline-6.2 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2022-02-20
   readline80 = throw "readline-8.0 is no longer supported in nixpkgs, please use 'readline' for main supported version or 'readline81' for most recent version"; # Added 2021-04-22
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # Added 2019-12-10
   redkite = throw "redkite was archived by upstream"; # Added 2021-04-12

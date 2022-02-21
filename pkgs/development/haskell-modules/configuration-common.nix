@@ -92,6 +92,12 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
+
+    # Git annex provides a restricted login shell. Setting
+    # passthru.shellPath here allows a user's login shell to be set to
+    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
+    # https://git-annex.branchable.com/git-annex-shell/
+    passthru.shellPath = "/bin/git-annex-shell";
   }) super.git-annex;
 
   # Fix test trying to access /home directory
