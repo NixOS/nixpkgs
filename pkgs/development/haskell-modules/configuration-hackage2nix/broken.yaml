@@ -1563,7 +1563,6 @@ broken-packages:
   - fused-effects-mwc-random
   - fused-effects-resumable
   - fusion
-  - futhark-manifest
   - futun
   - future
   - fuzzy-time-gen
