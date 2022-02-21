@@ -33,5 +33,5 @@ with lib;
   };
 }).overrideAttrs(o:
   let inherit (o) version; in {
-    propagatedBuildInputs = [ equations ] ++ optional (versions.isGe "0.6" version) LibHyps;
+    propagatedBuildInputs = [ equations ] ++ optional (versions.isGe "0.6" version || version == "dev") LibHyps;
   })
