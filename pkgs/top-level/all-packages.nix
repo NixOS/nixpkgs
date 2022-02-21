@@ -1530,15 +1530,15 @@ with pkgs;
 
   amule = callPackage ../tools/networking/p2p/amule { };
 
-  amuleDaemon = appendToName "daemon" (amule.override {
+  amuleDaemon = amule.override {
     monolithic = false;
     enableDaemon = true;
-  });
+  };
 
-  amuleGui = appendToName "gui" (amule.override {
+  amuleGui = amule.override {
     monolithic = false;
     client = true;
-  });
+  };
 
   antennas = nodePackages.antennas;
 
