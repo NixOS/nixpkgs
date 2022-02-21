@@ -9605,8 +9605,6 @@ with pkgs;
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview {};
 
-  scallion = callPackage ../tools/security/scallion { };
-
   scanbd = callPackage ../tools/graphics/scanbd { };
 
   scdoc = callPackage ../tools/typesetting/scdoc { };
