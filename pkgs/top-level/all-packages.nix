@@ -1092,6 +1092,8 @@ with pkgs;
     use64 = true;
   };
 
+  writedisk = callPackage ../tools/misc/writedisk { };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xrootd = callPackage ../tools/networking/xrootd { };
@@ -6639,10 +6641,6 @@ with pkgs;
 
   ike-scan = callPackage ../tools/security/ike-scan { };
 
-  imapproxy = callPackage ../tools/networking/imapproxy {
-    openssl = openssl_1_0_2;
-  };
-
   imapsync = callPackage ../tools/networking/imapsync { };
 
   imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
@@ -9607,8 +9605,6 @@ with pkgs;
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview {};
-
-  scallion = callPackage ../tools/security/scallion { };
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
@@ -31891,6 +31887,8 @@ with pkgs;
   exonerate = callPackage ../applications/science/biology/exonerate { };
 
   fastp = callPackage ../applications/science/biology/fastp { };
+
+  febio-studio = libsForQt5.callPackage ../applications/science/biology/febio-studio { };
 
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 

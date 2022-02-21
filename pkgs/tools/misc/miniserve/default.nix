@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.19.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-pKNcgrhq5sh6AXKCStAIYAjTpW+tcnSheFHohp+Z84k=";
+    sha256 = "sha256-/LmLz4hTmOjpR4Bqf+hABh3PSeaO/sSz/EgHp+nM20o=";
   };
 
-  cargoSha256 = "sha256-QonLcAixRR7HEefU6D7cSF/stWFodWLWQI7HAkPJHrY=";
+  cargoSha256 = "sha256-/KL5c5OeflNDKWuE5Gzqgcew9zf8HFjvmBid+mQSqZE=";
 
   nativeBuildInputs = [ installShellFiles pkg-config zlib ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];

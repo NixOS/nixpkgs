@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "6.001";
+  version = "6.101";
 in fetchzip rec {
   name = "gentium-${version}";
 
@@ -23,7 +23,7 @@ in fetchzip rec {
       -d $out/share/doc/${name}/documentation
   '';
 
-  sha256 = "sha256-DeoMTJ2nhTBtNQYG55lIMvnulqpk/KTeIqgpb5eiTIA=";
+  sha256 = "sha256-+T5aUlqQYDWRp4/4AZzsREHgjAnOeUB6qn1GAI0A5hE=";
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
