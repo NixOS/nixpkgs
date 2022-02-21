@@ -7,7 +7,27 @@
 , libxml2
 , sassc
 , util-linux
+, altVariants ? [] # default: normal
+, colorVariants ? [] # default: all
+, opacityVariants ? [] # default: all
+, themeVariants ? [] # default: default (BigSur-like theme)
+, nautilusSize ? null # default: 200px
+, panelOpacity ? null # default: 15%
+, panelSize ? null # default: 32px
 }:
+
+let
+  pname = "whitesur-gtk-theme";
+  single = x: lib.optional (x != null) x;
+
+in
+lib.checkListOfEnum "${pname}: alt variants" [ "normal" "alt" "all" ] altVariants
+lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: opacity variants" [ "normal" "solid" ] opacityVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: nautilus sidebar minimum width" [ "default" "180" "220" "240" "260" "280" ] (single nautilusSize)
+lib.checkListOfEnum "${pname}: panel opacity" [ "default" "30" "45" "60" "75" ] (single panelOpacity)
+lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (single panelSize)
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
@@ -48,8 +68,19 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/themes
-    ./install.sh --dest $out/share/themes --alt all --theme all
+
+    ./install.sh  \
+      ${toString (map (x: "--alt " + x) altVariants)} \
+      ${toString (map (x: "--color " + x) colorVariants)} \
+      ${toString (map (x: "--opacity " + x) opacityVariants)} \
+      ${toString (map (x: "--theme " + x) themeVariants)} \
+      ${lib.optionalString (nautilusSize != null) ("--size " + nautilusSize)} \
+      ${lib.optionalString (panelOpacity != null) ("--panel-opacity " + panelOpacity)} \
+      ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
+      --dest $out/share/themes
+
     runHook postInstall
   '';
 
