@@ -1,12 +1,12 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , libxml2
 , findXMLCatalogs
 , gettext
 , python
+, ncurses
 , libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
@@ -15,23 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.34";
+  version = "1.1.35";
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "KMR9szq02u+mIy8xzLPGUmDIJRUeyG7EYTVSR/P1aCQ=";
+    sha256 = "gkfzPpqHLGrIWapFAYvExNALl+L+rJ7rwQyTzh803Xk=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixes use-after-free in xsltApplyTemplates
-      name = "CVE-2021-30560.patch";
-      url = "https://gitlab.gnome.org/GNOME/libxslt/-/commit/50f9c9cd3b7dfe9b3c8c795247752d1fdcadcac8.patch";
-      hash = "sha256-XJD9SBo8xzztQQ6g13h4IzID7HV7u3xWSQdb2rVCJBQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -44,6 +35,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals pythonSupport [
     libxml2.py
     python
+    ncurses
   ] ++ lib.optionals cryptoSupport [
     libgcrypt
   ];
