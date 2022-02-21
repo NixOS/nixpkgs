@@ -2,9 +2,9 @@
 
 # lists all available versions listed for a package in a site (http)
 
-archive="$1"  # archive url
-pname="$2"  # package name
-file="$3"  # file for writing debugging information
+archive=""  # archive url
+pname=""  # package name
+file=""  # file for writing debugging information
 
 while (( $# > 0 )); do
     flag="$1"
@@ -17,7 +17,7 @@ while (( $# > 0 )); do
             pname="${flag#*=}"
             ;;
         --file=*)
-            version="${flag#*=}"
+            file="${flag#*=}"
             ;;
         *)
             echo "$0: unknown option ‘${flag}’"
@@ -26,13 +26,19 @@ while (( $# > 0 )); do
     esac
 done
 
-if [ -z "$archive" ]; then
-    echo "$scriptName: Missing archive url"
-    exit 1
+# by default set url to the base dir of the first url in src.urls
+if [[ -z "$archive" ]]; then
+    archive="$(nix-instantiate $systemArg --eval -E \
+                   "with import ./. {}; dirOf (dirOf (lib.head $UPDATE_NIX_ATTR_PATH.src.urls))" \
+            | tr -d '"')"
+fi
+
+if [[ -z "$pname" ]]; then
+    pname="$UPDATE_NIX_ATTR_PATH"
 fi
 
 # print a debugging message
-if [ -n "$file" ]; then
+if [[ -n "$file" ]]; then
     echo "# Listing versions for '$pname' at $archive" >> $file
 fi
 

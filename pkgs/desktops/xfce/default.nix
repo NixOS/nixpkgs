@@ -5,8 +5,12 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   genericUpdater = pkgs.genericUpdater;
 
-  archiveLister = category: name:
-    "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions --url=https://archive.xfce.org/src/${category}/${name}";
+  archiveUpdater = { category, pname, version }:
+    pkgs.httpTwoLevelsUpdater {
+      inherit pname version;
+      attrPath = "xfce.${pname}";
+      url = "https://archive.xfce.org/src/${category}/${pname}";
+    };
 
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
