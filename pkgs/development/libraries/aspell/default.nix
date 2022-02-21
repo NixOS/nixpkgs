@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl
+{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl, ncurses
 , searchNixProfiles ? true
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ perl ];
+  buildInputs = [ ncurses perl ];
 
   doCheck = true;
 
