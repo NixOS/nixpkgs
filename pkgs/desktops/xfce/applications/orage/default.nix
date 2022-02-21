@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru.updateScript = xfce.updateScript {
+  passthru.updateScript = xfce.genericUpdater {
     inherit pname version;
     attrPath = "xfce.${pname}";
     versionLister = xfce.archiveLister "apps" pname;

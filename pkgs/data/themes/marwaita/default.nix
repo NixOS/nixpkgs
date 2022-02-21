@@ -5,6 +5,7 @@
 , gtk-engine-murrine
 , gtk_engines
 , librsvg
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
     cp -a Marwaita* $out/share/themes
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";

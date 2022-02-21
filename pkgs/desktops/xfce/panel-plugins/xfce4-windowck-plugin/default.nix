@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-windowck-plugin";
@@ -33,10 +33,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = xfce.updateScript {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
     attrPath = "xfce.${pname}";
-    versionLister = xfce.gitLister src.meta.homepage;
     rev-prefix = "v";
   };
 

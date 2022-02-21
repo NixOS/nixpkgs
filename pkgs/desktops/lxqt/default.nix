@@ -4,10 +4,9 @@ let
 
     # Update script tailored to LXQt packages from git repository
     lxqtUpdateScript = { pname, version, src }:
-      pkgs.genericUpdater {
+      pkgs.gitUpdater {
         inherit pname version;
         attrPath = "lxqt.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
       };
 
     # For compiling information, see:

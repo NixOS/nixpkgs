@@ -10,7 +10,7 @@ let
       pkgs.genericUpdater {
         inherit pname version odd-unstable;
         attrPath = "mate.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions ${url}";
+        versionLister = "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions --url=${url}";
       };
 
     atril = callPackage ./atril { };

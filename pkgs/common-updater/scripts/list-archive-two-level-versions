@@ -2,25 +2,38 @@
 
 # lists all available versions listed for a package in a site (http)
 
-scriptName=list-archive-two-level-versions # do not use the .wrapped name
-
-usage() {
-    echo "Usage: $scriptName <archive url> [<package name> [<debug file path>]]"
-}
-
 archive="$1"  # archive url
 pname="$2"  # package name
 file="$3"  # file for writing debugging information
 
+while (( $# > 0 )); do
+    flag="$1"
+    shift 1
+    case "$flag" in
+        --url=*)
+            archive="${flag#*=}"
+            ;;
+        --pname=*)
+            pname="${flag#*=}"
+            ;;
+        --file=*)
+            version="${flag#*=}"
+            ;;
+        *)
+            echo "$0: unknown option ‘${flag}’"
+            exit 1
+            ;;
+    esac
+done
+
 if [ -z "$archive" ]; then
     echo "$scriptName: Missing archive url"
-    usage
     exit 1
 fi
 
 # print a debugging message
 if [ -n "$file" ]; then
-    echo "# Listing versions for $pname at $archive" >> $file
+    echo "# Listing versions for '$pname' at $archive" >> $file
 fi
 
 # list all major-minor versions from archive
