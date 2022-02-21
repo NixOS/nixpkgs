@@ -548,6 +548,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>bird1</literal> and its modules
+          <literal>services.bird</literal> as well as
+          <literal>services.bird6</literal> have been removed. Upgrade
+          to <literal>services.bird2</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The options
           <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
           and

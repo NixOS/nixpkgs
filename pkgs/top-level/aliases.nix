@@ -110,6 +110,8 @@ mapAliases ({
   bridge_utils = bridge-utils; # Added 2015-02-20
   bro = zeek; # Added 2019-09-29
   btrfsProgs = btrfs-progs; # Added 2016-01-03
+  bird2 = bird;
+  bird6 = throw "bird6 was dropped. Use bird instead, which has support for both ipv4/ipv6";
 
   # bitwarden_rs renamed to vaultwarden with release 1.21.0 (2021-04-30)
   bitwarden_rs = vaultwarden;
@@ -117,6 +119,7 @@ mapAliases ({
   bitwarden_rs-postgresql = vaultwarden-postgresql;
   bitwarden_rs-sqlite = vaultwarden-sqlite;
   bitwarden_rs-vault = vaultwarden-vault;
+
 
   blink = throw "blink has been removed from nixpkgs, it was unmaintained and required python2 at the time of removal."; # Added 2022-01-12
   bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # Added 2021-01-02
