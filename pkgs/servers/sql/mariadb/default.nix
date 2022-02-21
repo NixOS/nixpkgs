@@ -5,7 +5,7 @@
 , curl, libiconv, ncurses, openssl, pcre2
 , libkrb5, liburing, systemd
 , CoreServices, cctools, perl
-, jemalloc, less
+, jemalloc, less, libedit
 # Server components
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
@@ -28,11 +28,11 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.6.5";
+   version = "10.6.7";
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "sha256-4L4EBCjZpCqLtL0iG1Z/8lIs1vqJBjhic9pPA8XCCo8=";
+    sha256 = "1idjnkjfkjvyr6r899xbiwq9wwbs84cm85mbc725yxjshqghzvkm";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -42,7 +42,7 @@ common = rec { # attributes common to both builds
   buildInputs = [
     curl libiconv ncurses openssl pcre2 zlib
   ] ++ optionals stdenv.hostPlatform.isLinux [ libkrb5 liburing systemd ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
 
   prePatch = ''
