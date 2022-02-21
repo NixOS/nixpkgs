@@ -479,6 +479,7 @@ mapAliases ({
   icedtea8_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   idea = jetbrains; # Added 2017-04-03
+  imapproxy = throw "imapproxy has been removed because it did not support a supported openssl version"; # added 2021-12-15
   imagemagick7Big = imagemagickBig; # Added 2021-02-22
   imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
