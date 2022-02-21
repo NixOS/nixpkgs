@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , pkg-config
-, libxml2, findXMLCatalogs, gettext, python, libgcrypt
+, libxml2
+, findXMLCatalogs
+, gettext
+, python
+, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -8,6 +15,8 @@
 stdenv.mkDerivation rec {
   pname = "libxslt";
   version = "1.1.34";
+
+  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
@@ -23,25 +32,34 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
-
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [ libxml2.dev ]
-    ++ lib.optional stdenv.isDarwin gettext
-    ++ lib.optionals pythonSupport [ libxml2.py python ]
-    ++ lib.optionals cryptoSupport [ libgcrypt ];
+  buildInputs = [
+    libxml2.dev
+  ] ++ lib.optional stdenv.isDarwin [
+    gettext
+  ] ++ lib.optionals pythonSupport [
+    libxml2.py
+    python
+  ] ++ lib.optionals cryptoSupport [
+    libgcrypt
+  ];
 
-  propagatedBuildInputs = [ findXMLCatalogs ];
+  propagatedBuildInputs = [
+    findXMLCatalogs
+  ];
 
   configureFlags = [
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ lib.optional pythonSupport "--with-python=${python}"
-    ++ lib.optional (!cryptoSupport) "--without-crypto";
+  ] ++ lib.optionals pythonSupport [
+    "--with-python=${python}"
+  ] ++ lib.optionals (!cryptoSupport) [
+    "--without-crypto"
+  ];
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
@@ -62,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.eelco ];
-    broken = !(pythonSupport -> libxml2.pythonSupport); # see #73102 for why this is not an assert
+    maintainers = with maintainers; [ eelco ];
+    broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 }
