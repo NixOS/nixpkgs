@@ -93,6 +93,10 @@ rec {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;
 
+  mips64el-linux-gnuabin32      = platforms.mips64el-linux-gnuabin32;
+  mips64el-linux-gnuabi64       = platforms.mips64el-linux-gnuabi64  // { rustc.config = "mips64el-unknown-linux-gnuabi64"; };
+  mips64el-qemu-linux-gnuabi64  = platforms.mips64el-qemu-linux-gnuabi64;
+
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
   };
