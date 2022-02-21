@@ -26,6 +26,11 @@ buildPythonApplication rec {
     ./disable-test-timeouts.patch
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pyparsing = "^2.4"' 'pyparsing = "^3.0.6"'
+  '';
+
   nativeBuildInputs = [ poetry ];
   propagatedBuildInputs = [ pygls pyparsing ];
 
