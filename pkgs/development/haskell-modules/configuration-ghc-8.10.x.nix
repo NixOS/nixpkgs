@@ -102,4 +102,7 @@ self: super: {
 
   # ormolu 0.3 requires Cabal == 3.4
   ormolu = super.ormolu_0_2_0_0;
+
+  # weeder 2.3.0 no longer supports GHC 8.10
+  weeder = doDistribute (doJailbreak self.weeder_2_2_0);
 }
