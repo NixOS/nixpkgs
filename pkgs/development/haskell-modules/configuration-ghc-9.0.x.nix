@@ -75,7 +75,6 @@ self: super: {
   vector-binary-instances = doJailbreak super.vector-binary-instances;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
-  weeder = self.weeder_2_3_0;
   # 2021-11-08: Fixed in autoapply-0.4.2
   autoapply = doJailbreak super.autoapply;
 
