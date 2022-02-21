@@ -17,6 +17,10 @@ rec {
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
+    isMips32       = { cpu = { family = "mips"; bits = 32; }; };
+    isMips64       = { cpu = { family = "mips"; bits = 64; }; };
+    isMips64n32    = { cpu = { family = "mips"; }; abi = abis.gnuabin32; };
+    isMips64n64    = { cpu = { family = "mips"; }; abi = abis.gnuabi64;  };
     isMmix         = { cpu = { family = "mmix"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
