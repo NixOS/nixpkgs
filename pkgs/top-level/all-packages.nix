@@ -25705,6 +25705,8 @@ with pkgs;
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
+  ffpass = callPackage ../tools/security/ffpass { };
+
   feh = callPackage ../applications/graphics/feh { };
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
