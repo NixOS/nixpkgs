@@ -131,6 +131,7 @@ in {
 
     linux_5_4 = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
       kernelPatches = [
+        kernelPatches.bonding_dont_create_bond0
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
@@ -139,6 +140,7 @@ in {
 
     linux_rt_5_4 = callPackage ../os-specific/linux/kernel/linux-rt-5.4.nix {
       kernelPatches = [
+        kernelPatches.bonding_dont_create_bond0
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
@@ -146,6 +148,7 @@ in {
 
     linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
       kernelPatches = [
+        kernelPatches.bonding_dont_create_bond0
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
@@ -153,6 +156,7 @@ in {
 
     linux_rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
       kernelPatches = [
+        kernelPatches.bonding_dont_create_bond0
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
@@ -161,6 +165,7 @@ in {
 
     linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
       kernelPatches = [
+        kernelPatches.bonding_dont_create_bond0
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
@@ -168,6 +173,7 @@ in {
 
     linux_5_16 = callPackage ../os-specific/linux/kernel/linux-5.16.nix {
       kernelPatches = [
+        kernelPatches.bonding_dont_create_bond0
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
@@ -176,6 +182,7 @@ in {
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
+          kernelPatches.bonding_dont_create_bond0
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
         ];

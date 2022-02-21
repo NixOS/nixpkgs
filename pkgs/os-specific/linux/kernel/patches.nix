@@ -14,6 +14,11 @@
     };
   };
 
+  bonding_dont_create_bond0 =
+    { name = "bonding-dont-create-bond0";
+      patch = ./bonding-dont-create-bond0.patch;
+    };
+
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;

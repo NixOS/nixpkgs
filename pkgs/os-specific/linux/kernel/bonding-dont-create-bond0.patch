@@ -1,0 +1,18 @@
+Prevent the bonding driver to create a bond0 interface by default when
+loaded, as that conflicts with declarative configuration management and
+instead feels much like a side-effect.
+
+
+diff --git a/include/uapi/linux/if_bonding.h b/include/uapi/linux/if_bonding.h
+index d174914a837d..bf8e2af101a3 100644
+--- a/include/uapi/linux/if_bonding.h
++++ b/include/uapi/linux/if_bonding.h
+@@ -82,7 +82,7 @@
+ #define BOND_STATE_ACTIVE       0   /* link is active */
+ #define BOND_STATE_BACKUP       1   /* link is backup */
+ 
+-#define BOND_DEFAULT_MAX_BONDS  1   /* Default maximum number of devices to support */
++#define BOND_DEFAULT_MAX_BONDS  0   /* Default maximum number of devices to support */
+ 
+ #define BOND_DEFAULT_TX_QUEUES 16   /* Default number of tx queues per device */
+ 
