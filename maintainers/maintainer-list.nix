@@ -2903,6 +2903,12 @@
     githubId = 19733;
     name = "Moritz Heidkamp";
   };
+  DerickEddington = {
+    email = "derick.eddington@pm.me";
+    github = "DerickEddington";
+    githubId = 4731128;
+    name = "Derick Eddington";
+  };
   dermetfan = {
     email = "serverkorken@gmail.com";
     github = "dermetfan";

@@ -23446,6 +23446,8 @@ with pkgs;
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
+  comixcursors = callPackage ../data/icons/comixcursors {};
+
   coreclr = callPackage ../development/compilers/coreclr { };
 
   corefonts = callPackage ../data/fonts/corefonts { };
