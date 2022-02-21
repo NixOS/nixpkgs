@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonApplication
 , fetchPypi
 , isPy3k
@@ -16,17 +17,18 @@
 , pendulum
 , pytestCheckHook
 , mock
+, sshtunnel
 }:
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.3.1";
+  version = "3.4.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/MyeVcpopK0Ih6z6KZGvs7ivk/PM6a2iSeatiYeZM6E=";
+    sha256 = "sha256-1WbG7amarRonaAvf10ZX4lvAWG0E6vCxYmu1i951z7Y=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +44,7 @@ buildPythonApplication rec {
     setproctitle
     keyring
     pendulum
+    sshtunnel
   ];
 
   checkInputs = [ pytestCheckHook mock ];
