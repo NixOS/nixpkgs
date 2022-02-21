@@ -1530,12 +1530,12 @@ with pkgs;
 
   amule = callPackage ../tools/networking/p2p/amule { };
 
-  amuleDaemon = amule.override {
+  amule-daemon = amule.override {
     monolithic = false;
     enableDaemon = true;
   };
 
-  amuleGui = amule.override {
+  amule-gui = amule.override {
     monolithic = false;
     client = true;
   };

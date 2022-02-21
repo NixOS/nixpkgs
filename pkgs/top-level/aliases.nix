@@ -63,6 +63,8 @@ mapAliases ({
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # Added 2020-10-30
   aminal = throw "aminal was renamed to darktile."; # Added 2021-09-28
   ammonite-repl = ammonite; # Added 2017-05-02
+  amuleDaemon = throw "amuleDaemon was renamed to amule-daemon."; # Added 2022-02-11
+  amuleGui = throw "amuleGui was renamed to amule-gui."; # Added 2022-02-11
   amsn = throw "amsn has been removed due to being unmaintained."; # Added 2020-12-09
   angelfish = libsForQt5.plasmaMobileGear.angelfish; # Added 2021-10-06
   antimicro = throw "antimicro has been removed as it was broken, see antimicrox instead."; # Added 2020-08-06
