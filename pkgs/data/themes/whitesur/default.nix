@@ -4,6 +4,7 @@
 , glib
 , gnome-shell
 , gnome-themes-extra
+, jdupes
 , libxml2
 , sassc
 , util-linux
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     glib
     gnome-shell
+    jdupes
     libxml2
     sassc
     util-linux
@@ -80,6 +82,8 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (panelOpacity != null) ("--panel-opacity " + panelOpacity)} \
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
       --dest $out/share/themes
+
+    jdupes --link-soft --recurse $out/share
 
     runHook postInstall
   '';
