@@ -10,6 +10,7 @@
 , libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "0zrzz6kjdyavspzik6fbkpvfpbd25r2qg6py5nnjaabrsr3bvccq";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "KMR9szq02u+mIy8xzLPGUmDIJRUeyG7EYTVSR/P1aCQ=";
   };
 
   patches = [
@@ -73,6 +74,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit pythonSupport;
+
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   meta = with lib; {
