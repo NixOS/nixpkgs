@@ -16,15 +16,24 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.2.3";
+  version = "2022.2.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pt57wI1cYTqT65zGOk1/GyvK0BqITxCzWIyXSNZ9D/0=";
+    sha256 = "sha256-RG5wTWEpBEC4zTGJ7XTmnjnhSVAllqXjcr3qYbmhqP4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix ESPHOME_USE_SUBPROCESS usage in the ESP32 post build script
+      # https://github.com/esphome/esphome/pull/3246
+      url = "https://github.com/esphome/esphome/commit/dcd3f42eda5828c42feadbaa04b703c63899be54.patch";
+      hash = "sha256-rF1YHRRHVHfoRs492zmIOmRGPUzxx3s673UVx5UJ3+M=";
+    })
+  ];
 
   postPatch = ''
     # remove all version pinning (E.g tornado==5.1.1 -> tornado)

@@ -6712,6 +6712,8 @@ with pkgs;
 
   iouyap = callPackage ../tools/networking/iouyap { };
 
+  ioztat = callPackage ../tools/filesystems/ioztat { };
+
   ip2location = callPackage ../tools/networking/ip2location { };
 
   ip2unix = callPackage ../tools/networking/ip2unix { };
@@ -23441,6 +23443,8 @@ with pkgs;
   comic-neue = callPackage ../data/fonts/comic-neue { };
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
+
+  comixcursors = callPackage ../data/icons/comixcursors {};
 
   coreclr = callPackage ../development/compilers/coreclr { };
 
