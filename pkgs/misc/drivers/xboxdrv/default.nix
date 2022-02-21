@@ -10,7 +10,6 @@
 , dbus-glib
 }:
 
-
 stdenv.mkDerivation rec {
   pname = "xboxdrv";
   version = "0.8.8";
