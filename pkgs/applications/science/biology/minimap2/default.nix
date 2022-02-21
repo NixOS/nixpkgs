@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ];
-  
+
   makeFlags = lib.optional stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
 
   installPhase = ''
