@@ -49,6 +49,14 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # The upper bound on xdot's base dependency broke the build of xdot and its
+  # dependants so here we bump it:
+  # > https://github.com/def-/xdot/pull/12
+  xdot = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/def-/xdot/commit/574dce2b834917126590f4a3df53c00fb7f4fee1.patch";
+    sha256 = "sha256-T5mo/XHBMFup6hlqEvIT+VbLGRuGEe4qigJtJCL5KmQ=";
+  }) super.xdot;
+
   # We can remove this once fakedata version gets to 1.0.1 as the test suite
   # works fine there.
   fakedata = dontCheck super.fakedata;
