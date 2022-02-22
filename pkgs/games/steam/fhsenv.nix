@@ -274,7 +274,7 @@ in buildFHSUserEnv rec {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs extraBuildCommands profile;
+    inherit multiPkgs extraBuildCommands profile extraInstallCommands;
 
     inherit unshareIpc unsharePid;
 
