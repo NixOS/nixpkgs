@@ -2338,6 +2338,14 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "slynk" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."slynk" or (x: {}))
+       (import ./quicklisp-to-nix-output/slynk.nix {
+         inherit fetchurl;
+       }));
+
+
   "simple-date-time" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."simple-date-time" or (x: {}))
@@ -2699,6 +2707,20 @@ let quicklisp-to-nix-packages = rec {
        (import ./quicklisp-to-nix-output/moptilities.nix {
          inherit fetchurl;
            "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+       }));
+
+
+  "mmap" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."mmap" or (x: {}))
+       (import ./quicklisp-to-nix-output/mmap.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
        }));
 
 
