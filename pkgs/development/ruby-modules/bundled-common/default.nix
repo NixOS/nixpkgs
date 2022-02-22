@@ -1,6 +1,6 @@
 { stdenv, runCommand, ruby, lib, rsync
 , defaultGemConfig, buildRubyGem, buildEnv
-, makeWrapper
+, makeBinaryWrapper
 , bundler
 }@defs:
 
@@ -118,7 +118,7 @@ let
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
-        nativeBuildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeBinaryWrapper ];
         inherit (ruby) gemPath meta;
         buildCommand = ''
           mkdir -p $out/bin
