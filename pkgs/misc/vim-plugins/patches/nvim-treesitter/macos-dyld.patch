@@ -1,0 +1,60 @@
+Following patch makes nvim-treesitter look for tree-sittter parsers suffixed
+with .dylib instead of .so, which is how it's on Darwin
+
+diff --git a/lua/nvim-treesitter/health.lua b/lua/nvim-treesitter/health.lua
+index 996a87f..4f71512 100644
+--- a/lua/nvim-treesitter/health.lua
++++ b/lua/nvim-treesitter/health.lua
+@@ -117,7 +117,7 @@ function M.check()
+   -- Parser installation checks
+   local parser_installation = { "Parser/Features H L F I J" }
+   for _, parser_name in pairs(info.installed_parsers()) do
+-    local installed = #api.nvim_get_runtime_file("parser/" .. parser_name .. ".so", false)
++    local installed = #api.nvim_get_runtime_file("parser/" .. parser_name .. ".dylib", false)
+ 
+     -- Only append information about installed parsers
+     if installed >= 1 then
+diff --git a/lua/nvim-treesitter/info.lua b/lua/nvim-treesitter/info.lua
+index ed5a90b..8dc7078 100644
+--- a/lua/nvim-treesitter/info.lua
++++ b/lua/nvim-treesitter/info.lua
+@@ -15,7 +15,7 @@ local function install_info()
+   local parser_list = parsers.available_parsers()
+   table.sort(parser_list)
+   for _, ft in pairs(parser_list) do
+-    local is_installed = #api.nvim_get_runtime_file("parser/" .. ft .. ".so", false) > 0
++    local is_installed = #api.nvim_get_runtime_file("parser/" .. ft .. ".dylib", false) > 0
+     api.nvim_out_write(ft .. string.rep(" ", max_len - #ft + 1))
+     if is_installed then
+       api.nvim_out_write "[✓] installed\n"
+diff --git a/lua/nvim-treesitter/install.lua b/lua/nvim-treesitter/install.lua
+index 5362c86..f0faa7f 100644
+--- a/lua/nvim-treesitter/install.lua
++++ b/lua/nvim-treesitter/install.lua
+@@ -86,7 +86,7 @@ local function get_installed_revision(lang)
+ end
+ 
+ local function is_installed(lang)
+-  return #api.nvim_get_runtime_file("parser/" .. lang .. ".so", false) > 0
++  return #api.nvim_get_runtime_file("parser/" .. lang .. ".dylib", false) > 0
+ end
+ 
+ local function needs_update(lang)
+@@ -244,7 +244,7 @@ local function run_install(cache_folder, install_folder, lang, repo, with_sync,
+     local repo_location = string.gsub(repo.location or project_name, "/", path_sep)
+     compile_location = cache_folder .. path_sep .. repo_location
+   end
+-  local parser_lib_name = install_folder .. path_sep .. lang .. ".so"
++  local parser_lib_name = install_folder .. path_sep .. lang .. ".dylib"
+ 
+   generate_from_grammar = repo.requires_generate_from_grammar or generate_from_grammar
+ 
+@@ -485,7 +485,7 @@ function M.uninstall(...)
+         return api.nvim_err_writeln(err)
+       end
+ 
+-      local parser_lib = install_dir .. path_sep .. lang .. ".so"
++      local parser_lib = install_dir .. path_sep .. lang .. ".dylib"
+ 
+       local command_list = {
+         shell.select_rm_file_cmd(parser_lib, "Uninstalling parser for " .. lang),
