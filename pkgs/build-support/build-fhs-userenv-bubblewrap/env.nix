@@ -222,6 +222,9 @@ in stdenv.mkDerivation {
     ${extraBuildCommands}
     cd $out
     ${if isMultiBuild then extraBuildCommandsMulti else ""}
+
+    # create potential mountpoints, should be union of mesa, nvidia, and intel drivers
+    mkdir -p $out/usr/share/{vulkan,egl,glvnd,drirc.d}
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;

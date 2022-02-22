@@ -112,6 +112,8 @@ let
     blacklist=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
+    graphics_share=()
+
     for i in ${env}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -136,6 +138,13 @@ let
         ro_mounts+=(--ro-bind "$i" "/etc$path")
       done
     fi
+
+    declare -a graphics_share
+    for dir in /run/opengl-driver{,-32}/share/*; do
+      if [[ -d "$dir" ]]; then
+        graphics_share+=(--bind "$dir" "/usr/share/$(basename $dir)")
+      fi
+    done
 
     declare -a auto_mounts
     # loop through all directories in the root
@@ -179,6 +188,7 @@ let
       --remount-ro ${pkgsi686Linux.glibc}/etc \
       ${etcBindFlags}
       "''${ro_mounts[@]}"
+      "''${graphics_share[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
       ${concatStringsSep "\n  " extraBwrapArgs}
