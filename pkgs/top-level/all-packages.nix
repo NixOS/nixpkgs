@@ -17273,9 +17273,7 @@ with pkgs;
 
   highfive = callPackage ../development/libraries/highfive { };
 
-  highfive-mpi = appendToName "mpi" (highfive.override {
-    hdf5 = hdf5-mpi;
-  });
+  highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hiredis = callPackage ../development/libraries/hiredis { };
 
