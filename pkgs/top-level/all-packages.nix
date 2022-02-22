@@ -1752,6 +1752,8 @@ with pkgs;
 
   doona = callPackage ../tools/security/doona { };
 
+  dotter = callPackage ../tools/misc/dotter { };
+
   droidcam = callPackage ../applications/video/droidcam { };
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
