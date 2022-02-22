@@ -85,6 +85,7 @@ in buildFHSUserEnv rec {
     harfbuzz
     libthai
     pango
+    libdbusmenu-gtk3 # system tray
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
