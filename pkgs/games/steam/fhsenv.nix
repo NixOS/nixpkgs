@@ -156,7 +156,7 @@ in buildFHSUserEnv rec {
     xorg.libSM
     xorg.libICE
     gnome2.GConf
-    (curl.override { gnutlsSupport = true; opensslSupport = false; })
+    curl
     nspr
     nss
     cups
