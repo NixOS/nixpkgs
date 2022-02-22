@@ -4,6 +4,7 @@ in
 
 { stdenv
 , autoreconfHook
+, autoconf269, automake, libtool
 , bison
 , buildPackages
 , fetchFromGitHub
@@ -66,6 +67,13 @@ stdenv.mkDerivation {
     # Make binutils output deterministic by default.
     ./deterministic.patch
 
+
+    # Breaks nm BSD flag detection
+    ./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
+
+    # Required for newer macos versions
+    ./0001-libtool.m4-update-macos-version-detection-block.patch
+
     # For some reason bfd ld doesn't search DT_RPATH when cross-compiling. It's
     # not clear why this behavior was decided upon but it has the unfortunate
     # consequence that the linker will fail to find transitive dependencies of
@@ -94,6 +102,7 @@ stdenv.mkDerivation {
     texinfo
   ]
   ++ lib.optionals targetPlatform.isiOS [ autoreconfHook ]
+  ++ lib.optionals targetPlatform.isDarwin [ autoconf269 automake gettext libtool ]
   ++ lib.optionals targetPlatform.isVc4 [ flex ]
   ;
 
@@ -102,6 +111,15 @@ stdenv.mkDerivation {
   inherit noSysDirs;
 
   preConfigure = ''
+    for i in */configure.ac; do
+      pushd "$(dirname "$i")"
+      echo "Running autoreconf in $PWD"
+      # autoreconf doesn't work, don't know why
+      # autoreconf ''${autoreconfFlags:---install --force --verbose}
+      autoconf
+      popd
+    done
+
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then
         echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
