@@ -11412,7 +11412,9 @@ with pkgs;
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
-  zellij = callPackage ../tools/misc/zellij { };
+  zellij = callPackage ../tools/misc/zellij {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
 
   zenith = callPackage ../tools/system/zenith {
     inherit (darwin.apple_sdk.frameworks) IOKit;

@@ -8,6 +8,8 @@
 , openssl
 , zellij
 , testVersion
+, DiskArbitration
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,6 +34,8 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
+    DiskArbitration
+    Foundation
   ];
 
   preCheck = ''
