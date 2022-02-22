@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-iy8xjKnPLq1ntZa9x+KtLDznzu6m+1db3NPeGQESUVo=";
+    sha256 = "14lxkihjppy7cl921mby60y2i83h5cbdnx4n0xnmw1hrvisw05h5";
   };
 
   patches = [
