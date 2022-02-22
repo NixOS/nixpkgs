@@ -107,7 +107,7 @@ in {
     systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ] ++ optional enableIwd "iwd.service";
+      after = optional enableIwd "iwd.service";
       requires = optional enableIwd "iwd.service";
       serviceConfig = {
         Type = "dbus";
@@ -126,7 +126,6 @@ in {
     systemd.services.connman-vpn = mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ];
       before = [ "connman.service" ];
       serviceConfig = {
         Type = "dbus";
