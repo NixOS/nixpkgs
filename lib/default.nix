@@ -120,13 +120,13 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule mkDerivedConfig doRename;
+      mkAliasOptionModule mkDerivedConfig doRename mkForEachSubModule;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
-      showOption showFiles unknownModule mkOption;
+      showOption showFiles unknownModule mkOption mkSuperOptionAlias;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

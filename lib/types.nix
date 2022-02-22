@@ -23,6 +23,7 @@ let
   inherit (lib.lists)
     all
     concatLists
+    concatMap
     count
     elemAt
     filter
@@ -35,6 +36,7 @@ let
     ;
   inherit (lib.attrsets)
     attrNames
+    attrValues
     filterAttrs
     hasAttr
     mapAttrs
@@ -131,6 +133,8 @@ rec {
     , # Function for building the same option type with a different list of
       # modules.
       substSubModules ? m: null
+    , # Function used to return a list of all instances of submodules.
+      extractSubValues ? value: []
     , # Function that merge type declarations.
       # internal, takes a functor as argument and returns the merged type.
       # returning null means the type is not mergeable
@@ -153,7 +157,7 @@ rec {
       nestedTypes ? {}
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage nestedTypes;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules extractSubValues typeMerge functor deprecationMessage nestedTypes;
       description = if description == null then name else description;
     };
 
@@ -394,6 +398,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
+      extractSubValues = value: concatMap elemType.extractSubValues value;
       functor = (defaultFunctor name) // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
@@ -419,6 +424,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
+      extractSubValues = value: concatMap elemType.extractSubValues (attrValues value);
       functor = (defaultFunctor name) // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
@@ -444,6 +450,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
+      extractSubValues = value: concatMap elemType.extractSubValues (attrValues value);
       functor = (defaultFunctor name) // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
@@ -466,6 +473,7 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: uniq (elemType.substSubModules m);
+      extractSubValues = elemType.extractSubValues;
       functor = (defaultFunctor name) // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
@@ -497,6 +505,7 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
+      extractSubValues = value: if isNull value then [] else elemType.extractSubValues value;
       functor = (defaultFunctor name) // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
@@ -510,6 +519,7 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
+      extractSubValues = value: throw "Unable to extract definitions from submodule instances of a function.";
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
@@ -522,6 +532,7 @@ rec {
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
+      , exportOptionsUnderConfig ? false
       }@attrs:
       let
         inherit (lib.modules) evalModules;
@@ -559,6 +570,12 @@ rec {
           }] ++ modules;
         };
 
+        extend = loc: defs:
+          base.extendModules {
+            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
+            prefix = loc;
+          };
+
         freeformType = base._module.freeformType;
 
       in
@@ -567,10 +584,9 @@ rec {
         description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
-          (base.extendModules {
-            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
-            prefix = loc;
-          }).config;
+          let evaled = extend loc defs;
+              maybeOptions = lib.optionalAttrs exportOptionsUnderConfig { inherit (evaled) options; };
+          in maybeOptions // evaled.config;
         emptyValue = { value = {}; };
         getSubOptions = prefix: (base.extendModules
           { inherit prefix; }).options // optionalAttrs (freeformType != null) {
@@ -583,6 +599,7 @@ rec {
         substSubModules = m: submoduleWith (attrs // {
           modules = m;
         });
+        extractSubValues = value: [ value ];
         nestedTypes = lib.optionalAttrs (freeformType != null) {
           freeformType = freeformType;
         };
@@ -592,6 +609,7 @@ rec {
             modules = modules;
             specialArgs = specialArgs;
             shorthandOnlyDefinesConfig = shorthandOnlyDefinesConfig;
+            exportOptionsUnderConfig = exportOptionsUnderConfig;
           };
           binOp = lhs: rhs: {
             modules = lhs.modules ++ rhs.modules;
@@ -604,6 +622,12 @@ rec {
               if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
+            # When merging 2 submodules, if any need the options attribute set
+            # to be added, then the merged type should have it. At the moment
+            # exportOptionsUnderConfig defaults to false, such that the set of
+            # attributes visible does not change.
+            exportOptionsUnderConfig =
+              lhs.exportOptionsUnderConfig || rhs.exportOptionsUnderConfig;
           };
         };
       };
@@ -689,6 +713,7 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
+        extractSubValues = finalType.extractSubValues;
         typeMerge = t1: t2: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
         nestedTypes.coercedType = coercedType;

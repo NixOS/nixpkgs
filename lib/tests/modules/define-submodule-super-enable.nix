@@ -1,0 +1,3 @@
+{
+  submodule.super.enable = true;
+}

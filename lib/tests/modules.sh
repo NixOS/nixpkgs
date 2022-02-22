@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # This script is used to test that the module system is working as expected.
-# By default it test the version of nixpkgs which is defined in the NIX_PATH.
+# By default, it tests the version of nixpkgs which is defined in the NIX_PATH.
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -187,6 +187,29 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
 
+## submodules exposes options attribute set.
+checkConfigError 'attribute .* in selection path .* not found' config.submodule.options.inner.type.description ./declare-submoduleWith-modules.nix
+checkConfigOutput '^"boolean"$' config.submodule.options.inner.type.description ./declare-submoduleWith-{modules,exportOptionsUnderConfig}.nix
+
+## submodule with mkSuperOptionAlias
+checkConfigOutput 'Sink for option definitions' config.submodule.options.super.enable.description ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix
+checkConfigOutput 'Alias for a super module' config.submodule.options.super.enable.description ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix ./declare-enable.nix
+checkConfigError 'value is not readable' config.submodule.super.enable ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix
+checkConfigError 'value is not readable' config.submodule.super.enable ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix ./declare-enable.nix
+# The super option has to be defined, and aliased in the super-module to
+# properly forward the option definitions.
+checkConfigOutput '^false$' config.enable ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix ./declare-enable.nix
+checkConfigOutput '^false$' config.enable ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix ./declare-enable.nix ./define-enable-alias-submodule-super-enable.nix
+checkConfigOutput '^true$' config.enable ./declare-submoduleWith-{noshorthand,exportOptionsUnderConfig,mkSuperOptionAlias}.nix ./declare-enable.nix ./define-enable-alias-submodule-super-enable.nix ./define-submodule-super-enable.nix
+
+# Check mkForEachSubModule with (type = attrsOf submodule ..)
+checkConfigOutput '^false$' config.enable ./define-enable-alias-attrsOfSub-super-enable.nix
+checkConfigOutput '^false$' config.enable ./define-enable-alias-attrsOfSub-super-enable.nix ./define-attrsOfSub-foo.nix
+checkConfigOutput '^false$' config.enable ./define-enable-alias-attrsOfSub-super-enable.nix ./define-attrsOfSub-bar.nix
+checkConfigOutput '^false$' config.enable ./define-enable-alias-attrsOfSub-super-enable.nix ./define-attrsOfSub-foo.nix ./define-attrsOfSub-bar.nix
+checkConfigOutput '^true$' config.enable ./define-enable-alias-attrsOfSub-super-enable.nix ./define-attrsOfSub-foo-enable.nix ./define-attrsOfSub-bar.nix
+checkConfigOutput '^true$' config.enable ./define-enable-alias-attrsOfSub-super-enable.nix ./define-attrsOfSub-foo-enable.nix ./define-attrsOfSub-bar-enable.nix
+
 # Check that disabledModules works recursively and correctly
 checkConfigOutput '^true$' config.enable ./disable-recursive/main.nix
 checkConfigOutput '^true$' config.enable ./disable-recursive/{main.nix,disable-foo.nix}
@@ -283,6 +306,7 @@ checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
+
 
 cat <<EOF
 ====== module tests ======

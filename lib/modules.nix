@@ -558,7 +558,16 @@ rec {
          bothHave "apply" ||
          (bothHave "type" && (! typesMergeable))
       then
-        throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
+        let reason =
+          if bothHave "default" then "Both have `default` attribute."
+          else if bothHave "example" then "Both have `example` attribute."
+          else if bothHave "description" then "Both have `description` attribute."
+          else if bothHave "apply" then "Both have `apply` attribute."
+          else if (bothHave "type" && (! typesMergeable))
+          then "Both have `type` attribute which cannot be merged."
+          else ""
+            ;
+        in throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}: ${reason}"
       else
         let
           /* Add the modules of the current option to the list of modules
@@ -852,6 +861,57 @@ rec {
 
   mkAliasIfDef = option:
     mkIf (isOption option && option.isDefined);
+
+  /* Given a `forEach` function, return the option definitions produced by the
+     `forEach` function after applying it to all submodules definition
+     independently of the wrapping method used to wrap the submodules.
+
+     This function is useful when combined with mkAliasDefinitions to provide a
+     way to let submodules definitions contribute to supermodule definitions,
+     without having to deal with the internals of options nor the module system.
+
+     The following example, show how to use it, combined with mkSuperOptionAlias
+     and mkAliasDefinitions, to have a module definitions inheriting all
+     submodules definitions from a submodule. The `namedAggregates` option
+     declare a submodule where the `aggregate` option of the super module is
+     aliased into using `mkSuperOptionAlias`. The definitions of the `aggregate`
+     option within each submodule is extracted from each submodule using
+     `mkForEachSubModule`, and aliased as-if it was defined in the super-module
+     using `mkAliasDefinition`.
+
+       { config, options, lib, ... }:
+
+       with lib;
+       let superOptions = options; in
+       {
+         options.aggregate = mkOption { .. };
+         options.namedAggregates = mkOption {
+           type = with lib.types; attrsOf submoduleWith {
+             # Expose the eval.options attribute used as argument of `mkAliasDefinition`
+             exportOptionsUnderConfig = true;
+
+             modules = [
+               ({ ... }: {
+                 # Alias super-module option in the submodule.
+                 options.super.aggregate =
+                   mkSuperOptionAlias (superOptions.aggregate or null);
+               })
+             ];
+           };
+         };
+
+         config = {
+           # Collect all options definitions from submodules.
+           aggregate = mkForEachSubModule
+             (eval: mkAliasDefinitions eval.options.super.aggregate)
+             options.namedAggregates;
+         };
+       }
+
+  */
+  mkForEachSubModule = forEach: option:
+    let subValues = option.type.extractSubValues option.value;
+    in mkMerge (map forEach subValues);
 
   /* Compatibility. */
   fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };

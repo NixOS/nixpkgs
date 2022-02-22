@@ -161,6 +161,31 @@ rec {
     apply = x: throw "Option value is not readable because the option is not declared.";
   } // attrs);
 
+  /* This option alias a definition of an option from another module, most
+     frequently a super module.
+
+     This option is used to expose the definitions, such that super modules can
+     extract and merge the definition in the super module. This is an hidden
+     internal option as is only purpose is to be used for the implementation of
+     a submodule, and not to be used by users of the submodule.
+
+     The option produced here does not yield any value, as the merge and apply
+     functions provided by the type are not guaranteed to be idempotent.
+
+     The option given as argument should be extracted from the super module or
+     null if it does not exists in the super module. This is a feature meant to
+     provide submodules as independent moduels */
+  mkSuperOptionAlias = option:
+    if isNull option
+    then mkSinkUndeclaredOptions {}
+    else mkOption {
+      internal = true;
+      visible = false;
+      description = "Alias for a super module option.";
+      type = option.type;
+      apply = x: throw "Option value is not readable because the option is an alias of a super module option.";
+    };
+
   mergeDefaultOption = loc: defs:
     let list = getValues defs; in
     if length list == 1 then head list
