@@ -57,10 +57,6 @@ self: super: {
     sha256 = "sha256-T5mo/XHBMFup6hlqEvIT+VbLGRuGEe4qigJtJCL5KmQ=";
   }) super.xdot;
 
-  # We can remove this once fakedata version gets to 1.0.1 as the test suite
-  # works fine there.
-  fakedata = dontCheck super.fakedata;
-
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
   # and the upper bound doesn't exist in code anymore:
