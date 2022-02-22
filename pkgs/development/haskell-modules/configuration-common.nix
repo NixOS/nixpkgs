@@ -1565,6 +1565,9 @@ self: super: {
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
+  # waiting for aeson bump
+  servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
+
   hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
   hercules-ci-cli = pkgs.lib.pipe super.hercules-ci-cli [
