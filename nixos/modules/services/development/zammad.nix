@@ -307,7 +307,6 @@ in
       serviceConfig = serviceConfig // { Type = "forking"; };
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
-      wants = [ "zammad-web.service" ];
       description = "Zammad scheduler";
       wantedBy = [ "multi-user.target" ];
       script = "./script/scheduler.rb start";

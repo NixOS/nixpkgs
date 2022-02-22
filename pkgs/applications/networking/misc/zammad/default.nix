@@ -23,7 +23,7 @@ let
 
   src = applyPatches {
 
-    src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
+    src = fetchFromGitHub (lib.importJSON ./source.json);
 
     patches = [ ./0001-nulldb.patch ];
 
@@ -52,7 +52,7 @@ let
     #   https://docs.zammad.org/en/latest/prerequisites/software.html#ruby-programming-language
     inherit ruby_2_7;
 
-    gemdir = src;
+    gemdir = "${src}";
     gemset = ./gemset.nix;
     groups = [
       "assets"
@@ -89,7 +89,7 @@ let
     inherit version src;
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
-    packageJSON = src + "/package.json";
+    packageJSON = "${src}/package.json";
   };
 
 in
