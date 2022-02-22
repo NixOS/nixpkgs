@@ -134,6 +134,8 @@ let
           # and compile them
           ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
       fi
+
+      ln -s ${ldconfig}/bin/ldconfig $out/sbin/ldconfig
     '';
   };
 
