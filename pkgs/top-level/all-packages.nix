@@ -27309,7 +27309,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  mercurialFull = appendToName "full" (mercurial.override { fullBuild = true; });
+  mercurialFull = mercurial.override { fullBuild = true; };
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
