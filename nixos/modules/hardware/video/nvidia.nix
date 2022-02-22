@@ -285,8 +285,12 @@ in
 
     hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
     hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
-    hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
-    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
+    hardware.opengl.extraPackages = [
+      pkgs.nvidia-vaapi-driver
+    ] ++ optional offloadCfg.enable nvidia_x11.out;
+    hardware.opengl.extraPackages32 = [
+      pkgs.pkgsi686Linux.nvidia-vaapi-driver
+    ] ++ optional offloadCfg.enable nvidia_x11.lib32;
 
     environment.systemPackages = [ nvidia_x11.bin ]
       ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]
