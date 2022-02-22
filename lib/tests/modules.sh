@@ -284,6 +284,16 @@ checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-var
 checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
 
+## types.unconditional
+checkConfigOutput "10" config.ifTrue ./unconditional.nix
+checkConfigError "The option .ifFalse. is used but not defined." config.ifFalse ./unconditional.nix
+checkConfigOutput "10" config.attrsIfTrue.foo ./unconditional.nix
+checkConfigError "The option .attrsIfFalse.foo. is used but not defined." config.attrsIfFalse.foo ./unconditional.nix
+checkConfigOutput "[ \"foo\" ]" config.attrKeys ./unconditional.nix
+checkConfigOutput "10" config.listIfTrue.0 ./unconditional.nix
+checkConfigError "The option .listIfFalse.\[definition 1-entry 1\]. is used but not defined." config.listIfFalse.0 ./unconditional.nix
+checkConfigOutput "1" config.listLength ./unconditional.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
