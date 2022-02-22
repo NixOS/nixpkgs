@@ -6,11 +6,11 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocurl";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "http://ygrek.org.ua/p/release/ocurl/ocurl-${version}.tar.gz";
-    sha256 = "0n621cxb9012pj280c7821qqsdhypj8qy9qgrah79dkh6a8h2py6";
+    sha256 = "sha256-4DWXGMh02s1VwLWW5d7h0jtMOUubWmBPGm1hghfWd2M=";
   };
 
   buildInputs = [ pkg-config ocaml findlib ncurses ];
