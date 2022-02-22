@@ -13953,4 +13953,10 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  zanculmarktum = {
+    name = "Azure Zanculmarktum";
+    email = "zanculmarktum@gmail.com";
+    github = "zanculmarktum";
+    githubId = 16958511;
+  };
 }
