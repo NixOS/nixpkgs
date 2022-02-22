@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       comment = "x86 dos emulator enhanced";
       desktopName = "DosBox-Staging";
       genericName = "DOS emulator";
-      categories = "Emulator;Game;";
+      categories = [ "Emulator" "Game" ];
     })
   ];
 

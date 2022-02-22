@@ -40,10 +40,8 @@ let
         exec = "${pname} %f";
         icon = "${pname}${year}";
         comment = "Views and edits PDF files";
-        mimeType = "application/pdf";
-        categories = "Office";
-        type = "Application";
-        terminal = false;
+        mimeTypes = [ "application/pdf" ];
+        categories = [ "Office" ];
       })
     ];
 

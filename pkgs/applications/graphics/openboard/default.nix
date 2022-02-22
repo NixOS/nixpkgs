@@ -79,8 +79,8 @@ in mkDerivation rec {
       icon = "OpenBoard";
       comment = "OpenBoard, an interactive white board application";
       desktopName = "OpenBoard";
-      mimeType = "application/ubz";
-      categories = "Education;";
+      mimeTypes = [ "application/ubz" ];
+      categories = [ "Education" ];
       startupNotify = true;
     })
   ];

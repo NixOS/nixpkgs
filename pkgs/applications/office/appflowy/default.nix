@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       desktopName = "AppFlowy";
       comment = meta.description;
       exec = "appflowy";
-      categories = "Office;";
+      categories = [ "Office" ];
     })
   ];
 

@@ -13,7 +13,7 @@ let
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
     genericName = "Logic analyzer";
-    categories = "Development";
+    categories = [ "Development" ];
   };
 in
 appimageTools.wrapType2 {

@@ -52,9 +52,8 @@ stdenv.mkDerivation rec {
       genericName = "SQL Administration";
       exec = "pgadmin3";
       icon = "pgAdmin3";
-      type = "Application";
-      categories = "Development;";
-      mimeType = "text/html";
+      categories = [ "Development" ];
+      mimeTypes = [ "text/html" ];
     };
   in ''
     mkdir -p $out/share/pixmaps;

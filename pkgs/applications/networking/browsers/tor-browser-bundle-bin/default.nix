@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     desktopName = "Tor Browser";
     genericName = "Web Browser";
     comment = meta.description;
-    categories = "Network;WebBrowser;Security;";
+    categories = [ "Network" "WebBrowser" "Security" ];
   };
 
   buildCommand = ''

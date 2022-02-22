@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     icon = pname;
     desktopName = "REW";
     genericName = "Software for audio measurements";
-    categories = "AudioVideo;";
+    categories = [ "AudioVideo" ];
   };
 
   responseFile = writeTextFile {

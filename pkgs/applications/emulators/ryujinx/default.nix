@@ -74,7 +74,7 @@ buildDotnetModule rec {
     icon = "ryujinx";
     comment = meta.description;
     type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   })];
 
   meta = with lib; {

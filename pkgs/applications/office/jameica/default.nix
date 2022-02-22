@@ -17,7 +17,7 @@ let
     comment = "Free Runtime Environment for Java Applications.";
     desktopName = "Jameica";
     genericName = "Jameica";
-    categories = "Office;";
+    categories = [ "Office" ];
   };
 in
 stdenv.mkDerivation rec {

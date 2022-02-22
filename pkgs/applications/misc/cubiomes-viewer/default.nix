@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     desktopName = "Cubiomes Viewer";
     exec = pname;
     icon = pname;
-    categories = "Game";
+    categories = [ "Game" ];
     comment = meta.description;
   }) ];
 

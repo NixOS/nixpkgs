@@ -164,9 +164,9 @@ let
     icon = drvName;
     desktopName = "Android Studio (${channel} channel)";
     comment = "The official Android IDE";
-    categories = "Development;IDE;";
-    startupNotify = "true";
-    extraEntries="StartupWMClass=jetbrains-studio";
+    categories = [ "Development" "IDE" ];
+    startupNotify = true;
+    startupWMClass = "jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools

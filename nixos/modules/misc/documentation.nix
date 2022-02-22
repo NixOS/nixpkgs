@@ -129,7 +129,7 @@ let
       genericName = "View NixOS documentation in a web browser";
       icon = "nix-snowflake";
       exec = "nixos-help";
-      categories = "System";
+      categories = ["System"];
     };
 
     in pkgs.symlinkJoin {
