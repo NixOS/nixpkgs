@@ -446,6 +446,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.miniflux.adminCredentialFiles</literal> is
+          now required, instead of defaulting to
+          <literal>admin</literal> and <literal>password</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>autorestic</literal> package has been upgraded
           from 1.3.0 to 1.5.0 which introduces breaking changes in
           config file, check
@@ -556,6 +563,15 @@
           file’s path has also moved from
           <literal>~/.local/share/multimc/multimc.cfg</literal> to
           <literal>~/.local/share/polymc/polymc.cfg</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>systemd-nspawn@.service</literal> settings have been
+          reverted to the default systemd behaviour. User namespaces are
+          now activated by default. If you want to keep running nspawn
+          containers without user namespaces you need to set
+          <literal>systemd.nspawn.&lt;name&gt;.execConfig.PrivateUsers = false</literal>
         </para>
       </listitem>
       <listitem>

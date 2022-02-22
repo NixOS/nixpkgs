@@ -750,6 +750,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  augmax = callPackage ../development/python-modules/augmax { };
+
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
