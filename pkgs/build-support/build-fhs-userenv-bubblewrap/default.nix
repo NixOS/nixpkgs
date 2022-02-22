@@ -176,16 +176,16 @@ let
       # settled on being mounting one via bwrap.
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
-      --tmpfs ${glibc}/etc \
-      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
-      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
-      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
-      --remount-ro ${glibc}/etc \
-      --tmpfs ${pkgsi686Linux.glibc}/etc \
-      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
-      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
-      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
-      --remount-ro ${pkgsi686Linux.glibc}/etc \
+      --tmpfs ${glibc}/etc
+      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf
+      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache
+      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc
+      --remount-ro ${glibc}/etc
+      --tmpfs ${pkgsi686Linux.glibc}/etc
+      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf
+      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache
+      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc
+      --remount-ro ${pkgsi686Linux.glibc}/etc
       ${etcBindFlags}
       "''${ro_mounts[@]}"
       "''${graphics_share[@]}"
