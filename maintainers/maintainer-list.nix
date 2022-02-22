@@ -13959,4 +13959,10 @@
     github = "zanculmarktum";
     githubId = 16958511;
   };
+  kuwii = {
+    name = "kuwii";
+    email = "kuwii.someone@gmail.com";
+    github = "kuwii";
+    githubId = 10705175;
+  };
 }
