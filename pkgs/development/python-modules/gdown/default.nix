@@ -11,12 +11,12 @@
 
 buildPythonApplication rec {
   pname = "gdown";
-  version = "4.3.0";
+  version = "4.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KswYue892Mlpa8wnPf9bt8MEJGtjGaMjlDt0TXGoEdE=";
+    sha256 = "sha256-ZFy1/3ZI+Zu/fZbOhswNoRlKFCUSXcPO/bJetSkiyHE=";
   };
 
   propagatedBuildInputs = [
