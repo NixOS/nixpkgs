@@ -10814,6 +10814,8 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+  vtm = callPackage ../tools/misc/vtm { };
+
   witness = callPackage ../tools/security/witness { };
 
   openconnect = openconnect_gnutls;
