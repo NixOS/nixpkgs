@@ -8,9 +8,11 @@ stdenv.mkDerivation {
 
   inherit (libllvm) src;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python2 ocaml findlib ctypes ];
+  nativeBuildInputs = [ cmake python2 ocaml findlib ];
+  buildInputs = [ ctypes ];
   propagatedBuildInputs = [ libllvm ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=YES" # fixes bytecode builds

@@ -14,9 +14,12 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
   useDune2 = true;
 
+  strictDeps = !doCheck;
+
   propagatedBuildInputs = [ bigarray-compat ];
 
-  checkInputs = [ alcotest astring fpath bos findlib pkg-config ];
+  nativeBuildInputs = [ findlib pkg-config ];
+  checkInputs = [ alcotest astring fpath bos ];
   doCheck = true;
 
   meta = with lib; {

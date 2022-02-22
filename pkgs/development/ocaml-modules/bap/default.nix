@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
     export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}-llvm-plugins/"
   '';
 
-  nativeBuildInputs = [ which makeWrapper ];
+  nativeBuildInputs = [ which makeWrapper ocaml findlib ocamlbuild ocaml_oasis ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  linenoise
+  buildInputs = [ linenoise
                   ounit
                   ppx_bitstring
                   z3

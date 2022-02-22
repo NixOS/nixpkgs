@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ ocaml findlib ocamlbuild oasis camlp4 num ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild oasis camlp4 ];
+  buildInputs = [ oasis camlp4 ocamlbuild num ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://github.com/ocsigen/deriving";

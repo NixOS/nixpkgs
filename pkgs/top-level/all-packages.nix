@@ -15322,7 +15322,7 @@ with pkgs;
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
-  obelisk = callPackage ../development/tools/ocaml/obelisk { };
+  obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
 

@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libvirt ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ];
+  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ocaml ];
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" "CPPFLAGS=-Wno-error" ];
   installTargets = "install-opt";

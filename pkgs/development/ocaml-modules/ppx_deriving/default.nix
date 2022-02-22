@@ -5,7 +5,7 @@
 , ppxlib
 , ppx_derivers
 , result
-, ounit
+, ounit2
 , ocaml-migrate-parsetree
 , ocaml-migrate-parsetree-2
 }:
@@ -37,7 +37,11 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  buildInputs = [ ppxlib cppo ];
+  # This currently fails with dune
+  strictDeps = false;
+
+  nativeBuildInputs = [ cppo ];
+  buildInputs = [ ppxlib ];
   propagatedBuildInputs = [
     (if params.useOMP2
     then ocaml-migrate-parsetree-2
@@ -47,7 +51,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ ounit ];
+  checkInputs = [ ounit2 ];
 
   meta = with lib; {
     description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02.";
