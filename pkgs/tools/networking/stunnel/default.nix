@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "stunnel";
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
   ];
+
+  passthru.tests = {
+    stunnel = nixosTests.stunnel;
+  };
 
   meta = {
     description = "Universal tls/ssl wrapper";
