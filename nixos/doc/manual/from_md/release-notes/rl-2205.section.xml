@@ -62,6 +62,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>steam</literal> and <literal>lutris</literal> support
+          for nvidia cards has been improved, proton runtimes 5-7 now
+          work as expected.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           systemd services can now set
           <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>
           instead of <literal>reloadIfChanged</literal> for a more
@@ -1809,6 +1816,14 @@
           will be changed to <literal>false</literal> in 22.11.
           Configurations using this default will print a warning when
           rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.xserver.videoDrivers = [ &quot;nvidia&quot; ];</literal>
+          will now also install
+          <literal>pkgs.nvidia-vaapi-driver</literal> as a driver as
+          well.
         </para>
       </listitem>
       <listitem>
