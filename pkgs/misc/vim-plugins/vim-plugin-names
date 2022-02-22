@@ -886,6 +886,7 @@ uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
+ur4ltz/surround.nvim
 urbit/hoon.vim
 Valloric/MatchTagAlways
 Valodim/deoplete-notmuch

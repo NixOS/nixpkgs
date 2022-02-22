@@ -6241,6 +6241,18 @@ final: prev:
     meta.homepage = "https://github.com/ervandew/supertab/";
   };
 
+  surround-nvim = buildVimPluginFrom2Nix {
+    pname = "surround.nvim";
+    version = "2022-02-15";
+    src = fetchFromGitHub {
+      owner = "ur4ltz";
+      repo = "surround.nvim";
+      rev = "01756d3f31aeb2307cca5b73f9fa74a0802e5bc3";
+      sha256 = "0adxynnlbybj04vxflvrqhcc7z8y3m7myimdm9xyz8vi18qkfk5p";
+    };
+    meta.homepage = "https://github.com/ur4ltz/surround.nvim/";
+  };
+
   sved = buildVimPluginFrom2Nix {
     pname = "sved";
     version = "2021-10-22";
