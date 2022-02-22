@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , pkg-config
+, autoreconfHook
 , libxml2
 , findXMLCatalogs
 , gettext
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoreconfHook
   ];
 
   buildInputs = [
