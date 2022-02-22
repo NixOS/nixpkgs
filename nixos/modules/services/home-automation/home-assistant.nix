@@ -135,7 +135,7 @@ in {
     };
 
     config = mkOption {
-      type = types.submodule {
+      type = types.nullOr (types.submodule {
         freeformType = format.type;
         options = {
           # This is a partial selection of the most common options, so new users can quickly
@@ -244,7 +244,7 @@ in {
             };
           };
         };
-      };
+      });
       example = literalExpression ''
         {
           homeassistant = {
