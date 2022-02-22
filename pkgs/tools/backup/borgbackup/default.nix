@@ -13,11 +13,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.17";
+  version = "1.2.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0x0ncy0b0bmf586hbdgrif3gjmkdw760vfnfxndr493v07y29fbs";
+    sha256 = "sha256-45pVR5Au9FYQGqTHefpms0W9pw0WeI6L0Y5Fj5Ovf2c=";
   };
 
   postPatch = ''
@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     cython
     llfuse
+    msgpack
     packaging
   ] ++ lib.optionals (!stdenv.isDarwin) [
     pyfuse3
@@ -82,13 +83,14 @@ python3.pkgs.buildPythonApplication rec {
 
   checkInputs = with python3.pkgs; [
     e2fsprogs
+    python-dateutil
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
+    "--numprocesses" "$NIX_BUILD_CORES"
     "--benchmark-skip"
     "--pyargs" "borg.testsuite"
   ];
@@ -100,6 +102,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_fuse_mount_hardlinks"
     "test_fuse_mount_options"
     "test_fuse_versions_view"
+    "test_migrate_lock_alive"
     "test_readonly_mount"
     # Error: Permission denied while trying to write to /var/{,tmp}
     "test_get_cache_dir"
