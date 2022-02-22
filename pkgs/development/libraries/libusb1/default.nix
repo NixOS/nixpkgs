@@ -7,6 +7,7 @@
 , udev
 , libobjc
 , IOKit
+, Security
 , withStatic ? false
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   propagatedBuildInputs =
     lib.optional enableUdev udev ++
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   dontDisableStatic = withStatic;
 
