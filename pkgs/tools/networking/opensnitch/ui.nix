@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     unicode-slugify
     pyinotify
     notify2
-    # pyasn # dpendency missing but not mandatory
+    pyasn
   ];
 
   preBuild = ''
