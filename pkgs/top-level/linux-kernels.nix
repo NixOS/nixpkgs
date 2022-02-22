@@ -284,6 +284,8 @@ in {
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
+    dddvb = callPackage ../os-specific/linux/dddvb { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
