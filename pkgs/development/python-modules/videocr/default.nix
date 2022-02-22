@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Extract hardcoded subtitles from videos using machine learning";
     homepage = "https://github.com/apm1467/videocr";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ozkutuk ];
   };
 }
