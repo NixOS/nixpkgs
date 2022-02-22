@@ -8,7 +8,7 @@ let
     comment = "Open Source Jedi Academy game released by Raven Software";
     desktopName = "Jedi Academy (Multi Player)";
     genericName = "Jedi Academy";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
   jasp = makeDesktopItem rec {
     name = "jasp";
@@ -17,7 +17,7 @@ let
     comment = "Open Source Jedi Academy game released by Raven Software";
     desktopName = "Jedi Academy (Single Player)";
     genericName = "Jedi Academy";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 in stdenv.mkDerivation {
   pname = "OpenJK";

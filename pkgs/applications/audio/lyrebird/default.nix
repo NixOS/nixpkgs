@@ -15,7 +15,7 @@ let
     icon = "${placeholder "out"}/share/lyrebird/icon.png";
     desktopName = "Lyrebird";
     genericName = "Voice Changer";
-    categories = "AudioVideo;Audio;";
+    categories = [ "AudioVideo" "Audio" ];
   };
 in
 python3Packages.buildPythonApplication rec {

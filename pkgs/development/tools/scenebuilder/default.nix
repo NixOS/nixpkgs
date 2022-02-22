@@ -69,8 +69,8 @@ let
     icon = "scenebuilder";
     comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
     desktopName = pname;
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {

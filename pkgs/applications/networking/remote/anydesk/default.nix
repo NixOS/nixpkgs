@@ -12,8 +12,8 @@ let
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
-    categories = "Network;";
-    startupNotify = "false";
+    categories = [ "Network" ];
+    startupNotify = false;
   };
 
 in stdenv.mkDerivation rec {

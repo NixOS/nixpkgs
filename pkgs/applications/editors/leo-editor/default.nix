@@ -24,11 +24,9 @@ mkDerivation rec {
     comment = meta.description;
     desktopName = "Leo";
     genericName = "Text Editor";
-    categories = lib.concatStringsSep ";" [
-      "Application" "Development" "IDE"
-    ];
-    startupNotify = "false";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Application" "Development" "IDE" ];
+    startupNotify = false;
+    mimeTypes = [
       "text/plain" "text/asp" "text/x-c" "text/x-script.elisp" "text/x-fortran"
       "text/html" "application/inf" "text/x-java-source" "application/x-javascript"
       "application/javascript" "text/ecmascript" "application/x-ksh" "text/x-script.ksh"

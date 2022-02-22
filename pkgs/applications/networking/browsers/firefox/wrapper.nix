@@ -159,11 +159,10 @@ let
         name = applicationName;
         exec = "${applicationName}${nameSuffix} %U";
         inherit icon;
-        comment = "";
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
-        categories = "Network;WebBrowser;";
-        mimeType = lib.concatStringsSep ";" [
+        categories = [ "Network" "WebBrowser" ];
+        mimeTypes = [
           "text/html"
           "text/xml"
           "application/xhtml+xml"

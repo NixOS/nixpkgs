@@ -106,11 +106,9 @@ mkYarnPackage rec {
     desktopName = "Element";
     genericName = "Matrix Client";
     comment = meta.description;
-    categories = "Network;InstantMessaging;Chat;";
-    extraEntries = ''
-      StartupWMClass=element
-      MimeType=x-scheme-handler/element;
-    '';
+    categories = [ "Network" "InstantMessaging" "Chat" ];
+    startupWMClass = "element";
+    mimeTypes = [ "x-scheme-handler/element" ];
   };
 
   passthru = {

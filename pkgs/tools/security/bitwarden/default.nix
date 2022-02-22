@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     icon = "bitwarden";
     comment = "A secure and free password manager for all of your devices";
     desktopName = "Bitwarden";
-    categories = "Utility";
+    categories = [ "Utility" ];
   };
 
   dontBuild = true;

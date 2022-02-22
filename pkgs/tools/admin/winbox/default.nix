@@ -45,11 +45,8 @@ let
     comment = "GUI administration for Mikrotik RouterOS";
     exec = pname;
     icon = pname;
-    type = "Application";
-    categories = "Utility";
-    extraDesktopEntries = {
-      StartupWMClass = last (splitString "/" executable);
-    };
+    categories = [ "Utility" ];
+    startupWMClass = last (splitString "/" executable);
   };
 
   # The icon is also from the winbox AUR package (see above).

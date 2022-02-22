@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     comment = "Client side implementation of the eCard-API-Framework";
     icon = "oec_logo_bg-transparent.svg";
     exec = pname;
-    categories = "Utility;Security;";
+    categories = [ "Utility" "Security" ];
   };
 
   installPhase = ''

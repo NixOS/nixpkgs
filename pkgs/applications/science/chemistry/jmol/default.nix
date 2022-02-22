@@ -12,8 +12,16 @@ let
     exec = "jmol";
     desktopName = "JMol";
     genericName = "Molecular Modeler";
-    mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
-    categories = "Graphics;Education;Science;Chemistry;";
+    mimeTypes = [
+      "chemical/x-pdb"
+      "chemical/x-mdl-molfile"
+      "chemical/x-mol2"
+      "chemical/seq-aa-fasta"
+      "chemical/seq-na-fasta"
+      "chemical/x-xyz"
+      "chemical/x-mdl-sdf"
+    ];
+    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
   };
 in
 stdenv.mkDerivation rec {
