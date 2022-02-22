@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "weekly.2021.51";
+  version = "weekly.2022.07";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "1jvq3fxckl2jidiigkvclacjxbg5k38268mck7bl1ky1yspgfrnq";
+    sha256 = "sTnev6nxmaR8aSZJ9K70iZF84WkkoxOrbza9a+MTwxY=";
   };
 
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "c8ed2cd82b247e94c33217dba35c420cfc02fef3";
-    sha256 = "1acgx1qp480jmsv1xvqy1zf7iyy90mvg9x1m1b0zrwx09wz4y1cq";
+    rev = "3155be181911eb94ada67fcfef0911df7017992c";
+    sha256 = "SXf4F0c4aNSL+6Dze6W8cFSqJZr361gDNAjxPjduuHw=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://vlang.io/";
-    description = "Simple, fast, safe, compiled language for developing maintainable software";
+    description =
+      "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
