@@ -7,7 +7,7 @@ let
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
-  hsPkgs = self: pkgs.haskellPackages.override {
+  hsPkgs = self: pkgs.haskell.packages.ghc8107.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
       elm = overrideCabal (drv: {
@@ -200,4 +200,3 @@ in lib.makeScope pkgs.newScope (self: with self; {
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })
   )
-
