@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/droidcam.c \
-      --replace "/opt/droidcam-icon.png" "$out/share/icons/hicolor/droidcam.png"
+      --replace "/opt/droidcam-icon.png" "$out/share/icons/hicolor/96x96/apps/droidcam.png"
+    substituteInPlace droidcam.desktop \
+      --replace "/opt/droidcam-icon.png" "droidcam" \
+      --replace "/usr/local/bin/droidcam" "droidcam"
   '';
 
   preBuild = ''
@@ -42,7 +45,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dt $out/bin droidcam droidcam-cli
-    install -D icon2.png $out/share/icons/hicolor/droidcam.png
+    install -D icon2.png $out/share/icons/hicolor/96x96/apps/droidcam.png
+    install -D droidcam.desktop $out/share/applications/droidcam.desktop
 
     runHook postInstall
   '';

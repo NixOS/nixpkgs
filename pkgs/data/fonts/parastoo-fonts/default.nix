@@ -21,6 +21,6 @@ in fetchFromGitHub {
     description = "A Persian (Farsi) Font - فونت ( قلم ) فارسی پرستو";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

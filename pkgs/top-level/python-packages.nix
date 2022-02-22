@@ -760,6 +760,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  augmax = callPackage ../development/python-modules/augmax { };
+
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
@@ -1165,6 +1167,8 @@ in {
   beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
+
+  beartype = callPackage ../development/python-modules/beartype { };
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
