@@ -32997,13 +32997,9 @@ with pkgs;
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
-  dblatex = callPackage ../tools/typesetting/tex/dblatex {
-    enableAllFeatures = false;
-  };
+  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
-  dblatexFull = appendToName "full" (dblatex.override {
-    enableAllFeatures = true;
-  });
+  dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
