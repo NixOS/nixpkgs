@@ -116,9 +116,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/config
-    cp -R ./* $out
-    rm -R $out/tmp/*
+    cp -R . $out
     cp ${databaseConfig} $out/config/database.yml
     cp ${secretsConfig} $out/config/secrets.yml
     sed -i -e "s|info|debug|" $out/config/environments/production.rb

@@ -234,8 +234,7 @@ in
       inherit environment;
       serviceConfig = serviceConfig // {
         # loading all the gems takes time
-        TimeoutStartSec = 600;
-        Restart = "no";
+        TimeoutStartSec = 1200;
       };
       after = [
         "network.target"
@@ -270,6 +269,7 @@ in
           cat ${cfg.secretKeyBaseFile}
         } > ./config/secrets.yml
         ''}
+
         if [ `${config.services.postgresql.package}/bin/psql \
                   --host ${cfg.database.host} \
                   ${optionalString
@@ -307,6 +307,7 @@ in
       serviceConfig = serviceConfig // { Type = "forking"; };
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
+      wants = [ "zammad-web.service" ];
       description = "Zammad scheduler";
       wantedBy = [ "multi-user.target" ];
       script = "./script/scheduler.rb start";
