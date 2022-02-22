@@ -7820,7 +7820,9 @@ with pkgs;
 
   mdp = callPackage ../applications/misc/mdp { };
 
-  mednafen = callPackage ../applications/emulators/mednafen { };
+  mednafen = callPackage ../applications/emulators/mednafen {
+    inherit (darwin) libiconv;
+  };
 
   mednafen-server = callPackage ../applications/emulators/mednafen/server.nix { };
 
