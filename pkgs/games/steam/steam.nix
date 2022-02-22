@@ -33,6 +33,10 @@ in stdenv.mkDerivation {
     cp ./subprojects/steam-devices/*.rules $out/etc/udev/rules.d/
     substituteInPlace $out/etc/udev/rules.d/60-steam-input.rules \
       --replace "/bin/sh" "${bash}/bin/bash"
+
+    # Use PATH to find steam, as /usr/bin/ path will always fail
+    substituteInPlace $out/share/applications/steam.desktop \
+      --replace "/usr/bin/steam" "steam"
   '';
 
   meta = with lib; {
