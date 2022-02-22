@@ -57,6 +57,8 @@ buildPythonPackage rec {
     "test_hosts_no_network"
     "test_leakage_from_tracebacks"
     "test_patcher_existing_locks_locked"
+    # broken with pyopenssl 22.0.0
+    "test_sendall_timeout"
   ];
 
   disabledTestPaths = [

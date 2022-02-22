@@ -191,7 +191,6 @@ in with passthru; stdenv.mkDerivation {
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
-    substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
     # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
@@ -342,8 +341,6 @@ in with passthru; stdenv.mkDerivation {
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
   '' + optionalString stdenv.isDarwin ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
-    export MACOSX_DEPLOYMENT_TARGET=10.6
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
   '' + optionalString (isPy3k && pythonOlder "3.7") ''

@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.17.2";
+  version = "0.18.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4wDXvO6pDK0dQLnyfJTTa+GXf9Qtsi6ywYDUIdhkgGo=";
+    hash = "sha256-PE66ogjfzj6cW3+UD5nZHSt6zg7b+j6Q4ACznE4j0j8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   checkInputs = [
     flaky
     hypothesis
+    flaky
     pytestCheckHook
   ];
 
@@ -44,9 +45,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "library for testing asyncio code with pytest";
+    description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

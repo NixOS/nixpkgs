@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, gst_all_1
+, autoconf
 , gtk2
-, gtk3
 , libGL
 , libGLU
 , libSM
@@ -11,67 +10,60 @@
 , libXxf86vm
 , pkg-config
 , xorgproto
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , compat24 ? false
 , compat26 ? true
 , unicode ? true
-, withGtk2 ? true
-, withWebKit ? false, webkitgtk
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , darwin
 }:
 
-assert withGtk2 -> (!withWebKit);
-
+assert withMesa -> libGLU != null && libGL != null;
 let
   inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
-  inherit (gst_all_1) gstreamer gst-plugins-base;
-  gtk = if withGtk2 then gtk2 else gtk3;
+  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
 in
 stdenv.mkDerivation rec {
-  pname = "wxwidgets";
-  version = "3.0.5";
+  pname = "wxGTK";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-p69nNCg552j+nldGY0oL65uFRVu4xXCkoE10F5MwY9A=";
+    hash = "sha256-izefAPU4lORZxQja7/InHyElJ1++2lDloR+xPudsRNE=";
   };
 
+  patches = [
+    # https://github.com/wxWidgets/wxWidgets/issues/17942
+    ./0001-fix-assertion-using-hide-in-destroy.patch
+  ];
+
   nativeBuildInputs = [
+    autoconf
     pkg-config
   ];
 
   buildInputs = [
-    gstreamer
-    gst-plugins-base
-    gtk
+    gtk2
     libSM
     libXinerama
     libXxf86vm
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional withWebKit webkitgtk
   ++ lib.optionals stdenv.isDarwin [
     Carbon
     Cocoa
     Kernel
-    QTKit
+    QuickTime
     setfile
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
 
-  patches = [
-    # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ../0001-fix-assertion-using-hide-in-destroy.patch
-  ];
-
   configureFlags = [
     "--disable-precomp-headers"
-    "--enable-mediactrl"
+    "--enable-gtk2"
     (if compat24 then "--enable-compat24" else "--disable-compat24")
     (if compat26 then "--enable-compat26" else "--disable-compat26")
   ]
@@ -81,15 +73,12 @@ stdenv.mkDerivation rec {
     "--enable-universal-binaries"
     "--with-cocoa"
     "--with-macosx-version-min=10.7"
-  ]
-  ++ lib.optionals withWebKit [
-    "--enable-webview"
-    "--enable-webview-webkit"
   ];
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
+    ./autogen.sh
     substituteInPlace configure --replace \
       'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
     substituteInPlace configure --replace \
@@ -127,12 +116,12 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.wxWindows;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.darwin ++ platforms.linux;
     badPlatforms = [ "x86_64-darwin" ];
   };
 
   passthru = {
-    inherit gtk;
     inherit compat24 compat26 unicode;
+    gtk = gtk2;
   };
 }
