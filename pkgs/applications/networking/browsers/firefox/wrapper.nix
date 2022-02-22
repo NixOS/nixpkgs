@@ -27,6 +27,7 @@ let
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
+    , wmClass ? null
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , forceWayland ? false
@@ -171,6 +172,7 @@ let
           "x-scheme-handler/https"
           "x-scheme-handler/ftp"
         ];
+        startupWMClass = wmClass;
       };
 
       nativeBuildInputs = [ makeWrapper lndir replace jq ];
