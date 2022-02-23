@@ -21781,6 +21781,8 @@ with pkgs;
     buildGoModule = buildGo116Module;
   };
 
+  mycroft = recurseIntoAttrs (callPackage ../servers/mycroft { });
+
   napalm = with python3Packages; toPythonApplication (
     napalm.overridePythonAttrs (attrs: {
       # add community frontends that depend on the napalm python package
