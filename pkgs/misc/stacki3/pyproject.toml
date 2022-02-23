@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "stacki3"
+version = "1.0.0"
+description = "Stack layout for i3/sway wm."
+authors = ["Viliam Valent <stacki3@viliamvalent.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/ViliamV/stacki3"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+i3ipc = "^2.2.1"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+isort = "^5.7.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+stacki3 = "stacki3:main"
+
+[tool.black]
+line-length = 110
+target-version = ['py38']
+
+[tool.isort]
+line_length = 110
+atomic = true
+include_trailing_comma = true
+lines_after_imports = 2
+lines_between_types = 1
+multi_line_output = 3
+use_parentheses = true

@@ -33554,6 +33554,10 @@ with pkgs;
 
   sndio = callPackage ../misc/sndio { };
 
+  stacki3 = callPackage ../misc/stacki3 {
+    inherit (python3Packages) fetchPypi;
+  };
+
   stork = callPackage ../applications/misc/stork { };
 
   oclgrind = callPackage ../development/tools/analysis/oclgrind { };
