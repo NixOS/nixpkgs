@@ -84,6 +84,12 @@ in
             PostgreSQL = "/run/postgresql";
             MySQL = "localhost";
           }.${cfg.database.type};
+          defaultText = literalExpression ''
+            {
+              PostgreSQL = "/run/postgresql";
+              MySQL = "localhost";
+            }.''${config.services.zammad.database.type};
+          '';
           description = ''
             Database host address.
           '';
