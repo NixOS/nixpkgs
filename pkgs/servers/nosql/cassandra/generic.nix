@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "mirror://apache/cassandra/${version}/apache-${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/cassandra/${version}/apache-cassandra-${version}-bin.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper coreutils ];
@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
           assert test.testPackage.version == version;
           test;
       };
+
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
