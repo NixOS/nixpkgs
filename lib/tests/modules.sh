@@ -293,6 +293,12 @@ checkConfigOutput "{ }" config.submodule.a ./emptyValues.nix
 checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
 
+## types.raw
+checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
+checkConfigOutput "10" config.processedToplevel ./raw.nix
+checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
+checkConfigOutput "bar" config.priorities ./raw.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
