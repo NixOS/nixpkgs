@@ -175,6 +175,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  adapt-parser = callPackage ../development/python-modules/adapt-parser { };
+
   adax = callPackage ../development/python-modules/adax { };
 
   adax-local = callPackage ../development/python-modules/adax-local { };
