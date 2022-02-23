@@ -5416,6 +5416,8 @@ in {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  mycroft-messagebus-client = callPackage ../development/python-modules/mycroft-messagebus-client { };
+
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
