@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "18g1yqlnf48hi2xn2z2wajnjljpdbfdqmcmi7y8hi1r964ypmfcr";
   };
 
+  passthru.updateScript = ./update.sh;
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ mpg123 ffmpeg libvorbis libao jansson speex ];
