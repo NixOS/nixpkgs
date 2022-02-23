@@ -934,6 +934,14 @@
       </listitem>
       <listitem>
         <para>
+          It is now possible to specify wordlists to include as handy to
+          access environment variables using the
+          <literal>config.environment.wordlist</literal> configuration
+          options.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.mbpfan</literal> module was converted to
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
@@ -968,6 +976,13 @@
           <literal>services.mattermost.plugins</literal> has been added
           to allow the declarative installation of Mattermost plugins.
           Plugins are automatically repackaged using autoPatchelf.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.logrotate.enable</literal> now defaults to
+          true if any rotate path has been defined, and some paths have
+          been added by default.
         </para>
       </listitem>
       <listitem>

@@ -1217,6 +1217,23 @@ in
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
 
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
+
+    services.logrotate.paths = {
+      "/var/log/btmp" = mapAttrs (_: mkDefault) {
+        frequency = "monthly";
+        keep = 1;
+        extraConfig = ''
+          create 0660 root ${config.users.groups.utmp.name}
+        '';
+      };
+      "/var/log/wtmp" = mapAttrs (_: mkDefault) {
+        frequency = "monthly";
+        keep = 1;
+        extraConfig = ''
+          create 0664 root ${config.users.groups.utmp.name}
+        '';
+      };
+    };
   };
 
   # FIXME: Remove these eventually.

@@ -9253,6 +9253,12 @@
     githubId = 15930073;
     name = "Moritz Scheuren";
   };
+  ozkutuk = {
+    email = "ozkutuk@protonmail.com";
+    github = "ozkutuk";
+    githubId = 5948762;
+    name = "Berk Özkütük";
+  };
   pablovsky = {
     email = "dealberapablo07@gmail.com";
     github = "pablo1107";
