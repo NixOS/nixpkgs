@@ -21,7 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Wireguard network manager";
-    longDescription = "Wireguard network manager, written in rust, simplifies the setup of wireguard nodes, identifies short connections between nodes residing in the same subnet, identifies unreachable aka dead nodes and maintains the routes between all nodes automatically. To achieve this, wireguard network manager needs to be running on each node.";
+    longDescription = ''
+      Wireguard network manager, written in rust, simplifies the setup of wireguard nodes,
+      identifies short connections between nodes residing in the same subnet,
+      identifies unreachable aka dead nodes and maintains the routes between all nodes automatically.
+      To achieve this, wireguard network manager needs to be running on each node.
+    '';
     homepage = "https://github.com/gin66/wg_netmanager";
     license = with licenses; [ mit asl20 bsd3 mpl20 ];
     maintainers = with maintainers; [ gin66 ];
