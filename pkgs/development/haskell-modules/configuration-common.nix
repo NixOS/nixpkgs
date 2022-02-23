@@ -987,6 +987,10 @@ self: super: {
   ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
   stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
+  # Too strict version bound on hashable-time.
+  # Tests require newer package version.
+  aeson_1_5_6_0 = dontCheck (doJailbreak super.aeson_1_5_6_0);
+
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
