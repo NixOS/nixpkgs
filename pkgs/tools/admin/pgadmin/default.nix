@@ -151,7 +151,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    tests = { inherit (nixosTests) pgadmin4; };
+    tests = { inherit (nixosTests) pgadmin4 pgadmin4-standalone; };
   };
 
   meta = with lib; {
