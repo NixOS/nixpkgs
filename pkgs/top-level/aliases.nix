@@ -1327,6 +1327,7 @@ mapAliases ({
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite
+    krunner-ssh
     krunner-symbols
   ;
   inherit (libsForQt5)
