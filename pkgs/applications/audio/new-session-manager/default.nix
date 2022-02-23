@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    homepage = "https://linuxaudio.github.io/new-session-manager/";
+    homepage = "https://new-session-manager.jackaudio.org/";
     description = "A session manager designed for audio applications.";
     maintainers = [ maintainers._6AA4FD ];
     license = licenses.gpl3Plus;
