@@ -33,9 +33,16 @@ in buildGoPackage rec {
 
   goPackagePath = "github.com/openshift/origin";
 
-  buildInputs = [ libkrb5 ncurses ];
+  buildInputs = [ libkrb5 ];
 
-  nativeBuildInputs = [ which rsync go-bindata clang installShellFiles ];
+  nativeBuildInputs = [
+    clang
+    go-bindata
+    installShellFiles
+    ncurses
+    rsync
+    which
+  ];
 
   patchPhase = ''
     patchShebangs ./hack

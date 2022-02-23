@@ -31,5 +31,5 @@ rec {
   # Hooks
   inherit (callPackage ../../../build-support/rust/hooks {
     inherit stdenv cargo rustc;
-  }) cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook maturinBuildHook;
+  }) cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook maturinBuildHook bindgenHook;
 }

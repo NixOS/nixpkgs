@@ -879,6 +879,8 @@ with pkgs;
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
+  aardvark-dns = callPackage ../tools/networking/aardvark-dns { };
+
   a2ps = callPackage ../tools/text/a2ps { };
 
   abcm2ps = callPackage ../tools/audio/abcm2ps { };
@@ -1749,6 +1751,8 @@ with pkgs;
   };
 
   doona = callPackage ../tools/security/doona { };
+
+  dotter = callPackage ../tools/misc/dotter { };
 
   droidcam = callPackage ../applications/video/droidcam { };
 
@@ -8060,6 +8064,8 @@ with pkgs;
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
+  netavark = callPackage ../tools/networking/netavark { };
+
   netcdf = callPackage ../development/libraries/netcdf {
     hdf5 = hdf5.override { usev110Api = true; };
   };
@@ -9139,6 +9145,8 @@ with pkgs;
   };
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
+
+  rtabmap = libsForQt5.callPackage ../applications/video/rtabmap/default.nix { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
     jack = libjack2;
@@ -13415,7 +13423,6 @@ with pkgs;
 
   inherit (callPackage ../development/compilers/vala { })
     vala_0_48
-    vala_0_52
     vala_0_54
     vala;
 
