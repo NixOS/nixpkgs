@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mani";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     rev = "v${version}";
-    sha256 = "sha256-EkoDyVDK+DmwK45qBPwyHegQGsK9B5SQ0zVf1lBYbPE=";
+    sha256 = "sha256-sjudHGqSCgwafyT8alrGvTdC3yM2zmbRcYshxSm23Ko=";
   };
 
   vendorSha256 = "sha256-NnXQAf8m2cGLvwSOzQWXffiG1zyVqDPQnGAeqe7EUHY=";
