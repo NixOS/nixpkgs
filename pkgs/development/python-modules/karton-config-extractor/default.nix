@@ -3,11 +3,15 @@
 , fetchFromGitHub
 , karton-core
 , malduck
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
   version = "2.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
@@ -28,7 +32,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "karton.config_extractor" ];
+
+  pythonImportsCheck = [
+    "karton.config_extractor"
+  ];
 
   meta = with lib; {
     description = "Static configuration extractor for the Karton framework";
