@@ -247,7 +247,10 @@ let
             musleabi = lib.systems.parse.abis.musleabi;
             musleabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
-            or lib.systems.parse.abis.musl;
+            or (if      stdenv.hostPlatform.isMips64n32 then lib.systems.parse.abis.muslabin32
+                # commented out because glibc does not yet understand *-muslabi64
+                #else if stdenv.hostPlatform.isMips64n64 then lib.systems.parse.abis.muslabi64
+                else lib.systems.parse.abis.musl);
         };
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";

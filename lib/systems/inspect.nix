@@ -20,7 +20,8 @@ rec {
     isMips32       = { cpu = { family = "mips"; bits = 32; }; };
     isMips64       = { cpu = { family = "mips"; bits = 64; }; };
     isMips64n32    = { cpu = { family = "mips"; }; abi = { abi = "n32"; }; };
-    isMips64n64    = { cpu = { family = "mips"; }; abi = { abi = "64";  };  };
+    isMips64n64    =[{ cpu = { family = "mips"; }; abi = { abi = "64";  };  }
+                     { cpu = { family = "mips"; bits = 64; }; abi = { name = "musl";  };  } ];
     isMmix         = { cpu = { family = "mmix"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
