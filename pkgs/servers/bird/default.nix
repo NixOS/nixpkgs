@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
+    "--runstatedir=/run/bird"
   ];
 
   passthru.tests = nixosTests.bird;
