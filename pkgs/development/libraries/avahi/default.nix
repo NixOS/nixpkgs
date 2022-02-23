@@ -18,7 +18,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "avahi${lib.optionalString withLibdnssdCompat "-compat"}-${version}";
+  pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
   version = "0.8";
 
   src = fetchurl {
