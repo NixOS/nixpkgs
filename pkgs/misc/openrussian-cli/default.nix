@@ -1,6 +1,9 @@
 { stdenv, lib, fetchFromGitHub, gnumake, pkg-config, wget, unzip, gawk
-, sqlite, which, luaPackages, installShellFiles, makeWrapper
+, sqlite, which, lua, installShellFiles, makeWrapper
 }:
+let
+  luaEnv = lua.withPackages(p: with p; [ luasql-sqlite3 luautf8 ]);
+in
 stdenv.mkDerivation rec {
   pname   = "openrussian-cli";
   version = "1.0.0";
@@ -16,11 +19,11 @@ stdenv.mkDerivation rec {
     gnumake pkg-config wget unzip gawk sqlite which installShellFiles makeWrapper
   ];
 
-  buildInputs = with luaPackages; [ lua luasql-sqlite3 luautf8 ];
+  buildInputs = [ luaEnv ];
 
   makeFlags = [
-    "LUA=${luaPackages.lua}/bin/lua"
-    "LUAC=${luaPackages.lua}/bin/luac"
+    "LUA=${luaEnv}/bin/lua"
+    "LUAC=${luaEnv}/bin/luac"
   ];
 
   dontConfigure = true;
@@ -34,8 +37,8 @@ stdenv.mkDerivation rec {
     cp openrussian $out/bin
 
     wrapProgram $out/bin/openrussian \
-      --prefix LUA_PATH ';' "$LUA_PATH" \
-      --prefix LUA_CPATH ';' "$LUA_CPATH"
+      --prefix LUA_PATH ';' '${lua.pkgs.lib.genLuaPathAbsStr luaEnv}' \
+      --prefix LUA_CPATH ';' '${lua.pkgs.lib.genLuaCPathAbsStr luaEnv}'
 
     runHook postInstall
   '';
