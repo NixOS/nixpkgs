@@ -153,7 +153,9 @@ else let
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-      (map (drv: drv.crossDrv or drv) buildInputs)
+      (map (drv: drv.crossDrv or drv) buildInputs
+         ++ lib.optionals doCheck' checkInputs
+         ++ lib.optionals doInstallCheck' installCheckInputs)
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
