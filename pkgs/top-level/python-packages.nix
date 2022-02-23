@@ -5967,6 +5967,8 @@ in {
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
+  pako = callPackage ../development/python-modules/pako { };
+
   palace = callPackage ../development/python-modules/palace { };
 
   palettable = callPackage ../development/python-modules/palettable { };
