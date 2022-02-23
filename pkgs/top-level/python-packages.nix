@@ -5352,6 +5352,8 @@ in {
 
   msldap = callPackage ../development/python-modules/msldap { };
 
+  msm = callPackage ../development/python-modules/msm { };
+
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
 
   mss = callPackage ../development/python-modules/mss { };
