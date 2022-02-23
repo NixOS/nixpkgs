@@ -123,4 +123,52 @@ in {
       client.succeed('[[ "$(< out)" == "" ]]')
     '';
   };
+
+  mutualAuth = makeTest {
+    name = "mutualAuth";
+
+    nodes = rec {
+      client = {
+        imports = [ makeCert stunnelCommon ];
+        services.stunnel.clients.authenticated-https = {
+          accept = "80";
+          connect = "server:443";
+          verifyPeer = true;
+          CAFile = "/authorized-server-cert.crt";
+          cert = "/test-cert.pem";
+          key = "/test-key.pem";
+        };
+      };
+      wrongclient = client;
+      server = {
+        imports = [ makeCert serverCommon stunnelCommon ];
+        services.stunnel.servers.https = {
+          CAFile = "/authorized-client-certs.crt";
+          verifyPeer = true;
+        };
+        environment.etc."webroot/index.html".text = "secret handshake";
+      };
+    };
+
+    testScript = ''
+      start_all()
+
+      ${copyCert "server" "client" "/authorized-server-cert.crt"}
+      ${copyCert "client" "server" "/authorized-client-certs.crt"}
+      ${copyCert "server" "wrongclient" "/authorized-server-cert.crt"}
+
+      # In case stunnel came up before we got the cross-certs in place
+      client.succeed("systemctl reload-or-restart stunnel")
+      server.succeed("systemctl reload-or-restart stunnel")
+      wrongclient.succeed("systemctl reload-or-restart stunnel")
+
+      server.wait_for_unit("simple-webserver")
+      client.fail("curl --fail --insecure https://server/ > out")
+      client.succeed('[[ "$(< out)" == "" ]]')
+      client.succeed("curl --fail http://localhost/ > out")
+      client.succeed('[[ "$(< out)" == "secret handshake" ]]')
+      wrongclient.fail("curl --fail http://localhost/ > out")
+      wrongclient.succeed('[[ "$(< out)" == "" ]]')
+    '';
+  };
 }
