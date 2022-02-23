@@ -331,6 +331,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openssh</literal> has been update to 8.9p1, changing
+          the FIDO security key middleware interface.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The DHCP server (<literal>services.dhcpd4</literal>,
           <literal>services.dhcpd6</literal>) has been hardened. The
           service is now using the systemd’s
