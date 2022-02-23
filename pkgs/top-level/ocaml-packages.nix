@@ -620,7 +620,7 @@ let
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
-    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+    lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
 

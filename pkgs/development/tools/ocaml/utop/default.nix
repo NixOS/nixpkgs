@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, ocaml, findlib
-, lambdaTerm, cppo, makeWrapper, buildDunePackage
+, lambda-term, cppo, makeWrapper, buildDunePackage
 }:
 
 if !lib.versionAtLeast ocaml.version "4.03"
@@ -20,7 +20,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cppo ];
 
-  propagatedBuildInputs = [ lambdaTerm ];
+  propagatedBuildInputs = [ lambda-term ];
 
   postFixup =
    let
