@@ -16104,6 +16104,7 @@ with pkgs;
     boost174
     boost175
     boost177
+    boost178
   ;
 
   boost15x = boost159;
