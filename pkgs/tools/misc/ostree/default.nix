@@ -20,7 +20,7 @@
 , autoconf
 , automake
 , libtool
-, fuse
+, fuse3
 , util-linuxMinimal
 , libselinux
 , libsodium
@@ -41,13 +41,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2021.6";
+  version = "2022.1";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-6AYxyxNj1HNP6dDJH2mmi+OEgWbW4EgdsZzkSpy09TE=";
+    sha256 = "sha256-Q6AOeFaEK4o09mFvws4c4jjvQyEMykH3DmtLDSqfytU=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     libsoup
     glib-networking
     gpgme
-    fuse
+    fuse3
     libselinux
     libsodium
     libcap

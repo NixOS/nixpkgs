@@ -13611,6 +13611,10 @@ with pkgs;
 
   duktape = callPackage ../development/interpreters/duktape { };
 
+  duckscript = callPackage ../development/tools/rust/duckscript {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+
   evcxr = callPackage ../development/interpreters/evcxr {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };

@@ -138,7 +138,7 @@ rec {
             # support for that, in turn it's lazy in its values. This means e.g.
             # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
             # start a download when `pkgs` wasn't evaluated.
-            type = types.lazyAttrsOf types.unspecified;
+            type = types.lazyAttrsOf types.raw;
             internal = true;
             description = "Arguments passed to each module.";
           };
