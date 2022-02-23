@@ -77,6 +77,9 @@ let
     in elmPkgs // {
       inherit elmPkgs;
 
+      # We need attoparsec < 0.14 to build elm for now
+      attoparsec = self.attoparsec_0_13_2_5;
+
       # Needed for elm-format
       indents = self.callPackage ./packages/indents.nix {};
       bimap = self.callPackage ./packages/bimap.nix {};
