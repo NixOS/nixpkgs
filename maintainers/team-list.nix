@@ -409,6 +409,14 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  mycroft = {
+    members = [
+      hexa
+      mic92
+    ];
+    scope = "Maintain the ecosystem around Mycroft, an open source voice assistant.";
+  };
+
   openstack = {
     members = [
       emilytrau
