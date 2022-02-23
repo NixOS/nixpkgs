@@ -82,5 +82,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl3Plus ];
     maintainers = with maintainers; [ KarlJoad ];
     platforms = platforms.all;
+    badPlatforms = platforms.darwin;
   };
 }
