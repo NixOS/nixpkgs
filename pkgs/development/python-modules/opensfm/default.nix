@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -110,7 +111,7 @@ buildPythonPackage rec {
     "-Sopensfm/src"
   ];
 
-  disabledTests = [
+  disabledTests = lib.optionals stdenv.isDarwin [
     "test_reconstruction_incremental"
     "test_reconstruction_triangulation"
   ];
