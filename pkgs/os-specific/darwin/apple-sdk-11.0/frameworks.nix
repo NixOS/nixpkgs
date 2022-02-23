@@ -89,7 +89,7 @@
   IOBluetooth                      = { inherit CoreBluetooth IOKit; };
   IOBluetoothUI                    = { inherit IOBluetooth; };
   IOKit                            = {};
-  IOSurface                        = { inherit IOKit xpc; };
+  IOSurface                        = { inherit IOKit Libsystem; };
   IOUSBHost                        = {};
   IdentityLookup                   = {};
   ImageCaptureCore                 = {};
