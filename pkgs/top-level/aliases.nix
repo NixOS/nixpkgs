@@ -1328,9 +1328,16 @@ mapAliases ({
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off
 
-  inherit (ocaml-ng)
-    ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
-    ocamlPackages_4_03 ocamlPackages_latest;
+  ocamlPackages_4_00_1 = throw "'ocamlPackages_4_00_1' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_00_1'"; # Converted to throw 2022-02-22
+  ocamlPackages_4_01_0 = throw "'ocamlPackages_4_01_0' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_01_0'"; # Converted to throw 2022-02-22
+  ocamlPackages_4_02 = throw "'ocamlPackages_4_02' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_02'"; # Converted to throw 2022-02-22
+  ocamlPackages_4_03 = throw "'ocamlPackages_4_03' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_03'"; # Converted to throw 2022-02-22
+  ocamlPackages_latest = throw "'ocamlPackages_latest' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_latest'"; # Converted to throw 2022-02-22
+
+  ocaml_4_00_1 = throw "'ocamlPackages_4_00_1.ocaml' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_00_1.ocaml'"; # Converted to throw 2022-02-22
+  ocaml_4_01_0 = throw "'ocamlPackages_4_01_0.ocaml' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_01_0.ocaml'"; # Converted to throw 2022-02-22
+  ocaml_4_02 = throw "'ocamlPackages_4_02.ocaml' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_02.ocaml'"; # Converted to throw 2022-02-22
+  ocaml_4_03 = throw "'ocamlPackages_4_03.ocaml' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_4_03.ocaml'"; # Converted to throw 2022-02-22
 
   zabbix44 = throw ''
     Zabbix 4.4 is end of life. For details on upgrading to Zabbix 5.0 look at
@@ -1343,13 +1350,6 @@ mapAliases ({
   # Added 2020-06-22
   zeromq3 = throw "zeromq3 has been deprecated by zeromq4.";
   jzmq = throw "jzmq has been removed from nixpkgs, as it was unmaintained";
-
-} // (with ocaml-ng; {
-  ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
-  ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
-  ocaml_4_02   = ocamlPackages_4_02.ocaml;
-  ocaml_4_03   = ocamlPackages_4_03.ocaml;
-}) // {
 
   avian = throw ''
     The package doesn't compile anymore on NixOS and both development &
