@@ -1,4 +1,4 @@
-{ buildPackages, callPackage, stdenv }@prev:
+{ buildPackages, callPackage, stdenv, runCommand }@prev:
 
 { rustc, cargo, stdenv ? prev.stdenv, ... }:
 
@@ -21,11 +21,11 @@ rec {
   importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {};
 
   rustcSrc = callPackage ./rust-src.nix {
-    inherit stdenv rustc;
+    inherit runCommand rustc;
   };
 
   rustLibSrc = callPackage ./rust-lib-src.nix {
-    inherit stdenv rustc;
+    inherit runCommand rustc;
   };
 
   # Hooks
