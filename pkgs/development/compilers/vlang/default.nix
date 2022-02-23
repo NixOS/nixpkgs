@@ -18,6 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "SXf4F0c4aNSL+6Dze6W8cFSqJZr361gDNAjxPjduuHw=";
   };
 
+  # Require for pre-building v tools
+  markdown_module = fetchFromGitHub {
+    name = "vmarkdown_module";
+    owner = "vlang";
+    repo = "markdown";
+    rev = "8d90d75bf1985fd73a101cba653adf04b14e1825";
+    sha256 = "SsK82AAr2qvGsK13GfCi4qvTAvUSKR7N0pLnNAH/OWU=";
+  };
+
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
@@ -39,6 +48,28 @@ stdenv.mkDerivation rec {
     mv v $out/lib
     ln -s $out/lib/v $out/bin/v
     wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+
+    # This is require to because after installation, v will have no write
+    # access and v tools requires installation.
+    # should have done with `$out/lib/v build-tools` but this too requires git.
+    export HOME=$out
+    # Require for vdoc
+    mkdir -p $out/.vmodules; cp -r ${markdown_module}/ $out/.vmodules/markdown
+
+    ARG="-v"
+    $out/lib/v $ARG $out/lib/cmd/tools/vfmt.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vpm.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vcreate.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vtest.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vrepl.v
+    $out/lib/v $ARG $out/lib/cmd/tools/missdoc.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vbin2v.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vbug.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vcomplete.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vwipe-cache.v
+    $out/lib/v $ARG $out/lib/cmd/tools/vdoc
+    $out/lib/v $ARG $out/lib/cmd/tools/vvet
+    $out/lib/v $ARG $out/lib/cmd/tools/vast
     runHook postInstall
   '';
 
