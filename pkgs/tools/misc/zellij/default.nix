@@ -6,10 +6,10 @@
 , pkg-config
 , libiconv
 , openssl
-, zellij
-, testVersion
 , DiskArbitration
 , Foundation
+, zellij
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
