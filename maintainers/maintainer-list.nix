@@ -11553,6 +11553,12 @@
     githubId = 1699155;
     name = "Steve Elliott";
   };
+  stehessel = {
+      email = "stephan@stehessel.de";
+      github = "stehessel";
+      githubId = 55607356;
+      name = "Stephan Heßelmann";
+  };
   stelcodes = {
     email = "stel@stel.codes";
     github = "stelcodes";
