@@ -10,7 +10,7 @@ flutter.mkFlutterApp rec {
   pname = "fluffychat";
   version = "1.2.0";
 
-  vendorHash = "sha256-slQeCECItZirEVf3agB8mqhTg6/JLsErFV2yDj4M3k0=";
+  vendorHash = "sha256-j5opwEFifa+DMG7Uziv4SWEPVokD6OSq8mSIr0AdDL0=";
 
   src = fetchFromGitLab {
     owner = "famedly";
@@ -39,12 +39,18 @@ flutter.mkFlutterApp rec {
   flutterExtraFetchCommands = ''
     M=$(echo $TMP/.pub-cache/hosted/pub.dartlang.org/matrix-*)
     sed -i $M/scripts/prepare.sh \
-      -e "s|/usr/lib/x86_64-linux-gnu/libolm.so.3|${olm}/lib/libolm.so.3|g"  \
+      -e "s|/usr/lib/x86_64-linux-gnu/libolm.so.3|/bin/sh|g"  \
       -e "s|if which flutter >/dev/null; then|exit; if which flutter >/dev/null; then|g"
 
     pushd $M
     bash scripts/prepare.sh
     popd
+  '';
+
+  # replace olm dummy path
+  postConfigure = ''
+    M=$(echo $TMP/.pub-cache/hosted/pub.dartlang.org/matrix-*)
+    ln -sf ${olm}/lib/libolm.so.3 $M/ffi/olm/libolm.so
   '';
 
   postInstall = ''
