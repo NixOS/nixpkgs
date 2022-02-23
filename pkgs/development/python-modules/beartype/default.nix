@@ -5,7 +5,6 @@
 , pythonOlder
 }:
 
-
 buildPythonPackage rec {
   pname = "beartype";
   version = "0.10.2";
@@ -15,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Lo1AUxj+QR7N2Tdif58zGBMSp5Pr0jmz2nacRDnLS5g=";
+    hash = "sha256-Lo1AUxj+QR7N2Tdif58zGBMSp5Pr0jmz2nacRDnLS5g=";
   };
 
   checkInputs = [
