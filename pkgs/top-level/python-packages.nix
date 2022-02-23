@@ -9551,6 +9551,10 @@ in {
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
+  speechrecognition = callPackage ../development/python-modules/speechrecognition {
+    inherit (pkgs) flac;
+  };
+
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
   spglib = callPackage ../development/python-modules/spglib { };
