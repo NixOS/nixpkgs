@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, opencv
 , opencv4
 , ceres-solver
 , suitesparse
@@ -75,7 +74,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config sphinx ];
   buildInputs = [
-    opencv
     ceres'
     suitesparse
     metis
@@ -112,6 +110,11 @@ buildPythonPackage rec {
     "-Sopensfm/src"
   ];
 
+  disabledTests = [
+    "test_reconstruction_incremental"
+    "test_reconstruction_triangulation"
+  ];
+
   pythonImportsCheck = [ "opensfm" ];
 
   meta = {
@@ -119,6 +122,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     description = "Open source Structure-from-Motion pipeline from Mapillary";
     homepage = "https://opensfm.org/";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
