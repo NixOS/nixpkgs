@@ -1,5 +1,6 @@
 { lib
 , fetchurl
+, fetchpatch
 , nixosTests
 , python3
 , ghostscript
@@ -53,6 +54,15 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     url = "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
     sha256 = "oVSq0AWksuWC81MF5xiZ6ZbdKKtqqphmL+xIzJLaDMw=";
   };
+
+  patches = [
+    # Fix the `slow_write_pdf` test:
+    # https://github.com/NixOS/nixpkgs/issues/136626
+    (fetchpatch {
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/4fbabe43ea12811864e9676b04d82a82b38e799d.patch";
+      sha256 = "sha256-8ULep5aeW3wJAQGy2OEAjFYybELNq1DzCC1uBrZx36I=";
+    })
+  ];
 
   format = "other";
 
