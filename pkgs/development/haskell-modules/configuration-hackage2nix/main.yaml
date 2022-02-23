@@ -141,6 +141,7 @@ package-maintainers:
     - pretty-simple
     - purenix
     - spago
+    - stack
     - termonad
   dalpd:
     - ghc-vis
