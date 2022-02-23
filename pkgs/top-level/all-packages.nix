@@ -27624,6 +27624,8 @@ with pkgs;
 
   ocenaudio = callPackage ../applications/audio/ocenaudio { };
 
+  odo = callPackage ../applications/networking/cluster/odo { };
+
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
