@@ -2,6 +2,7 @@
 , meson
 , ninja
 , pkg-config
+, installShellFiles
 
 , platform-tools
 , ffmpeg
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
   buildInputs = [ ffmpeg SDL2 libusb1 ];
 
