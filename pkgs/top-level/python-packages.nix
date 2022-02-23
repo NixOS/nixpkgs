@@ -5350,6 +5350,8 @@ in {
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
 
+  msk = callPackage ../development/python-modules/msk { };
+
   msldap = callPackage ../development/python-modules/msldap { };
 
   msm = callPackage ../development/python-modules/msm { };
