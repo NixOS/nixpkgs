@@ -52,7 +52,7 @@ let
     #   https://docs.zammad.org/en/latest/prerequisites/software.html#ruby-programming-language
     inherit ruby_2_7;
 
-    gemdir = "${src}";
+    gemdir = src;
     gemset = ./gemset.nix;
     groups = [
       "assets"
@@ -89,7 +89,7 @@ let
     inherit version src;
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
-    packageJSON = "${src}/package.json";
+    packageJSON = ./package.json;
   };
 
 in

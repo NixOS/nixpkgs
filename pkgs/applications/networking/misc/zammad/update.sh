@@ -60,6 +60,9 @@ yarn install
 cp yarn.lock $TARGET_DIR
 yarn2nix > $TARGET_DIR/yarn.nix
 
+# needed to avoid import from derivation
+cp package.json $TARGET_DIR
+
 popd
 popd
 popd
