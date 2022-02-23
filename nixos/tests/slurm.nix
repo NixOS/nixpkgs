@@ -2,13 +2,21 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 let
     slurmconfig = {
       services.slurm = {
-        controlMachine = "control";
-        nodeName = [ "node[1-3] CPUs=1 State=UNKNOWN" ];
-        partitionName = [ "debug Nodes=node[1-3] Default=YES MaxTime=INFINITE State=UP" ];
-        extraConfig = ''
-          AccountingStorageHost=dbd
-          AccountingStorageType=accounting_storage/slurmdbd
-        '';
+        settings = {
+          SlurmctldHost = "control";
+          nodeName."node[1-3]" = {
+            CPUs = 1;
+            State = "UNKNOWN";
+          };
+          partitionName.debug = {
+            Nodes = "node[1-3]";
+            Default = true;
+            MaxTime = "INFINITE";
+            State = "UP";
+          };
+          AccountingStorageHost = "dbd";
+          AccountingStorageType = "accounting_storage/slurmdbd";
+        };
       };
       environment.systemPackages = [ mpitest ];
       networking.firewall.enable = false;
