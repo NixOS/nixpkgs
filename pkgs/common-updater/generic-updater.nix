@@ -55,7 +55,7 @@ let
       return 1
     }
 
-    tags=$($version_lister $pname ${fileForGitCommands}) || exit 1
+    tags=$($version_lister --pname=${pname} --file="${fileForGitCommands}") || exit 1
 
     # print available tags
     for tag in $tags; do
