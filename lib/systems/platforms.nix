@@ -485,8 +485,8 @@ rec {
   # MIPS ABI table transcribed from here: https://wiki.debian.org/Multiarch/Tuples
 
   # can execute on 32bit chip
-  mips-linux-gnuabin32          = { config = "mips-linux-gnuabin32";          gcc = { arch = "mips32r2"; abi = "o32"; float = "hard"; }; };
-  mipsel-linux-gnuabin32        = { config = "mipsel-linux-gnuabin32";        gcc = { arch = "mips32r2"; abi = "o32"; float = "hard"; }; };
+  mips-linux-gnu                = { config = "mips-linux-gnu";                gcc = { arch = "mips32r2"; abi = "o32"; float = "hard"; }; };
+  mipsel-linux-gnu              = { config = "mipsel-linux-gnu";              gcc = { arch = "mips32r2"; abi = "o32"; float = "hard"; }; };
   mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-linux-gnu";         gcc = { arch = "mips32r6"; abi = "o32"; float = "hard"; }; };
   mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-linux-gnu";       gcc = { arch = "mips32r6"; abi = "o32"; float = "hard"; }; };
 
