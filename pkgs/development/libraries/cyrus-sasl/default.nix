@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles }:
+, buildPackages, pruneLibtoolFiles, nixosTests }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+
+  passthru.tests = {
+    inherit (nixosTests) parsedmarc postfix;
+  };
 
   meta = {
     homepage = "https://www.cyrusimap.org/sasl";
