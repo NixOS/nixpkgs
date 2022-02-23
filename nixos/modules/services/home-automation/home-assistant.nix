@@ -135,7 +135,7 @@ in {
     };
 
     config = mkOption {
-      type = types.submodule {
+      type = types.nullOr (types.submodule {
         freeformType = format.type;
         options = {
           # This is a partial selection of the most common options, so new users can quickly
@@ -244,7 +244,7 @@ in {
             };
           };
         };
-      };
+      });
       example = literalExpression ''
         {
           homeassistant = {
@@ -349,10 +349,6 @@ in {
       '';
       description = ''
         The Home Assistant package to use.
-        Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
-        If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
-        to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
-        Avoid <literal>home-assistant.overridePythonAttrs</literal> if you use <literal>autoExtraComponents</literal>.
       '';
     };
 
