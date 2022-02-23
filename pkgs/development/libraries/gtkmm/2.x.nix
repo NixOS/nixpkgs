@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, gtk2, glibmm, cairomm, pangomm, atkmm }:
 
 stdenv.mkDerivation rec {
-  name = "gtkmm-${minVer}.5";
-  minVer = "2.24";
+  pname = "gtkmm";
+  version = "2.24.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkmm/${minVer}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
     sha256 = "0680a53b7bf90b4e4bf444d1d89e6df41c777e0bacc96e9c09fc4dd2f5fe6b72";
   };
 
