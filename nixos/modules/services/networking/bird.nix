@@ -72,23 +72,27 @@ in
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
+        # We need to start as root so bird can open netlink sockets i.e. for ospf
         ExecStart = "${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf -u bird2 -g bird2";
         ExecReload = "/bin/sh -c '${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf -p && ${pkgs.bird}/bin/birdc configure'";
         ExecStop = "${pkgs.bird}/bin/birdc down";
+        RuntimeDirectory = "bird";
         CapabilityBoundingSet = [
           "CAP_CHOWN"
           "CAP_FOWNER"
-          "CAP_DAC_OVERRIDE"
           "CAP_SETUID"
           "CAP_SETGID"
-          # see bird/sysdep/linux/syspriv.h
-          "CAP_NET_BIND_SERVICE"
-          "CAP_NET_BROADCAST"
           "CAP_NET_ADMIN"
+          "CAP_NET_BROADCAST"
+          "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW"
         ];
         ProtectSystem = "full";
         ProtectHome = "yes";
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
         SystemCallFilter = "~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
         MemoryDenyWriteExecute = "yes";
       };
