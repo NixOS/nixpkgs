@@ -5969,6 +5969,8 @@ in {
 
   padaos = callPackage ../development/python-modules/padaos { };
 
+  padatious = callPackage ../development/python-modules/padatious { };
+
   pafy = callPackage ../development/python-modules/pafy { };
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
