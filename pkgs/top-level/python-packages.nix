@@ -1988,6 +1988,8 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  dasbus = callPackage ../development/python-modules/dasbus { };
+
   dash = callPackage ../development/python-modules/dash { };
 
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
