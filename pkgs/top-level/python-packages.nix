@@ -2803,6 +2803,10 @@ in {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
+  fann2 = callPackage ../development/python-modules/fann2 {
+    inherit (pkgs) libfann;
+  };
+
   faraday-agent-parameters-types = callPackage ../development/python-modules/faraday-agent-parameters-types { };
 
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
