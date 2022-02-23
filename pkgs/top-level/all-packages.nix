@@ -20048,8 +20048,6 @@ with pkgs;
 
   sope = callPackage ../development/libraries/sope { };
 
-  soprano = callPackage ../development/libraries/soprano { };
-
   sord = callPackage ../development/libraries/sord {};
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
@@ -22047,16 +22045,6 @@ with pkgs;
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
-
-  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix {
-    openssl = openssl_1_0_2;
-  };
-
-  virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix {
-    openssl = openssl_1_0_2;
-  };
-
-  virtuoso = virtuoso6;
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
