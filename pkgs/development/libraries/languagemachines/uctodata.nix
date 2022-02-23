@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "uctodata-${release.version}";
+  pname = "uctodata";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "uctodata-${release.version}.tar.gz"; };
