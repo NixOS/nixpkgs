@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
 }@args:
 
 let
@@ -152,6 +152,10 @@ in
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
+  };
+
+  exiv2 = attrs: {
+    buildFlags = [ "--with-exiv2-lib=${exiv2}/lib" "--with-exiv2-include=${exiv2.dev}/include" ];
   };
 
   fog-dnsimple = attrs:
@@ -412,6 +416,10 @@ in
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -e 's@ENV\["MAGIC_LIB"\] ||@ENV\["MAGIC_LIB"\] || "${file}/lib/libmagic.so" ||@' -i $installPath/lib/magic/api.rb
     '';
+  };
+
+  maxmind_geoip2 = attrs: {
+    buildFlags = [ "--with-maxminddb-lib=${libmaxminddb}/lib" "--with-maxminddb-include=${libmaxminddb}/include" ];
   };
 
   metasploit-framework = attrs: {
