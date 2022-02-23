@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkFlags = [ "units" ];
-
   meta = with lib; {
     description = "A maintained ctags implementation";
     homepage = "https://ctags.io/";
