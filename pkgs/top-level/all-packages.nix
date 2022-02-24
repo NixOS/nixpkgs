@@ -19117,6 +19117,8 @@ with pkgs;
 
   mythes = callPackage ../development/libraries/mythes { };
 
+  nanodbc = callPackage ../development/libraries/nanodbc { };
+
   nanoflann = callPackage ../development/libraries/nanoflann { };
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
