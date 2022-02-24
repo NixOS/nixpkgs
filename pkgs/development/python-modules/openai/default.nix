@@ -9,6 +9,7 @@
 , pandas-stubs
 , requests
 , tqdm
+, wandb
 
 # Check dependencies
 , pytest-mock
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     pandas-stubs
     requests
     tqdm
+    wandb
   ];
 
   pythonImportsCheck = [ "openai" ];
