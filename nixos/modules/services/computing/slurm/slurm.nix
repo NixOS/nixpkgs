@@ -227,15 +227,36 @@ in {
 
   };
 
-  imports = [
-    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "storagePass" ] ''
-      This option has been removed so that the database password is not exposed via the nix store.
-      Use services.slurm.dbdserver.storagePassFile to provide the database password.
+  imports = let
+    removeMessage = "This option has been removed. Please have a look at the 23.05 release notes.";
+    in [
+    (mkRemovedOptionModule [ "services" "slurm" "nodeName" ] ''
+      ${removedMessage}
+      The nodes are now defined in services.slurm.settings.
     '')
-    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "configFile" ] ''
-      This option has been removed. Use services.slurm.dbdserver.storagePassFile
-      and services.slurm.dbdserver.extraConfig instead.
+    (mkRemovedOptionModule [ "services" "slurm" "partitionName" ] ''
+      ${removedMessage}
+      The partitions are now defined in services.slurm.settings.
     '')
+    (mkRemovedOptionModule [ "services" "slurm" "extraConfig" ] ''
+      ${removedMessage}
+      The configuration for slurm.conf is now defined in services.slurm.settings.
+    '')
+    (mkRemovedOptionModule [ "services" "slurm" "extraCgroupConfig" ] ''
+      ${removedMessage}
+      The configuration for cgroup.conf is now defined in services.slurm.settingsCgroup.
+    '')
+    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "extraConfig" ] ''
+      ${removedMessage}
+      The configuration for dbdserver.conf is now defined in services.slurm.dbdserver.settings.
+    '')
+    (mkRemovedOptionModule [ "services" "slurm" "controlAddr" ] ''
+     This option is deprecated. See slurm.conf manual.
+    '')
+    (mkRenamedOptionModule [ "services" "slurm" "stateSaveLocation" ] [ "services" "slurm" "settings" "StateSaveLocation" ] )
+    (mkRenamedOptionModule [ "services" "slurm" "procTrackType" ] [ "services" "slurm" "settings" "ProcTrackType" ] )
+    (mkRenamedOptionModule [ "services" "slurm" "controlMachine" ] [ "services" "slurm" "settings" "SlurmctldHost" ] )
+    (mkRenamedOptionModule [ "services" "slurm" "clusterName" ] [ "services" "slurm" "settings" "ClusterName" ] )
   ];
 
   ###### implementation
