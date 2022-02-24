@@ -76,6 +76,11 @@ buildPythonPackage rec {
     testpath
   ];
 
+  # Build environment doesn't have access to macOS `pbcopy` and `pbpaste`.
+  disabledTests = lib.optional stdenv.isDarwin [
+    "test_clipboard_get"
+  ];
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = "http://ipython.org/";
