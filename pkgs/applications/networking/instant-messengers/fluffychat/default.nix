@@ -49,7 +49,7 @@ flutter.mkFlutterApp rec {
 
   # replace olm dummy path
   postConfigure = ''
-    M=$(echo $TMP/.pub-cache/hosted/pub.dartlang.org/matrix-*)
+    M=$(echo $depsFolder/.pub-cache/hosted/pub.dartlang.org/matrix-*)
     ln -sf ${olm}/lib/libolm.so.3 $M/ffi/olm/libolm.so
   '';
 
