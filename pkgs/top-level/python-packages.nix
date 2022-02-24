@@ -10435,6 +10435,8 @@ in {
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
 
+  volvooncall = callPackage ../development/python-modules/volvooncall { };
+
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   vpk = callPackage ../development/python-modules/vpk { };
