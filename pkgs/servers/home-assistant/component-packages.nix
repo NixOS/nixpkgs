@@ -967,7 +967,7 @@
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ pyvolumio ];
-    "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
+    "volvooncall" = ps: with ps; [ volvooncall ];
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
