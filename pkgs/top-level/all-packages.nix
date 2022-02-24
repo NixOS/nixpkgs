@@ -9315,6 +9315,8 @@ with pkgs;
 
   rcon = callPackage ../tools/networking/rcon { };
 
+  rdap = callPackage ../tools/networking/rdap { };
+
   rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
 
   rdma-core = callPackage ../os-specific/linux/rdma-core { };
