@@ -15,6 +15,7 @@
 , libsndfile
 , pkg-config
 , zlib
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -31,20 +32,25 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     SDL2_net
-    alsa-lib
     flac
     freeglut
-    libGL
-    libGLU
-    libX11
     libcdio
     libjack2
     libsamplerate
     libsndfile
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libGL
+    libGLU
+    libX11
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "format" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/doc
@@ -87,6 +93,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
