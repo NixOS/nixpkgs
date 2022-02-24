@@ -501,6 +501,15 @@ rec {
             }
           else if optionDecls != [] then
               if (lib.head optionDecls).options.type.name == "submodule"
+              # Raw options can only be merged into submodules. Merging into
+              # attrsets might be nice, but ambiguous. Suppose we have
+              # attrset as a `attrsOf submodule`. User declares option
+              # attrset.foo.bar, this could mean:
+              #  a. option `bar` is only available in `attrset.foo`
+              #  b. option `foo.bar` is available in all `attrset.*`
+              #  c. reject and require "<name>" as a reminder that it behaves like (b).
+              #  d. magically combine (a) and (c).
+              # All options are merely syntax sugar though.
               then
                 let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
                 in {
