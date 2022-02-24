@@ -22,7 +22,7 @@ with lib;
 assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
 let
-  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
+  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "" }:
     let
       platformUrlSuffix = optionalString stdenv.isAarch64 "-aarch64";
     in
@@ -89,6 +89,7 @@ in
           aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
           aarch64-darwin = aarch64-linux;
         };
+
         inherit openssl;
         nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
         libPatches = ''
@@ -97,13 +98,8 @@ in
           ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
           ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
           ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
-          patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
-        '';
+        '' + optionalString stdenv.isLinux "patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0";
         jdk = jdk11_headless;
-      } // optionalAttrs stdenv.isDarwin {
-        openssl = null;
-        nativeLibs = [ ];
-        libPatches = "";
       });
   hadoop_3_2 = common rec {
     pname = "hadoop";
@@ -114,7 +110,6 @@ in
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
-    openssl = null;
   };
   hadoop2 = common rec {
     pname = "hadoop";
@@ -123,6 +118,5 @@ in
       x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
     };
     jdk = jdk8_headless;
-    openssl = null;
   };
 }
