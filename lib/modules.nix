@@ -9,7 +9,6 @@ let
     catAttrs
     concatLists
     concatMap
-    count
     elem
     filter
     findFirst
@@ -492,20 +491,16 @@ rec {
           loc = prefix ++ [name];
           defns = defnsByName.${name} or [];
           defns' = defnsByName'.${name} or [];
-          nrOptions = count (m: isOption m.options) decls;
+          optionDecls = filter (m: isOption m.options) decls;
         in
-          if nrOptions == length decls then
+          if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
             in {
               matchedOptions = evalOptionValue loc opt defns';
               unmatchedDefns = [];
             }
-          else if nrOptions != 0 then
-            let
-              firstOption = findFirst (m: isOption m.options) "" decls;
-              firstNonOption = findFirst (m: !isOption m.options) "" decls;
-            in
-              if firstOption.options.type.name == "submodule"
+          else if optionDecls != [] then
+              if (lib.head optionDecls).options.type.name == "submodule"
               then
                 let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
                 in {
@@ -513,7 +508,10 @@ rec {
                   unmatchedDefns = [];
                 }
               else
-                throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
+                let
+                  firstNonOption = findFirst (m: !isOption m.options) "" decls;
+                in
+                throw "The option `${showOption loc}' in `${(lib.head optionDecls)._file}' is a prefix of options in `${firstNonOption._file}'."
           else
             mergeModules' loc decls defns) declsByName;
 
