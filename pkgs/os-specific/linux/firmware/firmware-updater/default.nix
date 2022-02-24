@@ -7,7 +7,7 @@ flutter.mkFlutterApp {
   pname = "firmware-updater";
   version = "unstable";
 
-  vendorHash = "sha256-QgeRCFbd3AcFekJunFTwu2nDOQpAOMJUxZhgY4stJJc=";
+  vendorHash = "sha256-L8am4vTx4KlMHUdIhrUsCxGc27vkolawS/9DyFCPOJQ=";
 
   src = fetchFromGitHub {
     owner = "canonical";
@@ -20,7 +20,7 @@ flutter.mkFlutterApp {
   meta = with lib; {
     description = "Firmware Updater for Linux";
     homepage = "https://github.com/canonical/firmware-updater";
-    license = licenses.free;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.linux;
   };

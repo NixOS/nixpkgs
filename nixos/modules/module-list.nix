@@ -115,6 +115,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
+  ./misc/wordlist.nix
   ./misc/nixops-autoluks.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
@@ -349,7 +350,6 @@
   ./services/databases/redis.nix
   ./services/databases/riak.nix
   ./services/databases/victoriametrics.nix
-  ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix

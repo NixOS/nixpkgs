@@ -35,6 +35,9 @@ in
 ### Please maintain this list in ASCIIbetical ordering.
 ### Hint: the "sections" are delimited by ### <letter> ###
 
+# A script to convert old aliases to throws and remove old
+# throws can be found in './maintainers/scripts/remove-old-aliases.py'.
+
 mapAliases ({
   # forceSystem should not be used directly in Nixpkgs.
   # Added 2018-07-16
@@ -1248,6 +1251,7 @@ mapAliases ({
   vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # Added 2019-12-05
   vimprobable2-unwrapped = vimprobable2; # Added 2019-12-05
   virtinst = throw "virtinst has been removed, as it's included in virt-manager"; # Added 2021-07-21
+  virtuoso = throw "virtuoso has been removed, because it was unmaintained in nixpkgs"; # added 2021-12-15
   virtmanager = virt-manager; # Added 2019-10-29
   virtmanager-qt = virt-manager-qt; # Added 2019-10-29
   virtviewer = virt-viewer; # Added 2015-12-24

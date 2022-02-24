@@ -6524,7 +6524,7 @@
     githubId = 18447310;
   };
   kloenk = {
-    email = "me@kloenk.de";
+    email = "me@kloenk.dev";
     matrix = "@kloenk:petabyte.dev";
     name = "Finn Behrens";
     github = "kloenk";
@@ -9253,6 +9253,12 @@
     githubId = 15930073;
     name = "Moritz Scheuren";
   };
+  ozkutuk = {
+    email = "ozkutuk@protonmail.com";
+    github = "ozkutuk";
+    githubId = 5948762;
+    name = "Berk Özkütük";
+  };
   pablovsky = {
     email = "dealberapablo07@gmail.com";
     github = "pablo1107";
@@ -11546,6 +11552,12 @@
     github = "Steell";
     githubId = 1699155;
     name = "Steve Elliott";
+  };
+  stehessel = {
+      email = "stephan@stehessel.de";
+      github = "stehessel";
+      githubId = 55607356;
+      name = "Stephan Heßelmann";
   };
   stelcodes = {
     email = "stel@stel.codes";

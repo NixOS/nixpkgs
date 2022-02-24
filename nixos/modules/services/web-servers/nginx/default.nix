@@ -988,5 +988,17 @@ in
       nginx.gid = config.ids.gids.nginx;
     };
 
+    services.logrotate.paths.nginx = mapAttrs (_: mkDefault) {
+      path = "/var/log/nginx/*.log";
+      frequency = "weekly";
+      keep = 26;
+      extraConfig = ''
+        compress
+        delaycompress
+        postrotate
+          [ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`
+        endscript
+      '';
+    };
   };
 }

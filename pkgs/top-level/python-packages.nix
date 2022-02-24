@@ -1988,6 +1988,8 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  dasbus = callPackage ../development/python-modules/dasbus { };
+
   dash = callPackage ../development/python-modules/dash { };
 
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
@@ -2842,6 +2844,8 @@ in {
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
+
+  fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
 
@@ -10386,6 +10390,8 @@ in {
   vertica-python = callPackage ../development/python-modules/vertica-python { };
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
+
+  videocr = callPackage ../development/python-modules/videocr { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 

@@ -81,7 +81,7 @@ let
           (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
         ]
       }
-      latest=$(list-git-tags https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+      latest=$(list-git-tags --url=https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
       if [ "$latest" != "${version}" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"

@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , platformio
 , esptool
 , git
@@ -16,24 +15,15 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.2.4";
+  version = "2022.2.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-RG5wTWEpBEC4zTGJ7XTmnjnhSVAllqXjcr3qYbmhqP4=";
+    sha256 = "sha256-ZHxPiQEqFmW9tYv5SaHutOuBh7gsmN4Ux4+sMAJRIk4=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix ESPHOME_USE_SUBPROCESS usage in the ESP32 post build script
-      # https://github.com/esphome/esphome/pull/3246
-      url = "https://github.com/esphome/esphome/commit/dcd3f42eda5828c42feadbaa04b703c63899be54.patch";
-      hash = "sha256-rF1YHRRHVHfoRs492zmIOmRGPUzxx3s673UVx5UJ3+M=";
-    })
-  ];
 
   postPatch = ''
     # remove all version pinning (E.g tornado==5.1.1 -> tornado)

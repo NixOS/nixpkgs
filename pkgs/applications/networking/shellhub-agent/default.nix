@@ -1,8 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 , makeWrapper
 , openssh
 }:
@@ -25,9 +24,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.AgentVersion=v${version}" ];
 
   passthru = {
-    updateScript = genericUpdater {
+    updateScript = gitUpdater {
       inherit pname version;
-      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
       rev-prefix = "v";
       ignoredVersions = ".(rc|beta).*";
     };
