@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , setuptools-scm
 , pytestCheckHook
+, cacert
 }:
 
 buildPythonPackage rec {
@@ -19,11 +21,15 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ] ++ lib.optional stdenv.isDarwin [
+    cacert
   ];
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
+    # fails if IPv6 isn't available
+    "test_resolver_override"
   ];
 
   nativeBuildInputs = [
