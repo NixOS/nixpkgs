@@ -898,6 +898,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
+  ./services/networking/tetrd.nix
   ./services/networking/teleport.nix
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix
