@@ -33523,6 +33523,8 @@ with pkgs;
 
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
+  i3a = callPackage ../misc/i3a { };
+
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
   lice = python3Packages.callPackage ../tools/misc/lice {};
