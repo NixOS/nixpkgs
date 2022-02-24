@@ -20502,20 +20502,26 @@ with pkgs;
   wxformbuilder = callPackage ../development/tools/wxformbuilder { };
 
   wxGTK = wxGTK28;
-
   wxGTK30 = wxGTK30-gtk2;
   wxGTK31 = wxGTK31-gtk2;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 { };
 
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9 { };
+  wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9 {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
+  };
 
   wxGTK30-gtk2 = callPackage ../development/libraries/wxwidgets/3.0 {
     withGtk2 = true;
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   };
 
   wxGTK30-gtk3 = callPackage ../development/libraries/wxwidgets/3.0 {
     withGtk2 = false;
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   };
 
   wxGTK31-gtk2 = callPackage ../development/libraries/wxwidgets/3.1 {
