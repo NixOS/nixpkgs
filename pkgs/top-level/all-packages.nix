@@ -28912,6 +28912,8 @@ with pkgs;
 
   sipp = callPackage ../development/tools/misc/sipp { };
 
+  skanpage = libsForQt5.callPackage ../applications/graphics/skanpage { };
+
   soci = callPackage ../development/libraries/soci { };
 
   socialscan = with python3.pkgs; toPythonApplication socialscan;
