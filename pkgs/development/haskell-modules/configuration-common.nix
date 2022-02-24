@@ -224,6 +224,7 @@ self: super: {
   burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
   cabal-meta = dontCheck super.cabal-meta;              # http://hydra.cryp.to/build/497892/log/raw
   camfort = dontCheck super.camfort;
+  canonical-json = dontCheck super.canonical-json;
   cjk = dontCheck super.cjk;
   CLI = dontCheck super.CLI;                            # Upstream has no issue tracker.
   command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
@@ -314,6 +315,7 @@ self: super: {
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
+  OddWord = dontCheck super.OddWord;
   odpic-raw = dontCheck super.odpic-raw; # needs a running oracle database server
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
@@ -343,7 +345,7 @@ self: super: {
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
-  snap-core = dontCheck super.snap-core;
+  snap-core = doJailbreak (dontCheck super.snap-core); # attoparsec < 0.14
   sourcemap = dontCheck super.sourcemap;
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
@@ -362,6 +364,39 @@ self: super: {
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
+
+  async-timer = dontCheck (doJailbreak (super.async-timer.override {
+    unliftio-core = self.unliftio-core_0_1_2_0;
+  }));
+
+  gray-code = overrideCabal (drv: {
+    setupHaskellDepends = (drv.setupHaskellDepends or []) ++ [ self.QuickCheck ];
+    patches = [ ./patches/gray-code-setup.patch ];
+  }) super.gray-code;
+
+  hs-rqlite = doJailbreak super.hs-rqlite;
+
+  hjsonpointer = doJailbreak super.hjsonpointer;
+  hjsonschema = doJailbreak (dontCheck super.hjsonschema);
+
+  bech32 = overrideCabal (drv: {
+    preCheck = ''export PATH="$PWD/dist/build/bech32:$PATH"'';
+  }) super.bech32;
+
+  quickcheck-state-machine = dontCheck super.quickcheck-state-machine;
+  moo = dontCheck super.moo; # tests fail
+
+  ekg-core = doJailbreak super.ekg-core;
+  ekg-json = doJailbreak super.ekg-json;
+
+  io-streams-haproxy = doJailbreak super.io-streams-haproxy;
+
+  OneTuple = addBuildDepend self.hashable super.OneTuple;
+  universe-base = addBuildDepend self.OneTuple super.universe-base;
+
+  snap-server = doJailbreak super.snap-server;
+
+  ral_0_1 = doJailbreak super.ral_0_1;
 
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
@@ -447,7 +482,7 @@ self: super: {
   bytebuild = dontCheck super.bytebuild;
 
   # https://github.com/andrewthad/haskell-ip/issues/67
-  ip = dontCheck super.ip;
+  ip = doJailbreak (dontCheck super.ip);
 
   # https://github.com/ndmitchell/shake/issues/804
   shake = dontCheck super.shake;

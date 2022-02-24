@@ -227,7 +227,6 @@ broken-packages:
   - async-dejafu
   - asynchronous-exceptions
   - async-manager
-  - async-timer
   - aterm-utils
   - atndapi
   - atomic-modify
@@ -324,7 +323,6 @@ broken-packages:
   - beam-mysql
   - beam-newtype-field
   - beam-sqlite
-  - bech32
   - bed-and-breakfast
   - beeminder-api
   - Befunge93
@@ -564,7 +562,6 @@ broken-packages:
   - call-haskell-from-anything
   - canon
   - canonical-filepath
-  - canonical-json
   - canteven-listen-http
   - canteven-log
   - canteven-parsedate
@@ -1792,7 +1789,6 @@ broken-packages:
   - graph-utils
   - graql
   - grasp
-  - gray-code
   - graylog
   - greencard
   - greg-client
@@ -2199,7 +2195,6 @@ broken-packages:
   - HJavaScript
   - hjcase
   - hjs
-  - hjsonpointer
   - hjson-query
   - hjugement-protocol
   - HJVM
@@ -3457,7 +3452,6 @@ broken-packages:
   - oblivious-transfer
   - ocaml-export
   - Octree
-  - OddWord
   - oden-go-packages
   - oeis2
   - OGL

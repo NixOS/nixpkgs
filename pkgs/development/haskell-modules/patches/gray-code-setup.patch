@@ -1,0 +1,17 @@
+diff --git a/Setup.hs b/Setup.hs
+index 554af02..1f13f5e 100644
+--- a/Setup.hs
++++ b/Setup.hs
+@@ -1,11 +1,4 @@
+ #!/usr/bin/env runhaskell
+ import Distribution.Simple
+ 
+-import Test.QuickCheck
+-import Codec.Binary.Gray_props
+-
+-main = defaultMainWithHooks $
+-       simpleUserHooks { runTests = tests }
+-
+-tests _ _ _ _ = 
+-    quickCheckWith (stdArgs {maxSuccess = 1000}) all_props
++main = defaultMain

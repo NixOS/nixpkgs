@@ -105,4 +105,7 @@ self: super: {
 
   # weeder 2.3.0 no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
+
+  # generic-data needs oneliner for tests
+  generic-data = dontCheck super.generic-data;
 }

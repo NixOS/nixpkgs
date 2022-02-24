@@ -11776,6 +11776,11 @@ with pkgs;
 
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
+  cardano-address = (callPackage ../applications/blockchains/cardano { }).cardano-addresses;
+  cardano-cli = (callPackage ../applications/blockchains/cardano { }).cardano-cli;
+  cardano-node = (callPackage ../applications/blockchains/cardano { }).cardano-node;
+  cardano-wallet = (callPackage ../applications/blockchains/cardano { }).cardano-wallet;
+
   ciao = callPackage ../development/compilers/ciao { };
 
   colm = callPackage ../development/compilers/colm { };

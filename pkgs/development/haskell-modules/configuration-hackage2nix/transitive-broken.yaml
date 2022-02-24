@@ -1584,7 +1584,6 @@ dont-distribute-packages:
  - hist-pl-lmf
  - hit
  - hit-graph
- - hjsonschema
  - hjugement-cli
  - hlcm
  - hledger-api

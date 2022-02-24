@@ -1,0 +1,13 @@
+diff --git a/src/System/IOManager.hs b/src/System/IOManager.hs
+index 45ece57..74440cb 100644
+--- a/src/System/IOManager.hs
++++ b/src/System/IOManager.hs
+@@ -51,7 +51,7 @@ newtype IOManager = IOManager {
+   }
+ 
+ associateWithIOCP :: forall hole. IOManager -> hole -> IO ()
+-associateWithIOCP = associateWithIOManager
++associateWithIOCP = \x -> associateWithIOManager x
+ #endif
+ 
+ type AssociateWithIOCP = IOManager
