@@ -94,6 +94,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
     ./0002-meson-patch-ch-install-prefix.patch
+
+    # Fix building docs with latest libxslt.
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/54814c87f3706cc8eb894634ebef0f9cf7dabae6.patch";
+      sha256 = "1k1mGyxyofYzXr3cVtM8ZYsb6tDCzidCRKwKoNS0ocA=";
+    })
   ];
 
   nativeBuildInputs = [
