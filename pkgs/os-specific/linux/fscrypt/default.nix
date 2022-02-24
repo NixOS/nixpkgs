@@ -4,13 +4,13 @@
 
 buildGoModule rec {
   pname = "fscrypt";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "sha256-1pXeqG7RZRT6EgWVnjBp2Ea4Cr2Y3xXa//30JXIZJec=";
+    hash = "sha256-kkcZuX8tB7N8l9O3X6H92EqEqdAcqSbX+pwr7GrcRFY=";
   };
 
   postPatch = ''
@@ -27,11 +27,15 @@ buildGoModule rec {
   buildInputs = [ pam ];
 
   buildPhase = ''
+    runHook preBuild
     make
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     make install
+    runHook postInstall
   '';
 
   meta = with lib; {
