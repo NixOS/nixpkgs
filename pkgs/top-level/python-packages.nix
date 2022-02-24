@@ -7607,6 +7607,8 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
+
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };

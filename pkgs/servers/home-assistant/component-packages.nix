@@ -780,7 +780,7 @@
     "sia" = ps: with ps; [ pysiaalarm ];
     "sigfox" = ps: with ps; [ ];
     "sighthound" = ps: with ps; [ pillow simplehound ];
-    "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
+    "signal_messenger" = ps: with ps; [ pysignalclirestapi ];
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
     "simplisafe" = ps: with ps; [ simplisafe-python ];
     "simulated" = ps: with ps; [ ];
@@ -1476,6 +1476,7 @@
     "sia"
     "sigfox"
     "sighthound"
+    "signal_messenger"
     "simplisafe"
     "simulated"
     "siren"
