@@ -4,15 +4,16 @@
 , fetchFromGitHub
 , cmake
 , cppunit
+, pkg-config
 , curl
 , fuse
 , libkrb5
 , libuuid
 , libxml2
 , openssl
-, pkg-config
 , readline
 , systemd
+, voms
 , zlib
 , enableTests ? true
 }:
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.isLinux [
     fuse
     systemd
+    voms
   ]
   ++ lib.optionals enableTests [
     cppunit
