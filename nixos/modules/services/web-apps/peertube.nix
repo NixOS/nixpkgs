@@ -316,6 +316,15 @@ in {
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
         };
+        import = {
+          videos = {
+            http = {
+              youtube_dl_release = {
+                python_path = "${pkgs.python3}/bin/python";
+              };
+            };
+          };
+        };
       }
       (lib.mkIf cfg.redis.enableUnixSocket { redis = { socket = "/run/redis/redis.sock"; }; })
     ];
