@@ -1,60 +1,95 @@
-From c715a96c693baa0e6c8ab3c96b6c10e0a40bf7af Mon Sep 17 00:00:00 2001
-From: Tadeo Kondrak <me@tadeo.ca>
-Date: Thu, 21 Jan 2021 10:40:49 +0100
-Subject: [PATCH] Fix aerc breaking every time the package is rebuilt.
-
-On NixOS, the SHAREDIR changes on every rebuild to the package, but aerc
-fills it in as part of the default config and then installs that config
-to the users home folder. Fix this by not substituting @SHAREDIR@ in the
-default config until runtime.
----
- Makefile         |  2 +-
- config/config.go | 13 +++++++++++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 77f5e61..98cbc11 100644
---- a/Makefile
-+++ b/Makefile
-@@ -23,7 +23,7 @@ aerc: $(GOSRC)
- 		-o $@
-
- aerc.conf: config/aerc.conf.in
--	sed -e 's:@SHAREDIR@:$(SHAREDIR):g' > $@ < config/aerc.conf.in
-+	cat config/aerc.conf.in > $@
-
- debug: $(GOSRC)
- 	GOFLAGS="-tags=notmuch" \
+diff --git a/config/aerc.conf b/config/aerc.conf
+index 7a5e42389d4a..495b71d50ba7 100644
+--- a/config/aerc.conf
++++ b/config/aerc.conf
+@@ -101,8 +101,7 @@ next-message-on-delete=true
+ #
+ #   ~/.config/aerc/stylesets
+ #   ~/.local/share/aerc/stylesets
+-#   /usr/local/share/aerc/stylesets
+-#   /usr/share/aerc/stylesets
++#   @out@/share/aerc/stylesets
+ #
+ # default: ""
+ stylesets-dirs=
+@@ -247,8 +246,7 @@ new-email=
+ #
+ #   ~/.config/aerc/templates
+ #   ~/.local/share/aerc/templates
+-#   /usr/local/share/aerc/templates
+-#   /usr/share/aerc/templates
++#   @out@/share/aerc/templates
+ #
+ # default: ""
+ template-dirs=
 diff --git a/config/config.go b/config/config.go
-index 87d183a..cb6611a 100644
+index f730fe458d3a..c777a3f855f1 100644
 --- a/config/config.go
 +++ b/config/config.go
-@@ -470,6 +470,16 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
- 			return nil, err
- 		}
- 	}
-+	if sec, err := file.GetSection("templates"); err == nil {
-+		if key, err := sec.GetKey("template-dirs"); err == nil {
-+			sec.NewKey("template-dirs", strings.ReplaceAll(key.String(), "@SHAREDIR@", sharedir))
-+		}
-+	}
-+	if sec, err := file.GetSection("ui"); err == nil {
-+		if key, err := sec.GetKey("stylesets-dirs"); err == nil {
-+			sec.NewKey("stylesets-dirs", strings.ReplaceAll(key.String(), "@SHAREDIR@", sharedir))
-+		}
-+	}
- 	file.NameMapper = mapName
- 	config := &AercConfig{
- 		Bindings: BindingConfig{
-@@ -547,6 +557,9 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
- 		return nil, err
- 	}
-
-+	for i, filter := range config.Filters {
-+		config.Filters[i].Command = strings.ReplaceAll(filter.Command, "@SHAREDIR@", sharedir)
-+	}
- 	if ui, err := file.GetSection("general"); err == nil {
- 		if err := ui.MapTo(&config.General); err != nil {
- 			return nil, err
---
-2.30.0
+@@ -299,8 +299,7 @@ func parseCredential(cred, command string) (string, error) {
+ var defaultDirs []string = []string{
+ 	path.Join(xdg.ConfigHome(), "aerc"),
+ 	path.Join(xdg.DataHome(), "aerc"),
+-	"/usr/local/share/aerc",
+-	"/usr/share/aerc",
++	"@out@/share/aerc",
+ }
+ 
+ func installTemplate(root, name string) error {
+diff --git a/doc/aerc-config.5.scd b/doc/aerc-config.5.scd
+index 1992b59fccb7..3640f04a41b5 100644
+--- a/doc/aerc-config.5.scd
++++ b/doc/aerc-config.5.scd
+@@ -12,7 +12,7 @@ account credentials. We look for these files in your XDG config home plus
+ "aerc", which defaults to ~/.config/aerc.
+ 
+ Examples of these config files are typically included with your installation of
+-aerc and are usually installed in /usr/share/aerc.
++aerc and are installed in @out@/share/aerc.
+ 
+ Each file uses the _ini_ format, and consists of sections with keys and values.
+ A line beginning with # is considered a comment and ignored, as are empty lines.
+@@ -215,8 +215,7 @@ These options are configured in the *[ui]* section of aerc.conf.
+ 	```
+ 	~/.config/aerc/stylesets
+ 	~/.local/share/aerc/stylesets
+-	/usr/local/share/aerc/stylesets
+-	/usr/share/aerc/stylesets
++	@out@/share/aerc/stylesets
+ 	```
+ 
+ 	Default: ""
+@@ -374,9 +373,9 @@ You can also match on non-mimetypes, by prefixing with the header to match
+ against (non-case-sensitive) and a comma, e.g. subject,text will match a
+ subject which contains "text". Use header,~regex to match against a regex.
+ 
+-aerc ships with some default filters installed in the share directory (usually
+-_/usr/share/aerc/filters_). Note that these may have additional dependencies
+-that aerc does not have alone.
++aerc ships with some default filters installed in the share directory
++(_@out@/share/aerc/filters_).
++Note that these may have additional dependencies that aerc does not have alone.
+ 
+ ## TRIGGERS
+ 
+@@ -400,8 +399,8 @@ Templates are used to populate the body of an email. The compose, reply
+ and forward commands can be called with the -T flag with the name of the
+ template name.
+ 
+-aerc ships with some default templates installed in the share directory (usually
+-_/usr/share/aerc/templates_).
++aerc ships with some default templates installed in the share directory
++(_@out@/share/aerc/templates_).
+ 
+ These options are configured in the *[templates]* section of aerc.conf.
+ 
+@@ -413,8 +412,7 @@ These options are configured in the *[templates]* section of aerc.conf.
+ 	```
+ 	~/.config/aerc/templates
+ 	~/.local/share/aerc/templates
+-	/usr/local/share/aerc/templates
+-	/usr/share/aerc/templates
++	@out@/share/aerc/templates
+ 	```
+ 
+ 	Default: ""

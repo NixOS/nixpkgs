@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wiylBBqnivDnMUyCg3Zateu4jcjicTfrQFALT8dg5No=";
+    sha256 = "sha256-CCRrjbJuQHd1GXQ2hVOZHNo417T222IwAAZWy6aWYe0=";
   };
 
   proxyVendor = true;
@@ -27,6 +27,12 @@ buildGoModule rec {
   patches = [
     ./runtime-sharedir.patch
   ];
+
+  postPatch = ''
+    substituteAllInPlace config/aerc.conf
+    substituteAllInPlace config/config.go
+    substituteAllInPlace doc/aerc-config.5.scd
+  '';
 
   pythonPath = [
     python3.pkgs.colorama
