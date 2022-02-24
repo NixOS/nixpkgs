@@ -7,13 +7,15 @@
 , libpng
 , libtiff
 , zlib
-, darwin
+, AGL
+, Cocoa
+, Kernel
+, WebKit
+, derez
+, rez
+, setfile
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel WebKit;
-  inherit (darwin.stubs) derez rez setfile;
-in
 stdenv.mkDerivation rec {
   pname = "wxmac";
   version = "3.0.5.1";

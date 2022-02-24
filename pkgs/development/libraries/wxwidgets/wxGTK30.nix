@@ -17,15 +17,17 @@
 , unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk
-, darwin
+, setfile
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QTKit
 }:
 
 assert withGtk2 -> (!withWebKit);
 
 let
-  inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
-  inherit (gst_all_1) gstreamer gst-plugins-base;
   gtk = if withGtk2 then gtk2 else gtk3;
 in
 stdenv.mkDerivation rec {
@@ -44,8 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gstreamer
-    gst-plugins-base
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     gtk
     libSM
     libXinerama
