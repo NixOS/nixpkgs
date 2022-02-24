@@ -6769,6 +6769,8 @@ in {
 
   pyct = callPackage ../development/python-modules/pyct { };
 
+  pyctr = callPackage ../development/python-modules/pyctr { };
+
   pycuda = callPackage ../development/python-modules/pycuda {
     cudatoolkit = pkgs.cudatoolkit;
     inherit (pkgs.stdenv) mkDerivation;
