@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "mwdblib";
-  version = "3.4.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jCtK3Fk725EaA26GG6j6xqEMFH4Qq92QWrJ7sxcWRaY=";
+    sha256 = "sha256-afqE6zL1uwsLNAuy5XY7OduP1e3W2ueteOOVaFJg3b0=";
   };
 
   propagatedBuildInputs = [
