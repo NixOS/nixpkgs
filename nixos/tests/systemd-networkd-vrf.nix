@@ -159,23 +159,18 @@ in {
     node2.wait_for_unit("network.target")
     node3.wait_for_unit("network.target")
 
-    # NOTE: please keep in mind that the trailing whitespaces in the following strings
-    # are intentional as the output is compared against the raw `iproute2`-output.
-    # editorconfig-checker-disable
     client_ipv4_table = """
-    192.168.1.2 dev vrf1 proto static metric 100 
+    192.168.1.2 dev vrf1 proto static metric 100\x20
     192.168.2.3 dev vrf2 proto static metric 100
     """.strip()
     vrf1_table = """
-    broadcast 192.168.1.0 dev eth1 proto kernel scope link src 192.168.1.1 
-    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1 
-    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1 
+    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1\x20
+    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1\x20
     broadcast 192.168.1.255 dev eth1 proto kernel scope link src 192.168.1.1
     """.strip()
     vrf2_table = """
-    broadcast 192.168.2.0 dev eth2 proto kernel scope link src 192.168.2.1 
-    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1 
-    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1 
+    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1\x20
+    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1\x20
     broadcast 192.168.2.255 dev eth2 proto kernel scope link src 192.168.2.1
     """.strip()
     # editorconfig-checker-enable
