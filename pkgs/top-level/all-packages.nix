@@ -23790,6 +23790,8 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  lxgw-wenkai = callPackage ../data/fonts/lxgw-wenkai { };
+
   maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
 
   mailcap = callPackage ../data/misc/mailcap { };
@@ -24074,6 +24076,8 @@ with pkgs;
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
+
+  soundfont-ydp-grand = callPackage ../data/soundfonts/ydp-grand { };
 
   spdx-license-list-data = callPackage ../data/misc/spdx-license-list-data { };
 
