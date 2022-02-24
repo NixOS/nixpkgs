@@ -14,19 +14,19 @@
 , glib
 , xapian
 , libxml2
+, libxmlb
 , libyaml
 , gobject-introspection
 , pcre
 , itstool
 , gperf
 , vala
-, lmdb
 , curl
 }:
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.14.4";
+  version = "0.15.2";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "ximion";
     repo = "appstream";
     rev = "v${version}";
-    sha256 = "sha256-DJXCw50f+8c58bJw6xx0ECfkc9/KcWaeA+ne2zmTyhg=";
+    sha256 = "sha256-/JZ49wjtcInbGUOVVjevVSrLCHcA60FMT165rhfb78Q=";
   };
 
   patches = [
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
     glib
     xapian
     libxml2
+    libxmlb
     libyaml
     gperf
-    lmdb
     curl
   ];
 
@@ -88,5 +88,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
- };
+  };
 }
