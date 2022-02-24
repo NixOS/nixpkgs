@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
 , pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -21,7 +21,7 @@
 }:
 
 let
-  apparmor-version = "3.0.4";
+  apparmor-version = "3.0.3";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -31,11 +31,9 @@ let
     platforms = platforms.linux;
   };
 
-  apparmor-sources = fetchFromGitLab {
-    owner = "apparmor";
-    repo = "apparmor";
-    rev = "v${apparmor-version}";
-    sha256 = "1a217j28rgfq4lsmpn0wv1xgmdr9ba8iysv9i6q477kj6z77zrb9";
+  apparmor-sources = fetchurl {
+    url = "https://launchpad.net/apparmor/${lib.versions.majorMinor apparmor-version}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
+    sha256 = "0nasq8pdmzkrf856yg1v8z5hcs0nn6gw2qr60ab0a7j9ixfv0g8m";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -50,9 +48,8 @@ let
     substituteInPlace ./common/Make.rules \
       --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man" \
       --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html" \
+      --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h" \
       --replace "/usr/share/man" "share/man"
-    substituteInPlace ./utils/Makefile \
-      --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
@@ -62,8 +59,6 @@ let
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
   ];
-
-  python = python3.withPackages (ps: with ps; [ setuptools ]);
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -91,16 +86,19 @@ let
       ncurses
       which
       perl
-    ] ++ lib.optional withPython python;
+    ] ++ lib.optional withPython python3;
 
     buildInputs = lib.optional withPerl perl
-      ++ lib.optional withPython python;
+      ++ lib.optional withPython python3;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
     '';
     inherit patches;
 
@@ -134,12 +132,12 @@ let
 
     strictDeps = true;
 
-    nativeBuildInputs = [ makeWrapper which python ];
+    nativeBuildInputs = [ makeWrapper which python3 ];
 
     buildInputs = [
       bash
       perl
-      python
+      python3
       libapparmor
       libapparmor.python
     ];
@@ -161,7 +159,7 @@ let
     postInstall = ''
       sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
       done
 
       substituteInPlace $out/bin/aa-notify \
