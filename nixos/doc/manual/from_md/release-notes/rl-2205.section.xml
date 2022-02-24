@@ -147,6 +147,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.scorchworks.com/K40whisperer/k40whisperer.html">K40-Whisperer</link>,
+          a program to control cheap Chinese laser cutters. Available as
+          <link xlink:href="options.html#opt-programs.k4-whisperer.enable">programs.k40-whisperer.enable</link>.
+          Users must add themselves to the <literal>k40</literal> group
+          to be able to access the device.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
           a Prometheus exporter for mtr metrics. Available as
           <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.

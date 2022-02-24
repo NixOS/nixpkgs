@@ -33175,6 +33175,8 @@ with pkgs;
 
   jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
 
+  k40-whisperer = callPackage ../applications/misc/k40-whisperer { };
+
   keynav = callPackage ../tools/X11/keynav { };
 
   kgx = callPackage ../applications/terminal-emulators/kgx { };
