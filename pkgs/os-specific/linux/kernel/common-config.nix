@@ -729,7 +729,7 @@ let
       DRAGONRISE_FF      = yes;
       GREENASIA_FF       = yes;
       HOLTEK_FF          = yes;
-      JOYSTICK_PSXPAD_SPI_FF = yes;
+      JOYSTICK_PSXPAD_SPI_FF = whenAtLeast "4.14" yes;
       LOGIG940_FF        = yes;
       NINTENDO_FF        = whenAtLeast "5.16" yes;
       PLAYSTATION_FF     = whenAtLeast "5.12" yes;
