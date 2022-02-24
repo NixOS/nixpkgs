@@ -14,14 +14,15 @@
 , compat26 ? true
 , unicode ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, darwin
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QuickTime
+, setfile
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
-let
-  inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
-in
 stdenv.mkDerivation rec {
   pname = "wxGTK";
   version = "2.9.5";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ../0001-fix-assertion-using-hide-in-destroy.patch
+    ../patches/0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
   nativeBuildInputs = [
@@ -115,7 +116,7 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.darwin ++ platforms.linux;
     badPlatforms = [ "x86_64-darwin" ];
   };
