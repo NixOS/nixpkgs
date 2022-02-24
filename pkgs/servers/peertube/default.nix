@@ -6,28 +6,28 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
     else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
-  version = "4.0.0";
+  version = "4.1.0";
 
   source = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    sha256 = "sha256-nSbB5hRAMDPeKH48eviBS0xrNYab53BohWLKqRD02BI=";
+    sha256 = "sha256-gW/dzWns6wK3zzNjbW19HrV2jqzjdXR5uMMNXL4Xfdw=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${source}/yarn.lock";
-    sha256 = "sha256-GTBHZMjnIi5xqEQG4tNkX0RvnVGgxnxhX/3vsA/GOLU=";
+    sha256 = "sha256-L1Nr6sGjYVm42OyeFOQeQ6WEXjmNkngWilBtfQJ6bPE=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
     yarnLock = "${source}/server/tools/yarn.lock";
-    sha256 = "sha256-BGr5095F4FQ5ii+2xEmPMAATrqKkZiQ74FJYYo1weKc=";
+    sha256 = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${source}/client/yarn.lock";
-    sha256 = "sha256-Cyoo/85DVehuWcgPfLkk3S1sZE3WXOr79HZs5ULF8pg=";
+    sha256 = "sha256-wniMvtz7i3I4pn9xyzfNi1k7gQuzDl1GmEO8LqPBMKg=";
   };
 
   bcrypt_version = "5.0.1";
