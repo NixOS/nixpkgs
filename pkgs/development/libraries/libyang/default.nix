@@ -10,8 +10,7 @@
 , pcre2
 
 # update script
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +39,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE:String=Release"
   ];
 
-  passthru.updateScript = genericUpdater {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     rev-prefix = "v";
   };
 
