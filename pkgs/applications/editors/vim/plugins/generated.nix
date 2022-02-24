@@ -461,12 +461,12 @@ final: prev:
 
   bufferline-nvim = buildVimPluginFrom2Nix {
     pname = "bufferline.nvim";
-    version = "2022-02-15";
+    version = "2022-02-24";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "bufferline.nvim";
-      rev = "e97a404bd7449ecebab243c796c1016c98397fc0";
-      sha256 = "1cfqcbxvig271zppq0mydj616dgbdy5ryvycc64q5gyq1lfmhnsl";
+      rev = "871495d9e2dbe3314a421fd2d5e46f47de7ee537";
+      sha256 = "1xw13g6l16i6k32f3mdzmihz0m0n9y586ykiynjwkil69wxpjd1l";
     };
     meta.homepage = "https://github.com/akinsho/bufferline.nvim/";
   };
@@ -3228,12 +3228,12 @@ final: prev:
 
   lightspeed-nvim = buildVimPluginFrom2Nix {
     pname = "lightspeed.nvim";
-    version = "2022-02-18";
+    version = "2022-02-24";
     src = fetchFromGitHub {
       owner = "ggandor";
       repo = "lightspeed.nvim";
-      rev = "4d8359a30b26ee5316d0e7c79af08b10cb17a57b";
-      sha256 = "0j5qn12qmahdbyavp85yd633pap0rds4xnn37v2jhkipm0ag81wg";
+      rev = "8fd73360e89a219b5701339c08a469f5703cf163";
+      sha256 = "0y43p3sv99rsbks9r67zjm7wp3j7xpdx6ql5n18371ys8wyyddpd";
     };
     meta.homepage = "https://github.com/ggandor/lightspeed.nvim/";
   };
@@ -4163,12 +4163,12 @@ final: prev:
 
   nerdcommenter = buildVimPluginFrom2Nix {
     pname = "nerdcommenter";
-    version = "2022-02-12";
+    version = "2022-02-24";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "nerdcommenter";
-      rev = "ec002e8f5de441d07cf5cd3ac44f41edc5f939d9";
-      sha256 = "1z7xdgqbcpld1742rw52sc0d128b5wsx2607hwm0y0nrzajd57xb";
+      rev = "f8671f783baeb0739f556d9b6c440ae1767340d6";
+      sha256 = "1j0fxxprxw12b70isnfqixnvz2xd657rr1jphjz8277yfqpdnh2i";
     };
     meta.homepage = "https://github.com/preservim/nerdcommenter/";
   };
@@ -4359,8 +4359,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "jose-elias-alvarez";
       repo = "null-ls.nvim";
-      rev = "b984683d118bd2db53501b774a907485d39a002e";
-      sha256 = "19khlf5x7nn9bk73q2mclqxwwwdhbbkzh0b8rng7jyw8367lf1pw";
+      rev = "ee6134db8f55ed2ef965fbc2d036de3f87a140d9";
+      sha256 = "04dsmih3hmby3sa9w9n6cw2lzz69jmm6yd6nx70fg07730sg364x";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/null-ls.nvim/";
   };
@@ -4739,12 +4739,12 @@ final: prev:
 
   nvim-lspconfig = buildVimPluginFrom2Nix {
     pname = "nvim-lspconfig";
-    version = "2022-02-21";
+    version = "2022-02-24";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "ec7119b166b16e681f663fcbf16b7139b38172ae";
-      sha256 = "115d4n8i9cjafsl0nkrljcswn5qd0ny1cw7w1mw67sjddp79cqq7";
+      rev = "470569379d708e6c8f33f082497e0374067c6fee";
+      sha256 = "1rp9ymbss8jjm1k20q9vp3ayd7lv2cbdiz5ylhx9p1v1glqimigw";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
@@ -5111,12 +5111,12 @@ final: prev:
 
   onedarkpro-nvim = buildVimPluginFrom2Nix {
     pname = "onedarkpro.nvim";
-    version = "2022-02-23";
+    version = "2022-02-24";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "onedarkpro.nvim";
-      rev = "ba41d62559e1008cd03eb373a24f94a5e576134b";
-      sha256 = "0sy5vvg4mdgk1sl3z82nblf84wz9ywk3iy0z464l0a9v4i21yscc";
+      rev = "fda3b36be8613f6ba303082fed7a7e20fdf52205";
+      sha256 = "14i3lqz1l9k8ai9lskrgz511srvf2wwfjd8zlbkmx55ws085ifca";
     };
     meta.homepage = "https://github.com/olimorris/onedarkpro.nvim/";
   };
@@ -5797,12 +5797,12 @@ final: prev:
 
   SchemaStore-nvim = buildVimPluginFrom2Nix {
     pname = "SchemaStore.nvim";
-    version = "2022-02-18";
+    version = "2022-02-24";
     src = fetchFromGitHub {
       owner = "b0o";
       repo = "SchemaStore.nvim";
-      rev = "45761cc7f76abc543e614e2fafa1ea146f4313bb";
-      sha256 = "14d7pfrr57i1b8kjg6bn3v6z7pa7vqrpa0gi4y0wqjmwiyl22zvm";
+      rev = "90f1123c0d63f41627dca0c5258a4193274edba0";
+      sha256 = "0f3jgj1bwvxzmvqf7nbbbwyav5wxmr9kyjw4j4fq7n3mrcapdjj0";
     };
     meta.homepage = "https://github.com/b0o/SchemaStore.nvim/";
   };
@@ -6834,14 +6834,14 @@ final: prev:
 
   todo-nvim = buildVimPluginFrom2Nix {
     pname = "todo.nvim";
-    version = "2022-02-19";
+    version = "2022-02-23";
     src = fetchFromGitHub {
       owner = "AmeerTaweel";
       repo = "todo.nvim";
-      rev = "b252b4116812352161acfa73cdce6a15ffbde2eb";
-      sha256 = "+m3jy0ue0rAzRQ4hJDFPVVjNaOGNImkZjhIqI/AGTeY=";
+      rev = "6bd31dfd64b2730b33aad89423a1055c22fe276a";
+      sha256 = "1887d1bjzixrdinr857cqq4x84760scik04r9mz9zmwdf8nfgh6b";
     };
-    meta.homepage = "https://github.com/AmeerTaweel/todo.nvim";
+    meta.homepage = "https://github.com/AmeerTaweel/todo.nvim/";
   };
 
   todo-txt-vim = buildVimPluginFrom2Nix {
