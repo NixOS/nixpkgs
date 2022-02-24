@@ -642,11 +642,6 @@ rec {
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
           };
         };
-      } // {
-        # Submodule-typed options get special treatment in order to facilitate
-        # certain migrations, such as the addition of freeformTypes onto
-        # existing option trees.
-        isSubmodule = true;
       };
 
     # A value from a set of allowed ones.

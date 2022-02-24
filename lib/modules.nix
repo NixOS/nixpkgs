@@ -505,7 +505,7 @@ rec {
               firstOption = findFirst (m: isOption m.options) "" decls;
               firstNonOption = findFirst (m: !isOption m.options) "" decls;
             in
-              if firstOption.options.type?isSubmodule && firstOption.options.type.isSubmodule
+              if firstOption.options.type.name == "submodule"
               then
                 let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
                 in {
