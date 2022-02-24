@@ -49,14 +49,6 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
-  # The upper bound on xdot's base dependency broke the build of xdot and its
-  # dependants so here we bump it:
-  # > https://github.com/def-/xdot/pull/12
-  xdot = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/def-/xdot/commit/574dce2b834917126590f4a3df53c00fb7f4fee1.patch";
-    sha256 = "sha256-T5mo/XHBMFup6hlqEvIT+VbLGRuGEe4qigJtJCL5KmQ=";
-  }) super.xdot;
-
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
   # and the upper bound doesn't exist in code anymore:
