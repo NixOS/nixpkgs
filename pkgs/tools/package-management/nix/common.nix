@@ -44,6 +44,8 @@ in
 , sqlite
 , util-linuxMinimal
 , xz
+, runCommand
+, writeReferencesToFile
 
 , enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -159,7 +161,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!atLeast24) [
     # option was removed in 2.4
     "--disable-init-state"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (stdenv.isLinux && !enableStatic) [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
@@ -210,6 +212,20 @@ self = stdenv.mkDerivation {
     inherit aws-sdk-cpp boehmgc;
 
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; });
+
+    tests = lib.optionalAttrs enableStatic {
+      noReferences = runCommand "no-static-refs" {} ''
+        refs=$(grep -v ${self} ${writeReferencesToFile self} || true)
+        # Check that nix has no references
+        if [[ $refs != "" ]]; then
+          echo nixStatic should not have any references, but found the following:
+          echo "$refs"
+          exit 1
+        fi
+        echo OK
+        touch $out
+      '';
+    };
   };
 };
 in self
