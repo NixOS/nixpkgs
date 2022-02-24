@@ -213,6 +213,18 @@ let
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
+    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+    pkgsx86Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsx86Darwin = super';
+      })] ++ overlays;
+      localSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          cpu = lib.systems.parse.cpuTypes.x86_64;
+        };
+      };
+    } else throw "x86 Darwin package set can only be used on Darwin systems.";
+
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
     # in one go when calling Nixpkgs, for performance and simplicity.
