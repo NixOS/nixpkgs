@@ -82,7 +82,7 @@ in
       git = 41;
       #fourstore = 42; # dropped in 20.03
       #fourstorehttp = 43; # dropped in 20.03
-      virtuoso = 44;
+      #virtuoso = 44;  dropped module
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
