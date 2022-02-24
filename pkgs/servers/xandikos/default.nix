@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 , pythonOlder
 # dependencies
@@ -11,6 +12,7 @@
 , icalendar
 , jinja2
 , multidict
+, systemd
 , vobject
 # build dependencies
 , setuptools
@@ -32,6 +34,14 @@ buildPythonApplication rec {
     sha256 = "sha256-SqU/K3b8OML3PvFmP7L5R3Ub9vbW66xRpf79mgFZPfc=";
   };
 
+  patches = [
+    # do not listen on default address
+    (fetchpatch {
+      url = "https://github.com/jelmer/xandikos/pull/262.diff";
+      sha256 = "sha256-FiwaY0zWPjofuzmhX39rR5RELqiUYWtxySFlmKjWnDY=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
     wheel
@@ -45,6 +55,7 @@ buildPythonApplication rec {
     icalendar
     jinja2
     multidict
+    systemd
     vobject
   ];
 
