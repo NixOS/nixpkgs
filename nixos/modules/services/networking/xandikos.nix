@@ -4,6 +4,24 @@ with lib;
 
 let
   cfg = config.services.xandikos;
+
+  listenStream =
+    if cfg.address == null then
+      [ "[::1]:${toString cfg.port}" "127.0.0.1:${toString cfg.port}" ]
+    else if hasInfix "/" cfg.address then
+      [ cfg.address ]
+    else if hasInfix ":" cfg.address then
+      [ "[${cfg.address}]:${toString cfg.port}" ]
+    else
+      [ "${cfg.address}:${toString cfg.port}" ]
+    ;
+
+  nginxProxyAddress =
+    if hasInfix "/" (head listenStream) then
+      "unix:${head listenStream}"
+    else
+      head listenStream
+    ;
 in
 {
 
@@ -19,12 +37,13 @@ in
       };
 
       address = mkOption {
-        type = types.str;
-        default = "localhost";
+        type = types.nullOr types.str;
+        default = null;
         description = lib.mdDoc ''
-          The IP address on which Xandikos will listen.
+          The IP address or socket path on which Xandikos will listen.
           By default listens on localhost.
         '';
+        example = "/run/xandikos/socket";
       };
 
       port = mkOption {
@@ -92,11 +111,13 @@ in
       {
         meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
+        systemd.sockets.xandikos = {
+          wantedBy = [ "sockets.target" ];
+          socketConfig.ListenStream = listenStream;
+        };
+
         systemd.services.xandikos = {
           description = "A Simple Calendar and Contact Server";
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-
           serviceConfig = {
             User = "xandikos";
             Group = "xandikos";
@@ -122,8 +143,6 @@ in
             ExecStart = ''
               ${cfg.package}/bin/xandikos \
                 --directory /var/lib/xandikos \
-                --listen-address ${cfg.address} \
-                --port ${toString cfg.port} \
                 --route-prefix ${cfg.routePrefix} \
                 ${lib.concatStringsSep " " cfg.extraOptions}
             '';
@@ -137,7 +156,7 @@ in
             enable = true;
             virtualHosts."${cfg.nginx.hostName}" = {
               locations."/" = {
-                proxyPass = "http://${cfg.address}:${toString cfg.port}/";
+                proxyPass = "http://${nginxProxyAddress}";
               };
             };
           };

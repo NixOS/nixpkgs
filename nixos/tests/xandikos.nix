@@ -15,8 +15,6 @@ import ./make-test-python.nix (
         xandikos_proxy = {
           networking.firewall.allowedTCPPorts = [ 80 8080 ];
           services.xandikos.enable = true;
-          services.xandikos.address = "localhost";
-          services.xandikos.port = 8080;
           services.xandikos.routePrefix = "/xandikos-prefix/";
           services.xandikos.extraOptions = [
             "--defaults"
@@ -39,9 +37,7 @@ import ./make-test-python.nix (
         start_all()
 
         with subtest("Xandikos default"):
-            xandikos_default.wait_for_unit("multi-user.target")
-            xandikos_default.wait_for_unit("xandikos.service")
-            xandikos_default.wait_for_open_port(8080)
+            xandikos_default.wait_for_unit("sockets.target")
             xandikos_default.succeed("curl --fail http://localhost:8080/")
             xandikos_default.succeed(
                 "curl -s --fail --location http://localhost:8080/ | grep -i Xandikos"
@@ -50,9 +46,7 @@ import ./make-test-python.nix (
             xandikos_client.fail("curl --fail http://xandikos_default:8080/")
 
         with subtest("Xandikos proxy"):
-            xandikos_proxy.wait_for_unit("multi-user.target")
-            xandikos_proxy.wait_for_unit("xandikos.service")
-            xandikos_proxy.wait_for_open_port(8080)
+            xandikos_proxy.wait_for_unit("sockets.target")
             xandikos_proxy.succeed("curl --fail http://localhost:8080/")
             xandikos_proxy.succeed(
                 "curl -s --fail --location http://localhost:8080/ | grep -i Xandikos"
