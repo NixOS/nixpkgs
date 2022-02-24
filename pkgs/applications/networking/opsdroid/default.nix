@@ -8,7 +8,7 @@ python3Packages.buildPythonPackage rec {
     owner = "opsdroid";
     repo = "opsdroid";
     rev = "v${version}";
-    sha256 = "0ccxslgy8a18xz9yqcw6y6h93scaif1dbwylyafam635yrbmxv04";
+    sha256 = "0f32jf2rds9543akysxinf3hsgzr0w880xwcrcm1r2r0nhp8b8s5";
   };
 
   disabled = !python3Packages.isPy3k;
