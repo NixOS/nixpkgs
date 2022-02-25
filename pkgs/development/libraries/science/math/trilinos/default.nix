@@ -59,13 +59,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trilinos";
-  version = "12.12.1"; # Xyce 7.4 requires version 12.12.1
+  version = "13.2.0"; # Xyce 7.4 requires version 13.2.0
 
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
     rev = "${pname}-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
+    sha256 = "sha256-RwBUMNasVXV1L+hr3i0ms0p2DJju7v5tY/BjexIaLwU=";
   };
 
   nativeBuildInputs = [ cmake gfortran swig ];
