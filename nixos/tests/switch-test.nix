@@ -1,6 +1,46 @@
 # Test configuration switching.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : let
+
+  # Simple service that can either be socket-activated or that will
+  # listen on port 1234 if not socket-activated.
+  # A connection to the socket causes 'hello' to be written to the client.
+  socketTest = pkgs.writeScript "socket-test.py" /* python */ ''
+    #!${pkgs.python3}/bin/python3
+
+    from socketserver import TCPServer, StreamRequestHandler
+    import socket
+    import os
+
+
+    class Handler(StreamRequestHandler):
+        def handle(self):
+            self.wfile.write("hello".encode("utf-8"))
+
+
+    class Server(TCPServer):
+        def __init__(self, server_address, handler_cls):
+            listenFds = os.getenv('LISTEN_FDS')
+            if listenFds is None or int(listenFds) < 1:
+                print(f'Binding to {server_address}')
+                TCPServer.__init__(
+                        self, server_address, handler_cls, bind_and_activate=True)
+            else:
+                TCPServer.__init__(
+                        self, server_address, handler_cls, bind_and_activate=False)
+                # Override socket
+                print(f'Got activated by {os.getenv("LISTEN_FDNAMES")} '
+                      f'with {listenFds} FDs')
+                self.socket = socket.fromfd(3, self.address_family,
+                                            self.socket_type)
+
+
+    if __name__ == "__main__":
+        server = Server(("localhost", 1234), Handler)
+        server.serve_forever()
+  '';
+
+in {
   name = "switch-test";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ gleber das_j ];
@@ -8,6 +48,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
+      environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
       specialisation = rec {
@@ -229,6 +270,40 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         restart-and-reload-by-activation-script-modified.configuration = {
           imports = [ restart-and-reload-by-activation-script.configuration ];
           systemd.services.reload-triggers-and-restart.serviceConfig.X-Modified = "test";
+        };
+
+        simple-socket.configuration = {
+          systemd.services.socket-activated = {
+            description = "A socket-activated service";
+            stopIfChanged = lib.mkDefault false;
+            serviceConfig = {
+              ExecStart = socketTest;
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+          systemd.sockets.socket-activated = {
+            wantedBy = [ "sockets.target" ];
+            listenStreams = [ "/run/test.sock" ];
+            socketConfig.SocketMode = lib.mkDefault "0777";
+          };
+        };
+
+        simple-socket-service-modified.configuration = {
+          imports = [ simple-socket.configuration ];
+          systemd.services.socket-activated.serviceConfig.X-Test = "test";
+        };
+
+        simple-socket-stop-if-changed.configuration = {
+          imports = [ simple-socket.configuration ];
+          systemd.services.socket-activated.stopIfChanged = true;
+        };
+
+        simple-socket-stop-if-changed-and-reloadtrigger.configuration = {
+          imports = [ simple-socket.configuration ];
+          systemd.services.socket-activated = {
+            stopIfChanged = true;
+            reloadTriggers = [ "test" ];
+          };
         };
 
         mount.configuration = {
@@ -676,7 +751,71 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "would reload the following units: reload-triggers.service, simple-reload-service.service\n")
         assert_contains(out, "would restart the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nwould start the following units:")
-        assert_lacks(out, "as well:")
+
+    with subtest("socket-activated services"):
+        # Socket-activated services don't get started, just the socket
+        machine.fail("[ -S /run/test.sock ]")
+        out = switch_to_specialisation("${machine}", "simple-socket")
+        # assert_lacks(out, "stopping the following units:") nobody cares
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: socket-activated.socket\n")
+        machine.succeed("[ -S /run/test.sock ]")
+
+        # Changing a non-activated service does nothing
+        out = switch_to_specialisation("${machine}", "simple-socket-service-modified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # The unit is properly activated when the socket is accessed
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated")  # idk how that would happen tbh
+
+        # Changing an activated service with stopIfChanged=false restarts the service
+        out = switch_to_specialisation("${machine}", "simple-socket")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: socket-activated.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # Socket-activation of the unit still works
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated after the service was restarted")
+
+        # Changing an activated service with stopIfChanged=true stops the service and
+        # socket and starts the socket
+        out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed")
+        assert_contains(out, "stopping the following units: socket-activated.service, socket-activated.socket\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: socket-activated.socket\n")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # Socket-activation of the unit still works
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated after the service was restarted")
+
+        # Changing a reload trigger of a socket-activated unit only reloads it
+        out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed-and-reloadtrigger")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: socket-activated.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units: socket-activated.socket")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # Socket-activation of the unit still works
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated after the service was restarted")
 
     with subtest("mounts"):
         switch_to_specialisation("${machine}", "mount")
