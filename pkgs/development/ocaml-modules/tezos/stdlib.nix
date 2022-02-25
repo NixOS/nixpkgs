@@ -16,12 +16,12 @@
 
 buildDunePackage rec {
   pname = "tezos-stdlib";
-  version = "11.0";
+  version = "11.1";
   base_src = fetchFromGitLab {
     owner = "tezos";
     repo = "tezos";
     rev = "v${version}";
-    sha256 = "uUYd1DxH2bdCQlevQt3oGxvg0ai5EiCD2mti5SiueU8=";
+    sha256 = "lkPiWE4Q4HBAtsXSl6ZESqJy4sPZh2rMHq7h6QZq0kU=";
   };
 
   src = "${base_src}/src/lib_stdlib";

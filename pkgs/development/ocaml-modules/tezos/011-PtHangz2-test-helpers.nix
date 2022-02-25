@@ -3,8 +3,7 @@
 , tezos-stdlib
 , tezos-base
 , tezos-client-011-PtHangz2
-, tezos-protocol-011-PtHangz2
-, tezos-protocol-011-PtHangz2-parameters
+, tezos-011-PtHangz2
 , tezos-protocol-environment
 , tezos-shell-services
 , tezos-stdlib-unix
@@ -19,8 +18,8 @@ buildDunePackage {
   propagatedBuildInputs = [
     tezos-base
     tezos-client-011-PtHangz2
-    tezos-protocol-011-PtHangz2
-    tezos-protocol-011-PtHangz2-parameters
+    tezos-011-PtHangz2.protocol
+    tezos-011-PtHangz2.protocol-parameters
     tezos-protocol-environment
     tezos-shell-services
     tezos-stdlib-unix

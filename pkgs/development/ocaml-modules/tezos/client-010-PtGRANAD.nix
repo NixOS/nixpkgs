@@ -4,8 +4,7 @@
 , tezos-mockup-registration
 , tezos-proxy
 , tezos-signer-backends
-, tezos-protocol-010-PtGRANAD-parameters
-, tezos-protocol-plugin-010-PtGRANAD
+, tezos-010-PtGRANAD
 , alcotest-lwt
 , ppx_inline_test
 , cacert
@@ -20,8 +19,8 @@ buildDunePackage {
     tezos-mockup-registration
     tezos-proxy
     tezos-signer-backends
-    tezos-protocol-010-PtGRANAD-parameters
-    tezos-protocol-plugin-010-PtGRANAD
+    tezos-010-PtGRANAD.protocol-parameters
+    tezos-010-PtGRANAD.protocol-plugin
     ppx_inline_test
   ];
 

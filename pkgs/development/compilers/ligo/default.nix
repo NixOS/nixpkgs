@@ -6,12 +6,12 @@
 
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.34.0";
+  version = "0.36.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-MHkIr+XkW/zrRt+Cg48q4fOWTkNGH0hbf+oU7cAivNE=";
+    sha256 = "sha256-0c2hTtEBbf2EbBMPqAnzHGomRvolHnztbsVB3mDRsGw=";
   };
 
   # The build picks this up for ligo --version
@@ -19,32 +19,32 @@ coq.ocamlPackages.buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = with coq.ocamlPackages; [
+  nativeBuildInputs = with coq.ocamlPackages; [
     coq
+    findlib
     menhir
-    menhirLib
-    qcheck
-    ocamlgraph
-    ppx_deriving
-    ppx_deriving_yojson
-    ppx_expect
-    tezos-base
-    tezos-shell-services
-    tezos-010-PtGRANAD-test-helpers
-    tezos-011-PtHangz2-test-helpers
-    tezos-protocol-010-PtGRANAD-parameters
-    tezos-protocol-010-PtGRANAD
-    tezos-protocol-environment
-    yojson
-    getopt
-    terminal_size
-    pprint
-    linenoise
-    data-encoding
+    ocaml-recovery-parser
+  ];
+
+  buildInputs = with coq.ocamlPackages; [
     bisect_ppx
     cmdliner
     core
+    data-encoding
+    getopt
+    linenoise
+    menhirLib
+    ocamlgraph
+    pprint
+    ppx_deriving
+    ppx_deriving_yojson
+    ppx_expect
+    ppx_import
+    qcheck
+    terminal_size
+    tezos-011-PtHangz2-test-helpers
     ocaml-recovery-parser
+    yojson
   ];
 
   checkInputs = [

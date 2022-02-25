@@ -5,8 +5,7 @@
 , tezos-base
 , tezos-shell-services
 , tezos-protocol-environment
-, tezos-protocol-010-PtGRANAD
-, tezos-protocol-010-PtGRANAD-parameters
+, tezos-010-PtGRANAD
 , tezos-client-010-PtGRANAD
 , alcotest-lwt
 }:
@@ -21,8 +20,8 @@ buildDunePackage {
     tezos-stdlib-unix
     tezos-shell-services
     tezos-protocol-environment
-    tezos-protocol-010-PtGRANAD
-    tezos-protocol-010-PtGRANAD-parameters
+    tezos-010-PtGRANAD.protocol
+    tezos-010-PtGRANAD.protocol-parameters
     tezos-client-010-PtGRANAD
     alcotest-lwt
   ];

@@ -4,8 +4,7 @@
 , tezos-mockup-registration
 , tezos-proxy
 , tezos-signer-backends
-, tezos-protocol-011-PtHangz2-parameters
-, tezos-protocol-plugin-011-PtHangz2
+, tezos-011-PtHangz2
 , alcotest-lwt
 , cacert
 , ppx_inline_test
@@ -23,8 +22,9 @@ buildDunePackage {
     tezos-mockup-registration
     tezos-proxy
     tezos-signer-backends
-    tezos-protocol-011-PtHangz2-parameters
-    tezos-protocol-plugin-011-PtHangz2
+    tezos-011-PtHangz2.protocol
+    tezos-011-PtHangz2.protocol-parameters
+    tezos-011-PtHangz2.protocol-plugin
     ppx_inline_test
   ];
 

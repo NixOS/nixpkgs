@@ -15,6 +15,10 @@ buildDunePackage {
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src/lib_store/legacy_store";
 
+  postPatch = ''
+    rm -rf vendors
+  '';
+
   propagatedBuildInputs = [
     tezos-context
     tezos-lmdb
