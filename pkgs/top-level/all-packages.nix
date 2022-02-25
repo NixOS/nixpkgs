@@ -30473,6 +30473,8 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
+  tezos-node = callPackage ../applications/blockchains/tezos/node.nix { ocamlPackages = ocaml-ng.ocamlPackages_4_12; };
+
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
     boost = boost165;
     withGui = true;
