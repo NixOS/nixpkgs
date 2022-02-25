@@ -1,5 +1,6 @@
 { pkgs
 , withDoc ? false
+, extraPythonPackages ? ps: []
 }:
 
 # Here sage and its dependencies are put together. Some dependencies may be pinned
@@ -109,7 +110,7 @@ let
     rpy2
     sphinx
     pillow
-  ];
+  ] ++ extraPythonPackages python3.pkgs;
 
   pythonEnv = python3.buildEnv.override {
     extraLibs = pythonRuntimeDeps;
