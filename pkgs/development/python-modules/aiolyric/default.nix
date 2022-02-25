@@ -31,7 +31,7 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError, https://github.com/timmo001/aiolyric/issues/5
     "test_location"
-  ]
+  ];
 
   pythonImportsCheck = [
     "aiolyric"
