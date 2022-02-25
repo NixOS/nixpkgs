@@ -84,6 +84,7 @@ let
 in
 
 {
+  appstream = callInstalledTest ./appstream.nix {};
   colord = callInstalledTest ./colord.nix {};
   flatpak = callInstalledTest ./flatpak.nix {};
   flatpak-builder = callInstalledTest ./flatpak-builder.nix {};

@@ -22,13 +22,14 @@
 , gperf
 , vala
 , curl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "appstream";
   version = "0.15.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ximion";
@@ -43,6 +44,9 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       libstemmer_includedir = "${lib.getDev libstemmer}/include";
     })
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
   ];
 
   nativeBuildInputs = [
@@ -75,7 +79,14 @@ stdenv.mkDerivation rec {
     "-Dapidocs=false"
     "-Ddocs=false"
     "-Dvapi=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
+
+  passthru = {
+    tests = {
+      installed-tests = nixosTests.installed-tests.appstream;
+    };
+  };
 
   meta = with lib; {
     description = "Software metadata handling library";
