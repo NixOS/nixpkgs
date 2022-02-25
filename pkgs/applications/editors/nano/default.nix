@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
-, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
+, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, callPackage
 , gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
@@ -41,7 +41,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    tests = { inherit (nixosTests) nano; };
+    tests = {
+      expect = callPackage ./test-with-expect.nix {};
+    };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
