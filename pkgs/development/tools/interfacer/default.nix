@@ -9,7 +9,6 @@ buildGoPackage rec {
   rev = "c20040233aedb03da82d460eca6130fcd91c629a";
 
   goPackagePath = "mvdan.cc/interfacer";
-  excludedPackages = "check/testdata";
 
   src = fetchFromGitHub {
     inherit rev;

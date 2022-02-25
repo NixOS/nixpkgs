@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   excludedPackages = "\\("
-    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
+    + lib.concatStringsSep "\\|" ([ "vet" "cover" ])
     + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs

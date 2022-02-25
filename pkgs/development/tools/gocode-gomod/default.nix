@@ -9,8 +9,6 @@ buildGoModule rec {
   # standard packages.
   allowGoReference = true;
 
-  excludedPackages = "internal/suggest/testdata";
-
   src = fetchFromGitHub {
     owner = "stamblerre";
     repo = "gocode";
