@@ -30,6 +30,8 @@ self: super: ({
 
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
+  streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
+
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
