@@ -453,7 +453,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Start a simple service
         out = switch_to_specialisation("${machine}", "simpleService")
@@ -463,7 +462,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
-        assert_lacks(out, "as well:")
 
         # Not changing anything doesn't do anything
         out = switch_to_specialisation("${machine}", "simpleService")
@@ -473,7 +471,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Restart the simple service
         out = switch_to_specialisation("${machine}", "simpleServiceModified")
@@ -483,7 +480,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: test.service\n")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Restart the service with stopIfChanged=false
         out = switch_to_specialisation("${machine}", "simpleServiceNostop")
@@ -493,7 +489,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Reload the service with reloadIfChanged=true
         out = switch_to_specialisation("${machine}", "simpleServiceReload")
@@ -503,7 +498,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Nothing happens when restartIfChanged=false
         out = switch_to_specialisation("${machine}", "simpleServiceNorestart")
@@ -513,7 +507,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Dry mode shows different messages
         out = switch_to_specialisation("${machine}", "simpleService", action="dry-activate")
@@ -523,7 +516,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
         assert_contains(out, "would start the following units: test.service\n")
 
         # Ensure \ works in unit names
@@ -534,7 +526,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: escaped\\x2ddash.service\n")
-        assert_lacks(out, "as well:")
 
         out = switch_to_specialisation("${machine}", "unitWithBackslashModified")
         assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
@@ -543,7 +534,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: escaped\\x2ddash.service\n")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
     with subtest("failing units"):
         # Let the simple service fail
@@ -557,7 +547,6 @@ in {
         assert_lacks(out, "the following new units were started:")
         assert_contains(out, "warning: the following units failed: test.service\n")
         assert_contains(out, "Main PID:")  # output of systemctl
-        assert_lacks(out, "as well:")
 
         # A unit that gets into autorestart without failing is not treated as failed
         out = switch_to_specialisation("${machine}", "autorestartService")
@@ -567,7 +556,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: autorestart.service\n")
-        assert_lacks(out, "as well:")
         machine.systemctl('stop autorestart.service')  # cancel the 20y timer
 
         # Switching to the same system should do nothing (especially not treat the unit as failed)
@@ -578,7 +566,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: autorestart.service\n")
-        assert_lacks(out, "as well:")
         machine.systemctl('stop autorestart.service')  # cancel the 20y timer
 
         # If systemd thinks the unit has failed and is in autorestart, we should show it as failed
@@ -591,7 +578,6 @@ in {
         assert_lacks(out, "the following new units were started:")
         assert_contains(out, "warning: the following units failed: autorestart.service\n")
         assert_contains(out, "Main PID:")  # output of systemctl
-        assert_lacks(out, "as well:")
 
     with subtest("unit file parser"):
         # Switch to a well-known state
@@ -605,7 +591,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Rename it
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraSectionOtherName")
@@ -615,7 +600,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Remove it
         out = switch_to_specialisation("${machine}", "simpleServiceNostop")
@@ -625,7 +609,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # [Install] section is ignored
         out = switch_to_specialisation("${machine}", "simpleServiceWithInstallSection")
@@ -635,7 +618,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Add a key
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKey")
@@ -645,7 +627,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Change its value
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKeyOtherValue")
@@ -655,7 +636,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Rename it
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKeyOtherName")
@@ -665,7 +645,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Remove it
         out = switch_to_specialisation("${machine}", "simpleServiceNostop")
@@ -675,7 +654,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Add a reload trigger
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTrigger")
@@ -685,7 +663,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Modify the reload trigger
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModified")
@@ -695,7 +672,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Modify the reload trigger and something else
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModifiedAndSomethingElse")
@@ -705,7 +681,6 @@ in {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Remove the reload trigger
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModifiedSomethingElse")
@@ -715,7 +690,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
     with subtest("restart and reload by activation script"):
         switch_to_specialisation("${machine}", "simpleServiceNorestart")
@@ -725,7 +699,7 @@ in {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "restarting the following units:")
         assert_contains(out, "\nstarting the following units: no-restart-service.service, reload-triggers-and-restart-by-as.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
-        assert_lacks(out, "as well:")
+        assert_contains(out, "the following new units were started: no-restart-service.service, reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
         # Switch to the same system where the example services get restarted
         # and reloaded by the activation script
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
@@ -734,7 +708,7 @@ in {
         assert_contains(out, "reloading the following units: reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service\n")
         assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nstarting the following units:")
-        assert_lacks(out, "as well:")
+        assert_lacks(out, "the following new units were started:")
         # Switch to the same system and see if the service gets restarted when it's modified
         # while the fact that it's supposed to be reloaded by the activation script is ignored.
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script-modified")
@@ -743,7 +717,7 @@ in {
         assert_contains(out, "reloading the following units: reload-triggers.service, simple-reload-service.service\n")
         assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nstarting the following units:")
-        assert_lacks(out, "as well:")
+        assert_lacks(out, "the following new units were started:")
         # The same, but in dry mode
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
         assert_lacks(out, "would stop the following units:")
@@ -756,7 +730,7 @@ in {
         # Socket-activated services don't get started, just the socket
         machine.fail("[ -S /run/test.sock ]")
         out = switch_to_specialisation("${machine}", "simple-socket")
-        # assert_lacks(out, "stopping the following units:") nobody cares
+        # assert_lacks(out, "stopping the following units:") not relevant
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
@@ -828,7 +802,6 @@ in {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=10240k")
@@ -839,11 +812,11 @@ in {
         assert_contains(out, "OnCalendar=2014-03-25 02:59:56 UTC")
         out = switch_to_specialisation("${machine}", "timerModified")
         assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following units:")
         assert_lacks(out, "reloading the following units:")
-        assert_contains(out, "restarting the following units: test-timer.timer\n")
+        assert_contains(out, "\nrestarting the following units: test-timer.timer\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
         # It changed
         out = machine.succeed("systemctl show test-timer.timer")
         assert_contains(out, "OnCalendar=Fri 2012-11-23 16:00:00")
@@ -855,8 +828,7 @@ in {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
-        assert_contains(out, "the following new units were started: test-watch.path")
-        assert_lacks(out, "as well:")
+        assert_contains(out, "the following new units were started: test-watch.path\n")
         machine.fail("test -f /testpath-modified")
 
         # touch the file, unit should be triggered
@@ -878,8 +850,21 @@ in {
     with subtest("slices"):
         machine.succeed("echo 0 > /proc/sys/vm/panic_on_oom")  # allow OOMing
         out = switch_to_specialisation("${machine}", "slice")
+        # assert_lacks(out, "stopping the following units:") not relevant
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
         machine.fail("systemctl start testservice.service")
+
         out = switch_to_specialisation("${machine}", "sliceModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
         machine.succeed("systemctl start testservice.service")
         machine.succeed("echo 1 > /proc/sys/vm/panic_on_oom")  # disallow OOMing
   '';
