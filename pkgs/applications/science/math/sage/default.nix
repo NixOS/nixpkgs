@@ -1,5 +1,6 @@
 { pkgs
 , withDoc ? false
+, requireSageTests ? true
 , extraPythonPackages ? ps: []
 }:
 
@@ -167,5 +168,5 @@ in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
   inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
-  inherit withDoc;
+  inherit withDoc requireSageTests;
 }
