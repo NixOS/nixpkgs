@@ -33,7 +33,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
-    maintainers = with maintainers; [ mrmebelman ];
+    maintainers = with maintainers; [ lilyinstarlight ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
