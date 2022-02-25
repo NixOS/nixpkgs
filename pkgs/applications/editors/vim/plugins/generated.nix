@@ -4713,6 +4713,18 @@ final: prev:
     meta.homepage = "https://github.com/kosayoda/nvim-lightbulb/";
   };
 
+  nvim-lightline-lsp = buildVimPluginFrom2Nix {
+    pname = "nvim-lightline-lsp";
+    version = "2022-01-06";
+    src = fetchFromGitHub {
+      owner = "josa42";
+      repo = "nvim-lightline-lsp";
+      rev = "d9e61801f54c8824b59e93068865e3bc4f1ca0b8";
+      sha256 = "0sd38c4cp7i6prgr86b5nq9fhpi2h1yrn3ggs3d7my65ayz759m6";
+    };
+    meta.homepage = "https://github.com/josa42/nvim-lightline-lsp/";
+  };
+
   nvim-lint = buildVimPluginFrom2Nix {
     pname = "nvim-lint";
     version = "2022-02-23";
