@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, autoreconfHook
+{ lib, fetchFromGitHub, stdenv, autoreconfHook, callPackage
 , ncurses
 , IOKit
 , sensorsSupport ? stdenv.isLinux, lm_sensors
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       ${optionalPatch sensorsSupport "${lm_sensors}/lib/libsensors.so"}
       ${optionalPatch systemdSupport "${systemd}/lib/libsystemd.so"}
     '';
+
+  passthru.tests.expect = callPackage ./test-with-expect.nix { };
 
   meta = {
     description = "An interactive process viewer for Linux";
