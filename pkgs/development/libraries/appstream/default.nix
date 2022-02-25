@@ -28,6 +28,9 @@
 stdenv.mkDerivation rec {
   pname = "appstream";
   version = "0.15.2";
+  # When bumping this package, please also check whether
+  # fix-build-for-qt-olderthan-514.patch still applies by
+  # building libsForQt512.appstream-qt.
 
   outputs = [ "out" "dev" "installedTests" ];
 
