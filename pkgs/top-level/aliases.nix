@@ -1431,7 +1431,7 @@ mapAliases ({
     plasma-integration plasma-nano plasma-nm plasma-pa plasma-phone-components
     plasma-systemmonitor plasma-thunderbolt plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil qqc2-breeze-style
-    sddm-kcm spectacle systemsettings xdg-desktop-portal-kde yakuake
+    sddm-kcm skanlite spectacle systemsettings xdg-desktop-portal-kde yakuake
   ;
 
   inherit (plasma5Packages.thirdParty)
