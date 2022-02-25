@@ -1,7 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python-dateutil, jsonref, jsonschema,
+{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, python-dateutil, jsonref, jsonschema,
   pyyaml, simplejson, six, pytz, msgpack, swagger-spec-validator, rfc3987,
   strict-rfc3339, webcolors, mypy-extensions, jsonpointer, idna, pytest, mock,
   pytest-benchmark, isPy27, enum34 }:
+
+let
+  jsonschema320 = jsonschema.overridePythonAttrs (oldAttrs: rec {
+    version = "3.2.0";
+
+    src = fetchPypi {
+      inherit (oldAttrs) pname;
+      inherit version;
+      hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+    };
+
+    SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+    doCheck = false;
+  });
+
+  swagger-spec-validator' = swagger-spec-validator.overridePythonAttrs (oldAttrs: rec {
+    propagatedBuildInputs = [
+      pyyaml
+      jsonschema320
+      six
+    ];
+  });
+in
 
 buildPythonPackage rec {
   pname = "bravado-core";
@@ -26,13 +50,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     python-dateutil
     jsonref
-    jsonschema
+    jsonschema320
     pyyaml
     simplejson
     six
     pytz
     msgpack
-    swagger-spec-validator
+    swagger-spec-validator'
 
     # the following 3 packages are included when jsonschema (3.2) is installed
     # as jsonschema[format], which reflects what happens in setup.py
