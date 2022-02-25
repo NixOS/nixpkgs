@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "sha256-933bM15BZi4sTjnIOGAg5dc5tXVWQ9lFzktOtzj5DNQ=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     cython
   ];
 
