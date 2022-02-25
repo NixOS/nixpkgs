@@ -775,6 +775,7 @@ solarnz/arcanist.vim
 sonph/onehalf
 sotte/presenting.vim
 SpaceVim/SpaceVim
+spywhere/lightline-lsp
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
 steelsojka/pears.nvim

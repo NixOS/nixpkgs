@@ -3214,6 +3214,18 @@ final: prev:
     meta.homepage = "https://github.com/shinchu/lightline-gruvbox.vim/";
   };
 
+  lightline-lsp = buildVimPluginFrom2Nix {
+    pname = "lightline-lsp";
+    version = "2022-01-09";
+    src = fetchFromGitHub {
+      owner = "spywhere";
+      repo = "lightline-lsp";
+      rev = "78a8f6880c1d979b7c682e1b37299d970506f480";
+      sha256 = "00zkpri1pi6r0m0v91361zixqsfrf05hyml61k4s0i3yabfv84w8";
+    };
+    meta.homepage = "https://github.com/spywhere/lightline-lsp/";
+  };
+
   lightline-vim = buildVimPluginFrom2Nix {
     pname = "lightline.vim";
     version = "2021-11-21";
