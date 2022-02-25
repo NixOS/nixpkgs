@@ -5,11 +5,11 @@
 }:
 mkDerivation rec {
   pname = "nix-output-monitor";
-  version = "1.0.4.0";
+  version = "1.0.4.2";
   src = fetchFromGitHub {
     owner = "maralorn";
     repo = "nix-output-monitor";
-    hash = "sha256-3EQgjrDX8C3qG6danuPRl2gnPlX1qZjxjrROrKitsS0=";
+    hash = "sha256-gjKX8qGYd+I6FqXC/QBVb3ONT/q0hiwNfh6ZeUavDtg=";
     rev = "v${version}";
   };
   isLibrary = true;
