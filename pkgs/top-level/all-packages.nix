@@ -34757,4 +34757,6 @@ with pkgs;
   honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
 
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
+
+  terminus-cli = callPackage ../development/php-packages/terminus-cli { };
 }

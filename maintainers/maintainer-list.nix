@@ -14066,4 +14066,10 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  asimpson = {
+    name = "Adam Simpson";
+    email = "adam@adamsimpson.net";
+    github = "asimpson";
+    githubId = 1048831;
+  };
 }
