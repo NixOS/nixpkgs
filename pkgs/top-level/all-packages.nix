@@ -544,6 +544,8 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
+  opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
+
   owl = callPackage ../tools/networking/owl { };
 
   packer = callPackage ../development/tools/packer { };
