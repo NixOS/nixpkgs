@@ -34,6 +34,7 @@ let
       homepage = "https://github.com/awslabs/amazon-qldb-shell";
       license = licenses.asl20;
       maintainers = [ maintainers.terlar ];
+      mainProgram = "qldb";
     };
   };
 in
