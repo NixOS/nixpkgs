@@ -42,5 +42,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/mjmunger/pwgen_secure/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "spwgen";
   };
 }
