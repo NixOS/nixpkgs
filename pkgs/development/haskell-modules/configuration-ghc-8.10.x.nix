@@ -94,10 +94,13 @@ self: super: {
       "-f-fourmolu"
       "-f-stylishhaskell"
       "-f-brittany"
+      "-f-hlint"
     ]
   (super.haskell-language-server.override {
     # Not buildable on 8.10
     hls-fourmolu-plugin = null;
+    # https://github.com/haskell/haskell-language-server/issues/2728
+    hls-hlint-plugin = null;
   });
 
   # ormolu 0.3 requires Cabal == 3.4
