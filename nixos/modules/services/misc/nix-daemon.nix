@@ -762,7 +762,7 @@ in
     nix.settings = mkMerge [
       {
         trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-        substituters = [ "https://cache.nixos.org/" ];
+        substituters = mkAfter [ "https://cache.nixos.org/" ];
 
         system-features = mkDefault (
           [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++

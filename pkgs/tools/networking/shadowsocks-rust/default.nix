@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.13.2";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "sha256-4lOEft1uiGN7OgFQzSn+QV8/wHl+W2yM3RAc5t8bUtk=";
+    sha256 = "sha256-h0sSNN+039zstxmGWCnbn31xBzZaQhLSnxlyeoNRaGM=";
   };
 
-  cargoSha256 = "sha256-NKq/lnpGrCLZjWdKquysoi25SsFtmtDrPIioDgQoMjw=";
+  cargoSha256 = "sha256-vT+bx616aZ4VtAOh3p7U9hWgFskxskR5+M7CrSqoa9Y=";
 
   RUSTC_BOOTSTRAP = 1;
 

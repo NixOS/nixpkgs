@@ -760,6 +760,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  augmax = callPackage ../development/python-modules/augmax { };
+
   auroranoaa = callPackage ../development/python-modules/auroranoaa { };
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
@@ -1165,6 +1167,8 @@ in {
   beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
+
+  beartype = callPackage ../development/python-modules/beartype { };
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
@@ -1984,6 +1988,8 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  dasbus = callPackage ../development/python-modules/dasbus { };
+
   dash = callPackage ../development/python-modules/dash { };
 
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
@@ -2470,6 +2476,8 @@ in {
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
 
+  dsinternals = callPackage ../development/python-modules/dsinternals { };
+
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
@@ -2836,6 +2844,8 @@ in {
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
+
+  fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
 
@@ -5442,6 +5452,8 @@ in {
 
   nevow = callPackage ../development/python-modules/nevow { };
 
+  newversion = callPackage ../development/python-modules/newversion { };
+
   nexia = callPackage ../development/python-modules/nexia { };
 
   nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
@@ -7595,6 +7607,8 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
+
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
@@ -8169,7 +8183,9 @@ in {
 
   python-registry = callPackage ../development/python-modules/python-registry { };
 
-  python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
+  python-rtmidi = callPackage ../development/python-modules/python-rtmidi {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+  };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
 
@@ -8815,7 +8831,9 @@ in {
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
 
-  rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
+  rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+  };
 
   rtoml = callPackage ../development/python-modules/rtoml { };
 
@@ -10375,6 +10393,8 @@ in {
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
 
+  videocr = callPackage ../development/python-modules/videocr { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   ViennaRNA = toPythonModule pkgs.ViennaRNA;
@@ -10416,6 +10436,8 @@ in {
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
+
+  volvooncall = callPackage ../development/python-modules/volvooncall { };
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 

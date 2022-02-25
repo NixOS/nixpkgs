@@ -87,10 +87,9 @@ with lib;
     (mkRemovedOptionModule [ "services" "racoon" ] ''
       The racoon module has been removed, because the software project was abandoned upstream.
     '')
-
     (mkRemovedOptionModule [ "services" "shellinabox" ] "The corresponding package was removed from nixpkgs.")
-
     (mkRemovedOptionModule [ "services" "gogoclient" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "virtuoso" ] "The corresponding package was removed from nixpkgs.")
 
     # Do NOT add any option renames here, see top of the file
   ];

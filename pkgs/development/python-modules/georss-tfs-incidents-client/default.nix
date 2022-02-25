@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "georss-tfs-incidents-client";
-  version = "0.3";
+  version = "0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-georss-tfs-incidents-client";
     rev = "v${version}";
-    hash = "sha256-9fDFm9GLXxy814wR75TjP3pfQPU+nCSV8Z509WXm24Y=";
+    hash = "sha256-Cz0PRcGReAE0mg04ktCUaoLqPTjvyU1TiB/Pdz7o7zo=";
   };
 
   propagatedBuildInputs = [

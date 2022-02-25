@@ -35,6 +35,9 @@ in
 ### Please maintain this list in ASCIIbetical ordering.
 ### Hint: the "sections" are delimited by ### <letter> ###
 
+# A script to convert old aliases to throws and remove old
+# throws can be found in './maintainers/scripts/remove-old-aliases.py'.
+
 mapAliases ({
   # forceSystem should not be used directly in Nixpkgs.
   # Added 2018-07-16
@@ -63,6 +66,8 @@ mapAliases ({
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # Added 2020-10-30
   aminal = throw "aminal was renamed to darktile."; # Added 2021-09-28
   ammonite-repl = ammonite; # Added 2017-05-02
+  amuleDaemon = throw "amuleDaemon was renamed to amule-daemon."; # Added 2022-02-11
+  amuleGui = throw "amuleGui was renamed to amule-gui."; # Added 2022-02-11
   amsn = throw "amsn has been removed due to being unmaintained."; # Added 2020-12-09
   angelfish = libsForQt5.plasmaMobileGear.angelfish; # Added 2021-10-06
   antimicro = throw "antimicro has been removed as it was broken, see antimicrox instead."; # Added 2020-08-06
@@ -479,6 +484,7 @@ mapAliases ({
   icedtea8_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   idea = jetbrains; # Added 2017-04-03
+  imapproxy = throw "imapproxy has been removed because it did not support a supported openssl version"; # added 2021-12-15
   imagemagick7Big = imagemagickBig; # Added 2021-02-22
   imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
@@ -627,6 +633,7 @@ mapAliases ({
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_hardkernel_4_14 = linuxKernel.packages.hardkernel_4_14;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
+  linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
   linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
@@ -643,6 +650,7 @@ mapAliases ({
   linux_5_4 = linuxKernel.kernels.linux_5_4;
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
+  linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
   linux_rpi2 = linuxKernel.kernels.linux_rpi2;
   linux_rpi3 = linuxKernel.kernels.linux_rpi3;
@@ -849,6 +857,8 @@ mapAliases ({
   pgp-tools = signing-party; # Added 2017-03-26
   pg_tmp = ephemeralpg; # Added 2018-01-16
 
+  phantomjs = throw "phantomjs 1.9.8 has been dropped due to lack of maintenance and security issues"; # Added 2022-02-20
+
   # Obsolete PHP version aliases
   php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases."; # Added 2021-06-03
   php73Packages = php73; # Added 2021-06-03
@@ -1009,6 +1019,8 @@ mapAliases ({
   rdf4store = throw "rdf4store has been removed from nixpkgs."; # Added 2019-12-21
   rdiff_backup = rdiff-backup; # Added 2014-11-23
   rdmd = dtools; # Added 2017-08-19
+  readline5 = throw "readline-5 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2022-02-20
+  readline62 = throw "readline-6.2 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2022-02-20
   readline80 = throw "readline-8.0 is no longer supported in nixpkgs, please use 'readline' for main supported version or 'readline81' for most recent version"; # Added 2021-04-22
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # Added 2019-12-10
   redkite = throw "redkite was archived by upstream"; # Added 2021-04-12
@@ -1057,6 +1069,7 @@ mapAliases ({
   saneBackendsGit = sane-backends; # Added 2016-01-02
   saneFrontends = sane-frontends; # Added 2016-01-02
   scaff = throw "scaff is deprecated - replaced by https://gitlab.com/jD91mZM2/inc (not in nixpkgs yet)"; # Added 2020-03-01
+  scallion = throw "scallion has been removed, because it is currently unmaintained upstream"; # added 2021-12-15
   scim = sc-im; # Added 2016-01-22
   scollector = bosun; # Added 2018-04-25
   scyther = throw "scyther has been removed since it currently only supports Python 2, see https://github.com/cascremers/scyther/issues/20"; # Added 2021-10-07
@@ -1240,6 +1253,7 @@ mapAliases ({
   vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # Added 2019-12-05
   vimprobable2-unwrapped = vimprobable2; # Added 2019-12-05
   virtinst = throw "virtinst has been removed, as it's included in virt-manager"; # Added 2021-07-21
+  virtuoso = throw "virtuoso has been removed, because it was unmaintained in nixpkgs"; # added 2021-12-15
   virtmanager = virt-manager; # Added 2019-10-29
   virtmanager-qt = virt-manager-qt; # Added 2019-10-29
   virtviewer = virt-viewer; # Added 2015-12-24

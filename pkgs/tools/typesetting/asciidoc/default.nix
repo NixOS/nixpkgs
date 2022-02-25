@@ -147,7 +147,9 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "asciidoc";
+  pname = "asciidoc"
+    + lib.optionalString enableStandardFeatures "-full"
+    + lib.optionalString enableExtraPlugins "-with-plugins";
   version = "9.1.0";
 
   # Note: a substitution to improve reproducibility should be updated once 10.0.0 is

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alejandra";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
     repo = "alejandra";
     rev = version;
-    sha256 = "sha256-Gtz+z8ESIqY/2V6X/rLMweqio66IGaUVGmIT/Y20+JY=";
+    sha256 = "sha256-WIO34/eqIGnZ5PQrLbpBWECCEgEfs3GagE0IJW2y8b0=";
   };
 
-  cargoSha256 = "sha256-kydMIbx5Fu7+uwXn7KrrNd1fhXZQ5sabX4TBYpvmimk=";
+  cargoSha256 = "sha256-Q2rr62fhUPDKlHuwD/jGd5nsShhC9qskswQsGJO5H/Q=";
 
   passthru.tests = {
     version = testVersion { package = alejandra; };

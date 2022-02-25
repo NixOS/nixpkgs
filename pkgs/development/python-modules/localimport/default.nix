@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "localimport";
-  version = "1.7.3";
+  version = "1.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p7ACOzJRwH9hICMcxtVt/r+twEoFsDxPKGuarFnFIbo=";
+    hash = "sha256-8UhaZyGdN/N6UwR7pPYQR2hZCz3TrBxr1KOBJRx28ok=";
   };
 
   pythonImportsCheck = [ "localimport" ];

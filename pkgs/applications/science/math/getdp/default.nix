@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://getdp.info/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

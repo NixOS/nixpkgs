@@ -1825,10 +1825,10 @@
       elpaBuild {
         pname = "rust-mode";
         ename = "rust-mode";
-        version = "1.0.3";
+        version = "1.0.4";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/rust-mode-1.0.3.tar";
-          sha256 = "1hg5hr5jma5v4rilchwyyw1fzm8lkfd3fxay0sb9dgzrgypvh5am";
+          url = "https://elpa.nongnu.org/nongnu/rust-mode-1.0.4.tar";
+          sha256 = "137z04h29cgy1dmkf2cnchlfzqs4f5v3cc9gv9qxisw9dswlvdvk";
         };
         packageRequires = [ emacs ];
         meta = {

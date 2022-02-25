@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
        $out/LICENSE.txt \
        $out/NEWS.txt \
        $out/NOTICE.txt \
-       $out/javadoc \
        $out/share/doc/${pname}-${version}
 
     if [[ -d $out/doc ]]; then

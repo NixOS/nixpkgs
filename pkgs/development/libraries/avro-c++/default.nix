@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "avro-c++";
-  version = "1.8.2";
+  version = "1.10.2";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
-    sha256 = "1ars58bfw83s8f1iqbhnqp4n9wc9cxsph0gs2a8k7r9fi09vja2k";
+    sha256 = "1qv2wxh5q2iq48m5g3xci9p05znzcl0v3314bhcsyr5bkpdjvzs1";
   };
 
   nativeBuildInputs = [ cmake python3 ];

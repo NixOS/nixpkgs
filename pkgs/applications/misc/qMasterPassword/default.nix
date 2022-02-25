@@ -1,14 +1,14 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, qtbase, qmake, qttools, libX11, libXtst, openssl, libscrypt }:
 
 mkDerivation rec {
-  pname = "qMasterPassword-unstable";
-  version = "2022-01-28";
+  pname = "qMasterPassword";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "bkueng";
-    repo = "qMasterPassword";
-    rev = "7ade33952531731c266c2597f4212c93aca68c59";
-    sha256 = "sha256-MdV6AkRh072++sKoeuwvhgqLEfUkTF34xt6OH9n59Q0=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-eUJD9FoGaDzADKm3wZHs5Bhdt7RoM1WTTVNP6xUV7gs=";
   };
 
   buildInputs = [ qtbase libX11 libXtst openssl libscrypt ];

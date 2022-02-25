@@ -25,6 +25,8 @@
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
+, withAthena ? false
+, withToolkitScrollBars ? true
 , withPgtk ? false
 , withXinput2 ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
@@ -32,6 +34,7 @@
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
   else if withMotif then "motif"
+  else if withAthena then "athena"
   else "lucid")
 }:
 
@@ -154,6 +157,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withImageMagick "--with-imagemagick"
     ++ lib.optional withPgtk "--with-pgtk"
     ++ lib.optional withXinput2 "--with-xinput2"
+    ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
   ;
 
   installTargets = [ "tags" "install" ];

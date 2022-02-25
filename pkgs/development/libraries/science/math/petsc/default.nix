@@ -67,6 +67,11 @@ stdenv.mkDerivation rec {
 
   configureScript = "python ./configure";
 
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/158730
+  # see https://github.com/NixOS/nixpkgs/issues/127608 for a similar issue
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   enableParallelBuilding = true;
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
@@ -74,6 +79,6 @@ stdenv.mkDerivation rec {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://www.mcs.anl.gov/petsc/index.html";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ wucke13 cburstedde ];
+    maintainers = with maintainers; [ cburstedde ];
   };
 }

@@ -2903,6 +2903,12 @@
     githubId = 19733;
     name = "Moritz Heidkamp";
   };
+  DerickEddington = {
+    email = "derick.eddington@pm.me";
+    github = "DerickEddington";
+    githubId = 4731128;
+    name = "Derick Eddington";
+  };
   dermetfan = {
     email = "serverkorken@gmail.com";
     github = "dermetfan";
@@ -6518,7 +6524,7 @@
     githubId = 18447310;
   };
   kloenk = {
-    email = "me@kloenk.de";
+    email = "me@kloenk.dev";
     matrix = "@kloenk:petabyte.dev";
     name = "Finn Behrens";
     github = "kloenk";
@@ -7071,12 +7077,6 @@
     github = "limeytexan";
     githubId = 36448130;
     name = "Michael Brantley";
-  };
-  linarcx = {
-    email = "linarcx@gmail.com";
-    github = "linarcx";
-    githubId = 10884422;
-    name = "Kaveh Ahangar";
   };
   linc01n = {
     email = "git@lincoln.hk";
@@ -9252,6 +9252,12 @@
     github = "oyren";
     githubId = 15930073;
     name = "Moritz Scheuren";
+  };
+  ozkutuk = {
+    email = "ozkutuk@protonmail.com";
+    github = "ozkutuk";
+    githubId = 5948762;
+    name = "Berk Özkütük";
   };
   pablovsky = {
     email = "dealberapablo07@gmail.com";
@@ -11547,6 +11553,12 @@
     githubId = 1699155;
     name = "Steve Elliott";
   };
+  stehessel = {
+      email = "stephan@stehessel.de";
+      github = "stehessel";
+      githubId = 55607356;
+      name = "Stephan Heßelmann";
+  };
   stelcodes = {
     email = "stel@stel.codes";
     github = "stelcodes";
@@ -13164,7 +13176,7 @@
     name = "Wayne Scott";
   };
   wucke13 = {
-    email = "info@wucke13.de";
+    email = "wucke13@gmail.com";
     github = "wucke13";
     githubId = 20400405;
     name = "Wucke";
