@@ -14432,6 +14432,10 @@ with pkgs;
 
   supercollider_scel = supercollider.override { useSCEL = true; };
 
+  supercollider-with-plugins = callPackage ../development/interpreters/supercollider/wrapper.nix {
+    plugins = [];
+  };
+
   taktuk = callPackage ../applications/networking/cluster/taktuk { };
 
   tcl = tcl-8_6;
