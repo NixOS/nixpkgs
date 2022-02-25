@@ -2283,6 +2283,11 @@ self: super: {
   # 2022-02-25: Not compatible with relude 1.0
   ema = assert super.ema.version == 0.6.0.0; super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
 
+  # attoparsec bump is on v2 branch, but not released yet
+  irc-core = assert super.irc-core.version == "2.10"; doJailbreak super.irc-core;
+  glirc = assert super.irc-core.version == "2.10"; doJailbreak super.glirc;
+  hookup = assert super.irc-core.version == "2.10"; doJailbreak super.hookup;
+
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
