@@ -3029,6 +3029,8 @@ in {
 
   flax = callPackage ../development/python-modules/flax { };
 
+  fleep = callPackage ../development/python-modules/fleep { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
