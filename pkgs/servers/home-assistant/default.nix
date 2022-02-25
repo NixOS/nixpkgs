@@ -29,7 +29,7 @@
 let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
+    (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -58,7 +58,7 @@ let
     })
 
     # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
+    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
 
     # Pinned due to API changes >0.3.5.3
     (self: super: {
@@ -105,12 +105,12 @@ let
     })
   ];
 
-  mkOverride = attrName: version: sha256:
+  mkOverride = attrName: version: hash:
     self: super: {
       ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
-          inherit version sha256;
+          inherit version hash;
         };
       });
     };
