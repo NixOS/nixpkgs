@@ -941,6 +941,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>element-desktop</literal> package now has an
+          <literal>useKeytar</literal> option (defaults to
+          <literal>true</literal>), which allows disabling
+          <literal>keytar</literal> and in turn
+          <literal>libsecret</literal> usage (which binds to native
+          credential managers / keychain libraries).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option <literal>services.thelounge.plugins</literal> has
           been added to allow installing plugins for The Lounge. Plugins
           can be found in
