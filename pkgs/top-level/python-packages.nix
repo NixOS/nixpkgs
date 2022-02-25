@@ -2044,9 +2044,7 @@ in {
 
   datasette-template-sql = callPackage ../development/python-modules/datasette-template-sql { };
 
-  datashader = callPackage ../development/python-modules/datashader {
-    dask = self.dask.override { withExtraComplete = true; };
-  };
+  datashader = callPackage ../development/python-modules/datashader { };
 
   datashape = callPackage ../development/python-modules/datashape { };
 
