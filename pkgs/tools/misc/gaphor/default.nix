@@ -57,6 +57,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    broken = true; # Current dependencies are too new and the application does not work
     description = "Simple modeling tool written in Python";
     maintainers = with maintainers; [ wolfangaukang ];
     homepage = "https://github.com/gaphor/gaphor";
