@@ -14432,8 +14432,18 @@ with pkgs;
 
   supercollider_scel = supercollider.override { useSCEL = true; };
 
+  supercolliderPlugins = recurseIntoAttrs {
+    sc3-plugins = callPackage ../development/interpreters/supercollider/plugins/sc3-plugins.nix {
+      fftw = fftwSinglePrec;
+    };
+  };
+
   supercollider-with-plugins = callPackage ../development/interpreters/supercollider/wrapper.nix {
     plugins = [];
+  };
+
+  supercollider-with-sc3-plugins = supercollider-with-plugins.override {
+    plugins = with supercolliderPlugins; [ sc3-plugins ];
   };
 
   taktuk = callPackage ../applications/networking/cluster/taktuk { };
