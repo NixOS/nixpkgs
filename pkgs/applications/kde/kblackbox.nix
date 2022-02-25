@@ -7,7 +7,6 @@ mkDerivation {
     description = "Game of hide and seek played on a grid of boxes";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

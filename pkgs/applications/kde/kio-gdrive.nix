@@ -18,7 +18,6 @@ mkDerivation {
     description = "KIO slave for Google APIs";
     maintainers = with maintainers; [ kennyballou ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

@@ -22,7 +22,6 @@ mkDerivation {
     description = "Online account providers";
     maintainers = with maintainers; [ kennyballou ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

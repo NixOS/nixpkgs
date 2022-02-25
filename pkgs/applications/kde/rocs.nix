@@ -12,7 +12,6 @@ mkDerivation {
     homepage = "https://edu.kde.org/rocs/";
     description = "A graph theory IDE.";
     license = with licenses; [ gpl2 lgpl21 fdl12 ];
-    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ knairda ];
   };
 

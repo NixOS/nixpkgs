@@ -7,7 +7,6 @@ mkDerivation {
     description = "A simple one player strategy game played against the computer";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

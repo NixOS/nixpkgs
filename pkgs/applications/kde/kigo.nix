@@ -7,7 +7,6 @@ mkDerivation {
     description = "An open-source implementation of the popular Go game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

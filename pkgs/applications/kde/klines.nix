@@ -7,7 +7,6 @@ mkDerivation {
     description = "A simple but highly addictive one player game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

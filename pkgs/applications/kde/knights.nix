@@ -7,7 +7,6 @@ mkDerivation {
     description = "A chess game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

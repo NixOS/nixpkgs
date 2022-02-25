@@ -7,7 +7,6 @@ mkDerivation {
     description = "A game of Dots and Boxes";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

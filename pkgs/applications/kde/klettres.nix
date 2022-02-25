@@ -7,7 +7,6 @@ mkDerivation {
     description = "An application specially designed to help the user to learn an alphabet";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

@@ -7,7 +7,6 @@ mkDerivation {
     description = "A small Linux utility to magnify a part of the screen";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

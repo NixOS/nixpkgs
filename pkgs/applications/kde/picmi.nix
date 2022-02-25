@@ -13,7 +13,6 @@ mkDerivation {
       '';
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
 
   patches = [

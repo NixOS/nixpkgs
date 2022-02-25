@@ -14,7 +14,6 @@ mkDerivation {
     description = "Disk burning application";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ sander ];
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   buildInputs = [

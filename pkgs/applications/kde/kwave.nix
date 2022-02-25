@@ -10,7 +10,6 @@ mkDerivation {
     description = "A simple media player";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";
   };
   nativeBuildInputs = [

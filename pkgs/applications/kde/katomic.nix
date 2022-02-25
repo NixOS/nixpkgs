@@ -7,7 +7,6 @@ mkDerivation {
     description = "Fun educational game built around molecular geometry";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

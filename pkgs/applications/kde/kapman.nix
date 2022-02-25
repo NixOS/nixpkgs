@@ -7,7 +7,6 @@ mkDerivation {
     description = "Clone of the well known game Pac-Man";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules

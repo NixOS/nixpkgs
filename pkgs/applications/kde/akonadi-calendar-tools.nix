@@ -13,7 +13,6 @@ mkDerivation {
     description = "Console applications and utilities for managing calendars in Akonadi";
     license = with lib.licenses; [ gpl2Plus cc0 ];
     maintainers = with lib.maintainers; [ kennyballou ];
-    platforms = lib.platforms.linux;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [

@@ -7,7 +7,6 @@ mkDerivation {
     description = "Single player arcade game with the elements of puzzle";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
   };
   nativeBuildInputs = [
     extra-cmake-modules
