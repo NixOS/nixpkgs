@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytwitchapi";
-  version = "2.5.1";
+  version = "2.5.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "v${version}";
-    sha256 = "091p9yx0cc7aclj76s1n1jdzkypicy9b2mxgmk2fym5viqlgpbkk";
+    sha256 = "sha256-i+oAx23bMu+jaXHPWElD5GJH6vSytW/9N1amsmma4Lc=";
   };
 
   propagatedBuildInputs = [
