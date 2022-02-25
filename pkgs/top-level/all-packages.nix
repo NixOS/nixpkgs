@@ -196,6 +196,8 @@ with pkgs;
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
+  automathemely = callPackage ../applications/misc/automathemely { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
