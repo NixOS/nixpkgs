@@ -314,6 +314,7 @@ joonty/vim-xdebug
 joosepalviste/nvim-ts-context-commentstring
 jordwalke/vim-reasonml
 josa42/coc-lua
+josa42/nvim-lightline-lsp
 josa42/vim-lightline-coc
 jose-elias-alvarez/minsnip.nvim
 jose-elias-alvarez/null-ls.nvim
@@ -774,6 +775,7 @@ solarnz/arcanist.vim
 sonph/onehalf
 sotte/presenting.vim
 SpaceVim/SpaceVim
+spywhere/lightline-lsp
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
 steelsojka/pears.nvim

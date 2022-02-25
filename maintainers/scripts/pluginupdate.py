@@ -454,8 +454,8 @@ def prefetch_plugin(
     )
 
 
-def fetch_plugin_from_pluginline(plugin_line: str) -> Plugin:
-    plugin, _ = prefetch_plugin(parse_plugin_line(plugin_line))
+def fetch_plugin_from_pluginline(config: FetchConfig, plugin_line: str) -> Plugin:
+    plugin, _ = prefetch_plugin(parse_plugin_line(config, plugin_line))
     return plugin
 
 
@@ -586,6 +586,7 @@ def prefetch(
 
 
 def rewrite_input(
+    config: FetchConfig,
     input_file: Path,
     deprecated: Path,
     redirects: Dict[str, str] = None,
@@ -603,8 +604,8 @@ def rewrite_input(
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
         for old, new in redirects.items():
-            old_plugin = fetch_plugin_from_pluginline(old)
-            new_plugin = fetch_plugin_from_pluginline(new)
+            old_plugin = fetch_plugin_from_pluginline(config, old)
+            new_plugin = fetch_plugin_from_pluginline(config, new)
             if old_plugin.normalized_name != new_plugin.normalized_name:
                 deprecations[old_plugin.normalized_name] = {
                     "new": new_plugin.normalized_name,
@@ -640,7 +641,7 @@ def update_plugins(editor: Editor, args):
     update = editor.get_update(args.input_file, args.outfile, fetch_config)
 
     redirects = update()
-    editor.rewrite_input(args.input_file, editor.deprecated, redirects)
+    editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
@@ -659,9 +660,9 @@ def update_plugins(editor: Editor, args):
             )
 
     for plugin_line in args.add_plugins:
-        editor.rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
+        editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, append=(plugin_line + "\n",))
         update()
-        plugin = fetch_plugin_from_pluginline(plugin_line)
+        plugin = fetch_plugin_from_pluginline(fetch_config, plugin_line)
         if autocommit:
             commit(
                 nixpkgs_repo,
