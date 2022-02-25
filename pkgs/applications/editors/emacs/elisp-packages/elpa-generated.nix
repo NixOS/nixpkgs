@@ -2043,10 +2043,10 @@
       elpaBuild {
         pname = "isearch-mb";
         ename = "isearch-mb";
-        version = "0.3";
+        version = "0.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/isearch-mb-0.3.tar";
-          sha256 = "01yq1skc6rm9yp80vz2fhh9lbkdb9nhf57h424mrkycdky2w50mx";
+          url = "https://elpa.gnu.org/packages/isearch-mb-0.4.tar";
+          sha256 = "11q9sdi6l795hspi7hr621bbra66pxsgrkry95k7wxjkmibcbsxr";
         };
         packageRequires = [ emacs ];
         meta = {
