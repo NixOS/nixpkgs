@@ -7,7 +7,7 @@
 , click-threading
 , requests-toolbelt
 , requests
-, requests_oauthlib # required for google oauth sync
+, requests-oauthlib
 , atomicwrites
 , hypothesis
 , pytestCheckHook
@@ -17,13 +17,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.18.0";
   pname = "vdirsyncer";
+  version = "0.18.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
+    hash = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     click-log
     click-threading
     requests
-    requests_oauthlib # required for google oauth sync
+    requests-oauthlib
     requests-toolbelt
   ];
 
