@@ -2272,13 +2272,16 @@ self: super: {
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
   # 2022-02-25: Upstream fixes are not released. Remove this override on update.
-  cabal-fmt = assert super.cabal-fmt.version = "0.1.5.1"; pkgs.lib.pipe super.cabal-fmt [
+  cabal-fmt = assert super.cabal-fmt.version == "0.1.5.1"; pkgs.lib.pipe super.cabal-fmt [
     doJailbreak
     (appendPatch (pkgs.fetchpatch {
       url = "https://github.com/phadej/cabal-fmt/commit/842630f70adb5397245109f77dba07662836e964.patch";
       sha256 = "sha256-s0W/TI3wHA73MFyKKcNBJFHgFAmBDLGbLaIvWbe/Bsg=";
     }))
   ];
+
+  # 2022-02-25: Not compatible with relude 1.0
+  ema = assert super.ema.version == 0.6.0.0; super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
