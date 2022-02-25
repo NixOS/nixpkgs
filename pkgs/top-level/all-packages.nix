@@ -32081,6 +32081,8 @@ with pkgs;
 
   acpilight = callPackage ../misc/acpilight { };
 
+  alejandra = callPackage ../tools/nix/alejandra {};
+
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
