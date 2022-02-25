@@ -420,6 +420,9 @@ let
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.hello
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.lens
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.random
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.hello
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.lens
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.random
         ];
       };
     }
