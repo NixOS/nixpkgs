@@ -1,8 +1,10 @@
 { lib
 , absl-py
+, blas
 , buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, lapack
 , numpy
 , opt-einsum
 , pytestCheckHook
@@ -12,6 +14,9 @@
 , typing-extensions
 }:
 
+let
+  usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
+in
 buildPythonPackage rec {
   pname = "jax";
   version = "0.3.1";
@@ -58,6 +63,9 @@ buildPythonPackage rec {
     "-W ignore::DeprecationWarning"
     "tests/"
   ];
+
+  # See https://github.com/google/jax/issues/9705.
+  disabledTests = lib.optionals usingMKL [ "test_custom_root_with_aux" ];
 
   pythonImportsCheck = [
     "jax"
