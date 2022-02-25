@@ -105,4 +105,9 @@ self: super: {
 
   # weeder 2.3.0 no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
+
+  # OneTuple needs hashable instead of ghc-prim for GHC < 9
+  OneTuple = super.OneTuple.override {
+    ghc-prim = self.hashable;
+  };
 }

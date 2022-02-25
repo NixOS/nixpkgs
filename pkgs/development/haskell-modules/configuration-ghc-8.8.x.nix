@@ -142,4 +142,9 @@ self: super: {
     # https://github.com/haskell/haskell-language-server/issues/2728
     hls-hlint-plugin = null;
   });
+
+  # OneTuple needs hashable instead of ghc-prim for GHC < 9
+  OneTuple = super.OneTuple.override {
+    ghc-prim = self.hashable;
+  };
 }
