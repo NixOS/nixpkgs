@@ -18,7 +18,6 @@
 , pythonOlder
 , pyyaml
 , toolz
-, withExtraComplete ? false
 }:
 
 buildPythonPackage rec {
@@ -46,9 +45,6 @@ buildPythonPackage rec {
     jinja2
     bokeh
     numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
-    distributed
   ];
 
   doCheck = true;
@@ -103,6 +99,10 @@ buildPythonPackage rec {
     "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
+
+  passthru.extras-require = {
+    complete = [ distributed ];
+  };
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
