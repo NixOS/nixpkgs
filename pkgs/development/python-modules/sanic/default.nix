@@ -13,6 +13,7 @@
 , pytest-sugar
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 , sanic-routing
 , sanic-testing
 , ujson
@@ -26,7 +27,8 @@ buildPythonPackage rec {
   version = "21.12.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" ||
+    pythonAtLeast "3.10";  # see GHSA-7p79-6x2v-5h88
 
   src = fetchFromGitHub {
     owner = "sanic-org";
