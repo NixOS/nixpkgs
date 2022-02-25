@@ -528,7 +528,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "reloading the following units:")
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
-        assert_lacks(out, "the following new units were started:")
         assert_lacks(out, "as well:")
 
         # Rename it
