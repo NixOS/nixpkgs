@@ -2288,6 +2288,9 @@ self: super: {
   glirc = assert super.irc-core.version == "2.10"; doJailbreak super.glirc;
   hookup = assert super.irc-core.version == "2.10"; doJailbreak super.hookup;
 
+  # 2022-02-25: Unmaintained and to strict upper bounds
+  paths = doJailbreak super.paths;
+
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
