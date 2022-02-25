@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
 
   # Patch configuration
   # notify-send has to be patched in a bash file
-  postPatch = with lib.strings; ''
+  postPatch = ''
     substituteInPlace emojipick \
       --replace "use_rofi=0" "use_rofi=${boolToInt emojipick-use-rofi}" \
       --replace "copy_to_clipboard=1" "copy_to_clipboard=${boolToInt emojipick-copy-to-clipboard}" \
@@ -41,12 +41,11 @@ stdenvNoCC.mkDerivation {
       --replace "print_emoji=1" "print_emoji=${boolToInt emojipick-print-emoji}" \
       --replace "font_family='\"Noto Color Emoji\"'" "font_family='\"${emojipick-font-family}\"'" \
       --replace 'font_size="18"' 'font_size="${emojipick-font-size}"' \
-      ${optionalString emojipick-use-rofi "--replace 'rofi ' '${rofi}/bin/rofi '"} \
+      ${lib.optionalString emojipick-use-rofi "--replace 'rofi ' '${rofi}/bin/rofi '"} \
       --replace notify-send ${libnotify}/bin/notify-send
-
   '';
 
-  buildInputs = with lib.lists; [
+  buildInputs = [
     python3
     xclip
     libnotify
