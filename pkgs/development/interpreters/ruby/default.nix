@@ -49,17 +49,19 @@ let
       , libiconv, libobjc, libunwind, Foundation
       , makeWrapper, buildRubyGem, defaultGemConfig
       , baseRuby ? buildPackages.ruby.override {
+          buildFromGit = false;
           useRailsExpress = false;
           docSupport = false;
           rubygemsSupport = false;
         }
-      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
+      , buildFromGit ? true
+      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress || buildFromGit
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
         inherit version;
 
-        src = if useRailsExpress then fetchFromGitHub {
+        src = if buildFromGit then fetchFromGitHub {
           owner  = "ruby";
           repo   = "ruby";
           rev    = tag;
@@ -100,7 +102,7 @@ let
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
+          ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
           # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
           # the resulting error was swallowed. Newer rubygems no longer swallows
           # this error. We upgrade rubygems when rubygemsSupport is enabled, so
