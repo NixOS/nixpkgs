@@ -17,7 +17,7 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  generic = { version, sha256 }: let
+  generic = { version, revision, sha256 }: let
     ver = version;
     tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
@@ -118,6 +118,11 @@ let
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           cp -r ${rubygems}/test/rubygems $sourceRoot/test
+        '' + opString buildFromGit ''
+          cat <<EOF > $sourceRoot/revision.h
+          #define RUBY_REVISION "${lib.substring 0 8 revision}"
+          #define RUBY_FULL_REVISION "${revision}"
+          EOF
         '';
 
         postPatch = ''
@@ -255,6 +260,7 @@ let
 in {
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "5" "";
+    revision = "f69aeb83146be640995753667fdd6c6f157527f5";
     sha256 = {
       src = "1wc1hwmz4m6iqlmqag8liyld917p6a8dvnhnpd1v8d8jl80bjm97";
       git = "16565fyl7141hr6q6d74myhsz46lvgam8ifnacshi68vzibwjbbh";
@@ -263,6 +269,7 @@ in {
 
   ruby_3_0 = generic {
     version = rubyVersion "3" "0" "3" "";
+    revision = "3fb7d2cadc18472ec107b14234933b017a33c14d";
     sha256 = {
       src = "1b4j39zyyvdkf1ax2c6qfa40b4mxfkr87zghhw19fmnzn8f8d1im";
       git = "1q19w5i1jkfxn7qq6f9v9ngax9h52gxwijk7hp312dx6amwrkaim";
@@ -271,6 +278,7 @@ in {
 
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "1" "";
+    revision = "53f5fc4236a754ddf94b20dbb70ab63bd5109b18";
     sha256 = {
       src = "sha256-/m5Hgt6XRDl43bqLpL440iKqJNw+PwKmqOdwHA7rYZ0=";
       git = "sha256-76t/tGyK5nz7nvcRdHJTjjckU+Kv+/kbTMiNWJ93jU8=";
