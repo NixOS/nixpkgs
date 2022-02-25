@@ -22391,6 +22391,8 @@ with pkgs;
 
   gmailctl = callPackage ../applications/networking/gmailctl { };
 
+  gometer = callPackage ../applications/misc/gometer { };
+
   gomp = callPackage ../applications/version-management/gomp { };
 
   gomplate = callPackage ../development/tools/gomplate {};
