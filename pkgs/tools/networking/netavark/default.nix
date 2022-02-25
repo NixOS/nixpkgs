@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E3Mdrc8/IwuOOwwVf4LaLrNFzuO95MEvy8BbStQRgoE=";
+    sha256 = "sha256-r9NoPDFCqmzESxlovs91j0OyunGDmfWJXN+U1f0w2QQ=";
   };
 
-  cargoVendorDir = "vendor";
+  cargoHash = "sha256-/N9oKzcAwaxI2BbeoYZ2quN+Z3UO67ecpogK2SRG9Dw=";
 
   preBuild = ''
     substituteInPlace Cargo.toml \

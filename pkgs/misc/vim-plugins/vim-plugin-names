@@ -18,6 +18,7 @@ alvan/vim-closetag
 alvarosevilla95/luatab.nvim
 alx741/vim-hindent
 alx741/vim-stylishask
+AmeerTaweel/todo.nvim
 amiorin/ctrlp-z
 andersevenrud/cmp-tmux
 andersevenrud/nordic.nvim
@@ -52,7 +53,6 @@ benizi/vim-automkdir
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
-blackCauldron7/surround.nvim
 bling/vim-bufferline
 blueballs-theme/blueballs-neovim
 blueyed/vim-diminactive
@@ -887,6 +887,7 @@ uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
+ur4ltz/surround.nvim
 urbit/hoon.vim
 Valloric/MatchTagAlways
 Valodim/deoplete-notmuch

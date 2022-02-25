@@ -1,5 +1,6 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq nix-prefetch
+#! /usr/bin/env nix-shell
+#! nix-shell ../../update-shell.nix -i bash
+
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ $# -ne 1 ]]; then
@@ -12,7 +13,8 @@ FIXME: This script doesn't update patched lldb. Please manually check branches
 of https://github.com/vadimcn/llvm-project and update lldb with correct version of LLVM.
 "
 
-nixpkgs=../../../..
+# Ideally, nixpkgs points to default.nix file of Nixpkgs official tree
+nixpkgs=../../../../../..
 nixFile=./default.nix
 owner=vadimcn
 repo=vscode-lldb

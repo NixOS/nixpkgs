@@ -4,7 +4,7 @@
 set -eu -o pipefail
 
 # can be added to your configuration with the following command and snippet:
-# $ ./pkgs/misc/vscode-extensions/update_installed_exts.sh > extensions.nix
+# $ ./pkgs/applications/editors/vscode/extensions/update_installed_exts.sh > extensions.nix
 #
 # packages = with pkgs;
 #   (vscode-with-extensions.override {

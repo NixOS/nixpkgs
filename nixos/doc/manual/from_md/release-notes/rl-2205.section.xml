@@ -98,7 +98,7 @@
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
           OSPF, IS-IS, VVRP and others). Available as
-          <link linkend="opt-services.ffr.babel.enable">services.frr</link>
+          <link linkend="opt-services.frr.babel.enable">services.frr</link>
         </para>
       </listitem>
       <listitem>
@@ -143,6 +143,15 @@
           <link xlink:href="https://maddy.email">maddy</link>, a
           composable all-in-one mail server. Available as
           <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.scorchworks.com/K40whisperer/k40whisperer.html">K40-Whisperer</link>,
+          a program to control cheap Chinese laser cutters. Available as
+          <link xlink:href="options.html#opt-programs.k4-whisperer.enable">programs.k40-whisperer.enable</link>.
+          Users must add themselves to the <literal>k40</literal> group
+          to be able to access the device.
         </para>
       </listitem>
       <listitem>
@@ -196,7 +205,7 @@
         <para>
           <link xlink:href="https://moosefs.com">moosefs</link>, fault
           tolerant petabyte distributed file system. Available as
-          <link linkend="opt-services.moosefs">moosefs</link>.
+          <link linkend="opt-services.moosefs.client.enable">moosefs</link>.
         </para>
       </listitem>
       <listitem>
@@ -716,6 +725,19 @@
           <link xlink:href="https://github.com/olimorris/onedarkpro.nvim">olimorris/onedarkpro.nvim</link>).
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.pipewire.enable</literal> will default to
+          enabling the WirePlumber session manager instead of
+          pipewire-media-session. pipewire-media-session is deprecated
+          by upstream and not recommended, but can still be manually
+          enabled by setting
+          <literal>services.pipewire.media-session.enable</literal> to
+          <literal>true</literal> and
+          <literal>services.pipewire.wireplumber.enable</literal> to
+          <literal>false</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -1024,7 +1046,7 @@
       <listitem>
         <para>
           The option
-          <link linkend="opt-services.networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
+          <link linkend="opt-networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
           was added to support FCC unlock procedures. Since release
           1.18.4, the ModemManager daemon no longer automatically
           performs the FCC unlock procedure by default. See
