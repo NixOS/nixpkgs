@@ -285,18 +285,27 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages.integer-simple.ghc8107 =
+      pkgsStatic.haskell.packages =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
             "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
-          ]
-          {
-            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
-              hello
-              lens
-              random
+          ] {
+            integer-simple.ghc8107 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
+                hello
+                lens
+                random
               ;
+            };
+
+            native-bignum.ghc902 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc902)
+                hello
+                lens
+                random
+              ;
+            };
           };
     })
     (versionedCompilerJobs {
