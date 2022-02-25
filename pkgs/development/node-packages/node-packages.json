@@ -198,7 +198,7 @@
 , "markdownlint-cli"
 , "markdownlint-cli2"
 , "markdown-link-check"
-, {"markdown-preview-nvim": "../../misc/vim-plugins/markdown-preview-nvim"}
+, {"markdown-preview-nvim": "../../applications/editors/vim/plugins/markdown-preview-nvim"}
 , "mastodon-bot"
 , "mathjax"
 , "meat"

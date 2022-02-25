@@ -420,6 +420,7 @@ lighttiger2505/deoplete-vim-lsp
 lilydjwg/colorizer
 lilydjwg/fcitx.vim@fcitx5
 liuchengxu/graphviz.vim
+liuchengxu/space-vim
 liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
@@ -772,6 +773,7 @@ sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
 sotte/presenting.vim
+SpaceVim/SpaceVim
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
 steelsojka/pears.nvim
