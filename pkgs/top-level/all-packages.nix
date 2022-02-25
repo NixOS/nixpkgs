@@ -32105,6 +32105,8 @@ with pkgs;
 
   blas-reference = callPackage ../development/libraries/science/math/blas { };
 
+  bonmin = callPackage ../development/libraries/science/math/bonmin { };
+
   brial = callPackage ../development/libraries/science/math/brial { };
 
   clblas = callPackage ../development/libraries/science/math/clblas {
