@@ -868,7 +868,7 @@ let
         print(client.succeed("ip l add name foo type dummy"))
         print(client.succeed("stat /etc/systemd/network/50-foo.link"))
         client.succeed("udevadm settle")
-        assert "mtu 1442" in client.succeed("ip l show dummy0")
+        assert "mtu 1442" in client.succeed("ip l show dev foo")
       '';
     };
     wlanInterface = let
