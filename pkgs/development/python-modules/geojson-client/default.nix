@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "geojson-client";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-geojson-client";
     rev = "v${version}";
-    sha256 = "sha256-8eSLimCgFRn3cHTz5TE9fAUAbwFO72b23C0lg6fVOLQ=";
+    sha256 = "sha256-7EhdIfVM6d5fp6k+RdX6z33O5sZGeF/ThNkSXL8EjE8=";
   };
 
   propagatedBuildInputs = [
