@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-d3aOX4iMlhlxgYbqCHCIFKXunVha0Fw4ZBmy4OA6EhI=";
 
-  excludedPackages = "\\(sample\\|webhook\\|help\\)";
+  excludedPackages = [ "sample" "webhook" "help" ];
 
   tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 

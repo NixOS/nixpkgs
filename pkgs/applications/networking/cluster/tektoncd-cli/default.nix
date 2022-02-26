@@ -19,7 +19,7 @@ buildGoModule rec {
 
   # third_party/VENDOR-LICENSE breaks build/check as go files are still included
   # docs is a tool for generating docs
-  excludedPackages = "\\(third_party\\|cmd/docs\\)";
+  excludedPackages = [ "third_party" "cmd/docs" ];
 
   preCheck = ''
     # some tests try to write to the home dir
