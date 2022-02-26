@@ -12,6 +12,7 @@
 , libgudev
 , polkit
 , libxmlb
+, glib
 , gusb
 , sqlite
 , libarchive
@@ -112,7 +113,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.7.2";
+    version = "1.7.6";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -121,7 +122,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-hjLfacO6/Fk4fNy1F8POMaWXoJAm5E9ZB9g4RnG5+DQ=";
+      sha256 = "sha256-fr4VFKy2iNJknOzDktuSkJTaPwPPyYqcD6zKuwhJEvo=";
     };
 
     patches = [
@@ -145,6 +146,13 @@ let
 
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
+
+      # Drop hard-coded FHS path
+      # https://github.com/fwupd/fwupd/issues/4360
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/14cc2e7ee471b66ee2ef54741f4bec1f92204620.patch";
+        sha256 = "47682oqE66Y6QKPtN2mYpnb2+TIJFqBgsgx60LmC3FM=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -250,6 +258,9 @@ let
         contrib/generate-version-script.py \
         meson_post_install.sh \
         po/test-deps
+
+      substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
+        --replace "gdbus" ${glib.bin}/bin/gdbus
     '';
 
     preCheck = ''
@@ -301,6 +312,7 @@ let
     passthru = {
       filesInstalledToEtc = [
         "fwupd/daemon.conf"
+        "fwupd/msr.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
