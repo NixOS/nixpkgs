@@ -4724,6 +4724,8 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jplephem = callPackage ../development/python-modules/jplephem { };
+
   jproperties = callPackage ../development/python-modules/jproperties { };
 
   jpylyzer = callPackage ../development/python-modules/jpylyzer { };
