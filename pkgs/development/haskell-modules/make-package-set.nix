@@ -124,7 +124,7 @@ let
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
-    in buildPackages.stdenv.mkDerivation {
+    in buildPackages.stdenvNoCC.mkDerivation {
       name = "cabal2nix-${name}";
       nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
       preferLocalBuild = true;
