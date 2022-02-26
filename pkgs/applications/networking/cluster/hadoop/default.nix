@@ -23,13 +23,10 @@ assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarc
 
 let
   common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "" }:
-    let
-      platformUrlSuffix = optionalString stdenv.isAarch64 "-aarch64";
-    in
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}${platformUrlSuffix}.tar.gz";
+        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
         sha256 = sha256.${stdenv.system};
       };
       doCheck = true;
@@ -69,9 +66,8 @@ let
           computers, each of which may be prone to failures.
         '';
         maintainers = with maintainers; [ volth illustris ];
-        platforms = builtins.attrNames sha256;
+        platforms = attrNames sha256;
       };
-
     };
 in
 {
@@ -104,9 +100,7 @@ in
   hadoop_3_2 = common rec {
     pname = "hadoop";
     version = "3.2.2";
-    sha256 = {
-      x86_64-linux = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
-    };
+    sha256.x86_64-linux = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
@@ -114,9 +108,7 @@ in
   hadoop2 = common rec {
     pname = "hadoop";
     version = "2.10.1";
-    sha256 = {
-      x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
-    };
+    sha256.x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
     jdk = jdk8_headless;
   };
 }
