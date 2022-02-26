@@ -57,14 +57,16 @@ assert lib.assertOneOf "mountPosition" mountPosition [ "above" "below" "none" ];
 if mountPosition != "none" && vscodeExtensions == [ ] then vscode else
 
 let
+  # avoiding a mountpoint if the wrapped vscode-with-extensions
+  # do not take extensions from $VSCODE_EXTENSIONS
+  pos = if vscode.mountPosition or "" == "none" then "none" else mountPosition;
   # if vscode is itself another vscode-with-extensions we avoid to build it too
-  canFlatten = mountPosition == vscode.mountPosition or "" && vscode ? vscodeExtensions && vscode ? vscode;
+  canFlatten = (pos == "none" || pos == vscode.mountPosition or "") && vscode ? vscodeExtensions && vscode ? vscode;
   _vscode = if canFlatten then vscode.vscode else vscode;
+  exts = vscodeExtensions ++ (lib.optionals (canFlatten && mountPosition != "none") vscode.vscodeExtensions);
   combinedExtensionsDrv = symlinkJoin {
     name = "vscode-extensions";
-    paths = map
-      (p: "${p}/share/vscode/extensions")
-      (vscodeExtensions ++ (lib.optionals canFlatten vscode.vscodeExtensions));
+    paths = map (p: "${p}/share/vscode/extensions") exts;
   };
   setExtDir = ''
     export VSCODE_EXTENSIONS="${combinedExtensionsDrv}"
@@ -81,15 +83,16 @@ stdenvNoCC.mkDerivation rec {
     meta extensionHomePath executableName
     longName shortName userHomePath version;
   passthru = {
-    inherit vscodeExtensions mountPosition;
+    mountPosition = pos;
+    vscodeExtensions = exts;
   };
 
   passAsFile = [ "buildCommand" "vscSh" ];
-  vscSh = if mountPosition == "none" then setExtDir else ''
+  vscSh = "#!${runtimeShell}\n" + (if pos == "none" then setExtDir else ''
     homeExt="''${VSCODE_EXTENSIONS:-$HOME/${extensionHomePath}}"
     mkdir -p "$homeExt"
     # assume $out is unique enough it can replace a tmpdir suffix
-    export VSCODE_EXTENSIONS="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}/$UID}@out@"
+    export VSCODE_EXTENSIONS="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}/users/$UID}@out@"
     # avoid remounting after closing and reopening vscode
     if ! mountpoint -q "$VSCODE_EXTENSIONS"
     then
@@ -97,18 +100,17 @@ stdenvNoCC.mkDerivation rec {
       ${mergerfs}/bin/mergerfs \
         -o use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs \
         ${
-          if mountPosition =="above" then
+          if pos =="above" then
             ''"${combinedExtensionsDrv}=RO:$homeExt=RW"''
           else
             ''"$homeExt=RW:${combinedExtensionsDrv}=RO"''
         } "$VSCODE_EXTENSIONS" || ${setExtDir}
     fi
-  '';
+  '');
   buildCommand = ''
     mkVscWrapper()(
       o="$out/$1"
       install -Dm0777 "$vscShPath" "$o"
-      sed -i "1i#! ${runtimeShell}\n" "$o"
       echo exec "$vscode/$1" '"$@"' >> "$o"
       substituteInPlace "$o" --subst-var out
     )
