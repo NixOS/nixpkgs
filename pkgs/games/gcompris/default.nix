@@ -18,15 +18,15 @@
 
 mkDerivation rec {
   pname = "gcompris";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchurl {
     url = "http://gcompris.net/download/qt/src/gcompris-qt-${version}.tar.xz";
-    sha256 = "sha256-ljOY/uybXzfwOFmhBXB4sC4Vn/C8BP1BeUUPpdHuQwo=";
+    sha256 = "sha256-wMy0bNxGo6f65GdVr8VZS8Z1Tfw5WGpc2nijTgsQow8=";
   };
 
   cmakeFlags = [
-    "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1"
+    "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.2"
   ];
 
   nativeBuildInputs = [ cmake gettext ninja qttools ];
