@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq
+#!nix-shell -i bash -p curl gnugrep gnused jq yq-go nix-prefetch
 
 set -x -eu -o pipefail
 
@@ -32,22 +32,33 @@ curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/scripts
 FILE_MANIFESTS_TRAEFIK=${WORKDIR}/manifests-traefik.yaml
 curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/manifests/traefik.yaml > $FILE_MANIFESTS_TRAEFIK
 
-TRAEFIK_CHART_VERSION=$(awk -F/ '/traefik-([[:digit:]]+\.)/ {sub(/traefik-/, "", $6) ; sub(/\.tgz/, "", $6); print $6}' $FILE_MANIFESTS_TRAEFIK)
+FILE_GO_MOD=${WORKDIR}/go.mod
+curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/go.mod > $FILE_GO_MOD
 
+TRAEFIK_CHART_VERSION=$(yq e '.spec.chart' $FILE_MANIFESTS_TRAEFIK | awk 'match($0, /([0-9.]+)([0-9]{2})/,
+m) { print m[1]; exit; }')
 TRAEFIK_CHART_SHA256=$(nix-prefetch-url --quiet "https://helm.traefik.io/traefik/traefik-${TRAEFIK_CHART_VERSION}.tgz")
 
-K3S_ROOT_VERSION=$(grep 'ROOT_VERSION=' ${FILE_SCRIPTS_DOWNLOAD} \
-    | cut -d'=' -f2 | cut -d' ' -f1 | sed 's/^v//')
+K3S_ROOT_VERSION=$(grep 'VERSION_ROOT=' ${FILE_SCRIPTS_VERSION} \
+    | cut -d'=' -f2 | sed -e 's/"//g' -e 's/^v//')
 K3S_ROOT_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/k3s-io/k3s-root/releases/download/v${K3S_ROOT_VERSION}/k3s-root-amd64.tar")
 
 CNIPLUGINS_VERSION=$(grep 'VERSION_CNIPLUGINS=' ${FILE_SCRIPTS_VERSION} \
-    | cut -d'=' -f2 | cut -d' ' -f1 | sed -e 's/"//g' -e 's/^v//')
+    | cut -d'=' -f2 | sed -e 's/"//g' -e 's/^v//')
 CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/rancher/plugins/archive/refs/tags/v${CNIPLUGINS_VERSION}.tar.gz")
 
+CONTAINERD_VERSION=$(grep github.com/containerd/containerd ${FILE_GO_MOD} \
+    | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
+CONTAINERD_SHA256=$(nix-prefetch-url --quiet --unpack \
+    "https://github.com/k3s-io/containerd/archive/refs/tags/v${CONTAINERD_VERSION}.tar.gz")
+
+CRI_CTL_VERSION=$(grep github.com/kubernetes-sigs/cri-tools ${FILE_GO_MOD} \
+    | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
+
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" default.nix
 }
 
 setKV k3sVersion ${K3S_VERSION}
@@ -62,3 +73,36 @@ setKV k3sRootSha256 ${K3S_ROOT_SHA256}
 
 setKV k3sCNIVersion ${CNIPLUGINS_VERSION}
 setKV k3sCNISha256 ${CNIPLUGINS_SHA256}
+
+setKV containerdVersion ${CONTAINERD_VERSION}
+setKV containerdSha256 ${CONTAINERD_SHA256}
+
+setKV criCtlVersion ${CRI_CTL_VERSION}
+
+setKV k3sServerVendorSha256 "0000000000000000000000000000000000000000000000000000"
+
+cd ../../../../../
+set +e
+K3S_SERVER_VENDOR_SHA256=$(nix-build --no-out-link -A k3s 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
+set -e
+cd - > /dev/null
+
+if [ -n "${K3S_SERVER_VENDOR_SHA256:-}" ]; then
+    setKV k3sServerVendorSha256 ${K3S_SERVER_VENDOR_SHA256}
+else
+    echo "Update failed. K3S_SERVER_VENDOR_SHA256 is empty."
+    exit 1
+fi
+
+cd ../../../../../
+set +e
+K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=./. "{ sha256 }: (import ./. {}).k3s.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
+set -e
+cd - > /dev/null
+
+if [ -n "${K3S_VENDOR_SHA256:-}" ]; then
+    setKV k3sVendorSha256 ${K3S_VENDOR_SHA256}
+else
+    echo "Update failed. K3S_VENDOR_SHA256 is empty."
+    exit 1
+fi
