@@ -7,14 +7,14 @@
 
 buildPythonApplication rec {
   pname = "sybil";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dpLtZueT5eea5qcM8s+GGRftSOr/DYrfgl5k2Fgg8lE=";
+    sha256 = "sha256-bwLcIgSvflohIDeSTZdPcngfbcGP08RMx85GOhIPUw0=";
   };
 
   checkInputs = [
