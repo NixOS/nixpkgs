@@ -51,6 +51,9 @@
 , nixosTests
 , runCommand
 , unstableGitUpdater
+, modemmanager
+, libqmi
+, libmbim
 }:
 
 let
@@ -195,6 +198,9 @@ let
       efivar
       fwupd-efi
       protobufc
+      modemmanager
+      libmbim
+      libqmi
     ] ++ lib.optionals haveDell [
       libsmbios
     ];
@@ -214,6 +220,7 @@ let
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
+      "-Dplugin_modem_manager=true"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
