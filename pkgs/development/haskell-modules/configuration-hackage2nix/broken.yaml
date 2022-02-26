@@ -5503,7 +5503,6 @@ broken-packages:
   - XMMS
   - xmonad-bluetilebranch
   - xmonad-contrib-gpl
-  - xmonad-dbus
   - xmonad-eval
   - xmonad-vanessa
   - xmonad-windownames

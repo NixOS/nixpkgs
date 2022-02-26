@@ -214,6 +214,10 @@ self: super: builtins.intersectAttrs super {
   # Nix-specific workaround
   xmonad = appendPatch ./patches/xmonad_0_17_0-nix.patch (dontCheck super.xmonad);
 
+  # https://hydra.nixos.org/build/128665302/nixlog/3
+  # Disable tests because they require a running dbus session
+  xmonad-dbus = dontCheck super.xmonad-dbus;
+
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK30; };
