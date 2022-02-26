@@ -118,6 +118,13 @@ stdenv.mkDerivation {
     (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
     # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
     (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
+  ] ++ lib.optionals (atLeast24 && stdenv.hostPlatform.isMips64 && stdenv.hostPlatform.isLittleEndian && enableStatic) [
+    "-melf64ltsmip"
+    # without this flag, statically linked mips64el-linux-musl cross-builds of nix>=2.4 fail linking libutil:
+    #   mips64el-unknown-linux-musl-ld: failed to merge target specific data of file src/libutil/xml-writer.o
+    #   mips64el-unknown-linux-musl-ld: attempt to do relocatable link with elf64-tradlittlemips input and elf32-ntradlittlemips output
+    #   mips64el-unknown-linux-musl-ld: src/libutil/affinity.o: file class ELFCLASS64 incompatible with ELFCLASS32
+    #   mips64el-unknown-linux-musl-ld: final link failed: file in wrong format
   ];
 
   preConfigure =
