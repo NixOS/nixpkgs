@@ -6,7 +6,9 @@ set -x -eu -o pipefail
 WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
 
-cd $(dirname "${BASH_SOURCE[0]}")
+NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
+NIXPKGS_K3S_FOLDER=${NIXPKGS_ROOT}$(dirname "${BASH_SOURCE[0]}")/
+cd ${NIXPKGS_K3S_FOLDER}
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
 curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
@@ -58,7 +60,7 @@ CRI_CTL_VERSION=$(grep github.com/kubernetes-sigs/cri-tools ${FILE_GO_MOD} \
     | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
 
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ${NIXPKGS_K3S_FOLDER}default.nix
 }
 
 setKV k3sVersion ${K3S_VERSION}
@@ -81,11 +83,9 @@ setKV criCtlVersion ${CRI_CTL_VERSION}
 
 setKV k3sServerVendorSha256 "0000000000000000000000000000000000000000000000000000"
 
-cd ../../../../../
 set +e
-K3S_SERVER_VENDOR_SHA256=$(nix-build --no-out-link -A k3s 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
+K3S_SERVER_VENDOR_SHA256=$(nix-build ${NIXPKGS_ROOT} --no-out-link -A k3s 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
 set -e
-cd - > /dev/null
 
 if [ -n "${K3S_SERVER_VENDOR_SHA256:-}" ]; then
     setKV k3sServerVendorSha256 ${K3S_SERVER_VENDOR_SHA256}
@@ -94,11 +94,9 @@ else
     exit 1
 fi
 
-cd ../../../../../
 set +e
-K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=./. "{ sha256 }: (import ./. {}).k3s.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
+K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
 set -e
-cd - > /dev/null
 
 if [ -n "${K3S_VENDOR_SHA256:-}" ]; then
     setKV k3sVendorSha256 ${K3S_VENDOR_SHA256}
