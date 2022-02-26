@@ -61,6 +61,14 @@ self: super: {
   # > https://github.com/snapframework/io-streams-haproxy/pull/24
   io-streams-haproxy = doJailbreak super.io-streams-haproxy;
 
+  # xmlhtml's test suite depends on hspec with an invalid boundry range for
+  # the version we currently track, even though the upper bound is relaxed on
+  # github it doesn't have a release yet; though there's an MR preparing the
+  # next release:
+  # > https://github.com/snapframework/xmlhtml/pull/40
+  # Once that's out we can re-enable version checks.
+  xmlhtml = doJailbreak super.xmlhtml;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
