@@ -8,32 +8,44 @@ echo Patching the bootstrap tools...
 
 if test -f $out/lib/ld.so.?; then
    # MIPS case
-   LD_BINARY=$out/lib/ld.so.?
+   LD_BINARY=lib/ld.so.?
 elif test -f $out/lib/ld64.so.?; then
    # ppc64(le)
-   LD_BINARY=$out/lib/ld64.so.?
+   LD_BINARY=lib/ld64.so.?
 else
    # i686, x86_64 and armv5tel
-   LD_BINARY=$out/lib/ld-*so.?
+   LD_BINARY=lib/ld-*so.?
 fi
 
-# On x86_64, ld-linux-x86-64.so.2 barfs on patchelf'ed programs.  So
-# use a copy of patchelf.
-LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
+# make a copy of patchelf and lib so we don't try patchelf'ing
+# patchelf itself, or a library that patchelf itself links against --
+# this may cause segfaults due to lazy loading of binary images
+LD_LIBRARY_PATH=$out/lib $out/$LD_BINARY $out/bin/cp -r $out/lib $out/bin/patchelf .
 
-for i in $out/bin/* $out/libexec/gcc/*/*/*; do
-    if [ -L "$i" ]; then continue; fi
-    if [ -z "${i##*/liblto*}" ]; then continue; fi
-    echo patching "$i"
-    LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-        ./patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
-done
+export LD_LIBRARY_PATH=lib
+for i in $($LD_BINARY $out/bin/find $out -type f -executable); do
 
-for i in $out/lib/librt-*.so $out/lib/libpcre* $out/lib/libpthread-*.so; do
-    if [ -L "$i" ]; then continue; fi
-    echo patching "$i"
-    $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
+    interp=$($LD_BINARY ./patchelf --print-interpreter $i 2>/dev/null || echo)
+
+    # patchelf --set-interpreter only if a nuke-ref'd interpreter is found
+    if [ -n "${interp}" ] && [ -z "${interp##/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-*/lib*/*}" ] &&
+       # do not --set-interprerter libpthread.so or libc.so due to patchelf bug 368:
+       [ -n "${i##*/lib*/libpthread*.so}" ] && [ -n "${i##*/lib*/libc*.so}" ]; then
+      echo patching interpreter of "$i"
+      $LD_BINARY ./patchelf --set-interpreter $out/$LD_BINARY "$i"
+    fi
+
+    rpath=$($LD_BINARY ./patchelf --print-rpath $i 2>/dev/null || echo)
+
+    # patchelf --set-rpath only if a nuke-ref'd rpath is found
+    if [ -n "${rpath}" ] && [ -z "${rpath##/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-*}" ] &&
+       # do not use patchelf --set-rpath on libgcc_s.so.1, because its rpath leaks into stdenv-final
+       [ -n "${i##*/lib*/libgcc_s.so.*}" ]; then
+      echo patching rpath of "$i"
+      $LD_BINARY ./patchelf --set-rpath $out/lib --force-rpath "$i"
+    fi
 done
+export LD_LIBRARY_PATH=
 
 export PATH=$out/bin
 
