@@ -26,7 +26,7 @@ let
     exec = "mame${lib.optionalString stdenv.is64bit "64"}";
     desktopName = "MAME";
     genericName = "MAME is a multi-purpose emulation framework";
-    categories = "System;Emulator;";
+    categories = [ "System" "Emulator" ];
   };
 
   dest = "$out/opt/mame";

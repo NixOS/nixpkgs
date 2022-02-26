@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
       exec = "mars-mips";
       icon = "mars-mips";
       comment = "An IDE for programming in MIPS assembly language";
-      categories = "Development;IDE;";
+      categories = [ "Development" "IDE" ];
     })
   ];
 

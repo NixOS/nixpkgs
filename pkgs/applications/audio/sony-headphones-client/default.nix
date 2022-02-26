@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     icon = "SonyHeadphonesClient";
     desktopName = "Sony Headphones Client";
     comment     = "A client recreating the functionality of the Sony Headphones app";
-    categories  = "Audio;Mixer;";
+    categories  = [ "Audio" "Mixer" ];
   }) ];
 
   meta = with lib; {

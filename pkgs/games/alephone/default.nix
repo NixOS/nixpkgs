@@ -72,7 +72,7 @@ in self // {
         name = desktopName;
         exec = pname;
         genericName = pname;
-        categories = "Game;";
+        categories = [ "Game" ];
         comment = meta.description;
         inherit desktopName icon;
       };

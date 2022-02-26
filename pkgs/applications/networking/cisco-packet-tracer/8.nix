@@ -94,7 +94,7 @@ let
     desktopName = "Cisco Packet Tracer 8";
     icon = "${ptFiles}/opt/pt/art/app.png";
     exec = "packettracer8 %f";
-    mimeType = "application/x-pkt;application/x-pka;application/x-pkz;";
+    mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
   };
 
   fhs = buildFHSUserEnvBubblewrap {

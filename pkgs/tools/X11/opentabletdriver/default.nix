@@ -100,8 +100,7 @@ buildDotnetModule rec {
       exec = "otd-gui";
       icon = "otd";
       comment = meta.description;
-      type = "Application";
-      categories = "Utility;";
+      categories = [ "Utility" ];
     })
   ];
 

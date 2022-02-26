@@ -24,8 +24,8 @@ mkYarnPackage rec {
     icon = "vieb";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
       "text/html"
       "application/xhtml+xml"
       "x-scheme-handler/http"

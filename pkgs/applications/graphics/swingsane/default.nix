@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       desktopName = "SwingSane";
       genericName = "Scan from local or remote SANE servers";
       comment = meta.description;
-      categories = "Office;";
+      categories = [ "Office" ];
     };
 
   in ''

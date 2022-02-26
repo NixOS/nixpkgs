@@ -18,7 +18,7 @@ let
     icon = "portfolio";
     comment = "Calculate Investment Portfolio Performance";
     desktopName = "Portfolio Performance";
-    categories = "Office;";
+    categories = [ "Office" ];
   };
 
   runtimeLibs = lib.makeLibraryPath [ gtk3 webkitgtk ];

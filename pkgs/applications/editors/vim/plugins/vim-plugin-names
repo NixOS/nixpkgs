@@ -314,6 +314,7 @@ joonty/vim-xdebug
 joosepalviste/nvim-ts-context-commentstring
 jordwalke/vim-reasonml
 josa42/coc-lua
+josa42/nvim-lightline-lsp
 josa42/vim-lightline-coc
 jose-elias-alvarez/minsnip.nvim
 jose-elias-alvarez/null-ls.nvim
@@ -420,6 +421,7 @@ lighttiger2505/deoplete-vim-lsp
 lilydjwg/colorizer
 lilydjwg/fcitx.vim@fcitx5
 liuchengxu/graphviz.vim
+liuchengxu/space-vim
 liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
@@ -772,6 +774,8 @@ sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
 sotte/presenting.vim
+SpaceVim/SpaceVim
+spywhere/lightline-lsp
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
 steelsojka/pears.nvim

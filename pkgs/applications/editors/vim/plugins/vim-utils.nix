@@ -82,7 +82,8 @@ See vimHelpTags sample code below.
 
 CONTRIBUTING AND CUSTOMIZING
 ============================
-The example file pkgs/misc/vim-plugins/default.nix provides both:
+The example file pkgs/applications/editors/vim/plugins/default.nix provides
+both:
 * manually mantained plugins
 * plugins created by VAM's nix#ExportPluginsForNix implementation
 

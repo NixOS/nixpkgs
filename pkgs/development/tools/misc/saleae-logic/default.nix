@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
     genericName = "Logic analyzer";
-    categories = "Development";
+    categories = [ "Development" ];
   };
 
   nativeBuildInputs = [ unzip ];
