@@ -6,11 +6,15 @@
 , pytz
 , requests
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "geojson-client";
   version = "0.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
@@ -26,9 +30,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "geojson_client" ];
+  pythonImportsCheck = [
+    "geojson_client"
+  ];
 
   meta = with lib; {
     description = "Python module for convenient access to GeoJSON feeds";
