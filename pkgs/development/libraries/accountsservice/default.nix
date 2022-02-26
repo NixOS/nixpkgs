@@ -29,6 +29,24 @@ stdenv.mkDerivation rec {
     sha256 = "IdRJwN6tilQ86o8R5x6wSWwDXXMOpIOTOXowKzpMfBo=";
   };
 
+  patches = [
+    # Hardcode dependency paths.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit shadow coreutils;
+    })
+
+    # Do not try to create directories in /var, that will not work in Nix sandbox.
+    ./no-create-dirs.patch
+
+    # Disable mutating D-Bus methods with immutable /etc.
+    ./Disable-methods-that-change-files-in-etc.patch
+
+    # Do not ignore third-party (e.g Pantheon) extensions not matching FHS path scheme.
+    # Fixes https://github.com/NixOS/nixpkgs/issues/72396
+    ./drop-prefix-check-extensions.patch
+  ];
+
   nativeBuildInputs = [
     dbus
     gettext
@@ -57,22 +75,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit shadow coreutils;
-    })
-    ./no-create-dirs.patch
-    ./Disable-methods-that-change-files-in-etc.patch
-    # Fixes https://github.com/NixOS/nixpkgs/issues/72396
-    ./drop-prefix-check-extensions.patch
-  ];
-
   meta = with lib; {
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
+    license = licenses.gpl3Plus;
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ pSub ]);
     platforms = platforms.linux;
   };
 }
