@@ -4364,6 +4364,8 @@ in {
 
   jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
 
+  jupyterlab-lsp = callPackage ../development/python-modules/jupyterlab-lsp { };
+
   jupyter-packaging = callPackage ../development/python-modules/jupyter-packaging { };
 
   jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
