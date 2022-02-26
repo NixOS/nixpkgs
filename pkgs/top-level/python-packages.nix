@@ -9960,6 +9960,8 @@ in {
 
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
+  sgp4 = callPackage ../development/python-modules/sgp4 { };
+
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
   shap = callPackage ../development/python-modules/shap { };
