@@ -5,7 +5,7 @@
  static std::string queryMetaStrings(EvalState & state, DrvInfo & drv, const string & name, const string & subAttribute)
  {
 -    Strings res;
-+    list<std::string_view> res;
++    std::list<std::string_view> res;
      std::function<void(Value & v)> rec;
  
      rec = [&](Value & v) {
