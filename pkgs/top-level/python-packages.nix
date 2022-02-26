@@ -8225,6 +8225,8 @@ in {
 
   python-toolbox = callPackage ../development/python-modules/python-toolbox { };
 
+  python-trovo = callPackage ../development/python-modules/python-trovo { };
+
   python-twitch-client = callPackage ../development/python-modules/python-twitch-client { };
 
   python-twitter = callPackage ../development/python-modules/python-twitter { };
