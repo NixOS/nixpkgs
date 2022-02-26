@@ -95,6 +95,11 @@ self: super: {
   # https://github.com/snoyberg/mono-traversable/issues/192
   mono-traversable = dontCheck super.mono-traversable;
 
+  # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
+  # https://github.com/ekmett/reflection/issues/51
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141
+  reflection = dontCheck super.reflection;
+
   # Disable tests pending resolution of
   # https://github.com/Soostone/retry/issues/71
   retry = dontCheck super.retry;

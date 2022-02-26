@@ -282,10 +282,6 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.foldl;
 
-  # Strange crash in test suite
-  # https://github.com/ekmett/reflection/issues/51
-  reflection = dontCheck super.reflection;
-
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
