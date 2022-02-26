@@ -167,7 +167,6 @@ in
 
     systemd.services.logrotate = {
       description = "Logrotate Service";
-      wantedBy = [ "multi-user.target" ];
       startAt = "hourly";
 
       serviceConfig = {
