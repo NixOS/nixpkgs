@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, blas, lapack, gfortran }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, blas
+, lapack
+, gfortran
+, enableAMPL ? stdenv.isLinux, libamplsolver
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -15,8 +23,13 @@ stdenv.mkDerivation rec {
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
 
+  configureFlags = [
+    "--with-asl-cflags=-I${libamplsolver}/include"
+    "--with-asl-lflags=-lamplsolver"
+  ];
+
   nativeBuildInputs = [ pkg-config gfortran ];
-  buildInputs = [ blas lapack ];
+  buildInputs = [ blas lapack ] ++ lib.optionals enableAMPL [ libamplsolver ];
 
   enableParallelBuilding = true;
 
