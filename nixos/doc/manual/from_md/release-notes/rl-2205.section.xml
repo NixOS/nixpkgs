@@ -1660,6 +1660,12 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>programs.nncp</literal> options were added for
+          generating host-global NNCP configuration.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
