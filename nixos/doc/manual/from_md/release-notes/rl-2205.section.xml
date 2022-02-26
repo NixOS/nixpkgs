@@ -124,6 +124,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
+          an admin interface for the PostgreSQL database. Available at
+          <link xlink:href="options.html#opt-services.pgadmin.enable">services.pgadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/sezanzeb/input-remapper">input-remapper</link>,
           an easy to use tool to change the mapping of your input device
           buttons. Available at
@@ -621,6 +628,13 @@
           you refer to. If you don’t need them update your commands from
           <literal>otelcontribcol</literal> to
           <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.pgadmin</literal> now refers to
+          <literal>pkgs.pgadmin4</literal>. If you still need pgadmin3,
+          use <literal>pkgs.pgadmin3</literal>.
         </para>
       </listitem>
       <listitem>

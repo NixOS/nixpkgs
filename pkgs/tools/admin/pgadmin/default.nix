@@ -35,6 +35,11 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "setuptools";
 
+  patches = [
+    # Expose setup.py for later use
+    ./expose-setup.py.patch
+  ];
+
   postPatch = ''
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
@@ -146,7 +151,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    tests = { inherit (nixosTests) pgadmin4; };
+    tests = { inherit (nixosTests) pgadmin4 pgadmin4-standalone; };
   };
 
   meta = with lib; {
