@@ -46,25 +46,25 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.23.3+k3s1";     # k3s git tag
-  k3sCommit = "6f4217a3405d16a1a51bbb40872d7dcb87207bb9"; # k3s git commit at the above version
-  k3sRepoSha256 = "sha256-0dRusG1vL+1KbmViIUNCZK1b+FEgV6otcVUyFonHmm4=";
-  k3sVendorSha256 = "sha256-8Yp9csyRNSYi9wo8E8mF8cu92wG1t3l18wJ8Y4L7HEA=";
+  k3sVersion = "1.23.4+k3s1";     # k3s git tag
+  k3sCommit = "43b1cb48200d8f6af85c16ed944d68fcc96b6506"; # k3s git commit at the above version
+  k3sRepoSha256 = "sha256-rL72b2tzWqyubWHiWNeLKBtcpwaTLjOA5Bs7DEvLx+o=";
+  k3sVendorSha256 = "sha256-1/kQvNqFUWwch1JH+twWzBdjNYseoZyVObB1+s9WPM4=";
 
-  k3sServerVendorSha256 = "sha256-9+2k/ipAOhc8JJU+L2dwaM01Dkw+0xyrF5kt6mL19G0=";
+  k3sServerVendorSha256 = "sha256-2KIFff43jfqWdxX61aWofrjmc5mMkr5aEJRFdGpLyU8=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
-  traefikChartVersion = "10.9.1";
-  traefikChartSha256 = "sha256-XM1DLofU1zEEFeB5bNQ7cgv102gXsToPP7SFh87QuGQ=";
+  traefikChartVersion = "10.14.1";
+  traefikChartSha256 = "sha256-skadxLMJy4Uy6L6Jsh7rWmn2EZzzhcjtgdmeTlVkRiU=";
 
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion = "0.9.1";
-  k3sRootSha256 = "0r2cj4l50cxkrvszpzxfk36lvbjf9vcmp6d5lvxg8qsah8lki3x8";
+  k3sRootVersion = "0.11.0";
+  k3sRootSha256 = "sha256-QJiciKAQCFhvCI1oV0wvDVaDqlj/8QOv3LMnELcp1gQ=";
 
   # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion = "0.9.1-k3s1";
-  k3sCNISha256 = "1327vmfph7b8i14q05c2xdfzk60caflg1zhycx0mrf3d59f4zsz5";
+  k3sCNIVersion = "1.0.1-k3s1";
+  k3sCNISha256 = "sha256-Im3ff6reCAmnZ82Qc6o1ATDV152MKOCDuMlh2/6nMIY=";
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
