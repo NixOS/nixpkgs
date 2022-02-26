@@ -15,7 +15,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = "\\(tools\\|docgen\\)";
+  excludedPackages = [ "tools" "docgen" ];
 
   ldflags =
     let t = "github.com/rancher/k3d/v5/version"; in
