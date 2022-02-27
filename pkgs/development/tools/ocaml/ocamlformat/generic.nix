@@ -48,6 +48,12 @@ buildDunePackage {
 
   useDune2 = true;
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    menhir
+  ];
+
   buildInputs =
     if lib.versionAtLeast version "0.20.0"
     then [
@@ -57,7 +63,6 @@ buildDunePackage {
       either
       fix
       fpath
-      menhir
       menhirLib
       menhirSdk
       ocaml-version
@@ -78,7 +83,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       ocp-indent
@@ -96,7 +100,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       dune-build-info
@@ -115,7 +118,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       dune-build-info
@@ -135,7 +137,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       (ppxlib.override { version = "0.18.0"; })
@@ -154,7 +155,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
     ] else [

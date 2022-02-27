@@ -13,7 +13,9 @@ buildDunePackage rec {
     sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
   };
 
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure
