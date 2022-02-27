@@ -110,6 +110,7 @@ makeTest {
 
     host1.wait_for_unit("bird2.service")
     host2.wait_for_unit("bird2.service")
+    host1.succeed("systemctl reload bird2.service")
 
     with subtest("Waiting for advertised IPv4 routes"):
       host1.wait_until_succeeds("ip --json r | jq -e 'map(select(.dst == \"10.10.0.2\")) | any'")

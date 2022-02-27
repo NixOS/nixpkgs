@@ -4,6 +4,7 @@ let
   inherit (lib) mkEnableOption mkIf mkOption optionalString types;
 
   cfg = config.services.bird2;
+  caps = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_RAW" ];
 in
 {
   ###### interface
@@ -72,21 +73,14 @@ in
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";
-        # We need to start as root so bird can open netlink sockets i.e. for ospf
-        ExecStart = "${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf -u bird2 -g bird2";
-        ExecReload = "/bin/sh -c '${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf -p && ${pkgs.bird}/bin/birdc configure'";
+        User = "bird2";
+        Group = "bird2";
+        ExecStart = "${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf";
+        ExecReload = "${pkgs.bird}/bin/birdc configure";
         ExecStop = "${pkgs.bird}/bin/birdc down";
         RuntimeDirectory = "bird";
-        CapabilityBoundingSet = [
-          "CAP_CHOWN"
-          "CAP_FOWNER"
-          "CAP_SETUID"
-          "CAP_SETGID"
-          "CAP_NET_ADMIN"
-          "CAP_NET_BROADCAST"
-          "CAP_NET_BIND_SERVICE"
-          "CAP_NET_RAW"
-        ];
+        CapabilityBoundingSet = caps;
+        AmbientCapabilities = caps;
         ProtectSystem = "full";
         ProtectHome = "yes";
         ProtectKernelTunables = true;
