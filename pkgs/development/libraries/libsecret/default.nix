@@ -1,29 +1,64 @@
-{ lib, stdenv, fetchurl, fetchpatch, glib, pkg-config, gettext, libxslt, python3
-, docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
-, gtk-doc, gnome, gjs, libintl, dbus, xvfb-run }:
+{ stdenv
+, lib
+, fetchurl
+, glib
+, pkg-config
+, gettext
+, libxslt
+, python3
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, libgcrypt
+, gobject-introspection
+, vala
+, gtk-doc
+, gnome
+, gjs
+, libintl
+, dbus
+, xvfb-run
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
   version = "0.20.4";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0a4xnfmraxchd9cq5ai66j12jv2vrgjmaaxz25kl031jvda4qnij";
   };
 
-  postPatch = ''
-    patchShebangs .
-  '';
-
-  outputs = [ "out" "dev" "devdoc" ];
-
-  propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [
-    pkg-config gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
-    gobject-introspection vala gtk-doc glib
+    pkg-config
+    gettext
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+    libintl
+    gobject-introspection
+    vala
+    gtk-doc
+    glib
   ];
-  buildInputs = [ libgcrypt ];
-  # optional: build docs with gtk-doc? (probably needs a flag as well)
+
+  buildInputs = [
+    libgcrypt
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  installCheckInputs = [
+    python3
+    python3.pkgs.dbus-python
+    python3.pkgs.pygobject3
+    xvfb-run
+    dbus
+    gjs
+  ];
 
   configureFlags = [
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
@@ -31,12 +66,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb-run dbus gjs
-  ];
-
   # needs to run after install because typelibs point to absolute paths
   doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib
+
+  postPatch = ''
+    patchShebangs .
+  '';
+
   installCheckPhase = ''
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
