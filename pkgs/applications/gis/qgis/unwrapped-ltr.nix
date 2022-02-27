@@ -148,6 +148,6 @@ in mkDerivation rec {
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir erictapen ];
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen willcohen ];
   };
 }
