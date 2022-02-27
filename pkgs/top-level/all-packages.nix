@@ -21201,6 +21201,8 @@ with pkgs;
 
   bird = callPackage ../servers/bird { };
 
+  bloat = callPackage ../servers/bloat { };
+
   bosun = callPackage ../servers/monitoring/bosun { };
 
   cayley = callPackage ../servers/cayley { };
