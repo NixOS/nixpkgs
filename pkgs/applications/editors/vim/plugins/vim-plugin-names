@@ -378,6 +378,7 @@ kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
 Konfekt/vim-alias
+Konfekt/vim-CtrlXA
 konfekt/vim-DetectSpellLang
 kosayoda/nvim-lightbulb
 kovisoft/slimv
