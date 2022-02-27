@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , buildLlvmTools
-, src
+, monorepoSrc, runCommand
 , cmake
 , libxml2
 , libllvm
@@ -11,19 +11,30 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  # Blank llvm dir just so relative path works
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    mkdir -p "$out/libunwind"
+    cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+    mkdir -p "$out/llvm"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     ./gnu-install-dirs.patch
+	# On Darwin the llvm-config is perhaps not working fine as the
+	# LLVM_MAIN_SRC_DIR is not getting set correctly, and the build fails as
+	# the include path is not correct.
+    ./fix-root-src-dir.patch
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libllvm libxml2 ];
 
-  cmakeFlags = [
-    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
 
