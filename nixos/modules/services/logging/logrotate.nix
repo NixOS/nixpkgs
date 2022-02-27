@@ -97,12 +97,18 @@ let
   '';
 
   paths = sortProperties (attrValues (filterAttrs (_: pathOpts: pathOpts.enable) cfg.paths));
-  configFile = pkgs.writeText "logrotate.conf" (
-    concatStringsSep "\n" (
+  configText = concatStringsSep "\n" (
       [ "missingok" "notifempty" cfg.extraConfig ] ++ (map mkConf paths)
-    )
-  );
+    );
+  configFile = pkgs.writeText "logrotate.conf" configText;
 
+  mailOption =
+    # add mail option to service if a mail is requested in config
+    # this ugly match will be replaced by cleaner attribute check in
+    # the near future
+    if builtins.match "(.*[[:space:]])?mail[[:space:]].*" configText != null
+    then "--mail=${pkgs.mailutils}/bin/mail"
+    else "";
 in
 {
   imports = [
@@ -172,7 +178,7 @@ in
       serviceConfig = {
         Restart = "no";
         User = "root";
-        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${configFile}";
+        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${mailOption} ${configFile}";
       };
     };
   };
