@@ -7985,6 +7985,18 @@ final: prev:
     meta.homepage = "https://github.com/ap/vim-css-color/";
   };
 
+  vim-CtrlXA = buildVimPluginFrom2Nix {
+    pname = "vim-CtrlXA";
+    version = "2021-08-09";
+    src = fetchFromGitHub {
+      owner = "Konfekt";
+      repo = "vim-CtrlXA";
+      rev = "404ea1e055921db5679b3734108d72850d6faa76";
+      sha256 = "10bgyqnwcqly3sxl27np1b690hnj1snqbcvg8pzh4zgdysfgy9xg";
+    };
+    meta.homepage = "https://github.com/Konfekt/vim-CtrlXA/";
+  };
+
   vim-cue = buildVimPluginFrom2Nix {
     pname = "vim-cue";
     version = "2021-06-18";
