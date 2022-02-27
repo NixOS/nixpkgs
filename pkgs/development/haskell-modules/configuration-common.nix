@@ -69,6 +69,11 @@ self: super: {
   # Once that's out we can re-enable version checks.
   xmlhtml = doJailbreak super.xmlhtml;
 
+  # map-syntax has a restrictive upper bound on base, can be removed once
+  # > https://github.com/mightybyte/map-syntax/pull/14
+  # is released.
+  map-syntax = doJailbreak super.map-syntax;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
