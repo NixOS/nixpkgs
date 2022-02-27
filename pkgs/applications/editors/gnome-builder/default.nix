@@ -4,7 +4,6 @@
 , cmark
 , appstream-glib
 , desktop-file-utils
-, fetchpatch
 , fetchurl
 , flatpak
 , gnome
@@ -18,6 +17,7 @@
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libhandy
 , libpeas
 , libportal-gtk3
 , libxml2
@@ -40,23 +40,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "42.alpha1";
+  version = "42.beta1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "AtJ+Op2ChWWgcREWFb3zqyp1CzBb/469BwJXK3DuWnc=";
+    sha256 = "cEgZ7J/W7Mb6S489mFsCEs+hZWlhAMzalGGPiBKzKio=";
   };
-
-  patches = [
-    # Fix building docs
-    # https://gitlab.gnome.org/GNOME/gnome-builder/-/merge_requests/530
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/e2b369ec056ff43701803c5e5185fa2ac391d238.patch";
-      sha256 = "OI2CMtA0M9u6/5xmWm4i+bXOKDXmtYprCONNCU2aOj0=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -87,6 +78,7 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libdazzle
+    libhandy
     libxml2
     ostree
     pcre
