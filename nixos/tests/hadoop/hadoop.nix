@@ -145,7 +145,14 @@ import ../make-test-python.nix ({ package, ... }: {
           };
         };
       };
-    };
+      client = { options, ... }: {
+        services.hadoop = {
+          gatewayRole.enable = true;
+          inherit package coreSite hdfsSite;
+          yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
+        };
+      };
+  };
 
   testScript = ''
     start_all()
@@ -202,26 +209,26 @@ import ../make-test-python.nix ({ package, ... }: {
     # DN should have started by now, but confirm anyway
     dn1.wait_for_unit("hdfs-datanode")
     # Print states of namenodes
-    dn1.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
     # Wait for cluster to exit safemode
-    dn1.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
-    dn1.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
+    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
     # test R/W
-    dn1.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
-    assert "testfilecontents" in dn1.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
+    client.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
+    assert "testfilecontents" in client.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
 
     # Test NN failover
     nn1.succeed("systemctl stop hdfs-namenode")
-    assert "active" in dn1.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState")
-    dn1.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
-    assert "testfilecontents" in dn1.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
+    assert "active" in client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState")
+    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    assert "testfilecontents" in client.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
 
     nn1.succeed("systemctl start hdfs-namenode")
     nn1.wait_for_open_port(9870)
     nn1.wait_for_open_port(8022)
     nn1.wait_for_open_port(8020)
-    assert "standby" in dn1.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState")
-    dn1.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    assert "standby" in client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState")
+    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
 
     #### YARN tests ####
 
@@ -237,21 +244,21 @@ import ../make-test-python.nix ({ package, ... }: {
     nm1.wait_for_unit("yarn-nodemanager")
     nm1.wait_for_open_port(8042)
     nm1.wait_for_open_port(8040)
-    nm1.wait_until_succeeds("yarn node -list | grep Nodes:1")
-    nm1.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
-    nm1.succeed("sudo -u yarn yarn node -list | systemd-cat")
+    client.wait_until_succeeds("yarn node -list | grep Nodes:1")
+    client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u yarn yarn node -list | systemd-cat")
 
     # Test RM failover
     rm1.succeed("systemctl stop yarn-resourcemanager")
-    assert "standby" not in nm1.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
-    nm1.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
+    assert "standby" not in client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
+    client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
     rm1.succeed("systemctl start yarn-resourcemanager")
     rm1.wait_for_unit("yarn-resourcemanager")
     rm1.wait_for_open_port(8088)
-    assert "standby" in nm1.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
-    nm1.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
+    assert "standby" in client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
+    client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
 
-    assert "Estimated value of Pi is" in nm1.succeed("HADOOP_USER_NAME=hdfs yarn jar $(readlink $(which yarn) | sed -r 's~bin/yarn~lib/hadoop-*/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar~g') pi 2 10")
-    assert "SUCCEEDED" in nm1.succeed("yarn application -list -appStates FINISHED")
+    assert "Estimated value of Pi is" in client.succeed("HADOOP_USER_NAME=hdfs yarn jar $(readlink $(which yarn) | sed -r 's~bin/yarn~lib/hadoop-*/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar~g') pi 2 10")
+    assert "SUCCEEDED" in client.succeed("yarn application -list -appStates FINISHED")
   '';
 })

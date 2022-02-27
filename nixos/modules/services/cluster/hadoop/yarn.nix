@@ -49,10 +49,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf (
-        cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable
-    ) {
-
+    (mkIf cfg.gatewayRole.enable {
       users.users.yarn = {
         description = "Hadoop YARN user";
         group = "hadoop";
@@ -74,6 +71,9 @@ in
           Restart = "always";
         };
       };
+
+      services.hadoop.gatewayRole.enable = true;
+
       networking.firewall.allowedTCPPorts = (mkIf cfg.yarn.resourcemanager.openFirewall [
         8088 # resourcemanager.webapp.address
         8030 # resourcemanager.scheduler.address
@@ -118,6 +118,8 @@ in
           Restart = "always";
         };
       };
+
+      services.hadoop.gatewayRole.enable = true;
 
       networking.firewall.allowedTCPPortRanges = [
         (mkIf (cfg.yarn.nodemanager.openFirewall) {from = 1024; to = 65535;})

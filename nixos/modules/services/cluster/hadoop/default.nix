@@ -149,6 +149,8 @@ with lib;
       description = "Directories containing additional config files to be added to HADOOP_CONF_DIR";
     };
 
+    gatewayRole.enable = mkEnableOption "gateway role for deploying hadoop configs";
+
     package = mkOption {
       type = types.package;
       default = pkgs.hadoop;
@@ -158,21 +160,16 @@ with lib;
   };
 
 
-  config = mkMerge [
-    (mkIf (builtins.hasAttr "yarn" config.users.users ||
-           builtins.hasAttr "hdfs" config.users.users ||
-           builtins.hasAttr "httpfs" config.users.users) {
-      users.groups.hadoop = {
-        gid = config.ids.gids.hadoop;
-      };
-      environment = {
-        systemPackages = [ cfg.package ];
-        etc."hadoop-conf".source = let
-          hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-        in "${hadoopConf}";
-        variables.HADOOP_CONF_DIR = "/etc/hadoop-conf/";
-      };
-    })
-
-  ];
+  config = mkIf cfg.gatewayRole.enable {
+    users.groups.hadoop = {
+      gid = config.ids.gids.hadoop;
+    };
+    environment = {
+      systemPackages = [ cfg.package ];
+      etc."hadoop-conf".source = let
+        hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
+      in "${hadoopConf}";
+      variables.HADOOP_CONF_DIR = "/etc/hadoop-conf/";
+    };
+  };
 }

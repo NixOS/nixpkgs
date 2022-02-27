@@ -51,6 +51,8 @@ let
           };
         };
 
+        services.hadoop.gatewayRole.enable = true;
+
         networking.firewall.allowedTCPPorts = mkIf
           ((builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall)
           allowedTCPPorts;
@@ -145,17 +147,13 @@ in
       ];
     })
 
-    (mkIf
-      (
-        cfg.hdfs.namenode.enable || cfg.hdfs.datanode.enable || cfg.hdfs.journalnode.enable || cfg.hdfs.zkfc.enable
-      )
-      {
-        users.users.hdfs = {
-          description = "Hadoop HDFS user";
-          group = "hadoop";
-          uid = config.ids.uids.hdfs;
-        };
-      })
+    (mkIf cfg.gatewayRole.enable {
+      users.users.hdfs = {
+        description = "Hadoop HDFS user";
+        group = "hadoop";
+        uid = config.ids.uids.hdfs;
+      };
+    })
     (mkIf cfg.hdfs.httpfs.enable {
       users.users.httpfs = {
         description = "Hadoop HTTPFS user";
@@ -163,5 +161,6 @@ in
         isSystemUser = true;
       };
     })
+
   ];
 }
