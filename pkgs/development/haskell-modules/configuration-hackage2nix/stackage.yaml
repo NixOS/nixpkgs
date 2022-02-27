@@ -263,7 +263,6 @@ default-package-overrides:
   - cabal-file ==0.1.1
   - cabal-file-th ==0.2.7
   - cabal-flatpak ==0.1.0.3
-  - cabal-install ==3.4.1.0
   - cabal-plan ==0.7.2.1
   - cabal-rpm ==2.0.10
   - Cabal-syntax ==3.6.0.0

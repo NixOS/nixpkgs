@@ -45,6 +45,7 @@ sed -r \
     -e '/ distribution-nixpkgs /d' \
     -e '/ jailbreak-cabal /d' \
     -e '/ language-nix /d' \
+    -e '/ cabal-install /d' \
     < "${tmpfile}.new" >> $stackage_config
 
 if [[ "${1:-}" == "--do-commit" ]]; then
