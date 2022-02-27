@@ -1,6 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
 , boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "8d9a3de9162965e97f8e8cc584c67aad83b3f7a267584fa47701ed11c3e0d4b0";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-23727.patch";
+      url = "https://github.com/celery/celery/commit/1f7ad7e6df1e02039b6ab9eec617d283598cad6b.patch";
+      sha256 = "0dhd4hq2piv0iqjd9dap6dvxhb2c24mrnrgz31f8wcql4vdlf8n1";
+    })
+  ];
 
   # click  is only used for the repl, in most cases this shouldn't impact
   # downstream packages
