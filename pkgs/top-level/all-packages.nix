@@ -21473,6 +21473,8 @@ with pkgs;
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
+  misskey = callPackage ../servers/misskey { };
+
   mlflow-server = callPackage ../servers/mlflow-server { };
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
