@@ -2,6 +2,8 @@
 , lib
 , fetchurl
 , glib
+, meson
+, ninja
 , pkg-config
 , gettext
 , libxslt
@@ -11,7 +13,7 @@
 , libgcrypt
 , gobject-introspection
 , vala
-, gtk-doc
+, gi-docgen
 , gnome
 , gjs
 , libintl
@@ -21,25 +23,27 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.4";
+  version = "0.20.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0a4xnfmraxchd9cq5ai66j12jv2vrgjmaaxz25kl031jvda4qnij";
+    sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
     gettext
-    libxslt
+    libxslt # for xsltproc for building man pages
     docbook-xsl-nons
     docbook_xml_dtd_42
     libintl
     gobject-introspection
     vala
-    gtk-doc
+    gi-docgen
     glib
   ];
 
@@ -60,12 +64,6 @@ stdenv.mkDerivation rec {
     gjs
   ];
 
-  configureFlags = [
-    "--with-libgcrypt-prefix=${libgcrypt.dev}"
-  ];
-
-  enableParallelBuilding = true;
-
   # needs to run after install because typelibs point to absolute paths
   doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib
 
@@ -78,6 +76,11 @@ stdenv.mkDerivation rec {
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
