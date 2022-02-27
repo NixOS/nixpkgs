@@ -129,6 +129,7 @@ callPackage ./common.nix { inherit stdenv; } {
       ln -sf $out/lib/librt.so.1 $out/lib/librt.so
       ln -sf $out/lib/libdl.so.2 $out/lib/libdl.so
       ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
+      touch $out/lib/libpthread.a
     ''
       # For some reason these aren't stripped otherwise and retain reference
       # to bootstrap-tools; on cross-arm this stripping would break objects.
