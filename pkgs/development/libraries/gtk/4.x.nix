@@ -202,13 +202,6 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
-
-  '' + lib.optionalString x11Support ''
-    # So that DevHelp can find this.
-    # TODO: Remove this with DevHelp 41.
-    mkdir -p "$devdoc/share/devhelp/books"
-    mv "$out/share/doc/"* "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc"
   '';
 
   # Wrap demos
@@ -219,6 +212,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString x11Support ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
