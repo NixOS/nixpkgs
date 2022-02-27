@@ -17,6 +17,7 @@
 , glib
 , gnome
 , gtk3
+, libhandy
 , json-glib
 , libarchive
 , libnotify
@@ -28,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "3.40.0";
+  version = "3.41.90";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "039w1dcpa5ypmv6sm634alk9vbcdkyvy595vkh5gn032jsiqca2a";
+    sha256 = "Bi5rSO1re8o9ONAoY9apsBP0zNNbpvvjXFaYeQDf7Ok=";
   };
 
   patches = lib.optionals withPantheon [
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     glib
     gnome.adwaita-icon-theme
     gtk3
+    libhandy
     json-glib
     libarchive
     libnotify
