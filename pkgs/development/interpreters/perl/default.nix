@@ -121,9 +121,6 @@ let
         EOF
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
-      '' + optionalString (!enableThreading) ''
-        # We need to do this because the bootstrap doesn't have a static libpthread
-        sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
       '';
 
     # Default perl does not support --host= & co.

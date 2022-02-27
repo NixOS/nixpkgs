@@ -29,7 +29,7 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
         ./patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
 
-for i in $out/lib/librt-*.so $out/lib/libpcre*; do
+for i in $out/lib/librt-*.so $out/lib/libpcre* $out/lib/libpthread-*.so; do
     if [ -L "$i" ]; then continue; fi
     echo patching "$i"
     $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"

@@ -212,13 +212,6 @@ in
         gcc-unwrapped coreutils gnugrep;
 
       ${localSystem.libc} = getLibc prevStage;
-
-      # A threaded perl build needs glibc/libpthread_nonshared.a,
-      # which is not included in bootstrapTools, so disable threading.
-      # This is not an issue for the final stdenv, because this perl
-      # won't be included in the final stdenv and won't be exported to
-      # top-level pkgs as an override either.
-      perl = super.perl.override { enableThreading = false; };
     };
   })
 
