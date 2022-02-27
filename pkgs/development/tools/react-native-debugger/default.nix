@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     exec = "react-native-debugger";
     desktopName = "React Native Debugger";
     genericName = "React Native Debugger";
-    categories = "Development;Debugger;";
+    categories = [ "Development" "Debugger" ];
   };
 
   meta = with lib; {

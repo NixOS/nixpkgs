@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/SchildiChat/schildichat-desktop/";
-    rev = "v${version}";
+    inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
   };

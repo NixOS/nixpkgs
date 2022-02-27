@@ -198,7 +198,7 @@
 , "markdownlint-cli"
 , "markdownlint-cli2"
 , "markdown-link-check"
-, {"markdown-preview-nvim": "../../misc/vim-plugins/markdown-preview-nvim"}
+, {"markdown-preview-nvim": "../../applications/editors/vim/plugins/markdown-preview-nvim"}
 , "mastodon-bot"
 , "mathjax"
 , "meat"
@@ -257,7 +257,7 @@
 , "reveal-md"
 , "rimraf"
 , "rollup"
-, { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
+, { "rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-analyzer/build-deps" }
 , "rtlcss"
 , "s3http"
 , "sass"
@@ -361,7 +361,7 @@
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
 , "vscode-langservers-extracted"
-, { "vscode-lldb-build-deps": "../../misc/vscode-extensions/vscode-lldb/build-deps" }
+, { "vscode-lldb-build-deps": "../../applications/editors/vscode/extensions/vscode-lldb/build-deps" }
 , "vue-cli"
 , "vue-language-server"
 , "wavedrom-cli"

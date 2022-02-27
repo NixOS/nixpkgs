@@ -39,7 +39,7 @@ mkCoqDerivation {
   release."0.6".sha256   = "0qvar8gfbrcs9fmvkph5asqz4l5fi63caykx3bsn8zf0xllkwv0n";
   releaseRev = v: "v${v}";
 
-  nativeBuildInputs = [ autoreconfHook ];
+  extraNativeBuildInputs = [ autoreconfHook ];
   mlPlugin = true;
   extraBuildInputs = [ coq.ocamlPackages.ocamlgraph ];
 

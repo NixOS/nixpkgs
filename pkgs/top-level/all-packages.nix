@@ -3620,6 +3620,8 @@ with pkgs;
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
 
+  oil-buku = callPackage ../applications/misc/oil { };
+
   ossutil = callPackage ../tools/admin/ossutil {};
 
   pastel = callPackage ../applications/misc/pastel {
@@ -5016,7 +5018,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_13;
+    electron = electron_15;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -6724,12 +6726,15 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs {
     buildGoModule = buildGo116Module;
   };
-  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator {
-    buildGoModule = buildGo116Module;
-  };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
     buildGoModule = buildGo116Module;
   };
+
+  ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix {
+    buildGoModule = buildGo116Module;
+  };
+  ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
+  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
   ipget = callPackage ../applications/networking/ipget { };
 
@@ -7829,7 +7834,9 @@ with pkgs;
 
   mdp = callPackage ../applications/misc/mdp { };
 
-  mednafen = callPackage ../applications/emulators/mednafen { };
+  mednafen = callPackage ../applications/emulators/mednafen {
+    inherit (darwin) libiconv;
+  };
 
   mednafen-server = callPackage ../applications/emulators/mednafen/server.nix { };
 
@@ -11416,7 +11423,9 @@ with pkgs;
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
-  zellij = callPackage ../tools/misc/zellij { };
+  zellij = callPackage ../tools/misc/zellij {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
 
   zenith = callPackage ../tools/system/zenith {
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -15029,6 +15038,8 @@ with pkgs;
   gradle_6 = callPackage gradle-packages.gradle_6 { };
   gradle_7 = callPackage gradle-packages.gradle_7 { };
   gradle = gradle_7;
+
+  grcov = callPackage ../development/tools/misc/grcov { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -19546,6 +19557,8 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
+  pru = callPackage ../tools/text/pru { };
+
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_19;
@@ -20515,16 +20528,25 @@ with pkgs;
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/wxGTK28.nix { };
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix { };
-  wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix { };
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix { };
-  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix { };
 
+  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
+  };
+
+  wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
+    withGtk2 = true;
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+  };
   wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
   wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
 
-  wxGTK31-gtk2 = wxGTK30.override { withGtk2 = true; };
-  wxGTK31-gtk3 = wxGTK30.override { withGtk2 = false; };
+  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix { };
+
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix { };
+  wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
+  wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30-gtk3;
@@ -21004,8 +21026,7 @@ with pkgs;
   dnsutils = bind.dnsutils;
   dig = bind.dnsutils;
 
-  inherit (callPackages ../servers/bird { })
-    bird bird6 bird2;
+  bird = callPackage ../servers/bird { };
 
   bosun = callPackage ../servers/monitoring/bosun { };
 
@@ -27550,7 +27571,6 @@ with pkgs;
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
-      pulseSupport = config.pulseaudio or stdenv.isLinux;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
@@ -28775,6 +28795,8 @@ with pkgs;
 
   sxiv = callPackage ../applications/graphics/sxiv { };
 
+  nsxiv = callPackage ../applications/graphics/nsxiv { };
+
   resilio-sync = callPackage ../applications/networking/resilio-sync { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
@@ -29604,11 +29626,11 @@ with pkgs;
   vscode-fhs = vscode.fhs;
   vscode-fhsWithPackages = vscode.fhsWithPackages;
 
-  vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix {};
+  vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix { };
 
-  vscode-utils = callPackage ../misc/vscode-extensions/vscode-utils.nix {};
+  vscode-utils = callPackage ../applications/editors/vscode/extensions/vscode-utils.nix { };
 
-  vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
+  vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
   vscodium-fhs = vscodium.fhs;
@@ -33177,6 +33199,8 @@ with pkgs;
 
   jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
 
+  k40-whisperer = callPackage ../applications/misc/k40-whisperer { };
+
   keynav = callPackage ../tools/X11/keynav { };
 
   kgx = callPackage ../applications/terminal-emulators/kgx { };
@@ -33578,7 +33602,9 @@ with pkgs;
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
-  pgadmin = callPackage ../applications/misc/pgadmin {
+  pgadmin4 = callPackage ../tools/admin/pgadmin { };
+
+  pgadmin3 = callPackage ../tools/admin/pgadmin/3.nix {
     openssl = openssl_1_0_2;
   };
 
@@ -33993,12 +34019,11 @@ with pkgs;
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-
-  vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix {
+  vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix {
     inherit (lua51Packages) hasLuaModule;
   };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
+  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins {
     llvmPackages = llvmPackages_6;
     luaPackages = lua51Packages;
   });

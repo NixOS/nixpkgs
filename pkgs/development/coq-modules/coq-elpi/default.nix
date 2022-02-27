@@ -48,9 +48,8 @@ in mkCoqDerivation {
   release."1.6.0".sha256      = "0kf99i43mlf750fr7fric764mm495a53mg5kahnbp6zcjcxxrm0b";
   releaseRev = v: "v${v}";
 
-  nativeBuildInputs = [ which ];
+  extraNativeBuildInputs = [ which elpi ];
   mlPlugin = true;
-  extraBuildInputs = [ elpi ];
 
   meta = {
     description = "Coq plugin embedding ELPI.";

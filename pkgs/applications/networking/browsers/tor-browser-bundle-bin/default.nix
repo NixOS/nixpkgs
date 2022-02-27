@@ -96,6 +96,7 @@ let
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
       sha256 = "03c3l720x4c6mfq56fyqspc5sxw0mz1ph48l5wph06dzw8wd5cfz";
     };
@@ -104,6 +105,7 @@ let
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
       sha256 = "0llg1nl7x7y4kp0hr3bbhdfggaf8praizkvcpp88x2i2zc9sp5mx";
     };
@@ -125,7 +127,7 @@ stdenv.mkDerivation rec {
     desktopName = "Tor Browser";
     genericName = "Web Browser";
     comment = meta.description;
-    categories = "Network;WebBrowser;Security;";
+    categories = [ "Network" "WebBrowser" "Security" ];
   };
 
   buildCommand = ''

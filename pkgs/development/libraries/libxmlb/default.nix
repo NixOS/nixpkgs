@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , docbook_xml_dtd_43
 , docbook_xsl
@@ -11,11 +12,12 @@
 , python3
 , shared-mime-info
 , nixosTests
+, xz
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.1";
+  version = "0.3.7";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "sha256-4gJBmSbo5uGj12Y2Ov4gmS8nJshQxuBM9BAevY/lwjg=";
+    sha256 = "sha256-ZzA1YJYxTR91X79NU9dWd11Ze+PX2wuZeumuEuNdC48=";
   };
 
   patches = [
@@ -38,12 +40,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pkgs: with pkgs; [ setuptools ]))
+    python3
     shared-mime-info
   ];
 
   buildInputs = [
     glib
+    xz
   ];
 
   mesonFlags = [

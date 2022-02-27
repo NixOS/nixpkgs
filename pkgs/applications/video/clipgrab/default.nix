@@ -40,7 +40,7 @@ mkDerivation rec {
     desktopName = "ClipGrab";
     comment = meta.description;
     genericName = "Web video downloader";
-    categories = "Qt;AudioVideo;Audio;Video";
+    categories = [ "Qt" "AudioVideo" "Audio" "Video" ];
   };
 
   installPhase = ''

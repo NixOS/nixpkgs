@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     comment = "Commodore 64 emulator";
     desktopName = "VICE";
     genericName = "Commodore 64 emulator";
-    categories = "Emulator;";
+    categories = [ "Emulator" ];
   };
 
   preBuild = ''

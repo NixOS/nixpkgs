@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       comment = "G-code generator for 3D printers";
       desktopName = "PrusaSlicer";
       genericName = "3D printer tool";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
     (makeDesktopItem {
       name = "PrusaSlicer G-code Viewer";
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
       comment = "G-code viewer for 3D printers";
       desktopName = "PrusaSlicer G-code Viewer";
       genericName = "G-code Viewer";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
 

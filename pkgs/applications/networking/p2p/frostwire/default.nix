@@ -18,7 +18,7 @@ let
     exec = "frostwire";
     icon = "frostwire";
     comment = "Search and explore all kinds of files on the Bittorrent network";
-    categories = "Network;FileTransfer;P2P;";
+    categories = [ "Network" "FileTransfer" "P2P" ];
   };
 
   # fake build to pre-download deps into fixed-output derivation

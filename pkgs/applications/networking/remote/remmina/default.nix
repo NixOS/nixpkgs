@@ -7,6 +7,7 @@
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
+, withLibsecret ? true
 }:
 
 with lib;
@@ -29,15 +30,16 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsecret libsoup spice-protocol spice-gtk libepoxy at-spi2-core
+    libsoup spice-protocol spice-gtk libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
     harfbuzz
-  ];
+  ] ++ optionals withLibsecret [ libsecret ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
+    "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
     "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
     "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"

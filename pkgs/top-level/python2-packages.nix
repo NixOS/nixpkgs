@@ -46,6 +46,8 @@ with self; with super; {
 
   google-apputils = callPackage ../development/python2-modules/google-apputils { };
 
+  gtkme = callPackage ../development/python2-modules/gtkme { };
+
   httpretty = callPackage ../development/python2-modules/httpretty { };
 
   hypothesis = callPackage ../development/python2-modules/hypothesis { };

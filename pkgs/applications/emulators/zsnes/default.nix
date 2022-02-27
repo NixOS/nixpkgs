@@ -9,7 +9,7 @@ let
     comment = "A SNES emulator";
     desktopName = "zsnes";
     genericName = "zsnes";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
 in stdenv.mkDerivation {

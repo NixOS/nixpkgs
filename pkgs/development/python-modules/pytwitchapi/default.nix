@@ -10,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pytwitchapi";
-  version = "2.5.1";
+  version = "2.5.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "v${version}";
-    sha256 = "091p9yx0cc7aclj76s1n1jdzkypicy9b2mxgmk2fym5viqlgpbkk";
+    hash = "sha256-i+oAx23bMu+jaXHPWElD5GJH6vSytW/9N1amsmma4Lc=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +32,9 @@ buildPythonPackage rec {
   # Project has no tests.
   doCheck = false;
 
-  pythonImportsCheck = [ "twitchAPI" ];
+  pythonImportsCheck = [
+    "twitchAPI"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Twitch Helix API, its Webhook and PubSub";

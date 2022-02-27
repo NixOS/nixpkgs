@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "certipy";
-  version = "2.0";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
     rev = version;
-    hash = "sha256-xN0DrLrxWNCEy3HodA1pOJHYhDyA1sMRVIfefbXq45E=";
+    hash = "sha256-/89TO/Dzj53bxndLgMIPCaL3axXJUEpX07+25xtnmws=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

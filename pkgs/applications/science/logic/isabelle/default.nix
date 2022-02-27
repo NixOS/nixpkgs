@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     icon = "isabelle";
     desktopName = "Isabelle";
     comment = meta.description;
-    categories = "Education;Science;Math;";
+    categories = [ "Education" "Science" "Math" ];
   };
 
   meta = with lib; {

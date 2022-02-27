@@ -8,6 +8,8 @@ buildDunePackage rec {
   version = "2.1.0";
   useDune2 = true;
 
+  minimalOCamlVersion = "4.08";
+
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
     sha256 = "sha256-ol1zy8LODDYdcnv/jByE0pnqJ5ujQuMALq3v9y7td/o=";

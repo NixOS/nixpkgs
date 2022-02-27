@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     comment = "Integrated Development Environment";
     desktopName = "Eclipse IDE";
     genericName = "Integrated Development Environment";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   buildInputs = [

@@ -39,7 +39,7 @@ let
         comment = description;
         desktopName = appname;
         genericName = "3D printer tool";
-        categories = "Development;";
+        categories = [ "Development" ];
       })
     ];
 

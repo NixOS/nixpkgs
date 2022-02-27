@@ -15,7 +15,7 @@ let
     comment = "Knowledge base";
     icon = "obsidian";
     exec = "obsidian";
-    categories = "Office";
+    categories = [ "Office" ];
   };
 
   updateScript = writeScript "obsidian-updater" ''

@@ -44,6 +44,7 @@
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
 , withPantheon ? false
+, withLibsecret ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -103,13 +104,14 @@ stdenv.mkDerivation rec {
     libarchive
     libhandy
     librsvg
-    libsecret
     libspectre
     libxml2
     pango
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
+  ] ++ lib.optionals withLibsecret [
+    libsecret
   ] ++ lib.optionals supportXPS [
     libgxps
   ] ++ lib.optionals supportMultimedia (with gst_all_1; [
@@ -126,6 +128,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
+  ] ++ lib.optionals (!withLibsecret) [
+    "-Dkeyring=disabled"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

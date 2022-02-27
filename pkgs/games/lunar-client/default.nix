@@ -11,7 +11,7 @@ let
     comment = "Minecraft 1.7, 1.8, 1.12, 1.15, and 1.16 Client";
     desktopName = "Lunar Client";
     genericName = "Minecraft Client";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   appimageContents = appimageTools.extract {

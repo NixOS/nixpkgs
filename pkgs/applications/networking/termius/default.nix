@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   desktopItem = makeDesktopItem {
-    categories = "Network;";
+    categories = [ "Network" ];
     comment = "The SSH client that works on Desktop and Mobile";
     desktopName = "Termius";
     exec = "termius-app";

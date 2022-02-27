@@ -29,21 +29,18 @@ mkDerivation rec {
   '';
 
   desktopItem = makeDesktopItem {
-    type          = "Application";
     name          = "ostinato";
     desktopName   = "Ostinato";
     genericName   = "Packet/Traffic Generator and Analyzer";
     comment       = "Network packet and traffic generator and analyzer with a friendly GUI";
-    categories    = "Network";
-    terminal      = "false";
-    startupNotify = "true";
+    categories    = [ "Network" ];
+    startupNotify = true;
     exec          = "$out/bin/ostinato";
     icon          =  ostinatoIcon;
-    extraEntries  = ''
-      GenericName[it]=Generatore ed Analizzatore di pacchetti di rete
-      Comment[it]=Generatore ed Analizzatore di pacchetti di rete con interfaccia amichevole
-    '';
-    fileValidation = false;
+    extraConfig   = {
+      "GenericName[it]" = "Generatore ed Analizzatore di pacchetti di rete";
+      "Comment[it]"     = "Generatore ed Analizzatore di pacchetti di rete con interfaccia amichevole";
+    };
   };
 
   postInstall = ''

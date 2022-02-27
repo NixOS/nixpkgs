@@ -98,7 +98,7 @@
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
           OSPF, IS-IS, VVRP and others). Available as
-          <link linkend="opt-services.ffr.babel.enable">services.frr</link>
+          <link linkend="opt-services.frr.babel.enable">services.frr</link>
         </para>
       </listitem>
       <listitem>
@@ -124,6 +124,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
+          an admin interface for the PostgreSQL database. Available at
+          <link xlink:href="options.html#opt-services.pgadmin.enable">services.pgadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/sezanzeb/input-remapper">input-remapper</link>,
           an easy to use tool to change the mapping of your input device
           buttons. Available at
@@ -143,6 +150,15 @@
           <link xlink:href="https://maddy.email">maddy</link>, a
           composable all-in-one mail server. Available as
           <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.scorchworks.com/K40whisperer/k40whisperer.html">K40-Whisperer</link>,
+          a program to control cheap Chinese laser cutters. Available as
+          <link xlink:href="options.html#opt-programs.k4-whisperer.enable">programs.k40-whisperer.enable</link>.
+          Users must add themselves to the <literal>k40</literal> group
+          to be able to access the device.
         </para>
       </listitem>
       <listitem>
@@ -196,7 +212,7 @@
         <para>
           <link xlink:href="https://moosefs.com">moosefs</link>, fault
           tolerant petabyte distributed file system. Available as
-          <link linkend="opt-services.moosefs">moosefs</link>.
+          <link linkend="opt-services.moosefs.client.enable">moosefs</link>.
         </para>
       </listitem>
       <listitem>
@@ -539,6 +555,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>bird1</literal> and its modules
+          <literal>services.bird</literal> as well as
+          <literal>services.bird6</literal> have been removed. Upgrade
+          to <literal>services.bird2</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The options
           <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
           and
@@ -604,6 +628,13 @@
           you refer to. If you don’t need them update your commands from
           <literal>otelcontribcol</literal> to
           <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.pgadmin</literal> now refers to
+          <literal>pkgs.pgadmin4</literal>. If you still need pgadmin3,
+          use <literal>pkgs.pgadmin3</literal>.
         </para>
       </listitem>
       <listitem>
@@ -727,6 +758,70 @@
           <literal>true</literal> and
           <literal>services.pipewire.wireplumber.enable</literal> to
           <literal>false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.makeDesktopItem</literal> has been refactored to
+          provide a more idiomatic API. Specifically:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              All valid options as of FDO Desktop Entry specification
+              version 1.4 can now be passed in as explicit arguments
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>exec</literal> can now be null, for entries that
+              are not of type Application
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>mimeType</literal> argument is renamed to
+              <literal>mimeTypes</literal> for consistency
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>mimeTypes</literal>,
+              <literal>categories</literal>,
+              <literal>implements</literal>,
+              <literal>keywords</literal>, <literal>onlyShowIn</literal>
+              and <literal>notShowIn</literal> take lists of strings
+              instead of one string with semicolon separators
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>extraDesktopEntries</literal> renamed to
+              <literal>extraConfig</literal> for consistency
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Actions should now be provided as an attrset
+              <literal>actions</literal>, the <literal>Actions</literal>
+              line will be autogenerated.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>extraEntries</literal> is removed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Additional validation is added both at eval time and at
+              build time.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          See the <literal>vscode</literal> package for a more detailed
+          example.
         </para>
       </listitem>
     </itemizedlist>
@@ -932,6 +1027,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>element-desktop</literal> package now has an
+          <literal>useKeytar</literal> option (defaults to
+          <literal>true</literal>), which allows disabling
+          <literal>keytar</literal> and in turn
+          <literal>libsecret</literal> usage (which binds to native
+          credential managers / keychain libraries).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option <literal>services.thelounge.plugins</literal> has
           been added to allow installing plugins for The Lounge. Plugins
           can be found in
@@ -1037,7 +1142,7 @@
       <listitem>
         <para>
           The option
-          <link linkend="opt-services.networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
+          <link linkend="opt-networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
           was added to support FCC unlock procedures. Since release
           1.18.4, the ModemManager daemon no longer automatically
           performs the FCC unlock procedure by default. See
