@@ -55,6 +55,12 @@ self: super: {
   # > https://github.com/roelvandijk/numerals
   numerals = doJailbreak (dontCheck super.numerals);
 
+  # Waiting on a release with the following for bumping base and
+  # attoparsec upper bounds:
+  # > https://github.com/snapframework/io-streams-haproxy/pull/21
+  # > https://github.com/snapframework/io-streams-haproxy/pull/24
+  io-streams-haproxy = doJailbreak super.io-streams-haproxy;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
