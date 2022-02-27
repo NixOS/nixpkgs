@@ -64,8 +64,15 @@ buildPythonPackage rec {
     "tests/"
   ];
 
-  # See https://github.com/google/jax/issues/9705.
-  disabledTests = lib.optionals usingMKL [ "test_custom_root_with_aux" ];
+  # See
+  #  * https://github.com/google/jax/issues/9705
+  #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+  #  * https://github.com/NixOS/nixpkgs/issues/161960
+  disabledTests = lib.optionals usingMKL [
+    "test_custom_linear_solve_cholesky"
+    "test_custom_root_with_aux"
+    "testEigvalsGrad_shape"
+  ];
 
   pythonImportsCheck = [
     "jax"
