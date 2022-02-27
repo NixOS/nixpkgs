@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ../patches/0001-fix-assertion-using-hide-in-destroy.patch
+    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
   nativeBuildInputs = [
