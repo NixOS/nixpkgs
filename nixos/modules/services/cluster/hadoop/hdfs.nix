@@ -100,7 +100,8 @@ in
       allowedTCPPorts = [
         9870 # namenode.http-address
         8020 # namenode.rpc-address
-        8022 # namenode. servicerpc-address
+        8022 # namenode.servicerpc-address
+        8019 # dfs.ha.zkfc.port
       ];
       preStart = (mkIf cfg.hdfs.namenode.formatOnInit
         "${cfg.package}/bin/hdfs --config ${hadoopConf} namenode -format -nonInteractive || true"
@@ -109,10 +110,15 @@ in
 
     (hadoopServiceConfig {
       name = "DataNode";
-      allowedTCPPorts = [
+      # port numbers for datanode changed between hadoop 2 and 3
+      allowedTCPPorts = if versionAtLeast cfg.package.version "3" then [
         9864 # datanode.http.address
         9866 # datanode.address
         9867 # datanode.ipc.address
+      ] else [
+        50075 # datanode.http.address
+        50010 # datanode.address
+        50020 # datanode.ipc.address
       ];
     })
 

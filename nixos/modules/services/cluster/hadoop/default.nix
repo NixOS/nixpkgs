@@ -25,6 +25,7 @@ with lib;
     hdfsSite = mkOption {
       default = {
         "dfs.namenode.rpc-bind-host" = "0.0.0.0";
+        "dfs.namenode.http-address" = "0.0.0.0:9870";
       };
       type = types.attrsOf types.anything;
       example = literalExpression ''
