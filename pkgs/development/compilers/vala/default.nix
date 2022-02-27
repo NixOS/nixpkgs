@@ -100,8 +100,8 @@ in rec {
   };
 
   vala_0_56 = generic {
-    version = "0.55.3";
-    sha256 = "wWGF59HyF4NqfOvGSar+g1ULt7GS+9Mn7eOIzSwtUEk=";
+    version = "0.55.90";
+    sha256 = "jY49tFLkB3eeisTjsKWx2qVGDc6SDvN599dKNtMKXDM=";
   };
 
   vala = vala_0_54;
