@@ -56,8 +56,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild cc-wrapper ];
-  buildInputs = [ ocamlbuild findlib topkg cpuid ocb-stubblr ];
+  buildInputs = [ topkg cpuid ocb-stubblr ocamlbuild ];
   propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
+
+  strictDeps = true;
 
   buildPhase = "${topkg.buildPhase} --accelerate false --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;

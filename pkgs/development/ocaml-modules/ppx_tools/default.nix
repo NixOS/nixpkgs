@@ -5,6 +5,7 @@ let param =
     version = "6.4";
     sha256 = "15v7yfv6gyp8lzlgwi9garz10wpg34dk4072jdv19n6v20zfg7n1";
     useDune2 = true;
+    nativeBuildInputs = [cppo];
     buildInputs = [cppo];
   }; in
 {
@@ -54,7 +55,9 @@ if lib.versionAtLeast param.version "6.0"
 then
   buildDunePackage {
     inherit pname src meta;
-    inherit (param) version useDune2 buildInputs;
+    inherit (param) version useDune2 buildInputs nativeBuildInputs;
+
+    strictDeps = true;
   }
 else
   stdenv.mkDerivation {
@@ -63,7 +66,8 @@ else
     inherit src;
 
     nativeBuildInputs = [ ocaml findlib ];
-    buildInputs = [ ocaml findlib ];
+
+    strictDeps = true;
 
     createFindlibDestdir = true;
 

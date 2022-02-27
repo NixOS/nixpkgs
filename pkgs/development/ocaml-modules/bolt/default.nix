@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "1c807wrpxra9sbb34lajhimwra28ldxv04m570567lh2b04n38zy";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild which camlp4 ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild which camlp4 ];
+
+  strictDeps = true;
 
   patches = [
     (fetchpatch {

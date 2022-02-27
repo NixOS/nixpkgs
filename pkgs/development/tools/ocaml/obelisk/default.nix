@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, ocamlPackages }:
+{ lib, fetchFromGitHub, ocamlPackages, menhir }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "obelisk";
@@ -11,7 +11,10 @@ ocamlPackages.buildDunePackage rec {
     sha256 = "1jjaqa2b7msl9qd3x7j34vdh1s9alq8hbvzk8a5srb4yyfyim15b";
   };
 
-  buildInputs = with ocamlPackages; [ menhir re ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ menhir ];
+  buildInputs = with ocamlPackages; [ re ];
 
   meta = {
     description = "A simple tool which produces pretty-printed output from a Menhir parser file (.mly)";

@@ -31,9 +31,11 @@ buildDunePackage {
     tezos-legacy-store
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     tezos-protocol-compiler
   ];
+
+  strictDeps = true;
 
   checkInputs = [
     alcotest-lwt
