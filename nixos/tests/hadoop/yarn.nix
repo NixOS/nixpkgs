@@ -10,9 +10,6 @@ import ../make-test-python.nix ({ package, ... }: {
           enable = true;
           openFirewall = true;
         };
-        yarnSite = {
-          "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fifo.FifoScheduler";
-        };
       };
     };
     nodemanager = { ... }: {
