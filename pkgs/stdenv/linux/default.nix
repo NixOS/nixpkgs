@@ -254,19 +254,6 @@ in
         '';
       });
 
-      gcc-unwrapped = self.stdenvNoCC.mkDerivation {
-        inherit (prevStage.gcc-unwrapped) name;
-        dontUnpack = true;
-        dontBuild = true;
-        installPhase = ''
-          mkdir -p $out
-          cp -ar ${prevStage.gcc-unwrapped}/* $out/
-          chmod -R a+w $out/
-          cp -a ${getLibc self}/lib/* $out/lib/
-          chmod -R a-w $out/
-        '';
-      };
-
       # This also contains the full, dynamically linked, final Glibc.
       binutils = prevStage.binutils.override {
         # Rewrap the binutils with the new glibc, so both the next
