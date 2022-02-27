@@ -836,7 +836,7 @@
       <listitem>
         <para>
           Some top-level settings under
-          <link linkend="opt-services.epgstation">services.epgstation</link>
+          <link linkend="opt-services.epgstation.enable">services.epgstation</link>
           is now deprecated because it was redudant due to the same
           options being present in
           <link linkend="opt-services.epgstation.settings">services.epgstation.settings</link>.
@@ -844,8 +844,7 @@
       </listitem>
       <listitem>
         <para>
-          The option
-          <link linkend="opt-services.epgstation.basicAuth">services.epgstation.basicAuth</link>
+          The option <literal>services.epgstation.basicAuth</literal>
           was removed because basic authentication support was dropped
           by upstream.
         </para>
