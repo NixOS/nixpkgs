@@ -69,7 +69,9 @@ let
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_12;
-  ocamlBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
+  ocamlNativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
+    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2;
+  ocamlBuildInputs = []
     ++ optional (!versionAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!versionAtLeast "8.13") ocamlPackages.num
     ++ optional (versionAtLeast "8.13") ocamlPackages.zarith;
@@ -79,7 +81,7 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlBuildInputs;
+    inherit ocamlPackages ocamlBuildInputs ocamlNativeBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
@@ -129,6 +131,7 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ]
+    ++ ocamlNativeBuildInputs
     ++ optional buildIde copyDesktopItems
     ++ optional (buildIde && versionAtLeast "8.10") wrapGAppsHook
     ++ optional (!versionAtLeast "8.6") gnumake42;
@@ -137,7 +140,6 @@ self = stdenv.mkDerivation {
       (if versionAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
-    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
   ;
 
   postPatch = ''
@@ -168,7 +170,7 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = [ "revision" "coq" "coqide" ] ++ optional (!versionAtLeast "8.14") "bin/votour";
+  buildFlags = [ "revision" "coq" ] ++ optional buildIde "coqide" ++ optional (!versionAtLeast "8.14") "bin/votour";
   enableParallelBuilding = true;
 
   createFindlibDestdir = true;
@@ -179,7 +181,7 @@ self = stdenv.mkDerivation {
     icon = "coq";
     desktopName = "CoqIDE";
     comment = "Graphical interface for the Coq proof assistant";
-    categories = "Development;Science;Math;IDE;GTK";
+    categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
   });
 
   postInstall = let suffix = if versionAtLeast "8.14" then "-core" else ""; in ''

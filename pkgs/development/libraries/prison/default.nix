@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, cmake, qrencode, qt4, libdmtx }:
 
-let v = "1.0"; in
-
 stdenv.mkDerivation rec {
-  name = "prison-${v}";
+  pname = "prison";
+  version = "1.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/prison/${v}/src/${name}.tar.gz";
+    url = "mirror://kde/stable/prison/${version}/src/prison-${version}.tar.gz";
     sha256 = "08hkzzda36jpdywjqlyzcvli7cx17h4l9yffzsdnhdd788n28krr";
   };
 

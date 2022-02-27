@@ -1224,6 +1224,7 @@ in
         keep = 1;
         extraConfig = ''
           create 0660 root ${config.users.groups.utmp.name}
+          minsize 1M
         '';
       };
       "/var/log/wtmp" = mapAttrs (_: mkDefault) {
@@ -1231,6 +1232,7 @@ in
         keep = 1;
         extraConfig = ''
           create 0664 root ${config.users.groups.utmp.name}
+          minsize 1M
         '';
       };
     };

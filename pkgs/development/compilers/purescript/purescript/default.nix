@@ -18,7 +18,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.14.5";
+  version = "0.14.6";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
@@ -26,12 +26,12 @@ in stdenv.mkDerivation rec {
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "1brvbpzr3cwls809fl0sjrm9cbh8v7maf5d7ic2mha0xapabgfpv";
+      sha256 = "0yfl4galaqzbbkql2vfsg4zrc5cv037286764kv8qibdk2yrhap3";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1mvxvn30iyrq0ck6g08f925gxnnhbfgl29b2gjjsmm3m9mpll7ws";
+      sha256 = "01mf850a9jhqba6a3hsbl9fjxp2khplwnlr15wzp637s5vf7rd79";
     };
 
 

@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, mathcomp-ssreflect, mathcomp-algebra, paramcoq
+{ lib, mkCoqDerivation, coq, mathcomp-ssreflect, mathcomp-algebra, mathcomp-fingroup, paramcoq
 , version ? null }:
 with lib;
 
@@ -17,7 +17,7 @@ mkCoqDerivation {
     { case = range "8.11" "8.12"; out = "0.4"; }
   ] null;
 
-  propagatedBuildInputs = [ mathcomp-ssreflect mathcomp-algebra paramcoq ];
+  propagatedBuildInputs = [ mathcomp-ssreflect mathcomp-algebra mathcomp-fingroup paramcoq ];
 
   useDune2 = true;
 

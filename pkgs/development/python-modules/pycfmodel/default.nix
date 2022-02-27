@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "0.16.2";
+  version = "0.16.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Skyscanner";
     repo = pname;
     rev = version;
-    hash = "sha256-hOe6BH8aSGJ7YeraiCsJ10mbeGbFGaR3Bt5fh6M8iWI=";
+    hash = "sha256-/0JSnJy/OUbYX26wTZ3RloVy74bU2D4Z6NOLq6IkI7o=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     "test_auxiliar_cast"
     "test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built"
     "test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be_built"
+    "test_resolve_booleans_different_properties_for_generic_resource"
   ];
 
   pythonImportsCheck = [

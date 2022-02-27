@@ -46,13 +46,14 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = let
-    libPath = lib.makeLibraryPath [
+    binPath = lib.makeBinPath [
       xdg-user-dirs
     ];
   in ''
     # Add missing libraries to appflowy using the ones it comes with
     makeWrapper $out/opt/app_flowy $out/bin/appflowy \
-          --set LD_LIBRARY_PATH "$out/opt/lib/:${libPath}"
+          --set LD_LIBRARY_PATH "$out/opt/lib/" \
+          --prefix PATH : "${binPath}"
   '';
 
   desktopItems = [
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
       desktopName = "AppFlowy";
       comment = meta.description;
       exec = "appflowy";
-      categories = "Office;";
+      categories = [ "Office" ];
     })
   ];
 

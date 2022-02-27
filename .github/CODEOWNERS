@@ -226,10 +226,10 @@
 /pkgs/applications/editors/neovim      @jonringer @teto
 
 # VimPlugins
-/pkgs/misc/vim-plugins         @jonringer @softinio
+/pkgs/applications/editors/vim/plugins         @jonringer
 
 # VsCode Extensions
-/pkgs/misc/vscode-extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions   @jonringer
 
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz

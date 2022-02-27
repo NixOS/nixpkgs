@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       icon = "sauerbraten";
       desktopName = "Sauerbraten";
       comment = "FPS that uses an improved version of the Cube engine";
-      categories = "Application;Game;ActionGame;";
+      categories = [ "Application" "Game" "ActionGame" ];
     })
   ];
 

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       desktopName = "Berry Window Manager";
       genericName = "Berry Window Manager";
-      categories = "Utility;";
+      categories = [ "Utility" ];
     })
   ];
 

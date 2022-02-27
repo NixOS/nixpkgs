@@ -17,12 +17,12 @@
 , unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk
-, setfile
 , AGL
 , Carbon
 , Cocoa
 , Kernel
 , QTKit
+, setfile
 }:
 
 assert withGtk2 -> (!withWebKit);
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ./0001-fix-assertion-using-hide-in-destroy.patch
+    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
   configureFlags = [
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
     badPlatforms = [ "x86_64-darwin" ];
   };

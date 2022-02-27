@@ -105,7 +105,7 @@ let
     desktopName = "VMware Horizon Client";
     icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
     exec = "${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view %u";
-    mimeType = "x-scheme-handler/vmware-view";
+    mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
   binLinkCommands = lib.concatMapStringsSep

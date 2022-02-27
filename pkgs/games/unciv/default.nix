@@ -14,7 +14,7 @@ let
     exec = "unciv";
     comment = "An open-source Android/Desktop remake of Civ V";
     desktopName = "Unciv";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   envLibPath = lib.makeLibraryPath [

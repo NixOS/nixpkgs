@@ -17,7 +17,7 @@ let
     icon = icon;
     desktopName = pname;
     genericName = "Evernote desktop app";
-    categories = "Application";
+    categories = [ "Application" ];
   };
 
 in appimageTools.wrapType2 rec {

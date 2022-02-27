@@ -23,7 +23,7 @@ let
     comment = "The TeamSpeak voice communication tool";
     desktopName = "TeamSpeak";
     genericName = "TeamSpeak";
-    categories = "Network";
+    categories = [ "Network" ];
   };
 
   fakeLess = writeShellScriptBin "less" "cat";

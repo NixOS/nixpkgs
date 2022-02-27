@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       icon = "snapmaker-luban";
       desktopName = "Snapmaker Luban";
       genericName = meta.description;
-      categories = "Office;Printing;";
+      categories = [ "Office" "Printing" ];
     })
   ];
 

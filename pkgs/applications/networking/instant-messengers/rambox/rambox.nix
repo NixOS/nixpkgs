@@ -10,8 +10,7 @@ let
     name = pname;
     exec = pname;
     icon = pname;
-    type = "Application";
-    categories = "Network;";
+    categories = [ "Network" ];
   });
 
   appimageContents = appimageTools.extractType2 {

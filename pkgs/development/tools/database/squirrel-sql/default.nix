@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "SQuirreL SQL";
     genericName = "SQL Client";
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = "squirrel-sql";
   };
 

@@ -14,12 +14,12 @@
 , compat26 ? true
 , unicode ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, setfile
 , AGL
 , Carbon
 , Cocoa
 , Kernel
 , QuickTime
+, setfile
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ./0001-fix-assertion-using-hide-in-destroy.patch
+    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
   nativeBuildInputs = [
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.darwin ++ platforms.linux;
     badPlatforms = [ "x86_64-darwin" ];
   };

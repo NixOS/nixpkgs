@@ -3,7 +3,7 @@
 
 let
   desktopItem = name: short: long: description: makeDesktopItem {
-    categories  = "Game;AdventureGame;";
+    categories  = [ "Game" "AdventureGame" ];
     comment     = description;
     desktopName = long;
     exec        = "@out@/bin/${short}";

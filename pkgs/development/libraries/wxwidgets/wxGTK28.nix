@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 

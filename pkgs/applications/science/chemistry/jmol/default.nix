@@ -12,19 +12,27 @@ let
     exec = "jmol";
     desktopName = "JMol";
     genericName = "Molecular Modeler";
-    mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
-    categories = "Graphics;Education;Science;Chemistry;";
+    mimeTypes = [
+      "chemical/x-pdb"
+      "chemical/x-mdl-molfile"
+      "chemical/x-mol2"
+      "chemical/seq-aa-fasta"
+      "chemical/seq-na-fasta"
+      "chemical/x-xyz"
+      "chemical/x-mdl-sdf"
+    ];
+    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
   };
 in
 stdenv.mkDerivation rec {
-  version = "14.32.21";
+  version = "14.32.24";
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    sha256 = "sha256-jJw/y6lQ0bvzOmwOhedufxK0Tuq9Pq6lIPZ97o03Zec=";
+    sha256 = "sha256-YxYNb2fS7KiUkZDSRx4FN+ZeMMNpfTaElitRE4RtD0g=";
   };
 
   patchPhase = ''
