@@ -4,12 +4,13 @@
 , pytestCheckHook
 , pythonOlder
 , paho-mqtt
+, python-dateutil
 , weconnect
 }:
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.29.1";
+  version = "0.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,11 +19,12 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "v${version}";
-    sha256 = "sha256-/hFlH0naE62d2dyYIJD/+TuSQDOVgS8tQsSX8JuReC0=";
+    sha256 = "sha256-/mlN9gEEy8DJSFef0Pp2PLjHhwStKwANKSzw4nT19eM=";
   };
 
   propagatedBuildInputs = [
     paho-mqtt
+    python-dateutil
     weconnect
   ];
 
