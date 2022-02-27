@@ -39,8 +39,6 @@ stdenv.mkDerivation {
 
   buildInputs = cursesDeps ++ optionals tiles tilesDeps;
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     patchShebangs .
 
