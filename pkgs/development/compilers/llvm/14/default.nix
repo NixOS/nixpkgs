@@ -19,7 +19,7 @@
 
 let
   release_version = "14.0.0";
-  candidate = ""; # empty or "rcN"
+  candidate = "rc0"; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   rev = "fb1582f6c54422995c6fb61ba4c55126b357f64e"; # When using a Git commit
   rev-version = "unstable-2022-01-07"; # When using a Git commit
