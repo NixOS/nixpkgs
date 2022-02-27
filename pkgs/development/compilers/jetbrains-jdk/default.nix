@@ -1,4 +1,4 @@
-{ lib, openjdk11, fetchFromGitHub, jetbrains, fetchpatch }:
+{ lib, openjdk11, fetchFromGitHub, jetbrains }:
 
 openjdk11.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
@@ -10,12 +10,7 @@ openjdk11.overrideAttrs (oldAttrs: rec {
     rev = "jb${version}";
     sha256 = "sha256-TPNYZUkAoiZfp7Ci3fslKnRNGY1lnyIhXYUt6J31lwI=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/JetBrains/JetBrainsRuntime/commit/980cfdf8d04c015bf2ecb4642064e45e3f36630d.patch";
-      sha256 = "sha256-/f20sWnlWoObgdgZKWD785q0aRZ5oIP5pzW+AmejLWM=";
-    })
-  ];
+  patches = [];
   meta = with lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";
     longDescription = ''
