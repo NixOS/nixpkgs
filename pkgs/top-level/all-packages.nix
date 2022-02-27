@@ -24861,6 +24861,8 @@ with pkgs;
 
   ChowKick  = callPackage ../applications/audio/ChowKick { };
 
+  ChowPhaser  = callPackage ../applications/audio/ChowPhaser { };
+
   CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
