@@ -935,9 +935,9 @@ self: super: {
   # https://github.com/haskell-hvr/resolv/pull/6
   resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
-  # spdx 0.2.2.0 needs older tasty
-  # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)
-  spdx = dontCheck super.spdx;
+  # Too strict bounds on base and Cabal, fixed on master
+  # Occasional test failures: https://github.com/phadej/spdx/issues/27
+  spdx = assert super.spdx.version == "1.0.0.2"; doJailbreak (dontCheck super.spdx);
 
   # The test suite does not know how to find the 'alex' binary.
   alex = overrideCabal (drv: {
@@ -2317,4 +2317,5 @@ self: super: {
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
