@@ -9,6 +9,16 @@
 , libjpeg
 , xz
 , zlib
+
+# for passthru.tests
+, libgeotiff
+, python3Packages
+, imagemagick
+, graphicsmagick
+, gdal
+, openimageio
+, freeimage
+, imlib
 }:
 
 #FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
@@ -91,6 +101,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage imlib;
+    inherit (python3Packages) pillow imread;
+  };
 
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
