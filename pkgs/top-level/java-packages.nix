@@ -23,6 +23,7 @@ in {
       openjfx = openjfx11; /* need this despite next line :-( */
       enableJavaFX = false;
       headless = true;
+      gtkSupport = false;
     };
 
     mkAdoptopenjdk = path-linux: path-darwin: let
