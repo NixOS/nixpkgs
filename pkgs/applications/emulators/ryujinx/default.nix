@@ -1,18 +1,31 @@
-{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, dotnetCorePackages, libX11, libgdiplus, ffmpeg
-, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gdk-pixbuf, wrapGAppsHook
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, dotnetCorePackages
+, libX11
+, libgdiplus
+, ffmpeg
+, SDL2_mixer
+, openal
+, libsoundio
+, sndio
+, pulseaudio
+, gtk3
+, gdk-pixbuf
+, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7168"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.1.54"; # Versioning is based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "6e0799580f0d1b473a79471c5d365c6524d97a86";
-    sha256 = "145sn9xkjxj79292faypcdmpmbxm1w70q0iprg6pfymf9920gvfv";
+    rev = "3705c206688c69d3348f5cec84dc480d8d7c578e";
+    sha256 = "1lhnr11x46yjpka865m0dzkbkdxmrrhjcpvq4ab4wll6j0ipy908";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -67,22 +80,31 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Ryujinx";
-    name = "ryujinx";
-    exec = "Ryujinx";
-    icon = "ryujinx";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Ryujinx";
+      name = "ryujinx";
+      exec = "Ryujinx";
+      icon = "ryujinx";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = with lib; {
-    description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
-    license = licenses.mit;
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
-    maintainers = [ maintainers.ivar ];
+    description = "Experimental Nintendo Switch Emulator written in C#";
+    longDescription = ''
+      Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
+      written in C#. This emulator aims at providing excellent accuracy and
+      performance, a user-friendly interface and consistent builds. It was
+      written from scratch and development on the project began in September
+      2017.
+    '';
+    license = licenses.mit;
+    maintainers = with maintainers; [ ivar jk ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Ryujinx";
   };
