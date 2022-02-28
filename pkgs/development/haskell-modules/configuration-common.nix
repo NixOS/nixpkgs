@@ -2318,4 +2318,9 @@ self: super: {
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
+  # 2022-02-28: Unmaintained. Distribution.Simple must have changed since 2016
+  digits = appendPatches [
+    ./patches/digits-fix-162266.patch
+  ] super.digits;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

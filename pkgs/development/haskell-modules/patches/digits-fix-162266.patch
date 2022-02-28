@@ -1,0 +1,9 @@
+--- Setup.lhs.bak	2022-02-28 16:11:11.021132817 -0500
++++ digits-0.3.1/Setup.lhs	2022-02-28 16:31:19.631822707 -0500
+@@ -3,5 +3,5 @@
+ > import Distribution.Simple
+ > import System.Cmd
+ > tests _ _ _ _ = system "runhaskell src/Tests.hs" >> return ()
+-> main = defaultMainWithHooks (simpleUserHooks {runTests = tests})
++> main = defaultMainWithHooks (simpleUserHooks)
+ 

@@ -1085,7 +1085,6 @@ broken-packages:
   - digest-pure
   - DigitalOcean
   - digitalocean-kzs
-  - digits
   - dijkstra-simple
   - DimensionalHash
   - dimensional-tf
