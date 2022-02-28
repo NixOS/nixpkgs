@@ -33,8 +33,8 @@ in
 
 stdenv.mkDerivation {
   pname = "git"
-  + lib.optionalString svnSupport "-with-svn"
-  + lib.optionalString ( !svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2 ) "-minimal";
+    + lib.optionalString svnSupport "-with-svn"
+    + lib.optionalString (!svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2) "-minimal";
   inherit version;
 
   src = fetchurl {
