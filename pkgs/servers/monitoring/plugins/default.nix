@@ -85,6 +85,10 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "out"}/bin"
     "--with-mailq-command=${mailq}/bin/mailq"
     "--with-sudo-command=/run/wrappers/bin/sudo"
+    # Needed for cross-compilation
+    "--with-ps-command=${procps}/bin/ps"
+    "--with-uptime-command=${procps}/bin/uptime"
+    "PERL=${perl}/bin/perl"
   ];
 
   buildInputs = [
@@ -97,12 +101,16 @@ stdenv.mkDerivation rec {
     openssh
     openssl
     perl
-    procps
     uriparser
     zlib
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    procps # calls ps during configuration
+    libmysqlclient # calls mysql_config during configuration
+  ];
 
   enableParallelBuilding = true;
 
