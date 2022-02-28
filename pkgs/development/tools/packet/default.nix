@@ -3,12 +3,12 @@
 
 buildGoPackage rec {
   pname = "packet";
-  version = "v2.2.2";
+  version = "2.2.2";
 
   goPackagePath = "github.com/ebsarr/packet";
 
   src = fetchgit {
-    rev = version;
+    rev = "v${version}";
     url = "https://github.com/ebsarr/packet";
     sha256 = "18n8f2rlab4icb28k1b9gnh30zy382v792x07fmcdqq4nkw6wvwf";
   };
