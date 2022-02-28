@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fR0dSgPUYsWghAeH098JjxJYR+DTi4M7MPj4y8RaFCA=";
+    hash = "sha256-fR0dSgPUYsWghAeH098JjxJYR+DTi4M7MPj4y8RaFCA=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables.";
+    description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables";
     license = licenses.mit;
     homepage = "https://pypi.org/project/aioitertools/";
     maintainers = with maintainers; [ teh ];
