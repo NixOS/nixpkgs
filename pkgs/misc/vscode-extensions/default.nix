@@ -321,6 +321,18 @@ let
         };
       };
 
+      bierner.markdown-emoji = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-emoji";
+          publisher = "bierner";
+          version = "0.2.1";
+          sha256 = "1lcg2b39jydl40wcfrbgshl2i1r58k92c7dipz0hl1fa1v23vj4v";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bodil.file-browser = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "file-browser";
