@@ -17,8 +17,8 @@ python3Packages.buildPythonPackage rec {
   doCheck = true;
 
   checkPhase = ''
-    ${python3Packages.python}/bin/python3 tests/test_icnsutil.py
-    ${python3Packages.python}/bin/python3 tests/test_cli.py
+    ${python3.interpreter} tests/test_icnsutil.py
+    ${python3.interpreter} tests/test_cli.py
   '';
 
   meta = {
