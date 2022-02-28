@@ -1,16 +1,17 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , poetry-core
-, aiohttp
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
   version = "4.0.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -35,7 +36,9 @@ buildPythonPackage rec {
   # The only test requires network access
   doCheck = false;
 
-  pythonImportsCheck = [ "garages_amsterdam" ];
+  pythonImportsCheck = [
+    "garages_amsterdam"
+  ];
 
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";
