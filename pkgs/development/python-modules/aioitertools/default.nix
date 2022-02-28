@@ -31,7 +31,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 
