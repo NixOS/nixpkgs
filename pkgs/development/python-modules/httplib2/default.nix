@@ -52,7 +52,9 @@ buildPythonPackage rec {
     # ValueError: Unable to load PEM file.
     # https://github.com/httplib2/httplib2/issues/192#issuecomment-993165140
     "test_client_cert_password_verified"
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fails with "ConnectionResetError: [Errno 54] Connection reset by peer"
+    "test_connection_close"
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
     "test_connection_close"
