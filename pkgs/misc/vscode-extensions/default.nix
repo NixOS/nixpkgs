@@ -309,6 +309,18 @@ let
         };
       };
 
+      bierner.markdown-checkbox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-checkbox";
+          publisher = "bierner";
+          version = "0.3.1";
+          sha256 = "0x57dnr6ksqxi28g1c392k04vxy0vdni9nl4xps3i5zh0pyxizhw";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bodil.file-browser = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "file-browser";
