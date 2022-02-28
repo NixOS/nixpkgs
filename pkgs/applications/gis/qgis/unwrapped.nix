@@ -69,14 +69,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.22.3";
+  version = "3.24.0";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "TLXhXHU0dp0MnKHFw/+1rQnJbebnwje21Oasy0qWctk=";
+    sha256 = "sha256-EPF8sXAH7UAttLutxXGFovog3+XpXP0GXg2tu0mSU2s=";
   };
 
   passthru = {
@@ -148,6 +148,6 @@ in mkDerivation rec {
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir erictapen ];
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen willcohen ];
   };
 }

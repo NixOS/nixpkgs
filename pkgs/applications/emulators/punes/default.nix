@@ -20,24 +20,14 @@
 
 mkDerivation rec {
   pname = "punes";
-  version = "0.108";
+  version = "0.109";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
     rev = "v${version}";
-    sha256 = "0inkwmvbr2w4addmgk9r4f13yismang9ylfgflhh9352lf0lirv8";
+    sha256 = "sha256-6aRtR/d8nhzmpN9QKSZ62jye7qjfO+FpRMCXkX4Yubk=";
   };
-
-  patches = [
-    # Drop when version > 0.108
-    # https://github.com/punesemu/puNES/issues/185
-    (fetchpatch {
-      name = "0001-punes-Fixed-make-install.patch";
-      url = "https://github.com/punesemu/puNES/commit/902434f50398ebcda0786ade4b28a0496084810e.patch";
-      sha256 = "1a3052n3n1qipi4bd7f7gq4zl5jjjzzzpbijdisis2vxvhnfvcim";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace configure.ac \
