@@ -637,7 +637,11 @@ rec {
               then lhs.specialArgs // rhs.specialArgs
               else throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
             shorthandOnlyDefinesConfig =
-              if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
+              if lhs.shorthandOnlyDefinesConfig == null
+              then rhs.shorthandOnlyDefinesConfig
+              else if rhs.shorthandOnlyDefinesConfig == null
+              then lhs.shorthandOnlyDefinesConfig
+              else if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
           };

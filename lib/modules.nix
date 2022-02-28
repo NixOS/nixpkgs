@@ -496,6 +496,7 @@ rec {
             options = mkOption {
               type = types.submoduleWith {
                 modules = [ { options = decl.options; } ];
+                shorthandOnlyDefinesConfig = null;
               };
             };
           };
