@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   postPatch = if stdenv.isDarwin then ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+  '' else if stdenv.hostPlatform.isMusl then ''
+    substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
   '' else null;
 
   patches = [
