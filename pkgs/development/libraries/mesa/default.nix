@@ -235,7 +235,7 @@ self = stdenv.mkDerivation {
     done
 
     # NAR doesn't support hard links, so convert them to symlinks.
-    ${jdupes}/bin/jdupes -Hlr "$drivers"
+    ${jdupes}/bin/jdupes --hard-links --link-soft --recurse "$drivers"
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files
