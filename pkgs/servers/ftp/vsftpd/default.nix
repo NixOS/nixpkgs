@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libcap, libseccomp, openssl, pam }:
+{ lib, stdenv, fetchurl, libcap, libseccomp, openssl, pam, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "vsftpd";
@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap -lseccomp";
 
   enableParallelBuilding = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) vsftpd; };
+  };
 
   meta = with lib; {
     description = "A very secure FTP daemon";
