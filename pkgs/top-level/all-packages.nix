@@ -31859,6 +31859,8 @@ with pkgs;
 
   alliance = callPackage ../applications/science/electronics/alliance { };
 
+  angsd = callPackage ../applications/science/biology/angsd { };
+
   ants = callPackage ../applications/science/biology/ants {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
