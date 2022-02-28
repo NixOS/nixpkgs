@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kservice";
+  pname = "kservice";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedNativeBuildInputs = [ bison flex ];
   buildInputs = [
