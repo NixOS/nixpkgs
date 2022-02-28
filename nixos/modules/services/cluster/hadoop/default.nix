@@ -79,6 +79,10 @@ with lib;
         "yarn.nodemanager.log-dirs" = "/var/log/hadoop/yarn/nodemanager";
         "yarn.resourcemanager.bind-host" = "0.0.0.0";
         "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
+        "yarn.nodemanager.linux-container-executor.cgroups.hierarchy" = "/hadoop-yarn";
+        "yarn.nodemanager.linux-container-executor.resources-handler.class" = "org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler";
+        "yarn.nodemanager.linux-container-executor.cgroups.mount" = "true";
+        "yarn.nodemanager.linux-container-executor.cgroups.mount-path" = "/run/wrappers/yarn-nodemanager/cgroup";
       };
       type = types.attrsOf types.anything;
       example = literalExpression ''
@@ -124,6 +128,7 @@ with lib;
         "yarn.nodemanager.linux-container-executor.group"="hadoop";
         "min.user.id"=1000;
         "feature.terminal.enabled"=1;
+        "feature.mount-cgroup.enabled" = 1;
       };
       type = types.attrsOf types.anything;
       example = literalExpression ''

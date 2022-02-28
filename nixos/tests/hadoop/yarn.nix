@@ -12,14 +12,14 @@ import ../make-test-python.nix ({ package, ... }: {
         };
       };
     };
-    nodemanager = { ... }: {
+    nodemanager = { options, lib, ... }: {
       services.hadoop = {
         inherit package;
         yarn.nodemanager = {
           enable = true;
           openFirewall = true;
         };
-        yarnSite = {
+        yarnSite = options.services.hadoop.yarnSite.default // {
           "yarn.resourcemanager.hostname" = "resourcemanager";
           "yarn.nodemanager.log-dirs" = "/tmp/userlogs";
         };
