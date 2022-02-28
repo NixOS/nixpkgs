@@ -2,6 +2,7 @@
 , buildDunePackage
 , tezos-stdlib
 , tezos-protocol-compiler
+, tezos-protocol-environment
 }:
 
 buildDunePackage {
@@ -9,9 +10,15 @@ buildDunePackage {
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src";
 
-  buildInputs = [
+  nativeBuildInputs = [
     tezos-protocol-compiler
   ];
+
+  buildInputs = [
+    tezos-protocol-environment
+  ];
+
+  strictDeps = true;
 
   doCheck = true;
 

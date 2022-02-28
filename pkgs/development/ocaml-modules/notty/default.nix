@@ -19,9 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "1y3hx8zjri3x50nyiqal5gak1sw54gw3xssrqbj7srinvkdmrz1q";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ocb-stubblr ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ ocb-stubblr topkg ocamlbuild ];
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
                           optional withLwt lwt;
+
+  strictDeps = true;
 
   buildPhase = topkg.buildPhase
   + " --with-lwt ${boolToString withLwt}";

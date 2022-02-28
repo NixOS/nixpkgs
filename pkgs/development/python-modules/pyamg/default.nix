@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48d9be622049d8363cda84125c45d18b89e0ab7d99be5a93c0246f375ebad344";
+    sha256 = "sha256-mtrFqUwEustYlCcCiV1FQZm7dJKohu650xHdiNg6D6E=";
   };
 
   nativeBuildInputs = [

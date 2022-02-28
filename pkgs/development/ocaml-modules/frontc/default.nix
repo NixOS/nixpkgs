@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dq5nks0c9gsbr1m8k39m1bniawr5hqcy1r8x5px7naa95ch06ak";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   meta = with lib; {
     inherit (src.meta) homepage;

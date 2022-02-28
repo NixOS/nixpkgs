@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = param.propagatedBuildInputs or [];
 
+  strictDeps = true;
+
   buildPhase = "${run} build";
   createFindlibDestdir = true;
   installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";

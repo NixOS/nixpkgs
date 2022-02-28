@@ -49,6 +49,9 @@ let
   k3sVersion = "1.23.3+k3s1";     # k3s git tag
   k3sCommit = "6f4217a3405d16a1a51bbb40872d7dcb87207bb9"; # k3s git commit at the above version
   k3sRepoSha256 = "sha256-0dRusG1vL+1KbmViIUNCZK1b+FEgV6otcVUyFonHmm4=";
+  k3sVendorSha256 = "sha256-8Yp9csyRNSYi9wo8E8mF8cu92wG1t3l18wJ8Y4L7HEA=";
+
+  k3sServerVendorSha256 = "sha256-9+2k/ipAOhc8JJU+L2dwaM01Dkw+0xyrF5kt6mL19G0=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
@@ -65,17 +68,17 @@ let
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
-  containerdVersion = "v1.5.9-k3s1";
+  containerdVersion = "1.5.9-k3s1";
   containerdSha256 = "sha256-7xlhBA6KuwFlw+jyThygv4Ow9F3xjjIUtS6x8YHwjic=";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  criCtlVersion = "v1.22.0-k3s1";
+  criCtlVersion = "1.22.0-k3s1";
 
   baseMeta = {
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank mic92 ];
+    maintainers = with maintainers; [ euank mic92 superherointj ];
     platforms = platforms.linux;
   };
 
@@ -91,10 +94,8 @@ let
     "-X k8s.io/component-base/version.gitCommit=${k3sCommit}"
     "-X k8s.io/component-base/version.gitTreeState=clean"
     "-X k8s.io/component-base/version.buildDate=1970-01-01T01:01:01Z"
-    "-X github.com/kubernetes-sigs/cri-tools/pkg/version.Version=${criCtlVersion}"
-    "-X github.com/containerd/containerd/version.Version=${containerdVersion}"
-    "-X github.com/containerd/containerd/version.Package=github.com/k3s-io/containerd"
-    "-X github.com/containerd/containerd/version.Version=${containerdVersion}"
+    "-X github.com/kubernetes-sigs/cri-tools/pkg/version.Version=v${criCtlVersion}"
+    "-X github.com/containerd/containerd/version.Version=v${containerdVersion}"
     "-X github.com/containerd/containerd/version.Package=github.com/k3s-io/containerd"
   ];
 
@@ -168,12 +169,13 @@ let
   # strip/patchelf/remove-references step ourselves in the installPhase of the
   # derivation when we've built all the binaries, but haven't bundled them in
   # with generated bindata yet.
+
   k3sServer = buildGoModule rec {
     pname = "k3s-server";
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = "sha256-9+2k/ipAOhc8JJU+L2dwaM01Dkw+0xyrF5kt6mL19G0=";
+    vendorSha256 = k3sServerVendorSha256;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp ];
@@ -203,11 +205,11 @@ let
   };
   k3sContainerd = buildGoModule {
     pname = "k3s-containerd";
-    version = k3sVersion;
+    version = containerdVersion;
     src = fetchFromGitHub {
       owner = "k3s-io";
       repo = "containerd";
-      rev = containerdVersion;
+      rev = "v${containerdVersion}";
       sha256 = containerdSha256;
     };
     vendorSha256 = null;
@@ -222,7 +224,7 @@ buildGoModule rec {
 
   src = k3sRepo;
   proxyVendor = true;
-  vendorSha256 = "sha256-8Yp9csyRNSYi9wo8E8mF8cu92wG1t3l18wJ8Y4L7HEA=";
+  vendorSha256 = k3sVendorSha256;
 
   patches = [
     ./patches/0001-scrips-download-strip-downloading-just-package-CRD.patch

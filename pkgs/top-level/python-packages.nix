@@ -8569,6 +8569,8 @@ in {
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
+  readability-lxml = callPackage ../development/python-modules/readability-lxml { };
+
   readchar = callPackage ../development/python-modules/readchar { };
 
   readlike = callPackage ../development/python-modules/readlike { };

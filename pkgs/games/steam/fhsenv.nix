@@ -117,6 +117,7 @@ in buildFHSUserEnv rec {
     xorg.xkeyboardconfig
     xorg.libpciaccess
     udev # shadow of the tomb raider
+    icu # dotnet runtime, e.g. stardew valley
 
     # screeps dependencies
     gtk3

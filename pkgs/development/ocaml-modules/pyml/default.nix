@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GCO6KlRhJmADFjQ5QF4naMQBskF63yqnJnLnuQsagEk=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     ocaml
     findlib
+  ];
+  buildInputs = [
     utop
     ncurses
   ];
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
     python3
     stdcompat
   ];
+
+  strictDeps = true;
 
   buildPhase = ''
     make all pymltop pymlutop PREFIX=$out

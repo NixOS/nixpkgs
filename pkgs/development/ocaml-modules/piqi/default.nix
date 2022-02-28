@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v04hs85xv6d4ysqxyv1dik34dx49yab9shpi4x7iv19qlzl7csb";
   };
 
-  buildInputs = [ ocaml findlib which ];
+  nativeBuildInputs = [ ocaml findlib which ];
   propagatedBuildInputs = [ sedlex_2 xmlm easy-format base64 ];
+
+  strictDeps = true;
 
   patches = [ ./no-ocamlpath-override.patch ];
 
