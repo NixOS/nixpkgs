@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2021-06-28";
+  version = "2022-01-20";
 
   srcs = [
     (fetchFromGitHub {
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "00de3194a96397c913786945ac0af1fd6fbec45b";
-      sha256 = "1xnr364dkiq6gmr21lcrj23hwc0g9y5qad8dm2maij647bgzp07r";
+      rev = "99d5c588e95ec9c9b86d7e88d3cf85b4f729d2bc";
+      sha256 = "0pfgadblxs8cji8d227v6wsml8x6vzsz7j12jfidvvp01dhry3n6";
     })
   ];
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "0a54gyrq6jfxxvimaa4yjfiyfwf7wv58v0a32l74yrzyarr3ldby";
+  outputHash = "0gipxq1j0rp9x8psl5zfh14yg09q39dd6ixkysh3bczkb05h83qp";
 
   meta = with lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
