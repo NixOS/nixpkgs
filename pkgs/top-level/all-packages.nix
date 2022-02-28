@@ -20175,8 +20175,6 @@ with pkgs;
 
   sqlitecpp = callPackage ../development/libraries/sqlitecpp { };
 
-  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
-
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
 
   sqlite-replication = sqlite.overrideAttrs (oldAttrs: rec {

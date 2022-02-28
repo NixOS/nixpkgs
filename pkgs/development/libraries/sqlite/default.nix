@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, interactive ? false, readline, ncurses
+{ lib, stdenv, fetchurl, zlib, readline, ncurses
 , python3Packages
 , enableDeserialize ? false
 }:
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib readline ncurses ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" "--enable-readline" ];
 
   NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
