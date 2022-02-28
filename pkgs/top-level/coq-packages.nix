@@ -91,6 +91,7 @@ let
       serapi = callPackage ../development/coq-modules/serapi {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
+      smtcoq = callPackage ../development/coq-modules/smtcoq { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
