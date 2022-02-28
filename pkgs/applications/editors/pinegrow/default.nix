@@ -41,9 +41,8 @@ stdenv.mkDerivation rec {
   # Extract and copy executable in $out/bin
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/applications
-    mkdir -p $out/bin
-    mkdir -p $out/opt/bin
+
+    mkdir -p $out/share/applications $out/bin $out/opt/bin
     # we can't unzip it in $out/lib, because nw.js will start with
     # an empty screen. Therefore it will be unzipped in a non-typical
     # folder and symlinked.
@@ -52,13 +51,14 @@ stdenv.mkDerivation rec {
       --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/Pinegrow"'
     mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/Pinegrow.desktop
     ln -s $out/opt/pinegrow/PinegrowLibrary $out/bin/Pinegrow
+
     runHook postInstall
   '';
 
   preFixup = ''
-      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-      wrapGApp "$out/opt/pinegrow/PinegrowLibrary" --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
-    '';
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+    wrapGApp "$out/opt/pinegrow/PinegrowLibrary" --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
+  '';
 
   meta = with lib; {
     homepage = "https://pinegrow.com";
