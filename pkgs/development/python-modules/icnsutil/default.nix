@@ -1,9 +1,10 @@
 { lib
-, python3
+, python
 , fetchFromGitHub
+, buildPythonPackage
 }:
 
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "icnsutil";
   version = "1.0.1";
 
@@ -17,8 +18,8 @@ python3.pkgs.buildPythonPackage rec {
   doCheck = true;
 
   checkPhase = ''
-    ${python3.interpreter} tests/test_icnsutil.py
-    ${python3.interpreter} tests/test_cli.py
+    ${python.interpreter} tests/test_icnsutil.py
+    ${python.interpreter} tests/test_cli.py
   '';
 
   meta = {
