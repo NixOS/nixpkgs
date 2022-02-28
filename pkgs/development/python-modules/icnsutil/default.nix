@@ -1,9 +1,9 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "icnsutil";
   version = "1.0.1";
 
