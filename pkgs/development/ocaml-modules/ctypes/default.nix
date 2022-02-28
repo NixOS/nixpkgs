@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eu5RAuPYC97IM4XUsUw3HQ1BJlEHQ+eBpsdUE6hd+Q8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib ncurses ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  buildInputs = [ ncurses ];
   propagatedBuildInputs = [ integers libffi bigarray-compat ];
+
+  strictDeps = true;
 
   buildPhase = ''
     make XEN=false libffi.config ctypes-base ctypes-stubs

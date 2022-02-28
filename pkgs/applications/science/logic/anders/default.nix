@@ -13,7 +13,10 @@ ocamlPackages.buildDunePackage rec {
     sha256 = "sha256-JUiZoo2rNLfgs94TlJqUNzul/7ODisCjSFAzhgSp1z4=";
   };
 
-  buildInputs = with ocamlPackages; [ zarith menhir ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocamlPackages.menhir ];
+  buildInputs = [ ocamlPackages.zarith ];
 
   meta = with lib; {
     description = "Modal Homotopy Type System";

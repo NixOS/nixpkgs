@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   preInstall = ''
     mkdir -p $out/bin

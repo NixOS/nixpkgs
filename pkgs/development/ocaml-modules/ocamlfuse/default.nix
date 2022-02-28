@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, camlidl, fuse }:
+{ lib, buildDunePackage, fetchFromGitHub, camlidl, fuse, dune-configurator }:
 
 buildDunePackage {
   pname = "ocamlfuse";
@@ -11,6 +11,11 @@ buildDunePackage {
     sha256 = "1v9g0wh7rnjkrjrnw50145g6ry38plyjs8fq8w0nlzwizhf3qhff";
   };
 
+  # This currently fails with dune
+  strictDeps = false;
+
+  nativeBuildInputs = [ camlidl ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ camlidl fuse ];
 
   meta = {

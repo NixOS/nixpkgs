@@ -16,7 +16,9 @@ buildDunePackage rec {
     sha256 = "133l23mwxa9xy340izvk4zp5jqjz2cwsm2innsgs2kg85pd39c41";
   };
 
-  buildInputs = [ menhir ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ menhirLib fmt ];
 
   # Testr are not compatible with menhir 20211128
