@@ -121,7 +121,7 @@ rec {
         allowSubstitutes = false;
       }
       ''
-        target=$out${destination}
+        target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
