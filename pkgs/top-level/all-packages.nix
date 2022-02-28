@@ -14416,7 +14416,9 @@ with pkgs;
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
-  rebazel = callPackage ../development/tools/rebazel { };
+  rebazel = callPackage ../development/tools/rebazel {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
