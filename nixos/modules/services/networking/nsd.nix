@@ -194,19 +194,8 @@ let
                        zone.children
       );
 
-  # fighting infinite recursion
-  zoneOptions = zoneOptionsRaw // childConfig zoneOptions1 true;
-  zoneOptions1 = zoneOptionsRaw // childConfig zoneOptions2 false;
-  zoneOptions2 = zoneOptionsRaw // childConfig zoneOptions3 false;
-  zoneOptions3 = zoneOptionsRaw // childConfig zoneOptions4 false;
-  zoneOptions4 = zoneOptionsRaw // childConfig zoneOptions5 false;
-  zoneOptions5 = zoneOptionsRaw // childConfig zoneOptions6 false;
-  zoneOptions6 = zoneOptionsRaw // childConfig null         false;
-
-  childConfig = x: v: { options.children = { type = types.attrsOf x; visible = v; }; };
-
   # options are ordered alphanumerically
-  zoneOptionsRaw = types.submodule {
+  zoneOptions = types.submodule {
     options = {
 
       allowAXFRFallback = mkOption {
@@ -246,6 +235,13 @@ let
       };
 
       children = mkOption {
+        # TODO: This relies on the fact that `types.anything` doesn't set any
+        # values of its own to any defaults, because in the above zoneConfigs',
+        # values from children override ones from parents, but only if the
+        # attributes are defined. Because of this, we can't replace the element
+        # type here with `zoneConfigs`, since that would set all the attributes
+        # to default values, breaking the parent inheriting function.
+        type = types.attrsOf types.anything;
         default = {};
         description = ''
           Children zones inherit all options of their parents. Attributes
