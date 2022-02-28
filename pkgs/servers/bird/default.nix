@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline libssh ];
 
   patches = [
-    (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
+    ./dont-create-sysconfdir-2.patch
+    (fetchurl {
+      url = "https://gitlab.nic.cz/labs/bird/-/commit/fcb4dd0c831339c4374ace17d8f2ae6ebfeed279.patch";
+      sha256 = "sha256-PEgpRnOGLa1orHJDEHlblnVhBVv7XOKPR70M1wUMxMQ=";
+    })
   ];
 
   CPP="${stdenv.cc.targetPrefix}cpp -E";

@@ -96,7 +96,7 @@ let
     "libpng"
     "libwebp"
     "libxslt"
-    "opus"
+    # "opus"
   ];
 
   opusWithCustomModes = libopus.override {
