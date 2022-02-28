@@ -1,4 +1,4 @@
-{ minor_version, major_version, patch_version
+{ minor_version, major_version, patch_version, patches ? []
 , ...}@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
@@ -6,7 +6,7 @@ let
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips || stdenv.hostPlatform.isStatic);
 in
 
-{ lib, stdenv, fetchurl, ncurses, buildEnv, libunwind
+{ lib, stdenv, fetchurl, ncurses, buildEnv, libunwind, fetchpatch
 , libX11, xorgproto, useX11 ? safeX11 stdenv && !lib.versionAtLeast version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
@@ -35,6 +35,8 @@ let
   x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
+
+  fetchpatch' = x: if builtins.isAttrs x then fetchpatch x else x;
 in
 
 stdenv.mkDerivation (args // {
@@ -43,6 +45,8 @@ stdenv.mkDerivation (args // {
   inherit version;
 
   inherit src;
+
+  patches = map fetchpatch' patches;
 
   strictDeps = true;
 

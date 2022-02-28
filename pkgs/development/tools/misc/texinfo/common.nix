@@ -1,4 +1,4 @@
-{ version, sha256 }:
+{ version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, gettext
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = optional crossBuildTools ./cross-tools-flags.patch;
+  patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch

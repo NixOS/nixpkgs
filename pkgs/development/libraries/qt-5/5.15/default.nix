@@ -56,7 +56,13 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = lib.optionals stdenv.isDarwin [
+    qtwebengine = [
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-SIGSTKSZ.patch";
+        sha256 = "sha256-1zS7nvbe5ZVuW/wSNOUBc2Qz0aB483Kfnz1JbzKEI+M=";
+      })
+    ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
     ];

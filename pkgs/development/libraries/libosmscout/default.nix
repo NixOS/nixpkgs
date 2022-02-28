@@ -11,6 +11,8 @@ mkDerivation rec {
     sha256 = "1pa459h52kw88mvsdvkz83f4p35vvgsfy2qfjwcj61gj4y9d2rq4";
   };
 
+  cmakeFlags = [ "-DOSMSCOUT_BUILD_TESTS=OFF" ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ marisa qtlocation ];
 

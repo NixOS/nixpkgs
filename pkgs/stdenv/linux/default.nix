@@ -230,7 +230,7 @@ in
     overrides = self: super: {
       inherit (prevStage)
         ccWrapperStdenv
-        gcc-unwrapped coreutils gnugrep
+        coreutils gnugrep
         perl gnum4 bison;
       dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
 
