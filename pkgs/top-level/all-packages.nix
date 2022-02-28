@@ -26625,6 +26625,10 @@ with pkgs;
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  LibreArp = callPackage ../applications/audio/LibreArp { };
+
+  LibreArp-lv2 = callPackage ../applications/audio/LibreArp/lv2.nix { };
+
   librespot = callPackage ../applications/audio/librespot {
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
