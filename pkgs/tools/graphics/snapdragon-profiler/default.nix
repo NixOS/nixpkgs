@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "snapdragon-profiler";
-  version = "v2021.2";
+  version = "2021.2";
 
   src = archive;
 
