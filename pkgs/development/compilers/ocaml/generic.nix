@@ -78,7 +78,18 @@ stdenv.mkDerivation (args // {
   hardeningDisable = lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
     ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
-  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
+  # Older versions have some race:
+  #  cp: cannot stat 'boot/ocamlrun': No such file or directory
+  #  make[2]: *** [Makefile:199: backup] Error 1
+  enableParallelBuilding = lib.versionAtLeast version "4.08";
+
+  # Workaround lack of parallelism support among top-level targets:
+  # we place nixpkgs-specific targets to a separate file and set
+  # sequential order among them as a single rule.
+  makefile = ./Makefile.nixpkgs;
+  buildFlags = if useNativeCompilers
+    then ["nixpkgs_world_bootstrap_world_opt"]
+    else ["nixpkgs_world"];
   buildInputs = optional (!lib.versionAtLeast version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
   propagatedBuildInputs = optional spaceTimeSupport libunwind;
