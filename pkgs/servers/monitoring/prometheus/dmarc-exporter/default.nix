@@ -7,6 +7,14 @@ let
       poetry2nix.defaultPoetryOverrides
       (import ./poetry-git-overlay.nix { inherit pkgs; })
       (self: super: {
+        dmarc-metrics-exporter = super.dmarc-metrics-exporter.overridePythonAttrs ({ meta ? {}, ... }: {
+          meta = with lib; meta // {
+            license = licenses.mit;
+            homepage = "https://github.com/jgosmann/dmarc-metrics-exporter/";
+            description = " Export Prometheus metrics from DMARC reports";
+            maintainers = with maintainers; [ ma27 ];
+          };
+        });
         more-properties = super.more-properties.overridePythonAttrs (old: {
           src = pkgs.fetchFromGitHub {
             owner = "madman-bob";
@@ -42,7 +50,9 @@ let
   env = python.withPackages (p: [ p.dmarc-metrics-exporter ]);
 in
 
-pkgs.writeShellScriptBin "prometheus-dmarc-exporter" ''
+(pkgs.writeShellScriptBin "prometheus-dmarc-exporter" ''
   export PYTHONPATH="${env}/lib/${env.libPrefix}/site-packages''${PYTHONPATH:+:}''${PYTHONPATH}"
   exec ${env}/bin/python3 -m dmarc_metrics_exporter "$@"
-''
+'') // {
+  inherit (python.pkgs.dmarc-metrics-exporter) meta;
+}
