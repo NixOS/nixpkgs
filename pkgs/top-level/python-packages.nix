@@ -10072,6 +10072,8 @@ in {
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
+  skyfield = callPackage ../development/python-modules/skyfield { };
+
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
   skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
