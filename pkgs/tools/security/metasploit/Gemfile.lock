@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: aab66244adaadb275bd780c1301fea51f444426a
-  ref: refs/tags/6.1.30
+  revision: 2bed5461f9e43e2608a90c3331045b62e8dba26a
+  ref: refs/tags/6.1.31
   specs:
-    metasploit-framework (6.1.30)
+    metasploit-framework (6.1.31)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -31,7 +31,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.74)
+      metasploit-payloads (= 2.0.75)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.18)
       mqtt
@@ -128,23 +128,23 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.555.0)
-    aws-sdk-core (3.126.2)
+    aws-partitions (1.559.0)
+    aws-sdk-core (3.127.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.299.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-ec2 (1.300.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.67.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-iam (1.68.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.54.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-kms (1.55.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.112.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-s3 (1.113.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -251,7 +251,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.74)
+    metasploit-payloads (2.0.75)
     metasploit_data_models (5.0.4)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -264,7 +264,7 @@ GEM
       webrick
     metasploit_payloads-mettle (1.0.18)
     method_source (1.0.0)
-    mini_portile2 (2.7.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     mqtt (0.5.0)
     msgpack (1.4.5)
@@ -278,8 +278,8 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.13.1)
-      mini_portile2 (~> 2.7.0)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
     octokit (4.22.0)
@@ -292,13 +292,13 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.13.1)
-    pdf-reader (2.9.1)
+    pdf-reader (2.9.2)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.3.2)
+    pg (1.3.3)
     public_suffix (4.0.6)
     puma (5.6.2)
       nio4r (~> 2.0)

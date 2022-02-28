@@ -7904,12 +7904,6 @@
     github = "kira-bruneau";
     githubId = 382041;
   };
-  meutraa = {
-    email = "paul+nixpkgs@lost.host";
-    name = "Paul Meredith";
-    github = "meutraa";
-    githubId = 68550871;
-  };
   mephistophiles = {
     email = "mussitantesmortem@gmail.com";
     name = "Maxim Zhukov";
