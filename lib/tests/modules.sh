@@ -309,6 +309,12 @@ checkConfigOutput "10" config.processedToplevel ./raw.nix
 checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
 checkConfigOutput "bar" config.priorities ./raw.nix
 
+## Option collision
+checkConfigError \
+  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integers. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
+  config.set \
+  ./declare-set.nix ./declare-enable-nested.nix
+
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
 checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix

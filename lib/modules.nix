@@ -9,6 +9,7 @@ let
     catAttrs
     concatLists
     concatMap
+    concatStringsSep
     elem
     filter
     findFirst
@@ -46,6 +47,20 @@ let
     showOption
     unknownModule
     ;
+
+  showDeclPrefix = loc: decl: prefix:
+    " - option(s) with prefix `${showOption (loc ++ [prefix])}' in module `${decl._file}'";
+  showRawDecls = loc: decls:
+    concatStringsSep "\n"
+      (sort (a: b: a < b)
+        (concatMap
+          (decl: map
+            (showDeclPrefix loc decl)
+            (attrNames decl.options)
+          )
+          decls
+      ));
+
 in
 
 rec {
@@ -500,7 +515,7 @@ rec {
               unmatchedDefns = [];
             }
           else if optionDecls != [] then
-              if (lib.head optionDecls).options.type.name == "submodule"
+              if all (x: x.options.type.name == "submodule") optionDecls
               # Raw options can only be merged into submodules. Merging into
               # attrsets might be nice, but ambiguous. Suppose we have
               # attrset as a `attrsOf submodule`. User declares option
@@ -509,7 +524,7 @@ rec {
               #  b. option `foo.bar` is available in all `attrset.*`
               #  c. reject and require "<name>" as a reminder that it behaves like (b).
               #  d. magically combine (a) and (c).
-              # All options are merely syntax sugar though.
+              # All of the above are merely syntax sugar though.
               then
                 let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
                 in {
@@ -519,8 +534,11 @@ rec {
               else
                 let
                   firstNonOption = findFirst (m: !isOption m.options) "" decls;
+                  nonOptions = filter (m: !isOption m.options) decls;
                 in
-                throw "The option `${showOption loc}' in `${(lib.head optionDecls)._file}' is a prefix of options in `${firstNonOption._file}'."
+                throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
+                  showRawDecls loc nonOptions
+                }"
           else
             mergeModules' loc decls defns) declsByName;
 
