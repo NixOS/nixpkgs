@@ -140,6 +140,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     deployer = callPackage ../development/php-packages/deployer { };
 
+    phing = callPackage ../development/php-packages/phing { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };

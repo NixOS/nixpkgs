@@ -150,7 +150,8 @@ rec {
         rm '${output}'
       fi
 
-      inherit_errexit_restore=$(shopt -p inherit_errexit)
+      inherit_errexit_enabled=0
+      shopt -pq inherit_errexit && inherit_errexit_enabled=1
       shopt -s inherit_errexit
     ''
     + concatStringsSep
@@ -170,7 +171,7 @@ rec {
       ' <<'EOF'
       ${builtins.toJSON set}
       EOF
-      $inherit_errexit_restore
+      (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
     '';
 
   systemdUtils = {

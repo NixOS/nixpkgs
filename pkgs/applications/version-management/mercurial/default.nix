@@ -180,7 +180,7 @@ in
         buildInputs = self.buildInputs ++ self.propagatedBuildInputs;
         nativeBuildInputs = self.nativeBuildInputs;
 
-        phases = [ "installPhase" "installCheckPhase" ];
+        dontUnpack = true;
 
         installPhase = ''
           runHook preInstall

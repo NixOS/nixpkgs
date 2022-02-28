@@ -1879,8 +1879,8 @@ let
         mktplcRef = {
           publisher = "takayama";
           name = "vscode-qq";
-          version = "1.4.0";
-          sha256 = "sha256-DYjNWSKOrDYvdiV7G24uKz6w4ggeYUMkQIiOGZAbMSI=";
+          version = "1.4.2";
+          sha256 = "sha256-koeiFXUFI/i8EGCRDTym62m7JER18J9MKZpbAozr0Ng=";
         };
         meta = {
           license = lib.licenses.mpl20;

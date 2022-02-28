@@ -6618,13 +6618,15 @@ with pkgs;
   };
 
   inherit (callPackages ../tools/filesystems/irods rec {
-            stdenv = llvmPackages.libcxxStdenv;
-            libcxx = llvmPackages.libcxx;
-            boost = boost160.override { inherit stdenv; };
-            avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
-          })
-      irods
-      irods-icommands;
+    stdenv = llvmPackages.libcxxStdenv;
+    libcxx = llvmPackages.libcxx;
+    boost = boost17x.override { inherit stdenv; };
+    fmt = fmt_8.override { inherit stdenv; };
+    nanodbc_llvm = nanodbc.override { inherit stdenv; };
+    avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
+  })
+    irods
+    irods-icommands;
 
   ignite = callPackage ../applications/virtualization/ignite { };
 
@@ -26879,8 +26881,6 @@ with pkgs;
 
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
-  ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
-
   kubedb-cli = callPackage ../applications/networking/cluster/kubedb-cli { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
@@ -28915,8 +28915,6 @@ with pkgs;
 
   sipp = callPackage ../development/tools/misc/sipp { };
 
-  skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
-
   soci = callPackage ../development/libraries/soci { };
 
   socialscan = with python3.pkgs; toPythonApplication socialscan;
@@ -29141,7 +29139,7 @@ with pkgs;
   taskopen = callPackage ../applications/misc/taskopen { };
 
   tdesktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
-    inherit (xorg) libpthreadstubs libXdmcp;
+    abseil-cpp = abseil-cpp_202111;
   };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
