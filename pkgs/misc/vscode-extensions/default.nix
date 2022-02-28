@@ -297,6 +297,18 @@ let
         };
       };
 
+      bierner.emojisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "emojisense";
+          publisher = "bierner";
+          version = "0.9.0";
+          sha256 = "0gpcpwh57lqlynsrkv3smykndb46xjh7r85lb291wdklq5ahmb2j";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bodil.file-browser = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "file-browser";
