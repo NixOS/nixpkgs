@@ -527,7 +527,7 @@ rec {
               #  d. magically combine (a) and (c).
               # All of the above are merely syntax sugar though.
               then
-                let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
+                let opt = mergeOptionDecls loc (map optionTreeToOption decls);
                 in {
                   matchedOptions = evalOptionValue loc opt defns';
                   unmatchedDefns = [];
