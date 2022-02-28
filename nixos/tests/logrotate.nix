@@ -1,5 +1,14 @@
 # Test logrotate service works and is enabled by default
 
+let
+  importTest = { ... }: {
+    services.logrotate.settings.import = {
+      olddir = false;
+    };
+  };
+
+in
+
 import ./make-test-python.nix ({ pkgs, ... }: rec {
   name = "logrotate";
   meta = with pkgs.lib.maintainers; {
@@ -9,10 +18,59 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
   nodes = {
     defaultMachine = { ... }: { };
     machine = { config, ... }: {
-      services.logrotate.paths = {
+      imports = [ importTest ];
+
+      services.logrotate.settings = {
+        # remove default frequency header and add another
+        header = {
+          frequency = null;
+          delaycompress = true;
+        };
+        # extra global setting... affecting nothing
+        last_line = {
+          global = true;
+          priority = 2000;
+          shred = true;
+        };
         # using mail somewhere should add --mail to logrotate invokation
         sendmail = {
-          extraConfig = "mail user@domain.tld";
+          mail = "user@domain.tld";
+        };
+        # postrotate should be suffixed by 'endscript'
+        postrotate = {
+          postrotate = "touch /dev/null";
+        };
+        # multiple paths should be aggregated
+        multipath = {
+          files = [ "file1" "file2" ];
+        };
+        # overriding imported path should keep existing attributes
+        # (e.g. olddir is still set)
+        import = {
+          notifempty = true;
+        };
+      };
+      # extraConfig compatibility - should be added to top level, early.
+      services.logrotate.extraConfig = ''
+        nomail
+      '';
+      # paths compatibility
+      services.logrotate.paths = {
+        compat_path = {
+          path = "compat_test_path";
+        };
+        # user/group should be grouped as 'su user group'
+        compat_user = {
+          user = config.users.users.root.name;
+          group = "root";
+        };
+        # extraConfig in path should be added to block
+        compat_extraConfig = {
+          extraConfig = "dateext";
+        };
+        # keep -> rotate
+        compat_keep = {
+          keep = 1;
         };
       };
     };
@@ -44,5 +102,23 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
           defaultMachine.fail("systemctl cat logrotate.service | grep -- --mail")
       with subtest("using mails adds mail option"):
           machine.succeed("systemctl cat logrotate.service | grep -- --mail")
+      with subtest("check generated config matches expectation"):
+          machine.succeed(
+              # copy conf to /tmp/logrotate.conf for easy grep
+              "conf=$(systemctl cat logrotate | grep -oE '/nix/store[^ ]*logrotate.conf'); cp $conf /tmp/logrotate.conf",
+              "! grep weekly /tmp/logrotate.conf",
+              "grep -E '^delaycompress' /tmp/logrotate.conf",
+              "tail -n 1 /tmp/logrotate.conf | grep shred",
+              "sed -ne '/\"sendmail\" {/,/}/p' /tmp/logrotate.conf | grep 'mail user@domain.tld'",
+              "sed -ne '/\"postrotate\" {/,/}/p' /tmp/logrotate.conf | grep endscript",
+              "grep '\"file1\"\n\"file2\" {' /tmp/logrotate.conf",
+              "sed -ne '/\"import\" {/,/}/p' /tmp/logrotate.conf | grep noolddir",
+              "sed -ne '1,/^\"/p' /tmp/logrotate.conf | grep nomail",
+              "grep '\"compat_test_path\" {' /tmp/logrotate.conf",
+              "sed -ne '/\"compat_user\" {/,/}/p' /tmp/logrotate.conf | grep 'su root root'",
+              "sed -ne '/\"compat_extraConfig\" {/,/}/p' /tmp/logrotate.conf | grep dateext",
+              "[[ $(sed -ne '/\"compat_keep\" {/,/}/p' /tmp/logrotate.conf | grep -w rotate) = \"  rotate 1\" ]]",
+              "! sed -ne '/\"compat_keep\" {/,/}/p' /tmp/logrotate.conf | grep -w keep",
+          )
     '';
 })
