@@ -18802,6 +18802,8 @@ with pkgs;
 
   libvori = callPackage ../development/libraries/libvori { };
 
+  libwbxml = callPackage ../development/libraries/libwbxml { };
+
   libwebcam = callPackage ../os-specific/linux/libwebcam { };
 
   libwebp = callPackage ../development/libraries/libwebp { };
