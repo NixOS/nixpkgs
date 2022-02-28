@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, libffi, coreutils }:
+{ lib, stdenv, fetchurl, libffi, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "txr";
@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bWgz0kmPLN0V0rkFRiCqxkBjhN8FV9fL+Vu8GSw9Ja4=";
   };
 
-  nativeBuildInputs = [ bison flex ];
   buildInputs = [ libffi ];
 
   enableParallelBuilding = true;
