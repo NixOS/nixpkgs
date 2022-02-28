@@ -49,10 +49,10 @@
       elpaBuild {
         pname = "annotate";
         ename = "annotate";
-        version = "1.5.0";
+        version = "1.5.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/annotate-1.5.0.tar";
-          sha256 = "0ba91yy2id5jsl9bg8cfjm2sqbqp9jwwdikwkdj5v6xz6ggh134b";
+          url = "https://elpa.nongnu.org/nongnu/annotate-1.5.1.tar";
+          sha256 = "13xf8izl99y1aqwk9k9hgiwggibjycjh2lhwg0wk5hm7zp6gm8mx";
         };
         packageRequires = [];
         meta = {
@@ -2210,10 +2210,10 @@
       elpaBuild {
         pname = "web-mode";
         ename = "web-mode";
-        version = "17.0.4";
+        version = "17.1.4";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/web-mode-17.0.4.tar";
-          sha256 = "0ji40fcw3y2n4dw0cklbvsybv04wmfqfnqnykgp05aai388rp3j1";
+          url = "https://elpa.nongnu.org/nongnu/web-mode-17.1.4.tar";
+          sha256 = "0863p8ikc8yqw0dahswi5s9q7v7rg1hasdxz5jwkd796fh1ih78n";
         };
         packageRequires = [ emacs ];
         meta = {
