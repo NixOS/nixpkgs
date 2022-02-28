@@ -3667,6 +3667,8 @@ with pkgs;
 
   precice = callPackage ../development/libraries/precice { };
 
+  precice-config-visualizer = callPackage ../tools/misc/precice-config-visualizer { };
+
   pueue = callPackage ../applications/misc/pueue {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
