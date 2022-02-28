@@ -6080,6 +6080,8 @@ in {
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 
+  pyprecice = callPackage ../development/python-modules/pyprecice { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
