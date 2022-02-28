@@ -4069,7 +4069,7 @@ with pkgs;
 
   davix = callPackage ../tools/networking/davix { };
 
-  davix-copy = appendToName "copy" (davix.override { enableThirdPartyCopy = true; });
+  davix-copy = davix.override { enableThirdPartyCopy = true; };
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
@@ -5681,8 +5681,7 @@ with pkgs;
   };
   gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix {};
 
-  gawkInteractive = appendToName "interactive"
-    (gawk.override { interactive = true; });
+  gawkInteractive = gawk.override { interactive = true; };
 
   gawp = callPackage ../tools/misc/gawp { };
 
@@ -8085,9 +8084,9 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
-  netcdf-mpi = appendToName "mpi" (netcdf.override {
+  netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
-  });
+  };
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
@@ -15756,9 +15755,7 @@ with pkgs;
   texinfo6_7 = callPackage ../development/tools/misc/texinfo/6.7.nix { }; # needed for gpm, iksemel and fwknop
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
   texinfo = texinfo6;
-  texinfoInteractive = appendToName "interactive" (
-    texinfo.override { interactive = true; }
-  );
+  texinfoInteractive = texinfo.override { interactive = true; };
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
@@ -17276,9 +17273,7 @@ with pkgs;
 
   highfive = callPackage ../development/libraries/highfive { };
 
-  highfive-mpi = appendToName "mpi" (highfive.override {
-    hdf5 = hdf5-mpi;
-  });
+  highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hiredis = callPackage ../development/libraries/hiredis { };
 
@@ -20160,7 +20155,7 @@ with pkgs;
 
   sqlitecpp = callPackage ../development/libraries/sqlitecpp { };
 
-  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
+  sqlite-interactive = (sqlite.override { interactive = true; }).bin;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
 
@@ -27316,7 +27311,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  mercurialFull = appendToName "full" (mercurial.override { fullBuild = true; });
+  mercurialFull = mercurial.override { fullBuild = true; };
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
@@ -31818,12 +31813,12 @@ with pkgs;
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
   openlp = libsForQt5.callPackage ../applications/misc/openlp { };
-  openlpFull = appendToName "full" (openlp.override {
+  openlpFull = openlp.override {
     pdfSupport = true;
     presentationSupport = true;
     vlcSupport = true;
     gstreamerSupport = true;
-  });
+  };
 
   dkh = callPackage ../applications/science/chemistry/dkh { };
 
@@ -31975,13 +31970,9 @@ with pkgs;
 
   n3 = callPackage ../applications/science/biology/N3 { };
 
-  neuron = callPackage ../applications/science/biology/neuron {
-    python = null;
-  };
+  neuron = callPackage ../applications/science/biology/neuron { python = null; };
 
-  neuron-mpi = appendToName "mpi" (neuron.override {
-    useMpi = true;
-  });
+  neuron-mpi = neuron.override {useMpi = true; };
 
   neuron-full = neuron-mpi.override { python = python2; };
 
@@ -32031,9 +32022,7 @@ with pkgs;
 
   raxml = callPackage ../applications/science/biology/raxml { };
 
-  raxml-mpi = appendToName "mpi" (raxml.override {
-    useMpi = true;
-  });
+  raxml-mpi = raxml.override { useMpi = true; };
 
   sambamba = callPackage ../applications/science/biology/sambamba { };
 
@@ -33008,13 +32997,9 @@ with pkgs;
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
-  dblatex = callPackage ../tools/typesetting/tex/dblatex {
-    enableAllFeatures = false;
-  };
+  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
-  dblatexFull = appendToName "full" (dblatex.override {
-    enableAllFeatures = true;
-  });
+  dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
