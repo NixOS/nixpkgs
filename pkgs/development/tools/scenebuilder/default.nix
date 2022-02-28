@@ -64,11 +64,11 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = "Scene Builder";
+    name = "scenebuilder";
     exec = "scenebuilder";
     icon = "scenebuilder";
     comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = pname;
+    desktopName = "Scene Builder";
     mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
     categories = [ "Development" ];
   };
