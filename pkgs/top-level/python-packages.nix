@@ -10183,6 +10183,8 @@ in {
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
+  types-paramiko = callPackage ../development/python-modules/types-paramiko { };
+
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
   types-pytz = callPackage ../development/python-modules/types-pytz { };
