@@ -32123,6 +32123,8 @@ with pkgs;
   lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
   liblapack = lapack-reference;
 
+  libamplsolver = callPackage ../development/libraries/science/math/libamplsolver { };
+
   libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
 
   libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
