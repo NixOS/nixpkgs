@@ -115,6 +115,7 @@ stdenv.mkDerivation (rec {
       larger LLVM Project, such as the Clang expression parser and LLVM
       disassembler.
     '';
+    broken = stdenv.isDarwin; # error: use of undeclared identifier 'CPU_SUBTYPE_ARM64E'
   };
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
