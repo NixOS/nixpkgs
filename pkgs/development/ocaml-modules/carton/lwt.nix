@@ -24,6 +24,8 @@ buildDunePackage {
   doCheck = true;
   nativeCheckInputs = [
     git-binary
+  ];
+  checkInputs = [
     alcotest
     alcotest-lwt
     cstruct

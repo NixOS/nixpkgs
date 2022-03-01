@@ -9,12 +9,12 @@ buildDunePackage rec {
   inherit (mirage-crypto-rng) version src;
 
   doCheck = true;
-  nativeCheckInputs = [ mirage-unix mirage-clock-unix mirage-time-unix ];
+  checkInputs = [ mirage-unix mirage-clock-unix mirage-time-unix ];
 
   propagatedBuildInputs = [ duration cstruct mirage-crypto-rng mirage-runtime
                             mirage-time mirage-clock logs lwt ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   meta = mirage-crypto-rng.meta // {
     description = "Entropy collection for a cryptographically secure PRNG";

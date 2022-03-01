@@ -32,9 +32,10 @@ let common = { version, sha256, patches ? [ ] }:
     nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
     buildInputs = [ python ]
       ++ optional javaBindings jdk
-      ++ optionals ocamlBindings [ ocaml findlib zarith ]
+      ++ optionals ocamlBindings [ ocaml findlib ]
     ;
-    propagatedBuildInputs = [ python.pkgs.setuptools ];
+    propagatedBuildInputs = [ python.pkgs.setuptools ]
+      ++ optionals ocamlBindings [ zarith ];
     enableParallelBuilding = true;
 
     postPatch = optionalString ocamlBindings ''

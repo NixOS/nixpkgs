@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ fmt mirage-device ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "MirageOS signatures for key/value devices";

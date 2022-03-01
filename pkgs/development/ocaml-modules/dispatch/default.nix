@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ result ];
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

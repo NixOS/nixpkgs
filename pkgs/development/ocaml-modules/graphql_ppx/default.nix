@@ -18,7 +18,11 @@ buildDunePackage rec {
     sha256 = "sha256-+WJhA2ixZHiSZBoX14dnQKk7JfVAIME4JooNSnhRp44=";
   };
 
-  buildInputs = [ ppxlib ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ reason ];
+
+  buildInputs = [ ppxlib reason ];
 
   propagatedBuildInputs = [
     reason
@@ -26,7 +30,7 @@ buildDunePackage rec {
     yojson
   ];
 
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

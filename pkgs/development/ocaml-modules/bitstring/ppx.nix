@@ -14,7 +14,7 @@ buildDunePackage rec {
   buildInputs = [ bitstring ppxlib ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  nativeCheckInputs = [ ounit ];
+  checkInputs = [ ounit ];
 
   meta = bitstring.meta // {
     description = "Bitstrings and bitstring matching for OCaml - PPX extension";

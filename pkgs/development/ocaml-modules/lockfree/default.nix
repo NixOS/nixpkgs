@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ dscheck ];
 
   doCheck = true;
-  nativeCheckInputs = [ qcheck qcheck-alcotest ];
+  checkInputs = [ qcheck qcheck-alcotest ];
 
   meta = {
     description = "Lock-free data structures for multicore OCaml";

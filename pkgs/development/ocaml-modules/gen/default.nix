@@ -16,9 +16,12 @@ buildDunePackage rec {
     hash = "sha256-YWoVcl2TQoMIgU1LoKL16ia31zJjwAMwuphtSXnhtvw=";
   };
 
+  strictDeps = true;
+
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ seq ];
   nativeCheckInputs = [ qcheck ounit2 ];
+  checkInputs = [ qcheck ounit2 ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

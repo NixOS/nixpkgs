@@ -9,6 +9,8 @@ buildDunePackage rec {
     sha256 = "sha256-h2u284r3OoSilDij2jXkhXxgoUVWpgZSWxSMb9vlRhs=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [ seq ];
 

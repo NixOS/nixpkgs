@@ -36,7 +36,7 @@ buildDunePackage {
     json-data-encoding-bson
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     crowbar
     ppx_expect

@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, fmt, bigstringaf, angstrom, alcotest }:
+{ lib
+, buildDunePackage
+, fetchurl
+, ocaml
+, fmt
+, bigstringaf
+, angstrom
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "encore";
@@ -15,7 +22,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   propagatedBuildInputs = [ angstrom fmt bigstringaf ];
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
   doCheck = true;
 
   meta = {

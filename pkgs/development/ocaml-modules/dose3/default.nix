@@ -34,11 +34,13 @@ buildDunePackage rec {
   ];
 
   nativeCheckInputs = [
-    dpkg                      # Replaces: conf-dpkg
-    git
-    ounit
     python39                  # Replaces: conf-python-3
     python39Packages.pyyaml   # Replaces: conf-python3-yaml
+    git
+  ];
+  checkInputs = [
+    dpkg                      # Replaces: conf-dpkg
+    ounit
   ];
   doCheck = false; # Tests are failing.
                    # To enable tests use: lib.versionAtLeast ocaml.version "4.04";

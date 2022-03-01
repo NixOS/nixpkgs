@@ -177,7 +177,7 @@ with self;
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [ sexplib0 ];
-    nativeCheckInputs = [ alcotest ];
+    checkInputs = [ alcotest ];
   };
 
   base_bigstring = janePackage {

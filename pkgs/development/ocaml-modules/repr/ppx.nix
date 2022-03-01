@@ -12,7 +12,7 @@ buildDunePackage {
   ];
 
   doCheck = false; # tests fail with ppxlib >= 0.23.0
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     hex
   ];

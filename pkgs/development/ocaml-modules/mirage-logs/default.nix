@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ logs lwt mirage-clock mirage-profile ptime stdlib-shims ];
 
   doCheck = true;
-  nativeCheckInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "A reporter for the Logs library that writes log messages to stderr, using a Mirage `CLOCK` to add timestamps";

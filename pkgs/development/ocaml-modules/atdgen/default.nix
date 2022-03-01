@@ -10,10 +10,10 @@ buildDunePackage {
 
   propagatedBuildInputs = [ atdgen-runtime ];
 
+  strictDeps = true;
   doCheck = true;
-  nativeCheckInputs = [ alcotest atdgen-codec-runtime
-    (python3.withPackages (ps: [ ps.jsonschema ]))
-  ];
+  nativeCheckInputs = [ atd (python3.withPackages (ps: [ ps.jsonschema ]))];
+  checkInputs = [ alcotest atdgen-codec-runtime ];
 
   meta = (builtins.removeAttrs atd.meta [ "mainProgram" ]) // {
     description = "Generates efficient JSON serializers, deserializers and validators";

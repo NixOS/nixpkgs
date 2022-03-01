@@ -15,7 +15,7 @@ buildDunePackage rec {
   };
 
   doCheck = true;
-  nativeCheckInputs = [ ounit2 ];
+  checkInputs = [ ounit2 ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator  ];
@@ -25,7 +25,7 @@ buildDunePackage rec {
     ocaml-freestanding
   ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-crypto";

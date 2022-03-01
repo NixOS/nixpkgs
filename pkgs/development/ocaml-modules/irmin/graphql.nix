@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  nativeCheckInputs = [
+  checkInputs = [
     alcotest
     alcotest-lwt
     logs

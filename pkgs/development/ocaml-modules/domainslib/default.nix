@@ -1,4 +1,6 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , lockfree
 , mirage-clock-unix
 }:
@@ -18,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ lockfree ];
 
   doCheck = true;
-  nativeCheckInputs = [ mirage-clock-unix ];
+  checkInputs = [ mirage-clock-unix ];
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/domainslib";
