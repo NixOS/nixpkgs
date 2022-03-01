@@ -8557,6 +8557,8 @@ in {
 
   radio_beam = callPackage ../development/python-modules/radio_beam { };
 
+  radios = callPackage ../development/python-modules/radios { };
+
   radiotherm = callPackage ../development/python-modules/radiotherm { };
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
