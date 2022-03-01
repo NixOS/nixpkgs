@@ -4214,6 +4214,8 @@ with pkgs;
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
 
+  colord-gtk4 = colord-gtk.override { withGtk4 = true; };
+
   colordiff = callPackage ../tools/text/colordiff { };
 
   connect = callPackage ../tools/networking/connect { };
@@ -8158,6 +8160,8 @@ with pkgs;
   networkmanagerapplet = callPackage ../tools/networking/networkmanager/applet { };
 
   libnma = callPackage ../tools/networking/networkmanager/libnma { };
+
+  libnma-gtk4 = libnma.override { withGtk4 = true; };
 
   networkmanager_dmenu = callPackage ../tools/networking/networkmanager/dmenu  { };
 
@@ -17968,6 +17972,8 @@ with pkgs;
 
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome-keyring3 = gnome.libgnome-keyring;
+
+  libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
 
   libgnomekbd = callPackage ../development/libraries/libgnomekbd { };
 
