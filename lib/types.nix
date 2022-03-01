@@ -562,9 +562,13 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
+        shorthandToModule = if shorthandOnlyDefinesConfig == false
+          then value: value
+          else value: { config = value; };
+
         coerce = unify: value: if isFunction value
           then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
+          else unify (shorthandToModule value);
 
         allModules = defs: imap1 (n: { value, file }:
           if isAttrs value || isFunction value then
