@@ -18,7 +18,7 @@ buildPythonPackage rec {
   
   disabled = pythonOlder "3.6";
 
-src = fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-qtaZs6mgcYeEEdf6KGQNx7c+RP8SqSNyTCZuhTVAq38=";
   };
