@@ -85,13 +85,13 @@ let
         sha512 = "dG76W7ElfLi+fbTjnZVGj+M9e0BIEJmRxU6fHaUQ12bZBe8EJKYb2GV50YWNaP2uJiVQ5+7nXEVj1VN1UQtaEw==";
       };
     };
-    "@azure/ms-rest-js-2.6.0" = {
+    "@azure/ms-rest-js-2.6.1" = {
       name = "_at_azure_slash_ms-rest-js";
       packageName = "@azure/ms-rest-js";
-      version = "2.6.0";
+      version = "2.6.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@azure/ms-rest-js/-/ms-rest-js-2.6.0.tgz";
-        sha512 = "4C5FCtvEzWudblB+h92/TYYPiq7tuElX8icVYToxOdggnYqeec4Se14mjse5miInKtZahiFHdl8lZA/jziEc5g==";
+        url = "https://registry.npmjs.org/@azure/ms-rest-js/-/ms-rest-js-2.6.1.tgz";
+        sha512 = "LLi4jRe/qy5IM8U2CkoDgSZp2OH+MgDe2wePmhz8uY84Svc53EhHaamVyoU6BjjHBxvCRh1vcD1urJDccrxqIw==";
       };
     };
     "@azure/ms-rest-nodeauth-3.1.1" = {
@@ -976,13 +976,13 @@ let
         sha512 = "uUbetCWczQHbsKyX1C99XpQHBM8SWfovvaZhPIj23/1uV7SQf0WeRZbiLpw0JZm+LHTChfNgrLfDJOVoU2kU+A==";
       };
     };
-    "aws-sdk-2.1082.0" = {
+    "aws-sdk-2.1083.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.1082.0";
+      version = "2.1083.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1082.0.tgz";
-        sha512 = "aDrUZ63O/ocuC827ursDqFQAm3jhqsJu1DvMCCFg73y+FK9pXXNHp2mwdi3UeeHvtfxISCLCjuyO3VFd/tpVfA==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1083.0.tgz";
+        sha512 = "o9pOC3LrkJRKLwSumdFrNWzGAVRNPGt4EFS48/917BaFafvnOAzOG/DM8cl5yguz3wT7eylj92I4pP2TE3qZIQ==";
       };
     };
     "aws-sign2-0.7.0" = {
@@ -4504,13 +4504,13 @@ let
         sha512 = "ZMPcOVL/yzsIut7mvHbIx03OxLa2z+jE3CtaZjSyK4tk2NQ8gVc+BOBAasmVCkO4CeJbdDMGDF+ktnUaC4ougw==";
       };
     };
-    "n8n-editor-ui-0.132.0" = {
+    "n8n-editor-ui-0.132.1" = {
       name = "n8n-editor-ui";
       packageName = "n8n-editor-ui";
-      version = "0.132.0";
+      version = "0.132.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-editor-ui/-/n8n-editor-ui-0.132.0.tgz";
-        sha512 = "WOH1Lh+2VYTqBL75pe+WB0H2K8O/6BSW/Wsl5zXbrI0YXmaC9YEvSTAcmjxvjW+oYnYLfQR3p3j6g3AtNldiJQ==";
+        url = "https://registry.npmjs.org/n8n-editor-ui/-/n8n-editor-ui-0.132.1.tgz";
+        sha512 = "Kggz0oSLjmh/kqIkerfTaPqGE+qk8mEK9Vs7ZxgmQ4CdRreELSBBVGZiuZALfDjm//+hUF2VnLU3PWUm6uqfDg==";
       };
     };
     "n8n-nodes-base-0.163.0" = {
@@ -7480,10 +7480,10 @@ in
   n8n = nodeEnv.buildNodePackage {
     name = "n8n";
     packageName = "n8n";
-    version = "0.165.0";
+    version = "0.165.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/n8n/-/n8n-0.165.0.tgz";
-      sha512 = "PYg5cXEeH6YzVZaSDD9yOZbPtTM/yfaohbZjijyyzVmlOBnI6teQsaY+aLqK6ST4LfMfpB0ZkXpaiBj6xE9azA==";
+      url = "https://registry.npmjs.org/n8n/-/n8n-0.165.1.tgz";
+      sha512 = "bezUoR+PGGZIoZ4fV7BfH3C9poVJj0GXBkswsA2nhCSGoE2WExhLFEh8mR1ExDUqCwe9mhVLUEdJHO/RNJAD4g==";
     };
     dependencies = [
       (sources."@azure/abort-controller-1.0.5" // {
@@ -7524,7 +7524,7 @@ in
         ];
       })
       sources."@azure/ms-rest-azure-env-2.0.0"
-      (sources."@azure/ms-rest-js-2.6.0" // {
+      (sources."@azure/ms-rest-js-2.6.1" // {
         dependencies = [
           sources."form-data-2.5.1"
         ];
@@ -7664,7 +7664,7 @@ in
         ];
       })
       sources."avsc-5.7.3"
-      (sources."aws-sdk-2.1082.0" // {
+      (sources."aws-sdk-2.1083.0" // {
         dependencies = [
           sources."buffer-4.9.2"
           sources."events-1.1.1"
@@ -8230,7 +8230,7 @@ in
         ];
       })
       sources."n8n-design-system-0.12.0"
-      sources."n8n-editor-ui-0.132.0"
+      sources."n8n-editor-ui-0.132.1"
       (sources."n8n-nodes-base-0.163.0" // {
         dependencies = [
           sources."iconv-lite-0.6.3"
