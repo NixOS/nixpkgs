@@ -10169,6 +10169,8 @@ in {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-cryptography = callPackage ../development/python-modules/types-cryptography { };
+
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
