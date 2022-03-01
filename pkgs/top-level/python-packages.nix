@@ -10169,6 +10169,8 @@ in {
 
   types-futures = callPackage ../development/python-modules/types-futures { };
 
+  types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
   types-pytz = callPackage ../development/python-modules/types-pytz { };
