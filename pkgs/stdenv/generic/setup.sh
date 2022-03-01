@@ -143,14 +143,14 @@ exitHandler() {
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
             printf "%s" "$exitCode" > "$out/nix-support/failed"
-            exit 0
+            return 0
         fi
 
     else
         runHook exitHook
     fi
 
-    exit "$exitCode"
+    return "$exitCode"
 }
 
 trap "exitHandler" EXIT
