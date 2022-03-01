@@ -48,7 +48,7 @@ do
         sha256=$(nix-prefetch-url "$url" 2>/dev/null)
         cat << EOL
   {
-    name = "$package";
+    pname = "$package";
     version = "$version";
     src = fetchurl {
       url = "$url";
