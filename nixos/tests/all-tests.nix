@@ -189,9 +189,9 @@ in
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
   gvisor = handleTest ./gvisor.nix {};
-  hadoop.all = handleTestOn [ "x86_64-linux" ] ./hadoop/hadoop.nix {};
-  hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
-  hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
+  hadoop.all = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hadoop.nix {};
+  hadoop.hdfs = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hdfs.nix {};
+  hadoop.yarn = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/yarn.nix {};
   haka = handleTest ./haka.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
