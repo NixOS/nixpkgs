@@ -7,20 +7,32 @@
 , grpc-google-iam-v1
 , proto-plus
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
   version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-InkkAtqK5f1oqUK0Nsxc2PYt5JWBlB3ElGVNs5IJV/Q=";
+    hash = "sha256-InkkAtqK5f1oqUK0Nsxc2PYt5JWBlB3ElGVNs5IJV/Q=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core grpc-google-iam-v1 proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    grpc-google-iam-v1
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   # prevent google directory from shadowing google imports
   preCheck = ''
