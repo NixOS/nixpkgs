@@ -9838,6 +9838,8 @@ in {
 
   textile = callPackage ../development/python-modules/textile { };
 
+  textual = callPackage ../development/python-modules/textual { };
+
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
 
   testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
