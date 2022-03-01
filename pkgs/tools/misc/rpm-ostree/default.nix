@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2022.2";
+  version = "2022.3";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wy6zmVy7+31+wadLldWdf/IyT0dyLArYLmGw/Kgd+sU=";
+    sha256 = "sha256-ERDaCLj/qvyzAxmpUfFsCx9fsDjlhQ19PRyUTVZ2Z2w=";
   };
 
   nativeBuildInputs = [
