@@ -4219,6 +4219,8 @@ with pkgs;
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
 
+  colord-gtk4 = colord-gtk.override { withGtk4 = true; };
+
   colordiff = callPackage ../tools/text/colordiff { };
 
   connect = callPackage ../tools/networking/connect { };
@@ -8163,6 +8165,8 @@ with pkgs;
   networkmanagerapplet = callPackage ../tools/networking/networkmanager/applet { };
 
   libnma = callPackage ../tools/networking/networkmanager/libnma { };
+
+  libnma-gtk4 = libnma.override { withGtk4 = true; };
 
   networkmanager_dmenu = callPackage ../tools/networking/networkmanager/dmenu  { };
 
@@ -17984,6 +17988,8 @@ with pkgs;
   libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome-keyring3 = gnome.libgnome-keyring;
 
+  libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
+
   libgnomekbd = callPackage ../development/libraries/libgnomekbd { };
 
   libglvnd = callPackage ../development/libraries/libglvnd { };
@@ -19662,12 +19668,12 @@ with pkgs;
 
   qmake4Hook = qmake48Hook;
 
-  qt48Full = appendToName "full" (qt48.override {
+  qt48Full = qt48.override {
     docs = true;
     demos = true;
     examples = true;
     developerBuild = true;
-  });
+  };
 
   qt512 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.12) {
@@ -32105,6 +32111,8 @@ with pkgs;
   blas-ilp64 = blas.override { isILP64 = true; };
 
   blas-reference = callPackage ../development/libraries/science/math/blas { };
+
+  bonmin = callPackage ../development/libraries/science/math/bonmin { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
 

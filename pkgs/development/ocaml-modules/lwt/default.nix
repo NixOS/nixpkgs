@@ -21,9 +21,9 @@ buildDunePackage rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config cppo ];
+  nativeBuildInputs = [ pkg-config cppo ]
+    ++ optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims;
   buildInputs = [ dune-configurator ]
-    ++ optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims
     ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 

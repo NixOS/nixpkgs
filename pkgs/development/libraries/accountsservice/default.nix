@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , substituteAll
 , pkg-config
 , glib
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "accountsservice";
-  version = "22.07.5";
+  version = "22.08.8";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "IdRJwN6tilQ86o8R5x6wSWwDXXMOpIOTOXowKzpMfBo=";
+    sha256 = "kJmXp2kZ/n3BOKmgHOpwvWItWpMtvJ+xMBARMCOno5E=";
   };
 
   patches = [
@@ -45,15 +44,6 @@ stdenv.mkDerivation rec {
     # Do not ignore third-party (e.g Pantheon) extensions not matching FHS path scheme.
     # Fixes https://github.com/NixOS/nixpkgs/issues/72396
     ./drop-prefix-check-extensions.patch
-
-    # Work around not being able to set profile picture in GNOME Settings.
-    # https://github.com/NixOS/nixpkgs/issues/85357
-    # https://gitlab.freedesktop.org/accountsservice/accountsservice/-/issues/98
-    # https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1629
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/commit/1ef3add46983af875adfed5d29954cbfb184f688.patch";
-      sha256 = "N4siK4SWkwYBnFa0JJUFgahi9XBkB/nS5yc+PyH3/iM=";
-    })
   ];
 
   nativeBuildInputs = [
