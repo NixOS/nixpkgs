@@ -10005,6 +10005,8 @@ in {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
+
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
