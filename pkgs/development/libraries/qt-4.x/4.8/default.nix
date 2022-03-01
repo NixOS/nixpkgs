@@ -20,7 +20,7 @@
 #    false build-time dependencies
 
 stdenv.mkDerivation rec {
-  pname = "qt";
+  pname = "qt" + lib.optionalString ( docs && demos && examples && developerBuild ) "-full";
   version = "4.8.7";
 
   src = fetchurl {
