@@ -9878,6 +9878,8 @@ with pkgs;
 
   smu = callPackage ../tools/text/smu { };
 
+  smug = callPackage ../tools/misc/smug { };
+
   smpq = callPackage ../applications/misc/smpq { };
 
   sn0int = callPackage ../tools/security/sn0int { };
