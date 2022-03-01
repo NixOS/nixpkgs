@@ -4,7 +4,7 @@
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gtksourceview4, gnome
 , steam, xdg-utils, pciutils, cabextract, wineWowPackages
-, freetype, p7zip, gamemode
+, freetype, p7zip, gamemode, mangohud
 , bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
 , bottlesExtraPkgs ? pkgs: [ ] # extra packages to add to steam.run targetPkgs
 }:
@@ -20,8 +20,8 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.2.28-trento-1";
-  sha256 = "tE6YuuZZcs3RKxs1S6OoGt0CXz3oHUi/sopFN0iywds=";
+  version = "2022.3.14-trento-3";
+  sha256 = "0wdqj9l69a9pnray2zcfgl2yw0hmrh23njbgwgqccimch014ckdq";
   # Note: Update via pkgs/applications/misc/bottles/update.py
   # mostly copypasted from pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
@@ -82,6 +82,7 @@ python3Packages.buildPythonApplication rec {
     freetype
     p7zip
     gamemode # programs.gamemode.enable
+    mangohud
   ];
 
   format = "other";
@@ -91,7 +92,9 @@ python3Packages.buildPythonApplication rec {
   preConfigure = ''
     patchShebangs build-aux/meson/postinstall.py
     substituteInPlace src/backend/wine/winecommand.py \
-      --replace '= f"{Paths.runners}' '= f"${steam-run}/bin/steam-run {Paths.runners}'
+      --replace \
+        'self.__get_runner()' \
+        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
   '';
 
   preFixup = ''
