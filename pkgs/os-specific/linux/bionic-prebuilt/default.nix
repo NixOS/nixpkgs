@@ -1,4 +1,6 @@
-{ stdenvNoCC, lib, fetchzip, pkgs
+{ stdenv, stdenvNoCC, lib, fetchzip, pkgs
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 let
 
@@ -92,10 +94,17 @@ stdenvNoCC.mkDerivation rec {
     cp -v ${prebuilt_crt.out}/*.o $out/lib/
     cp -v ${prebuilt_crt.out}/libgcc.a $out/lib/
     cp -v ${prebuilt_ndk_crt.out}/*.o $out/lib/
+  '' + lib.optionalString enableShared ''
     for i in libc.so libm.so libdl.so liblog.so; do
       cp -v ${prebuilt_libs.out}/$i $out/lib/
     done
-
+  '' + lib.optionalString enableStatic ''
+    # no liblog.a; while it's also part of the base libraries,
+    # it's only available as shared object in the prebuilts.
+    for i in libc.a libm.a libdl.a; do
+      cp -v ${prebuilt_ndk_crt.out}/$i $out/lib/
+    done
+  '' + ''
     mkdir -p $dev/include
     cp -v $out/include/*.h $dev/include/
   '';
