@@ -67,15 +67,6 @@ let
     #   expected: anything else
     # waiting for child to reap grandchild...
     "spawn"
-    # TODO: reenable after https://public-inbox.org/meta/20211208010730.f47xxgzj53nwgvja@sourcephile.fr/T/#m38685d23bd686442d91a4890bac3c018d427b96b
-    # has been merged
-    "lei-sigpipe"
-    # Fails at least when TMPDIR is on ZFS
-    "lei_to_mail"
-    # Disabled after 1.7.0
-    # https://public-inbox.org/public-inbox.git/commit/?id=7cb1f806dfa0173fb689048c56a755cb3874dcaf
-    "lei-watch"
-    "lei-auto-watch"
   ];
 
   testConditions = with lib;
@@ -85,11 +76,11 @@ in
 
 buildPerlPackage rec {
   pname = "public-inbox";
-  version = "1.7.0";
+  version = "unstable-2022-04-05";
 
   src = fetchurl {
-    url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
-    sha256 = "sha256-hQSpmAFFVuPmXZvc7q6yP5Zhl86oar83OLYFn+42yMk=";
+    url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-961690bae47c90a4a6960952587c6f4463fb4b19.tar.gz";
+    sha256 = "sha256-dvo+0kCZZQlXudtWyv8Npf3KhSC8pg95CmP7fMFqgww=";
   };
 
   outputs = [ "out" "devdoc" "sa_config" ];
@@ -124,6 +115,7 @@ buildPerlPackage rec {
     man
   ];
 
+  doCheck = !stdenv.isDarwin;
   checkInputs = [
     MailIMAPClient
     curl
@@ -137,6 +129,7 @@ buildPerlPackage rec {
   ];
   preCheck = ''
     perl certs/create-certs.perl
+    export TEST_LEI_ERR_LOUD=1
     export HOME="$NIX_BUILD_TOP"/home
     mkdir -p "$HOME"/.cache/public-inbox/inline-c
   '';
