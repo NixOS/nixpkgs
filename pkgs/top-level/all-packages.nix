@@ -23333,11 +23333,11 @@ with pkgs;
 
   util-linuxCurses = util-linux;
 
-  util-linuxMinimal = if stdenv.isLinux then appendToName "minimal" (util-linux.override {
+  util-linuxMinimal = if stdenv.isLinux then util-linux.override {
     nlsSupport = false;
     ncurses = null;
     systemd = null;
-  }) else util-linux;
+  } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
