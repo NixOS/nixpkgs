@@ -37,14 +37,14 @@ assert withWebKit -> webkitgtk != null;
 assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK31: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
-  version = "3.1.4";
+  version = "3.1.5";
   pname = "wxwidgets";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    sha256 = "1fwzrk6w5k0vs8kqdq5lpzdbp5c09hx740wg6mi6vgmc1r67dv67";
+    sha256 = "sha256-2zMvcva0GUDmSYK0Wk3/2Y6R3F7MgdqGBrOhmWgVA6g=";
     fetchSubmodules = true;
   };
 
@@ -65,15 +65,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
-
-  patches = [
-    (fetchurl {
-      # https://trac.wxwidgets.org/ticket/17942
-      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
-        + "fix_assertion_using_hide_in_destroy.diff";
-      sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
-    })
-  ];
 
   configureFlags =
     [
