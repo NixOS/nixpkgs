@@ -162,6 +162,7 @@ mapAliases ({
   clang10Stdenv = lowPrio llvmPackages_10.stdenv;
   clang11Stdenv = lowPrio llvmPackages_11.stdenv;
   clang12Stdenv = lowPrio llvmPackages_12.stdenv;
+  clang13Stdenv = lowPrio llvmPackages_13.stdenv;
 
   clangAnalyzer = throw "'clangAnalyzer' has been renamed to/replaced by 'clang-analyzer'"; # Converted to throw 2022-02-22
   claws-mail-gtk2 = throw "claws-mail-gtk2 was removed to get rid of Python 2, please use claws-mail"; # Added 2021-12-05
