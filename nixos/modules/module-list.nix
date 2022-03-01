@@ -809,6 +809,7 @@
   ./services/networking/monero.nix
   ./services/networking/morty.nix
   ./services/networking/miredo.nix
+  ./services/networking/misskey.nix
   ./services/networking/mstpd.nix
   ./services/networking/mtprotoproxy.nix
   ./services/networking/mtr-exporter.nix
