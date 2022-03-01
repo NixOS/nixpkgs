@@ -1928,6 +1928,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/emodeline/";
   };
 
+  everforest = buildVimPluginFrom2Nix {
+    pname = "everforest";
+    version = "2022-02-20";
+    src = fetchFromGitHub {
+      owner = "sainnhe";
+      repo = "everforest";
+      rev = "7c5e520962a57f7cd42bb0b9eab268795375d26e";
+      sha256 = "IBDWDvSpUHHgE2zslYfvznHyQmisbRZsF0D80YqcKto=";
+    };
+    meta.homepage = "https://github.com/sainnhe/everforest/";
+  };
+
   falcon = buildVimPluginFrom2Nix {
     pname = "falcon";
     version = "2021-12-19";
