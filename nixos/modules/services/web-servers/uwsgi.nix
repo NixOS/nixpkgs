@@ -20,10 +20,11 @@ let
 
   buildCfg = name: c:
     let
-      plugins =
+      plugins' =
         if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
         then throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
         else c.plugins or cfg.plugins;
+      plugins = unique plugins';
 
       hasPython = v: filter (n: n == "python${v}") plugins != [];
       hasPython2 = hasPython "2";
@@ -48,13 +49,10 @@ let
                 pyhome = "${pythonEnv}";
                 env =
                   # Argh, uwsgi expects list of key-values there instead of a dictionary.
-                  let env' = c.env or [];
-                      getPath =
-                        x: if hasPrefix "PATH=" x
-                           then substring (stringLength "PATH=") (stringLength x) x
-                           else null;
-                      oldPaths = filter (x: x != null) (map getPath env');
-                  in env' ++ [ "PATH=${optionalString (oldPaths != []) "${last oldPaths}:"}${pythonEnv}/bin" ];
+                  let envs = partition (hasPrefix "PATH=") (c.env or []);
+                      oldPaths = map (x: substring (stringLength "PATH=") (stringLength x) x) envs.right;
+                      paths = oldPaths ++ [ "${pythonEnv}/bin" ];
+                  in [ "PATH=${concatStringsSep ":" paths}" ] ++ envs.wrong;
               }
           else if isEmperor
             then {
@@ -225,7 +223,7 @@ in {
     };
 
     services.uwsgi.package = pkgs.uwsgi.override {
-      inherit (cfg) plugins;
+      plugins = unique cfg.plugins;
     };
   };
 }
