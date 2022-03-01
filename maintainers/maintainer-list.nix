@@ -12810,9 +12810,9 @@
     githubId = 5837359;
     name = "Adrian Pistol";
   };
-  vika_nezrimaya = {
+  vikanezrimaya = {
     email = "vika@fireburn.ru";
-    github = "kisik21";
+    github = "vikanezrimaya";
     githubId = 7953163;
     name = "Vika Shleina";
     keys = [{
