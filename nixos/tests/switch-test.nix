@@ -283,6 +283,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           systemd.services.test-watch = {
             serviceConfig = {
               Type = "oneshot";
+              RemainAfterExit = true;
               ExecStart = "${pkgs.coreutils}/bin/touch /testpath-modified";
             };
           };
@@ -723,6 +724,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.succeed("touch /testpath")
         machine.wait_until_succeeds("test -f /testpath-modified")
         machine.succeed("rm /testpath /testpath-modified")
+        machine.systemctl("stop test-watch.service")
         switch_to_specialisation("${machine}", "pathModified")
         machine.succeed("touch /testpath")
         machine.fail("test -f /testpath-modified")

@@ -47,14 +47,26 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.7.1";
+    version = "1.9.1";
   };
 
   vsix = fetchurl {
-    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
-    url = "https://github.com/microsoft/vscode-cpptools/releases/download/${mktplcRef.version}/cpptools-linux.vsix";
-    sha256 = "sha256-LqndG/vv8LgVPEX6dGkikDB6M6ISneo2UJ78izXVFbk=";
+    name = "${mktplcRef.publisher}-${mktplcRef.name}.gz";
+    url = "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${mktplcRef.publisher}/vsextensions/${mktplcRef.name}/${mktplcRef.version}/vspackage?targetPlatform=linux-x64";
+    sha256 = "sha256-BtTl9DR8hnwNpO5k99M4dtqcTQ2hTzVbjR8VZh+tdDI=";
   };
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    gzip -d $src --stdout &> temporary.zip
+    unzip temporary.zip
+    rm temporary.zip
+
+    cd extension/
+
+    runHook postUnpack
+  '';
 
   buildInputs = [
     jq

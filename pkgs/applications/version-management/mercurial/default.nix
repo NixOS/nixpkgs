@@ -20,7 +20,7 @@ let
   inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
 
   self = python3Packages.buildPythonApplication rec {
-    pname = "mercurial";
+    pname = "mercurial${lib.optionalString fullBuild "-full"}";
     version = "6.0.3";
 
     src = fetchurl {
@@ -34,9 +34,9 @@ let
 
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
-      name = "${pname}-${version}";
+      name = "mercurial-${version}";
       sha256 = "sha256-i4WROxezeqLX4hTdcPrqsf6dBqsNZz6fFAPzItYuklE=";
-      sourceRoot = "${pname}-${version}/rust";
+      sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
@@ -180,7 +180,7 @@ in
         buildInputs = self.buildInputs ++ self.propagatedBuildInputs;
         nativeBuildInputs = self.nativeBuildInputs;
 
-        phases = [ "installPhase" "installCheckPhase" ];
+        dontUnpack = true;
 
         installPhase = ''
           runHook preInstall

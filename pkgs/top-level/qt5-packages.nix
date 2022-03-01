@@ -116,8 +116,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
-  libktorrent = callPackage ../development/libraries/libktorrent { };
-
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
