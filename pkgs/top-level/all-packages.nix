@@ -32279,6 +32279,7 @@ with pkgs;
     singlePrec = true;
     enableMpi = true;
     enableCuda = true;
+    cudatoolkit = cudatoolkit_11;
     fftw = fftwSinglePrec;
   });
 
