@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.287.1";
+  version = "2.288.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-4SPrtX3j8blWTYnSkD2Z7IecZvI4xdAqHRJ1lBM0aAo=";
+    hash = "sha256-vl8p+isoK+yczmsMO2YjnmJQW/k0jLgCUbhQa/wG650=";
   };
 
   nativeBuildInputs = [
@@ -184,6 +184,11 @@ stdenv.mkDerivation rec {
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
     ]
     ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+      "RunnerLayoutParts_CheckExternalsHash"
+      "RunnerLayoutParts_CheckDotnetRuntimeHash"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
