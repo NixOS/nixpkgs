@@ -566,14 +566,14 @@ rec {
           then value: value
           else value: { config = value; };
 
-        coerce = unify: value: if isFunction value
-          then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (shorthandToModule value);
-
         allModules = defs: imap1 (n: { value, file }:
-          if isAttrs value || isFunction value then
-            # Annotate the value with the location of its definition for better error messages
-            coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+          if isFunction value
+          then setFunctionArgs
+                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (value args))
+                (functionArgs value)
+          else if isAttrs value
+          then
+            lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (shorthandToModule value)
           else value
         ) defs;
 
