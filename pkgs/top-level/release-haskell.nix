@@ -296,6 +296,7 @@ let
                 hello
                 lens
                 random
+                QuickCheck
               ;
             };
 
@@ -304,6 +305,7 @@ let
                 hello
                 lens
                 random
+                QuickCheck
               ;
             };
           };
