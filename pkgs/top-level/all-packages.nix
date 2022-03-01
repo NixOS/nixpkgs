@@ -19653,12 +19653,12 @@ with pkgs;
 
   qmake4Hook = qmake48Hook;
 
-  qt48Full = appendToName "full" (qt48.override {
+  qt48Full = qt48.override {
     docs = true;
     demos = true;
     examples = true;
     developerBuild = true;
-  });
+  };
 
   qt512 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.12) {
