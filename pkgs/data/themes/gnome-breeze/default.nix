@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "gnome-breeze-20160526";
+  pname = "gnome-breeze";
+  version = "unstable-2016-05-26";
   src = fetchgit {
     url = "https://github.com/dirruk1/gnome-breeze";
     sha256 = "0hkk0gqlnrs1m4rb5r84f5y96qfamrbiwm09z89yc32124x1a1lm";
