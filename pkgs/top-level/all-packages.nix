@@ -4074,7 +4074,7 @@ with pkgs;
 
   davix = callPackage ../tools/networking/davix { };
 
-  davix-copy = appendToName "copy" (davix.override { enableThirdPartyCopy = true; });
+  davix-copy = davix.override { enableThirdPartyCopy = true; };
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
@@ -5686,8 +5686,7 @@ with pkgs;
   };
   gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix {};
 
-  gawkInteractive = appendToName "interactive"
-    (gawk.override { interactive = true; });
+  gawkInteractive = gawk.override { interactive = true; };
 
   gawp = callPackage ../tools/misc/gawp { };
 
@@ -8090,9 +8089,9 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
-  netcdf-mpi = appendToName "mpi" (netcdf.override {
+  netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
-  });
+  };
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
@@ -10610,7 +10609,7 @@ with pkgs;
 
   twurl = callPackage ../tools/misc/twurl { };
 
-  txr = callPackage ../tools/misc/txr { stdenv = clangStdenv; };
+  txr = callPackage ../tools/misc/txr { inherit (llvmPackages_latest) stdenv; };
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
@@ -15771,9 +15770,7 @@ with pkgs;
   texinfo6_7 = callPackage ../development/tools/misc/texinfo/6.7.nix { }; # needed for gpm, iksemel and fwknop
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
   texinfo = texinfo6;
-  texinfoInteractive = appendToName "interactive" (
-    texinfo.override { interactive = true; }
-  );
+  texinfoInteractive = texinfo.override { interactive = true; };
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
@@ -17291,9 +17288,7 @@ with pkgs;
 
   highfive = callPackage ../development/libraries/highfive { };
 
-  highfive-mpi = appendToName "mpi" (highfive.override {
-    hdf5 = hdf5-mpi;
-  });
+  highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hiredis = callPackage ../development/libraries/hiredis { };
 
@@ -20175,7 +20170,7 @@ with pkgs;
 
   sqlitecpp = callPackage ../development/libraries/sqlitecpp { };
 
-  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
+  sqlite-interactive = (sqlite.override { interactive = true; }).bin;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
 
@@ -22426,6 +22421,8 @@ with pkgs;
 
   gmailctl = callPackage ../applications/networking/gmailctl { };
 
+  gometer = callPackage ../applications/misc/gometer { };
+
   gomp = callPackage ../applications/version-management/gomp { };
 
   gomplate = callPackage ../development/tools/gomplate {};
@@ -23607,6 +23604,8 @@ with pkgs;
   emojione = callPackage ../data/fonts/emojione {
     inherit (nodePackages) svgo;
   };
+
+  emojipick = callPackage ../applications/misc/emojipick { };
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
@@ -26497,6 +26496,8 @@ with pkgs;
 
   i3-resurrect = python3Packages.callPackage ../applications/window-managers/i3/i3-resurrect.nix { };
 
+  i3-swallow = python3Packages.callPackage ../applications/window-managers/i3/swallow.nix { };
+
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
@@ -27325,7 +27326,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  mercurialFull = appendToName "full" (mercurial.override { fullBuild = true; });
+  mercurialFull = mercurial.override { fullBuild = true; };
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
@@ -27715,6 +27716,8 @@ with pkgs;
   pijul = callPackage ../applications/version-management/pijul { };
 
   pijuice = with python3Packages; toPythonApplication pijuice;
+
+  pinegrow = callPackage ../applications/editors/pinegrow { };
 
   ping = callPackage ../applications/networking/ping { };
 
@@ -30179,8 +30182,6 @@ with pkgs;
 
   zammad = callPackage ../applications/networking/misc/zammad { };
 
-  zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
-
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
 
@@ -31823,12 +31824,12 @@ with pkgs;
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
   openlp = libsForQt5.callPackage ../applications/misc/openlp { };
-  openlpFull = appendToName "full" (openlp.override {
+  openlpFull = openlp.override {
     pdfSupport = true;
     presentationSupport = true;
     vlcSupport = true;
     gstreamerSupport = true;
-  });
+  };
 
   dkh = callPackage ../applications/science/chemistry/dkh { };
 
@@ -31980,13 +31981,9 @@ with pkgs;
 
   n3 = callPackage ../applications/science/biology/N3 { };
 
-  neuron = callPackage ../applications/science/biology/neuron {
-    python = null;
-  };
+  neuron = callPackage ../applications/science/biology/neuron { python = null; };
 
-  neuron-mpi = appendToName "mpi" (neuron.override {
-    useMpi = true;
-  });
+  neuron-mpi = neuron.override {useMpi = true; };
 
   neuron-full = neuron-mpi.override { python = python2; };
 
@@ -32036,9 +32033,7 @@ with pkgs;
 
   raxml = callPackage ../applications/science/biology/raxml { };
 
-  raxml-mpi = appendToName "mpi" (raxml.override {
-    useMpi = true;
-  });
+  raxml-mpi = raxml.override { useMpi = true; };
 
   sambamba = callPackage ../applications/science/biology/sambamba { };
 
@@ -33017,13 +33012,9 @@ with pkgs;
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
-  dblatex = callPackage ../tools/typesetting/tex/dblatex {
-    enableAllFeatures = false;
-  };
+  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
-  dblatexFull = appendToName "full" (dblatex.override {
-    enableAllFeatures = true;
-  });
+  dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 

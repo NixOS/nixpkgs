@@ -221,6 +221,7 @@ let
       skanlite = callPackage ./skanlite.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
+      zanshin = callPackage ./zanshin.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages

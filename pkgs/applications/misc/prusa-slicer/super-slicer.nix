@@ -33,7 +33,7 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = appname;
+        name = "superslicer";
         exec = "superslicer";
         icon = appname;
         comment = description;

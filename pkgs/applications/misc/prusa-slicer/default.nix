@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "PrusaSlicer";
+      name = "prusa-slicer";
       exec = "prusa-slicer";
       icon = "PrusaSlicer";
       comment = "G-code generator for 3D printers";
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
       categories = [ "Development" ];
     })
     (makeDesktopItem {
-      name = "PrusaSlicer G-code Viewer";
+      name = "prusa-gcodeviewer";
       exec = "prusa-gcodeviewer";
       icon = "PrusaSlicer-gcodeviewer";
       comment = "G-code viewer for 3D printers";
