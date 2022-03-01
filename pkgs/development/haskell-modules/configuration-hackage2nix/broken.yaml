@@ -323,7 +323,6 @@ broken-packages:
   - beamable
   - beam-mysql
   - beam-newtype-field
-  - beam-sqlite
   - bech32
   - bed-and-breakfast
   - beeminder-api
