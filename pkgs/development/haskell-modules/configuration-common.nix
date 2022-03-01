@@ -1279,11 +1279,6 @@ self: super: {
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
 
-  # We jailbreak webify, as optparse-applicative evolved past the version bound
-  # and the corresponding (and outdated) PR was not merged for a year.
-  # https://github.com/ananthakumaran/webify/pull/27
-  webify = doJailbreak super.webify;
-
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
@@ -1482,6 +1477,14 @@ self: super: {
   # Our quickcheck-instances is too old for the newer binary-instances, but
   # quickcheck-instances is only used in the tests of binary-instances.
   binary-instances = dontCheck super.binary-instances;
+
+  # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
+  binary-strict = appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/idontgetoutmuch/binary-low-level/pull/16/commits/c16d06a1f274559be0dea0b1f7497753e1b1a8ae.patch";
+      sha256 = "sha256-deSbudy+2je1SWapirWZ1IVWtJ0sJVR5O/fnaAaib2g=";
+    })
+  ] super.binary-strict;
 
   # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
   # https://github.com/haskell/haskell-language-server/issues/610
