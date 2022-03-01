@@ -26490,6 +26490,8 @@ with pkgs;
 
   i3-resurrect = python3Packages.callPackage ../applications/window-managers/i3/i3-resurrect.nix { };
 
+  i3-swallow = python3Packages.callPackage ../applications/window-managers/i3/swallow.nix { };
+
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
@@ -30173,8 +30175,6 @@ with pkgs;
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zammad = callPackage ../applications/networking/misc/zammad { };
-
-  zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
 
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;

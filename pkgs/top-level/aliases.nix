@@ -1433,6 +1433,7 @@ mapAliases ({
     plasma-systemmonitor plasma-thunderbolt plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil qqc2-breeze-style
     sddm-kcm skanlite spectacle systemsettings xdg-desktop-portal-kde yakuake
+    zanshin
   ;
 
   inherit (plasma5Packages.thirdParty)
