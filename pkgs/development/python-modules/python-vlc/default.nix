@@ -4,11 +4,15 @@
 , setuptools
 , libvlc
 , substituteAll
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-vlc";
   version = "3.0.16120";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,9 +31,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  doCheck = false; # no tests
+  # Module has no tests
+  doCheck = false;
 
-  pythonImportsCheck = [ "vlc" ];
+  pythonImportsCheck = [
+    "vlc"
+  ];
 
   meta = with lib; {
     description = "Python bindings for VLC, the cross-platform multimedia player and framework";
