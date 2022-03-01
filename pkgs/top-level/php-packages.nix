@@ -140,6 +140,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     deployer = callPackage ../development/php-packages/deployer { };
 
+    grumphp = callPackage ../development/php-packages/grumphp { };
+
     phing = callPackage ../development/php-packages/phing { };
 
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
