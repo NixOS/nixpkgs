@@ -10069,7 +10069,9 @@ in {
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
-  trio = callPackage ../development/python-modules/trio { };
+  trio = callPackage ../development/python-modules/trio {
+    inherit (pkgs) coreutils;
+  };
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 
