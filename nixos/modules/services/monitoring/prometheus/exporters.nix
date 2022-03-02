@@ -55,6 +55,7 @@ let
     "postfix"
     "postgres"
     "process"
+    "pve"
     "py-air-control"
     "redis"
     "rspamd"

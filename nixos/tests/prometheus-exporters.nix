@@ -933,6 +933,27 @@ let
       '';
     };
 
+    pve = let
+      pveExporterEnvFile = pkgs.writeTextFile {
+        name = "pve.env";
+        text = ''
+          PVE_USER="test_user@pam"
+          PVE_PASSWORD="hunter3"
+          PVE_VERIFY_SSL="false"
+        '';
+      };
+    in {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pveExporterEnvFile;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-pve-exporter.service")
+        wait_for_open_port(9221)
+        wait_until_succeeds("curl localhost:9221")
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
