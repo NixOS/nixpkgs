@@ -555,6 +555,13 @@
       </listitem>
       <listitem>
         <para>
+          The F-PROT antivirus (<literal>fprot</literal> package) and
+          its service module were removed because it reached
+          <link xlink:href="https://kb.cyren.com/av-support/index.php?/Knowledgebase/Article/View/434/0/end-of-sale--end-of-life-for-f-prot-and-csam">end-of-life</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bird1</literal> and its modules
           <literal>services.bird</literal> as well as
           <literal>services.bird6</literal> have been removed. Upgrade
