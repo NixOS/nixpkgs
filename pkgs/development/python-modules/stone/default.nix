@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xby5mpsms7b2rv8j6mvxzmzz5i9ii01brb9ylxz6kiv2i08piwv";
+    sha256 = "sha256-TvA5dRL2CXV5dffsCbNWOdcrp+PhfOTd85lXg0a0y1A=";
   };
 
   postPatch = ''
