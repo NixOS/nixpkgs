@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab5875facfdef77e0a47d5fd39ea178b58e60e454a4c85aa1e52fcb80db7babf";
+    sha256 = "sha256-MdTy1rckvJqY5Se1hJuKflib8epjDDOqVj7akSyf8L0=";
   };
 
   nativeBuildInputs = [ cython gfortran pythran ];
