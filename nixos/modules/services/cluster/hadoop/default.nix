@@ -21,12 +21,29 @@ with lib;
         <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml"/>
       '';
     };
+    coreSiteInternal = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
+      internal = true;
+      description = ''
+        Internal option to add configs to core-site.xml based on module options
+      '';
+    };
 
-    hdfsSite = mkOption {
+    hdfsSiteDefault = mkOption {
       default = {
         "dfs.namenode.rpc-bind-host" = "0.0.0.0";
         "dfs.namenode.http-address" = "0.0.0.0:9870";
+        "dfs.namenode.servicerpc-bind-host" = "0.0.0.0";
+        "dfs.namenode.http-bind-host" = "0.0.0.0";
       };
+      type = types.attrsOf types.anything;
+      description = ''
+        Default options for hdfs-site.xml
+      '';
+    };
+    hdfsSite = mkOption {
+      default = {};
       type = types.attrsOf types.anything;
       example = literalExpression ''
         {
@@ -34,12 +51,20 @@ with lib;
         }
       '';
       description = ''
-        Hadoop hdfs-site.xml definition
+        Additional options and overrides for hdfs-site.xml
         <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml"/>
       '';
     };
+    hdfsSiteInternal = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
+      internal = true;
+      description = ''
+        Internal option to add configs to hdfs-site.xml based on module options
+      '';
+    };
 
-    mapredSite = mkOption {
+    mapredSiteDefault = mkOption {
       default = {
         "mapreduce.framework.name" = "yarn";
         "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
@@ -55,18 +80,25 @@ with lib;
         }
       '';
       type = types.attrsOf types.anything;
+      description = ''
+        Default options for mapred-site.xml
+      '';
+    };
+    mapredSite = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
       example = literalExpression ''
-        options.services.hadoop.mapredSite.default // {
+        {
           "mapreduce.map.java.opts" = "-Xmx900m -XX:+UseParallelGC";
         }
       '';
       description = ''
-        Hadoop mapred-site.xml definition
+        Additional options and overrides for mapred-site.xml
         <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml"/>
       '';
     };
 
-    yarnSite = mkOption {
+    yarnSiteDefault = mkOption {
       default = {
         "yarn.nodemanager.admin-env" = "PATH=$PATH";
         "yarn.nodemanager.aux-services" = "mapreduce_shuffle";
@@ -79,20 +111,31 @@ with lib;
         "yarn.nodemanager.log-dirs" = "/var/log/hadoop/yarn/nodemanager";
         "yarn.resourcemanager.bind-host" = "0.0.0.0";
         "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
-        "yarn.nodemanager.linux-container-executor.cgroups.hierarchy" = "/hadoop-yarn";
-        "yarn.nodemanager.linux-container-executor.resources-handler.class" = "org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler";
-        "yarn.nodemanager.linux-container-executor.cgroups.mount" = "true";
-        "yarn.nodemanager.linux-container-executor.cgroups.mount-path" = "/run/wrappers/yarn-nodemanager/cgroup";
       };
       type = types.attrsOf types.anything;
+      description = ''
+        Default options for yarn-site.xml
+      '';
+    };
+    yarnSite = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
       example = literalExpression ''
-        options.services.hadoop.yarnSite.default // {
+        {
           "yarn.resourcemanager.hostname" = "''${config.networking.hostName}";
         }
       '';
       description = ''
-        Hadoop yarn-site.xml definition
+        Additional options and overrides for yarn-site.xml
         <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml"/>
+      '';
+    };
+    yarnSiteInternal = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
+      internal = true;
+      description = ''
+        Internal option to add configs to yarn-site.xml based on module options
       '';
     };
 

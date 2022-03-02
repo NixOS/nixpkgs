@@ -7,7 +7,7 @@ let
   hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
 
   # Generator for HDFS service options
-  hadoopServiceOption = { serviceName, firewallOption ? true }: {
+  hadoopServiceOption = { serviceName, firewallOption ? true, extraOpts ? null }: {
     enable = mkEnableOption serviceName;
     restartIfChanged = mkOption {
       type = types.bool;
@@ -19,13 +19,27 @@ let
       '';
       default = false;
     };
+    extraFlags = mkOption{
+      type = with types; listOf str;
+      default = [];
+      description = "Extra command line flags to pass to ${serviceName}";
+      example = [
+        "-Dcom.sun.management.jmxremote"
+        "-Dcom.sun.management.jmxremote.port=8010"
+      ];
+    };
+    extraEnv = mkOption{
+      type = with types; attrsOf str;
+      default = {};
+      description = "Extra environment variables for ${serviceName}";
+    };
   } // (optionalAttrs firewallOption {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
       description = "Open firewall ports for ${serviceName}.";
     };
-  });
+  }) // (optionalAttrs (extraOpts != null) extraOpts);
 
   # Generator for HDFS service configs
   hadoopServiceConfig =
@@ -36,17 +50,19 @@ let
     , allowedTCPPorts ? [ ]
     , preStart ? ""
     , environment ? { }
+    , extraConfig ? { }
     }: (
 
-      mkIf serviceOptions.enable {
+      mkIf serviceOptions.enable ( mkMerge [{
         systemd.services."hdfs-${toLower name}" = {
-          inherit description preStart environment;
+          inherit description preStart;
+          environment = environment // serviceOptions.extraEnv;
           wantedBy = [ "multi-user.target" ];
           inherit (serviceOptions) restartIfChanged;
           serviceConfig = {
             inherit User;
             SyslogIdentifier = "hdfs-${toLower name}";
-            ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} ${toLower name}";
+            ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} ${toLower name} ${escapeShellArgs serviceOptions.extraFlags}";
             Restart = "always";
           };
         };
@@ -56,7 +72,7 @@ let
         networking.firewall.allowedTCPPorts = mkIf
           ((builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall)
           allowedTCPPorts;
-      }
+      } extraConfig])
     );
 
 in
@@ -77,7 +93,27 @@ in
       };
     };
 
-    datanode = hadoopServiceOption { serviceName = "HDFS DataNode"; };
+    datanode = hadoopServiceOption { serviceName = "HDFS DataNode"; } // {
+      dataDirs = mkOption {
+        default = null;
+        description = "Tier and path definitions for datanode storage.";
+        type = with types; nullOr (listOf (submodule {
+          options = {
+            type = mkOption {
+              type = enum [ "SSD" "DISK" "ARCHIVE" "RAM_DISK" ];
+              description = ''
+                Storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies.
+              '';
+            };
+            path = mkOption {
+              type = path;
+              example = [ "/var/lib/hadoop/hdfs/dn" ];
+              description = "Determines where on the local filesystem a data node should store its blocks.";
+            };
+          };
+        }));
+      };
+    };
 
     journalnode = hadoopServiceOption { serviceName = "HDFS JournalNode"; };
 
@@ -122,6 +158,8 @@ in
         50010 # datanode.address
         50020 # datanode.ipc.address
       ];
+      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = let d = cfg.hdfs.datanode.dataDirs; in
+        if (d!= null) then (concatMapStringsSep "," (x: "["+x.type+"]file://"+x.path) cfg.hdfs.datanode.dataDirs) else d;
     })
 
     (hadoopServiceConfig {

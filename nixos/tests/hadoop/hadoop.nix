@@ -10,15 +10,10 @@ import ../make-test-python.nix ({ package, ... }: {
         "fs.defaultFS" = "hdfs://ns1";
       };
       hdfsSite = {
-        "dfs.namenode.rpc-bind-host" = "0.0.0.0";
-        "dfs.namenode.http-bind-host" = "0.0.0.0";
-        "dfs.namenode.servicerpc-bind-host" = "0.0.0.0";
-
         # HA Quorum Journal Manager configuration
         "dfs.nameservices" = "ns1";
         "dfs.ha.namenodes.ns1" = "nn1,nn2";
-        "dfs.namenode.shared.edits.dir.ns1.nn1" = "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
-        "dfs.namenode.shared.edits.dir.ns1.nn2" = "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
+        "dfs.namenode.shared.edits.dir.ns1" = "qjournal://jn1:8485;jn2:8485;jn3:8485/ns1";
         "dfs.namenode.rpc-address.ns1.nn1" = "nn1:8020";
         "dfs.namenode.rpc-address.ns1.nn2" = "nn2:8020";
         "dfs.namenode.servicerpc-address.ns1.nn1" = "nn1:8022";
@@ -32,7 +27,7 @@ import ../make-test-python.nix ({ package, ... }: {
         "dfs.ha.fencing.methods" = "shell(true)";
         "ha.zookeeper.quorum" = "zk1:2181";
       };
-      yarnSiteHA = {
+      yarnSite = {
         "yarn.resourcemanager.zk-address" = "zk1:2181";
         "yarn.resourcemanager.ha.enabled" = "true";
         "yarn.resourcemanager.ha.rm-ids" = "rm1,rm2";
@@ -116,8 +111,7 @@ import ../make-test-python.nix ({ package, ... }: {
       # YARN cluster
       rm1 = { options, ... }: {
         services.hadoop = {
-          inherit package coreSite hdfsSite;
-          yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
+          inherit package coreSite hdfsSite yarnSite;
           yarn.resourcemanager = {
             enable = true;
             openFirewall = true;
@@ -126,8 +120,7 @@ import ../make-test-python.nix ({ package, ... }: {
       };
       rm2 = { options, ... }: {
         services.hadoop = {
-          inherit package coreSite hdfsSite;
-          yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
+          inherit package coreSite hdfsSite yarnSite;
           yarn.resourcemanager = {
             enable = true;
             openFirewall = true;
@@ -137,8 +130,7 @@ import ../make-test-python.nix ({ package, ... }: {
       nm1 = { options, ... }: {
         virtualisation.memorySize = 2048;
         services.hadoop = {
-          inherit package coreSite hdfsSite;
-          yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
+          inherit package coreSite hdfsSite yarnSite;
           yarn.nodemanager = {
             enable = true;
             openFirewall = true;
@@ -148,8 +140,7 @@ import ../make-test-python.nix ({ package, ... }: {
       client = { options, ... }: {
         services.hadoop = {
           gatewayRole.enable = true;
-          inherit package coreSite hdfsSite;
-          yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
+          inherit package coreSite hdfsSite yarnSite;
         };
       };
   };

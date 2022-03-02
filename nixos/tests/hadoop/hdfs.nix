@@ -35,6 +35,10 @@ with lib;
         hdfs.datanode = {
           enable = true;
           openFirewall = true;
+          dataDirs = [{
+            type = "DISK";
+            path = "/tmp/dn1";
+          }];
         };
         inherit coreSite;
       };
