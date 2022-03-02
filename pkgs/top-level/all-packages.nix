@@ -18570,6 +18570,8 @@ with pkgs;
 
   libptytty = callPackage ../development/libraries/libptytty { };
 
+  libpulsar = callPackage ../development/libraries/libpulsar { };
+
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
   libqalculate = callPackage ../development/libraries/libqalculate {
