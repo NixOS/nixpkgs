@@ -123,6 +123,5 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     description = "Open source Structure-from-Motion pipeline from Mapillary";
     homepage = "https://opensfm.org/";
-    platforms = lib.platforms.unix;
   };
 }
