@@ -11,12 +11,12 @@
 , docstring-parser
 }: buildPythonPackage rec {
   pname = "magicgui";
-  version = "0.3.0";
+  version = "0.3.7";
   src = fetchFromGitHub {
     owner = "napari";
     repo = "magicgui";
     rev = "v${version}";
-    sha256 = "sha256-DvL1szk2RoCrpisjp0BVNL6qFZtYc2oYDenX59Cxbug=";
+    sha256 = "sha256-LYXNNr5lS3ibQk2NIopZkB8kzC7j3yY8moGMk0Gr+hU=";
   };
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ typing-extensions qtpy pyside2 psygnal docstring-parser ];
