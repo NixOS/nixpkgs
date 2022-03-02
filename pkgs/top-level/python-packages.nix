@@ -6278,6 +6278,8 @@ in {
     inherit (pkgs.libsForQt5) soqt;
   };
 
+  pixel-ring = callPackage ../development/python-modules/pixel-ring { };
+
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
   pkce = callPackage ../development/python-modules/pkce { };
