@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.5.0";
+  version = "7.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e97a069c6a73fce3042a5ef0d438cc564152cfbcc2e7db6f7a19fbd51bb3555b";
+    sha256 = "sha256-uZGxQ1Vl6wpBCMW1+80/CBuqelLV02yXf1sNlNtCpHU=";
   };
 
   propagatedBuildInputs = [
