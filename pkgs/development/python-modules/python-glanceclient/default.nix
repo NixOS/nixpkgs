@@ -19,11 +19,11 @@
 
 buildPythonApplication rec {
   pname = "python-glanceclient";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "417b9d814b43e62df4351f26a0d5569b801e9f99f7758bd8c82ef994c3629356";
+    sha256 = "sha256-gi1IYtWJL2pltoKTRy5gsHTRwHlp0GHoBMbh1UP5g9o=";
   };
 
   postPatch = ''
