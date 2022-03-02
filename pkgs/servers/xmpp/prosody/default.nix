@@ -30,6 +30,7 @@ let
       luabitop
       luadbi-sqlite3
       luaunbound
+      luaossl
     ]
     ++ lib.optional withDBI p.luadbi
     ++ withExtraLuaPackages p
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   # default setup.
   nixosModuleDeps = [
     "cloud_notify"
+    "cloud_notify_encrypted"
     "vcard_muc"
     "http_upload"
   ];
