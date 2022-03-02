@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pycountry
 , pythonOlder
 , requests
 , websocket-client
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pycountry
     requests
     websocket-client
     xmltodict
