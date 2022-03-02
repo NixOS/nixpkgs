@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "packageurl-python";
-  version = "0.9.8.1";
+  version = "0.9.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Z14OyAWPoIN6BAUEcXi96mp9C0aWaYP6eeHAoa+rHJ4=";
+    sha256 = "sha256-hyoENLmkSLP6l1cXEfad0qP7cjRa1myQsX2Cev6oLwk=";
   };
 
   checkInputs = [ pytestCheckHook ];
