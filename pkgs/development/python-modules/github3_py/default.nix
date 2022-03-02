@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "github3.py";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9134cb9efd334b1644ad7c5ee3ff3ff488317c4549ffc0e8d82e4d63383a1a4";
+    sha256 = "sha256-Cbcr4Ul9NGsJaM3oNgoNavedwgbQFJpjzT7IbGXDd8w=";
   };
 
   checkInputs = [ betamax pytest betamax-matchers ]
