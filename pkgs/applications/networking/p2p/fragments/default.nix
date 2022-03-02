@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , meson
-, vala
+, rustPlatform
 , ninja
 , pkg-config
 , wrapGAppsHook
@@ -10,68 +10,75 @@
 , appstream-glib
 , python3
 , glib
-, gtk3
-, libhandy
+, gtk4
 , libtransmission
-, libb64
-, libutp
-, miniupnpc
-, dht
-, libnatpmp
-, libevent
+, transmission
 , curl
 , openssl
 , zlib
+, sqlite
+, dbus
+, libadwaita
+, git
 }:
 
 stdenv.mkDerivation rec {
   pname = "fragments";
-  version = "1.5";
+  version = "2.0.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
     rev = version;
-    sha256 = "0x1kafhlgyi65l4w67c24r8mpvasg3q3c4wlgnjc9sxvp6ki7xbn";
+    sha256 = "sha256-CMa1yka0kOxMhxSuazlJxTk4fzxuuwKYLBpEMwHbBUE=";
   };
 
-  patches = [
-    # Fix dependency resolution
-    ./dependency-resolution.patch
-  ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "sha256-/rFZcbpITYkpSCEZp9XH253u90RGmuVLEBGIRNBgI/o=";
+  };
+
+  postPatch = ''
+    patchShebangs build-aux/meson/postinstall.py
+  '';
 
   nativeBuildInputs = [
     meson
-    vala
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     ninja
     pkg-config
     wrapGAppsHook
     desktop-file-utils
     appstream-glib
     python3
+    git
   ];
 
   buildInputs = [
     glib
-    gtk3
-    libhandy
+    gtk4
     libtransmission
-    libb64
-    libutp
-    miniupnpc
-    dht
-    libnatpmp
-    libevent
     curl
     openssl
     zlib
+    sqlite
+    dbus
+    libadwaita
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/fragments \
+      --prefix PATH : ${lib.makeBinPath [transmission]}
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";
-    description = "A GTK3 BitTorrent Client";
-    maintainers = with maintainers; [ emilytrau ];
+    description = "A BitTorrent Client";
+    maintainers = with maintainers; [ emilytrau fgaz ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
