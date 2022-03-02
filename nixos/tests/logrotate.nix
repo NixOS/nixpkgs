@@ -40,6 +40,14 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
         postrotate = {
           postrotate = "touch /dev/null";
         };
+        # check checkConfig works as expected: there is nothing to check here
+        # except that the file build passes
+        checkConf = {
+          su = "root utmp";
+          createolddir = "0750 root utmp";
+          create = "root utmp";
+          "create " = "0750 root utmp";
+        };
         # multiple paths should be aggregated
         multipath = {
           files = [ "file1" "file2" ];

@@ -152,11 +152,45 @@ let
       { header = { global = true; priority = 100; }; }
     ]
   )));
-  configFile = pkgs.writeText "logrotate.conf" (
-    concatStringsSep "\n" (
+  configFile = pkgs.writeTextFile {
+    name = "logrotate.conf";
+    text = concatStringsSep "\n" (
       map mkConf settings
-    )
-  );
+    );
+    checkPhase = optionalString cfg.checkConfig ''
+      # logrotate --debug also checks that users specified in config
+      # file exist, but we only have sandboxed users here so brown these
+      # out. according to man page that means su, create and createolddir.
+      # files required to exist also won't be present, so missingok is forced.
+      user=$(${pkgs.coreutils}/bin/id -un)
+      group=$(${pkgs.coreutils}/bin/id -gn)
+      sed -e "s/\bsu\s.*/su $user $group/" \
+          -e "s/\b\(create\s\+[0-9]*\s*\|createolddir\s\+[0-9]*\s\+\).*/\1$user $group/" \
+          -e "1imissingok" -e "s/\bnomissingok\b//" \
+          $out > /tmp/logrotate.conf
+      # Since this makes for very verbose builds only show real error.
+      # There is no way to control log level, but logrotate hardcodes
+      # 'error:' at common log level, so we can use grep, taking care
+      # to keep error codes
+      set -o pipefail
+      if ! ${pkgs.logrotate}/sbin/logrotate --debug /tmp/logrotate.conf 2>&1 \
+          | ( ! grep "error:" ) > /tmp/logrotate-error; then
+              echo "Logrotate configuration check failed."
+              echo "The failing configuration (after adjustments to pass tests in sandbox) was:"
+              printf "%s\n" "-------"
+              cat /tmp/logrotate.conf
+              printf "%s\n" "-------"
+              echo "The error reported by logrotate was as follow:"
+              printf "%s\n" "-------"
+              cat /tmp/logrotate-error
+              printf "%s\n" "-------"
+              echo "You can disable this check with services.logrotate.checkConfig = false,"
+              echo "but if you think it should work please report this failure along with"
+              echo "the config file being tested!"
+              false
+      fi
+    '';
+  };
 
   mailOption =
     if foldr (n: a: a || n ? mail) false (attrValues cfg.settings)
@@ -253,6 +287,24 @@ in
               weekly
             }
           ''';
+        '';
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the config should be checked at build time.
+
+          Some options are not checkable at build time because of the build sandbox:
+          for example, the test does not know about existing files and system users are
+          not known.
+          These limitations mean we must adjust the file for tests (missingok is forced
+          and users are replaced by dummy users).
+
+          Conversely there are still things that might make this check fail incorrectly
+          (e.g. a file path where we don't have access to intermediate directories):
+          in this case you can disable the failing check with this option.
         '';
       };
 
