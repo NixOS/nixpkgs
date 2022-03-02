@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.8.3";
+  version = "2.10.1";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de0f70ffb2e0d539461940d6f7529c3548541fa098d8edc37af256af61c09b44";
+    sha256 = "sha256-9+Vp8ps3I5Oe/sgWTrLtcnS91ICwsoPXWDPw9Z0QhAk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
