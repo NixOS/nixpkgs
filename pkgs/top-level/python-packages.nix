@@ -10137,6 +10137,8 @@ in {
 
   twitch-python = callPackage ../development/python-modules/twitch-python { };
 
+  twitchapi = callPackage ../development/python-modules/twitchapi { };
+
   twitter = callPackage ../development/python-modules/twitter { };
 
   twitter-common-collections = callPackage ../development/python-modules/twitter-common-collections { };
