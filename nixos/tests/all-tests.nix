@@ -193,6 +193,7 @@ in
   hadoop.hdfs = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/yarn.nix {};
   haka = handleTest ./haka.nix {};
+  haste-server = handleTest ./haste-server.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
   hedgedoc = handleTest ./hedgedoc.nix {};
