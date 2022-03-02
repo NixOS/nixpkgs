@@ -61,7 +61,11 @@ let
     boolToString
     ;
 
-  inherit (lib.modules) mergeDefinitions;
+  inherit (lib.modules)
+    mergeDefinitions
+    fixupOptionType
+    mergeOptionDecls
+    ;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -523,6 +527,31 @@ rec {
     submodule = modules: submoduleWith {
       shorthandOnlyDefinesConfig = true;
       modules = toList modules;
+    };
+
+    # The type of a type!
+    optionType = mkOptionType {
+      name = "optionType";
+      description = "optionType";
+      check = value: value._type or null == "option-type";
+      merge = loc: defs:
+        let
+          # Prepares the type definitions for mergeOptionDecls, which
+          # annotates submodules types with file locations
+          optionModules = map ({ value, file }:
+            {
+              _file = file;
+              # There's no way to merge types directly from the module system,
+              # but we can cheat a bit by just declaring an option with the type
+              options = lib.mkOption {
+                type = value;
+              };
+            }
+          ) defs;
+          # Merges all the types into a single one, including submodule merging.
+          # This also propagates file information to all submodules
+          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+        in mergedOption.type;
     };
 
     submoduleWith =

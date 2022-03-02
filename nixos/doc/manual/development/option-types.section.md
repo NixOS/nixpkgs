@@ -74,6 +74,13 @@ merging is handled.
     should only be used when checking, merging and nested evaluation are not
     desirable.
 
+`types.optionType`
+
+:   The type of an option's type. Its merging operation ensures that nested
+    options have the correct file location annotated, and that if possible,
+    multiple option definitions are correctly merged together. The main use
+    case is as the type of the `_module.freeformType` option.
+
 `types.attrs`
 
 :   A free-form attribute set.
