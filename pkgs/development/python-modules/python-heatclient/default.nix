@@ -22,11 +22,11 @@
 
 buildPythonApplication rec {
   pname = "python-heatclient";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b610748eb3f18f6bd762e0808accdf872308289a77c3b19ed2d8b9f306393a42";
+    sha256 = "sha256-3l7XyxKm18BAM1DhNsCmRwcZR224+8m/jQ1YHrwLHCs=";
   };
 
   propagatedBuildInputs = [
