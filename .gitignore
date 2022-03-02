@@ -2,6 +2,7 @@
 ,*
 .*.swp
 .*.swo
+.envrc
 .idea/
 .vscode/
 outputs/
