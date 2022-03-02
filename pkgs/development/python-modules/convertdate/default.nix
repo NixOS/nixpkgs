@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "convertdate";
-  version = "2.3.2";
+  version = "2.4.0";
   disabled = isPy27;
 
   # Tests are not available in the PyPI tarball so use GitHub instead.
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "fitnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k7j59sbqwyi72vcjx5vsh3qb6hxfnkfjkd2i6f6lckdr1bkh7fz";
+    sha256 = "sha256-iOHK3UJulXJJR50nhiVgfk3bt+CAtG3BRySJ8DkBuJE=";
   };
 
   propagatedBuildInputs = [
