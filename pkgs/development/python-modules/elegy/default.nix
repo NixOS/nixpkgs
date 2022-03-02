@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "elegy";
-  version = "0.8.4";
+  version = "0.8.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poets-ai";
     repo = pname;
     rev = version;
-    sha256 = "11w8lgl31b52w2qri8j8cgzd30sn8i3769g8nkkshvgkjgca9r4g";
+    sha256 = "sha256-2qBHiNmdO53rD9/tudnf1z4+6a5ZHH/y2wB4v3/Tqdg=";
   };
 
   nativeBuildInputs = [
