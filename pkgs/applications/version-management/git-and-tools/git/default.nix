@@ -166,8 +166,13 @@ stdenv.mkDerivation {
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
-      mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
+      # only readme, developed in another repo
+      rm -r contrib/hooks/multimail
+      mkdir -p $out/share/git-core/contrib
+      cp -a contrib/hooks/ $out/share/git-core/contrib/
+      substituteInPlace $out/share/git-core/contrib/hooks/pre-auto-gc-battery \
+        --replace ' grep' ' ${gnugrep}/bin/grep' \
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
