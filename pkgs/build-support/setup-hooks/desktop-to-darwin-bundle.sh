@@ -40,10 +40,10 @@ convertIconTheme() {
 
         local -a validSizes=(
             ${exactSize}
-            $(expr $iconSize + 1)x$(expr $iconSize + 1)${scaleSuffix}
-            $(expr $iconSize + 2)x$(expr $iconSize + 2)${scaleSuffix}
-            $(expr $iconSize - 1)x$(expr $iconSize - 1)${scaleSuffix}
-            $(expr $iconSize - 2)x$(expr $iconSize - 2)${scaleSuffix}
+            $((iconSize + 1))x$((iconSize + 1))${scaleSuffix}
+            $((iconSize + 2))x$((iconSize + 2))${scaleSuffix}
+            $((iconSize - 1))x$((iconSize - 1))${scaleSuffix}
+            $((iconSize - 2))x$((iconSize - 2))${scaleSuffix}
         )
 
         for iconIndex in "${!candidateIcons[@]}"; do
@@ -68,8 +68,8 @@ convertIconTheme() {
         local -r iconSize=$3
         local -r scale=$4
 
-        local density=$(expr 72 \* $scale)x$(expr 72 \* $scale)
-        local dim=$(expr $iconSize \* $scale)
+        local density=$((72 * scale))x$((72 * scale))
+        local dim=$((iconSize * scale))
 
         magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
     }
@@ -81,8 +81,8 @@ convertIconTheme() {
         local -r scale=$4
 
         if [[ $in != '-' ]]; then
-            local density=$(expr 72 \* $scale)x$(expr 72 \* $scale)
-            local dim=$(expr $iconSize \* $scale)
+            local density=$((72 * scale))x$((72 * scale))
+            local dim=$((iconSize * scale))
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
             magick convert -density "$density" -units PixelsPerInch "$out" "$out"
         else
@@ -115,7 +115,7 @@ convertIconTheme() {
                 local result=${resultdir}/${iconSize}x${iconSize}${scales[$scale]}${scaleSuffix:+x}.png
                 case $type in
                     fixed)
-                        local density=$(expr 72 \* $scale)x$(expr 72 \* $scale)
+                        local density=$((72 * scale))x$((72 * scale))
                         magick convert -density "$density" -units PixelsPerInch "$icon" "$result"
                         ;;
                     threshold)
