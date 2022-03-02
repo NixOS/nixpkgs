@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "5.7.3";
+  version = "6.3.0";
   disabled = isPy27; # unable to import pyutilib.th
 
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
     rev = version;
-    sha256 = "sha256-p0/DdCwyXdzXElzjWewKs0Oi7BMXC+BxgYikdZL0t68=";
+    sha256 = "sha256-xyjiB5fDRf5y9Av5Cr+8wtU4pHzMHsM45mcmJEOaTWs=";
   };
 
   checkInputs = [ nose glpk ];
