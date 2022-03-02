@@ -2,7 +2,7 @@
 
 ## Local Development Workflow {#local-development-workflow}
 
-For local development, it's recommended to use nix-shell to create a dotnet environment:
+For local development, its recommended to use nix-shell to create a dotnet environment:
 
 ```nix
 # shell.nix
@@ -34,7 +34,7 @@ mkShell {
 }
 ```
 
-This will produce a dotnet installation that has the dotnet 3.1, 3.0, and 2.1 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
+This will produce a dotnet installation that has the dotnet 3.1, 3.0, and 2.1 sdk. The first sdk listed will have its cli utility present in the resulting environment. Example info output:
 
 ```ShellSession
 $ dotnet --info
@@ -71,8 +71,9 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
-* `projectFile` has to be used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be an array of multiple projects as well.
-* `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. This file can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
+* `projectFile` has to be used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be a list of multiple projects as well.
+* `nugetSha256` is used to specify the hash of the generated nix-compatible lockfile containing all Nuget dependencies. This depends on no floating version ranges being requested upstream, as we cannot deterministically fetch those. If any unstable version range is requested, an error will be thrown and you will need to use `nugetDeps` instead. This option is mutually exclusive with the `nugetDeps` attribute.
+* `nugetDeps` is used to specify a manually generated nix-compatible lockfile, in case we cannot deterministically do so. A script to generate this file is available as `passthru.fetch-deps`. It can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`. This option is mutually exclusive with the `nugetSha256` attribute.
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
 * `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
  For example, your project has a local dependency:
@@ -100,7 +101,15 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnetPackFlags` can be used to pass flags to `dotnet pack`. Used only if `packNupkg` is set to `true`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
 
-When packaging a new application, you need to fetch it's dependencies. You can set `nugetDeps` to an empty string to make the derivation temporarily evaluate, and then run `nix-build -A package.passthru.fetch-deps` to generate it's dependency fetching script. After running the script, you should have the location of the generated lockfile printed to the console. This can be copied to a stable directory. Note that if either `projectFile` or `nugetDeps` are unset, this script cannot be generated!
+When packaging a new application, you need to fetch and lock its Nuget dependencies. `buildDotnetModule` has two ways of handling this:
+* Using `nugetSha256`. We try to generate a nix-compatible lockfile at build time, of which you can specify the hash with `nugetSha256`. When you try to build the derivation, everything gets fetched automatically and the expected hash gets printed out. We try this by default when neither `nugetSha256` nor `nugetDeps` are set, and it is the recommanded way to resolve dependencies. The passthru attribute `nuget-lockfile` is exposed which builds this lockfile for you. The downside of this method is that it only works if no floating versions are requested upstream, in which case an error will be thrown and you will need to use `nugetDeps` instead.
+* Using `nugetDeps`. This method requires you to manually generate a nix-compatible lockfile, which has to be checked into source control. You can run `nix-build -A package.fetch-deps` to build a script which generates the lockfile. After running said script you should copy the generated lockfile to a stable directory, and can set the `nugetDeps` attribute to its path. Note that if you change any flags effecting the restore process, you will need to regenerate this script. This takes more work to maintain, so you should use `nugetSha256` instead when possible.
+
+Note that both of these methods use the flags and attributes from your derivation, and attempt to mirror the restore process from the package itself. That means that if you for example set `dotnetRestoreFlags`, it will be used both for fetching dependencies and for building the derivation.
+
+If you change the `dotnet-sdk` attribute, or set a flag effecting `dotnet restore`, you will most likely need to regenerate the lockfile.
+
+When updating an existing application, you should *always* regenerate its lockfile.
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
@@ -115,19 +124,21 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+
+  nugetSha256 = "sha256-8FBfEhXmnfk/Y2Cd5jWoKgSS/HbEJyBXV5jOTyR+ft8="; # Generated automatically.
+  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`, this is *not* recommanded.
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
-  dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-runtime = dotnetCorePackages.net_5_0;
-  dotnetFlags = [ "--runtime linux-x64" ];
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnetFlags = [ "--runtime linux-x64" ]; # Note: this usually is not required.
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
   executables = []; # Don't install any executables.
 
   packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
 
-  runtimeDeps = [ ffmpeg ]; # This will wrap ffmpeg's library path into `LD_LIBRARY_PATH`.
+  runtimeDeps = [ ffmpeg ]; # This will wrap ffmpeg into `LD_LIBRARY_PATH`.
 }
 ```
