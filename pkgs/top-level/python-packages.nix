@@ -3017,6 +3017,8 @@ in {
 
   flax = callPackage ../development/python-modules/flax { };
 
+  fleep = callPackage ../development/python-modules/fleep { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
@@ -5459,6 +5461,8 @@ in {
   nexia = callPackage ../development/python-modules/nexia { };
 
   nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
+
+  nextcord = callPackage ../development/python-modules/nextcord { };
 
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;

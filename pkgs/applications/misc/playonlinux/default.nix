@@ -22,11 +22,12 @@
 , jq
 , xorg
 , libGL
-, steam-run-native
+, steam-run
 # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
 , glib
 , wrapGAppsHook
+, hicolor-icon-theme
 }:
 
 let
@@ -89,6 +90,8 @@ in stdenv.mkDerivation {
     xorg.libX11
     libGL
     python
+    gsettings-desktop-schemas
+    hicolor-icon-theme
   ];
 
   postPatch = ''
@@ -103,16 +106,6 @@ in stdenv.mkDerivation {
 
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
-    makeWrapper $out/share/playonlinux/playonlinux{,-wrapper} \
-      --prefix PATH : ${binpath} \
-      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/GConf
-    # steam-run is needed to run the downloaded wine executables
-    mkdir -p $out/bin
-    cat > $out/bin/playonlinux <<EOF
-    #!${stdenv.shell} -e
-    exec ${steam-run-native}/bin/steam-run $out/share/playonlinux/playonlinux-wrapper "\$@"
-    EOF
-    chmod a+x $out/bin/playonlinux
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
@@ -125,6 +118,15 @@ in stdenv.mkDerivation {
     for f in $out/share/playonlinux/bin/*; do
       bzip2 $f
     done
+  '';
+
+  dontWrapGApps = true;
+  postFixup = ''
+    makeWrapper $out/share/playonlinux/playonlinux{,-wrapped} \
+      --prefix PATH : ${binpath} \
+      ''${gappsWrapperArgs[@]}
+    makeWrapper ${steam-run}/bin/steam-run $out/bin/playonlinux \
+      --add-flags $out/share/playonlinux/playonlinux-wrapped
   '';
 
   meta = with lib; {
