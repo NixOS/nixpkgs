@@ -25,7 +25,9 @@
       "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
       "application/vnd.ms-excel.sheet.macroenabled.12"
       "application/vnd.ms-excel.template.macroEnabled.12"
-      "application/x-dif;text/spreadsheet;text/csv"
+      "application/x-dif"
+      "text/spreadsheet"
+      "text/csv"
       "application/x-prn"
       "application/vnd.ms-excel.sheet.binary.macroenabled.12"
     ];
