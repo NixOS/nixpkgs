@@ -6011,6 +6011,8 @@ with pkgs;
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos { };
 
+  gnome-randr = callPackage ../tools/wayland/gnome-randr { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
