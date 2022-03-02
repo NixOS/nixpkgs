@@ -10,7 +10,7 @@ let
     icon = "quartus";
     desktopName = "Quartus";
     genericName = "Quartus Prime";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSUserEnv rec {

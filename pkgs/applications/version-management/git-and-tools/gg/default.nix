@@ -3,32 +3,41 @@
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
+, bash
+, coreutils
 , git
 , pandoc
 }:
 
-buildGoModule rec {
+let
+  version = "1.2.1";
+  commit = "eed9dc7c82c5a7fbc13fd9b496e1faaec3f20d57";
+in buildGoModule {
   pname = "gg-scm";
-  version = "1.1.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gg-scm";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "sha256-kLmu4h/EBbSFHrffvusKq38X3/ID9bOlLMvEUtnFGhk=";
+    sha256 = "770c807403f5d99cea6450f889d268800e1c2563f0cd6142936741c40b29cc95";
   };
-  patches = [ ./skip-broken-revert-tests.patch ];
+  postPatch = ''
+    substituteInPlace cmd/gg/editor_unix.go \
+      --replace /bin/sh ${bash}/bin/sh
+  '';
   subPackages = [ "cmd/gg" ];
   ldflags = [
     "-s" "-w"
     "-X" "main.versionInfo=${version}"
-    "-X" "main.buildCommit=a0b348c9cef33fa46899f5e55e3316f382a09f6a+"
+    "-X" "main.buildCommit=${commit}"
   ];
 
-  vendorSha256 = "sha256-+ZmNXB+I6vPRbACwEkfl/vVmqoZy67Zn9SBrham5zRk=";
+  vendorSha256 = "214dc073dad7b323ea449acf24c5b578d573432eeaa1506cf5761a2d7f5ce405";
 
-  nativeBuildInputs = [ git pandoc installShellFiles makeWrapper ];
-  buildInputs = [ git ];
+  nativeBuildInputs = [ pandoc installShellFiles makeWrapper ];
+  checkInputs = [ bash coreutils git ];
+  buildInputs = [ bash git ];
 
   postInstall = ''
     wrapProgram $out/bin/gg --suffix PATH : ${git}/bin

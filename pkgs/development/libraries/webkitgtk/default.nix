@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , runCommand
 , fetchurl
 , perl
@@ -44,7 +45,6 @@
 , lcms2
 , libmanette
 , openjpeg
-, enableGeoLocation ? true
 , geoclue2
 , sqlite
 , enableGLES ? true
@@ -58,9 +58,9 @@
 , substituteAll
 , glib
 , addOpenGLRunpath
+, enableGeoLocation ? true
+, withLibsecret ? true
 }:
-
-assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
@@ -125,12 +125,8 @@ stdenv.mkDerivation rec {
     libidn
     libintl
     lcms2
-  ] ++ lib.optionals stdenv.isLinux [
-    libmanette
-  ] ++ [
     libnotify
     libpthreadstubs
-    libsecret
     libtasn1
     libwebp
     libxkbcommon
@@ -155,28 +151,36 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" {} ''
+    runCommand "${pname}_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
+    libmanette
     systemd
     wayland
     xdg-dbus-proxy
-  ] ++ lib.optional enableGeoLocation geoclue2;
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ] ++ lib.optionals withLibsecret [
+    libsecret
+  ];
 
   propagatedBuildInputs = [
     gtk3
     libsoup
   ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    cmakeBool = x: if x then "ON" else "OFF";
+  in [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
-    "-DUSE_SOUP2=${if lib.versions.major libsoup.version == "2" then "ON" else "OFF"}"
+    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -191,7 +195,9 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-DUSE_SYSTEMD=OFF"
-  ] ++ lib.optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
+    "-DENABLE_GLES2=ON"
+  ];
 
   postPatch = ''
     patchShebangs .

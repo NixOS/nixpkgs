@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
     icon = pname;
     desktopName = "Ideamaker";
     genericName = meta.description;
-    categories = "Utility;Viewer;Engineering;";
-    mimeType = "application/sla";
+    categories = [ "Utility" "Viewer" "Engineering" ];
+    mimeTypes = [ "application/sla" ];
   };
 
   meta = with lib; {

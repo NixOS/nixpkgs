@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiopyarr";
-  version = "22.2.1";
+  version = "22.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tkdrob";
     repo = pname;
     rev = version;
-    hash = "sha256-SEF47hz5XbATuuuO5t5H40+kT7RWSBjP0BfYd38pNSw=";
+    hash = "sha256-gkiUPznAJ5nkrdbDKAvODsf6UStsxFugCfkZ0fCJkng=";
   };
 
   propagatedBuildInputs = [

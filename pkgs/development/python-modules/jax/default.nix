@@ -1,8 +1,10 @@
 { lib
 , absl-py
+, blas
 , buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, lapack
 , numpy
 , opt-einsum
 , pytestCheckHook
@@ -12,9 +14,12 @@
 , typing-extensions
 }:
 
+let
+  usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
+in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +28,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "${pname}-v${version}";
-    sha256 = "0ndpngx5k6lf6jqjck82bbp0gs943z0wh7vs9gwbyk2bw0da7w72";
+    sha256 = "0bpqmyc4hg25i8cfnrx3y2bwgp6h5rri2a1q9i8gb6r0id97zvcn";
   };
 
   patches = [
@@ -57,6 +62,16 @@ buildPythonPackage rec {
     "-n auto"
     "-W ignore::DeprecationWarning"
     "tests/"
+  ];
+
+  # See
+  #  * https://github.com/google/jax/issues/9705
+  #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+  #  * https://github.com/NixOS/nixpkgs/issues/161960
+  disabledTests = lib.optionals usingMKL [
+    "test_custom_linear_solve_cholesky"
+    "test_custom_root_with_aux"
+    "testEigvalsGrad_shape"
   ];
 
   pythonImportsCheck = [

@@ -1,11 +1,11 @@
-{ lib, buildGoModule, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, buildGoPackage, fetchFromGitHub, installShellFiles, pkgsBuildBuild, stdenv }:
 
 let
   # Argo can package a static server in the CLI using the `staticfiles` go module.
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = buildGoPackage rec {
+  staticfiles = pkgsBuildBuild.buildGoPackage rec {
     name = "staticfiles";
     src = fetchFromGitHub {
       owner = "bouk";
@@ -54,7 +54,10 @@ buildGoModule rec {
 
   postInstall = ''
     for shell in bash zsh; do
-      $out/bin/argo completion $shell > argo.$shell
+      ${if (stdenv.buildPlatform == stdenv.hostPlatform)
+        then "$out/bin/argo"
+        else "${pkgsBuildBuild.argo}/bin/argo"
+      } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done
   '';

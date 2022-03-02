@@ -162,6 +162,7 @@ stdenv.mkDerivation rec {
     "-DARROW_ENGINE=ON"
     "-DARROW_FILESYSTEM=ON"
     "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_HDFS=ON"
     "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"

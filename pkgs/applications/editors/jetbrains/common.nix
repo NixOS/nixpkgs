@@ -27,11 +27,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = mainProgram;
-    extraEntries = ''
-      StartupWMClass=${wmClass}
-    '';
+    startupWMClass = wmClass;
   };
 
   vmoptsFile = optionalString (vmopts != null) (writeText vmoptsName vmopts);

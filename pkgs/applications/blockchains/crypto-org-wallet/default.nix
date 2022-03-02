@@ -1,4 +1,4 @@
-{ lib, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
+{ lib, fetchurl, appimageTools, imagemagick }:
 
 let
   pname = "chain-desktop-wallet";

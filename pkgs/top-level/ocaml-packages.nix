@@ -310,6 +310,8 @@ let
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
+    dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
+
     dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
     dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
@@ -618,7 +620,7 @@ let
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
-    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+    lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
@@ -1190,8 +1192,6 @@ let
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     ptset = callPackage ../development/ocaml-modules/ptset { };
-
-    pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     pyml = callPackage ../development/ocaml-modules/pyml { };
 

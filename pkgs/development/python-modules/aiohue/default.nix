@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "4.2.0";
+  version = "4.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/NcCo4Jvq1JeXD1UTrzNpPNDNmEt7GOrbCl79V00+eM=";
+    hash = "sha256-bcSCYNJt9xYBMmuZYM6s+PWV0TAUFOn3ibHE0KRX+iw=";
   };
 
   propagatedBuildInputs = [

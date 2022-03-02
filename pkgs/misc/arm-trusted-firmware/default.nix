@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages
+
+# Warning: this blob runs on the main CPU (not the GPU) at privilege
+# level EL3, which is above both the kernel and the hypervisor.
+, unfreeIncludeHDCPBlob ? true
+}:
 
 let
   buildArmTrustedFirmware = { filesToInstall
@@ -19,6 +24,11 @@ let
       rev = "v${version}";
       sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
     };
+
+    patches = lib.optionals (!unfreeIncludeHDCPBlob) [
+      # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
+      ./remove-hdcp-blob.patch
+    ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -50,7 +60,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
-      license = licenses.bsd3;
+      license = (if unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);

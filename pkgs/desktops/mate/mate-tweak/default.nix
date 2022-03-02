@@ -9,8 +9,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , glib
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -74,10 +73,9 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  passthru.updateScript = genericUpdater {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
     attrPath = "mate.${pname}";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
   };
 
   meta = with lib; {

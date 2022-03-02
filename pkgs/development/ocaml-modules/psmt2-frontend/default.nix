@@ -15,7 +15,9 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  buildInputs = [ menhir ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ menhir ];
 
   meta = {
     description = "A simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";

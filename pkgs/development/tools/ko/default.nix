@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cIrlhhk5Lt0Qt7q7rKw8EXrJqZWZEjrEUyHOvHiT6bs=";
+    sha256 = "sha256-Xhe5WNHQ+Oa1m/6VwC3zCwWzXRc1spSfPp4jySsOcuU=";
   };
   vendorSha256 = null;
 

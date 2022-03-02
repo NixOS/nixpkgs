@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2021.10.1";
+  version = "2022.01.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "filesystem_spec";
     rev = version;
-    sha256 = "sha256-LgrOHBXKs2bEgtgrdHb1OEhOeQ5Rbgr6X5YtgiqiCH0=";
+    sha256 = "sha256-iPe2q9hY3ZRIKQGpxrHda3t9G0AtbtohVcWdnAzlzCo=";
   };
 
   propagatedBuildInputs = [

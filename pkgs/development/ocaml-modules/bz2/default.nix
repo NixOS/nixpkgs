@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-  ];
-
-  buildInputs = [
     ocaml
     findlib
   ];
@@ -29,6 +26,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     bzip2
   ];
+
+  strictDeps = true;
 
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
 

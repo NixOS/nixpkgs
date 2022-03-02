@@ -464,6 +464,8 @@ you of the correct hash.
   be disabled by setting `dontUseCargoParallelTests`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
+* `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
+  `bindgen` find `libclang` and `libclang` find the libraries in `buildInputs`.
 
 ### Examples {#examples}
 

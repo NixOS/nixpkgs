@@ -97,7 +97,8 @@ buildPythonPackage rec {
     done
   '';
 
-  # pip dependencies and optionally cudatoolkit.
+  # pip dependencies and optionally cudatoolkit. Note that cudatoolkit is
+  # necessary since jaxlib looks for "ptxas" in $PATH.
   propagatedBuildInputs = [ absl-py flatbuffers scipy ] ++ lib.optional cudaSupport cudatoolkit_11;
 
   pythonImportsCheck = [ "jaxlib" ];

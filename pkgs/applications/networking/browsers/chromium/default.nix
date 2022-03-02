@@ -1,5 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_13, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_13, llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
@@ -54,6 +54,9 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
+    } // lib.optionalAttrs (chromiumVersionAtLeast "99") rec {
+      llvmPackages = llvmPackages_14;
+      stdenv = llvmPackages_14.stdenv;
     });
 
     browser = callPackage ./browser.nix {
@@ -207,8 +210,8 @@ in stdenv.mkDerivation {
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 
-    # Mainly for xdg-open but also other xdg-* tools:
-    export PATH="${xdg-utils}/bin\''${PATH:+:}\$PATH"
+    # Mainly for xdg-open but also other xdg-* tools (this is only a fallback; \$PATH is suffixed so that other implementations can be used):
+    export PATH="\$PATH\''${PATH:+:}${xdg-utils}/bin"
 
     .
     w

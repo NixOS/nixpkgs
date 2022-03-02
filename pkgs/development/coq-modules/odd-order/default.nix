@@ -16,7 +16,15 @@ mkCoqDerivation {
     { case = (range "1.10.0" "1.12.0"); out = "1.12.0"; }
   ] null;
 
-  propagatedBuildInputs = [ mathcomp.character ];
+  propagatedBuildInputs = [
+    mathcomp.character
+    mathcomp.ssreflect
+    mathcomp.fingroup
+    mathcomp.algebra
+    mathcomp.solvable
+    mathcomp.field
+    mathcomp.all
+  ];
 
   meta = {
     description = "Formal proof of the Odd Order Theorem";

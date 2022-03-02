@@ -433,8 +433,6 @@ in
             drop the packet if the source address is not reachable via any
             interface) or false.  Defaults to the value of
             kernelHasRPFilter.
-
-            (needs kernel 3.3+)
           '';
       };
 

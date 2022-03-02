@@ -6564,6 +6564,21 @@ let
     buildInputs = [ DBDSQLite TestFatal TestRoo ];
   };
 
+  DevelCamelcadedb = buildPerlPackage {
+    pname = "Devel-Camelcadedb";
+    version = "2021.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HU/HURRICUP/Devel-Camelcadedb-v2021.2.tar.gz";
+      sha256 = "88a1d9e95d398ffe4d4114861e21c36f7c22315b3d03e7f764ccbce018ab3e47";
+    };
+    propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Perl side of the Perl debugger for IntelliJ IDEA and other JetBrains IDEs";
+      license = lib.licenses.mit;
+    };
+  };
+
   DevelCycle = buildPerlPackage {
     pname = "Devel-Cycle";
     version = "1.12";
@@ -24876,14 +24891,14 @@ let
 
   XMLLibXML = buildPerlPackage {
     pname = "XML-LibXML";
-    version = "2.0206";
+    version = "2.0207";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0206.tar.gz";
-      sha256 = "068nhmld1031grgi4qm7k5niwxlbn6qd08zf6g1gj4c7qfas62q1";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0207.tar.gz";
+      sha256 = "sha256-kDQ2yYWYdb71WTJDquhc7TKa0PtLV7v0WXXjJUfFDBU=";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
-      ++ lib.optional stdenv.isDarwin pkgs.libiconv;
+      ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
     propagatedBuildInputs = [ XMLSAX ];
   };
 

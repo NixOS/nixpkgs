@@ -11,15 +11,15 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.67";
+  version = "1.2.71";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    sha256 = "sha256-SCSj+spANhbrdhj204fsvshkDi0fKmt8jbc11UHJARw=";
+    sha256 = "sha256-bDaxxeHeswuoEU7YACa3tU80DFnmuFvEPfAq+pANSWY=";
   };
-  vendorSha256 = "sha256-PNg4QEi9+LvYWWhj2B6OrP+SBanuINlSGZYCMNjOQv0=";
+  vendorSha256 = "sha256-75uCGxW6Gqfhk5oImz26fUR8BeGHkikXHGJcCH32MxQ=";
   proxyVendor = true;
 
   nativeBuildInputs = [ pkg-config ];

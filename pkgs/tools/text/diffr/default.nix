@@ -2,12 +2,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "diffr";
-  version = "v0.1.4";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "mookid";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "18ks5g4bx6iz9hdjxmi6a41ncxpb1hnsscdlddp2gr40k3vgd0pa";
   };
 

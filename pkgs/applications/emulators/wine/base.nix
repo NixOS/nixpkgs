@@ -1,10 +1,11 @@
-{ stdenv, lib, pkgArches, callPackage,
+{ stdenv, lib, pkgArches, callPackage, makeSetupHook,
   name, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
   autoconf, hexdump, perl, nixosTests,
   supportFlags,
   patches,
   vkd3dArches,
+  moltenvk,
   buildScript ? null, configureFlags ? []
 }:
 
@@ -15,9 +16,31 @@ let
   prevName = name;
   prevPlatforms = platforms;
   prevConfigFlags = configureFlags;
+  setupHookDarwin = makeSetupHook {
+    name = "darwin-mingw-hook";
+    substitutions = {
+      darwinSuffixSalt = stdenv.cc.suffixSalt;
+      mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
+    };
+  } ./setup-hook-darwin.sh;
 in
 stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   builder = buildScript;
+}) // (lib.optionalAttrs stdenv.isDarwin {
+  postConfigure = ''
+    # dynamic fallback, so this shouldn’t cause problems for older versions of macOS and will
+    # provide additional functionality on newer ones. This can be removed once the x86_64-darwin
+    # SDK is updated.
+    sed 's|/\* #undef HAVE_MTLDEVICE_REGISTRYID \*/|#define HAVE_MTLDEVICE_REGISTRYID 1|' \
+      -i include/config.h
+  '';
+  postBuild = ''
+    # The Wine preloader must _not_ be linked to any system libraries, but `NIX_LDFLAGS` will link
+    # to libintl, libiconv, and CoreFoundation no matter what. Delete the one that was built and
+    # rebuild it with empty NIX_LDFLAGS.
+    rm loader/wine64-preloader
+    make loader/wine64-preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}=""
+  '';
 }) // rec {
   inherit src;
 
@@ -38,11 +61,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     hexdump
     perl
   ]
-  ++ lib.optionals supportFlags.mingwSupport mingwGccs;
+  ++ lib.optionals supportFlags.mingwSupport (mingwGccs
+    ++ lib.optional stdenv.isDarwin setupHookDarwin);
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype pkgs.perl ]
+  [ pkgs.freetype pkgs.perl pkgs.libunwind ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
+  ++ lib.optional stdenv.isDarwin        pkgs.libinotify-kqueue
   ++ lib.optional cupsSupport            pkgs.cups
   ++ lib.optional gettextSupport         pkgs.gettext
   ++ lib.optional dbusSupport            pkgs.dbus
@@ -56,14 +81,16 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional v4lSupport             pkgs.libv4l
   ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
+  ++ lib.optional krb5Support            pkgs.libkrb5
   ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional (xineramaSupport && !waylandSupport) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
-  ++ lib.optional vulkanSupport          pkgs.vulkan-loader
+  ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
+  ++ lib.optional usbSupport             pkgs.libusb1
   ++ vkd3dArches
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
     [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
@@ -83,12 +110,17 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
      wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
   ])));
 
-  patches = [ ] ++ patches';
+  patches = [ ]
+    # Wine requires `MTLDevice.registryID` for `winemac.drv`, but that property is not available
+    # in the 10.12 SDK (current SDK on x86_64-darwin). Work around that by using selector syntax.
+    ++ lib.optional stdenv.isDarwin ./darwin-metal-compat.patch
+    ++ patches';
 
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
-    ++ lib.optionals supportFlags.vkd3dSupport [ "--with-vkd3d" ];
+    ++ lib.optionals supportFlags.vkd3dSupport [ "--with-vkd3d" ]
+    ++ lib.optionals (stdenv.isDarwin && !supportFlags.xineramaSupport) [ "--without-x" ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in

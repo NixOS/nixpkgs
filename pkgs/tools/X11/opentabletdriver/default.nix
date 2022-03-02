@@ -19,13 +19,13 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.0.2";
+  version = "0.6.0.3";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "sha256-qPlya5f12Cc1yAK8dliWelA7drAoeeIkFXOD+aDeToo=";
+    sha256 = "sha256-/Tow25ycQEK8HN1IaB12ZXCXEsuKItD+aYLF/IX8Eos=";
   };
 
   debPkg = fetchurl {
@@ -100,8 +100,7 @@ buildDotnetModule rec {
       exec = "otd-gui";
       icon = "otd";
       comment = meta.description;
-      type = "Application";
-      categories = "Utility;";
+      categories = [ "Utility" ];
     })
   ];
 

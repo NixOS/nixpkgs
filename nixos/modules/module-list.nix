@@ -115,6 +115,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
+  ./misc/wordlist.nix
   ./misc/nixops-autoluks.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
@@ -166,6 +167,7 @@
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/k40-whisperer.nix
   ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
@@ -252,6 +254,7 @@
   ./security/tpm2.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
+  ./services/admin/pgadmin.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
@@ -349,7 +352,6 @@
   ./services/databases/redis.nix
   ./services/databases/riak.nix
   ./services/databases/victoriametrics.nix
-  ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
@@ -394,6 +396,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/lorri.nix
+  ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
@@ -718,6 +721,7 @@
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
+  ./services/networking/blocky.nix
   ./services/networking/charybdis.nix
   ./services/networking/cjdns.nix
   ./services/networking/cntlm.nix
@@ -896,6 +900,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
+  ./services/networking/tetrd.nix
   ./services/networking/teleport.nix
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix

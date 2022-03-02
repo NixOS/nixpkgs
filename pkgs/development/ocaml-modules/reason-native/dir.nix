@@ -3,7 +3,7 @@
 {
   pname = "dir";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.2.8";
+  version = "2022.2.9";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -57,8 +57,8 @@
     "aruba" = ps: with ps; [ pexpect ];
     "arwn" = ps: with ps; [ aiohttp-cors paho-mqtt ];
     "aseko_pool_live" = ps: with ps; [ aioaseko ];
-    "asterisk_cdr" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
-    "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
+    "asterisk_cdr" = ps: with ps; [ asterisk-mbox ];
+    "asterisk_mbox" = ps: with ps; [ asterisk-mbox ];
     "asuswrt" = ps: with ps; [ aioasuswrt ];
     "atag" = ps: with ps; [ pyatag ];
     "aten_pe" = ps: with ps; [ atenpdu ];
@@ -83,7 +83,7 @@
     "bbb_gpio" = ps: with ps; [ ]; # missing inputs: Adafruit_BBIO
     "bbox" = ps: with ps; [ ]; # missing inputs: pybbox
     "beewi_smartclim" = ps: with ps; [ ]; # missing inputs: beewi_smartclim
-    "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
+    "bh1750" = ps: with ps; [ i2csense smbus-cffi ];
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ bizkaibus ];
@@ -98,7 +98,7 @@
     "bluesound" = ps: with ps; [ xmltodict ];
     "bluetooth_le_tracker" = ps: with ps; [ pygatt ];
     "bluetooth_tracker" = ps: with ps; [ bt-proximity pybluez ];
-    "bme280" = ps: with ps; [ smbus-cffi ]; # missing inputs: bme280spi i2csense
+    "bme280" = ps: with ps; [ bme280spi i2csense smbus-cffi ];
     "bme680" = ps: with ps; [ bme680 smbus-cffi ];
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ bimmer-connected ];
@@ -208,7 +208,7 @@
     "dunehd" = ps: with ps; [ pdunehd ];
     "dwd_weather_warnings" = ps: with ps; [ dwdwfsapi ];
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
-    "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
+    "dynalite" = ps: with ps; [ dynalite-devices ];
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
@@ -216,7 +216,7 @@
     "ecobee" = ps: with ps; [ python-ecobee-api ];
     "econet" = ps: with ps; [ pyeconet ];
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
-    "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
+    "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ pysml ];
     "efergy" = ps: with ps; [ pyefergy ];
@@ -264,7 +264,7 @@
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
-    "fibaro" = ps: with ps; [ ]; # missing inputs: fiblary3
+    "fibaro" = ps: with ps; [ fiblary3-fork ];
     "fido" = ps: with ps; [ pyfido ];
     "file" = ps: with ps; [ ];
     "filesize" = ps: with ps; [ ];
@@ -312,7 +312,7 @@
     "generic" = ps: with ps; [ ];
     "generic_hygrostat" = ps: with ps; [ ];
     "generic_thermostat" = ps: with ps; [ sqlalchemy ];
-    "geniushub" = ps: with ps; [ ]; # missing inputs: geniushub-client
+    "geniushub" = ps: with ps; [ geniushub-client ];
     "geo_json_events" = ps: with ps; [ geojson-client ];
     "geo_location" = ps: with ps; [ ];
     "geo_rss_events" = ps: with ps; [ georss-generic-client ];
@@ -382,7 +382,7 @@
     "hp_ilo" = ps: with ps; [ python-hpilo ];
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
+    "htu21d" = ps: with ps; [ i2csense smbus-cffi ];
     "huawei_lte" = ps: with ps; [ huawei-lte-api stringcase url-normalize ];
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ huisbaasje-client ];
@@ -780,7 +780,7 @@
     "sia" = ps: with ps; [ pysiaalarm ];
     "sigfox" = ps: with ps; [ ];
     "sighthound" = ps: with ps; [ pillow simplehound ];
-    "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
+    "signal_messenger" = ps: with ps; [ pysignalclirestapi ];
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
     "simplisafe" = ps: with ps; [ simplisafe-python ];
     "simulated" = ps: with ps; [ ];
@@ -967,7 +967,7 @@
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ pyvolumio ];
-    "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
+    "volvooncall" = ps: with ps; [ volvooncall ];
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
@@ -1149,6 +1149,7 @@
     "dte_energy_bridge"
     "duckdns"
     "dunehd"
+    "dynalite"
     "eafm"
     "ecobee"
     "econet"
@@ -1475,6 +1476,7 @@
     "sia"
     "sigfox"
     "sighthound"
+    "signal_messenger"
     "simplisafe"
     "simulated"
     "siren"

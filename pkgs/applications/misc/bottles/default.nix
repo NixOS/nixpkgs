@@ -2,20 +2,32 @@
 , meson, ninja, pkg-config, wrapGAppsHook
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
 , python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gnome
-, steam-run, xdg-utils, pciutils, cabextract, wineWowPackages
+, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gtksourceview4, gnome
+, steam, xdg-utils, pciutils, cabextract, wineWowPackages
 , freetype, p7zip, gamemode
+, bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
+, bottlesExtraPkgs ? pkgs: [ ] # extra packages to add to steam.run targetPkgs
 }:
 
+let
+  steam-run = (steam.override {
+    # required by wine runner `caffe`
+    extraLibraries = pkgs: with pkgs; [ libunwind libusb1 ]
+      ++ bottlesExtraLibraries pkgs;
+    extraPkgs = pkgs: [ ]
+      ++ bottlesExtraPkgs pkgs;
+  }).run;
+in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2021.12.28-treviso";
+  version = "2022.2.28-trento-1";
+  sha256 = "tE6YuuZZcs3RKxs1S6OoGt0CXz3oHUi/sopFN0iywds=";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "lZbSLLBg7XM6PuOmu5rJ15dg+QHHRcjijRYE6u3WT9Y=";
+    inherit sha256;
   };
 
   postPatch = ''
@@ -40,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     gsettings-desktop-schemas
     gspell
     gtk3
+    gtksourceview4
     libhandy
     libnotify
     webkitgtk
@@ -75,8 +88,8 @@ python3Packages.buildPythonApplication rec {
 
   preConfigure = ''
     patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace src/backend/runner.py \
-      --replace "{Paths.runners}" "${steam-run}/bin/steam-run {Paths.runners}"
+    substituteInPlace src/backend/wine/winecommand.py \
+      --replace '= f"{Paths.runners}' '= f"${steam-run}/bin/steam-run {Paths.runners}'
   '';
 
   preFixup = ''
@@ -86,8 +99,9 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
+    downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino shamilton ];
+    maintainers = with maintainers; [ bloomvdomino psydvl shamilton ];
     platforms = platforms.linux;
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , platformio
 , esptool
 , git
@@ -16,14 +15,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.2.3";
+  version = "2022.2.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pt57wI1cYTqT65zGOk1/GyvK0BqITxCzWIyXSNZ9D/0=";
+    sha256 = "sha256-ZHxPiQEqFmW9tYv5SaHutOuBh7gsmN4Ux4+sMAJRIk4=";
   };
 
   postPatch = ''

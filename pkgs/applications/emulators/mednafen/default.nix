@@ -1,32 +1,56 @@
-{ lib, stdenv, fetchurl, pkg-config, freeglut, libGLU, libGL, libcdio, libjack2
-, libsamplerate, libsndfile, libX11, SDL2, SDL2_net, zlib, alsa-lib }:
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, SDL2_net
+, alsa-lib
+, flac
+, freeglut
+, libGL
+, libGLU
+, libX11
+, libcdio
+, libjack2
+, libsamplerate
+, libsndfile
+, pkg-config
+, zlib
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "mednafen";
-  version = "1.26.1";
+  version = "1.29.0";
 
   src = fetchurl {
     url = "https://mednafen.github.io/releases/files/${pname}-${version}.tar.xz";
-    sha256 = "1x7xhxjhwsdbak8l0iyb497f043xkhibk73w96xck4j2bk10fac4";
+    hash = "sha256-2j+88Ch3+b4PAov6XRy1npU6QEm5D+fjk4ijOG2fNi4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    freeglut
-    libGLU libGL
-    libcdio
-    libjack2
-    alsa-lib
-    libsamplerate
-    libsndfile
-    libX11
     SDL2
     SDL2_net
+    flac
+    freeglut
+    libcdio
+    libjack2
+    libsamplerate
+    libsndfile
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libGL
+    libGLU
+    libX11
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "format" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/doc
@@ -34,6 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://mednafen.github.io/";
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     longDescription = ''
       Mednafen is a portable, utilizing OpenGL and SDL,
@@ -66,9 +91,8 @@ stdenv.mkDerivation rec {
       - Sega Saturn (experimental, x86_64 only)
       - Sony PlayStation
     '';
-    homepage = "https://mednafen.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

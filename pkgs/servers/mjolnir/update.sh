@@ -20,7 +20,7 @@ store_src="$(nix-build . -A mjolnir.src --no-out-link)"
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 node2nix \
-  --nodejs-12 \
+  --nodejs-14 \
   --development \
   --node-env ./node-env.nix \
   --output ./node-deps.nix \

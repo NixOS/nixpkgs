@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "uri-${version}";
+  pname = "uri";
   version = "1.1.0";
 
   src = fetchFromGitHub {

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "getdp";
-  version = "3.3.0";
+  version = "3.4.0";
   src = fetchurl {
     url = "http://getdp.info/src/getdp-${version}-source.tgz";
-    sha256 = "1pfviy2bw8z5y6c15czvlvyjjg9pvpgrj9fr54xfi2gmvs7zkgpf";
+    sha256 = "sha256-d5YxJgtMf94PD6EHvIXpPBFPKC+skI/2v1K5Sad51hA=";
   };
 
   inherit (petsc) mpiSupport;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://getdp.info/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

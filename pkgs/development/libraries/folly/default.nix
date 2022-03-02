@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2022.02.07.00";
+  version = "2022.02.21.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-C/PQBXhOELNxQFfQhgQeU+QmsdtFeBESyWerC+QZBEI=";
+    sha256 = "sha256-QCL+GLc6b4Ae3jUj7VCxnE7Yc1JJ8+P0/r41Zf0KYos=";
   };
 
   nativeBuildInputs = [

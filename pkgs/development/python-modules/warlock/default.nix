@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-59V4KOwjs/vhA3F3E0j3p5L4JnKPgcExN+mgSWs0Cn0=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "jsonschema>=0.7,<4" "jsonschema"
+    sed -i "/--cov/d" pytest.ini
+  '';
+
   propagatedBuildInputs = [
     jsonpatch
     jsonschema
@@ -32,11 +38,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "jsonschema>=0.7,<4" "jsonschema"
-    sed -i "/--cov/d" pytest.ini
-  '';
+  disabledTests = [
+    # https://github.com/bcwaldon/warlock/issues/64
+    "test_recursive_models"
+  ];
 
   pythonImportsCheck = [
     "warlock"

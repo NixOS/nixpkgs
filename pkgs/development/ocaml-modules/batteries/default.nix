@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, num
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, num, ounit
 , doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
 }:
 
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1cd7475n1mxhq482aidmhh27mq5p2vmb8d9fkb1mlza9pz5z66yq";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  checkInputs = [ qtest ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  checkInputs = [ qtest ounit ];
   propagatedBuildInputs = [ num ];
+
+  strictDeps = !doCheck;
 
   inherit doCheck;
   checkTarget = "test";

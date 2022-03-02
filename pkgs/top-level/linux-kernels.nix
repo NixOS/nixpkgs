@@ -284,6 +284,8 @@ in {
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
+    dddvb = callPackage ../os-specific/linux/dddvb { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
@@ -440,6 +442,8 @@ in {
 
     vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
 
+    virtio_vmmci  = callPackage ../os-specific/linux/virtio_vmmci { };
+
     virtualbox = callPackage ../os-specific/linux/virtualbox {
       virtualbox = pkgs.virtualboxHardened;
     };
@@ -528,7 +532,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_5_10;
+    linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_5_16;
     linux_mptcp = packages.linux_mptcp_95;

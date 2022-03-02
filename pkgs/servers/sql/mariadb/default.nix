@@ -142,7 +142,7 @@ in stdenv.mkDerivation (common // {
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
     "-DWITHOUT_SERVER=ON"
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
@@ -207,7 +207,8 @@ in stdenv.mkDerivation (common // {
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
     "-DWITH_JEMALLOC=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
+    "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [

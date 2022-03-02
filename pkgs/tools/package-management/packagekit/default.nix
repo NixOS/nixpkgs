@@ -11,6 +11,7 @@
 , vala
 , gtk-doc
 , nix
+, nlohmann_json ? null
 , boost
 , meson
 , ninja
@@ -26,18 +27,24 @@
 , enableSystemd ? stdenv.isLinux
 , systemd
 }:
+let
+  nix_version = lib.removeSuffix nix.VERSION_SUFFIX nix.version;
+  useNlohmann = lib.versionAtLeast "2.7" nix_version;
+in
+
+assert useNlohmann -> nlohmann_json != null;
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.2.5pre";
+  version = "1.2.5.1pre";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "9c2ef9cddf39ebde587907561f8e7ac99ed6be1a";
-    sha256 = "05z1ds240kcmigygkbgjasr4spn7vd7cbpsbfrghhgnmszx9bjgl";
+    rev = "33b847c49b4a42499e3c0f10fef62830c874e086";
+    sha256 = "UDpMswf0EBwcoHTqoWiztXnIAwM69nM+S9MPsR24amw=";
   };
 
   buildInputs = [
@@ -52,6 +59,7 @@ stdenv.mkDerivation rec {
     nix
     boost
   ] ++ lib.optional enableSystemd systemd
+  ++ lib.optional useNlohmann nlohmann_json
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     vala

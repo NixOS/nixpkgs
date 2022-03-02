@@ -54,9 +54,7 @@ stdenv.mkDerivation rec {
     desktopName = "Android GPU Inspector";
     exec = "$out/bin/agi";
     icon = "agi";
-    type = "Application";
-    categories = "Development;Debugger;Graphics;3DGraphics";
-    terminal = "false";
+    categories = [ "Development" "Debugger" "Graphics" "3DGraphics" ];
   })];
 
   meta = with lib; {

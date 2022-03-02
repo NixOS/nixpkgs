@@ -218,18 +218,18 @@
 /nixos/modules/services/mail/rspamd.nix     @peti
 
 # Emacs
-/pkgs/applications/editors/emacs-modes @adisbladis
-/pkgs/applications/editors/emacs       @adisbladis
-/pkgs/top-level/emacs-packages.nix     @adisbladis
+/pkgs/applications/editors/emacs/elisp-packages @adisbladis
+/pkgs/applications/editors/emacs                @adisbladis
+/pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
 /pkgs/applications/editors/neovim      @jonringer @teto
 
 # VimPlugins
-/pkgs/misc/vim-plugins         @jonringer @softinio
+/pkgs/applications/editors/vim/plugins         @jonringer
 
 # VsCode Extensions
-/pkgs/misc/vscode-extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions   @jonringer
 
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz

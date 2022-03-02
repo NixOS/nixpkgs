@@ -9,13 +9,13 @@
 
 buildGoPackage rec {
   pname = "mob";
-  version = "2.2.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "remotemobprogramming";
     repo = pname;
-    sha256 = "sha256-1yE3KFGY51m6OL4LYrz+BSCHQSnbQRSpB3EUqAzSr+M=";
+    sha256 = "sha256-NXctu5gg0QfiTZ7osQ0yzETabGDuEeTVZBPFyLeNq8k=";
   };
 
   nativeBuildInputs = [

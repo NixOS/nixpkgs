@@ -58,20 +58,20 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_6 = common {
-    version = "2.6.0";
-    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+    version = "2.6.1";
+    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
   };
 
   stable = self.nix_2_6;
 
   unstable = lib.lowPrio (common rec {
     version = "2.7";
-    suffix = "pre20220127_${lib.substring 0 7 src.rev}";
+    suffix = "pre20220221_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "558c4ee3e370c9f9a6ea293df54ed6914a999f1c";
-      sha256 = "sha256-hMzKQflpgf3P7OdYKSnD1VMBSnF48XSRjaNX3bUJct4=";
+      rev = "caf51729450d4c57d48ddbef8e855e9bf65f8792";
+      sha256 = "sha256-2fbza6fWPjyTyVEqWIp0jk/Z4epjSDe1u4lbEu+v7Iw=";
     };
   });
 })

@@ -2,8 +2,6 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, makeWrapper
-, kubectl
 }:
 
 buildGoModule rec {
@@ -39,13 +37,6 @@ buildGoModule rec {
     "-X github.com/alexellis/arkade/cmd.GitCommit=ref/tags/${version}"
     "-X github.com/alexellis/arkade/cmd.Version=${version}"
   ];
-
-  buildInputs = [ makeWrapper ];
-
-  postInstall = ''
-    wrapProgram "$out/bin/arkade" \
-      --prefix PATH : ${lib.makeBinPath [ kubectl ]}
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/alexellis/arkade";

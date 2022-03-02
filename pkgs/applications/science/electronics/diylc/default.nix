@@ -27,7 +27,7 @@ let
     comment = "Multi platform circuit layout and schematic drawing tool";
     exec = "diylc";
     icon = "diylc_icon";
-    categories = "Development;Electronics;";
+    categories = [ "Development" "Electronics" ];
   };
 in
 stdenv.mkDerivation rec {

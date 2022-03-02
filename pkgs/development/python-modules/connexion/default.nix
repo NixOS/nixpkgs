@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.11.1";
+  version = "2.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "zalando";
     repo = pname;
     rev = version;
-    sha256 = "sha256-m/r09VNp/AMssOJH9RKMhPcObGHl9uIAoS1PwrjpKaE=";
+    sha256 = "sha256-JMuI3h0Pg7nCXrJtF0fhSFJTOWelEqcvmqv3ooIfkqM=";
   };
 
   propagatedBuildInputs = [

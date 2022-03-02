@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tribler";
-  version = "7.10.0";
+  version = "7.11.0";
 
   src = fetchurl {
     url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    hash = "sha256-CVZOVOWS0fvfg1yDiWFRa4v4Tpzl8RMVBQ6z0Ib4hfQ=";
+    sha256 = "0ffh8chb47iaar8872gvalgm84fjzyxph16nixsxknnprqdxyrkx";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
     service-identity
     twisted
     yappi
+    pydantic
+    anyio
   ]);
 
   installPhase = ''
@@ -71,6 +73,7 @@ stdenv.mkDerivation rec {
     cp -prvd ./* $out/
     makeWrapper ${python3.pkgs.python}/bin/python $out/bin/tribler \
         --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
+        --set QT_PLUGIN_PATH "${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}" \
         --set _TRIBLERPATH $out/src \
         --set PYTHONPATH $out/src/tribler-core:$out/src/tribler-common:$out/src/tribler-gui:$program_PYTHONPATH \
         --set NO_AT_BRIDGE 1 \
@@ -78,8 +81,15 @@ stdenv.mkDerivation rec {
         --add-flags "-O $out/src/run_tribler.py"
 
     mkdir -p $out/share/applications $out/share/icons
-    cp $out/build/debian/tribler/usr/share/applications/tribler.desktop $out/share/applications/tribler.desktop
+    cp $out/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop $out/share/applications/
     cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
+  '';
+
+  shellHook = ''
+    wrapPythonPrograms || true
+    export QT_QPA_PLATFORM_PLUGIN_PATH=$(echo ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms)
+    export PYTHONPATH=./tribler-core:./tribler-common:./tribler-gui:$program_PYTHONPATH
+    export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
   '';
 
   meta = with lib; {

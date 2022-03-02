@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     icon = "open-supaplex";
     desktopName = "OpenSupaplex";
     comment = meta.description;
-    categories = "Application;Game;";
+    categories = [ "Application" "Game" ];
   })];
 
   meta = with lib; {

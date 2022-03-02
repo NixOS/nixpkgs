@@ -259,7 +259,7 @@ in
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
       '' + optionalString cfg.autoMigrate ''
-        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -y
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
       '' + ''
         ipfs --offline config show \
           | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${

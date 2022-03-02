@@ -1,7 +1,7 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
-, curl, libcap, libuuid, lm_sensors, zlib
+, curl, libcap, libuuid, lm_sensors, zlib, protobuf
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
-  buildInputs = [ curl.dev zlib.dev ]
+  buildInputs = [ curl.dev zlib.dev protobuf ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
@@ -47,6 +47,8 @@ in stdenv.mkDerivation rec {
     # Therefore we put it into `/run/netdata`, which is owned
     # by netdata only.
     ./ipc-socket-in-run.patch
+    # This is only needed for 1.33.1, remove on the next release
+    ./fix-protobuf.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";

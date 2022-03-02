@@ -38,19 +38,15 @@ mkDerivation rec{
 
   desktopItems = [
     (makeDesktopItem {
-      name = "jamesdsp.desktop";
+      name = "jamesdsp";
       desktopName = "JamesDSP";
       genericName = "Audio effects processor";
       exec = "jamesdsp";
       icon = "jamesdsp";
       comment = "JamesDSP for Linux";
-      categories = "AudioVideo;Audio";
+      categories = [ "AudioVideo" "Audio" ];
       startupNotify = false;
-      terminal = false;
-      type = "Application";
-      extraDesktopEntries = {
-        Keywords = "equalizer;audio;effect";
-      };
+      keywords = [ "equalizer" "audio" "effect" ];
     })
   ];
 

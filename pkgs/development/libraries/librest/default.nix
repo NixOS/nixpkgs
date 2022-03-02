@@ -4,13 +4,19 @@
 , pkg-config
 , glib
 , libsoup
+, libxml2
 , gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_412
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "rest";
   version = "0.8.1";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -20,14 +26,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_412
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
     libsoup
+    libxml2
   ];
 
   configureFlags = [
+    "--enable-gtk-doc"
     # Remove when https://gitlab.gnome.org/GNOME/librest/merge_requests/2 is merged.
     "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt"
   ];

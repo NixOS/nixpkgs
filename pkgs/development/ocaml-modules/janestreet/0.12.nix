@@ -24,6 +24,7 @@ with self;
     hash = "0gl89zpgsf3n30nb6v5cns27g2bfg4rf3s2427gqvwbkr5gcf7ri";
     meta.description = "Full standard library replacement for OCaml";
     propagatedBuildInputs = [ sexplib0 ];
+    buildInputs = [ dune-configurator ];
   };
 
   stdio = janePackage {

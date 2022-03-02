@@ -5,28 +5,41 @@
 , blessed
 , prefixed
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "enlighten";
   version = "1.10.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a5b83cd0f4d095e59d80c648ebb5f7ffca0cd8bcf7ae6639828ee1ad000632a";
+    hash = "sha256-eluDzQ9NCV5Z2Axkjrtff/ygzYvPeuZjmCjuGtAAYyo=";
   };
 
   propagatedBuildInputs = [
     blessed
     prefixed
   ];
-  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "enlighten" ];
-  disabledTests =
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "enlighten"
+  ];
+
+  disabledTests = [
+    # AssertionError: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'> is not...
+    "test_init"
+  ] ++ lib.optional stdenv.isDarwin [
     # https://github.com/Rockhopper-Technologies/enlighten/issues/44
-    lib.optional stdenv.isDarwin "test_autorefresh"
-    ;
+    "test_autorefresh"
+  ];
 
   meta = with lib; {
     description = "Enlighten Progress Bar for Python Console Apps";

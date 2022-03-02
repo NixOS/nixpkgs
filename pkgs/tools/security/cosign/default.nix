@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hQFkbHOmtk0SqFSPw1+5nCvjq9cKsGzFPtK4jXDrubQ=";
+    sha256 = "sha256-37jahAGgQn7HwwdRTlAS/oJQ3BxTkMViI6iJMBYFgjI=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)

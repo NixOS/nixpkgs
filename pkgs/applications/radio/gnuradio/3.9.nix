@@ -275,7 +275,11 @@ stdenv.mkDerivation rec {
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
+    inherit
+      boost
+      volk
+      log4cpp
+    ;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {

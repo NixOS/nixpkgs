@@ -28,10 +28,10 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   meta = with retroarch.meta; {
-    inherit changelog license homepage platforms maintainers;
-    description = description
-      + " (with cores: "
+    inherit changelog description homepage license maintainers platforms;
+    longDescription =
+      "RetroArch is the reference frontend for the libretro API. The following cores are included: "
       + lib.concatStringsSep ", " (map (x: "${x.name}") cores)
-      + ")";
+      + ".";
   };
 }
