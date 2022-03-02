@@ -4,16 +4,18 @@
 , go-md2man
 , installShellFiles
 , libusb-compat-0_1
+, IOKit
+, xcbuild
 }:
 
 stdenv.mkDerivation rec {
   pname = "teensy-loader-cli";
-  version = "2.1+unstable=2021-04-10";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "PaulStoffregen";
     repo = "teensy_loader_cli";
-    rev = "9dbbfa3b367b6c37e91e8a42dae3c6edfceccc4d";
+    rev = "refs/tags/${version}";
     sha256 = "lQ1XtaWPr6nvE8NArD1980QVOH6NggO3FlfsntUjY7s=";
   };
 
@@ -22,9 +24,15 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    libusb-compat-0_1
-  ];
+  buildInputs =
+    if stdenv.isDarwin then [
+      IOKit
+      xcbuild
+    ] else [
+      libusb-compat-0_1
+    ];
+
+  makeFlags = lib.optional stdenv.isDarwin [ "OS=MACOSX" ];
 
   installPhase = ''
     runHook preInstall
