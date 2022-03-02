@@ -2333,4 +2333,7 @@ self: super: {
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
+  # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
+  ekg-core  = doJailbreak super.ekg-core;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
