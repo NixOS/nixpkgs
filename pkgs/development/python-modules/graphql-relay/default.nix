@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "graphql-relay";
-  version = "3.1.0";
+  version = "3.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cNWn7lmV6nwqmjflEidmOxpGTx9A6Y/d6VC+VBXf4LQ=";
+    sha256 = "sha256-En9AkT8Ry4R0Uu95STEmGq47Ii6q+Xb3yEMCmFNOVNM=";
   };
 
   propagatedBuildInputs = [
