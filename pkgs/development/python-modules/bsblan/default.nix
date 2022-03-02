@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bsblan";
-  version = "0.5.0";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "v.${version}";
-    sha256 = "1j41y2njnalcsp1vjqwl508yp3ki82lv8108ijz52hprhrq4fffb";
+    rev = "v${version}";
+    sha256 = "sha256-kq4cML7D9XC/QRPjGfaWcs0H78OOc2IXGua7qJpWYOQ=";
   };
 
   propagatedBuildInputs = [
