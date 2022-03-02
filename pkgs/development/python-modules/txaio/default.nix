@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "txaio";
-  version = "21.2.1";
+  version = "22.2.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fW+JdFaAIz8cTbndt0jfXojSp6N5Yr4XTA/QTI26Hcg=";
+    sha256 = "sha256-LkWCtw8EsjRZCCVGhKmEIGwNm1DjB0okpMVauiHSTQE=";
   };
 
   propagatedBuildInputs = [
