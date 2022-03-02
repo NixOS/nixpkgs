@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "3.7.1";
+  version = "3.8.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28460a3db6b4532bde6a5db6755cf2dce6c5020bada8a641bb2c5c7a9b1f35b8";
+    sha256 = "sha256-jvpSZY4K53BoahO2dVaTKPH7qYN+XeGGe/5fRqmu/hk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
