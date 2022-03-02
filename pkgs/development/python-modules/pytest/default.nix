@@ -1,5 +1,4 @@
 { lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, pythonAtLeast, fetchpatch
 , atomicwrites
 , attrs
 , hypothesis
@@ -13,28 +12,20 @@
 , setuptools
 , setuptools-scm
 , six
-, toml
+, tomli
 , wcwidth
 , writeText
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.5";
+  version = "7.0.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89";
+    sha256 = "sha256-4wkFoMEx09lLiWJKHMWv7D4LovvbFRhn2ODr1JhQ8XE=";
   };
-
-  patches = lib.optionals (pythonAtLeast "3.10") [
-    (fetchpatch {
-      # Fix test_errors_in_xfail_skip_expressions for Python 3.10.1, remove after 6.2.5
-      url = "https://github.com/pytest-dev/pytest/commit/913439f5e5691f391e2969b3c8f0a49e50dce43a.patch";
-      sha256 = "0hsl3lww6bx5k99cp8gj0fy9rg02kcfbwiiwjx2y8vbhwd5ns41p";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -48,7 +39,7 @@ buildPythonPackage rec {
     py
     setuptools
     six
-    toml
+    tomli
     wcwidth
   ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
@@ -95,7 +86,7 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/6.2.5/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.0.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"
