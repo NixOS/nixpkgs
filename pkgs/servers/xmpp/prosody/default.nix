@@ -14,7 +14,7 @@ with lib;
 
 let
   luaEnv = lua.withPackages(p: with p; [
-      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
+      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaossl
     ]
     ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   nixosModuleDeps = [
     "bookmarks"
     "cloud_notify"
+    "cloud_notify_encrypted"
     "vcard_muc"
     "smacks"
     "http_upload"
