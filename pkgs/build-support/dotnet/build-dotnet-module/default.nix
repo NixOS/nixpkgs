@@ -158,7 +158,6 @@ in stdenvNoCC.mkDerivation (args // {
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
-          -p:RestoreUseStaticGraphEvaluation=true \
           --packages "$HOME/nuget_pkgs" \
           ${lib.optionalString (dotnetRestoreFlags != []) (builtins.toString dotnetRestoreFlags)} \
           ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
