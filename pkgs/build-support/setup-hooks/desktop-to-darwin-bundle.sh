@@ -18,7 +18,7 @@ convertIconTheme() {
     local -r iconName=$3
     local -r theme=${4:-hicolor}
 
-    local -ra iconSizes=(16 32 128 256 512)
+    local -ra iconSizes=(16 32 48 128 256 512)
     local -ra scales=([1]="" [2]="@2")
 
     # Based loosely on the algorithm at:
@@ -30,6 +30,13 @@ convertIconTheme() {
 
         local scaleSuffix=${scales[$scale]}
         local exactSize=${iconSize}x${iconSize}${scaleSuffix}
+
+        if [[ $exactSize = '48x48@2' ]]; then
+            # macOS does not support a 2x scale variant of 48x48 icons
+            # See: https://en.wikipedia.org/wiki/Apple_Icon_Image_format#Icon_types
+            echo "unsupported"
+            return 0
+        fi
 
         local -a validSizes=(
             ${exactSize}
@@ -120,6 +127,8 @@ convertIconTheme() {
                         ;;
                     scalable)
                         synthesizeIcon "${scalableIcon[0]}" "$result" "$iconSize" "$scale" || true
+                        ;;
+                    *)
                         ;;
                 esac
             done
