@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyskyqremote";
-  version = "0.3.2";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "RogerSelwyn";
     repo = "skyq_remote";
     rev = version;
-    sha256 = "sha256-R/HmkVbVKbO54lDSw1tLYs2mXi/XqZX9GGXozv+96iI=";
+    sha256 = "sha256-/BhNoU1dnZj07ZvG126srSb6eW00n8htFuDttq006QE=";
   };
 
   propagatedBuildInputs = [
