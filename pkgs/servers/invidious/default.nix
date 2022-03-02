@@ -8,17 +8,16 @@ let
   #  * shards.nix (by running `crystal2nix` in invidious’ source tree)
   #  * If the lsquic.cr dependency changed: lsquic in lsquic.nix (version, sha256)
   #  * If the lsquic version changed: boringssl' in lsquic.nix (version, sha256)
-  rev = "081fd541afc9b2f9b821e0f8f4c66dda0839295c";
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
-  version = "unstable-2022-02-25";
+  inherit (versions.invidious) version;
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = pname;
-    inherit rev;
-    sha256 = "12m1fd8yfs6fqchvf9masr837dcghsg5x2nb8vcpzakzia5qc2kf";
+    inherit (versions.invidious) rev sha256;
   };
 
   postPatch =
@@ -39,9 +38,9 @@ crystal.buildCrystalPackage rec {
       # build-time
       substituteInPlace src/invidious.cr \
           --replace ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 rev}"' \
+          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
           --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceChars ["-"] ["."] (lib.substring 9 10 version)}"' \
-          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 rev}"'
+          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
