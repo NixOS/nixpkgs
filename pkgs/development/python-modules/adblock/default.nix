@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "adblock";
-  version = "0.5.1";
+  version = "0.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ArniDagur";
     repo = "python-adblock";
     rev = version;
-    sha256 = "sha256-f6PmEHVahQv8t+WOkE8DO2emivHG2t14hUSIf/l8omY=";
+    sha256 = "sha256-6FH+AVK7+Yg1a6oKbFV80TuGGE4Y7I3mMVzwVHdHYO4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
