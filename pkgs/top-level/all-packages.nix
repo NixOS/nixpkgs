@@ -464,6 +464,8 @@ with pkgs;
 
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+  mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
+  mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
     dotnetfx = dotnetfx40;
