@@ -38,9 +38,14 @@ in
 # A script to convert old aliases to throws and remove old
 # throws can be found in './maintainers/scripts/remove-old-aliases.py'.
 
+# Add 'preserve, reason: reason why' after the date if the alias should not be removed.
+# Try to keep them to a minimum.
+# valid examples of what to preserve:
+#   distro aliases such as:
+#     debian-package-name -> nixos-package-name
+
 mapAliases ({
-  # forceSystem should not be used directly in Nixpkgs.
-  # Added 2018-07-16
+  # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
 

@@ -57,7 +57,7 @@ def get_date_lists(
                 except ValueError:
                     continue
 
-        if my_date is None or my_date > cutoffdate:
+        if my_date is None or my_date > cutoffdate or "preserve, reason:" in line.lower():
             continue
 
         if "=" not in line:
