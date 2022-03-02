@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "17.6.0";
+  version = "17.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yRDCCFMQ2mNfs0NYXxBwcS/w+cs8j3nUTKPWMsTyMPU=";
+    sha256 = "sha256-Trwn9M4GwVW46ZGkRGO5NYWW5oVs8XHJr43HVo2Gi+0=";
   };
 
   propagatedBuildInputs = [
