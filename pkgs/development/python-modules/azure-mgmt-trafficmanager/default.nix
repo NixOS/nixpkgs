@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-trafficmanager";
-  version = "0.51.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "fc8ae77022cfe52fda4379a2f31e0b857574d536e41291a7b569b5c0f4104186";
+    sha256 = "sha256-R0F2HoA0bE7dTLPycTaOqYBj+ATQFeJFwv4EjtK1lqg=";
   };
 
   propagatedBuildInputs = [
