@@ -1,17 +1,17 @@
 {rustPlatform, fetchFromGitHub, lib}:
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v0.10.0";
-    sha256 = "sha256-zvH2oPm2tOdk4C5EDNhNgO9nt4usnuBTp+fh6xfwraQ=";
+    rev = "v${version}";
+    sha256 = "sha256-9BeQHwwnirK5Wquj6Tal8yCU/NXZGaPjXZe3cy5m98s=";
   };
 
-  cargoSha256 = "sha256-Es4COQiNZmbGdWeSyOvx4tiV1ygic3VPQLTiispVWpM=";
-  doCheck = false;
+  cargoSha256 = "sha256-DHdfv6210wAkL9vXxLr76ejFWU/eV/q3lmgsYa5Rn54=";
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://rbspy.github.io/";
