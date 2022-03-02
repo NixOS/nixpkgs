@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "manticore";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = "manticore";
     rev = version;
-    sha256 = "sha256-L112YwrBcdcLBeBsPLWt3C57u2WDvGLq50EzW9ojdyg=";
+    sha256 = "sha256-+17VBfAtkZZIi3SF5Num1Uqg3WjIpgbz3Jx65rD5zkM=";
   };
 
   propagatedBuildInputs = [
