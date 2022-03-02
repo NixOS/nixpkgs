@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "seafile-client";
-  version = "8.0.5";
+  version = "8.0.6";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "1p9wkvnr3km829gy84b1w1pv72pany5vr3r7ydz1c0aqrp0snfhx";
+    sha256 = "sha256-pImSrQ63AS1hi9CUvFAR91ZHgPCJB0ZOAA0fEZ24O8o=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
