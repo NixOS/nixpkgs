@@ -6199,6 +6199,10 @@ with pkgs;
 
   grin = callPackage ../tools/text/grin { };
 
+  igrep = callPackage ../tools/text/igrep {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ripgrep = callPackage ../tools/text/ripgrep {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
