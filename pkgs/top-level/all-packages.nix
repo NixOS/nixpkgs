@@ -33016,6 +33016,8 @@ with pkgs;
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  dockutil = callPackage ../os-specific/darwin/dockutil { };
+
   dosbox = callPackage ../applications/emulators/dosbox { };
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
