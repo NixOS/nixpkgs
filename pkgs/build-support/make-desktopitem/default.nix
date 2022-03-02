@@ -6,38 +6,39 @@
 # See https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
 { name # The name of the desktop file
 , type ? "Application"
-# version is hardcoded
+  # version is hardcoded
 , desktopName # The name of the application
 , genericName ? null
 , noDisplay ? null
 , comment ? null
 , icon ? null
-# we don't support the Hidden key - if you don't need something, just don't install it
-, onlyShowIn ? []
-, notShowIn ? []
+  # we don't support the Hidden key - if you don't need something, just don't install it
+, onlyShowIn ? [ ]
+, notShowIn ? [ ]
 , dbusActivatable ? null
 , tryExec ? null
 , exec ? null
 , path ? null
 , terminal ? null
-, actions ? {} # An attrset of [internal name] -> { name, exec?, icon? }
-, mimeTypes ? [] # The spec uses "MimeType" as singular, use plural here to signify list-ness
-, categories ? []
-, implements ? []
-, keywords ? []
+, actions ? { } # An attrset of [internal name] -> { name, exec?, icon? }
+, mimeTypes ? [ ] # The spec uses "MimeType" as singular, use plural here to signify list-ness
+, categories ? [ ]
+, implements ? [ ]
+, keywords ? [ ]
 , startupNotify ? null
 , startupWMClass ? null
 , url ? null
 , prefersNonDefaultGPU ? null
-# not supported until version 1.5, which is not supported by our desktop-file-utils as of 2022-02-23
-# , singleMainWindow ? null
-, extraConfig ? {} # Additional values to be added literally to the final item, e.g. vendor extensions
+  # not supported until version 1.5, which is not supported by our desktop-file-utils as of 2022-02-23
+  # , singleMainWindow ? null
+, extraConfig ? { } # Additional values to be added literally to the final item, e.g. vendor extensions
 }:
 let
   # FIXME: workaround until https://github.com/NixOS/nixpkgs/pull/162246 lands
-  cleanName = if lib.hasInfix " " name
-                then throw "Name must not contain spaces!"
-                else name;
+  cleanName =
+    if lib.hasInfix " " name
+    then throw "Name must not contain spaces!"
+    else name;
 
   # There are multiple places in the FDO spec that make "boolean" values actually tristate,
   # e.g. StartupNotify, where "unset" is literally defined as "do something reasonable".
@@ -45,6 +46,7 @@ let
   boolOrNullToString = value:
     if value == null then null
     else if builtins.isBool value then lib.boolToString value
+    else if value == "true" || value == "false" then value
     else throw "Value must be a boolean or null!";
 
   # Multiple values are represented as one string, joined by semicolons.
@@ -52,7 +54,7 @@ let
   renderList = value:
     if !builtins.isList value then throw "Value must be a list!"
     else if builtins.any (item: lib.hasInfix ";" item) value then throw "Values in list must not contain semicolons!"
-    else if value == [] then null
+    else if value == [ ] then null
     else builtins.concatStringsSep ";" value;
 
   # The [Desktop Entry] section of the desktop file, as an attribute set.
