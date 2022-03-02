@@ -28838,6 +28838,8 @@ with pkgs;
 
   vgmplay-libvgm = callPackage ../applications/audio/vgmplay-libvgm { };
 
+  vgmtools = callPackage ../tools/audio/vgmtools { };
+
   vieb = callPackage ../applications/networking/browsers/vieb { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
