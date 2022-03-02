@@ -3,12 +3,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.10.1";
+  version = "1.11";
   pname = "Flask-Compress";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28352387efbbe772cfb307570019f81957a13ff718d994a9125fa705efb73680";
+    sha256 = "sha256-9WnzLERtayXKjjR9UAOgUxgR73MmeABbADb8HJ6xwhw=";
   };
 
   postPatch = ''
