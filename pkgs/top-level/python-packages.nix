@@ -5733,6 +5733,8 @@ in {
 
   opensensemap-api = callPackage ../development/python-modules/opensensemap-api { };
 
+  opensfm = callPackage ../development/python-modules/opensfm { };
+
   openshift = callPackage ../development/python-modules/openshift { };
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
