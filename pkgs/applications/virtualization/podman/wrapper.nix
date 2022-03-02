@@ -3,6 +3,7 @@
 , makeWrapper
 , symlinkJoin
 , lib
+, stdenv
 , extraPackages ? []
 , podman # Docker compat
 , runc # Default container runtime
@@ -15,6 +16,7 @@
 , iptables
 , iproute2
 , catatonit
+, gvproxy
 }:
 
 # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -25,6 +27,7 @@ let
   podman = podman-unwrapped;
 
   binPath = lib.makeBinPath ([
+  ] ++ lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
@@ -40,6 +43,8 @@ let
 
     # this only works for some binaries, others may need to be be added to `binPath` or in the modules
     paths = [
+      gvproxy
+    ] ++ lib.optionals stdenv.isLinux [
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       podman.rootlessport
     ];
