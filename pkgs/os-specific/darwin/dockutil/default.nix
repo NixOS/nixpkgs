@@ -1,27 +1,23 @@
-{ lib, stdenv, fetchurl, libarchive, p7zip }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "dockutil";
   version = "2.0.5";
 
-  src = fetchurl {
-    url = "https://github.com/kcrawford/dockutil/releases/download/${version}/dockutil-${version}.pkg";
-    sha256 = "sha256-kZ7dOG8SSh25DgcbvkgPvEFGZIVz4fv0kWN41pbeNlw=";
+  src = fetchFromGitHub {
+    owner  = "kcrawford";
+    repo   = "dockutil";
+    rev    = version;
+    sha256 = "sha256-8tDkueCTCtvxc7owp3K9Tsrn4hL79CM04zBNv7AcHgA=";
   };
 
   dontBuild = true;
-  nativeBuildInputs = [ libarchive p7zip ];
-
-  unpackPhase = ''
-    7z x $src
-    bsdtar -xf Payload~
-  '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
-    install -Dm755 usr/local/bin/dockutil -t $out/bin
+    install -Dm755 scripts/dockutil -t $out/bin
 
     runHook postInstall
   '';
