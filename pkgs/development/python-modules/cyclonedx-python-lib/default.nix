@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "1.3.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/1kWvhTUS0JT0RwodiivJSUiWIDwQyXxdjF/KUlCNds=";
+    hash = "sha256-S1bcUCHe4UYJuSHI8LMQZ/reS6YAE0hxrpw+QweFm/8=";
   };
 
   nativeBuildInputs = [
