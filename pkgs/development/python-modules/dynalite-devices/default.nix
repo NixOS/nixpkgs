@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "dynalite-devices";
-  version = "0.1.46";
+  version = "0.46";
 
   src = fetchFromGitHub {
     owner = "ziv1234";
     repo = "python-dynalite-devices";
-    rev = "v0.46"; # https://github.com/ziv1234/python-dynalite-devices/issues/2
+    rev = "v${version}"; # https://github.com/ziv1234/python-dynalite-devices/issues/2
     hash = "sha256-Fju2JpFkQBCbOln7r3L+crv82TI2SkdPJ1oaK7PEifo=";
   };
 
