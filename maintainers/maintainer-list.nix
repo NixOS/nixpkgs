@@ -10276,6 +10276,13 @@
     githubId = 6047658;
     name = "Ryan Horiguchi";
   };
+  rhysmdnz = {
+    email = "rhys@memes.nz";
+    matrix = "@rhys:memes.nz";
+    github = "rhysmdnz";
+    githubId = 2162021;
+    name = "Rhys Davies";
+  };
   ribose-jeffreylau = {
     name = "Jeffrey Lau";
     email = "jeffrey.lau@ribose.com";
