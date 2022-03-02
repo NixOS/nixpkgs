@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2022.1.18";
+  version = "2022.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l/MtwDqAVKTEpatddh7Uhh6CiywgD+vU5GhXBppIORY=";
+    hash = "sha256-eeWvH/JYvA/gvdb2m8SuM5NaiY48vvu8zyLoiif6BTs=";
   };
 
   checkPhase = ''
