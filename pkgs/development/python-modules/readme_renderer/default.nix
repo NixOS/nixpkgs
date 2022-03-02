@@ -43,6 +43,12 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/pypa/readme_renderer/issues/221
     "test_GFM_"
+    # Relies on old distutils behaviour removed by setuptools (TypeError: dist must be a Distribution instance)
+    "test_valid_rst"
+    "test_invalid_rst"
+    "test_malicious_rst"
+    "test_invalid_missing"
+    "test_invalid_empty"
   ];
 
   pythonImportsCheck = [

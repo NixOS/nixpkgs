@@ -50,7 +50,9 @@ with python3Packages; buildPythonApplication rec {
   checkInputs = [ nose ];
 
   checkPhase = ''
-    ${python.interpreter} setup.py nosetests
+    runHook preCheck
+    ${python.interpreter} -m nose
+    runHook postCheck
   '';
 
   passthru.tests = { inherit (nixosTests) isso; };

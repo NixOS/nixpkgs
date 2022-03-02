@@ -1214,8 +1214,6 @@ in {
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
-  bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
-
   bitcoin-utils-fork-minimal = callPackage ../development/python-modules/bitcoin-utils-fork-minimal { };
 
   bitcoinrpc = callPackage ../development/python-modules/bitcoinrpc { };
@@ -5541,8 +5539,6 @@ in {
   nose = callPackage ../development/python-modules/nose { };
 
   nose-cov = callPackage ../development/python-modules/nose-cov { };
-
-  nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
 
   nose-cprof = callPackage ../development/python-modules/nose-cprof { };
 
