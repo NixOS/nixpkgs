@@ -9893,6 +9893,8 @@ with pkgs;
 
   ouch = callPackage ../tools/compression/ouch { };
 
+  outils = callPackage ../tools/misc/outils {};
+
   mpi = openmpi; # this attribute should used to build MPI applications
 
   ucx = callPackage ../development/libraries/ucx {};
