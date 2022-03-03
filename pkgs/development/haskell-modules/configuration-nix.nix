@@ -981,7 +981,6 @@ self: super: builtins.intersectAttrs super {
   inherit (super)
     hls-brittany-plugin
     hls-call-hierarchy-plugin
-    hls-class-plugin
     hls-eval-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
