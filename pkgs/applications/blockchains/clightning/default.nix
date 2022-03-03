@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # when building on darwin we need dawin.cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
-  nativeBuildInputs = [ autogen autoconf automake gettext pkg-config py3 unzip which ] 
+  nativeBuildInputs = [ autogen autoconf automake gettext pkg-config py3 unzip which ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools ] ++ [ libtool ];
 
   buildInputs = [ gmp libsodium sqlite zlib ];
