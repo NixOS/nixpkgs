@@ -3,6 +3,8 @@
 let expect-script = writeScript "expect-script" ''
   #!${expect}/bin/expect -f
 
+  exp_internal 1
+
   # Load htop
   spawn htop
   expect "Load average"
