@@ -85,6 +85,10 @@
         sha256 = "1zzrzsa07af7x4vwv7zgwkdrfmlhw30dcc7hqj92q4mn6valbn5q";
       }
       {
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.15.0-linux-amd64.tar.gz";
+        sha256 = "0cnwgr358lbrw6ssz8s7m87yniy7q2zhd6pmjhl8x41j1cljwyfa";
+      }
+      {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.7.1-linux-amd64.tar.gz";
         sha256 = "0qv3a4d6hnpga7lli7xnbwiig56h080hxrxjr8jbqsy9ymsqb39a";
       }
@@ -237,6 +241,10 @@
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v4.5.0-darwin-amd64.tar.gz";
         sha256 = "0mqciml9rzzfpjy7wdqqak1yym2yzilnsjyrpm255q38z77f5nkr";
+      }
+      {
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.15.0-darwin-amd64.tar.gz";
+        sha256 = "1616fbs348r539kcmvwxlhzzgdszgb0j2wy7lamqvnm8xw4l53ii";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.7.1-darwin-amd64.tar.gz";
@@ -393,6 +401,10 @@
         sha256 = "0z0ch08xqbyjmizwvgx9jysnp6g3kjjbwh11gbc6vgxacqcajgz3";
       }
       {
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.15.0-linux-arm64.tar.gz";
+        sha256 = "1v3pdsdpqzgbsg181g9w0rn3sw1xirljvgvkw0081i9hxvhwq9zq";
+      }
+      {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.7.1-linux-arm64.tar.gz";
         sha256 = "14xqlgy0wy223hg9wp1rc4hbj1pvxrqnzxzv901dqjf5434n6aa0";
       }
@@ -545,6 +557,10 @@
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v4.5.0-darwin-arm64.tar.gz";
         sha256 = "0dc7cpgvb20s6qyyfm2i4hc4rbg8zdv0j92wc397pacd6i6jhvgn";
+      }
+      {
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.15.0-darwin-arm64.tar.gz";
+        sha256 = "0avmwnxj1m8j3jj5w1ims64lxqgig4z8yxpi76000xrv74w625b2";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.7.1-darwin-arm64.tar.gz";
