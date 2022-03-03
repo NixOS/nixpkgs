@@ -12539,7 +12539,11 @@ with pkgs;
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc902;
+  haskellPackages = dontRecurseIntoAttrs
+    # Prefer native-bignum to avoid linking issues with gmp
+    (if stdenv.hostPlatform.isStatic
+       then haskell.packages.native-bignum.ghc902
+       else haskell.packages.ghc902);
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -12549,7 +12553,11 @@ with pkgs;
   # the withPackages wrapper available. In the final cross-compiled package set
   # however, targetPackages won't be populated, so we need to fall back to the
   # plain, cross-compiled compiler (which is only theoretical at the moment).
-  ghc = targetPackages.haskellPackages.ghc or haskell.compiler.ghc902;
+  ghc = targetPackages.haskellPackages.ghc or
+    # Prefer native-bignum to avoid linking issues with gmp
+    (if stdenv.targetPlatform.isStatic
+       then haskell.compiler.native-bignum.ghc902
+       else haskell.compiler.ghc902);
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
