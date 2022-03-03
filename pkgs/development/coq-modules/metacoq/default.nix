@@ -36,7 +36,7 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        nativeBuildInputs = [ which ];
+        extraNativeBuildInputs = [ which ];
         mlPlugin = true;
         extraBuildInputs = [ equations coq.ocamlPackages.zarith ];
         propagatedBuildInputs = metacoq-deps;
