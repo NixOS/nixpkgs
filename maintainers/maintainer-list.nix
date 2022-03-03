@@ -9333,6 +9333,13 @@
     githubId = 71795;
     name = "Mica Semrick";
   };
+  papojari = {
+    email = "papojari-git.ovoid@aleeas.com";
+    matrix = "@papojari:artemislena.eu";
+    github = "papojari";
+    githubId = 81317317;
+    name = "papojari";
+  };
   paraseba = {
     email = "paraseba@gmail.com";
     github = "paraseba";
