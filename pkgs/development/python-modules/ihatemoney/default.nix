@@ -96,6 +96,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
+      --replace "cachetools>=4.1,<5" "cachetools>=4.1" \
       --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2" \
       --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
       --replace "WTForms>=2.3.1,<2.4" "WTForms"
@@ -106,7 +107,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportChecks = [ "ihatemoney" ];
+  pythonImportsCheck = [ "ihatemoney" ];
 
   disabledTests = [
     "test_notifications"  # requires running service.
