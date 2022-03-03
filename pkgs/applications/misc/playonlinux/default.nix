@@ -106,6 +106,16 @@ in stdenv.mkDerivation {
 
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
+    makeWrapper $out/share/playonlinux/playonlinux{,-wrapper} \
+      --prefix PATH : ${binpath} \
+      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/GConf
+    # steam-run is needed to run the downloaded wine executables
+    mkdir -p $out/bin
+    cat > $out/bin/playonlinux <<EOF
+    #!${stdenv.shell} -e
+    exec ${steam-run}/bin/steam-run $out/share/playonlinux/playonlinux-wrapper "\$@"
+    EOF
+    chmod a+x $out/bin/playonlinux
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
