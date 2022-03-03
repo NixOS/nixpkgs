@@ -1,4 +1,7 @@
-{lib, stdenvNoCC, git, git-lfs, cacert}: let
+{lib, stdenvNoCC, git, git-lfs, cacert}:
+let
+  inherit (builtins) unsafeGetAttrPos;
+
   urlToName = url: rev: let
     inherit (lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
@@ -11,12 +14,15 @@
       then "-${short}"
       else "";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
+
 in
+args@
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? ""
 , name ? urlToName url rev
+, pos ? if (args?rev) then unsafeGetAttrPos "rev" args else null
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
@@ -90,5 +96,6 @@ stdenvNoCC.mkDerivation {
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
-  inherit preferLocalBuild;
+  inherit preferLocalBuild pos;
+
 }
