@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-appconf";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,13 +17,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-compressor";
     repo = "django-appconf";
-    rev = version;
-    sha256 = "06hwbz7362y0la9np3df25mms235fcqgpd2vn0mnf8dri9spzy1h";
+    rev = "v${version}";
+    hash = "sha256-nS4Hwp/NYg1XGvZO1tiE9mzJA7WFifyvgAjyp3YpqS4=";
   };
 
   propagatedBuildInputs = [
     django
-    six
   ];
 
   preCheck = ''
