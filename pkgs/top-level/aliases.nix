@@ -799,6 +799,7 @@ mapAliases ({
   nix_2_4 = nixVersions.nix_2_4;
   nix_2_5 = nixVersions.nix_2_5;
   nix_2_6 = nixVersions.nix_2_6;
+  nixopsUnstable = nixops_unstable; # Added 2022-03-03
   nmap-unfree = nmap; # Added 2021-04-06
   nmap_graphical = throw "'nmap_graphical' has been renamed to/replaced by 'nmap-graphical'"; # Converted to throw 2022-02-22
   nologin = throw "'nologin' has been renamed to/replaced by 'shadow'"; # Converted to throw 2022-02-22
