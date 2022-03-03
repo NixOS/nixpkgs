@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
 
+  makeFlags = [ "all" "llvm-spirv" ];
+
+  postInstall = ''
+    install -D tools/llvm-spirv/llvm-spirv $out/bin/llvm-spirv
+  '';
+
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
