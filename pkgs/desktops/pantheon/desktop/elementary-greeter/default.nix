@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.0.1";
+  version = "6.0.2";
 
   repoName = "greeter";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
+    sha256 = "sha256-0chBM8JuCYgZXHneiSxSICZwBVm2Vgx+bas9wUjbnyg=";
   };
 
   passthru = {
@@ -94,18 +94,6 @@ stdenv.mkDerivation rec {
       src = ./hardcode-fallback-background.patch;
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
-    # Revert "UserCard: use accent color for logged_in check (#566)"
-    # https://github.com/elementary/greeter/pull/566
-    # Fixes crash issue reported in:
-    # https://github.com/elementary/greeter/issues/578
-    # https://github.com/NixOS/nixpkgs/issues/151609
-    # Probably also fixes:
-    # https://github.com/elementary/greeter/issues/568
-    # https://github.com/elementary/greeter/issues/583
-    # https://github.com/NixOS/nixpkgs/issues/140513
-    # Revisit this when the greeter is ported to GTK 4:
-    # https://github.com/elementary/greeter/pull/591
-    ./revert-pr566.patch
   ];
 
   preFixup = ''
