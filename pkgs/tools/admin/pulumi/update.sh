@@ -36,6 +36,7 @@ pulumi_repos=(
   "gcp"
   "github"
   "gitlab"
+  "google-native"
   "hcloud"
   "kubernetes"
   "linode"
