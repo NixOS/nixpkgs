@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi,
-  rcssmin, rjsmin, django_appconf }:
+  rcssmin, rjsmin, django-appconf }:
 
 buildPythonPackage rec {
     pname = "django_compressor";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     # requires django-sekizai, which we don't have packaged yet
     doCheck = false;
 
-    propagatedBuildInputs = [ rcssmin rjsmin django_appconf ];
+    propagatedBuildInputs = [ rcssmin rjsmin django-appconf ];
 
     meta = with lib; {
       description = "Compresses linked and inline JavaScript or CSS into single cached files";
