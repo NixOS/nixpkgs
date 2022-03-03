@@ -227,7 +227,7 @@ typing-extensions = "^3.7.4"
 type = "git"
 url = "https://github.com/NixOS/nixops.git"
 reference = "master"
-resolved_reference = "e39404442531196853954820643407e8316cdf6e"
+resolved_reference = "d939c9bcae184d10583bf48211739b5b6521fc64"
 
 [[package]]
 name = "nixops-aws"
