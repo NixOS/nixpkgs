@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, python
 
 # native inputs
 , pkgconfig
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     "lz4"
     "lz4.block"
     "lz4.frame"
+    "lz4.stream"
   ];
 
   checkInputs = [
@@ -49,13 +51,13 @@ buildPythonPackage rec {
     psutil
   ];
 
-  # leave build directory, so the installed library gets imported
-  preCheck = ''
-    pushd tests
-  '';
+  # for lz4.steam
+  PYLZ4_EXPERIMENTAL = true;
 
-  postCheck = ''
-    popd
+  # prevent local lz4 directory from getting imported as it lacks native extensions
+  preCheck = ''
+    rm -r lz4
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
   meta = with lib; {
