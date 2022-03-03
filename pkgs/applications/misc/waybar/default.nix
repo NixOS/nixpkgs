@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , pkg-config
 , ninja
@@ -38,6 +39,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-yXvT9NMXtUxr9VVLADoL6PUOMko5yFFc51zNsfHz6S4=";
   };
+
+  patches = [
+    # Note: remove for version > 0.9.9
+    (fetchpatch {
+      url = "https://github.com/Alexays/Waybar/commit/96caa9f094f26755217156a77f4d5bf4a46ce91b.patch";
+      sha256 = "sha256-p8X1JZLNHUUy7Qn1gebWVozl+55SPePlyNfJLBw0rTY=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson ninja pkg-config scdoc wrapGAppsHook
