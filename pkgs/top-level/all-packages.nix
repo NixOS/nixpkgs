@@ -6435,6 +6435,8 @@ with pkgs;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
+  hcl2json = callPackage ../applications/misc/hcl2json { };
+
   hcxtools = callPackage ../tools/security/hcxtools { };
 
   hcxdumptool = callPackage ../tools/security/hcxdumptool { };
