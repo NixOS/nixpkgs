@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, writeText
 
 , cmake
 , pkg-config
@@ -18,6 +19,7 @@
 , libuuid
 , wayland-protocols
 , Carbon
+, CoreServices
 # optionals
 , opencl-headers
 , OpenCL
@@ -39,13 +41,13 @@ let cmake3_22 = cmake.overrideAttrs (old: {
 
 in stdenv.mkDerivation rec {
   pname = "vengi-tools";
-  version = "0.0.14";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
-    repo = "engine";
+    repo = "vengi";
     rev = "v${version}";
-    sha256 = "sha256-v82hKskTSwM0NDgLVHpHZNRQW6tWug4pPIt91MrUwUo=";
+    sha256 = "sha256-Ur1X5FhOa87jbjWBXievBfCHW+qP/8bqLiyKAC8+KU4=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +71,7 @@ in stdenv.mkDerivation rec {
     #libpqxx
     #mosquitto
   ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon OpenCL ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
     ++ lib.optional (!stdenv.isDarwin) opencl-headers;
 
   cmakeFlags = [
@@ -82,7 +84,7 @@ in stdenv.mkDerivation rec {
     "-DGAMES=OFF"
     "-DMAPVIEW=OFF"
     "-DAIDEBUG=OFF"
-  ];
+  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
@@ -98,6 +100,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests = {
     voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
     run-voxedit = nixosTests.vengi-tools;
   };
 
@@ -110,10 +113,12 @@ in stdenv.mkDerivation rec {
       filemanager and a command line tool to convert between several voxel
       formats.
     '';
-    homepage = "https://mgerhardy.github.io/engine/";
-    downloadPage = "https://github.com/mgerhardy/engine/releases";
+    homepage = "https://mgerhardy.github.io/vengi/";
+    downloadPage = "https://github.com/mgerhardy/vengi/releases";
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
