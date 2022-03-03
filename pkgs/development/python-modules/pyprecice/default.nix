@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy mpi4py precice ];
 
   doCheck = false; # Disable Test because everything depends on open mpi which requires network.
-  pythonImportChecks = [ "precice" ];
+  pythonImportsCheck = [ "precice" ];
 
   meta = with lib; {
     description = "Python language bindings for preCICE";
