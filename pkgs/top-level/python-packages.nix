@@ -714,6 +714,8 @@ in {
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
 
+  asyncsleepiq = callPackage ../development/python-modules/asyncsleepiq { };
+
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
   asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
