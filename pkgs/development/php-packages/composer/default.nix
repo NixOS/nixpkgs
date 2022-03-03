@@ -5,7 +5,7 @@ mkDerivation rec {
   version = "2.2.7";
 
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/${version}/composer.phar";
+    url = "https://github.com/composer/composer/releases/download/${version}/composer.phar";
     sha256 = "sha256-EAQN7WY1QZkO74zh9vpEyztKR+FF77jp5ZkHoVBoAz0=";
   };
 
