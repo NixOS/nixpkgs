@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, cacert }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -74,40 +74,13 @@ let
     inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
-  _nugetDeps = linkFarmFromDrvs "${name}-nuget-deps" (import nugetDeps {
-    fetchNuGet = { pname, version, sha256 }: fetchurl {
-      name = "${pname}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-      inherit sha256;
-    };
-  });
+  _nugetDeps = mkNugetDeps { name = "${name}-nuget-deps"; nugetDeps = import nugetDeps; };
   _localDeps = linkFarmFromDrvs "${name}-local-nuget-deps" projectReferences;
 
-  nuget-source = stdenvNoCC.mkDerivation rec {
-    name = "${pname}-nuget-source";
-    meta.description = "A Nuget source with the dependencies for ${pname}";
-
-    nativeBuildInputs = [ dotnetPackages.Nuget xml2 ];
-    buildCommand = ''
-      export HOME=$(mktemp -d)
-      mkdir -p $out/{lib,share}
-
-      nuget sources Add -Name nixos -Source "$out/lib"
-      nuget init "${_nugetDeps}" "$out/lib"
-      ${lib.optionalString (projectReferences != [])
-        "nuget init \"${_localDeps}\" \"$out/lib\""}
-
-      # Generates a list of all unique licenses' spdx ids.
-      find "$out/lib" -name "*.nuspec" -exec sh -c \
-        "xml2 < {} | grep "license=" | cut -d'=' -f2" \; | sort -u > $out/share/licenses
-    '';
-  } // { # This is done because we need data from `$out` for `meta`. We have to use overrides as to not hit infinite recursion.
-    meta.licence = let
-      depLicenses = lib.splitString "\n" (builtins.readFile "${nuget-source}/share/licenses");
-      getLicence = spdx: lib.filter (license: license.spdxId or null == spdx) (builtins.attrValues lib.licenses);
-    in (lib.flatten (lib.forEach depLicenses (spdx:
-      if (getLicence spdx) != [] then (getLicence spdx) else [] ++ lib.optional (spdx != "") spdx
-    )));
+  nuget-source = mkNugetSource {
+    name = "${args.pname}-nuget-source";
+    description = "A Nuget source with the dependencies for ${args.pname}";
+    deps = [ _nugetDeps _localDeps ];
   };
 
 in stdenvNoCC.mkDerivation (args // {
@@ -158,7 +131,6 @@ in stdenvNoCC.mkDerivation (args // {
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
-          -p:RestoreUseStaticGraphEvaluation=true \
           --packages "$HOME/nuget_pkgs" \
           ${lib.optionalString (dotnetRestoreFlags != []) (builtins.toString dotnetRestoreFlags)} \
           ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
