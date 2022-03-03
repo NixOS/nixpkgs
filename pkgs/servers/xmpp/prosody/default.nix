@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   nixosModuleDeps = [
     "cloud_notify"
     "cloud_notify_encrypted"
+    "cloud_notify_priority_tag"
+    "cloud_notify_filters"
     "vcard_muc"
     "http_upload"
   ];
