@@ -10,8 +10,8 @@
 }:
 
 let
-  version = "1.2.1";
-  commit = "eed9dc7c82c5a7fbc13fd9b496e1faaec3f20d57";
+  version = "1.3.0";
+  commit = "5bfe79b3632f15c442e8dc51ec206ab76354487f";
 in buildGoModule {
   pname = "gg-scm";
   inherit version;
@@ -20,7 +20,7 @@ in buildGoModule {
     owner = "gg-scm";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "770c807403f5d99cea6450f889d268800e1c2563f0cd6142936741c40b29cc95";
+    sha256 = "e628aeddb94d2470de860df09ef65499f8c5493fb336bf3df8502842ee02487f";
   };
   postPatch = ''
     substituteInPlace cmd/gg/editor_unix.go \
