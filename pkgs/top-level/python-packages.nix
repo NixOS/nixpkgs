@@ -9298,6 +9298,8 @@ in {
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
+  socksio = callPackage ../development/python-modules/socksio { };
+
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 
   soco = callPackage ../development/python-modules/soco { };
