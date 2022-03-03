@@ -33316,7 +33316,7 @@ with pkgs;
 
   nixops = callPackage ../tools/package-management/nixops { };
 
-  nixopsUnstable = lowPrio (callPackage ../applications/networking/cluster/nixops { });
+  nixops_unstable = lowPrio (callPackage ../applications/networking/cluster/nixops { });
 
   nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
 

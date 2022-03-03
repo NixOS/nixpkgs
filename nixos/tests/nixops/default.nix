@@ -9,7 +9,7 @@ let
     #  - Alternatively, blocked on a NixOps 2 release
     #    https://github.com/NixOS/nixops/issues/1242
     # stable = testsLegacyNetwork { nixopsPkg = pkgs.nixops; };
-    unstable = testsForPackage { nixopsPkg = pkgs.nixopsUnstable; };
+    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable; };
 
     # inherit testsForPackage;
   };
