@@ -42,7 +42,6 @@ buildPythonPackage rec {
     "lz4"
     "lz4.block"
     "lz4.frame"
-    "lz4.stream"
   ];
 
   checkInputs = [
