@@ -18,7 +18,7 @@ let
 
             nixops = super.nixops.overridePythonAttrs (
               old: {
-                version = "${old.version}-pre-${lib.substring 0 7 super.nixops.src.rev}";
+                version = "${old.version}-pre-${lib.substring 0 7 super.nixops.src.rev or "dirty"}";
 
                 postPatch = ''
                   substituteInPlace nixops/args.py --subst-var version
