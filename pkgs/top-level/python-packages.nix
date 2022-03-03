@@ -176,6 +176,8 @@ in {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+  adafruit-io = callPackage ../development/python-modules/adafruit-io { };
+
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
   adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
@@ -6080,6 +6082,8 @@ in {
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 
+  pyprecice = callPackage ../development/python-modules/pyprecice { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
@@ -9979,6 +9983,8 @@ in {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
+
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
@@ -10104,6 +10110,8 @@ in {
   twisted = callPackage ../development/python-modules/twisted { };
 
   twitch-python = callPackage ../development/python-modules/twitch-python { };
+
+  twitchapi = callPackage ../development/python-modules/twitchapi { };
 
   twitter = callPackage ../development/python-modules/twitter { };
 

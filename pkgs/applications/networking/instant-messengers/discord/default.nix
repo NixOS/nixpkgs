@@ -3,7 +3,7 @@ let
   inherit (pkgs) callPackage fetchurl;
   versions = if stdenv.isLinux then {
     stable = "0.0.17";
-    ptb = "0.0.27";
+    ptb = "0.0.29";
     canary = "0.0.133";
   } else {
     stable = "0.0.264";
@@ -26,7 +26,7 @@ let
       ptb = fetchurl {
         url =
           "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "0yphs65wpyr0ap6y24b0nbhq7sm02dg5c1yiym1fxjbynm1mdvqb";
+        sha256 = "d78NnQZ3MkLje8mHrI6noH2iD2oEvSJ3cDnsmzQsUYc=";
       };
       canary = fetchurl {
         url =

@@ -89,7 +89,7 @@ in
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       # bind = 53; #dynamically allocated as of 2021-09-03
       wwwrun = 54;
       #adm = 55; # unused
@@ -412,7 +412,7 @@ in
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       #bind = 53; # unused
       wwwrun = 54;
       adm = 55;

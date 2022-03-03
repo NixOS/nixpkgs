@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "electrum-grs";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "0wvbjj80r1zxpz24adkicxsdjnv3nciga6rl1wfmky463w03rca2";
   };
 

@@ -469,6 +469,8 @@ with pkgs;
 
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+  mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
+  mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
     dotnetfx = dotnetfx40;
@@ -5557,8 +5559,6 @@ with pkgs;
   fping = callPackage ../tools/networking/fping {};
 
   fpm = callPackage ../tools/package-management/fpm { };
-
-  fprot = callPackage ../tools/security/fprot { };
 
   fprintd = callPackage ../tools/security/fprintd { };
 
@@ -25307,12 +25307,12 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  emacs27-nox = lowPrio (appendToName "nox" (emacs27.override {
+  emacs27-nox = lowPrio (emacs27.override {
     withX = false;
     withNS = false;
     withGTK2 = false;
     withGTK3 = false;
-  }));
+  });
 
   emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
     inherit (darwin.apple_sdk.frameworks)
@@ -31450,9 +31450,6 @@ with pkgs;
   steam = steamPackages.steam-fhsenv;
 
   steam-run = steam.run;
-  steam-run-native = (steam.override {
-    nativeOnly = true;
-  }).run;
 
   steam-tui = callPackage ../games/steam-tui { };
 
