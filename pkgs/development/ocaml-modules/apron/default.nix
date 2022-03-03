@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp mpfr ppl camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
 
-  strictDeps = true;
+  strictDeps = false;
 
   outputs = [ "out" "bin" "dev" ];
 
