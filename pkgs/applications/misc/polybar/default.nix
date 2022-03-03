@@ -10,6 +10,7 @@
 , python3
 , python3Packages # sphinx-build
 , lib
+, libuv
 , stdenv
 , xcbproto
 , xcbutil
@@ -43,21 +44,24 @@
 
 stdenv.mkDerivation rec {
   pname = "polybar";
-  version = "3.5.7";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-h12VW3IY4do4cKz2Fd/QgVTBk+zJO+qXuRUCQUyO/x0=";
+    sha256 = "sha256-CgMXCo5YpnvuBNWSKZ8QdCcEb5bhnWx1DWBDy6fE1KI=";
     fetchSubmodules = true;
   };
+
+  cmakeFlags = ["-DBUILD_CONFIG=off"];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.sphinx
     removeReferencesTo
+    libuv
   ] ++ lib.optional (i3Support || i3GapsSupport) makeWrapper;
 
   buildInputs = [
