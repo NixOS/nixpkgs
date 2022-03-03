@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
+    sha256 = "0810da5sqsdlssbc73rcml171ghja5bkznpfja35k0d296f33ihy";
   };
 
   nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
@@ -96,36 +96,6 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
-    })
-    (fetchpatch {
-      name = "CVE-2021-3713.patch"; # remove with next release
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
-      sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
-    })
-    # Fixes a crash that frequently happens in some setups that share /nix/store over 9p like nixos tests
-    # on some systems. Remove with next release.
-    (fetchpatch {
-      name = "fix-crash-in-v9fs_walk.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
-      sha256 = "sha256-LYGbBLS5YVgq8Bf7NVk7HBFxXq34NmZRPCEG79JPwk8=";
-    })
-    # Fixes an io error on discard/unmap operation for aio/file backend. Remove with next release.
-    (fetchpatch {
-      name = "fix-aio-discard-return-value.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
-      sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
-    })
-    # Fixes managedsave (snapshot creation) with QXL video device. Remove with next release.
-    (fetchpatch {
-      name = "qxl-fix-pre-save-logic.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
-      sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
-    })
-    # Fixes socket_sockaddr_to_address_unix assertion errors in some setups. Remove with next release.
-    (fetchpatch {
-      name = "fix-unix-socket-path-copy-again.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/118d527f2e4baec5fe8060b22a6212468b8e4d3f.patch";
-      sha256 = "sha256-ox+JSpc0pqd3bMi5Ot7ljQyk70SX8g+BLufR06mZPps=";
     })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
