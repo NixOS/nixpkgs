@@ -4,6 +4,8 @@
 
 let
 
+  inherit (builtins) unsafeGetAttrPos;
+
   mirrors = import ./mirrors.nix;
 
   # Write the list of mirrors to a file that we can reuse between
@@ -37,6 +39,7 @@ let
 
 in
 
+args@
 { # URL to fetch.
   url ? ""
 
@@ -98,6 +101,15 @@ in
 
   # Additional packages needed as part of a fetch
 , nativeBuildInputs ? [ ]
+
+  # Source position for meta.position
+, pos ?
+    if (args?sha256) then unsafeGetAttrPos "sha256" args
+    else if (args?sha1) then unsafeGetAttrPos "sha1" args
+    else if (args?sha512) then unsafeGetAttrPos "sha512" args
+    else if (args?md5) then unsafeGetAttrPos "md5" args
+    else if (args?url) then unsafeGetAttrPos "url" args
+    else null
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
@@ -161,6 +173,9 @@ stdenvNoCC.mkDerivation {
     curlOpts="$curlOpts --netrc-file $PWD/netrc"
   '';
 
-  inherit meta;
-  inherit passthru;
+  inherit
+    meta
+    passthru
+    pos
+    ;
 }
