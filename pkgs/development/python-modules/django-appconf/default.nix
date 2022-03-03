@@ -1,7 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, django
+, six
+, python
+}:
+
 buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.0.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "django-compressor";
@@ -10,20 +21,20 @@ buildPythonPackage rec {
     sha256 = "06hwbz7362y0la9np3df25mms235fcqgpd2vn0mnf8dri9spzy1h";
   };
 
-  propagatedBuildInputs = [ six django ];
-
-  patches = [
-    (fetchpatch {
-      name = "backport_django_2_2.patch";
-      url = "https://github.com/django-compressor/django-appconf/commit/1526a842ee084b791aa66c931b3822091a442853.patch";
-      sha256 = "1vl2s6vlf15089s8p4c3g4d5iqm8jva66bdw683r8440f80ixgmw";
-    })
+  propagatedBuildInputs = [
+    django
+    six
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # prove we're running tests against installed package, not build dir
     rm -r appconf
-    python -m django test --settings="tests.test_settings"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m django test --settings=tests.test_settings
+    runHook postCheck
   '';
 
   meta = with lib; {
