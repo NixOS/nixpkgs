@@ -996,6 +996,7 @@ self: super: builtins.intersectAttrs super {
 
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-class-plugin = dontCheck super.hls-class-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
