@@ -17,6 +17,12 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
 
   nodes = {
     defaultMachine = { ... }: { };
+    failingMachine = { ... }: {
+      services.logrotate.configFile = pkgs.writeText "logrotate.conf" ''
+        # self-written config file
+        su notarealuser notagroupeither
+      '';
+    };
     machine = { config, ... }: {
       imports = [ importTest ];
 
@@ -128,5 +134,19 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
               "[[ $(sed -ne '/\"compat_keep\" {/,/}/p' /tmp/logrotate.conf | grep -w rotate) = \"  rotate 1\" ]]",
               "! sed -ne '/\"compat_keep\" {/,/}/p' /tmp/logrotate.conf | grep -w keep",
           )
+          # also check configFile option
+          failingMachine.succeed(
+              "conf=$(systemctl cat logrotate | grep -oE '/nix/store[^ ]*logrotate.conf'); cp $conf /tmp/logrotate.conf",
+              "grep 'self-written config' /tmp/logrotate.conf",
+          )
+      with subtest("Check logrotate-checkconf service"):
+          machine.wait_for_unit("logrotate-checkconf.service")
+          # wait_for_unit also asserts for success, so wait for
+          # parent target instead and check manually.
+          failingMachine.wait_for_unit("multi-user.target")
+          info = failingMachine.get_unit_info("logrotate-checkconf.service")
+          if info["ActiveState"] != "failed":
+              raise Exception('logrotate-checkconf.service was not failed')
+
     '';
 })

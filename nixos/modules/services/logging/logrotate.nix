@@ -300,7 +300,10 @@ in
           for example, the test does not know about existing files and system users are
           not known.
           These limitations mean we must adjust the file for tests (missingok is forced
-          and users are replaced by dummy users).
+          and users are replaced by dummy users), so tests are complemented by a
+          logrotate-checkconf service that is enabled by default.
+          This extra check can be disabled by disabling it at the systemd level with the
+          <option>services.systemd.services.logrotate-checkconf.enable</option> option.
 
           Conversely there are still things that might make this check fail incorrectly
           (e.g. a file path where we don't have access to intermediate directories):
@@ -385,6 +388,15 @@ in
         Restart = "no";
         User = "root";
         ExecStart = "${pkgs.logrotate}/sbin/logrotate ${mailOption} ${cfg.configFile}";
+      };
+    };
+    systemd.services.logrotate-checkconf = {
+      description = "Logrotate configuration check";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.logrotate}/sbin/logrotate --debug ${cfg.configFile}";
       };
     };
   };
