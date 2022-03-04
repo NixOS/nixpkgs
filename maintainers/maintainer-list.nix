@@ -12866,6 +12866,12 @@
     githubId = 118959;
     name = "VinyMeuh";
   };
+  viraptor = {
+    email = "nix@viraptor.info";
+    github = "viraptor";
+    githubId = 188063;
+    name = "Stanisław Pitucha";
+  };
   viric = {
     email = "viric@viric.name";
     github = "viric";

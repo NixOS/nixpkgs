@@ -1040,7 +1040,11 @@ with pkgs;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
 
+  cf-vault = callPackage ../tools/admin/cf-vault { };
+
   cope = callPackage ../tools/misc/cope { };
+
+  ejson2env = callPackage ../tools/admin/ejson2env { };
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
@@ -4549,7 +4553,8 @@ with pkgs;
     cudatoolkit_11_2
     cudatoolkit_11_3
     cudatoolkit_11_4
-    cudatoolkit_11_5;
+    cudatoolkit_11_5
+    cudatoolkit_11_6;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -5207,6 +5212,8 @@ with pkgs;
   };
 
   endlessh = callPackage ../servers/endlessh { };
+
+  endlessh-go = callPackage ../servers/endlessh-go { };
 
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
@@ -6209,6 +6216,10 @@ with pkgs;
   };
 
   grin = callPackage ../tools/text/grin { };
+
+  igrep = callPackage ../tools/text/igrep {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ripgrep = callPackage ../tools/text/ripgrep {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -10842,6 +10853,8 @@ with pkgs;
     # or xterm -ti 340
     SDL = SDL_sixel;
   };
+
+  vtm = callPackage ../tools/misc/vtm { };
 
   witness = callPackage ../tools/security/witness { };
 

@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     "-Dintrospection=${mesonEnableFeature enableGI}"
     "-Dsystemd-system-service=true"
     "-Dsystemd-system-unit-dir=${placeholder "out"}/lib/systemd/system"
+    "-Dsysconfdir=/etc"
   ];
 
   passthru.updateScript = nix-update-script {
