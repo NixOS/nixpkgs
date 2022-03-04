@@ -9935,6 +9935,8 @@ in {
 
   tika = callPackage ../development/python-modules/tika { };
 
+  tikzplotlib = callPackage ../development/python-modules/tikzplotlib { };
+
   tiledb = callPackage ../development/python-modules/tiledb {
     inherit (pkgs) tiledb;
   };
