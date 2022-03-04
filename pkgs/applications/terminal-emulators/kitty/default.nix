@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
-  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  lcms2,
-  librsync,
-  installShellFiles,
-  dbus,
-  darwin,
-  Cocoa,
-  CoreGraphics,
-  Foundation,
-  IOKit,
-  Kernel,
-  OpenGL,
-  libcanberra,
-  libicns,
-  libpng,
-  python3,
-  zlib,
+{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
+, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel
+, libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
+, libxkbcommon, libXi, libXext, wayland-protocols, wayland
+, lcms2
+, librsync
+, installShellFiles
+, dbus
+, darwin
+, Cocoa
+, CoreGraphics
+, Foundation
+, IOKit
+, Kernel
+, OpenGL
+, libcanberra
+, libicns
+, libpng
+, python3
+, zlib
 }:
 
 with python3Packages;
