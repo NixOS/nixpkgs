@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-/YmFlK5xl3HjaKGAhQu0JUVeujzPkAb8gNik4Lzp470=";
+    sha256 = "sha256-pjBjFPkKhKd8XI6wmzX/rAssHINMzDAZa+XRqG/pLYo=";
   };
 
   propagatedBuildInputs = [
