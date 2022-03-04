@@ -132,9 +132,9 @@ buildPythonApplication rec {
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
-      --bash <("$out/bin/kitty" + complete setup bash) \
-      --fish <("$out/bin/kitty" + complete setup fish) \
-      --zsh  <("$out/bin/kitty" + complete setup zsh)
+      --bash <("$out/bin/kitty" +complete setup bash) \
+      --fish <("$out/bin/kitty" +complete setup fish2) \
+      --zsh  <("$out/bin/kitty" +complete setup zsh)
 
     terminfo_src=${if stdenv.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
