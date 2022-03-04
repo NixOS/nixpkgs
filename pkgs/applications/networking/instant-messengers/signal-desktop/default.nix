@@ -4,7 +4,7 @@
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
-, systemd, libnotify, libdbusmenu, libpulseaudio
+, systemd, libnotify, libdbusmenu, libpulseaudio, xdg-utils
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -84,6 +84,7 @@ in stdenv.mkDerivation rec {
     (lib.getLib systemd)
     libnotify
     libdbusmenu
+    xdg-utils
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -123,6 +124,7 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
       ${customLanguageWrapperArgs}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
     # Fix the desktop link

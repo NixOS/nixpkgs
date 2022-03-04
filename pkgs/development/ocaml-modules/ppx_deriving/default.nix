@@ -5,6 +5,7 @@
 , ppxlib
 , ppx_derivers
 , result
+, ounit
 , ounit2
 , ocaml-migrate-parsetree
 , ocaml-migrate-parsetree-2
@@ -51,7 +52,9 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ ounit2 ];
+  checkInputs = [
+    (if lib.versionAtLeast version "5.2" then ounit2 else ounit)
+  ];
 
   meta = with lib; {
     description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02.";
