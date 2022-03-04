@@ -1015,6 +1015,8 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
+  ejson2env = callPackage ../tools/admin/ejson2env { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
