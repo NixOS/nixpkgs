@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.1";
 
   src = fetchurl {
-    url = "https://github.com/omar-polo/kamid/releases/download/0.1/${pname}-${version}.tar.gz";
+    url = "https://github.com/omar-polo/kamid/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "16gi82dgaxwy8fgg05hbam796pk51i6xlyrx8qhghi7ikxr5jd19";
   };
 
