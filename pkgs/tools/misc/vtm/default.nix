@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 }:
@@ -15,16 +16,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ ];
-
   cmakeFlags = [ "../src" ];
 
   meta = {
     homepage = "https://vtm.netxs.online/";
     description = "Terminal multiplexer with window manager and session sharing";
-
     license = lib.licenses.mit;
-
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ahuzik ];
   };
