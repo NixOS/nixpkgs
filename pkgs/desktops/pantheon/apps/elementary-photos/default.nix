@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.3";
+  version = "2.7.4";
 
   repoName = "photos";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-ja4ElW0FNm9oNyn+00SdI2Cxep6LyWTYM8Blc6bnuiY=";
+    sha256 = "sha256-NhF/WgS6IOwgALSCNyFNxz8ROVTb+mUX+lBtnWEyhEI=";
   };
 
   nativeBuildInputs = [
