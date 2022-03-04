@@ -61,6 +61,18 @@ cfgbootnone = """  # Disable bootloader.
 cfgbootcrypt = """  # Enable grub cryptodisk
   boot.loader.grub.enableCryptodisk=true;
 
+  # Setup keyfile
+  boot.initrd.secrets = {
+    "/crypto_keyfile.bin" = "/crypto_keyfile.bin";
+  };
+  boot.initrd.luks.devices."@@cryptodisk@@".keyFile = "/crypto_keyfile.bin"; 
+
+"""
+
+cfgswapcrypt = """  # Enable swap on luks
+  boot.initrd.luks.devices."@@swapdev@@".device = "/dev/disk/by-uuid/@@swapuuid@@";
+  boot.initrd.luks.devices."@@swapdev@@".keyFile = "/crypto_keyfile.bin";
+
 """
 
 cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
@@ -257,8 +269,16 @@ def run():
         cfg += cfgbootnone
 
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks":
+        if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
             cfg += cfgbootcrypt
+            catenate(variables, "cryptodisk", part["luksMapperName"])
+            break
+
+    for part in gs.value("partitions"):
+        if part["claimed"] == True and part["fs"] == "linuxswap" and part["fsName"] == "luks":
+            cfg += cfgswapcrypt
+            catenate(variables, "swapdev", part["luksMapperName"])
+            catenate(variables, "swapuuid", part["luksUuid"])
             break
 
     cfg += cfgnetwork
@@ -284,7 +304,7 @@ def run():
 
     cfg += cfggnome
 
-    if (gs.value("KeyboardLayout") is not None and gs.value("KeyboardVariant") is not None):
+    if (gs.value("keyboardLayout") is not None and gs.value("keyboardVariant") is not None):
         cfg += cfgkeymap
         catenate(variables, "kblayout", gs.value("keyboardLayout"))
         catenate(variables, "kbvariant", gs.value("keyboardVariant"))
@@ -296,7 +316,7 @@ def run():
             "username")], stderr=subprocess.STDOUT).decode("utf-8").rstrip("\n").split(":")
         fullname = passwd[4]
         groups = subprocess.check_output(["chroot", root_mount_point, "groups", gs.value(
-            "username")]).decode("utf-8").rstrip("\n").split(":")[1].lstrip().split(" ")
+            "username")], stderr=subprocess.STDOUT).decode("utf-8").rstrip("\n").split(":")[1].lstrip().split(" ")
 
         if "users" in groups:
             groups.remove("users")
@@ -345,13 +365,28 @@ def run():
 
     libcalamares.job.setprogress(0.1)
 
+    # Generate hardware.nix with mounted swap device
+    subprocess.check_output(
+        ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+
     # Install customizations
-    subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
-                            "--root", root_mount_point], stderr=subprocess.STDOUT)
-    subprocess.check_output(["nixos-enter", "--root", root_mount_point,
-                            "--", "nix-collect-garbage", "-d"], stderr=subprocess.STDOUT)
+    try:
+        subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
+                                 "--root", root_mount_point], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return ("nixos-install failed", e.output.decode("utf-8"))
+
+    try:
+        subprocess.check_output(["nixos-enter", "--root", root_mount_point,
+                                 "--", "nix-collect-garbage", "-d"], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return ("nix-collect-garbage failed", e.output.decode("utf-8"))
+
     libcalamares.job.setprogress(0.4)
-    subprocess.check_output(["nixos-enter", "--root", root_mount_point,
-                            "--", "nixos-rebuild", "boot"], stderr=subprocess.STDOUT)
+    try:
+        subprocess.check_output(["nixos-enter", "--root", root_mount_point,
+                                 "--", "nixos-rebuild", "boot"], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return ("nixos-rebuild failed", e.output.decode("utf-8"))
 
     return None

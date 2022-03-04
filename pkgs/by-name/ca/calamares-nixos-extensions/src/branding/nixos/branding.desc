@@ -12,7 +12,7 @@ componentName:  nixos
 # uses "Welcome to the Calamares installer for %1." This allows
 # to distinguish this installer from other installers for the
 # same distribution.
-welcomeStyleCalamares:   true
+welcomeStyleCalamares:   false
 
 # Should the welcome image (productWelcome, below) be scaled
 # up beyond its natural size? If false, the image does not grow

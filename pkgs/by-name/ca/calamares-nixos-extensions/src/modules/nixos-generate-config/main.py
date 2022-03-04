@@ -40,10 +40,31 @@ def run():
         return ("Bad mount point for root partition in globalstorage",
                 "globalstorage[\"rootMountPoint\"] is \"{}\", which does not "
                 "exist, doing nothing".format(root_mount_point))
+
+    # Mount swap partition
+    for part in gs.value("partitions"):
+        if part["claimed"] == True and part["fs"] == "linuxswap":
+            if part["fsName"] == "luks":
+                try:
+                    subprocess.check_output(
+                        ["swapon", "/dev/mapper/" + part["luksMapperName"]], stderr=subprocess.STDOUT)
+                except subprocess.CalledProcessError as e:
+                    return ("swapon failed to activate swap", "/dev/mapper/" + part["luksMapperName"], e.output.decode("utf-8"))
+            else:
+                try:
+                    subprocess.check_output(
+                        ["swapon", part["device"]], stderr=subprocess.STDOUT)
+                except subprocess.CalledProcessError as e:
+                    return ("swapon failed to activate swap", part["device"], e.output.decode("utf-8"))
+            break
+
     subprocess.check_output(
         ["chmod", "o+rx", root_mount_point], stderr=subprocess.STDOUT)
-    subprocess.check_output(
-        ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+    try:
+        subprocess.check_output(
+            ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return ("nixos-generate-config failed", e.output.decode("utf-8"))
 
     config = os.path.join(root_mount_point, "etc/nixos/configuration.nix")
 
@@ -64,18 +85,26 @@ def run():
             subprocess.check_output(
                 ["sed", "-i", "s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
 
-    # Remove services, we'll install them later
+    # Remove services and networking options, we'll install them later
     subprocess.check_output(
         ["sed", "-i", "/  services.*/d", config], stderr=subprocess.STDOUT)
+    subprocess.check_output(
+        ["sed", "-i", "/  networking.*/d", config], stderr=subprocess.STDOUT)
 
     libcalamares.job.setprogress(0.3)
 
-    subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
-                            "--root", root_mount_point], stderr=subprocess.STDOUT)
+    try:
+        subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
+                                 "--root", root_mount_point], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return ("nixos-install failed", e.output.decode("utf8"))
 
     libcalamares.job.setprogress(0.9)
     # Fix issues in modules that use chroot
-    subprocess.check_output(
-        ["chroot", root_mount_point, "/nix/var/nix/profiles/system/activate"], stderr=subprocess.STDOUT)
+    try:
+        subprocess.check_output(
+            ["chroot", root_mount_point, "/nix/var/nix/profiles/system/activate"], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return ("chroot failed", e.output.decode("utf8"))
 
     return None
