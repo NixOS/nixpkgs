@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.3.2";
+  version = "3.3.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-h7an/Fm9pNnThCHXg9PAKG822dqXE/CUuW8lDJlwMfw=";
+    sha256 = "sha256-X0tizMD/2hfYKBk+zGqfyU5yYjqM4cQiS/uI6GuVmew=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
   ];
+
+  format = "pyproject";
 
   # no tests available, do the imports check instead
   doCheck = false;
