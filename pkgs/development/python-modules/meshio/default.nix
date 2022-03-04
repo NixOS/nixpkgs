@@ -6,6 +6,7 @@
 , h5py
 , exdown
 , pytestCheckHook
+, rich
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
     numpy
     netcdf4
     h5py
+    rich
   ];
 
   checkInputs = [
