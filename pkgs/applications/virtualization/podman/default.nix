@@ -58,6 +58,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
+    mkdir -p {$out/{bin,etc,lib,share},$man} # ensure paths exist for the wrapper
     ${if stdenv.isDarwin then ''
       mv bin/{darwin/podman,podman}
     '' else ''
