@@ -10,8 +10,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "lark-parser" "lark"
+    substituteInPlace setup.py --replace "lark-parser" "lark"
   '';
 
   propagatedBuildInputs = [ hypothesis lark libcst ];
@@ -19,6 +18,7 @@ buildPythonPackage rec {
   checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
 
   pytestFlagsArray = [
+    "-v"
     "--numprocesses $NIX_BUILD_CORES"
   ];
 
