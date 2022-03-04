@@ -1,6 +1,46 @@
 # Test configuration switching.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : let
+
+  # Simple service that can either be socket-activated or that will
+  # listen on port 1234 if not socket-activated.
+  # A connection to the socket causes 'hello' to be written to the client.
+  socketTest = pkgs.writeScript "socket-test.py" /* python */ ''
+    #!${pkgs.python3}/bin/python3
+
+    from socketserver import TCPServer, StreamRequestHandler
+    import socket
+    import os
+
+
+    class Handler(StreamRequestHandler):
+        def handle(self):
+            self.wfile.write("hello".encode("utf-8"))
+
+
+    class Server(TCPServer):
+        def __init__(self, server_address, handler_cls):
+            listenFds = os.getenv('LISTEN_FDS')
+            if listenFds is None or int(listenFds) < 1:
+                print(f'Binding to {server_address}')
+                TCPServer.__init__(
+                        self, server_address, handler_cls, bind_and_activate=True)
+            else:
+                TCPServer.__init__(
+                        self, server_address, handler_cls, bind_and_activate=False)
+                # Override socket
+                print(f'Got activated by {os.getenv("LISTEN_FDNAMES")} '
+                      f'with {listenFds} FDs')
+                self.socket = socket.fromfd(3, self.address_family,
+                                            self.socket_type)
+
+
+    if __name__ == "__main__":
+        server = Server(("localhost", 1234), Handler)
+        server.serve_forever()
+  '';
+
+in {
   name = "switch-test";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ gleber das_j ];
@@ -8,6 +48,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
+      environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
       specialisation = rec {
@@ -231,6 +272,40 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           systemd.services.reload-triggers-and-restart.serviceConfig.X-Modified = "test";
         };
 
+        simple-socket.configuration = {
+          systemd.services.socket-activated = {
+            description = "A socket-activated service";
+            stopIfChanged = lib.mkDefault false;
+            serviceConfig = {
+              ExecStart = socketTest;
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+          systemd.sockets.socket-activated = {
+            wantedBy = [ "sockets.target" ];
+            listenStreams = [ "/run/test.sock" ];
+            socketConfig.SocketMode = lib.mkDefault "0777";
+          };
+        };
+
+        simple-socket-service-modified.configuration = {
+          imports = [ simple-socket.configuration ];
+          systemd.services.socket-activated.serviceConfig.X-Test = "test";
+        };
+
+        simple-socket-stop-if-changed.configuration = {
+          imports = [ simple-socket.configuration ];
+          systemd.services.socket-activated.stopIfChanged = true;
+        };
+
+        simple-socket-stop-if-changed-and-reloadtrigger.configuration = {
+          imports = [ simple-socket.configuration ];
+          systemd.services.socket-activated = {
+            stopIfChanged = true;
+            reloadTriggers = [ "test" ];
+          };
+        };
+
         mount.configuration = {
           systemd.mounts = [
             {
@@ -378,7 +453,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Start a simple service
         out = switch_to_specialisation("${machine}", "simpleService")
@@ -388,7 +462,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
-        assert_lacks(out, "as well:")
 
         # Not changing anything doesn't do anything
         out = switch_to_specialisation("${machine}", "simpleService")
@@ -398,7 +471,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Restart the simple service
         out = switch_to_specialisation("${machine}", "simpleServiceModified")
@@ -408,7 +480,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: test.service\n")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Restart the service with stopIfChanged=false
         out = switch_to_specialisation("${machine}", "simpleServiceNostop")
@@ -418,7 +489,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Reload the service with reloadIfChanged=true
         out = switch_to_specialisation("${machine}", "simpleServiceReload")
@@ -428,7 +498,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Nothing happens when restartIfChanged=false
         out = switch_to_specialisation("${machine}", "simpleServiceNorestart")
@@ -438,7 +507,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Dry mode shows different messages
         out = switch_to_specialisation("${machine}", "simpleService", action="dry-activate")
@@ -448,7 +516,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
         assert_contains(out, "would start the following units: test.service\n")
 
         # Ensure \ works in unit names
@@ -459,7 +526,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: escaped\\x2ddash.service\n")
-        assert_lacks(out, "as well:")
 
         out = switch_to_specialisation("${machine}", "unitWithBackslashModified")
         assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
@@ -468,7 +534,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: escaped\\x2ddash.service\n")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
     with subtest("failing units"):
         # Let the simple service fail
@@ -482,7 +547,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "the following new units were started:")
         assert_contains(out, "warning: the following units failed: test.service\n")
         assert_contains(out, "Main PID:")  # output of systemctl
-        assert_lacks(out, "as well:")
 
         # A unit that gets into autorestart without failing is not treated as failed
         out = switch_to_specialisation("${machine}", "autorestartService")
@@ -492,7 +556,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: autorestart.service\n")
-        assert_lacks(out, "as well:")
         machine.systemctl('stop autorestart.service')  # cancel the 20y timer
 
         # Switching to the same system should do nothing (especially not treat the unit as failed)
@@ -503,7 +566,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: autorestart.service\n")
-        assert_lacks(out, "as well:")
         machine.systemctl('stop autorestart.service')  # cancel the 20y timer
 
         # If systemd thinks the unit has failed and is in autorestart, we should show it as failed
@@ -516,7 +578,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "the following new units were started:")
         assert_contains(out, "warning: the following units failed: autorestart.service\n")
         assert_contains(out, "Main PID:")  # output of systemctl
-        assert_lacks(out, "as well:")
 
     with subtest("unit file parser"):
         # Switch to a well-known state
@@ -530,7 +591,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Rename it
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraSectionOtherName")
@@ -540,7 +600,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Remove it
         out = switch_to_specialisation("${machine}", "simpleServiceNostop")
@@ -550,7 +609,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # [Install] section is ignored
         out = switch_to_specialisation("${machine}", "simpleServiceWithInstallSection")
@@ -560,7 +618,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Add a key
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKey")
@@ -570,7 +627,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Change its value
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKeyOtherValue")
@@ -580,7 +636,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Rename it
         out = switch_to_specialisation("${machine}", "simpleServiceWithExtraKeyOtherName")
@@ -590,7 +645,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Remove it
         out = switch_to_specialisation("${machine}", "simpleServiceNostop")
@@ -600,7 +654,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Add a reload trigger
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTrigger")
@@ -610,7 +663,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Modify the reload trigger
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModified")
@@ -620,7 +672,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Modify the reload trigger and something else
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModifiedAndSomethingElse")
@@ -630,7 +681,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "\nrestarting the following units: test.service\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
         # Remove the reload trigger
         out = switch_to_specialisation("${machine}", "simpleServiceReloadTriggerModifiedSomethingElse")
@@ -640,7 +690,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
 
     with subtest("restart and reload by activation script"):
         switch_to_specialisation("${machine}", "simpleServiceNorestart")
@@ -650,7 +699,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "restarting the following units:")
         assert_contains(out, "\nstarting the following units: no-restart-service.service, reload-triggers-and-restart-by-as.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
-        assert_lacks(out, "as well:")
+        assert_contains(out, "the following new units were started: no-restart-service.service, reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
         # Switch to the same system where the example services get restarted
         # and reloaded by the activation script
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
@@ -659,7 +708,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "reloading the following units: reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service\n")
         assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nstarting the following units:")
-        assert_lacks(out, "as well:")
+        assert_lacks(out, "the following new units were started:")
         # Switch to the same system and see if the service gets restarted when it's modified
         # while the fact that it's supposed to be reloaded by the activation script is ignored.
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script-modified")
@@ -668,7 +717,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "reloading the following units: reload-triggers.service, simple-reload-service.service\n")
         assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nstarting the following units:")
-        assert_lacks(out, "as well:")
+        assert_lacks(out, "the following new units were started:")
         # The same, but in dry mode
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
         assert_lacks(out, "would stop the following units:")
@@ -676,7 +725,71 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "would reload the following units: reload-triggers.service, simple-reload-service.service\n")
         assert_contains(out, "would restart the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
         assert_lacks(out, "\nwould start the following units:")
-        assert_lacks(out, "as well:")
+
+    with subtest("socket-activated services"):
+        # Socket-activated services don't get started, just the socket
+        machine.fail("[ -S /run/test.sock ]")
+        out = switch_to_specialisation("${machine}", "simple-socket")
+        # assert_lacks(out, "stopping the following units:") not relevant
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: socket-activated.socket\n")
+        machine.succeed("[ -S /run/test.sock ]")
+
+        # Changing a non-activated service does nothing
+        out = switch_to_specialisation("${machine}", "simple-socket-service-modified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # The unit is properly activated when the socket is accessed
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated")  # idk how that would happen tbh
+
+        # Changing an activated service with stopIfChanged=false restarts the service
+        out = switch_to_specialisation("${machine}", "simple-socket")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: socket-activated.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # Socket-activation of the unit still works
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated after the service was restarted")
+
+        # Changing an activated service with stopIfChanged=true stops the service and
+        # socket and starts the socket
+        out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed")
+        assert_contains(out, "stopping the following units: socket-activated.service, socket-activated.socket\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: socket-activated.socket\n")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # Socket-activation of the unit still works
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated after the service was restarted")
+
+        # Changing a reload trigger of a socket-activated unit only reloads it
+        out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed-and-reloadtrigger")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: socket-activated.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units: socket-activated.socket")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("[ -S /run/test.sock ]")
+        # Socket-activation of the unit still works
+        if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+            raise Exception("Socket was not properly activated after the service was restarted")
 
     with subtest("mounts"):
         switch_to_specialisation("${machine}", "mount")
@@ -689,7 +802,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=10240k")
@@ -700,11 +812,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "OnCalendar=2014-03-25 02:59:56 UTC")
         out = switch_to_specialisation("${machine}", "timerModified")
         assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following units:")
         assert_lacks(out, "reloading the following units:")
-        assert_contains(out, "restarting the following units: test-timer.timer\n")
+        assert_contains(out, "\nrestarting the following units: test-timer.timer\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
-        assert_lacks(out, "as well:")
         # It changed
         out = machine.succeed("systemctl show test-timer.timer")
         assert_contains(out, "OnCalendar=Fri 2012-11-23 16:00:00")
@@ -716,8 +828,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
-        assert_contains(out, "the following new units were started: test-watch.path")
-        assert_lacks(out, "as well:")
+        assert_contains(out, "the following new units were started: test-watch.path\n")
         machine.fail("test -f /testpath-modified")
 
         # touch the file, unit should be triggered
@@ -739,8 +850,21 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     with subtest("slices"):
         machine.succeed("echo 0 > /proc/sys/vm/panic_on_oom")  # allow OOMing
         out = switch_to_specialisation("${machine}", "slice")
+        # assert_lacks(out, "stopping the following units:") not relevant
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
         machine.fail("systemctl start testservice.service")
+
         out = switch_to_specialisation("${machine}", "sliceModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
         machine.succeed("systemctl start testservice.service")
         machine.succeed("echo 1 > /proc/sys/vm/panic_on_oom")  # disallow OOMing
   '';
