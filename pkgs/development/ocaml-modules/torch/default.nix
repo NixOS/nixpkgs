@@ -19,8 +19,6 @@ buildDunePackage rec {
   pname = "torch";
   version = "0.14";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

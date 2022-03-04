@@ -25,7 +25,7 @@
 buildDunePackage {
   pname = "git-paf";
 
-  inherit (git) version src minimumOCamlVersion useDune2;
+  inherit (git) version src minimumOCamlVersion;
 
   propagatedBuildInputs = [
     git

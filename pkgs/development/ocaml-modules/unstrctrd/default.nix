@@ -21,8 +21,6 @@ buildDunePackage rec {
     sha256 = "0mjm4v7kk75iwwsfnpmxc3bsl8aisz53y7z21sykdp60f4rxnah7";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     angstrom
     uutf

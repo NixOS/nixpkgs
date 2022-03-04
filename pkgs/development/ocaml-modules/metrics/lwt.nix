@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "metrics-lwt";
 
-  inherit (metrics) version useDune2 src;
+  inherit (metrics) version src;
 
   propagatedBuildInputs = [ logs ocaml_lwt metrics ];
 

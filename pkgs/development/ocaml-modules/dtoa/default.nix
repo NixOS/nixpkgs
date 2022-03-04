@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "dtoa";
   version = "0.3.2";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {

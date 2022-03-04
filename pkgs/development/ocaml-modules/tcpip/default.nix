@@ -15,8 +15,6 @@ buildDunePackage rec {
   pname = "tcpip";
   version = "7.0.1";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
     sha256 = "0gqj2s9sk3a7f4yavx423a569fvxsrgm0wg58biiv16v37xjaymp";

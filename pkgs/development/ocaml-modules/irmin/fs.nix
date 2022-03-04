@@ -8,8 +8,6 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ irmin ];
 
-  useDune2 = true;
-
   checkInputs = lib.optional doCheck irmin-test;
 
   doCheck = true;

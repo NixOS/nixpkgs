@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "integers";
   version = "0.5.1";
 
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  useDune1 = lib.versionOlder ocaml.version "4.08";
 
   src = fetchFromGitHub {
     owner = "ocamllabs";

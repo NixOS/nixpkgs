@@ -28,8 +28,6 @@ buildDunePackage rec {
     substituteInPlace ./vendor/dune --replace "mrmime.prettym" "prettym"
   '';
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     logs
     magic-mime

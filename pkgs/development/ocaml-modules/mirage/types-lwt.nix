@@ -3,7 +3,7 @@
 
 buildDunePackage {
   pname = "mirage-types-lwt";
-  inherit (mirage-types) version src useDune2;
+  inherit (mirage-types) version src;
 
   propagatedBuildInputs = [ mirage-types ];
 

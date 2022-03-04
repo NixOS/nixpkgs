@@ -5,8 +5,6 @@ buildDunePackage rec {
   pname = "crunch";
   version = "3.1.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-crunch/releases/download/v${version}/crunch-v${version}.tbz";
     sha256 = "0d26715a4h9r1wibnc12xy690m1kan7hrcgbb5qk8x78zsr67lnf";

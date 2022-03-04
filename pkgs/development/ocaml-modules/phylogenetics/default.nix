@@ -18,8 +18,6 @@ buildDunePackage rec {
   pname = "phylogenetics";
   version = "0.0.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/${pname}-${version}.tbz";
     sha256 = "sha256:0knfh2s0jfnsc0vsq5yw5xla7m7i98xd0qv512dyh3jhkh7m00l9";

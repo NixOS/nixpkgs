@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "secp256k1";
   version = "0.4.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "dakk";
     repo = "secp256k1-ml";

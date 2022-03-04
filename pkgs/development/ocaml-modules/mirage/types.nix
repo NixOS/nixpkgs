@@ -6,7 +6,7 @@
 
 buildDunePackage {
   pname = "mirage-types";
-  inherit (mirage) src version useDune2;
+  inherit (mirage) src version;
 
   propagatedBuildInputs = [ mirage-block mirage-channel mirage-clock
     mirage-console mirage-device mirage-flow mirage-fs mirage-kv mirage-net

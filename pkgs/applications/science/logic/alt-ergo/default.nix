@@ -10,13 +10,11 @@ let
     rev = version;
     sha256 = "0hglj1p0753w2isds01h90knraxa42d2jghr35dpwf9g8a1sm9d3";
   };
-
-  useDune2 = true;
-in
+  in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src useDune2;
+  inherit version src;
   configureFlags = pname;
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
@@ -25,7 +23,7 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src useDune2;
+  inherit version src;
   configureFlags = pname;
   nativeBuildInputs = [ which ocamlPackages.menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
@@ -33,7 +31,7 @@ let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src useDune2;
+  inherit pname version src;
 
   configureFlags = pname;
 

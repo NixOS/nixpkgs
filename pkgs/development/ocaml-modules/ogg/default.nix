@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "ogg";
   version = "0.7.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ogg";

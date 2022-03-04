@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "dolmen";
   version = "0.6";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {

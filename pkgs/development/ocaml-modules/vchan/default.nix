@@ -8,8 +8,7 @@ buildDunePackage rec {
   pname = "vchan";
   version = "6.0.0";
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+    minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-vchan/releases/download/v${version}/vchan-v${version}.tbz";

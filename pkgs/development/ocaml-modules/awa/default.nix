@@ -11,7 +11,6 @@ buildDunePackage rec {
   version = "0.0.5";
 
   minimumOCamlVersion = "4.07";
-  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";

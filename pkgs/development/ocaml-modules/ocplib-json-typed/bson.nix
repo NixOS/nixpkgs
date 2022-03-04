@@ -2,7 +2,7 @@
 
 buildDunePackage {
   pname = "ocplib-json-typed-bson";
-  inherit (ocplib-json-typed) version useDune2 src;
+  inherit (ocplib-json-typed) version src;
 
   propagatedBuildInputs = [ ocplib-json-typed ocplib-endian ];
 

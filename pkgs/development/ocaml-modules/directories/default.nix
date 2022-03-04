@@ -3,8 +3,6 @@
 buildDunePackage rec {
   pname = "directories";
   version = "0.2";
-  useDune2 = true;
-
   minimumOCamlVersion = "4.07";
 
   src = fetchFromGitHub {

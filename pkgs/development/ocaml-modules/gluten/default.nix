@@ -16,8 +16,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.06";
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     bigstringaf
     faraday

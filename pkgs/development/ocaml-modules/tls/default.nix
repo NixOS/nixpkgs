@@ -14,8 +14,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.08";
-  useDune2 = true;
-
   propagatedBuildInputs = [
     cstruct
     cstruct-sexp

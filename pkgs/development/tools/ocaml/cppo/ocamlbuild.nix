@@ -7,7 +7,7 @@ else
 buildDunePackage rec {
   pname = "cppo_ocamlbuild";
 
-  inherit (cppo) version useDune2 src;
+  inherit (cppo) version src;
 
   propagatedBuildInputs = [ ocamlbuild ];
 

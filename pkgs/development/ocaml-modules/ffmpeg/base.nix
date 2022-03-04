@@ -3,8 +3,6 @@
 rec {
   version = "1.1.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ffmpeg";

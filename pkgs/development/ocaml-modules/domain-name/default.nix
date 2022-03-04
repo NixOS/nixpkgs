@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "domain-name";
   version = "0.3.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/hannesm/domain-name/releases/download/v${version}/domain-name-v${version}.tbz";
     sha256 = "12kc9p2a2fi1ipc2hyhbzivxpph3npglxwdgvhd6v20rqqdyvnad";

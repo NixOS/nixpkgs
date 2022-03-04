@@ -6,7 +6,7 @@
 buildDunePackage {
   pname = "js_of_ocaml-tyxml";
 
-  inherit (js_of_ocaml-compiler) version src meta useDune2;
+  inherit (js_of_ocaml-compiler) version src meta;
 
   buildInputs = [ js_of_ocaml-ppx ];
 

@@ -11,8 +11,6 @@ ocamlPackages.buildDunePackage rec {
     sha256 = "1ziqjfv8jwidl8lj2mid2shhgqhv31dfh5wad2zxjpvf6038ahsw";
   };
 
-  useDune2 = true;
-
   buildInputs = with ocamlPackages; [
     gen sedlex_2 ocaml_extlib dune-build-info linenoise
   ];

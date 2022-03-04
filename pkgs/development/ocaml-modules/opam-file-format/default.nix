@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "1fxhppdmrysr2nb5z3c448h17np48f3ga9jih33acj78r4rdblcs";
   };
 
-  useDune2 = true;
-
   meta = with lib; {
     description = "Parser and printer for the opam file syntax";
     license = licenses.lgpl21;

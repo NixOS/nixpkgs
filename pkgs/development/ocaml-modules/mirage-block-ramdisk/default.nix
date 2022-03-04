@@ -5,8 +5,6 @@ buildDunePackage rec {
   pname = "mirage-block-ramdisk";
   version = "0.5";
 
-  useDune2 = true;
-
   src = fetchurl {
     url =
       "https://github.com/mirage/mirage-block-ramdisk/releases/download/${version}/mirage-block-ramdisk-${version}.tbz";

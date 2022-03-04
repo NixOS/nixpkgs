@@ -8,9 +8,6 @@
 buildDunePackage rec {
   version = "0.3.2";
   pname = "checkseum";
-
-  useDune2 = true;
-
   minimumOCamlVersion = "4.07";
 
   src = fetchurl {

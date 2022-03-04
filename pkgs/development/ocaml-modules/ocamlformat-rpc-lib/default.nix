@@ -10,8 +10,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.08";
-  useDune2 = true;
-
   propagatedBuildInputs = [ csexp sexplib0 ];
 
   meta = with lib; {

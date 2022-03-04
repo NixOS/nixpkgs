@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "uri";
   version = "4.2.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
     sha256 = "0szifda6yism5vn5jdizkha3ad0xk6zw4xgfl8g77dnv83ci7h65";

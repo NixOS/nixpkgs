@@ -9,7 +9,7 @@
 
 buildDunePackage rec {
   pname = "tar-unix";
-  inherit (tar) version src useDune2 doCheck;
+  inherit (tar) version src doCheck;
 
   propagatedBuildInputs = [
     tar

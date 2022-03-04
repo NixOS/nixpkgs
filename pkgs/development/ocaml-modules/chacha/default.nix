@@ -16,9 +16,6 @@ buildDunePackage rec {
     url = "https://github.com/abeaumont/ocaml-chacha/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "sha256-t8dOMQQDpje0QbuOhjSIa3xnXuXcxMVTLENa/rwdgA4=";
   };
-
-  useDune2 = true;
-
   minimumOCamlVersion = "4.02";
 
   propagatedBuildInputs = [ cstruct mirage-crypto ];

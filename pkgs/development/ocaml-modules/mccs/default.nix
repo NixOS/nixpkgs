@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-K249E9qkWNK4BC+ynaR3bVEyu9Tk8iCE7GptKk/aVJc=";
   };
 
-  useDune2 = true;
-
   buildInputs = [
     cudf
   ];

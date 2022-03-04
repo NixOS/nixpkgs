@@ -10,8 +10,6 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.03";
 
   # due to cstruct
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-pcap/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "14c5rpgglyz41jic0fg0xa22d2w1syb86kva22y9fi7aqj9vm31f";

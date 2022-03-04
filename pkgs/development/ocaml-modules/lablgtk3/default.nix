@@ -4,8 +4,6 @@ buildDunePackage rec {
   version = "3.1.2";
   pname = "lablgtk3";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.05";
 
   src = fetchFromGitHub {

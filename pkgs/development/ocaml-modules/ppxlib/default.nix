@@ -11,12 +11,12 @@ let param = {
   "0.8.1" = {
     sha256 = "0vm0jajmg8135scbg0x60ivyy5gzv4abwnl7zls2mrw23ac6kml6";
     max_version = "4.10";
-    useDune2 = false;
+    useDune1 = true;
     useOMP2 = false;
   };
   "0.13.0" = {
     sha256 = "0c54g22pm6lhfh3f7s5wbah8y48lr5lj3cqsbvgi99bly1b5vqvl";
-    useDune2 = false;
+    useDune1 = true;
     useOMP2 = false;
   };
   "0.15.0" = {
@@ -57,7 +57,7 @@ buildDunePackage rec {
   pname = "ppxlib";
   inherit version;
 
-  useDune2 = param.useDune2 or true;
+  useDune1 = param.useDune1 or false;
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";

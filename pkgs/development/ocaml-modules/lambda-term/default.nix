@@ -14,8 +14,6 @@ buildDunePackage rec {
   pname = "lambda-term";
   inherit (params) version;
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;

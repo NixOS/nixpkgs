@@ -48,8 +48,6 @@ buildDunePackage {
     then "4.08"
     else "4.06";
 
-  useDune2 = true;
-
   strictDeps = true;
 
   nativeBuildInputs = [

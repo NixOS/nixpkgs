@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "posix-types";
 
-  inherit (posix-base) version src useDune2;
+  inherit (posix-base) version src;
 
   minimumOCamlVersion = "4.03";
 

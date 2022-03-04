@@ -8,8 +8,6 @@ buildDunePackage rec {
   pname = "otoml";
   version = "0.9.0";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

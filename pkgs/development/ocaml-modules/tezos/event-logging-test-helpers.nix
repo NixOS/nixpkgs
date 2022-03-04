@@ -8,7 +8,7 @@
 
 buildDunePackage {
   pname = "tezos-event-logging-test-helpers";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src/lib_event_logging/test_helpers/";
 
   propagatedBuildInputs = [

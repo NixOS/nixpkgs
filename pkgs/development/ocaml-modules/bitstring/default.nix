@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "bitstring";
   version = "4.1.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "xguerin";
     repo = pname;

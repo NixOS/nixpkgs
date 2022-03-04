@@ -11,8 +11,6 @@ ocamlPackages.buildDunePackage rec {
   # request to tag releases: https://github.com/alexozer/flitter/issues/34
   version = "unstable-2020-10-05";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";

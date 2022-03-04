@@ -20,8 +20,7 @@ ocamlPackages.buildDunePackage rec {
     rm -r ocaml-wayland
   '';
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+    minimumOCamlVersion = "4.08";
 
   nativeBuildInputs = [
     buildPackages.ocamlPackages.ppx_cstruct

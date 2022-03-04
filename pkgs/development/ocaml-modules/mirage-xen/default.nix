@@ -21,8 +21,6 @@ buildDunePackage rec {
   pname = "mirage-xen";
   version = "6.0.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/mirage-xen/releases/download/v${version}/mirage-xen-v${version}.tbz";
     sha256 = "f991e972059b27993c287ad010d9281fee061efaa1dd475d0955179f93710fbd";

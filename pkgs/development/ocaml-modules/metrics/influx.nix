@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "metrics-influx";
-  inherit (metrics) version useDune2 src;
+  inherit (metrics) version src;
 
   propagatedBuildInputs = [ astring duration fmt lwt metrics ];
 

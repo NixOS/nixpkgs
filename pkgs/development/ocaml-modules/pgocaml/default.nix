@@ -13,8 +13,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.08";
-  useDune2 = true;
-
   propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ];
 
   meta = with lib; {

@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "faraday";
   version = "0.7.2";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {

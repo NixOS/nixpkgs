@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "hex";
   version = "1.4.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {

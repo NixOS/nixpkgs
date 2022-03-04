@@ -5,8 +5,6 @@ buildDunePackage rec {
   pname = "wodan";
   version = "unstable-2020-11-20";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "mirage";
     repo = pname;

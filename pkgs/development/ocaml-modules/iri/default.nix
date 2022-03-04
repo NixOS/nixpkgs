@@ -5,8 +5,6 @@
 buildDunePackage rec {
   pname = "iri";
   version = "0.6.0";
-  useDune2 = true;
-
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";

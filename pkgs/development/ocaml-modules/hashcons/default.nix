@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "0h4pvwj34pndaw3pajkhl710ywwinhc9pqimgllfmkl37wz2d8zq";
   };
 
-  useDune2 = true;
-
   doCheck = true;
 
   meta = {

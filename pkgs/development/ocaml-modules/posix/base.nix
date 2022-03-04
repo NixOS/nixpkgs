@@ -13,8 +13,6 @@ buildDunePackage rec {
     sha256 = "18px8hfqcfy2lk8105ki3hrxxigs44gs046ba0fqda6wzd0hr82b";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [ ctypes integers ];
 
   meta = {

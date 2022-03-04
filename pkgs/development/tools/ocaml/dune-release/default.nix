@@ -25,8 +25,6 @@ in buildDunePackage rec {
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 
-  useDune2 = true;
-
   patches = [
     # add missing git config calls to avoid failing due to the lack of a global git config
     (fetchpatch {

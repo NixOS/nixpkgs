@@ -13,8 +13,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.03";
-  useDune2 = true;
-
   meta = with lib; {
     homepage = "https://gitlab.inria.fr/fpottier/fix/";
     description = "A simple OCaml module for computing the least solution of a system of monotone equations";

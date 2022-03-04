@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "cpuid";
   version = "0.1.2";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {

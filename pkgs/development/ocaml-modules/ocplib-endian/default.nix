@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "sha256-zKsSkhlZBXSqPtw+/WN3pwo9plM9rDZfMbGVfosqb10=";
   };
 
-  useDune2 = true;
-
   nativeBuildInputs = [ cppo ];
 
   meta = with lib; {

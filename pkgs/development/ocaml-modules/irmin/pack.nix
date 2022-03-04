@@ -9,8 +9,6 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
-  useDune2 = true;
-
   buildInputs = [ fpath ];
   propagatedBuildInputs = [ index irmin irmin-layers ocaml_lwt optint ];
 

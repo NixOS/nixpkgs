@@ -9,7 +9,6 @@ buildDunePackage rec {
   pname = "carton";
   version = "0.4.3";
 
-  useDune2 = true;
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {

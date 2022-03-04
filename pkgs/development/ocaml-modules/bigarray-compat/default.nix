@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "bigarray-compat";
   version = "1.0.0";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.02";
 
   src = fetchFromGitHub {

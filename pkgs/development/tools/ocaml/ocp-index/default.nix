@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "ocp-index";
   version = "1.3.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-index";

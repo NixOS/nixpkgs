@@ -27,7 +27,6 @@ let
       rev = "v1.4.2+satysfi";
       sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
-    useDune2 = true;
     nativeBuildInputs = [ ocamlPackages.cppo ];
     propagatedBuildInputs = [ ocamlPackages.biniou ];
     inherit (ocamlPackages.yojson) meta;

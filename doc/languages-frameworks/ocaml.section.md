@@ -10,6 +10,7 @@ OCaml applications are usually available top-level, and not inside `ocamlPackage
 
 To open a shell able to build a typical OCaml project, put the dependencies in `buildInputs` and add `ocamlPackages.ocaml` and `ocamlPackages.findlib` to `nativeBuildInputs` at least.
 For example:
+
 ```nix
 let
  pkgs = import <nixpkgs> {};
@@ -38,8 +39,7 @@ Here is a simple package example.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- `useDune2 = true` ensures that the latest version of Dune is used for the
-  build (this may become the default value in a future release).
+- `useDune1 = true` ensures that version 1 of Dune is used for the build.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is
@@ -67,7 +67,6 @@ Here is a simple package example.
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  useDune2 = true;
 
   minimalOCamlVersion = "4.04";
 
@@ -100,7 +99,6 @@ buildDunePackage rec {
   pname = "wtf8";
   version = "1.0.2";
 
-  useDune2 = true;
 
   minimalOCamlVersion = "4.02";
 
@@ -118,7 +116,7 @@ buildDunePackage rec {
 }
 ```
 
-Note about `minimalOCamlVersion`.  A deprecated version of this argument was
+Note about `minimalOCamlVersion`. A deprecated version of this argument was
 spelled `minimumOCamlVersion`; setting the old attribute wrongly modifies the
 derivation hash and is therefore inappropriate. As a technical dept, currently
 packaged libraries may still use the old spelling: maintainers are invited to

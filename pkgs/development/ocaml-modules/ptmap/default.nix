@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "ptmap";
   version = "2.0.5";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/backtracking/ptmap/releases/download/${version}/ptmap-${version}.tbz";
     sha256 = "1apk61fc1y1g7x3m3c91fnskvxp6i0vk5nxwvipj56k7x2pzilgb";

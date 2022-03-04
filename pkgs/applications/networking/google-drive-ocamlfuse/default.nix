@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "google-drive-ocamlfuse";
   version = "0.7.26";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.06";
 
   src = fetchFromGitHub {

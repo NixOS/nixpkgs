@@ -14,8 +14,7 @@ buildDunePackage rec {
     sha256 = "0qcn3yvyz0h419fjg9nb20csfmwmh3ihz0zb0jfzdycf5w4mlry6";
   };
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.04";
+    minimumOCamlVersion = "4.04";
 
   propagatedBuildInputs = [
     angstrom

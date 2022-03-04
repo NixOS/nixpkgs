@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "metrics";
   version = "0.2.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.04";
 
   src = fetchurl {

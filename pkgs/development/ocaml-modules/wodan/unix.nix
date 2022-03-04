@@ -4,7 +4,7 @@
 buildDunePackage rec {
   outputs = [ "bin" "out" ];
   pname = "wodan-unix";
-  inherit (wodan) version src useDune2;
+  inherit (wodan) version src;
 
   propagatedBuildInputs = [
     afl-persistent

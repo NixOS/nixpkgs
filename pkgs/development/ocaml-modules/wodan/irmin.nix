@@ -3,7 +3,7 @@
 
 buildDunePackage rec {
   pname = "wodan-irmin";
-  inherit (wodan) version src useDune2;
+  inherit (wodan) version src;
 
   propagatedBuildInputs = [
     io-page-unix

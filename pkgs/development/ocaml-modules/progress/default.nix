@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "progress";
 
   minimalOCamlVersion = "4.08";
-  useDune2 = true;
-
   inherit (terminal) version src;
 
   propagatedBuildInputs = [ fmt logs mtime optint terminal vector ];

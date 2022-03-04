@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "ocaml-r";
   version = "0.4.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

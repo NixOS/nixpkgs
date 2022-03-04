@@ -8,8 +8,6 @@ buildDunePackage rec {
   pname = "digestif";
   version = "1.1.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-v${version}.tbz";
     sha256 = "01gwkbrznci4xdcbww4ysgsciz2qs0r8jsmhp0siwbcgcrf1jjv5";

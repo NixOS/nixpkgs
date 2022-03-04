@@ -7,7 +7,7 @@ buildDunePackage rec {
     url = "https://github.com/ocaml/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "0jnqsv6pqp5b5g7lcjwgd75zqqvcwcl5a32zi03zg1kvj79p5gxs";
   };
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  useDune1 = lib.versionOlder ocaml.version "4.08";
   minimumOCamlVersion = "4.02";
   doCheck = true;
   meta = {

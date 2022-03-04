@@ -14,8 +14,6 @@ buildDunePackage rec {
     sha256 = "0idzidmz7y10xkwcf4aih0mdvkipxk1gzi4anhnbbi2q2s0nzdzj";
   };
 
-  useDune2 = true;
-
   buildInputs = [ astring cmdliner cppo fpath result tyxml ];
 
   checkInputs = [ alcotest markup yojson sexplib jq ];

@@ -10,8 +10,7 @@
 , ...}@args:
 
 buildDunePackage (args // {
-  useDune2 = true;
-  inherit version buildInputs strictDeps;
+    inherit version buildInputs strictDeps;
 
   inherit minimumOCamlVersion;
 

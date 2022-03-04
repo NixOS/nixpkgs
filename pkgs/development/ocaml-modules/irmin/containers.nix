@@ -6,7 +6,7 @@
 buildDunePackage {
   pname = "irmin-containers";
 
-  inherit (ppx_irmin) src version useDune2;
+  inherit (ppx_irmin) src version;
 
   nativeBuildInputs = [
     ppx_irmin

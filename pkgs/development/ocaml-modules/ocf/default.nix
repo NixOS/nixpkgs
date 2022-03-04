@@ -3,8 +3,7 @@
 buildDunePackage rec {
   pname = "ocf";
   version = "0.8.0";
-  useDune2 = true;
-  minimalOCamlVersion = "4.03";
+    minimalOCamlVersion = "4.03";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";

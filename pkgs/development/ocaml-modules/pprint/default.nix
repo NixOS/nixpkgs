@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "pprint";
   version = "20220103";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "fpottier";
     repo = pname;

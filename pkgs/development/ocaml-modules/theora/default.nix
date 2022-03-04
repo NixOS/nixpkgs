@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "theora";
   version = "0.4.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-theora";

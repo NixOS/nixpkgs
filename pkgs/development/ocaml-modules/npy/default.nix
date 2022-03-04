@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "npy";
   version = "0.0.9";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.06";
 
   src = fetchFromGitHub {

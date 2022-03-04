@@ -8,8 +8,6 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.08";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";

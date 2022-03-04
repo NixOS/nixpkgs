@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "posix-socket";
 
-  inherit (posix-base) version src useDune2;
+  inherit (posix-base) version src;
 
   propagatedBuildInputs = [ posix-base ];
 

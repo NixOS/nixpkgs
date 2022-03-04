@@ -20,8 +20,6 @@ buildDunePackage {
     rev = "v0.4";
     sha256 = "1f88l9azpfk730hps5v6zlg4yyyyhj1gl27qy3cbbkzjc82d2rhx";
   };
-  useDune2 = true;
-
   propagatedBuildInputs = [
     ezjsonm
     zarith

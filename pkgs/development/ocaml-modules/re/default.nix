@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  useDune1 = lib.versionOlder ocaml.version "4.08";
 
   src = fetchurl {
     url = "https://github.com/ocaml/ocaml-re/releases/download/${version}/re-${version}.tbz";

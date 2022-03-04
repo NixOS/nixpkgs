@@ -7,7 +7,7 @@
 
 buildDunePackage {
   pname = "tezos-protocol-010-PtGRANAD";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src";
 
   nativeBuildInputs = [

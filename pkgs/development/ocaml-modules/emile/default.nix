@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "emile";
   version = "1.1";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/dinosaure/emile/releases/download/v${version}/emile-v${version}.tbz";
     sha256 = "0r1141makr0b900aby1gn0fccjv1qcqgyxib3bzq8fxmjqwjan8p";

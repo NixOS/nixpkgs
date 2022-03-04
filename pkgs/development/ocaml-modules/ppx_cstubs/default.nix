@@ -18,8 +18,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "fdopen";
     repo = "ppx_cstubs";

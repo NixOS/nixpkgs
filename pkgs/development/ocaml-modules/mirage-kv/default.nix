@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "mirage-kv";
   version = "3.0.1";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/mirage-kv/releases/download/v${version}/mirage-kv-v${version}.tbz";
     sha256 = "1n736sjvdd8rkbc2b5jm9sn0w6hvhjycma5328r0l03v24vk5cki";

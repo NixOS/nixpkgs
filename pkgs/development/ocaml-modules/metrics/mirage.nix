@@ -4,7 +4,7 @@
 
 buildDunePackage {
   pname = "metrics-mirage";
-  inherit (metrics) version useDune2 src;
+  inherit (metrics) version src;
 
   propagatedBuildInputs = [ cstruct ipaddr logs lwt metrics metrics-influx mirage-clock mirage-stack ];
 

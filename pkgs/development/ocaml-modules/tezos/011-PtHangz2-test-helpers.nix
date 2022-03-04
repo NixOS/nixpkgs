@@ -13,7 +13,7 @@
 
 buildDunePackage {
   pname = "tezos-011-PtHangz2-test-helpers";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src";
 
   propagatedBuildInputs = [

@@ -5,7 +5,7 @@
 buildDunePackage {
   pname = "js_of_ocaml-ocamlbuild";
 
-  inherit (js_of_ocaml-compiler) version src meta useDune2;
+  inherit (js_of_ocaml-compiler) version src meta;
 
   minimalOCamlVersion = "4.02";
 

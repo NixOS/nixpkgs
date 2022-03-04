@@ -6,8 +6,6 @@ buildDunePackage rec {
 
   src = ./.;
 
-  useDune2 = true;
-
   buildInputs = [
     reason
     console

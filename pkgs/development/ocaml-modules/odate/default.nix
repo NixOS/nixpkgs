@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "odate";
   version = "0.6";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.07";
 
   src = fetchFromGitHub {

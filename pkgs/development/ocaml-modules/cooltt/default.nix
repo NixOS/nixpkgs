@@ -16,8 +16,6 @@ buildDunePackage {
 
   minimumOCamlVersion = "4.10";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = "cooltt";

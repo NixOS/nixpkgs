@@ -23,8 +23,6 @@ buildDunePackage rec {
     sha256 = "c95f5b2e36a0564e6f65421e0e197d7cfe600d19eb492f8f27c4841cbe68b231";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     mirage-crypto
     mirage-clock

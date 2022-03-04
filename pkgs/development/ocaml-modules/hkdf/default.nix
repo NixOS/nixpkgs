@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "0nzx6vzbc1hh6vx1ly8df4b16lgps6zjpp9mjycsnnn49bddc9mr";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [ cstruct mirage-crypto ];
   checkInputs = [ alcotest ];
   doCheck = true;

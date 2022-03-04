@@ -14,7 +14,7 @@
 buildDunePackage rec {
   pname = "owl";
 
-  inherit (owl-base) version src meta useDune2;
+  inherit (owl-base) version src meta;
 
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator stdio ];

@@ -15,8 +15,6 @@ buildDunePackage rec {
     sha256 = "4034afdd83a0cb8291b1f809403015da9139bd772813d59d6093e42ec31ba643";
   };
 
-  useDune2 = true;
-
   buildInputs = [ alcotest cstruct-unix ];
   propagatedBuildInputs = [ asn1-combinators domain-name fmt gmap mirage-crypto mirage-crypto-pk mirage-crypto-ec pbkdf logs base64 ipaddr ];
 

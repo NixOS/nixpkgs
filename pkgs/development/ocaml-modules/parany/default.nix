@@ -4,8 +4,7 @@ buildDunePackage rec {
   pname = "parany";
   version = "12.1.2";
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.03.0";
+    minimumOCamlVersion = "4.03.0";
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";

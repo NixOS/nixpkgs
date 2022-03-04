@@ -3,8 +3,7 @@
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
-  useDune2 = true;
-  minimumOcamlVersion = "4.04.1";
+    minimumOcamlVersion = "4.04.1";
 
   src = fetchFromGitHub {
     owner = "rvantonder";

@@ -13,8 +13,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.07";
-  useDune2 = true;
-
   buildInputs = [ stdlib-shims ];
 
   doCheck = true;

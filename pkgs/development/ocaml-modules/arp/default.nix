@@ -16,7 +16,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.06";
-  useDune2 = true;
 
   nativeBuildInputs = [
     bisect_ppx

@@ -5,8 +5,6 @@ buildDunePackage rec {
   pname = "mirage-block-unix";
   version = "2.12.1";
 
-  useDune2 = true;
-
   src = fetchurl {
     url =
       "https://github.com/mirage/mirage-block-unix/releases/download/v${version}/mirage-block-unix-v${version}.tbz";

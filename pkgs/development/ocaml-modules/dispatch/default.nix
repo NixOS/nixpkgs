@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "dispatch";
   version = "0.5.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "ocaml-dispatch";

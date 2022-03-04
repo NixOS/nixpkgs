@@ -18,8 +18,6 @@ buildDunePackage rec {
     sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.05";
 
   propagatedBuildInputs = [ zarith ];

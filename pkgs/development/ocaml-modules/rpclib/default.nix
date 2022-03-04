@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "rpclib";
   version = "8.1.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-rpc/releases/download/v${version}/rpclib-v${version}.tbz";
     sha256 = "0fbajg8wq8hjhkvvfnq68br0m0pa8zf2qzadhfgi2nnr9713rada";

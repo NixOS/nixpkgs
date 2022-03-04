@@ -6,7 +6,7 @@
 buildDunePackage {
   pname = "containers-data";
 
-  inherit (containers) src version doCheck useDune2;
+  inherit (containers) src version doCheck;
 
   buildInputs = [ dune-configurator ];
   checkInputs = [ gen iter qcheck ];

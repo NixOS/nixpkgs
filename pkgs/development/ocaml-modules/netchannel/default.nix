@@ -19,8 +19,6 @@ buildDunePackage rec {
   pname = "netchannel";
   version = "2.0.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {

@@ -4,8 +4,6 @@ buildDunePackage rec {
   version = "1.8.2";
   pname = "ocp-indent";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-indent";

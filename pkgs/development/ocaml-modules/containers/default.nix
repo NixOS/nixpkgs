@@ -8,8 +8,6 @@ buildDunePackage rec {
   version = "3.6.1";
   pname = "containers";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";

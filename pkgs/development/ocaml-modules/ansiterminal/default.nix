@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "ANSITerminal";
   version = "0.8.2";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "Chris00";
     repo = pname;

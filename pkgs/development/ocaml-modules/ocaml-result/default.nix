@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "result";
   version = "1.5";
 
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  useDune1 = lib.versionOlder ocaml.version "4.08";
 
   src = fetchurl {
     url = "https://github.com/janestreet/result/releases/download/${version}/result-${version}.tbz";

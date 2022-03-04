@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "mirage-channel";
   version = "4.0.1";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/mirage-channel/releases/download/v${version}/mirage-channel-v${version}.tbz";
     sha256 = "0wmb2zhiyp8n78xgcspcsyd19bhcml3kyli2caw3778wc1gyvfpc";

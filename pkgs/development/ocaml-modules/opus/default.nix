@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "opus";
   version = "0.2.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-opus";

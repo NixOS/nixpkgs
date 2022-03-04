@@ -3,8 +3,6 @@
 buildDunePackage rec {
   pname = "opam-format";
 
-  useDune2 = true;
-
   inherit (opam-core) src version;
 
   minimumOCamlVersion = "4.02.3";

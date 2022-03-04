@@ -6,8 +6,6 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-v${version}.tbz";
     sha256 = "sha256-WJ3pwAV46/54QZismBjTWGxHSyMWts0+HEbMsfYq46Q=";

@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "mirage-fs";
   version = "3.0.1";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/mirage-fs/releases/download/v${version}/mirage-fs-v${version}.tbz";
     sha256 = "0px18bgk528vr7iw78r0j3z4sdcz684sfcj47ibbly2adbvd64yk";

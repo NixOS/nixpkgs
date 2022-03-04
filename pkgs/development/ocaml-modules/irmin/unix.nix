@@ -10,8 +10,6 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     checkseum cmdliner git-unix yaml fpath
     irmin irmin-fs irmin-git irmin-graphql irmin-http

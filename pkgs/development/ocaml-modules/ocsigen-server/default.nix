@@ -20,8 +20,7 @@ buildDunePackage rec {
   version = "4.0.1";
   pname = "ocsigenserver";
 
-  useDune2 = true;
-  minimalOCamlVersion = "4.08";
+    minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "ocsigen";

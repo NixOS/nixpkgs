@@ -9,8 +9,6 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
-  useDune2 = true;
-
   propagatedBuildInputs = [ cohttp-lwt irmin webmachine ];
 
   checkInputs = [

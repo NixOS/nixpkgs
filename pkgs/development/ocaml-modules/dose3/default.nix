@@ -16,8 +16,6 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.03";
-  useDune2 = true;
-
   buildInputs = [
     parmap
   ];

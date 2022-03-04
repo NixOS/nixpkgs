@@ -9,8 +9,6 @@ buildDunePackage {
   pname = "cohttp-lwt-unix";
   inherit (cohttp-lwt) version src;
 
-  useDune2 = true;
-
   buildInputs = [ cmdliner ppx_sexp_conv ];
 
   propagatedBuildInputs = [

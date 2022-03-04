@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname   = "functoria";
   version = "3.1.1";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.04";
 
   src = fetchurl {

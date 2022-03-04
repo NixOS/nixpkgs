@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 

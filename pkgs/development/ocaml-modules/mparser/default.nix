@@ -3,8 +3,6 @@
 buildDunePackage rec {
   pname = "mparser";
   version = "1.3";
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "murmour";
     repo = "mparser";

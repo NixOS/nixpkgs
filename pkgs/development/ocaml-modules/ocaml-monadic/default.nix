@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "ocaml-monadic";
   version = "0.5.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "zepalmer";
     repo = pname;

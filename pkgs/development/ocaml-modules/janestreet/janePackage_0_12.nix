@@ -14,6 +14,8 @@ buildDunePackage (args // {
     sha256 = hash;
   };
 
+  useDune1 = true;
+
   strictDeps = true;
 
   meta = {

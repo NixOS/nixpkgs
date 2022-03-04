@@ -11,7 +11,7 @@
 
 buildDunePackage {
   pname = "tezos-requester";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src/lib_requester";
 
   propagatedBuildInputs = [

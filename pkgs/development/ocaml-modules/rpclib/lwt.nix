@@ -5,7 +5,7 @@
 
 buildDunePackage {
   pname = "rpclib-lwt";
-  inherit (rpclib) version useDune2 src;
+  inherit (rpclib) version src;
 
   propagatedBuildInputs = [ lwt rpclib ];
 

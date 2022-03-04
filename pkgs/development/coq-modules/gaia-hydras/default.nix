@@ -21,8 +21,6 @@ with lib; mkCoqDerivation rec {
     mathcomp-zify
   ];
 
-  useDune2 = true;
-
   meta = {
     description = "Comparison between ordinals in Gaia and Hydra battles";
     longDescription = ''

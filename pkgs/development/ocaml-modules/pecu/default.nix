@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "pecu";
   version = "0.6";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {

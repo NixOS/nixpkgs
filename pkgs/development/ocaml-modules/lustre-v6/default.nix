@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "lustre-v6";
   version = "6.103.3";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.05";
 
   src = fetchurl {

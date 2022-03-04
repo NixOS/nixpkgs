@@ -14,8 +14,6 @@ buildDunePackage rec {
     sha256 = "sha256-eeKMSRZrBiTzWLv80P5LeouPib24uTigk2HLtORKpJU=";
   };
 
-  useDune2 = true;
-
   doCheck = true;
   checkInputs = [ ounit ];
 

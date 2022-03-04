@@ -9,7 +9,6 @@ buildDunePackage {
   inherit (mirage-clock)
     version
     src
-    useDune2
     minimumOCamlVersion
     ;
 

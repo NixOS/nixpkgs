@@ -17,7 +17,6 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
     minimumOCamlVersion
   ;
 

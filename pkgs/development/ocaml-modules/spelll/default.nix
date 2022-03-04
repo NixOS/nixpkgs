@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "spelll";
   version = "0.3";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;

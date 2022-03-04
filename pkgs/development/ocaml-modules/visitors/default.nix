@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "visitors";
   version = "20210608";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.08";
 
   src = fetchFromGitLab {

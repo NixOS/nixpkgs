@@ -9,7 +9,7 @@
 
 buildDunePackage {
   pname = "tezos-mockup-proxy";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src/lib_mockup_proxy";
 
   propagatedBuildInputs = [

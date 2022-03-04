@@ -33,8 +33,6 @@ buildDunePackage rec {
   pname = "sedlex";
   version = "2.4";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "sedlex";

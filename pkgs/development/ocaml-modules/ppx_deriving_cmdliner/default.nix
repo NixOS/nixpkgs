@@ -12,8 +12,6 @@ buildDunePackage rec {
   version = "0.6.0";
 
   minimumOCamlVersion = "4.08";
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = "ppx_deriving_cmdliner";

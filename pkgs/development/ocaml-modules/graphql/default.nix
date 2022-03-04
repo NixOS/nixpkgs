@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "graphql";
 
-  inherit (graphql_parser) version useDune2 src;
+  inherit (graphql_parser) version src;
 
   propagatedBuildInputs = [ graphql_parser rresult yojson ];
 

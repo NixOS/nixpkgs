@@ -7,8 +7,6 @@ buildDunePackage {
 
   inherit (macaddr) version src minimumOCamlVersion;
 
-  useDune2 = true;
-
   propagatedBuildInputs = [ ppx_sexp_conv ];
 
   checkInputs = [ macaddr-cstruct ounit ];

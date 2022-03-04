@@ -10,8 +10,6 @@ buildDunePackage rec {
     sha256 = "13h3zga7h2jhgbyda1q53szbpxcz3vvy3c51mlqk3jh9jq2wrn87";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     uri
   ];

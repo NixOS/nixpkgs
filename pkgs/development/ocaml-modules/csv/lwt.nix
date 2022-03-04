@@ -6,7 +6,7 @@ else
 
 buildDunePackage {
   pname = "csv-lwt";
-  inherit (csv) src version useDune2 meta;
+  inherit (csv) src version meta;
 
   propagatedBuildInputs = [ csv ocaml_lwt ];
 

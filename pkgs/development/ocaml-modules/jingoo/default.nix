@@ -5,8 +5,6 @@ buildDunePackage rec {
   pname = "jingoo";
   version = "1.4.2";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.04";
 
   src = fetchFromGitHub {

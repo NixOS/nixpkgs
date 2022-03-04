@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "cstruct";
   version = "6.0.1";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {

@@ -6,8 +6,6 @@
 buildDunePackage rec {
   pname = "mdx";
   version = "2.1.0";
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {

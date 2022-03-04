@@ -23,8 +23,6 @@ buildDunePackage {
   version = version;
   src = "${src}/vendors/ocaml-lmdb";
 
-  useDune2 = true;
-
   nativeBuildInputs = [
     pkg-config
   ];

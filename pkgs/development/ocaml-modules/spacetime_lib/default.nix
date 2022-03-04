@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "spacetime_lib";
   version = "0.3.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "lpw25";
     repo = "spacetime_lib";

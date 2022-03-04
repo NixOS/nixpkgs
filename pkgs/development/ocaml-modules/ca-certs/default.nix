@@ -14,8 +14,6 @@ buildDunePackage rec {
     sha256 = "d43109496a5129feff967d557c556af96f8b10456896a405c43b7cf0c35d0af3";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [ bos fpath rresult ptime mirage-crypto x509 astring logs ];
 
   # Assumes nss-cacert < 3.74 https://github.com/mirage/ca-certs/issues/21

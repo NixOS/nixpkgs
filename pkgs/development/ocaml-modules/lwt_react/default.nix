@@ -4,8 +4,6 @@ buildDunePackage {
   pname = "lwt_react";
   version = "1.1.5";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "lwt";

@@ -10,7 +10,6 @@ buildDunePackage rec {
     sha256 = "0ppq56i2yhxzz38w120aynnkx10kncl86zvqip9zx0v4974k3k4x";
   };
 
-  useDune2 = true;
   propagatedBuildInputs = [ eqaf cstruct ];
   checkInputs = [ alcotest benchmark hex ppx_blob ppx_deriving_yojson stdlib-shims yojson ];
   doCheck = true;

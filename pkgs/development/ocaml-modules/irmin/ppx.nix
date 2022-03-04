@@ -11,8 +11,6 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.08";
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     ppx_repr
     ppxlib

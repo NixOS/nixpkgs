@@ -28,8 +28,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  useDune2 = true;
-
   preBuild = ''
     rm -rf vendors
   '';

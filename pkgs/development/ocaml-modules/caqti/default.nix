@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "caqti";
   version = "1.5.1";
-  useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 

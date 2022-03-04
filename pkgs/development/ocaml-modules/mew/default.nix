@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "mew";
   version = "0.1.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "kandu";
     repo = pname;

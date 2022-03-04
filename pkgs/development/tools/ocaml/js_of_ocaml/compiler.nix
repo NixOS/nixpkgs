@@ -6,7 +6,6 @@
 buildDunePackage rec {
   pname = "js_of_ocaml-compiler";
   version = "3.11.0";
-  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";

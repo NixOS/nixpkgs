@@ -32,8 +32,7 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  useDune2 = true;
-  minimalOCamlVersion = "4.06";
+    minimalOCamlVersion = "4.06";
 
   buildInputs =
     if lib.versionAtLeast version "1.7.0" then

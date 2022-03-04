@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "httpaf";
   version = "0.7.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = pname;

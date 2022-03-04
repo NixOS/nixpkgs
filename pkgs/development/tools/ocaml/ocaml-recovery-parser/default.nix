@@ -11,7 +11,6 @@ buildDunePackage rec {
   version = "0.2.2";
 
   minimalOCamlVersion = "4.08";
-  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "serokell";

@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "graphql_parser";
   version = "0.13.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {

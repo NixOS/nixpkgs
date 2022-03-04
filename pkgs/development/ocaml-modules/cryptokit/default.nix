@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "cryptokit";
   version = "1.16.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "cryptokit";

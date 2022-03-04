@@ -9,7 +9,7 @@
 
 buildDunePackage {
   pname = "tezos-lwt-result-stdlib";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src/lib_lwt_result_stdlib";
 
   minimalOCamlVersion = "4.12";

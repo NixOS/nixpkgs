@@ -8,8 +8,6 @@ buildDunePackage rec {
   pname = "yaml";
   version = "3.0.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-v${version}.tbz";
     sha256 = "1iws6lbnrrd5hhmm7lczfvqp0aidx5xn7jlqk2s5rjfmj9qf4j2c";

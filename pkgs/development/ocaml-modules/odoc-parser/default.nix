@@ -21,8 +21,6 @@ buildDunePackage rec {
     inherit (param) sha256;
   };
 
-  useDune2 = true;
-
   buildInputs = [ astring result ];
 
   meta = {

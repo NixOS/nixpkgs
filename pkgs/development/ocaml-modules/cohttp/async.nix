@@ -26,7 +26,6 @@ buildDunePackage {
     version
     src
     minimumOCamlVersion
-    useDune2
     ;
 
   buildInputs = [ ppx_sexp_conv ];

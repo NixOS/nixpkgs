@@ -13,8 +13,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.05";
 
-  useDune2 = true;
-
   doCheck = true;
 
   # If we just run the test as is it will try to test ringo-lwt

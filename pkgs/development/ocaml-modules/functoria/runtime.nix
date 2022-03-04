@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "functoria-runtime";
 
-  inherit (functoria) version useDune2 src;
+  inherit (functoria) version src;
 
   propagatedBuildInputs = [ cmdliner fmt ];
   checkInputs = [ alcotest functoria];

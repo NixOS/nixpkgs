@@ -9,8 +9,6 @@ buildDunePackage rec {
     sha256 = "0dpnpla20lgiicrxl2432m2fcr6y68msw3pnjxqb11xw6yrdfhsz";
   };
 
-  useDune2 = true;
-
   doCheck = true;
   checkInputs = [
     stdlib-shims

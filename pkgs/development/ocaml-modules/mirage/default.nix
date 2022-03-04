@@ -9,8 +9,6 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.08";
 
-  useDune2 = true;
-
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [

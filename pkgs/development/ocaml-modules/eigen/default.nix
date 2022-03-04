@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "eigen";
   version = "0.2.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "owlbarn";
     repo   = pname;

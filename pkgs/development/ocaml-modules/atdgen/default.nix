@@ -3,7 +3,7 @@
 let runtime =
   buildDunePackage {
     pname = "atdgen-runtime";
-    inherit (atd) version useDune2 src;
+    inherit (atd) version src;
 
     propagatedBuildInputs = [ biniou yojson ];
 
@@ -13,7 +13,7 @@ let runtime =
 
 buildDunePackage {
   pname = "atdgen";
-  inherit (atd) version useDune2 src;
+  inherit (atd) version src;
 
   buildInputs = [ atd ];
 

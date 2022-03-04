@@ -6,7 +6,6 @@ mkCoqDerivation {
   pname = "word";
   owner = "jasmin-lang";
   repo = "coqword";
-  useDune2 = true;
 
   releaseRev = v: "v${v}";
 

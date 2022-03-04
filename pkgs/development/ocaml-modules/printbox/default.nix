@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "printbox";
   version = "0.6";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.03";
 
   src = fetchFromGitHub {

@@ -4,9 +4,6 @@
 buildDunePackage rec {
   pname = "crowbar";
   version = "0.2";
-
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner  = "stedolan";
     repo   = pname;

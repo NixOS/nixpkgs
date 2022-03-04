@@ -28,7 +28,6 @@ buildDunePackage rec {
   inherit (hpack)
     version
     src
-    useDune2
     ;
 
   minimumOCamlVersion = "4.06";

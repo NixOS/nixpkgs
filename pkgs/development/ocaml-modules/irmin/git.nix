@@ -10,8 +10,6 @@ buildDunePackage {
 
   inherit (irmin) version src;
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     git
     irmin

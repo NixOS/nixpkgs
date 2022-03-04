@@ -3,8 +3,6 @@
 buildDunePackage {
   pname = "ocplib-json-typed-browser";
   inherit (ocplib-json-typed) version src;
-  useDune2 = true;
-
   propagatedBuildInputs = [ ocplib-json-typed js_of_ocaml ];
 
   meta = {

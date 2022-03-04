@@ -16,8 +16,6 @@ buildDunePackage rec {
     sha256 = "0idywlkw0fbakrxv65swnr5bj7f2vns9kpay7q03gzlv82p670hy";
   };
 
-  useDune2 = true;
-
   checkInputs = [
     gcc
     alcotest

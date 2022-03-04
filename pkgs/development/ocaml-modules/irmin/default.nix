@@ -8,8 +8,7 @@ buildDunePackage {
 
   inherit (ppx_irmin) src version;
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+    minimumOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     astring

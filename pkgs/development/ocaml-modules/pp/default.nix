@@ -13,8 +13,7 @@ buildDunePackage rec {
     sha256 = "1l1im054pxrkj7zk8m6yj4qfdpxkajpjfvy818ggf0j4nxkaihc5";
   };
 
-  useDune2 = true;
-  minimalOCamlVersion = "4.08";
+    minimalOCamlVersion = "4.08";
 
   checkInputs = [ ppx_expect ];
   doCheck = true;

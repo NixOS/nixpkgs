@@ -3,8 +3,6 @@
 buildDunePackage {
   pname = "ocaml-lsp-server";
   inherit (jsonrpc) version src;
-  useDune2 = true;
-
   inherit (lsp) preBuild;
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]

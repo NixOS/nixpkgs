@@ -25,8 +25,6 @@ in
       { case = isEq "8.10"; out = "8.10.0+0.7.2";  }
     ] null;
 
-  useDune2 = true;
-
   propagatedBuildInputs =
     with coq.ocamlPackages; [
       cmdliner

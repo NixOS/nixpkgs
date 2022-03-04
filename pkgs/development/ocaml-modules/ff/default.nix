@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "1ik29srzkd0pl48p1si9p1c4f8vmx5rgm02yv2arj3vg0a1nfhdv";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     zarith
   ];

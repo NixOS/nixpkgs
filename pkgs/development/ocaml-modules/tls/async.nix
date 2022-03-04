@@ -6,8 +6,6 @@ buildDunePackage rec {
   inherit (tls) src meta version;
 
   minimumOCamlVersion = "4.08";
-  useDune2 = true;
-
   doCheck = true;
 
   propagatedBuildInputs = [

@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "flac";
   version = "0.3.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-flac";

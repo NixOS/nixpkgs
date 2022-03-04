@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.03";
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  useDune1 = lib.versionOlder ocaml.version "4.08";
 
   doCheck = true;
 

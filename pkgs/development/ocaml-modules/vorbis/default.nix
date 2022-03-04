@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "vorbis";
   version = "0.8.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-vorbis";

@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "hxd";
   version = "0.3.1";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {

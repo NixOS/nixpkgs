@@ -17,8 +17,6 @@ buildDunePackage rec {
     sha256 = "14k24vn3q5jl0iyrynb5vwg80670qsv12fsmc6cdgh4zwdpjh7zs";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     ppx_cstruct
     cstruct

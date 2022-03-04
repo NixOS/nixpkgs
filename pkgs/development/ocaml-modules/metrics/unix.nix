@@ -4,7 +4,7 @@ buildDunePackage rec {
 
   pname = "metrics-unix";
 
-  inherit (metrics) version useDune2 src;
+  inherit (metrics) version src;
 
   propagatedBuildInputs = [ gnuplot ocaml_lwt metrics mtime uuidm ];
 

@@ -7,7 +7,7 @@
 buildDunePackage rec {
   pname = "git-cohttp";
 
-  inherit (git) version minimumOCamlVersion src useDune2;
+  inherit (git) version minimumOCamlVersion src;
 
   propagatedBuildInputs = [
     git cohttp cohttp-lwt fmt lwt result rresult uri

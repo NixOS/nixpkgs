@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "qcheck-core";
   version = "0.18";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "ounit2";
   version = "2.2.4";
 
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  useDune1 = lib.versionOlder ocaml.version "4.08";
 
   src = fetchurl {
     url = "https://github.com/gildor478/ounit/releases/download/v${version}/ounit-v${version}.tbz";

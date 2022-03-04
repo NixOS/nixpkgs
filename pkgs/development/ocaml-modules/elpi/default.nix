@@ -43,5 +43,4 @@ buildDunePackage rec {
     substituteInPlace elpi_REPL.ml --replace "tput cols" "${ncurses}/bin/tput cols"
   '';
 
-  useDune2 = true;
-}
+  }

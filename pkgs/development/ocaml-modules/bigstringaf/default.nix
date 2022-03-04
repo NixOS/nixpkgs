@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "bigstringaf";
   version = "0.7.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.03";
 
   src = fetchFromGitHub {

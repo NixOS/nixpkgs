@@ -21,8 +21,6 @@ buildDunePackage rec {
     sha256 = "03x7jh62mvzc6x2d8xsy456qa6iphw72zm7jmqrakpmsy6zcf2lb";
   };
 
-  useDune2 = true;
-
   propagatedBuildInputs = [
     bigarray-compat
     bigarray-overlap

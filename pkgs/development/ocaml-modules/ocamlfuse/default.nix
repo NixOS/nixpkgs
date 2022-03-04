@@ -13,6 +13,7 @@ buildDunePackage {
 
   # This currently fails with dune
   strictDeps = false;
+  useDune1 = true;
 
   nativeBuildInputs = [ camlidl ];
   buildInputs = [ dune-configurator ];

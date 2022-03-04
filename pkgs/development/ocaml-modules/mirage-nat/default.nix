@@ -12,8 +12,6 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.08";
 
   # due to cstruct
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
     sha256 = "01xp0z4mywhawz7rxizi9ph342mqqwyfa5hqgvs8lhqzcym5d104";

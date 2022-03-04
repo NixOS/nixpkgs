@@ -1,8 +1,14 @@
 { lib, stdenv, ocaml, findlib, dune_1, dune_2 }:
 
-{ pname, version, nativeBuildInputs ? [], enableParallelBuilding ? true, ... }@args:
+{ pname, version, nativeBuildInputs ? [], enableParallelBuilding ? true, useDune1 ? false, ... }@args:
 
-let Dune = if args.useDune2 or false then dune_2 else dune_1; in
+let
+  useDune1' =
+    if useDune1 then true
+    else if (args.useDune2 or false)  then
+      lib.warnIf (args.useDune2) "useDune2 is now deprecated since dune 2 is the default, set useDune1 = true if you need dune 1, please update ${pname}" (!args.useDune2)
+    else false;
+  Dune = if useDune1' then dune_1 else dune_2; in
 
 if (args ? minimumOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion) ||
    (args ? minimalOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimalOCamlVersion)
@@ -10,7 +16,6 @@ then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation ({
-
   inherit enableParallelBuilding;
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [];

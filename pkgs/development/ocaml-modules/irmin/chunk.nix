@@ -3,7 +3,7 @@
 buildDunePackage rec {
 
   pname = "irmin-chunk";
-  inherit (irmin) version src useDune2;
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [ irmin ];
 

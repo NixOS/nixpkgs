@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "postgresql";
   version = "5.0.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

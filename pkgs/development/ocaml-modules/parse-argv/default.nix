@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "parse-argv";
   version = "0.2.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {

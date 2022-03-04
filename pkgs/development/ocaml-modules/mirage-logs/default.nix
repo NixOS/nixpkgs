@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "mirage-logs";
   version = "1.2.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/mirage/mirage-logs/releases/download/v${version}/mirage-logs-v${version}.tbz";
     sha256 = "0h0amzjxy067jljscib7fvw5q8k0adqa8m86affha9hq5jsh07a1";

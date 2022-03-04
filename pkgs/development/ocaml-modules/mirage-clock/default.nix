@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "mirage-clock";
   version = "3.1.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {

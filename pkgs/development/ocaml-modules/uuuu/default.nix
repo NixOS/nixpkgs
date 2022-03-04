@@ -22,8 +22,6 @@ buildDunePackage rec {
       'ocaml} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib '
   '';
 
-  useDune2 = true;
-
   nativeBuildInputs = [ menhir findlib ];
 
   buildInputs = [ angstrom ];

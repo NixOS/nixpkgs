@@ -7,7 +7,7 @@
 buildDunePackage rec {
   pname = "kafka_lwt";
 
-  inherit (kafka) version useDune2 src;
+  inherit (kafka) version src;
 
   buildInputs = [ cmdliner ];
 

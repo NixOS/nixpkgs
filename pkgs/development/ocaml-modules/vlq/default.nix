@@ -11,8 +11,6 @@ buildDunePackage rec {
     sha256 = "02wr9ph4q0nxmqgbc67ydf165hmrdv9b655krm2glc3ahb6larxi";
   };
 
-  useDune2 = true;
-
   buildInputs = [ dune-configurator ];
 
   meta = {

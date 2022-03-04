@@ -23,8 +23,6 @@ buildDunePackage rec {
   inherit pname;
   version = "1.6.8";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;

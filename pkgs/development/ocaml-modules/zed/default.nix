@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "zed";
   version = "3.1.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;

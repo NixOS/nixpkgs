@@ -5,7 +5,7 @@
 buildDunePackage rec {
   pname = "dap";
   version = "1.0.6";
-  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/hackwaly/ocaml-dap/releases/download/${version}/dap-${version}.tbz";
     sha256 = "1zq0f8429m38a4x3h9n3rv7n1vsfjbs72pfi5902a89qwyilkcp0";

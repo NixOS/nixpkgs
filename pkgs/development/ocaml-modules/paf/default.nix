@@ -32,8 +32,7 @@ buildDunePackage rec {
     sha256 = "CyIIV11G7oUPPHuhov52LP4Ih4pY6bcUApD23/9q39k=";
   };
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+    minimumOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     mirage-stack

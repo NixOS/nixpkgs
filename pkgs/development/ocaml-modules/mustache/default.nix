@@ -3,8 +3,7 @@
 buildDunePackage rec {
   pname = "mustache";
   version = "3.1.0";
-  useDune2 = true;
-  src = fetchFromGitHub {
+    src = fetchFromGitHub {
     owner = "rgrinberg";
     repo = "ocaml-mustache";
     rev = "v${version}";

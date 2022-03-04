@@ -10,8 +10,6 @@ buildDunePackage rec {
   };
 
   minimumOCamlVersion = "4.07";
-  useDune2 = true;
-
   meta = with lib; {
     description = "Manipulate, parse and generate OCaml compiler version strings";
     homepage = "https://github.com/ocurrent/ocaml-version";

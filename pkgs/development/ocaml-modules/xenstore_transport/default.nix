@@ -5,7 +5,6 @@ buildDunePackage rec {
   version = "1.3.0";
 
   minimumOCamlVersion = "4.04";
-  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "xapi-project";

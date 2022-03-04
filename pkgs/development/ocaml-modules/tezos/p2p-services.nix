@@ -6,7 +6,7 @@
 
 buildDunePackage {
   pname = "tezos-p2p-services";
-  inherit (tezos-stdlib) version useDune2;
+  inherit (tezos-stdlib) version;
   src = "${tezos-stdlib.base_src}/src/lib_p2p_services";
 
   propagatedBuildInputs = [

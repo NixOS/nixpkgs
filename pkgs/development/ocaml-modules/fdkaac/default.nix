@@ -12,8 +12,6 @@ buildDunePackage rec {
     sha256 = "10i6hsjkrpw7zgx99zvvka3sapd7zy53k7z4b6khj9rdrbrgznv8";
   };
 
-  useDune2 = true;
-
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ fdk_aac ];
 

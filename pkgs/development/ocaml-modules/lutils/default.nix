@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "lutils";
   version = "1.51.2";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {

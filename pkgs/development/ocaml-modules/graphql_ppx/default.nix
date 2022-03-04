@@ -26,8 +26,6 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  useDune2 = true;
-
   meta = {
     homepage = "https://github.com/reasonml-community/graphql_ppx";
     description = "GraphQL PPX rewriter for Bucklescript/ReasonML";

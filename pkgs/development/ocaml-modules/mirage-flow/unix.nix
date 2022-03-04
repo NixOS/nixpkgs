@@ -4,7 +4,7 @@
 buildDunePackage {
   pname = "mirage-flow-unix";
 
-  inherit (mirage-flow) version useDune2 src;
+  inherit (mirage-flow) version src;
 
   # Make tests compatible with alcotest 1.4.0
   postPatch = ''

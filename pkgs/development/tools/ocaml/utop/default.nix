@@ -10,8 +10,6 @@ buildDunePackage rec {
   pname = "utop";
   version = "2.8.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
     sha256 = "0mi571ifjzq4wcjarn8q1b7yl8nxjm1jfx3afac224lqwn6bhb2d";

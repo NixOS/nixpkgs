@@ -15,7 +15,6 @@ buildDunePackage {
   inherit (letsencrypt)
     version
     src
-    useDune2
     minimumOCamlVersion
     ;
 

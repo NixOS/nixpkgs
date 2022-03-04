@@ -14,8 +14,6 @@ buildDunePackage {
   pname = "git-unix";
   inherit (git) version src minimumOCamlVersion;
 
-  useDune2 = true;
-
   buildInputs = [
     awa awa-mirage cmdliner git-cohttp-unix
     mirage-clock mirage-clock-unix tcpip

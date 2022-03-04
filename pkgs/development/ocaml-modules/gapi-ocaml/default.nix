@@ -7,8 +7,6 @@ buildDunePackage rec {
   pname = "gapi-ocaml";
   version = "0.4.1";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {

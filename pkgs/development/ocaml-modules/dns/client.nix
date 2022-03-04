@@ -6,8 +6,6 @@ buildDunePackage {
   pname = "dns-client";
   inherit (dns) src version;
 
-  useDune2 = true;
-
   propagatedBuildInputs = [ cstruct fmt logs dns rresult randomconv domain-name ipaddr
                             ocaml_lwt mirage-stack mirage-random mirage-time mirage-clock
                             mtime mirage-crypto-rng ];

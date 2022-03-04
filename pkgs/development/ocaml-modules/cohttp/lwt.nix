@@ -5,7 +5,6 @@ buildDunePackage {
   inherit (cohttp)
     version
     src
-    useDune2
     minimumOCamlVersion
     ;
 

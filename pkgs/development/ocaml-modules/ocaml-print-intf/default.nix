@@ -11,8 +11,6 @@ let
 in
 buildDunePackage rec {
   inherit pname version;
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = author;
     repo = pname;

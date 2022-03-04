@@ -8,8 +8,6 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/rgrinberg/curly/releases/download/${version}/curly-${version}.tbz";
     sha256 = "07vqdrklar0d5i83ip7sjw2c1v18a9m3anw07vmi5ay29pxzal6k";

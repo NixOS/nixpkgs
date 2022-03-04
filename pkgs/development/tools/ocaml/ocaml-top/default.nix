@@ -4,8 +4,6 @@ with ocamlPackages; buildDunePackage rec {
   pname = "ocaml-top";
   version = "1.2.0-rc";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocaml-top";

@@ -15,8 +15,6 @@ buildDunePackage rec {
   pname = "opium_kernel";
   version = "0.18.0";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.04.1";
 
   src = fetchurl {

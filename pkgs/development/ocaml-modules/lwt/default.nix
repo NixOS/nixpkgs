@@ -10,8 +10,6 @@ buildDunePackage rec {
   pname = "lwt";
   version = "5.4.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "lwt";

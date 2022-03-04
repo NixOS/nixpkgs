@@ -5,8 +5,6 @@ buildDunePackage rec {
   pname = "zmq";
   version = "20180726";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "issuu";
     repo = "ocaml-zmq";

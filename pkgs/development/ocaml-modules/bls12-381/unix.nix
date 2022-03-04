@@ -12,7 +12,7 @@
 buildDunePackage {
   pname = "bls12-381-unix";
 
-  inherit (bls12-381) version src useDune2 doCheck;
+  inherit (bls12-381) version src doCheck;
 
   propagatedBuildInputs = [
     bls12-381

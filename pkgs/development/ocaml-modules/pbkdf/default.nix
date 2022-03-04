@@ -9,8 +9,6 @@ buildDunePackage rec {
   pname = "pbkdf";
   version = "1.1.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/abeaumont/ocaml-pbkdf/releases/download/${version}/pbkdf-${version}.tbz";
     sha256 = "e53ed1bd9abf490c858a341c10fb548bc9ad50d4479acdf95a9358a73d042264";

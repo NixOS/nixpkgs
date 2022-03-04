@@ -17,8 +17,6 @@ coq.ocamlPackages.buildDunePackage rec {
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
-  useDune2 = true;
-
   buildInputs = with coq.ocamlPackages; [
     coq
     menhir

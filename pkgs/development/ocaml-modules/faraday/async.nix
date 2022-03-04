@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "faraday-async";
-  inherit (faraday) version src useDune2;
+  inherit (faraday) version src;
 
   minimumOCamlVersion = "4.08";
 

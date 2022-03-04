@@ -3,9 +3,6 @@
 buildDunePackage rec {
   pname = "biniou";
   version = "1.2.1";
-
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;

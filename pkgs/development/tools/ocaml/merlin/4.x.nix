@@ -55,8 +55,6 @@ buildDunePackage {
     ./test.patch
   ;
 
-  useDune2 = true;
-
   strictDeps = true;
 
   nativeBuildInputs = [

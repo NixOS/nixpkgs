@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "irmin-layers";
 
-  inherit (irmin) version src useDune2;
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [
     irmin

@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "dune-site";
   inherit (dune_2) src version patches;
 
-  useDune2 = true;
-
   dontAddPrefix = true;
 
   propagatedBuildInputs = [ dune-private-libs ];

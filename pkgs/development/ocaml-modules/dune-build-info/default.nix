@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "dune-build-info";
   inherit (dune_2) src version patches;
 
-  useDune2 = true;
-
   dontAddPrefix = true;
 
   meta = with lib; {

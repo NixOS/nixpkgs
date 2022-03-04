@@ -4,7 +4,7 @@ buildDunePackage {
   pname = "ocf_ppx";
   minimalOCamlVersion = "4.11";
 
-  inherit (ocf) src version useDune2;
+  inherit (ocf) src version;
 
   buildInputs = [ ppxlib ocf ];
 

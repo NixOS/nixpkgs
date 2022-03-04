@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "ppx_deriving_yaml";
   version = "0.1.0";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {

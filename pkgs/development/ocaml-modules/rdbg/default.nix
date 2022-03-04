@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "rdbg";
   version = "1.196.12";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {

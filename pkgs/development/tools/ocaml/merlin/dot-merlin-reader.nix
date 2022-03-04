@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "dot-merlin-reader";
   version = "4.1";
 
-  useDune2 = true;
-
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {
