@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.18.3";
+  version = "6.18.5";
   format = "setuptools";
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -25,12 +25,9 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JgAQCulv/QgjNLN441VVD++LSlKab6TDT0cTCQXHQm0=";
+    hash = "sha256-Atrog/Vn9bcP0608nu+5WRLniskL5sdES14vRr9XLIQ=";
   };
 
-  # no longer compatible with sybil
-  # https://github.com/simplistix/testfixtures/issues/169
-  doCheck = false;
   checkInputs = [
     mock
     pytestCheckHook
@@ -42,19 +39,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Django is too much hasle to setup at the moment
     "testfixtures/tests/test_django"
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/simplistix/testfixtures/issues/168
-    "test_invalid_communicate_call"
-    "test_invalid_kill"
-    "test_invalid_parameters"
-    "test_invalid_poll"
-    "test_invalid_send_signal"
-    "test_invalid_terminate"
-    "test_invalid_wait_call"
-    "test_replace_delattr_cant_remove"
-    "test_replace_delattr_cant_remove_not_strict"
   ];
 
   pytestFlagsArray = [
