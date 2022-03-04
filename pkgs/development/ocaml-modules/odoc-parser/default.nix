@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [ astring result ];
+  propagatedBuildInputs = [ astring result ];
 
   meta = {
     description = "Parser for Ocaml documentation comments";
