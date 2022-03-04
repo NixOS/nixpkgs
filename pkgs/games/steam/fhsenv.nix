@@ -105,6 +105,7 @@ in buildFHSUserEnv rec {
     gtk3
     dbus
     zlib
+    glib
     atk
     cairo
     freetype
@@ -130,6 +131,9 @@ in buildFHSUserEnv rec {
     openssl_1_1
     rtmpdump
 
+    # needed by getcap for vr startup
+    libcap
+
     # dependencies for mesa drivers, needed inside pressure-vessel
     mesa.drivers
     mesa.llvmPackages.llvm.lib
@@ -141,69 +145,6 @@ in buildFHSUserEnv rec {
     xorg.libxshmfence
     xorg.libXxf86vm
     libelf
-
-    # Required
-    glib
-    gtk2
-    bzip2
-
-    # Without these it silently fails
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXi
-    xorg.libSM
-    xorg.libICE
-    gnome2.GConf
-    (curl.override { gnutlsSupport = true; opensslSupport = false; })
-    nspr
-    nss
-    cups
-    libcap
-    SDL2
-    libusb1
-    dbus-glib
-    ffmpeg
-    # Only libraries are needed from those two
-    libudev0-shim
-    networkmanager098
-
-    # Verified games requirements
-    xorg.libXt
-    xorg.libXmu
-    libogg
-    libvorbis
-    SDL
-    SDL2_image
-    glew110
-    libidn
-    tbb
-
-    # Other things from runtime
-    flac
-    freeglut
-    libjpeg
-    libpng12
-    libsamplerate
-    libmikmod
-    libtheora
-    libtiff
-    pixman
-    speex
-    SDL_image
-    SDL_ttf
-    SDL_mixer
-    SDL2_ttf
-    SDL2_mixer
-    libappindicator-gtk2
-    libcaca
-    libcanberra
-    libgcrypt
-    libvpx
-    librsvg
-    xorg.libXft
-    libvdpau
   ]
   ++ steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
