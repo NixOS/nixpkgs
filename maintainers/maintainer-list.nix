@@ -7963,6 +7963,12 @@
     githubId = 668926;
     name = "Maximilian Güntner";
   };
+  mh = {
+    email = "68288772+markus-heinrich@users.noreply.github.com";
+    github = "markus-heinrich";
+    githubId = 68288772;
+    name = "Markus Heinrich";
+  };
   mhaselsteiner = {
     email = "magdalena.haselsteiner@gmx.at";
     github = "mhaselsteiner";
