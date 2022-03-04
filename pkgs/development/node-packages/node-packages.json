@@ -224,6 +224,7 @@
 , "nrm"
 , "ocaml-language-server"
 , "parcel-bundler"
+, "parcel"
 , "parsoid"
 , "patch-package"
 , "peerflix"
