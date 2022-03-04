@@ -31,6 +31,26 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
+    # pytest-aiohttp>0.3.0 breaks home-assistant tests
+    (self: super: {
+      pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0kx4mbs9bflycd8x9af0idcjhdgnzri3nw1qb0vpfyb3751qaaf9";
+        };
+      });
+      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+    })
+
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.18";
