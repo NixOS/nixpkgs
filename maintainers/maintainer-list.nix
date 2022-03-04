@@ -6350,6 +6350,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keldu = {
+    email = "mail@keldu.de";
+    github = "keldu";
+    githubId = 15373888;
+    name = "Claudius Holeksa";
+  };
   kennyballou = {
     email = "kb@devnulllabs.io";
     github = "kennyballou";
@@ -10981,6 +10987,12 @@
     github = "seb314";
     githubId = 19472270;
     name = "Sebastian";
+  };
+  sebastianblunt = {
+    name = "Sebastian Blunt";
+    email = "nix@sebastianblunt.com";
+    github = "sebastianblunt";
+    githubId = 47431204;
   };
   sebbadk = {
     email = "sebastian@sebba.dk";

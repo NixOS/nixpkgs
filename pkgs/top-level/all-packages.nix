@@ -1082,6 +1082,8 @@ with pkgs;
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  midimonster = callPackage ../tools/audio/midimonster { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
@@ -7467,7 +7469,7 @@ with pkgs;
   leatherman = callPackage ../development/libraries/leatherman { };
 
   ledit = callPackage ../tools/misc/ledit {
-    inherit (ocamlPackages) camlp5;
+    inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
   };
 
   ledmon = callPackage ../tools/system/ledmon { };
@@ -9320,6 +9322,8 @@ with pkgs;
 
   rcon = callPackage ../tools/networking/rcon { };
 
+  rdap = callPackage ../tools/networking/rdap { };
+
   rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
 
   rdma-core = callPackage ../os-specific/linux/rdma-core { };
@@ -9750,6 +9754,8 @@ with pkgs;
 
   shelldap = callPackage ../tools/misc/shelldap { };
 
+  shellspec = callPackage ../tools/misc/shellspec { };
+
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
   sharedown = callPackage ../tools/misc/sharedown { };
@@ -9833,7 +9839,9 @@ with pkgs;
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  sks = callPackage ../servers/sks { };
+  sks = callPackage ../servers/sks {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
+  };
 
   skydns = callPackage ../servers/skydns { };
 
@@ -9880,6 +9888,8 @@ with pkgs;
   };
 
   smu = callPackage ../tools/text/smu { };
+
+  smug = callPackage ../tools/misc/smug { };
 
   smpq = callPackage ../applications/misc/smpq { };
 
@@ -14047,7 +14057,7 @@ with pkgs;
 
   regina = callPackage ../development/interpreters/regina { };
 
-  inherit (ocamlPackages) reason;
+  inherit (ocaml-ng.ocamlPackages_4_12) reason;
 
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
@@ -14953,6 +14963,7 @@ with pkgs;
 
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
 
   fly = callPackage ../development/tools/continuous-integration/fly { };
@@ -28079,7 +28090,9 @@ with pkgs;
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
-  orpie = callPackage ../applications/misc/orpie { };
+  orpie = callPackage ../applications/misc/orpie {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
+  };
 
   osmo = callPackage ../applications/office/osmo { };
 
@@ -29004,7 +29017,7 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
-  inherit (ocamlPackages) stog;
+  inherit (ocaml-ng.ocamlPackages_4_12) stog;
 
   stp = callPackage ../applications/science/logic/stp { };
 
@@ -31893,6 +31906,8 @@ with pkgs;
 
   alliance = callPackage ../applications/science/electronics/alliance { };
 
+  angsd = callPackage ../applications/science/biology/angsd { };
+
   ants = callPackage ../applications/science/biology/ants {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -32365,7 +32380,9 @@ with pkgs;
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
 
-  abella = callPackage ../applications/science/logic/abella { };
+  abella = callPackage ../applications/science/logic/abella {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
+  };
 
   acgtk = callPackage ../applications/science/logic/acgtk {};
 
@@ -32444,7 +32461,7 @@ with pkgs;
 
   hol = callPackage ../applications/science/logic/hol { };
 
-  inherit (ocamlPackages) hol_light;
+  inherit (ocaml-ng.ocamlPackages_4_12) hol_light;
 
   hologram = callPackage ../tools/security/hologram { };
 
@@ -32508,7 +32525,9 @@ with pkgs;
 
   libpoly = callPackage ../applications/science/logic/poly {};
 
-  prooftree = callPackage  ../applications/science/logic/prooftree {};
+  prooftree = callPackage  ../applications/science/logic/prooftree {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
+  };
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
