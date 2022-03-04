@@ -518,7 +518,7 @@ let
                 auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly " store-only"}
               '' +
               optionalString cfg.googleAuthenticator.enable ''
-                auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
+                auth required ${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
               '' +
               optionalString cfg.duoSecurity.enable ''
                 auth required ${pkgs.duo-unix}/lib/security/pam_duo.so
