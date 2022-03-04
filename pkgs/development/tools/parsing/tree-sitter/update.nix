@@ -308,6 +308,10 @@ let
       orga = "milisims";
       repo = "tree-sitter-org";
     };
+    "tree-sitter-hcl" = {
+      orga = "MichaHoffmann";
+      repo = "tree-sitter-hcl";
+    };
   };
 
   allGrammars =
