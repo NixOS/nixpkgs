@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyobihai";
-  version = "1.3.1";
+  version = "1.3.2";
   disabled = pythonOlder "3.6";
 
   # GitHub release, https://github.com/dshokouhi/pyobihai/issues/10
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vvf5if57dfd091a7fb5rvx63hvf0isrx28j72nj2aav1as460qp";
+    sha256 = "sha256-zhsnJyhXlugK0nJ7FJZZcrq2VDQt1a9uCgsJAIABZ28=";
   };
 
   propagatedBuildInputs = [
