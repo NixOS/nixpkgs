@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
   nativeBuildInputs = [ autogen autoconf automake gettext pkg-config py3 unzip which ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ] ++ [ libtool ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ] ++ [ libtool ];
 
   buildInputs = [ gmp libsodium sqlite zlib ];
 
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ElementsProject/lightning";
     maintainers = with maintainers; [ jb55 prusnak ];
     license = licenses.mit;
-    platforms = platforms.linux ++ [ "x86_64-darwin" ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
