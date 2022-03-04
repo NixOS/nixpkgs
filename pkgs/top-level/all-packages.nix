@@ -2569,7 +2569,7 @@ with pkgs;
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
-  cinny = callPackage ../applications/networking/instant-messengers/cinny {};
+  cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
