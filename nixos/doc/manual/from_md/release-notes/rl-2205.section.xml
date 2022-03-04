@@ -445,6 +445,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.prometheus.alertManagerTimeout</literal> has
+          been removed as it has been deprecated upstream and has no
+          effect.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The DHCP server (<literal>services.dhcpd4</literal>,
           <literal>services.dhcpd6</literal>) has been hardened. The
           service is now using the systemd’s
