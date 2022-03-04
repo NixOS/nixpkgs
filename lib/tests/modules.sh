@@ -240,6 +240,11 @@ checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
+# submodules in freeformTypes should have their locations annotated
+checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
+# freeformTypes can get merged using `types.type`, including submodules
+checkConfigOutput '^10$' config.free.xxx.foo ./freeform-submodules.nix
+checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
 
 ## types.anything
 # Check that attribute sets are merged recursively
@@ -283,6 +288,28 @@ checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
+
+## emptyValue's
+checkConfigOutput "[ ]" config.list.a ./emptyValues.nix
+checkConfigOutput "{ }" config.attrs.a ./emptyValues.nix
+checkConfigOutput "null" config.null.a ./emptyValues.nix
+checkConfigOutput "{ }" config.submodule.a ./emptyValues.nix
+# These types don't have empty values
+checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+
+## types.raw
+checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
+checkConfigOutput "10" config.processedToplevel ./raw.nix
+checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
+checkConfigOutput "bar" config.priorities ./raw.nix
+
+# Test that types.optionType merges types correctly
+checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
+checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
+
+# Test that types.optionType correctly annotates option locations
+checkConfigError 'The option .theOption.nested. in .other.nix. is already declared in .optionTypeFile.nix.' config.theOption.nested ./optionTypeFile.nix
 
 cat <<EOF
 ====== module tests ======

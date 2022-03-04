@@ -1,15 +1,18 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.2.18";
+  version = "3.3.2";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
     rev = "v${version}";
-    sha256 = "sha256-68tD7I7MI/Cp94tp6c4lQx+8xwRnJTKTF/3SWz4Ddgg=";
+    hash = "sha256-Z2JYFnE9g2bWaR+Ghxg3zJUD0Ja8/od52jkOVWEqeVE=";
   };
 
   postPatch = ''
@@ -18,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     ln -sf requirements.in requirements.txt
 
     # remove dependency constraints
-    sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+    sed 's/[>=]=.*//' -i requirements.txt
 
     # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
     # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110

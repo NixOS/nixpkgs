@@ -29,7 +29,7 @@ let
     comment = "A modular ComputerCraft emulator";
     desktopName = "CCEmuX";
     genericName = "ComputerCraft Emulator";
-    categories = "Emulator;";
+    categories = [ "Emulator" ];
   };
 in
 

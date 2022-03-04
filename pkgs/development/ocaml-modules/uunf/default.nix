@@ -18,9 +18,12 @@ stdenv.mkDerivation {
     sha256 = "sha256:17wv0nm3vvwcbzb1b09akw8jblmigyhbfmh1sy9lkb5756ni94a2";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg uutf cmdliner ];
 
   propagatedBuildInputs = [ uchar ];
+
+  strictDeps = true;
 
   prePatch = lib.optionalString stdenv.isAarch64 "ulimit -s 16384";
 

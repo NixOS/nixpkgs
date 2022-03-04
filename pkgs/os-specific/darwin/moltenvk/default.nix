@@ -29,7 +29,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "MoltenVK";
-  version = "1.1.7";
+  version = "1.1.8";
 
   buildInputs = [
     AppKit
@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "glslang";
-        rev = "2742e959347ae2fac58acd0d022c92a0ff1f24bf";
+        rev = "90d4bd05cd77ef5782a6779a0fe3d084440dc80d";
         hash = "sha256-Q0sk4bPj/skPat1n4GJyuXAlZqpfEn4Td8Bm2IBNUqE=";
       };
     })).override {
@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${version}";
-    hash = "sha256-I9QcjyE09qclWPCLAVfKEaifP89q1ftLh9cXWy9m7kw=";
+    hash = "sha256-IfTBtA2fM7YN4qaSDUTfsiCXzn+omSV6oroL1ivKiVA=";
   };
 
   patches = [

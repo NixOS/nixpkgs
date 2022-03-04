@@ -50,6 +50,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ scikit-build cmake ];
   propagatedBuildInputs = [ ush requests numpy cffi ];
 
+  doCheck = false;  # no tests exist
+
   meta = with lib; {
     description = "Python Kaldi speech recognition";
     homepage = "https://github.com/daanzu/kaldi-active-grammar";

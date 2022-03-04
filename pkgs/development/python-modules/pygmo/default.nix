@@ -1,52 +1,63 @@
 { lib
-, buildPythonPackage
-, eigen
-, nlopt
-, ipopt
+, stdenv
+, toPythonModule
+, fetchFromGitHub
+, cmake
 , boost
+, eigen
+, ipopt
+, nlopt
 , pagmo2
-, numpy
+, python
 , cloudpickle
 , ipyparallel
 , numba
-, python
+, numpy
+, pybind11
 }:
 
-let
-  propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];
-
-  pagmo2WithPython = pagmo2.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DPAGMO_BUILD_PYGMO=yes"
-      "-DPAGMO_BUILD_PAGMO=no"
-      "-DPagmo_DIR=${pagmo2}"
-    ];
-    buildInputs = [ eigen nlopt ipopt boost pagmo2 ] ++ propagatedBuildInputs;
-    postInstall = ''
-      mv wheel $out
-    '';
-  });
-
-in buildPythonPackage {
+toPythonModule (stdenv.mkDerivation rec {
   pname = "pygmo";
-  version = pagmo2WithPython.version;
+  version = "2.18.0";
 
-  inherit propagatedBuildInputs;
+  src = fetchFromGitHub {
+    owner = "esa";
+    repo = "pygmo2";
+    rev = "v${version}";
+    sha256 = "sha256-he7gxRRJd6bBrD0Z0i+CQTr5JH4P3Im/beNGO+HfmNM=";
+  };
 
-  src = pagmo2WithPython;
+  cmakeFlags = [
+    "-DPYGMO_INSTALL_PATH=${placeholder "out"}/lib/${python.libPrefix}/site-packages"
+  ];
 
-  preBuild = ''
-    mv ${python.sitePackages}/pygmo wheel
-    cd wheel
-  '';
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  # dont do tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    cloudpickle
+    ipyparallel
+    numba
+    numpy
+    python
+  ];
+
+  buildInputs = [
+    boost
+    eigen
+    ipopt
+    nlopt
+    pagmo2
+    pybind11
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Parallel optimisation for Python";
-    homepage = "https://esa.github.io/pagmo2/";
+    homepage = "https://github.com/esa/pygmo2";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.costrouc ];
   };
-}
+})

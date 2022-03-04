@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "3.2.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3b60ea9059070e6d0d5c3bd3a705b5c7216a54e6a586149f9caa9158d099c3f";
+    sha256 = "sha256-x4ejr6qj5z4yKOx0pIqK13oVzsKj+uQ43Q5VN48jaFQ=";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];

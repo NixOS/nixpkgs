@@ -284,6 +284,8 @@ in {
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
+    dddvb = callPackage ../os-specific/linux/dddvb { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
@@ -460,6 +462,8 @@ in {
 
     xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
 
+    xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
+
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
@@ -530,7 +534,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_5_10;
+    linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_5_16;
     linux_mptcp = packages.linux_mptcp_95;

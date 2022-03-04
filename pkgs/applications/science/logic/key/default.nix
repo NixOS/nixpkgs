@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
       comment = meta.description;
       desktopName = "KeY";
       genericName = "KeY";
-      categories = "Science;";
+      categories = [ "Science" ];
     })
   ];
 

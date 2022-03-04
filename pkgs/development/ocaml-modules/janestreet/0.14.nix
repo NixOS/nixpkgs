@@ -203,6 +203,8 @@ with self;
     meta.description = "Trivial metaprogramming tool";
     propagatedBuildInputs = [ re ];
     checkInputs = [ ppx_jane ];
+    # This currently fails with dune
+    strictDeps = false;
   };
 
   core = janePackage {
@@ -761,6 +763,8 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
+    # This currently fails with dune
+    strictDeps = false;
   };
 
   shexp = janePackage {

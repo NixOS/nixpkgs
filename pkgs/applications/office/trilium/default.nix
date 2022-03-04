@@ -8,7 +8,7 @@ let
     icon = "trilium";
     comment = description;
     desktopName = "Trilium Notes";
-    categories = "Office";
+    categories = [ "Office" ];
   };
 
   meta = with lib; {

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , libxml2
@@ -16,27 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "7w+evZLtmTmDHVVsw25bJz99xtlSCE8qTFSxez9tlZk=";
+    sha256 = "I1ZoDqZQPfPwPr4Ybk+syz+YEkrK2ReflZaJJWD4Nsk=";
   };
-
-  patches = [
-    # Fix broken translation.
-    # https://github.com/flatpak/xdg-desktop-portal-gtk/issues/353
-    (fetchpatch {
-      url = "https://github.com/flatpak/xdg-desktop-portal-gtk/commit/e34f49ca8365801a7fcacccb46ab1e62aec17435.patch";
-      sha256 = "umMsSP0fuSQgxlHLaZlg25ln1aAL1mssWzPMIWAOUt4=";
-    })
-    (fetchpatch {
-      url = "https://github.com/flatpak/xdg-desktop-portal-gtk/commit/19c5385b9f5fe0f8dac8ae7cc4493bb08f802de6.patch";
-      sha256 = "nbmOb5er20zBOO4K2geYITafqBaNHbDpq1OOvIVD6hY=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -54,13 +40,18 @@ stdenv.mkDerivation rec {
     gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
   ];
 
-  configureFlags = lib.optionals buildPortalsInGnome [
+  configureFlags = if buildPortalsInGnome then [
     "--enable-wallpaper"
     "--enable-screenshot"
     "--enable-screencast"
     "--enable-background"
     "--enable-settings"
     "--enable-appchooser"
+  ] else [
+    # These are now enabled by default, even though we do not need them for GNOME.
+    # https://github.com/flatpak/xdg-desktop-portal-gtk/issues/355
+    "--disable-settings"
+    "--disable-appchooser"
   ];
 
   meta = with lib; {

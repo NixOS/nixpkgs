@@ -82,14 +82,14 @@ in
       git = 41;
       #fourstore = 42; # dropped in 20.03
       #fourstorehttp = 43; # dropped in 20.03
-      virtuoso = 44;
+      #virtuoso = 44;  dropped module
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       # bind = 53; #dynamically allocated as of 2021-09-03
       wwwrun = 54;
       #adm = 55; # unused
@@ -412,7 +412,7 @@ in
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       #bind = 53; # unused
       wwwrun = 54;
       adm = 55;

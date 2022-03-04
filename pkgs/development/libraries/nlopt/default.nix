@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
   ];
 
+  postFixup = ''
+    substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace \
+      'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/' 'INTERFACE_INCLUDE_DIRECTORIES "'
+  '';
+
   meta = {
     homepage = "https://nlopt.readthedocs.io/en/latest/";
     description = "Free open-source library for nonlinear optimization";

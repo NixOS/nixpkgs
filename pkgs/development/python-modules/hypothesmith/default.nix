@@ -9,10 +9,15 @@ buildPythonPackage rec {
     sha256 = "0fb7b3fd03d76eddd4474b0561e1c2662457593a74cc300fd27e5409cd4d7922";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "lark-parser" "lark"
+  '';
+
   propagatedBuildInputs = [ hypothesis lark libcst ];
 
   checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
 
+  pytestFlagsArray = [ "-v" ];  # tests are fairly slow, prevents timeout due to no stdout printing
   pythonImportsCheck = [ "hypothesmith" ];
 
   meta = with lib; {

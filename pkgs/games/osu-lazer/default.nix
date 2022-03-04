@@ -63,7 +63,7 @@ buildDotnetModule rec {
     icon = "osu!";
     comment = meta.description;
     type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   })];
 
   meta = with lib; {

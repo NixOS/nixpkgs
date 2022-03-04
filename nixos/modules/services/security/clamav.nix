@@ -9,7 +9,7 @@ let
   pkg = pkgs.clamav;
 
   toKeyValue = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {} " ";
+    mkKeyValue = generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
   };
 
@@ -30,7 +30,7 @@ in
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-          default = {};
+          default = { };
           description = ''
             ClamAV configuration. Refer to <link xlink:href="https://linux.die.net/man/5/clamd.conf"/>,
             for details on supported values.
@@ -59,7 +59,7 @@ in
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-          default = {};
+          default = { };
           description = ''
             freshclam configuration. Refer to <link xlink:href="https://linux.die.net/man/5/freshclam.conf"/>,
             for details on supported values.
@@ -104,7 +104,6 @@ in
     systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       after = optional cfg.updater.enable "clamav-freshclam.service";
-      requires = optional cfg.updater.enable "clamav-freshclam.service";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
@@ -134,7 +133,7 @@ in
     systemd.services.clamav-freshclam = mkIf cfg.updater.enable {
       description = "ClamAV virus database updater (freshclam)";
       restartTriggers = [ freshclamConfigFile ];
-
+      after = [ "network-online.target" ];
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
         chown ${clamavUser}:${clamavGroup} ${stateDir}

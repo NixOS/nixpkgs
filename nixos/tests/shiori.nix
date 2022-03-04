@@ -12,7 +12,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     authJSON = pkgs.writeText "auth.json" (builtins.toJSON {
       username = "shiori";
       password = "gopher";
-      remember = 1; # hour
       owner = true;
     });
 

@@ -216,7 +216,7 @@
     "ecobee" = ps: with ps; [ python-ecobee-api ];
     "econet" = ps: with ps; [ pyeconet ];
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
-    "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
+    "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ pysml ];
     "efergy" = ps: with ps; [ pyefergy ];
@@ -264,7 +264,7 @@
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
-    "fibaro" = ps: with ps; [ ]; # missing inputs: fiblary3
+    "fibaro" = ps: with ps; [ fiblary3-fork ];
     "fido" = ps: with ps; [ pyfido ];
     "file" = ps: with ps; [ ];
     "filesize" = ps: with ps; [ ];
@@ -780,7 +780,7 @@
     "sia" = ps: with ps; [ pysiaalarm ];
     "sigfox" = ps: with ps; [ ];
     "sighthound" = ps: with ps; [ pillow simplehound ];
-    "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
+    "signal_messenger" = ps: with ps; [ pysignalclirestapi ];
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
     "simplisafe" = ps: with ps; [ simplisafe-python ];
     "simulated" = ps: with ps; [ ];
@@ -967,7 +967,7 @@
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ pyvolumio ];
-    "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
+    "volvooncall" = ps: with ps; [ volvooncall ];
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
@@ -1476,6 +1476,7 @@
     "sia"
     "sigfox"
     "sighthound"
+    "signal_messenger"
     "simplisafe"
     "simulated"
     "siren"

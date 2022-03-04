@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1fxq57xy1ajzfdnvv5zfm7ap2nf49znw5f9gbi4kb9vds942ij27";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg ]
-    ++ lib.optional jsooSupport js_of_ocaml;
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ] ++ lib.optional jsooSupport js_of_ocaml;
+
+  strictDeps = true;
 
   propagatedBuildInputs = [ result ];
 

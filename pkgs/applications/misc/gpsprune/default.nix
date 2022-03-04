@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
       comment = meta.description;
-      categories = "Education;Geoscience;";
+      categories = [ "Education" "Geoscience" ];
     })
   ];
 

@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, version, src, cmake
+{ lib, stdenv, llvm_meta, version
+, monorepoSrc, runCommand
+, cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -6,8 +8,20 @@ stdenv.mkDerivation rec {
   pname = "libunwind";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  # I am not so comfortable giving libc++ and friends the whole monorepo as
+  # requested, so I filter it to what is needed.
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    mkdir -p "$out/libcxx"
+    cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+    cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
+    mkdir -p "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     ./gnu-install-dirs.patch

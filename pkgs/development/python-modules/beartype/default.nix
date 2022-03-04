@@ -5,17 +5,16 @@
 , pythonOlder
 }:
 
-
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.9.1";
+  version = "0.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "YjYw3CQ7DaWoTw+kFOaqryYT5WetGav+aoHBfqWrYvE=";
+    hash = "sha256-Lo1AUxj+QR7N2Tdif58zGBMSp5Pr0jmz2nacRDnLS5g=";
   };
 
   checkInputs = [

@@ -47,6 +47,9 @@ buildPythonApplication rec {
       hash = "sha256:1dizf9j3z7zk4lxvnszwx63xzd9r68f2iva5sszzf8s8na831dvd";
     })
   ];
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace "pdm-pep517>=0.9,<0.10" "pdm-pep517"
+  '';
 
   propagatedBuildInputs = [
     blinker

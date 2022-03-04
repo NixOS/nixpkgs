@@ -620,7 +620,7 @@ let
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
-    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+    lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
@@ -1192,8 +1192,6 @@ let
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     ptset = callPackage ../development/ocaml-modules/ptset { };
-
-    pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     pyml = callPackage ../development/ocaml-modules/pyml { };
 

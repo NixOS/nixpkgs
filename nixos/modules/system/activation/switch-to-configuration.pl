@@ -307,6 +307,7 @@ sub handleModifiedUnit {
         # seem to get applied on daemon-reload.
     } elsif ($unit =~ /\.mount$/) {
         # Reload the changed mount unit to force a remount.
+        # FIXME: only reload when Options= changed, restart otherwise
         $unitsToReload->{$unit} = 1;
         recordUnit($reloadListFile, $unit);
     } elsif ($unit =~ /\.socket$/) {
@@ -339,7 +340,7 @@ sub handleModifiedUnit {
                 # If this unit is socket-activated, then stop the
                 # socket unit(s) as well, and restart the
                 # socket(s) instead of the service.
-                my $socketActivated = 0;
+                my $socket_activated = 0;
                 if ($unit =~ /\.service$/) {
                     my @sockets = split(/ /, join(" ", @{$unitInfo{Service}{Sockets} // []}));
                     if (scalar @sockets == 0) {
@@ -347,13 +348,15 @@ sub handleModifiedUnit {
                     }
                     foreach my $socket (@sockets) {
                         if (defined $activePrev->{$socket}) {
+                            # We can now be sure this is a socket-activate unit
+
                             $unitsToStop->{$socket} = 1;
                             # Only restart sockets that actually
                             # exist in new configuration:
                             if (-e "$out/etc/systemd/system/$socket") {
                                 $unitsToStart->{$socket} = 1;
                                 recordUnit($startListFile, $socket);
-                                $socketActivated = 1;
+                                $socket_activated = 1;
                             }
                             # Remove from units to reload so we don't restart and reload
                             if ($unitsToReload->{$unit}) {
@@ -368,7 +371,7 @@ sub handleModifiedUnit {
                 # that this unit needs to be started below.
                 # We write this to a file to ensure that the
                 # service gets restarted if we're interrupted.
-                if (!$socketActivated) {
+                if (!$socket_activated) {
                     $unitsToStart->{$unit} = 1;
                     recordUnit($startListFile, $unit);
                 }

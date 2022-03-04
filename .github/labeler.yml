@@ -142,7 +142,7 @@
 "6.topic: vim":
   - doc/languages-frameworks/vim.section.md
   - pkgs/applications/editors/vim/**/*
-  - pkgs/misc/vim-plugins/**/*
+  - pkgs/applications/editors/vim/plugins/**/*
   - nixos/modules/programs/neovim.nix
   - pkgs/applications/editors/neovim/**/*
 

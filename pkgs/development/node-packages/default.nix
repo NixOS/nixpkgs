@@ -314,6 +314,13 @@ let
       '';
     };
 
+    parcel = super.parcel.override {
+      buildInputs = [ self.node-gyp-build ];
+      preRebuild = ''
+        sed -i -e "s|#!/usr/bin/env node|#! ${pkgs.nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+      '';
+    };
+
     postcss-cli = super.postcss-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -336,7 +343,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-xLmVyO/L6C4ZdHzHqiJVq3ZfDWSym29x75JcwJx746ps61UcNEg4ozSwN9ud7UjXLntdXe1xDLNOUO1lc7LN5g==";
+        sha512 = "sha512-dAld12vtwdz9Rz01nOjmnXe+vHana5PSog8t0XGgLemKsUVsaupYpr74AHaS3s78SaTS5s2HOghnJF+jn91ZrA==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \

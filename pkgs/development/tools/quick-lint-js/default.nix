@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quick-lint-js";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
-    sha256 = "09jp118n487g467d4zhqcpnwwrvmjw02ssv1rbyw2s22cgz9701f";
+    sha256 = "1ay59pmprcswip6zzbqfy5g2rdv4lgmps8vrxay4l9w6xn9lg03v";
   };
 
   nativeBuildInputs = [ cmake ninja ];

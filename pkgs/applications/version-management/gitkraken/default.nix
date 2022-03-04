@@ -95,7 +95,7 @@ let
       icon = pname;
       desktopName = "GitKraken";
       genericName = "Git Client";
-      categories = "Development;";
+      categories = [ "Development" ];
       comment = "Graphical Git client from Axosoft";
     }) ];
 

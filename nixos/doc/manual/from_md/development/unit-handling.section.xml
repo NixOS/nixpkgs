@@ -88,9 +88,10 @@
         </listitem>
         <listitem>
           <para>
-            The rest of the behavior is decided whether the unit has
+            Further behavior depends on the unit having
             <literal>X-StopIfChanged</literal> in the
-            <literal>[Service]</literal> section set (exposed via
+            <literal>[Service]</literal> section set to
+            <literal>true</literal> (exposed via
             <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.stopIfChanged</link>).
             This is set to <literal>true</literal> by default and must
             be explicitly turned off if not wanted. If the flag is
@@ -100,17 +101,22 @@
             is <emphasis role="strong">restart</emphasis>ed. The goal of
             the flag is to make sure that the new unit never runs in the
             old environment which is still in place before the
-            activation script is run.
+            activation script is run. This behavior is different when
+            the service is socket-activated, as outlined in the
+            following steps.
           </para>
         </listitem>
         <listitem>
           <para>
             The last thing that is taken into account is whether the
-            unit is a service and socket-activated. Due to a bug, this
-            is currently only done when
-            <literal>X-StopIfChanged</literal> is set. If the unit is
-            socket-activated, the socket is stopped and started, and the
-            service is stopped and to be started by socket activation.
+            unit is a service and socket-activated. If
+            <literal>X-StopIfChanged</literal> is
+            <emphasis role="strong">not</emphasis> set, the service is
+            <emphasis role="strong">restart</emphasis>ed with the
+            others. If it is set, both the service and the socket are
+            <emphasis role="strong">stop</emphasis>ped and the socket is
+            <emphasis role="strong">start</emphasis>ed, leaving socket
+            activation to start the service when it’s needed.
           </para>
         </listitem>
       </itemizedlist>

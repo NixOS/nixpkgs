@@ -18,12 +18,11 @@
 , pythonOlder
 , pyyaml
 , toolz
-, withExtraComplete ? false
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.01.0";
+  version = "2022.02.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,8 +31,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HlVvnhEDzefzv9xchlXl9d4KCumoAqoYUWmIiCXLJyM=
-";
+    hash = "sha256-tDqpIS8j6a16YbJak+P1GkCEZvJyheWV5vkUrkhScRY=";
   };
 
   propagatedBuildInputs = [
@@ -47,9 +45,6 @@ buildPythonPackage rec {
     jinja2
     bokeh
     numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
-    distributed
   ];
 
   doCheck = true;
@@ -104,6 +99,10 @@ buildPythonPackage rec {
     "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
+
+  passthru.extras-require = {
+    complete = [ distributed ];
+  };
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

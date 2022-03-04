@@ -12,7 +12,7 @@ with lib; mkCoqDerivation {
   release."1.4.4".sha256 = "114q2hgw64j6kqa9mg3qcp1nlf0ia46z2xadq81fnkxqm856ml7l";
   releaseRev = v: "gappalib-coq-${v}";
 
-  nativeBuildInputs = [ which autoconf ];
+  extraNativeBuildInputs = [ which autoconf ];
   mlPlugin = true;
   propagatedBuildInputs = [ flocq ];
   useMelquiondRemake.logpath = "Gappa";

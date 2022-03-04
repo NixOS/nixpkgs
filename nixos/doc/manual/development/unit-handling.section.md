@@ -41,17 +41,18 @@ checks:
     `RefuseManualStop` in the `[Unit]` section, and `X-OnlyManualStart` in the
     `[Unit]` section.
 
-  - The rest of the behavior is decided whether the unit has `X-StopIfChanged`
-    in the `[Service]` section set (exposed via
+  - Further behavior depends on the unit having `X-StopIfChanged` in the
+    `[Service]` section set to `true` (exposed via
     [systemd.services.\<name\>.stopIfChanged](#opt-systemd.services)). This is
     set to `true` by default and must be explicitly turned off if not wanted.
     If the flag is enabled, the unit is **stop**ped and then **start**ed. If
     not, the unit is **restart**ed. The goal of the flag is to make sure that
     the new unit never runs in the old environment which is still in place
-    before the activation script is run.
+    before the activation script is run. This behavior is different when the
+    service is socket-activated, as outlined in the following steps.
 
   - The last thing that is taken into account is whether the unit is a service
-    and socket-activated. Due to a bug, this is currently only done when
-    `X-StopIfChanged` is set. If the unit is socket-activated, the socket is
-    stopped and started, and the service is stopped and to be started by socket
-    activation.
+    and socket-activated. If `X-StopIfChanged` is **not** set, the service
+    is **restart**ed with the others. If it is set, both the service and the
+    socket are **stop**ped and the socket is **start**ed, leaving socket
+    activation to start the service when it's needed.

@@ -29,8 +29,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  buildInputs = [ findlib ];
+  nativeBuildInputs = [ findlib ];
   propagatedBuildInputs = [ zarith ];
+
+  strictDeps = true;
 
   meta = z3.meta // {
     description = "Z3 Theorem Prover (OCaml API)";

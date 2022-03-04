@@ -12,36 +12,33 @@ let
   };
 
   useDune2 = true;
-
-  nativeBuildInputs = [ which ];
-
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src useDune2 nativeBuildInputs;
+  inherit version src useDune2;
   configureFlags = pname;
+  nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src useDune2 nativeBuildInputs;
+  inherit version src useDune2;
   configureFlags = pname;
-  buildInputs = with ocamlPackages; [ menhir ];
+  nativeBuildInputs = [ which ocamlPackages.menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
 }; in
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src useDune2 nativeBuildInputs;
+  inherit pname version src useDune2;
 
   configureFlags = pname;
 
-  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [
-    cmdliner menhir ])
-  ;
+  nativeBuildInputs = [ which ocamlPackages.menhir ];
+  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

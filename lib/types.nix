@@ -61,7 +61,11 @@ let
     boolToString
     ;
 
-  inherit (lib.modules) mergeDefinitions;
+  inherit (lib.modules)
+    mergeDefinitions
+    fixupOptionType
+    mergeOptionDecls
+    ;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -161,6 +165,13 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
+
+    raw = mkOptionType rec {
+      name = "raw";
+      description = "raw value";
+      check = value: true;
+      merge = mergeOneOption;
+    };
 
     anything = mkOptionType {
       name = "anything";
@@ -390,7 +401,7 @@ rec {
             ).optionalValue
           ) def.value
         ) defs)));
-      emptyValue = { value = {}; };
+      emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -402,7 +413,7 @@ rec {
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
         description = "non-empty " + list.description;
-        # Note: emptyValue is left as is, because another module may define an element.
+        emptyValue = { }; # no .value attr, meaning unset
       };
 
     attrsOf = elemType: mkOptionType rec {
@@ -503,7 +514,7 @@ rec {
 
     functionTo = elemType: mkOptionType {
       name = "functionTo";
-      description = "function that evaluates to a(n) ${elemType.name}";
+      description = "function that evaluates to a(n) ${elemType.description}";
       check = isFunction;
       merge = loc: defs:
         fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
@@ -516,6 +527,31 @@ rec {
     submodule = modules: submoduleWith {
       shorthandOnlyDefinesConfig = true;
       modules = toList modules;
+    };
+
+    # The type of a type!
+    optionType = mkOptionType {
+      name = "optionType";
+      description = "optionType";
+      check = value: value._type or null == "option-type";
+      merge = loc: defs:
+        let
+          # Prepares the type definitions for mergeOptionDecls, which
+          # annotates submodules types with file locations
+          optionModules = map ({ value, file }:
+            {
+              _file = file;
+              # There's no way to merge types directly from the module system,
+              # but we can cheat a bit by just declaring an option with the type
+              options = lib.mkOption {
+                type = value;
+              };
+            }
+          ) defs;
+          # Merges all the types into a single one, including submodule merging.
+          # This also propagates file information to all submodules
+          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+        in mergedOption.type;
     };
 
     submoduleWith =
