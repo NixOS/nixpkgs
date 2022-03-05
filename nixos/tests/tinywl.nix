@@ -10,6 +10,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       # Automatically login on tty1 as a normal user:
       imports = [ ./common/user-account.nix ];
       services.getty.autologinUser = "alice";
+      security.polkit.enable = true;
 
       environment = {
         systemPackages = with pkgs; [ tinywl foot wayland-utils ];

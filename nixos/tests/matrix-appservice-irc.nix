@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }:
   let
-    homeserverUrl = "http://homeserver:8448";
+    homeserverUrl = "http://homeserver:8008";
   in
   {
     name = "matrix-appservice-irc";
@@ -14,28 +14,32 @@ import ./make-test-python.nix ({ pkgs, ... }:
         specialisation.running.configuration = {
           services.matrix-synapse = {
             enable = true;
-            database_type = "sqlite3";
-            app_service_config_files = [ "/registration.yml" ];
+            settings = {
+              database.name = "sqlite3";
+              app_service_config_files = [ "/registration.yml" ];
 
-            enable_registration = true;
+              enable_registration = true;
 
-            listeners = [
-              # The default but tls=false
-              {
-                "bind_address" = "";
-                "port" = 8448;
-                "resources" = [
-                  { "compress" = true; "names" = [ "client" ]; }
-                  { "compress" = false; "names" = [ "federation" ]; }
+              listeners = [ {
+                # The default but tls=false
+                bind_addresses = [
+                  "0.0.0.0"
                 ];
-                "tls" = false;
-                "type" = "http";
-                "x_forwarded" = false;
-              }
-            ];
+                port = 8008;
+                resources = [ {
+                  "compress" = true;
+                  "names" = [ "client" ];
+                } {
+                  "compress" = false;
+                  "names" = [ "federation" ];
+                } ];
+                tls = false;
+                type = "http";
+              } ];
+            };
           };
 
-          networking.firewall.allowedTCPPorts = [ 8448 ];
+          networking.firewall.allowedTCPPorts = [ 8008 ];
         };
       };
 
@@ -209,7 +213,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
           )
 
           homeserver.wait_for_unit("matrix-synapse.service")
-          homeserver.wait_for_open_port(8448)
+          homeserver.wait_for_open_port(8008)
 
       with subtest("ensure messages can be exchanged"):
           client.succeed("do_test ${homeserverUrl} >&2")

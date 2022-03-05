@@ -16,9 +16,9 @@ merging is handled.
 
 `types.path`
 
-:   A filesystem path, defined as anything that when coerced to a string
-    starts with a slash. Even if derivations can be considered as path,
-    the more specific `types.package` should be preferred.
+:   A filesystem path is anything that starts with a slash when
+    coerced to a string. Even if derivations can be considered as
+    paths, the more specific `types.package` should be preferred.
 
 `types.package`
 
