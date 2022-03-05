@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hackrf";
-  version = "2018.01.1";
+  version = "2021.03.1";
 
   src = fetchFromGitHub {
-    owner = "mossmann";
+    owner = "greatscottgadgets";
     repo = "hackrf";
     rev = "v${version}";
-    sha256 = "0idh983xh6gndk9kdgx5nzz76x3mxb42b02c5xvdqahadsfx3b9w";
+    sha256 = "sha256-2kEfTco95I9YLz/18nfjJSd7U/HE5sBCEioWL2t804k=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd host
+  '';
+
+  postPatch = ''
+    substituteInPlace host/cmake/modules/FindFFTW.cmake \
+      --replace "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
   '';
 
   meta = with lib; {

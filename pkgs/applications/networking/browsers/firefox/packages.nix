@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    version = "92.0";
+    version = "97.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "1a73cc275ea1790120845f579a7d21713ea78db0867ced767f393dfc25b132292dfbb673290fccdb9dcde86684e0300d56565841985fa3f0115376c91154ba8e";
+      sha512 = "efbf33723f5979025454b6cc183927afb4bc72a51c00b5d45940122da596b8ac99080f3a6a59f5dd85a725e356349ec57e7eba1c36cdab7d55a28b04895d274c";
     };
 
     meta = {
@@ -32,10 +32,10 @@ rec {
 
   firefox-esr-91 = common rec {
     pname = "firefox-esr";
-    version = "91.1.0esr";
+    version = "91.6.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "dad0249eb2ce66eb90ff5daf0dfb63105a19790dd45661d977f7cc889644e86b33b9b0c472f46d4032ae2e4fe02c2cf69d552156fb0ad4cf77a15b3542556ed3";
+      sha512 = "e72ff7114e251ec3558f47bb45e4017fe4c665a95e0a108d5818c628b3de44c92f57cfb3dd9f5a25b7abad889be228f89dda838bc20fc9617c90655694184ed5";
     };
 
     meta = {
@@ -55,28 +55,28 @@ rec {
     };
   };
 
-  firefox-esr-78 = common rec {
-    pname = "firefox-esr";
-    version = "78.14.0esr";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "5d5e4b1197f87b458a8ab14a62701fa0f3071e9facbb4fba71a64ef69abf31edbb4c5efa6c20198de573216543b5289270b5929c6e917f01bb165ce8c139c1ac";
-    };
+  librewolf =
+  let
+    librewolf-src = callPackage ./librewolf { };
+  in
+  (common rec {
+    pname = "librewolf";
+    binaryName = "librewolf";
+    version = librewolf-src.packageVersion;
+    src = librewolf-src.firefox;
+    inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
 
     meta = {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-      homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ eelco hexa ];
-      platforms = lib.platforms.unix;
-      badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-      license = lib.licenses.mpl20;
+      description = "A fork of Firefox, focused on privacy, security and freedom";
+      homepage = "https://librewolf.net/";
+      maintainers = with lib.maintainers; [ squalus ];
+      inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
     };
-    tests = [ nixosTests.firefox-esr-78 ];
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-78-unwrapped";
-      versionSuffix = "esr";
+    updateScript = callPackage ./librewolf/update.nix {
+      attrPath = "librewolf-unwrapped";
     };
+  }).override {
+    crashreporterSupport = false;
+    enableOfficialBranding = false;
   };
 }

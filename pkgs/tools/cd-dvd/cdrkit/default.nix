@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
-  patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ];
+  patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];
 
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)

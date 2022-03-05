@@ -1,6 +1,6 @@
-let lib = import ../../../lib; in lib.makeOverridable (
+let lib = import ../../../lib; stdenv-overridable = lib.makeOverridable (
 
-{ name ? "stdenv", preHook ? "", initialPath
+argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , # If we don't have a C compiler, we might either have `cc = null` or `cc =
   # throw ...`, but if we do have a C compiler we should definiely have `cc !=
@@ -81,8 +81,10 @@ let
 
   defaultBuildInputs = extraBuildInputs;
 
+  stdenv = (stdenv-overridable argsStdenv);
+
   # The stdenv that we are producing.
-  stdenv =
+  in
     derivation (
     lib.optionalAttrs (allowedRequisites != null) {
       allowedRequisites = allowedRequisites
@@ -110,7 +112,7 @@ let
       # are absolute unless we go out of our way to make them relative (like with CF)
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
-      preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
+      preHook = preHook + lib.optionalString buildPlatform.isDarwin ''
         export NIX_DONT_SET_RPATH_FOR_BUILD=1
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
@@ -166,12 +168,16 @@ let
       inherit overrides;
 
       inherit cc hasCC;
+
+      # Convenience for doing some very basic shell syntax checking by parsing a script
+      # without running any commands. Because this will also skip `shopt -s extglob`
+      # commands and extglob affects the Bash parser, we enable extglob always.
+      shellDryRun = "${stdenv.shell} -n -O extglob";
     }
 
     # Propagate any extra attributes.  For instance, we use this to
     # "lift" packages like curl from the final stdenv for Linux to
     # all-packages.nix for that platform (meaning that it has a line
     # like curl = if stdenv ? curl then stdenv.curl else ...).
-    // extraAttrs;
-
-in stdenv)
+    // extraAttrs
+); in stdenv-overridable

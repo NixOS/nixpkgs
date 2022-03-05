@@ -120,6 +120,11 @@ in {
         enable = true;
         description = "Pebble ACME server";
         wantedBy = [ "network.target" ];
+        environment = {
+          # We're not testing lego, we're just testing our configuration.
+          # No need to sleep.
+          PEBBLE_VA_NOSLEEP = "1";
+        };
 
         serviceConfig = {
           RuntimeDirectory = "pebble";

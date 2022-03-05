@@ -98,6 +98,7 @@ in
         the public and private keys respectively.
       '';
       default = "${config.services.cfssl.dataDir}/ca";
+      defaultText = literalExpression ''"''${config.services.cfssl.dataDir}/ca"'';
       type = str;
     };
 
@@ -265,7 +266,7 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${kubernetes}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 
@@ -400,4 +401,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }

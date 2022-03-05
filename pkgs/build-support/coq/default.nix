@@ -16,7 +16,8 @@ in
   displayVersion ? {},
   release ? {},
   extraBuildInputs ? [],
-  namePrefix ? [],
+  extraNativeBuildInputs ? [],
+  namePrefix ? [ "coq" ],
   enableParallelBuilding ? true,
   extraInstallFlags ? [],
   setCOQBIN ? true,
@@ -27,14 +28,14 @@ in
   dropDerivationAttrs ? [],
   useDune2ifVersion ? (x: false),
   useDune2 ? false,
-  opam-name ? "coq-${pname}",
+  opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
   ...
 }@args:
 let
   args-to-remove = foldl (flip remove) ([
     "version" "fetcher" "repo" "owner" "domain" "releaseRev"
     "displayVersion" "defaultVersion" "useMelquiondRemake"
-    "release" "extraBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
+    "release" "extraBuildInputs" "extraNativeBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
     "meta" "useDune2ifVersion" "useDune2" "opam-name"
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
@@ -44,7 +45,6 @@ let
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
   fetched = fetch (if !isNull version then version else defaultVersion);
-  namePrefix = args.namePrefix or [ "coq" ];
   display-pkg = n: sep: v:
     let d = displayVersion.${n} or (if sep == "" then ".." else true); in
     n + optionalString (v != "" && v != null) (switch d [
@@ -68,9 +68,11 @@ stdenv.mkDerivation (removeAttrs ({
 
   inherit (fetched) version src;
 
-  buildInputs = [ coq ]
-    ++ optionals mlPlugin coq.ocamlBuildInputs
+  nativeBuildInputs = [ coq ]
     ++ optionals useDune2 [coq.ocaml coq.ocamlPackages.dune_2]
+    ++ optionals mlPlugin coq.ocamlNativeBuildInputs
+    ++ extraNativeBuildInputs;
+  buildInputs = optionals mlPlugin coq.ocamlBuildInputs
     ++ extraBuildInputs;
   inherit enableParallelBuilding;
 

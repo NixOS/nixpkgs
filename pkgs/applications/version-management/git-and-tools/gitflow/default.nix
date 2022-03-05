@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/git-flow \
       --set FLAGS_GETOPT_CMD ${pkgs.getopt}/bin/getopt \
-      --suffix PATH : ${pkgs.git}/bin
+      --suffix PATH : ${pkgs.git}/bin \
+      --prefix PATH : ${pkgs.coreutils}/bin
   '';
 
   meta = with lib; {

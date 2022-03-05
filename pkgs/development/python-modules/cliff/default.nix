@@ -3,21 +3,24 @@
 , fetchPypi
 , autopage
 , cmd2
+, installShellFiles
+, openstackdocstheme
 , pbr
 , prettytable
 , pyparsing
 , pyyaml
 , stevedore
+, sphinx
 , callPackage
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "3.9.0";
+  version = "3.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95363e9b43e2ec9599e33b5aea27a6953beda2d0673557916fa4f5796857daa3";
+    sha256 = "sha256-BFruPzxkRxll161QfOhHSk4vIIFfu1QFp3D4WWoqAKA=";
   };
 
   postPatch = ''
@@ -25,6 +28,12 @@ buildPythonPackage rec {
     # so instead of removing them one by one remove everything
     rm test-requirements.txt
   '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    openstackdocstheme
+    sphinx
+  ];
 
   propagatedBuildInputs = [
     autopage
@@ -35,6 +44,11 @@ buildPythonPackage rec {
     pyyaml
     stevedore
   ];
+
+  postInstall = ''
+    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
+    installManPage doc/build/man/cliff.1
+  '';
 
   # check in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;

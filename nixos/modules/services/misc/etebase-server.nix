@@ -97,13 +97,13 @@ in
               static_root = mkOption {
                 type = types.str;
                 default = "${cfg.dataDir}/static";
-                defaultText = "\${config.services.etebase-server.dataDir}/static";
+                defaultText = literalExpression ''"''${config.services.etebase-server.dataDir}/static"'';
                 description = "The directory for static files.";
               };
               media_root = mkOption {
                 type = types.str;
                 default = "${cfg.dataDir}/media";
-                defaultText = "\${config.services.etebase-server.dataDir}/media";
+                defaultText = literalExpression ''"''${config.services.etebase-server.dataDir}/media"'';
                 description = "The media directory.";
               };
             };
@@ -126,7 +126,7 @@ in
               name = mkOption {
                 type = types.str;
                 default = "${cfg.dataDir}/db.sqlite3";
-                defaultText = "\${config.services.etebase-server.dataDir}/db.sqlite3";
+                defaultText = literalExpression ''"''${config.services.etebase-server.dataDir}/db.sqlite3"'';
                 description = "The database name.";
               };
             };

@@ -6,12 +6,18 @@ let
 
   defaultUser = "paperless";
 
+  hasCustomRedis = hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
+
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
     PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
     PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-  } // lib.mapAttrs (_: toString) cfg.extraConfig;
+  } // (
+    lib.mapAttrs (_: toString) cfg.extraConfig
+  ) // (optionalAttrs (!hasCustomRedis) {
+    PAPERLESS_REDIS = "unix://${config.services.redis.servers.paperless-ng.unixSocket}";
+  });
 
   manage = let
     setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
@@ -30,7 +36,7 @@ let
       "-/etc/hosts"
       "-/etc/localtime"
       "-/run/postgresql"
-    ];
+    ] ++ (optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.unixSocket);
     BindPaths = [
       cfg.consumptionDir
       cfg.dataDir
@@ -44,8 +50,7 @@ let
     NoNewPrivileges = true;
     PrivateDevices = true;
     PrivateMounts = true;
-    # Needs to connect to redis
-    # PrivateNetwork = true;
+    PrivateNetwork = true;
     PrivateTmp = true;
     PrivateUsers = true;
     ProcSubset = "pid";
@@ -65,6 +70,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
+    SupplementaryGroups = optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
     # Does not work well with the temporary root
@@ -107,14 +113,14 @@ in
     mediaDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/media";
-      defaultText = "\${dataDir}/consume";
+      defaultText = literalExpression ''"''${dataDir}/media"'';
       description = "Directory to store the Paperless documents.";
     };
 
     consumptionDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/consume";
-      defaultText = "\${dataDir}/consume";
+      defaultText = literalExpression ''"''${dataDir}/consume"'';
       description = "Directory from which new documents are imported.";
     };
 
@@ -167,7 +173,7 @@ in
         See <link xlink:href="https://paperless-ng.readthedocs.io/en/latest/configuration.html">the documentation</link>
         for available options.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           PAPERLESS_OCR_LANGUAGE = "deu+eng";
         }
@@ -183,14 +189,14 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.paperless-ng;
-      defaultText = "pkgs.paperless-ng";
+      defaultText = literalExpression "pkgs.paperless-ng";
       description = "The Paperless package to use.";
     };
   };
 
   config = mkIf cfg.enable {
     # Enable redis if no special url is set
-    services.redis.enable = mkIf (!hasAttr "PAPERLESS_REDIS" env) true;
+    services.redis.servers.paperless-ng.enable = mkIf (!hasCustomRedis) true;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
@@ -234,6 +240,8 @@ in
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
+    } // optionalAttrs (!hasCustomRedis) {
+      after = [ "redis-paperless-ng.service" ];
     };
 
     # Password copying can't be implemented as a privileged preStart script
@@ -248,6 +256,8 @@ in
             '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
         '';
         Type = "oneshot";
+        # Needs to talk to mail server for automated import rules
+        PrivateNetwork = false;
       };
     };
 
@@ -279,6 +289,8 @@ in
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # gunicorn needs setuid
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid" ];
+        # Needs to serve web page
+        PrivateNetwork = false;
       };
       environment = env // {
         PATH = mkForce cfg.package.path;

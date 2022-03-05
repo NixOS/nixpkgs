@@ -13,6 +13,8 @@
 , withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
+, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, libclc
 }:
 
 /** Packaging design:
@@ -31,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.2.1";
+  version = "21.3.5";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,23 +47,31 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "11qpq16xbxymcgiy0wk787dk4yw2pv8fzgj8d92ng6s11dqycr9c";
+    sha256 = "0k2ary16ixsrp65m2n5djpr51nbwdgzpv81pfrnqbvk44jfjlfyr";
   };
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
-    ./opencl-install-dir.patch
-    ./disk_cache-include-dri-driver-path-in-cache-key.patch
-    # Fix `-Werror=int-conversion` pthread warnings on musl.
-    # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
+    # To fix flickering on Intel GPUs (iris), see https://github.com/NixOS/nixpkgs/issues/153377:
     (fetchpatch {
-      name = "nine_debug-Make-tid-more-type-correct";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
-      sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/07dc3d4238e57901ccf98e0b506d9aad2c86b9d9.diff";
+      sha256 = "sha256-3fa1qHJes3x1/iXsxfjgy9HnEGlOyFtJatSkU1a3XDI=";
     })
+    # fixes pkgsMusl.mesa build
+    ./musl.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
+      sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-stacksize.patch";
+      sha256 = "sha256-bEp0AWddsw1Pc3rxdKN8fsrX4x2TQEzMUa5afhLXGsg=";
+    })
+
+    ./opencl.patch
+    ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
     # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
@@ -88,7 +98,12 @@ self = stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "drivers" ]
     ++ lib.optional enableOSMesa "osmesa"
-    ++ lib.optional stdenv.isLinux "driversdev";
+    ++ lib.optional stdenv.isLinux "driversdev"
+    ++ lib.optional enableOpenCL "opencl";
+
+  preConfigure = ''
+    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '';
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -116,8 +131,14 @@ self = stdenv.mkDerivation {
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${boolToString enableOSMesa}" # used by wine
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+
+    # To enable non-mesa gbm backends to be found (e.g. Nvidia)
+    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
+  ] ++ optionals enableOpenCL [
+    "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
+    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ];
 
   buildInputs = with xorg; [
@@ -128,6 +149,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
+    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped ]
     ++ lib.optional withValgrind valgrind-light;
 
   depsBuildBuild = [ pkg-config ];
@@ -162,7 +184,7 @@ self = stdenv.mkDerivation {
 
     if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
       # Move other drivers to a separate output
-      mv $out/lib/lib*_mesa* $drivers/lib
+      mv -t $drivers/lib $out/lib/lib*_mesa*
     fi
 
     # Update search path used by glvnd
@@ -175,6 +197,17 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
+  '' + optionalString enableOpenCL ''
+    # Move OpenCL stuff
+    mkdir -p $opencl/lib
+    mv -t "$opencl/lib/"     \
+      $out/lib/gallium-pipe   \
+      $out/lib/libMesaOpenCL*
+
+    # We construct our own .icd file that contains an absolute path.
+    rm -r $out/etc/OpenCL
+    mkdir -p $opencl/etc/OpenCL/vendors/
+    echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
   '' + lib.optionalString enableOSMesa ''
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p $osmesa/lib
@@ -209,19 +242,24 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+    "-UPIPE_SEARCH_DIR"
+    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+  ];
 
   passthru = {
     inherit libdrm;
     inherit (libglvnd) driverLink;
     inherit llvmPackages;
 
-    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
-      name = "mesa-dev-does-not-depend-on-llvm";
-      buildCommand = ''
-        echo ${self.dev} >>$out
-      '';
-      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    tests = lib.optionalAttrs stdenv.isLinux {
+      devDoesNotDependOnLLVM = stdenv.mkDerivation {
+        name = "mesa-dev-does-not-depend-on-llvm";
+        buildCommand = ''
+          echo ${self.dev} >>$out
+        '';
+        disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+      };
     };
   };
 

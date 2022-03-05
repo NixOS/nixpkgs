@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , runCommand
 , fetchurl
-, fetchpatch
 , perl
 , python3
 , ruby
@@ -15,13 +15,14 @@
 , libnotify
 , gnutls
 , libgcrypt
+, libgpg-error
 , gtk3
 , wayland
 , libwebp
 , enchant2
 , xorg
 , libxkbcommon
-, epoxy
+, libepoxy
 , at-spi2-core
 , libxml2
 , libsoup
@@ -41,9 +42,9 @@
 , libGLU
 , mesa
 , libintl
+, lcms2
 , libmanette
 , openjpeg
-, enableGeoLocation ? true
 , geoclue2
 , sqlite
 , enableGLES ? true
@@ -57,13 +58,13 @@
 , substituteAll
 , glib
 , addOpenGLRunpath
+, enableGeoLocation ? true
+, withLibsecret ? true
 }:
-
-assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.3";
+  version = "2.34.6";
 
   outputs = [ "out" "dev" ];
 
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wfSW9axlTv5M72L71PL77u8mWgfF50GeXSkAv+6lLLw=";
+    sha256 = "sha256-a8j9A0qtBDKiRZzk/H7iWtZaSSTGGL+Nk7UrDBqEwfY=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -81,26 +82,6 @@ stdenv.mkDerivation rec {
       inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    # https://bugs.webkit.org/show_bug.cgi?id=225856
-    (fetchpatch {
-      url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
-      sha256 = "sha256-ffo5p2EyyjXe3DxdrvAcDKqxwnoqHtYBtWod+1fOjMU=";
-      excludes = [ "Source/WebCore/ChangeLog" ];
-    })
-
-    # https://bugs.webkit.org/show_bug.cgi?id=225850
-    ./428774.patch # https://bug-225850-attachments.webkit.org/attachment.cgi?id=428774
-    (fetchpatch {
-      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428776";
-      sha256 = "sha256-ryNRYMsk72SL0lNdh6eaAdDV3OT8KEqVq1H0j581jmQ=";
-      excludes = [ "Source/WTF/ChangeLog" ];
-    })
-    (fetchpatch {
-      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428778";
-      sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
-    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -131,7 +112,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-core
     enchant2
-    epoxy
+    libepoxy
     gnutls
     gst-plugins-bad
     gst-plugins-base
@@ -140,14 +121,12 @@ stdenv.mkDerivation rec {
     libGLU
     mesa # for libEGL headers
     libgcrypt
+    libgpg-error
     libidn
     libintl
-  ] ++ lib.optionals stdenv.isLinux [
-    libmanette
-  ] ++ [
+    lcms2
     libnotify
     libpthreadstubs
-    libsecret
     libtasn1
     libwebp
     libxkbcommon
@@ -172,27 +151,36 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" {} ''
+    runCommand "${pname}_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
+    libmanette
     systemd
     wayland
     xdg-dbus-proxy
-  ] ++ lib.optional enableGeoLocation geoclue2;
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ] ++ lib.optionals withLibsecret [
+    libsecret
+  ];
 
   propagatedBuildInputs = [
     gtk3
     libsoup
   ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    cmakeBool = x: if x then "ON" else "OFF";
+  in [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -207,7 +195,9 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-DUSE_SYSTEMD=OFF"
-  ] ++ lib.optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
+    "-DENABLE_GLES2=ON"
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -226,5 +216,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
+    broken = stdenv.isDarwin;
   };
 }

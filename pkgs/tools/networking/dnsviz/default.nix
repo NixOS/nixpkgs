@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "dnsviz";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "dnsviz";
     repo = "dnsviz";
     rev = "v${version}";
-    sha256 = "sha256-QsTYpNaAJiIRUrr2JYjXWOKFihENhAccvmB/DRhX1PA=";
+    sha256 = "sha256-x6LdPVQFfsJIuKde1+LbFKz5bBEi+Mri9sVH0nGsbCU=";
   };
 
   patches = [

@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bandwidth";
-  version = "1.10.1";
+  version = "1.11.2";
 
   src = fetchurl {
     url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
-    sha256 = "sha256-trya+/cBNIittQAc5tcykZbImeISqIolO/Y8uOI0jGk=";
+    sha256 = "sha256-mjtvQAOH9rv12XszGdD5hIX197er7Uc74WfVaP32TpM=";
   };
 
   postPatch = ''

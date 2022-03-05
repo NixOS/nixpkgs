@@ -1,17 +1,10 @@
 diff --git a/gnome-session/gnome-session.in b/gnome-session/gnome-session.in
-index ddd1a591..46a3488b 100755
+index b4b1f8fa..99d52cba 100755
 --- a/gnome-session/gnome-session.in
 +++ b/gnome-session/gnome-session.in
-@@ -3,17 +3,19 @@
- if [ "x$XDG_SESSION_TYPE" = "xwayland" ] &&
+@@ -4,13 +4,15 @@ if [ "x$XDG_SESSION_TYPE" = "xwayland" ] &&
     [ "x$XDG_SESSION_CLASS" != "xgreeter" ] &&
-    [  -n "$SHELL" ] &&
--   grep -q "$SHELL" /etc/shells &&
--   ! (echo "$SHELL" | grep -q "false") &&
--   ! (echo "$SHELL" | grep -q "nologin"); then
-+   @grep@ -q "$SHELL" /etc/shells &&
-+   ! (echo "$SHELL" | @grep@ -q "false") &&
-+   ! (echo "$SHELL" | @grep@ -q "nologin"); then
+    [  -n "$SHELL" ]; then
    if [ "$1" != '-l' ]; then
 -    exec bash -c "exec -l '$SHELL' -c '$0 -l $*'"
 +    # Make sure the shell actually sets up the environment.
@@ -28,7 +21,7 @@ index ddd1a591..46a3488b 100755
  REGION=${REGION%\'}
  
 diff --git a/gnome-session/main.c b/gnome-session/main.c
-index 84edfbe5..e5285489 100644
+index a460a849..9d07898f 100644
 --- a/gnome-session/main.c
 +++ b/gnome-session/main.c
 @@ -215,7 +215,7 @@ require_dbus_session (int      argc,

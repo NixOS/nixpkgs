@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evscript";
-  version = "git-${builtins.substring 0 7 src.rev}";
+  version = "unstable-2021-06-16";
 
   src = fetchFromGitHub {
-    owner = "myfreeweb";
+    owner = "unrelentingtech";
     repo = pname;
-    rev = "47f86f0d15add2af785ea1ff47f24d130026d1b4";
-    sha256 = "1xm8297k0d8d0aq7fxgmibr4qva4d02cb6gnnlzq77jcmnknxv14";
+    rev = "25912c0b6446f31b0f64485af3fa4aa8a93b33df";
+    sha256 = "sha256-apq3kHipEX6zOTNwqpIQR46JqmeE7EKVSOGrNNSkyu8=";
   };
 
-  cargoSha256 = "1z0xxbjnhhzn1fnc3zhvy727l88qyyfqdayj5yvf3nh23m7sr87l";
+  cargoSha256 = "sha256-1aR9/fhJQ+keRIxSG2cpY1HTalE6nM+MTb1Za3Tot28=";
 
   meta = with lib; {
-    homepage = "https://github.com/myfreeweb/${pname}";
+    homepage = "https://github.com/unrelentingtech/evscript";
     description = "A tiny sandboxed Dyon scripting environment for evdev input devices";
     license = licenses.unlicense;
     maintainers = with maintainers; [ milesbreslin ];

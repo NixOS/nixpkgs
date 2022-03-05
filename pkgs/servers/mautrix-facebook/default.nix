@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
     rev = "v${version}";
-    sha256 = "0m7nznx3z6cg4wgvjybdivx22ifxcdri4i8501yibsri0jnpf0y2";
+    hash = "sha256-lIUGuc6ZL+GW7jw5OhPE3/mU5pg8Y09dd+p5kiy14io=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,15 +27,15 @@ python3.pkgs.buildPythonPackage rec {
     pycryptodome
     python-olm
     python_magic
-    ruamel_yaml
+    ruamel-yaml
     unpaddedbase64
     yarl
+    zstandard
   ] ++ lib.optional enableSystemd systemd;
 
-  doCheck = false;
-
   postPatch = ''
-    sed -ie 's/^asyncpg.*/asyncpg>=0.20/' requirements.txt
+    # Drop version limiting so that every dependency update doesn't break this package.
+    sed -i -e 's/,<.*//' requirements.txt
   '';
 
   postInstall = ''
@@ -46,6 +46,10 @@ python3.pkgs.buildPythonPackage rec {
     PYTHONPATH="$PYTHONPATH" exec ${python3}/bin/python -m mautrix_facebook "\$@"
     END
     chmod +x $out/bin/mautrix-facebook
+  '';
+
+  checkPhase = ''
+    $out/bin/mautrix-facebook --help
   '';
 
   meta = with lib; {

@@ -45,7 +45,7 @@ let
   basePkgs = with pkgs;
     [ glibcLocales
       (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractive coreutils less shadow su
+      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
     ];
@@ -184,7 +184,7 @@ let
     done
     cd ..
 
-    for i in var etc; do
+    for i in var etc opt; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi

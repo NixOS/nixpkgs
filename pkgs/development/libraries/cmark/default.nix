@@ -1,29 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "cmark";
-  version = "0.30.1";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "jgm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UjDM2N6gCwO94F1nW3qCP9JX42MYAicAuGTKAXMy1Gg=";
+    sha256 = "sha256-IkNybUe/XYwAvPowym3aqfVyvNdw2t/brRjhOrjVRpA=";
   };
-
-  patches = [
-    # Fix libcmark.pc paths (should be incorporated next release)
-    (fetchpatch {
-      url = "https://github.com/commonmark/cmark/commit/15762d7d391483859c241cdf82b1615c6b6a5a19.patch";
-      sha256 = "sha256-wdyK1tQolgfiwYMAaWMQZdCSbMDCijug5ykpoDl/HwI=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    # https://github.com/commonmark/cmark/releases/tag/0.30.1
-    # recommends distributions dynamically link
+    # Link the executable with the shared library
     "-DCMARK_STATIC=OFF"
   ];
 

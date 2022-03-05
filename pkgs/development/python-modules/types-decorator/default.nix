@@ -5,17 +5,20 @@
 
 buildPythonPackage rec {
   pname = "types-decorator";
-  version = "0.1.7";
+  version = "5.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pmcc8xpsmij4174ky81vp811yxgic2lj1dfj2fa0ii87nlcfwhp";
+    sha256 = "463c04b192108e2b3f409df8a3eaaf8d44e3e98965c11e473ed2a97da591798b";
   };
 
   # Modules doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "decorator-stubs" ];
+  pythonImportsCheck = [
+    "decorator-stubs"
+  ];
 
   meta = with lib; {
     description = "Typing stubs for decorator";

@@ -1,8 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
-, substituteAll
 , meson
 , ninja
 , pkg-config
@@ -28,11 +27,12 @@ stdenv.mkDerivation rec {
     sha256 = "0c075ac7iqz4hqbp2ph0cwyhiq0jn6c1g1jjfhygjbssv3vvd268";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Introduces a wallpaper meson flag.
+    # The wallpapaper path does not exist on NixOS, let's just remove the wallpaper.
+    # https://github.com/elementary/switchboard-plug-about/pull/236
+    ./add-wallpaper-option.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -52,11 +52,16 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    # The NixOS logo is not centered in the circular background and path
-    # to the background is hardcoded, we will drop the background.
-    ./remove-logo-background.patch
+  mesonFlags = [
+    # This option is introduced in add-wallpaper-option.patch
+    "-Dwallpaper=false"
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard About Plug";

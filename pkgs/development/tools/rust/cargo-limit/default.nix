@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-limit";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "alopatindev";
     repo = "cargo-limit";
     rev = version;
-    sha256 = "sha256-OHBxQcXhZkJ1F6xLc7/sPpJhJzuJXb91IUjAtyC3XP8=";
+    sha256 = "sha256-GRitz9LOdZhbakbLZI2BUfZjqXLrsMK2MQJgixiEHaA=";
   };
 
-  cargoSha256 = "sha256-LxqxRtMKUKZeuvk1caoYy8rv1bkEOQBM8i5SXMF4GXc=";
+  cargoSha256 = "sha256-uiANH9HOvy41FiABTTx2D9Rz1z/F7eITc5aiofaMSfI=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

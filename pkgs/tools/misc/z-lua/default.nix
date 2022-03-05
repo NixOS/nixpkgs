@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
-  version = "1.8.13";
+  version = "1.8.14";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
     rev = version;
-    sha256 = "sha256-74EWeLkSRrVsJuucdN8sSTl5fPmboViYW0qdovBZQ5U=";
+    sha256 = "sha256-Jy5fcXqXbuJTOAP8vpZjN0qmDR/cVACztcIxl4aXNKs=";
   };
 
   dontBuild = true;
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/skywind3000/z.lua";
     description = "A new cd command that helps you navigate faster by learning your habits";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
+    mainProgram = "z.lua";
   };
 }

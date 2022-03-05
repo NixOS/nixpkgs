@@ -1,69 +1,132 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p gh
+# shellcheck shell=bash
 # Bash 3 compatible for Darwin
+
+if [ -z "${GITHUB_TOKEN}" ]; then
+  echo >&2 "usage: GITHUB_TOKEN=… ./update.sh"
+  exit 1
+fi
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.12.0"
+VERSION="3.25.1"
 
-# Grab latest release ${VERSION} from
-# https://github.com/pulumi/pulumi-${NAME}/releases
-plugins=(
-    "auth0=2.2.0"
-    "aws=4.19.0"
-    "cloudflare=3.5.0"
-    "consul=3.3.0"
-    "datadog=4.1.0"
-    "digitalocean=4.6.1"
-    "docker=3.1.0"
-    "equinix-metal=2.0.0"
-    "gcp=5.18.0"
-    "github=4.3.0"
-    "gitlab=4.2.0"
-    "hcloud=1.4.0"
-    "kubernetes=3.7.0"
-    "linode=3.3.2"
-    "mailgun=3.1.0"
-    "mysql=3.0.0"
-    "openstack=3.3.0"
-    "packet=3.2.2"
-    "postgresql=3.2.0"
-    "random=4.2.0"
-    "vault=4.4.0"
-    "vsphere=4.0.1"
+# An array of plugin names. The respective repository inside Pulumi's
+# Github organization is called pulumi-$name by convention.
+
+declare -a pulumi_repos
+pulumi_repos=(
+  "aiven"
+  "akamai"
+  "alicloud"
+  "artifactory"
+  "auth0"
+  "aws"
+  "azure"
+  "azuread"
+  "azuredevops"
+  "cloudflare"
+  "consul"
+  "datadog"
+  "digitalocean"
+  "docker"
+  "equinix-metal"
+  "fastly"
+  "gcp"
+  "github"
+  "gitlab"
+  "google-native"
+  "hcloud"
+  "kubernetes"
+  "linode"
+  "mailgun"
+  "mysql"
+  "openstack"
+  "postgresql"
+  "random"
+  "snowflake"
+  "spotinst"
+  "sumologic"
+  "tailscale"
+  "tls"
+  "vault"
+  "venafi"
+  "vsphere"
+  "wavefront"
+  "yandex"
 )
 
+# Contains latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
+
+# Dynamically builds the plugin array, using the GitHub API for getting the
+# latest version.
+plugin_num=1
+plugins=()
+for key in "${pulumi_repos[@]}"; do
+  plugin="${key}=$(gh api "repos/pulumi/pulumi-${key}/releases/latest" --jq '.tag_name | sub("^v"; "")')"
+  printf "%20s: %s of %s\r" "${plugin}" "${plugin_num}" "${#pulumi_repos[@]}"
+  plugins+=("${plugin}")
+  sleep 1
+  ((++plugin_num))
+done
+printf "\n"
+
 function genMainSrc() {
-    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
-    local sha256
-    sha256=$(nix-prefetch-url "$url")
-    echo "      {"
-    echo "        url = \"${url}\";"
-    echo "        sha256 = \"$sha256\";"
-    echo "      }"
+  local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
+  local sha256
+  sha256=$(nix-prefetch-url "$url")
+  echo "      {"
+  echo "        url = \"${url}\";"
+  echo "        sha256 = \"$sha256\";"
+  echo "      }"
+}
+
+function genSrc() {
+  local url="${1}"
+  local plug="${2}"
+  local tmpdir="${3}"
+
+  local sha256
+  sha256=$(nix-prefetch-url "$url")
+
+  {
+    if [ -n "$sha256" ]; then # file exists
+      echo "      {"
+      echo "        url = \"${url}\";"
+      echo "        sha256 = \"$sha256\";"
+      echo "      }"
+    else
+      echo "      # pulumi-resource-${plug} skipped (does not exist on remote)"
+    fi
+  } > "${tmpdir}/${plug}.nix"
 }
 
 function genSrcs() {
-    for plugVers in "${plugins[@]}"; do
-        local plug=${plugVers%=*}
-        local version=${plugVers#*=}
-        # url as defined here
-        # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
-        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
-        local sha256
-        sha256=$(nix-prefetch-url "$url")
-        if [ "$sha256" ]; then  # file exists
-            echo "      {"
-            echo "        url = \"${url}\";"
-            echo "        sha256 = \"$sha256\";"
-            echo "      }"
-        else
-            echo "      # pulumi-resource-${plug} skipped (does not exist on remote)"
-        fi
-    done
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+
+  local i=0
+
+  for plugVers in "${plugins[@]}"; do
+    local plug=${plugVers%=*}
+    local version=${plugVers#*=}
+    # url as defined here
+    # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
+    local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
+    genSrc "${url}" "${plug}" "${tmpdir}" &
+    ((++i))
+  done
+
+  wait
+
+  find "${tmpdir}" -name '*.nix' -print0 | sort -z | xargs -r0 cat
+  rm -r "${tmpdir}"
 }
 
 {
-  cat <<EOF
+  cat << EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {

@@ -8,19 +8,32 @@
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2021.8.11b42";
-  format = "flit";
+  version = "2022.3.4";
+  format = "wheel";
   disable = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-rhi2T57EfidQV1IHBkplCbzLlBCC5gVGmbkCf40s0qU=";
+    inherit pname version format;
+    dist = "py3";
+    python = "py3";
+    sha256 = "sha256-bHGCk+v4d1XwufFIseaXyeOqvXr5VWRNS8ruXOddt4E=";
   };
 
   propagatedBuildInputs = [
     sphinx
     beautifulsoup4
   ];
+
+  installCheckPhase = ''
+    # furo was built incorrectly if this directory is empty
+    # Ignore the hidden file .gitignore
+    cd "$out/lib/python"*
+    if [ "$(ls 'site-packages/furo/theme/furo/static/' | wc -l)" -le 0 ]; then
+      echo 'static directory must not be empty'
+      exit 1
+    fi
+    cd -
+  '';
 
   pythonImportsCheck = [ "furo" ];
 

@@ -1,24 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, sanic, sanic-testing, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, sanic
+, sanic-testing
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "Sanic-Auth";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0dc24ynqjraqwgvyk0g9bj87zgpq4xnssl24hnsn7l5vlkmk8198";
   };
 
-  propagatedBuildInputs = [ sanic ];
+  propagatedBuildInputs = [
+    sanic
+  ];
 
-  checkInputs = [ pytestCheckHook sanic-testing ];
+  checkInputs = [
+    pytestCheckHook
+    sanic-testing
+  ];
 
-  pythonImportsCheck = [ "sanic_auth" ];
+  postPatch = ''
+    # Support for httpx>=0.20.0
+    substituteInPlace tests/test_auth.py \
+      --replace "allow_redirects=False" "follow_redirects=False"
+  '';
+
+  pythonImportsCheck = [
+    "sanic_auth"
+  ];
 
   meta = with lib; {
     description = "Simple Authentication for Sanic";
     homepage = "https://github.com/pyx/sanic-auth/";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

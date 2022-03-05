@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , fetchNuGet
 , glib
-, pkg-config
 , mono
 , overrides ? {}
 }:
@@ -16,14 +15,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   # BINARY PACKAGES
 
   NUnit3 = fetchNuGet {
-    baseName = "NUnit";
+    pname = "NUnit";
     version = "3.0.1";
     sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
     outputFiles = [ "lib/*" ];
   };
 
   NUnit2 = fetchNuGet {
-    baseName = "NUnit";
+    pname = "NUnit";
     version = "2.6.4";
     sha256 = "1acwsm7p93b1hzfb83ia33145x0w6fvdsfjm9xflsisljxpdx35y";
     outputFiles = [ "lib/*" ];
@@ -32,91 +31,91 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   NUnit = NUnit2;
 
   NUnitConsole = fetchNuGet {
-    baseName = "NUnit.Console";
+    pname = "NUnit.Console";
     version = "3.0.1";
     sha256 = "154bqwm2n95syv8nwd67qh8qsv0b0h5zap60sk64z3kd3a9ffi5p";
     outputFiles = [ "tools/*" ];
   };
 
   MaxMindDb = fetchNuGet {
-    baseName = "MaxMind.Db";
+    pname = "MaxMind.Db";
     version = "1.1.0.0";
     sha256 = "0lixl76f7k3ldiqzg94zh13gn82w5mm5dx72y97fcqvp8g6nj3ds";
     outputFiles = [ "lib/*" ];
   };
 
   MaxMindGeoIP2 = fetchNuGet {
-    baseName = "MaxMind.GeoIP2";
+    pname = "MaxMind.GeoIP2";
     version = "2.3.1";
     sha256 = "1s44dvjnmj1aimbrgkmpj6h5dn1w6acgqjch1axc76yz6hwknqgf";
     outputFiles = [ "lib/*" ];
   };
 
   SharpZipLib = fetchNuGet {
-    baseName = "SharpZipLib";
+    pname = "SharpZipLib";
     version = "0.86.0";
     sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
     outputFiles = [ "lib/*" ];
   };
 
   StyleCopMSBuild = fetchNuGet {
-    baseName = "StyleCop.MSBuild";
+    pname = "StyleCop.MSBuild";
     version = "4.7.49.0";
     sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
     outputFiles = [ "tools/*" ];
   };
 
   StyleCopPlusMSBuild = fetchNuGet {
-    baseName = "StyleCopPlus.MSBuild";
+    pname = "StyleCopPlus.MSBuild";
     version = "4.7.49.5";
     sha256 = "1hv4lfxw72aql8siyqc4n954vzdz8p6jx9f2wrgzz0jy1k98x2mr";
     outputFiles = [ "tools/*" ];
   };
 
   RestSharp = fetchNuGet {
-    baseName = "RestSharp";
+    pname = "RestSharp";
     version = "105.2.3";
     sha256 = "1br48124ppz80x92m84sfyil1gn23hxg2ml9i9hsd0lp86vlaa1m";
     outputFiles = [ "lib/*" ];
   };
 
   SharpFont = fetchNuGet {
-    baseName = "SharpFont";
+    pname = "SharpFont";
     version = "4.0.1";
     sha256 = "1yd3cm4ww0hw2k3aymf792hp6skyg8qn491m2a3fhkzvsl8z7vs8";
     outputFiles = [ "lib/*" "config/*" ];
   };
 
   SmartIrc4net = fetchNuGet {
-    baseName = "SmartIrc4net";
+    pname = "SmartIrc4net";
     version = "0.4.5.1";
     sha256 = "1d531sj39fvwmj2wgplqfify301y3cwp7kwr9ai5hgrq81jmjn2b";
     outputFiles = [ "lib/*" ];
   };
 
   FuzzyLogicLibrary = fetchNuGet {
-    baseName = "FuzzyLogicLibrary";
+    pname = "FuzzyLogicLibrary";
     version = "1.2.0";
     sha256 = "0x518i8d3rw9n51xwawa4sywvqd722adj7kpcgcm63r66s950r5l";
     outputFiles = [ "bin/*" ];
   };
 
   OpenNAT = fetchNuGet {
-    baseName = "Open.NAT";
+    pname = "Open.NAT";
     version = "2.1.0";
     sha256 = "1jyd30fwycdwx5ck96zhp2xf20yz0sp7g3pjbqhmay4kd322mfwk";
     outputFiles = [ "lib/*" ];
   };
 
   MonoNat = fetchNuGet {
-    baseName = "Mono.Nat";
+    pname = "Mono.Nat";
     version = "1.2.24";
     sha256 = "0vfkach11kkcd9rcqz3s38m70d5spyb21gl99iqnkljxj5555wjs";
     outputFiles = [ "lib/*" ];
   };
 
   NUnitRunners = fetchNuGet {
-    baseName = "NUnit.Runners";
+    pname = "NUnit.Runners";
     version = "2.6.4";
     sha256 = "11nmi7vikn9idz8qcad9z7f73arsh5rw18fc1sri9ywz77mpm1s4";
     outputFiles = [ "tools/*" ];
@@ -126,7 +125,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   # SOURCE PACKAGES
 
   Boogie = buildDotnetPackage rec {
-    baseName = "Boogie";
+    pname = "Boogie";
     version = "2.4.1";
 
     src = fetchFromGitHub {
@@ -153,8 +152,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "Binaries/*" ];
 
     postInstall = ''
-        mkdir -pv "$out/lib/dotnet/${baseName}"
-        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+        mkdir -pv "$out/lib/dotnet/${pname}"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${pname}/z3.exe"
 
         # so that this derivation can be used as a vim plugin to install syntax highlighting
         vimdir=$out/share/vim-plugins/boogie
@@ -195,7 +194,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     });
     Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
   in buildDotnetPackage rec {
-    baseName = "Dafny";
+    pname = "Dafny";
     version = "2.3.0";
 
     src = fetchurl {
@@ -230,11 +229,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     # Boogie as an input is not enough. Boogie libraries need to be at the same
     # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
     postFixup = ''
-      for lib in ${Boogie}/lib/dotnet/${Boogie.baseName}/*.dll{,.mdb}; do
-        ln -s $lib $out/lib/dotnet/${baseName}/
+      for lib in ${Boogie}/lib/dotnet/${Boogie.pname}/*.dll{,.mdb}; do
+        ln -s $lib $out/lib/dotnet/${pname}/
       done
       # We generate our own executable scripts
-      rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
+      rm -f $out/lib/dotnet/${pname}/dafny{,-server}
     '';
 
     meta = with lib; {
@@ -247,7 +246,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   MonoAddins = buildDotnetPackage rec {
-    baseName = "Mono.Addins";
+    pname = "Mono.Addins";
     version = "1.2";
 
     xBuildFiles = [
@@ -279,14 +278,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   NewtonsoftJson = fetchNuGet {
-    baseName = "Newtonsoft.Json";
+    pname = "Newtonsoft.Json";
     version = "11.0.2";
     sha256 = "07na27n4mlw77f3hg5jpayzxll7f4gyna6x7k9cybmxpbs6l77k7";
     outputFiles = [ "*" ];
   };
 
   Nuget = buildDotnetPackage rec {
-    baseName = "Nuget";
+    pname = "Nuget";
     version = "5.6.0.6489";
 
     src = fetchFromGitHub {
@@ -307,7 +306,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   Paket = fetchNuGet {
-    baseName = "Paket";
+    pname = "Paket";
     version = "5.179.1";
     sha256 = "11rzna03i145qj08hwrynya548fwk8xzxmg65swyaf19jd7gzg82";
     outputFiles = [ "*" ];

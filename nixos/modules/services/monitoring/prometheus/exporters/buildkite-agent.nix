@@ -36,7 +36,7 @@ in
     queues = mkOption {
       type = with types; nullOr (listOf str);
       default = null;
-      example = literalExample ''[ "my-queue1" "my-queue2" ]'';
+      example = literalExpression ''[ "my-queue1" "my-queue2" ]'';
       description = ''
         Which specific queues to process.
       '';

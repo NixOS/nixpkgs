@@ -1,17 +1,18 @@
 { lib
 , fetchFromGitHub
 , ocamlPackages
+, buildPackages
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
-  version = "unstable-2021-04-15";
+  version = "unstable-2021-12-05";
 
   src = fetchFromGitHub {
     owner = "talex5";
     repo = pname;
-    rev = "09321a28f3d4c0fa7e41ebb3014106b62090b649";
-    sha256 = "03rc2jp5d2y9y7mfis6kk9gchd49gvq0jg6fq5gi9r21ckb4k5v4";
+    rev = "d7f58d405514dd031f2f12e402c8c6a58e62a885";
+    sha256 = "0riwaqdlrx2gzkrb02v4zdl4ivpmz9g5w87lj3bhqs0l3s6c249s";
   };
 
   postPatch = ''
@@ -22,11 +23,18 @@ ocamlPackages.buildDunePackage rec {
   useDune2 = true;
   minimumOCamlVersion = "4.08";
 
+  nativeBuildInputs = [
+    buildPackages.ocamlPackages.ppx_cstruct
+  ];
+
   buildInputs = with ocamlPackages; [
     wayland
     cmdliner
     logs
+    cstruct-lwt
   ];
+
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";

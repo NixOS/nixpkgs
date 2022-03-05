@@ -39,7 +39,7 @@ with lib;
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample "[ pkgs.evolution-ews ]";
+        example = literalExpression "[ pkgs.evolution-ews ]";
         description = "Plugins for Evolution.";
       };
 

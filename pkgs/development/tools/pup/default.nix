@@ -17,6 +17,6 @@ buildGoModule rec {
     description = "Parsing HTML at the command line";
     homepage = "https://github.com/ericchiang/pup";
     license = licenses.mit;
-    maintainers = with maintainers; [ yegortimoshenko SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 yana ];
   };
 }

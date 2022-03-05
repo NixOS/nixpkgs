@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
 , isPy27
+, isPy38
+, isPy39
+, pythonAtLeast
 , flake8
 , six
 , python
@@ -20,8 +22,10 @@ buildPythonPackage rec {
     sha256 = "00q8n15xdnvqj454arn7xxksyrzh0dw996kjyy7g9rdk0rf8x82z";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.8") [
-    ./fix-annotations-version.patch
+  patches = lib.optionals (pythonAtLeast "3.10") [
+    ./fix-annotations-version-11.patch
+  ] ++ lib.optionals (isPy38 || isPy39) [
+    ./fix-annotations-version-10.patch
   ] ++ lib.optionals isPy27 [
     # Upstream disables this test case naturally on python 3, but it also fails
     # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it

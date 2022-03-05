@@ -3,16 +3,16 @@
 let
   versions = {
     matomo = {
-      version = "4.4.1";
-      sha256 = "0y8ljdj97znvd3hkkr7s6s9k8m93agw3z9cfw1azzaxgc46akfcl";
+      version = "4.5.0";
+      sha256 = "sha256-OyjdzY+ENYxOTVjDLjj2unJbpaGODIH2I5Acmt45HDA=";
     };
 
     matomo-beta = {
-      version = "4.4.1";
+      version = "4.6.0";
       # `beta` examples: "b1", "rc1", null
-      # TOOD when updating: use null if stable version is >= latest beta or release candidate
-      beta = null;
-      sha256 = "0y8ljdj97znvd3hkkr7s6s9k8m93agw3z9cfw1azzaxgc46akfcl";
+      # when updating: use null if stable version is >= latest beta or release candidate
+      beta = "b2";
+      sha256 = "sha256-7p/ZPtr5a/tBjrM27ILF3rNfxDIWuzWKCXNom3HlyL8=";
     };
   };
   common = pname: { version, sha256, beta ? null }:
@@ -32,14 +32,19 @@ let
 
         nativeBuildInputs = [ makeWrapper ];
 
-        # make-localhost-default-database-server.patch:
-        #   This changes the default value of the database server field
-        #   from 127.0.0.1 to localhost.
-        #   unix socket authentication only works with localhost,
-        #   but password-based SQL authentication works with both.
-        # TODO: is upstream interested in this?
-        # -> discussion at https://github.com/matomo-org/matomo/issues/12646
-        patches = [ ./make-localhost-default-database-host.patch ];
+        patches = [
+          # This changes the default value of the database server field
+          # from 127.0.0.1 to localhost.
+          # unix socket authentication only works with localhost,
+          # but password-based SQL authentication works with both.
+          # TODO: is upstream interested in this?
+          # -> discussion at https://github.com/matomo-org/matomo/issues/12646
+          ./make-localhost-default-database-host.patch
+
+          # This changes the default config for path.geoip2 so that it doesn't point
+          # to the nix store.
+          ./change-path-geoip2.patch
+        ];
 
         # this bootstrap.php adds support for getting PIWIK_USER_PATH
         # from an environment variable. Point it to a mutable location
@@ -73,11 +78,11 @@ let
           "misc/composer/build-xhprof.sh"
           "misc/composer/clean-xhprof.sh"
           "misc/cron/archive.sh"
+          "plugins/GeoIp2/config/config.php"
           "plugins/Installation/FormDatabaseSetup.php"
-          "vendor/leafo/lessphp/package.sh"
           "vendor/pear/archive_tar/sync-php4"
           "vendor/szymach/c-pchart/coverage.sh"
-          # drupal_test.sh does not exist in 3.12.0-b3; added for 3.13.0
+          "vendor/matomo/matomo-php-tracker/run_tests.sh"
           "vendor/twig/twig/drupal_test.sh"
         ];
 
@@ -92,6 +97,8 @@ let
               length="$(wc -c "$f" | cut -d' ' -f1)"
               hash="$(md5sum "$f" | cut -d' ' -f1)"
               sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
+            else
+              echo "INFO(files-to-fix): $f does not exist in this version"
             fi
           done
           popd > /dev/null

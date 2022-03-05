@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "0.8.6";
+  version = "0.10.0";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "3lvy23zg0hpixrf06g8hh15h2c9wwa0wa95vh2hp924kdi2akqcp2i313chycx1cmmg379w4v80ha2726ala69zxzk42y6djc8vm3xd";
+    sha512 = "3gq6awxvkz2hb8xzcwqhdhdqgspvqjfzm50bq9i29qy2iisq9vzb91bdp3f4q2sqcmk3gms44xyxyn3ih2hwlzsnk0f5prjzyg97fjj";
   };
 
   nativeBuildInputs = [ which ]

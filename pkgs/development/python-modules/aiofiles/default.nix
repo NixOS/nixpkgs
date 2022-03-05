@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Tinche";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vvk9j8cfdqvq8hw2qc6ajfzsy8x1afabf83mxafffq92rwknd4y";
+    sha256 = "sha256-V7F+xalFGMgTgT30Gmd9FVV3cPndI/i9cB5vEuW/KVc=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +33,17 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_sendfile_file"
+
+    # require loopback networking:
+    "test_sendfile_socket"
+    "test_serve_small_bin_file_sync"
+    "test_serve_small_bin_file"
+    "test_slow_file"
   ];
 
-  pythonImportsCheck = [ "aiofiles" ];
+  pythonImportsCheck = [
+    "aiofiles"
+  ];
 
   meta = {
     description = "File support for asyncio";

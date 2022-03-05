@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.24.2";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = version;
-    sha256 = "0xpzc3rizdkjxclgxngswz0a22kdv1pw235gsw517ma7i06d0lw6";
+    sha256 = "sha256-Xn8OqeEihLxZS9QZtrhzau2zLg9SzQrrigK70PoImhU=";
   };
 
   propagatedBuildInputs = [
@@ -61,7 +61,8 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing'
+      --replace "typing==3.6.4" "typing" \
+      --replace "attrs>=19.3.0,<21.3.0" "attrs"
   '';
 
   disabledTestPaths = [
@@ -85,6 +86,9 @@ buildPythonPackage rec {
     # Don't build
     "test_can_generate_pipeline_for_all"
     "test_build_wheel"
+    # https://github.com/aws/chalice/issues/1850
+    "test_resolve_endpoint"
+    "test_endpoint_from_arn"
   ];
 
   pythonImportsCheck = [ "chalice" ];

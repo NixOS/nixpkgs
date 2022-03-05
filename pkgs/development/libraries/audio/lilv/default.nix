@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook
+
+# test derivations
+, pipewire
+}:
 
 stdenv.mkDerivation rec {
   pname = "lilv";
   version = "0.24.12";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
@@ -15,11 +21,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
 
+  passthru.tests = {
+    inherit pipewire;
+  };
+
   meta = with lib; {
     homepage = "http://drobilla.net/software/lilv";
     description = "A C library to make the use of LV2 plugins";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

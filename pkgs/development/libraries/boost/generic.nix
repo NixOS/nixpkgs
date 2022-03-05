@@ -31,8 +31,8 @@ assert enableShared || enableStatic;
 assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
-# Boost <1.69 can't be build with clang >8, because pth was removed
-assert with lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
+# Boost <1.69 can't be built on linux with clang >8, because pth was removed
+assert with lib; ((stdenv.isLinux && toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
 
 with lib;
 let
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
                  ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
                  ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
-    maintainers = with maintainers; [ peti ];
+    maintainers = with maintainers; [ hjones2199 ];
   };
 
   preConfigure = optionalString useMpi ''

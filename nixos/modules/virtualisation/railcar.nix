@@ -41,7 +41,7 @@ let
         description = "Source for the in-container mount";
       };
       options = mkOption {
-        type = attrsOf (str);
+        type = listOf str;
         default = [ "bind" ];
         description = ''
           Mount options of the filesystem to be used.
@@ -77,9 +77,7 @@ in
               The defaults have been chosen for simple bindmounts, meaning
               that you only need to provide the "source" parameter.
             '';
-            example = ''
-              { "/data" = { source = "/var/lib/data"; }; }
-            '';
+            example = { "/data" = { source = "/var/lib/data"; }; };
           };
 
           runType = mkOption {
@@ -112,6 +110,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.railcar;
+      defaultText = literalExpression "pkgs.railcar";
       description = "Railcar package to use";
     };
   };

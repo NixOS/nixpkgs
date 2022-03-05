@@ -152,6 +152,7 @@ rec {
         { name = outputName;
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
+            outputSpecified = true;
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           };
@@ -159,7 +160,6 @@ rec {
 
       outputsList = map outputToAttrListElement outputs;
     in commonAttrs // {
-      outputUnspecified = true;
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };

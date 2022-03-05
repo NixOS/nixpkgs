@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/caja-dropbox";
     license = with licenses; [ gpl3Plus cc-by-nd-30 ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

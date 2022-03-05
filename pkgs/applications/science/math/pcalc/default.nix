@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://vapier.github.io/pcalc/";
     description = "Programmer's calculator";
-    license = licenses.gpl2;
-    maintainers = with lib.maintainers; [ ftrvxmtrx ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ftrvxmtrx ];
+    platforms = platforms.unix;
   };
 }

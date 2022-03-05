@@ -28,17 +28,13 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://www.xfce.org/";
     description = "Icons for Xfce";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco ] ++ teams.xfce.members;
   };
 }

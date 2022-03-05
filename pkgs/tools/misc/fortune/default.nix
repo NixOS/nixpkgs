@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
-  version = "3.6.1";
+  version = "3.12.0";
 
   # We use fetchurl instead of fetchFromGitHub because the release pack has some
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/${pname}-${version}/${pname}-${version}.tar.xz";
-    sha256 = "1cw7xf9xhh6d73y4h4q57g6akjhc1gq6xv37k57sx0wx77wjxqdp";
+    sha256 = "sha256-fVrtfLmZiVDTSeuoOltX/vunGSizSw+ZhQhBn9t0C3E=";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   '') ];
 
   meta = with lib; {
+    mainProgram = "fortune";
     description = "A program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;

@@ -26,7 +26,7 @@ in
         type = attrsOf (oneOf [ str int ]);
         default = {};
         description = "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
-        example = literalExample ''
+        example = literalExpression ''
           {
             videoInput = "hwaccel"; # requires `services.replay-sorcery.enableSysAdminCapability = true`
             videoFramerate = 60;

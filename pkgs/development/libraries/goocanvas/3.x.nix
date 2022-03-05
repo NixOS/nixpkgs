@@ -9,6 +9,7 @@
 , cairo
 , gtk3
 , glib
+, gnome
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,14 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      attrPath = "${pname}${lib.versions.major version}";
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
 
   meta = with lib; {
     description = "Canvas widget for GTK based on the the Cairo 2D library";

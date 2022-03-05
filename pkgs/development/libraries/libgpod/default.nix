@@ -6,10 +6,11 @@
 
 
 stdenv.mkDerivation rec {
-  name = "libgpod-0.8.3";
+  pname = "libgpod";
+  version = "0.8.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkpod/${name}.tar.bz2";
+    url = "mirror://sourceforge/gtkpod/libgpod-${version}.tar.bz2";
     sha256 = "0pcmgv1ra0ymv73mlj4qxzgyir026z9jpl5s5bkg35afs1cpk2k3";
   };
 

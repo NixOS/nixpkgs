@@ -1,9 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchurl
-, mono6
-, msbuild
-, dotnet-sdk
+, dotnetCorePackages
 , makeWrapper
 , unzip
 , writeText
@@ -11,9 +9,10 @@
 
 let
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+
   deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+    inherit pname version src;
 
     buildInputs = [ unzip ];
     unpackPhase = ''
@@ -39,7 +38,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
+      package=$out/lib/dotnet/${pname}/${version}
       mkdir -p $package
       cp -r . $package
       echo "{}" > $package/.nupkg.metadata
@@ -66,26 +65,23 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
-  version = "1.37.12";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gyy49v3pslr0l0q6h8hzah4s0iwkhkyckyrj3g2cg08w20b10gw";
+    sha256 = "00V+7Z1IoCSuSM0RClM81IslzCzC/FNYxHIKtnI9QDg=";
   };
 
-  nativeBuildInputs = [ makeWrapper msbuild ];
+  nativeBuildInputs = [ makeWrapper dotnet-sdk ];
 
-  # NuGetPackageVersion is overridden to be to be compatible with msbuild 16.10,
-  # it needs to be kept in sync with ./create-deps.sh
   buildPhase = ''
     runHook preBuild
 
-    HOME=$(pwd)/fake-home msbuild -r \
+    HOME=$(pwd)/fake-home dotnet msbuild -r \
       -p:Configuration=Release \
       -p:RestoreConfigFile=${nuget-config} \
-      -p:NuGetPackageVersion=5.9.1-rc.8 \
       src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
 
     runHook postBuild
@@ -93,24 +89,16 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r bin/Release/OmniSharp.Stdio.Driver/net472 $out/src
-    cp bin/Release/OmniSharp.Host/net472/SQLitePCLRaw* $out/src
-    mkdir $out/src/.msbuild
-    ln -s ${msbuild}/lib/mono/xbuild/* $out/src/.msbuild/
-    rm $out/src/.msbuild/Current
-    mkdir $out/src/.msbuild/Current
-    ln -s ${msbuild}/lib/mono/xbuild/Current/* $out/src/.msbuild/Current/
-    ln -s ${msbuild}/lib/mono/msbuild/Current/bin $out/src/.msbuild/Current/Bin
-
-    makeWrapper ${mono6}/bin/mono $out/bin/omnisharp \
-      --suffix PATH : ${dotnet-sdk}/bin \
-      --add-flags "$out/src/OmniSharp.exe"
+    cp -r bin/Release/OmniSharp.Stdio.Driver/net6.0 $out/src
+    makeWrapper $out/src/OmniSharp $out/bin/omnisharp \
+      --prefix DOTNET_ROOT : ${dotnet-sdk} \
+      --suffix PATH : ${dotnet-sdk}/bin
   '';
 
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ tesq0 ericdallo corngood ];
   };

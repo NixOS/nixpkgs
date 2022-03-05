@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Workspace switcher plugin for xfce4-panel which can be used for the i3 window manager";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.berbiche ];
+    maintainers = with maintainers; [ berbiche ] ++ teams.xfce.members;
   };
 }

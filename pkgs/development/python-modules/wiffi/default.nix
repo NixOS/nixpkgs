@@ -7,21 +7,28 @@
 
 buildPythonPackage rec {
   pname = "wiffi";
-  version = "1.0.1";
+  version = "1.1.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "python-wiffi";
     rev = version;
-    sha256 = "1bsx8dcmbkajh7hdgxg6wdnyxz4bfnd45piiy3yzyvszfdyvxw0f";
+    sha256 = "sha256-uB4M3etW1DCE//V2pcmsLZbORmrL00pbPADMQD5y3CY=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "wiffi" ];
+
+  pythonImportsCheck = [
+    "wiffi"
+  ];
 
   meta = with lib; {
     description = "Python module to interface with STALL WIFFI devices";

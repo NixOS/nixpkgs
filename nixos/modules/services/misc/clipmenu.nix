@@ -12,7 +12,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.clipmenu;
-      defaultText = "pkgs.clipmenu";
+      defaultText = literalExpression "pkgs.clipmenu";
       description = "clipmenu derivation to use.";
     };
   };

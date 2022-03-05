@@ -353,7 +353,7 @@ in {
           };
         });
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
         [ {
               source = pkgs.writeText "upHook" '''
 
@@ -382,6 +382,17 @@ in {
           <literal>networkmanager_strongswan</literal> plugin will be added to
           the <option>networking.networkmanager.packages</option> option
           so you don't need to to that yourself.
+        '';
+      };
+
+      enableFccUnlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
+          automatically performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the docs</link>
+          for more details.
         '';
       };
     };
@@ -438,7 +449,13 @@ in {
 
       "NetworkManager/VPN/nm-sstp-service.name".source =
         "${networkmanager-sstp}/lib/NetworkManager/VPN/nm-sstp-service.name";
+
       }
+      // optionalAttrs cfg.enableFccUnlock
+         {
+           "ModemManager/fcc-unlock.d".source =
+             "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
+         }
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {
            "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
@@ -502,13 +519,6 @@ in {
 
     systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
 
-    # override unit as recommended by upstream - see https://github.com/NixOS/nixpkgs/issues/88089
-    # TODO: keep an eye on modem-manager releases as this will eventually be added to the upstream unit
-    systemd.services.ModemManager.serviceConfig.ExecStart = [
-      ""
-      "${pkgs.modemmanager}/sbin/ModemManager --filter-policy=STRICT"
-    ];
-
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile overrideNameserversScript ];
@@ -534,7 +544,6 @@ in {
 
       {
         networkmanager.connectionConfig = {
-          "ipv6.ip6-privacy" = 2;
           "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
           "wifi.cloned-mac-address" = cfg.wifi.macAddress;
           "wifi.powersave" =

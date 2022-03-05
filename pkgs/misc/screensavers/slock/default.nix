@@ -16,13 +16,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorgproto libX11 libXext libXrandr ];
 
-  installFlags = [ "DESTDIR=\${out}" "PREFIX=" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   postPatch = "sed -i '/chmod u+s/d' Makefile";
 
   preBuild = optionalString (conf != null) ''
     cp ${writeText "config.def.h" conf} config.def.h
   '';
+
+  makeFlags = [ "CC:=$(CC)" ];
 
   meta = {
     homepage = "https://tools.suckless.org/slock";

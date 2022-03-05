@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b9749ce807170fb340d044d3f971e1da4dac0ae6af8ce8db00b6758a920a2bc";
+    sha256 = "sha256-4SAXjx5pRDhv4YVUgrUttyUa5izpYqpDKiiGJc2y8V0=";
   };
 
   # win_inet_pton is required for windows support

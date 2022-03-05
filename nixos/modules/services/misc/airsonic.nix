@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.airsonic;
+  opt = options.services.airsonic;
 in {
   options = {
 
@@ -38,9 +39,11 @@ in {
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
-          Only relevant if you have multiple network interfaces and want
-          to make Airsonic available on only one of them. The default value
-          will bind Airsonic to all available network interfaces.
+          The default value is appropriate for first launch, when the
+          default credentials are easy to guess. It is also appropriate
+          if you intend to use the virtualhost option in the service
+          module. In other cases, you may want to change this to a
+          specific IP or 0.0.0.0 to listen on all interfaces.
         '';
       };
 
@@ -74,18 +77,18 @@ in {
       transcoders = mkOption {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        defaultText= [ "\${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
+        defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
         description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
-          ${cfg.home}/transcoders.
+          ''${config.${opt.home}}/transcoders.
         '';
       };
 
       jre = mkOption {
         type = types.package;
         default = pkgs.jre8;
-        defaultText = literalExample "pkgs.jre8";
+        defaultText = literalExpression "pkgs.jre8";
         description = ''
           JRE package to use.
 
@@ -97,7 +100,7 @@ in {
       war = mkOption {
         type = types.path;
         default = "${pkgs.airsonic}/webapps/airsonic.war";
-        defaultText = "\${pkgs.airsonic}/webapps/airsonic.war";
+        defaultText = literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
         description = "Airsonic war file to use.";
       };
 

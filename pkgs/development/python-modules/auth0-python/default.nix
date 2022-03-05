@@ -4,16 +4,20 @@
 , mock
 , pyjwt
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.17.0";
+  version = "3.20.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b21bf91859ea56ac3b665efe5e73340c65dfd30de01081ff334a18a35a188a6";
+    sha256 = "sha256-WIH2lMPehrqkXCh+JbEI5nf99nt61OwLhP/pF6BbsnQ=";
   };
 
   propagatedBuildInputs = [
@@ -23,16 +27,19 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    pyjwt
     pytestCheckHook
   ];
 
   disabledTests = [
     # tries to ping websites (e.g. google.com)
     "can_timeout"
+    "test_options_are_created_by_default"
+    "test_options_are_used_and_override"
   ];
 
-  pythonImportsCheck = [ "auth0" ];
+  pythonImportsCheck = [
+    "auth0"
+  ];
 
   meta = with lib; {
     description = "Auth0 Python SDK";

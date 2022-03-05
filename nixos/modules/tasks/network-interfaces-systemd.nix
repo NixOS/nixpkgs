@@ -12,12 +12,17 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
+  interfaceRoutes = i:
+    i.ipv4.routes
+    ++ optionals cfg.enableIPv6 i.ipv6.routes;
+
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
+    ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
     ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
     # add dependency to physical or independently created vswitch member interface
     # TODO: warn the user that any address configured on those interfaces will be useless
@@ -47,6 +52,9 @@ in
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
+    }) ++ flip mapAttrsToList cfg.fooOverUDP (n: { local, ... }: {
+      assertion = local == null;
+      message = "networking.fooOverUDP.${n}.local is not supported by networkd.";
     });
 
     networking.dhcpcd.enable = mkDefault false;
@@ -84,12 +92,69 @@ in
             };
           };
         });
-        networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
+        networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          routes = forEach (interfaceRoutes i)
+            (route: {
+              # Most of these route options have not been tested.
+              # Please fix or report any mistakes you may find.
+              routeConfig =
+                optionalAttrs (route.prefixLength > 0) {
+                  Destination = "${route.address}/${toString route.prefixLength}";
+                } //
+                optionalAttrs (route.options ? fastopen_no_cookie) {
+                  FastOpenNoCookie = route.options.fastopen_no_cookie;
+                } //
+                optionalAttrs (route.via != null) {
+                  Gateway = route.via;
+                } //
+                optionalAttrs (route.options ? onlink) {
+                  GatewayOnLink = true;
+                } //
+                optionalAttrs (route.options ? initrwnd) {
+                  InitialAdvertisedReceiveWindow = route.options.initrwnd;
+                } //
+                optionalAttrs (route.options ? initcwnd) {
+                  InitialCongestionWindow = route.options.initcwnd;
+                } //
+                optionalAttrs (route.options ? pref) {
+                  IPv6Preference = route.options.pref;
+                } //
+                optionalAttrs (route.options ? mtu) {
+                  MTUBytes = route.options.mtu;
+                } //
+                optionalAttrs (route.options ? metric) {
+                  Metric = route.options.metric;
+                } //
+                optionalAttrs (route.options ? src) {
+                  PreferredSource = route.options.src;
+                } //
+                optionalAttrs (route.options ? protocol) {
+                  Protocol = route.options.protocol;
+                } //
+                optionalAttrs (route.options ? quickack) {
+                  QuickAck = route.options.quickack;
+                } //
+                optionalAttrs (route.options ? scope) {
+                  Scope = route.options.scope;
+                } //
+                optionalAttrs (route.options ? from) {
+                  Source = route.options.from;
+                } //
+                optionalAttrs (route.options ? table) {
+                  Table = route.options.table;
+                } //
+                optionalAttrs (route.options ? advmss) {
+                  TCPAdvertisedMaximumSegmentSize = route.options.advmss;
+                } //
+                optionalAttrs (route.options ? ttl-propagate) {
+                  TTLPropagate = route.options.ttl-propagate == "enabled";
+                };
+            });
           networkConfig.IPv6PrivacyExtensions = "kernel";
           linkConfig = optionalAttrs (i.macAddress != null) {
             MACAddress = i.macAddress;
@@ -194,6 +259,23 @@ in
           macvlan = [ name ];
         } ]);
       })))
+      (mkMerge (flip mapAttrsToList cfg.fooOverUDP (name: fou: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = "fou";
+          };
+          # unfortunately networkd cannot encode dependencies of netdevs on addresses/routes,
+          # so we cannot specify Local=, Peer=, PeerPort=. this looks like a missing feature
+          # in networkd.
+          fooOverUDPConfig = {
+            Port = fou.port;
+            Encapsulation = if fou.protocol != null then "FooOverUDP" else "GenericUDPEncapsulation";
+          } // (optionalAttrs (fou.protocol != null) {
+            Protocol = fou.protocol;
+          });
+        };
+      })))
       (mkMerge (flip mapAttrsToList cfg.sits (name: sit: {
         netdevs."40-${name}" = {
           netdevConfig = {
@@ -207,10 +289,39 @@ in
               Local = sit.local;
             }) // (optionalAttrs (sit.ttl != null) {
               TTL = sit.ttl;
-            });
+            }) // (optionalAttrs (sit.encapsulation != null) (
+              {
+                FooOverUDP = true;
+                Encapsulation =
+                  if sit.encapsulation.type == "fou"
+                  then "FooOverUDP"
+                  else "GenericUDPEncapsulation";
+                FOUDestinationPort = sit.encapsulation.port;
+              } // (optionalAttrs (sit.encapsulation.sourcePort != null) {
+                FOUSourcePort = sit.encapsulation.sourcePort;
+              })));
         };
         networks = mkIf (sit.dev != null) {
           "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+            tunnel = [ name ];
+          } ]);
+        };
+      })))
+      (mkMerge (flip mapAttrsToList cfg.greTunnels (name: gre: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = gre.type;
+          };
+          tunnelConfig =
+            (optionalAttrs (gre.remote != null) {
+              Remote = gre.remote;
+            }) // (optionalAttrs (gre.local != null) {
+              Local = gre.local;
+            });
+        };
+        networks = mkIf (gre.dev != null) {
+          "40-${gre.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
             tunnel = [ name ];
           } ]);
         };

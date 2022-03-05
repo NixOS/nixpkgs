@@ -78,13 +78,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.34.22";
+  version = "1.36.10";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "1144j9crm0q5pwxnkmy3ahw1vbkddpbk2ys2m2pxxxiqifdhll83";
+    sha256 = "sha256-MmBnbVDitKOctPe2dNe1sMNNs/qEYGVq3UMJxAkLlCc=";
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -130,7 +131,7 @@ in stdenv.mkDerivation rec {
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
-             src/zm_config.h.in \
+             src/zm_config_data.h.in \
              web/api/app/Config/bootstrap.php.in \
              web/includes/config.php.in ; do
       substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder

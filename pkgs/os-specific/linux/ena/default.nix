@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.5";
+    broken = kernel.kernelOlder "4.5" || kernel.kernelAtLeast "5.15";
   };
 }

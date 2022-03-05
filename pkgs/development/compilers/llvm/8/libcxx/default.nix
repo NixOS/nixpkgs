@@ -21,6 +21,12 @@ stdenv.mkDerivation {
     ../../libcxx-0001-musl-hacks.patch
   ];
 
+  # Prevent errors like "error: 'foo' is unavailable: introduced in macOS yy.zz"
+  postPatch = ''
+    substituteInPlace include/__config \
+      --replace "#    define _LIBCPP_USE_AVAILABILITY_APPLE" ""
+  '';
+
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
   '';

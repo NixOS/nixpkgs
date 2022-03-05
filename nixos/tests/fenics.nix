@@ -38,7 +38,6 @@ in
         gcc
         (python3.withPackages (ps: with ps; [ fenics ]))
       ];
-      virtualisation.memorySize = 512;
     };
   };
   testScript =

@@ -1,31 +1,23 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
+{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl, fetchpatch
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
-, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
+, squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
-, nftablesSupport ? false
 , nixosTests
 }:
 
-let
-  networkPkgs = if nftablesSupport then
-    [ iptables-nftables-compat ]
-  else
-    [ iptables ebtables ];
-
-in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.18";
+  version = "4.23";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "19gkllahfd2fgz6vng5lrqx3bdrzaf9s874gzznvzvj9sgj0j3mn";
+    sha256 = "sha256-bPzH9MRirgl3b/wkkYIRhEvryvy/5M2Y9LLPqD4IL8U=";
   };
 
   postPatch = ''
@@ -45,7 +37,7 @@ buildGoPackage rec {
     rm $out/bin/{deps,macaroon-identity,generate}
 
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
-      networkPkgs
+      [ iptables ]
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
              exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
@@ -66,7 +58,7 @@ buildGoPackage rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 marsam ];
+    maintainers = with maintainers; [ fpletz marsam ];
     platforms = platforms.linux;
   };
 }

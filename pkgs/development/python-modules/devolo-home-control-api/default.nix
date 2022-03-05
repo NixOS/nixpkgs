@@ -1,11 +1,11 @@
 { lib
-, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools-scm
 , websocket-client
 , zeroconf
 }:
@@ -22,6 +22,12 @@ buildPythonPackage rec {
     sha256 = "sha256-N/48Q2IEL194vCzrPPuy+mRNejXfkoXy2t2oe0Y6ug4=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     requests
     zeroconf
@@ -32,13 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
   ];
-
-  postPatch = ''
-    # setup.py is not able to detect the version with setuptools_scm
-    substituteInPlace setup.py \
-      --replace "setuptools_scm" "" \
-      --replace 'use_scm_version=True' 'use_scm_version="${version}"'
-  '';
 
   # Disable test that requires network access
   disabledTests = [

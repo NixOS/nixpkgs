@@ -1,8 +1,15 @@
-{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh, cacert, nixopsAzurePackages ? []
+{ lib, python2, poetry2nix, docbook_xsl_ns, openssh, cacert, nixopsAzurePackages ? []
 , fetchurl, fetchpatch
 }:
 
-python2Packages.buildPythonApplication rec {
+let
+  inherit (poetry2nix.mkPoetryPackages {
+    projectDir = ./python-env;
+    python = python2;
+  }) python;
+  pythonPackages = python.pkgs;
+
+in pythonPackages.buildPythonApplication rec {
   pname = "nixops";
   version = "1.7";
 
@@ -19,23 +26,22 @@ python2Packages.buildPythonApplication rec {
     ./optional-virtd.patch
   ];
 
-  buildInputs = [ libxslt ];
+  buildInputs = [ pythonPackages.libxslt ];
 
-  pythonPath = with python2Packages;
+  pythonPath = (with pythonPackages;
     [ prettytable
       boto
       boto3
       hetzner
-      libcloud
+      apache-libcloud
       adal
       # Go back to sqlite once Python 2.7.13 is released
       pysqlite
       datadog
-      digital-ocean
-      typing
+      python-digitalocean
       ]
       ++ lib.optional (!libvirt.passthru.libvirt.meta.insecure or true) libvirt
-      ++ nixopsAzurePackages;
+      ++ nixopsAzurePackages);
 
   checkPhase =
   # Ensure, that there are no (python) import errors

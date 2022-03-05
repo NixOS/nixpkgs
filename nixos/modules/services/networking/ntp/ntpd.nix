@@ -77,6 +77,7 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.
@@ -97,7 +98,7 @@ in
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
-        example = literalExample ''[ "--interface=eth0" ]'';
+        example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };
 

@@ -21,6 +21,11 @@ wafConfigurePhase() {
     echoCmd 'configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "waf: enabled parallel building"
+    fi
+
     runHook postConfigure
 }
 

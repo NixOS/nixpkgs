@@ -6,9 +6,6 @@
 #
 # * Add correct `name`/`version` field to `package.json`, otherwise `yarn2nix` fails to
 #   find required dependencies.
-# * Keep `tailwindcss` on version 2.0.1-compat (on `yarn` it will be upgraded due to the `^`).
-#   This is needed to make sure the entire build still works with `postcss-7` (needed
-#   by plausible).
 # * Adjust `file:`-dependencies a bit for the structure inside a Nix build.
 # * Update hashes for the tarball & the fixed-output drv with all `mix`-dependencies.
 # * Generate `yarn.lock` & `yarn.nix` in a temporary directory.
@@ -29,10 +26,9 @@ fi
 SRC="https://raw.githubusercontent.com/plausible/analytics/${latest}"
 
 package_json="$(curl -qf "$SRC/assets/package.json")"
-export fixed_tailwind_version="$(jq '.dependencies.tailwindcss' -r <<< "$package_json" | sed -e 's,^^,,g')"
 
 echo "$package_json" \
-  | jq '. + {"name":"plausible","version": $ENV.latest} | .dependencies.tailwindcss = $ENV.fixed_tailwind_version' \
+  | jq '. + {"name":"plausible","version": $ENV.latest}' \
   | sed -e 's,../deps/,../../tmp/deps/,g' \
   > $dir/package.json
 
@@ -58,7 +54,6 @@ cp -r "$(nix-build -A plausible.mixFodDeps)" "$tmp_setup_dir/deps"
 chmod -R u+rwx "$tmp_setup_dir"
 
 pushd $tmp_setup_dir/assets
-jq < package.json '.dependencies.tailwindcss = "'"$fixed_tailwind_version"'"' | sponge package.json
 yarn
 yarn2nix > "$dir/yarn.nix"
 cp yarn.lock "$dir/yarn.lock"

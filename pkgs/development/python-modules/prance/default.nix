@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , chardet
 , requests
-, ruamel_yaml
+, ruamel-yaml
+, setuptools-scm
 , six
 , semver
 , pytestCheckHook
@@ -22,10 +23,16 @@ buildPythonPackage rec {
     sha256 = "sha256-kGANMHfWwhW3ZBw2ZVCJZR/bV2EPhcydMKhDeDTVwcQ=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     chardet
     requests
-    ruamel_yaml
+    ruamel-yaml
     six
     semver
   ];
@@ -51,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
-    homepage = "https://github.com/jfinkhaeuser/prance";
+    homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

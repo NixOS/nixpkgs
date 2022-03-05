@@ -15,7 +15,10 @@ finished booting, it should have detected most of your hardware.
 The NixOS manual is available by running `nixos-help`.
 
 You are logged-in automatically as `nixos`. The `nixos` user account has
-an empty password so you can use `sudo` without a password.
+an empty password so you can use `sudo` without a password:
+```ShellSession
+$ sudo -i
+```
 
 If you downloaded the graphical ISO image, you can run `systemctl
 start display-manager` to start the desktop environment. If you want

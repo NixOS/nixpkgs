@@ -20,9 +20,9 @@ let
 
 in stdenv.mkDerivation rec {
   version = "3.6.6";
-  name = if x11Mode then "nethack-x11-${version}"
-         else if qtMode then "nethack-qt-${version}"
-         else "nethack-${version}";
+  pname = if x11Mode then "nethack-x11"
+         else if qtMode then "nethack-qt"
+         else "nethack";
 
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";

@@ -5,16 +5,20 @@
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "1.0.3";
+  version = "1.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4137612bc050f606b4d6f9e6a554ebfb50633c8dd9699481f82271f84d9425f";
+    sha256 = "6463d5c49142d14029196a6a781b57bc98ba5b3d93244f4ed637f534d08129c1";
   };
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "parts" ];
+
+  pythonImportsCheck = [
+    "parts"
+  ];
 
   meta = with lib; {
     description = "Python library for common list functions related to partitioning lists";

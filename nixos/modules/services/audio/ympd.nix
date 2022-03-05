@@ -26,12 +26,12 @@ in {
           type = types.str;
           default = "localhost";
           description = "The host where MPD is listening.";
-          example = "localhost";
         };
 
         port = mkOption {
           type = types.int;
           default = config.services.mpd.network.port;
+          defaultText = literalExpression "config.services.mpd.network.port";
           description = "The port where MPD is listening.";
           example = 6600;
         };

@@ -91,10 +91,10 @@ in {
         Command to run after become master, the interface name, virtual address
         and optional extra parameters are passed as arguments.
       '';
-      example = ''
+      example = literalExpression ''
         pkgs.writeScript "upscript" '''
           #!/bin/sh
-          $\{pkgs.iproute2\}/bin/ip addr add "$2"/24 dev "$1"
+          ''${pkgs.iproute2}/bin/ip addr add "$2"/24 dev "$1"
         ''';
       '';
     };
@@ -105,10 +105,10 @@ in {
         Command to run after become backup, the interface name, virtual address
         and optional extra parameters are passed as arguments.
       '';
-      example = ''
+      example = literalExpression ''
         pkgs.writeScript "downscript" '''
           #!/bin/sh
-          $\{pkgs.iproute2\}/bin/ip addr del "$2"/24 dev "$1"
+          ''${pkgs.iproute2}/bin/ip addr del "$2"/24 dev "$1"
         ''';
       '';
     };
@@ -152,7 +152,7 @@ in {
         upstream updates for a long time and can be considered as unmaintained.
       '';
       default = pkgs.ucarp;
-      defaultText = "pkgs.ucarp";
+      defaultText = literalExpression "pkgs.ucarp";
     };
   };
 

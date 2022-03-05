@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "34";
+  version = "35";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo   = "ns-3-dev";
     rev    = "ns-3.${version}";
-    sha256 = "sha256-udP7U+pHnNUdo35d9sN1o+aR9ctw9fgU3UunCjisGUI=";
+    sha256 = "sha256-3w+lCWWra9sndL8+vkGfH5plrDYYCMFi1PzwIVRku6I=";
   };
 
   nativeBuildInputs = [ wafHook python ];

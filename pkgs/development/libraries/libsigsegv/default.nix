@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libsigsegv-2.13";
+  pname = "libsigsegv";
+  version = "2.13";
 
   src = fetchurl {
-    url = "mirror://gnu/libsigsegv/${name}.tar.gz";
+    url = "mirror://gnu/libsigsegv/libsigsegv-${version}.tar.gz";
     sha256 = "sha256-vnjuQXawX3x1/wMpjYSHTbkPS2ydVQPw2hIms6PEgRk=";
   };
 

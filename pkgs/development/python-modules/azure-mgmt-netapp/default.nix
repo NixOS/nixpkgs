@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.0";
+  version = "6.0.1";
   pname = "azure-mgmt-netapp";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d5163c49f91636809ef1cacd48d91130803594855f43afe0f2b31fc5f02d53c";
+    sha256 = "6ce683587be1638d8d77620b7af118060b8b7dfc4fd23d46a623a66edcb388e1";
     extension = "zip";
   };
 

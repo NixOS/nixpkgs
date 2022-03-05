@@ -1,12 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
 , dbus
 , desktop-file-utils
-, elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
+, fetchpatch
 , flatpak
 , gettext
 , glib
@@ -20,7 +21,6 @@
 , meson
 , ninja
 , packagekit
-, pantheon
 , pkg-config
 , python3
 , vala
@@ -30,26 +30,25 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.7.1";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1llkc0p47jcx992lkwics86vv622dmmvm5hxrdsq26j9crcd5dam";
+    sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
   };
 
   patches = [
-    # Try to remove other backends to make flatpak backend work.
-    # https://github.com/NixOS/nixpkgs/issues/70214
-    ./flatpak-only.patch
+    # Fix AppStream.PoolFlags being renamed
+    # Though the API break has been fixed in latest appstream,
+    # let's use the non-deprecated version anyway.
+    # https://github.com/elementary/appcenter/pull/1794
+    (fetchpatch {
+      url = "https://github.com/elementary/appcenter/commit/84bc6400713484aa9365f0ba73f59c495da3f08b.patch";
+      sha256 = "sha256-HNRCJ/5mRbEVjCq9nrXtdQOOk1Jj5jalApkghD8ecpk=";
+    })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     appstream-glib
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
     elementary-icon-theme
     flatpak
     glib
@@ -82,7 +80,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -92,11 +89,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

@@ -1,23 +1,23 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" ]
+, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" "kvdb_postgres" "kvdb_etcd" ]
 }:
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.13.1-beta";
+  version = "0.14.2-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    sha256 = "07cs9yq83laajmfwfv42xfkfai3q873wg4qg7bfzw18w5fllivkg";
+    sha256 = "sha256-JOKitxxWcTlGlxYR1XpySZlI2fT9jgBrOxNUwT/sqdQ=";
   };
 
-  vendorSha256 = "1hk67x8nlc0wm1pg8k8hywih623p4c0klfhfyy26b7mqq62lazia";
+  vendorSha256 = "sha256-shDmJcEyobY7Ih1MHMEY2GQnzAffsH/y4J1bme/bT7I=";
 
-  subPackages = ["cmd/lncli" "cmd/lnd"];
+  subPackages = [ "cmd/lncli" "cmd/lnd" ];
 
   preBuild = let
     buildVars = {

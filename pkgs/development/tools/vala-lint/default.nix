@@ -9,17 +9,18 @@
 , vala
 , gettext
 , wrapGAppsHook
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  pname = "vala-lint-unstable";
-  version = "2021-02-17";
+  pname = "vala-lint";
+  version = "unstable-2021-12-28";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "5b06cc2341ae7e9f7f8c35c542ef78c36e864c30";
-    sha256 = "KwJ5sCp9ZrrxIqc6qi2+ZdHBt1esNOO1+uDkS+d9mW8=";
+    rev = "1eeb3538b2a71addd0d8adc9f53ffe80fdfb8ce0";
+    sha256 = "sha256-u2VJIDc1yvhbBgdMKL1RijoKEL4Vl8sbrGUYu5t/wJI=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/vala-lang/vala-lint.git";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/vala-lang/vala-lint";
     description = "Check Vala code files for code-style errors";
@@ -47,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.vala-lint";
   };
 }

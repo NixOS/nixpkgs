@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
-  baseName = "stldict";
+  pname = "pure-stldict";
   version = "0.8";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-stldict-${version}.tar.gz";
     sha256 = "5b894ae6dc574c7022258e2732bea649c82c959ec4d0be13fb5a3e8ba8488f28";
   };
 

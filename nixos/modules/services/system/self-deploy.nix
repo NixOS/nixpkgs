@@ -126,6 +126,8 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.self-deploy = {
+      inherit (cfg) startAt;
+
       wantedBy = [ "multi-user.target" ];
 
       requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
@@ -138,8 +140,7 @@ in
       path = with pkgs; [
         git
         nix
-        systemd
-      ];
+      ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
       script = ''
         if [ ! -e ${repositoryDirectory} ]; then

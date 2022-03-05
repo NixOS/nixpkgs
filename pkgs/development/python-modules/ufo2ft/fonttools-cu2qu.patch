@@ -1,0 +1,126 @@
+From 0b3631e91c93d56460929f40850f7d8a39a71bde Mon Sep 17 00:00:00 2001
+From: Simon Cozens <simon@simon-cozens.org>
+Date: Thu, 11 Feb 2021 09:43:41 +0000
+Subject: [PATCH 1/2] Rename cu2qu to fontTools.cu2qu
+
+---
+ Lib/ufo2ft/filters/cubicToQuadratic.py | 4 ++--
+ Lib/ufo2ft/preProcessor.py             | 4 ++--
+ requirements.txt                       | 1 -
+ setup.py                               | 1 -
+ tests/outlineCompiler_test.py          | 2 +-
+ tests/preProcessor_test.py             | 2 +-
+ 6 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/Lib/ufo2ft/filters/cubicToQuadratic.py b/Lib/ufo2ft/filters/cubicToQuadratic.py
+index 87d81b1f..4b77144f 100644
+--- a/Lib/ufo2ft/filters/cubicToQuadratic.py
++++ b/Lib/ufo2ft/filters/cubicToQuadratic.py
+@@ -1,7 +1,7 @@
+ import logging
+ 
+-from cu2qu.pens import Cu2QuPointPen
+-from cu2qu.ufo import CURVE_TYPE_LIB_KEY, DEFAULT_MAX_ERR
++from fontTools.pens.cu2quPen import Cu2QuPointPen
++from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY, DEFAULT_MAX_ERR
+ 
+ from ufo2ft.filters import BaseFilter
+ from ufo2ft.fontInfoData import getAttrWithFallback
+diff --git a/Lib/ufo2ft/preProcessor.py b/Lib/ufo2ft/preProcessor.py
+index 05ac47dc..c796df2e 100644
+--- a/Lib/ufo2ft/preProcessor.py
++++ b/Lib/ufo2ft/preProcessor.py
+@@ -217,7 +217,7 @@ def __init__(
+         layerNames=None,
+         skipExportGlyphs=None,
+     ):
+-        from cu2qu.ufo import DEFAULT_MAX_ERR
++        from fontTools.cu2qu.ufo import DEFAULT_MAX_ERR
+ 
+         self.ufos = ufos
+         self.inplace = inplace
+@@ -249,7 +249,7 @@ def __init__(
+             self.postFilters.append(post)
+ 
+     def process(self):
+-        from cu2qu.ufo import fonts_to_quadratic
++        from fontTools.cu2qu.ufo import fonts_to_quadratic
+ 
+         # first apply all custom pre-filters
+         for funcs, ufo, glyphSet in zip(self.preFilters, self.ufos, self.glyphSets):
+diff --git a/setup.py b/setup.py
+index 175429af..eef39ee1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -30,7 +30,6 @@
+     tests_require=["pytest>=2.8"],
+     install_requires=[
+         "fonttools[ufo]>=4.28.5",
+-        "cu2qu>=1.6.7",
+         "cffsubr>=0.2.8",
+         "booleanOperations>=0.9.0",
+     ],
+diff --git a/tests/outlineCompiler_test.py b/tests/outlineCompiler_test.py
+index 74319184..e7b15a23 100644
+--- a/tests/outlineCompiler_test.py
++++ b/tests/outlineCompiler_test.py
+@@ -2,7 +2,7 @@
+ import os
+ 
+ import pytest
+-from cu2qu.ufo import font_to_quadratic
++from fontTools.cu2qu.ufo import font_to_quadratic
+ from fontTools.ttLib import TTFont
+ from fontTools.ttLib.tables._g_l_y_f import USE_MY_METRICS
+ 
+diff --git a/tests/preProcessor_test.py b/tests/preProcessor_test.py
+index 64196f92..87b23946 100644
+--- a/tests/preProcessor_test.py
++++ b/tests/preProcessor_test.py
+@@ -2,7 +2,7 @@
+ import os
+ 
+ import pytest
+-from cu2qu.ufo import CURVE_TYPE_LIB_KEY
++from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY
+ from fontTools import designspaceLib
+ 
+ import ufo2ft
+
+From 27c5af88ec2c3314618ecbf65104050a53508bb0 Mon Sep 17 00:00:00 2001
+From: Simon Cozens <simon@simon-cozens.org>
+Date: Thu, 11 Feb 2021 09:49:28 +0000
+Subject: [PATCH 2/2] Sort the imports
+
+---
+ Lib/ufo2ft/filters/cubicToQuadratic.py | 2 +-
+ tests/preProcessor_test.py             | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Lib/ufo2ft/filters/cubicToQuadratic.py b/Lib/ufo2ft/filters/cubicToQuadratic.py
+index 4b77144f..5f28ea42 100644
+--- a/Lib/ufo2ft/filters/cubicToQuadratic.py
++++ b/Lib/ufo2ft/filters/cubicToQuadratic.py
+@@ -1,7 +1,7 @@
+ import logging
+ 
+-from fontTools.pens.cu2quPen import Cu2QuPointPen
+ from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY, DEFAULT_MAX_ERR
++from fontTools.pens.cu2quPen import Cu2QuPointPen
+ 
+ from ufo2ft.filters import BaseFilter
+ from ufo2ft.fontInfoData import getAttrWithFallback
+diff --git a/tests/preProcessor_test.py b/tests/preProcessor_test.py
+index 87b23946..76ee495a 100644
+--- a/tests/preProcessor_test.py
++++ b/tests/preProcessor_test.py
+@@ -2,8 +2,8 @@
+ import os
+ 
+ import pytest
+-from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY
+ from fontTools import designspaceLib
++from fontTools.cu2qu.ufo import CURVE_TYPE_LIB_KEY
+ 
+ import ufo2ft
+ from ufo2ft.constants import (

@@ -5,6 +5,7 @@
 , closureInfo
 , coreutils
 , e2fsprogs
+, fakechroot
 , fakeroot
 , findutils
 , go
@@ -31,11 +32,18 @@
 , writeText
 , writeTextDir
 , writePython3
-, system
-, # Note: This is the cross system we're compiling for
 }:
 
 let
+  inherit (lib)
+    optionals
+    optionalString
+    ;
+
+  inherit (lib)
+    escapeShellArgs
+    toList
+    ;
 
   mkDbExtraCommand = contents:
     let
@@ -191,13 +199,13 @@ rec {
     , postMount ? ""
     , postUmount ? ""
     }:
-    let
-      result = vmTools.runInLinuxVM (
+      vmTools.runInLinuxVM (
         runCommand name
           {
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "docker-run-disk";
+              destination = "./image";
             };
             inherit fromImage fromImageName fromImageTag;
 
@@ -232,7 +240,7 @@ rec {
           # Unpack all of the parent layers into the image.
           lowerdir=""
           extractionID=0
-          for layerTar in $(tac layer-list); do
+          for layerTar in $(cat layer-list); do
             echo "Unpacking layer $layerTar"
             extractionID=$((extractionID + 1))
 
@@ -278,12 +286,6 @@ rec {
 
           ${postUmount}
         '');
-    in
-    runCommand name { } ''
-      mkdir -p $out
-      cd ${result}
-      cp layer.tar json VERSION $out
-    '';
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
     runWithOverlay {
@@ -291,7 +293,13 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
-        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
+        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+      '';
+
+      postUmount = ''
+        mv $out/layer.tar .
+        rm -rf $out
+        mv layer.tar $out
       '';
     };
 
@@ -402,7 +410,7 @@ rec {
 
       preMount = lib.optionalString (contents != null && contents != [ ]) ''
         echo "Adding contents..."
-        for item in ${toString contents}; do
+        for item in ${escapeShellArgs (map (c: "${c}") (toList contents))}; do
           echo "Adding $item..."
           rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
         done
@@ -636,7 +644,7 @@ rec {
              <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
         # Append the new files to the layer.
         tar -rpf temp/layer.tar --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-          --owner=0 --group=0 --no-recursion --files-from newFiles
+          --owner=0 --group=0 --no-recursion --verbatim-files-from --files-from newFiles
 
         echo "Adding meta..."
 
@@ -808,6 +816,10 @@ rec {
     , # Optional bash script to run inside fakeroot environment.
       # Could be used for changing ownership of files in customisation layer.
       fakeRootCommands ? ""
+    , # Whether to run fakeRootCommands in fakechroot as well, so that they
+      # appear to run inside the image, but have access to the normal Nix store.
+      # Perhaps this could be enabled on by default on pkgs.stdenv.buildPlatform.isLinux
+      enableFakechroot ? false
     , # We pick 100 to ensure there is plenty of room for extension. I
       # believe the actual maximum is 128.
       maxLayers ? 100
@@ -815,6 +827,8 @@ rec {
       # this on, but tooling may disable this to insert the store paths more
       # efficiently via other means, such as bind mounting the host store.
       includeStorePaths ? true
+    , # Passthru arguments for the underlying derivation.
+      passthru ? {}
     ,
     }:
       assert
@@ -839,16 +853,26 @@ rec {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
           inherit extraCommands fakeRootCommands;
-          nativeBuildInputs = [ fakeroot ];
+          nativeBuildInputs = [
+            fakeroot
+          ] ++ optionals enableFakechroot [
+            fakechroot
+            # for chroot
+            coreutils
+            # fakechroot needs getopt, which is provided by util-linux
+            util-linux
+          ];
           postBuild = ''
             mv $out old_out
             (cd old_out; eval "$extraCommands" )
 
             mkdir $out
-
-            fakeroot bash -c '
+            ${optionalString enableFakechroot ''
+              export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out/layer.tar
+            ''}
+            ${optionalString enableFakechroot ''fakechroot chroot $PWD/old_out ''}fakeroot bash -c '
               source $stdenv/setup
-              cd old_out
+              ${optionalString (!enableFakechroot) ''cd old_out''}
               eval "$fakeRootCommands"
               tar \
                 --sort name \
@@ -864,13 +888,13 @@ rec {
         };
 
         closureRoots = lib.optionals includeStorePaths /* normally true */ (
-          [ baseJson ] ++ contentsList
+          [ baseJson customisationLayer ]
         );
         overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
 
         # These derivations are only created as implementation details of docker-tools,
         # so they'll be excluded from the created images.
-        unnecessaryDrvs = [ baseJson overallClosure ];
+        unnecessaryDrvs = [ baseJson overallClosure customisationLayer ];
 
         conf = runCommand "${baseName}-conf.json"
           {
@@ -965,7 +989,7 @@ rec {
         result = runCommand "stream-${baseName}"
           {
             inherit (conf) imageName;
-            passthru = {
+            passthru = passthru // {
               inherit (conf) imageTag;
 
               # Distinguish tarballs and exes at the Nix level so functions that

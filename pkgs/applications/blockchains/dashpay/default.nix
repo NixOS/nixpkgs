@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "dashpay";
     repo= "dash";
     rev = "v${version}";
-    sha256 = "0l1gcj2xf2bal9ph9y11x8yd28fd25f55f48xbm45bfw3ij7nbaa";
+    sha256 = "sha256-DMoiUX8Q0HcBHA6ZIN58uPsTnHjEJMi8eGG2DW8z17Q=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

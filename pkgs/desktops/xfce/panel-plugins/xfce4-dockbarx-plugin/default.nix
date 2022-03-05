@@ -7,7 +7,7 @@
 , keybinder3
 , pkg-config
 , python3Packages
-, vala_0_48
+, vala
 , wafHook
 , wrapGAppsHook
 , xfce
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3Packages.wrapPython
-    vala_0_48
+    vala
     wafHook
     wrapGAppsHook
   ];
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "Plugins to embed DockbarX into xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

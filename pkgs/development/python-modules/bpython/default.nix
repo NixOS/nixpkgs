@@ -2,38 +2,41 @@
 , buildPythonPackage
 , fetchPypi
 , curtsies
+, cwcwidth
 , greenlet
 , jedi
 , pygments
+, pytestCheckHook
+, pyperclip
 , pyxdg
 , requests
 , substituteAll
+, typing-extensions
 , urwid
 , watchdog
-, which
 }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.21";
+  version = "0.22.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "88aa9b89974f6a7726499a2608fa7ded216d84c69e78114ab2ef996a45709487";
+    sha256 = "1fb1e0a52332579fc4e3dcf75e21796af67aae2be460179ecfcce9530a49a200";
   };
-
-  patches = [ (substituteAll {
-    src = ./clipboard-make-which-substitutable.patch;
-    which = "${which}/bin/which";
-  })];
 
   propagatedBuildInputs = [
     curtsies
+    cwcwidth
     greenlet
+    jedi
     pygments
+    pyperclip
     pyxdg
     requests
+    typing-extensions
     urwid
+    watchdog
   ];
 
   postInstall = ''
@@ -41,13 +44,16 @@ buildPythonPackage rec {
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  checkInputs = [ jedi watchdog ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "bpython" ];
 
   meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dotlambda ];
   };
 }

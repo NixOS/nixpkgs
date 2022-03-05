@@ -12,7 +12,7 @@ in appimageTools.wrapType2 rec {
   inherit name src;
 
   extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk-pixbuf glib libGL libGLU nss nspr
-    alsa-lib cups gnome2.GConf libcap fontconfig freetype pango
+    alsa-lib cups libcap fontconfig freetype pango
     cairo dbus dbus-glib libdbusmenu libdbusmenu-gtk2 expat zlib libpng12 udev tbb
     libpqxx gtk3 libsecret lsb-release openssl nodejs ncurses5
 

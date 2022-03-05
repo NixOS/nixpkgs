@@ -1,17 +1,18 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes, gnome }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-configtool-0.4.10";
+  pname = "fcitx-configtool";
+  version = "0.4.10";
 
   meta = with lib; {
     description = "GTK-based config tool for Fcitx";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ cdepillabout ];
   };
 
   src = fetchurl {
-    url = "https://download.fcitx-im.org/fcitx-configtool/${name}.tar.xz";
+    url = "https://download.fcitx-im.org/fcitx-configtool/fcitx-configtool-${version}.tar.xz";
     sha256 = "1yyi9jhkwn49lx9a47k1zbvwgazv4y4z72gnqgzdpgdzfrlrgi5w";
   };
 

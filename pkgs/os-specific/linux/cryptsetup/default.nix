@@ -3,13 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.3.6";
+  version = "2.4.3";
 
   outputs = [ "out" "dev" "man" ];
+  separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v2.3/${pname}-${version}.tar.xz";
-    sha256 = "sha256-spa3oh6ldsKxgGEcyxnQauyN3a7ffHBLDGqBIQwlY18=";
+    url = "mirror://kernel/linux/utils/cryptsetup/v2.4/${pname}-${version}.tar.xz";
+    sha256 = "sha256-/A35RRiBciZOxb8dC9oIJk+tyKP4VtR+upHzH+NUtQc=";
   };
 
   # Disable 4 test cases that fail in a sandbox
@@ -24,11 +25,12 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
+    "--disable-ssh-token"
   ];
 
   nativeBuildInputs = [ pkg-config ];

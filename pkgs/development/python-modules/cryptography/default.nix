@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , rustPlatform
 , setuptools-rust
 , openssl
@@ -9,7 +8,6 @@
 , darwin
 , packaging
 , six
-, pythonOlder
 , isPyPy
 , cffi
 , pytest
@@ -23,18 +21,18 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.4.7"; # Also update the hash in vectors.nix
+  version = "36.0.0"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04x7bhjkglxpllad10821vxddlmxdkd3gjvp35iljmnj2s0xw41x";
+    sha256 = "0zshc1jaavykdnic5ns8zax6gqganys6gp5f35bqcfggnkn6kxsj";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "1m6smky4nahwlp4hn6yzibrcxlbsw4nx162dsq48vlw8h1lgjl62";
+    sha256 = "1nbw4cfshyc125jwdivg9gxy52qcd1iz31lypl95ij9bn1dyx933";
   };
 
   cargoRoot = "src/rust";
@@ -80,10 +78,6 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test ${pytestFlags} tests
   '';
-
-  # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
-  # can do until nix 1.11's release
-  __impureHostDeps = [ "/usr/lib" ];
 
   meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";

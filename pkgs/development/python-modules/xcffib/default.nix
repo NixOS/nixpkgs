@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi six ];
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   checkInputs = [ nose ];
 
   pythonImportsCheck = [ "xcffib" ];

@@ -192,10 +192,6 @@ meta.hydraPlatforms = [];
 
 If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
 
-### `updateWalker` {#var-meta-updateWalker}
-
-If set to `true`, the package is tested to be updated correctly by the `update-walker.sh` script without additional settings. Such packages have `meta.version` set and their homepage (or the page specified by `meta.downloadPage`) contains a direct link to the package tarball.
-
 ## Licenses {#sec-meta-license}
 
 The `meta.license` attribute should preferably contain a value from `lib.licenses` defined in [`nixpkgs/lib/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix), or in-place license description of the same format if the license is unlikely to be useful in another expression.

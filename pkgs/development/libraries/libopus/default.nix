@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";
+    url = "mirror://mozilla/opus/opus-${version}.tar.gz";
     sha256 = "17gz8kxs4i7icsc1gj713gadiapyklynlwqlf0ai98dj4lg8xdb5";
   };
 

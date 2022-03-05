@@ -9,19 +9,24 @@
 , crowbar
 , bigstring
 , lwt_log
+, ppx_inline_test
+, qcheck-alcotest
+, tezos-test-helpers
 }:
 
 buildDunePackage rec {
   pname = "tezos-stdlib";
-  version = "8.3";
-  src = fetchFromGitLab {
+  version = "11.0";
+  base_src = fetchFromGitLab {
     owner = "tezos";
     repo = "tezos";
     rev = "v${version}";
-    sha256 = "1ykhz5m5sb2hq04nspbsbq8wspkhimagb5g6yi65hpdbn8f4zr6h";
+    sha256 = "uUYd1DxH2bdCQlevQt3oGxvg0ai5EiCD2mti5SiueU8=";
   };
 
-  minimalOCamlVersion = "4.0.8";
+  src = "${base_src}/src/lib_stdlib";
+
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 
@@ -33,17 +38,23 @@ buildDunePackage rec {
     hex
     lwt
     zarith
+    ppx_inline_test
   ];
 
   checkInputs = [
+    bigstring
+    lwt_log
     alcotest
     alcotest-lwt
     crowbar
     bigstring
     lwt_log
+    qcheck-alcotest
+    # tezos-test-helpers
   ];
 
-  doCheck = true;
+  # circular dependency if we add this
+  doCheck = false;
 
   meta = {
     description = "Tezos: yet-another local-extension of the OCaml standard library";

@@ -4,7 +4,7 @@
 , libffi
 , gdbm
 , xz
-, mime-types ? null, mimetypesSupport ? true
+, mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
@@ -17,6 +17,7 @@
 , configd
 , autoreconfHook
 , autoconf-archive
+, pkg-config
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -45,9 +46,7 @@
 # enableLTO is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
 # enabling LTO on *-darwin causes python3 to fail when linking.
-# enabling LTO with musl and dynamic linking fails with a linker error although it should
-# be possible as alpine is doing it: https://github.com/alpinelinux/aports/blob/a8ccb04668c7729e0f0db6c6ff5f25d7519e779b/main/python3/APKBUILD#L82
-, enableLTO ? stdenv.is64bit && stdenv.isLinux && !(stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isStatic)
+, enableLTO ? stdenv.is64bit && stdenv.isLinux
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
@@ -63,8 +62,6 @@ assert x11Support -> tcl != null
                   && libX11 != null;
 
 assert bluezSupport -> bluez != null;
-
-assert mimetypesSupport -> mime-types != null;
 
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
@@ -107,7 +104,7 @@ let
 
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
-  ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
+    pkg-config
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
@@ -195,7 +192,8 @@ in with passthru; stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
-  '' + optionalString (stdenv.isDarwin && x11Support) ''
+  '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
+    # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 
@@ -278,7 +276,7 @@ in with passthru; stdenv.mkDerivation {
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
-      --replace "@mime-types@" "${mime-types}"
+      --replace "@mime-types@" "${mailcap}"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
@@ -286,7 +284,10 @@ in with passthru; stdenv.mkDerivation {
   CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
   LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
-  NIX_LDFLAGS = optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) "-lgcc_s" + optionalString stdenv.hostPlatform.isMusl "-lgcc_eh";
+  NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU ({
+    "glibc" = "-lgcc_s";
+    "musl" = "-lgcc_eh";
+  }."${stdenv.hostPlatform.libc}" or "");
   # Determinism: We fix the hashes of str, bytes and datetime objects.
   PYTHONHASHSEED=0;
 
@@ -416,6 +417,11 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+
+    # debug info can't be separated from a static library and would otherwise be
+    # left in place by a separateDebugInfo build. force its removal here to save
+    # space in output.
+    $STRIP -S $out/lib/${libPrefix}/config-*/libpython*.a || true
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -445,6 +451,13 @@ in with passthru; stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    '' + ''
+    # *strip* shebang from libpython gdb script - it should be dual-syntax and
+    # interpretable by whatever python the gdb in question is using, which may
+    # not even match the major version of this python. doing this after the
+    # bytecode compilations for the same reason - we don't want bytecode generated.
+    mkdir -p $out/share/gdb
+    sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -469,6 +482,8 @@ in with passthru; stdenv.mkDerivation {
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash
   ];
+
+  separateDebugInfo = true;
 
   inherit passthru;
 

@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "ldappool";
-  version = "2.4.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     pname = "ldappool";
     inherit version;
-    sha256 = "23edef09cba4b1ae764f1ddada828d8e39d72cf32a457e599f5a70064310ea00";
+    sha256 = "4bb59b7d6b11407f48ee01a781267e3c8ba98d91f426806ac7208612ae087b86";
   };
 
   postPatch = ''

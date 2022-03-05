@@ -1,25 +1,14 @@
 { lib, stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsa-lib, atk
-, nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg }:
+, nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg, requireFile }:
 
-# TODO: use dynamic attributes once Nix 1.7 is out
-assert ((config.planetary_annihilation or null).url or null) != null;
-assert ((config.planetary_annihilation or null).sha256 or null) != null;
+stdenv.mkDerivation rec {
+  pname = "planetary-annihalation";
+  version = "62857";
 
-/* to setup:
- $ cat ~/.config/nixpkgs/config.nix
- {
-  planetary_annihilation = {
-    url = "file:///home/user/PA_Linux_62857.tar.bz2";
+  src = requireFile {
+    message = "This file has to be downloaded manually via nix-prefetch-url.";
+    name = "PA_Linux_${version}.tar.bz2";
     sha256 = "0imi3k5144dsn3ka9khx3dj76klkw46ga7m6rddqjk4yslwabh3k";
-  };
-}
-*/
-
-stdenv.mkDerivation {
-  name = "planetary-annihalation";
-
-  src = fetchurl {
-    inherit (config.planetary_annihilation) url sha256;
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];

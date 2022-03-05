@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     icon = basename;
     desktopName = "Streamlink Twitch GUI";
     genericName = meta.description;
-    categories = "AudioVideo;Network;";
+    categories = [ "AudioVideo" "Network" ];
   };
 
   meta = with lib; {

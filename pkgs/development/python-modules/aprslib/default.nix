@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "aprslib";
-  version = "0.6.47";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
     repo = "aprs-python";
     rev = "v${version}";
-    sha256 = "1569v74ym2r8vxx3dnjcs5fr7rdrfb0i9sycny5frw2zgms4ag6b";
+    sha256 = "sha256-QasyF0Ch4zdPoAgcqRavEENVGA/02/AgeWAgXYcSUjk=";
   };
 
   checkInputs = [

@@ -56,6 +56,7 @@ in
     powerpc-linux = /* stagesLinux */ stagesNative;
     powerpc64-linux = stagesLinux;
     powerpc64le-linux = stagesLinux;
+    riscv64-linux = stagesLinux;
     x86_64-darwin = stagesDarwin;
     aarch64-darwin = stagesDarwin;
     x86_64-solaris = stagesNix;

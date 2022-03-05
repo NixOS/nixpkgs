@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pytest
+, pythonOlder
+, pytestCheckHook
 , bokeh
 , ipython
 , matplotlib
@@ -13,23 +13,23 @@
 
 buildPythonPackage rec {
   pname = "livelossplot";
-  version = "0.5.0";
+  version = "0.5.4";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
+
+  # version number in source is wrong in this release
+  postPatch = ''substituteInPlace ${pname}/version.py --replace "0.5.3" "0.5.4"'';
 
   src = fetchFromGitHub {
     owner  = "stared";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "164v65qglgyg38q9ajnas99rp14mvrk5hn8x76b8iy81vszmx1c0";
+    sha256 = "IV6YAidoqVoKvpy+LNNHTPpobiDoGX59bHqJcBtaydk=";
   };
 
   propagatedBuildInputs = [ bokeh ipython matplotlib numpy ];
 
-  checkInputs = [ pytest nbconvert nbformat ];
-  checkPhase = ''
-    pytest tests tests/external_test_examples.py
-  '';
+  checkInputs = [ nbconvert nbformat pytestCheckHook ];
 
   meta = with lib; {
     description = "Live training loss plot in Jupyter for Keras, PyTorch, and others";

@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "enturclient";
-  version = "0.2.2";
+  version = "0.2.3";
   disabled = pythonOlder "3.8";
+
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hfurubotten";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kl44ch8p31pr70yv6na2m0w40frackdwzph9rpb05sc83va701i";
+    sha256 = "1w0791f4p3yyncc1izx3q97fyaky2ling14qr0yn0acrmq9yh5cc";
   };
 
   nativeBuildInputs = [
@@ -29,10 +30,17 @@ buildPythonPackage rec {
     async-timeout
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'async_timeout = "^3.0.1"' 'async_timeout = ">=3.0.1"'
+  '';
+
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "enturclient" ];
+  pythonImportsCheck = [
+    "enturclient"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with the Entur.org API";

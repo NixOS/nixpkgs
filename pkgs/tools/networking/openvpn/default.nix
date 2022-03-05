@@ -24,7 +24,7 @@ let
 
   generic = { version, sha256 }:
     let
-      withIpRoute = stdenv.isLinux && (versionOlder version "2.5");
+      withIpRoute = stdenv.isLinux && (versionOlder version "2.5.4");
     in
     stdenv.mkDerivation
       rec {
@@ -83,7 +83,7 @@ in
   };
 
   openvpn = generic {
-    version = "2.5.2";
-    sha256 = "sha256-sSdDg2kB82Xvr4KrJJOWfhshwh60POmo2hACoXycHcg=";
+    version = "2.5.5";
+    sha256 = "sha256-EZvWn6AhCDj2zaonNpbcc476IA9FTb4R6237dd+2ADs=";
   };
 }

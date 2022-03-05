@@ -17,15 +17,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.14.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AVWQDFw/kof8rxKCs9N5efNDRe6TGseD6g1QAf02fx0=";
+    sha256 = "sha256-BqwiconG5hn5RPV+hlKu6e6+GjZA4Im/dD+no3IduYw=";
   };
-  cargoSha256 = "sha256-MjmnKypvnPKhU5qZFGNVAz1hK3VkHudRwSPxciobuJU=";
+  cargoSha256 = "sha256-q/5AezLQgN7WdGsbHoxX5riJMlxw3cTFhVs5OvCeI5U=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
@@ -35,24 +35,17 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin
     [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
 
-  # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and place it in the locations it will require it in advance
-  preBuild =
-    let arch = rust.toRustTarget stdenv.hostPlatform; in
-    ''
-      _librusty_v8_setup() {
-        for v in "$@"; do
-          install -D ${librusty_v8} "target/$v/gn_out/obj/librusty_v8.a"
-        done
-      }
-
-      # Copy over the `librusty_v8.a` file inside target/XYZ/gn_out/obj, symlink not allowed
-      _librusty_v8_setup "debug" "release" "${arch}/release"
-    '';
+  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
+  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
+  RUSTY_V8_ARCHIVE = librusty_v8;
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
   doCheck = false;
+
+  preInstall = ''
+    find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+  '';
 
   postInstall = ''
     installShellCompletion --cmd deno \

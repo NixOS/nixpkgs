@@ -38,14 +38,13 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.graylog;
-        defaultText = "pkgs.graylog";
+        defaultText = literalExpression "pkgs.graylog";
         description = "Graylog package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "graylog";
-        example = literalExample "graylog";
         description = "User account under which graylog runs";
       };
 
@@ -90,7 +89,7 @@ in
 
       elasticsearchHosts = mkOption {
         type = types.listOf types.str;
-        example = literalExample ''[ "http://node1:9200" "http://user:password@node2:19200" ]'';
+        example = literalExpression ''[ "http://node1:9200" "http://user:password@node2:19200" ]'';
         description = "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
       };
 

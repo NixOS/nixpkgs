@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, coreutils, pkg-config, glib, jsoncpp }:
 
 stdenv.mkDerivation rec {
-  name = "libevdevc";
+  pname = "libevdevc";
   version = "2.0.1";
   src = fetchFromGitHub {
     owner = "hugegreenbug";

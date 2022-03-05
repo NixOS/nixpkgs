@@ -44,11 +44,9 @@ in
 
       package = mkOption {
         default = pkgs.firebird;
-        defaultText = "pkgs.firebird";
+        defaultText = literalExpression "pkgs.firebird";
         type = types.package;
-        example = ''
-          <code>package = pkgs.firebird_3;</code>
-        '';
+        example = literalExpression "pkgs.firebird_3";
         description = ''
           Which Firebird package to be installed: <code>pkgs.firebird_3</code>
           For SuperServer use override: <code>pkgs.firebird_3.override { superServer = true; };</code>
@@ -56,7 +54,7 @@ in
       };
 
       port = mkOption {
-        default = "3050";
+        default = 3050;
         type = types.port;
         description = ''
           Port Firebird uses.

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3303776f774d3e0115c1c4f6e1fc35470d15f113a7ae9401a0b90acfa1661ac";
+    sha256 = "sha256-bixc/1qh5D9DEDSAdhFS9cXWvvQPXB9QyHWKbonmbLY=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -21,14 +21,16 @@ buildPythonPackage rec {
     cached-property
   ] ++ lib.optional (!isPyPy) cffi;
 
+  propagatedNativeBuildInputs = lib.optional (!isPyPy) cffi;
+
   checkInputs = [ pytestCheckHook ];
 
-  preCheck = ''
+  disabledTestPaths = [
     # disable tests that require networking
-    rm test/test_repository.py
-    rm test/test_credentials.py
-    rm test/test_submodule.py
-  '';
+    "test/test_repository.py"
+    "test/test_credentials.py"
+    "test/test_submodule.py"
+  ];
 
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
@@ -42,11 +44,10 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
   doCheck = false;
 
-  disabled = !isPy3k;
-
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";
     homepage = "https://pypi.python.org/pypi/pygit2";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
 }

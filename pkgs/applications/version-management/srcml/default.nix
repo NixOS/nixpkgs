@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr2,
+{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python2, antlr2,
   curl
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake antlr2 ];
-  buildInputs = [ libxml2 libxslt boost libarchive python curl ];
+  buildInputs = [ libxml2 libxslt boost libarchive python2 curl ];
 
   meta = {
     description = "Infrastructure for exploration, analysis, and manipulation of source code";

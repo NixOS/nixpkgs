@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, intltool, glib, pkg-config, udev, util-linux, acl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, acl
+, glib
+, intltool
+, pkg-config
+, udev
+, util-linux
+}:
 
 stdenv.mkDerivation rec {
   pname = "udevil";
@@ -13,32 +22,41 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ intltool glib udev ];
+  buildInputs = [
+    glib
+    intltool
+    udev
+  ];
 
-  configurePhase = ''
+  preConfigure = ''
     substituteInPlace src/Makefile.in --replace "-o root -g root" ""
     # do not set setuid bit in nix store
     substituteInPlace src/Makefile.in --replace 4755 0755
-    ./configure \
-      --prefix=$out \
-      --with-mount-prog=${util-linux}/bin/mount \
-      --with-umount-prog=${util-linux}/bin/umount \
-      --with-losetup-prog=${util-linux}/bin/losetup \
-      --with-setfacl-prog=${acl.bin}/bin/setfacl \
-      --sysconfdir=$prefix/etc
   '';
+
+  configureFlags = [
+    "--with-mount-prog=${util-linux}/bin/mount"
+    "--with-umount-prog=${util-linux}/bin/umount"
+    "--with-losetup-prog=${util-linux}/bin/losetup"
+    "--with-setfacl-prog=${acl.bin}/bin/setfacl"
+    "--sysconfdir=${placeholder "out"}/etc"
+  ];
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system/devmon@.service \
       --replace /usr/bin/devmon "$out/bin/devmon"
   '';
 
-  patches = [ ./device-info-sys-stat.patch ];
+  patches = [
+    # sys/stat.h header missing on src/device-info.h
+    ./device-info-sys-stat.patch
+  ];
 
   meta = with lib; {
-    description = "A command line Linux program which mounts and unmounts removable devices without a password, shows device info, and monitors device changes";
     homepage = "https://ignorantguru.github.io/udevil/";
-    platforms = platforms.linux;
+    description = "Mount without password";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

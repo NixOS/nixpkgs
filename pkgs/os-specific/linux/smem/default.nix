@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "smem";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "19ibv1byxf2b68186ysrgrhy5shkc5mc69abark1h18yigp3j34m";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   makeFlags = [ "smemcap" ];
 

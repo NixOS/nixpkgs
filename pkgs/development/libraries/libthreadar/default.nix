@@ -3,12 +3,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.3.2";
+  version = "1.3.5";
   pname = "libthreadar";
 
   src = fetchurl {
     url = "mirror://sourceforge/libthreadar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-q5FiBlncbhdXDgRm7wgxcd4rkxqje/1ls9kPGqmomP0=";
+    sha256 = "sha256-T5W83Ry3e1hHrnpmSLkfJDYHrVP6YDpXTqmf0WGCjB8=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ izorkin ];
     license = licenses.lgpl3;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/libthreadar.x86_64-darwin
   };
 }

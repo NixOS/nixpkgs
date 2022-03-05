@@ -45,7 +45,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.prometheus-alertmanager;
-        defaultText = "pkgs.alertmanager";
+        defaultText = literalExpression "pkgs.alertmanager";
         description = ''
           Package that should be used for alertmanager.
         '';

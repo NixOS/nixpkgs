@@ -1,8 +1,7 @@
 { lib, stdenv, fetchgit, ncurses, portmidi }:
 stdenv.mkDerivation {
   pname = "orca-c";
-
-  version = "git-2021-02-13";
+  version = "unstable-2021-02-13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~rabbits/orca";
@@ -14,6 +13,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs tool
+    sed -i tool \
+      -e 's@ncurses_dir=.*@ncurses_dir="${ncurses}"@' \
+      -e 's@portmidi_dir=.*@portmidi_dir="${portmidi}"@' tool
   '';
 
   installPhase = ''
@@ -31,5 +33,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ netcrns ];
+    mainProgram = "orca";
   };
 }

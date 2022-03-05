@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "4.8.1";
+  version = "4.8.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0WPXG1/K+8Wx7sbdhB7b283dOnURzV/c/9hri7/mmsE=";
+    sha256 = "1k1pava84ywgq62xl5bz8y3zm7z2kz6kkgp423c0y02jrgjyfbc4";
   };
 
   patches = [
@@ -38,13 +37,6 @@ stdenv.mkDerivation rec {
     # but not from its own datadr (it assumes it will be in XDG_DATA_DIRS).
     # Since this is not generally true with Nix, let’s add $out/share unconditionally.
     ./4.x-nix_share_path.patch
-
-    # fixes intermittent "gtksourceview-gresources.h: no such file" errors
-    (fetchpatch {
-      name = "ensure-access-to-resources-in-corelib-build.patch";
-      url = "https://gitlab.gnome.org/GNOME/gtksourceview/-/commit/9bea9d1c4a56310701717bb106c52a5324ee392a.patch";
-      sha256 = "sha256-rSB6lOFEyz58HfOSj7ZM48/tHxhqbtWWbh60JuySAZ0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -96,6 +88,7 @@ stdenv.mkDerivation rec {
       packageName = "gtksourceview";
       attrPath = "gtksourceview4";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

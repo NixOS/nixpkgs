@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zef";
-  version = "0.11.10";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "ugexe";
     repo = "zef";
     rev = "v${version}";
-    sha256 = "sha256-snnvREM2RLssmE55Ea0Imcw12pmyD6+/11ZXmmUY36U=";
+    sha256 = "sha256-FEQwe9MkP+tFZgXiR3hrNS+Jyavj85oYql3uOLP3nwc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

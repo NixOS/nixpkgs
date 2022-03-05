@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
+  # Force the systemd service file to be regenerated from it's template.  This
+  # file is erroneously added in version 35 and it has already been deleted from
+  # upstream's git repository.  So this "postPatch" phase can be deleted in next
+  # release.
+  postPatch = ''
+    rm -f systemd/smartdns.service
+  '';
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"

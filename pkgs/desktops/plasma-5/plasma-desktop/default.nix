@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchpatch,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
 
   boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
@@ -36,11 +36,6 @@ mkDerivation {
   patches = [
     ./hwclock-path.patch
     ./tzdir.patch
-    # https://invent.kde.org/plasma/plasma-desktop/-/merge_requests/563
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/plasma-desktop/-/commit/8d9bf2032b8a2e5de75edf5713c42866f5b80649.patch";
-      sha256 = "sha256-2jqqFjBljbhf7I+fTsIvuFs3Ic662KTKRnbcSm5Jing=";
-    })
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/sbin/hwclock\"''

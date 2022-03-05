@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.0.7";
+  version = "2.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "v${version}";
-    sha256 = "0s9y9956awl26rnrp5l78rbrjcwliqdijnmm7k6xm4hh7iak4q6z";
+    sha256 = "0qxqd5ip98d6q1d48vcprpr38sa47ky3cr6lprd01nzibdmf2r2d";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,6 @@ buildPythonPackage rec {
     backoff
     requests
     rich
-  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
@@ -50,7 +49,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace 'backoff = "^1.11.1"' 'backoff = "*"' \
       --replace 'requests = ">=2.26.0"' 'requests = "*"' \
-      --replace 'rich = "^10.6.0"' 'rich = "*"'
+      --replace 'rich = "^10.16.2"' 'rich = "*"'
     substituteInPlace pytest.ini \
       --replace "--cov" ""
   '';

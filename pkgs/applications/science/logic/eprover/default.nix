@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which, enableHO ? false }:
 
 stdenv.mkDerivation rec {
   pname = "eprover";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--exec-prefix=$(out)"
     "--man-prefix=$(out)/share/man"
+  ] ++ lib.optionals enableHO [
+    "--enable-ho"
   ];
 
   meta = with lib; {

@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems ];
 
   pythonPath = with python3.pkgs; [
-    wxPython_4_0 # not compatible with wxPython_4_1. reported upstream https://github.com/wxWidgets/Phoenix/issues/1956
+    wxPython_4_1
     humblewx
     icalendar
     markdown
@@ -37,9 +37,8 @@ python3.pkgs.buildPythonApplication rec {
       name = "timeline";
       comment = "Display and navigate information on a timeline";
       icon = "timeline";
-      terminal = false;
       exec = "timeline";
-      categories = "Office;Calendar;";
+      categories = [ "Office" "Calendar" ];
     })
   ];
 

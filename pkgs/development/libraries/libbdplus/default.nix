@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libgcrypt, libgpgerror, gettext }:
+{ lib, stdenv, fetchurl, libgcrypt, libgpg-error, gettext }:
 
 # library that allows libbluray to play BDplus protected bluray disks
 # libaacs does not infringe DRM's right or copyright. See the legal page of the website for more info.
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "02n87lysqn4kg2qk7d1ffrp96c44zkdlxdj0n16hbgrlrpiwlcd6";
   };
 
-  buildInputs = [ libgcrypt libgpgerror gettext ];
+  buildInputs = [ libgcrypt libgpg-error gettext ];
 
   nativeBuildInputs = [ ];
 

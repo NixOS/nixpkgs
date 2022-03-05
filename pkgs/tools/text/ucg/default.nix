@@ -3,14 +3,11 @@
 , pkg-config
 , autoreconfHook
 , pcre
-, nixosTests
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "ucg";
-  version = "20190225";
-in stdenv.mkDerivation {
-  inherit pname version;
+  version = "0.3.3+date=2019-02-25";
 
   src = fetchFromGitHub {
     owner = "gvansickle";
@@ -19,8 +16,29 @@ in stdenv.mkDerivation {
     sha256 = "sha256-/wU1PmI4ejlv7gZzZNasgROYXFiDiIxE9BFoCo6+G5Y=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ pcre ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    pcre
+  ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testFile=$(mktemp /tmp/ucg-test.XXXX)
+    echo -ne 'Lorem ipsum dolor sit amet\n2.7182818284590' > $testFile
+    $out/bin/ucg 'dolor' $testFile || { rm $testFile; exit -1; }
+    $out/bin/ucg --ignore-case 'lorem' $testFile || { rm $testFile; exit -1; }
+    $out/bin/ucg --word-regexp '2718' $testFile && { rm $testFile; exit -1; }
+    $out/bin/ucg 'pisum' $testFile && { rm $testFile; exit -1; }
+    rm $testFile
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/gvansickle/ucg/";
@@ -34,7 +52,7 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    broken = stdenv.isAarch64; # cpuid.h: no such file or directory
   };
-
-  passthru.tests = { inherit (nixosTests) ucg; };
 }
+# TODO: report upstream

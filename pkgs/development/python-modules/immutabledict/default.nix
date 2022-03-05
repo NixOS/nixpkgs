@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "immutabledict";
-  version = "2.2.0";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
     rev = "v${version}";
-    sha256 = "sha256-Jf7ad3ImPfEvCBrUZ1NVXMCBqwLmd0hwpKfe9rVsehc=";
+    sha256 = "sha256-z04xxoCw0eBtkt++y/1yUsAPaLlAGUtWBdRBM74ul1c=";
   };
 
   nativeBuildInputs = [

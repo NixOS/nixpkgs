@@ -25,14 +25,11 @@ mkDerivation rec {
     desktopName = "lsd2dsl";
     genericName = "lsd2dsl";
     comment = meta.description;
-    categories = "Dictionary;FileTools;Qt;";
+    categories = [ "Dictionary" "FileTools" "Qt" ];
   });
 
   installPhase = ''
     install -Dm755 console/lsd2dsl gui/lsd2dsl-qtgui -t $out/bin
-  '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/bin/lsd2dsl
-    wrapQtApp $out/bin/lsd2dsl-qtgui
   '';
 
   meta = with lib; {

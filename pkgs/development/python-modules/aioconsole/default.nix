@@ -16,14 +16,16 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.3.2";
-  disabled = pythonOlder "3.6";
+  version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bximaalakw1dxan1lxar33l8hnmxqn0fg62hmdmprmra72z4bm8";
+    sha256 = "sha256-OCsao4oerHGpzsoqPP3EXJVs6NZeLNsoaC83k7oX688=";
   };
 
   checkInputs = [
@@ -36,7 +38,13 @@ buildPythonPackage rec {
       --replace "--cov aioconsole --count 2" ""
   '';
 
-  pythonImportsCheck = [ "aioconsole" ];
+  disabledTests = [
+    "test_interact_syntax_error"
+  ];
+
+  pythonImportsCheck = [
+    "aioconsole"
+  ];
 
   meta = with lib; {
     description = "Asynchronous console and interfaces for asyncio";

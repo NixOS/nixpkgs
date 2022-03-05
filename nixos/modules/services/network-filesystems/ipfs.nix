@@ -57,7 +57,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.ipfs;
-        defaultText = "pkgs.ipfs";
+        defaultText = literalExpression "pkgs.ipfs";
         description = "Which IPFS package to use.";
       };
 
@@ -79,6 +79,11 @@ in
           if versionAtLeast config.system.stateVersion "17.09"
           then "/var/lib/ipfs"
           else "/var/lib/ipfs/.ipfs";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "17.09"
+          then "/var/lib/ipfs"
+          else "/var/lib/ipfs/.ipfs"
+        '';
         description = "The data dir for IPFS";
       };
 
@@ -254,25 +259,18 @@ in
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
       '' + optionalString cfg.autoMigrate ''
-        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -y
-      '' + concatStringsSep "\n" (collect
-        isString
-        (mapAttrsRecursive
-          (path: value:
-            # Using heredoc below so that the value is never improperly quoted
-            ''
-              read value <<EOF
-              ${builtins.toJSON value}
-              EOF
-              ipfs --offline config --json "${concatStringsSep "." path}" "$value"
-            '')
-          ({
-            Addresses.API = cfg.apiAddress;
-            Addresses.Gateway = cfg.gatewayAddress;
-            Addresses.Swarm = cfg.swarmAddress;
-          } //
-          cfg.extraConfig))
-      );
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
+      '' + ''
+        ipfs --offline config show \
+          | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${
+              escapeShellArg (builtins.toJSON ({
+                Addresses.API = cfg.apiAddress;
+                Addresses.Gateway = cfg.gatewayAddress;
+                Addresses.Swarm = cfg.swarmAddress;
+              } // cfg.extraConfig))
+            } \
+          | ipfs --offline config replace -
+      '';
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}" ];
         User = cfg.user;

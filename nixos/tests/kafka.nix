@@ -19,7 +19,6 @@ let
         };
 
         networking.firewall.allowedTCPPorts = [ 2181 ];
-        virtualisation.memorySize = 1024;
       };
       kafka = { ... }: {
         services.apache-kafka = {

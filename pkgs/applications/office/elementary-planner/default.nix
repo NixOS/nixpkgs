@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     pantheon.granite
     sqlite
     webkitgtk
-    libgdata # required by some dependency transitively
     libhandy
     curl
   ];
@@ -85,6 +84,8 @@ stdenv.mkDerivation rec {
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    platforms = platforms.linux;
+    mainProgram = "com.github.alainm23.planner";
   };
 }
 

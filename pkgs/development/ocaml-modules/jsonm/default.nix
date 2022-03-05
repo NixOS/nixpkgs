@@ -1,18 +1,19 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
 
-let version = "1.0.1"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-jsonm-${version}";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-jsonm";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "https://erratique.ch/software/jsonm/releases/jsonm-${version}.tbz";
     sha256 = "1176dcmxb11fnw49b7yysvkjh0kpzx4s48lmdn5psq9vshp5c29w";
   };
 
-  buildInputs = [ findlib topkg ];
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
   propagatedBuildInputs = [ uutf ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 

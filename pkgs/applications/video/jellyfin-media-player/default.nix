@@ -94,9 +94,6 @@ mkDerivation rec {
     mv $out/Resources/* "$out/Applications/Jellyfin Media Player.app/Contents/Resources/"
     rmdir $out/Resources
 
-    # fix 'Could not find the Qt platform plugin "cocoa" in ""' error
-    wrapQtApp "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player"
-
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
   '';
 

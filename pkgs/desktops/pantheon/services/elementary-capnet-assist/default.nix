@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , python3
@@ -19,21 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.3.0";
-
-  repoName = "capnet-assist";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "capnet-assist";
     rev = version;
-    sha256 = "1gma8a04ndivx1fd3ha9f45r642qq2li80wrd6dsrp4v3vqix9bn";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-8hhp37EBzZxEVvPaRw9PohjaPWKQZ/AfqqvwLxQCBKk=";
   };
 
   nativeBuildInputs = [
@@ -55,15 +47,16 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [
-    ./remove-capnet-test.patch
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
@@ -71,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.capnet-assist";
   };
 }

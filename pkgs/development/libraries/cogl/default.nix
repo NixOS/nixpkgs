@@ -3,14 +3,12 @@
 , mesa, automake, autoconf
 , gstreamerSupport ? true, gst_all_1 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "cogl";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
     sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 

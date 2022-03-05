@@ -97,7 +97,7 @@ in stdenv.mkDerivation {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib
+        curl libevent openssl pcre zlib libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
@@ -106,7 +106,6 @@ in stdenv.mkDerivation {
       r @{PROC}/@{pid}/environ,
       r @{PROC}/@{pid}/mounts,
       rwk /tmp/tr_session_id_*,
-      r /run/systemd/resolve/stub-resolv.conf,
 
       r $out/share/transmission/web/**,
 
@@ -116,6 +115,7 @@ in stdenv.mkDerivation {
   '';
 
   passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
   };
 

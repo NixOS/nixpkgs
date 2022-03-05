@@ -1,14 +1,12 @@
-{ lib, stdenv, qmake, qtbase, perl, python, php, kcachegrind, wrapQtAppsHook }:
+{ lib, stdenv, qmake, qtbase, perl, python2, php, kcachegrind, wrapQtAppsHook }:
 
-let
-  name = lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
-
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation {
+  pname = "qcachegrind";
+  version = kcachegrind.version;
 
   src = kcachegrind.src;
 
-  buildInputs = [ qtbase perl python php ];
+  buildInputs = [ qtbase perl python2 php ];
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 

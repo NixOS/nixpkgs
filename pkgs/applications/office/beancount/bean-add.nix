@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation {
-  name = "bean-add-2018-01-08";
+  pname = "bean-add";
+  version = "unstable-2018-01-08";
 
   src = fetchFromGitHub {
     owner = "simon-v";

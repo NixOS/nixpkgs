@@ -1,42 +1,22 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
-, enableRedis ? false
+, enableRedis ? true
 , callPackage
 }:
 
 let
-py = python3.override {
-  packageOverrides = self: super: {
-    frozendict = super.frozendict.overridePythonAttrs (oldAttrs: rec {
-      version = "1.2";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
-      };
-      doCheck = false;
-    });
-  };
-};
-in
-
-with py.pkgs;
-
-let
-  plugins = py.pkgs.callPackage ./plugins { };
+  plugins = python3.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.42.0";
+  version = "1.53.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wJFjjm9apRqjk5eN/kIEgecHgm/XLbtwXHEpM2pmvO8=";
+    sha256 = "0pp9l3191rg9iildknm1s1phi896y7zh7b3a6m16f6bmchmn8jz3";
   };
-
-  patches = [
-    ./0001-setup-add-homeserver-as-console-script.patch
-  ];
 
   buildInputs = [ openssl ];
 
@@ -51,6 +31,7 @@ buildPythonApplication rec {
     jinja2
     jsonschema
     lxml
+    matrix-common
     msgpack
     netaddr
     phonenumbers
@@ -81,13 +62,13 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${py.interpreter} -m twisted.trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
   passthru.plugins = plugins;
   passthru.tools = tools;
-  passthru.python = py;
+  passthru.python = python3;
 
   meta = with lib; {
     homepage = "https://matrix.org";

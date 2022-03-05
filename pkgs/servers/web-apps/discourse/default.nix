@@ -1,21 +1,22 @@
 { stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
 , fetchFromGitHub, bundlerEnv, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
-, redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
+, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
+, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
+, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
+, nodePackages, nodejs-16_x
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.7.7";
+  version = "2.9.0.beta1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-rhcTQyirgPX0ITjgotJAYLLSU957GanxAYYhy9j123U=";
+    sha256 = "sha256-mf2Niyv1H+Zq7RfnV93O1Ul9RdRrtmtAJMBJrb8hp3U=";
   };
 
   runtimeDeps = [
@@ -32,6 +33,7 @@ let
     procps       # For ps and kill
     util-linux   # For renice
     gawk
+    nettools     # For hostname
 
     # Image optimization
     imagemagick
@@ -41,6 +43,7 @@ let
     jpegoptim
     gifsicle
     nodePackages.svgo
+    jhead
   ];
 
   runtimeEnv = {
@@ -108,16 +111,21 @@ let
         gems = import ./rubyEnv/gemset.nix;
       in
         gems // {
+          mini_racer = gems.mini_racer // {
+            buildInputs = [ icu ];
+            dontBuild = false;
+            NIX_LDFLAGS = "-licui18n";
+          };
           libv8-node =
             let
               noopScript = writeShellScript "noop" "exit 0";
               linkFiles = writeShellScript "link-files" ''
                 cd ../..
 
-                mkdir -p vendor/v8/out.gn/libv8/obj/
-                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+                mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
+                ln -s "${nodejs-16_x.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${v8}/include vendor/v8/include
+                ln -s ${nodejs-16_x.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -153,13 +161,9 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    nativeBuildInputs = [
-      rubyEnv.wrappedRuby
+    nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      which
-      brotli
-      procps
       nodePackages.uglify-js
       nodePackages.terser
     ];
@@ -242,9 +246,6 @@ let
       # Add a noninteractive admin creation task
       ./admin_create.patch
 
-      # Disable jhead, which is currently marked as vulnerable
-      ./disable_jhead.patch
-
       # Add the path to the CA cert bundle to make TLS work
       ./action_mailer_ca_cert.patch
 
@@ -256,14 +257,13 @@ let
       # one constructed by bundlerEnv
       ./plugin_gem_api_version.patch
 
-      # Use mv instead of rename, since rename doesn't work across
-      # device boundaries
-      ./use_mv_instead_of_rename.patch
-
       # Change the path to the auto generated plugin assets, which
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
       ./auto_generated_path.patch
+
+      # Make sure the notification email setting applies
+      ./notification_email.patch
     ];
 
     postPatch = ''
@@ -290,7 +290,7 @@ let
       cp -r . $out/share/discourse
       rm -r $out/share/discourse/log
       ln -sf /var/log/discourse $out/share/discourse/log
-      ln -sf /run/discourse/tmp $out/share/discourse/tmp
+      ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
@@ -313,7 +313,11 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse

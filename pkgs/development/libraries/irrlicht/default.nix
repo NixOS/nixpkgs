@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libGLU, libGL, libXrandr, libX11, libXxf86vm }:
+{ lib, stdenv, fetchzip, libGLU, libGL, libXrandr, libX11, libXxf86vm, zlib }:
 
 let
   common = import ./common.nix { inherit fetchzip; };
@@ -12,22 +12,29 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+  '' + lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace source/Irrlicht/Makefile \
+      --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
   '';
 
   preConfigure = ''
     cd source/Irrlicht
   '';
 
-  buildPhase = ''
-    make sharedlib NDEBUG=1 "LDFLAGS=-lX11 -lGL -lXxf86vm"
+  preBuild = ''
+    makeFlagsArray+=(sharedlib NDEBUG=1 LDFLAGS="-lX11 -lGL -lXxf86vm")
   '';
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     sed -i s,/usr/local/lib,$out/lib, Makefile
     mkdir -p $out/lib
   '';
 
-  buildInputs = [ libGLU libGL libXrandr libX11 libXxf86vm ];
+  buildInputs = [
+    libGLU libGL libXrandr libX11 libXxf86vm
+  ] ++ lib.optional stdenv.isAarch64 zlib;
 
   meta = {
     homepage = "http://irrlicht.sourceforge.net/";

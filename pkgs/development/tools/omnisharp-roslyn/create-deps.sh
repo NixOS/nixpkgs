@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p msbuild -p jq -p xmlstarlet -p curl
+#!nix-shell -I nixpkgs=../../../../.. -i bash -p dotnet-sdk_6 jq xmlstarlet curl
 set -euo pipefail
 
 cat << EOL
@@ -18,9 +18,8 @@ mapfile -t repos < <(
         done
     )
 
-msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
+dotnet msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
         -p:RestoreNoCache=true -p:RestoreForce=true \
-        -p:NuGetPackageVersion=5.9.1-rc.8 \
         src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj >&2
 
 cd "$tmpdir"
@@ -49,7 +48,7 @@ do
         sha256=$(nix-prefetch-url "$url" 2>/dev/null)
         cat << EOL
   {
-    name = "$package";
+    pname = "$package";
     version = "$version";
     src = fetchurl {
       url = "$url";

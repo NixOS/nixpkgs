@@ -19,7 +19,7 @@ in {
 
     package = mkOption {
       default = pkgs.rxvt-unicode;
-      defaultText = "pkgs.rxvt-unicode";
+      defaultText = literalExpression "pkgs.rxvt-unicode";
       description = ''
         Package to install. Usually pkgs.rxvt-unicode.
       '';

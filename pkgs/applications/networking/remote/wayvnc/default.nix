@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q48fgh6gf3jicy4bk3kq18h9lhqfq9qz32ri6j9ffvbb8mcw64s";
+    sha256 = "0cws9jfnmxqycmlyllvvqzw4jsbrwwk10v9gy8wifv3c61rwgdkk";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja scdoc wayland-scanner ];

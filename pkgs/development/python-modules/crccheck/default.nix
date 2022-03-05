@@ -3,7 +3,7 @@
 
 let
   pname = "crccheck";
-  version = "1.0";
+  version = "1.1";
 in buildPythonPackage {
   inherit pname version;
 
@@ -11,7 +11,7 @@ in buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ay9lgy80j7lklm07iw2wq7giwnv9fbv50mncblqlc39y322vi0p";
+    sha256 = "45962231cab62b82d05160553eebd9b60ef3ae79dc39527caef52e27f979fa96";
   };
 
   disabled = !isPy3k;

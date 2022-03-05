@@ -11,7 +11,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.shiori;
-        defaultText = "pkgs.shiori";
+        defaultText = literalExpression "pkgs.shiori";
         description = "The Shiori package to use.";
       };
 

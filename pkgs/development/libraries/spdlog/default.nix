@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_8 }:
 
 let
   generic = { version, sha256 }:
@@ -15,7 +15,7 @@ let
 
       nativeBuildInputs = [ cmake ];
       # spdlog <1.3 uses a bundled version of fmt
-      propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt;
+      propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt_8;
 
       cmakeFlags = [
         "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
@@ -36,7 +36,7 @@ let
       '';
 
       doCheck = true;
-      preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
+      preCheck = "export LD_LIBRARY_PATH=$(pwd)\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH";
 
       meta = with lib; {
         description    = "Very fast, header only, C++ logging library";
@@ -49,8 +49,8 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.8.5";
-    sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
+    version = "1.9.2";
+    sha256 = "sha256-GSUdHtvV/97RyDKy8i+ticnSlQCubGGWHg4Oo+YAr8Y=";
   };
 
   spdlog_0 = generic {

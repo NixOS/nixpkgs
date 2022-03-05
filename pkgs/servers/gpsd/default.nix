@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.23";
+  version = "3.23.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UiwjYqfrLXrDfqoVBPEq3tHDc0eah7oGzGeVl0tWe7w=";
+    sha256 = "sha256-C5kc6aRlOMTqRQ96juQo/0T7T41mX93y/+QP4K6abAk=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor

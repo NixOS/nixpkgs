@@ -1,0 +1,10 @@
+--enable-cuvid
+--enable-ffnvcodec
+--enable-nvdec
+--enable-nvenc
+--enable-hwaccel=h264_nvdec
+--enable-hwaccel=hevc_nvdec
+--enable-hwaccel=vp8_nvdec
+--enable-hwaccel=mjpeg_nvdec
+--enable-encoder=h264_nvenc
+--enable-encoder=hevc_nvenc

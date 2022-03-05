@@ -18,7 +18,6 @@
 , httpx
 # Check Inputs
 , pytestCheckHook
-, pytest-runner
 , pytest-asyncio
 , pytest-timeout
 , aiohttp
@@ -31,17 +30,16 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.58.1";
+  version = "0.60.2";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dtKqp7LV1fRjwOMAlmmAnC19j8hLA1oixGextATW6z0=";
+    sha256 = "sha256-GehtjukmSVHffAnDeDwjopgnuycD1CLQRHzLtO1iLsE=";
   };
-
-  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -74,12 +72,13 @@ buildPythonPackage rec {
 
   postConfigure = ''
     substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
+    substituteInPlace setup.py \
       --replace "click-default-group~=1.2.2" "click-default-group" \
       --replace "hupper~=1.9" "hupper" \
       --replace "pint~=0.9" "pint" \
       --replace "pluggy~=0.13.0" "pluggy" \
       --replace "uvicorn~=0.11" "uvicorn" \
-      --replace "PyYAML~=5.3" "PyYAML"
   '';
 
   # takes 30-180 mins to run entire test suite, not worth the CPU resources, slows down reviews
@@ -108,6 +107,6 @@ buildPythonPackage rec {
     description = "Multi-tool for exploring and publishing data";
     homepage = "https://datasette.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

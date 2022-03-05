@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "9.0";
+  version = "9.1";
   disabled = python.pythonOlder "3.6";  # not supported upstream
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "0yihrsg8wj4b82xwg1hbn97my8zqd7xhw7dk7wm2axsyvqd6m3b3";
+    sha256 = "sha256-dEYMPWpa3J9EqtCq3kubdUYJivNRTOKUpNDx3UC1IcQ=";
   };
 
   # The original build system uses cmake which does things like pull
@@ -77,7 +77,8 @@ stdenv.mkDerivation rec {
     (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
   '';
 
-  enableParallelBuilding = true;
+  # protobuf generation is not thread safe
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [
     cmake

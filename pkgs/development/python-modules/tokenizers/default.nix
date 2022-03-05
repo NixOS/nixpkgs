@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , fetchurl
 , buildPythonPackage
 , rustPlatform
 , setuptools-rust
+, libiconv
 , numpy
 , datasets
 , pytestCheckHook
@@ -71,6 +73,10 @@ in buildPythonPackage rec {
     rust.cargo
     rust.rustc
   ]);
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   propagatedBuildInputs = [
     numpy

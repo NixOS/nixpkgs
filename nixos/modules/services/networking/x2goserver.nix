@@ -42,7 +42,6 @@ in {
     nxagentDefaultOptions = mkOption {
       type = types.listOf types.str;
       default = [ "-extension GLX" "-nolisten tcp" ];
-      example = [ "-extension GLX" "-nolisten tcp" ];
       description = ''
         List of default nx agent options.
       '';
@@ -55,12 +54,14 @@ in {
         x2goserver.conf ini configuration as nix attributes. See
         `x2goserver.conf(5)` for details
       '';
-      example = literalExample ''
-        superenicer = {
-          "enable" = "yes";
-          "idle-nice-level" = 19;
-        };
-        telekinesis = { "enable" = "no"; };
+      example = literalExpression ''
+        {
+          superenicer = {
+            "enable" = "yes";
+            "idle-nice-level" = 19;
+          };
+          telekinesis = { "enable" = "no"; };
+        }
       '';
     };
   };

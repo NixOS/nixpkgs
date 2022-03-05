@@ -5,20 +5,36 @@
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
 }:
-python3.pkgs.buildPythonApplication rec {
-  pname = "salt";
-  version = "3003.3";
 
-  src = python3.pkgs.fetchPypi {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      # Incompatible with pyzmq 22
+      pyzmq = super.pyzmq.overridePythonAttrs (oldAttrs: rec {
+        version = "21.0.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
+        };
+      });
+   };
+  };
+in
+py.pkgs.buildPythonApplication rec {
+  pname = "salt";
+  version = "3004";
+
+  src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "pvnIyLXiYA6oYgtKZzcd4XYRvrT42X5LubCzCKN+0eI=";
+    sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     distro
     jinja2
     markupsafe
     msgpack
+    psutil
     pycryptodomex
     pyyaml
     pyzmq

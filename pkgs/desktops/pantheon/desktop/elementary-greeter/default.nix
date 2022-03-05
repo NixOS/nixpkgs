@@ -1,11 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -20,7 +19,6 @@
 , elementary-icon-theme
 , wingpanel-with-indicators
 , elementary-gtk-theme
-, elementary-settings-daemon
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
@@ -32,27 +30,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.0.0";
-
-  repoName = "greeter";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
-    sha256 = "1ny1003bbpdscc4kr2d94zc5vxm30y64dpj3fpd5zz2p2g0cq2h9";
+    sha256 = "sha256-0chBM8JuCYgZXHneiSxSICZwBVm2Vgx+bas9wUjbnyg=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
-  };
+  patches = [
+    ./sysconfdir-install.patch
+    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    (substituteAll {
+      src = ./hardcode-fallback-background.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -68,7 +62,6 @@ stdenv.mkDerivation rec {
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-gtk-theme
     elementary-icon-theme
-    elementary-settings-daemon
     gnome-settings-daemon
     gdk-pixbuf
     granite
@@ -77,7 +70,6 @@ stdenv.mkDerivation rec {
     libhandy
     lightdm
     mutter
-    wingpanel-with-indicators
   ];
 
   mesonFlags = [
@@ -88,27 +80,12 @@ stdenv.mkDerivation rec {
     "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
   ];
 
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/greeter/pull/545
-    (fetchpatch {
-      url = "https://github.com/elementary/greeter/commit/d1373a7db827bc753bfcd70d0c8f25460ea9f1de.patch";
-      sha256 = "0s8l7ycd2s307d3dh1p4vdk33dbzjzqwxs6msyb9w0ycfyxlwdvp";
-    })
-    ./sysconfdir-install.patch
-    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
-    (substituteAll {
-      src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
-  ];
-
   preFixup = ''
     gappsWrapperArgs+=(
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 
-      # for `wingpanel -g`
+      # for `io.elementary.wingpanel -g`
       --prefix PATH : "${wingpanel-with-indicators}/bin"
 
       # for the compositor
@@ -129,11 +106,23 @@ stdenv.mkDerivation rec {
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
+      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+      name = "io.elementary.greeter.desktop";
+    }];
+  };
+
   meta = with lib; {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.greeter";
   };
 }

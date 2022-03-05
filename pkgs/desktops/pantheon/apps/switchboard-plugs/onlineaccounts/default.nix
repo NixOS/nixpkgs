@@ -1,42 +1,30 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
-, libgee
+, evolution-data-server
+, glib
 , granite
 , gtk3
-, libaccounts-glib
 , libgdata
 , libhandy
-, libsignon-glib
-, json-glib
-, librest
-, webkitgtk
-, libsoup
 , sqlite
 , switchboard
-, evolution-data-server
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1lp3i31jzp21n43d1mh4d4i8zgim3q3j4inw4hmyimyql2s83cc3";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-aRh2zbKqcGOH4Qw5gdJw07hod8a/QGWUcJo/2R9erQs=";
   };
 
   nativeBuildInputs = [
@@ -48,23 +36,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     evolution-data-server
+    glib
     granite
     gtk3
-    json-glib
-    libaccounts-glib
     libgdata
-    libgee
     libhandy
-    libsignon-glib
-    libsoup
-    librest
     sqlite # needed for camel-1.2
     switchboard
-    webkitgtk
   ];
 
-  PKG_CONFIG_LIBACCOUNTS_GLIB_PROVIDERFILESDIR = "${placeholder "out"}/share/accounts/providers";
-  PKG_CONFIG_LIBACCOUNTS_GLIB_SERVICEFILESDIR = "${placeholder "out"}/share/accounts/services";
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Online Accounts Plug";
@@ -73,5 +58,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };
-
 }

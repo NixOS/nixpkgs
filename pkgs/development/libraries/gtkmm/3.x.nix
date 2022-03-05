@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config meson ninja python3 ];
-  buildInputs = [ epoxy ];
+  buildInputs = [ libepoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       attrPath = "${pname}3";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

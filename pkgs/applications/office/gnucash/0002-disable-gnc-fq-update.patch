@@ -1,0 +1,18 @@
+diff --git a/libgnucash/quotes/CMakeLists.txt b/libgnucash/quotes/CMakeLists.txt
+index b33569d39..fdbfa10a9 100644
+--- a/libgnucash/quotes/CMakeLists.txt
++++ b/libgnucash/quotes/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ 
+ set(_BIN_FILES "")
+-foreach(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump.in)
++foreach(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-dump.in)
+   string(REPLACE ".in" "" _OUTPUT_FILE_NAME ${file})
+   set(_ABS_OUTPUT_FILE ${BINDIR_BUILD}/${_OUTPUT_FILE_NAME})
+   configure_file( ${file} ${_ABS_OUTPUT_FILE} @ONLY)
+@@ -26,4 +26,4 @@ add_custom_target(quotes-bin ALL DEPENDS ${_BIN_FILES})
+ install(FILES ${_MAN_FILES} DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)
+ install(PROGRAMS ${_BIN_FILES} DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+-set_dist_list(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump.in gnc-fq-helper.in gnc-fq-update.in Quote_example.pl README)
++set_dist_list(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump.in gnc-fq-helper.in Quote_example.pl README)

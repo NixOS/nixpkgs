@@ -1,7 +1,4 @@
 import ./make-test-python.nix ({ pkgs, ... }:
-let
-  redisSocket = "/run/redis/redis.sock";
-in
 {
   name = "redis";
   meta = with pkgs.lib.maintainers; {
@@ -10,35 +7,40 @@ in
 
   nodes = {
     machine =
-      { pkgs, ... }:
+      { pkgs, lib, ... }: with lib;
 
       {
-        services.redis.enable = true;
-        services.redis.unixSocket = redisSocket;
+        services.redis.servers."".enable = true;
+        services.redis.servers."test".enable = true;
 
-        # Allow access to the unix socket for the "redis" group.
-        services.redis.unixSocketPerm = 770;
-
-        users.users."member" = {
+        users.users = listToAttrs (map (suffix: nameValuePair "member${suffix}" {
           createHome = false;
-          description = "A member of the redis group";
+          description = "A member of the redis${suffix} group";
           isNormalUser = true;
-          extraGroups = [
-            "redis"
-          ];
-        };
+          extraGroups = [ "redis${suffix}" ];
+        }) ["" "-test"]);
       };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: let
+    inherit (nodes.machine.config.services) redis;
+    in ''
     start_all()
     machine.wait_for_unit("redis")
+    machine.wait_for_unit("redis-test")
+
+    # The unnamed Redis server still opens a port for backward-compatibility
     machine.wait_for_open_port("6379")
+
+    machine.wait_for_file("${redis.servers."".unixSocket}")
+    machine.wait_for_file("${redis.servers."test".unixSocket}")
 
     # The unix socket is accessible to the redis group
     machine.succeed('su member -c "redis-cli ping | grep PONG"')
+    machine.succeed('su member-test -c "redis-cli ping | grep PONG"')
 
     machine.succeed("redis-cli ping | grep PONG")
-    machine.succeed("redis-cli -s ${redisSocket} ping | grep PONG")
+    machine.succeed("redis-cli -s ${redis.servers."".unixSocket} ping | grep PONG")
+    machine.succeed("redis-cli -s ${redis.servers."test".unixSocket} ping | grep PONG")
   '';
 })

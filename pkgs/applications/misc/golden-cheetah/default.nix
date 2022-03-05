@@ -12,32 +12,40 @@ let
     desktopName = "GoldenCheetah";
     genericName = "GoldenCheetah";
     comment = "Performance software for cyclists, runners and triathletes";
-    categories = "Utility;";
+    categories = [ "Utility" ];
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.6-DEV2107";
+  version = "3.6-DEV2111";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     rev = "v${version}";
-    sha256 = "1d54x3pv27w1ys2f5l7gnfhyijhgcgdjnq1c1mj7hvg35dmh054d";
+    sha256 = "17sk89szvaq31bcv6rgfn1bbw132k7w8zlalfb3ayflavdxbk6sa";
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1 gsl blas
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb-compat-0_1
+    gsl
+    blas
   ];
   nativeBuildInputs = [ flex makeWrapper qmake bison ];
 
   patches = [
     # allow building with bison 3.7
-    # PR at https://github.com/GoldenCheetah/GoldenCheetah/pull/3590
-    (fetchpatch {
-      url = "https://github.com/GoldenCheetah/GoldenCheetah/commit/e1f42f8b3340eb4695ad73be764332e75b7bce90.patch";
-      sha256 = "1h0y9vfji5jngqcpzxna5nnawxs77i1lrj44w8a72j0ah0sznivb";
-    })
+    # Included in https://github.com/GoldenCheetah/GoldenCheetah/pull/3590,
+    # which is periodically rebased but pre 3.6 release, as it'll break other CI systems
+    ./0001-Fix-building-with-bison-3.7.patch
   ];
 
   NIX_LDFLAGS = "-lz -lgsl -lblas";

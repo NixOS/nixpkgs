@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.syncthing;
+  opt = options.services.syncthing;
   defaultUser = "syncthing";
   defaultGroup = defaultUser;
 
@@ -182,7 +183,7 @@ in {
           will be reverted on restart if <link linkend="opt-services.syncthing.overrideDevices">overrideDevices</link>
           is enabled.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "/home/user/sync" = {
               id = "syncme";
@@ -243,7 +244,7 @@ in {
                 There are 4 different types of versioning with different parameters.
                 See <link xlink:href="https://docs.syncthing.net/users/versioning.html"/>.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 [
                   {
                     versioning = {
@@ -430,8 +431,27 @@ in {
         description = ''
           The path where the settings and keys will exist.
         '';
-        default = cfg.dataDir + (optionalString cond "/.config/syncthing");
-        defaultText = literalExample "dataDir${optionalString cond " + \"/.config/syncthing\""}";
+        default = cfg.dataDir + optionalString cond "/.config/syncthing";
+        defaultText = literalDocBook ''
+          <variablelist>
+            <varlistentry>
+              <term><literal>stateVersion >= 19.03</literal></term>
+              <listitem>
+                <programlisting>
+                  config.${opt.dataDir} + "/.config/syncthing"
+                </programlisting>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>otherwise</term>
+              <listitem>
+                <programlisting>
+                  config.${opt.dataDir}
+                </programlisting>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        '';
       };
 
       extraFlags = mkOption {
@@ -448,7 +468,7 @@ in {
         default = false;
         example = true;
         description = ''
-          Whether to open the default ports in the firewall: TCP 22000 for transfers
+          Whether to open the default ports in the firewall: TCP/UDP 22000 for transfers
           and UDP 21027 for discovery.
 
           If multiple users are running Syncthing on this machine, you will need
@@ -461,7 +481,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.syncthing;
-        defaultText = literalExample "pkgs.syncthing";
+        defaultText = literalExpression "pkgs.syncthing";
         description = ''
           The Syncthing package to use.
         '';
@@ -484,7 +504,7 @@ in {
 
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];
-      allowedUDPPorts = [ 21027 ];
+      allowedUDPPorts = [ 21027 22000 ];
     };
 
     systemd.packages = [ pkgs.syncthing ];

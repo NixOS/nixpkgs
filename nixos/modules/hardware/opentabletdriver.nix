@@ -29,7 +29,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.opentabletdriver;
-        defaultText = "pkgs.opentabletdriver";
+        defaultText = literalExpression "pkgs.opentabletdriver";
         description = ''
           OpenTabletDriver derivation to use.
         '';

@@ -34,7 +34,7 @@ let
           in types.attrsOf (types.submodule { options = hiddenOptions; });
           default = {};
           description = "Child entries of the current entry, with recursively the same structure.";
-          example = lib.literalExample ''
+          example = lib.literalExpression ''
             {
                 "cn=schema" = {
                 # The attribute used in the DN must be defined
@@ -127,6 +127,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.openldap;
+        defaultText = literalExpression "pkgs.openldap";
         description = ''
           OpenLDAP package to use.
 
@@ -158,14 +159,14 @@ in {
       settings = mkOption {
         type = ldapAttrsType;
         description = "Configuration for OpenLDAP, in OLC format";
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           {
             attrs.olcLogLevel = [ "stats" ];
             children = {
               "cn=schema".includes = [
-                 "\${pkgs.openldap}/etc/schema/core.ldif"
-                 "\${pkgs.openldap}/etc/schema/cosine.ldif"
-                 "\${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+                 "''${pkgs.openldap}/etc/schema/core.ldif"
+                 "''${pkgs.openldap}/etc/schema/cosine.ldif"
+                 "''${pkgs.openldap}/etc/schema/inetorgperson.ldif"
               ];
               "olcDatabase={-1}frontend" = {
                 attrs = {
@@ -225,7 +226,7 @@ in {
           rebuilt on each server startup, so this will slow down server startup,
           especially with large databases.
         '';
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           {
             "dc=example,dc=org" = '''
               dn= dn: dc=example,dc=org

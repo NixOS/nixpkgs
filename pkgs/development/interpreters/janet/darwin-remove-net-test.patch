@@ -1,0 +1,20 @@
+diff --git a/test/suite0009.janet b/test/suite0009.janet
+index 6095bc60..25360d60 100644
+--- a/test/suite0009.janet
++++ b/test/suite0009.janet
+@@ -174,15 +174,6 @@
+   (defer (:close stream)
+     (check-matching-names stream)))
+ 
+-# Test localname and peername
+-(repeat 20
+-  (with [s (net/server "127.0.0.1" "8000" names-handler)]
+-    (defn test-names []
+-      (with [conn (net/connect "127.0.0.1" "8000")]
+-        (check-matching-names conn)))
+-    (repeat 20 (test-names)))
+-  (gccollect))
+-
+ # Create pipe
+ 
+ (var pipe-counter 0)

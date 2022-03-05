@@ -82,6 +82,17 @@ pkgs$sha256 <- parApply(cl, pkgs, 1, function(p) nixPrefetch(p[1], p[2]))
 nix <- apply(pkgs, 1, function(p) formatPackage(p[1], p[2], p[18], p[4], p[5], p[6]))
 write("done", stderr())
 
+# Mark deleted packages as broken
+setkey(readFormatted, V2)
+markBroken <- function(name) {
+  str <- paste0(readFormatted[name], collapse='"')
+  if(sum(grep("broken = true;", str)))
+    return(str)
+  write(paste("marked", name, "as broken"), stderr())
+  gsub("};$", "broken = true; };", str)
+}
+broken <- lapply(setdiff(readFormatted[[2]], pkgs[[1]]), markBroken)
+
 cat("# This file is generated from generate-r-packages.R. DO NOT EDIT.\n")
 cat("# Execute the following command to update the file.\n")
 cat("#\n")
@@ -95,6 +106,7 @@ if (mirrorType == "cran") { cat("{ snapshot = \"", paste(snapshotDate), "\"; }",
 cat(";\n")
 cat("in with self; {\n")
 cat(paste(nix, collapse="\n"), "\n", sep="")
+cat(paste(broken, collapse="\n"), "\n", sep="")
 cat("}\n")
 
 stopCluster(cl)

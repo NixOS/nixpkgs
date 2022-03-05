@@ -68,12 +68,12 @@ luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
 luuid,,,,,,
-luv,,,,1.30.0-0,,
+luv,,,,1.42.0-0,,
 lyaml,,,,,,lblasc
 markdown,,,,,,
 mediator_lua,,,,,,
 mpack,,,,,,
-moonscript,,,,,,arobyn
+moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,lua5_1,

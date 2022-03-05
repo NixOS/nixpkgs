@@ -67,6 +67,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  aom = {
+    fullName = "Alliance for Open Media Patent License 1.0";
+    url = "https://aomedia.org/license/patent-license/";
+  };
+
   apsl20 = {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
@@ -151,6 +156,11 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+  };
+
+  capec = {
+    fullName = "Common Attack Pattern Enumeration and Classification";
+    url = "https://capec.mitre.org/about/termsofuse.html";
   };
 
   clArtistic = {
@@ -238,6 +248,11 @@ in mkLicense lset) ({
   cecill20 = {
     spdxId = "CECILL-2.0";
     fullName = "CeCILL Free Software License Agreement v2.0";
+  };
+
+  cecill21 = {
+    spdxId = "CECILL-2.1";
+    fullName = "CeCILL Free Software License Agreement v2.1";
   };
 
   cecill-b = {
@@ -450,6 +465,11 @@ in mkLicense lset) ({
     spdxId = "imagemagick";
   };
 
+  imlib2 = {
+    spdxId = "Imlib2";
+    fullName = "Imlib2 License";
+  };
+
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "https://compcert.org/doc/LICENSE.txt";
@@ -575,6 +595,16 @@ in mkLicense lset) ({
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
+  };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
+
+  mitAdvertising = {
+    spdxId = "MIT-advertising";
+    fullName = "Enlightenment License (e16)";
   };
 
   mpl10 = {

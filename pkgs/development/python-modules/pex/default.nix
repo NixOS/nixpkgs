@@ -1,28 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.50";
+  version = "2.1.69";
+  format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c67365b26060452631c0083a0f5d50af3cba9287b84b2c157404c959cb4bb74d";
+    sha256 = "sha256-JbQ8yn/uALjjVSRgqKXsQOC4rOCGkMPxb50KqWg89kM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;
 
+  pythonImportsCheck = [
+    "pex"
+  ];
+
   meta = with lib; {
-    description = "A library and tool for generating .pex (Python EXecutable) files";
+    description = "Python library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
     license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
   };
-
 }

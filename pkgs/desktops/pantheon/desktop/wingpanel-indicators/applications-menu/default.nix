@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , substituteAll
 , meson
 , ninja
@@ -12,7 +12,6 @@
 , libgee
 , gettext
 , gtk3
-, appstream
 , gnome-menus
 , json-glib
 , elementary-dock
@@ -27,25 +26,23 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.8.2";
-
-  repoName = "applications-menu";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "applications-menu";
     rev = version;
-    sha256 = "1pm3dnq35vbvyxqapmfy4frfwhc1l2zh634annlmbjiyfp5mzk0q";
+    sha256 = "sha256-xBuMJzIFOueSvNwvXc85AI9NHuMW3bOblNsyuDkIzyk=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
+    })
+  ];
 
   nativeBuildInputs = [
-    appstream
     gettext
     meson
     ninja
@@ -78,17 +75,16 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      bc = "${bc}/bin/bc";
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg22, gpgme, dbus-glib, libgnome-keyring }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg, gpgme, dbus-glib, libgnome-keyring }:
 
 stdenv.mkDerivation rec {
   pname = "libcryptui";
@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./fix-gnupg-2.2.patch # based on https://gitlab.gnome.org/GNOME/libcryptui/-/commit/b05e301d1b264a5d8f07cb96e5edc243d99bff79.patch
+    # based on https://gitlab.gnome.org/GNOME/libcryptui/-/commit/b05e301d1b264a5d8f07cb96e5edc243d99bff79.patch
+    # https://gitlab.gnome.org/GNOME/libcryptui/-/merge_requests/1
+    ./fix-latest-gnupg.patch
   ];
 
   nativeBuildInputs = [ pkg-config intltool autoreconfHook ];
-  buildInputs = [ glib gtk3 gnupg22 gpgme dbus-glib libgnome-keyring ];
+  buildInputs = [ glib gtk3 gnupg gpgme dbus-glib libgnome-keyring ];
   propagatedBuildInputs = [ dbus-glib ];
 
   enableParallelBuilding = true;

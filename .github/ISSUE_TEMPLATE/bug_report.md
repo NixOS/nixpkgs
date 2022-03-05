@@ -38,11 +38,3 @@ Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
 [user@system:~]$ nix-shell -p nix-info --run "nix-info -m"
 output here
 ```
-
-Maintainer information:
-```yaml
-# a list of nixpkgs attributes affected by the problem
-attribute:
-# a list of nixos modules affected by the problem
-module:
-```

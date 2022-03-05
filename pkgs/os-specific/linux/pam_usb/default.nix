@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkg-config, pmount, pythonPackages, writeScript, runtimeShell }:
+{ lib, stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkg-config, pmount, python2Packages, writeScript, runtimeShell }:
 
 let
 
@@ -29,14 +29,15 @@ let
 
   pmountBin = useSetUID pmount "/bin/pmount";
   pumountBin = useSetUID pmount "/bin/pumount";
-  inherit (pythonPackages) python dbus-python;
+  inherit (python2Packages) python dbus-python;
 in
 
 stdenv.mkDerivation rec {
-  name = "pam_usb-0.5.0";
+  pname = "pam_usb";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pamusb/${name}.tar.gz";
+    url = "mirror://sourceforge/pamusb/pam_usb-${version}.tar.gz";
     sha256 = "1g1w0s9d8mfld8abrn405ll5grv3xgs0b0hsganrz6qafdq9j7q1";
   };
 

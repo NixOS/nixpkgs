@@ -1,20 +1,18 @@
-{ lib, stdenv, fetchFromBitbucket, pkg-config, SDL2, libGLU, libGL, openal, luajit,
-  libdevil, freetype, physfs, libmodplug, mpg123, libvorbis, libogg,
-  libtheora, which, autoconf, automake, libtool
+{ lib, stdenv, fetchFromGitHub, pkg-config
+, SDL2, libGLU, libGL, openal, luajit
+, libdevil, freetype, physfs, libmodplug, mpg123, libvorbis, libogg
+, libtheora, which, autoconf, automake, libtool
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "love";
-  version = "0.10.2";
-in
+  version = "11.4";
 
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-  src = fetchFromBitbucket {
-    owner = "rude";
+  src = fetchFromGitHub {
+    owner = "love2d";
     repo = "love";
     rev = version;
-    sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
+    sha256 = "sha256-C/Ifd0KjmaM5Y2fxBiDNz1GQoT4GeH/vyUCiira57U4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -32,7 +30,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   meta = {
-    homepage = "http://love2d.org";
+    homepage = "https://love2d.org";
     description = "A Lua-based 2D game engine/scripting language";
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;

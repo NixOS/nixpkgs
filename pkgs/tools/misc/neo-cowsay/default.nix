@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "neo-cowsay";
-  version = "1.0.3";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Code-Hex";
     repo = "Neo-cowsay";
     rev = "v${version}";
-    sha256 = "sha256-n01C6Z9nV2DDbSqgbOIZTqZAWXo6h4/NJdyFiOCh79A=";
+    sha256 = "sha256-VswknPs/yCUOUsXoGlGNF22i7dK8FrYzWkUWlfIPrNo=";
   };
 
-  vendorSha256 = "sha256-4qMsyNFD2MclsseE+IAaNm5r0wHWdcwLLPsZ0JJ3qpw=";
+  vendorSha256 = "sha256-kJSKDqw2NpnPjotUM6Ck6sixCJt3nVOdx800/+JBiWM=";
 
   doCheck = false;
 

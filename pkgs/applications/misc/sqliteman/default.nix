@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qt4, qscintilla }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4, qscintilla-qt4 }:
 
 stdenv.mkDerivation rec {
   pname = "sqliteman";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 qscintilla ];
+  buildInputs = [ qt4 qscintilla-qt4 ];
 
   prePatch = ''
     sed -i 's,m_file(0),m_file(QString()),' Sqliteman/sqliteman/main.cpp
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd Sqliteman
-    sed -i 's,/usr/include/Qsci,${qscintilla}/include/Qsci,' cmake/modules/FindQScintilla.cmake
-    sed -i 's,PATHS ''${QT_LIBRARY_DIR},PATHS ${qscintilla}/libs,' cmake/modules/FindQScintilla.cmake
+    sed -i 's,/usr/include/Qsci,${qscintilla-qt4}/include/Qsci,' cmake/modules/FindQScintilla.cmake
+    sed -i 's,PATHS ''${QT_LIBRARY_DIR},PATHS ${qscintilla-qt4}/libs,' cmake/modules/FindQScintilla.cmake
   '';
 
   meta = with lib; {

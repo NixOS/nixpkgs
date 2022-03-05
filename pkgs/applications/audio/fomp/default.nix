@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python2, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "fomp";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ lv2 python2 ];
+  buildInputs = [ lv2 python3 ];
 
   meta = with lib; {
-    homepage = "http://drobilla.net/software/fomp/";
+    homepage = "https://drobilla.net/software/fomp.html";
     description = "An LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
   };

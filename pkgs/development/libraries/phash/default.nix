@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
-    updateWalker = true;
   };
 }

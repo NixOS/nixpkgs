@@ -1,15 +1,21 @@
-{ lib, fetchurl, buildOcaml}:
+{ lib, fetchFromGitHub, buildOcaml, camlp4}:
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";
 
-  name = "type_conv";
+  pname = "type_conv";
   version = "113.00.02";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/type_conv/archive/${version}.tar.gz";
-    sha256 = "1718yl2q8zandrs4xqffkfmssfld1iz62dzcqdm925735c1x01fk";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "type_conv";
+    rev = version;
+    sha256 = "sha256-HzH0hnceCQ2kDRATjl+tfKk3XSBDsGnPzVUGYpDQUmU=";
   };
+
+  strictDeps = true;
+
+  buildInputs = [ camlp4 ];
 
   meta = {
     homepage = "https://github.com/janestreet/type_conv/";

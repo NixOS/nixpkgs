@@ -19,5 +19,12 @@ mkDerivation {
     kpty syntax-highlighting libmtp libssh openexr openslp
     phonon qtsvg samba solid gperf
   ];
+
+  # org.kde.kmtpd5 DBUS service launches kiod5 binary from kio derivation, not from kio-extras
+  postInstall = ''
+    substituteInPlace $out/share/dbus-1/services/org.kde.kmtpd5.service \
+      --replace Exec=$out Exec=${kio}
+  '';
+
   CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 }

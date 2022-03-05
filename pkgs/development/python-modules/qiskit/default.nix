@@ -4,18 +4,31 @@
 , fetchFromGitHub
   # Python Inputs
 , qiskit-aer
-, qiskit-aqua
 , qiskit-ibmq-provider
 , qiskit-ignis
 , qiskit-terra
+  # Optional inputs
+, withOptionalPackages ? true
+, qiskit-finance
+, qiskit-machine-learning
+, qiskit-nature
+, qiskit-optimization
   # Check Inputs
 , pytestCheckHook
 }:
 
+let
+  optionalQiskitPackages = [
+    qiskit-finance
+    qiskit-machine-learning
+    qiskit-nature
+    qiskit-optimization
+  ];
+in
 buildPythonPackage rec {
   pname = "qiskit";
   # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "0.26.2";
+  version = "0.34.2";
 
   disabled = pythonOlder "3.6";
 
@@ -23,22 +36,20 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = "qiskit";
     rev = version;
-    hash = "sha256-QYWKKS7e/uCt5puWV4jA9Emp7M4Cyv2RUCxilbChWhw=";
+    sha256 = "sha256-weL65IQs6vbjJiPJdaizU0ST6u9qDYb0LhTwC6yAdhY=";
   };
 
   propagatedBuildInputs = [
     qiskit-aer
-    qiskit-aqua
     qiskit-ibmq-provider
     qiskit-ignis
     qiskit-terra
-  ];
+  ] ++ lib.optionals withOptionalPackages optionalQiskitPackages;
 
   checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "qiskit"
-    "qiskit.aqua"
     "qiskit.circuit"
     "qiskit.ignis"
     "qiskit.providers.aer"

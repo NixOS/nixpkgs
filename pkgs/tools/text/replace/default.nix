@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  makeFlags = [ "TREE=\$(out)" "MANTREE=\$(TREE)/share/man" ];
+  makeFlags = [
+    "TREE=\$(out)"
+    "MANTREE=\$(TREE)/share/man"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preBuild = ''
     sed -e "s@/bin/mv@$(type -P mv)@" -i replace.h

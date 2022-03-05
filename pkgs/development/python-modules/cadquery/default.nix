@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , toPythonModule
-, isPy3k
 , pythonOlder
 , pythonAtLeast
 , fetchFromGitHub

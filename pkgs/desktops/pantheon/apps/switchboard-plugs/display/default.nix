@@ -1,12 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
+, libhandy
 , granite
 , gtk3
 , switchboard
@@ -14,19 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1dqd34v124y71nnk0l617a53x652m0sb7b58465imr6ppyhx4vsv";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-3sYZCazGnTjIi3Iry5673TMI13sD0GuY+46AK+NJH70=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +35,15 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Displays Plug";

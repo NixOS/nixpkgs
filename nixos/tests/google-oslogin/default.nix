@@ -31,10 +31,10 @@ in {
 
     # mockserver should return a non-expired ssh key for both mockuser and mockadmin
     server.succeed(
-        f'${pkgs.google-compute-engine-oslogin}/bin/google_authorized_keys {MOCKUSER} | grep -q "${snakeOilPublicKey}"'
+        f'${pkgs.google-guest-oslogin}/bin/google_authorized_keys {MOCKUSER} | grep -q "${snakeOilPublicKey}"'
     )
     server.succeed(
-        f'${pkgs.google-compute-engine-oslogin}/bin/google_authorized_keys {MOCKADMIN} | grep -q "${snakeOilPublicKey}"'
+        f'${pkgs.google-guest-oslogin}/bin/google_authorized_keys {MOCKADMIN} | grep -q "${snakeOilPublicKey}"'
     )
 
     # install snakeoil ssh key on the client, and provision .ssh/config file

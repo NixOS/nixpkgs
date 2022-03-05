@@ -1,20 +1,20 @@
 { lib, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
-  jupyter_client, pyzmq }:
+  jupyter-client, pyzmq }:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c287207c7855bb581eae66ef8d990407382d5f9caccb1e0cabf909aaaf10c9b";
+    sha256 = "574ee1bd03f7236b9f9dacae34936a0625cd67ccfe3df11fec69f26889a0b866";
   };
 
   propagatedBuildInputs = [
     cloudpickle
     ipykernel
     wurlitzer
-    jupyter_client
+    jupyter-client
     pyzmq
   ];
 

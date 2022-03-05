@@ -15,7 +15,7 @@
 }:
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 in
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     comment = "Query GUI for mongodb";
     desktopName = "Robo3T";
     genericName = "MongoDB management tool";
-    categories = "Development;IDE;";
+    categories = [ "Development" "IDE" ];
   };
 
   nativeBuildInputs = [ makeWrapper ];

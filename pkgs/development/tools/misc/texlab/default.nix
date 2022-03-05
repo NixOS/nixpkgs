@@ -6,20 +6,21 @@
 , libiconv
 , Security
 , CoreServices
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "3.2.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iXsV7zt190GH0kTMpdmf8xHk4cqtCVwq6LDICmhe5qU=";
+    sha256 = "sha256-SpfX/3uM1y8skN5BqudUtswkCpinrmHWT7ixbgg8QNI=";
   };
 
-  cargoHash = "sha256-Yqn6VpAKw93QvkxuwNcYvrQm0C4TfisRDcmFy95/yw8=";
+  cargoSha256 = "sha256-0YipSDKss8qaINkUw9dW8n0fVKp4FmagI9+9jFyXaLA=";
 
   outputs = [ "out" "man" ];
 
@@ -37,6 +38,10 @@ rustPlatform.buildRustPackage rec {
     rm "$out/lib/libhtml2md${stdenv.hostPlatform.extensions.sharedLibrary}"
     rmdir "$out/lib"
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

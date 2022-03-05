@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deco";
-  version = "0.0.2";
+  version = "unstable-2019-04-03";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
     repo = pname;
-    rev = "49cded5ad123b0169f47cd0dc0f5420f4b581837";
-    sha256 = "19rvqhw0blwga8ck86yy8hj7j1l9hriphlld6yrfd3yip4jprjzz";
+    rev = "dd8ec7905bc85d085eb2ee3bddabea451054288c";
+    sha256 = "sha256-/3GeNvWOCRPOYTUbodXDUxR5QVDEyx6x2Jt5PxsPdvk=";
   };
 
   installPhase = ''

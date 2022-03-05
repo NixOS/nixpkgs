@@ -1,0 +1,31 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 202cda0..bc864cc 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -872,6 +872,7 @@ dependencies = [
+  "tokei",
+  "toml",
+  "yaml-rust",
++ "zstd-sys",
+ ]
+ 
+ [[package]]
+@@ -1678,4 +1679,5 @@ checksum = "2141bed8922b427761470e6bbfeff255da94fa20b0bbeab0d9297fcaf71e3aa7"
+ dependencies = [
+  "cc",
+  "libc",
++ "pkg-config",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index 8e0b5ff..48959b4 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -57,6 +57,8 @@ libc = "0.2.112"
+ [dev-dependencies]
+ more-asserts = "0.2"
+ paste = "1.0.6"
++# Specify that the indirect dependency ztsd-sys should pick up the system zstd C library
++zstd-sys = { version = "1", features = [ "pkg-config" ] }
+ 
+ [features]
+ fail-on-deprecated = []

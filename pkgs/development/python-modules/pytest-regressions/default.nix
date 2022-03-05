@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pythonOlder
 , matplotlib
@@ -16,33 +15,44 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15a71f77cb266dd4ca94331abe4c339ad056b2b2175e47442711c98cf6d65716";
+    sha256 = "sha256-STWtZzbvhQ0NsSvl7jh0CjmYjmtRA/LTUQAAaze5Tg4=";
   };
-
-  patches = [
-    # Make pytest-regressions compatible with NumPy 1.20.
-    # Should be part of the next release.
-    (fetchpatch {
-      url = "https://github.com/ESSS/pytest-regressions/commit/ffad2c7fd1d110f420f4e3ca3d39d90cae18a972.patch";
-      sha256 = "sha256-bUna7MnMV6u9oEaZMsFnr4gE28rz/c0O2+Hyk291+l0=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy pandas pillow pytest-datadir pyyaml ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  checkInputs = [ pytestCheckHook matplotlib ];
-  pythonImportsCheck = [ "pytest_regressions" "pytest_regressions.plugin" ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    pandas
+    pillow
+    pytest-datadir
+    pyyaml
+  ];
+
+
+  checkInputs = [
+    pytestCheckHook
+    matplotlib
+  ];
+
+  pythonImportsCheck = [
+    "pytest_regressions"
+    "pytest_regressions.plugin"
+  ];
 
   meta = with lib; {
     description = "Pytest fixtures to write regression tests";

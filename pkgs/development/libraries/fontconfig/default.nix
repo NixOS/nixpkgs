@@ -1,4 +1,5 @@
 { lib, stdenv
+, fetchpatch
 , substituteAll
 , fetchurl
 , pkg-config
@@ -20,6 +21,14 @@ stdenv.mkDerivation rec {
     url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
     sha256 = "0g004r0bkkqz00mpm3svnnxn7d83158q0yb9ggxryizxfg5m5w55";
   };
+
+  patches = [
+    # Fix font style detection
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/92fbf14b0d7c4737ffe1e8326b7ab8ffae5548c3.patch";
+      sha256 = "1wmyax2151hg3m11q61mv25k45zk2w3xapb4p1r6wzk91zjlsgyr";
+    })
+  ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 

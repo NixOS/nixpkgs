@@ -32,7 +32,6 @@ let
     last
     length
     tail
-    unique
     ;
   inherit (lib.attrsets)
     attrNames
@@ -48,6 +47,7 @@ let
     mergeDefaultOption
     mergeEqualOption
     mergeOneOption
+    mergeUniqueOption
     showFiles
     showOption
     ;
@@ -61,7 +61,11 @@ let
     boolToString
     ;
 
-  inherit (lib.modules) mergeDefinitions;
+  inherit (lib.modules)
+    mergeDefinitions
+    fixupOptionType
+    mergeOptionDecls
+    ;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -162,6 +166,13 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
+    raw = mkOptionType rec {
+      name = "raw";
+      description = "raw value";
+      check = value: true;
+      merge = mergeOneOption;
+    };
+
     anything = mkOptionType {
       name = "anything";
       description = "anything";
@@ -192,6 +203,12 @@ rec {
               else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
+            lambda = loc: defs: arg: anything.merge
+              (loc ++ [ "<function body>" ])
+              (map (def: {
+                file = def.file;
+                value = def.value arg;
+              }) defs);
             # Otherwise fall back to only allowing all equal definitions
           }.${commonType} or mergeEqualOption;
         in mergeFunction loc defs;
@@ -294,6 +311,19 @@ rec {
       inherit (str) merge;
     };
 
+    # Allow a newline character at the end and trim it in the merge function.
+    singleLineStr =
+      let
+        inherit (strMatching "[^\n\r]*\n?") check merge;
+      in
+      mkOptionType {
+        name = "singleLineStr";
+        description = "(optionally newline-terminated) single-line string";
+        inherit check;
+        merge = loc: defs:
+          lib.removeSuffix "\n" (merge loc defs);
+      };
+
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
       description = "string matching the pattern ${pattern}";
@@ -371,7 +401,7 @@ rec {
             ).optionalValue
           ) def.value
         ) defs)));
-      emptyValue = { value = {}; };
+      emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -383,7 +413,7 @@ rec {
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
         description = "non-empty " + list.description;
-        # Note: emptyValue is left as is, because another module may define an element.
+        emptyValue = { }; # no .value attr, meaning unset
       };
 
     attrsOf = elemType: mkOptionType rec {
@@ -451,6 +481,18 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    unique = { message }: type: mkOptionType rec {
+      name = "unique";
+      inherit (type) description check;
+      merge = mergeUniqueOption { inherit message; };
+      emptyValue = type.emptyValue;
+      getSubOptions = type.getSubOptions;
+      getSubModules = type.getSubModules;
+      substSubModules = m: uniq (type.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = type; };
+      nestedTypes.elemType = type;
+    };
+
     # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
@@ -472,7 +514,7 @@ rec {
 
     functionTo = elemType: mkOptionType {
       name = "functionTo";
-      description = "function that evaluates to a(n) ${elemType.name}";
+      description = "function that evaluates to a(n) ${elemType.description}";
       check = isFunction;
       merge = loc: defs:
         fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
@@ -487,6 +529,31 @@ rec {
       modules = toList modules;
     };
 
+    # The type of a type!
+    optionType = mkOptionType {
+      name = "optionType";
+      description = "optionType";
+      check = value: value._type or null == "option-type";
+      merge = loc: defs:
+        let
+          # Prepares the type definitions for mergeOptionDecls, which
+          # annotates submodules types with file locations
+          optionModules = map ({ value, file }:
+            {
+              _file = file;
+              # There's no way to merge types directly from the module system,
+              # but we can cheat a bit by just declaring an option with the type
+              options = lib.mkOption {
+                type = value;
+              };
+            }
+          ) defs;
+          # Merges all the types into a single one, including submodule merging.
+          # This also propagates file information to all submodules
+          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+        in mergedOption.type;
+    };
+
     submoduleWith =
       { modules
       , specialArgs ? {}
@@ -499,17 +566,36 @@ rec {
           then setFunctionArgs (args: unify (value args)) (functionArgs value)
           else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
 
-        allModules = defs: modules ++ imap1 (n: { value, file }:
+        allModules = defs: imap1 (n: { value, file }:
           if isAttrs value || isFunction value then
             # Annotate the value with the location of its definition for better error messages
             coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
           else value
         ) defs;
 
-        freeformType = (evalModules {
-          inherit modules specialArgs;
-          args.name = "‹name›";
-        })._module.freeformType;
+        base = evalModules {
+          inherit specialArgs;
+          modules = [{
+            # This is a work-around for the fact that some sub-modules,
+            # such as the one included in an attribute set, expects an "args"
+            # attribute to be given to the sub-module. As the option
+            # evaluation does not have any specific attribute name yet, we
+            # provide a default for the documentation and the freeform type.
+            #
+            # This is necessary as some option declaration might use the
+            # "name" attribute given as argument of the submodule and use it
+            # as the default of option declarations.
+            #
+            # We use lookalike unicode single angle quotation marks because
+            # of the docbook transformation the options receive. In all uses
+            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+            # would be used, and use of `<` and `>` would break the XML document.
+            # It shouldn't cause an issue since this is cosmetic for the manual.
+            _module.args.name = lib.mkOptionDefault "‹name›";
+          }] ++ modules;
+        };
+
+        freeformType = base._module.freeformType;
 
       in
       mkOptionType rec {
@@ -517,32 +603,13 @@ rec {
         description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
-          (evalModules {
-            modules = allModules defs;
-            inherit specialArgs;
-            args.name = last loc;
+          (base.extendModules {
+            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
           }).config;
         emptyValue = { value = {}; };
-        getSubOptions = prefix: (evalModules
-          { inherit modules prefix specialArgs;
-            # This is a work-around due to the fact that some sub-modules,
-            # such as the one included in an attribute set, expects a "args"
-            # attribute to be given to the sub-module. As the option
-            # evaluation does not have any specific attribute name, we
-            # provide a default one for the documentation.
-            #
-            # This is mandatory as some option declaration might use the
-            # "name" attribute given as argument of the submodule and use it
-            # as the default of option declarations.
-            #
-            # Using lookalike unicode single angle quotation marks because
-            # of the docbook transformation the options receive. In all uses
-            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
-            # would be used, and use of `<` and `>` would break the XML document.
-            # It shouldn't cause an issue since this is cosmetic for the manual.
-            args.name = "‹name›";
-          }).options // optionalAttrs (freeformType != null) {
+        getSubOptions = prefix: (base.extendModules
+          { inherit prefix; }).options // optionalAttrs (freeformType != null) {
             # Expose the sub options of the freeform type. Note that the option
             # discovery doesn't care about the attribute name used here, so this
             # is just to avoid conflicts with potential options from the submodule
@@ -580,6 +647,7 @@ rec {
     # A value from a set of allowed ones.
     enum = values:
       let
+        inherit (lib.lists) unique;
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v

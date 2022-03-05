@@ -26,8 +26,8 @@ let
     };
 
     "2.13" = {
-      version = "2.13.6";
-      sha256 = "Sd+SUDzRHMPGSWg9s2jlh4t+eS5AFW0jd+UjJuk17UM=";
+      version = "2.13.8";
+      sha256 = "LLMdhGnGUYOfDpyDehqwZVDQMXJnUvVJBr4bneATFM8=";
       pname = "scala_2_13";
     };
   };

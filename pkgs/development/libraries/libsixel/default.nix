@@ -1,30 +1,47 @@
-{lib, stdenv, fetchFromGitHub}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, gdk-pixbuf
+, gd
+, libjpeg
+, pkg-config
+}:
 stdenv.mkDerivation rec {
-  version = "1.8.6";
   pname = "libsixel";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
+    owner = "libsixel";
     repo = "libsixel";
     rev = "v${version}";
-    owner = "saitoha";
-    sha256 = "1saxdj6sldv01g6w6yk8vr7px4bl31xca3a82j6v1j3fw5rbfphy";
+    sha256 = "1nny4295ipy4ajcxmmh04c796hcds0y7z7rv3qd17mj70y8j0r2d";
   };
 
-  configureFlags = [
-    "--enable-tests"
+  buildInputs = [
+    gdk-pixbuf gd
+  ];
+
+  nativeBuildInputs = [
+    meson ninja pkg-config
   ];
 
   doCheck = true;
 
+  mesonFlags = [
+    "-Dtests=enabled"
+    # build system seems to be broken here, it still seems to handle jpeg
+    # through some other ways.
+    "-Djpeg=disabled"
+    "-Dpng=disabled"
+  ];
+
   meta = with lib; {
     description = "The SIXEL library for console graphics, and converter programs";
-    homepage = "http://saitoha.github.com/libsixel";
+    homepage = "https://github.com/libsixel/libsixel";
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
-    platforms = with platforms; unix;
-    knownVulnerabilities = [
-      "CVE-2020-11721" # https://github.com/saitoha/libsixel/issues/134
-      "CVE-2020-19668" # https://github.com/saitoha/libsixel/issues/136
-    ];
+    platforms = platforms.unix;
   };
 }

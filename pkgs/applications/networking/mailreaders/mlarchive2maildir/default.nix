@@ -23,6 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/flokli/mlarchive2maildir";
     description = "Imports mail from (pipermail) archives into a maildir";
     license = licenses.mit;
-    maintainers = with maintainers; [ andir flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

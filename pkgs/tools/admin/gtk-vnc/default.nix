@@ -15,6 +15,7 @@
 , vala
 , gettext
 , perl
+, python3
 , gnome
 , gdk-pixbuf
 , zlib
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
-  version = "1.2.0";
+  version = "1.3.0";
 
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jmr6igyzcj2wmx5v5ywaazvdz3hx6a6rys26yb4l4s71l281bvs";
+    sha256 = "X6qlgjuMvowLC6HkVsTnDEsa5mhcn+gaQoLZjPAKIR0=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     vala
     gettext
     perl # for pod2man
+    python3
   ];
 
   buildInputs = [

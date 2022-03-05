@@ -59,6 +59,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     pkg-config

@@ -10,6 +10,8 @@
 mkDerivation {
   pname = "kate";
   meta = {
+    homepage = "https://apps.kde.org/kate/";
+    description = "Advanced text editor";
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };

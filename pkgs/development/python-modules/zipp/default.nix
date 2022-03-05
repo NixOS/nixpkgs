@@ -1,25 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
 , more-itertools
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "zipp";
-  version = "3.5.0";
+  version = "3.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5812b1e007e48cff63449a5e9f4e7ebea716b4111f9c4f9a645f91d579bf0c4";
+    sha256 = "9f50f446828eb9d45b267433fd3e9da8d801f614129124863f9c51ebceafb87d";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ more-itertools ];
+  propagatedBuildInputs = [
+    more-itertools
+  ];
 
   # Prevent infinite recursion with pytest
   doCheck = false;
+
+  pythonImportsCheck = [
+    "zipp"
+  ];
 
   meta = with lib; {
     description = "Pathlib-compatible object wrapper for zip files";

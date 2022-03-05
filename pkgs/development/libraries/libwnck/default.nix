@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "3.36.0";
+  version = "40.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0pwjdhca9lz2n1gf9b60xf0m6ipf9snp8rqf9csj4pgdnd882l5w";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "AxNPoRTvP740B1qoNnj1iqLevp/O9OojwHeeKGAdZhE=";
   };
 
   nativeBuildInputs = [
@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "${pname}${lib.versions.major version}";
-      versionPolicy = "odd-unstable";
     };
   };
 

@@ -21,6 +21,10 @@ in stdenvNoCC.mkDerivation {
   patchPhase = ''
     # Needed since the tests expect that HISTCONTROL is set.
     sed -i '/setup()/a HISTCONTROL=""' test/bash-preexec.bats
+
+    # Skip tests failing with Bats 1.5.0.
+    # See https://github.com/rcaloras/bash-preexec/issues/121
+    sed -i '/^@test.*IFS/,/^}/d' test/bash-preexec.bats
   '';
 
   checkPhase = ''

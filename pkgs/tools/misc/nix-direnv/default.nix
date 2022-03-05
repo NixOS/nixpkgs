@@ -2,23 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , gnugrep
-, nixStable
-, nixUnstable
-, enableFlakes ? false
+, nix
+, enableFlakes ? null # deprecated
 }:
-
-let
-  nix = if enableFlakes then nixUnstable else nixStable;
-in
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    sha256 = "sha256-BKiuYvxgY2P7GK59jul5l0kHNrJtD2jmsMGmX0+09hY=";
+    sha256 = "sha256-vMs4CyMhEy96gWMWXD74rTR1uNjU+y21i0dh6AdaMGE=";
   };
 
   # Substitute instead of wrapping because the resulting file is

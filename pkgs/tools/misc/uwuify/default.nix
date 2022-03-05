@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast text uwuifier";
     homepage = "https://github.com/Daniel-Liu-c0deb0t/uwu";
     license = licenses.mit;
+    platforms = lib.platforms.x86; # uses SSE instructions
     maintainers = with maintainers; [ siraben ];
   };
 }

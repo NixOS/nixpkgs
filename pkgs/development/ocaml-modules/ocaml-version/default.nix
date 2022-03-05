@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "ocaml-version";
-  version = "3.1.0";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://github.com/ocurrent/ocaml-version/releases/download/v${version}/ocaml-version-v${version}.tbz";
-    sha256 = "sha256-rHuhagnY9yISdC85NpgPv667aYx7v2JRgq99ayw83l8=";
+    sha256 = "sha256-2MG+tejY67dxC19DTOZqPsi3UrHk1rqHxP4nRSvbiiU=";
   };
 
   minimumOCamlVersion = "4.07";

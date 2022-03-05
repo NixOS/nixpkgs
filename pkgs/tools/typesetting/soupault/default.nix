@@ -2,7 +2,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "3.1.0";
+  version = "3.2.0";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "dmbaturin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SVNC2DbdciunSKTCmmX0SqaEXMe1DkVX4VJTqriI8Y4=";
+    sha256 = "sha256-T1K/ntCK19LfPmMtaAa9c1JjSL+5dax2SNhM4yUFln4=";
   };
 
   buildInputs = with ocamlPackages; [
@@ -23,6 +23,7 @@ ocamlPackages.buildDunePackage rec {
     lambdasoup
     lua-ml
     logs
+    markup
     odate
     otoml
     re

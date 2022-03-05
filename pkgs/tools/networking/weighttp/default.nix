@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, python, libev, wafHook }:
+{ lib, stdenv, fetchgit, python2, libev, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "weighttp";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wafHook ];
 
-  buildInputs = [ python libev ];
+  buildInputs = [ python2 libev ];
 
   meta = with lib; {
     description = "Lightweight and simple webserver benchmarking tool";

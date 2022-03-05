@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
-, util-linux, open-isns, openssl, kmod, perl, systemd, pkgconf
+, util-linux, open-isns, openssl, kmod, perl, systemd, pkgconf, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     sed -i "s|/sbin/iscsiadm|$out/bin/iscsiadm|" $out/bin/iscsi_fw_login
   '';
+
+  passthru.tests = { inherit (nixosTests) iscsi-root iscsi-multipath-root; };
 
   meta = with lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";

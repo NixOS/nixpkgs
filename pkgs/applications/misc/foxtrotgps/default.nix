@@ -6,8 +6,8 @@ let
   srcs = {
     foxtrot = fetchbzr {
       url = "lp:foxtrotgps";
-      rev = "329";
-      sha256 = "0fwgnsrah63h1xdgm5xdi5ancrz89shdp5sdzw1qc1m7i9a03rid";
+      rev = "331";
+      sha256 = "sha256-/kJv6a3MzAzzwIl98Mqi7jrUJC1kDvouigf9kGtv868=";
     };
     screenshots = fetchbzr {
       url = "lp:foxtrotgps/screenshots";
@@ -17,7 +17,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "foxtrotgps";
-  version = "1.2.2+329";
+  version = "1.2.2+331";
 
   # Pull directly from bzr because gpsd API version 9 is not supported on latest release
   src = srcs.foxtrot;
@@ -39,12 +39,20 @@ in stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
-  cp -R ${srcs.screenshots} $sourceRoot/doc/screenshots
-  chmod -R u+w $sourceRoot/doc/screenshots
+    cp -R ${srcs.screenshots} $sourceRoot/doc/screenshots
+    chmod -R u+w $sourceRoot/doc/screenshots
+  '';
+
+  # Remove when foxtrotgps supports gpsd 3.23.1
+  # Patch for compatibility with gpsd 3.23.1. This was added for foxtrotgps
+  # 1.2.2+331. The command can be removed if the build of a newer version
+  # succeeds without it.
+  postPatch = ''
+    substituteInPlace src/gps_functions.c --replace "STATUS_NO_FIX" "STATUS_UNK"
   '';
 
   preConfigure = ''
-  intltoolize --automake --copy --force
+    intltoolize --automake --copy --force
   '';
 
   meta = with lib; {

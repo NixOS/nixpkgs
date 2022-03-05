@@ -29,6 +29,20 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  bazel = {
+    members = [
+      mboes
+      marsam
+      uri-canva
+      cbley
+      olebedev
+      groodt
+      aherrmann
+      ylecornec
+    ];
+    scope = "Bazel build tool & related tools https://bazel.build/";
+  };
+
   beam = {
     members = [
       ankhers
@@ -36,6 +50,7 @@ with lib.maintainers; {
       DianaOlympos
       gleber
       happysalada
+      minijackson
       yurrriq
     ];
     scope = "Maintain BEAM-related packages and modules.";
@@ -93,7 +108,6 @@ with lib.maintainers; {
       cstrahan
       Frostman
       kalbasit
-      mdlayher
       mic92
       orivej
       rvolosatovs
@@ -137,7 +151,7 @@ with lib.maintainers; {
       cleverca22
       disassembler
       jonringer
-      maveru
+      manveru
       nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";
@@ -145,11 +159,23 @@ with lib.maintainers; {
 
   jitsi = {
     members = [
+      cleeyv
       petabyteboy
       ryantm
       yuka
     ];
     scope = "Maintain Jitsi.";
+  };
+
+  kubernetes = {
+    members = [
+      johanot
+      offline
+      saschagrunert
+      srhb
+      zowoq
+    ];
+    scope = "Maintain the Kubernetes package and module";
   };
 
   kodi = {
@@ -164,6 +190,24 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
+  };
+
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
+  };
+
   matrix = {
     members = [
       ma27
@@ -171,7 +215,6 @@ with lib.maintainers; {
       mguentner
       ekleog
       ralith
-      mjlbach
       dandellion
       sumnerevans
     ];
@@ -180,8 +223,7 @@ with lib.maintainers; {
 
   openstack = {
     members = [
-      angustrau
-      superherointj
+      emilytrau
       SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";
@@ -198,6 +240,7 @@ with lib.maintainers; {
   php = {
     members = [
       aanderse
+      drupol
       etu
       globin
       ma27
@@ -216,6 +259,15 @@ with lib.maintainers; {
     scope = "Maintain Podman and CRI-O related packages and modules.";
   };
 
+  redcodelabs = {
+    members = [
+      unrooted
+      wr0belj
+      wintrmvte
+    ];
+    scope = "Maintain Red Code Labs related packages and modules.";
+  };
+
   sage = {
     members = [
       timokau
@@ -224,6 +276,13 @@ with lib.maintainers; {
       collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
+  };
+
+  sphinx = {
+    members = [
+      SuperSandro2000
+    ];
+    scope = "Maintain Sphinx related packages.";
   };
 
   serokell = {
@@ -241,5 +300,12 @@ with lib.maintainers; {
       mic92
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
+  };
+
+  xfce = {
+    members = [
+      romildo
+    ];
+    scope = "Maintain Xfce desktop environment and related packages.";
   };
 }

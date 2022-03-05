@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An email classification system that automatically sorts messages and fights spam";
-    homepage = "http://getpopfile.org";
+    homepage = "https://getpopfile.org/";
     license = lib.licenses.gpl2;
 
     # Should work on macOS, but havent tested it.

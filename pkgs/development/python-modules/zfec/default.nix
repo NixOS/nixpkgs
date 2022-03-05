@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "zfec";
-  version = "1.5.5";
+  version = "1.5.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6033b2f3cc3edacf3f7eeed5f258c1ebf8a1d7e5e35b623db352512ce564e5ca";
+    sha256 = "sha256-TuUZvg3MfaLohIK8/Av5d6Ql4dfoJ4z1u7uNAPiir7Y=";
   };
 
   propagatedBuildInputs = [ pyutil ];
@@ -23,6 +23,8 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i -e '/argparse/d' setup.py
   '';
+
+  pythonImportsCheck = [ "zfec" ];
 
   meta = with lib; {
     homepage = "https://github.com/tahoe-lafs/zfec";

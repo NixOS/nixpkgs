@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "JMusicBot";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchurl {
     url = "https://github.com/jagrosh/MusicBot/releases/download/${version}/JMusicBot-${version}.jar";
-    sha256 = "sha256-++/ot9k74pkN9Wl7IEjiMIv/q5zklIEdU6uFjam0tmU=";
+    sha256 = "sha256-Hc3dsOADC+jVZScY19OYDkHimntMjdw/BoB3EUS/d0k=";
   };
 
   dontUnpack = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp $src $out/lib/JMusicBot
 
     makeWrapper ${jre}/bin/java $out/bin/JMusicBot \
-      --add-flags "-Xmx1G -Dnogui=true -jar $out/lib/JMusicBot"
+      --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
   '';
 
   meta = with lib; {

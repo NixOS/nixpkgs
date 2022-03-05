@@ -1,6 +1,5 @@
 { lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
 , pycryptodome
-, eth-utils
 }:
 
 buildPythonPackage rec {

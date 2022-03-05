@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl
 , SDL, libogg, libvorbis, smpeg, libmikmod
-, fluidsynth
+, fluidsynth, pkg-config
 , enableNativeMidi ? false
 }:
 
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0alrhqgm40p4c92s26mimg9cm1y7rzr6m0p49687jxd9g6130i0n";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL libogg libvorbis fluidsynth smpeg libmikmod ];
 
   configureFlags = [ "--disable-music-ogg-shared" "--disable-music-mod-shared" ]

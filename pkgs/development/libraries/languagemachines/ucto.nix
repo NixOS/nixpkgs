@@ -5,7 +5,7 @@
 }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-ucto.json);
+  release = lib.importJSON ./release-info/LanguageMachines-ucto.json;
 in
 
 stdenv.mkDerivation {

@@ -1,21 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, libtool, gettext
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gettext
 , which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
 , libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "1685";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
-    rev = "s${version}";
-    sha256 = "1kyvy022sij898g2hm5spy5vq0kw6aqd7fsnawl2xyh06gwh29wg";
+    rev = "v${version}";
+    sha256 = "sha256-7CEL2ddlABM7SYjMVUs3pu0O+2cVsz04slsdUIbgZuM=";
   };
 
-  patches = [ ./0001-Fix-Gettext-Requirement.patch ];
-
-  nativeBuildInputs = [ pkg-config automake autoconf libtool gettext which ];
+  nativeBuildInputs = [ pkg-config gettext which autoreconfHook ];
 
   buildInputs = [
     libX11
@@ -38,12 +36,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = "./autogen.sh";
-
   meta = {
     homepage = "http://joewing.net/projects/jwm/";
     description = "Joe's Window Manager is a light-weight X11 window manager";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };

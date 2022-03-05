@@ -1,21 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, fuse3, fuse, pcre }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, fuse3, pcre }:
 
 stdenv.mkDerivation {
   pname = "rewritefs";
-  version = "2020-02-21";
+  version = "unstable-2021-10-03";
 
   src = fetchFromGitHub {
     owner  = "sloonz";
     repo   = "rewritefs";
-    rev    = "bc241c7f81e626766786b56cf71d32c1a6ad510c";
-    sha256 = "0zj2560hcbg5az0r8apnv0zz9b22i9r9w6rlih0rbrn673xp7q2i";
+    rev    = "3a56de8b5a2d44968b8bc3885c7d661d46367306";
+    sha256 = "1w2rik0lhqm3wr68x51zs45gqfx79l7fi4p0sqznlfq7sz5s8xxn";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  # Note: fuse is needed solely because (unlike fuse3) it exports ulockmgr.h.
-  # This library was removed in fuse 3 to be distributed separately, but
-  # apparently it's not.
-  buildInputs = [ fuse3 fuse pcre ];
+  buildInputs = [ fuse3 pcre ];
 
   prePatch = ''
     # do not set sticky bit in nix store

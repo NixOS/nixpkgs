@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.10";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "1aklicpgwc88578k03i5d5cm5h8mfm7hmx8vfprchbmaa2p8f4z0";
+    sha256 = "sha256-snp9+PlffU9Ay8o42PM8SqyP60hu9nozp457HM+0bM8=";
   };
 
   patches = [
@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export LD=$CC
-  '' # Fixed on master, remove with 2.11
-     + lib.optionalString stdenv.isDarwin ''
-    NIX_CFLAGS_COMPILE+=" -framework Security"
   '';
 
   postInstall = ''

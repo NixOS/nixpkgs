@@ -87,7 +87,7 @@ rec {
   nvim_with_plug = neovim.override {
     extraName = "-with-plug";
     configure.plug.plugins = with pkgs.vimPlugins; [
-      base16-vim
+      (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
     ];
     configure.customRC = ''
       color base16-tomorrow-night
@@ -97,7 +97,7 @@ rec {
 
   run_nvim_with_plug = runTest nvim_with_plug ''
     export HOME=$TMPDIR
-    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit!
+    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
 

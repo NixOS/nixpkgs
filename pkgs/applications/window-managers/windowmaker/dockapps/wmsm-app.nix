@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  preInstall = ''
+  installPhase = ''
     runHook preInstall
     install -d ${placeholder "out"}/bin
     runHook postInstall

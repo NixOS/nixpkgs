@@ -13,15 +13,18 @@ buildDunePackage rec {
     sha256 = "1j7rd7ajrzla76r3sxljx6fb18f4f4s3jd7vhv59l2ilxyxycai2";
   };
 
+  strictDeps = true;
+
   minimumOCamlVersion = "4.03";
 
-  buildInputs = [ pkgs.hidapi pkg-config dune-configurator ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pkgs.hidapi dune-configurator ];
   propagatedBuildInputs = [ bigstring ];
 
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://github.com/vbmithr/ocaml-hidapi;
+    homepage = "https://github.com/vbmithr/ocaml-hidapi";
     description = "Bindings to Signal11's hidapi library";
     license = licenses.isc;
     maintainers = [ maintainers.alexfmpe ];

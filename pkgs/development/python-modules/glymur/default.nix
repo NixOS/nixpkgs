@@ -10,6 +10,7 @@
 , mock
 , importlib-resources
 , isPy27
+, lxml
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     scikitimage
     procps
     pytestCheckHook
+    lxml
   ];
 
   postConfigure = ''

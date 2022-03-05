@@ -1,8 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , gettext
 , fetchurl
+, fetchpatch
 , pkg-config
 , gtk3
 , glib
@@ -10,7 +12,7 @@
 , wrapGAppsHook
 , gnome
 , pantheon
-, libportal
+, libportal-gtk3
 , libxml2
 , libxslt
 , itstool
@@ -39,18 +41,37 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "40.3";
+  version = "41.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "2tE4ufLVXeJxEo/KOLYfU/2YDFh9KeG6a1CP/zsZ9WQ=";
+    sha256 = "ugEmjuVPMY39rC4B66OKP8lpQMHL9kDtJhOuKfi8ua0=";
   };
 
   patches = lib.optionals withPantheon [
+    # Pantheon specific patches for epiphany
     # https://github.com/elementary/browser
-    # FIXME: Update the patches when https://github.com/elementary/browser/pull/41 merged
-    ./dark-style.patch
-    ./navigation-buttons.patch
+    #
+    # Make this respect dark mode settings from Pantheon
+    # https://github.com/elementary/browser/pull/21
+    # https://github.com/elementary/browser/pull/41
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/dark-style.patch";
+      sha256 = "sha256-RzMUc9P51UN3tRFefzRtMniXR9duOOmLj5eu5gL2TEQ=";
+    })
+    # Patch to unlink nav buttons
+    # https://github.com/elementary/browser/pull/18
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/navigation-buttons.patch";
+      sha256 = "sha256-G1/JUjn/8DyO9sgL/5Kq205KbTOs4EMi4Vf3cJ8FHXU=";
+    })
+  ] ++ [
+    # Fix build with latest libportal
+    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1051
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/84474398f6e59266b73170838219aa896729ce93.patch";
+      sha256 = "SeiLTo3FcOxuml5sJX9GqyGdyGf1jm1A76SOI0JJvoo=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -86,7 +107,7 @@ stdenv.mkDerivation rec {
     json-glib
     libdazzle
     libhandy
-    libportal
+    libportal-gtk3
     libnotify
     libarchive
     libsecret
@@ -96,7 +117,9 @@ stdenv.mkDerivation rec {
     p11-kit
     sqlite
     webkitgtk
-  ] ++ lib.optional withPantheon pantheon.granite;
+  ] ++ lib.optionals withPantheon [
+    pantheon.granite
+  ];
 
   # Tests need an X display
   mesonFlags = [

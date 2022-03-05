@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "fxload-2002_04_11";
+stdenv.mkDerivation rec {
+  pname = "fxload";
+  version = "2002.04.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/linux-hotplug/fxload-2002_04_11.tar.gz";
+    url = "mirror://sourceforge/linux-hotplug/fxload-${lib.replaceStrings ["."] ["_"] version}.tar.gz";
     sha256 = "1hql93bp3dxrv1p67nc63xsbqwljyynm997ysldrc3n9ifi6s48m";
   };
 

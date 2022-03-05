@@ -42,8 +42,8 @@ in
     };
     piholePort = mkOption {
       type = types.port;
-      default = "80";
-      example = "443";
+      default = 80;
+      example = 443;
       description = ''
         The port pihole webinterface is reachable on
       '';

@@ -4,30 +4,29 @@
 , mock
 , nose
 , pyjwt
-, pysocks
+, pythonOlder
 , pytz
 , requests
-, six
 }:
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "6.56.0";
+  version = "7.5.0";
+  format = "setuptools";
 
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
     rev = version;
-    sha256 = "sha256-vVJuuPxVyOqnplPYrjCjIm5IyIFZvsCMoDLrrHpHK+4=";
+    sha256 = "0h6r9nz7dcvagrjhzvnirpnjazcy9r64cwlr2bnmlrbjhwdni9rq";
   };
 
   propagatedBuildInputs = [
     pyjwt
-    pysocks
     pytz
     requests
-    six
   ];
 
   checkInputs = [
@@ -35,7 +34,9 @@ buildPythonPackage rec {
     nose
   ];
 
-  pythonImportsCheck = [ "twilio" ];
+  pythonImportsCheck = [
+    "twilio"
+  ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";

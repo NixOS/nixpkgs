@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwise";
-  version = "0.42";
+  version = "0.43";
 
   src = fetchFromGitHub {
     owner = "mellowcandle";
     repo = "bitwise";
     rev = "v${version}";
-    sha256 = "154y0sn3z64z56k84ghsazkyihbkaz40hfwxcxdymnhvhh6m9f3g";
+    sha256 = "18sz7bfpq83s2zhw7c35snz6k3b6rzad2mmfq2qwmyqwypbp1g7l";
   };
 
   buildInputs = [ ncurses readline ];

@@ -8,11 +8,12 @@
 
 buildPythonPackage rec {
   pname = "bitlist";
-  version = "0.4.0";
+  version = "0.6.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IL1tpP/F6O3BvJab6aC6r6PhRgKFpLp9aXmOK1rQXaU=";
+    sha256 = "69cf632ca61b5fb5d2fd7587ddf023bcab8f327302f15070ec9079b68df9082a";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +25,9 @@ buildPythonPackage rec {
     nose
   ];
 
-  pythonImportsCheck = [ "bitlist" ];
+  pythonImportsCheck = [
+    "bitlist"
+  ];
 
   meta = with lib; {
     description = "Python library for working with little-endian list representation of bit strings";

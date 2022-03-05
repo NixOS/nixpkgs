@@ -30,6 +30,9 @@ let
       HaltCommand = "/run/current-system/systemd/bin/systemctl poweroff";
       RebootCommand = "/run/current-system/systemd/bin/systemctl reboot";
       Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
+
+      # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
+      DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
     };
 
     Theme = {
@@ -113,14 +116,12 @@ in
       settings = mkOption {
         type = iniFmt.type;
         default = { };
-        example = ''
-          {
-            Autologin = {
-              User = "john";
-              Session = "plasma.desktop";
-            };
-          }
-        '';
+        example = {
+          Autologin = {
+            User = "john";
+            Session = "plasma.desktop";
+          };
+        };
         description = ''
           Extra settings merged in and overwritting defaults in sddm.conf.
         '';

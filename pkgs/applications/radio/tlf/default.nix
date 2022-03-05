@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkg-config, glib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf, automake, pkg-config, glib
 , perl, ncurses5, hamlib, xmlrpc_c }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,18 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     sha256 = "1xpgs4k27pjd9mianfknknp6mf34365bcp96wrv5xh4dhph573rj";
   };
+
+  patches = [
+    # Pull upstream fix for ncurses-6.3:
+    #   https://github.com/Tlf/tlf/pull/282
+    # We use Debian's patch as upstream fixes don't apply as is due to
+    # related code changes. The change will be a part of 1.4.2 release.
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://salsa.debian.org/debian-hamradio-team/tlf/-/raw/5a2d79fc35bde97f653b1373fd970d41fe01a3ec/debian/patches/warnings-as-errors.patch?inline=false";
+      sha256 = "1zi1dd4vqkgl2pg29lnhj91ralqg58gmkzq9fkcx0dyakbjm6070";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook autoconf automake pkg-config perl ];
   buildInputs = [ glib ncurses5 hamlib xmlrpc_c ];

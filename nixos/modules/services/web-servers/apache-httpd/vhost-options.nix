@@ -1,6 +1,6 @@
 { config, lib, name, ... }:
 let
-  inherit (lib) literalExample mkOption nameValuePair types;
+  inherit (lib) literalExpression mkOption nameValuePair types;
 in
 {
   options = {
@@ -128,9 +128,12 @@ in
     };
 
     acmeRoot = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
+      description = ''
+        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Set to null to inherit from config.security.acme.
+      '';
     };
 
     sslServerCert = mkOption {
@@ -266,7 +269,7 @@ in
     locations = mkOption {
       type = with types; attrsOf (submodule (import ./location-options.nix));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

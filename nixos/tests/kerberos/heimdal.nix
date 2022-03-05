@@ -9,7 +9,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
     };
     krb5 = {
       enable = true;
-      kerberos = pkgs.heimdalFull;
+      kerberos = pkgs.heimdal;
       libdefaults = {
         default_realm = "FOO.BAR";
       };

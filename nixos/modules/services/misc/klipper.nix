@@ -19,6 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.klipper;
+        defaultText = literalExpression "pkgs.klipper";
         description = "The Klipper package.";
       };
 

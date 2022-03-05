@@ -10,6 +10,7 @@
 , procps
 , libwnck
 , libappindicator-gtk3
+, xdg-utils
 }:
 
 let
@@ -64,13 +65,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shutter";
-  version = "0.99";
+  version = "0.99.2";
 
   src = fetchFromGitHub {
     owner = "shutter-project";
     repo = "shutter";
     rev = "v${version}";
-    sha256 = "sha256-n5M+Ggk8ulJQMWjAW+/fC8fbqiBGzsx6IXlYxvf8utA=";
+    sha256 = "sha256-o95skSr6rszh0wsHQTpu1GjqCDmde7aygIP+i4XQW9A=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -81,6 +82,7 @@ stdenv.mkDerivation rec {
     librsvg
     libwnck
     libappindicator-gtk3
+    hicolor-icon-theme
   ] ++ perlModules;
 
   makeFlags = [
@@ -94,9 +96,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --set PERL5LIB ${perlPackages.makePerlPath perlModules} \
-      --prefix PATH : ${lib.makeBinPath [ imagemagick ] } \
-      --suffix XDG_DATA_DIRS : ${hicolor-icon-theme}/share \
-      --set GDK_PIXBUF_MODULE_FILE $GDK_PIXBUF_MODULE_FILE
+      --prefix PATH : ${lib.makeBinPath [ imagemagick xdg-utils ] }
     )
   '';
 

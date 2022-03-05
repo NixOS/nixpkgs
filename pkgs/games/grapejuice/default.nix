@@ -11,17 +11,19 @@
 , xdg-user-dirs
 , wine
 , winetricks
+, pciutils
+, glxinfo
 }:
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
-  version = "3.60.14";
+  version = "4.10.2";
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
-    rev = "8a86aa31444f6afa97e4ab4cc2c651b1243b8349";
-    sha256 = "sha256-2+zG0O5ZW3rA4c83HXWsQ/V72KwHgrynDH0i3rLBWwU=";
+    rev = "9a7cf806d35b4d53b3d3762339eba7d861b5043d";
+    sha256 = "sha256-cKZv9qPCnl7i4kb6PG8RYx3HNLcwgI4d2zkw899MA6E=";
   };
 
   nativeBuildInputs = [
@@ -43,13 +45,14 @@ python3Packages.buildPythonApplication rec  {
     packaging
     psutil
     setuptools
+    unidecode
   ];
 
   dontWrapGApps = true;
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine (winetricks.override { wine = wine; }) ]}"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks pciutils glxinfo ]}"
   ];
 
   postPatch = ''
@@ -84,7 +87,7 @@ python3Packages.buildPythonApplication rec  {
 
   meta = with lib; {
     homepage = "https://gitlab.com/brinkervii/grapejuice";
-    description = "Simple Wine+Roblox management tool";
+    description = "A wine+Roblox management application";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ artturin ];

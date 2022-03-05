@@ -1,13 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
-, elementary-settings-daemon
 , gnome-settings-daemon
 , granite
 , gtk3
@@ -15,6 +14,7 @@
 , dbus
 , polkit
 , switchboard
+, wingpanel-indicator-power
 }:
 
 stdenv.mkDerivation rec {
@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "006h8mrhmdrbd83vhdyahgrfk9wh6j9kjincpp7dz7sl8fsyhmcr";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -43,7 +37,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
-    elementary-settings-daemon
     gnome-settings-daemon
     glib
     granite
@@ -51,7 +44,14 @@ stdenv.mkDerivation rec {
     libgee
     polkit
     switchboard
+    wingpanel-indicator-power # settings schema
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Power Plug";

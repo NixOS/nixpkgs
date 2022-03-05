@@ -7,16 +7,17 @@
 , jinja2
 , python-dotenv
 , werkzeug
+, setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.0.2";
   pname = "Flask";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mcgwq7b4qd99mf5bsvs3wphchxarf8kgil4hwww3blj31xjak0w";
+    sha256 = "7b2fb8e934ddd50731893bdcdb00fc8c0315916f9fcd50d22c7cc1a95ab634e2";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
+
+    # required for CLI subcommand autodiscovery
+    # see: https://github.com/pallets/flask/blob/fdac8a5404e3e3a316568107a293f134707c75bb/src/flask/cli.py#L498
+    setuptools
   ];
 
   checkInputs = [

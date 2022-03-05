@@ -9,11 +9,11 @@
 
 mkDerivation rec {
   pname = "pulseaudio-qt";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${pname}-${lib.versions.majorMinor version}.tar.xz";
-    sha256 = "1i0ql68kxv9jxs24rsd3s7jhjid3f2fq56fj4wbp16zb4wd14099";
+    sha256 = "1i4yb0v1mmhih8c2i61hybg6q60qys3pc5wbjb7a0vwl1mihgsxw";
   };
 
   buildInputs = [

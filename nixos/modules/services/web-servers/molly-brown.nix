@@ -22,8 +22,8 @@ in {
 
     hostName = mkOption {
       type = types.str;
-      example = literalExample "config.networking.hostName";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       description = ''
         The hostname to respond to requests for. Requests for URLs with
         other hosts will result in a status 53 (PROXY REQUEST REFUSED)

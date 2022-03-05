@@ -5,18 +5,29 @@
 , gnome-themes-extra
 , gtk-engine-murrine
 , sassc
-, accentColor ? "default"
+, tweaks ? [ ] # can be "solid" "compact" "black" "primary"
+, withWallpapers ? false
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  validTweaks = [ "solid" "compact" "black" "primary" ];
+  unknownTweaks = lib.subtractLists validTweaks tweaks;
+in
+assert lib.assertMsg (unknownTweaks == [ ]) ''
+  You entered wrong tweaks: ${toString unknownTweaks}
+  Valid tweaks are: ${toString validTweaks}
+'';
+
+stdenvNoCC.mkDerivation
+rec {
   pname = "orchis-theme";
-  version = "2021-06-25";
+  version = "2022-02-18";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-j0nsw1yR1yOckXiIMtzhC3w6kvfzxQQHgwdY6l0OuXw=";
+    sha256 = "sha256-SqptW8DEDCB6LMHalRlf71TWK93gW+blbu6Q1Oommes=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -31,7 +42,11 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    bash install.sh -d $out/share/themes -t ${accentColor}
+    bash install.sh -d $out/share/themes -t all ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks}
+    ${lib.optionalString withWallpapers ''
+      mkdir -p $out/share/backgrounds
+      cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds
+    ''}
     runHook postInstall
   '';
 

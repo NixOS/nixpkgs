@@ -45,6 +45,6 @@ buildGoPackage {
     homepage = "https://github.com/rgburke/grv";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
   };
 }

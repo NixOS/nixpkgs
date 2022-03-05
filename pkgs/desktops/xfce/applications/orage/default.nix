@@ -38,10 +38,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru.updateScript = xfce.updateScript {
+  passthru.updateScript = xfce.archiveUpdater {
+    category = "apps";
     inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister "apps" pname;
   };
 
   meta = with lib; {
@@ -49,5 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.xfce.org/archive/orage/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

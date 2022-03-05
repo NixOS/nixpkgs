@@ -123,7 +123,7 @@ let
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
-          maintainers = with maintainers; [ thoughtpolice ];
+          maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };
 in makeFdb

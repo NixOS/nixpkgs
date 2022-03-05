@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -10,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.4.2";
+  version = "0.4.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c9b07cff59c837d258002ed806ee134ed367ef11042bd7d283d6ce407bf889c";
+    sha256 = "sha256-9pD1qkGKViaMe9vJfWl8ha3QE0xcedRLiirXobhdp4k=";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-portaudio-library-path.patch;
-      portaudio = "${portaudio}/lib/libportaudio.so.2";
+      portaudio = "${portaudio}/lib/libportaudio${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 

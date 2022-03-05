@@ -44,7 +44,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.chrony;
-        defaultText = "pkgs.chrony";
+        defaultText = literalExpression "pkgs.chrony";
         description = ''
           Which chrony package to use.
         '';
@@ -52,6 +52,7 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.

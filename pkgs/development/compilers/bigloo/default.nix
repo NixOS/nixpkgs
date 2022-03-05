@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
-, darwin
+, darwin, libunistring
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
-  buildInputs = lib.optional stdenv.isDarwin
+  buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
-  ;
+    libunistring
+  ];
 
   propagatedBuildInputs = [ gmp ];
 

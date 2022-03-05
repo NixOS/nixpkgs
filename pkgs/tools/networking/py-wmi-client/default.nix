@@ -1,6 +1,6 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python2Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "py-wmi-client";
   version = "unstable-20160601";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1kd12gi1knqv477f1shzqr0h349s5336vzp3fpfp3xl0b502ld8d";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ impacket natsort pyasn1 pycrypto ];
+  propagatedBuildInputs = with python2Packages; [ impacket natsort pyasn1 pycrypto ];
 
   # no tests
   doCheck = false;

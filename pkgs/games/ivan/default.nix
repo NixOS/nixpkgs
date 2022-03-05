@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
 
   pname = "ivan";
-  version = "058";
+  version = "059";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "04jzs8wad2b3g9hvnijr4r89iiw6b1i44zdzkg0dy447lrw6l6xc";
+    sha256 = "sha256-5Ijy28LLx1TGnZE6ZNQXPYfvW2KprF+91fKx2MzLEms=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     icon = "ivan.png";
     desktopName = "IVAN";
     genericName = pname;
-    categories = "Game;AdventureGame;RolePlaying;";
+    categories = [ "Game" "AdventureGame" "RolePlaying" ];
     comment = meta.description;
   };
 
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://attnam.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [freepotion];
+    maintainers = with maintainers; [];
   };
 }

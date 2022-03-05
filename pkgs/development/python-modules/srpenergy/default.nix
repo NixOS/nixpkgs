@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "srpenergy";
-  version = "1.3.2";
+  version = "1.3.6";
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "lamoreauxlab";
     repo = "srpenergy-api-client-python";
     rev = version;
-    sha256 = "03kldjk90mrnzf2hpd7xky0lpph853mjxc34kfa2m5mbpbpkxz9c";
+    hash = "sha256-aZnqGtfklWgigac2gdkQv29Qy5HC34zGGY2iWr2cOMo=";
   };
 
   propagatedBuildInputs = [

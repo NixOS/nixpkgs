@@ -32,7 +32,7 @@ mkOpenModelicaDerivation rec {
     description = "A Modelica connection editor for OpenModelica";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [ balodja smironov ];
     platforms = platforms.linux;
   };
 }

@@ -1,37 +1,32 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
+let
+  srcInfo = lib.importJSON ./src.json;
+in
+
 buildGoModule rec {
   pname = "chroma";
-  version = "0.9.2";
+  version = "0.10.0";
 
+  # To update:
+  # nix-prefetch-git --rev v${version} https://github.com/alecthomas/chroma.git > src.json
   src = fetchFromGitHub {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "19d7yr6q8kwrm91yyglmw9n7wa861sgi6dbwn8sl6dp55czfwvaq";
-    # populate values otherwise taken care of by goreleaser,
-    # unfortunately these require us to use git. By doing
-    # this in postFetch we can delete .git afterwards and
-    # maintain better reproducibility of the src.
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-
-      commit="$(git rev-parse HEAD)"
-      date=$(git show -s --format=%aI "$commit")
-
-      substituteInPlace "$out/cmd/chroma/main.go" \
-        --replace 'version = "?"' 'version = "${version}"' \
-        --replace 'commit  = "?"' "commit = \"$commit\"" \
-        --replace 'date    = "?"' "date = \"$date\""
-
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
+    inherit (srcInfo) sha256;
   };
 
-  vendorSha256 = "0y8mp08zccn9qxrsj9j7vambz8dwzsxbbgrlppzam53rg8rpxhrg";
+  vendorSha256 = "09b718vjd6npg850fr7z6srs2sc5vsr7byzlz5yb5qx0vm3ajxpf";
 
-  subPackages = [ "cmd/chroma" ];
+  modRoot = "./cmd/chroma";
+
+  # substitute version info as done in goreleaser builds
+  ldflags = [
+    "-X" "main.version=${version}"
+    "-X" "main.commit=${srcInfo.rev}"
+    "-X" "main.date=${srcInfo.date}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/alecthomas/chroma";

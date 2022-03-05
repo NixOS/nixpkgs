@@ -13,29 +13,46 @@
 , unshield
 , openal
 , libXt
+, lz4
+, recastnavigation
 }:
 
 let
-  openscenegraph_ = openscenegraph.overrideDerivation (self: {
+  openscenegraph_openmw = (openscenegraph.override { colladaSupport = true; })
+    .overrideDerivation (self: {
+      src = fetchFromGitHub {
+        owner = "OpenMW";
+        repo = "osg";
+        rev = "bbe61c3bc510a4f5bb4aea21cce506519c2d24e6";
+        sha256 = "sha256-t3smLqstp7wWfi9HXJoBCek+3acqt/ySBYF8RJOG6Mo=";
+      };
+    });
+
+  bullet_openmw = bullet.overrideDerivation (old: rec {
+    version = "3.17";
     src = fetchFromGitHub {
-      owner = "OpenMW";
-      repo = "osg";
-      # commit does not exist on any branch on the target repository
-      rev = "1556cd7966ebc1c80b6626988d2b25fb43a744cf";
-      sha256 = "0d74hijzmj82nx3jkv5qmr3pkgvplra0b8fbjx1y3vmzxamb0axd";
+      owner = "bulletphysics";
+      repo = "bullet3";
+      rev = version;
+      sha256 = "sha256-uQ4X8F8nmagbcFh0KexrmnhHIXFSB3A1CCnjPVeHL3Q=";
     };
+    patches = [];
+    cmakeFlags = (old.cmakeFlags or []) ++ [
+      "-DUSE_DOUBLE_PRECISION=ON"
+      "-DBULLET2_MULTITHREADING=ON"
+    ];
   });
 
 in
 mkDerivation rec {
-  version = "0.46.0";
   pname = "openmw";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
     rev = "${pname}-${version}";
-    sha256 = "0rm32zsmxvr6b0jjihfj543skhicbw5kg6shjx312clhlm035w2x";
+    sha256 = "sha256-Xq9hDUTCQr79Zzjk0CsiXclVTHK6nrSowukIQqVdrKY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -43,26 +60,28 @@ mkDerivation rec {
   buildInputs = [
     SDL2
     boost
-    bullet
+    bullet_openmw
     ffmpeg
     libXt
     mygui
     openal
-    openscenegraph_
+    openscenegraph_openmw
     unshield
+    lz4
+    recastnavigation
   ];
 
   cmakeFlags = [
-    "-DDESIRED_QT_VERSION:INT=5"
     # as of 0.46, openmw is broken with GLVND
     "-DOpenGL_GL_PREFERENCE=LEGACY"
+    "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
   ];
 
   meta = with lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
-    homepage = "http://openmw.org";
+    homepage = "https://openmw.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar marius851000 ];
     platforms = platforms.linux;
   };
 }

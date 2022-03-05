@@ -26,13 +26,8 @@ in {
     environment.systemPackages = [ pkgs.sx ];
     services.xserver = {
       exportConfiguration = true;
-      displayManager = {
-        job.execCmd = "";
-        lightdm.enable = mkForce false;
-      };
       logFile = mkDefault null;
     };
-    systemd.services.display-manager.enable = false;
   };
 
   meta.maintainers = with maintainers; [ figsoda ];

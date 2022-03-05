@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , fetchpatch
 , gettext
@@ -8,7 +9,6 @@
 , asciidoc
 , gobject-introspection
 , python3
-, gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 , libxml2
@@ -22,6 +22,7 @@
 , icu
 , libuuid
 , libsoup
+, libsoup_3
 , json-glib
 , systemd
 , dbus
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.1.1";
+  version = "3.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Q3bi6YRUBm9E96JC5FuZs7/kwDtn+rGauw7Vhsp0iuc=";
+    sha256 = "GEfgiznm5h2EhzWqH5f32WwDggFlP6DXy56Bs365wDo=";
   };
 
   patches = [
@@ -45,15 +46,11 @@ stdenv.mkDerivation rec {
       inherit asciidoc;
     })
 
-    # Add missing build target dependencies to fix parallel building of docs.
-    # TODO: Upstream this.
-    ./fix-docs.patch
-
-    # Fix 32bit datetime issue, use this upstream patch until 3.1.2 lands
-    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/401
+    # Filter out hidden (wrapped) subcommands
+    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/481
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker/merge_requests/401.patch";
-      sha256 = "QEf+ciGkkCzanmtGO0aig6nAxd+NxjvuNi4RbNOwZEA=";
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/8c28c24e447f13da8cf804cd7a00f9b909c5d3f9.patch";
+      sha256 = "EYo1nOtEr4semaPC5wk6A7bliRXu8qsBHaltd0DEI6Y=";
     })
   ];
 
@@ -67,13 +64,13 @@ stdenv.mkDerivation rec {
     libxslt
     wrapGAppsNoGuiHook
     gobject-introspection
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkg-config to install dbus service/s
-  ];
+  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
+                    # whether tests are enabled
 
   buildInputs = [
     glib
@@ -81,6 +78,7 @@ stdenv.mkDerivation rec {
     sqlite
     icu
     libsoup
+    libsoup_3
     libuuid
     json-glib
     libstemmer
@@ -88,7 +86,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = with python3.pkgs; [
     pygobject3
-    tappy
   ];
 
   mesonFlags = [
@@ -135,7 +132,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

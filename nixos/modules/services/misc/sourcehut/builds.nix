@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   scfg = cfg.builds;
   rcfg = config.services.redis;
   iniKey = "builds.sr.ht";
@@ -38,6 +39,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/buildsrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/buildsrht"'';
       description = ''
         State path for builds.sr.ht.
       '';
@@ -54,14 +56,14 @@ in
     images = mkOption {
       type = types.attrsOf (types.attrsOf (types.attrsOf types.package));
       default = { };
-      example = lib.literalExample ''(let
+      example = lib.literalExpression ''(let
           # Pinning unstable to allow usage with flakes and limit rebuilds.
           pkgs_unstable = builtins.fetchGit {
               url = "https://github.com/NixOS/nixpkgs";
               rev = "ff96a0fa5635770390b184ae74debea75c3fd534";
               ref = "nixos-unstable";
           };
-          image_from_nixpkgs = pkgs_unstable: (import ("${pkgs.sourcehut.buildsrht}/lib/images/nixos/image.nix") {
+          image_from_nixpkgs = pkgs_unstable: (import ("''${pkgs.sourcehut.buildsrht}/lib/images/nixos/image.nix") {
             pkgs = (import pkgs_unstable {});
           });
         in

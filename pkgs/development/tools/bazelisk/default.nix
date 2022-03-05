@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bazelisk";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MpAYJSDAbyh4aGW+hRrny5+bXZ96cNcUhqJkgY8bdD8=";
+    sha256 = "sha256-9J49+1fI3wmHQqYgdoGgaAuVMA9eG7wrFe7dQEectvI=";
   };
 
-  vendorSha256 = "sha256-5qpeAD4VFsR8iJlRiNTncOdq39lq3MU6gSLu3G/BcPU=";
+  vendorSha256 = "sha256-+zJEB9FyVvxHdwR/dAn56jrMbgVBhlbziVFe2WCQFfE=";
 
   doCheck = false;
 

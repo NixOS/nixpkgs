@@ -7,7 +7,7 @@
 
 trivialBuild {
   pname = "color-theme-solarized";
-  version = "0.0.0+unstable=2017-10-24";
+  version = "0.pre+unstable=2017-10-24";
 
   src = fetchFromGitHub {
     owner = "sellout";

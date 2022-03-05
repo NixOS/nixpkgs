@@ -2,20 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tv";
-  version = "0.5.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "uzimaru0000";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mh/+MX0MZM1fsi9HGTioRRH1DVatmkdyiwAgG/42cVU=";
+    sha256 = "sha256-qODv45smZ6jHCJBaa6EEvFLG+7g+FWrRf6BiHRFLzqM=";
   };
 
-  cargoSha256 = "sha256-8uxW0EIeMPvgffYW55Ov1euoVi8Zz9fZ4F44ktxvj9Q=";
+  cargoSha256 = "sha256-nI4n4KMPLaIF978b5VvW3mb02vKW+r39nllrhukJilI=";
 
   meta = with lib; {
     description = "Format json into table view";
     homepage = "https://github.com/uzimaru0000/tv";
+    changelog = "https://github.com/uzimaru0000/tv/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

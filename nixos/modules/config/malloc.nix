@@ -22,12 +22,28 @@ let
       '';
     };
 
-    scudo = {
-      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-x86_64.so";
+    scudo = let
+      platformMap = {
+        aarch64-linux = "aarch64";
+        x86_64-linux  = "x86_64";
+      };
+
+      systemPlatform = platformMap.${pkgs.stdenv.hostPlatform.system} or (throw "scudo not supported on ${pkgs.stdenv.hostPlatform.system}");
+    in {
+      libPath = "${pkgs.llvmPackages_latest.compiler-rt}/lib/linux/libclang_rt.scudo-${systemPlatform}.so";
       description = ''
         A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
         which aims at providing additional mitigations against heap based
         vulnerabilities, while maintaining good performance.
+      '';
+    };
+
+    mimalloc = {
+      libPath = "${pkgs.mimalloc}/lib/libmimalloc.so";
+      description = ''
+        A compact and fast general purpose allocator, which may
+        optionally be built with mitigations against various heap
+        vulnerabilities.
       '';
     };
   };
@@ -91,7 +107,10 @@ in
       "abstractions/base" = ''
         r /etc/ld-nix.so.preload,
         r ${config.environment.etc."ld-nix.so.preload".source},
-        mr ${providerLibPath},
+        include "${pkgs.apparmorRulesFromClosure {
+            name = "mallocLib";
+            baseRules = ["mr $path/lib/**.so*"];
+          } [ mallocLib ] }"
       '';
     };
   };

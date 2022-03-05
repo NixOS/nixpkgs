@@ -1,16 +1,18 @@
-{ lib, python3, fetchpatch, writeText }:
+{ lib
+, python3
+, pkgsCross
+, avrdude
+, dfu-programmer
+, dfu-util
+, gcc-arm-embedded
+, teensy-loader-cli
+}:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-  setuppy = writeText "setup.py" ''
-    from setuptools import setup
-    setup()
-  '';
-in buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "sha256-2mLuxzxFSMw3sLm+OTcgLcOjAdwvJmNhDsynUaYQ+co=";
   };
@@ -34,10 +36,24 @@ in buildPythonApplication rec {
     milc
     pygments
     pyusb
+  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
+    avrdude
+    dfu-programmer
+    dfu-util
+    teensy-loader-cli
+    gcc-arm-embedded
+    pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.binutils.bintools
+    pkgsCross.avr.buildPackages.gcc8
+    pkgsCross.avr.libcCross
   ];
 
+  # buildPythonApplication requires setup.py; the setup.py file crafted below
+  # acts as a wrapper to setup.cfg
   postConfigure = ''
-    cp ${setuppy} setup.py
+    touch setup.py
+    echo "from setuptools import setup" >> setup.py
+    echo "setup()" >> setup.py
   '';
 
   # no tests implemented
@@ -61,6 +77,6 @@ in buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ];
+    maintainers = with maintainers; [ bhipple babariviere ekleog ];
   };
 }

@@ -16,12 +16,14 @@ let compcert = mkCoqDerivation rec {
 
   defaultVersion =  with versions; switch coq.version [
       { case = range "8.8" "8.11"; out = "3.8"; }
-      { case = range "8.12" "8.13"; out = "3.9"; }
+      { case = isEq "8.12"       ; out = "3.9"; }
+      { case = range "8.12" "8.15"; out = "3.10"; }
     ] null;
 
   release = {
     "3.8".sha256 = "1gzlyxvw64ca12qql3wnq3bidcx9ygsklv9grjma3ib4hvg7vnr7";
     "3.9".sha256 = "1srcz2dqrvmbvv5cl66r34zqkm0hsbryk7gd3i9xx4slahc9zvdb";
+    "3.10".sha256 = "sha256:19rmx8r8v46101ij5myfrz60arqjy7q3ra3fb8mxqqi3c8c4l4j6";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -102,6 +104,20 @@ compcert.overrideAttrs (o:
           (fetchpatch {
             url = "https://github.com/AbsInt/CompCert/commit/48bc183167c4ce01a5c9ea86e49d60530adf7290.patch";
             sha256 = "0j62lppfk26d1brdp3qwll2wi4gvpx1k70qivpvby5f7dpkrkax1";
+          })
+        ];
+      }
+      { cases = [ (range "8.14" "8.15") "3.10" ];
+        out = [
+          # Support for Coq 8.14.1
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/a79f0f99831aa0b0742bf7cce459cc9353bd7cd0.patch";
+            sha256 = "sha256:0g20x8gfzvplpad9y9vr1p33k6qv6rsp691x6687v9ffvz7zsz94";
+          })
+          # Support for Coq 8.15.0
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/a882f78c069f7337dd9f4abff117d4df98ef38a6.patch";
+            sha256 = "sha256:16i87s608fj9ni7cvd5wrd7gicqniad7w78wi26pxdy0pacl7bjg";
           })
         ];
       }

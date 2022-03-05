@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    sha256 = "sha256-B/ga5MpjXoLe5H/JosmrS/Wuj1elzQHPsnz/qOm7Hrg=";
+    sha256 = "sha256-uij5daVHKIfxx+8UTmU/HKSbf/RTRFuO8mCQdsC80qI=";
   };
 
-  vendorSha256 = "sha256-/rhV7JHuqejCTizcjKIkaJlbRcx7AfMcGqQYo6dlg48=";
+  vendorSha256 = "sha256-kI5i1us3Ooh603HOz9Y+HlfPUy/1J8z89/jvKEenpLw=";
 
   nativeBuildInputs = [
     installShellFiles

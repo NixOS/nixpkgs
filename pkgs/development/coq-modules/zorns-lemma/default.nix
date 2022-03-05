@@ -1,9 +1,8 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 with lib;
 
-mkCoqDerivation {
+(mkCoqDerivation {
   pname = "zorns-lemma";
-  repo = "topology";
 
   releaseRev = v: "v${v}";
 
@@ -38,4 +37,4 @@ mkCoqDerivation {
     maintainers = with maintainers; [ siraben ];
     license = licenses.lgpl21Plus;
   };
-}
+}).overrideAttrs({version, ...}: if versions.isGe "9.0" version then { repo =  "topology"; } else {})

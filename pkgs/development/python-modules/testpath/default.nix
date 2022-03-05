@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -16,6 +17,11 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    # Work around https://github.com/jupyter/testpath/issues/24
+    export TMPDIR="/tmp"
+  '';
 
   meta = with lib; {
     description = "Test utilities for code working with files and commands";

@@ -9,7 +9,7 @@ with lib;
   options = {
 
     netboot.storeContents = mkOption {
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
@@ -94,7 +94,9 @@ with lib;
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
-      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams}
+      # Use the cmdline variable to allow the user to specify custom kernel params
+      # when chainloading this script from other iPXE scripts like netboot.xyz
+      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams} ''${cmdline}
       initrd initrd
       boot
     '';

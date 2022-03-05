@@ -1,12 +1,18 @@
-{ stdenv
-, dpkg
-, lib
-, autoPatchelfHook
+{ lib
+, stdenv
 , fetchurl
-, webkitgtk
-, libjack2
+, autoPatchelfHook
+, dpkg
 , alsa-lib
+, freetype
+, libglvnd
 , curl
+, libXcursor
+, libXinerama
+, libXrandr
+, libXrender
+, libjack2
+, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
@@ -18,36 +24,40 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4q2vM0/q7o/FracnO2xxnr27opqfVQoN7fsqTD9Tr/c=";
   };
 
-  buildInputs = [
-    dpkg
-    webkitgtk
-    libjack2
-    alsa-lib
-  ];
-
   nativeBuildInputs = [
     autoPatchelfHook
+    dpkg
   ];
 
-  unpackPhase = ''
-    mkdir -p $TMP/ $out/
-    dpkg -x $src $TMP
-  '';
+  buildInputs = [
+    stdenv.cc.cc.lib
+    alsa-lib
+    freetype
+    libglvnd
+    webkitgtk
+  ] ++ runtimeDependencies;
+
+  runtimeDependencies = map lib.getLib [
+    curl
+    libXcursor
+    libXinerama
+    libXrandr
+    libXrender
+    libjack2
+  ];
+
+  unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
-    cp -R $TMP/usr/* $out/
-    mv $out/bin/ToneLib-Zoom $out/bin/tonelib-zoom
+    mv usr $out
+    substituteInPlace $out/share/applications/ToneLib-Zoom.desktop --replace /usr/ $out/
   '';
-
-  runtimeDependencies = [
-    (lib.getLib curl)
-  ];
 
   meta = with lib; {
     description = "ToneLib Zoom – change and save all the settings in your Zoom(r) guitar pedal";
     homepage = "https://tonelib.net/";
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

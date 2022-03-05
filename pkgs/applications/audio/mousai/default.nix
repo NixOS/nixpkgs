@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, substituteAll
 , appstream-glib
 , desktop-file-utils
 , gettext
@@ -13,12 +14,13 @@
 , meson
 , ninja
 , pkg-config
+, pulseaudio
 , wrapGAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
-  version = "0.4.2";
+  version = "0.6.6";
 
   format = "other";
 
@@ -26,8 +28,15 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    sha256 = "sha256-zH++GGFIz3oxkKOYB4zhY6yL3vENEXxtrv8mZZ+41kU=";
+    sha256 = "sha256-nCbFVFg+nVF8BOBfdzQVgdTRXR5UF18PJFC266yTFwg=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      pactl = "${lib.getBin pulseaudio}/bin/pactl";
+    })
+  ];
 
   postPatch = ''
     patchShebangs build-aux/meson
@@ -53,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     libadwaita
     librsvg
+    pulseaudio
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

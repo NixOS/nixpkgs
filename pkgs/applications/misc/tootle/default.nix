@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -29,6 +30,21 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "NRM7GiJA8c5z9AvXpGXtMl4ZaYN2GauEIbjBmoY4pdo=";
   };
+
+  patches = [
+    # Adhere to GLib.Object naming conventions for properties
+    # https://github.com/bleakgrey/tootle/pull/339
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/tootle/0001-Adhere-to-GLib.Object-naming-conventions-for-propert.patch?id=001bf1ce9695ddb0bbb58b44433d54207c15b0b5";
+      sha256 = "sha256-B62PhMRkU8P3jmnIUq1bYWztLtO2oNcDsXnAYbJGpso=";
+    })
+    # Use reason_phrase instead of get_phrase
+    # https://github.com/bleakgrey/tootle/pull/336
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/tootle/0002-Use-reason_phrase-instead-of-get_phrase.patch?id=001bf1ce9695ddb0bbb58b44433d54207c15b0b5";
+      sha256 = "sha256-rm5NFLeAL2ilXpioywgCR9ppoq+MD0MLyVaBmdzVkqU=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

@@ -1,4 +1,13 @@
-{ fetchFromGitHub, lib, stdenv, cmake, openssl, zlib, libuv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, zlib
+, libuv
+# External poll is required for e.g. mosquitto, but discouraged by the maintainer.
+, withExternalPoll ? false
+}:
 
 let
   generic = { version, sha256 }: stdenv.mkDerivation rec {
@@ -22,7 +31,8 @@ let
       "-DLWS_WITH_SOCKS5=ON"
       # Required since v4.2.0
       "-DLWS_BUILD_HASH=no_hash"
-    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON";
+    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+      ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
 
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
@@ -63,5 +73,10 @@ in {
   libwebsockets_4_2 = generic {
     version = "4.2.1";
     sha256 = "sha256-C+WGfNF4tAgbp/7aRraBgjNOe4I5ihm+8CGelXzfxbU=";
+  };
+
+  libwebsockets_4_3 = generic {
+    version = "4.3.0";
+    sha256 = "13lxb487mqlzbsbv6fbj50r1717mfwdy87ps592lgfy3307yqpr4";
   };
 }

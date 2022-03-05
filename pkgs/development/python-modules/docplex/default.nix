@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.21.207";
+  version = "2.22.213";
 
   # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f1781592be2b093db939772db8c6575a0f017041fb0cfd784bedf4222ac5e58";
+    sha256 = "8a86bba42b5b65f2e0f88ed350115efeb783b444661e2cfcf3a67d5c59bcb0bd";
   };
 
   propagatedBuildInputs = [

@@ -2,25 +2,26 @@
 , buildPythonPackage
 , pythonOlder
 , git
+, gnupg
 , fetchFromGitHub
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "git-revise";
-  version = "0.6.0";
+  version = "0.7.0";
 
   # Missing tests on PyPI
   src = fetchFromGitHub {
     owner = "mystor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03v791yhips9cxz9hr07rhsgxfhwyqq17rzi7ayjhwvy65s4hzs9";
+    sha256 = "sha256-xV1Z9O5FO4Q/XEpNwnX31tbv8CrXY+wF1Ltpfq+ITRg=";
   };
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  checkInputs = [ git pytestCheckHook ];
+  checkInputs = [ git gnupg pytestCheckHook ];
 
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";

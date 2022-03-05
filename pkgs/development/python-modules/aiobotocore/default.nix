@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "1.4.1";
+  version = "2.1.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09f06723d1d69c6d407d9a356ca65ab42a5b7b73a45be4b1ed0ed1a6b6057a9f";
+    sha256 = "sha256-2+mrmXhRwkWLB6hfaCvizPNdZ51d4Pj1cSKfdArXunE=";
   };
 
   # relax version constraints: aiobotocore works with newer botocore versions
   # the pinning used to match some `extras_require` we're not using.
   postPatch = ''
-    substituteInPlace setup.py --replace 'botocore>=1.20.106,<1.20.107' 'botocore'
+    sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
   propagatedBuildInputs = [ wrapt aiohttp aioitertools botocore ];

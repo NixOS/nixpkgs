@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , alsa-lib
 , audiofile
@@ -27,6 +28,16 @@ stdenv.mkDerivation rec {
     url = "https://ecasound.seul.org/download/ecasound-${version}.tar.gz";
     sha256 = "1m7njfjdb7sqf0lhgc4swihgdr4snkg8v02wcly08wb5ar2fr2s6";
   };
+
+  patches = [
+    # Pull patch pending upstream inclusion for ncurses-6.3:
+    #  https://sourceforge.net/p/ecasound/bugs/54/
+    (fetchpatch {
+      name = "ncursdes-6.3.patch";
+      url = "https://sourceforge.net/p/ecasound/bugs/54/attachment/0001-ecasignalview.cpp-always-use-s-style-format-for-prin.patch";
+      sha256 = "1x1gsjzd43lh19mhpmwrbq269h56s8bxgyv0yfi5yf0sqjf9vaq0";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

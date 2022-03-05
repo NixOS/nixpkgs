@@ -4,41 +4,45 @@
 , makeWrapper
 , makeDesktopItem
 , mkYarnPackage
+, fetchYarnDeps
 , electron
 , element-web
+, sqlcipher
 , callPackage
 , Security
 , AppKit
 , CoreServices
-
-, useWayland ? false
+, desktopToDarwinBundle
+, useKeytar ? true
 }:
-# Notes for maintainers:
-# * versions of `element-web` and `element-desktop` should be kept in sync.
-# * the Yarn dependency expression must be updated with `./update-element-desktop.sh <git release tag>`
 
 let
+  pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
-  version = "1.8.5";
+  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
+  keytar = callPackage ./keytar { inherit Security AppKit; };
+  seshat = callPackage ./seshat { inherit CoreServices; };
+in
+mkYarnPackage rec {
+  pname = "element-desktop";
+  inherit (pinData) version;
+  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "sha256-i9PWGEcf+EOn6j++GuYt6xmwYycmW5hE5xhpRMOFBGM=";
+    sha256 = pinData.desktopSrcHash;
   };
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
-in
-mkYarnPackage rec {
-  name = "element-desktop-${version}";
-  inherit version src;
 
   packageJSON = ./element-desktop-package.json;
-  yarnNix = ./element-desktop-yarndeps.nix;
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = pinData.desktopYarnHash;
+  };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
-  seshat = callPackage ./seshat { inherit CoreServices; };
-  keytar = callPackage ./keytar { inherit Security AppKit; };
+  inherit seshat;
 
   buildPhase = ''
     runHook preBuild
@@ -49,12 +53,14 @@ mkYarnPackage rec {
     node ./scripts/copy-res.js
     popd
     rm -rf node_modules/matrix-seshat node_modules/keytar
-    ln -s $keytar node_modules/keytar
+    ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
     ln -s $seshat node_modules/matrix-seshat
     runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # resources
     mkdir -p "$out/share/element"
     ln -s '${element-web}' "$out/share/element/webapp"
@@ -76,8 +82,13 @@ mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
+    # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
+      --add-flags "$out/share/element/electron" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+
+    runHook postInstall
   '';
 
   # Do not attempt generating a tarball for element-web again.
@@ -92,14 +103,27 @@ mkYarnPackage rec {
     name = "element-desktop";
     exec = "${executableName} %u";
     icon = "element";
-    desktopName = "Element (Riot)";
+    desktopName = "Element";
     genericName = "Matrix Client";
     comment = meta.description;
-    categories = "Network;InstantMessaging;Chat;";
-    extraEntries = ''
-      StartupWMClass=element
-      MimeType=x-scheme-handler/element;
-    '';
+    categories = [ "Network" "InstantMessaging" "Chat" ];
+    startupWMClass = "element";
+    mimeTypes = [ "x-scheme-handler/element" ];
+  };
+
+  passthru = {
+    updateScript = ./update.sh;
+
+    # TL;DR: keytar is optional while seshat isn't.
+    #
+    # This prevents building keytar when `useKeytar` is set to `false`, because
+    # if libsecret is unavailable (e.g. set to `null` or fails to build), then
+    # this package wouldn't even considered for building because
+    # "one of the dependencies failed to build",
+    # although the dependency wouldn't even be used.
+    #
+    # It needs to be `passthru` anyways because other packages do depend on it.
+    inherit keytar;
   };
 
   meta = with lib; {

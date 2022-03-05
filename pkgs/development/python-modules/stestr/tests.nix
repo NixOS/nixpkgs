@@ -1,9 +1,5 @@
-{ stdenv
-, buildPythonPackage
-, ddt
-, sqlalchemy
+{  buildPythonPackage
 , stestr
-, subunit2sql
 }:
 
 buildPythonPackage rec {

@@ -56,13 +56,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EZP33U10fchyqy7Jr26vHgUUfWR6xtG3fcMWUII0m9w=";
+    sha256 = "00f1jrclai2b6ys78dpsg6r1mvcyxlna93vxcz8zjyia24c2pjsb";
   };
 
   postPatch = ''
@@ -180,6 +180,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = "https://www.webmproject.org/";
+    changelog   = "https://github.com/webmproject/libvpx/raw/v${version}/CHANGELOG";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

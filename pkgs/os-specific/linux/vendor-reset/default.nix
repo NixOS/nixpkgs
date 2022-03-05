@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, kernel, lib }:
 
 stdenv.mkDerivation rec {
-  name = "vendor-reset-${version}-${kernel.version}";
-  version = "unstable-2021-02-16";
+  pname = "vendor-reset";
+  version = "unstable-2021-02-16-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "gnif";

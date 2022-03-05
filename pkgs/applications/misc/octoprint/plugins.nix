@@ -2,15 +2,17 @@
 
 with pkgs;
 
-self: super: let
+self: super:
+let
   buildPlugin = args: self.buildPythonPackage (args // {
     pname = "OctoPrintPlugin-${args.pname}";
     inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ [ super.octoprint ];
+    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
     # none of the following have tests
     doCheck = false;
   });
-in {
+in
+{
   inherit buildPlugin;
 
   m86motorsoff = buildPlugin rec {
@@ -73,18 +75,18 @@ in {
 
   costestimation = buildPlugin rec {
     pname = "CostEstimation";
-    version = "3.3.0";
+    version = "3.4.0";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "sha256-d7miGMCNJD0siaZb6EnoMZCkKot7vnZjxNZX2TunJcs=";
+      sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
 
     meta = with lib; {
       description = "Plugin to display the estimated print cost for the loaded model.";
-      homepage = "https://github.com/malnvenshorn/OctoPrint-CostEstimation";
+      homepage = "https://github.com/OllisGit/OctoPrint-CostEstimation";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];
     };
@@ -415,6 +417,30 @@ in {
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
       license = licenses.agpl3;
       maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
+  octolapse = buildPlugin rec {
+    pname = "Octolapse";
+    version = "0.4.1";
+
+    src = fetchFromGitHub {
+      owner = "FormerLurker";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "13q20g7brabplc198jh67lk65rn140r8217iak9b2jy3in8fggv4";
+    };
+
+    # Test fails due to code executed on import, see #136513
+    #pythonImportsCheck = [ "octoprint_octolapse" ];
+
+    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six psutil file-read-backwards ];
+
+    meta = with lib; {
+      description = "Stabilized timelapses for Octoprint";
+      homepage = "https://github.com/FormerLurker/OctoLapse";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [ illustris j0hax ];
     };
   };
 

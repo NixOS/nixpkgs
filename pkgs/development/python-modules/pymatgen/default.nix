@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
+, cython
 , enum34
 , glibcLocales
 , matplotlib
@@ -8,9 +9,10 @@
 , palettable
 , pandas
 , plotly
+, pybtex
 , pydispatcher
 , requests
-, ruamel_yaml
+, ruamel-yaml
 , scipy
 , six
 , spglib
@@ -21,14 +23,20 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.0.12";
+  version = "2022.2.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bad712c883a12d774a8a58c35abc5d582c5e5eafdbb5351dc06ebe98c28bd135";
+  # sdist doesn't include c files
+  src = fetchFromGitHub {
+    owner = "materialsproject";
+    repo = "pymatgen";
+    rev= "v${version}";
+    sha256 = "sha256-92Dxmo1Z9LR2caSOftIf1I6jeZmqDe3SqhhoCofWraw=";
   };
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [
+    cython
+    glibcLocales
+  ];
 
   propagatedBuildInputs = [
     enum34
@@ -39,9 +47,10 @@ buildPythonPackage rec {
     palettable
     pandas
     plotly
+    pybtex
     pydispatcher
     requests
-    ruamel_yaml
+    ruamel-yaml
     scipy
     six
     spglib

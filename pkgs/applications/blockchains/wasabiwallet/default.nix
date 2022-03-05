@@ -2,7 +2,7 @@
 , fetchurl
 , makeDesktopItem
 , curl
-, dotnet-netcore
+, dotnetCorePackages
 , fontconfig
 , krb5
 , openssl
@@ -11,9 +11,10 @@
 }:
 
 let
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
   libPath = lib.makeLibraryPath [
     curl
-    dotnet-netcore
+    dotnet-runtime
     fontconfig.lib
     krb5
     openssl
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     desktopName = "Wasabi";
     genericName = "Bitcoin wallet";
     comment = meta.description;
-    categories = "Network;Utility;";
+    categories = [ "Network" "Utility" ];
   };
 
   installPhase = ''

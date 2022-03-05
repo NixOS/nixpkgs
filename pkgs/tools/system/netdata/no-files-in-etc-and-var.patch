@@ -25,10 +25,10 @@ index 03c7f0a94..01985db01 100644
  
  chartsconfigdir=$(libconfigdir)/charts.d
 diff --git a/collectors/ebpf.plugin/Makefile.am b/collectors/ebpf.plugin/Makefile.am
-index 18b1fc6c8..b4b0c7852 100644
+index 2d5f92a6b..8b11c7502 100644
 --- a/collectors/ebpf.plugin/Makefile.am
 +++ b/collectors/ebpf.plugin/Makefile.am
-@@ -13,7 +13,7 @@ SUFFIXES = .in
+@@ -9,7 +9,7 @@ SUFFIXES = .in
  userebpfconfigdir=$(configdir)/ebpf.d
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -36,7 +36,7 @@ index 18b1fc6c8..b4b0c7852 100644
 +no-install-exec-local:
  	$(INSTALL) -d $(DESTDIR)$(userebpfconfigdir)
  
- dist_plugins_SCRIPTS = \
+ dist_noinst_DATA = \
 diff --git a/collectors/node.d.plugin/Makefile.am b/collectors/node.d.plugin/Makefile.am
 index c3142d433..95e324455 100644
 --- a/collectors/node.d.plugin/Makefile.am
@@ -75,7 +75,7 @@ index 71f2d468d..2c9ced2bf 100644
 +no-install-exec-local:
  	$(INSTALL) -d $(DESTDIR)$(userstatsdconfigdir)
 diff --git a/health/Makefile.am b/health/Makefile.am
-index b963ea0cd..6979e69bf 100644
+index 349b86d61..514f1874f 100644
 --- a/health/Makefile.am
 +++ b/health/Makefile.am
 @@ -19,7 +19,7 @@ dist_userhealthconfig_DATA = \
@@ -88,14 +88,26 @@ index b963ea0cd..6979e69bf 100644
  
  healthconfigdir=$(libconfigdir)/health.d
 diff --git a/system/Makefile.am b/system/Makefile.am
-index 5323738c9..06e1b6a73 100644
+index a88ccab65..bda6ee2b6 100644
 --- a/system/Makefile.am
 +++ b/system/Makefile.am
-@@ -20,11 +20,10 @@ include $(top_srcdir)/build/subst.inc
+@@ -3,7 +3,6 @@
+ 
+ MAINTAINERCLEANFILES = $(srcdir)/Makefile.in
+ CLEANFILES = \
+-    edit-config \
+     netdata-openrc \
+     netdata.logrotate \
+     netdata.service \
+@@ -20,15 +19,13 @@ include $(top_srcdir)/build/subst.inc
  SUFFIXES = .in
  
  dist_config_SCRIPTS = \
 -    edit-config \
+     $(NULL)
+ 
+ dist_config_DATA = \
+-    .install-type \
      $(NULL)
  
  # Explicitly install directories to avoid permission issues due to umask

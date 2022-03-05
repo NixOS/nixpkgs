@@ -1,0 +1,13 @@
+diff --git a/plugins/redfish/fu-self-test.c b/plugins/redfish/fu-self-test.c
+index 4710c769..1c68fdb9 100644
+--- a/plugins/redfish/fu-self-test.c
++++ b/plugins/redfish/fu-self-test.c
+@@ -27,7 +27,7 @@ fu_test_is_installed_test(void)
+ 	const gchar *builddir = g_getenv("G_TEST_BUILDDIR");
+ 	if (builddir == NULL)
+ 		return FALSE;
+-	return g_str_has_prefix(builddir, "/usr");
++	return g_str_has_prefix(builddir, "/nix");
+ }
+ 
+ static void

@@ -6,7 +6,7 @@
 # into DocBook files in the from_md folder.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-pushd $DIR
+pushd "$DIR"
 
 # NOTE: Keep in sync with Nixpkgs manual (/doc/Makefile).
 # TODO: Remove raw-attribute when we can get rid of DocBook altogether.
@@ -29,7 +29,7 @@ mapfile -t MD_FILES < <(find . -type f -regex '.*\.md$')
 
 for mf in ${MD_FILES[*]}; do
   if [ "${mf: -11}" == ".section.md" ]; then
-    mkdir -p $(dirname "$OUT/$mf")
+    mkdir -p "$(dirname "$OUT/$mf")"
     OUTFILE="$OUT/${mf%".section.md"}.section.xml"
     pandoc "$mf" "${pandoc_flags[@]}" \
       -o "$OUTFILE"
@@ -37,7 +37,7 @@ for mf in ${MD_FILES[*]}; do
   fi
 
   if [ "${mf: -11}" == ".chapter.md" ]; then
-    mkdir -p $(dirname "$OUT/$mf")
+    mkdir -p "$(dirname "$OUT/$mf")"
     OUTFILE="$OUT/${mf%".chapter.md"}.chapter.xml"
     pandoc "$mf" "${pandoc_flags[@]}" \
       --top-level-division=chapter \

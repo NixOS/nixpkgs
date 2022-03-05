@@ -16,9 +16,8 @@ in
       type = types.str;
       default = optionalString config.fonts.fontDir.enable
         "/run/current-system/sw/share/X11/fonts";
-      defaultText = literalExample ''
-        optionalString config.fonts.fontDir.enable
-          "/run/current-system/sw/share/X11/fonts";
+      defaultText = literalExpression ''
+        optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
       '';
       description = ''
         Default font path. Setting this option causes Xwayland to be rebuilt.
@@ -30,10 +29,10 @@ in
       default = pkgs.xwayland.override (oldArgs: {
         inherit (cfg) defaultFontPath;
       });
-      defaultText = literalExample ''
+      defaultText = literalExpression ''
         pkgs.xwayland.override (oldArgs: {
           inherit (config.programs.xwayland) defaultFontPath;
-        });
+        })
       '';
       description = "The Xwayland package to use.";
     };

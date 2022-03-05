@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, sqlite }:
 
 stdenv.mkDerivation rec {
-  baseName = "sql3";
+  pname = "pure-sql3";
   version = "0.5";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-sql3-${version}.tar.gz";
     sha256 = "b9f79dd443c8ffc5cede51e2af617f24726f5c0409aab4948c9847e6adb53c37";
   };
 

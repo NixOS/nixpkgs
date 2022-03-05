@@ -3,10 +3,12 @@
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
+, isort
 , jinja2
 , md-toc
-, isort
 , mdformat
+, newversion
+, poetry-core
 , pyparsing
 , pytestCheckHook
 , pythonOlder
@@ -14,15 +16,21 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "4.14.1";
-  disabled = pythonOlder "3.6";
+  version = "7.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "vemel";
     repo = "mypy_boto3_builder";
     rev = version;
-    sha256 = "sha256-y55bPi70ldd528Olr2atXHm5JHiLNBZ396D9qwbBmkc=";
+    hash = "sha256-X/dPO2p6GmnyJwcVPOmyo9zYda2uYfBAkuKTeX0Bt0Q=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     black
@@ -31,6 +39,7 @@ buildPythonPackage rec {
     jinja2
     md-toc
     mdformat
+    newversion
     pyparsing
   ];
 
@@ -38,7 +47,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "mypy_boto3_builder" ];
+  pythonImportsCheck = [
+    "mypy_boto3_builder"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "TestBotocoreChangelogChangelog"
+  ];
 
   meta = with lib; {
     description = "Type annotations builder for boto3";

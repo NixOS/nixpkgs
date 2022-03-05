@@ -42,6 +42,5 @@ buildGoModule rec {
     description = "Ran is a simple web server for serving static files";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
-    platforms = platforms.unix;
   };
 }

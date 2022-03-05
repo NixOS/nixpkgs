@@ -18,8 +18,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.haskellPackages.arbtt;
-        defaultText = "pkgs.haskellPackages.arbtt";
-        example = literalExample "pkgs.haskellPackages.arbtt";
+        defaultText = literalExpression "pkgs.haskellPackages.arbtt";
         description = ''
           The package to use for the arbtt binaries.
         '';

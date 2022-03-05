@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "PyMsgBox";
-  version = "1.0.6";
+  version = "1.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kmd00w7p6maiyqpqqb2j8m6v2gh9c0h5i198pa02bc1c1m1321q";
-    extension = "zip";
+    sha256 = "sha256-IZQifei/96PW2lQYSHBaFV3LsqBu4SDZ8oCh1/USY/8=";
   };
 
   propagatedBuildInputs = [ tkinter ];
 
   # Finding tests fails
   doCheck = false;
+  pythonImportsCheck = [ "pymsgbox" ];
 
   meta = with lib; {
     description = "A simple, cross-platform, pure Python module for JavaScript-like message boxes";

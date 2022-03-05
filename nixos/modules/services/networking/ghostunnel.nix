@@ -5,7 +5,7 @@ let
     concatMap
     concatStringsSep
     escapeShellArg
-    literalExample
+    literalExpression
     mapAttrs'
     mkDefault
     mkEnableOption
@@ -219,7 +219,7 @@ in
       description = "The ghostunnel package to use.";
       type = types.package;
       default = pkgs.ghostunnel;
-      defaultText = literalExample ''pkgs.ghostunnel'';
+      defaultText = literalExpression "pkgs.ghostunnel";
     };
 
     services.ghostunnel.servers = mkOption {

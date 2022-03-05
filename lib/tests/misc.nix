@@ -246,6 +246,11 @@ runTests {
     };
   };
 
+  testEscapeXML = {
+    expr = escapeXML ''"test" 'test' < & >'';
+    expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
+  };
+
 # LISTS
 
   testFilter = {
@@ -491,7 +496,7 @@ runTests {
 
   testToPretty =
     let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = builtins.currentSystem; };
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
     in {
     expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
       int = 42;
@@ -528,6 +533,25 @@ runTests {
       drv = "<derivation ${deriv.drvPath}>";
     };
   };
+
+  testToPrettyLimit =
+    let
+      a.b = 1;
+      a.c = a;
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { throwOnDepthLimit = false; depthLimit = 2; } a);
+      expected = "{\n  b = 1;\n  c = {\n    b = \"<unevaluated>\";\n    c = {\n      b = \"<unevaluated>\";\n      c = \"<unevaluated>\";\n    };\n  };\n}";
+    };
+
+  testToPrettyLimitThrow =
+    let
+      a.b = 1;
+      a.c = a;
+    in {
+      expr = (builtins.tryEval
+        (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
+      expected = false;
+    };
 
   testToPrettyMultiline = {
     expr = mapAttrs (const (generators.toPretty { })) rec {

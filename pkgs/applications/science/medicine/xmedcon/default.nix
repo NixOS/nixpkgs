@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmedcon";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchurl {
-    url = "https://prdownloads.sourceforge.net/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0yfnbrcil5i76z1wbg308pb1mnjbcxy6nih46qpqs038v1lhh4q8";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0svff8rc3j2p47snaq1hx9mv4ydmxawpb0hf3d165g1ccjwvmm6m";
   };
 
   buildInputs = [
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xmedcon.sourceforge.io/Main/HomePage";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ arianvp flokli ];
-    platforms = with platforms; [ darwin linux ];
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }

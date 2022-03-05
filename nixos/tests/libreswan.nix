@@ -120,7 +120,7 @@ in
           alice.succeed("ipsec verify 1>&2")
 
       with subtest("Alice and Bob can start the tunnel"):
-          alice.execute("ipsec auto --start tunnel &")
+          alice.execute("ipsec auto --start tunnel >&2 &")
           bob.succeed("ipsec auto --start tunnel")
           # apparently this is needed to "wake" the tunnel
           bob.execute("ping -c1 alice")

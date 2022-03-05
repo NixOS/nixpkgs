@@ -1,11 +1,18 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.ntopng;
-  redisCfg = config.services.redis;
+  opt = options.services.ntopng;
+
+  createRedis = cfg.redis.createInstance != null;
+  redisService =
+    if cfg.redis.createInstance == "" then
+      "redis.service"
+    else
+      "redis-${cfg.redis.createInstance}.service";
 
   configFile = if cfg.configText != "" then
     pkgs.writeText "ntopng.conf" ''
@@ -14,14 +21,20 @@ let
     else
     pkgs.writeText "ntopng.conf" ''
       ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
-      --http-port=${toString cfg.http-port}
-      --redis=localhost:${toString redisCfg.port}
+      --http-port=${toString cfg.httpPort}
+      --redis=${cfg.redis.address}
+      --data-dir=/var/lib/ntopng
+      --user=ntopng
       ${cfg.extraConfig}
     '';
 
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "ntopng" "http-port" ] [ "services" "ntopng" "httpPort" ])
+  ];
 
   options = {
 
@@ -35,8 +48,8 @@ in
           collection tool.
 
           With the default configuration, ntopng monitors all network
-          interfaces and displays its findings at http://localhost:${toString
-          cfg.http-port}. Default username and password is admin/admin.
+          interfaces and displays its findings at http://localhost:''${toString
+          config.${opt.http-port}}. Default username and password is admin/admin.
 
           See the ntopng(8) manual page and http://www.ntop.org/products/ntop/
           for more info.
@@ -55,11 +68,29 @@ in
         '';
       };
 
-      http-port = mkOption {
+      httpPort = mkOption {
         default = 3000;
         type = types.int;
         description = ''
           Sets the HTTP port of the embedded web server.
+        '';
+      };
+
+      redis.address = mkOption {
+        type = types.str;
+        example = literalExpression "config.services.redis.ntopng.unixSocket";
+        description = ''
+          Redis address - may be a Unix socket or a network host and port.
+        '';
+      };
+
+      redis.createInstance = mkOption {
+        type = types.nullOr types.str;
+        default = if versionAtLeast config.system.stateVersion "22.05" then "ntopng" else "";
+        description = ''
+          Local Redis instance name. Set to <literal>null</literal> to disable
+          local Redis instance. Defaults to <literal>""</literal> for
+          <literal>system.stateVersion</literal> older than 22.05.
         '';
       };
 
@@ -94,23 +125,36 @@ in
   config = mkIf cfg.enable {
 
     # ntopng uses redis for data storage
-    services.redis.enable = true;
+    services.ntopng.redis.address =
+      mkIf createRedis config.services.redis.servers.${cfg.redis.createInstance}.unixSocket;
+
+    services.redis.servers = mkIf createRedis {
+      ${cfg.redis.createInstance} = {
+        enable = true;
+        user = mkIf (cfg.redis.createInstance == "ntopng") "ntopng";
+      };
+    };
 
     # nice to have manual page and ntopng command in PATH
     environment.systemPackages = [ pkgs.ntopng ];
 
+    systemd.tmpfiles.rules = [ "d /var/lib/ntopng 0700 ntopng ntopng -" ];
+
     systemd.services.ntopng = {
       description = "Ntopng Network Monitor";
-      requires = [ "redis.service" ];
-      after = [ "network.target" "redis.service" ];
+      requires = optional createRedis redisService;
+      after = [ "network.target" ] ++ optional createRedis redisService;
       wantedBy = [ "multi-user.target" ];
-      preStart = "mkdir -p /var/lib/ntopng/";
       serviceConfig.ExecStart = "${pkgs.ntopng}/bin/ntopng ${configFile}";
       unitConfig.Documentation = "man:ntopng(8)";
     };
 
-    # ntopng drops priveleges to user "nobody" and that user is already defined
-    # in users-groups.nix.
+    users.extraUsers.ntopng = {
+      group = "ntopng";
+      isSystemUser = true;
+    };
+
+    users.extraGroups.ntopng = { };
   };
 
 }

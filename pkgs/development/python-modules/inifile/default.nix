@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "inifile";
-  version = "0.3";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zgd53czc1irwx6b5zip8xlmyfr40hz2pd498d8yv61znj6lm16h";
+    sha256 = "d9e5eb4708ebf13353c4cfce798ad47890a8bcc5fbae04630223d15d79f55e96";
   };
 
   meta = with lib; {

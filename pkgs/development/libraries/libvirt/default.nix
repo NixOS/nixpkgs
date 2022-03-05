@@ -22,7 +22,6 @@
 , gettext
 , libtasn1
 , iptables
-, ebtables
 , libgcrypt
 , yajl
 , pmutils
@@ -61,6 +60,8 @@
 , ceph
 , enableGlusterfs ? false
 , glusterfs
+, Carbon
+, AppKit
 }:
 
 with lib;
@@ -68,39 +69,27 @@ with lib;
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
   buildFromTarball = stdenv.isDarwin;
-  # libvirt hardcodes the binary name 'ebtables', but in nixpkgs the ebtables
-  # binary we want to use is named 'ebtables-legacy'.
-  # Create a derivation to alias the binary name so that libvirt can find the right one, and use that below.
-  ebtables-compat = stdenv.mkDerivation {
-    pname = "ebtables-compat";
-    version = ebtables.version;
-    src = null;
-    buildInputs = [ ebtables ];
-    buildCommand = ''
-      mkdir -p $out/bin
-      ln -sf ${ebtables}/bin/ebtables-legacy $out/bin/ebtables
-    '';
-  };
 in
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.7.0";
+  version = "7.10.0";
 
   src =
     if buildFromTarball then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "1cjj48dn4ww13ayicd2g863a5kz0sc5jlbv2991bj54dq6cn0q8v";
+          sha256 = "sha256-yzGAFK8JcyeSjG49cpIuO+AqPmQBJHsqpS2auOC0gPk=";
         }
     else
-      fetchFromGitLab {
-        owner = pname;
-        repo = pname;
-        rev = "v${version}";
-        sha256 = "sha256-gv/tORDlzZP3L3YcU6/YPEpqHQSLzEWa6kEX8EzZM28=";
-        fetchSubmodules = true;
-      };
+      fetchFromGitLab
+        {
+          owner = pname;
+          repo = pname;
+          rev = "v${version}";
+          sha256 = "sha256-bB8LsjZFeJbMmmC0YRPyMag2MBhwagUFC7aB1KhZEkA=";
+          fetchSubmodules = true;
+        };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
@@ -165,6 +154,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isDarwin [
     libiconv
     gmp
+    Carbon
+    AppKit
   ];
 
   preConfigure =
@@ -178,7 +169,7 @@ stdenv.mkDerivation rec {
       '';
     in
     ''
-      PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables ebtables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+      PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
       # the path to qemu-kvm will be stored in VM's .xml and .save files
       # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
       substituteInPlace src/lxc/lxc_conf.c \
@@ -226,16 +217,18 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      # Keep the legacy iptables binary for now for backwards compatibility (comment on #109332)
-      binPath = [ iptables ebtables-compat iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
+      binPath = [ iptables iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
     in
     ''
-        substituteInPlace $out/libexec/libvirt-guests.sh \
-          --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
-          --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
-          --replace "$out/bin"              '${gettext}/bin' \
-          --replace 'lock/subsys'           'lock' \
-          --replace 'gettext.sh'            'gettext.sh
+      substituteInPlace $out/bin/virt-xml-validate \
+        --replace xmllint ${libxml2}/bin/xmllint
+
+      substituteInPlace $out/libexec/libvirt-guests.sh \
+        --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
+        --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+        --replace "$out/bin"              '${gettext}/bin' \
+        --replace 'lock/subsys'           'lock' \
+        --replace 'gettext.sh'            'gettext.sh
       # Added in nixpkgs:
       gettext() { "${gettext}/bin/gettext" "$@"; }
       '

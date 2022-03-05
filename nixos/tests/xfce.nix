@@ -23,7 +23,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
 
-      virtualisation.memorySize = 1024;
     };
 
   testScript = { nodes, ... }: let
@@ -38,7 +37,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       # Check that logging in has given the user ownership of devices.
       machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-      machine.succeed("su - ${user.name} -c 'DISPLAY=:0.0 xfce4-terminal &'")
+      machine.succeed("su - ${user.name} -c 'DISPLAY=:0.0 xfce4-terminal >&2 &'")
       machine.wait_for_window("Terminal")
       machine.sleep(10)
       machine.screenshot("screen")

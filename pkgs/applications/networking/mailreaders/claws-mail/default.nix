@@ -1,9 +1,6 @@
 { stdenv, lib, fetchgit, fetchpatch, wrapGAppsHook, autoreconfHook, bison, flex
-, curl, gtk2, gtk3, pkg-config, python2, python3, shared-mime-info
+, curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
-
-# Selector between the GTK+ 3 and GTK+ 2 releases.
-, useGtk3
 
 # Package compatibility: old parameters whose name were not directly derived
 , enablePgp ? true
@@ -34,14 +31,14 @@
 , enablePluginBsfilter ? true
 , enablePluginClamd ? true
 , enablePluginDillo ? true
-, enablePluginFancy ? useGtk3, libsoup, webkitgtk
+, enablePluginFancy ? true, libsoup, webkitgtk
 , enablePluginFetchInfo ? true
 , enablePluginLibravatar ? enablePluginRavatar
 , enablePluginLitehtmlViewer ? true, gumbo
 , enablePluginMailmbox ? true
 , enablePluginManageSieve ? true
 , enablePluginNewMail ? true
-, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds), libcanberra-gtk2, libcanberra-gtk3, libnotify
+, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds), libcanberra-gtk3, libnotify
 , enablePluginPdfViewer ? enablePluginPdf, poppler
 , enablePluginPerl ? true, perl
 , enablePluginPython ? true
@@ -57,23 +54,7 @@
 with lib;
 
 let
-  # Last release and hash for both the GTK+ 3 and GTK+ 2 version.
-  version = if useGtk3 then "4.0.0" else "3.18.0";
-
-  gtk2src = {
-    sha256 = "1vsiy3xsppw4d8ylsz70wsyrvmgy88lp2hj7vrc353ckny80r9lh";
-  };
-
-  gtk3src = {
-    sha256 = "0mwnjiqg2sj61va0y9yi3v52iyr5kzmbnvsqxav3a48m2f8p27qn";
-  };
-
-  python = if useGtk3 then python3 else python2;
-  pythonPkgs = if useGtk3
-    then
-      with python.pkgs; [ python wrapPython pygobject3 ]
-    else
-      with python.pkgs; [ python wrapPython pygtk pygobject2 ];
+  pythonPkgs = with python3.pkgs; [ python3 wrapPython pygobject3 ];
 
   features = [
     { flags = [ "acpi_notifier-plugin" ]; enabled = enablePluginAcpiNotifier; }
@@ -99,7 +80,7 @@ let
     { flags = [ "managesieve-plugin" ]; enabled = enablePluginManageSieve; }
     { flags = [ "networkmanager" ]; enabled = enableNetworkManager; deps = [ networkmanager ]; }
     { flags = [ "newmail-plugin" ]; enabled = enablePluginNewMail; }
-    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [(if useGtk3 then libcanberra-gtk3 else libcanberra-gtk2)]; }
+    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [libcanberra-gtk3]; }
     { flags = [ "pdf_viewer-plugin" ]; enabled = enablePluginPdfViewer; deps = [ poppler ]; }
     { flags = [ "perl-plugin" ]; enabled = enablePluginPerl; deps = [ perl ]; }
     { flags = [ "pgpcore-plugin" "pgpinline-plugin" "pgpmime-plugin" ]; enabled = enablePluginPgp; deps = [ gnupg gpgme ]; }
@@ -115,12 +96,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  inherit version;
+  version = "4.0.0";
 
-  src = fetchgit ({
+  src = fetchgit {
     rev = version;
     url = "git://git.claws-mail.org/claws.git";
-  } // (if useGtk3 then gtk3src else gtk2src));
+    sha256 = "0mwnjiqg2sj61va0y9yi3v52iyr5kzmbnvsqxav3a48m2f8p27qn";
+    };
 
   outputs = [ "out" "dev" ];
 
@@ -140,7 +122,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     # autotools check tries to dlopen libpython as a requirement for the python plugin
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python3}/lib
     # generate version without .git
     [ -e version ] || echo "echo ${version}" > version
   '';
@@ -154,8 +136,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = pythonPkgs;
 
   buildInputs =
-    [ curl gsettings-desktop-schemas glib-networking ]
-    ++ [(if useGtk3 then gtk3 else gtk2)]
+    [ curl gsettings-desktop-schemas glib-networking gtk3 ]
     ++ concatMap (f: optionals f.enabled f.deps) (filter (f: f ? deps) features)
   ;
 

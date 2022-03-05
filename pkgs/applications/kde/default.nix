@@ -4,8 +4,8 @@
 
 READ THIS FIRST
 
-This module is for official packages in the KDE Applications Bundle. All
-available packages are listed in `./srcs.nix`, although some are not yet
+This module is for official packages in the KDE Gear. All available
+packages are listed in `./srcs.nix`, although some are not yet
 packaged in Nixpkgs (see below).
 
 IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
@@ -174,6 +174,7 @@ let
       ksquares = callPackage ./ksquares.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpublictransport = callPackage ./kpublictransport.nix {};
       kreversi = callPackage ./kreversi.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
@@ -185,6 +186,7 @@ let
       kteatime = callPackage ./kteatime.nix {};
       ktimer = callPackage ./ktimer.nix {};
       ktnef = callPackage ./ktnef.nix {};
+      ktorrent = callPackage ./ktorrent.nix {};
       ktouch = callPackage ./ktouch.nix {};
       kturtle = callPackage ./kturtle.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
@@ -202,6 +204,7 @@ let
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
       libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
+      libktorrent = callPackage ./libktorrent.nix {};
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
@@ -215,8 +218,10 @@ let
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
+      skanlite = callPackage ./skanlite.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
+      zanshin = callPackage ./zanshin.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages

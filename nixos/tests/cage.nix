@@ -17,7 +17,6 @@ import ./make-test-python.nix ({ pkgs, ...} :
       program = "${pkgs.xterm}/bin/xterm -cm -pc -fa Monospace -fs 24";
     };
 
-    virtualisation.memorySize = 1024;
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cage can launch:
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };

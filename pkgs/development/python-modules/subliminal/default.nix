@@ -7,7 +7,7 @@
 , beautifulsoup4
 , requests
 , click
-, dogpile_cache
+, dogpile-cache
 , stevedore
 , chardet
 , pysrt
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     guessit babelfish enzyme beautifulsoup4 requests
-    click dogpile_cache stevedore chardet pysrt six
+    click dogpile-cache stevedore chardet pysrt six
     appdirs rarfile pytz
   ];
 

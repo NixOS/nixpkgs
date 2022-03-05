@@ -3,7 +3,7 @@
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }@args:
+{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
 
 with lib;
 
@@ -17,7 +17,7 @@ let loName = toLower product;
                + ".vmoptions";
 in
 
-with stdenv; lib.makeOverridable mkDerivation rec {
+with stdenv; lib.makeOverridable mkDerivation (rec {
   inherit name src;
   meta = args.meta // { inherit mainProgram; };
 
@@ -27,11 +27,9 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = mainProgram;
-    extraEntries = ''
-      StartupWMClass=${wmClass}
-    '';
+    startupWMClass = wmClass;
   };
 
   vmoptsFile = optionalString (vmopts != null) (writeText vmoptsName vmopts);
@@ -81,10 +79,11 @@ with stdenv; lib.makeOverridable mkDerivation rec {
         stdenv.cc.cc.lib libsecret e2fsprogs
         libnotify
       ] ++ extraLdPath)}" \
-      --set JDK_HOME "$jdk" \
+      ${lib.concatStringsSep " " extraWrapperArgs} \
+      --set-default JDK_HOME "$jdk" \
+      --set-default ANDROID_JAVA_HOME "$jdk" \
+      --set-default JAVA_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
-      --set ANDROID_JAVA_HOME "$jdk" \
-      --set JAVA_HOME "$jdk" \
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$item/share/applications" $out/share
@@ -94,4 +93,4 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
 } // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
-}
+})

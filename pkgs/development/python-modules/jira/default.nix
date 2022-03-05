@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hAUAzkHPXFDlKEom+dkzr8GQ+sqK2Ci1/k+QuSNvifE=";
+    sha256 = "04s2zgwxip54g894hps2cm081cp07mbi7qipmsv4dvailhsg43nn";
   };
 
   postPatch = ''

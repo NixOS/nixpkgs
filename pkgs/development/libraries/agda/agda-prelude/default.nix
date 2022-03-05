@@ -1,14 +1,14 @@
 { lib, mkDerivation, fetchFromGitHub }:
 
 mkDerivation rec {
-  version = "compat-2.6.1";
+  version = "compat-2.6.2";
   pname = "agda-prelude";
 
   src = fetchFromGitHub {
     owner = "UlfNorell";
     repo = "agda-prelude";
     rev = version;
-    sha256 = "128rbhd32qlq2nq3wgqni4ih58zzwvs9pkn9j8236ycxxp6x81sl";
+    sha256 = "0j2nip5fbn61fpkm3qz4dlazl4mzdv7qlgw9zm15bkcvaila0h14";
   };
 
   preConfigure = ''
@@ -19,8 +19,6 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    # Remove if a version compatible with agda 2.6.2 is made
-    broken = true;
     homepage = "https://github.com/UlfNorell/agda-prelude";
     description = "Programming library for Agda";
     license = lib.licenses.mit;

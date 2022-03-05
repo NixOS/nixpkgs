@@ -1,4 +1,4 @@
-{ buildPythonPackage, python, fetchurl, lib, stdenv,
+{ python, fetchurl, lib, stdenv,
   cmake, ninja, qt5, shiboken2 }:
 
 stdenv.mkDerivation rec {

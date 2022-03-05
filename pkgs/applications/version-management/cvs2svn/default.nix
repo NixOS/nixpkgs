@@ -1,14 +1,14 @@
 { lib, fetchurl, makeWrapper
-, python2Packages
+, pypy2Packages
 , cvs, subversion, git, breezy
 }:
 
-python2Packages.buildPythonApplication  rec {
+pypy2Packages.buildPythonApplication  rec {
   pname = "cvs2svn";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "http://cvs2svn.tigris.org/files/documents/1462/49543/${pname}-${version}.tar.gz";
+    url = "https://github.com/mhagger/cvs2svn/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "1ska0z15sjhyfi860rjazz9ya1gxbf5c0h8dfqwz88h7fccd22b4";
   };
 
@@ -16,7 +16,7 @@ python2Packages.buildPythonApplication  rec {
 
   checkInputs = [ subversion git breezy ];
 
-  checkPhase = "python run-tests.py";
+  checkPhase = "${pypy2Packages.python.interpreter} run-tests.py";
 
   doCheck = false; # Couldn't find node 'transaction...' in expected output tree
 
@@ -29,7 +29,7 @@ python2Packages.buildPythonApplication  rec {
 
   meta = with lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
-    homepage = "http://cvs2svn.tigris.org/";
+    homepage = "https://github.com/mhagger/cvs2svn";
     maintainers = [ maintainers.makefu ];
     platforms = platforms.unix;
     license = licenses.asl20;

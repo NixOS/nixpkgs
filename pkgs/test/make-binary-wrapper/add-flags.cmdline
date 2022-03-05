@@ -1,0 +1,2 @@
+    --add-flags "-x -y -z" \
+    --add-flags -abc

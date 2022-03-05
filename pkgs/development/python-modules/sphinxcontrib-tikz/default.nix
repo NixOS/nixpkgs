@@ -1,5 +1,4 @@
 { lib
-, substituteAll
 , buildPythonPackage
 , fetchPypi
 , sphinx
@@ -9,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
-  version = "0.4.14";
+  version = "0.4.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1614a45c960b80009dd42f96689122c9c0781018a0c5ec5828f4cdc5e35b11ad";
+    sha256 = "sha256-8f9FNx6WMopcqihUzNlQoPBGYoW2YkFi6W1iaFLD4qU=";
   };
 
   postPatch = ''
     substituteInPlace sphinxcontrib/tikz.py \
-      --replace "config.latex_engine" "${texLive}/bin/pdflatex" \
+      --replace "config.latex_engine" "'${texLive}/bin/pdflatex'" \
       --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
 
@@ -26,6 +25,8 @@ buildPythonPackage rec {
 
   # no tests in package
   doCheck = false;
+
+  pythonImportsCheck = [ "sphinxcontrib.tikz" ];
 
   meta = with lib; {
     description = "TikZ extension for Sphinx";

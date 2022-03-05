@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.40.0";
+  version = "3.42.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-nxNQde3GZs8rnKkd41xnA+KxdxwQp3B0FPtlbCilmzs=";
+    hash = "sha256-rqjA78LtuiDpetRpUXnNCiU45kwpBHAsyMWU6OCJhwM=";
   };
 
   patches = [

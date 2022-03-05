@@ -64,20 +64,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1iykfw2j6dd26rhgid3a17zghrmbmi68ppf3a7cdkvii68p4f37a";
+      sha256 = "15yrwawhvkjvfg0dsf8z81876ddj6161q0wh5s7pw4sim8z8pspr";
       type = "gem";
     };
-    version = "0.85.0";
+    version = "0.88.0";
   };
   ffi = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wgvaclp4h9y8zkrgz8p2hqkrgr4j7kz0366mik0970w532cbmcq";
+      sha256 = "0ssxcywmb3flxsjdg13is6k01807zgzasdhj4j48dm7ac59cmksn";
       type = "gem";
     };
-    version = "1.15.3";
+    version = "1.15.4";
   };
   gssapi = {
     dependencies = ["ffi"];
@@ -127,10 +127,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0g2fnag935zn2ggm5cn6k4s4xvv53v2givj1j90szmvavlpya96a";
+      sha256 = "0vdd1kii40qhbr9n8qx71k2gskq6rkl8ygy8hw5hfj8bb5a364xf";
       type = "gem";
     };
-    version = "1.8.10";
+    version = "1.8.11";
   };
   listen = {
     dependencies = ["rb-fsevent" "rb-inotify"];
@@ -138,10 +138,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1dq7yd4s9accpjiq0f92sgikw3whc5wnjn065laggkpqcqgx75gh";
+      sha256 = "0ncfhdkjiwq9l1pm87ax2pa20kz2j0dz56vi74cnr5a6cfk0qb5p";
       type = "gem";
     };
-    version = "3.6.0";
+    version = "3.7.0";
   };
   little-plugger = {
     groups = ["default"];
@@ -190,10 +190,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dlxwc75iy0dj23x824cxpvpa7c8aqcpskksrmb32j6m66h5mkcy";
+      sha256 = "1z5wvk6qi4ws1kjh7xn1rfirqw5m72bwvqacck1fjpbh33pcrwxv";
       type = "gem";
     };
-    version = "3.2021.0704";
+    version = "3.2021.0901";
   };
   multi_json = {
     groups = ["default"];
@@ -274,10 +274,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rmm9ym3qxysrmvgnrad28llnzj6wj9ljir8zaw9myas7m8vhvsq";
+      sha256 = "0wpn2m28qs7s95nqg67dn5vpyh05q7d0w6sm4svhflm41cd0akr4";
       type = "gem";
     };
-    version = "0.2.6";
+    version = "0.2.7";
   };
   rexml = {
     groups = ["default"];

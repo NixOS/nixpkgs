@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "colobot-data";
-  version = "0.1.12-alpha";
+  version = "0.2.0-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
     repo = "colobot-data";
     rev = "colobot-gold-${version}";
-    sha256 = "1vm33s52ymwd03x24i9bqiglw5v3wgd7rlzyx9r5ww0nnqzwbwi6";
+    sha256 = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
   };
 
   nativeBuildInputs = [ cmake vorbis-tools xmlstarlet doxygen python3 ];

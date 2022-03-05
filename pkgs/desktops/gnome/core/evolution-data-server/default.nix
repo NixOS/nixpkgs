@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.40.4";
+  version = "3.42.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "h8GF8Yw3Jw42EZgfGb2SIayXTIB0Ysjc6QvqCHEsWAA=";
+    sha256 = "fftBs+bAWBHUSajeTfx3q5sZ+O3yCzL92FeRhmIm0lI=";
   };
 
   patches = [
@@ -38,7 +38,15 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3 pcre libphonenumber boost protobuf
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
+  propagatedBuildInputs = [
+    db
+    libsecret
+    nss
+    nspr
+    libical
+    libgdata # needed for GObject inspection, https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/57/diffs
+    libsoup
+  ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"

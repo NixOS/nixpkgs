@@ -17,7 +17,7 @@
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences
+, kernel ? null, perl, nukeReferences, which
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -40,8 +40,11 @@ let
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
   i686bundled = versionAtLeast version "391" && !disable32Bit;
 
-  libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
-    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
+  libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
+    libdrm xorg.libXext xorg.libX11
+    xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
+    wayland mesa libGL
+  ]);
 
   self = stdenv.mkDerivation {
     name = "nvidia-x11-${version}${nameSuffix}";
@@ -90,6 +93,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
+    buildInputs = [ which ];
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
@@ -111,7 +115,7 @@ let
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
-      maintainers = with maintainers; [ baracoder ];
+      maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

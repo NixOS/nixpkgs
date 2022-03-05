@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
-  version = "0.3.2";
+  version = "0.4.5";
 
   src = fetchzip {
     url = "https://github.com/project-everest/hacl-star/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
-    sha256 = "1wp27vf0g43ggs7cv85hpa62jjvzkwzzg5rfznbwac6j6yr17zc7";
+    sha256 = "1330vgbf5krlkvifby96kyk13xhmihajk2w5hgf2761jrljmnnrs";
     stripRoot = false;
   };
 
   sourceRoot = "./source/raw";
 
-  minimalOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.08";
 
   postPatch = ''
     patchShebangs ./
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [];
 
-  buildInputs = [
+  nativeBuildInputs = [
     which
     ocaml
     findlib
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   checkInputs = [
     cppo
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

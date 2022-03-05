@@ -10,7 +10,7 @@ let
     desktopName = "Oracle SQL Developer";
     genericName = "Oracle SQL Developer";
     comment = "Oracle's Oracle DB GUI client";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 in
   stdenv.mkDerivation {

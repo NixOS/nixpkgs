@@ -1,11 +1,11 @@
 { lib
 , fetchurl
+, fetchpatch
 , nixosTests
 , python3
 , ghostscript
 , imagemagick
 , jbig2enc
-, ocrmypdf
 , optipng
 , pngquant
 , qpdf
@@ -27,10 +27,18 @@ let
       # https://github.com/Koed00/django-q/issues/526
       django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.4";
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
+        src = oldAttrs.src.override {
           inherit version;
           sha256 = "Uj1U3PG2YVLBtlj5FPAO07UYo0MqnezUiYc4yo274Q8=";
+        };
+      });
+
+      # Incompatible with aioredis 2
+      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
       });
     };
@@ -46,6 +54,15 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     url = "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
     sha256 = "oVSq0AWksuWC81MF5xiZ6ZbdKKtqqphmL+xIzJLaDMw=";
   };
+
+  patches = [
+    # Fix the `slow_write_pdf` test:
+    # https://github.com/NixOS/nixpkgs/issues/136626
+    (fetchpatch {
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/4fbabe43ea12811864e9676b04d82a82b38e799d.patch";
+      sha256 = "sha256-8ULep5aeW3wJAQGy2OEAjFYybELNq1DzCC1uBrZx36I=";
+    })
+  ];
 
   format = "other";
 
@@ -76,7 +93,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     daphne
     dateparser
     django-cors-headers
-    django_extensions
+    django-extensions
     django-filter
     django-picklefield
     django-q
@@ -148,27 +165,6 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     zope_interface
   ];
 
-  doCheck = true;
-  checkInputs = with py.pkgs.pythonPackages; [
-    pytest
-    pytest-cov
-    pytest-django
-    pytest-env
-    pytest-sugar
-    pytest-xdist
-    factory_boy
-  ];
-
-  # The tests require:
-  # - PATH with runtime binaries
-  # - A temporary HOME directory for gnupg
-  # - XDG_DATA_DIRS with test-specific fonts
-  checkPhase = ''
-    pushd src
-    PATH="${path}:$PATH" HOME=$(mktemp -d) XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS" pytest
-    popd
-  '';
-
   installPhase = ''
     mkdir -p $out/lib
     cp -r . $out/lib/paperless-ng
@@ -176,6 +172,31 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     makeWrapper $out/lib/paperless-ng/src/manage.py $out/bin/paperless-ng \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : "${path}"
+  '';
+
+  checkInputs = with py.pkgs.pythonPackages; [
+    pytest-django
+    pytest-env
+    pytest-sugar
+    pytest-xdist
+    factory_boy
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "src" ];
+
+  # The tests require:
+  # - PATH with runtime binaries
+  # - A temporary HOME directory for gnupg
+  # - XDG_DATA_DIRS with test-specific fonts
+  preCheck = ''
+    export PATH="${path}:$PATH"
+    export HOME=$(mktemp -d)
+    export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
+
+    # Disable unneeded code coverage test
+    substituteInPlace src/setup.cfg \
+      --replace "--cov --cov-report=html" ""
   '';
 
   passthru = {

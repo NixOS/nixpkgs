@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -10,7 +11,6 @@
 , libgee
 , libhandy
 , libcanberra-gtk3
-, pantheon
 , python3
 , wrapGAppsHook
 }:
@@ -19,11 +19,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-notifications";
   version = "6.0.0";
 
-  repoName = "notifications";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "notifications";
     rev = version;
     sha256 = "0jfppafbc8jwhhnillylicz4zfds789d8b31ifsx0qijlxa7kji9";
   };
@@ -58,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "io.elementary.notifications";
   };
 }

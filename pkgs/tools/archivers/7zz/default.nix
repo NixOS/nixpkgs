@@ -1,47 +1,53 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
+{ stdenv, lib, fetchurl, p7zip, uasm, useUasm ? stdenv.isx86_64 }:
 
-let platform =       if stdenv.isi686    then "x86"
-                else if stdenv.isx86_64  then "x64"
-                else if stdenv.isAarch32 then "arm"
-                else if stdenv.isAarch64 then "arm64"
-                else throw "Unsupported architecture";
-
-    url = "https://7-zip.org/a/7z2101-linux-${platform}.tar.xz";
-
-    hashes = {
-      x86 = "0k6vg85ld8i2pcv5sv3xbvf3swqh9qj8hf2jcpadssys3yyidqyj";
-      x64 = "1yfanx98fizj8d2s87yxgsy30zydx7h5w9wf4wy3blgsp0vkbjb3";
-      arm = "04iah9vijm86r8rbkhxig86fx3lpag4xi7i3vq7gfrlwkymclhm1";
-      arm64 = "0a26ginpb22aydcyvffxpbi7lxh4sgs9gb6cj96qqx7cnf7bk2ri";
-    };
-    sha256 = hashes."${platform}";
-
-in stdenv.mkDerivation {
+let
+  inherit (stdenv.hostPlatform) system;
+  platformSuffix =
+    if useUasm then
+      {
+        x86_64-linux = "_x64";
+      }.${system} or (throw "`useUasm` is not supported for system ${system}")
+    else "";
+in
+stdenv.mkDerivation rec {
   pname = "7zz";
-  version = "21.01";
+  version = "21.07";
 
-  src = fetchurl { inherit url sha256; };
-  sourceRoot = ".";
+  src = fetchurl {
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.7z";
+    sha256 = "sha256-0QdNVvQVqrmdmeWXp7ZtxFXbpjSa6KTInfdkdbahKEw=";
+  };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  sourceRoot = "CPP/7zip/Bundles/Alone2";
 
-  dontBuild = true;
+  makeFlags = lib.optionals useUasm [ "MY_ASM=uasm" ];
+
+  makefile = "../../cmpl_gcc${platformSuffix}.mak";
+
+  nativeBuildInputs = [ p7zip ] ++ lib.optionals useUasm [ uasm ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
-    install -D -t $out/bin 7zz
+
+    install -Dm555 -t $out/bin b/g${platformSuffix}/7zz
+    install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
+
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/7zz --help | grep ${version}
   '';
 
   meta = with lib; {
     description = "Command line archiver utility";
-    homepage = "https://www.7-zip.org";
-
-    # source not released yet. will be under LGPL 2.1+ with RAR exception
-    license = licenses.unfree;
-
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ anna328p ];
+    homepage = "https://7-zip.org";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ anna328p peterhoeg ];
+    platforms = platforms.linux;
   };
 }

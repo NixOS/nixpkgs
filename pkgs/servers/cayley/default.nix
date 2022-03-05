@@ -20,7 +20,7 @@ buildGoPackage rec {
   ];
 
   meta = {
-    homepage = "https://cayley.io/";
+    homepage = "https://github.com/cayleygraph/cayley";
     description = "A graph database inspired by Freebase and Knowledge Graph";
     maintainers = with lib.maintainers; [ sigma ];
     license = lib.licenses.asl20;

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.8.8";
+  version = "0.9.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0506089cacf9b5897442134417b04b3c6610c19f280ae535eace390dc6325a5c";
+    sha256 = "40c9a2ffd8bd3016f7611d424120442f627f56d518a106847dc93f0ead6ad79a";
   };
 
   checkInputs = [ pytest unicodecsv ];

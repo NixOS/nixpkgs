@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "linkify-it-py";
-  version = "1.0.1";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "tsutsu3";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gd51no6VqvIiW9fbCdp30zHG/us6by7FLHV2ul/XJAM=";
+    hash = "sha256-1QqfqFdTEdZr02jQnmHmvw3fgnC/ktsfALyhtkGSXoY=";
   };
 
   propagatedBuildInputs = [ uc-micro-py ];

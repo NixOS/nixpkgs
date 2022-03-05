@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-scala",
-  "rev": "449b6baa6b1cd0c2403636459af1571e075dbaa8",
-  "date": "2021-08-31T13:42:29-07:00",
-  "path": "/nix/store/8m3s0ndhmns8435g2mlbcz9sdbqgmjz7-tree-sitter-scala",
-  "sha256": "1lmiljsd5irzc0pabxdcjgfq98xyqm76fracglq68p106mngia07",
+  "rev": "0a3dd53a7fc4b352a538397d054380aaa28be54c",
+  "date": "2021-10-10T10:34:22-07:00",
+  "path": "/nix/store/mys098cdap3mdp6x4qwlk7b9v84998b0-tree-sitter-scala",
+  "sha256": "1lwyipn5b36fskr8cm60qjblj2chf8336zkqbsifq49z1lj0wvpi",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

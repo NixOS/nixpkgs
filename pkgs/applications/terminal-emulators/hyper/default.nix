@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hyper";
-  version = "3.1.3";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "sha256-w+FISIeGf3K1dnykIEzU3KevyaFNl4X0beT6DdLW+zQ=";
+    sha256 = "1ryw3315x0lb60j8nzz78h7zd36r2l1j39hnlfav0p7nq8dhqbpm";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A terminal built on web technologies";
     homepage    = "https://hyper.is/";
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh fabiangd ];
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];
   };

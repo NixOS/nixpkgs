@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "A GTK3 BitTorrent Client";
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

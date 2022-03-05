@@ -23,7 +23,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
   };
 
-  sourceRoot = "source/src";
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/CMakeLists.txt \
+    --replace 'add_definitions(-DGPAC_CONFIG_LINUX)' 'add_definitions(-DGPAC_CONFIG_DARWIN)'
+  '';
+
+  cmakeDir = "../src";
 
   nativeBuildInputs = [ pkg-config cmake makeWrapper ];
 

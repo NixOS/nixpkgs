@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , binutils
 , asciidoctor
@@ -11,29 +10,23 @@
 , bashInteractive
 , xcodebuild
 , makeWrapper
+, nix-update-script
 }:
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.4.1";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zsJoaaxYVV78vsxq2nbOh9ZAU1giKp8Kh6qJFL120CQ=";
+    sha256 = "sha256-h1lhR8P4aNM6tQCodhpEIXwA0bUQ26B3aoiQeX2siCU=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
-    # Use the shell builtin pwd for the basedir test
-    # See https://github.com/ccache/ccache/pull/933
-    (fetchpatch {
-      url = "https://github.com/ccache/ccache/commit/58fd1fbe75a1b5dc3f9151947ace15164fdef91c.patch";
-      sha256 = "BoBn4YSDy8pQxJ+fQHSsrUZDBVeLFWXIQ6CunDwMO7o=";
-    })
-
     # When building for Darwin, test/run uses dwarfdump, whereas on
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
@@ -115,6 +108,10 @@ let ccache = stdenv.mkDerivation rec {
         done
       '';
     };
+  };
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 
   meta = with lib; {

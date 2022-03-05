@@ -1,27 +1,62 @@
 { lib
 , buildPythonPackage
+, chardet
+, cryptography
+, feedparser
 , fetchPypi
-, isPy27
-, git
+, mock
+, pysocks
+, pytestCheckHook
+, python-dateutil
+, python-gnupg
+, pythonOlder
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2021.07.21";
-  disabled = isPy27; # abandoned upstream
+  version = "2022.2.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80ca1db9648e7678f81b373dab04d06025ec6532e68a9be773ddbd159de54e4c";
+    hash = "sha256-Jc11hS+WrRnjgYOUpc+GdkRoNV/DUJhQK6rI2lUkEIA=";
   };
 
-  postPatch = ''
-    sed -i 's/version=version/version="${version}"/' setup.py
-  '';
-  buildInputs = [ git ];
+  propagatedBuildInputs = [
+    chardet
+    cryptography
+    feedparser
+    mock
+    pysocks
+    python-dateutil
+    python-gnupg
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    pytz
+  ];
 
-  # cannot be imported
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=version" 'version="${version}"'
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    export PATH="$PATH:$out/bin";
+    supybot-test test -v --no-network
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [
+    # Uses the same names as Supybot
+    "supybot"
+  ];
 
   meta = with lib; {
     description = "A modified version of Supybot, an IRC bot";
@@ -29,5 +64,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

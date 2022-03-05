@@ -3,6 +3,7 @@
 , autoPatchelfHook
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , git
 , protobuf
@@ -10,17 +11,29 @@
 , opencv
 , unzip
 , shellcheck
+, srcOnly
 , python
 , enablePython ? false
 }:
 
 let
 
-  onnx_src = fetchFromGitHub {
-    owner = "onnx";
-    repo = "onnx";
-    rev = "v1.8.1";
-    sha256 = "+1zNnZ4lAyVYRptfk0PV7koIX9FqcfD1Ah33qj/G2rA=";
+  onnx_src = srcOnly {
+    name = "onnx-patched";
+    src = fetchFromGitHub {
+      owner = "onnx";
+      repo = "onnx";
+      rev = "v1.8.1";
+      sha256 = "+1zNnZ4lAyVYRptfk0PV7koIX9FqcfD1Ah33qj/G2rA=";
+    };
+    patches = [
+      # Fix build with protobuf 3.18+
+      # Remove with onnx 1.9 release
+      (fetchpatch {
+        url = "https://github.com/onnx/onnx/commit/d3bc82770474761571f950347560d62a35d519d7.patch";
+        sha256 = "0vdsrklkzhdjaj8wdsl4icn93q3961g8dx35zvff0nhpr08wjb7y";
+      })
+    ];
   };
 
 in

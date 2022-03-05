@@ -10,7 +10,8 @@ let
   # Workaround the issue by providing click 7 explicitly.
   python = python3.override {
     packageOverrides = self: super: {
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      # Use click 7
+      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
     };
   };
 in with python.pkgs; buildPythonApplication rec {
@@ -30,6 +31,7 @@ in with python.pkgs; buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
+    installShellCompletion --fish watson.fish
   '';
 
   checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];

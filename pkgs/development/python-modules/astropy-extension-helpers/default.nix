@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, findutils
 , pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -14,9 +16,18 @@ buildPythonPackage rec {
     sha256 = "10iqjzmya2h4sk765dlm1pbqypwlqyh8rw59a5m9i63d3klnz2mc";
   };
 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   patches = [ ./permissions.patch ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ findutils pytestCheckHook ];
+
+  # avoid import mismatch errors, as conftest.py is copied to build dir
+  pytestFlagsArray = [
+    "extension_helpers"
+  ];
 
   pythonImportsCheck = [
     "extension_helpers"

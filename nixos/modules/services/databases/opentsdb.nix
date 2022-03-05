@@ -26,8 +26,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.opentsdb;
-        defaultText = "pkgs.opentsdb";
-        example = literalExample "pkgs.opentsdb";
+        defaultText = literalExpression "pkgs.opentsdb";
         description = ''
           OpenTSDB package to use.
         '';

@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -8987,8 +8987,7 @@
+@@ -9281,8 +9281,7 @@ fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking libusb include dir" >&5
  $as_echo_n "checking libusb include dir... " >&6; }
     usb_incdir_found="no"

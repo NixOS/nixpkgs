@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.6.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "v${version}";
-    sha256 = "1pf619cd3dckn3d8gh18vbn7dflvb0mzpf6frx4y950x2j3rdplk";
+    sha256 = "17fbb78gvic5s9nlcgwj817fq1f9j9d1d7z6n2ahhinmvyzl9gc8";
   };
 
   postPatch = ''

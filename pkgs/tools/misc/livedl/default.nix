@@ -13,7 +13,7 @@ buildGoModule rec {
 
   sourceRoot = "source/src";
 
-  vendorSha256 = sha256:g5Y1IH1U1zOOHygTzAJuBnUj+MyPe64KHTYikipt3TY=;
+  vendorSha256 = "g5Y1IH1U1zOOHygTzAJuBnUj+MyPe64KHTYikipt3TY=";
 
   meta = with lib; {
     description = "Command-line tool to download nicovideo.jp livestreams";

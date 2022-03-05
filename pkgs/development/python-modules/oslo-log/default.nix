@@ -10,17 +10,17 @@
 , pbr
 , pyinotify
 , python-dateutil
-, stestr
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    sha256 = "dad5d7ff1290f01132b356d36a1bb79f98a3929d5005cce73e849ed31b385ba7";
+    sha256 = "0dlnxjci9mpwhgfv19fy1z7xrdp8m95skrj5dr60all3pr7n22f6";
   };
 
   propagatedBuildInputs = [
@@ -36,12 +36,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     oslotest
-    stestr
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    stestr run
-  '';
+  disabledTests = [
+    # not compatible with sandbox
+    "test_logging_handle_error"
+  ];
 
   pythonImportsCheck = [ "oslo_log" ];
 

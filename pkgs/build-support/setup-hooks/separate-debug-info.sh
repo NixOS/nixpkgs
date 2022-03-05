@@ -28,10 +28,16 @@ _separateDebugInfo() {
         # Extract the debug info.
         header "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
-        $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
-        $STRIP --strip-debug "$i"
 
-        # Also a create a symlink <original-name>.debug.
-        ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
+        # This may fail, e.g. if the binary is for a different
+        # architecture than we're building for.  (This happens with
+        # firmware blobs in QEMU.)
+        (
+            $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
+            $STRIP --strip-debug "$i"
+
+            # Also a create a symlink <original-name>.debug.
+            ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
+        ) || rmdir -p "$dst/${id:0:2}"
     done < <(find "$prefix" -type f -print0)
 }

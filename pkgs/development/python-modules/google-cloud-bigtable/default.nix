@@ -8,15 +8,19 @@
 , mock
 , proto-plus
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.3.3";
+  version = "2.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4rMnGnDQtuu55mzrYkeJjrU0ykQXd+pOYAw2yVcqJAQ=";
+    hash = "sha256-z6qhLNPfZnFJE6CStAByqxHBv3Itfzn1FtxDE+JPci8=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +55,6 @@ buildPythonPackage rec {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

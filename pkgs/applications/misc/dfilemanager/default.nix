@@ -2,7 +2,7 @@
 
 mkDerivation {
   pname = "dfilemanager";
-  version = "git-2020-09-04";
+  version = "unstable-2020-09-04";
 
   src = fetchFromGitHub {
     owner = "probonopd";

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-scheme";
-  version = "9.5.4";
+  version = "9.5.6";
 
   src = fetchFromGitHub {
     owner  = "cisco";
     repo   = "ChezScheme";
     rev    = "refs/tags/v${version}";
-    sha256 = "065dir19cqpn0d1bk9w49wnwzn6qfrgvcqw8da2fdhkafhfcb1bj";
+    sha256 = "sha256-1C5fEbVIpFXlDQ5wFmYZ2nrDUq9jBmvnku/7f0MH7vc=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     license      = lib.licenses.asl20;
     maintainers  = with lib.maintainers; [ thoughtpolice ];
     platforms    = lib.platforms.unix;
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
   };
 }

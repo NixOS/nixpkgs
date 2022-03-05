@@ -1,4 +1,5 @@
 { buildOctavePackage
+, stdenv
 , lib
 , fetchurl
 , gsl
@@ -22,5 +23,8 @@ buildOctavePackage rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Octave bindings to the GNU Scientific Library";
+    # error: use of undeclared identifier 'feval'; did you mean 'octave::feval'?
+    # error: no member named 'is_real_type' in 'octave_value'
+    broken = stdenv.isDarwin;
   };
 }

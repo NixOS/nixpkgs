@@ -1,61 +1,51 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
-, pkg-config
+, appstream
+, desktop-file-utils
 , meson
 , ninja
-, vala
+, pkg-config
+, polkit
 , python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, libpeas
+, vala
+, wrapGAppsHook
 , editorconfig-core-c
+, elementary-icon-theme
+, granite
+, gtk3
 , gtksourceview4
 , gtkspell3
+, libgee
+, libgit2-glib
+, libhandy
+, libpeas
 , libsoup
 , vte
-, webkitgtk
-, zeitgeist
 , ctags
-, libgit2-glib
-, wrapGAppsHook
-, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.0.0";
-
-  repoName = "code";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "code";
     rev = version;
-    sha256 = "1w1m52mq3zr9alkxk1c0s4ncscka1km5ppd0r6zm86qan9cjwq0f";
+    sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
   };
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/code/pull/1090
+    # Fix build with meson 0.61
+    # https://github.com/elementary/code/pull/1165
     (fetchpatch {
-      url = "https://github.com/elementary/code/commit/88dc40d7bbcc2288ada6673eb8f4fab345d97882.patch";
-      sha256 = "16y20bvslcm390irlib759703lvf7w6rz4xzaiazjj1r1njwinvv";
+      url = "https://github.com/elementary/code/commit/a2607cce3a6b1bb62d02456456d3cbc3c6530bb0.patch";
+      sha256 = "sha256-VKR83IOUYsQhBRlU9JUTlMJtXWv/AyG4wDsjMU2vmU8=";
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     appstream
@@ -70,7 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ctags
     editorconfig-core-c
     elementary-icon-theme
     granite
@@ -83,12 +72,7 @@ stdenv.mkDerivation rec {
     libpeas
     libsoup
     vte
-    webkitgtk
-    zeitgeist
   ];
-
-  # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
-  LC_ALL = "C.UTF-8";
 
   # ctags needed in path by outline plugin
   preFixup = ''
@@ -102,11 +86,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Code editor designed for elementary OS";
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.code";
   };
 }

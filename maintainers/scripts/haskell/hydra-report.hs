@@ -26,6 +26,8 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE TupleSections #-}
 
 import Control.Monad (forM_, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
@@ -41,7 +43,7 @@ import Data.List.NonEmpty (NonEmpty, nonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromMaybe, mapMaybe, isNothing)
 import Data.Monoid (Sum (Sum, getSum))
 import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
@@ -70,6 +72,12 @@ import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
 import System.Process (readProcess)
 import Prelude hiding (id)
+import Data.List (sortOn)
+import Control.Concurrent.Async (concurrently)
+import Control.Exception (evaluate)
+import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntSet as IntSet
+import Data.Bifunctor (second)
 
 newtype JobsetEvals = JobsetEvals
    { evals :: Seq Eval
@@ -134,20 +142,17 @@ hydraEvalCommand = "hydra-eval-jobs"
 hydraEvalParams :: [String]
 hydraEvalParams = ["-I", ".", "pkgs/top-level/release-haskell.nix"]
 
-handlesCommand :: FilePath
-handlesCommand = "nix-instantiate"
+nixExprCommand :: FilePath
+nixExprCommand = "nix-instantiate"
 
-handlesParams :: [String]
-handlesParams = ["--eval", "--strict", "--json", "-"]
-
-handlesExpression :: String
-handlesExpression = "with import ./. {}; with lib; zipAttrsWith (_: builtins.head) (mapAttrsToList (_: v: if v ? github then { \"${v.email}\" = v.github; } else {}) (import maintainers/maintainer-list.nix))"
+nixExprParams :: [String]
+nixExprParams = ["--eval", "--strict", "--json"]
 
 -- | This newtype is used to parse a Hydra job output from @hydra-eval-jobs@.
 -- The only field we are interested in is @maintainers@, which is why this
 -- is just a newtype.
 --
--- Note that there are occassionally jobs that don't have a maintainers
+-- Note that there are occasionally jobs that don't have a maintainers
 -- field, which is why this has to be @Maybe Text@.
 newtype Maintainers = Maintainers { maintainers :: Maybe Text }
   deriving stock (Generic, Show)
@@ -195,13 +200,49 @@ type EmailToGitHubHandles = Map Text Text
 -- @@
 type MaintainerMap = Map Text (NonEmpty Text)
 
--- | Generate a mapping of Hydra job names to maintainer GitHub handles.
+-- | Information about a package which lists its dependencies and whether the
+-- package is marked broken.
+data DepInfo = DepInfo {
+   deps :: Set Text,
+   broken :: Bool
+}
+   deriving stock (Generic, Show)
+   deriving anyclass (FromJSON, ToJSON)
+
+-- | Map from package names to their DepInfo. This is the data we get out of a
+-- nix call.
+type DependencyMap = Map Text DepInfo
+
+-- | Map from package names to its broken state, number of reverse dependencies (fst) and
+-- unbroken reverse dependencies (snd).
+type ReverseDependencyMap = Map Text (Int, Int)
+
+-- | Calculate the (unbroken) reverse dependencies of a package by transitively
+-- going through all packages if it’s a dependency of them.
+calculateReverseDependencies :: DependencyMap -> ReverseDependencyMap
+calculateReverseDependencies depMap = Map.fromDistinctAscList $ zip keys (zip (rdepMap False) (rdepMap True))
+ where
+    -- This code tries to efficiently invert the dependency map and calculate
+    -- it’s transitive closure by internally identifying every pkg with it’s index
+    -- in the package list and then using memoization.
+    keys = Map.keys depMap
+    pkgToIndexMap = Map.fromDistinctAscList (zip keys [0..])
+    intDeps = zip [0..] $ (\DepInfo{broken,deps} -> (broken,mapMaybe (`Map.lookup` pkgToIndexMap) $ Set.toList deps)) <$> Map.elems depMap
+    rdepMap onlyUnbroken = IntSet.size <$> resultList
+     where
+       resultList = go <$> [0..]
+       oneStepMap = IntMap.fromListWith IntSet.union $ (\(key,(_,deps)) -> (,IntSet.singleton key) <$> deps) <=< filter (\(_, (broken,_)) -> not (broken && onlyUnbroken)) $ intDeps
+       go pkg = IntSet.unions (oneStep:((resultList !!) <$> IntSet.toList oneStep))
+        where oneStep = IntMap.findWithDefault mempty pkg oneStepMap
+
+-- | Generate a mapping of Hydra job names to maintainer GitHub handles. Calls
+-- hydra-eval-jobs and the nix script ./maintainer-handles.nix.
 getMaintainerMap :: IO MaintainerMap
 getMaintainerMap = do
    hydraJobs :: HydraJobs <-
-      readJSONProcess hydraEvalCommand hydraEvalParams "" "Failed to decode hydra-eval-jobs output: "
+      readJSONProcess hydraEvalCommand hydraEvalParams "Failed to decode hydra-eval-jobs output: "
    handlesMap :: EmailToGitHubHandles <-
-      readJSONProcess handlesCommand handlesParams handlesExpression "Failed to decode nix output for lookup of github handles: "
+      readJSONProcess nixExprCommand ("maintainers/scripts/haskell/maintainer-handles.nix":nixExprParams) "Failed to decode nix output for lookup of github handles: "
    pure $ Map.mapMaybe (splitMaintainersToGitHubHandles handlesMap) hydraJobs
    where
    -- Split a comma-spearated string of Maintainers into a NonEmpty list of
@@ -211,6 +252,12 @@ getMaintainerMap = do
    splitMaintainersToGitHubHandles handlesMap (Maintainers maint) =
       nonEmpty .  mapMaybe (`Map.lookup` handlesMap) .  Text.splitOn ", " $ fromMaybe "" maint
 
+-- | Get the a map of all dependencies of every package by calling the nix
+-- script ./dependencies.nix.
+getDependencyMap :: IO DependencyMap
+getDependencyMap =
+   readJSONProcess nixExprCommand ("maintainers/scripts/haskell/dependencies.nix":nixExprParams) "Failed to decode nix output for lookup of dependencies: "
+
 -- | Run a process that produces JSON on stdout and and decode the JSON to a
 -- data type.
 --
@@ -219,11 +266,10 @@ readJSONProcess
    :: FromJSON a
    => FilePath -- ^ Filename of executable.
    -> [String] -- ^ Arguments
-   -> String -- ^ stdin to pass to the process
    -> String -- ^ String to prefix to JSON-decode error.
    -> IO a
-readJSONProcess exe args input err = do
-   output <- readProcess exe args input
+readJSONProcess exe args err = do
+   output <- readProcess exe args ""
    let eitherDecodedOutput = eitherDecodeStrict' . encodeUtf8 . Text.pack $ output
    case eitherDecodedOutput of
      Left decodeErr -> error $ err <> decodeErr <> "\nRaw: '" <> take 1000 output <> "'"
@@ -264,7 +310,13 @@ platformIcon (Platform x) = case x of
 data BuildResult = BuildResult {state :: BuildState, id :: Int} deriving (Show, Eq, Ord)
 newtype Platform = Platform {platform :: Text} deriving (Show, Eq, Ord)
 newtype Table row col a = Table (Map (row, col) a)
-type StatusSummary = Map Text (Table Text Platform BuildResult, Set Text)
+data SummaryEntry = SummaryEntry {
+   summaryBuilds :: Table Text Platform BuildResult,
+   summaryMaintainers :: Set Text,
+   summaryReverseDeps :: Int,
+   summaryUnbrokenReverseDeps :: Int
+}
+type StatusSummary = Map Text SummaryEntry
 
 instance (Ord row, Ord col, Semigroup a) => Semigroup (Table row col a) where
    Table l <> Table r = Table (Map.unionWith (<>) l r)
@@ -275,11 +327,11 @@ instance Functor (Table row col) where
 instance Foldable (Table row col) where
    foldMap f (Table a) = foldMap f a
 
-buildSummary :: MaintainerMap -> Seq Build -> StatusSummary
-buildSummary maintainerMap = foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
+buildSummary :: MaintainerMap -> ReverseDependencyMap -> Seq Build -> StatusSummary
+buildSummary maintainerMap reverseDependencyMap = foldl (Map.unionWith unionSummary) Map.empty . fmap toSummary
   where
-   unionSummary (Table l, l') (Table r, r') = (Table $ Map.union l r, l' <> r')
-   toSummary Build{finished, buildstatus, job, id, system} = Map.singleton name (Table (Map.singleton (set, Platform system) (BuildResult state id)), maintainers)
+   unionSummary (SummaryEntry (Table lb) lm lr lu) (SummaryEntry (Table rb) rm rr ru) = SummaryEntry (Table $ Map.union lb rb) (lm <> rm) (max lr rr) (max lu ru)
+   toSummary Build{finished, buildstatus, job, id, system} = Map.singleton name (SummaryEntry (Table (Map.singleton (set, Platform system) (BuildResult state id))) maintainers reverseDeps unbrokenReverseDeps)
      where
       state :: BuildState
       state = case (finished, buildstatus) of
@@ -297,6 +349,7 @@ buildSummary maintainerMap = foldl (Map.unionWith unionSummary) Map.empty . fmap
       name = maybe packageName NonEmpty.last splitted
       set = maybe "" (Text.intercalate "." . NonEmpty.init) splitted
       maintainers = maybe mempty (Set.fromList . toList) (Map.lookup job maintainerMap)
+      (reverseDeps, unbrokenReverseDeps) = Map.findWithDefault (0,0) name reverseDependencyMap
 
 readBuildReports :: IO (Eval, UTCTime, Seq Build)
 readBuildReports = do
@@ -339,25 +392,29 @@ makeSearchLink evalId linkLabel query = "[" <> linkLabel <> "](" <> "https://hyd
 statusToNumSummary :: StatusSummary -> NumSummary
 statusToNumSummary = fmap getSum . foldMap (fmap Sum . jobTotals)
 
-jobTotals :: (Table Text Platform BuildResult, a) -> Table Platform BuildState Int
-jobTotals (Table mapping, _) = getSum <$> Table (Map.foldMapWithKey (\(_, platform) (BuildResult buildstate _) -> Map.singleton (platform, buildstate) (Sum 1)) mapping)
+jobTotals :: SummaryEntry -> Table Platform BuildState Int
+jobTotals (summaryBuilds -> Table mapping) = getSum <$> Table (Map.foldMapWithKey (\(_, platform) (BuildResult buildstate _) -> Map.singleton (platform, buildstate) (Sum 1)) mapping)
 
 details :: Text -> [Text] -> [Text]
 details summary content = ["<details><summary>" <> summary <> " </summary>", ""] <> content <> ["</details>", ""]
 
-printBuildSummary :: Eval -> UTCTime -> StatusSummary -> Text
+printBuildSummary :: Eval -> UTCTime -> StatusSummary -> [(Text, Int)] -> Text
 printBuildSummary
    Eval{id, jobsetevalinputs = JobsetEvalInputs{nixpkgs = Nixpkgs{revision}}}
    fetchTime
-   summary =
+   summary
+   topBrokenRdeps =
       Text.unlines $
-         headline <> totals
+         headline <> [""] <> tldr <> (("  * "<>) <$> (errors <> warnings)) <> [""]
+            <> totals
             <> optionalList "#### Maintained packages with build failure" (maintainedList fails)
             <> optionalList "#### Maintained packages with failed dependency" (maintainedList failedDeps)
             <> optionalList "#### Maintained packages with unknown error" (maintainedList unknownErr)
             <> optionalHideableList "#### Unmaintained packages with build failure" (unmaintainedList fails)
             <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList failedDeps)
             <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList unknownErr)
+            <> optionalHideableList "#### Top 50 broken packages, sorted by number of reverse dependencies" (brokenLine <$> topBrokenRdeps)
+            <> ["","*:arrow_heading_up:: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
             <> footer
      where
       footer = ["*Report generated with [maintainers/scripts/haskell/hydra-report.hs](https://github.com/NixOS/nixpkgs/blob/haskell-updates/maintainers/scripts/haskell/hydra-report.sh)*"]
@@ -365,7 +422,7 @@ printBuildSummary
          [ "#### Build summary"
          , ""
          ]
-            <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT (statusToNumSummary summary)
+            <> printTable "Platform" (\x -> makeSearchLink id (platform x <> " " <> platformIcon x) ("." <> platform x)) (\x -> showT x <> " " <> icon x) showT numSummary
       headline =
          [ "### [haskell-updates build report from hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)"
          , "*evaluation ["
@@ -380,24 +437,49 @@ printBuildSummary
             <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
             <> "*"
          ]
-      jobsByState predicate = Map.filter (predicate . foldl' min Success . fmap state . fst) summary
+      brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
+      numSummary = statusToNumSummary summary
+      jobsByState predicate = Map.filter (predicate . worstState) summary
+      worstState = foldl' min Success . fmap state . summaryBuilds
       fails = jobsByState (== Failed)
       failedDeps = jobsByState (== DependencyFailed)
       unknownErr = jobsByState (\x -> x > DependencyFailed && x < TimedOut)
-      withMaintainer = Map.mapMaybe (\(x, m) -> (x,) <$> nonEmpty (Set.toList m))
-      withoutMaintainer = Map.mapMaybe (\(x, m) -> if Set.null m then Just x else Nothing)
+      withMaintainer = Map.mapMaybe (\e -> (summaryBuilds e,) <$> nonEmpty (Set.toList (summaryMaintainers e)))
+      withoutMaintainer = Map.mapMaybe (\e -> if Set.null (summaryMaintainers e) then Just e else Nothing)
       optionalList heading list = if null list then mempty else [heading] <> list
       optionalHideableList heading list = if null list then mempty else [heading] <> details (showT (length list) <> " job(s)") list
       maintainedList = showMaintainedBuild <=< Map.toList . withMaintainer
-      unmaintainedList = showBuild <=< Map.toList . withoutMaintainer
-      showBuild (name, table) = printJob id name (table, "")
+      unmaintainedList = showBuild <=< sortOn (\(snd -> x) -> (negate (summaryUnbrokenReverseDeps x), negate (summaryReverseDeps x))) . Map.toList . withoutMaintainer
+      showBuild (name, entry) = printJob id name (summaryBuilds entry, Text.pack (if summaryReverseDeps entry > 0 then " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>" | "<> show (summaryReverseDeps entry) else ""))
       showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
+      tldr = case (errors, warnings) of
+               ([],[]) -> [":green_circle: **Ready to merge**"]
+               ([],_) -> [":yellow_circle: **Potential issues**"]
+               _ -> [":red_circle: **Branch not mergeable**"]
+      warnings =
+         if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
+         if' (Unfinished == maybe Success worstState mergeableJob) "`mergeable` jobset is not finished." <>
+         if' (Unfinished == maybe Success worstState maintainedJob) "`maintained` jobset is not finished."
+      errors =
+         if' (isNothing mergeableJob) "No `mergeable` job found." <>
+         if' (isNothing maintainedJob) "No `maintained` job found." <>
+         if' (Unfinished > maybe Success worstState mergeableJob) "`mergeable` jobset failed." <>
+         if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too many outstanding jobs on x86_64-linux." <>
+         if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too many outstanding jobs on aarch64-linux."
+      if' p e = if p then [e] else mempty
+      outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
+      maintainedJob = Map.lookup "maintained" summary
+      mergeableJob = Map.lookup "mergeable" summary
 
 printMaintainerPing :: IO ()
 printMaintainerPing = do
-   maintainerMap <- getMaintainerMap
+   (maintainerMap, (reverseDependencyMap, topBrokenRdeps)) <- concurrently getMaintainerMap do
+      depMap <- getDependencyMap
+      rdepMap <- evaluate . calculateReverseDependencies $ depMap
+      let tops = take 50 . sortOn (negate . snd) . fmap (second fst) . filter (\x -> maybe False broken $ Map.lookup (fst x) depMap) . Map.toList $ rdepMap
+      pure (rdepMap, tops)
    (eval, fetchTime, buildReport) <- readBuildReports
-   putStrLn (Text.unpack (printBuildSummary eval fetchTime (buildSummary maintainerMap buildReport)))
+   putStrLn (Text.unpack (printBuildSummary eval fetchTime (buildSummary maintainerMap reverseDependencyMap buildReport) topBrokenRdeps))
 
 printMarkBrokenList :: IO ()
 printMarkBrokenList = do

@@ -25,7 +25,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.nzbhydra2;
-        defaultText = "pkgs.nzbhydra2";
+        defaultText = literalExpression "pkgs.nzbhydra2";
         description = "NZBHydra2 package to use.";
       };
     };

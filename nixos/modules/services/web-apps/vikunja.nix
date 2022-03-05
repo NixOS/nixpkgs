@@ -14,13 +14,13 @@ in {
     package-api = mkOption {
       default = pkgs.vikunja-api;
       type = types.package;
-      defaultText = "pkgs.vikunja-api";
+      defaultText = literalExpression "pkgs.vikunja-api";
       description = "vikunja-api derivation to use.";
     };
     package-frontend = mkOption {
       default = pkgs.vikunja-frontend;
       type = types.package;
-      defaultText = "pkgs.vikunja-frontend";
+      defaultText = literalExpression "pkgs.vikunja-frontend";
       description = "vikunja-frontend derivation to use.";
     };
     environmentFiles = mkOption {
@@ -34,7 +34,7 @@ in {
     setupNginx = mkOption {
       type = types.bool;
       default = config.services.nginx.enable;
-      defaultText = "config.services.nginx.enable";
+      defaultText = literalExpression "config.services.nginx.enable";
       description = ''
         Whether to setup NGINX.
         Further nginx configuration can be done by changing

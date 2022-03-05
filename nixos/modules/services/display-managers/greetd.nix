@@ -13,13 +13,13 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.greetd.greetd;
-      defaultText = "pkgs.greetd.greetd";
+      defaultText = literalExpression "pkgs.greetd.greetd";
       description = "The greetd package that should be used.";
     };
 
     settings = mkOption {
       type = settingsFormat.type;
-      example = literalExample ''
+      example = literalExpression ''
         {
           default_session = {
             command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
@@ -43,7 +43,7 @@ in
     restart = mkOption {
       type = types.bool;
       default = !(cfg.settings ? initial_session);
-      defaultText = "!(config.services.greetd.settings ? initial_session)";
+      defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
       description = ''
         Wether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
@@ -99,7 +99,12 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
-    users.users.greeter.isSystemUser = true;
+    users.users.greeter = {
+      isSystemUser = true;
+      group = "greeter";
+    };
+
+    users.groups.greeter = {};
   };
 
   meta.maintainers = with maintainers; [ queezle ];

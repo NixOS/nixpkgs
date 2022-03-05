@@ -20,7 +20,7 @@ in
 
       package = mkOption {
         default = pkgs.cyrus_sasl.bin;
-        defaultText = "pkgs.cyrus_sasl.bin";
+        defaultText = literalExpression "pkgs.cyrus_sasl.bin";
         type = types.package;
         description = "Cyrus SASL package to use.";
       };

@@ -10,14 +10,14 @@ let
     "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-4kvcBRMMH4AnTKSES5Cpst/omTRXVRq1V1y/z5njKJI=";
-    arm64-linux_hash = "sha256-NLsf0ldvlKSrHJyAXv5Ar2zIetoga6iZPOGTxFOqoQQ=";
-    x64-osx_hash = "sha256-tjvGuShz/fv3qUknFVKJ+tE/bVtIyPZ7dr4JfTEcDJY=";
+    x64-linux_hash = "sha256-O/dfLZst7RFnqDZj8UX6ejL2EBjGnCBY3e8JB3peRgY=";
+    arm64-linux_hash = "sha256-DkCOK1A7L1gMqY/XPIJFFz7qvUvxA6aJa24Hrh3dT/U=";
+    x64-osx_hash = "sha256-4N0/FTVhxUooauhh+7u527aViSBILiCb+a4cI17QTAg=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.0.1468";
+  version = "4.10.2";
 
   sourceRoot = ".";
 

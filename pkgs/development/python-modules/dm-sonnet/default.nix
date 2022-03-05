@@ -86,5 +86,6 @@ in buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
     platforms = platforms.linux;
+    broken = true; # depends on older TensorFlow version than is currently packaged
   };
 }

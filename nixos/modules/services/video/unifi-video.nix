@@ -1,7 +1,8 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi-video;
+  opt = options.services.unifi-video;
   mainClass = "com.ubnt.airvision.Main";
   cmd = ''
     ${pkgs.jsvc}/bin/jsvc \
@@ -104,7 +105,7 @@ in
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.jre8;
-        defaultText = "pkgs.jre8";
+        defaultText = literalExpression "pkgs.jre8";
         description = ''
           The JRE package to use. Check the release notes to ensure it is supported.
         '';
@@ -113,7 +114,7 @@ in
       unifiVideoPackage = mkOption {
         type = types.package;
         default = pkgs.unifi-video;
-        defaultText = "pkgs.unifi-video";
+        defaultText = literalExpression "pkgs.unifi-video";
         description = ''
           The unifi-video package to use.
         '';
@@ -122,7 +123,7 @@ in
       mongodbPackage = mkOption {
         type = types.package;
         default = pkgs.mongodb-4_0;
-        defaultText = "pkgs.mongodb";
+        defaultText = literalExpression "pkgs.mongodb";
         description = ''
           The mongodb package to use.
         '';
@@ -164,6 +165,7 @@ in
       pidFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/unifi-video.pid";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
         description = "Location of unifi-video pid file.";
       };
 

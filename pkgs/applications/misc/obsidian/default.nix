@@ -15,7 +15,7 @@ let
     comment = "Knowledge base";
     icon = "obsidian";
     exec = "obsidian";
-    categories = "Office";
+    categories = [ "Office" ];
   };
 
   updateScript = writeScript "obsidian-updater" ''
@@ -31,11 +31,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obsidian";
-  version = "0.12.15";
+  version = "0.13.23";
 
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-    sha256 = "sha256-0pAwTkx89B6S0GPes2XXSRNdByIc+DwiI5HXoUqs/QE=";
+    sha256 = "1chxf6vrybjvc64k66a3l5xvv6iv6w8b03pdcrc0pr0nnlwkcf8c";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];

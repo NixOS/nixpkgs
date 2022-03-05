@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # some functionality to work (inparticular, pybel).
   # see https://openbabel.org/docs/dev/Installation/install.html
   BABEL_LIBDIR = "${openbabel}/lib/openbabel/3.1.0";
-  LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${openbabel}/lib";
+  LD_LIBRARY_PATH = "${openbabel}/lib";
 
   doCheck = false;
   pythonImportsCheck = [ "openbabel" ];

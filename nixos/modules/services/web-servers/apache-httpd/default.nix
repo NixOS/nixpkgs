@@ -154,7 +154,7 @@ let
       sslServerKey = if useACME then "${sslCertDir}/key.pem" else hostOpts.sslServerKey;
       sslServerChain = if useACME then "${sslCertDir}/chain.pem" else hostOpts.sslServerChain;
 
-      acmeChallenge = optionalString useACME ''
+      acmeChallenge = optionalString (useACME && hostOpts.acmeRoot != null) ''
         Alias /.well-known/acme-challenge/ "${hostOpts.acmeRoot}/.well-known/acme-challenge/"
         <Directory "${hostOpts.acmeRoot}">
             AllowOverride None
@@ -370,6 +370,8 @@ let
       cat ${php.phpIni} > $out
       echo "$options" >> $out
     '';
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 
 
@@ -407,7 +409,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.apacheHttpd;
-        defaultText = "pkgs.apacheHttpd";
+        defaultText = literalExpression "pkgs.apacheHttpd";
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';
@@ -416,8 +418,8 @@ in
       configFile = mkOption {
         type = types.path;
         default = confFile;
-        defaultText = "confFile";
-        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
+        defaultText = literalExpression "confFile";
+        example = literalExpression ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
         description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
@@ -437,7 +439,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "proxy_connect"
             { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
@@ -516,7 +518,14 @@ in
             documentRoot = "${pkg}/htdocs";
           };
         };
-        example = literalExample ''
+        defaultText = literalExpression ''
+          {
+            localhost = {
+              documentRoot = "''${package.out}/htdocs";
+            };
+          }
+        '';
+        example = literalExpression ''
           {
             "foo.example.com" = {
               forceSSL = true;
@@ -550,7 +559,7 @@ in
       phpPackage = mkOption {
         type = types.package;
         default = pkgs.php;
-        defaultText = "pkgs.php";
+        defaultText = literalExpression "pkgs.php";
         description = ''
           Overridable attribute of the PHP package to use.
         '';
@@ -650,7 +659,11 @@ in
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
         '';
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) dependentCertNames;
 
     warnings =
       mapAttrsToList (name: hostOpts: ''
@@ -670,9 +683,16 @@ in
     };
 
     security.acme.certs = let
-      acmePairs = map (hostOpts: nameValuePair hostOpts.hostName {
+      acmePairs = map (hostOpts: let
+        hasRoot = hostOpts.acmeRoot != null;
+      in nameValuePair hostOpts.hostName {
         group = mkDefault cfg.group;
-        webroot = hostOpts.acmeRoot;
+        # if acmeRoot is null inherit config.security.acme
+        # Since config.security.acme.certs.<cert>.webroot's own default value
+        # should take precedence set priority higher than mkOptionDefault
+        webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
+        # Also nudge dnsProvider to null in case it is inherited
+        dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
         extraDomainNames = hostOpts.serverAliases;
         # Use the vhost-specific email address if provided, otherwise let
         # security.acme.email or security.acme.certs.<cert>.email be used.

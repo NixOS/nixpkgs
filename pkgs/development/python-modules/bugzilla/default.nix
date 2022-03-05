@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Bugzilla XMLRPC access module";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron peti ];
+    maintainers = with maintainers; [ pierron ];
   };
 }

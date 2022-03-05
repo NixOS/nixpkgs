@@ -764,8 +764,8 @@ and in this case the `python38` interpreter is automatically used.
 
 ### Interpreters {#interpreters}
 
-Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
-respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
+Versions 2.7, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
+respectively `python27`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python39`. The attribute `python` maps to `python2`. The PyPy interpreters
 compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
@@ -830,10 +830,11 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python36Packages`
 * `pkgs.python37Packages`
 * `pkgs.python38Packages`
 * `pkgs.python39Packages`
+* `pkgs.python310Packages`
+* `pkgs.python311Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
@@ -978,6 +979,31 @@ with import <nixpkgs> {};
 in python.withPackages(ps: [ps.blaze])).env
 ```
 
+#### Optional extra dependencies
+
+Some packages define optional dependencies for additional features. With
+`setuptools` this is called `extras_require` and `flit` calls it `extras-require`. A
+method for supporting this is by declaring the extras of a package in its
+`passthru`, e.g. in case of the package `dask`
+
+```nix
+passthru.extras-require = {
+  complete = [ distributed ];
+};
+```
+
+and letting the package requiring the extra add the list to its dependencies
+
+```nix
+propagatedBuildInputs = [
+  ...
+] ++ dask.extras-require.complete;
+```
+
+Note this method is preferred over adding parameters to builders, as that can
+result in packages depending on different variants and thereby causing
+collisions.
+
 #### `buildPythonApplication` function {#buildpythonapplication-function}
 
 The `buildPythonApplication` function is practically the same as
@@ -995,18 +1021,18 @@ called with `callPackage` and passed `python` or `pythonPackages` (possibly
 specifying an interpreter version), like this:
 
 ```nix
-{ lib, python3Packages }:
+{ lib, python3 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
   version = "2.7.9";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
   };
 
-  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
+  propagatedBuildInputs = with python3.pkgs; [ tornado python-daemon ];
 
   meta = with lib; {
     ...
@@ -1632,3 +1658,25 @@ would be:
 ```ShellSession
 $ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
 ```
+
+## CPython Update Schedule
+
+With [PEP 602](https://www.python.org/dev/peps/pep-0602/), CPython now
+follows a yearly release cadence. In nixpkgs, all supported interpreters
+are made available, but only the most recent two
+interpreters package sets are built; this is a compromise between being
+the latest interpreter, and what the majority of the Python packages support.
+
+New CPython interpreters are released in October. Generally, it takes some
+time for the majority of active Python projects to support the latest stable
+interpreter. To help ease the migration for Nixpkgs users
+between Python interpreters the schedule below will be used:
+
+| When | Event |
+| --- | --- |
+| After YY.11 Release | Bump CPython package set window. The latest and previous latest stable should now be built. |
+| After YY.05 Release | Bump default CPython interpreter to latest stable. |
+
+In practice, this means that the Python community will have had a stable interpreter
+for ~2 months before attempting to update the package set. And this will
+allow for ~7 months for Python applications to support the latest interpreter.

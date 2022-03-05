@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-CMvT9DouwERhDtBsLDesxN/QgEEfXLgtJaQLjq+SzOI=";
+    sha256 = "sha256-Xw/Rs30mH81b8qqdpmbXjSSYIG08wwRvykzhPpF94uk=";
   };
 
-  cargoSha256 = "sha256-zGsb49yt6SRFfvNHZY+RpjihGpV9ziLsg9BII7WTX2Y=";
+  cargoSha256 = "sha256-JzYCxsaBuQ5I+FgHVRQPNM32bJlE4H9Fd+48/jXDcr0=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -40,6 +40,8 @@ rustPlatform.buildRustPackage rec {
       --replace Exec=tectonic Exec=$out/bin/tectonic
     install -D dist/appimage/tectonic.desktop -t $out/share/applications/
     install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+
+    ln -s $out/bin/tectonic $out/bin/nextonic
   '';
 
   doCheck = true;

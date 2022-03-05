@@ -10,7 +10,7 @@
 , format ? "make"
 , installManPages ? true
   # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
-  # The default `crystal build` options can be overridden with { foo.options = [ "--no-debug" ]; }
+  # The default `crystal build` options can be overridden with { foo.options = [ "--optionname" ]; }
 , crystalBinaries ? { }
 , ...
 }@args:
@@ -32,8 +32,7 @@ let
     })
     (import shardsFile));
 
-  # we previously had --no-debug here but that is not recommended by upstream
-  defaultOptions = [ "--release" "--progress" "--verbose" ];
+  defaultOptions = [ "--release" "--progress" "--verbose" "--no-debug" ];
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
 
@@ -78,7 +77,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
     '')
     crystalBinaries)
   ++ lib.optional (format == "shards")
-    "shards build --local --production ${lib.concatStringsSep " " defaultOptions}"
+    "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
   ++ [ "runHook postBuild" ]));
 
   installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
@@ -120,7 +119,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
-      $f --help
+      $f --help > /dev/null
     done
   '';
 

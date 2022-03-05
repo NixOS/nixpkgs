@@ -4,20 +4,22 @@ if !lib.versionAtLeast ocaml.version "4.10"
 then throw "cpdf is not available for OCaml ${ocaml.version}"
 else
 
-let version = "2.4"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-cpdf-${version}";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-cpdf";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "cpdf-source";
     rev = "v${version}";
-    sha256 = "1a8lmfc76dr8x6pxgm4aypbys02pfma9yh4z3l1qxp2q1909na5l";
+    sha256 = "sha256:1qmx229nij7g6qmiacmyy4mcgx3k9509p4slahivshqm79d6wiwl";
   };
 
-  buildInputs = [ ocaml findlib ncurses ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ ncurses ];
   propagatedBuildInputs = [ camlpdf ];
+
+  strictDeps = true;
 
   preInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR

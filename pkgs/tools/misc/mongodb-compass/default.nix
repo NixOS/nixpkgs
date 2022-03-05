@@ -1,9 +1,39 @@
-{ lib, stdenv, fetchurl, dpkg
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gdk-pixbuf, gtk3, pango, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
+{
+alsa-lib,
+at-spi2-atk,
+at-spi2-core,
+atk,
+cairo,
+cups,
+curl,
+dbus,
+dpkg,
+expat,
+fetchurl,
+fontconfig,
+freetype,
+gdk-pixbuf,
+glib,
+gtk3,
+lib,
+libdrm,
+libnotify,
+libsecret,
+libuuid,
+libxcb,
+libxkbcommon,
+mesa,
+nspr,
+nss,
+pango,
+stdenv,
+systemd,
+wrapGAppsHook,
+xorg,
+}:
 
 let
-  version = "1.25.0";
+  version = "1.30.1";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -17,22 +47,23 @@ let
     expat
     fontconfig
     freetype
-    glib
-    gnome2.GConf
     gdk-pixbuf
+    glib
     gtk3
-    pango
+    libdrm
     libnotify
     libsecret
     libuuid
     libxcb
+    libxkbcommon
+    mesa
     nspr
     nss
+    pango
     stdenv.cc.cc
     systemd
-
-    xorg.libxkbfile
     xorg.libX11
+    xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -42,14 +73,16 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libXScrnSaver
-  ] + ":${stdenv.cc.cc.lib}/lib64";
+    xorg.libxkbfile
+    xorg.libxshmfence
+    (lib.getLib stdenv.cc.cc)
+  ];
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "sha256-998/voQ04fLj3KZCy6BueUoI1v++4BoGRTGJT7Nsv40=";
+        sha256 = "sha256-MwkYgkDZmzZsthJxSK6c+0us0D4cPuDfuV1XBbeTNXE=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
@@ -94,8 +127,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "The GUI for MongoDB";
+    maintainers = with maintainers; [ bryanasdev000 ];
     homepage = "https://www.mongodb.com/products/compass";
-    license = licenses.unfree;
+    license = licenses.sspl;
     platforms = [ "x86_64-linux" ];
   };
 }

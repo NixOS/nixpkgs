@@ -3,7 +3,7 @@
 , pkg-config
 , fetchpatch
 , scons
-, boost
+, boost172
 , dvdauthor
 , dvdplusrwtools
 , enca
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
 
   buildInputs = [
-    boost
+    boost172
     dvdauthor
     dvdplusrwtools
     enca

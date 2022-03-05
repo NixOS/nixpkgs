@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "1.7";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    sha256 = "sha256-+3OoeuGuyiHWlUrxm5A7CmNR+ijxdlmecmvqk+i+h08=";
+    hash = "sha256-OCBFhlnEXZROp47KDiy7Y6l4GDVCCP+i1IFYQa7esyg=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages(p: with p; [ pygobject3 magic setproctitle ]))
+    (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
     gsettings-desktop-schemas
     gtk3
     glib
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/bulky";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

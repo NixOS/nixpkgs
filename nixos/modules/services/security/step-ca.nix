@@ -13,6 +13,7 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.step-ca;
+        defaultText = lib.literalExpression "pkgs.step-ca";
         description = "Which step-ca package to use.";
       };
       address = lib.mkOption {
@@ -105,6 +106,9 @@ in
           ConditionFileNotEmpty = ""; # override upstream
         };
         serviceConfig = {
+          User = "step-ca";
+          Group = "step-ca";
+          UMask = "0077";
           Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
           ReadWriteDirectories = ""; # override upstream
@@ -118,13 +122,21 @@ in
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet
-          # ProcSubset = "pid"; # not supported by upstream upstream yet
+          # ProcSubset = "pid"; # not supported by upstream yet
           # PrivateUsers = true; # doesn't work with privileged ports therefore not supported by upstream
 
           DynamicUser = true;
           StateDirectory = "step-ca";
         };
       };
+
+      users.users.step-ca = {
+        home = "/var/lib/step-ca";
+        group = "step-ca";
+        isSystemUser = true;
+      };
+
+      users.groups.step-ca = {};
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.port ];

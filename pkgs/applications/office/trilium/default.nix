@@ -8,7 +8,7 @@ let
     icon = "trilium";
     comment = description;
     desktopName = "Trilium Notes";
-    categories = "Office";
+    categories = [ "Office" ];
   };
 
   meta = with lib; {
@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.47.7";
+  version = "0.50.2";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "1fcrc01wr8ln1i77q9h89i90wwyijpfp58fa717wbdvyly4860sh";
+    sha256 = "0fljza5afpjxgrzgskjhs7w86aa51d88xzv2h43666638j3c5mvk";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "0qp37y3xgbhl6vj2bkwz1lfylkn82kx7n0lcfr58wxwkn00149ry";
+    sha256 = "0jqpi1gc48jxvc68yzx80jp553haihybj3g3c5ymvqmgivwn7n4c";
   };
 
 in {
@@ -39,15 +39,6 @@ in {
     inherit meta;
 
     src = fetchurl desktopSource;
-
-    # Fetch from source repo, no longer included in release.
-    # (they did special-case icon.png but we want the scalable svg)
-    # Use the version here to ensure we get any changes.
-    trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
-      sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
-    };
-
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -61,12 +52,12 @@ in {
       runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+      mkdir -p $out/share/{applications,icons/hicolor/128x128/apps}
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
-      ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
+      ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
       cp ${desktopItem}/share/applications/* $out/share/applications
       runHook postInstall
     '';

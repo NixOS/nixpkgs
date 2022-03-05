@@ -1,0 +1,19 @@
+commit 282eed37f39ff216add8d53766fd59f3737eb87f
+Author: Vincent Laporte <Vincent.Laporte@gmail.com>
+Date:   Thu Nov 4 06:24:07 2021 +0100
+
+    Ignore dune stderr in tests
+
+diff --git a/tests/test-dirs/document/src-documentation.t/run.t b/tests/test-dirs/document/src-documentation.t/run.t
+index 2c9e1419..4f4c4327 100644
+--- a/tests/test-dirs/document/src-documentation.t/run.t
++++ b/tests/test-dirs/document/src-documentation.t/run.t
+@@ -42,7 +42,7 @@ documentation for the non-last defined value (in the same file) is show
+   > jq '.value'
+   " List reversal. "
+ 
+-  $ dune build --root=. ./doc.exe
++  $ dune build --root=. ./doc.exe 2> /dev/null
+   $ cat >.merlin <<EOF
+   > B _build/default/.doc.eobjs/byte
+   > S .

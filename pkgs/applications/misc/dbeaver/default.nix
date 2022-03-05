@@ -14,17 +14,19 @@
 , libXtst
 , zlib
 , maven
+, webkitgtk
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
-  version = "21.2.0"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.3.5"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "UYLX8oUHHfdsNiby+emunLRPIHo8ht3bfiredXOjkWs=";
+    sha256 = "sha256-xJYC+p8HeY4XOzArZMKRvOafW82npMMfwlqlxsH6Ycg=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "L8kfYkMCbQOZDrSNIfshR/00qYQLTf8WOGQvxmaIwBg=";
+    outputHash = "sha256-WAB15d4UvUOkBXT7K/hvAZWOE3V1Lpl/tr+AFNBM4FI=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +71,9 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    webkitgtk
+    glib-networking
   ];
 
   desktopItems = [
@@ -79,7 +84,7 @@ stdenv.mkDerivation rec {
       desktopName = "dbeaver";
       comment = "SQL Integrated Development Environment";
       genericName = "SQL Integrated Development Environment";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
 
@@ -130,7 +135,8 @@ stdenv.mkDerivation rec {
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
+        --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
       mkdir -p $out/share/pixmaps

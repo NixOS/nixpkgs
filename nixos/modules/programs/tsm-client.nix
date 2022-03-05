@@ -5,9 +5,9 @@ let
   inherit (builtins) length map;
   inherit (lib.attrsets) attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
   inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) literalExample mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.strings) concatStringsSep optionalString toLower;
-  inherit (lib.types) addCheck attrsOf lines nullOr package path port str strMatching submodule;
+  inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr package path port str strMatching submodule;
 
   # Checks if given list of strings contains unique
   # elements when compared without considering case.
@@ -35,7 +35,7 @@ let
       '';
     };
     options.server = mkOption {
-      type = strMatching ".+";
+      type = nonEmptyStr;
       example = "tsmserver.company.com";
       description = ''
         Host/domain name or IP address of the IBM TSM server.
@@ -56,7 +56,7 @@ let
       '';
     };
     options.node = mkOption {
-      type = strMatching ".+";
+      type = nonEmptyStr;
       example = "MY-TSM-NODE";
       description = ''
         Target node name on the IBM TSM server.
@@ -123,7 +123,7 @@ let
     };
     options.text = mkOption {
       type = lines;
-      example = literalExample
+      example = literalExpression
         ''lib.modules.mkAfter "compression no"'';
       description = ''
         Additional text lines for the server stanza.
@@ -144,7 +144,7 @@ let
     };
     config.name = mkDefault name;
     # Client system-options file directives are explained here:
-    # https://www.ibm.com/support/knowledgecenter/SSEQVQ_8.1.8/client/c_opt_usingopts.html
+    # https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=commands-processing-options
     config.extraConfig =
       mapAttrs (lib.trivial.const mkDefault) (
         {
@@ -218,8 +218,8 @@ let
     package = mkOption {
       type = package;
       default = pkgs.tsm-client;
-      defaultText = "pkgs.tsm-client";
-      example = literalExample "pkgs.tsm-client-withGui";
+      defaultText = literalExpression "pkgs.tsm-client";
+      example = literalExpression "pkgs.tsm-client-withGui";
       description = ''
         The TSM client derivation to be
         added to the system environment.

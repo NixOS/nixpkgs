@@ -1,21 +1,31 @@
-{ lib, stdenv, llvm_meta, cmake, python3, src, libunwind, version
+{ lib, stdenv, llvm_meta, cmake, python3
+, monorepoSrc, runCommand
+, cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
-, libcxx
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcxxabi";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    mkdir -p "$out/libcxx/src"
+    cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+    cp -r ${monorepoSrc}/libcxx/include "$out/libcxx"
+    cp -r ${monorepoSrc}/libcxx/src/include "$out/libcxx/src"
+    mkdir -p "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
     patch -p1 -d llvm -i ${./wasm.patch}
   '';
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = [
-    "-DLIBCXXABI_LIBCXX_INCLUDES=${libcxx.dev}/include/c++/v1"
+    "-DLIBCXXABI_LIBCXX_INCLUDES=${cxx-headers}/include/c++/v1"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"

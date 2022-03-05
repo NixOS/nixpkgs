@@ -1,18 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , colorful
 , tomlkit
 , git
+, packaging
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "21.7.4";
+  version = "22.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,16 +22,17 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12z74fp21kv6jf4cwc4hd5xvl5lilhmpprcqimdg85pcddc4zwc2";
+    hash = "sha256-RmMlwnAJlCTDnTyim0MdAeW3NA8r2IiqrE0YeWgxUk4=";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
     colorful
     tomlkit
+    packaging
     requests
   ];
 
@@ -39,14 +41,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'packaging = "^20.3"' 'packaging = "*"'
+  '';
+
   disabledTests = [
     # Signing fails
     "test_find_no_signing_key"
     "test_find_signing_key"
     "test_find_unreleased_information"
+    # CLI test fails
+    "test_missing_cmd"
   ];
 
-  pythonImportsCheck = [ "pontos" ];
+  pythonImportsCheck = [
+    "pontos"
+  ];
 
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";

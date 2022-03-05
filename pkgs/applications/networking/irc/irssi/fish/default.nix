@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    tar xf ${irssi.src}
+    cp -a "${irssi.src}" "./${irssi.name}"
     configureFlags="$configureFlags --with-irssi-source=`pwd`/${irssi.name}"
 
     ./regen.sh

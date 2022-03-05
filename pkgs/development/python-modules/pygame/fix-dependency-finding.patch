@@ -1,29 +1,13 @@
 diff --git a/buildconfig/config_darwin.py b/buildconfig/config_darwin.py
-index 8d84683f..70df8f9c 100644
+index c785e183..37d5cea4 100644
 --- a/buildconfig/config_darwin.py
 +++ b/buildconfig/config_darwin.py
-@@ -56,10 +56,10 @@ class Dependency:
- class FrameworkDependency(Dependency):
-     def configure(self, incdirs, libdirs):
-         BASE_DIRS = '/', os.path.expanduser('~/'), '/System/'
--        for n in BASE_DIRS:
-+        for n in incdirs + libdirs:
-             n += 'Library/Frameworks/'
-             fmwk = n + self.libs + '.framework/Versions/Current/'
--            if os.path.isfile(fmwk + self.libs):
-+            if os.path.isfile(fmwk + self.libs + '.tbd'):
-                 print ('Framework ' + self.libs + ' found')
-                 self.found = 1
-                 self.inc_dir = fmwk + 'Headers'
-@@ -158,19 +158,8 @@ def main(sdl2=False):
+@@ -146,16 +146,8 @@ def main():
      ])
  
      print ('Hunting dependencies...')
--    incdirs = ['/usr/local/include']
--    if sdl2:
--        incdirs.append('/usr/local/include/SDL2')
--    else:
--        incdirs.append('/usr/local/include/SDL')
+-    incdirs = ['/usr/local/include', '/opt/homebrew/include']
+-    incdirs.extend(['/usr/local/include/SDL2', '/opt/homebrew/include/SDL2', '/opt/local/include/SDL2'])
 -
 -    incdirs.extend([
 -       #'/usr/X11/include',
@@ -31,17 +15,17 @@ index 8d84683f..70df8f9c 100644
 -       '/opt/local/include/freetype2/freetype']
 -    )
 -    #libdirs = ['/usr/local/lib', '/usr/X11/lib', '/opt/local/lib']
--    libdirs = ['/usr/local/lib', '/opt/local/lib']
+-    libdirs = ['/usr/local/lib', '/opt/local/lib', '/opt/homebrew/lib']
 +    incdirs = @buildinputs_include@
 +    libdirs = @buildinputs_lib@
  
      for d in DEPS:
          if isinstance(d, (list, tuple)):
 diff --git a/buildconfig/config_unix.py b/buildconfig/config_unix.py
-index f6a4ea4b..f7f5be76 100644
+index 5c50bcdc..2fd69e2d 100644
 --- a/buildconfig/config_unix.py
 +++ b/buildconfig/config_unix.py
-@@ -224,18 +224,8 @@ def main(sdl2=False):
+@@ -210,18 +210,8 @@ def main():
      if not DEPS[0].found:
          raise RuntimeError('Unable to run "sdl-config". Please make sure a development version of SDL is installed.')
  

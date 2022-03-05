@@ -6,10 +6,11 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "libdbi-drivers-0.9.0";
+  pname = "libdbi-drivers";
+  version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdbi-drivers/${name}.tar.gz";
+    url = "mirror://sourceforge/libdbi-drivers/libdbi-drivers-${version}.tar.gz";
     sha256 = "0m680h8cc4428xin4p733azysamzgzcmv4psjvraykrsaz6ymlj3";
   };
 

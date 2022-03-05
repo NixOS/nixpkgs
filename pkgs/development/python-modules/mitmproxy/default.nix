@@ -24,7 +24,7 @@
 , pyopenssl
 , pyparsing
 , pyperclip
-, ruamel_yaml
+, ruamel-yaml
 , setuptools
 , sortedcontainers
 , tornado
@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "7.0.3";
+  version = "7.0.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j1lipshccPUpMR+o28hDyaJbrVgj6AHijFqOgVmrBkg=";
+    sha256 = "sha256-424WNG9Yj+Zfo1UTh7emknZ7xTtpFPz7Ph+FpE149FM=";
   };
 
   propagatedBuildInputs = [
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     pyopenssl
     pyparsing
     pyperclip
-    ruamel_yaml
+    ruamel-yaml
     sortedcontainers
     tornado
     urwid

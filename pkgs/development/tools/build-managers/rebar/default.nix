@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, erlang }:
+{ lib, stdenv, fetchFromGitHub, erlang }:
 
 stdenv.mkDerivation rec {
   pname = "rebar";
   version = "2.6.4";
 
-  src = fetchurl {
-    url = "https://github.com/rebar/rebar/archive/${version}.tar.gz";
-    sha256 = "01xxq1f1vrwca00pky2van26hi2hhr05ghfhy71v5cifzax4cwjp";
+  src = fetchFromGitHub {
+    owner = "rebar";
+    repo = "rebar";
+    rev = version;
+    sha256 = "sha256-okvG7X2uHtZ1p+HUoFOmslrWvYjk0QWBAvAMAW2E40c=";
   };
 
   buildInputs = [ erlang ];
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
       work. rebar also provides dependency management, enabling
       application writers to easily re-use common libraries from a
       variety of locations (git, hg, etc).
-      '';
+    '';
 
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;

@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, portaudio, fftw, libsndfile, libsamplerate }:
 
 stdenv.mkDerivation rec {
-  baseName = "audio";
+  pname = "pure-audio";
   version = "0.6";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-audio-${version}.tar.gz";
     sha256 = "c1f2a5da73983efb5a54f86d57ba93713ebed20ff0c72de9b3467f10f2904ee0";
   };
 

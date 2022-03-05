@@ -23,5 +23,6 @@ buildGoModule rec {
     # https://github.com/blackbinn/wprecon/blob/master/LICENSE
     license = with licenses; [ unfree ];
     maintainers = with maintainers; [ fab ];
+    broken = true; # build fails, missing tag
   };
 }

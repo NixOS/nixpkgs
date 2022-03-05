@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradleGen, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jdk, gradle, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
 let
-  # The default one still uses jdk8 (#89731)
-  gradle = (gradleGen.override (old: { java = jdk; })).gradle_latest;
-
   pname = "scenic-view";
   version = "11.0.2";
 
@@ -69,8 +66,8 @@ let
     desktopName = pname;
     exec = pname;
     comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {

@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "23.0.0";
+  version = "26.1.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1eb26b965ba4049ddcf10d4f25818725fc03c491c3be76537d0d74ceb1146b04";
+    sha256 = "sha256-K63nT8sx2PCIFhc+1eCAs/ItESbv9xA+8GDn2hZCJHU=";
   };
 
   propagatedBuildInputs = [

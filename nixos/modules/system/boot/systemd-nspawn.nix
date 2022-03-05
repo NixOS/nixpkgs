@@ -1,8 +1,8 @@
-{ config, lib , pkgs, ...}:
+{ config, lib, pkgs, utils, ...}:
 
+with utils.systemdUtils.unitOptions;
+with utils.systemdUtils.lib;
 with lib;
-with import ./systemd-unit-options.nix { inherit config lib; };
-with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
   cfg = config.systemd.nspawn;
@@ -120,14 +120,6 @@ in {
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
-
-          # Workaround for https://github.com/NixOS/nixpkgs/pull/67232#issuecomment-531315437 and https://github.com/systemd/systemd/issues/13622
-          # Once systemd fixes this upstream, we can re-enable -U
-          systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [
-            ""  # deliberately empty. signals systemd to override the ExecStart
-            # Only difference between upstream is that we do not pass the -U flag
-            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
-          ];
         }
       ];
 }

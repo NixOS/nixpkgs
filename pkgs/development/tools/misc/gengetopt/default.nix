@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     rm tests/test_conf_parser_save.sh
   '';
 
-  enableParallelBuilding = true;
+  # test suite is not thread safe
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [ texinfo help2man ];
 

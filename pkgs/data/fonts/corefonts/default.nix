@@ -25,7 +25,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "corefonts-1";
+  pname = "corefonts";
+  version = "1";
 
   exes = map ({name, sha256}: fetchurl {
     url = "mirror://sourceforge/corefonts/${name}32.exe";

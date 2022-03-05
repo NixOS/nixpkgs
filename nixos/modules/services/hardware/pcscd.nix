@@ -21,8 +21,8 @@ in
     plugins = mkOption {
       type = types.listOf types.package;
       default = [ pkgs.ccid ];
-      defaultText = "[ pkgs.ccid ]";
-      example = literalExample "[ pkgs.pcsc-cyberjack ]";
+      defaultText = literalExpression "[ pkgs.ccid ]";
+      example = literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = "Plugin packages to be used for PCSC-Lite.";
     };
 

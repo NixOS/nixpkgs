@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "blspy";
-  version = "1.0.6";
+  version = "1.0.8";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sULXnecEs8VI687pR9EK9jjYWlrB4tV4dt7Kzekaxb4=";
+    hash = "sha256-yKLirwWWeUTs5BFXZfqfuNJUXtQW40EiNPxuP+FeHso=";
   };
 
   patches = [
@@ -38,6 +38,12 @@ buildPythonPackage rec {
         rev = "f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65"; # pinned by blspy
         sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
         fetchSubmodules = true;
+      };
+      catch2_src = fetchFromGitHub {
+        owner = "catchorg";
+        repo = "Catch2";
+        rev = "v2.13.7"; # pinned by blspy
+        sha256 = "NhZ8Hh7dka7KggEKKZyEbIZahuuTYeCT7cYYSUvkPzI=";
       };
     })
   ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoconf
 , automake
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = src.meta.homepage;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ roberth ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

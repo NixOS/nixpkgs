@@ -3,15 +3,15 @@
 
 stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38425/why3-${version}.tar.gz";
-    sha256 = "0lw0cpx347zz9vvwqibmbxgs80fsd16scgk3isscvwxnajpc3rv8";
+    url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256:1rqyypzlvagrn43ykl0c5wxyvnry5fl1ykn3xcvlzgghk96yq3jq";
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir menhirLib
+    ocaml findlib ocamlgraph zarith menhir
     # Emacs compilation of why3.el
     emacs
     # Documentation
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     # S-expression output for why3pp
     ppx_deriving ppx_sexp_conv
     # Coq Support
-    coqPackages.coq coqPackages.flocq ocamlPackages.camlp5
+    coqPackages.coq coqPackages.flocq
   ];
 
-  propagatedBuildInputs = with ocamlPackages; [ camlzip num re sexplib ];
+  propagatedBuildInputs = with ocamlPackages; [ camlzip menhirLib num re sexplib ];
 
   enableParallelBuilding = true;
 

@@ -19,7 +19,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.digitalbitbox;
-      defaultText = "pkgs.digitalbitbox";
+      defaultText = literalExpression "pkgs.digitalbitbox";
       description = "The Digital Bitbox package to use. This can be used to install a package with udev rules that differ from the defaults.";
     };
   };

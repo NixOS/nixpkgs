@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   version = "2.2.0";
   pname = "LASzip";
 
-  src = fetchurl {
-    url = "https://github.com/LASzip/LASzip/archive/v${version}.tar.gz";
-    sha256 = "b8e8cc295f764b9d402bc587f3aac67c83ed8b39f1cb686b07c168579c61fbb2";
+  src = fetchFromGitHub {
+    owner = "LASzip";
+    repo = "LASzip";
+    rev = "v${version}";
+    sha256 = "sha256-TXzse4oLjNX5R2xDR721iV+gW/rP5z3Zciv4OgxfeqA=";
   };
 
   nativeBuildInputs = [ cmake ];

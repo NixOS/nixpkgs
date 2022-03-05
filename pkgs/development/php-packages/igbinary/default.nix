@@ -3,8 +3,8 @@
 buildPecl {
   pname = "igbinary";
 
-  version = "3.2.3";
-  sha256 = "1ffaqhckkk1qr5dk1fl7f8dm2w4lj4gqrgazzmc67acsdmp7z5f0";
+  version = "3.2.7";
+  sha256 = "sha256-0NwNC1aphfT1LOogcXEz09oFNoh2vA+UMXweYOAxnn0=";
 
   configureFlags = [ "--enable-igbinary" ];
   makeFlags = [ "phpincludedir=$(dev)/include" ];

@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.0.16";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gF4VhNEq/gpxXqOKvBtWZ5iZ3Jf98vSuSZYUu8r1jKA=";
+    hash = "sha256-/kZI/NOZO8T5jlG9Qtfr14aCJDKrP7wEQLgJ6qe9VzY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,8 +30,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
   postInstall = ''
-    substituteInPlace $out/lib/s2n/cmake/shared/s2n-targets.cmake \
-      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+    # Glob for 'shared' or 'static' subdir
+    for f in $out/lib/s2n/cmake/*/s2n-targets.cmake; do
+      substituteInPlace "$f" \
+        --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+    done
   '';
 
   meta = with lib; {

@@ -85,7 +85,7 @@ in {
 
       backupAll = mkOption {
         default = cfg.databases == [];
-        defaultText = "services.postgresqlBackup.databases == []";
+        defaultText = literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
           Backup all databases using pg_dumpall.

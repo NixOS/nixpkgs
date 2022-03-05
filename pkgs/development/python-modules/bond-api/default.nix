@@ -5,17 +5,21 @@
 , aioresponses
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "bond-api";
-  version = "0.1.13";
+  version = "0.1.16";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "prystupa";
     repo = "bond-api";
     rev = "v${version}";
-    sha256 = "0v3bwbpn98fjm8gza2k7fb7w5ps3982kfvbck5x0fh2xq2825b80";
+    sha256 = "1nqf090b14nd7an2n776mb37yskddfnihmas2fy56pxclwvwqr9n";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +32,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bond_api" ];
+  pythonImportsCheck = [
+    "bond_api"
+  ];
 
   meta = with lib; {
     description = "Asynchronous Python wrapper library over Bond Local API";

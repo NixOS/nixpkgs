@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     colorama
-    clintermission
+    prompt-toolkit
   ];
 
   checkInputs = [ git ]

@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "sparsehash-2.0.4";
+  pname = "sparsehash";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "sparsehash";
     repo = "sparsehash";
-    rev = name;
+    rev = "sparsehash-${version}";
     sha256 = "1pf1cjvcjdmb9cd6gcazz64x0cd2ndpwh6ql2hqpypjv725xwxy7";
   };
 

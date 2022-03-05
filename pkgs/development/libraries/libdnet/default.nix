@@ -1,12 +1,13 @@
 {lib, stdenv, fetchurl, automake, autoconf, libtool}:
 
-stdenv.mkDerivation {
-  name = "libdnet-1.12";
+stdenv.mkDerivation rec {
+  pname = "libdnet";
+  version = "1.12";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libdnet/libdnet-1.12.tgz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libdnet/libdnet-${version}.tgz";
     sha256 = "09mhbr8x66ykhf5581a5zjpplpjxibqzgkkpx689kybwg0wk1cw3";
   };
 

@@ -1,10 +1,11 @@
-{lib, stdenv, fetchurl, cmake, libpng, libtiff, libjpeg, panotools, libxml2 }:
+{ lib, stdenv, fetchurl, cmake, libpng, libtiff, libjpeg, panotools, libxml2 }:
 
-stdenv.mkDerivation {
-  name = "autopano-sift-C-2.5.1";
+stdenv.mkDerivation rec {
+  pname = "autopano-sift-C";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hugin/autopano-sift-C-2.5.1.tar.gz";
+    url = "mirror://sourceforge/hugin/autopano-sift-C-${version}.tar.gz";
     sha256 = "0dqk8ff82gmy4v5ns5nr9gpzkc1p7c2y8c8fkid102r47wsjk44s";
   };
 

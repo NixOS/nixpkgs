@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.66";
+  version = "2.0.69";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "sha256-1aikMRY1YiSQNUnYqsw1Eew9D9JHbkX+BXNCof6YK50=";
+    sha256 = "sha256-p273O5JLFX1dA2caV3lVVL9YNTcGMSrC7DWieUfUmqI=";
   };
 
   buildInputs = [
@@ -88,6 +88,10 @@ stdenv.mkDerivation rec {
     # munin hardcodes PATH, we need it to obey $PATH
     sed -i '/ENV{PATH}/d' node/lib/Munin/Node/Service.pm
   '';
+
+  # Disable parallel build, errors:
+  #  Can't locate Munin/Common/Defaults.pm in @INC ...
+  enableParallelBuilding = false;
 
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
   # developers have forgotten to use PREFIX everywhere, so we use DESTDIR to

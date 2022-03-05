@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
-, nftablesCompat ? false
+, nftablesCompat ? true
 }:
 
 with lib;
@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
-    updateWalker = true;
   };
 }

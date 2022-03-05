@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, jre, git, gradle_6, perl, makeWrapper }:
 
 let
-  name = "ma1sd-${version}";
+  pname = "ma1sd";
   version = "2.4.0";
   rev = version;
 
@@ -14,8 +14,8 @@ let
 
 
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
-    inherit src;
+    pname = "${pname}-deps";
+    inherit src version;
     nativeBuildInputs = [ gradle_6 perl git ];
 
     buildPhase = ''
@@ -40,7 +40,7 @@ let
 
 in
 stdenv.mkDerivation {
-  inherit name src version;
+  inherit pname src version;
   nativeBuildInputs = [ gradle_6 perl makeWrapper ];
   buildInputs = [ jre ];
 

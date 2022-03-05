@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
     license = with licenses; [ gpl2Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

@@ -1,3 +1,0 @@
-url http://foicica.com/gtdialog/download
-version_link '[.]zip$'
-version '.*_([0-9.]*)[.]zip' '\1'

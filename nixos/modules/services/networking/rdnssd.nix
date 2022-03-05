@@ -72,8 +72,10 @@ in
 
     users.users.rdnssd = {
       description = "RDNSSD Daemon User";
-      uid = config.ids.uids.rdnssd;
+      isSystemUser = true;
+      group = "rdnssd";
     };
+    users.groups.rdnssd = {};
 
   };
 

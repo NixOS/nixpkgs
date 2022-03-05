@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, fasteners
+{ lib, buildPythonPackage, fetchPypi, fasteners
 , jinja2
 , pbr
 , python-jenkins
@@ -10,14 +9,17 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "3.10.0";
+  version = "3.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8MP8YHIkxDqjPsUYv6ROmuRwcGMzPpsVCRwxga3XdYU=";
+    sha256 = "sha256-gpsot4LW1IBfYt8eb72WJqMzWEAMt4gqWOD1KhTQjds=";
   };
 
   postPatch = ''
+    # relax version constraint, https://storyboard.openstack.org/#!/story/2009723
+    substituteInPlace requirements.txt --replace 'PyYAML>=3.10.0,<6' 'PyYAML>=3.10.0'
+
     export HOME=$TMPDIR
   '';
 

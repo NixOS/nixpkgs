@@ -68,5 +68,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymc-devs/pymc3";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
+    # several dependencies are not declared and in the end it requires theano-pymc3
+    # instead of Theano. The former is currently not packaged.
+    broken = true;
   };
 }

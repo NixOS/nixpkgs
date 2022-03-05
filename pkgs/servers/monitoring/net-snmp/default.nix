@@ -1,13 +1,20 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
-, file, openssl, perl, perlPackages, unzip, nettools, ncurses }:
+, file, openssl, perl, perlPackages, nettools, gnused
+, withPerlTools ? false }: let
 
-stdenv.mkDerivation rec {
+  perlWithPkgs = perl.withPackages (ps: with ps; [
+    JSON
+    TermReadKey
+    Tk
+  ]);
+
+in stdenv.mkDerivation rec {
   pname = "net-snmp";
-  version = "5.9";
+  version = "5.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
-    sha256 = "0wb0vyafpspw3mcifkjjmf17r1r80kjvslycscb8nvaxz1k3lc04";
+    sha256 = "sha256-63/UpE3mzdv/2akqha0TCeXBBU+51afdkweciVP0jD8=";
   };
 
   patches =
@@ -37,8 +44,9 @@ stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo unzip ];
-  buildInputs = with perlPackages; [ file perl openssl ncurses JSON Tk TermReadKey ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo gnused file ];
+  buildInputs = [ openssl ]
+    ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
   doCheck = false;  # tries to use networking
@@ -56,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
-    homepage = "http://net-snmp.sourceforge.net/";
+    homepage = "http://www.net-snmp.org/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

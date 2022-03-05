@@ -84,9 +84,13 @@ let
 
 in
 stdenv.mkDerivation ({
-  name = "${baseName}-${version}"
-    + optionalString javacSupport "-javac"
-    + optionalString odbcSupport "-odbc";
+  # name is used instead of pname to
+  # - not have to pass pnames as argument
+  # - have a separate pname for erlang (main module)
+  name = "${baseName}"
+    + optionalString javacSupport "_javac"
+    + optionalString odbcSupport "_odbc"
+    + "-${version}";
 
   inherit src version;
 
@@ -150,7 +154,7 @@ stdenv.mkDerivation ({
         #!${stdenv.shell}
         set -ox errexit
         PATH=${lib.makeBinPath [ common-updater-scripts coreutils git gnused ]}
-        latest=$(list-git-tags https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
+        latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
         if [ "$latest" != "${version}" ]; then
           nixpkgs="$(git rev-parse --show-toplevel)"
           nix_file="$nixpkgs/pkgs/development/interpreters/erlang/R${major}.nix"

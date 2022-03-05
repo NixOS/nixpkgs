@@ -2,19 +2,20 @@
 , fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.8.18";
+  version = "3.11.1";
   pname = "standardnotes";
   name = "${pname}-${version}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   plat = {
-    i386-linux = "i386";
+    i686-linux = "i386";
     x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system};
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   sha256 = {
-    i386-linux = "1xiypsmvpk8i6kab862pipbdfb0y5d5355hdwjmva7v7g26aa7h7";
-    x86_64-linux = "03qlxlgyypnvcr40jh6i4wriyax2jbfhrb798cq0n7qlc1y4pg8r";
-  }.${stdenv.hostPlatform.system};
+    i686-linux = "3e83a7eef5c29877eeffefb832543b21627cf027ae6e7b4f662865b6b842649a";
+    x86_64-linux = "fd461e98248a2181afd2ef94a41a291d20f7ffb20abeaf0cfcf81a9f94e27868";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
@@ -60,7 +61,7 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire ];
-    platforms = [ "i386-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ mgregoire chuangzhu ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

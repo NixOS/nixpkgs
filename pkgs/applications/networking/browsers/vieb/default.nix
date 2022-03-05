@@ -1,14 +1,14 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
+{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
 
 mkYarnPackage rec {
   pname = "vieb";
-  version = "6.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3mX6z/CRUQdyQxYK50yqCZIrhPgitsyus4oLkbPqNvM=";
+    sha256 = "sha256-FuaN9iUxR5Y6SnNmuegmNJXn1BYKgcobquTL3thuByM=";
   };
 
   packageJSON = ./package.json;
@@ -24,8 +24,8 @@ mkYarnPackage rec {
     icon = "vieb";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
       "text/html"
       "application/xhtml+xml"
       "x-scheme-handler/http"
@@ -34,6 +34,11 @@ mkYarnPackage rec {
   };
 
   postInstall = ''
+    unlink $out/libexec/vieb/deps/vieb/node_modules
+    ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
+
+    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7za {} ';'
+
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
     pushd $out/libexec/vieb/node_modules/vieb/app/img/icons

@@ -2,18 +2,21 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.0";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     rev = "v${version}";
-    sha256 = "10ml3va6ip501ibaykbhq8282y1j6r8bc8azc1gqxskk5jvfz1jm";
+    sha256 = "sha256-NNdg3H+tB5ovKWGneOs496c0b2dv/zFYF4CZhuH07Fs=";
   };
 
   outputs = [ "out" ];
 
   makeMakerFlags = [ "INSTALLDIRS=vendor" ];
+
+  # Avoid creating perllocal.pod, which contains a timestamp
+  installTargets = [ "pure_install" ];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
   patchPhase = ''

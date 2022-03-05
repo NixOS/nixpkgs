@@ -64,13 +64,14 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.gerrit;
+        defaultText = literalExpression "pkgs.gerrit";
         description = "Gerrit package to use";
       };
 
       jvmPackage = mkOption {
         type = types.package;
         default = pkgs.jre_headless;
-        defaultText = "pkgs.jre_headless";
+        defaultText = literalExpression "pkgs.jre_headless";
         description = "Java Runtime Environment package to use";
       };
 
@@ -236,4 +237,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [ edef zimbatm ];
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

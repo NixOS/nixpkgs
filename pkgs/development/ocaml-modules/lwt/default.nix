@@ -1,4 +1,4 @@
-{ lib, fetchzip, pkg-config, ncurses, libev, buildDunePackage, ocaml
+{ lib, fetchFromGitHub, pkg-config, ncurses, libev, buildDunePackage, ocaml
 , cppo, dune-configurator, ocplib-endian, result
 , mmap, seq
 , ocaml-syntax-shims
@@ -12,15 +12,19 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  src = fetchzip {
-    url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
-    sha256 = "0cq2qy23sa1a5zk6nja3c652mp29i84yfrkcwks6i8sdqwli36jy";
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "lwt";
+    rev = version;
+    sha256 = "sha256-XpoRKcdNo2j05Gxm5wmKSdwqimFDSWvmLyooPYTHAjM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cppo dune-configurator ]
-   ++ optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims
-   ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config cppo ]
+    ++ optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims;
+  buildInputs = [ dune-configurator ]
+    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {

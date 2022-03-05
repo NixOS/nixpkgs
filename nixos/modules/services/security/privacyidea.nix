@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.privacyidea;
+  opt = options.services.privacyidea;
 
   uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; };
   python = uwsgi.python3;
@@ -112,6 +113,7 @@ in
       encFile = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/enckey";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/enckey"'';
         description = ''
           This is used to encrypt the token data and token passwords
         '';
@@ -120,6 +122,7 @@ in
       auditKeyPrivate = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/private.pem";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/private.pem"'';
         description = ''
           Private Key for signing the audit log.
         '';
@@ -128,6 +131,7 @@ in
       auditKeyPublic = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/public.pem";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/public.pem"'';
         description = ''
           Public key for checking signatures of the audit log.
         '';
@@ -169,7 +173,6 @@ in
 
         configFile = mkOption {
           type = types.path;
-          default = "";
           description = ''
             Path to PrivacyIDEA LDAP Proxy configuration (proxy.ini).
           '';
@@ -201,6 +204,7 @@ in
       systemd.services.privacyidea = let
         piuwsgi = pkgs.writeText "uwsgi.json" (builtins.toJSON {
           uwsgi = {
+            buffer-size = 8192;
             plugins = [ "python3" ];
             pythonpath = "${penv}/${uwsgi.python3.sitePackages}";
             socket = "/run/privacyidea/socket";
@@ -273,7 +277,7 @@ in
     (mkIf cfg.ldap-proxy.enable {
 
       systemd.services.privacyidea-ldap-proxy = let
-        ldap-proxy-env = pkgs.python2.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
+        ldap-proxy-env = pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
       in {
         description = "privacyIDEA LDAP proxy";
         wantedBy = [ "multi-user.target" ];

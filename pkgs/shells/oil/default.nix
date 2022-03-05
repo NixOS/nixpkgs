@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.9.0";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "sha256-xk4io2ZXVupU6mCqmD94k1AaE8Kk0cf3PIx28X6gNjY=";
+    sha256 = "sha256-OsrxfJ5dF9Anpg1r6Hj+aD194l99X9Yh4vIZ+R+aH8E=";
   };
 
   postPatch = ''
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
       asl20 # Licence for Oil itself
     ];
 
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lheckemann alva ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };

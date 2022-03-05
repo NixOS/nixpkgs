@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "python-vipaccess";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f148d4534e3a4dda9050a6a038868594c1216ea2413f2144ca6697e0e20c9cad";
+    sha256 = "d5013d306e5891ecfe523c9ef52d074fe8b6ca29ee259c0deeb8a83ae9884ce0";
   };
 
   propagatedBuildInputs = [

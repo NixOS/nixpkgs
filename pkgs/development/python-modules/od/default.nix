@@ -1,16 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, unittest2, repeated_test }:
+{ lib, buildPythonPackage, fetchPypi, unittest2 }:
 
 buildPythonPackage rec {
   pname = "od";
-  version = "1.0";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1az30snc3w6s4k1pi7mspcv8y0kp3ihf3ly44z517nszmz9lrjfi";
+    sha256 = "sha256-uGkj2Z8mLg51IV+FOqwZl1hT7zVyjmD1CcY/VbH4tKk=";
   };
 
+  # repeated_test no longer exists in nixpkgs
+  # also see: https://github.com/epsy/od/issues/1
+  doCheck = false;
   checkInputs = [
-    repeated_test
     unittest2
   ];
 

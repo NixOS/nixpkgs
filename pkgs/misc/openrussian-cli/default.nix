@@ -25,12 +25,6 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  # Disable check as it's too slow.
-  # doCheck = true;
-
-  #This is needed even though it's the default for some reason.
-  checkTarget = "check";
-
   # Can't use "make install" here
   installPhase = ''
     runHook preInstall

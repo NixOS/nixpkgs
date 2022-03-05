@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     borgbackup
     colorama
     jsonschema
-    ruamel_yaml
+    ruamel-yaml
     requests
     setuptools
   ];

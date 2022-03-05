@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
-, python3, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
+, coreutils, python3, makeWrapper }:
 
 let
   common = { version, sha256, extraNativeBuildInputs ? [] }:
@@ -16,8 +16,11 @@ let
 
       nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
       buildInputs = [
-        pcre libxslt groff ncurses readline libedit makeWrapper python3
-      ];
+        libxslt groff ncurses readline libedit makeWrapper python3
+      ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
 
@@ -45,11 +48,18 @@ let
 in
 {
   varnish60 = common {
-    version = "6.0.7";
-    sha256 = "0njs6xpc30nc4chjdm4d4g63bigbxhi4dc46f4az3qcz51r8zl2a";
+    version = "6.0.10";
+    sha256 = "1sr60wg5mzjb14y75cga836f19sbmmpgh13mwc4alyg3irsbz1bb";
   };
-  varnish65 = common {
-    version = "6.5.2";
-    sha256 = "041gc22h8cwsb8jw7zdv6yk5h8xg2q0g655m5zhi5jxq35f2sljx";
-  };
+  varnish70 = (common {
+    version = "7.0.2";
+    sha256 = "0q9z1iilqwbh5flfy9pl18kxv0yjs5z91c4j81z5pgyjd9d4jjjj";
+  }).overrideAttrs (oA: {
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/varnishcache/varnish-cache/commit/20e007a5b17c1f68f70ab42080de384f9e192900.patch";
+        sha256 = "0vvihbjknb0skdv2ksn2lz89pwmn4f2rjmb6q65cvgnnjfj46s82";
+      })
+    ];
+  });
 }

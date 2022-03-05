@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "automysqlbackup";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "sixhop";
     repo = pname;
     rev = version;
-    sha256 = "0lki2049npc38r8m08garymywp1rzgflm0mxsfdznn9jfp4pk2lp";
+    sha256 = "sha256-C0p1AY4yIxybQ6a/HsE3ZTHumtvQw5kKM51Ap+Se0ZI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

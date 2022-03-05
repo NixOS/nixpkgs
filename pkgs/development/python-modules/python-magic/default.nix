@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "python-magic";
-  version = "0.4.24";
+  version = "0.4.25";
 
   src = fetchFromGitHub {
     owner = "ahupp";
     repo = "python-magic";
     rev = version;
-    sha256 = "17jalhjbfd600lzfz296m0nvgp6c7vx1mgz82jbzn8hgdzknf4w0";
+    sha256 = "sha256-h7YQVH5Z7zunT6AdLPBh3TWpxLpZ5unSHDhkVDFOWDI=";
   };
 
   patches = [

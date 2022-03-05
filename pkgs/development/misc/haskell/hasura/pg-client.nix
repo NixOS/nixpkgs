@@ -13,8 +13,8 @@ mkDerivation {
   version = "0.1.0";
   src = fetchgit {
     url = "https://github.com/hasura/pg-client-hs.git";
-    sha256 = "1y79s3ai4h82szpm1j5n5ygybqr7cza9l0raxf39vgn66jhy1jd2";
-    rev = "92975d0f8f933c8d06913dc97af259253bf7fb5f";
+    sha256 = "00h9hskv3p4mg35php5wsr2d2rjahcv29rqidb2lxl11r05psr4m";
+    rev = "5e8a2d7ebe8b96518e5a70f4d61be2550eaa4e70";
     fetchSubmodules = true;
   };
   setupHaskellDepends = [ base Cabal ];

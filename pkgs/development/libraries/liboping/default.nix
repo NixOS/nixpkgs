@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses ? null, perl ? null, lib }:
+{ stdenv, fetchurl, fetchpatch, ncurses ? null, perl ? null, lib }:
 
 stdenv.mkDerivation rec {
   pname = "liboping";
@@ -8,6 +8,20 @@ stdenv.mkDerivation rec {
     url = "https://noping.cc/files/${pname}-${version}.tar.bz2";
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
+
+  patches = [
+    # Add support for ncurses-6.3. A backport of patch pending upstream
+    # inclusion: https://github.com/octo/liboping/pull/61
+    ./ncurses-6.3.patch
+
+    # Pull pending fix for format arguments mismatch:
+    #  https://github.com/octo/liboping/pull/60
+    (fetchpatch {
+      name = "format-args.patch";
+      url = "https://github.com/octo/liboping/commit/7a50e33f2a686564aa43e4920141e6f64e042df1.patch";
+      sha256 = "118fl3k84m3iqwfp49g5qil4lw1gcznzmyxnfna0h7za2nm50cxw";
+    })
+  ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString
     stdenv.cc.isGNU "-Wno-error=format-truncation";

@@ -1,39 +1,38 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pytestCheckHook,
+  libffi, pkg-config, pycparser
+}:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.14.6";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9a875ce9d7fe32887784274dd533c57909b7b1dcadcc128a2ac21331a9765dd";
+    sha256 = "920f0d66a896c2d99f0adbb391f990a84091179542c205fa53ce5787aff87954";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [ libffi ];
 
+  nativeBuildInputs = [ pkg-config ];
+
   propagatedBuildInputs = [ pycparser ];
 
-  # On Darwin, the cffi tests want to hit libm a lot, and look for it in a global
-  # impure search path. It's obnoxious how much repetition there is, and how difficult
-  # it is to get it to search somewhere else (since we do actually have a libm symlink in libSystem)
   prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace testing/cffi0/test_parsing.py \
-      --replace 'lib_m = "m"' 'lib_m = "System"' \
-      --replace '"libm" in name' '"libSystem" in name'
-    substituteInPlace testing/cffi0/test_unicode_literals.py --replace 'lib_m = "m"' 'lib_m = "System"'
-    substituteInPlace testing/cffi0/test_zdistutils.py --replace 'self.lib_m = "m"' 'self.lib_m = "System"'
-    substituteInPlace testing/cffi1/test_recompiler.py --replace 'lib_m = "m"' 'lib_m = "System"'
-    substituteInPlace testing/cffi0/test_function.py --replace "lib_m = 'm'" "lib_m = 'System'"
-    substituteInPlace testing/cffi0/test_verify.py --replace "lib_m = ['m']" "lib_m = ['System']"
+    # Remove setup.py impurities
+    substituteInPlace setup.py --replace "'-iwithsysroot/usr/include/ffi'" ""
+    substituteInPlace setup.py --replace "'/usr/include/ffi'," ""
+    substituteInPlace setup.py --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
   '';
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-unused-command-line-argument -Wno-unreachable-code";
+    "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";
 
-  doCheck = !stdenv.hostPlatform.isMusl && !stdenv.isDarwin; # TODO: Investigate
+  # Lots of tests fail on aarch64-darwin due to "Cannot allocate write+execute memory":
+  # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+  doCheck = !stdenv.hostPlatform.isMusl && !(stdenv.isDarwin && stdenv.isAarch64);
 
   checkInputs = [ pytestCheckHook ];
 

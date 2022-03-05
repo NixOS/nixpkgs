@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 
 , cmake
@@ -53,16 +54,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kgZEbOGmO+uRKaWR+oQBiGkBzDSuCznUyWNUoMICHhk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Q/ulRgU6zNLRZUjL83O/Krx85voPWZPZDo65CLp/aOg=";
   };
 
-  cargoSha256 = "sha256-JqnYMDkagWNGliUxi5eqJN92ULsvT7Fwmah8um1xaRw=";
+  cargoSha256 = "sha256-S1V8hDuzp4sf6945gqs8QNVdu8jwPGVYjVbV6EY28Hk=";
 
   nativeBuildInputs = [
     cmake
@@ -92,6 +93,8 @@ rustPlatform.buildRustPackage rec {
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
+  checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
+
   postInstall = (
     if stdenv.isDarwin then ''
       mkdir $out/Applications
@@ -117,6 +120,7 @@ rustPlatform.buildRustPackage rec {
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+    gzip -c extra/alacritty-msg.man > "$out/share/man/man1/alacritty-msg.1.gz"
 
     install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
 

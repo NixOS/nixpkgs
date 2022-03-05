@@ -8,7 +8,9 @@ let
 
   configOptions = {
     data_dir = dataDir;
-    ui = cfg.webUi;
+    ui_config = {
+      enabled = cfg.webUi;
+    };
   } // cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
@@ -34,7 +36,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.consul;
-        defaultText = "pkgs.consul";
+        defaultText = literalExpression "pkgs.consul";
         description = ''
           The package used for the Consul agent and CLI.
         '';
@@ -121,7 +123,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
-          defaultText = "pkgs.consul-alerts";
+          defaultText = literalExpression "pkgs.consul-alerts";
           type = types.package;
         };
 

@@ -2,7 +2,8 @@
 , fetchFromGitHub, cmake
 , libusb-compat-0_1, pkg-config
 , usePython ? false
-, python, ncurses, swig2
+, python ? null
+, ncurses, swig2
 , extraPackages ? []
 } :
 
@@ -50,6 +51,6 @@ in stdenv.mkDerivation {
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

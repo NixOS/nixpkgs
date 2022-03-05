@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnutls, openssl, libgcrypt, libgpgerror, pkg-config, gettext
+{ lib, stdenv, fetchurl, gnutls, openssl, libgcrypt, libgpg-error, pkg-config, gettext
 , which
 
 # GUI support
@@ -55,14 +55,14 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gettext which ];
 
-  buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpgerror ];
+  buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpg-error ];
 
   dontWrapQtApps = true;
 
   meta = with lib; {
     description = "OS abstraction functions used by aqbanking and related tools";
-    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=01&showall=1";
-    license = licenses.lgpl21;
+    homepage = "https://www.aquamaniac.de/rdm/projects/gwenhywfar";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };

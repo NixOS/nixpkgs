@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, gtk3, libgudev, libxfce4ui, libxfce4util, xfconf }:
+{ lib, mkXfceDerivation, exo, gtk3, libgudev, libxfce4ui, libxfce4util, xfconf }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -11,7 +11,8 @@ mkXfceDerivation {
 
   odd-unstable = false;
 
-  meta = {
+  meta = with lib; {
     description = "Thunar extension for automatic management of removable drives and media";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

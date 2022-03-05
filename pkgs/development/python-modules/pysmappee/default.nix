@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pysmappee";
-  version = "0.2.27";
+  version = "0.2.29";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "smappee";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CzdkeC53ye+IMeGUiD1mK84h2ruC1/ZpjlDjuWMVoyQ=";
+    sha256 = "sha256-Ffi55FZsZUKDcS4qV46NpRK3VP6axzrL2BO+hYW7J9E=";
   };
 
   propagatedBuildInputs = [

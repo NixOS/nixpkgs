@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = pname;
-    rev = "rel-${lib.replaceStrings [ "." ] [ "_" ] version}"; # 3.9.1 -> rel-3_9_1
-    sha256 = "1hh196kz2n3asv8r8r2bdk5b2w93zq7rw4880ciiq1554h0ib7fj";
+    rev = version;
+    sha256 = "sha256-DvGR3rDegInpnLp3H+rXNXktCGhpjsBBPTRMwodeTro=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf wrapGAppsHook ];
@@ -106,10 +106,8 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
-    ];
-    startupNotify = "false";
+    categories = [ "Application" "System" "TerminalEmulator" ];
+    startupNotify = false;
   };
 
   meta = with lib; {

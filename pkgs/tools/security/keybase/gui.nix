@@ -4,17 +4,16 @@
 , runtimeShell, gsettings-desktop-schemas }:
 
 let
-  versionSuffix = "20210623205749.763227b4c6";
+  versionSuffix = "20220120174718.95a3939b3a";
 in
 
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
-  version = "5.7.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "5.9.0"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
-
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    sha256 = "0ajpkidbzfwhi7q018wriws0n3amcy9g3mfiqm13cpz0q6vkjx83";
+    sha256 = "sha256-Wdl5pZFIz+mDkkE0EDpLGH/eGWYoBbLV05LYJgkwpI4=";
   };
 
   nativeBuildInputs = [
@@ -111,7 +110,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.keybase.io/";
     description = "The Keybase official GUI";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne ];
+    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne shofius ];
     license = licenses.bsd3;
   };
 }

@@ -1,8 +1,9 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl, nixosTests }:
 
 let
-  since = (version: pkgs.lib.versionAtLeast nodejs.version version);
-  before = (version: pkgs.lib.versionOlder nodejs.version version);
+  inherit (pkgs) lib;
+  since = version: pkgs.lib.versionAtLeast nodejs.version version;
+  before = version: pkgs.lib.versionOlder nodejs.version version;
   super = import ./composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
@@ -46,11 +47,22 @@ let
       '';
     };
 
+    carbon-now-cli = super.carbon-now-cli.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/carbon-now \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    };
+
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
     };
 
-    fast-cli = super.fast-cli.override ({
+    fast-cli = super.fast-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
         export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
@@ -59,7 +71,7 @@ let
         wrapProgram $out/bin/fast \
           --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
-    });
+    };
 
     hyperspace-cli = super."@hyperspace/cli".override {
       nativeBuildInputs = with pkgs; [
@@ -77,6 +89,25 @@ let
           pkgs.lib.makeBinPath [ pkgs.nodejs ]
         }
       '';
+      # See: https://github.com/NixOS/nixpkgs/issues/142196
+      # [...]/@hyperspace/cli/node_modules/.bin/node-gyp-build: /usr/bin/env: bad interpreter: No such file or directory
+      meta.broken = true;
+    };
+
+    mdctl-cli = super."@medable/mdctl-cli".override {
+      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+        glib
+        libsecret
+        pkg-config
+      ] ++ lib.optionals stdenv.isDarwin [
+        AppKit
+        Security
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodePackages.node-pre-gyp
+        nodejs
+      ];
     };
 
     coc-imselect = super.coc-imselect.override {
@@ -139,6 +170,10 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    intelephense = super.intelephense.override {
+      meta.license = pkgs.lib.licenses.unfree;
+    };
+
     jsonplaceholder = super.jsonplaceholder.override (drv: {
       buildInputs = [ nodejs ];
       postInstall = ''
@@ -164,6 +199,19 @@ let
       '';
     };
 
+    manta = super.manta.override {
+      nativeBuildInputs = with pkgs; [ nodejs-14_x installShellFiles ];
+      postInstall = ''
+        # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
+        completion_cmds=$(find ./bin -type f -printf "%f\n")
+
+        node ./lib/create_client.js
+        for cmd in $completion_cmds; do
+          installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
+        done
+      '';
+    };
+
     markdownlint-cli = super.markdownlint-cli.override {
       meta.mainProgram = "markdownlint";
     };
@@ -176,6 +224,15 @@ let
         wrapProgram "$out/bin/node-gyp" \
           --set npm_config_nodedir ${nodejs}
       '';
+    };
+
+    near-cli = super.near-cli.override {
+      nativeBuildInputs = with pkgs; [
+        libusb
+        nodePackages.prebuild-install
+        nodePackages.node-gyp-build
+        pkg-config
+      ];
     };
 
     node-inspector = super.node-inspector.override {
@@ -207,6 +264,11 @@ let
           (fetchpatch {
             url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
             sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
+          })
+          # Extract common logic from composePackage to a shell function
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/e4c951971df6c9f9584c7252971c13b55c369916.patch";
+            sha256 = "0w8fcyr12g2340rn06isv40jkmz2khmak81c95zpkjgipzx7hp7w";
           })
         ];
       };
@@ -252,6 +314,13 @@ let
       '';
     };
 
+    parcel = super.parcel.override {
+      buildInputs = [ self.node-gyp-build ];
+      preRebuild = ''
+        sed -i -e "s|#!/usr/bin/env node|#! ${pkgs.nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+      '';
+    };
+
     postcss-cli = super.postcss-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -267,15 +336,22 @@ let
       meta.mainProgram = "postcss";
     };
 
-    prisma = super.prisma.override {
+    prisma = super.prisma.override rec {
       nativeBuildInputs = [ pkgs.makeWrapper ];
+
+      inherit (pkgs.prisma-engines) version;
+
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
+        sha512 = "sha512-dAld12vtwdz9Rz01nOjmnXe+vHana5PSog8t0XGgLemKsUVsaupYpr74AHaS3s78SaTS5s2HOghnJF+jn91ZrA==";
+      };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
-          --prefix PRISMA_MIGRATION_ENGINE_BINARY : "${prisma-engines}/bin/migration-engine" \
-          --prefix PRISMA_QUERY_ENGINE_BINARY : "${prisma-engines}/bin/query-engine" \
-          --prefix PRISMA_QUERY_ENGINE_LIBRARY : "${lib.getLib prisma-engines}/libquery_engine.so.node"
-          --prefix PRISMA_INTROSPECTION_ENGINE_BINARY : "${prisma-engines}/bin/introspection-engine" \
-          --prefix PRISMA_FMT_BINARY : "${prisma-engines}/bin/prisma-fmt"
+          --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+          --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
+          --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+          --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
+          --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
     };
 
@@ -291,25 +367,18 @@ let
       '';
     };
 
-    netlify-cli =
-      let
-        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
-          version = "0.13.6";
-
-          src = fetchFromGitHub {
-            owner = "netlify";
-            repo = "esbuild";
-            rev = "v${version}";
-            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
-          };
-
-        });
-      in
-      super.netlify-cli.override {
-        preRebuild = ''
-          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
+    reveal-md = super.reveal-md.override (
+      lib.optionalAttrs (!stdenv.isDarwin) {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        prePatch = ''
+          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
         '';
-      };
+        postInstall = ''
+          wrapProgram $out/bin/reveal-md \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+        '';
+      }
+    );
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
@@ -319,6 +388,25 @@ let
     stf = super.stf.override {
       meta.broken = since "10";
     };
+
+    tailwindcss = super.tailwindcss.overrideAttrs (oldAttrs: {
+      plugins = [ ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        nodePath=""
+        for p in "$out" "${self.postcss}" $plugins; do
+          nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
+        done
+        wrapProgram "$out/bin/tailwind" \
+          --prefix NODE_PATH : "$nodePath"
+        wrapProgram "$out/bin/tailwindcss" \
+          --prefix NODE_PATH : "$nodePath"
+        unset nodePath
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
+      };
+    });
 
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -340,12 +428,17 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/typescript-language-server" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
+          --suffix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
     };
 
     teck-programmer = super.teck-programmer.override {
+      nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
+    };
+
+    uppy-companion = super."@uppy/companion".override {
+      name = "uppy-companion";
     };
 
     vega-cli = super.vega-cli.override {
@@ -360,18 +453,19 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        # npx tries to install vega from scratch at vegalite runtime if it
-        # can't find it. We thus replace it with a direct call to the nix
-        # derivation. This might not be necessary anymore in future vl
-        # versions: https://github.com/vega/vega-lite/issues/6863.
         postInstall = ''
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
-            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
-            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
-            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+          cd node_modules
+          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+            if [[ ! -d $dep ]]; then
+              ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+            fi
+          done
         '';
+        passthru.tests = {
+          simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
+            inherit (self) vega-lite;
+          };
+        };
     };
 
     webtorrent-cli = super.webtorrent-cli.override {
@@ -398,6 +492,16 @@ let
       buildInputs = [ self.node-pre-gyp ];
       postInstall = ''
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+        patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
+      '';
+      passthru.tests = { inherit (nixosTests) thelounge; };
+      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
+    };
+
+    triton = super.triton.override {
+      nativeBuildInputs = [ pkgs.installShellFiles ];
+      postInstall = ''
+        installShellCompletion --cmd triton --bash <($out/bin/triton completion)
       '';
     };
 

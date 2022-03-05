@@ -1,9 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, eigen, opencv, ceres-solver, cgal, boost, vcg
-, gmp, mpfr, glog, gflags, libjpeg_turbo }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, eigen
+, opencv
+, ceres-solver
+, cgal
+, boost
+, vcg
+, gmp
+, mpfr
+, glog
+, gflags
+, libjpeg_turbo
+}:
 
 stdenv.mkDerivation {
-  name = "openmvs-unstable-2018-05-26";
+  pname = "openmvs";
+  version = "unstable-2018-05-26";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";

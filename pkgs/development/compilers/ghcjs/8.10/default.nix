@@ -3,7 +3,7 @@
 , callPackage
 , fetchgit
 , ghcjsSrcJson ? null
-, ghcjsSrc ? fetchgit (builtins.fromJSON (builtins.readFile ghcjsSrcJson))
+, ghcjsSrc ? fetchgit (lib.importJSON ghcjsSrcJson)
 , bootPkgs
 , stage0
 , haskellLib
@@ -78,6 +78,11 @@ in stdenv.mkDerivation {
     ];
     dontConfigure = true;
     dontInstall = true;
+
+    # Newer versions of `config.sub` reject the `js-ghcjs` host string, but the
+    # older `config.sub` filed vendored within `ghc` still works
+    dontUpdateAutotoolsGnuConfigScripts = true;
+
     buildPhase = ''
       export HOME=$TMP
       mkdir $HOME/.cabal
@@ -108,7 +113,14 @@ in stdenv.mkDerivation {
 
     inherit passthru;
 
-    # The emscripten is broken on darwin
-    meta.platforms = lib.platforms.linux;
-    meta.maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+    meta = {
+      platforms = with lib.platforms; linux ++ darwin;
+
+      # Hydra limits jobs to only outputting 1 gigabyte worth of files.
+      # GHCJS outputs over 3 gigabytes.
+      # https://github.com/NixOS/nixpkgs/pull/137066#issuecomment-922335563
+      hydraPlatforms = lib.platforms.none;
+
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+    };
   }

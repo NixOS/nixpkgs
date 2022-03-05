@@ -1,24 +1,17 @@
-{ fetchFromGitHub, lib, rustPlatform, stdenv, SystemConfiguration }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "kamiyaa";
     repo = pname;
     rev = version;
-    sha256 = "08d6h7xwcgycw5bdzwwc6aaikcrw3yc7inkiydgml9q261kql7zl";
-    # upstream includes an outdated Cargo.lock that stops cargo from compiling
-    postFetch = ''
-      mkdir -p $out
-      tar xf $downloadedFile --strip=1 -C $out
-      substituteInPlace $out/Cargo.lock \
-        --replace 0.8.6 ${version}
-    '';
+    sha256 = "sha256-9TGHSGYCzU6uAIO4zZ/6+B4oVPE6SD9Phl4dShylW5o=";
   };
 
-  cargoSha256 = "1scrqm7fs8y7anfiigimj7y5rjxcc2qvrxiq8ai7k5cwfc4v1ghm";
+  cargoSha256 = "sha256-g8YYOk2RW4GPdkWlvAxd5KFdV4S1l5yKEzNm9OAc8RI=";
 
   buildInputs = lib.optional stdenv.isDarwin SystemConfiguration;
 

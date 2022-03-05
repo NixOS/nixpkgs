@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "1.12.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+AWkzv6SI/d3p1ljopSyLg2qi1hv6PsynmVG7+lUSTw=";
+    sha256 = "sha256-TamtjFnh+HT7JHcRTEpALdkXM9MyZGulb644bNr/BQI=";
   };
 
-  vendorSha256 = "sha256-jYBkC0IA2xbRa+56CW/5EWG8sYg3eRuFdLpOFSinuuw=";
+  vendorSha256 = "sha256-uci8/gQqLtjmxxqSlpgZhgBnvMotMvklNfwR+ua8H3M=";
 
   doCheck = false;
 

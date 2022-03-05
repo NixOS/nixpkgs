@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = "PreMiD";
       genericName = meta.description;
-      mimeType = "x-scheme-handler/premid";
+      mimeTypes = [ "x-scheme-handler/premid" ];
     })
   ];
 

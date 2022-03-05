@@ -28,6 +28,8 @@ import ./make-test-python.nix (
       { nodes, ... }:
       {
         virtualisation.memorySize = 2048;
+        virtualisation.cores = 4;
+        virtualisation.useNixStoreImage = true;
 
         imports = [ common/user-account.nix ];
 

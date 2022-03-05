@@ -25,8 +25,11 @@
     <para>
       You are logged-in automatically as <literal>nixos</literal>. The
       <literal>nixos</literal> user account has an empty password so you
-      can use <literal>sudo</literal> without a password.
+      can use <literal>sudo</literal> without a password:
     </para>
+    <programlisting>
+$ sudo -i
+</programlisting>
     <para>
       If you downloaded the graphical ISO image, you can run
       <literal>systemctl start display-manager</literal> to start the

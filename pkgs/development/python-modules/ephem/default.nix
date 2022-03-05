@@ -1,18 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , glibcLocales
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "4.0.0.2";
+  version = "4.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0D3nPr9qkWgdWX61tdQ7z28MZ+KSu6L5qXRzS08VdX4=";
+    sha256 = "sha256-f6GGhZgbpSjt1QQFKp1SEqCapb8VwRpzTtxqhuiotWo=";
   };
 
   checkInputs = [
@@ -25,7 +25,9 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" pytest --pyargs ephem.tests -k "not JPLTest"
   '';
 
-  pythonImportsCheck = [ "ephem" ];
+  pythonImportsCheck = [
+    "ephem"
+  ];
 
   meta = with lib; {
     description = "Compute positions of the planets and stars";

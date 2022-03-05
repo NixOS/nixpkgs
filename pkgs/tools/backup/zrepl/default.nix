@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "zrepl";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "zrepl";
     repo = "zrepl";
     rev = "v${version}";
-    sha256 = "5Bp8XGCjibDJgeAjW98rcABuddI+CV4Fh3hFJaKKwbo=";
+    sha256 = "4q/wwlF11HPDS2lTXUizJ3RFQ9sX5qNnWZUKAgnvDiE=";
   };
 
-  vendorSha256 = "MwmYiK2z7ZK5kKBZV7K6kCZRSd7v5Sgjoih1eeOh6go=";
+  vendorSha256 = "xToq9pKAxxknh4kE8S3uUg5ySPMbJkLftkMhofNxotc=";
 
   subPackages = [ "." ];
 

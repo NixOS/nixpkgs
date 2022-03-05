@@ -27,7 +27,7 @@ in
       '';
       default = { };
       type = attrsOf attrs;
-      example = literalExample ''
+      example = literalExpression ''
         {
           "my-service" = {
             "apiVersion" = "v1";
@@ -46,7 +46,7 @@ in
       description = "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
       default = { };
       type = attrsOf (either attrs (listOf attrs));
-      example = literalExample ''
+      example = literalExpression ''
         {
           "my-service" = {
             "apiVersion" = "v1";
@@ -58,7 +58,7 @@ in
             "spec" = { ... };
           };
         }
-        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dashboard.nix> { cfg = config.services.kubernetes; };
+        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dns.nix> { cfg = config.services.kubernetes; };
       '';
     };
 
@@ -167,4 +167,5 @@ in
     };
   };
 
+  meta.buildDocsInSandbox = false;
 }

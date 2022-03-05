@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "stm32cubemx";
-  version = "6.2.1";
+  version = "6.4.0";
 
   src = fetchzip {
     url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-    sha256 = "0m5h01iq0mgrr9svj4gmykfi9lsyjpqzrkvlizff26c8dqad59c5";
+    sha256 = "sha256-5qotjAyaNFtYUjHlNKwywmBJGAzS/IM9bF+dmONE4bk=";
     stripRoot = false;
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       name = "stm32CubeMX";
       exec = "stm32cubemx";
       desktopName = "STM32CubeMX";
-      categories = "Development;";
+      categories = [ "Development" ];
       comment = "STM32Cube initialization code generator";
       icon = "stm32cubemx";
     })

@@ -8,14 +8,13 @@
 }:
 
 let
-  mpiSupport = hdf5.mpiSupport;
-  mpi = hdf5.mpi;
+  inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
-  pname = "netcdf";
+  pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
   version = "4.8.0"; # Remove patch mentioned below on upgrade
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
+    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${version}.tar.gz";
     sha256 = "1mfn8qi4k0b8pyar3wa8v0npj69c7rhgfdlppdwmq5jqk88kb5k7";
   };
 
@@ -44,8 +43,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
-    mpiSupport = mpiSupport;
-    inherit mpi;
+    inherit mpiSupport mpi;
   };
 
   configureFlags = [

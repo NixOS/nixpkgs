@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2021-05-28";
+  version = "${kernel.version}-unstable-2021-11-19";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "f93db734666f75ebf65e44ceb943c19b598b1647";
-    sha256 = "sha256-cqXV52U+6Jl9Jje1nEOYDvmH4rgA1QdrwNCfYeul3hU=";
+    rev = "ca204c60724d23ab10244f920d4e50759ed1affb";
+    sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
   };
 
   hardeningDisable = [ "pic" ];
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
-    maintainers = with maintainers; [ hhm ];
+    maintainers = with maintainers; [ hhm ivar ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, python2, exif, imagemagick }:
+{ lib, stdenv, fetchurl, makeWrapper, python3, exif, imagemagick }:
 
 stdenv.mkDerivation rec {
   pname = "recoverjpeg";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ python2 ];
+  buildInputs = [ python3 ];
 
   postFixup = ''
     wrapProgram $out/bin/sort-pictures \

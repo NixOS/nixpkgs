@@ -5,26 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.17";
+  version = "1.23";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "12wsy2zdfhg0ygkpvz58rk86qiy259fi9grb0jxiz8zcyd6x1ngk";
+    sha256 = "sha256-NtnnZV/+8aUm8BkUz8Xm3aeSbOI2gNUPNfvYlwUl01Y=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
   buildInputs = [ libX11 libzip glfw libpng ]
-    ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm ]);
+    ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm libXext ]);
 
   dontWrapGApps = true; # We also need zenity (see below)
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/" "''${out}/"
-  '';
 
   cmakeFlags = [
     "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
@@ -53,6 +48,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    badPlatforms = [ "aarch64-linux" ]; # fails on Hydra since forever
+    maintainers = with maintainers; [ ];
   };
 }

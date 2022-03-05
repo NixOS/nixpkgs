@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "html-xml-utils";
-  version = "8.0";
+  version = "8.3";
 
   src = fetchurl {
     url = "https://www.w3.org/Tools/HTML-XML-utils/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dJBZkGwzHCx/us7uAkZiRaI3uRvUCN/485bQc0oGCuI=";
+    sha256 = "sha256-pQxNFtrWYK1nku9TvHfvqdVyl5diN3Gj/OUtjiPT0Iw=";
   };
 
   buildInputs = [curl libiconv];

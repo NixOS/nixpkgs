@@ -1,4 +1,4 @@
-{ stdenv, lib, python, cmake, libllvm, ocaml, findlib, ctypes }:
+{ stdenv, lib, python2, cmake, libllvm, ocaml, findlib, ctypes }:
 
 let version = lib.getVersion libllvm; in
 
@@ -8,9 +8,11 @@ stdenv.mkDerivation {
 
   inherit (libllvm) src;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python ocaml findlib ctypes ];
+  nativeBuildInputs = [ cmake python2 ocaml findlib ];
+  buildInputs = [ ctypes ];
   propagatedBuildInputs = [ libllvm ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=YES" # fixes bytecode builds

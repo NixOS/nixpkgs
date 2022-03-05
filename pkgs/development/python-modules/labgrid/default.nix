@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "v${version}";
-    sha256 = "03dg0c5vahrdj1153pmd4653hjisq3cc6niqnwayjx5pjb15ikxk";
+    sha256 = "0ih04lh1q3dysps4vfmk2rhqqrsimssadsxvbxdsnim2yihrrw47";
   };
 
   patches = [
@@ -63,11 +63,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     pytest-dependency
-  ];
-
-  disabledTests = [
-    "docker"
-    "sshmanager"
   ];
 
   meta = with lib; {

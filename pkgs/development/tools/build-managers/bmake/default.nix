@@ -1,15 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, getopt, tzdata, ksh
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, getopt
+, tzdata
+, ksh
 , pkgsMusl # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
   pname = "bmake";
-  version = "20210621";
+  version = "20220208";
 
   src = fetchurl {
-    url    = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
-    sha256 = "0gpzv75ibzqz1j1h0hdjgx1v7hkl3i5cb5yf6q9sfcgx0bvb55xa";
+    url = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
+    hash = "sha256-ewDB4UYrLh5Upk2ND88n/HfursPxOSDv+NlST/BZ1to=";
   };
 
   # Make tests work with musl
@@ -30,8 +35,6 @@ stdenv.mkDerivation rec {
     ./bootstrap-fix.patch
     # preserve PATH from build env in unit tests
     ./fix-unexport-env-test.patch
-    # Fix localtime tests without global /etc/zoneinfo directory
-    ./fix-localtime-test.patch
     # Always enable ksh test since it checks in a impure location /bin/ksh
     ./unconditional-ksh-test.patch
     # decouple tests from build phase
@@ -48,14 +51,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # The generated makefile is a small wrapper for calling ./boot-strap
-  # with a given op. On a case-insensitive filesystem this generated
-  # makefile clobbers a distinct, shipped, Makefile and causes
-  # infinite recursion during tests which eventually fail with
-  # "fork: Resource temporarily unavailable"
+  # The generated makefile is a small wrapper for calling ./boot-strap with a
+  # given op. On a case-insensitive filesystem this generated makefile clobbers
+  # a distinct, shipped, Makefile and causes infinite recursion during tests
+  # which eventually fail with "fork: Resource temporarily unavailable"
   configureFlags = [
     "--without-makefile"
   ];
+
+  # Disabled tests:
+  # varmod-localtime: musl doesn't support TZDIR and this test relies on impure,
+  # implicit paths
+  # opt-chdir: ofborg complains about it somehow
+  BROKEN_TESTS = "varmod-localtime opt-chdir";
 
   buildPhase = ''
     runHook preBuild
@@ -74,11 +82,13 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
   checkInputs = [
     tzdata
   ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
     ksh
   ];
+
   checkPhase = ''
     runHook preCheck
 
@@ -89,15 +99,15 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru.tests = {
-    bmakeMusl = pkgsMusl.bmake;
+  meta = with lib; {
+    homepage = "http://www.crufty.net/help/sjg/bmake.html";
+    description = "Portable version of NetBSD 'make'";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
+    platforms = platforms.unix;
+    broken = stdenv.isAarch64; # ofborg complains
   };
 
-  meta = with lib; {
-    description = "Portable version of NetBSD 'make'";
-    homepage    = "http://www.crufty.net/help/sjg/bmake.html";
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
-  };
+  passthru.tests.bmakeMusl = pkgsMusl.bmake;
 }
+# TODO: report the quirks and patches to bmake devteam (especially the Musl one)

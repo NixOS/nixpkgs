@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchFromGitHub, runCommandLocal, makeWrapper, substituteAll
-, sbcl, bash, which, perl, nettools
-, openssl, glucose, minisat, abc-verifier, z3, python
+, sbcl, bash, which, perl, hostname
+, openssl, glucose, minisat, abc-verifier, z3, python2
 , certifyBooks ? true
 } @ args:
 
@@ -36,7 +36,8 @@ in stdenv.mkDerivation rec {
   patches = [(substituteAll {
     src = ./0001-Fix-some-paths-for-Nix-build.patch;
     libipasir = "${libipasir}/lib/${libipasir.libname}";
-    openssl = openssl.out;
+    libssl = "${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
+    libcrypto = "${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
   })];
 
   buildInputs = [
@@ -44,10 +45,10 @@ in stdenv.mkDerivation rec {
     sbcl
   ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
-    which perl nettools makeWrapper
+    which perl hostname makeWrapper
     # Some of the books require one or more of these external tools:
     openssl.out glucose minisat abc-verifier libipasir
-    z3 (python.withPackages (ps: [ ps.z3 ]))
+    z3 (python2.withPackages (ps: [ ps.z3 ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of

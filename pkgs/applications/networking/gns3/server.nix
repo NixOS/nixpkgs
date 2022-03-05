@@ -8,22 +8,37 @@ let
     (self: super: {
       aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
         pname = "aiofiles";
-        version = "0.5.0";
+        version = "0.7.0";
         src = fetchFromGitHub {
           owner = "Tinche";
           repo = pname;
           rev = "v${version}";
-          sha256 = "17bsg2x5r0q6jy74hajnbp717pvbf752w0wgih6pbb4hdvfg5lcf";
+          sha256 = "sha256-njQ7eRYJO+dUrwO5pZwKHXn9nVSGYcEhwhs3x5BMc28=";
         };
         doCheck = false;
       });
+
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+        doCheck = false;
+      });
+
     })
   ];
 
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
-in python.pkgs.buildPythonPackage {
+in python.pkgs.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -36,8 +51,10 @@ in python.pkgs.buildPythonPackage {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
-      --replace "py-cpuinfo==7.0.0" "py-cpuinfo>=8.0.0"
+      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
+      --replace "Jinja2==3.0.1" "Jinja2>=3.0.1" \
+      --replace "sentry-sdk==1.3.1" "sentry-sdk>=1.3.1" \
+      --replace "async-timeout==3.0.1" "async-timeout>=3.0.1" \
   '';
 
   propagatedBuildInputs = with python.pkgs; [

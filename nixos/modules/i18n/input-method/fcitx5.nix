@@ -12,7 +12,7 @@ in {
       addons = mkOption {
         type = with types; listOf package;
         default = [];
-        example = with pkgs; [ fcitx5-rime ];
+        example = literalExpression "with pkgs; [ fcitx5-rime ]";
         description = ''
           Enabled Fcitx5 addons.
         '';

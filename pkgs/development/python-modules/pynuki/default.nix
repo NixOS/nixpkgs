@@ -3,27 +3,40 @@
 , fetchFromGitHub
 , poetry-core
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynuki";
-  version = "1.4.1";
+  version = "1.5.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = pname;
     rev = version;
-    sha256 = "1nymlrf0j430851plp355697p55asfxjmavdh2zr96b16d41dnn4";
+    sha256 = "sha256-Uqw1Xa0pBQmQsFEBv/l1gtsPy+owYcTZITOYUmMvT5Y=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requests = ">=2.27,<3"' 'requests = "*"'
+  '';
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pynuki" ];
+
+  pythonImportsCheck = [
+    "pynuki"
+  ];
 
   meta = with lib; {
     description = "Python bindings for nuki.io bridges";

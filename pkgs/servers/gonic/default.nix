@@ -12,19 +12,19 @@
 
 buildGoModule rec {
   pname = "gonic";
-  version = "0.13.1";
+  version = "0.14.0";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08zr5cbmn25wfi1sjfsb311ycn1855x57ypyn5165zcz49pcfzxn";
+    sha256 = "sha256-wX97HtvHgHpKTDwZl/wHQRpiyDJ7U38CpdzWu/CYizQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ taglib zlib ]
     ++ lib.optionals stdenv.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.isDarwin [ AudioToolbox AppKit ];
-  vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
+  vendorSha256 = "sha256-oTuaA5ZsZ7zMcjzGh37zO/1XyOfj6xjfNr6A7ecrOiA=";
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break

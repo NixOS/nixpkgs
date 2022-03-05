@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 
@@ -8,25 +8,63 @@ let
     else pkgs.wpa_supplicant;
 
   cfg = config.networking.wireless;
+  opt = options.networking.wireless;
+
+  wpa3Protocols = [ "SAE" "FT-SAE" ];
+  hasMixedWPA = opts:
+    let
+      hasWPA3 = !mutuallyExclusive opts.authProtocols wpa3Protocols;
+      others = subtractLists wpa3Protocols opts.authProtocols;
+    in hasWPA3 && others != [];
+
+  # Gives a WPA3 network higher priority
+  increaseWPA3Priority = opts:
+    opts // optionalAttrs (hasMixedWPA opts)
+      { priority = if opts.priority == null
+                     then 1
+                     else opts.priority + 1;
+      };
+
+  # Creates a WPA2 fallback network
+  mkWPA2Fallback = opts:
+    opts // { authProtocols = subtractLists wpa3Protocols opts.authProtocols; };
+
+  # Networks attrset as a list
+  networkList = mapAttrsToList (ssid: opts: opts // { inherit ssid; })
+                cfg.networks;
+
+  # List of all networks (normal + generated fallbacks)
+  allNetworks =
+    if cfg.fallbackToWPA2
+      then map increaseWPA3Priority networkList
+           ++ map mkWPA2Fallback (filter hasMixedWPA networkList)
+      else networkList;
 
   # Content of wpa_supplicant.conf
   generatedConfig = concatStringsSep "\n" (
-    (mapAttrsToList mkNetwork cfg.networks)
+    (map mkNetwork allNetworks)
     ++ optional cfg.userControlled.enable (concatStringsSep "\n"
       [ "ctrl_interface=/run/wpa_supplicant"
         "ctrl_interface_group=${cfg.userControlled.group}"
         "update_config=1"
       ])
+    ++ [ "pmf=1" ]
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
+  configIsGenerated = with cfg;
+    networks != {} || extraConfig != "" || userControlled.enable;
+
+  # the original configuration file
   configFile =
-    if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable
+    if configIsGenerated
       then pkgs.writeText "wpa_supplicant.conf" generatedConfig
       else "/etc/wpa_supplicant.conf";
+  # the config file with environment variables replaced
+  finalConfig = ''"$RUNTIME_DIRECTORY"/wpa_supplicant.conf'';
 
   # Creates a network block for wpa_supplicant.conf
-  mkNetwork = ssid: opts:
+  mkNetwork = opts:
   let
     quote = x: ''"${x}"'';
     indent = x: "  " + x;
@@ -36,7 +74,7 @@ let
       else opts.pskRaw;
 
     options = [
-      "ssid=${quote ssid}"
+      "ssid=${quote opts.ssid}"
       (if pskString != null || opts.auth != null
         then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
         else "key_mgmt=NONE")
@@ -56,8 +94,8 @@ let
     let
       deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr = if cfg.allowAuxiliaryImperativeNetworks
-        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
-        else "-c ${configFile}";
+        then "-c /etc/wpa_supplicant.conf -I ${finalConfig}"
+        else "-c ${finalConfig}";
     in {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
 
@@ -69,12 +107,25 @@ let
       stopIfChanged = false;
 
       path = [ package ];
+      serviceConfig.RuntimeDirectory = "wpa_supplicant";
+      serviceConfig.RuntimeDirectoryMode = "700";
+      serviceConfig.EnvironmentFile = mkIf (cfg.environmentFile != null)
+        (builtins.toString cfg.environmentFile);
 
       script =
       ''
-        if [ -f /etc/wpa_supplicant.conf -a "/etc/wpa_supplicant.conf" != "${configFile}" ]; then
-          echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-        fi
+        ${optionalString configIsGenerated ''
+          if [ -f /etc/wpa_supplicant.conf ]; then
+            echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+          fi
+        ''}
+
+        # substitute environment variables
+        ${pkgs.gawk}/bin/awk '{
+          for(varname in ENVIRON)
+            gsub("@"varname"@", ENVIRON[varname])
+          print
+        }' "${configFile}" > "${finalConfig}"
 
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
 
@@ -155,6 +206,56 @@ in {
         '';
       };
 
+      fallbackToWPA2 = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to fall back to WPA2 authentication protocols if WPA3 failed.
+          This allows old wireless cards (that lack recent features required by
+          WPA3) to connect to mixed WPA2/WPA3 access points.
+
+          To avoid possible downgrade attacks, disable this options.
+        '';
+      };
+
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/secrets/wireless.env";
+        description = ''
+          File consisting of lines of the form <literal>varname=value</literal>
+          to define variables for the wireless configuration.
+
+          See section "EnvironmentFile=" in <citerefentry>
+          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+          </citerefentry> for a syntax reference.
+
+          Secrets (PSKs, passwords, etc.) can be provided without adding them to
+          the world-readable Nix store by defining them in the environment file and
+          referring to them in option <option>networking.wireless.networks</option>
+          with the syntax <literal>@varname@</literal>. Example:
+
+          <programlisting>
+          # content of /run/secrets/wireless.env
+          PSK_HOME=mypassword
+          PASS_WORK=myworkpassword
+          </programlisting>
+
+          <programlisting>
+          # wireless-related configuration
+          networking.wireless.environmentFile = "/run/secrets/wireless.env";
+          networking.wireless.networks = {
+            home.psk = "@PSK_HOME@";
+            work.auth = '''
+              eap=PEAP
+              identity="my-user@example.com"
+              password="@PASS_WORK@"
+            ''';
+          };
+          </programlisting>
+        '';
+      };
+
       networks = mkOption {
         type = types.attrsOf (types.submodule {
           options = {
@@ -165,10 +266,14 @@ in {
                 The network's pre-shared key in plaintext defaulting
                 to being a network without any authentication.
 
-                Be aware that these will be written to the nix store
-                in plaintext!
+                <warning><para>
+                  Be aware that this will be written to the nix store
+                  in plaintext! Use an environment variable instead.
+                </para></warning>
 
-                Mutually exclusive with <varname>pskRaw</varname>.
+                <note><para>
+                  Mutually exclusive with <varname>pskRaw</varname>.
+                </para></note>
               '';
             };
 
@@ -179,7 +284,14 @@ in {
                 The network's pre-shared key in hex defaulting
                 to being a network without any authentication.
 
-                Mutually exclusive with <varname>psk</varname>.
+                <warning><para>
+                  Be aware that this will be written to the nix store
+                  in plaintext! Use an environment variable instead.
+                </para></warning>
+
+                <note><para>
+                  Mutually exclusive with <varname>psk</varname>.
+                </para></note>
               '';
             };
 
@@ -231,7 +343,7 @@ in {
               example = ''
                 eap=PEAP
                 identity="user@example.com"
-                password="secret"
+                password="@EXAMPLE_PASSWORD@"
               '';
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
@@ -242,7 +354,15 @@ in {
                 </citerefentry>
                 for example configurations.
 
-                Mutually exclusive with <varname>psk</varname> and <varname>pskRaw</varname>.
+                <warning><para>
+                  Be aware that this will be written to the nix store
+                  in plaintext! Use an environment variable for secrets.
+                </para></warning>
+
+                <note><para>
+                  Mutually exclusive with <varname>psk</varname> and
+                  <varname>pskRaw</varname>.
+                </para></note>
               '';
             };
 
@@ -252,7 +372,7 @@ in {
               description = ''
                 Set this to <literal>true</literal> if the SSID of the network is hidden.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 { echelon = {
                     hidden = true;
                     psk = "abcdefgh";
@@ -301,13 +421,19 @@ in {
           /etc/wpa_supplicant.conf as the configuration file.
         '';
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           { echelon = {                   # SSID with no spaces or special characters
-              psk = "abcdefgh";
+              psk = "abcdefgh";           # (password will be written to /nix/store!)
             };
+
+            echelon = {                   # safe version of the above: read PSK from the
+              psk = "@PSK_ECHELON@";      # variable PSK_ECHELON, defined in environmentFile,
+            };                            # this won't leak into /nix/store
+
             "echelon's AP" = {            # SSID with spaces and/or special characters
-               psk = "ijklmnop";
+               psk = "ijklmnop";          # (password will be written to /nix/store!)
             };
+
             "free.wifi" = {};             # Public wireless network
           }
         '';
@@ -339,6 +465,7 @@ in {
       dbusControlled = mkOption {
         type = types.bool;
         default = lib.length cfg.interfaces < 2;
+        defaultText = literalExpression "length config.${opt.interfaces} < 2";
         description = ''
           Whether to enable the DBus control interface.
           This is only needed when using NetworkManager or connman.

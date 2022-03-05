@@ -12,18 +12,12 @@
 , fetchFromGitHub, which, writeText
 , pkgs
 , lib
-}:
+}@args:
 
 let
   packages = ( self:
 
 let
-
-  # a function of lua_path / lua_cpath
-  lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix {
-    inherit lib;
-  };
-
   callPackage = pkgs.newScope self;
 
   buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
@@ -52,11 +46,13 @@ in
   # helper functions for dealing with LUA_PATH and LUA_CPATH
   lib = luaLib;
 
-  getLuaPath = drv: luaLib.getPath drv (luaLib.luaPathList lua.luaversion) ;
-  getLuaCPath = drv: luaLib.getPath drv (luaLib.luaCPathList lua.luaversion) ;
+  getLuaPath = drv: getPath drv luaLib.luaPathList;
+  getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
+  inherit (callPackage ../development/interpreters/lua-5/hooks { inherit (args) lib;})
+    lua-setup-hook;
 
-  inherit lua lua-setup-hook callPackage;
+  inherit lua callPackage;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
   inherit (luaLib) luaOlder luaAtLeast isLua51 isLua52 isLua53 isLuaJIT
     requiredLuaModules toLuaModule hasLuaModule;
@@ -68,6 +64,10 @@ in
   };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
+    inherit lua lib;
+  };
+
+  luarocks-3_7 = callPackage ../development/tools/misc/luarocks/3.7.nix {
     inherit lua lib;
   };
 

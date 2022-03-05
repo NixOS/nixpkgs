@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.64.5";
+  version = "2.66.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-UI/IbiyRQRmKoWwiWxb9a5EZF8DTgXYCZShE0Jc+o4Y=";
+    sha256 = "sha256-sqTNe5rph3lMu1ob7MEM7LZRgrm7hBhoYl1ruxI+2x0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

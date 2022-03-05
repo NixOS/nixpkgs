@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "veriT";
-  version = "2016";
+  version = "2021.06.2";
 
   src = fetchurl {
-    url = "http://www.verit-solver.org/distrib/veriT-stable2016.tar.gz";
-    sha256 = "0gvp4diz0qjg0y5ry0p1z7dkdkxw8l7jb8cdhvcnhl06jx977v4b";
+    url = "https://verit.loria.fr/download/2021.06.2/verit-2021.06.2-rmx.tar.gz";
+    sha256 = "1yjvvxnsix0rhilc81ycx1s85dymq366c6zh1hwwd8qxp7k1zca2";
   };
 
   nativeBuildInputs = [ autoreconfHook flex bison ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "An open, trustable and efficient SMT-solver";
-    homepage = "http://www.verit-solver.org/";
+    homepage = "https://verit.loria.fr/";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

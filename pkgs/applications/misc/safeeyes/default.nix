@@ -57,6 +57,9 @@ in buildPythonApplication rec {
       # safeeyes images
       --prefix XDG_DATA_DIRS : "$out/lib/${python.libPrefix}/site-packages/usr/share"
     )
+    mkdir -p $out/share/applications
+    cp -r safeeyes/platform/icons $out/share/
+    cp safeeyes/platform/safeeyes.desktop $out/share/applications/
   '';
 
   doCheck = false; # no tests

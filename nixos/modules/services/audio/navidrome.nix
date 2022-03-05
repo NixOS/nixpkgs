@@ -9,7 +9,7 @@ in {
   options = {
     services.navidrome = {
 
-      enable = mkEnableOption pkgs.navidrome.meta.description;
+      enable = mkEnableOption "Navidrome music server";
 
       settings = mkOption rec {
         type = settingsFormat.type;

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "autorestic";
-  version = "1.2.0";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "cupcakearmy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "yQgSJ0SQNWPMyrYn8rep+1b549HP8sOERh+kOiAK3+c=";
+    sha256 = "sha256-JOiFsH9r92Gac7DH7h/4Q6hwXBtqLwHNQpW3gKBybHo=";
   };
 
-  vendorSha256 = "7648gAguqeqLKFS9xRcx20wpSLb+ykZ7rOqR5PKe71o=";
+  vendorSha256 = "sha256-WzmgV0wUsGfMVeho6M8wXJKD9adaAKRYmaJYaAcXwFc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

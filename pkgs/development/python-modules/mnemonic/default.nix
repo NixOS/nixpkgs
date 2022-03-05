@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "mnemonic";
-  version = "0.19";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "0rs3szdikkgypiwn43ad3lwh7zvpccw39j5ggkziq6v7pnw3isaq";
+    sha256 = "sha256-YYgWlYfVd1iALOziaUI8uVYjJDCIVk/dXcUmJd2jcvQ=";
   };
 
   checkInputs = [ pytestCheckHook ];

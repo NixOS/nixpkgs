@@ -1,5 +1,7 @@
+{ lib }:
+
 let
-  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  sources = lib.importJSON ./sources.json;
 in
 {
   jdk-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk14.linux.jdk.hotspot; knownVulnerabilities = ["Support ended"]; };

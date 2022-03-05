@@ -79,6 +79,11 @@ let
       # we use a list of mime types from the mailcap package, which is also
       # used by most other Linux distributions by default.
       include ${pkgs.mailcap}/etc/nginx/mime.types;
+      # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
+      # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
+      # overwrite it because nginx does not allow duplicated settings.
+      types_hash_max_size 4096;
+
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
 
@@ -113,7 +118,6 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
@@ -241,12 +245,9 @@ let
         defaultListen =
           if vhost.listen != [] then vhost.listen
           else
-            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else (
-              [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
-            );
-            in
-          optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-          ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -274,7 +275,7 @@ let
         acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
-            root ${vhost.acmeRoot};
+            ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
             auth_basic off;
           }
           ${optionalString (vhost.acmeFallbackHost != null) ''
@@ -315,6 +316,9 @@ let
           ''}
           ${optionalString vhost.rejectSSL ''
             ssl_reject_handshake on;
+          ''}
+          ${optionalString (hasSSL && vhost.kTLS) ''
+            ssl_conf_command Options KTLS;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -367,6 +371,8 @@ let
       ${user}:{PLAIN}${password}
     '') authDef)
   );
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 
 {
@@ -423,9 +429,19 @@ in
         ";
       };
 
+      defaultListenAddresses = mkOption {
+        type = types.listOf types.str;
+        default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
+        defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
+        example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
+        description = "
+          If vhosts do not specify listenAddresses, use these addresses by default.
+        ";
+      };
+
       package = mkOption {
         default = pkgs.nginxStable;
-        defaultText = "pkgs.nginxStable";
+        defaultText = literalExpression "pkgs.nginxStable";
         type = types.package;
         apply = p: p.override {
           modules = p.modules ++ cfg.additionalModules;
@@ -440,7 +456,7 @@ in
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExample "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.brotli ]";
         description = ''
           Additional <link xlink:href="https://www.nginx.com/resources/wiki/modules/">third-party nginx modules</link>
           to install. Packaged modules are available in
@@ -674,7 +690,7 @@ in
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = literalExample ''[ "[::1]" "127.0.0.1:5353" ]'';
+              example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
               description = "List of resolvers to use";
             };
             valid = mkOption {
@@ -738,7 +754,7 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           "backend_server" = {
             servers = { "127.0.0.1:8000" = {}; };
             extraConfig = ''''
@@ -755,7 +771,7 @@ in
         default = {
           localhost = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             "hydra.example.com" = {
               forceSSL = true;
@@ -821,13 +837,25 @@ in
       }
 
       {
+        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.kTLS requires nginx version
+          1.21.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
         '';
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) dependentCertNames;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
@@ -889,14 +917,14 @@ in
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
+        MemoryDenyWriteExecute = !((builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules) || (cfg.package == pkgs.openresty));
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
+        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ] ++ optionals (cfg.package != pkgs.tengine) [ "~@ipc" ];
       };
     };
 
@@ -933,9 +961,16 @@ in
     };
 
     security.acme.certs = let
-      acmePairs = map (vhostConfig: nameValuePair vhostConfig.serverName {
+      acmePairs = map (vhostConfig: let
+        hasRoot = vhostConfig.acmeRoot != null;
+      in nameValuePair vhostConfig.serverName {
         group = mkDefault cfg.group;
-        webroot = vhostConfig.acmeRoot;
+        # if acmeRoot is null inherit config.security.acme
+        # Since config.security.acme.certs.<cert>.webroot's own default value
+        # should take precedence set priority higher than mkOptionDefault
+        webroot = mkOverride (if hasRoot then 1000 else 2000) vhostConfig.acmeRoot;
+        # Also nudge dnsProvider to null in case it is inherited
+        dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
         extraDomainNames = vhostConfig.serverAliases;
       # Filter for enableACME-only vhosts. Don't want to create dud certs
       }) (filter (vhostConfig: vhostConfig.useACMEHost == null) acmeEnabledVhosts);
@@ -953,5 +988,17 @@ in
       nginx.gid = config.ids.gids.nginx;
     };
 
+    services.logrotate.paths.nginx = mapAttrs (_: mkDefault) {
+      path = "/var/log/nginx/*.log";
+      frequency = "weekly";
+      keep = 26;
+      extraConfig = ''
+        compress
+        delaycompress
+        postrotate
+          [ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`
+        endscript
+      '';
+    };
   };
 }

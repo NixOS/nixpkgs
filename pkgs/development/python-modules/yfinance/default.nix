@@ -1,20 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , multitasking
 , numpy
 , pandas
 , requests
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.63";
+  version = "0.1.70";
 
-  # GitHub source releases aren't tagged
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0k1saz0wknxv31vpqcfyi35mzi68c75hlqpw8lf83xqw9zllydhi";
+  src = fetchFromGitHub {
+    owner = "ranaroussi";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Anvt+ag0PysGynQv4q+2IrQmCPZViGqWI4dgfLQWGds=";
   };
 
   propagatedBuildInputs = [
@@ -22,6 +24,7 @@ buildPythonPackage rec {
     numpy
     pandas
     requests
+    lxml
   ];
 
   doCheck = false;  # Tests require internet access

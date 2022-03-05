@@ -9,8 +9,8 @@
 , libffcall
 , coreutils
 # build options
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
-, x11Support ? (stdenv.isi686 || stdenv.isx86_64)
+, threadSupport ? stdenv.hostPlatform.isx86
+, x11Support ? stdenv.hostPlatform.isx86
 , dllSupport ? true
 , withModules ? [
     "pcre"
@@ -24,11 +24,11 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
-  v = "2.49";
-  name = "clisp-${v}";
+  version = "2.49";
+  pname = "clisp";
 
   src = fetchurl {
-    url = "mirror://gnu/clisp/release/${v}/${name}.tar.bz2";
+    url = "mirror://gnu/clisp/release/${version}/clisp-${version}.tar.bz2";
     sha256 = "8132ff353afaa70e6b19367a25ae3d5a43627279c25647c220641fed00f8e890";
   };
 
@@ -81,6 +81,10 @@ stdenv.mkDerivation rec {
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
     cd builddir
   '';
+
+  # Fails to build in parallel due to missing gnulib header dependency used in charstrg.d:
+  #   ../src/charstrg.d:319:10: fatal error: uniwidth.h: No such file or directory
+  enableParallelBuilding = false;
 
   postInstall =
     lib.optionalString (withModules != [])

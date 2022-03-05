@@ -16,25 +16,20 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.14.5";
+  version = "1.14.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "268e07c09012d24233d8957f0207b9aec33000b639e661ca50e68458d735e6be";
+    sha256 = "sha256-bDZVmaLLFnk7tifJtcVDCYK7WRyd6IhQAv+RtTm2ETM=";
   };
 
   propagatedBuildInputs = [
     colorcet
-    param
     numpy
-    pyviz-comms
-    ipython
-    notebook
     pandas
-    matplotlib
-    bokeh
-    scipy
     panel
+    param
+    pyviz-comms
   ];
 
   # tests not fully included with pypi release

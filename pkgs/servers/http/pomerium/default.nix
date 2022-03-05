@@ -7,19 +7,19 @@
 }:
 
 let
-  inherit (lib) concatStringsSep mapAttrsToList;
+  inherit (lib) concatStringsSep concatMap id mapAttrsToList;
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.14.7";
+  version = "0.15.7";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256:1jb96jk5qmary4fi1z9zwmppdyskj0qb6qii8s8mwazjjxqj1z2s";
+    hash = "sha256:0adlk4ylny1z43x1dw3ny0s1932vhb61hpf5wdz4r65y8k9qyfgr";
   };
 
-  vendorSha256 = "sha256:1daabi9qc9nx8bafn26iw6rv4vx2xpd0nnk06265aqaksx26db0s";
+  vendorSha256 = "sha256:1fszfbra84pcs8v1h2kf7iy603vf9v2ysg6il76aqmqrxmb1p7nv";
   subPackages = [
     "cmd/pomerium"
     "cmd/pomerium-cli"
@@ -28,38 +28,49 @@ buildGoModule rec {
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
     setVars = {
-      Version = "v${version}";
-      BuildMeta = "nixpkgs";
-      ProjectName = "pomerium";
-      ProjectURL = "github.com/pomerium/pomerium";
+      "github.com/pomerium/pomerium/internal/version" = {
+        Version = "v${version}";
+        BuildMeta = "nixpkgs";
+        ProjectName = "pomerium";
+        ProjectURL = "github.com/pomerium/pomerium";
+      };
+      "github.com/pomerium/pomerium/internal/envoy" = {
+        OverrideEnvoyPath = "${envoy}/bin/envoy";
+      };
     };
-    varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
+    concatStringsSpace = list: concatStringsSep " " list;
+    mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+    varFlags = concatStringsSpace (
+      mapAttrsToFlatList (package: packageVars:
+        mapAttrsToList (variable: value:
+          "-X ${package}.${variable}=${value}"
+        ) packageVars
+      ) setVars);
   in [
     "${varFlags}"
   ];
 
-  nativeBuildInputs = [
-    zip
-  ];
+  preBuild = ''
+    # Replace embedded envoy with nothing.
+    # We set OverrideEnvoyPath above, so rawBinary should never get looked at
+    # but we still need to set a checksum/version.
+    rm internal/envoy/files/files_{darwin,linux}*.go
+    cat <<EOF >internal/envoy/files/files_generic.go
+    package files
 
-  # Pomerium expects to have envoy append to it in a zip.
-  # We use a store-only (-0) zip, so that the Nix scanner can find any store references we had in the envoy binary.
-  postBuild = ''
-    # Append Envoy
-    pushd $NIX_BUILD_TOP
-    mkdir -p envoy
-    cd envoy
-    cp ${envoy}/bin/envoy envoy
-    zip -0 envoy.zip envoy
-    popd
+    import _ "embed" // embed
 
-    mv $GOPATH/bin/pomerium $GOPATH/bin/pomerium.old
-    cat $GOPATH/bin/pomerium.old $NIX_BUILD_TOP/envoy/envoy.zip >$GOPATH/bin/pomerium
-    zip --adjust-sfx $GOPATH/bin/pomerium
+    var rawBinary []byte
+
+    //go:embed envoy.sha256
+    var rawChecksum string
+
+    //go:embed envoy.version
+    var rawVersion string
+    EOF
+    sha256sum '${envoy}/bin/envoy' > internal/envoy/files/envoy.sha256
+    echo '${envoy.version}' > internal/envoy/files/envoy.version
   '';
-
-  # We also need to set dontStrip to avoid having the envoy ZIP stripped off the end.
-  dontStrip = true;
 
   installPhase = ''
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium

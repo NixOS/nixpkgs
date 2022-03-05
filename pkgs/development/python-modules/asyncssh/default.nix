@@ -1,29 +1,32 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cryptography
 , bcrypt
-, gssapi
+, buildPythonPackage
+, cryptography
+, fetchPypi
 , fido2
+, gssapi
 , libnacl
 , libsodium
 , nettle
-, python-pkcs11
-, pyopenssl
-, openssl
 , openssh
+, openssl
+, pyopenssl
 , pytestCheckHook
+, python-pkcs11
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.7.1";
+  version = "2.9.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c8852eb00a09e45c403086e10965cb6d13e5cd203a1688d91e9c81aa080d052";
+    sha256 = "sha256-PMM32AZhlGVFW/GH6KkeP1dUI3GBhOI4+a6MQcTzOvE=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +37,9 @@ buildPythonPackage rec {
     libnacl
     libsodium
     nettle
-    python-pkcs11
     pyopenssl
+    python-pkcs11
+    typing-extensions
   ];
 
   checkInputs = [
@@ -59,7 +63,18 @@ buildPythonPackage rec {
     "tests/sspi_stub.py"
   ];
 
-  pythonImportsCheck = [ "asyncssh" ];
+  disabledTests = [
+    # No PIN set
+    "TestSKAuthCTAP2"
+    # Requires network access
+    "test_connect_timeout_exceeded"
+    # Fails in the sandbox
+    "test_forward_remote"
+  ];
+
+  pythonImportsCheck = [
+    "asyncssh"
+  ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";

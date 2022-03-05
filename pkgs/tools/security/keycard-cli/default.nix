@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, pkg-config, pcsclite }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, pkg-config, pcsclite }:
 
 buildGoPackage rec {
   pname = "keycard-cli";
@@ -26,5 +26,6 @@ buildGoPackage rec {
     homepage = "https://keycard.status.im";
     license = licenses.mpl20;
     maintainers = [ maintainers.zimbatm ];
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/keycard-cli.x86_64-darwin
   };
 }

@@ -7,17 +7,20 @@
 }:
 
 buildPythonPackage rec{
-  version = "2.1.0";
+  version = "2.1.3";
   pname = "panflute";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8a3d5dd2a10c3aa6fa8167713fedb47400f0e8ae6ea8346fd4b599842bb1882d";
+    sha256 = "y5QkT+dmiTuy8XLruCfsPe12G4//qE5MhLZ4ufip/5U=";
   };
 
-  propagatedBuildInputs = [ click pyyaml ];
+  propagatedBuildInputs = [
+    click
+    pyyaml
+  ];
 
   meta = with lib; {
     description = "A Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";

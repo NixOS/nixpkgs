@@ -5,13 +5,13 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
+  es7 = builtins.compareVersions cfg.package.version "7" >= 0;
+
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
-    ${lib.optionalString cfg.single_node ''
-      discovery.type: single-node
-      gateway.auto_import_dangling_indices: true
-    ''}
+    ${lib.optionalString cfg.single_node "discovery.type: single-node"}
+    ${lib.optionalString (cfg.single_node && es7) "gateway.auto_import_dangling_indices: true"}
 
     http.port: ${toString cfg.port}
     transport.port: ${toString cfg.tcp_port}
@@ -53,7 +53,7 @@ in
     package = mkOption {
       description = "Elasticsearch package to use.";
       default = pkgs.elasticsearch;
-      defaultText = "pkgs.elasticsearch";
+      defaultText = literalExpression "pkgs.elasticsearch";
       type = types.package;
     };
 
@@ -140,7 +140,18 @@ in
       description = "Extra elasticsearch plugins";
       default = [ ];
       type = types.listOf types.package;
-      example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
+      example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
+    };
+
+    restartIfChanged  = mkOption {
+      type = types.bool;
+      description = ''
+        Automatically restart the service on config change.
+        This can be set to false to defer restarts on a server or cluster.
+        Please consider the security implications of inadvertently running an older version,
+        and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
+      '';
+      default = true;
     };
 
   };
@@ -153,6 +164,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pkgs.inetutils ];
+      inherit (cfg) restartIfChanged;
       environment = {
         ES_HOME = cfg.dataDir;
         ES_JAVA_OPTS = toString cfg.extraJavaOptions;
@@ -163,6 +175,8 @@ in
         User = "elasticsearch";
         PermissionsStartOnly = true;
         LimitNOFILE = "1024000";
+        Restart = "always";
+        TimeoutStartSec = "infinity";
       };
       preStart = ''
         ${optionalString (!config.boot.isContainer) ''
@@ -204,7 +218,7 @@ in
       postStart = ''
         # Make sure elasticsearch is up and running before dependents
         # are started
-        while ! ${pkgs.curl}/bin/curl -sS -f http://localhost:${toString cfg.port} 2>/dev/null; do
+        while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.listenAddress}:${toString cfg.port} 2>/dev/null; do
           sleep 1
         done
       '';

@@ -1,9 +1,14 @@
-{ buildPythonPackage, fetchPypi, atpublic }:
+{ buildPythonPackage, fetchPypi
+, atpublic
+, pdm-pep517
+}:
 
 buildPythonPackage rec {
   pname = "flufl.i18n";
-  version = "3.1.5";
+  version = "4.0";
+  format = "pyproject";
 
+  nativeBuildInputs = [ pdm-pep517 ];
   propagatedBuildInputs = [ atpublic ];
 
   doCheck = false;
@@ -12,6 +17,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7016000a4d9d366866e776947b777dbe2b1532c990efeef58922b3e7bcab36e";
+    sha256 = "sha256-MTq0djhFp/cEx0Ezt5EaMz3MzrAWjxZ0HQSkfFuasWY=";
   };
 }

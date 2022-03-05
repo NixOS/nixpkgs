@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, garcon, gtk3, glib
+{ lib, mkXfceDerivation, exo, garcon, gtk3, glib
 , libnotify, libxfce4ui, libxfce4util, libxklavier
 , upower, xfconf, xf86inputlibinput }:
 
@@ -34,7 +34,8 @@ mkXfceDerivation {
     "--enable-sound-settings"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Settings manager for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

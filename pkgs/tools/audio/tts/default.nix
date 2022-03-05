@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 
 # USAGE:
@@ -14,37 +13,62 @@
 # For now, for deployment check the systemd unit in the pull request:
 #   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # API breakage with 0.9.0
+      # TypeError: mel() takes 0 positional arguments but 2 positional arguments (and 3 keyword-only arguments) were given
+      librosa = super.librosa.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.3.1";
+  version = "0.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-/CeetLm3jgS5Q69zTVkLm+Wh4nD7D4c6j9MTujMc3fU=";
+    sha256 = "sha256-9fNYNhHS9wqrk2bZnrkkGU1OaDu/16RA8fz+Zj9xsyQ=";
   };
 
-  postPatch = ''
-    sed -i requirements.txt \
-      -e 's!librosa==[^"]*!librosa!' \
-      -e 's!mecab-python3==[^"]*!mecab-python3!' \
-      -e 's!numba==[^"]*!numba!' \
-      -e 's!numpy==[^"]*!numpy!' \
-      -e 's!umap-learn==[^"]*!umap-learn!'
+  postPatch = let
+    relaxedConstraints = [
+      "gruut"
+      "librosa"
+      "mecab-python3"
+      "numba"
+      "numpy"
+      "umap-learn"
+      "torch"
+    ];
+  in ''
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
+      ) relaxedConstraints)}
+    requirements.txt
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     cython
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     anyascii
     coqpit
     flask
     fsspec
-    gruut
     gdown
+    gruut
     inflect
     jieba
     librosa
@@ -54,15 +78,17 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     pypinyin
     pysbd
-    pytorch
+    pytorch-bin
     pyworld
     scipy
     soundfile
     tensorboardx
     tensorflow
+    torchaudio-bin
     tqdm
     umap-learn
     unidic-lite
+    webrtcvad
   ];
 
   postInstall = ''
@@ -86,6 +112,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_multiscale_stft_loss"
     # Requires network acccess to download models
     "test_synthesize"
+    "test_run_all_models"
   ];
 
   preCheck = ''

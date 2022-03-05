@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname version; };
 
-  meta = {
+  meta = with lib; {
     description = "Icon themes from MATE";
     homepage = "https://mate-desktop.org";
-    license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.mate.members;
   };
 }

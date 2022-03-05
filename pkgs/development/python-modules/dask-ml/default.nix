@@ -17,13 +17,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.9.0";
+  version = "2022.1.22";
   pname = "dask-ml";
   disabled = pythonOlder "3.6"; # >= 3.6
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f376a7114133b484a6d393f62298473116fc49c79ec7d50d5b031d752f54307";
+    sha256 = "21a128e9f4f10e3b39cf82b36266eae28b17d16f2f6aa351bd73eb361e49326a";
   };
 
   nativeBuildInputs = [

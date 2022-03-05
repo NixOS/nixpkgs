@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
+, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
-, systemd, libnotify, libdbusmenu, libpulseaudio
+, systemd, libnotify, libdbusmenu, libpulseaudio, xdg-utils
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -18,14 +18,13 @@ let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
       spellLangComponents = splitString "_" spellcheckerLanguage;
       hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in if spellcheckerLanguage != null
-      then ''
-        --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
-        --set LC_MESSAGES "${spellcheckerLanguage}"''
-      else "");
+    in lib.optionalString (spellcheckerLanguage != null) ''
+      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+      --set LC_MESSAGES "${spellcheckerLanguage}"'');
+
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.17.2"; # Please backport all updates to the stable channel.
+  version = "5.33.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -35,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "1fmn2i6k3zh3d37234yxbawzf85fa66xybcli7xffli39czxbcj3";
+    sha256 = "03c7pw6cmv8ryw2wqsfc27d953950jc8nxs58mgk08g62v4qa672";
   };
 
   nativeBuildInputs = [
@@ -57,7 +56,6 @@ in stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libX11
     libXScrnSaver
@@ -86,6 +84,7 @@ in stdenv.mkDerivation rec {
     (lib.getLib systemd)
     libnotify
     libdbusmenu
+    xdg-utils
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -114,19 +113,18 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
 
+    # Create required symlinks:
+    ln -s libGLESv2.so $out/lib/Signal/libGLESv2.so.2
+
     runHook postInstall
   '';
 
-  # Required for $SQLCIPHER_LIB which contains "/build/" inside the path:
-  noAuditTmpdir = true;
-
   preFixup = ''
-    export SQLCIPHER_LIB="$out/lib/Signal/resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
-    test -x "$SQLCIPHER_LIB" # To ensure the location hasn't changed
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      --prefix LD_PRELOAD : "$SQLCIPHER_LIB"
       ${customLanguageWrapperArgs}
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
     # Fix the desktop link

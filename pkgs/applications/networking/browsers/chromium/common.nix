@@ -6,7 +6,7 @@
 
 # Native build inputs:
 , ninja, pkg-config
-, python2, python3, perl
+, python3, perl
 , gnutar, which
 , llvmPackages
 # postPatch:
@@ -34,6 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
+, libepoxy
 # postPatch:
 , glibc # gconv + locale
 
@@ -53,12 +54,13 @@ buildFun:
 with lib;
 
 let
-  python2WithPackages = python2.withPackages(ps: with ps; [
-    ply jinja2 setuptools
-  ]);
   python3WithPackages = python3.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
+  clangFormatPython3 = fetchurl {
+    url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
+    sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
+  };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -85,18 +87,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
-  gnSystemLibraries = lib.optionals (!chromiumVersionAtLeast "93") [
-    "ffmpeg"
-    "snappy"
-  ] ++ lib.optionals (!chromiumVersionAtLeast "95") [
-    "zlib"
-  ] ++ [
+  gnSystemLibraries = [
+    # TODO:
+    # "ffmpeg"
+    # "snappy"
     "flac"
     "libjpeg"
     "libpng"
     "libwebp"
     "libxslt"
-    "opus"
+    # "opus"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -125,7 +125,7 @@ let
 
     nativeBuildInputs = [
       ninja pkg-config
-      python2WithPackages python3WithPackages perl
+      python3WithPackages perl
       gnutar which
       llvmPackages.bintools
     ];
@@ -150,6 +150,7 @@ let
       libva
       libdrm wayland mesa.drivers libxkbcommon
       curl
+      libepoxy
     ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
@@ -160,21 +161,6 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
-    ] ++ lib.optionals (versionRange "91" "94") [
-      # Fix the build by adding a missing dependency (s. https://crbug.com/1197837):
-      ./patches/fix-missing-atspi2-dependency.patch
-      # Required as dependency for the next patch:
-      (githubPatch {
-        # Reland "Reland "Linux sandbox syscall broker: use struct kernel_stat""
-        commit = "4b438323d68840453b5ef826c3997568e2e0e8c7";
-        sha256 = "1lf6yilx2ffd3r0840ilihp4px35w7jvr19ll56bncqmz4r5fd82";
-      })
-      # To fix the text rendering, see #131074:
-      (githubPatch {
-        # Linux sandbox: fix fstatat() crash
-        commit = "60d5e803ef2a4874d29799b638754152285e0ed9";
-        sha256 = "0apmsqqlfxprmdmi3qzp3kr9jc52mcc4xzps206kwr8kzwv48b70";
-      })
     ];
 
     postPatch = ''
@@ -196,7 +182,7 @@ let
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
-      chmod -x third_party/webgpu-cts/src/tools/deno
+      chmod -x third_party/webgpu-cts/src/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -227,11 +213,14 @@ let
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
+      # We need the fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1254408:
+      base64 --decode ${clangFormatPython3} > buildtools/linux64/clang-format
+
       patchShebangs .
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
-      ln -s "${pkgsBuildHost.jre8}/bin/java" third_party/jdk/current/bin/
+      ln -s "${pkgsBuildHost.jre8_headless}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
@@ -253,6 +242,7 @@ let
       # e.g. unsafe developer builds have developer-friendly features that may
       # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
+      disable_fieldtrial_testing_config = true;
       # Build Chromium using the system toolchain (for Linux distributions):
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
@@ -276,7 +266,7 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
 
       # Optional features:
-      use_gio = gnomeSupport;
+      use_gio = gnomeSupport || chromiumVersionAtLeast "99";
       use_gnome_keyring = gnomeKeyringSupport;
       use_cups = cupsSupport;
 
@@ -289,10 +279,6 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
-    } // optionalAttrs (!chromiumVersionAtLeast "94") {
-      fieldtrial_testing_like_official_build = true;
-    } // optionalAttrs (chromiumVersionAtLeast "94") {
-      disable_fieldtrial_testing_config = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -306,7 +292,6 @@ let
       enable_hangout_services_extension = false;
       enable_js_type_check = false;
       enable_mdns = false;
-      enable_nacl_nonsfi = false;
       enable_one_click_signin = false;
       enable_reading_list = false;
       enable_remoting = false;
@@ -326,7 +311,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python2}/bin/python2 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.

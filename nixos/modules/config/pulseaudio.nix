@@ -149,8 +149,8 @@ in {
         default = if config.services.jack.jackd.enable
                   then pkgs.pulseaudioFull
                   else pkgs.pulseaudio;
-        defaultText = "pkgs.pulseaudio";
-        example = literalExample "pkgs.pulseaudioFull";
+        defaultText = literalExpression "pkgs.pulseaudio";
+        example = literalExpression "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
@@ -161,7 +161,7 @@ in {
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.pulseaudio-modules-bt ]";
+        example = literalExpression "[ pkgs.pulseaudio-modules-bt ]";
         description = ''
           Extra pulseaudio modules to use. This is intended for out-of-tree
           pulseaudio modules like extra bluetooth codecs.
@@ -184,7 +184,7 @@ in {
           type = types.attrsOf types.unspecified;
           default = {};
           description = "Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.";
-          example = literalExample ''{ realtime-scheduling = "yes"; }'';
+          example = literalExpression ''{ realtime-scheduling = "yes"; }'';
         };
       };
 
@@ -204,7 +204,7 @@ in {
           allowedIpRanges = mkOption {
             type = types.listOf types.str;
             default = [];
-            example = literalExample ''[ "127.0.0.1" "192.168.1.0/24" ]'';
+            example = literalExpression ''[ "127.0.0.1" "192.168.1.0/24" ]'';
             description = ''
               A list of IP subnets that are allowed to stream to the server.
             '';

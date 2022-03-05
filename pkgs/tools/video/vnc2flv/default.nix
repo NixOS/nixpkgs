@@ -1,6 +1,6 @@
-{ lib, fetchurl, pythonPackages }:
+{ lib, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "vnc2flv";
   version = "20100207";
 

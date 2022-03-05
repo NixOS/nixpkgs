@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
       Makefile.in
     sed -i 's,PYTHONPATH=,PYTHONPATH=$(PYTHONPATH):,' \
       doc/Makefile.in
+
+    # Pull fix for new pyyaml pending upstream inclusion
+    #   https://sourceforge.net/p/lirc/git/merge-requests/39/
+    substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
   '';
 
   preConfigure = ''
@@ -42,6 +46,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--enable-uinput" # explicit activation because build env has no uinput
     "--enable-devinput" # explicit activation because build env has no /dev/input
+    "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
   ];
 
   installFlags = [

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lightwalletd";
-  version = "0.4.7";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "lightwalletd";
     rev = "v${version}";
-    sha256 = "0dwam3fhc4caga7kjg6cc06sz47g4ii7n3sa4j2ac4aiy21hsbjk";
+    sha256 = "sha256-IksA06V+mP7ZAXXFYLKLacxrDXeMXHAk5w4t7pmobq4=";
   };
 
   vendorSha256 = null;

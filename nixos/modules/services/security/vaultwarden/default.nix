@@ -60,7 +60,7 @@ in {
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           domain = "https://bw.domain.tld:8443";
           signupsAllowed = true;
@@ -106,14 +106,14 @@ in {
     package = mkOption {
       type = package;
       default = pkgs.vaultwarden;
-      defaultText = "pkgs.vaultwarden";
+      defaultText = literalExpression "pkgs.vaultwarden";
       description = "Vaultwarden package to use.";
     };
 
     webVaultPackage = mkOption {
       type = package;
       default = pkgs.vaultwarden-vault;
-      defaultText = "pkgs.vaultwarden-vault";
+      defaultText = literalExpression "pkgs.vaultwarden-vault";
       description = "Web vault package to use.";
     };
   };
@@ -131,7 +131,7 @@ in {
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      aliases = [ "bitwarden_rs" ];
+      aliases = [ "bitwarden_rs.service" ];
       after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
@@ -151,7 +151,7 @@ in {
     };
 
     systemd.services.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs" ];
+      aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden";
       environment = {
         DATA_FOLDER = "/var/lib/bitwarden_rs";
@@ -169,7 +169,7 @@ in {
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs" ];
+      aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";
@@ -179,4 +179,7 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

@@ -20,6 +20,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.erlang;
+      defaultText = literalExpression "pkgs.erlang";
       description = ''
         The Erlang package to use to get epmd binary. That way you can re-use
         an Erlang runtime that is already installed for other purposes.

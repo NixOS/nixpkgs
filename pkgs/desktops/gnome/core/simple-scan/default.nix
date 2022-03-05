@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "40.1";
+  version = "40.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6+45qx/kygU8TtK9OjynZ0L/EJQ23QZF00FWIhMroLQ=";
+    sha256 = "sha256-fFUYUsta99NKqYn4rV7ePL4xgoz43VrsKytv3NGsPVM=";
   };
 
   nativeBuildInputs = [

@@ -4,13 +4,13 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "unstable-2021-08-05";
+  version = "unstable-2022-02-10";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
-    rev = "89a33154707c09789177a893e5a8ebbb131d5d3d";
-    sha256 = "1g8011ldrghbw5ibchsp0p93r31cwyx2r1z5xplksd779jw79wdx";
+    rev = "e8145d541a35d8a03df49fbbeefa50c4a0076bbf";
+    sha256 = "h/3XP/BiNnUgQI29gEBl6RFee77WDhFyvsnTi1eRbKg=";
   };
 
   buildInputs = [ ncurses ];

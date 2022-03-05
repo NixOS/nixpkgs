@@ -2,16 +2,28 @@
 , openbabel, qttools, wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+let
+  avogadroI18N = fetchFromGitHub {
+    owner = "OpenChemistry";
+    repo = "avogadro-i18n";
+    rev = "3b8a86cc37e988b043d1503d2f11068389b0aca3";
+    sha256 = "9wLY7/EJyIZYnlUAMsViCwD5kGc1vCNbk8vUhb90LMQ=";
+  };
+
+in stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.94.0";
+  version = "1.95.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    sha256 = "6RaiX23YUMfTYAuSighcLGGlJtqeydNgi3PWGF77Jp8=";
+    sha256 = "9GnsxQsMuik6CPDmJbJPF0/+LXbZHf/JLevpSsMEoP0=";
   };
+
+  postUnpack = ''
+    cp -r ${avogadroI18N} avogadro-i18n
+  '';
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 

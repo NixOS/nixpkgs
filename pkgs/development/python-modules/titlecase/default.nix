@@ -1,24 +1,51 @@
-{ buildPythonPackage, lib, fetchPypi, regex }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, regex
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "titlecase";
   version = "2.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9a1595ed9b88f3ce4362a7602ee63cf074e10ac80d1256b32ea1ec5ffa265fa0";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "ppannuto";
+    repo = "python-titlecase";
+    rev = "v${version}";
+    sha256 = "169ywzn5wfzwyknqavspkdpwbx31nycxsxkl7iywwk71gs1lskkw";
   };
 
-  propagatedBuildInputs = [ regex ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # no tests run
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  pythonImportsCheck = [ "titlecase" ];
+  propagatedBuildInputs = [
+    regex
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "titlecase/tests.py"
+  ];
+
+  pythonImportsCheck = [
+    "titlecase"
+  ];
 
   meta = with lib; {
+    description = "Python library to capitalize strings as specified by the New York Times";
     homepage = "https://github.com/ppannuto/python-titlecase";
-    description = "Python Port of John Gruber's titlecase.pl";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

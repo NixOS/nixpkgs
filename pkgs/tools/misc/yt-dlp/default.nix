@@ -5,13 +5,14 @@
 , rtmpdump
 , phantomjs2
 , atomicparsley
-, pycryptodome
+, pycryptodomex
 , websockets
 , mutagen
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
 , hlsEncryptedSupport ? true
+, withAlias ? false # Provides bin/youtube-dl for backcompat
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,16 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.9.2";
+  version = "2022.2.4";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-yn53zbBVuiaD31sIB6qxweEgy+AsjzXZ0yk9lNva6mM=";
+    sha256 = "sha256-gbUO18+c/MBC2PWhrS0c17E8SLNsB/rxiAaW6sCn3bU=";
   };
 
   propagatedBuildInputs = [ websockets mutagen ]
-    ++ lib.optional hlsEncryptedSupport pycryptodome;
+    ++ lib.optional hlsEncryptedSupport pycryptodomex;
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -49,6 +50,10 @@ buildPythonPackage rec {
 
   # Requires network
   doCheck = false;
+
+  postInstall = lib.optionalString withAlias ''
+      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";

@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.0.1";
+  version = "5.2.0";
   pname = "gspread";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "236a0f24e3724b49bae4cbd5144ed036b0ae6feaf5828ad033eb2824bf05e5be";
+    sha256 = "sha256-JRc6wIFGnPnWIVFMZXbGz0bznIJfF4uMueeDdKY3sL8=";
   };
 
   propagatedBuildInputs = [ requests google-auth google-auth-oauthlib ];

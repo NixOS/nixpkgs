@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "psysh";
-  version = "0.10.8";
+  version = "0.11.1";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-    sha256 = "sha256-6opSBKR5eI5HlaJy4A94JrxYfUtCCNVlyntmLZbWfOE=";
+    sha256 = "sha256-OiEXI7AVcC5udISfJ41285OBL82mSd1Xb5qhVtG4p9I=";
   };
 
   dontUnpack = true;

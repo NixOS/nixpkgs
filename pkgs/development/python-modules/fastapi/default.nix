@@ -13,24 +13,23 @@
 , peewee
 , python-jose
 , sqlalchemy
+, trio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.68.1";
+  version = "0.75.0";
   format = "flit";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = "fastapi";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-zwfopyig4ImMbkx89l8SsLW8PzoVcDN5KSd7a7fOnms=";
+    sha256 = "sha256-LCdScvQUdwOM8Don/5n/49bKrivT+bkhqWcBNku4fso=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette ==" "starlette >="
-  '';
 
   propagatedBuildInputs = [
     starlette
@@ -48,16 +47,25 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     sqlalchemy
+    trio
   ];
 
-  # disabled tests require orjson which requires rust nightly
-
-  # ignoring deprecation warnings to avoid test failure from
-  # tests/test_tutorial/test_testing/test_tutorial001.py
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette ==" "starlette >="
+  '';
 
   pytestFlagsArray = [
-    "--ignore=tests/test_default_response_class.py"
+    # ignoring deprecation warnings to avoid test failure from
+    # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Disabled tests require orjson which requires rust nightly
+    "tests/test_default_response_class.py"
+    # Don't test docs and examples
+    "docs_src"
   ];
 
   disabledTests = [
@@ -68,9 +76,13 @@ buildPythonPackage rec {
     "test_websocket_no_credentials"
   ];
 
+  pythonImportsCheck = [
+    "fastapi"
+  ];
+
   meta = with lib; {
+    description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
-    description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

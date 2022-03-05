@@ -13,13 +13,15 @@
 , gupnp-igd
 , gst_all_1
 , gnutls
+, graphviz
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnice";
   version = "0.1.18";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
@@ -47,6 +49,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
+    graphviz
   ];
 
   buildInputs = [
@@ -61,7 +64,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=enabled" # Disabled by default as of libnice-0.1.15
+    "-Dgtk_doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 

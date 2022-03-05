@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, cmake
 , libiconv
 , useMimalloc ? false
 , doCheck ? true
@@ -6,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-09-06";
-  cargoSha256 = "sha256-CTCDSoViyVMHxUKQz8fE+r3rkXf7yRgzZ90fZmMtcNM=";
+  version = "2022-02-28";
+  cargoSha256 = "sha256-dTw6xp99uGtGp6YuqAX3r3GDD6Wto3KHTaO2DUUE2FA=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-TacpTVvHAIs4kZ5vibj8luy/kryYwxY+OXFNPnqiXP0=";
+    sha256 = "sha256-GQ1cPO4povnozLl0MTFs0ZXpmBn+AZeFWQVnxHHWf9g=";
   };
 
   patches = [
@@ -24,15 +29,14 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "crates/rust-analyzer";
 
-  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
-  cargoTestFlags = lib.optional useMimalloc "--features=mimalloc";
-
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
     libiconv
   ];
+
+  buildFeatures = lib.optional useMimalloc "mimalloc";
 
   RUST_ANALYZER_REV = version;
 
@@ -53,8 +57,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    description = "A modular compiler frontend for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
   };

@@ -7,6 +7,7 @@
 , makeWrapper
 , pkg-config
 , python2
+, python3
 , openssl
 , SDL2
 , fontconfig
@@ -17,21 +18,23 @@
 , makeFontsConf
 , libglvnd
 , libxkbcommon
+, stdenv
+, enableWayland ? stdenv.isLinux
 , wayland
 , xorg
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "unstable-2021-08-08";
+  version = "unstable-2022-02-04";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
-    rev = "725f12cafd4a26babd0d6bbcbca9a99c181991ac";
-    sha256 = "sha256-ThMobWKe3wHhR15TmmKrI6Gp1wvGVfJ52MzibK0ubkc=";
+    rev = "92bc1725f1733547eb0ae25b740425f03f358c2a";
+    sha256 = "sha256-bKTteaj6gddp0NuV5Y0pfHotezU9Hmb136xOC9zkJ/M=";
   };
 
-  cargoSha256 = "sha256-5lOGncnyA8DwetY5bU6k2KXNClFgp+xIBEeA0/iwGF0=";
+  cargoSha256 = "sha256-TaZN49ou6bf1vW0mEsmaItp1c73d0M826MMrSGXpnGE=";
 
   SKIA_SOURCE_DIR =
     let
@@ -39,8 +42,8 @@ rustPlatform.buildRustPackage rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m91-0.39.4";
-        sha256 = "sha256-ovlR1vEZaQqawwth/UYVUSjFu+kTsywRpRClBaE1CEA=";
+        rev = "m93-0.42.0";
+        sha256 = "sha256-F1DWLm7bdKnuCu5tMMekxSyaGq8gPRNtZwcRVXJxjZQ=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
@@ -70,6 +73,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeWrapper
     python2 # skia-bindings
+    python3 # rust-xcb
     llvmPackages.clang # skia
   ];
 
@@ -96,9 +100,18 @@ rustPlatform.buildRustPackage rec {
     }))
   ];
 
-  postFixup = ''
+  postFixup = let
+    libPath = lib.makeLibraryPath ([
+      libglvnd
+      libxkbcommon
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXi
+    ] ++ lib.optionals enableWayland [ wayland ]);
+  in ''
       wrapProgram $out/bin/neovide \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon wayland xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
+        --prefix LD_LIBRARY_PATH : ${libPath}
     '';
 
   postInstall = ''
@@ -115,7 +128,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Kethku/neovide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "neovide";
   };
 }

@@ -12,7 +12,6 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gnome
 , gsettings-desktop-schemas
 , gtk3
@@ -42,6 +41,7 @@
 , zlib
 , xdg-utils
 , wrapGAppsHook
+, commandLineArgs ? ""
 }:
 
 let
@@ -59,7 +59,6 @@ rpath = lib.makeLibraryPath [
   freetype
   gdk-pixbuf
   glib
-  gnome2.GConf
   gtk3
   libdrm
   libpulseaudio
@@ -92,11 +91,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.29.77";
+  version = "1.36.109";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "LJykdig44ACpvlaGogbwrbY9hCJT3CB4ZKDZ/IzaBOU=";
+    sha256 = "KKoMpMagq5lVoRFyWNs92LdPwNIlmAjfwqxfOArIFeo=";
   };
 
   dontConfigure = true;
@@ -126,7 +125,7 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
-      for exe in $out/opt/brave.com/brave/{brave,crashpad_handler}; do
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${rpath}" $exe
@@ -158,6 +157,11 @@ stdenv.mkDerivation rec {
       runHook postInstall
   '';
 
+  preFixup = ''
+    # Add command line args to wrapGApp.
+    gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
+  '';
+
   installCheckPhase = ''
     # Bypass upstream wrapper which suppresses errors
     $out/opt/brave.com/brave/brave --version
@@ -168,7 +172,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#" + lib.replaceStrings [ "." ] [ "" ] version;
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you

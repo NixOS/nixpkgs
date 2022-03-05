@@ -5,6 +5,7 @@
 , cloudpickle
 , distributed
 , fetchFromGitHub
+, fetchpatch
 , fsspec
 , jinja2
 , numpy
@@ -17,12 +18,11 @@
 , pythonOlder
 , pyyaml
 , toolz
-, withExtraComplete ? false
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.08.1";
+  version = "2022.02.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HnrHOp3Y/iLYaK3KVp6NJrK68BMqX8lTl/wLosiGc7k=";
+    hash = "sha256-tDqpIS8j6a16YbJak+P1GkCEZvJyheWV5vkUrkhScRY=";
   };
 
   propagatedBuildInputs = [
@@ -45,9 +45,6 @@ buildPythonPackage rec {
     jinja2
     bokeh
     numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
-    distributed
   ];
 
   doCheck = true;
@@ -71,7 +68,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # parallelize
-    "--numprocesses auto"
+    "--numprocesses $NIX_BUILD_CORES"
     # rerun failed tests up to three times
     "--reruns 3"
     # don't run tests that require network access
@@ -102,6 +99,10 @@ buildPythonPackage rec {
     "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
+
+  passthru.extras-require = {
+    complete = [ distributed ];
+  };
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

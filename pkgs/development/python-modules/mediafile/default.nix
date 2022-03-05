@@ -1,23 +1,46 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
 , mutagen
+, pytestCheckHook
+, pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "mediafile";
-  version = "0.8.0";
+  version = "0.9.0";
+  format = "flit";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-19K5DZMstRWu/6+N/McEdM1swedI5qr15kmnIAMA60Y=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "beetbox";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-S90BgjKXpE4kAR0mPXgacmr2A+0hrkGpHRMeuvyFNCg=";
   };
 
-  propagatedBuildInputs = [ mutagen six ];
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
+    mutagen
+    six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mediafile"
+  ];
 
   meta = with lib; {
-    description = "MediaFile is a simple interface to the metadata tags for many audio file formats.";
+    description = "Python interface to the metadata tags for many audio file formats";
     homepage = "https://github.com/beetbox/mediafile";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

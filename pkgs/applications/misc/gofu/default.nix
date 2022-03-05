@@ -15,6 +15,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  postInstall = ''
+    ln -s $out/bin/gofu $out/bin/rtree
+    ln -s $out/bin/gofu $out/bin/prettyprompt
+  '';
+
   meta = with lib; {
     description = "Multibinary containing several utilities";
     homepage = "https://github.com/majewsky/gofu";

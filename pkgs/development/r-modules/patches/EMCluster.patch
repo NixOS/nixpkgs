@@ -1,6 +1,0 @@
-diff -ru -x '*~' EMCluster_orig/src/Makevars EMCluster/src/Makevars
---- EMCluster_orig/src/Makevars	2013-07-05 02:43:25.000000000 +0900
-+++ EMCluster/src/Makevars	2014-10-25 18:10:19.190992120 +0900
-@@ -1 +1 @@
--PKG_LIBS = $(FLIBS) $(BLAS_LIBS) $(LAPACK_LIBS)
-+PKG_LIBS = $(FLIBS) $(LAPACK_LIBS) $(BLAS_LIBS)

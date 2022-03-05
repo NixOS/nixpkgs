@@ -1,9 +1,6 @@
 import ./generic.nix {
   major_version = "4";
   minor_version = "13";
-  patch_version = "0-rc2";
-  src = fetchTarball {
-    url = "https://caml.inria.fr/pub/distrib/ocaml-4.13/ocaml-4.13.0~rc2.tar.xz";
-    sha256 = "1w4sdrs5s1bhbisgz44ysi2j1n13qd3slgs34ppglpwmqqw6ply2";
-  };
+  patch_version = "1";
+  sha256 = "sha256:1s7xwqidpjwfhnpfma4nb93gxfr7g9jfn03s1j03iyavmpgph7ck";
 }

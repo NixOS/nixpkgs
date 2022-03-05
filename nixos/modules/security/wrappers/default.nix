@@ -92,7 +92,6 @@ let
     , permissions
     , ...
     }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
     ''
       cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
       echo -n "${source}" > "$wrapperDir/${program}.real"
@@ -152,7 +151,7 @@ in
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
       default = {};
-      example = lib.literalExample
+      example = lib.literalExpression
         ''
           {
             # a setuid root program
@@ -244,8 +243,6 @@ in
     security.apparmor.includes."nixos/security.wrappers" = ''
       include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
         securityWrapper
-        pkgs.stdenv.cc.cc
-        pkgs.stdenv.cc.libc
       ]}"
     '';
 

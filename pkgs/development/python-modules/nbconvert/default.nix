@@ -17,17 +17,17 @@
 , ipykernel
 , pandocfilters
 , tornado
-, jupyter_client
+, jupyter-client
 , defusedxml
 }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.1.0";
+  version = "6.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d22a8ff202644d31db254d24d52c3a96c82156623fcd7c7f987bba2612303ec9";
+    sha256 = "5412ec774c6db4fccecb8c4ba07ec5d37d6dcf5762593cb3d6ecbbeb562ebbe5";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
+    jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
     defusedxml
     (nbclient.override { doCheck = false; }) # avoid infinite recursion
     jupyterlab-pygments

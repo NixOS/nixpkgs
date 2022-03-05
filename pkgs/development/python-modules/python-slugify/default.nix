@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, python
 , pythonOlder
 , text-unidecode
 , unidecode
@@ -10,12 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-slugify";
-  version = "5.0.2";
+  version = "6.1.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8TODoLn8vmSaGJK5yOtPjqsdbYS4S7emJDF6+pgVnKs=";
+    hash = "sha256-7/GQ5N+sl9L4wYkO5oJwns0jZQdCNhaH24LZXh5eJfU=";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +28,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  pytestFlagsArray = [
+    "test.py"
+  ];
 
-  pythonImportsCheck = [ "slugify" ];
+  pythonImportsCheck = [
+    "slugify"
+  ];
 
   meta = with lib; {
     description = "Python Slugify application that handles Unicode";

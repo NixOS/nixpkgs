@@ -1,20 +1,22 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , glib
 , gettext
 , sassc
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-dash-to-dock";
-  version = "unstable-2021-07-07";
+  version = "71+date=2022-02-23";
 
-  # temporarily switched to https://github.com/micheleg/dash-to-dock/pull/1402 because upstream doesn't work with GNOME 40 yet.
+  # Temporarily switched to commit hash because stable version is buggy.
   src = fetchFromGitHub {
-    owner = "ewlsh";
+    owner = "micheleg";
     repo = "dash-to-dock";
-    rev = "e4beec847181e4163b0a99ceaef4c4582cc8ae4c";
-    hash = "sha256-7UVnLXH7COnIbqxbt3CCscuu1YyPH6ax5DlKdaHCT/0=";
+    rev = "6f717302747931de6bf35bc9839fb3bd946e2c2f";
+    sha256 = "1J8t0R43jBbqpXyH2uVyEK+OvhrCw18WWheflqwe100=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +32,17 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "dash-to-dock@micxgx.gmail.com";
     extensionPortalSlug = "dash-to-dock";
+
+    updateScript = unstableGitUpdater {
+      stableVersion = true;
+      tagPrefix = "extensions.gnome.org-v";
+    };
   };
 
   meta = with lib; {
     description = "A dock for the Gnome Shell";
     homepage = "https://micheleg.github.io/dash-to-dock/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ eperuffo jtojnar ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ eperuffo jtojnar rhoriguchi ];
   };
 }

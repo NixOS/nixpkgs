@@ -12,7 +12,7 @@ in
       type = types.package;
       description = "Fluidd package to be used in the module";
       default = pkgs.fluidd;
-      defaultText = "pkgs.fluidd";
+      defaultText = literalExpression "pkgs.fluidd";
     };
 
     hostName = mkOption {
@@ -25,9 +25,11 @@ in
       type = types.submodule
         (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
       default = { };
-      example = {
-        serverAliases = [ "fluidd.\${config.networking.domain}" ];
-      };
+      example = literalExpression ''
+        {
+          serverAliases = [ "fluidd.''${config.networking.domain}" ];
+        }
+      '';
       description = "Extra configuration for the nginx virtual host of fluidd.";
     };
   };

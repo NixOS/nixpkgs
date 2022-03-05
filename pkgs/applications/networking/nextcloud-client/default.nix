@@ -17,22 +17,24 @@
 , qtgraphicaleffects
 , sqlite
 , inkscape
+, xdg-utils
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.3.3";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-QE6F+L1uy2Tmsf/DI8eUF5Ck+oE8CXDTpZS3xg2tiSs=";
+    sha256 = "sha256-nryoueoqnbBAJaU11OUXKP5PNrYf4515ojBkdMFIEMA=";
   };
 
   patches = [
     # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
+    ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
   nativeBuildInputs = [
@@ -59,6 +61,9 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    # See also: https://bugreports.qt.io/browse/QTBUG-85967
+    "--set QML_DISABLE_DISK_CACHE 1"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [
@@ -70,7 +75,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ caugner kranzes ];
+    maintainers = with maintainers; [ kranzes ];
     platforms = platforms.linux;
   };
 }

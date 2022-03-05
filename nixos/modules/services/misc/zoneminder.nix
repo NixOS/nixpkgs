@@ -171,7 +171,7 @@ in {
         example = "/storage/tank";
         description = ''
           ZoneMinder can generate quite a lot of data, so in case you don't want
-          to use the default ${home}, you can override the path here.
+          to use the default ${defaultDir}, you can override the path here.
         '';
       };
 
@@ -254,7 +254,7 @@ in {
                 location /cgi-bin {
                   gzip off;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME ${pkg}/libexec/zoneminder/${zms};
                   fastcgi_param HTTP_PROXY "";
                   fastcgi_intercept_errors on;
@@ -270,7 +270,7 @@ in {
                   try_files $uri =404;
                   fastcgi_index index.php;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 
@@ -366,5 +366,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

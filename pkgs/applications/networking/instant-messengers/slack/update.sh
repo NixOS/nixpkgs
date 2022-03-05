@@ -16,21 +16,28 @@ nixpkgs="$(git rev-parse --show-toplevel)"
 slack_nix="$nixpkgs/pkgs/applications/networking/instant-messengers/slack/default.nix"
 nixpkgs_linux_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-linux-version = \"\([0-9\.]\+\)\";.*/\1/p')
 nixpkgs_mac_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-darwin-version = \"\([0-9\.]\+\)\";.*/\1/p')
+nixpkgs_mac_arm_version=$(cat "$slack_nix" | sed -n 's/.*aarch64-darwin-version = \"\([0-9\.]\+\)\";.*/\1/p')
 
-if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && "$nixpkgs_mac_version" == "$latest_mac_version" ]]; then
+if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && \
+      "$nixpkgs_mac_version" == "$latest_mac_version" && \
+      "$nixpkgs_mac_arm_version" == "$latest_mac_version" ]]; then
   echo "nixpkgs versions are all up to date!"
   exit 0
 fi
 
-linux_url="https://downloads.slack-edge.com/linux_releases/slack-desktop-${latest_linux_version}-amd64.deb"
+linux_url="https://downloads.slack-edge.com/releases/linux/${latest_linux_version}/prod/x64/slack-desktop-${latest_linux_version}-amd64.deb"
 mac_url="https://downloads.slack-edge.com/releases/macos/${latest_mac_version}/prod/x64/Slack-${latest_mac_version}-macOS.dmg"
+mac_arm_url="https://downloads.slack-edge.com/releases/macos/${latest_mac_version}/prod/arm64/Slack-${latest_mac_version}-macOS.dmg"
 linux_sha256=$(nix-prefetch-url ${linux_url})
 mac_sha256=$(nix-prefetch-url ${mac_url})
+mac_arm_sha256=$(nix-prefetch-url ${mac_arm_url})
 
 sed -i "s/x86_64-linux-version = \".*\"/x86_64-linux-version = \"${latest_linux_version}\"/" "$slack_nix"
 sed -i "s/x86_64-darwin-version = \".*\"/x86_64-darwin-version = \"${latest_mac_version}\"/" "$slack_nix"
+sed -i "s/aarch64-darwin-version = \".*\"/aarch64-darwin-version = \"${latest_mac_version}\"/" "$slack_nix"
 sed -i "s/x86_64-linux-sha256 = \".*\"/x86_64-linux-sha256 = \"${linux_sha256}\"/" "$slack_nix"
 sed -i "s/x86_64-darwin-sha256 = \".*\"/x86_64-darwin-sha256 = \"${mac_sha256}\"/" "$slack_nix"
+sed -i "s/aarch64-darwin-sha256 = \".*\"/aarch64-darwin-sha256 = \"${mac_arm_sha256}\"/" "$slack_nix"
 
 if ! nix-build -A slack "$nixpkgs"; then
   echo "The updated slack failed to build."

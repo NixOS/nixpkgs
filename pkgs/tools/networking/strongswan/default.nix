@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, autoreconfHook, perl, gperf, bison, flex
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
@@ -7,6 +7,7 @@
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 , darwin
+, nixosTests
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -17,13 +18,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
-  version = "5.8.1"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "5.9.5"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
     rev = version;
-    sha256 = "1a1hw2jsbwvkdhhxjmq87hz13ivbgvqwks1q3adz14mqgbc64snd";
+    sha256 = "sha256-Jx0Wd/xgkl/WrBfcEvZPogPAQp0MW9HE+AQR2anP5Vo=";
   };
 
   dontPatchELF = true;
@@ -40,12 +41,6 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
-      sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
-    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''
@@ -106,6 +101,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = optionalString stdenv.cc.isGNU "-lgcc_s" ;
+
+  passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
 
   meta = {
     description = "OpenSource IPsec-based VPN Solution";

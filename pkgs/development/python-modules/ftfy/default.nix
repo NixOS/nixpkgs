@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll aborsu ];
+    maintainers = with maintainers; [ aborsu ];
   };
 }

@@ -7,20 +7,21 @@
 , PCSC
 , pkg-config
 , hsmSupport ? true
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.16.2";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "v${version}";
-    sha256 = "sha256-JDoiz/BX8zB+qdwlGPUCa30R+pwWWtjEiXHP5LxdPAE=";
+    sha256 = "sha256-oebmJ+xrJTV5gXH3U1lWCSQMHiVnUTa0ZTp39sVB7KM=";
   };
 
-  vendorSha256 = "sha256-cFuLW0qkI/l/TvYwQZA2bLlWYjs1hdbQJ5jU7xiuFZI=";
+  vendorSha256 = "sha256-IJXJS+Z93Hw1I1CAeRv4mq8as9DKebqNFa0IMgZ+Kic=";
 
   ldflags = [ "-buildid=" ];
 
@@ -45,6 +46,8 @@ buildGoModule rec {
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests.step-ca = nixosTests.step-ca;
 
   meta = with lib; {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";

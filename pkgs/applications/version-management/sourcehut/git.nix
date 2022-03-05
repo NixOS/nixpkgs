@@ -8,13 +8,13 @@
 , scmsrht
 }:
 let
-  version = "0.72.8";
+  version = "0.77.3";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-AB2uzajO5PtcpJfbOOTfuDFM6is5K39v3AZJ1hShRNc=";
+    sha256 = "sha256-eJvXCcmdiUzTK0EqNJkLEZsAfr6toD/378HObnMbOWM=";
   };
 
   buildShell = src: buildGoModule {
@@ -32,13 +32,13 @@ let
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    vendorSha256 = "1d94cqy7x0q0agwg515xxsbl70b3qrzxbzsyjhn1pbyj532brn7f";
+    vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    vendorSha256 = "0fwzqpjv8x5y3w3bfjd0x0cvqjjak23m0zj88hf32jpw49xmjkih";
+    vendorSha256 = "sha256-sBlG7EFqdDm7CkAHVX50Mf4N3sl1rPNmWExG/bfbfGA=";
   };
 
   updateHook = buildUpdateHook "${src}/gitsrht-update-hook";
@@ -47,6 +47,11 @@ in
 buildPythonPackage rec {
   inherit src version;
   pname = "gitsrht";
+
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/git/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -72,10 +77,12 @@ buildPythonPackage rec {
     inherit updateHook;
   };
 
+  pythonImportsCheck = [ "gitsrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

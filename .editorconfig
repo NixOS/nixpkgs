@@ -61,17 +61,10 @@ trim_trailing_whitespace = unset
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
 trim_trailing_whitespace = unset
 
-[nixos/tests/systemd-networkd-vrf.nix]
-trim_trailing_whitespace = unset
-
 [pkgs/build-support/dotnetenv/Wrapper/**]
 end_of_line = unset
 indent_style = unset
 insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/build-support/upstream-updater/**]
-indent_style = unset
 trim_trailing_whitespace = unset
 
 [pkgs/development/compilers/elm/registry.dat]
@@ -86,11 +79,4 @@ trim_trailing_whitespace = unset
 trim_trailing_whitespace = unset
 
 [pkgs/tools/misc/timidity/timidity.cfg]
-trim_trailing_whitespace = unset
-
-[pkgs/tools/security/enpass/data.json]
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/top-level/emscripten-packages.nix]
 trim_trailing_whitespace = unset

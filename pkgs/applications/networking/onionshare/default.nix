@@ -1,52 +1,54 @@
-{
-  lib,
-  buildPythonApplication,
-  substituteAll,
-  fetchFromGitHub,
-  isPy3k,
-  colorama,
-  flask,
-  flask-httpauth,
-  flask-socketio,
-  stem,
-  psutil,
-  pyqt5,
-  pycrypto,
-  pyside2,
-  pytestCheckHook,
-  qrcode,
-  qt5,
-  requests,
-  unidecode,
-  tor,
-  obfs4,
+{ lib
+, stdenv
+, buildPythonApplication
+, substituteAll
+, fetchFromGitHub
+, isPy3k
+, colorama
+, flask
+, flask-httpauth
+, flask-socketio
+, cepa
+, psutil
+, pyqt5
+, pycrypto
+, pynacl
+, pyside2
+, pytestCheckHook
+, qrcode
+, qt5
+, requests
+, unidecode
+, tor
+, obfs4
+, snowflake
 }:
 
 let
-  version = "2.3.3";
+  version = "2.5";
   src = fetchFromGitHub {
-    owner = "micahflee";
+    owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-wU2020RNXlwJ2y9uzcLxIX4EECev1Z9YvNyiBalLj/Y=";
+    sha256 = "xCAM+tjjyDg/gqAXr4YNPhM8R3n9r895jktisAGlpZo=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
     longDescription = ''
-    OnionShare is an open source tool for securely and anonymously sending
-    and receiving files using Tor onion services. It works by starting a web
-    server directly on your computer and making it accessible as an
-    unguessable Tor web address that others can load in Tor Browser to
-    download files from you, or upload files to you. It doesn't require
-    setting up a separate server, using a third party file-sharing service,
-    or even logging into an account.
+      OnionShare is an open source tool for securely and anonymously sending
+      and receiving files using Tor onion services. It works by starting a web
+      server directly on your computer and making it accessible as an
+      unguessable Tor web address that others can load in Tor Browser to
+      download files from you, or upload files to you. It doesn't require
+      setting up a separate server, using a third party file-sharing service,
+      or even logging into an account.
 
-    Unlike services like email, Google Drive, DropBox, WeTransfer, or nearly
-    any other way people typically send files to each other, when you use
-    OnionShare you don't give any companies access to the files that you're
-    sharing. So long as you share the unguessable web address in a secure way
-    (like pasting it in an encrypted messaging app), no one but you and the
-    person you're sharing with can access the files.
+      Unlike services like email, Google Drive, DropBox, WeTransfer, or nearly
+      any other way people typically send files to each other, when you use
+      OnionShare you don't give any companies access to the files that you're
+      sharing. So long as you share the unguessable web address in a secure way
+      (like pasting it in an encrypted messaging app), no one but you and the
+      person you're sharing with can access the files.
     '';
 
     homepage = "https://onionshare.org/";
@@ -55,7 +57,11 @@ let
     maintainers = with maintainers; [ lourkeur ];
   };
 
-in rec {
+  # TODO: package meek https://support.torproject.org/glossary/meek/
+  meek = "/meek-not-available";
+
+in
+rec {
   onionshare = buildPythonApplication {
     pname = "onionshare-cli";
     inherit version meta;
@@ -64,7 +70,7 @@ in rec {
       # hardcode store paths of dependencies
       (substituteAll {
         src = ./fix-paths.patch;
-        inherit tor obfs4;
+        inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
     ];
@@ -74,9 +80,10 @@ in rec {
       flask
       flask-httpauth
       flask-socketio
-      stem
+      cepa
       psutil
       pycrypto
+      pynacl
       requests
       unidecode
     ];
@@ -96,20 +103,24 @@ in rec {
     '';
 
     disabledTests = [
-      "test_firefox_like_behavior"
-      "test_if_unmodified_since"
+      "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
+    ] ++ lib.optionals stdenv.isDarwin [
+      # on darwin (and only on darwin) onionshare attempts to discover
+      # user's *real* homedir via /etc/passwd, making it more painful
+      # to fake
+      "test_receive_mode_webhook"
     ];
   };
 
   onionshare-gui = buildPythonApplication {
     pname = "onionshare";
     inherit version meta;
-    src = "${src}/desktop/src";
+    src = "${src}/desktop";
     patches = [
       # hardcode store paths of dependencies
       (substituteAll {
         src = ./fix-paths-gui.patch;
-        inherit tor obfs4;
+        inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
     ];

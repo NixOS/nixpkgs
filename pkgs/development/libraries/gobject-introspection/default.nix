@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
-  version = "1.68.0";
+  version = "1.70.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09sawnv3xj9pzgy2qrrk87dl3jibfphnswb61i5bh0d2h4j28afj";
+    sha256 = "0jpwraip7pwl9bf9s59am3r7074p34fasvfb5ym1fb8hwc34jawh";
   };
 
   patches = [
@@ -45,6 +45,15 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
+    })
+    # Fix build with meson 0.61.0
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/827494d6415b696a98fa195cbd883b50cc893bfc.patch";
+      sha256 = "sha256-imVWzU760FRsX+eXREQDQ6mDcmzZ5ASLT9rBf4oyBGQ=";
+    })
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/effb1e09dee263cdac4ec593e8caf316e6f01fe2.patch";
+      sha256 = "sha256-o7a0qDT5IYcYcz8toeZu+nPj3SwS52sNgmxgzsmlp4Q=";
     })
   ] ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.

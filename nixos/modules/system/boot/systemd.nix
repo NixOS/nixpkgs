@@ -1,9 +1,9 @@
 { config, lib, pkgs, utils, ... }:
 
 with utils;
+with systemdUtils.unitOptions;
+with systemdUtils.lib;
 with lib;
-with import ./systemd-unit-options.nix { inherit config lib; };
-with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
 
@@ -25,7 +25,11 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
+    ] ++ (optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
+      "cryptsetup-pre.target"
+      "remote-cryptsetup.target"
+    ]) ++ [
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -40,7 +44,7 @@ let
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
       "systemd-udev-settle.service"
-      "systemd-udev-trigger.service"
+      ] ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service") ++ [
       # hwdb.bin is managed by NixOS
       # "systemd-hwdb-update.service"
 
@@ -65,6 +69,7 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.import1.service"
       "dbus-org.freedesktop.machine1.service"
+      "dbus-org.freedesktop.login1.service"
       "user@.service"
       "user-runtime-dir@.service"
 
@@ -207,20 +212,14 @@ let
   makeJobScript = name: text:
     let
       scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = pkgs.writeTextFile {
+      out = (pkgs.writeShellScriptBin scriptName ''
+        set -e
+        ${text}
+      '').overrideAttrs (_: {
         # The derivation name is different from the script file name
         # to keep the script file name short to avoid cluttering logs.
         name = "unit-script-${scriptName}";
-        executable = true;
-        destination = "/bin/${scriptName}";
-        text = ''
-          #!${pkgs.runtimeShell} -e
-          ${text}
-        '';
-        checkPhase = ''
-          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
-        '';
-      };
+      });
     in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {
@@ -244,6 +243,8 @@ let
           { Requisite = toString config.requisite; }
         // optionalAttrs (config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
+        // optionalAttrs (config.reloadTriggers != [])
+          { X-Reload-Triggers = toString config.reloadTriggers; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
@@ -426,7 +427,7 @@ in
 
     systemd.package = mkOption {
       default = pkgs.systemd;
-      defaultText = "pkgs.systemd";
+      defaultText = literalExpression "pkgs.systemd";
       type = types.package;
       description = "The systemd package.";
     };
@@ -446,7 +447,7 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
       description = "Packages providing systemd units and hooks.";
     };
 
@@ -663,7 +664,7 @@ in
 
     services.journald.forwardToSyslog = mkOption {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
-      defaultText = "services.rsyslogd.enable || services.syslog-ng.enable";
+      defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = types.bool;
       description = ''
         Whether to forward log messages to syslog.
@@ -722,7 +723,7 @@ in
 
     services.logind.lidSwitchExternalPower = mkOption {
       default = config.services.logind.lidSwitch;
-      defaultText = "services.logind.lidSwitch";
+      defaultText = literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
 
@@ -768,7 +769,7 @@ in
     systemd.tmpfiles.packages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ pkgs.lvm2 ]";
+      example = literalExpression "[ pkgs.lvm2 ]";
       apply = map getLib;
       description = ''
         List of packages containing <command>systemd-tmpfiles</command> rules.
@@ -917,6 +918,9 @@ in
               )
               (optional hasDeprecated
                 "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786."
+              )
+              (optional (service.reloadIfChanged && service.reloadTriggers != [])
+                "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
               )
             ]
         )
@@ -1213,6 +1217,25 @@ in
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
 
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
+
+    services.logrotate.paths = {
+      "/var/log/btmp" = mapAttrs (_: mkDefault) {
+        frequency = "monthly";
+        keep = 1;
+        extraConfig = ''
+          create 0660 root ${config.users.groups.utmp.name}
+          minsize 1M
+        '';
+      };
+      "/var/log/wtmp" = mapAttrs (_: mkDefault) {
+        frequency = "monthly";
+        keep = 1;
+        extraConfig = ''
+          create 0664 root ${config.users.groups.utmp.name}
+          minsize 1M
+        '';
+      };
+    };
   };
 
   # FIXME: Remove these eventually.

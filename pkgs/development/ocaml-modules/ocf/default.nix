@@ -1,37 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ppx_tools, yojson }:
+{ lib, buildDunePackage, fetchFromGitLab, yojson }:
 
-if lib.versionOlder ocaml.version "4.03"
-|| lib.versionAtLeast ocaml.version "4.08"
-then throw "ocf not supported for ocaml ${ocaml.version}"
-else
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "ocf";
-  version = "0.5.0";
-  src = fetchFromGitHub {
+  version = "0.8.0";
+  useDune2 = true;
+  minimalOCamlVersion = "4.03";
+  src = fetchFromGitLab {
+    domain = "framagit.org";
     owner = "zoggy";
     repo = "ocf";
-    rev = "release-${version}";
-    sha256 = "1fhq9l2nmr39hxzpavc0jssmba71nnmhsncdn4dsbh2ylv29w56y";
+    rev = version;
+    sha256 = "sha256:00ap3q5yjqmpk87lxqv1j2wkc7583ynhjr1jjrfn9r0j2h9pfd60";
   };
 
-  buildInputs = [ ocaml findlib ppx_tools ];
   propagatedBuildInputs = [ yojson ];
-
-  createFindlibDestdir = true;
-
-  dontStrip = true;
-
-  patches = [(fetchpatch {
-    url = "https://github.com/zoggy/ocf/commit/3a231c7a6c5e535a77c25e207af8952793436444.patch";
-    sha256 = "0nc8cggc5gxhch9amaz3s71lxs1xbgi7fs9p90cng04dsgr64xk5";
-  })
-  ];
 
   meta = with lib; {
     description = "OCaml library to read and write configuration options in JSON syntax";
-    homepage = "https://zoggy.github.io/ocf/";
+    homepage = "https://zoggy.frama.io/ocf/";
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];
   };
 }

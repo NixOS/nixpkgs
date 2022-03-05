@@ -9,6 +9,7 @@
 , symlinkJoin
 , mygui
 , crudini
+, bullet
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
@@ -70,7 +71,8 @@ let
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
 
-    buildInputs = oldAttrs.buildInputs ++ [ luajit ];
+    buildInputs = (builtins.map (x: if x.pname or "" == "bullet" then bullet else x) oldAttrs.buildInputs)
+      ++ [ luajit ];
 
     cmakeFlags = oldAttrs.cmakeFlags ++ [
       "-DBUILD_OPENCS=OFF"
@@ -78,6 +80,11 @@ let
       "-DRakNet_LIBRARY_RELEASE=${raknet}/lib/libRakNetLibStatic.a"
       "-DRakNet_LIBRARY_DEBUG=${raknet}/lib/libRakNetLibStatic.a"
     ];
+
+    prePatch = ''
+      substituteInPlace components/process/processinvoker.cpp \
+        --replace "\"./\"" "\"$out/bin/\""
+    '';
 
     # https://github.com/TES3MP/openmw-tes3mp/issues/552
     patches = [ ./tes3mp.patch ];

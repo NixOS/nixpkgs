@@ -6,13 +6,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libredwg";
-  version = "0.12";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = pname;
     rev = version;
-    sha256 = "0ayhp3ym30hzp5f6dz7mmp9hpxf6a48nx3kq5crcmzycm5fllbn7";
+    sha256 = "sha256-CZZ5/uCls2tY3PKmD+hBBvp7d7KX8nZuCPf03sa4iXc=";
     fetchSubmodules = true;
   };
 

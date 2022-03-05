@@ -1,25 +1,32 @@
 { lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
 , abootimg, acl, apksigner, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, openssl, pdftk, pgpdump, poppler_utils, qemu, R
-, radare2, sng, sqlite, squashfsTools, tcpdump, odt2txt, unzip, wabt, xxd, xz, zip, zstd
+, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
+, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
+, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
 , enableBloat ? false
+# updater only
+, writeScript
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "183";
+  version = "205";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-XFFrRmCpE2UvZRCELfPaotLklyjLiCDWkyFWkISOHZM=";
+    sha256 = "sha256-Smx9trogh7E6jsH0K+FXAocN8znnMXXnN6N/QzXkdJQ=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
     ./ignore_links.patch
+
+    # due to https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/953a599c2b903298b038b34abf515cea69f4fc19
+    # the version detection of LLVM is broken and the comparison result is compared against
+    # the expected result from LLVM 10 (rather than 7 which is our default).
+    ./fix-tests.patch
   ];
 
   postPatch = ''
@@ -35,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: docx2txt dumpimage dumppdf dumpxsb enjarify lipo ocamlobjinfo oggDump otool procyon
+  # Still missing these tools: docx2txt lipo otool r2pipe
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
@@ -43,14 +50,14 @@ python3Packages.buildPythonApplication rec {
       xz zip zstd
     ]
     ++ (with python3Packages; [
-      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
+      argcomplete black debian defusedxml jsondiff jsbeautifier libarchive-c
       python_magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
-      abootimg apksigner apktool cbfstool colord ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono odt2txt openssh pdftk poppler_utils qemu R tcpdump wabt radare2
-    ] ++ (with python3Packages; [ binwalk guestfs h5py ]));
+      abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
+      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
@@ -70,10 +77,14 @@ python3Packages.buildPythonApplication rec {
     # Failing because of file-v5.40 has a slightly different output.
     # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
     "test_text_proper_indentation"
+
+    # fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
     "test_listing"
+    "test_symlink_root"
   ];
 
   # flaky tests on Darwin
@@ -84,6 +95,19 @@ python3Packages.buildPythonApplication rec {
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
   ];
+
+   passthru = {
+    updateScript = writeScript "update-diffoscope" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
+      newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
+      update-source-version ${pname} "$newVersion"
+    '';
+   };
 
   meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";

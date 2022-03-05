@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , file
 , glib
@@ -55,11 +56,19 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.40";
+  version = "1.41";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GleufOI0qjoXRKrDvlwhIdmNzpmUQO+KucxO39XtyxI=";
+    sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # Fix Musl build by avoiding a Glibc-only API.
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
+      sha256 = "1kg2nml7pdxc82h5hgsa3npvzdxy4d2jpz2f93pa97if868i8d43";
+    })
+  ];
 
   buildInputs = [
     glib
@@ -67,17 +76,17 @@ stdenv.mkDerivation rec {
     libmnl
     gnutls
     readline
-  ] ++ optionals (enableOpenconnect) [ openconnect ];
+  ] ++ optionals (enableOpenconnect) [ openconnect ]
+    ++ optionals (firewallType == "iptables") [ iptables ]
+    ++ optionals (firewallType == "nftables") [ libnftnl ]
+    ++ optionals (enablePolkit) [ polkit ]
+    ++ optionals (enablePptp) [ pptp ppp ]
+  ;
 
   nativeBuildInputs = [
     pkg-config
     file
-  ]
-    ++ optionals (enablePolkit) [ polkit ]
-    ++ optionals (enablePptp) [ pptp ppp ]
-    ++ optionals (firewallType == "iptables") [ iptables ]
-    ++ optionals (firewallType == "nftables") [ libnftnl ]
-  ;
+  ];
 
   # fix invalid path to 'file'
   postPatch = ''
@@ -163,9 +172,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A daemon for managing internet connections";
-    homepage = "https://01.org/connman";
+    homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/";
     maintainers = [ maintainers.matejc ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

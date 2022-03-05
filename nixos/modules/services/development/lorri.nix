@@ -21,8 +21,7 @@ in {
         description = ''
           The lorri package to use.
         '';
-        defaultText = lib.literalExample "pkgs.lorri";
-        example = lib.literalExample "pkgs.lorri";
+        defaultText = lib.literalExpression "pkgs.lorri";
       };
     };
   };

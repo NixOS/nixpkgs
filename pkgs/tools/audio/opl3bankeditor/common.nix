@@ -53,7 +53,6 @@ mkDerivation rec {
     mv "${binname}.app" $out/Applications/
 
     install_name_tool -change {,${qwt}/lib/}libqwt.6.dylib "$out/Applications/${binname}.app/Contents/MacOS/${binname}"
-    wrapQtApp "$out/Applications/${binname}.app/Contents/MacOS/${binname}"
 
     ln -s "$out/Applications/${binname}.app/Contents/MacOS/${binname}" $out/bin/${mainProgram}
   '';

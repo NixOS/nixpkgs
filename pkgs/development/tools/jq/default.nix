@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A lightweight and flexible command-line JSON processor";
+    homepage = "https://stedolan.github.io/jq/";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin globin ];
     platforms = platforms.unix;
     downloadPage = "https://stedolan.github.io/jq/download/";
-    updateWalker = true;
   };
 }

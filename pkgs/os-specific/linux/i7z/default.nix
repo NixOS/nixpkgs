@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i7z";
-  version = "0.27.3";
+  version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "DimitryAndric";
     repo = "i7z";
     rev = "v${version}";
-    sha256 = "0l8wz0ffb27nkwchc606js652spk8masy3kjmzh7ygipwsary5ds";
+    sha256 = "00c4ng30ry88hcya4g1i9dngiqmz3cs31x7qh1a10nalxn1829xy";
   };
 
   buildInputs = [ ncurses ] ++ lib.optional withGui qtbase;

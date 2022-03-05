@@ -1,17 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
+{ lib, rustPlatform, fetchCrate, makeWrapper, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "racer";
-  version = "2.1.46";
+  version = "2.1.48";
 
-  src = fetchFromGitHub {
-    owner = "racer-rust";
-    repo = "racer";
-    rev = "v${version}";
-    sha256 = "sha256-7h1w5Yyt5VN6+pYuTTbdM1Nrd8aDEhPLusxuIsdS+mQ=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-lat5s9+AMFI3VXiWqjLESZrtq3IwOZhlt+5BhYoonfA=";
   };
 
-  cargoSha256 = "sha256-fllhB+so6H36b+joW0l+NBtz3PefOKdj6C8qKQPuJpk=";
+  cargoSha256 = "sha256-jGsvCmrPGVzWdx7V3J4bBK+SF2o+icORmVKuwqYxdh4=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.isDarwin Security;
@@ -44,5 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;
     maintainers = with maintainers; [ jagajaga ];
+    # error[E0199]: implementing the trait `Step` is not unsafe
+    broken = true;
   };
 }

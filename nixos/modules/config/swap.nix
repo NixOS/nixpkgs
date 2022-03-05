@@ -47,6 +47,15 @@ let
         '';
       };
 
+      allowDiscards = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to allow TRIM requests to the underlying device. This option
+          has security implications; please read the LUKS documentation before
+          activating it.
+        '';
+      };
     };
 
   };
@@ -194,7 +203,6 @@ in
     ];
 
     # Create missing swapfiles.
-    # FIXME: support changing the size of existing swapfiles.
     systemd.services =
       let
 
@@ -214,17 +222,14 @@ in
                 ${optionalString (sw.size != null) ''
                   currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
                   if [ "${toString sw.size}" != "$currentSize" ]; then
-                    fallocate -l ${toString sw.size}M "${sw.device}" ||
-                      dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
-                    if [ "${toString sw.size}" -lt "$currentSize" ]; then
-                      truncate --size "${toString sw.size}M" "${sw.device}"
-                    fi
+                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${optionalString (sw.discardPolicy != null) "--allow-discards"} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
+                    ${optionalString sw.randomEncryption.allowDiscards "--allow-discards"} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

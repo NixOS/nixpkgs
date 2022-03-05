@@ -14,11 +14,11 @@
 }:
 mkDerivation {
   pname = "spago";
-  version = "0.20.2";
+  version = "0.20.7";
   src = fetchgit {
     url = "https://github.com/purescript/spago.git";
-    sha256 = "11jh3bszvl8zfi4xcabpx43jply28dxdywd6fadxspaa05jdxxn2";
-    rev = "0f38c9153e46f30e9d87963e181f5c1a595f4b64";
+    sha256 = "0k9ablqhx4m1hk0sc0rx824qq5gr7fp7dpg9rj5v793v6hd3q4jv";
+    rev = "41d9c967dc1db0de03985e31083eb76b3e2fcce4";
     fetchSubmodules = true;
   };
   isLibrary = true;

@@ -165,8 +165,13 @@ runCommand
           (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
         ''}
         EOF
-        # Link subdirs.el from the emacs distribution
-        ln -s $emacs/share/emacs/site-lisp/subdirs.el -T $subdirs
+
+        # Generate a subdirs.el that statically adds all subdirectories to load-path.
+        $emacs/bin/emacs \
+          --batch \
+          --load ${./mk-wrapper-subdirs.el} \
+          --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
+          > "$subdirs"
 
         # Byte-compiling improves start-up time only slightly, but costs nothing.
         $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"

@@ -1,17 +1,17 @@
 { lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex
 , libclang, llvm, unifdef
-, pebble, psutil, pytestCheckHook, pytest-flake8
+, chardet, pebble, psutil, pytestCheckHook, pytest-flake8
 }:
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "v${version}";
-    sha256 = "1x2i8nv0nncgvr07znhh2slngbrg8qcsz2zqx76bcyq9hssn6yal";
+    sha256 = "0cfzikkhp91hjgxjk3izzczb8d9p8v9zsfyk6iklk92n5qf1aakq";
   };
 
   patches = [
@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ cmake flex llvm.dev ];
   buildInputs = [ bash libclang llvm llvm.dev unifdef ];
-  propagatedBuildInputs = [ pebble psutil ];
+  propagatedBuildInputs = [ chardet pebble psutil ];
   checkInputs = [ pytestCheckHook pytest-flake8 unifdef ];
 
   # 'cvise --command=...' generates a script with hardcoded shebang.

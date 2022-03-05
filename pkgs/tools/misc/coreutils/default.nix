@@ -21,19 +21,22 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation (rec {
-  pname = "coreutils";
-  version = "8.32";
+  pname = "coreutils${optionalString (!minimal) "-full"}";
+  version = "9.0";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
+    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
+    sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
   };
 
-  patches = [ ./sys-getdents-undeclared.patch ]
-    ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-    # fix gnulib tests on 32-bit ARM. Included on coreutils master.
-    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+  patches = [
+    ./fix-chmod-exit-code.patch
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
+    ./disable-seek-hole.patch
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=52330
+    # This patch can be dropped, once we upgrade to the next coreutils version after 9.0
+    ./fix-arm64-macos.patch
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -43,9 +46,6 @@ stdenv.mkDerivation (rec {
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
-    # Depends on the mountpoints
-    sed '2i echo Skipping df df-symlink test && exit 77' -i ./tests/df/df-symlink.sh
-
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
     sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
@@ -54,8 +54,6 @@ stdenv.mkDerivation (rec {
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
-
-    sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
 
     # Fails on systems with a rootfs. Looks like a bug in the test, see
     # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
@@ -69,28 +67,31 @@ stdenv.mkDerivation (rec {
       echo "int main() { return 77; }" > "$f"
     done
 
-    # tests try to access user 1000 which is forbidden in sandbox
-    sed '2i print "Skipping id uid test"; exit 77' -i ./tests/id/uid.sh
-    sed '2i print "Skipping id zero test"; exit 77' -i ./tests/id/zero.sh
-    sed '2i print "Skipping misc help-versiob test"; exit 77' -i ./tests/misc/help-version.sh
-    sed '2i print "Skipping chown separator test"; exit 77' -i ./tests/chown/separator.sh
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+    # intermittent failures on builders, unknown reason
+    sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
+  '' + (optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
     ''
       echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
-  ]);
+  ])) + (optionalString stdenv.isAarch64 ''
+    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
+
+    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
+  '');
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
+  nativeBuildInputs = [ perl xz.bin autoreconfHook ] # autoreconfHook is due to patch, normally only needed for cygwin
+    ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ];  # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
+    ++ optional stdenv.isDarwin "--disable-nls" # the shipped configure script doesn't enable nls, but using autoreconfHook does so which breaks the build
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.
@@ -118,9 +119,7 @@ stdenv.mkDerivation (rec {
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
-  # Saw random failures like ‘help2man: can't get '--help' info from
-  # man/sha512sum.td/sha512sum’.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
@@ -152,7 +151,7 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix ++ platforms.windows;
     priority = 10;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ maintainers.eelco maintainers.das_j ];
   };
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.

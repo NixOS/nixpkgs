@@ -1,26 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, fetchpatch
+{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  version = "20210205";
+  version = "20211029";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-ADg/+gmndOiuQHsncOzS5K4chthXeUFz6RRJsrZNeZY=";
+    sha256 = "sha256-haPDZorAfKuIEMiBCXJRMALAYnurQyjmCSOnj9IsoKk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2021-32055.patch";
-      url = "https://github.com/neomutt/neomutt/commit/fa1db5785e5cfd9d3cd27b7571b9fe268d2ec2dc.patch";
-      sha256 = "0bb7gisjynq3w7hhl6vxa469h609bcz6fkdi8vf740pqrwhk68yn";
-    })
-  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme libkrb5 libidn ncurses
@@ -30,6 +23,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib w3m
+  ];
+
+  patches = [
+    # Remove on next update, see
+    # https://github.com/NixOS/nixpkgs/pull/143641#issuecomment-954991746 for context.
+    (fetchpatch {
+      url = "https://github.com/neomutt/neomutt/commit/4242a31313e0b600693215c01047bbda8a6dd25a.patch";
+      sha256 = "sha256-fcuNeBkPjqln5QA9VFcfXCQD/VrUoSEMSxQ//Xj+yxY=";
+    })
   ];
 
   enableParallelBuilding = true;

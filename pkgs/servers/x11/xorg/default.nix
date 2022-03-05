@@ -1017,11 +1017,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXft = callPackage ({ stdenv, pkg-config, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
     pname = "libXft";
-    version = "2.3.3";
+    version = "2.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXft-2.3.3.tar.bz2";
-      sha256 = "05lja9s54090xwh31r0bqms4v3pimng5xr09g2rdnafx2vk6hp12";
+      url = "mirror://xorg/individual/lib/libXft-2.3.4.tar.bz2";
+      sha256 = "1pdbr6gzfvixc791pjf42i9gg8wvfq6cpq6sdca04h4i42mxmpjp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -1032,11 +1032,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
     pname = "libXi";
-    version = "1.7.10";
+    version = "1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXi-1.7.10.tar.bz2";
-      sha256 = "0q8hz3slga3w3ch8wp0k7ay9ilhz315qnab0w1y2x9w3cf7hv8rn";
+      url = "mirror://xorg/individual/lib/libXi-1.8.tar.bz2";
+      sha256 = "005sicls6faddkcj449858i9xz1nafy70y26frsk7iv1d9283l9f";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -1341,6 +1341,21 @@ lib.makeScope newScope (self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config python3 ];
     buildInputs = [ libxslt libpthreadstubs libXau xcbproto libXdmcp ];
+    meta.platforms = lib.platforms.unix;
+  }) {};
+
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
+  libxcvt = callPackage ({ stdenv, pkg-config, fetchurl, meson, ninja }: stdenv.mkDerivation {
+    pname = "libxcvt";
+    version = "0.1.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/lib/libxcvt-0.1.1.tar.xz";
+      sha256 = "0acc7vrj5kfb19zvyl7f29rnsvx383dvwc19k70r8prm1lccxsr7";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkg-config meson ninja ];
+    buildInputs = [ ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -1902,11 +1917,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xev = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
     pname = "xev";
-    version = "1.2.3";
+    version = "1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xev-1.2.3.tar.bz2";
-      sha256 = "02ddsdx138g7szhwklpbzi0cxr34871iay3k28kdcihrz8f4zg36";
+      url = "mirror://xorg/individual/app/xev-1.2.4.tar.bz2";
+      sha256 = "1ql592pdhddhkipkrsxn929y9l2nn02a5fh2z3dx47kmzs5y006p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -1977,11 +1992,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-libinput";
-    version = "1.1.0";
+    version = "1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.1.0.tar.bz2";
-      sha256 = "05ldqr10f2rrnshyk3lc773rz0gp3ccdzwa8n7lsc94i850jl7g1";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.2.0.tar.bz2";
+      sha256 = "1xk9b05csndcgcj8kbb6fkwa3c7njzzxc6qvz9bvy77y2k2s63gq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
@@ -2271,21 +2286,6 @@ lib.makeScope newScope (self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo xorgproto libdrm libpng udev libpciaccess libX11 xcbutil libxcb libXcursor libXdamage libXext libXfixes xorgserver libXrandr libXrender libxshmfence libXtst libXvMC ];
-    meta.platforms = lib.platforms.unix;
-  }) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videomach64 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    pname = "xf86-video-mach64";
-    version = "6.9.6";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-mach64-6.9.6.tar.bz2";
-      sha256 = "171wg8r6py1l138s58rlapin3rlpwsg9spmvhc7l68mm3g3hf1vs";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -3087,11 +3087,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgproto = callPackage ({ stdenv, pkg-config, fetchurl, libXt, python3 }: stdenv.mkDerivation {
     pname = "xorgproto";
-    version = "2021.4";
+    version = "2021.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2021.4.tar.bz2";
-      sha256 = "1gwz8lhvczjinndrq2jb0swfvhk7p65rprkwiqwlp132041mfl8g";
+      url = "mirror://xorg/individual/proto/xorgproto-2021.5.tar.bz2";
+      sha256 = "05d0kib351qmnlfimaznaw0220fr0ym7fx2gn9h2jqxxilxncbxa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config python3 ];

@@ -14,7 +14,10 @@ buildDunePackage rec {
     sha256 = "0wjfc9irvirfkic32ivvj6qb7r838w08b0d3vmngigbjpjyc9b14";
   };
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
+
+  # Fix tests with pprint ≥ 20220103
+  patches = [ ./pprint.patch ];
 
   # disable xmldiff tests, so we don't need to package unmaintained and legacy pkgs
   postPatch = "rm -rf examples/xmldiff";

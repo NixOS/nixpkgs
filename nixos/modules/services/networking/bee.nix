@@ -20,8 +20,8 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.bee;
-        defaultText = "pkgs.bee";
-        example = "pkgs.bee-unstable";
+        defaultText = literalExpression "pkgs.bee";
+        example = literalExpression "pkgs.bee-unstable";
         description = "The package providing the bee binary for the service.";
       };
 

@@ -13,6 +13,10 @@ in {
         ${pkgs.prometheus-systemd-exporter}/bin/systemd_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
       '';
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

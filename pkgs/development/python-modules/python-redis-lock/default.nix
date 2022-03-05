@@ -6,7 +6,7 @@
 , pytestCheckHook
 , process-tests
 , pkgs
-, withDjango ? false, django_redis
+, withDjango ? false, django-redis
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-  ] ++ lib.optional withDjango django_redis;
+  ] ++ lib.optional withDjango django-redis;
 
   checkInputs = [
     pytestCheckHook

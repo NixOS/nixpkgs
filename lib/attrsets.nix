@@ -3,9 +3,9 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) and;
+  inherit (lib.trivial) id;
   inherit (lib.strings) concatStringsSep sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt;
+  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all;
 in
 
 rec {
@@ -73,9 +73,9 @@ rec {
        getAttrFromPath ["z" "z"] x
        => error: cannot find attribute `z.z'
   */
-  getAttrFromPath = attrPath: set:
+  getAttrFromPath = attrPath:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in attrByPath attrPath (abort errorMsg) set;
+    in attrByPath attrPath (abort errorMsg);
 
 
   /* Return the specified attributes from a set.
@@ -154,12 +154,12 @@ rec {
        foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
        => { a = [ 2 3 ]; }
   */
-  foldAttrs = op: nul: list_of_attrs:
+  foldAttrs = op: nul:
     foldr (n: a:
         foldr (name: o:
           o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
-    ) {} list_of_attrs;
+    ) {};
 
 
   /* Recursively collect sets that verify a given predicate named `pred'
@@ -276,7 +276,7 @@ rec {
 
 
   /* Like `mapAttrsRecursive', but it takes an additional predicate
-     function that tells it whether to recursive into an attribute
+     function that tells it whether to recurse into an attribute
      set.  If it returns false, `mapAttrsRecursiveCond' does not
      recurse, but does apply the map function.  If it returns true, it
      does recurse, and does not apply the map function.
@@ -295,14 +295,14 @@ rec {
   */
   mapAttrsRecursiveCond = cond: f: set:
     let
-      recurse = path: set:
+      recurse = path:
         let
           g =
             name: value:
             if isAttrs value && cond value
               then recurse (path ++ [name]) value
               else f (path ++ [name]) value;
-        in mapAttrs g set;
+        in mapAttrs g;
     in recurse [] set;
 
 
@@ -369,7 +369,7 @@ rec {
       value = f name (catAttrs name sets);
     }) names);
 
-  /* Implementation note: Common names  appear multiple times in the list of
+  /* Implementation note: Common names appear multiple times in the list of
      names, hopefully this does not affect the system because the maximal
      laziness avoid computing twice the same expression and listToAttrs does
      not care about duplicated attribute names.
@@ -378,7 +378,8 @@ rec {
        zipAttrsWith (name: values: values) [{a = "x";} {a = "y"; b = "z";}]
        => { a = ["x" "y"]; b = ["z"] }
   */
-  zipAttrsWith = f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets;
+  zipAttrsWith =
+    builtins.zipAttrsWith or (f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets);
   /* Like `zipAttrsWith' with `(name: values: values)' as the function.
 
     Example:
@@ -419,8 +420,8 @@ rec {
     let f = attrPath:
       zipAttrsWith (n: values:
         let here = attrPath ++ [n]; in
-        if tail values == []
-        || pred here (head (tail values)) (head values) then
+        if length values == 1
+        || pred here (elemAt values 1) (head values) then
           head values
         else
           f here values
@@ -446,10 +447,7 @@ rec {
        }
 
      */
-  recursiveUpdate = lhs: rhs:
-    recursiveUpdateUntil (path: lhs: rhs:
-      !(isAttrs lhs && isAttrs rhs)
-    ) lhs rhs;
+  recursiveUpdate = recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs));
 
   /* Returns true if the pattern is contained in the set. False otherwise.
 
@@ -458,8 +456,8 @@ rec {
        => true
    */
   matchAttrs = pattern: attrs: assert isAttrs pattern;
-    foldr and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
-      let pat = head values; val = head (tail values); in
+    all id (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
+      let pat = head values; val = elemAt values 1; in
       if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs pat val
       else pat == val
@@ -487,7 +485,7 @@ rec {
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
   */
   getOutput = output: pkg:
-    if pkg.outputUnspecified or false
+    if ! pkg ? outputSpecified || ! pkg.outputSpecified
       then pkg.${output} or pkg.out or pkg
       else pkg;
 

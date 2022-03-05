@@ -2,68 +2,77 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
-, pytestCheckHook
+, gevent
 , pytest-asyncio
 , pytest-tornado
-, pytest-cov
-, sqlalchemy
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+, setuptools-scm
+, six
 , tornado
 , twisted
-, mock
-, gevent
-, six
-, pytz
 , tzlocal
-, funcsigs
-, setuptools
-, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "APScheduler";
-  version = "3.7.0";
+  pname = "apscheduler";
+  version = "3.9.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1cab7f2521e107d07127b042155b632b7a1cd5e02c34be5a28ff62f77c900c6a";
+    pname = "APScheduler";
+    inherit version;
+    hash = "sha256-ZeZXS2OVSY03HQRfKop+T31Qxq0h73MT0VscfPIN8eM=";
   };
 
   buildInputs = [
     setuptools-scm
   ];
 
+  propagatedBuildInputs = [
+    pytz
+    setuptools
+    six
+    tzlocal
+  ];
+
   checkInputs = [
+    gevent
     pytest-asyncio
     pytest-tornado
     pytestCheckHook
-    pytest-cov
-    sqlalchemy
     tornado
     twisted
-    mock
-    gevent
   ];
 
-  propagatedBuildInputs = [
-    six
-    pytz
-    tzlocal
-    funcsigs
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --tb=short" ""
+  '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    "test_broken_pool"
+    # gevent tests have issue on newer Python releases
+    "test_add_live_job"
+    "test_add_pending_job"
+    "test_shutdown"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_submit_job"
     "test_max_instances"
   ];
 
-  pythonImportsCheck = [ "apscheduler" ];
+  pythonImportsCheck = [
+    "apscheduler"
+  ];
 
   meta = with lib; {
-    description = "A Python library that lets you schedule your Python code to be executed";
+    description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

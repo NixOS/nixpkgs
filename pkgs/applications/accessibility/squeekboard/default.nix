@@ -19,14 +19,15 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.14.0";
+  version = "1.16.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ayap40pgzcpmfydk5pbf3gwhh26m3cmbk6lyly4jihr9qw7dgb0";
+    sha256 = "sha256-51Grkn6NSR6azTRuq1vdbDg7d3HuQQ+ZJCsM2mSrSHk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -35,17 +36,8 @@ stdenv.mkDerivation rec {
       cat Cargo.toml.in Cargo.deps > Cargo.toml
     '';
     name = "${pname}-${version}";
-    sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
+    sha256 = "sha256-vQaiEENxaQxBGYP1br03wSkU7OGOYkJvMBUAOeb3jGk=";
   };
-
-  patches = [
-    # remove when updating from 1.14.0
-    (fetchpatch {
-      name = "fix-rust-1.54-build.patch";
-      url = "https://gitlab.gnome.org/World/Phosh/squeekboard/-/commit/9cd56185c59ace535a6af26384ef6beca4423816.patch";
-      sha256 = "sha256-8rWcfhQmGiwlc2lpkRvJ95XQp1Xg7St+0K85x8nQ0mk=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

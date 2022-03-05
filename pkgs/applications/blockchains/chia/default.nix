@@ -1,36 +1,26 @@
 { lib
 , cacert
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 }:
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.6";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-Y+cRfx5WE+hb31E975xquuSmNgqr2AvaQnCE70sW91w=";
+    sha256 = "sha256-hRpZce8ydEsyq7htNfzlRSKPwMAOUurC3uiQpX6WiB8=";
   };
-
-  patches = [
-    # Allow later websockets release, https://github.com/Chia-Network/chia-blockchain/pull/6304
-    (fetchpatch {
-      name = "later-websockets.patch";
-      url = "https://github.com/Chia-Network/chia-blockchain/commit/a188f161bf15a30e8e2efc5eec824e53e2a98a5b.patch";
-      sha256 = "1s5qjhd4kmi28z6ni7pc5n09czxvh8qnbwmnqsmms7cpw700g78s";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "==" ">="
 
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+    cp ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
   '';
 
   nativeBuildInputs = [
@@ -56,7 +46,7 @@ let chia = python3Packages.buildPythonApplication rec {
     colorlog
     concurrent-log-handler
     cryptography
-    dnspython
+    dnspythonchia
     fasteners
     keyrings-cryptfile
     pyyaml

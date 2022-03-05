@@ -72,6 +72,15 @@ in
   ...
 ```
 
+You can also specify what JDK your JRE should be based on, for example
+selecting a 'headless' build to avoid including a link to GTK+:
+
+```nix
+my_jre = pkgs.jre_minimal.override {
+  jdk = jdk11_headless;
+};
+```
+
 Note all JDKs passthru `home`, so if your application requires
 environment variables like `JAVA_HOME` being set, that can be done in a
 generic fashion with the `--set` argument of `makeWrapper`:

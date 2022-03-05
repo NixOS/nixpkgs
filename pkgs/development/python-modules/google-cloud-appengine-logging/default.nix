@@ -7,16 +7,15 @@
 , proto-plus
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "0.1.4";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1E+3fXcGsIbTh7nXnBOcVT1UtY3cjulnu/MqU+e77lY=";
+    sha256 = "91fe9b0833f6e1a46293dcc0e483716372c9ff4a95ebe51276c5f0092cb9defd";
   };
 
   propagatedBuildInputs = [

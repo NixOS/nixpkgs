@@ -33,6 +33,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         #include <linux/sched/signal.h>
         #endif
 
+        MODULE_LICENSE("GPL");
+
         struct task_struct *canaryTask;
 
         static int kcanary(void *nothing)

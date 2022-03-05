@@ -21,6 +21,12 @@ stdenv.mkDerivation {
     ../../libcxx-0001-musl-hacks.patch
   ];
 
+  # Prevent errors like "error: 'foo' is unavailable: introduced in macOS yy.zz"
+  postPatch = ''
+    substituteInPlace include/__config \
+      --replace "#    define _LIBCPP_USE_AVAILABILITY_APPLE" ""
+  '';
+
   preConfigure = ''
     # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
     cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$LIBCXXABI_INCLUDE_DIR")

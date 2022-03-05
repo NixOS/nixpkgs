@@ -2,6 +2,7 @@
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   AGL, Carbon, Cocoa, Foundation,
+  boost,
   jpegSupport ? true, libjpeg,
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
@@ -9,7 +10,7 @@
   tiffSupport ? true, libtiff,
   gdalSupport ? false, gdal,
   curlSupport ? true, curl,
-  colladaSupport ? false, opencollada,
+  colladaSupport ? false, collada-dom,
   opencascadeSupport ? false, opencascade,
   ffmpegSupport ? false, ffmpeg,
   nvttSupport ? false, nvidia-texture-tools,
@@ -20,7 +21,7 @@
   lasSupport ? false, libLAS,
   luaSupport ? false, lua,
   sdlSupport ? false, SDL2,
-  restSupport ? false, asio, boost,
+  restSupport ? false, asio,
   withApps ? false,
   withExamples ? false, fltk, wxGTK,
 }:
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional tiffSupport libtiff
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
-    ++ lib.optional colladaSupport opencollada
+    ++ lib.optional colladaSupport collada-dom
     ++ lib.optional opencascadeSupport opencascade
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional nvttSupport nvidia-texture-tools
@@ -59,9 +60,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional lasSupport libLAS
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
-    ++ lib.optionals restSupport [ asio boost ]
+    ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk wxGTK ]
     ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
+    ++ lib.optional (restSupport || colladaSupport) boost
   ;
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";

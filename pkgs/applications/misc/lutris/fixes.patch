@@ -1,0 +1,67 @@
+diff --git a/Makefile b/Makefile
+index 821a9500..75affa77 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,12 +25,12 @@ release: build-source upload upload-ppa
+ 
+ test:
+ 	rm tests/fixtures/pga.db -f
+-	nosetests3
++	nosetests
+ 
+ cover:
+ 	rm tests/fixtures/pga.db -f
+ 	rm tests/coverage/ -rf
+-	nosetests3 --with-coverage --cover-package=lutris --cover-html --cover-html-dir=tests/coverage
++	nosetests --with-coverage --cover-package=lutris --cover-html --cover-html-dir=tests/coverage
+ 
+ pgp-renew:
+ 	osc signkey --extend home:strycore
+diff --git a/lutris/util/graphics/xrandr.py b/lutris/util/graphics/xrandr.py
+index f788c94c..5544dbe9 100644
+--- a/lutris/util/graphics/xrandr.py
++++ b/lutris/util/graphics/xrandr.py
+@@ -5,6 +5,7 @@ from collections import namedtuple
+ 
+ from lutris.util.log import logger
+ from lutris.util.system import read_process_output
++from lutris.util.linux import LINUX_SYSTEM
+ 
+ Output = namedtuple("Output", ("name", "mode", "position", "rotation", "primary", "rate"))
+ 
+@@ -12,7 +13,7 @@ Output = namedtuple("Output", ("name", "mode", "position", "rotation", "primary"
+ def _get_vidmodes():
+     """Return video modes from XrandR"""
+     logger.debug("Retrieving video modes from XrandR")
+-    return read_process_output(["xrandr"]).split("\n")
++    return read_process_output([LINUX_SYSTEM.get("xrandr")]).split("\n")
+ 
+ 
+ def get_outputs():  # pylint: disable=too-many-locals
+@@ -76,7 +77,7 @@ def turn_off_except(display):
+     for output in get_outputs():
+         if output.name != display:
+             logger.info("Turning off %s", output[0])
+-            subprocess.Popen(["xrandr", "--output", output.name, "--off"])
++            subprocess.Popen([LINUX_SYSTEM.get("xrandr"), "--output", output.name, "--off"])
+ 
+ 
+ def get_resolutions():
+@@ -111,7 +112,7 @@ def change_resolution(resolution):
+             logger.warning("Resolution %s doesn't exist.", resolution)
+         else:
+             logger.info("Changing resolution to %s", resolution)
+-            subprocess.Popen(["xrandr", "-s", resolution])
++            subprocess.Popen([LINUX_SYSTEM.get("xrandr"), "-s", resolution])
+     else:
+         for display in resolution:
+             logger.debug("Switching to %s on %s", display.mode, display.name)
+@@ -128,7 +129,7 @@ def change_resolution(resolution):
+             logger.info("Switching resolution of %s to %s", display.name, display.mode)
+             subprocess.Popen(
+                 [
+-                    "xrandr",
++                    LINUX_SYSTEM.get("xrandr"),
+                     "--output",
+                     display.name,
+                     "--mode",

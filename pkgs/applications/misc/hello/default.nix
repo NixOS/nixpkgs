@@ -1,23 +1,32 @@
 { lib
 , stdenv
 , fetchurl
+, nixos
 , testVersion
+, testEqualDerivation
 , hello
 }:
 
 stdenv.mkDerivation rec {
   pname = "hello";
-  version = "2.10";
+  version = "2.12";
 
   src = fetchurl {
     url = "mirror://gnu/hello/${pname}-${version}.tar.gz";
-    sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
+    sha256 = "1ayhp9v4m4rdhjmnl2bq3cibrbqqkgjbl3s7yk2nhlh8vj3ay16g";
   };
 
   doCheck = true;
 
-  passthru.tests.version =
-    testVersion { package = hello; };
+  passthru.tests = {
+    version = testVersion { package = hello; };
+
+    invariant-under-noXlibs =
+      testEqualDerivation
+        "hello must not be rebuilt when environment.noXlibs is set."
+        hello
+        (nixos { environment.noXlibs = true; }).pkgs.hello;
+  };
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";

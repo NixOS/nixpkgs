@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 {
@@ -85,9 +85,12 @@ with lib;
     };
 
     acmeRoot = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
+      description = ''
+        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Set to null to inherit from config.security.acme.
+      '';
     };
 
     acmeFallbackHost = mkOption {
@@ -147,6 +150,17 @@ with lib;
       '';
     };
 
+    kTLS = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable kTLS support.
+        Implementing TLS in the kernel (kTLS) improves performance by significantly
+        reducing the need for copying operations between user space and the kernel.
+        Required Nginx version 1.21.4 or later.
+      '';
+    };
+
     sslCertificate = mkOption {
       type = types.path;
       example = "/var/host.cert";
@@ -162,7 +176,7 @@ with lib;
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = "\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+      example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
@@ -231,7 +245,7 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           user = "password";
         };
@@ -261,7 +275,7 @@ with lib;
         inherit lib;
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

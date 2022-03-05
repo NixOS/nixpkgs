@@ -1,4 +1,4 @@
-{ stdenv, lib, version, src, cmake, python3, llvm, libcxxabi }:
+{ stdenv, lib, version, src, cmake, python3, llvm, libcxxabi, fetchpatch }:
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version src;
@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-  ];
+    # https://github.com/llvm/llvm-project/commit/68d5235cb58f988c71b403334cd9482d663841ab.diff but the compiler-rt part of the path is stripped
+    ./68d5235cb58f988c71b403334cd9482d663841ab.patch
+    ];
 
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

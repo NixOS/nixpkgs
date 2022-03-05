@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e2eb65ccd75c6579214fb2099cfb98c57b2b4907ccb38a2ed21f00f492b7a50";
+    sha256 = "sha256-cU4bwfxRAp14qmSTO+8u/APa7clWXqeeyRuEOwUgFuw=";
   };
 
   propagatedBuildInputs = [

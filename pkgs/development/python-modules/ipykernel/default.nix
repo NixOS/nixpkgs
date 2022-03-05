@@ -1,31 +1,33 @@
 { lib
-, stdenv
 , buildPythonPackage
 , callPackage
 , fetchPypi
+, pythonOlder
+, argcomplete
 , debugpy
 , ipython
-, jupyter_client
+, jupyter-client
 , tornado
 , traitlets
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.3.0";
+  version = "6.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5314690a638f893e2cc3bf3d25042920e9fbb873f7d8263033390264caeb95f4";
+    sha256 = "d82b904fdc2fd8c7b1fbe0fa481c68a11b4cd4c8ef07e6517da1f10cc3114d24";
   };
 
   propagatedBuildInputs = [
     debugpy
     ipython
-    jupyter_client
+    jupyter-client
     tornado
     traitlets
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    argcomplete
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel

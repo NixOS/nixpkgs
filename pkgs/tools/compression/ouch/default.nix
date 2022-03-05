@@ -1,28 +1,48 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, help2man
+, installShellFiles
+, pkg-config
+, bzip2
+, xz
+, zlib
+, zstd
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.1.5";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "vrmiguel";
+    owner = "ouch-org";
     repo = pname;
     rev = version;
-    sha256 = "00ah8hgrppa61jhwb74zl5b509q0yp2pp27w9frm814iqx70qn38";
+    sha256 = "sha256-I9CgkYxcK+Ih9UlcYBa8QAZZsPvzPUK5ZUYKPxzgs38=";
   };
 
-  cargoPatches = [
-    # a patch file to add Cargo.lock in the source code
-    # https://github.com/vrmiguel/ouch/pull/46
-    ./add-Cargo.lock.patch
-  ];
+  cargoSha256 = "sha256-jEprWtIl5LihD9fOMYHGGlk0+h4woUlwUWNfSkd2t10=";
 
-  cargoSha256 = "181aq8r78g4bl1ndlwl54ws5ccrwph0mmk9506djxvfdy3hndxkg";
+  nativeBuildInputs = [ help2man installShellFiles pkg-config ];
+
+  buildInputs = [ bzip2 xz zlib zstd ];
+
+  buildFeatures = [ "zstd/pkg-config" ];
+
+  postInstall = ''
+    help2man $out/bin/ouch > ouch.1
+    installManPage ouch.1
+
+    completions=($releaseDir/build/ouch-*/out/completions)
+    installShellCompletion $completions/ouch.{bash,fish} --zsh $completions/_ouch
+  '';
+
+  GEN_COMPLETIONS = 1;
 
   meta = with lib; {
-    description = "Taking the pain away from file (de)compression";
-    homepage = "https://github.com/vrmiguel/ouch";
+    description = "A command-line utility for easily compressing and decompressing files and directories";
+    homepage = "https://github.com/ouch-org/ouch";
     license = licenses.mit;
-    maintainers = [ maintainers.psibi ];
+    maintainers = with maintainers; [ figsoda psibi ];
   };
 }

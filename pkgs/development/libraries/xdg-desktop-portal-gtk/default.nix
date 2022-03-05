@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -9,17 +10,18 @@
 , glib
 , wrapGAppsHook
 , gsettings-desktop-schemas
+, buildPortalsInGnome ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.8.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "0987fwsdgkcd3mh3scvg2kyg4ay1rr5w16js4pl3pavw9yhl9lbi";
+    sha256 = "I1ZoDqZQPfPwPr4Ybk+syz+YEkrK2ReflZaJJWD4Nsk=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +38,20 @@ stdenv.mkDerivation rec {
     gtk3
     gnome.gnome-desktop
     gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
+  ];
+
+  configureFlags = if buildPortalsInGnome then [
+    "--enable-wallpaper"
+    "--enable-screenshot"
+    "--enable-screencast"
+    "--enable-background"
+    "--enable-settings"
+    "--enable-appchooser"
+  ] else [
+    # These are now enabled by default, even though we do not need them for GNOME.
+    # https://github.com/flatpak/xdg-desktop-portal-gtk/issues/355
+    "--disable-settings"
+    "--disable-appchooser"
   ];
 
   meta = with lib; {

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.74";
+  version = "0.1.77";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Z0226G0eivU+Uo7MShGv9xqcl1QtAmbEzhI1IBjPL5M=";
+    sha256 = "00d95c21b95a17bc07586f69c976fb343a103adc0954d7b2d56c7160665625cb";
   };
 
   checkPhase = ''

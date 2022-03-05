@@ -10,7 +10,7 @@ let
     inherit (pkgs) stdenv lib nix-gitignore fetchurl fetchgit;
   });
   nodeEnv = import ../../development/node-packages/node-env.nix {
-    inherit (pkgs) stdenv lib python2 runCommand writeTextFile;
+    inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
     inherit pkgs nodejs;
     libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
   };

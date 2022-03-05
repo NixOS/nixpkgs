@@ -11,7 +11,6 @@ import ../make-test-python.nix (
           ...
         }:
           {
-            virtualisation.memorySize = 1024;
 
             imports = [
               ../common/user-account.nix

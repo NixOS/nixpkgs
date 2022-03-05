@@ -10,7 +10,6 @@
 , pathspec
 , parameterized
 , platformdirs
-, regex
 , tomli
 , typed-ast
 , typing-extensions
@@ -20,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.8b0";
+  version = "21.12b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VwYI0oqjrxeSuYxKM326xjZ4d7R7EriKtCCVz8GmJ8I=";
+    hash = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -54,6 +53,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     "test_expression_diff"
+    # Fail on Hydra, see https://github.com/NixOS/nixpkgs/pull/130785
+    "test_bpo_2142_workaround"
+    "test_skip_magic_trailing_comma"
   ];
 
   propagatedBuildInputs = [
@@ -65,7 +67,6 @@ buildPythonPackage rec {
     mypy-extensions
     pathspec
     platformdirs
-    regex
     tomli
     typed-ast # required for tests and python2 extra
     uvloop
@@ -77,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ sveitser ];
+    maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

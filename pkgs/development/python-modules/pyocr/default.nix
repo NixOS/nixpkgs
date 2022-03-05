@@ -9,7 +9,6 @@
 , isPy3k
 , substituteAll
 , pytestCheckHook
-, tox
 }:
 
 buildPythonPackage rec {

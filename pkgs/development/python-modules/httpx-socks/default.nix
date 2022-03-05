@@ -6,26 +6,30 @@
 , flask
 , httpcore
 , httpx
+, hypercorn
 , pytest-asyncio
 , pytest-trio
 , pytestCheckHook
 , python-socks
 , pythonOlder
 , sniffio
+, starlette
 , trio
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.4.1";
+  version = "0.7.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rz69z5fcw7d5nzy5q2q0r9gxrsqijgpg70cnyr5br6xnfgy01ar";
+    sha256 = "11wnhx9nfsg5lsnlgh33zngyhc2klichpfrkwajbbyq95fdqj8ri";
   };
 
   propagatedBuildInputs = [
@@ -40,13 +44,23 @@ buildPythonPackage rec {
 
   checkInputs = [
     flask
+    hypercorn
     pytest-asyncio
     pytest-trio
     pytestCheckHook
+    starlette
     yarl
   ];
 
-  pythonImportsCheck = [ "httpx_socks" ];
+  pythonImportsCheck = [
+    "httpx_socks"
+  ];
+
+  disabledTests = [
+    # Tests don't work in the sandbox
+    "test_proxy"
+    "test_secure_proxy"
+  ];
 
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";

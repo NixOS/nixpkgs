@@ -17,10 +17,9 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     configobj
-    vobject
-    ruamel_yaml
-    ruamel_base
+    ruamel-yaml
     unidecode
+    vobject
   ];
 
   postInstall = ''
@@ -31,6 +30,8 @@ python3.pkgs.buildPythonApplication rec {
     # see https://github.com/scheibler/khard/issues/263
     export COLUMNS=80
   '';
+
+  pythonImportsCheck = [ "khard" ];
 
   meta = {
     homepage = "https://github.com/scheibler/khard";

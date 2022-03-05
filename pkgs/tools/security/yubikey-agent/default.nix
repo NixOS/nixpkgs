@@ -21,7 +21,7 @@ buildGoModule rec {
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
   '';
 
-  vendorSha256 = "0cpj4nj2g0ick6p79h4pnjg7ybnyz9p26jivv0awi6bmn378nbxn";
+  vendorSha256 = "1v4ccn7ysh8ax1nkf1v9fcgsdnz6zjyh6j6ivyljyfvma1lmcrmk";
 
   doCheck = false;
 

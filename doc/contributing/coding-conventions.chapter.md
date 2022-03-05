@@ -181,6 +181,21 @@
   rev = "${version}";
   ```
 
+- Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
+
+  ```nix
+  buildInputs = lib.optional stdenv.isDarwin iconv;
+  ```
+
+  instead of
+
+  ```nix
+  buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+  ```
+
+  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 ## Package naming {#sec-package-naming}
@@ -209,7 +224,7 @@ There are a few naming guidelines:
 
 - Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 

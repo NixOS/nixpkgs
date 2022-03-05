@@ -9,22 +9,18 @@
 
 buildPythonPackage rec {
   pname = "aioasuswrt";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = pname;
-    rev = version;
-    sha256 = "101d76zarvilzfmcy8n3bjqzyars8hsjzr0zc80d4rngv4vhrki1";
+    rev = "V${version}";
+    sha256 = "1iv9f22v834g8wrjcynjn2azpzk8gsczv71jf7dw8aix0n04h325";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report html" "" \
-      --replace "--cov-report term-missing" ""
-  '';
-
-  propagatedBuildInputs = [ asyncssh ];
+  propagatedBuildInputs = [
+    asyncssh
+  ];
 
   checkInputs = [
     pytest-asyncio
@@ -32,7 +28,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aioasuswrt" ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report html" "" \
+      --replace "--cov-report term-missing" ""
+  '';
+
+  pythonImportsCheck = [
+    "aioasuswrt"
+  ];
 
   meta = with lib; {
     description = "Python module for Asuswrt";

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     comment = "Schematic capture and PCB layout";
     desktopName = "Eagle";
     genericName = "Schematic editor";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   buildInputs =
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Schematic editor and PCB layout tool from CadSoft";
-    homepage = "http://www.cadsoftusa.com/";
+    homepage = "https://www.autodesk.com/products/eagle/overview";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

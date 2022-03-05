@@ -1,16 +1,16 @@
 # Arguments that this derivation gets when it is created with `callPackage`
 { stdenv
 , lib
-, symlinkJoin
 , makeWrapper
-, youtube-dl
+, symlinkJoin
+, yt-dlp
 }:
 
 # the unwrapped mpv derivation - 1st argument to `wrapMpv`
 mpv:
 
 let
-  # arguments to the function (called `wrapMpv` in all-packages.nix)
+  # arguments to the function (exposed as `wrapMpv` in all-packages.nix)
   wrapper = {
     extraMakeWrapperArgs ? [],
     youtubeSupport ? true,
@@ -25,7 +25,7 @@ let
     binPath = lib.makeBinPath ([
       mpv.luaEnv
     ] ++ lib.optionals youtubeSupport [
-      youtube-dl
+      yt-dlp
     ] ++ lib.optionals mpv.vapoursynthSupport [
       mpv.vapoursynth.python3
     ]);
@@ -79,6 +79,11 @@ let
         rm "$out/Applications/mpv.app/Contents/MacOS/mpv"
         makeWrapper "${mpv}/Applications/mpv.app/Contents/MacOS/mpv" "$out/Applications/mpv.app/Contents/MacOS/mpv" ${mostMakeWrapperArgs}
       '';
+
+      meta = {
+        inherit (mpv.meta) homepage description longDescription maintainers;
+        mainProgram = "mpv";
+      };
     };
 in
   lib.makeOverridable wrapper

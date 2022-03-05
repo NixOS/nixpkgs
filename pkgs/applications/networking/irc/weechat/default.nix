@@ -28,24 +28,15 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.2.1";
+      version = "3.3";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "sha256-gtFskJoJLw7cqLao46LRUcZobOtzgwUOiKf7I4OiJAQ=";
+        sha256 = "sha256-GnSi7uMxiyWSQau75q07NlX1ikaBeWOdrzOf9f0jnBM=";
       };
-
-      patches = [
-        # weechat 3.2 fails to build on Darwin, but is fixed for the next release:
-        (fetchpatch {
-          url = "https://github.com/weechat/weechat/commit/0b7e4977bef763993e361c23db0f52117b799949.patch";
-          sha256 = "eVdrhr4mrqv+OkqYOv1E7mUkmzd5NC3LmZhbXJnCpFg=";
-          excludes = [ "ChangeLog.adoc" ];
-        })
-      ];
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 

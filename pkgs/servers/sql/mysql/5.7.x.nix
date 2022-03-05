@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, cmake, bison, pkg-config
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
-, libtirpc, rpcsvc-proto
+, libtirpc, rpcsvc-proto, nixosTests
 }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
@@ -9,11 +9,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "5.7.27";
+  version = "5.7.37";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${pname}-${version}.tar.gz";
-    sha256 = "1fhv16zr46pxm1j8vb8x8mh3nwzglg01arz8gnazbmjqldr5idpq";
+    sha256 = "sha256-qZqaqGNdJWbat2Sy3la+0XMDZdNg4guyf1Y5LOVOGL0=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -75,6 +75,7 @@ self = stdenv.mkDerivation rec {
     connector-c = self;
     server = self;
     mysqlVersion = "5.7";
+    tests = nixosTests.mysql.mysql57;
   };
 
   meta = with lib; {

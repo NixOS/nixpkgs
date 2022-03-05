@@ -13,18 +13,14 @@
 
 buildPythonPackage rec {
   pname = "osmpythontools";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
-    rev = "v${version}";
-    sha256 = "1m5ai9h1zbp79x0vb138fmyh2hg8lqp859s7j33lra9hds6wb40a";
+    rev = "v.${version}";
+    sha256 = "sha256-335zo/kOX4OpUwHas2aaPibY6zNmDaaHJpolbTQWqKk=";
   };
-
-  # Upstream setup.py has test dependencies in `install_requires` argument.
-  # Remove them, as we don't run the tests.
-  patches = [ ./remove-test-only-dependencies.patch ];
 
   propagatedBuildInputs = [
     beautifulsoup4

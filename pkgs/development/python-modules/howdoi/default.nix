@@ -9,19 +9,18 @@
 , pygments
 , pyquery
 , requests
-, six
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "2.0.17";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "gleitz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cc9hbnalbsd5la9wsm8s6drb79vlzin9qnv86ic81r5nq27n180";
+    sha256 = "0hl7cpxm4llsgw6390bpjgkzrprrpb0vxx2flgly7wiy9zl1rc5q";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     pygments
     pyquery
     requests
-    six
   ];
 
   checkInputs = [
@@ -50,7 +48,9 @@ buildPythonPackage rec {
     "test_get_text_without_links"
   ];
 
-  pythonImportsCheck = [ "howdoi" ];
+  pythonImportsCheck = [
+    "howdoi"
+  ];
 
   meta = with lib; {
     description = "Instant coding answers via the command line";

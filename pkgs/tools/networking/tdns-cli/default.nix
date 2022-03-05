@@ -1,17 +1,17 @@
 { lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tdns-cli";
+  pname = "tdns-cli";
   version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "rotty";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
     sha256 = "0nn036in5j1h0vxkwif0lf7fn900zy4f4kxlzy6qdx3jakgmxvwh";
   };
 
-  cargoSha256 = "14mmfj5my8gbsdhlhz17w8wjcc085c6dkj78kwr2hhsbcxp1vjgg";
+  cargoSha256 = "sha256-O4n38dla2WgZ4949Ata6AYbZF9LMnXDyuFNoXRrTN7I=";
 
   meta = with lib; {
     description = "DNS tool that aims to replace dig and nsupdate";

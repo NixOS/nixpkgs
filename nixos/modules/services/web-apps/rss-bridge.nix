@@ -16,7 +16,6 @@ in
       user = mkOption {
         type = types.str;
         default = "nginx";
-        example = "nginx";
         description = ''
           User account under which both the service and the web-application run.
         '';
@@ -25,7 +24,6 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        example = "nginx";
         description = ''
           Group under which the web-application run.
         '';
@@ -61,7 +59,7 @@ in
       whitelist = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = options.literalExample ''
+        example = options.literalExpression ''
           [
             "Facebook"
             "Instagram"
@@ -113,7 +111,7 @@ in
 
           locations."~ ^/index.php(/|$)" = {
             extraConfig = ''
-              include ${pkgs.nginx}/conf/fastcgi_params;
+              include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

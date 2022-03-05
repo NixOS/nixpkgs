@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ianpk32vwdllpbk4zhfifqb5b064cbmia2hm02lcrh2m76z0zi5";
+    sha256 = "sha256-2PikUPqyoSlOCu+M3JolWhvMW1jhsvYJjjXm2x4T6dE=";
   };
 
   nativeBuildInputs = [

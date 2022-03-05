@@ -3,8 +3,8 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, nixosTests
   # required
-, fmt
 , libiconv
 , libupnp
 , libuuid
@@ -65,13 +65,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-FtUKj3IhLMRs3VzawFgy6rnd+beW+Kvzq6tk8wPv7pw=";
+    sha256 = "sha256-uLHiGuBXYafpY1/Q4qWFt1CTHKW7vqq0o/zqIEbEZqs=";
   };
 
   postPatch = lib.optionalString enableMysql ''
@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    fmt
     libiconv
     libupnp'
     libuuid
@@ -97,6 +96,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+
+  passthru.tests = { inherit (nixosTests) mediatomb; };
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";

@@ -9,7 +9,7 @@ let
     "bin-x86_64-efi/ipxe.efi" = null;
     "bin-x86_64-efi/ipxe.efirom" = null;
     "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
-  } // lib.optionalAttrs (stdenv.isi686 || stdenv.isx86_64) {
+  } // lib.optionalAttrs stdenv.hostPlatform.isx86 {
     "bin/ipxe.dsk" = null;
     "bin/ipxe.usb" = null;
     "bin/ipxe.iso" = null;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   pname = "ipxe";
   version = "1.21.1";
 
-  nativeBuildInputs = [ perl cdrkit xz openssl gnu-efi mtools ] ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) syslinux;
+  nativeBuildInputs = [ perl cdrkit xz openssl gnu-efi mtools ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
 
   src = fetchFromGitHub {
     owner = "ipxe";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
-    ] ++ lib.optionals (stdenv.isi686 || stdenv.isx86_64) [
+    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
       "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";

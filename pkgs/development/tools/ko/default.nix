@@ -7,23 +7,32 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.8.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LoOXZY4uF7GSS3Dh/ozCsLJTxgmPmZZuEisJ4ShjCBc=";
+    sha256 = "sha256-Xhe5WNHQ+Oa1m/6VwC3zCwWzXRc1spSfPp4jySsOcuU=";
   };
   vendorSha256 = null;
-  # Don't build the legacy main.go or test dir
-  excludedPackages = "\\(cmd/ko\\|test\\)";
+
   nativeBuildInputs = [ installShellFiles ];
+
+  # Pin so that we don't build the several other development tools
+  subPackages = ".";
 
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
   checkInputs = [ git ];
   preCheck = ''
+    # Feed in all the tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    getGoDirs() {
+      go list ./...
+    }
+
     # resolves some complaints from ko
     export GOROOT="$(go env GOROOT)"
     git init

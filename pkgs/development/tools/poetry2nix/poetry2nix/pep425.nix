@@ -76,14 +76,21 @@ let
           if targetMachine != null
           then
             (
-              x: x.platform == "manylinux1_${targetMachine}"
-                || x.platform == "manylinux2010_${targetMachine}"
-                || x.platform == "manylinux2014_${targetMachine}"
-                || x.platform == "any"
+              x: x.platform == "any" || lib.lists.any (e: hasInfix e x.platform) [
+                "manylinux1_${targetMachine}"
+                "manylinux2010_${targetMachine}"
+                "manylinux2014_${targetMachine}"
+              ]
             )
           else
             (x: x.platform == "any")
-        else (x: hasInfix "macosx" x.platform || x.platform == "any");
+        else
+          if stdenv.isDarwin
+          then
+            if stdenv.targetPlatform.isAarch64
+            then (x: x.platform == "any" || (hasInfix "macosx" x.platform && lib.lists.any (e: hasSuffix e x.platform) [ "arm64" "aarch64" ]))
+            else (x: x.platform == "any" || (hasInfix "macosx" x.platform && hasSuffix "x86_64" x.platform))
+          else (x: x.platform == "any");
       filterWheel = x:
         let
           f = toWheelAttrs x.file;
@@ -92,7 +99,7 @@ let
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
-          osxMatches = [ "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
+          osxMatches = [ "12_0" "11_0" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
           linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);

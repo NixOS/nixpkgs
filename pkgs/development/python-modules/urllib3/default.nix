@@ -12,18 +12,18 @@
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
-, pythonOlder
 , tornado
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.6";
+  version = "1.26.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9XtMFsYvonYLfj2Xw1slVRL7a1miWXMPNroyzp+ONC8=";
+    hash = "sha256-Dnwz2aY+fd/LhngKrIe+/C+930bFjbtIfghV987sKDw=";
   };
 
   propagatedBuildInputs = [
@@ -62,7 +62,9 @@ buildPythonPackage rec {
     export CI # Increases LONG_TIMEOUT
   '';
 
-  pythonImportsCheck = [ "urllib3" ];
+  pythonImportsCheck = [
+    "urllib3"
+  ];
 
   meta = with lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";

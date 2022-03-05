@@ -1,4 +1,4 @@
-{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
+{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python2
 , lib, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   version = "1.5.1.81";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which attr python ];
+  buildInputs = [ which attr python2 ];
 
   patches = [
     (fetchpatch {

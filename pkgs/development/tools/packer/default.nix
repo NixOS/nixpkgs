@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.7.4";
+  version = "1.7.10";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-VNOq9uhtzf1hdEn+bkAOYy4gZxP5ek0WaaS/71uJzrA=";
+    sha256 = "sha256-KkdkLos55n+IE9oIZPADIcSgrE6kn0rDWzEkwoYfoFw=";
   };
 
-  vendorSha256 = "sha256-WYA/wZJg93+X4IAX9hOMRHVRQRyA4N4aDaScDgkGUIE=";
+  vendorSha256 = "sha256-oSIwp8t+US8yNziuq0BR8BsVR1/e0jkxE4QuiqyheQQ=";
 
   subPackages = [ "." ];
 
@@ -28,6 +33,7 @@ buildGoModule rec {
     homepage    = "https://www.packer.io";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ cstrahan zimbatm ma27 ];
+    changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
     platforms   = platforms.unix;
   };
 }

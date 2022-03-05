@@ -1,41 +1,34 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchPypi
 , appdirs
 , cryptography
-, ddt
-, dogpile_cache
-, hacking
+, dogpile-cache
 , jmespath
 , jsonpatch
-, jsonschema
 , keystoneauth1
 , munch
 , netifaces
 , os-service-types
-, oslo-config
-, oslotest
 , pbr
-, prometheus-client
-, requests-mock
+, pyyaml
 , requestsexceptions
-, stestr
-, testscenarios
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "0.59.0";
+  version = "0.61.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PfdgzScjmKv6yM6+Yu64LLxJe7JdTdcHV290qM6avw0=";
+    sha256 = "3eed308871230f0c53a8f58b6c5a358b184080c6b2c6bc69ab088eea057aa127";
   };
 
   propagatedBuildInputs = [
     appdirs
     cryptography
-    dogpile_cache
+    dogpile-cache
     jmespath
     jsonpatch
     keystoneauth1
@@ -44,35 +37,15 @@ buildPythonPackage rec {
     os-service-types
     pbr
     requestsexceptions
+    pyyaml
   ];
 
-  checkInputs = [
-    ddt
-    hacking
-    jsonschema
-    oslo-config
-    oslotest
-    prometheus-client
-    requests-mock
-    stestr
-    testscenarios
-  ];
+  # Checks moved to 'passthru.tests' to workaround slowness
+  doCheck = false;
 
-  checkPhase = ''
-    stestr run -e <(echo "
-    openstack.tests.unit.cloud.test_image.TestImage.test_create_image_task
-    openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_error_396
-    openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_wait
-    openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails
-    openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails_different_attribute
-    openstack.tests.unit.test_resource.TestWaitForStatus.test_status_match
-    openstack.tests.unit.test_resource.TestWaitForStatus.test_status_match_with_none
-    openstack.tests.unit.test_stats.TestStats.test_list_projects
-    openstack.tests.unit.test_stats.TestStats.test_projects
-    openstack.tests.unit.test_stats.TestStats.test_servers
-    openstack.tests.unit.test_stats.TestStats.test_servers_no_detail
-    ")
-  '';
+  passthru.tests = {
+    tests = callPackage ./tests.nix { };
+  };
 
   pythonImportsCheck = [ "openstack" ];
 

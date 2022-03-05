@@ -37,19 +37,16 @@ let
       genericName = "Text Editor";
       exec = "${executableName} %F";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "text/plain;inode/directory;";
-      extraEntries = ''
-        StartupWMClass=${shortName}
-        Actions=new-empty-window;
-        Keywords=vscode;
-
-        [Desktop Action new-empty-window]
-        Name=New Empty Window
-        Exec=${executableName} --new-window %F
-        Icon=code
-      '';
+      startupNotify = true;
+      startupWMClass = shortName;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "text/plain" "inode/directory" ];
+      keywords = [ "vscode" ];
+      actions.new-empty-window = {
+        name = "New Empty Window";
+        exec = "${executableName} --new-window %F";
+        icon = "code";
+      };
     };
 
     urlHandlerDesktopItem = makeDesktopItem {
@@ -59,13 +56,11 @@ let
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "x-scheme-handler/vscode;";
-      extraEntries = ''
-        NoDisplay=true
-        Keywords=vscode;
-      '';
+      startupNotify = true;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "x-scheme-handler/vscode" ];
+      keywords = [ "vscode" ];
+      noDisplay = true;
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
@@ -81,25 +76,25 @@ let
     installPhase = ''
       runHook preInstall
     '' + (if stdenv.isDarwin then ''
-      mkdir -p "$out/Applications/${longName}.app" $out/bin
+      mkdir -p "$out/Applications/${longName}.app" "$out/bin"
       cp -r ./* "$out/Applications/${longName}.app"
-      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" $out/bin/${executableName}
+      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
     '' else ''
-      mkdir -p $out/lib/vscode $out/bin
-      cp -r ./* $out/lib/vscode
+      mkdir -p "$out/lib/vscode" "$out/bin"
+      cp -r ./* "$out/lib/vscode"
 
-      ln -s $out/lib/vscode/bin/${sourceExecutableName} $out/bin/${executableName}
+      ln -s "$out/lib/vscode/bin/${sourceExecutableName}" "$out/bin/${executableName}"
 
-      mkdir -p $out/share/applications
-      ln -s $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop
-      ln -s $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop
+      mkdir -p "$out/share/applications"
+      ln -s "$desktopItem/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
+      ln -s "$urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
 
-      mkdir -p $out/share/pixmaps
-      cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
+      mkdir -p "$out/share/pixmaps"
+      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/code.png"
 
       # Override the previously determined VSCODE_PATH with the one we know to be correct
-      sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName}
-      grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
+      sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
+      grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
     '') + ''
       runHook postInstall
     '';
@@ -108,22 +103,24 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
       )
     '';
 
     # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
-    postPatch = ''
+    # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
+    postPatch = lib.optionalString stdenv.isLinux ''
       # this is a fix for "save as root" functionality
       packed="resources/app/node_modules.asar"
       unpacked="resources/app/node_modules"
       ${nodePackages.asar}/bin/asar extract "$packed" "$unpacked"
-      substituteInPlace $unpacked/sudo-prompt/index.js \
+      substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
         --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
         --replace "/bin/bash" "${bash}/bin/bash"
       rm -rf "$packed"
 
       # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
+      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
 
     inherit meta;
@@ -159,12 +156,9 @@ let
       krb5
     ]) ++ additionalPkgs pkgs;
 
-    # restore desktop item icons
+    # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''
-      mkdir -p $out/share/applications
-      for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s $item $out/share/applications/
-      done
+      ln -s "${unwrapped}/share" "$out/"
     '';
 
     runScript = "${unwrapped}/bin/${executableName}";

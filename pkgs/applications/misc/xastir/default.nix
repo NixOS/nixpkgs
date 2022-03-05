@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , curl, db, libgeotiff
 , libXpm, libXt, motif, pcre
 , perl, proj, rastermagick, shapelib
@@ -6,17 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xastir";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Release-${version}";
-    sha256 = "0yrvwy6hlc73gzwrsrczflyymyz0k33hj991ajrd1vijq14m3n91";
+    hash = "sha256-hRe0KO1lWOv3hNNDMS70t+X1rxuhNlNKykmo4LEU+U0=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
     curl db libgeotiff
     libXpm libXt motif pcre
     perl proj rastermagick shapelib

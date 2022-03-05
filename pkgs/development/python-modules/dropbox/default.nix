@@ -1,30 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests, urllib3, mock, setuptools, stone }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, urllib3
+, mock
+, setuptools
+, stone
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.19.0";
+  version = "11.28.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a56d200c47d7cd19f697e232a616342b224079f43abf4748bc55fb0c1de4346f";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "dropbox";
+    repo = "dropbox-sdk-python";
+    rev = "v${version}";
+    sha256 = "sha256-xNenBmeCRIYxQqAkV8IDpPpIHyVAYJs1jAFr8w1tz2Y=";
   };
+
+  propagatedBuildInputs = [
+    requests
+    urllib3
+    mock
+    setuptools
+    stone
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'pytest-runner == 5.2.0'," ""
   '';
 
-  propagatedBuildInputs = [ requests urllib3 mock setuptools stone ];
-
   # Set DROPBOX_TOKEN environment variable to a valid token.
   doCheck = false;
 
-  pythonImportsCheck = [ "dropbox" ];
+  pythonImportsCheck = [
+    "dropbox"
+  ];
 
   meta = with lib; {
-    description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-    homepage = "https://www.dropbox.com/developers/core/docs";
+    description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
+    homepage = "https://github.com/dropbox/dropbox-sdk-python";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

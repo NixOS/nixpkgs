@@ -7,25 +7,37 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.8.0";
+  version = "2.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3750fd988082b880ed1ec6f3d59c4f29f4cd0df3804a58d6c151d4bf15d3a597";
+    hash = "sha256-NO2oxVszbm2KYiN2NCn3edIyBx+E++sttJTgZd/yXzQ=";
   };
 
-  propagatedBuildInputs = [ libcst google-api-core proto-plus ];
+  propagatedBuildInputs = [
+    libcst
+    google-api-core
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
-  pytestFlagsArray = [
-    # requrire credentials
-    "--ignore=tests/system/gapic/v1/test_system_speech_v1.py"
-    "--ignore=tests/system/gapic/v1p1beta1/test_system_speech_v1p1beta1.py"
+  disabledTestPaths = [
+    # Requrire credentials
+    "tests/system/gapic/v1/test_system_speech_v1.py"
+    "tests/system/gapic/v1p1beta1/test_system_speech_v1p1beta1.py"
   ];
 
   pythonImportsCheck = [

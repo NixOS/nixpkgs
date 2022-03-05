@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
-  baseName = "rational";
+  pname = "pure-rational";
   version = "0.1";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-rational-${version}.tar.gz";
     sha256 = "62cb4079a0dadd232a859e577e97e50e9718ccfcc5983c4d9c4c32cac7a9bafa";
   };
 

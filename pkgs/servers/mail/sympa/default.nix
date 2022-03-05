@@ -24,7 +24,7 @@ let
     IO
     IOStringy
     LWP
-    libintl_perl
+    libintl-perl
 
     MHonArc
     MIMECharset
@@ -61,13 +61,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
-  version = "6.2.60";
+  version = "6.2.68";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
     repo = pname;
     rev = version;
-    sha256 = "0mnpmkvxf3bmrmahkf3d0i5r6sj7xb1yca5v7xdnwnh5wh9vlx7v";
+    sha256 = "sha256-biTF2We9/ZBFBNpltyJonAe5tpXz+eNam+Bu6esJPiY=";
   };
 
   configureFlags = [

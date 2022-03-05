@@ -2,22 +2,23 @@
 
 buildGoModule rec {
   pname = "helm";
-  version = "3.6.3";
-  gitCommit = "ee407bdf364942bcb8e8c665f82e15aa28009b71";
+  version = "3.8.0";
+  gitCommit = "d14138609b01886f544b2025f5000351c9eb092e";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-DfMI50eQsMHRX8S5rBzF3qlSfJizlYQyofA7HPkD4EQ=";
+    sha256 = "sha256-/vxf3YfBP1WHFpqll6iq4m+X4NA16qHnuGA0wvrVRsg=";
   };
-  vendorSha256 = "sha256-PTAyRG6PZK+vaiheUd3oiu4iBGlnFjoCrci0CYbXjBk=";
+  vendorSha256 = "sha256-M7XId+2HIh1mFzU54qQZEisWdVq67RlGJjlw+2dpiDc=";
 
   doCheck = false;
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
     "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
   ];

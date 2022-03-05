@@ -2,16 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , pyroute2-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2-nslink";
-  version = "0.6.4";
+  version = "0.6.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pyroute2.nslink";
     inherit version;
-    sha256 = "0iz4vrv05x678ihhl2wdppxda82fxrq3d3sh7mka0pyb66a8mrik";
+    hash = "sha256-p+U3Y5vKCxuvMl/yNKlay57tlU4GKttCJrAwctKa5TY=";
   };
 
   propagatedBuildInputs = [

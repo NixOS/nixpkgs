@@ -8,6 +8,8 @@
 mkDerivation {
   pname = "kcalc";
   meta = {
+    homepage = "https://apps.kde.org/kcalc/";
+    description = "Scientific calculator";
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.fridh ];
   };

@@ -47,7 +47,8 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstall
 
     substituteInPlace mime/*.desktop \
-      --replace "Exec=mcomix" "Exec=mcomix3"
+      --replace "Exec=mcomix" "Exec=mcomix3" \
+      --replace "Icon=mcomix" "Icon=${pname}"
     ${python3.executable} installer.py --srcdir=mcomix --target=$libdir
     mv $libdir/mcomix/mcomixstarter.py $out/bin/${pname}
     mv $libdir/mcomix/comicthumb.py $out/bin/comicthumb

@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, zeromq, cppzmq }:
+{ lib, stdenv, fetchFromGitHub, cmake, zeromq, cppzmq }:
 
 stdenv.mkDerivation rec {
   pname = "ursadb";
   version = "1.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/CERT-Polska/ursadb/archive/v${version}.tar.gz";
-    sha256 = "10dax3mswq0x4cfrpi31b7ii7bxl536wz1j11b7f5c0zw9pjxzym";
+  src = fetchFromGitHub {
+    owner = "CERT-Polska";
+    repo = "ursadb";
+    rev = "v${version}";
+    hash = "sha256-/EK1CKJ0IR7fkKSpQkONbWcz6uhUoAwK430ljNYsV5U=";
   };
 
   installPhase = ''
