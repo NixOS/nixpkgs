@@ -33028,6 +33028,10 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  dcpj315wlpr = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcpj315w { }).driver;
+
+  dcpj315w-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcpj315w { }).cupswrapper;
+
   dcp9020cdwlpr = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).driver;
 
   dcp9020cdw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).cupswrapper;
