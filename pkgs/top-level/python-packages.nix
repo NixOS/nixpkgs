@@ -9379,6 +9379,8 @@ in {
 
   socketio-client = callPackage ../development/python-modules/socketio-client { };
 
+  social-auth-core = callPackage ../development/python-modules/social-auth-core { };
+
   socialscan = callPackage ../development/python-modules/socialscan { };
 
   socid-extractor =  callPackage ../development/python-modules/socid-extractor { };
