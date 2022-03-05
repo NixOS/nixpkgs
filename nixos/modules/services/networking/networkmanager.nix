@@ -556,6 +556,7 @@ in {
 
     boot.kernelModules = [ "ctr" ];
 
+    security.polkit.enable = true;
     security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = cfg.packages

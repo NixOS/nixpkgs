@@ -390,6 +390,116 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>matrix-synapse</literal> service
+          (<literal>services.matrix-synapse</literal>) has been
+          converted to use the <literal>settings</literal> option
+          defined in RFC42. This means that options that are part of
+          your <literal>homeserver.yaml</literal> configuration, and
+          that were specified at the top-level of the module
+          (<literal>services.matrix-synapse</literal>) now need to be
+          moved into
+          <literal>services.matrix-synapse.settings</literal>. And while
+          not all options you may use are defined in there, they are
+          still supported, because you can set arbitrary values in this
+          freeform type.
+        </para>
+        <para>
+          An example to make the required migration clearer:
+        </para>
+        <para>
+          Before:
+        </para>
+        <programlisting language="bash">
+{
+  services.matrix-synapse = {
+    enable = true;
+
+    server_name = &quot;example.com&quot;;
+    public_baseurl = &quot;https://example.com:8448&quot;;
+
+    enable_registration = false;
+    registration_shared_secret = &quot;xohshaeyui8jic7uutuDogahkee3aehuaf6ei3Xouz4iicie5thie6nohNahceut&quot;;
+    macaroon_secret_key = &quot;xoo8eder9seivukaiPh1cheikohquuw8Yooreid0The4aifahth3Ou0aiShaiz4l&quot;;
+
+    tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+    tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+
+    listeners = [ {
+      port = 8448;
+      bind_address = &quot;&quot;;
+      type = &quot;http&quot;;
+      tls = true;
+      resources = [ {
+        names = [ &quot;client&quot; ];
+        compress = true;
+      } {
+        names = [ &quot;federation&quot; ];
+        compress = false;
+      } ];
+    } ];
+
+  };
+}
+</programlisting>
+        <para>
+          After:
+        </para>
+        <programlisting language="bash">
+{
+  services.matrix-synapse = {
+    enable = true;
+
+    # this attribute set holds all values that go into your homeserver.yaml configuration
+    # See https://github.com/matrix-org/synapse/blob/develop/docs/sample_config.yaml for
+    # possible values.
+    settings = {
+      server_name = &quot;example.com&quot;;
+      public_baseurl = &quot;https://example.com:8448&quot;;
+
+      enable_registration = false;
+      # pass `registration_shared_secret` and `macaroon_secret_key` via `extraConfigFiles` instead
+
+      tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+      tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+
+      listeners = [ {
+        port = 8448;
+        bind_address = [
+          &quot;::&quot;
+          &quot;0.0.0.0&quot;
+        ];
+        type = &quot;http&quot;;
+        tls = true;
+        resources = [ {
+          names = [ &quot;client&quot; ];
+          compress = true;
+        } {
+          names = [ &quot;federation&quot; ];
+          compress = false;
+        } ];
+      } ];
+    };
+
+    extraConfigFiles = [
+      /run/keys/matrix-synapse/secrets.yaml
+    ];
+  };
+}
+</programlisting>
+        <para>
+          The secrets in your original config should be migrated into a
+          YAML file that is included via
+          <literal>extraConfigFiles</literal>.
+        </para>
+        <para>
+          Additionally a few option defaults have been synced up with
+          upstream default values, for example the
+          <literal>max_upload_size</literal> grew from
+          <literal>10M</literal> to <literal>50M</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The MoinMoin wiki engine
           (<literal>services.moinmoin</literal>) has been removed,
           because Python 2 is being retired from nixpkgs.
@@ -1183,6 +1293,14 @@
           from the <literal>tmuxPlugins</literal> group. The specified
           packages are added to the system and loaded by
           <literal>tmux</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The polkit service, available at
+          <literal>security.polkit.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed.
         </para>
       </listitem>
     </itemizedlist>
