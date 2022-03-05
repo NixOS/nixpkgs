@@ -65,7 +65,6 @@ cfgbootcrypt = """  # Enable grub cryptodisk
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" = "/crypto_keyfile.bin";
   };
-  boot.initrd.luks.devices."@@cryptodisk@@".keyFile = "/crypto_keyfile.bin"; 
 
 """
 
@@ -271,8 +270,12 @@ def run():
     for part in gs.value("partitions"):
         if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
             cfg += cfgbootcrypt
-            catenate(variables, "cryptodisk", part["luksMapperName"])
             break
+
+    for part in gs.value("partitions"):
+        if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
+            cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";
+""".format(part["luksMapperName"])
 
     for part in gs.value("partitions"):
         if part["claimed"] == True and part["fs"] == "linuxswap" and part["fsName"] == "luks":
