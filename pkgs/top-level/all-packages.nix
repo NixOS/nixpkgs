@@ -25792,6 +25792,7 @@ with pkgs;
   };
   wireshark-qt = wireshark;
 
+  tshark = wireshark-cli;
   wireshark-cli = wireshark.override {
     withQt = false;
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
