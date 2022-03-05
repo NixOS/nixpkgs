@@ -5637,6 +5637,16 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jensac = {
+    email = "jens.schneider.ac@posteo.de";
+    github = "jensac";
+    githubId = 17930863;
+    name = "Jens Schneider";
+    keys = [{
+      longkeyid = "rsa4096/0x955C9CF126CE94C3";
+      fingerprint = "B6CB 48B1 8625 6F28 B29F  1E22 955C 9CF1 26CE 94C3";
+    }];
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
