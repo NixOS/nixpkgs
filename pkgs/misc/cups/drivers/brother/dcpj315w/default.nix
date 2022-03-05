@@ -35,7 +35,7 @@ rec {
     installPhase = ''
       substituteInPlace $out/opt/brother/Printers/${model}/lpd/filter${model} \
       --replace /opt "$out/opt"
- 
+
       substituteInPlace $out/opt/brother/Printers/${model}/inf/brdcpj315wrc \
       --replace "Letter" "A4"
 
