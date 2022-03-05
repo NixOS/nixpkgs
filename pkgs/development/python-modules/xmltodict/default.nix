@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , coverage
-, pytestCheckHook
+, nose
 }:
 
 buildPythonPackage rec {
@@ -14,13 +14,11 @@ buildPythonPackage rec {
     sha256 = "50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21";
   };
 
-  checkInputs = [ coverage pytestCheckHook ];
+  checkInputs = [ coverage nose ];
 
-  disabledTests = [
-    # incompatibilities with security fixes: https://github.com/martinblech/xmltodict/issues/289
-    "test_namespace_collapse"
-    "test_namespace_support"
-  ];
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = {
     description = "Makes working with XML feel like you are working with JSON";
