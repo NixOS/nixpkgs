@@ -29543,6 +29543,8 @@ with pkgs;
 
   qtile = callPackage ../applications/window-managers/qtile { };
 
+  vimgolf = callPackage ../games/vimgolf { };
+
   vimpc = callPackage ../applications/audio/vimpc { };
 
   # this is a lower-level alternative to wrapNeovim conceived to handle
