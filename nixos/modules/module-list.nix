@@ -455,6 +455,7 @@
   ./services/hardware/vdr.nix
   ./services/hardware/xow.nix
   ./services/home-automation/home-assistant.nix
+  ./services/home-automation/zigbee2mqtt.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
@@ -626,7 +627,6 @@
   ./services/misc/weechat.nix
   ./services/misc/xmr-stak.nix
   ./services/misc/xmrig.nix
-  ./services/misc/zigbee2mqtt.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
