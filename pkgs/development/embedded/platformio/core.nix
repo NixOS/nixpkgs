@@ -80,6 +80,7 @@ with python.pkgs; buildPythonApplication rec {
     pyserial
     requests
     semantic-version
+    spdx-license-list-data.json
     starlette
     tabulate
     uvicorn
@@ -171,7 +172,7 @@ with python.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
       --replace "zeroconf==0.37.*" "zeroconf"
@@ -180,7 +181,7 @@ with python.pkgs; buildPythonApplication rec {
   meta = with lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = "http://platformio.org";
+    homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
   };
