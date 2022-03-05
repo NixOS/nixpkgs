@@ -2205,7 +2205,6 @@ in {
   django = self.django_3;
 
   # Current LTS
-  django_2 = callPackage ../development/python-modules/django/2.nix { };
   django_3 = callPackage ../development/python-modules/django/3.nix { };
 
   # Current latest
