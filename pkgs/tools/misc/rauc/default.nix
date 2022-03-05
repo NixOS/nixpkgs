@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Safe and secure software updates for embedded Linux";
     homepage = "https://rauc.io";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
   };
