@@ -158,7 +158,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.3.0";
+  hassVersion = "2022.3.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -176,7 +176,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-ms5ZKOGhpCHHIMWBXtpNgaGhVPPJDoJKsFXbTfP7ApE=";
+    hash = "sha256-bihb6DL8hQuRnJZp39Lh2qfTXr0tFxn7FHFZewttNOc=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -237,6 +237,8 @@ in python.pkgs.buildPythonApplication rec {
     yarl
     # Not in setup.py, but used in homeassistant/util/package.py
     setuptools
+    # Not in setup.py, but uncounditionally imported via tests/conftest.py
+    paho-mqtt
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
