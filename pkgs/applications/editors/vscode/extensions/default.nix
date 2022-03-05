@@ -1167,10 +1167,14 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.2.0";
-          sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
+          version = "8.23.0";
+          sha256 = "sha256-IHLsAuTi+GBZViL2KozudebNY745RiOYNATzabQfnOY=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
+          description = "LaTeX Workshop Extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop";
+          homepage = "https://github.com/James-Yu/LaTeX-Workshop";
           license = licenses.mit;
         };
       };
