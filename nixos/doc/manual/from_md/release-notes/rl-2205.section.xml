@@ -794,6 +794,16 @@
       </listitem>
       <listitem>
         <para>
+          The Tor SOCKS proxy is now actually disabled if
+          <literal>services.tor.client.enable</literal> is set to
+          <literal>false</literal> (the default). If you are using this
+          functionality but didn’t change the setting or set it to
+          <literal>false</literal>, you now need to set it to
+          <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The terraform 0.12 compatibility has been removed and the
           <literal>terraform.withPlugins</literal> and
           <literal>terraform-providers.mkProvider</literal>
