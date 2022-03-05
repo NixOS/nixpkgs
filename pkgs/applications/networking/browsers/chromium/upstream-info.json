@@ -1,6 +1,6 @@
 {
   "stable": {
-    "version": "99.0.4844.52",
+    "version": "99.0.4844.51",
     "sha256": "1qxsn8zvvvsnn0k7nn606rhaial8ikrlfh175msqpp50xibjxicp",
     "sha256bin64": "04kqfppa88g2q54vp53avyyhqzrxljz49p4wqk76kq7fz2rm94x1",
     "deps": {
