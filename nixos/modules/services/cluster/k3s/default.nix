@@ -114,6 +114,7 @@ in
           [
             "${cfg.package}/bin/k3s ${cfg.role}"
           ] ++ (optional cfg.docker "--docker")
+          ++ (optional (cfg.docker && config.systemd.enableUnifiedCgroupHierarchy) "--kubelet-arg=cgroup-driver=systemd")
           ++ (optional cfg.disableAgent "--disable-agent")
           ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
           ++ (optional (cfg.token != "") "--token ${cfg.token}")
