@@ -395,6 +395,12 @@ in {
           for more details.
         '';
       };
+
+      modemManagerFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = "Flags to be passed to the ModemManager daemon.";
+      };
     };
   };
 
@@ -517,7 +523,13 @@ in {
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+    systemd.services.ModemManager = {
+      serviceConfig.ExecStart = [
+        "" # clear ExecStart from upstream unit file.
+        "${pkgs.modemmanager}/sbin/ModemManager ${toString cfg.modemManagerFlags}"
+      ];
+      aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+    };
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
