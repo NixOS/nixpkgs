@@ -81,6 +81,8 @@ in {
       };
     };
 
+    security.polkit.enable = true;
+
     security.pam.services.cage.text = ''
       auth    required pam_unix.so nullok
       account required pam_unix.so

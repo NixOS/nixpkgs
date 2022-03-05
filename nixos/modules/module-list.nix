@@ -455,6 +455,7 @@
   ./services/hardware/vdr.nix
   ./services/hardware/xow.nix
   ./services/home-automation/home-assistant.nix
+  ./services/home-automation/zigbee2mqtt.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
@@ -499,6 +500,7 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
+  ./services/matrix/matrix-synapse.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
   ./services/misc/ananicy.nix
@@ -565,7 +567,6 @@
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-appservice-irc.nix
   ./services/misc/matrix-conduit.nix
-  ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-facebook.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
@@ -626,7 +627,6 @@
   ./services/misc/weechat.nix
   ./services/misc/xmr-stak.nix
   ./services/misc/xmrig.nix
-  ./services/misc/zigbee2mqtt.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
