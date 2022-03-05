@@ -7,22 +7,22 @@
 }:
 
 rustPlatform.buildRustPackage {
-  version = "0.29.1";
+  version = "0.30.0";
   pname = "geckodriver";
   sourceRoot = "source/testing/geckodriver";
 
   # Source revisions are noted alongside the binary releases:
   # https://github.com/mozilla/geckodriver/releases
   src = (fetchzip {
-    url = "https://hg.mozilla.org/mozilla-central/archive/970ef713fe58cbc8a29bfb2fb452a57e010bdb08.zip/testing";
-    sha256 = "0cpx0kx8asqkmz2nyanbmcvhnrsksgd6jp3wlcd0maid3qbyw7s2";
+    url = "https://hg.mozilla.org/mozilla-central/archive/d372710b98a6ce5d1b2a9dffd53a879091c5c148.zip/testing";
+    sha256 = "0d27h9c8vw4rs9c2l9wms4lc931nbp2g5hacsh24zhc9y3v454i6";
   }).overrideAttrs (_: {
     # normally guessed by the url's file extension, force it to unpack properly
     unpackCmd = "unzip $curSrc";
   });
 
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1vajlcpyk77v6nvhs737yi8hs7ids9kz0sbwy29rm1vmmfjp2b27";
+  cargoSha256 = "08zcrhrmxh3c3iwd7kbnr19lfisikb779i2r7ir7b1i1ynmi4v6r";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
