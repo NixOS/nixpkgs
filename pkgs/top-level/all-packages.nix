@@ -11896,6 +11896,8 @@ with pkgs;
     jdk = jdk8;
   };
 
+  alan = callPackage ../development/compilers/alan { };
+
   algol68g = callPackage ../development/compilers/algol68g { };
 
   armips = callPackage ../development/compilers/armips { };
