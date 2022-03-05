@@ -3688,6 +3688,8 @@ in {
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
+  hatchling = callPackage ../development/python-modules/hatchling { };
+
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
