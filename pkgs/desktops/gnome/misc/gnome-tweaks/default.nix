@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
-  version = "40.0";
+  version = "40.10";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "+V8/4DGwsBwC95oWWfiJFS03cq4+RN+EA9FGC6Xuw2o=";
+    sha256 = "z/07M6OZV3+7RJHOj70C9UxZJPEFbzARTo1CApDvI/w=";
   };
 
   nativeBuildInputs = [
