@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.2.1";
+  version = "7.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "vemel";
     repo = "mypy_boto3_builder";
     rev = version;
-    hash = "sha256-jovvSNw2ahCwhA+9zOrn9bR2siXJetZPymQVG4EC9Us=";
+    hash = "sha256-X/dPO2p6GmnyJwcVPOmyo9zYda2uYfBAkuKTeX0Bt0Q=";
   };
 
   nativeBuildInputs = [
