@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dddvb";
-  version = "0.9.33-404-ge9ccab3";
+  version = "0.9.38-pre.4";
 
   src = fetchFromGitHub {
     owner = "DigitalDevices";
