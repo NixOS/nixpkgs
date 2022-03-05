@@ -231,6 +231,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
+          infrastructure resource modeling (IRM) tool. Available as
+          <link xlink:href="options.html#opt-services.netbox.enable">services.netbox</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://tetrd.app">tetrd</link>, share your
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
