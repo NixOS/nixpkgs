@@ -115,20 +115,21 @@ in {
   };
   services.matrix-synapse = {
     <link linkend="opt-services.matrix-synapse.enable">enable</link> = true;
-    <link linkend="opt-services.matrix-synapse.server_name">server_name</link> = config.networking.domain;
-    <link linkend="opt-services.matrix-synapse.listeners">listeners</link> = [
+    <link linkend="opt-services.matrix-synapse.settings.server_name">server_name</link> = config.networking.domain;
+    <link linkend="opt-services.matrix-synapse.settings.listeners">listeners</link> = [
       {
-        <link linkend="opt-services.matrix-synapse.listeners._.port">port</link> = 8008;
-        <link linkend="opt-services.matrix-synapse.listeners._.bind_address">bind_address</link> = "::1";
-        <link linkend="opt-services.matrix-synapse.listeners._.type">type</link> = "http";
-        <link linkend="opt-services.matrix-synapse.listeners._.tls">tls</link> = false;
-        <link linkend="opt-services.matrix-synapse.listeners._.x_forwarded">x_forwarded</link> = true;
-        <link linkend="opt-services.matrix-synapse.listeners._.resources">resources</link> = [
-          {
-            <link linkend="opt-services.matrix-synapse.listeners._.resources._.names">names</link> = [ "client" "federation" ];
-            <link linkend="opt-services.matrix-synapse.listeners._.resources._.compress">compress</link> = false;
-          }
-        ];
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.port">port</link> = 8008;
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.bind_addresses">bind_address</link> = [ "::1" ];
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.type">type</link> = "http";
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.tls">tls</link> = false;
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.x_forwarded">x_forwarded</link> = true;
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.resources">resources</link> = [ {
+          <link linkend="opt-services.matrix-synapse.settings.listeners._.resources._.names">names</link> = [ "client" ];
+          <link linkend="opt-services.matrix-synapse.settings.listeners._.resources._.compress">compress</link> = true;
+        } {
+          <link linkend="opt-services.matrix-synapse.settings.listeners._.resources._.names">names</link> = [ "federation" ];
+          <link linkend="opt-services.matrix-synapse.settings.listeners._.resources._.compress">compress</link> = false;
+        } ];
       }
     ];
   };
@@ -151,11 +152,11 @@ in {
 
   <para>
    If you want to run a server with public registration by anybody, you can
-   then enable <literal><link linkend="opt-services.matrix-synapse.enable_registration">services.matrix-synapse.enable_registration</link> =
+   then enable <literal><link linkend="opt-services.matrix-synapse.settings.enable_registration">services.matrix-synapse.enable_registration</link> =
    true;</literal>. Otherwise, or you can generate a registration secret with
    <command>pwgen -s 64 1</command> and set it with
-   <option><link linkend="opt-services.matrix-synapse.registration_shared_secret">services.matrix-synapse.registration_shared_secret</link></option>. To
-   create a new user or admin, run the following after you have set the secret
+   <option><link linkend="opt-services.matrix-synapse.settings.registration_shared_secret">services.matrix-synapse.registration_shared_secret</link></option>.
+   To create a new user or admin, run the following after you have set the secret
    and have rebuilt NixOS:
 <screen>
 <prompt>$ </prompt>nix run nixpkgs.matrix-synapse
@@ -170,7 +171,7 @@ Success!
    <literal>@your-username:example.org</literal>. Note that the registration
    secret ends up in the nix store and therefore is world-readable by any user
    on your machine, so it makes sense to only temporarily activate the
-   <link linkend="opt-services.matrix-synapse.registration_shared_secret">registration_shared_secret</link>
+   <link linkend="opt-services.matrix-synapse.settings.registration_shared_secret">registration_shared_secret</link>
    option until a better solution for NixOS is in place.
   </para>
  </section>
