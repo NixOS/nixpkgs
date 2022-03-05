@@ -104,9 +104,29 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
+  '' + lib.optionalString stdenv.isDarwin ''
+    # https://github.com/libretro/RetroArch/blob/master/retroarch-apple-packaging.sh
+    app=$out/Applications/RetroArch.app
+    mkdir -p $app/Contents/MacOS
+    cp -r pkg/apple/OSX/* $app/Contents
+    cp $out/bin/retroarch $app/Contents/MacOS
+    # FIXME: using Info_Metal.plist results in input not working
+    # mv $app/Contents/Info_Metal.plist $app/Contents/Info.plist
+
+    substituteInPlace $app/Contents/Info.plist \
+      --replace '${"\${EXECUTABLE_NAME}"}' 'RetroArch' \
+      --replace '$(PRODUCT_BUNDLE_IDENTIFIER)' 'com.libretro.RetroArch' \
+      --replace '${"\${PRODUCT_NAME}"}' 'RetroArch' \
+      --replace '${"\${MACOSX_DEPLOYMENT_TARGET}"}' '10.13'
+
+    cp media/retroarch.icns $app/Contents/Resources/
   '';
 
   preFixup = "rm $out/bin/retroarch-cg2glsl";
+
+  # Workaround for the following error affecting newer versions of Clang:
+  # ./config.def.h:xxx:x: error: 'TARGET_OS_TV' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isClang [ "-Wno-undef-prefix" ];
 
   meta = with lib; {
     homepage = "https://libretro.com";
@@ -115,8 +135,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
-    # FIXME: exits with error on macOS:
-    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
-    broken = stdenv.isDarwin;
   };
 }
