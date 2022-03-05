@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "canonicaljson";
-  version = "1.5.0";
+  version = "1.6.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Xr3c10xbBm7mjsylZGUzjpsTgEZ+CpBvR5dpfJ+zgeI=";
+    sha256 = "sha256-hznV/ZGspygdQlZgrmWvdmOAjIF3d4ll9n6QsWorJCc=";
   };
 
   propagatedBuildInputs = [
