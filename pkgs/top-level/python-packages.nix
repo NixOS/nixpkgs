@@ -3255,6 +3255,8 @@ in {
 
   gbinder-python = callPackage ../development/python-modules/gbinder-python { };
 
+  gbulb = callPackage ../development/python-modules/gbulb { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
