@@ -1441,6 +1441,7 @@ mapAliases ({
 
   inherit (plasma5Packages.thirdParty)
     krohnkite
+    krunner-ssh
     krunner-symbols
     kwin-dynamic-workspaces
     kwin-tiling

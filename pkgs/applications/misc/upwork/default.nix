@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.6.10.0";
+  version = "5.6.10.1";
 
   src = fetchurl {
-    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_10_0_b124e6f3a4944b32/${pname}_${version}_amd64.deb";
-    sha256 = "fd201ce817abe32e1b582bb4b55fef85ac8132806f5ddf0548fd25bbfd48833c";
+    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_10_1_de501d28cc034306/${pname}_${version}_amd64.deb";
+    sha256 = "8faf896d2570d1d210793f46a3860e934d03498c1f11640d43721b6eb2b56860";
   };
 
   nativeBuildInputs = [

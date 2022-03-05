@@ -1,8 +1,8 @@
 {
   "1.18": {
-    "url": "https://launcher.mojang.com/v1/objects/125e5adf40c659fd3bce3e66e67a16bb49ecc1b9/server.jar",
-    "sha1": "125e5adf40c659fd3bce3e66e67a16bb49ecc1b9",
-    "version": "1.18.1",
+    "url": "https://launcher.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar",
+    "sha1": "c8f83c5655308435b3dcf03c06d9fe8740a77469",
+    "version": "1.18.2",
     "javaVersion": 17
   },
   "1.17": {

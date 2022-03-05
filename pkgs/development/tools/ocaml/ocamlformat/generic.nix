@@ -28,8 +28,10 @@ let src =
     }."${version}";
   };
   ocamlPackages =
-  if lib.versionAtLeast version "0.17.0"
+  if lib.versionAtLeast version "0.19.0"
   then ocaml-ng.ocamlPackages
+  else if lib.versionAtLeast version "0.17.0"
+  then ocaml-ng.ocamlPackages_4_12
   else if lib.versionAtLeast version "0.14.3"
   then ocaml-ng.ocamlPackages_4_10
   else ocaml-ng.ocamlPackages_4_07

@@ -3,7 +3,7 @@
 let
   ocamlDependencies = version:
     if lib.versionAtLeast version "4.2"
-    then with ocaml-ng.ocamlPackages; [
+    then with ocaml-ng.ocamlPackages_4_12; [
       ocaml
       findlib
       sedlex_2

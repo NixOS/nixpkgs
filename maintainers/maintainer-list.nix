@@ -6350,6 +6350,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keldu = {
+    email = "mail@keldu.de";
+    github = "keldu";
+    githubId = 15373888;
+    name = "Claudius Holeksa";
+  };
   kennyballou = {
     email = "kb@devnulllabs.io";
     github = "kennyballou";
@@ -7962,6 +7968,12 @@
     github = "mguentner";
     githubId = 668926;
     name = "Maximilian Güntner";
+  };
+  mh = {
+    email = "68288772+markus-heinrich@users.noreply.github.com";
+    github = "markus-heinrich";
+    githubId = 68288772;
+    name = "Markus Heinrich";
   };
   mhaselsteiner = {
     email = "magdalena.haselsteiner@gmx.at";
@@ -10976,6 +10988,12 @@
     githubId = 19472270;
     name = "Sebastian";
   };
+  sebastianblunt = {
+    name = "Sebastian Blunt";
+    email = "nix@sebastianblunt.com";
+    github = "sebastianblunt";
+    githubId = 47431204;
+  };
   sebbadk = {
     email = "sebastian@sebba.dk";
     github = "SEbbaDK";
@@ -12859,6 +12877,12 @@
     github = "vinymeuh";
     githubId = 118959;
     name = "VinyMeuh";
+  };
+  viraptor = {
+    email = "nix@viraptor.info";
+    github = "viraptor";
+    githubId = 188063;
+    name = "Stanisław Pitucha";
   };
   viric = {
     email = "viric@viric.name";

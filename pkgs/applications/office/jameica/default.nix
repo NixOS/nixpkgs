@@ -17,6 +17,7 @@ let
     comment = "Free Runtime Environment for Java Applications.";
     desktopName = "Jameica";
     genericName = "Jameica";
+    icon = "jameica";
     categories = [ "Office" ];
   };
 in
