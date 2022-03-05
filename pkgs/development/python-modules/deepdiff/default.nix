@@ -12,18 +12,21 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "5.6.0";
+  version = "5.7.0";
   format = "setuptools";
 
   # pypi source does not contain all fixtures required for tests
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
-    rev = version;
-    sha256 = "sha256-ysaIeVefsTX7ZubOXaEzeS1kMyBp4/w3SHNFxsGVhzY=";
+    # 5.7.0 release not tagged https://github.com/seperman/deepdiff/issues/300
+    rev = "f2ffdb83b2993f4f0bb7e854620f0acd0bf6339e";
+    hash = "sha256-0UBx7sH2iMrLVl5FtHNTwoecLHi8GbInn75G3FSg4gk=";
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "ordered-set==4.0.2" "ordered-set"
     substituteInPlace tests/test_command.py \
       --replace '/tmp/' "$TMPDIR/"
   '';
