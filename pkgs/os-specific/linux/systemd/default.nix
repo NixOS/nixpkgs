@@ -460,7 +460,6 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
-    "-Defi-ld=gold"
     "-Dsbat-distro=nixos"
     "-Dsbat-distro-summary=NixOS"
     "-Dsbat-distro-url=https://nixos.org/"
