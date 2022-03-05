@@ -69,7 +69,6 @@ with py.pkgs; buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
       --replace "wcwidth<0.2.0" "wcwidth" \
