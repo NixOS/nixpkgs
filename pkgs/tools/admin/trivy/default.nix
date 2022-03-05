@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/XkHvXzF7SG5niIknd+wh1Uc0ZbfrklgTkZigjz3aNY=";
+    sha256 = "sha256-xMLSou+8kIQVEJlkA7ygv623hvETcEAdyFPR3HJr5ZQ=";
   };
 
-  vendorSha256 = "sha256-C3JpjDXQ6sUnz9ixO3w2aP3G122nYHezYrNW/FZqlJQ=";
+  vendorSha256 = "sha256-qRkxDvrqMVOsz5r3m3I+E0HAVoUwFykkfGzTz9Qc/S4=";
 
   excludedPackages = "misc";
 
