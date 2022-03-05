@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "berry";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
