@@ -3522,6 +3522,8 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
+  monica = callPackage ../servers/web-apps/monica { };
+
   mons = callPackage ../tools/misc/mons {};
 
   monsoon = callPackage ../tools/security/monsoon {};
