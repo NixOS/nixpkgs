@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_conntrack";
@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${pname}-${version}.tar.bz2";
     sha256 = "sha256-Z72d9J/jTouCFE9t+5OzIPOEqOpZcn6S/40YtfS1eag=";
   };
+
+  patches = [
+    # Fix Musl build.
+    (fetchpatch {
+      url = "https://git.netfilter.org/libnetfilter_conntrack/patch/?id=21ee35dde73aec5eba35290587d479218c6dd824";
+      sha256 = "00rp82jrx5ygcw8la3c7bv7sigw9qzbn956dk71qjx981a2g2kqk";
+    })
+  ];
 
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
