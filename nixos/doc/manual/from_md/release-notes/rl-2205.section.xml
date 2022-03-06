@@ -136,6 +136,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://gitlab.com/kop316/mmsd">mmsd-tng</link>,
+          a service for sending and receiving MMS through the
+          ModemManager or ofono stack. Available as
+          <link xlink:href="options.html#opt-services.mmsd-tng.enable">services.mmsd-tng</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.

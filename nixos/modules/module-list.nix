@@ -803,6 +803,7 @@
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
+  ./services/networking/mmsd-tng.nix
   ./services/networking/mosquitto.nix
   ./services/networking/monero.nix
   ./services/networking/morty.nix
