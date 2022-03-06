@@ -167,7 +167,6 @@ in buildFHSUserEnv rec {
     ffmpeg
     # Only libraries are needed from those two
     libudev0-shim
-    networkmanager098
 
     # Verified games requirements
     xorg.libXt
