@@ -17,7 +17,8 @@ checks:
   them and comparing their contents. If they are different but only
   `X-Reload-Triggers` in the `[Unit]` section is changed, **reload** the unit.
   The NixOS module system allows setting these triggers with the option
-  [systemd.services.\<name\>.reloadTriggers](#opt-systemd.services). If the
+  [systemd.services.\<name\>.reloadTriggers](#opt-systemd.services). There are
+  some additional keys in the `[Unit]` section that are ignored as well. If the
   unit files differ in any way, the following actions are performed:
 
   - `.path` and `.slice` units are ignored. There is no need to restart them

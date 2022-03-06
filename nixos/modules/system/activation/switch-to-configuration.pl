@@ -226,10 +226,20 @@ sub unrecord_unit {
 sub compare_units {
     my ($old_unit, $new_unit) = @_;
     my $ret = 0;
+    # Keys to ignore in the [Unit] section
+    my %unit_section_ignores = map { $_ => 1 } qw(
+        X-Reload-Triggers
+        Description Documentation
+        OnFailure OnSuccess OnFailureJobMode
+        IgnoreOnIsolate StopWhenUnneeded
+        RefuseManualStart RefuseManualStop
+        AllowIsolate CollectMode
+        SourcePath
+    );
 
     my $comp_array = sub {
       my ($a, $b) = @_;
-      return join("\0", @{$a}) eq join("\0", @{$b});
+      return join("\0", @{$a}) eq join "\0", @{$b};
     };
 
     # Comparison hash for the sections
@@ -238,6 +248,18 @@ sub compare_units {
     foreach my $section_name (keys %{$old_unit}) {
         # Missing section in the new unit?
         if (not exists $section_cmp{$section_name}) {
+            # If the [Unit] section was removed, make sure that only keys
+            # were in it that are ignored
+            if ($section_name eq 'Unit') {
+                foreach my $ini_key (keys %{$old_unit->{'Unit'}}) {
+                    if (not defined $unit_section_ignores{$ini_key}) {
+                        return 1;
+                    }
+                }
+                next; # check the next section
+            } else {
+                return 1;
+            }
             if ($section_name eq 'Unit' and %{$old_unit->{'Unit'}} == 1 and defined(%{$old_unit->{'Unit'}}{'X-Reload-Triggers'})) {
                 # If a new [Unit] section was removed that only contained X-Reload-Triggers,
                 # do nothing.
@@ -255,8 +277,8 @@ sub compare_units {
             my @old_value = @{$old_unit->{$section_name}{$ini_key}};
             # If the key is missing in the new unit, they are different...
             if (not $new_unit->{$section_name}{$ini_key}) {
-                # ... unless the key that is now missing was the reload trigger
-                if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
+                # ... unless the key that is now missing is one of the ignored keys
+                if ($section_name eq 'Unit' and defined $unit_section_ignores{$ini_key}) {
                     next;
                 }
                 return 1;
@@ -264,19 +286,30 @@ sub compare_units {
             my @new_value = @{$new_unit->{$section_name}{$ini_key}};
             # If the contents are different, the units are different
             if (not $comp_array->(\@old_value, \@new_value)) {
-                # Check if only the reload triggers changed
-                if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
-                    $ret = 2;
-                } else {
-                    return 1;
+                # Check if only the reload triggers changed or one of the ignored keys
+                if ($section_name eq 'Unit') {
+                    if ($ini_key eq 'X-Reload-Triggers') {
+                        $ret = 2;
+                        next;
+                    } elsif (defined $unit_section_ignores{$ini_key}) {
+                        next;
+                    }
                 }
+                return 1;
             }
         }
         # A key was introduced that was missing in the old unit
         if (%ini_cmp) {
-            if ($section_name eq 'Unit' and %ini_cmp == 1 and defined($ini_cmp{'X-Reload-Triggers'})) {
-                # If the newly introduced key was the reload triggers, reload the unit
-                $ret = 2;
+            if ($section_name eq 'Unit') {
+                foreach my $ini_key (keys %ini_cmp) {
+                    if ($ini_key eq 'X-Reload-Triggers') {
+                        $ret = 2;
+                    } elsif (defined $unit_section_ignores{$ini_key}) {
+                        next;
+                    } else {
+                        return 1;
+                    }
+                }
             } else {
                 return 1;
             }
@@ -284,10 +317,14 @@ sub compare_units {
     }
     # A section was introduced that was missing in the old unit
     if (%section_cmp) {
-        if (%section_cmp == 1 and defined($section_cmp{'Unit'}) and %{$new_unit->{'Unit'}} == 1 and defined(%{$new_unit->{'Unit'}}{'X-Reload-Triggers'})) {
-            # If a new [Unit] section was introduced that only contains X-Reload-Triggers,
-            # reload instead of restarting
-            $ret = 2;
+        if (%section_cmp == 1 and defined $section_cmp{'Unit'}) {
+            foreach my $ini_key (keys %{$new_unit->{'Unit'}}) {
+                if (not defined $unit_section_ignores{$ini_key}) {
+                    return 1;
+                } elsif ($ini_key eq 'X-Reload-Triggers') {
+                    $ret = 2;
+                }
+            }
         } else {
             return 1;
         }

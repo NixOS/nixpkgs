@@ -64,6 +64,11 @@ in {
           };
         };
 
+        simpleServiceDifferentDescription.configuration = {
+          imports = [ simpleService.configuration ];
+          systemd.services.test.description = "Test unit";
+        };
+
         simpleServiceModified.configuration = {
           imports = [ simpleService.configuration ];
           systemd.services.test.serviceConfig.X-Test = true;
@@ -490,6 +495,15 @@ in {
 
         # Not changing anything doesn't do anything
         out = switch_to_specialisation("${machine}", "simpleService")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+        # Only changing the description does nothing
+        out = switch_to_specialisation("${machine}", "simpleServiceDifferentDescription")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
