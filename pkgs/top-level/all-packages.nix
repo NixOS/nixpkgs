@@ -4419,6 +4419,8 @@ with pkgs;
 
   brotli = callPackage ../tools/compression/brotli { };
 
+  biodiff = callPackage ../development/tools/biodiff { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
