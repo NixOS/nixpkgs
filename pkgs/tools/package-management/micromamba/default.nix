@@ -21,16 +21,25 @@ let
       })
     ];
   });
+
+  spdlog' = spdlog.overrideAttrs (oldAttrs: {
+    # Required for header files. See alse:
+    # https://github.com/gabime/spdlog/pull/1241 (current solution)
+    # https://github.com/gabime/spdlog/issues/1897 (previous solution)
+    cmakeFlags = oldAttrs.cmakeFlags ++ [
+      "-DSPDLOG_FMT_EXTERNAL=OFF"
+    ];
+  });
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "0.18.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = version;
-    sha256 = "1gr9r257l300hafp8zm61bn58rysdk9i4wv1879q96b6n6v8hwa6";
+    rev = "mamba-" + version;
+    sha256 = "0zsl0rhsx87vvwcwc1xn7gqgbxffprr8dyc9rkr6kcr4rjgy9yzp";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -43,16 +52,10 @@ stdenv.mkDerivation rec {
     libyamlcpp
     libsolv'
     reproc
-    spdlog
+    spdlog'
     termcolor
     ghc_filesystem
   ];
-
-  postPatch = ''
-    # See https://github.com/gabime/spdlog/issues/1897
-    sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
-    echo 'target_link_libraries(micromamba PRIVATE -lspdlog -lfmt)' >> micromamba/CMakeLists.txt
-  '';
 
   cmakeFlags = [
     "-DBUILD_LIBMAMBA=ON"
