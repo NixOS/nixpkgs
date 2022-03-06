@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "onlykey";
-    sha256 = "sha256-7Pr1gXaPF5mctGxDciKKj0YDDQVFFi1+t6QztoKqpAA=";
+    sha256 = "sha256-Uf4FASugl5r5n2G6pZQ8W1PmbON+KombwlIzi00XANc=";
   };
 
   propagatedBuildInputs = with python3Packages; [
