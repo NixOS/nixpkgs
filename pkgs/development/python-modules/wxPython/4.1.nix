@@ -94,7 +94,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = licenses.wxWindows;
+    license = with licenses; [ lgpl2Plus /* WITH */ wx-exception ];
     maintainers = with maintainers; [ tfmoraes ];
   };
 }
