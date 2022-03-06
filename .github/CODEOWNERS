@@ -155,7 +155,7 @@
 /pkgs/applications/editors/jetbrains @edwtjo
 
 # Licenses
-/lib/licenses.nix @alyssais
+/lib/licenses.nix @alyssais @c0bw3b
 
 # Qt / KDE
 /pkgs/applications/kde @ttuegel
