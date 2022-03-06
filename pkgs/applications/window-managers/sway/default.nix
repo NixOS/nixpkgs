@@ -10,6 +10,7 @@
 , enableXWayland ? true
 , systemdSupport ? stdenv.isLinux
 , dbusSupport ? true
+, dbus
 , trayEnabled ? dbusSupport
 }:
 
