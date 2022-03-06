@@ -1,7 +1,8 @@
 {
   mkDerivation, propagate,
-  extra-cmake-modules, kcoreaddons, polkit-qt, qttools
+  extra-cmake-modules, kcoreaddons, qttools
 , enablePolkit ? true
+, polkit-qt
 }:
 
 mkDerivation {
