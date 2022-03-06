@@ -1,11 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , httpx
-, pytest-asyncio
 , sanic
 , websockets
+, callPackage
 }:
 
 buildPythonPackage rec {
@@ -35,18 +34,18 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  postInstall = ''
+    mkdir $testsout
+    cp -R tests $testsout/tests
+  '';
 
-  # `sanic` is explicitly set to null when building `sanic` itself
-  # to prevent infinite recursion.  In that case we skip running
-  # the package at all.
-  doCheck = sanic != null;
-  dontUsePythonImportsCheck = sanic == null;
+  # check in passthru.tests.pytest to escape infinite recursion with sanic
+  doCheck = false;
+  doInstallCheck = false;
 
-  pythonImportsCheck = [ "sanic_testing" ];
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Core testing clients for the Sanic web framework";
