@@ -1,6 +1,6 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
+, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, soxr
 , x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
 , srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
@@ -21,6 +21,7 @@
 , branch, sha256, version, patches ? [], knownVulnerabilities ? []
 , doCheck ? true
 , pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
 , ...
 }:
 
