@@ -13,6 +13,7 @@
 , systemd
 , go-md2man
 , nixosTests
+, qemu
 }:
 
 buildGoModule rec {
@@ -44,6 +45,14 @@ buildGoModule rec {
     systemd
   ];
 
+  patches = lib.optional (stdenv.isDarwin && stdenv.isAarch64) [
+    ./fix-edk2-aarch64-darwin.patch
+  ];
+
+  postPatch = lib.optional (stdenv.isDarwin && stdenv.isAarch64) ''
+    substituteAllInPlace pkg/machine/qemu/options_darwin_arm64.go;
+  '';
+
   buildPhase = ''
     runHook preBuild
     patchShebangs .
@@ -74,6 +83,9 @@ buildGoModule rec {
     PREFIX=$out make install.completions
     MANDIR=$man/share/man make install.man
     runHook postInstall
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      mkdir $out/share/qemu
+      ln -s ${qemu}/share/qemu/edk2-aarch64-code.fd $out/share/qemu
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''

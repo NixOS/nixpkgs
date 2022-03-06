@@ -1,0 +1,13 @@
+diff --git a/pkg/machine/qemu/options_darwin_arm64.go b/pkg/machine/qemu/options_darwin_arm64.go
+--- a/pkg/machine/qemu/options_darwin_arm64.go
++++ b/pkg/machine/qemu/options_darwin_arm64.go
+@@ -45,8 +45,7 @@ func getOvmfDir(imagePath, vmName string) string {
+  */
+ func getEdk2CodeFd(name string) string {
+ 	dirs := []string{
+-		"/usr/local/share/qemu",
+-		"/opt/homebrew/share/qemu",
++		"@out@/share/qemu",
+ 	}
+ 	for _, dir := range dirs {
+ 		fullpath := filepath.Join(dir, name)
