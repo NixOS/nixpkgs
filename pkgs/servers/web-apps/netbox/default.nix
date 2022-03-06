@@ -1,6 +1,7 @@
 { lib
 , pkgs
 , fetchFromGitHub
+, nixosTests
 , python3
 
 , plugins ? ps: [] }:
@@ -101,6 +102,10 @@ py.pkgs.buildPythonApplication rec {
     passthru = {
       # PYTHONPATH of all dependencies used by the package
       pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+
+      tests = {
+        inherit (nixosTests) netbox;
+      };
     };
 
     meta = with lib; {
