@@ -39596,6 +39596,8 @@ with pkgs;
 
   ymuse = callPackage ../applications/audio/ymuse { };
 
+  zeyple = callPackage ../misc/zeyple { };
+
   zk = callPackage ../applications/office/zk { };
 
   zktree = callPackage ../applications/misc/zktree { };
