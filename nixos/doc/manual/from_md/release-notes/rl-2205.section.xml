@@ -280,6 +280,13 @@
           with many features.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.monicahq.com">monica</link>, an
+          open source personal CRM. Available as
+          <link xlink:href="options.html#opt-services.monica.enable">services.monica</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
