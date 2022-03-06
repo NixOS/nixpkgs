@@ -351,7 +351,6 @@ in
 
     (mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
@@ -367,6 +366,9 @@ in
       services.gnome.tracker.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
       services.packagekit.enable = mkDefault true;
+      services.pipewire.enable = mkDefault true;
+      services.pipewire.pulse.enable = mkDefault true;
+      services.pipewire.alsa.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
