@@ -9780,6 +9780,8 @@ in {
 
   tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit { };
 
+  tensorboard = callPackage ../development/python-modules/tensorboard { };
+
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
@@ -9811,8 +9813,6 @@ in {
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow = self.tensorflow-build;
-
-  tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
   tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;

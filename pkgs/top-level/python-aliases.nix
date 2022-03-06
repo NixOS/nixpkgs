@@ -123,6 +123,7 @@ mapAliases ({
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
   tensorflow-estimator_2 = tensorflow-estimator; # added 2021-11-25
+  tensorflow-tensorboard = tensorboard; # added 2022-03-06
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
   topydo = throw "topydo was moved to pkgs.topydo"; # added 2017-09-22
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05

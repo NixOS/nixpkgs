@@ -6,7 +6,7 @@
 , pytestCheckHook
 , pytorch
 , pyyaml
-, tensorflow-tensorboard
+, tensorboard
 , tqdm }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     future
     pytorch
     pyyaml
-    tensorflow-tensorboard
+    tensorboard
     tqdm
   ];
 
