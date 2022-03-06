@@ -9455,6 +9455,12 @@
     github = "nessdoor";
     githubId = 25993494;
   };
+  net-mist = {
+    email = "archimist.linux@gmail.com";
+    github = "Net-Mist";
+    githubId = 13920346;
+    name = "Sébastien Iooss";
+  };
   netali = {
     name = "Jennifer Graul";
     email = "me@netali.de";
