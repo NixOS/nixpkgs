@@ -24,12 +24,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ioztat $out/bin
+    runHook preInstall
+
+    install -vDt $out/bin -m 0555 ioztat
 
     if [ -f ioztat.8 ]; then
       installManPage ioztat.8
     fi
+
+    runHook postInstall
   '';
 
   meta = with lib; {
