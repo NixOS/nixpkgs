@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) bind; };
 
   meta = with lib; {
-    homepage = "https://www.isc.org/downloads/bind/";
+    homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
 
