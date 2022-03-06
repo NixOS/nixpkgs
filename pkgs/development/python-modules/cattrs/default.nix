@@ -7,6 +7,7 @@
 , motor
 , msgpack
 , poetry-core
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -44,10 +45,15 @@ buildPythonPackage rec {
     immutables
     motor
     msgpack
+    pytest-xdist
     pytestCheckHook
     pyyaml
     tomlkit
     ujson
+  ];
+
+  pytestFlagsArray = [
+    "--numprocesses $NIX_BUILD_CORES"
   ];
 
   postPatch = ''
