@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "sha256-cZYGxMtRDeT+dPJLv6U5EacFMYIfwe55op49luqhZzM=";
+    sha256 = "sha256-qlNZHonqzDSRq0ctxN+Zh4D7Z0fuo7l+y3qfgf8sml4=";
   };
 
   buildInputs = [ jdk ant gettext which ];
