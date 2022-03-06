@@ -65,7 +65,7 @@
 , libfido2
 , p11-kit
 
-  # the (optional) BPF feature requires bpftool, libbpf, clang and llmv-strip to be avilable during build time.
+  # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
 , bpftools
 , libbpf
@@ -176,7 +176,7 @@ stdenv.mkDerivation {
     # systemd. With the below patch we mitigate that effect by special casing
     # all our root unit dirs if they are symlinks. This does exactly what we
     # need (AFAICT).
-    # See https://github.com/systemd/systemd/pull/20479 for upsteam discussion.
+    # See https://github.com/systemd/systemd/pull/20479 for upstream discussion.
     ./0019-core-handle-lookup-paths-being-symlinks.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
@@ -224,7 +224,7 @@ stdenv.mkDerivation {
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
-      # The folllowing patches references to dynamic libraries to ensure that
+      # The following patches references to dynamic libraries to ensure that
       # all the features that are implemented via dlopen(3) are available (or
       # explicitly deactivated) by pointing dlopen to the absolute store path
       # instead of relying on the linkers runtime lookup code.
@@ -280,7 +280,7 @@ stdenv.mkDerivation {
           { name = "libidn.so.12"; pkg = null; }
           { name = "libidn.so.11"; pkg = null; }
 
-          # journalctl --grep requires libpcre so lets provide it
+          # journalctl --grep requires libpcre so let's provide it
           { name = "libpcre2-8.so.0"; pkg = pcre2; }
 
           # Support for TPM2 in systemd-cryptsetup, systemd-repart and systemd-cryptenroll
@@ -311,7 +311,7 @@ stdenv.mkDerivation {
             # exceptional case, details:
             # https://github.com/systemd/systemd-stable/blob/v249-stable/src/shared/tpm2-util.c#L157
             if ! [[ "${library}" =~ .*libtss2-tcti-$ ]]; then
-              echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
+              echo 'The shared library `${library}` does not exist but was given as substitute for `${dl.name}`'
               exit 1
             fi
           fi
