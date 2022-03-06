@@ -335,8 +335,8 @@ stdenv.mkDerivation {
     fi
   ''
   # Finally patch shebangs that might need patching.
-  # Should no longer be necessary with v250.
-  # https://github.com/systemd/systemd/pull/19638
+  # Should no longer be necessary with v251.
+  # https://github.com/systemd/systemd/pull/21749
   + ''
     patchShebangs .
   '';
