@@ -469,6 +469,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.ipfs.extraFlags</literal> is now escaped
+          with <literal>utils.escapeSystemdExecArgs</literal>. If you
+          rely on systemd interpolating <literal>extraFlags</literal> in
+          the service <literal>ExecStart</literal>, this will no longer
+          work.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>matrix-synapse</literal> service
           (<literal>services.matrix-synapse</literal>) has been
           converted to use the <literal>settings</literal> option
