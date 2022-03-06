@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mock
-, nose
-, pyjwt
 , pythonOlder
+
+, pyjwt
 , pytz
 , requests
+
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,7 +33,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    nose
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
