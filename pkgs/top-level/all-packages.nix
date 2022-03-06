@@ -6368,6 +6368,8 @@ with pkgs;
     inherit (xorg) libX11;
   };
 
+  pridecat = callPackage ../tools/misc/pridecat { };
+
   pxattr = callPackage ../tools/archivers/pxattr { };
 
   pxz = callPackage ../tools/compression/pxz { };
