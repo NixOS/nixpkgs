@@ -6,11 +6,11 @@
 let
   # onlykey requires a patched version of libagent
   lib-agent = with python3Packages; libagent.overridePythonAttrs (oa: rec{
-    version = "1.0.2";
+    version = "1.0.3";
     src = fetchPypi {
       inherit version;
       pname = "lib-agent";
-      sha256 = "sha256-NAimivO3m4UUPM4JgLWGq2FbXOaXdQEL/DqZAcy+kEw=";
+      sha256 = "sha256-hFaT6FQMZNU6xsUxt0nVqJMlz0a0skhgxE1pvuyreR8=";
     };
     propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
       pynacl
@@ -32,11 +32,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
-  version = "1.1.11";
+  version = "1.1.12";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YH/cqQOVy5s6dTp2JwxM3s4xRTXgwhOr00whtHAwZZI=";
+    sha256 = "sha256-vD+jWC0XmOI+w1Qoi36AhQHJY4xBekuVCDodeC/8BpU=";
   };
 
   propagatedBuildInputs = with python3Packages; [ lib-agent onlykey-cli ];
