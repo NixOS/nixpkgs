@@ -2,6 +2,11 @@
 , opencv3, gtest, blas, gomp, llvmPackages, perl
 , cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
+, sseSupport   ? true
+, f16cSupport  ? true
+#, sseSupport   ? stdenv.hostPlatform.sseSupport
+#, f16cSupport  ? stdenv.hostPlatform.f16cSupport
+# TODO implement in nixpkgs/lib/systems/architectures.nix
 }:
 
 assert cudnnSupport -> cudaSupport;
@@ -38,8 +43,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
     ++ lib.optional cudnnSupport cudnn;
 
+  # https://github.com/apache/incubator-mxnet/blob/v1.x/config/
   cmakeFlags =
-    [ "-DUSE_MKL_IF_AVAILABLE=OFF" ]
+    [ "-DUSE_MKL_IF_AVAILABLE=OFF"
+      "-DUSE_SSE=${if sseSupport then "ON" else "OFF"}"
+      "-DUSE_F16C=${if f16cSupport then "ON" else "OFF"}"
+    ]
     ++ (if cudaSupport then [
       "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
