@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dragon-drop";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mwh";
     repo = "dragon";
     rev = "v${version}";
-    sha256 = "0fgzz39007fdjwq72scp0qygp2v3zc5f1xkm0sxaa8zxm25g1bra";
+    sha256 = "sha256-wqG6idlVvdN+sPwYgWu3UL0la5ssvymZibiak3KeV7M=";
   };
 
   nativeBuildInputs = [ pkg-config ];
