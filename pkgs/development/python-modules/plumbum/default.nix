@@ -52,6 +52,12 @@ buildPythonPackage rec {
     "test_local"
   ];
 
+  disabledTestPaths = [
+    # incompatible with pytest7
+    # https://github.com/tomerfiliba/plumbum/issues/594
+    "tests/test_remote.py"
+  ];
+
   meta = with lib; {
     description = " Plumbum: Shell Combinators ";
     homepage = " https://github.com/tomerfiliba/plumbum ";
