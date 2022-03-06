@@ -8165,9 +8165,6 @@ with pkgs;
     inherit (skawarePackages) cleanPackaging;
   };
 
-  # stripped down, needed by steam
-  networkmanager098 = callPackage ../tools/networking/networkmanager/0.9.8 { };
-
   networkmanager = callPackage ../tools/networking/networkmanager { };
 
   networkmanager-iodine = callPackage ../tools/networking/networkmanager/iodine { };
