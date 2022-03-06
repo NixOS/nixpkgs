@@ -12,7 +12,6 @@
 , libcap
 , pciutils
 , systemd
-, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cctools, libobjc, libunwind, sandbox, xnu
@@ -24,6 +23,7 @@
 , version ? null
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux
+, pipewire_0_2
 }:
 
 qtModule {
