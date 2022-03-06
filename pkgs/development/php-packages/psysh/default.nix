@@ -26,6 +26,6 @@ mkDerivation {
     description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
     license = licenses.mit;
     homepage = "https://psysh.org/";
-    maintainers = with maintainers; [ caugner ] ++ teams.php.members;
+    maintainers = teams.php.members;
   };
 }
