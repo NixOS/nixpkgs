@@ -72,6 +72,11 @@
             <literal>[Service]</literal> section is set to
             <literal>true</literal> (exposed via
             <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadIfChanged</link>).
+            A little exception is done for units that were deactivated
+            in the meantime, for example because they require a unit
+            that got stopped before. These are
+            <emphasis role="strong">start</emphasis>ed instead of
+            reloaded.
           </para>
         </listitem>
         <listitem>

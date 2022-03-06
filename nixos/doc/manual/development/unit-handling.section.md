@@ -34,6 +34,9 @@ checks:
   - The rest of the units (mostly `.service` units) are then **reload**ed if
     `X-ReloadIfChanged` in the `[Service]` section is set to `true` (exposed
     via [systemd.services.\<name\>.reloadIfChanged](#opt-systemd.services)).
+    A little exception is done for units that were deactivated in the meantime,
+    for example because they require a unit that got stopped before. These
+    are **start**ed instead of reloaded.
 
   - If the reload flag is not set, some more flags decide if the unit is
     skipped. These flags are `X-RestartIfChanged` in the `[Service]` section

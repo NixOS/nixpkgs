@@ -104,6 +104,19 @@ sub getActiveUnits {
     return $res;
 }
 
+# Returns whether a systemd unit is active
+sub unit_is_active {
+    my ($unit_name) = @_;
+
+    my $mgr = Net::DBus->system->get_service('org.freedesktop.systemd1')->get_object('/org/freedesktop/systemd1');
+    my $units = $mgr->ListUnitsByNames([$unit_name]);
+    if (@{$units} == 0) {
+        return 0;
+    }
+    my $active_state = $units->[0]->[3]; ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+    return $active_state eq 'active' || $active_state eq 'activating';
+}
+
 sub parseFstab {
     my ($filename) = @_;
     my ($fss, $swaps);
@@ -744,6 +757,24 @@ close $listActiveUsers;
 print STDERR "setting up tmpfiles\n";
 system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
 
+# Before reloading we need to ensure that the units are still active. They may have been
+# deactivated because one of their requirements got stopped. If they are inactive
+# but should have been reloaded, the user probably expects them to be started.
+if (scalar(keys %unitsToReload) > 0) {
+    for my $unit (keys %unitsToReload) {
+        if (!unit_is_active($unit)) {
+            # Figure out if we need to start the unit
+            my %unit_info = parse_unit("$out/etc/systemd/system/$unit");
+            if (!(parseSystemdBool(\%unit_info, 'Unit', 'RefuseManualStart', 0) || parseSystemdBool(\%unit_info, 'Unit', 'X-OnlyManualStart', 0))) {
+                $unitsToStart{$unit} = 1;
+                recordUnit($startListFile, $unit);
+            }
+            # Don't reload the unit, reloading would fail
+            delete %unitsToReload{$unit};
+            unrecord_unit($reloadListFile, $unit);
+        }
+    }
+}
 # Reload units that need it. This includes remounting changed mount
 # units.
 if (scalar(keys %unitsToReload) > 0) {

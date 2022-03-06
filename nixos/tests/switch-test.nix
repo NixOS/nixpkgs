@@ -208,6 +208,39 @@ in {
           systemd.services."escaped\\x2ddash".serviceConfig.X-Test = "test";
         };
 
+        unitWithRequirement.configuration = {
+          systemd.services.required-service = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+          systemd.services.test-service = {
+            wantedBy = [ "multi-user.target" ];
+            requires = [ "required-service.service" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+        };
+
+        unitWithRequirementModified.configuration = {
+          imports = [ unitWithRequirement.configuration ];
+          systemd.services.required-service.serviceConfig.X-Test = "test";
+          systemd.services.test-service.reloadTriggers = [ "test" ];
+        };
+
+        unitWithRequirementModifiedNostart.configuration = {
+          imports = [ unitWithRequirement.configuration ];
+          systemd.services.test-service.unitConfig.RefuseManualStart = true;
+        };
+
         restart-and-reload-by-activation-script.configuration = {
           systemd.services = rec {
             simple-service = {
@@ -572,6 +605,32 @@ in {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "the following new units were started:")
+
+        # Ensure units that require changed units are properly reloaded
+        out = switch_to_specialisation("${machine}", "unitWithRequirement")
+        assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: required-service.service, test-service.service\n")
+
+        out = switch_to_specialisation("${machine}", "unitWithRequirementModified")
+        assert_contains(out, "stopping the following units: required-service.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: required-service.service, test-service.service\n")
+        assert_lacks(out, "the following new units were started:")
+
+        # Unless the unit asks to be not restarted
+        out = switch_to_specialisation("${machine}", "unitWithRequirementModifiedNostart")
+        assert_contains(out, "stopping the following units: required-service.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: required-service.service\n")
         assert_lacks(out, "the following new units were started:")
 
     with subtest("failing units"):
