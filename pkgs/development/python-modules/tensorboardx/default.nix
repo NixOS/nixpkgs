@@ -13,7 +13,7 @@
 , pytorch
 , six
 , soundfile
-, tensorflow-tensorboard
+, tensorboard
 , torchvision
 }:
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     pytorch
-    tensorflow-tensorboard
+    tensorboard
     torchvision
   ];
 

@@ -3,7 +3,7 @@
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
-, numpy, tensorflow-tensorboard, absl-py
+, numpy, tensorboard, absl-py
 , setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
@@ -94,8 +94,8 @@ let
       setuptools
       six
       tblib
+      tensorboard
       tensorflow-estimator
-      tensorflow-tensorboard
       termcolor
       typing-extensions
       wheel
@@ -439,7 +439,7 @@ in buildPythonPackage {
   '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorflow-tensorboard, which causes environment collisions.
+  # and the propagated input tensorboard, which causes environment collisions.
   # Another possibility would be to have tensorboard only in the buildInputs
   # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
   postInstall = ''
@@ -469,7 +469,7 @@ in buildPythonPackage {
     typing-extensions
     wrapt
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard
+    tensorboard
   ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
