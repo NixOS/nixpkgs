@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit python3;
+    inherit (python3.pkgs) xmltodict;
     inherit (haskellPackages) hexpat;
     inherit (perlPackages) XMLSAXExpat XMLParser;
     inherit (luaPackages) luaexpat;
