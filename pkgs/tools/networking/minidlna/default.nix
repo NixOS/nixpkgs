@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
+{ lib, stdenv, fetchgit, autoreconfHook, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext, nixosTests }:
 
 let
   pname = "minidlna";
@@ -27,6 +27,8 @@ stdenv.mkDerivation {
     cp minidlna.conf.5 $out/share/man/man5
     cp minidlnad.8 $out/share/man/man8
   '';
+
+  passthru.tests = { inherit (nixosTests) minidlna; };
 
   meta = with lib; {
     description = "Media server software";
