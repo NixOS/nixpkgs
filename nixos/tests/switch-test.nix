@@ -350,6 +350,31 @@ in {
           systemd.timers.test-timer.timerConfig.OnCalendar = lib.mkForce "Fri 2012-11-23 16:00:00";
         };
 
+        hybridSleepModified.configuration = {
+          systemd.targets.hybrid-sleep.unitConfig.X-Test = true;
+        };
+
+        target.configuration = {
+          systemd.targets.test-target.wantedBy = [ "multi-user.target" ];
+          # We use this service to figure out whether the target was modified.
+          # This is the only way because targets are filtered and therefore not
+          # printed when they are started/stopped.
+          systemd.services.test-service = {
+            bindsTo = [ "test-target.target" ];
+            serviceConfig.ExecStart = "${pkgs.coreutils}/bin/sleep infinity";
+          };
+        };
+
+        targetModified.configuration = {
+          imports = [ target.configuration ];
+          systemd.targets.test-target.unitConfig.X-Test = true;
+        };
+
+        targetModifiedStopOnReconfig.configuration = {
+          imports = [ target.configuration ];
+          systemd.targets.test-target.unitConfig.X-StopOnReconfiguration = true;
+        };
+
         path.configuration = {
           systemd.paths.test-watch = {
             wantedBy = [ "paths.target" ];
@@ -820,6 +845,55 @@ in {
         # It changed
         out = machine.succeed("systemctl show test-timer.timer")
         assert_contains(out, "OnCalendar=Fri 2012-11-23 16:00:00")
+
+    with subtest("targets"):
+        # Modifying some special targets like hybrid-sleep.target does nothing
+        out = switch_to_specialisation("${machine}", "hybridSleepModified")
+        assert_contains(out, "stopping the following units: test-timer.timer\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+        # Adding a new target starts it
+        out = switch_to_specialisation("${machine}", "target")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test-target.target\n")
+
+        # Changing a target doesn't print anything because the unit is filtered
+        machine.systemctl("start test-service.service")
+        out = switch_to_specialisation("${machine}", "targetModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("systemctl is-active test-service.service")  # target was not restarted
+
+        # With X-StopOnReconfiguration, the target gets stopped and started
+        out = switch_to_specialisation("${machine}", "targetModifiedStopOnReconfig")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.fail("systemctl is-active test-service.servce")  # target was restarted
+
+        # Remove the target by switching to the old specialisation
+        out = switch_to_specialisation("${machine}", "timerModified")
+        assert_contains(out, "stopping the following units: test-target.target\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test-timer.timer\n")
 
     with subtest("paths"):
         out = switch_to_specialisation("${machine}", "path")
