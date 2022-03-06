@@ -60,6 +60,8 @@ stdenv.mkDerivation {
     smoke-test = nixosTests.bcachefs;
   };
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
