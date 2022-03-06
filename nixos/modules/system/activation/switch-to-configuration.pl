@@ -392,7 +392,11 @@ sub handleModifiedUnit {
                             # exist in new configuration:
                             if (-e "$out/etc/systemd/system/$socket") {
                                 $unitsToStart->{$socket} = 1;
-                                recordUnit($startListFile, $socket);
+                                if ($unitsToStart eq $unitsToRestart) {
+                                    recordUnit($restartListFile, $socket);
+                                } else {
+                                    recordUnit($startListFile, $socket);
+                                }
                                 $socket_activated = 1;
                             }
                             # Remove from units to reload so we don't restart and reload
@@ -410,7 +414,11 @@ sub handleModifiedUnit {
                 # service gets restarted if we're interrupted.
                 if (!$socket_activated) {
                     $unitsToStart->{$unit} = 1;
-                    recordUnit($startListFile, $unit);
+                    if ($unitsToStart eq $unitsToRestart) {
+                        recordUnit($restartListFile, $unit);
+                    } else {
+                        recordUnit($startListFile, $unit);
+                    }
                 }
 
                 $unitsToStop->{$unit} = 1;
