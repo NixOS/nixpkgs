@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
-    license = licenses.wxWindows;
+    license = with licenses; [ lgpl2Plus /* WITH */ wx-exception ];
     maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
     badPlatforms = [ "x86_64-darwin" ];

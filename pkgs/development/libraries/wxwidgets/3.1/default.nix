@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = with platforms; darwin ++ linux;
-    license = licenses.wxWindows;
+    license = with licenses; [ lgpl2Plus /* WITH */ wx-exception ];
     homepage = "https://www.wxwidgets.org/";
     description = "A C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = ''
