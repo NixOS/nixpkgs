@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libiconv, gettext }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libiconv, gettext, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "dosfstools";
@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-compat-symlinks" ];
+
+  checkInputs = [ xxd ];
+  doCheck = true;
 
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
