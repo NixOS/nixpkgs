@@ -700,6 +700,7 @@ in mkLicense lset) ({
 
   publicDomain = {
     fullName = "Public Domain";
+    url = "https://opensource.org/faq#public-domain";
   };
 
   purdueBsd = {
