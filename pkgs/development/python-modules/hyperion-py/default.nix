@@ -2,24 +2,25 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hyperion-py";
-  version = "0.7.4";
+  version = "0.7.5";
   disabled = pythonOlder "3.8";
+
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00x12ppmvlxs3qbdxq06wnzakvwm2m39qhmpp27qfpl137b0qqyj";
+    hash = "sha256-arcnpCQsRuiWCrAz/t4TCjTe8DRDtRuzYp8k7nnjGDk=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +47,9 @@ buildPythonPackage rec {
       --replace " --timeout=9 --cov=hyperion" ""
   '';
 
-  pythonImportsCheck = [ "hyperion" ];
+  pythonImportsCheck = [
+    "hyperion"
+  ];
 
   meta = with lib; {
     description = "Python package for Hyperion Ambient Lighting";
