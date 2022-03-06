@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 }:
 
@@ -14,6 +15,14 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-pl2NWRfFCYyM2qvBt4Ic3wgbGkYZvAO6pX2Set8zYW8=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix flapping test; https://github.com/python-metar/python-metar/issues/161
+      url = "https://github.com/python-metar/python-metar/commit/716fa76682e6c2936643d1cf62e3d302ef29aedd.patch";
+      sha256 = "sha256-y82NN+KDryOiH+eG+2ycXCO9lqQLsah4+YpGn6lM2As=";
+    })
+  ];
 
   checkInputs = [ pytestCheckHook ];
 
