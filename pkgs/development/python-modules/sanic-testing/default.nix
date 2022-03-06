@@ -19,11 +19,14 @@ buildPythonPackage rec {
     sha256 = "17fbb78gvic5s9nlcgwj817fq1f9j9d1d7z6n2ahhinmvyzl9gc8";
   };
 
+  outputs = [
+    "out"
+    "testsout"
+  ];
+
   postPatch = ''
-    # https://github.com/sanic-org/sanic-testing/issues/19
     substituteInPlace setup.py \
-      --replace '"websockets==8.1",' '"websockets>=9.1",' \
-      --replace "httpx==0.18.*" "httpx"
+      --replace "httpx>=0.18,<0.22" "httpx"
   '';
 
   propagatedBuildInputs = [
