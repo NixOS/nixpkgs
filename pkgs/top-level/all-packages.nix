@@ -7078,6 +7078,10 @@ with pkgs;
 
   k6 = callPackage ../development/tools/k6 { };
 
+  xk6 = callPackage ../development/tools/k6/xk6.nix {
+      go = go_1_17;
+  };
+
   l2md = callPackage ../tools/text/l2md { };
 
   lab = callPackage ../applications/version-management/git-and-tools/lab { };
