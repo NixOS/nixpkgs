@@ -54,7 +54,7 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
   passthru.home = result;
 
   meta = with lib; {
-    license = licenses.gpl2Classpath;
+    license = with licenses; [ gpl2Only /* WITH */ classpath-exception ];
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = [ "x86_64-darwin" ]; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];
