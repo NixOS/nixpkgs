@@ -1,5 +1,6 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
 , shared ? !stdenv.hostPlatform.isStatic
+, e2fsprogs, runCommand
 }:
 
 stdenv.mkDerivation rec {
@@ -65,6 +66,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    simple-filesystem = runCommand "e2fsprogs-create-fs" {} ''
+      mkdir -p $out
+      truncate -s10M $out/disc
+      ${e2fsprogs}/bin/mkfs.ext4 $out/disc | tee $out/success
+      ${e2fsprogs}/bin/e2fsck -n $out/disc | tee $out/success
+      [ -e $out/success ]
+    '';
+  };
   meta = with lib; {
     homepage = "http://e2fsprogs.sourceforge.net/";
     changelog = "http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
