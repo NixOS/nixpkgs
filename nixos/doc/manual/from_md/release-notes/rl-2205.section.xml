@@ -980,6 +980,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.github-runner</literal> has been hardened.
+          Notably address families and system calls have been
+          restricted, which may adversely affect some kinds of testing,
+          e.g. using <literal>AF_BLUETOOTH</literal> to test bluetooth
+          devices.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The terraform 0.12 compatibility has been removed and the
           <literal>terraform.withPlugins</literal> and
           <literal>terraform-providers.mkProvider</literal>
