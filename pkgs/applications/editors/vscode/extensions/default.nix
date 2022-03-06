@@ -2071,11 +2071,12 @@ let
         mktplcRef = {
           name = "vscode-pitch-black-theme";
           publisher = "ViktorQvarfordt";
-          version = "1.2.4";
-          sha256 = "sha256-HTXToZv0WWFjuQiofEJuaZNSDTmCUcZ0B3KOn+CVALw=";
+          version = "1.3.0";
+          sha256 = "sha256-1JDm/cWNWwxa1gNsHIM/DIvqjXsO++hAf0mkjvKyi4g=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          license = licenses.mit;
+          maintainers = with maintainers; [ wolfangaukang ];
         };
       };
 
