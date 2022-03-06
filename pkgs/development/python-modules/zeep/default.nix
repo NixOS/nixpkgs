@@ -6,6 +6,7 @@
 , cached-property
 , defusedxml
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , httpx
 , isodate
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-fJLr2LJpbNQTl183R56G7sJILfm04R39qpJxLogQLoo=";
   };
+
+  patches = [
+    (fetchpatch {
+      # fixes pytest_httpx test case; https://github.com/mvantellingen/python-zeep/pull/1293
+      url = "https://github.com/mvantellingen/python-zeep/commit/2907848185adcb4e6d8c093db6c617c64cb8c8bf.patch";
+      hash = "sha256-hpksgMfrBLvYtI1QIs1aHBtFq7C1PWpnAj8BW5ak1/4=";
+    })
+  ];
 
   propagatedBuildInputs = [
     attrs
