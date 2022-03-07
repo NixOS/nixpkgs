@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "2.5.2";
+  version = "2.5.3";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "twitchAPI";
     inherit version;
-    sha256 = "f0ee5388911154375170a83df9a18e8a698fe382cea5d94a3e33ad27a7ce9133";
+    sha256 = "e7987dd8c3d1a3d25fe85ff0c0b0bad492f916c920f618dca8efd6baad3ac704";
   };
 
   propagatedBuildInputs = [
