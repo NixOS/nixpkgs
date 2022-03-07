@@ -9196,6 +9196,8 @@ in {
 
   simpy = callPackage ../development/python-modules/simpy { };
 
+  single-version = callPackage ../development/python-modules/single-version { };
+
   signify = callPackage ../development/python-modules/signify { };
 
   siosocks = callPackage ../development/python-modules/siosocks { };
