@@ -8277,6 +8277,8 @@ in {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  python-zbar = callPackage ../development/python-modules/python-zbar { };
+
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
   };
