@@ -9470,8 +9470,6 @@ with pkgs;
 
   repseek = callPackage ../applications/science/biology/repseek { };
 
-  reicast = callPackage ../applications/emulators/reicast { };
-
   reredirect = callPackage ../tools/misc/reredirect { };
 
   retext = libsForQt5.callPackage ../applications/editors/retext { };
