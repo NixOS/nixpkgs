@@ -28,7 +28,7 @@ in
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (lib) optional optionals optionalString;
-   name = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}-${version}";
+   pname = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}";
 in
 
 let
@@ -41,10 +41,7 @@ in
 
 stdenv.mkDerivation (args // {
 
-  inherit name;
-  inherit version;
-
-  inherit src;
+  inherit pname version src;
 
   patches = map fetchpatch' patches;
 
