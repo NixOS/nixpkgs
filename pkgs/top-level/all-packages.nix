@@ -4484,6 +4484,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  cobang = python3Packages.callPackage ../applications/misc/cobang {
+    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+  };
+
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
