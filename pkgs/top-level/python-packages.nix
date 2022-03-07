@@ -6096,6 +6096,8 @@ in {
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 
+  pixcat = callPackage ../development/python-modules/pixcat { };
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
