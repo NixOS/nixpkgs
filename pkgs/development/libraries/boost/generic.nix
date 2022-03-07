@@ -126,6 +126,13 @@ stdenv.mkDerivation {
     stripLen = 1;
     extraPrefix = "libs/context/";
   })
+  # Fix compiler warning with GCC >= 8; TODO: patch may apply to older versions
+  ++ optional (versionAtLeast version "1.65" &&
+               versionOlder version "1.67") (fetchpatch {
+    url = "https://github.com/boostorg/mpl/commit/f48fd09d021db9a28bd7b8452c175897e1af4485.patch";
+    sha256 = "15d2a636hhsb1xdyp44x25dyqfcaws997vnp9kl1mhzvxjzz7hb0";
+    stripLen = 1;
+  })
   ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
   ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
 
