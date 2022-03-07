@@ -21,7 +21,7 @@
 
 let
   pname = "hatchling";
-  version = "0.18.0";
+  version = "0.20.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -31,7 +31,7 @@ buildPythonPackage {
     owner = "ofek";
     repo = "hatch";
     rev = "${pname}-v${version}";
-    hash = "sha256-kCaEAM0cY1yQcuHfvnaLs3smN9MKATjrrQTXpCfGmWc=";
+    hash = "sha256-Sm3utqkuofVDn815HPj501KEuypnaYKm06ehsu+m3i4=";
   };
 
   prePatch = ''
