@@ -10644,7 +10644,7 @@ with pkgs;
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
-  txt2tags = callPackage ../tools/text/txt2tags { };
+  txt2tags = python3.pkgs.callPackage ../tools/text/txt2tags { };
 
   txtw = callPackage ../tools/misc/txtw { };
 
