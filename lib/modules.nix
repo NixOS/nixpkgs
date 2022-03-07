@@ -799,13 +799,14 @@ rec {
       compare = a: b: (a.priority or 1000) < (b.priority or 1000);
     in sort compare defs';
 
-  /* Hack for backward compatibility: convert options of type
-     optionSet to options of type submodule.  FIXME: remove
-     eventually. */
   fixupOptionType = loc: opt:
     let
       options = opt.options or
         (throw "Option `${showOption loc}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
+
+      # Hack for backward compatibility: convert options of type
+      # optionSet to options of type submodule.  FIXME: remove
+      # eventually.
       f = tp:
         let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
         in
