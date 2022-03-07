@@ -1005,6 +1005,15 @@
     "vendorSha256": null,
     "version": "0.14.5"
   },
+  "snowflake": {
+    "owner": "chanzuckerberg",
+    "provider-source-address": "registry.terraform.io/chanzuckerberg/snowflake",
+    "repo": "terraform-provider-snowflake",
+    "rev": "v0.25.36",
+    "sha256": "sha256-AeIQfdn68EnSj2BXZIsC0+L3EJ6tRHLD0NYHdPcf89w=",
+    "vendorSha256": "sha256-oYjoTZ79ricoFZTokiFcCKNXAeqFvW4RIMQmTp763gE=",
+    "version": "0.25.36"
+  },
   "sops": {
     "owner": "carlpett",
     "provider-source-address": "registry.terraform.io/carlpett/sops",
