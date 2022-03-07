@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "bluedevil";
+  pname = "bluedevil";
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
     qtbase qtdeclarative bluez-qt
