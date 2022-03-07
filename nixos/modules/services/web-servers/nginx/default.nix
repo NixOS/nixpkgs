@@ -259,6 +259,7 @@ let
           # UDP listener for **QUIC+HTTP/3
           listen ${addr}:${toString port} http3 "
           + optionalString vhost.default "default_server "
+          + optionalString vhost.reuseport "reuseport "
           + ";" else "")
           + "
 
@@ -266,6 +267,7 @@ let
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
+          + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
