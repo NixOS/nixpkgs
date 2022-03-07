@@ -12145,6 +12145,8 @@ with pkgs;
 
   flasm = callPackage ../development/compilers/flasm { };
 
+  flycast = callPackage ../applications/emulators/flycast { };
+
   flyctl = callPackage ../development/web/flyctl { };
 
   fluidd = callPackage ../applications/misc/fluidd { };
