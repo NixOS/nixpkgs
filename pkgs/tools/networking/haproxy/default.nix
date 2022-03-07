@@ -11,11 +11,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1vo8ZvcH/5O1vSfOaecKiWTXtweFSLUYaNR9ffOUP+Q=";
+    sha256 = "sha256-3EAV2Fx/74EbRZgDt2MAHYCbB6klHcGGT+25oHtErvs=";
   };
 
   buildInputs = [ openssl zlib ]
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # TODO: make it work on bsd as well
   makeFlags = [
-    "PREFIX=\${out}"
+    "PREFIX=${placeholder "out"}"
     ("TARGET=" + (if stdenv.isSunOS  then "solaris"
              else if stdenv.isLinux  then "linux-glibc"
              else if stdenv.isDarwin then "osx"
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = "https://haproxy.org";
-    license = licenses.gpl2;
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
+    license = with licenses; [ gpl2Plus lgpl21Only ];
     maintainers = with maintainers; [ fuzzy-id ];
     platforms = with platforms; linux ++ darwin;
   };

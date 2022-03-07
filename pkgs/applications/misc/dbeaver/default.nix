@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
-  version = "21.3.5"; # When updating also update fetchedMavenDeps.sha256
+  version = "22.0.0"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-xJYC+p8HeY4XOzArZMKRvOafW82npMMfwlqlxsH6Ycg=";
+    sha256 = "sha256-LSEsaCEUoKViKC+IjJrV/w1VzOGi4EOr4LnAutOIyJU=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {

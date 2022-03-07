@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "berry";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
     repo = pname;
     rev = version;
-    hash = "sha256-E1kjqSv2eylJ/9EGcxQrJ2P7VaehyUiirk0TxlPWSnM=";
+    hash = "sha256-6asph0QXzhmHuYcfrLcQ8RTP4QzX8m6AcCp5ImA++9M=";
   };
 
   nativeBuildInputs = [
@@ -75,5 +75,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-# TODO: report upstream that `which` is not POSIX; the `command` shell builtin
-# should be used instead
