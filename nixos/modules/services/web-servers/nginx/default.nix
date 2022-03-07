@@ -260,6 +260,7 @@ let
           listen ${addr}:${toString port} http3 "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";" else "")
           + "
 
