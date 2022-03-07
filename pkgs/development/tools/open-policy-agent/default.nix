@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.37.2";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "sha256-2DkqRKAN7eOTBG6P3YYa5N9oJ0ndm35jIxK7o5Z3dfA=";
+    sha256 = "sha256-RGGxqmQ0mZ5iSAzDvUU6mAlCve3MknuNr2wAzHcV3RQ=";
   };
   vendorSha256 = null;
 

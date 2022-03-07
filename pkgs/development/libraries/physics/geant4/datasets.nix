@@ -32,7 +32,7 @@ let
       };
     };
 in
-  builtins.listToAttrs (map (a: { inherit (a) pname; value = mkDataset a; }) [
+  builtins.listToAttrs (map (a: { name = a.pname; value = mkDataset a; }) [
     {
       pname = "G4NDL";
       version = "4.6";

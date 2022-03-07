@@ -684,8 +684,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "11.7.0";
-          sha256 = "0apjjlfdwljqih394ggz2d8m599pyyjrb0b4cfcz83601b7hk3x6";
+          version = "12.0.1";
+          sha256 = "1xv1vzx643qa8jhjpnpv2wrymz38w130vm0idkcl77lh209r5i8x";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1007,8 +1007,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.35.2022010609";
-            sha256 = "06ryx8b605fd1q2zz8jps7j8r506qwym93x1ra1kc0h9g8a8r7sa";
+            version = "0.37.2022030309";
+            sha256 = "1icmg2ssdkxvwp8mn8zzakwn42hrdglsdgfnaf8va4vd9mqixl1v";
           };
           meta = { license = lib.licenses.mit; };
         };
@@ -1167,10 +1167,14 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.2.0";
-          sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
+          version = "8.23.0";
+          sha256 = "sha256-IHLsAuTi+GBZViL2KozudebNY745RiOYNATzabQfnOY=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
+          description = "LaTeX Workshop Extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop";
+          homepage = "https://github.com/James-Yu/LaTeX-Workshop";
           license = licenses.mit;
         };
       };

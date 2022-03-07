@@ -4419,6 +4419,8 @@ with pkgs;
 
   brotli = callPackage ../tools/compression/brotli { };
 
+  biodiff = callPackage ../development/tools/biodiff { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
@@ -9126,6 +9128,8 @@ with pkgs;
   };
 
   pubs = callPackage ../tools/misc/pubs {};
+
+  pulumictl = callPackage ../development/tools/pulumictl { };
 
   pure-prompt = callPackage ../shells/zsh/pure-prompt { };
 
@@ -25796,6 +25800,7 @@ with pkgs;
   };
   wireshark-qt = wireshark;
 
+  tshark = wireshark-cli;
   wireshark-cli = wireshark.override {
     withQt = false;
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
@@ -33619,6 +33624,8 @@ with pkgs;
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
+
+  i3a = callPackage ../misc/i3a { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
