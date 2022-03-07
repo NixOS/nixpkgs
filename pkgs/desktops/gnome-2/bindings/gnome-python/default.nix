@@ -5,11 +5,11 @@ with lib;
 let
   inherit (python2.pkgs) python pygobject2 pygtk dbus-python;
 in stdenv.mkDerivation rec {
-  version = "2.28";
-  name = "gnome-python-${version}.1";
+  pname = "gnome-python";
+  version = "2.28.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-python/${version}/${name}.tar.bz2";
+    url = "mirror://gnome/sources/gnome-python/${lib.versions.majorMinor version}/gnome-python-${version}.tar.bz2";
     sha256 = "759ce9344cbf89cf7f8449d945822a0c9f317a494f56787782a901e4119b96d8";
   };
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   # gnome-python expects that .pth file is already installed by PyGTK in the
   # same directory. This is not the case for Nix.
   postInstall = ''
-    echo "gtk-2.0" > $out/${python2.sitePackages}/${name}.pth
+    echo "gtk-2.0" > $out/${python2.sitePackages}/gnome-python-${version}.pth
   '';
 
   meta = with lib; {
