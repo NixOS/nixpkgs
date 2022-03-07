@@ -496,6 +496,9 @@ rec {
             options = mkOption {
               type = types.submoduleWith {
                 modules = [ { options = decl.options; } ];
+                # `null` is not intended for use by modules. It is an internal
+                # value that means "whatever the user has declared elsewhere".
+                # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
                 shorthandOnlyDefinesConfig = null;
               };
             };
