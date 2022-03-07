@@ -1,18 +1,21 @@
 { lib, stdenv, fetchurl, tcl, tk }:
 
 stdenv.mkDerivation rec {
-  pname = "tkcvs";
-  version = "8.2.1";
+  pname = "tkrev";
+  version = "9.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tkcvs/tkcvs_${lib.replaceStrings ["."] ["_"] version}.tar.gz";
-    sha256 = "0kvj6rcx1153wq0n1lmd8imbrki6xy5wxghwzlb9i15l65sclg3i";
+    url = "mirror://sourceforge/tkcvs/tkrev_${version}.tar.gz";
+    sha256 = "sha256-WHDZPShEB9Q+Bjbb37mogJLUZk2GuWoO8bz+Zydc7i4=";
   };
 
   buildInputs = [ tcl tk ];
 
   patchPhase = ''
-    sed -e 's@exec wish@exec ${tk}/bin/wish@' -i tkcvs/tkcvs.tcl tkdiff/tkdiff
+    for file in tkrev/tkrev.tcl tkdiff/tkdiff; do
+        substituteInPlace "$file" \
+            --replace "exec wish" "exec ${tk}/bin/wish"
+    done
   '';
 
   installPhase = ''
