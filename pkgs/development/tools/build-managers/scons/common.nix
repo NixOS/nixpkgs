@@ -7,7 +7,10 @@ python.pkgs.buildPythonApplication rec {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/scons/${pname}-${version}.tar.gz";
+    url = if lib.versionAtLeast version "4.3.0" then
+      "mirror://sourceforge/project/scons/scons/${version}/SCons-${version}.tar.gz"
+    else
+      "mirror://sourceforge/scons/scons-${version}.tar.gz";
     inherit sha256;
   };
 
