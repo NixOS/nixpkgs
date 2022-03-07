@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.16";
+  version = "0.6.17";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    sha256 = "sha256-vRnzsV9pubAmyVSxZpBK+mD9Bkbt6BQYo5S0Jsl26Ns=";
+    sha256 = "sha256-K2va9as+z00txpg/0fR89+kpMzpQSiSSIV489NDs8Bs=";
   };
 
   propagatedBuildInputs = with python3Packages; [
