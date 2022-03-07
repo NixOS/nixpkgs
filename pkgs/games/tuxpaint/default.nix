@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   # stamps
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2014-08-23/tuxpaint-stamps-2014.08.23.tar.gz";
-    sha256 = "0rhlwrjz44wp269v3rid4p8pi0i615pzifm1ym6va64gn1bms06q";
+    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2021-11-25/tuxpaint-stamps-2021.11.25.tar.gz";
+    sha256 = "sha256-y1XuIbLSW0QO4has+rC7jZBq8cma28d+jbEe7DBYnVI=";
   };
 
   postInstall = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     # Install stamps
     tar xzf $stamps
-    cd tuxpaint-stamps-2014.08.23
+    cd tuxpaint-stamps-*
     make install-all PREFIX=$out
     rm -rf $out/share/tuxpaint/stamps/military
   '';
