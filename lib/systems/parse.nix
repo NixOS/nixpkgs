@@ -364,8 +364,8 @@ rec {
     musleabihf   = { float = "hard"; };
     musl         = {};
 
-    uclibceabihf = { float = "soft"; };
-    uclibceabi   = { float = "hard"; };
+    uclibceabi   = { float = "soft"; };
+    uclibceabihf = { float = "hard"; };
     uclibc       = {};
 
     unknown = {};
