@@ -155,7 +155,6 @@ with python.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "wsproto==1.0.*" "wsproto" \
       --replace "zeroconf==0.38.*" "zeroconf"
-
   '';
 
   meta = with lib; {
