@@ -12167,6 +12167,8 @@ with pkgs;
 
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
+  s5 = callPackage ../tools/security/s5 { };
+
   s5cmd = callPackage ../tools/networking/s5cmd { };
 
   sacad = callPackage ../tools/misc/sacad { };
