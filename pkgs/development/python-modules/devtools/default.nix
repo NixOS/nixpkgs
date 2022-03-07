@@ -44,6 +44,8 @@ buildPythonPackage rec {
     "test_print_subprocess"
     # sensitive to timing
     "test_multiple_not_verbose"
+    # sensitive to interpreter output
+    "test_simple_vars"
   ];
 
   pythonImportsCheck = [
