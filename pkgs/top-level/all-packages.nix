@@ -9615,6 +9615,8 @@ with pkgs;
 
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
+  s5 = callPackage ../tools/security/s5 { };
+
   s5cmd = callPackage ../tools/networking/s5cmd { };
 
   s3gof3r = callPackage ../tools/networking/s3gof3r { };
