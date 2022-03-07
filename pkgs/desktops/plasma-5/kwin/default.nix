@@ -18,7 +18,7 @@
 # TODO (ttuegel): investigate qmlplugindump failure
 
 mkDerivation {
-  name = "kwin";
+  pname = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     libepoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
