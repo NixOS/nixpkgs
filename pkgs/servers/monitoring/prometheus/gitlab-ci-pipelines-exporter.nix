@@ -24,7 +24,6 @@ buildGoModule rec {
     description = "Prometheus / OpenMetrics exporter for GitLab CI pipelines insights";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.darwin;
     maintainers = with maintainers; [ mmahut mvisonneau ];
   };
 }
