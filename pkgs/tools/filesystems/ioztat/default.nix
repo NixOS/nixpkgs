@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ioztat";
-  version = "1.1.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
     repo = "ioztat";
     rev = "v${version}";
-    sha256 = "wDRcFlXmXTc1J9MQZqILfPp5jUhX6wW4nOnqspIWVjQ=";
+    sha256 = "sha256-8svMijgVxSuquPFO2Q2HeqGLdMkwhiujS1DSxC/LRRk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -24,12 +24,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ioztat $out/bin
+    runHook preInstall
+
+    install -vDt $out/bin -m 0555 ioztat
 
     if [ -f ioztat.8 ]; then
       installManPage ioztat.8
     fi
+
+    runHook postInstall
   '';
 
   meta = with lib; {
