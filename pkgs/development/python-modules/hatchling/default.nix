@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 
 # runtime
@@ -21,22 +21,16 @@
 
 let
   pname = "hatchling";
-  version = "0.20.0";
+  version = "0.20.1";
 in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "ofek";
-    repo = "hatch";
-    rev = "${pname}-v${version}";
-    hash = "sha256-Sm3utqkuofVDn815HPj501KEuypnaYKm06ehsu+m3i4=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-l1VRce5H3CSAwZBeuxRyy7bNpOM6zX5s2L1/DXPo/Bg=";
   };
-
-  prePatch = ''
-    cd backend
-  '';
 
   # listed in backend/src/hatchling/ouroboros.py
   propagatedBuildInputs = [
@@ -51,6 +45,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [
     "hatchling"
+    "hatchling.build"
   ];
 
   # tries to fetch packages from the internet
@@ -79,6 +74,6 @@ buildPythonPackage {
     description = "Modern, extensible Python build backend";
     homepage = "https://ofek.dev/hatch/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa ofek ];
   };
 }
