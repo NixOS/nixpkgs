@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # TODO: make it work on bsd as well
   makeFlags = [
-    "PREFIX=\${out}"
+    "PREFIX=${placeholder "out"}"
     ("TARGET=" + (if stdenv.isSunOS  then "solaris"
              else if stdenv.isLinux  then "linux-glibc"
              else if stdenv.isDarwin then "osx"
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = "https://haproxy.org";
-    license = licenses.gpl2;
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
+    license = with licenses; [ gpl2Plus lgpl21Only ];
     maintainers = with maintainers; [ fuzzy-id ];
     platforms = with platforms; linux ++ darwin;
   };
