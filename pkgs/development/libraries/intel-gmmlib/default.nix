@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ primeos SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
