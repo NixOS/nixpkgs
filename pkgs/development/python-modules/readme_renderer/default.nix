@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "readme-renderer";
-  version = "32.0";
+  version = "33.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;
-    sha256 = "sha256-tRK+r6Z5gmDH1a8+Gx8Jfli/zZpXXafE3dXgN0kKW4U=";
+    sha256 = "sha256-47U7yEvWrwVOTMH+NWfcGuGfVUE0IhBDo/jGdOIiCds=";
   };
 
   propagatedBuildInputs = [
