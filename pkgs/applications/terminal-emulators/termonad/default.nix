@@ -3,7 +3,8 @@
 let
   termonadEnv = haskellPackages.ghcWithPackages (self: [ self.termonad ] ++ packages self);
 in stdenv.mkDerivation {
-  name = "termonad-with-packages-${termonadEnv.version}";
+  pname = "termonad-with-packages";
+  inherit (termonadEnv) version;
 
   nativeBuildInputs = [ makeWrapper ];
 
