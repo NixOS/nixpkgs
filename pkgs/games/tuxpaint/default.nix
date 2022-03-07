@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/tuxpaint/stamps/military
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Open Source Drawing Software for Children";
     homepage = "http://www.tuxpaint.org/";
