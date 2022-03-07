@@ -128,7 +128,6 @@ buildPythonPackage rec {
     "tests/integrations/rq/"
     # broken since pytest 7.0.1; AssertionError: previous item was not torn down properly
     "tests/utils/test_contextvars.py"
-
   ];
 
   pythonImportsCheck = [
