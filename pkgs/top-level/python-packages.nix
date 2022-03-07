@@ -8341,8 +8341,6 @@ in {
 
   pytweening = callPackage ../development/python-modules/pytweening { };
 
-  pytwitchapi = callPackage ../development/python-modules/pytwitchapi { };
-
   pytz = callPackage ../development/python-modules/pytz { };
 
   pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
