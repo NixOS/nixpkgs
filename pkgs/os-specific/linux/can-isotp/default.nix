@@ -12,18 +12,14 @@ stdenv.mkDerivation {
     rev = "21a3a59e2bfad246782896841e7af042382fcae7";
     sha256 = "1laax93czalclg7cy9iq1r7hfh9jigh7igj06y9lski75ap2vhfq";
   };
+
   makeFlags = kernel.makeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  buildPhase = ''
-    make modules $makeFlags
-  '';
-
-  installPhase = ''
-    make modules_install $makeFlags
-  '';
+  buildFlags = [ "modules" ];
+  installTargets = [ "modules_install" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
