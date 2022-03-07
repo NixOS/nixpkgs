@@ -42,7 +42,6 @@ buildPythonPackage rec {
   # check in passthru.tests.pytest to escape infinite recursion with sanic
   doCheck = false;
   doInstallCheck = false;
-  dontUsePythonImportsCheck = true;
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
