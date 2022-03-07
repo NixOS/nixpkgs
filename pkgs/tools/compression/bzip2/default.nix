@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    ln -s libbz2.so.1.0.6 $out/lib/libbz2.so.1.0
+  '';
+
   meta = with lib; {
     description = "High-quality data compression program";
     homepage = "https://www.sourceware.org/bzip2";
