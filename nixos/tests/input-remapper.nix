@@ -18,7 +18,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
         services.input-remapper.enable = true;
         users.users.sybil = { isNormalUser = true; group = "wheel"; };
         test-support.displayManager.auto.user = user.name;
-        # passwordless pkexec bodge
+        # workaround for pkexec not working in the test environment
+        # Error creating textual authentication agent:
+        #   Error opening current controlling terminal for the process (`/dev/tty'):
+        #   No such device or address
+        # passwordless pkexec with polkit module also doesn't work
+        # to allow the program to run, we replace pkexec with sudo
+        # and turn on passwordless sudo
+        # this is not correct in general but good enough for this test
         security.sudo = { enable = true; wheelNeedsPassword = false; };
         security.wrappers.pkexec = pkgs.lib.mkForce
           {
