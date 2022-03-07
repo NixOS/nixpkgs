@@ -2,7 +2,7 @@
 
 let
   pname = "ytmdesktop";
-  version = "1.13.0";
+  version = "1.16.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
