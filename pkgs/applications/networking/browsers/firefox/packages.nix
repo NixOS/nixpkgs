@@ -32,10 +32,10 @@ rec {
 
   firefox-esr-91 = common rec {
     pname = "firefox-esr";
-    version = "91.6.1esr";
+    version = "91.7.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "e72ff7114e251ec3558f47bb45e4017fe4c665a95e0a108d5818c628b3de44c92f57cfb3dd9f5a25b7abad889be228f89dda838bc20fc9617c90655694184ed5";
+      sha512 = "925811989d8a91d826ba356bd46ac54be8153288ec0319c28d2bfbe89191e62e107691159dd7ca247253e2a4952eb59a5b9613e3feea3f5351238d4822e26301";
     };
 
     meta = {
