@@ -213,6 +213,7 @@ in
       sha256 = "sha256-UXiitc3jZlgXlCsDPS+xEFLNRVgRbn8BCCXUEqAWlII=";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+    disableIPC = true;
   };
 
   moreheaders = {
