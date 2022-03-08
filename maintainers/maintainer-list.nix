@@ -8822,6 +8822,12 @@
     githubId = 8214542;
     name = "Nicolò Balzarotti";
   };
+  nidabdella = {
+    name = "Mohamed Nidabdella";
+    email = "nidabdella.mohamed@gmail.com";
+    github = "nidabdella";
+    githubId = 8083813;
+  };
   NieDzejkob = {
     email = "kuba@kadziolka.net";
     github = "NieDzejkob";
