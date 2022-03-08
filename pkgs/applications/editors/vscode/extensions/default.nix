@@ -536,6 +536,19 @@ let
         };
       };
 
+      daohong-emilio.yash = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "daohong-emilio";
+          name = "yash";
+          version = "0.2.8";
+          sha256 = "ummOEBSXUI78hBb1AUh+x339T7ocB/evOVaz79geHRM=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
       davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-markdownlint";
