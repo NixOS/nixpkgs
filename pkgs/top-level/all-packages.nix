@@ -305,6 +305,8 @@ with pkgs;
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  comitium = callPackage ../pkgs/applications/networking/feedreaders/comitium { };
+
   commitlint = nodePackages."@commitlint/cli";
 
   commit-formatter = callPackage ../applications/version-management/commit-formatter { };
