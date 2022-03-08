@@ -1619,6 +1619,10 @@ self: super: {
 
   hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
+  # Test suite doesn't compile with aeson 2.0
+  # https://github.com/hercules-ci/hercules-ci-agent/pull/387
+  hercules-ci-api-agent = dontCheck super.hercules-ci-api-agent;
+
   hercules-ci-cli = pkgs.lib.pipe super.hercules-ci-cli [
     unmarkBroken
     (overrideCabal (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
@@ -2186,12 +2190,6 @@ self: super: {
       "-t" "!*/compiled/ns*"
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.heist);
-  # https://github.com/hercules-ci/hercules-ci-agent/issues/352
-  hercules-ci-api-agent = assert super.hercules-ci-api-agent.version == "0.4.1.0"; overrideCabal (drv: {
-    testFlags = [
-      "--skip" "/hercules-ci-api/Hercules.API.Agent.Evaluate.EvaluateEvent.DerivationInfo/DerivationInfo/ToJSON/encodes v2 correctly/"
-    ] ++ drv.testFlags or [];
-  }) (doJailbreak super.hercules-ci-api-agent);
   # https://github.com/emc2/HUnit-Plus/issues/26
   HUnit-Plus = dontCheck super.HUnit-Plus;
   # https://github.com/ewestern/haskell-postgis/issues/7
