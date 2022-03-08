@@ -4484,6 +4484,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  cobang = python3Packages.callPackage ../applications/misc/cobang {
+    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+  };
+
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
@@ -8273,6 +8277,8 @@ with pkgs;
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
+  pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
+
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
   pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
@@ -9561,6 +9567,8 @@ with pkgs;
   rustcat = callPackage ../tools/networking/rustcat {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rustdesk = callPackage ../applications/networking/remote/rustdesk { };
 
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -18628,6 +18636,8 @@ with pkgs;
 
   libschrift = callPackage ../development/libraries/libschrift { };
 
+  libsciter = callPackage ../development/libraries/libsciter { };
+
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
@@ -18958,6 +18968,8 @@ with pkgs;
   libytnef = callPackage ../development/libraries/libytnef { };
 
   libyubikey = callPackage ../development/libraries/libyubikey { };
+
+  libyuv = callPackage ../development/libraries/libyuv { };
 
   libzapojit = callPackage ../development/libraries/libzapojit { };
 
@@ -27933,7 +27945,7 @@ with pkgs;
   navipowm = callPackage ../applications/misc/navipowm { };
 
   netbeans = callPackage ../applications/editors/netbeans {
-    jdk = jdk11;
+    jdk = jdk17;
   };
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };

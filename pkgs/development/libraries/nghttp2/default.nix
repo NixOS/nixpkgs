@@ -10,6 +10,10 @@
 , enableJemalloc ? false, jemalloc ? null
 , enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
 , enablePython ? false, python ? null, cython ? null, ncurses ? null, setuptools ? null
+
+# downstream dependencies, for testing
+, curl
+, libsoup
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -72,6 +76,10 @@ stdenv.mkDerivation rec {
   '';
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
+
+  passthru.tests = {
+    inherit curl libsoup;
+  };
 
   meta = with lib; {
     homepage = "https://nghttp2.org/";

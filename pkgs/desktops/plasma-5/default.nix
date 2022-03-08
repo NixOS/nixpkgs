@@ -76,8 +76,8 @@ let
 
         mkDerivation = args:
           let
-            inherit (args) name;
-            sname = args.sname or name;
+            inherit (args) pname;
+            sname = args.sname or pname;
             inherit (srcs.${sname}) src version;
 
             outputs = args.outputs or [ "out" ];
@@ -98,8 +98,7 @@ let
               };
           in
           mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit pname version meta outputs setupHook src;
           });
       };
 

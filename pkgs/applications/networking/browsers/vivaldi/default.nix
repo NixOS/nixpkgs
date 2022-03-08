@@ -12,6 +12,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
 , commandLineArgs ? ""
+, pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
 
 let
@@ -40,7 +41,8 @@ in stdenv.mkDerivation rec {
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo
     libdrm mesa
-  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
+  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
+    ++ lib.optional pulseSupport libpulseaudio;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)

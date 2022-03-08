@@ -8544,6 +8544,17 @@
     githubId = 25388474;
     name = "Matej Urbas";
   };
+  mvisonneau = {
+    name = "Maxime VISONNEAU";
+    email = "maxime@visonneau.fr";
+    matrix = "@maxime:visonneau.fr";
+    github = "mvisonneau";
+    githubId = 1761583;
+    keys = [{
+      longkeyid = "rsa4096/0x150D6F0AE9198D24";
+      fingerprint = "EC63 0CEA E8BC 5EE5 5C58  F2E3 150D 6F0A E919 8D24";
+    }];
+  };
   mvnetbiz = {
     email = "mvnetbiz@gmail.com";
     matrix = "@mvtva:matrix.org";
@@ -9109,6 +9120,12 @@
     github = "odi";
     githubId = 158758;
     name = "Oliver Dunkl";
+  };
+  ofek = {
+    email = "oss@ofek.dev";
+    github = "ofek";
+    githubId = 9677399;
+    name = "Ofek Lev";
   };
   offline = {
     email = "jaka@x-truder.net";
