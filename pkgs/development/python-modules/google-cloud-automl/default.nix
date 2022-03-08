@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.7.1";
+  version = "2.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NHjHzZm20jDdIg91Zr0ytM0V2sHAmZUF0hlD1C9DeSM=";
+    hash = "sha256-CUsLMX0zRONChgzejZnBztth5ORMZyb6rj6mok2pMMU=";
   };
 
   propagatedBuildInputs = [
