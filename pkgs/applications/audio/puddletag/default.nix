@@ -2,25 +2,38 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "puddletag";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
-    owner = "keithgg";
+    owner = "puddletag";
     repo = "puddletag";
     rev = version;
-    sha256 = "sha256-9l8Pc77MX5zFkOqU00HFS8//3Bzd2OMnVV1brmWsNAQ=";
+    hash = "sha256-eilETaFvvPMopIbccV1uLbpD55kHX9KGTCcGVXaHPgM=";
   };
-
-  sourceRoot = "source/source";
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [ chromaprint ] ++ (with python3Packages; [
+    python3Packages.chromaprint
     configobj
+    levenshtein
+    lxml
     mutagen
+    pyacoustid
     pyparsing
     pyqt5
   ]);
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "levenshtein==0.16.0" "levenshtein" \
+      --replace "pyparsing==3.0.7" "pyparsing" \
+      --replace "pyqt5==5.15.6" "pyqt5" \
+      --replace "pyqt5-sip==12.9.0" "pyqt5-sip" \
+      --replace "rapidfuzz==1.8.3" "rapidfuzz"
+    # According to PyPi, 'pyqt5-qt5' is a subset of 'pyqt5'.
+    sed -i '/pyqt5-qt5/d' requirements.txt
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
