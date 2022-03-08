@@ -334,6 +334,8 @@ with pkgs;
 
   deadnix = callPackage ../development/tools/deadnix { };
 
+  dottrace = callPackage ../development/tools/dottrace { };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
