@@ -50,7 +50,7 @@ in
       terminal_input console serial
     '';
 
-    services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
+    services.zfs.expandOnBoot = mkIf cfg.zfs.enable (lib.mkDefault "all");
     boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
     # Allow root logins
