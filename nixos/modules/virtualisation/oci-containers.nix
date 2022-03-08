@@ -22,11 +22,13 @@ let
           type = with types; nullOr package;
           default = null;
           description = ''
-            Path to an image file to load instead of pulling from a registry.
-            If defined, do not pull from registry.
+            Path to an image file to load before running the image. This can
+            be used to bypass pulling the image from the registry.
 
-            You still need to set the <literal>image</literal> attribute, as it
-            will be used as the image name for docker to start a container.
+            The <literal>image</literal> attribute must match the name and
+            tag of the image contained in this file, as they will be used to
+            run the container with that image. If they do not match, the
+            image will be pulled from the registry as usual.
           '';
           example = literalExpression "pkgs.dockerTools.buildImage {...};";
         };
