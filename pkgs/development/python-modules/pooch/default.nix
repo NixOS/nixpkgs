@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pooch";
   version = "1.6.0";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
