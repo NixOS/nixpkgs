@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+# image metadata:
+# hw_firmware_type=uefi
+
 let
   inherit (lib) mkIf mkDefault;
   cfg = config.openstack;
