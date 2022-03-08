@@ -63,9 +63,9 @@ mkDerivation rec {
   ];
 
   postInstallPhase = ''
-      # Make a desktop item
-      mkdir -p $out/share/icons/ $out/share/applications/
-      cp ../data/images/logo.png $out/share/icons/hdrmerge.png
+    # Make a desktop item
+    mkdir -p $out/share/icons/ $out/share/applications/
+    cp ../data/images/logo.png $out/share/icons/hdrmerge.png
   '';
 
   meta = with lib; {
