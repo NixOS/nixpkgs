@@ -29,12 +29,18 @@ buildPythonPackage rec {
 
   # zope.interface collision
   doCheck = !isPy27;
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
   checkInputs = [
     git
     mock
     twisted
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "towncrier" ];
 
   meta = with lib; {
