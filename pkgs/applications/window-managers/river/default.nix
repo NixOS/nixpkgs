@@ -61,6 +61,17 @@ stdenv.mkDerivation rec {
   */
   installFlags = [ "DESTDIR=$(out)" ];
 
+  postInstall = ''
+    mkdir -p $out/share/wayland-sessions
+    cp contrib/river.desktop $out/share/wayland-sessions/
+  '';
+
+  passthru = {
+    providedSessions = [
+     "river"
+    ];
+  };
+
   meta = with lib; {
     homepage = "https://github.com/ifreund/river";
     description = "A dynamic tiling wayland compositor";
