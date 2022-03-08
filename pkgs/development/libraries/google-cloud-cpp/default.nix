@@ -25,7 +25,6 @@ let
     repo = "googleapis";
     rev = googleapisRev;
     hash = "sha256-sIQVFQhE3Ae6ia45apzdgtwzglMM4hFZ8efNAhMO5ZY=";
-
   };
   excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
