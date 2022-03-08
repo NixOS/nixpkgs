@@ -55,8 +55,9 @@ in
 
       configFile = pkgs.writeText "configuration.nix"
         ''
-          {
-            imports = [ <nixpkgs/nixos/modules/virtualisation/openstack-config.nix> ];
+          { modulesPath, ... }: {
+            imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
+            openstack.zfs.enable = true;
           }
         '';
 
