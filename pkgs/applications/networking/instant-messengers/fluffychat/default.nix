@@ -25,7 +25,7 @@ flutter.mkFlutterApp rec {
     icon = "fluffychat";
     desktopName = "Fluffychat";
     genericName = "Chat with your friends (matrix client)";
-    categories = "Chat;Network;InstantMessaging;";
+    categories = [ "Chat" "Network" "InstantMessaging" ];
   };
 
   buildInputs = [
