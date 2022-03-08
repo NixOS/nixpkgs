@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ac688593279c48d7863f0a90457202ff9b235e3ee8862498e8a5b8f867cc137";
+    sha256 = "sha256-ZmoBaY0OM2pQcqasGCJQIeN6Rmbo4xlYK7LtH7SecgY=";
   };
 
   propagatedBuildInputs = [
