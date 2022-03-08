@@ -1519,6 +1519,8 @@ in {
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
+  coqui-trainer = callPackage ../development/python-modules/coqui-trainer {};
+
   cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
