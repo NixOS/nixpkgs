@@ -140,12 +140,16 @@ let
       # they are not really part of the library.
       ./install-fwupdplugin-to-out.patch
 
+      # Fix detection of installed tests
+      # https://github.com/fwupd/fwupd/issues/3880
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/5bc546221331feae9cedc1892219a25d8837955f.patch";
+        sha256 = "XcLhcDrB2/MFCXjKAyhftQgvJG4BBkp07geM9eK3q1g=";
+      })
+
       # Installed tests are installed to different output
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
       ./installed-tests-path.patch
-
-      # Tests detect fwupd is installed when prefix is /usr.
-      ./fix-install-detection.patch
 
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
