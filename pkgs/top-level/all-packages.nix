@@ -32136,6 +32136,8 @@ with pkgs;
 
   tebreak = callPackage ../applications/science/biology/tebreak { };
 
+  treepl = callPackage ../applications/science/biology/treepl { };
+
   trimal = callPackage ../applications/science/biology/trimal { };
 
   truvari = callPackage ../applications/science/biology/truvari { };
