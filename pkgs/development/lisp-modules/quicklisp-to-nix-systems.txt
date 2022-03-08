@@ -178,6 +178,7 @@ mgl-pax
 minheap
 misc-extensions
 mk-string-metrics
+mmap
 moptilities
 more-conditions
 mt19937
@@ -207,6 +208,7 @@ salza2
 serapeum
 simple-date
 simple-date-time
+slynk
 smart-buffer
 smug
 spinneret

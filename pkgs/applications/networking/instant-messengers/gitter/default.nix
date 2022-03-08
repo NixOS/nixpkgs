@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     icon = pname;
     desktopName = "Gitter";
     genericName = meta.description;
-    categories = "Network;InstantMessaging;";
+    categories = [ "Network" "InstantMessaging" ];
   };
 
   meta = with lib; {

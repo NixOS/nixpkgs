@@ -8,7 +8,7 @@
 , gtk3
 , python3
 , python3Packages
-, steam-run-native
+, steam-run
 , unzip
 , webkitgtk
 , wrapGAppsHook
@@ -54,14 +54,14 @@ python3Packages.buildPythonApplication rec {
     python3.pkgs.requests
     python3.pkgs.setuptools
     python3.pkgs.simplejson
-    steam-run-native
+    steam-run
     unzip
     webkitgtk
   ];
 
   # Run Linux games using the Steam Runtime by using steam-run in the wrapper
   postFixup = ''
-    sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run-native}/bin/steam-run#' -i $out/bin/minigalaxy
+    sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run}/bin/steam-run#' -i $out/bin/minigalaxy
   '';
 
   meta = with lib; {

@@ -6,12 +6,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.44.3";
+  version = "3.2.53";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-p3ctULrzXPt9dNs8Ckb7cqdOBpp4qOmEwu0dEVq8lEw=";
+    sha256 = "sha256-LWkgQsvP7XmupBDSAnbwewWRT+ZaALyDFw3w7iz66X0=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

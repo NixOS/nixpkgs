@@ -4,7 +4,7 @@
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
-, systemd, libnotify, libdbusmenu, libpulseaudio
+, systemd, libnotify, libdbusmenu, libpulseaudio, xdg-utils
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -24,7 +24,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.31.1"; # Please backport all updates to the stable channel.
+  version = "5.34.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "sha256-6w6znIIN5TFXTLLhazWyBXiqS5882zMNRZxYxnZjRHA=";
+    sha256 = "sha256-uU4WJtd9qwrjHgsK0oDg/pCf/5lfNhoMDEd/lHUnLwk=";
   };
 
   nativeBuildInputs = [
@@ -84,6 +84,7 @@ in stdenv.mkDerivation rec {
     (lib.getLib systemd)
     libnotify
     libdbusmenu
+    xdg-utils
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -123,6 +124,7 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
       ${customLanguageWrapperArgs}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
     # Fix the desktop link

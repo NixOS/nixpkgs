@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.27.0";
+  version = "11.28.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "v${version}";
-    sha256 = "sha256-atIrrK4BgTfu0UaHTqJ66AxEeSJLanrmYx8myrOCOfo=";
+    sha256 = "sha256-xNenBmeCRIYxQqAkV8IDpPpIHyVAYJs1jAFr8w1tz2Y=";
   };
 
   propagatedBuildInputs = [

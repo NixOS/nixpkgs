@@ -8,11 +8,9 @@ let
     comment = "Themeable and easy to use TV Guide";
     desktopName = "TV-Browser";
     genericName = "Electronic TV Program Guide";
-    categories = "AudioVideo;TV;Java;";
-    startupNotify = "true";
-    extraEntries = ''
-      StartupWMClass=tvbrowser-TVBrowser
-    '';
+    categories = [ "AudioVideo" "TV" "Java" ];
+    startupNotify = true;
+    startupWMClass = "tvbrowser-TVBrowser";
   };
 
 in stdenv.mkDerivation rec {

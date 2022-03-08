@@ -92,14 +92,7 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-      kernelPatches =
-        [ kernelPatches.bridge_stp_helper
-          kernelPatches.request_key_helper_updated
-          kernelPatches.cpu-cgroup-v2."4.4"
-          kernelPatches.modinst_arg_list_too_long
-        ];
-    };
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
 
     linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
       kernelPatches =
@@ -284,6 +277,8 @@ in {
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
+    dddvb = callPackage ../os-specific/linux/dddvb { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
@@ -460,6 +455,8 @@ in {
 
     xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
 
+    xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
+
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
@@ -480,7 +477,7 @@ in {
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_4_4 = recurseIntoAttrs (packagesFor kernels.linux_4_4);
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream"; # Added 2022-02-11
     linux_4_9 = recurseIntoAttrs (packagesFor kernels.linux_4_9);
     linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
@@ -530,7 +527,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_5_10;
+    linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_5_16;
     linux_mptcp = packages.linux_mptcp_95;

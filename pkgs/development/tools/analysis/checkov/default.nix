@@ -32,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.885";
+  version = "2.0.923";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-jhZ2LdCb7+4SMXcoWw9hKT77Qdiw+HWff0jkkvaci28=";
+    hash = "sha256-EvT1nEE58gtlpRKEZkVaZ0mjABldmioW9u1foF8RCJI=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -71,6 +71,7 @@ buildPythonApplication rec {
     packaging
     policyuniverse
     prettytable
+    pycep-parser
     pyyaml
     semantic-version
     tabulate

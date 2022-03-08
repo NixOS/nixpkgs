@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1qmx229nij7g6qmiacmyy4mcgx3k9509p4slahivshqm79d6wiwl";
   };
 
-  buildInputs = [ ocaml findlib ncurses ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ ncurses ];
   propagatedBuildInputs = [ camlpdf ];
+
+  strictDeps = true;
 
   preInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR

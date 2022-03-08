@@ -25,7 +25,7 @@ buildDunePackage {
 
   useDune2 = true;
 
-  buildInputs = [
+  nativeBuildInputs = [
     pkg-config
   ];
 
@@ -33,6 +33,8 @@ buildDunePackage {
     rresult
     lmdb
   ];
+
+  strictDeps = true;
 
   checkInputs = [
     cstruct

@@ -69,7 +69,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.45";
+    version = "0.3.48";
 
     outputs = [
       "out"
@@ -87,7 +87,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-OnQd98qfOekAsVXLbciZLNPrM84KBX6fOx/f8y2BYI0=";
+      sha256 = "sha256-+gk/MJ9YimHBwN2I42DRP+I2OqBFFtZ81Fd/l89HcSk=";
     };
 
     patches = [
@@ -139,7 +139,7 @@ let
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libxcb ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
 
     # Valgrind binary is required for running one optional test.
     checkInputs = lib.optional withValgrind valgrind;
@@ -214,6 +214,7 @@ let
             "nix-support/client-rt.conf.json"
             "nix-support/client.conf.json"
             "nix-support/jack.conf.json"
+            "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];

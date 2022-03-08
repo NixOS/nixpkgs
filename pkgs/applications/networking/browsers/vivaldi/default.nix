@@ -12,6 +12,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
 , commandLineArgs ? ""
+, pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
 
 let
@@ -19,11 +20,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.1.2567.39-1";
+  version = "5.1.2567.49-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "140idghryk132nyb8np011xiwzgh518n0fxrkjnnvi3c67shq7qc";
+    sha256 = "1cyd789apjh71vzry2zjxb0c215yarfryb9jzxjmkfvrqg4g23xr";
   };
 
   unpackPhase = ''
@@ -40,7 +41,8 @@ in stdenv.mkDerivation rec {
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo
     libdrm mesa
-  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
+  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
+    ++ lib.optional pulseSupport libpulseaudio;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)

@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gn9l2qdr8gby2x8c2mb59x1kipb2plr45rbq6ymcxyi0wmzfh3q";
   };
 
-  nativeBuildInputs = [ which pkg-config ];
-  buildInputs = [ ocaml findlib imagemagick ];
+  nativeBuildInputs = [ which pkg-config ocaml findlib ];
+  buildInputs = [ imagemagick ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

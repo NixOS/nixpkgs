@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, systemd
+, wayland, wayland-protocols
+, systemdSupport ? stdenv.isLinux, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols systemd ];
+  buildInputs = [ wayland wayland-protocols ]
+                ++ lib.optionals systemdSupport [ systemd ];
 
-  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];
+  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=${if systemdSupport then "enabled" else "disabled"}" ];
 
   meta = with lib; {
     description = "Idle management daemon for Wayland";

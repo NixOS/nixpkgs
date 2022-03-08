@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.logrotate;
-  inherit (config.users) groups;
 
   pathOpts = { name, ... }:  {
     options = {
@@ -85,10 +84,6 @@ let
     };
 
     config.name = name;
-    config.extraConfig = ''
-      missingok
-      notifempty
-    '';
   };
 
   mkConf = pathOpts: ''
@@ -102,7 +97,11 @@ let
   '';
 
   paths = sortProperties (attrValues (filterAttrs (_: pathOpts: pathOpts.enable) cfg.paths));
-  configFile = pkgs.writeText "logrotate.conf" (concatStringsSep "\n" ((map mkConf paths) ++ [ cfg.extraConfig ]));
+  configFile = pkgs.writeText "logrotate.conf" (
+    concatStringsSep "\n" (
+      [ "missingok" "notifempty" cfg.extraConfig ] ++ (map mkConf paths)
+    )
+  );
 
 in
 {
@@ -112,7 +111,10 @@ in
 
   options = {
     services.logrotate = {
-      enable = mkEnableOption "the logrotate systemd service";
+      enable = mkEnableOption "the logrotate systemd service" // {
+        default = foldr (n: a: a || n.enable) false (attrValues cfg.paths);
+        defaultText = literalExpression "cfg.paths != {}";
+      };
 
       paths = mkOption {
         type = with types; attrsOf (submodule pathOpts);
@@ -163,28 +165,8 @@ in
       }
     ) cfg.paths;
 
-    services.logrotate = {
-      paths = {
-        "/var/log/btmp" = {
-          frequency = mkDefault "monthly";
-          keep = mkDefault 1;
-          extraConfig = ''
-            create 0660 root ${groups.utmp.name}
-          '';
-        };
-        "/var/log/wtmp" = {
-          frequency = mkDefault "monthly";
-          keep = mkDefault 1;
-          extraConfig = ''
-            create 0664 root ${groups.utmp.name}
-          '';
-        };
-      };
-    };
-
     systemd.services.logrotate = {
       description = "Logrotate Service";
-      wantedBy = [ "multi-user.target" ];
       startAt = "hourly";
 
       serviceConfig = {

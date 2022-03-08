@@ -9,6 +9,7 @@
 , itstool
 , clutter-gtk
 , libgee
+, libgnome-games-support
 , gnome
 , gtk3
 }:
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     clutter-gtk
     libgee
-    gnome.libgnome-games-support
+    libgnome-games-support
     gtk3
   ];
 

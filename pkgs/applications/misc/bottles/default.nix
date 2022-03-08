@@ -20,8 +20,8 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.2.14-trento";
-  sha256 = "GtVC3JfVoooJ+MuF9r1W3J8RfXNKalaIgecv1ner7GA=";
+  version = "2022.2.28-trento-1";
+  sha256 = "tE6YuuZZcs3RKxs1S6OoGt0CXz3oHUi/sopFN0iywds=";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
@@ -99,6 +99,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
+    downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bloomvdomino psydvl shamilton ];
     platforms = platforms.linux;

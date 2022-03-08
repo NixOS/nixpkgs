@@ -106,10 +106,8 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
-    ];
-    startupNotify = "false";
+    categories = [ "Application" "System" "TerminalEmulator" ];
+    startupNotify = false;
   };
 
   meta = with lib; {

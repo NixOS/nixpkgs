@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
 , ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
@@ -31,6 +31,15 @@ in mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-OlGXGIMghil/GG6eso20+CWo/hCjarXGs6edXX9pc/M=";
   };
+
+  patches = [
+    # Poppler requires at least C++17
+    (fetchpatch {
+      name = "use-c-17-for-pdf-on-linux-builds";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/use-c-17-for-pdf-on-linux-builds.patch?h=openboard";
+      sha256 = "sha256-M6HigpOo8ul7qaub4cd7/ATUc85HezEyKyDuzsrZvC8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
@@ -79,8 +88,8 @@ in mkDerivation rec {
       icon = "OpenBoard";
       comment = "OpenBoard, an interactive white board application";
       desktopName = "OpenBoard";
-      mimeType = "application/ubz";
-      categories = "Education;";
+      mimeTypes = [ "application/ubz" ];
+      categories = [ "Education" ];
       startupNotify = true;
     })
   ];

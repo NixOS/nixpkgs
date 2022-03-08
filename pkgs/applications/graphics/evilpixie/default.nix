@@ -16,8 +16,8 @@ let
     exec = "evilpixie %F";
     icon = "evilpixie";
     genericName = "Image Editor";
-    categories = "Graphics;2DGraphics;RasterGraphics;";
-    mimeType = "image/bmp;image/gif;image/jpeg;image/jpg;image/png;image/x-pcx;image/x-targa;image/x-tga;";
+    categories = [ "Graphics" "2DGraphics" "RasterGraphics" ];
+    mimeTypes = [ "image/bmp" "image/gif" "image/jpeg" "image/jpg" "image/png" "image/x-pcx" "image/x-targa" "image/x-tga" ];
   };
 
 in mkDerivation rec {

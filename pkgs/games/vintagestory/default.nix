@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
     exec = "vintagestory";
     icon = "vintagestory";
     comment = "Innovate and explore in a sandbox world";
-    type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   installPhase = ''

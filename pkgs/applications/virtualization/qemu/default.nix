@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell
+, makeWrapper, runtimeShell, removeReferencesTo
 , attr, libcap, libcap_ng, socat
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -175,6 +175,7 @@ stdenv.mkDerivation rec {
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
     cp $out/bin/qemu-ga $ga/bin/
+    remove-references-to -t $out $ga/bin/qemu-ga
   '' + lib.optionalString gtkSupport ''
     # wrap GTK Binaries
     for f in $out/bin/qemu-system-*; do
@@ -219,6 +220,7 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
+    ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
@@ -239,5 +241,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qemu-kvm";
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
+    priority = 10; # Prefer virtiofsd from the virtiofsd package.
   };
 }

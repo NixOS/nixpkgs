@@ -26,7 +26,7 @@
 , testpath
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (rec {
   pname = "ipython";
   version = "8.0.1";
   format = "pyproject";
@@ -82,4 +82,8 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };
-}
+} // lib.optionalAttrs stdenv.isDarwin {
+  disabledTests = [
+    "test_clipboard_get" # uses pbpaste
+  ];
+})

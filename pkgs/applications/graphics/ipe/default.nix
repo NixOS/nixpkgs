@@ -60,12 +60,10 @@ mkDerivation rec {
       comment = "A drawing editor for creating figures in PDF format";
       exec = "ipe";
       icon = "ipe";
-      mimeType = "text/xml;application/pdf";
-      categories = "Graphics;Qt;";
-      extraDesktopEntries = {
-        StartupWMClass = "ipe";
-        StartupNotify = "true";
-      };
+      mimeTypes = [ "text/xml" "application/pdf" ];
+      categories = [ "Graphics" "Qt" ];
+      startupNotify = true;
+      startupWMClass = "ipe";
     })
   ];
 

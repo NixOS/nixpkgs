@@ -9,15 +9,19 @@
 , mock
 , proto-plus
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.6.1";
+  version = "3.7.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38772cc60ef4315d25a7dbeef5ddab9e75674722cb4500bc69b295e5d0af6a97";
+    hash = "sha256-x4gSLVNo2uk93GWpvcPM20f0gJ1S3x/BVe13oNIpa0Y=";
   };
 
   propagatedBuildInputs = [

@@ -26,7 +26,10 @@ let
       sha256 = "0y4xvz2vkkw2dkp6056j2mzwlcm1m5w58fgm639psxzfmfpk73p3";
     };
 
-    aarch64-darwin = srcs.x86_64-darwin;
+    aarch64-darwin = fetchzip {
+      url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
+      sha256 = "sha256-PJ4/R1pHbfoSBHhIyiqcGoE13FSWQapxj4Lq+ZdcYCQ=";
+    };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
@@ -95,7 +98,7 @@ let
       icon = pname;
       desktopName = "GitKraken";
       genericName = "Git Client";
-      categories = "Development;";
+      categories = [ "Development" ];
       comment = "Graphical Git client from Axosoft";
     }) ];
 

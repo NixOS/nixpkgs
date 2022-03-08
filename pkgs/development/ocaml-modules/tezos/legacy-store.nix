@@ -23,9 +23,11 @@ buildDunePackage {
     lwt-watcher
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     tezos-protocol-compiler
   ];
+
+  strictDeps = true;
 
   checkInputs = [
     alcotest-lwt

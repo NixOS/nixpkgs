@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "sabyenc3";
-  version = "4.0.2";
+  version = "5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfaa0bdd01752a9cfde0d349a8f4e178b04b1cf9c1bc018b287961192cd2bb90";
+    sha256 = "sha256-MIKBSPs3CtETDefiozN758hmJhdmw0UqVyG9t224tfw=";
   };
 
   # tests are not included in pypi distribution

@@ -1,8 +1,10 @@
 { lib
 , absl-py
+, blas
 , buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, lapack
 , numpy
 , opt-einsum
 , pytestCheckHook
@@ -12,6 +14,9 @@
 , typing-extensions
 }:
 
+let
+  usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
+in
 buildPythonPackage rec {
   pname = "jax";
   version = "0.3.1";
@@ -57,6 +62,16 @@ buildPythonPackage rec {
     "-n auto"
     "-W ignore::DeprecationWarning"
     "tests/"
+  ];
+
+  # See
+  #  * https://github.com/google/jax/issues/9705
+  #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+  #  * https://github.com/NixOS/nixpkgs/issues/161960
+  disabledTests = lib.optionals usingMKL [
+    "test_custom_linear_solve_cholesky"
+    "test_custom_root_with_aux"
+    "testEigvalsGrad_shape"
   ];
 
   pythonImportsCheck = [

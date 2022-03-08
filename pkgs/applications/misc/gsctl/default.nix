@@ -1,17 +1,22 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gsctl";
-  version = "0.15.4";
-
-  goPackagePath = "github.com/giantswarm/gsctl";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "giantswarm";
     repo = pname;
-    rev  = version;
-    sha256 = "0s5bli08wfd9xszx3kc90k51vlgjc00r0qg4mikb6qdc4pxpgsxj";
+    rev = version;
+    sha256 = "sha256-uCNWgaLZMm1vPxFduj8mpjKYuYlp1ChF6bK+bmAWy50=";
   };
+
+  vendorSha256 = "sha256-lZgHrQYqoyoM1Iv6vCqTMcv62zSKyxaAsq56kUXHrIA=";
+
+  ldflags =
+    [ "-s" "-w" "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}" ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "The Giant Swarm command line interface";

@@ -620,7 +620,7 @@ let
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
-    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+    lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
@@ -1193,8 +1193,6 @@ let
 
     ptset = callPackage ../development/ocaml-modules/ptset { };
 
-    pycaml = callPackage ../development/ocaml-modules/pycaml { };
-
     pyml = callPackage ../development/ocaml-modules/pyml { };
 
     qcheck-alcotest = callPackage ../development/ocaml-modules/qcheck/alcotest.nix { };
@@ -1541,5 +1539,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_13;
 
-  ocamlPackages = ocamlPackages_4_12;
+  ocamlPackages = ocamlPackages_4_13;
 }

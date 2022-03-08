@@ -24,6 +24,9 @@
         [pi3]
         kernel=u-boot-rpi3.bin
 
+        [pi02]
+        kernel=u-boot-rpi3.bin
+
         [pi4]
         kernel=u-boot-rpi4.bin
         enable_gic=1
@@ -32,6 +35,9 @@
         # Otherwise the resolution will be weird in most cases, compared to
         # what the pi3 firmware does by default.
         disable_overscan=1
+
+        # Supported in newer board revisions
+        arm_boost=1
 
         [all]
         # Boot in 64-bit mode.

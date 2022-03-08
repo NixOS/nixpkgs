@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       icon = "bisq";
       desktopName = "Bisq ${version}";
       genericName = "Decentralized bitcoin exchange";
-      categories = "Network;P2P;";
+      categories = [ "Network" "P2P" ];
     })
   ];
 

@@ -20,14 +20,22 @@ in stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/SchildiChat/schildichat-desktop/";
-    rev = "v${version}";
+    inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
   };
 
-  offlineCache = fetchYarnDeps {
+  webOfflineCache = fetchYarnDeps {
     yarnLock = src + "/element-web/yarn.lock";
     sha256 = pinData.webYarnHash;
+  };
+  jsSdkOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/matrix-js-sdk/yarn.lock";
+    sha256 = pinData.jsSdkYarnHash;
+  };
+  reactSdkOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/matrix-react-sdk/yarn.lock";
+    sha256 = pinData.reactSdkYarnHash;
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
@@ -37,14 +45,30 @@ in stdenv.mkDerivation rec {
 
     export HOME=$PWD/tmp
     mkdir -p $HOME
+
     pushd element-web
-    yarn config --offline set yarn-offline-mirror $offlineCache
     fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $webOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
     rm -rf node_modules/matrix-react-sdk
-    patchShebangs node_modules/ ../matrix-react-sdk/scripts/
     ln -s $PWD/../matrix-react-sdk node_modules/
-    ln -s $PWD/node_modules ../matrix-react-sdk/
+    rm -rf node_modules/matrix-js-sdk
+    ln -s $PWD/../matrix-js-sdk node_modules/
+    popd
+
+    pushd matrix-js-sdk
+    fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $jsSdkOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+    popd
+
+    pushd matrix-react-sdk
+    fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $reactSdkOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules scripts
     popd
 
     runHook postConfigure
@@ -54,7 +78,7 @@ in stdenv.mkDerivation rec {
     runHook preBuild
 
     pushd matrix-react-sdk
-    node_modules/.bin/reskindex -h ../element-web/src/header
+    ../element-web/node_modules/.bin/reskindex -h ../element-web/src/header
     popd
 
     pushd element-web
@@ -79,7 +103,7 @@ in stdenv.mkDerivation rec {
     description = "Matrix client / Element Web fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members;
+    maintainers = lib.teams.matrix.members ++ [ lib.maintainers.kloenk ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };

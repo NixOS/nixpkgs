@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
-  version = "1.21.0";
+  version = "1.21.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3P3dThYXpmtZ/cn+NCDS9RNtu6N48Vb78ZqmCdkTK50=";
+    hash = "sha256-SWzL6AMXoZzYw3LwrBdvbe9JzLMudZioKZWo7HtHM8U=";
   };
 
   propagatedBuildInputs = [

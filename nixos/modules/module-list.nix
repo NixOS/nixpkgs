@@ -91,6 +91,7 @@
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./hardware/xone.nix
   ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
@@ -115,6 +116,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
+  ./misc/wordlist.nix
   ./misc/nixops-autoluks.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
@@ -166,6 +168,8 @@
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/k40-whisperer.nix
+  ./programs/kclock.nix
   ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
@@ -252,6 +256,7 @@
   ./security/tpm2.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
+  ./services/admin/pgadmin.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
@@ -349,7 +354,6 @@
   ./services/databases/redis.nix
   ./services/databases/riak.nix
   ./services/databases/victoriametrics.nix
-  ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
@@ -394,6 +398,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/lorri.nix
+  ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
@@ -451,6 +456,7 @@
   ./services/hardware/vdr.nix
   ./services/hardware/xow.nix
   ./services/home-automation/home-assistant.nix
+  ./services/home-automation/zigbee2mqtt.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix
@@ -495,6 +501,7 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
+  ./services/matrix/matrix-synapse.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
   ./services/misc/ananicy.nix
@@ -561,7 +568,6 @@
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-appservice-irc.nix
   ./services/misc/matrix-conduit.nix
-  ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-facebook.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
@@ -622,7 +628,6 @@
   ./services/misc/weechat.nix
   ./services/misc/xmr-stak.nix
   ./services/misc/xmrig.nix
-  ./services/misc/zigbee2mqtt.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
@@ -873,6 +878,7 @@
   ./services/networking/shorewall6.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
+  ./services/networking/snowflake-proxy.nix
   ./services/networking/smartdns.nix
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
@@ -897,6 +903,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
+  ./services/networking/tetrd.nix
   ./services/networking/teleport.nix
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix
@@ -946,7 +953,6 @@
   ./services/security/clamav.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
-  ./services/security/fprot.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hockeypuck.nix

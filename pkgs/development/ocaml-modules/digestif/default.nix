@@ -1,4 +1,5 @@
 { lib, ocaml, fetchurl, buildDunePackage
+, pkg-config, which
 , bigarray-compat, eqaf, stdlib-shims
 , alcotest, astring, bos, findlib, fpath
 }:
@@ -14,7 +15,12 @@ buildDunePackage rec {
     sha256 = "01gwkbrznci4xdcbww4ysgsciz2qs0r8jsmhp0siwbcgcrf1jjv5";
   };
 
+  nativeBuildInputs = [ findlib which ];
+  buildInputs = [ ocaml ];
+
   propagatedBuildInputs = [ bigarray-compat eqaf stdlib-shims ];
+
+  strictDeps = !doCheck;
 
   checkInputs = [ alcotest astring bos fpath ];
   doCheck = lib.versionAtLeast ocaml.version "4.05";

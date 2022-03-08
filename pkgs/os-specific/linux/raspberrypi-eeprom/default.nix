@@ -3,13 +3,18 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2021.04.29-138a1";
+  version = "2021.12.02";
+  # From 3fdf703f3f7bbe57eacceada3b558031229a34b0 Mon Sep 17 00:00:00 2001
+  # From: Peter Harper <peter.harper@raspberrypi.com>
+  # Date: Mon, 13 Dec 2021 11:56:11 +0000
+  # Subject: [PATCH] 2021-12-02: Promote the 2021-12-02 beta release to LATEST/STABLE
+  commit = "3fdf703f3f7bbe57eacceada3b558031229a34b0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "v${version}";
-    sha256 = "sha256-nzAMPa4gqCAcROFa7z34IoMA3aoMHX9fYCsPFde9dac=";
+    rev = commit;
+    sha256 = "sha256-JTL2ziOkT0tnOrOS08ttNtxj3qegsacP73xZBVur7xM=";
   };
 
   buildInputs = [ python3 ];
@@ -26,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/share/rpi-eeprom
 
-    cp rpi-eeprom-config rpi-eeprom-update $out/bin
+    cp rpi-eeprom-config rpi-eeprom-update rpi-eeprom-digest $out/bin
     cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
     cp -P firmware/default firmware/latest $out/share/rpi-eeprom
   '';

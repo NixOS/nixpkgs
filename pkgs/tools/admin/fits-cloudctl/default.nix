@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "fits-cloudctl";
-  version = "0.10.8";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "fi-ts";
     repo = "cloudctl";
     rev = "v${version}";
-    sha256 = "sha256-vqzHZ7DW4ev5soFMcafgL/81k6vCsm6Ds5yto/VheX8=";
+    sha256 = "sha256-US3Wvr6uBwsaIqjsbWeZtYucXVybMjKu8AuPYvykCvA=";
   };
 
   vendorSha256 = "sha256-f35Asf9l6ZfixpjMGzesTsxmANreilMxH2CULMH3b2o=";

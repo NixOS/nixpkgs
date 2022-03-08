@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.14.2";
-  name = "cgal-" + version;
+  pname = "cgal";
 
   src = fetchFromGitHub {
     owner = "CGAL";
