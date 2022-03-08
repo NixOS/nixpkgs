@@ -1054,7 +1054,9 @@ with pkgs;
 
   weidu = callPackage ../tools/games/weidu { };
 
-  weylus = callPackage ../applications/graphics/weylus { };
+  weylus = callPackage ../applications/graphics/weylus  {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa VideoToolbox;
+  };
 
   gfshare = callPackage ../tools/security/gfshare { };
 
