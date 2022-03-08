@@ -1290,6 +1290,8 @@ with pkgs;
 
   aldo = callPackage ../applications/radio/aldo { };
 
+  alglib = callPackage ../development/libraries/alglib { };
+
   almanah = callPackage ../applications/misc/almanah { };
 
   alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
@@ -25460,6 +25462,8 @@ with pkgs;
   gspeech = callPackage ../applications/audio/gspeech { };
 
   haruna = libsForQt5.callPackage ../applications/video/haruna { };
+
+  hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
 
   helix = callPackage ../applications/editors/helix { };
 
