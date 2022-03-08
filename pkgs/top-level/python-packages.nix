@@ -9904,6 +9904,8 @@ in {
 
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
 
+  theano-pymc = callPackage ../development/python-modules/theano-pymc { };
+
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
