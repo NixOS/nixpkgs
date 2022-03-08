@@ -316,7 +316,7 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = released;
-      Cabal_3_6_2_0 = released;
+      Cabal_3_6_3_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;

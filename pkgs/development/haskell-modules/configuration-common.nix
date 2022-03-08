@@ -1972,7 +1972,7 @@ self: super: {
 
   # 2022-01-16 haskell-ci needs Cabal 3.6, ShellCheck 0.7.2
   haskell-ci = super.haskell-ci.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_2_0;
+    Cabal = self.Cabal_3_6_3_0;
     ShellCheck = self.ShellCheck_0_7_2;
   });
 
@@ -2077,7 +2077,7 @@ self: super: {
 
   # 2021-11-05: jailBreak the too tight upper bound on haskus-utils-variant
   ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_2_0;
+    Cabal = self.Cabal_3_6_3_0;
   }));
 
   # Break out of "Cabal < 3.2" constraint.
@@ -2108,7 +2108,7 @@ self: super: {
 
   # Needs Cabal >= 3.4
   chs-cabal = super.chs-cabal.override {
-    Cabal = self.Cabal_3_6_2_0;
+    Cabal = self.Cabal_3_6_3_0;
   };
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
