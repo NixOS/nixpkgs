@@ -1,4 +1,4 @@
-{ lib, writeTextFile, desktop-file-utils }:
+{ lib, writeTextFile, buildPackages }:
 
 # All possible values as defined by the spec, version 1.4.
 # Please keep in spec order for easier maintenance.
@@ -119,5 +119,5 @@ writeTextFile {
   name = "${cleanName}.desktop";
   destination = "/share/applications/${cleanName}.desktop";
   text = builtins.concatStringsSep "\n" content;
-  checkPhase = "${desktop-file-utils}/bin/desktop-file-validate $target";
+  checkPhase = "${buildPackages.desktop-file-utils}/bin/desktop-file-validate $target";
 }
