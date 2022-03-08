@@ -297,6 +297,42 @@ let
         };
       };
 
+      bierner.emojisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "emojisense";
+          publisher = "bierner";
+          version = "0.9.0";
+          sha256 = "0gpcpwh57lqlynsrkv3smykndb46xjh7r85lb291wdklq5ahmb2j";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      bierner.markdown-checkbox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-checkbox";
+          publisher = "bierner";
+          version = "0.3.1";
+          sha256 = "0x57dnr6ksqxi28g1c392k04vxy0vdni9nl4xps3i5zh0pyxizhw";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      bierner.markdown-emoji = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-emoji";
+          publisher = "bierner";
+          version = "0.2.1";
+          sha256 = "1lcg2b39jydl40wcfrbgshl2i1r58k92c7dipz0hl1fa1v23vj4v";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bodil.file-browser = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "file-browser";
