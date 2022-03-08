@@ -17,6 +17,7 @@
 , pam
 , pkg-config
 , python3
+, nixosTests
 
 # Pacemaker is compiled twice, once with forOCF = true to extract its
 # OCF definitions for use in the ocf-resource-agents derivation, then
@@ -87,11 +88,15 @@ stdenv.mkDerivation rec {
     rm -r $out/nix
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) pacemaker;
+  };
+
   meta = with lib; {
     homepage = "https://clusterlabs.org/pacemaker/";
     description = "Pacemaker is an open source, high availability resource manager suitable for both small and large clusters.";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ ryantm astro ];
   };
 }

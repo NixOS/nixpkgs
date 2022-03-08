@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "$out/sbin:${libqb}/sbin"
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) pacemaker;
+  };
+
   meta = {
     homepage = "http://corosync.org/";
     description = "A Group Communication System with features for implementing high availability within applications";
