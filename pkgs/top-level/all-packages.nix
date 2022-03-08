@@ -1064,6 +1064,8 @@ with pkgs;
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
+  goflow = callPackage ../tools/networking/goflow { };
+
   gofu = callPackage ../applications/misc/gofu { };
 
   godns = callPackage ../tools/networking/godns { };
