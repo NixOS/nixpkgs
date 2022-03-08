@@ -700,11 +700,6 @@ self: super: builtins.intersectAttrs super {
     testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie_1_2_0_0;
 
-  nix-output-monitor = overrideCabal {
-    # Can't ran the golden-tests with nix, because they call nix
-    testTarget = "unit-tests";
-  } super.nix-output-monitor;
-
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
     # by default. Unless we reflect this in the generic builder, GHC is going to
