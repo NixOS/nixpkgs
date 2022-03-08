@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
+    # 1
     mkdir -p $out/bin
     cp -r Linux $out/
     chmod +x "$out/Linux/TerrariaServer.bin.x86_64"
