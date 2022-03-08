@@ -1783,6 +1783,23 @@ let
         };
       };
 
+      skellock.just = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "just";
+          publisher = "skellock";
+          version = "2.0.0";
+          sha256 = "sha256-FOp/dcW0+07rADEpUMzx+SGYjhvE4IhcCOqUQ38yCN4=";
+        };
+        meta = with lib; {
+          changelog = "https://github.com/skellock/vscode-just/blob/master/CHANGELOG.md";
+          description = "Provides syntax and recipe launcher for Just scripts";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=skellock.just";
+          homepage = "https://github.com/skellock/vscode-just";
+          license = licenses.mit;
+          maintainers = with maintainers; [ maximsmol ];
+        };
+      };
+
       skyapps.fish-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "fish-vscode";
