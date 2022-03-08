@@ -1,6 +1,8 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+# for passthru.tests
+, imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:
 
 import ./generic.nix (rec {
@@ -12,6 +14,10 @@ import ./generic.nix (rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "bIvII4p9/a96dfXsWmY/QXP4w2flo5+H5yBJXh7tdfo=";
+  };
+
+  passthru.tests = {
+    inherit imageio matplotlib pilkit pydicom reportlab;
   };
 
   meta = with lib; {

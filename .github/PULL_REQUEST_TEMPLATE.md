@@ -8,8 +8,12 @@ List of open PRs: https://github.com/NixOS/nixpkgs/pulls
 Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
 -->
 
-###### Motivation for this change
+###### Description of changes
 
+<!--
+For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
+For new packages please briefly describe the package or provide a link to its homepage.
+-->
 
 ###### Things done
 
