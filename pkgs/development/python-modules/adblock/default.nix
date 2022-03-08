@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ArniDagur";
     repo = "python-adblock";
-    rev = version;
+    rev = "refs/tags/${version}";
     sha256 = "sha256-6FH+AVK7+Yg1a6oKbFV80TuGGE4Y7I3mMVzwVHdHYO4=";
   };
 
