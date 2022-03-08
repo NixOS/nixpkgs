@@ -2866,6 +2866,8 @@ in {
 
   findimports = callPackage ../development/python-modules/findimports { };
 
+  findpython = callPackage ../development/python-modules/findpython { };
+
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
   finitude = callPackage ../development/python-modules/finitude { };
