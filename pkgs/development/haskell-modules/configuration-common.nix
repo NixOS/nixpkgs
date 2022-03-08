@@ -2322,6 +2322,9 @@ self: super: {
     ./patches/regex-compat-tdfa-ghc-9.0.patch
   ] super.regex-compat-tdfa;
 
+  # https://github.com/kowainik/validation-selective/issues/64
+  validation-selective = doJailbreak super.validation-selective;
+
   # aws upstream seems to lack the necessary maintenance at the moment, luckily
   # Joey Hess seems to have already looked into building git-annex with aeson 2.0
   # https://github.com/aristidb/aws/issues/275
