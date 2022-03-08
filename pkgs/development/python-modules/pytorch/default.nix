@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
   MPISupport ? false, mpi,
@@ -135,7 +135,17 @@ in buildPythonPackage rec {
     sha256 = "sha256-QcvoJqpZJXPSc9HLCJHetrp/hMESuC5kYl90d7Id0ZU=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = [
+    (fetchpatch {
+      # Import distutils directly, not from setuptools
+      url = "https://github.com/pytorch/pytorch/commit/07767569c964552702bf374da753212eb9cde327.patch";
+      hash = "sha256-XNqKzIG3JYlQFeyng3UDkuEI9CC6mFD3aislM0H6W34=";
+      excludes = [
+        # we don't run the tests anyway
+        "test/run_test.py"
+      ];
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
     # pthreadpool added support for Grand Central Dispatch in April
     # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
     # that is available starting with macOS 10.13. However, our current
