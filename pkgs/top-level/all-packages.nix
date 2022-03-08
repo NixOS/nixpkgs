@@ -32780,6 +32780,8 @@ with pkgs;
 
   almonds = callPackage ../applications/science/math/almonds { };
 
+  adolc = callPackage ../applications/science/math/adolc { };
+
   amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
 
   amd-libflame = callPackage ../development/libraries/science/math/amd-libflame { };
