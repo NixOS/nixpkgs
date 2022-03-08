@@ -213,7 +213,10 @@ with pkgs;
 
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
+
   authy = callPackage ../applications/misc/authy { };
+
+  authz0 = callPackage ../tools/security/authz0 { };
 
   avro-tools = callPackage ../development/tools/avro-tools { };
 
@@ -14475,7 +14478,9 @@ with pkgs;
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
-  rebazel = callPackage ../development/tools/rebazel { };
+  rebazel = callPackage ../development/tools/rebazel {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
@@ -33107,6 +33112,8 @@ with pkgs;
   dumb = callPackage ../misc/dumb { };
 
   dump = callPackage ../tools/backup/dump { };
+
+  dxvk = callPackage ../misc/dxvk { };
 
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 

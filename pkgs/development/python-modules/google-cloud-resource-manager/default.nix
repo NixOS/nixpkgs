@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-InkkAtqK5f1oqUK0Nsxc2PYt5JWBlB3ElGVNs5IJV/Q=";
+    hash = "sha256-NUqFkvIwfaqz3MZEUoLqO7hFCVwV5124+lA8LGzccl0=";
   };
 
   propagatedBuildInputs = [
