@@ -1,33 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, lark
 , nose
 , pythonOlder
 }:
 
-let
-  lark-parser = buildPythonPackage rec {
-    pname = "lark-parser";
-    version = "0.10.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "15jr4c1falvgkq664xdgamykk6waklh1psy8v3wlrg0v59hngws2";
-    };
-
-    doCheck = true;
-  };
-in
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
-  version = "0.3.30";
+  version = "0.3.33";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wfcTIPKbMPa7xpXzkFtxnxG2ZRFzTw35EP7f4zwHxcs=";
+    hash = "sha256-tdsw9gf64VGH9tRWgYZZq3FNa5B5JNhN3k6wUHrU5zY=";
   };
 
   # Nose is required during build process, so can not use `checkInputs`.
@@ -36,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    lark-parser
+    lark
   ];
 
   # This fork of python-hcl2 doesn't ship tests
