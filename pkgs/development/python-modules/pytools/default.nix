@@ -3,10 +3,9 @@
 , fetchPypi
 , pythonOlder
 , decorator
-, appdirs
-, six
 , numpy
-, pytest
+, platformdirs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,18 +18,21 @@ buildPythonPackage rec {
     sha256 = "sha256-GXqs9uH11gxxW5JDh5Kst3Aq7Vnrv7FH+oTtp4DlT+4=";
   };
 
-  checkInputs = [ pytest ];
-
   propagatedBuildInputs = [
     decorator
-    appdirs
-    six
     numpy
+    platformdirs
   ];
 
-  checkPhase = ''
-    py.test -k 'not test_persistent_dict'
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pytools"
+    "pytools.batchjob"
+    "pytools.lex"
+  ];
 
   meta = {
     homepage = "https://github.com/inducer/pytools/";
