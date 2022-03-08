@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "menyoki";
-  version = "1.5.6";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2k8CRya9SylauYV+2aQS2QHkQhyiTHMgGp1DNoZ4jbU=";
+    sha256 = "sha256-7dqV18+Q0M1PrSXfMro5bUqSeA72Stj5JfP4MsTlrjM=";
   };
 
-  cargoSha256 = "sha256-NLPqJepg0WRt/X3am9J7vwIE9bn+dt2UHE26Dc/QRMM=";
+  cargoSha256 = "sha256-c3VpHr/X2tKh7mY4dOQac0lS7oem0GGqjzv7feNwc24=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isLinux pkg-config;
