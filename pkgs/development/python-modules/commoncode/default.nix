@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "commoncode";
   version = "30.0.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -28,6 +28,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "intbitset >= 2.3.0, < 3.0" "intbitset >= 2.3.0"
+  '';
 
   dontConfigure = true;
 
