@@ -208,7 +208,10 @@ with pkgs;
 
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
+
   authy = callPackage ../applications/misc/authy { };
+
+  authz0 = callPackage ../tools/security/authz0 { };
 
   avro-tools = callPackage ../development/tools/avro-tools { };
 
