@@ -20,8 +20,8 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.2.28-trento-1";
-  sha256 = "tE6YuuZZcs3RKxs1S6OoGt0CXz3oHUi/sopFN0iywds=";
+  version = "2022.2.28-trento-4";
+  sha256 = "0aar2nr8id7mrpj4b64avya3nh8h6x4wzxbzwxg0ya3smq1i3niz";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
