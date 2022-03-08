@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     ApplicationServices
     Carbon
     Cocoa
+    VideoToolbox
   ] ++ lib.optionals stdenv.isLinux [
     dbus
     libva
