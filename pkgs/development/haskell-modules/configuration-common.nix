@@ -995,6 +995,7 @@ self: super: {
   # dontCheck: https://github.com/haskell-servant/servant-auth/issues/113
   # doJailbreak: waiting on revision 1 to hit hackage
   servant-auth-client = doJailbreak (dontCheck super.servant-auth-client);
+  servant-auth-server = doJailbreak super.servant-auth-server;
 
   # Generate cli completions for dhall.
   dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
