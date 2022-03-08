@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "jaraco.itertools";
   version = "6.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
