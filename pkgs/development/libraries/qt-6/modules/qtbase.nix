@@ -20,7 +20,7 @@
 , xmlstarlet
 , libproxy
 , xlibsWrapper
-, xlibs ? null
+, xorg
 , zstd
 , double-conversion
 , util-linux
@@ -242,13 +242,11 @@ stdenv.mkDerivation rec {
       xcbutilkeysyms
       xcbutilrenderutil
       xcbutilwm
+      xorg.libXdmcp
+      xorg.libXtst
+      xorg.xcbutilcursor
 
       epoxy # for gdk-3.0
-    ]
-    ++ lib.optionals (xlibs != null) [
-      xlibs.libXdmcp
-      xlibs.libXtst
-      xlibs.xcbutilcursor
     ]
     ++ lib.optional libGLSupported libGL
   );

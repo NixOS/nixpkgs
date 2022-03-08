@@ -24,7 +24,6 @@
 , libXtst
 , libxshmfence
 , libXi
-, xlibs ? null
 , fontconfig
 , freetype
 , harfbuzz
@@ -288,6 +287,7 @@ qtModule rec {
     xorg.libxkbfile
     libxshmfence
     libXi
+    xorg.libXext
 
     # Pipewire
     pipewire
@@ -318,11 +318,7 @@ qtModule rec {
 
     openbsm
     libunwind
-  ]
-  ++ lib.optionals (xlibs != null) [
-    xlibs.libXext
-  ]
-  ;
+  ];
 
   buildInputs = [
     cups
