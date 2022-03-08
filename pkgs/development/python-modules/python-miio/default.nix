@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.10";
+  version = "0.5.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6iV+uIdVi0Z3FeM9xnp1Ss3VzFVEOm7wykxjSTXUIGM=";
+    sha256 = "sha256-1hC7yE/hGLx9g3NXqU45yC/6dcW6/0oZwgYW5bj/37c=";
   };
 
   nativeBuildInputs = [
@@ -68,10 +68,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "miio"
-  ];
-
-  disabledTestPaths = [
-    "miio/tests/test_vacuums.py"
   ];
 
   meta = with lib; {
