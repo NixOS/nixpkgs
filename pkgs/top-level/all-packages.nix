@@ -23297,6 +23297,7 @@ with pkgs;
     buildUBoot
     ubootTools
     ubootA20OlinuxinoLime
+    ubootA20OlinuxinoLime2EMMC
     ubootBananaPi
     ubootBananaPim3
     ubootBananaPim64
