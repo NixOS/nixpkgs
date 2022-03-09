@@ -9141,8 +9141,11 @@ in {
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
+    # TODO(milahu) remove next line?
     inherit (pkgs) cmake llvmPackages qt5;
   });
+
+  shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 { });
 
   shippai = callPackage ../development/python-modules/shippai { };
 

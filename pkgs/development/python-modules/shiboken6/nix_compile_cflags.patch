@@ -1,0 +1,13 @@
+--- a/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
++++ b/sources/shiboken6/ApiExtractor/clangparser/compilersupport.cpp
+@@ -172,6 +172,10 @@
+                     headerPath.type = HeaderType::FrameworkSystem;
+                     headerPath.path.truncate(headerPath.path.size() - frameworkPath().size());
+                 }
++                // detect qt paths https://bugreports.qt.io/browse/PYSIDE-1802
++                else if (headerPath.path.startsWith("/nix/store/") && headerPath.path.indexOf("-qt") == 43) {
++                    headerPath.type = HeaderType::Standard;
++                }
+                 result.append(headerPath);
+             }
+         } else if (line.startsWith(QByteArrayLiteral("#include <...> search starts here"))) {
