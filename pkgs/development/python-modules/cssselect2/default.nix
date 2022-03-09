@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, flit-core
 , pythonOlder
 , fetchPypi
 , tinycss2
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "cssselect2";
   version = "0.5.0";
+  format = "pyproject";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
@@ -19,6 +21,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i '/^addopts/d' pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [ tinycss2 ];
 
