@@ -212,7 +212,7 @@ let
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = makeStaticParsedPlatform stdenv.hostPlatform.parsed;
+        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
       };
     } else throw "Musl libc only supports Linux systems.";
 
@@ -256,7 +256,7 @@ let
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
-        parsed = makeStaticParsedPlatform stdenv.hostPlatform.parsed;
+        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";
       };
