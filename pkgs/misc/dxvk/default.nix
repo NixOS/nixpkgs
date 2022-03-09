@@ -1,33 +1,52 @@
 { lib
 , pkgs
-, stdenv
+, hostPlatform
+, stdenvNoCC
 , fetchFromGitHub
 , pkgsCross
 }:
 
 let
+  inherit (hostPlatform.uname) system;
+
   # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
   # needs to be built with a cross-compiler.
   dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix { inherit (self) src version dxvkPatches; };
   dxvk64 = pkgsCross.mingwW64.callPackage ./dxvk.nix { inherit (self) src version dxvkPatches; };
 
+  # Split out by platform to make maintenance easy in case supported versions on Darwin and other
+  # platforms diverge (due to the need for Darwin-specific patches that would fail to apply).
+  # Should that happen, set `darwin` to the last working `rev` and `hash`.
+  srcs = rec {
+    darwin = { inherit (default) rev hash version; };
+    default = {
+      rev = "v${self.version}";
+      hash = "sha256-/zH6vER/6s/d+Tt181UJOa97sqdkJyKGw6E36+1owzQ=";
+      version = "1.10";
+    };
+  };
+
   # Use the self pattern to support overriding `src` and `version` via `overrideAttrs`. A recursive
   # attrset wouldn’t work.
-  self = stdenv.mkDerivation {
+  self = stdenvNoCC.mkDerivation {
     name = "dxvk";
-    version = "1.10";
+    inherit (srcs."${system}" or srcs.default) version;
 
     src = fetchFromGitHub {
       owner = "doitsujin";
       repo = "dxvk";
-      rev = "v${self.version}";
-      hash = "sha256-/zH6vER/6s/d+Tt181UJOa97sqdkJyKGw6E36+1owzQ=";
+      inherit (srcs."${system}" or srcs.default) rev hash;
     };
 
-    # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
-    # Some games will work poorly (particularly Unreal Engine 4 games), but others work pretty well.
     # Override this to patch DXVK itself (rather than the setup script).
-    dxvkPatches = lib.optional stdenv.isDarwin ./darwin-dxvk-compat.patch;
+    dxvkPatches = lib.optionals stdenvNoCC.isDarwin [
+      # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
+      # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
+      ./darwin-dxvk-compat.patch
+      # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
+      # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
+      ./darwin-thread-primitives.patch
+    ];
 
     outputs = [ "out" "bin" "lib" ];
 
