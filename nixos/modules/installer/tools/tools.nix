@@ -166,7 +166,7 @@ in
         # Enable CUPS to print documents.
         # services.printing.enable = true;
 
-        # Enable sound.
+        # Enable sound (may be already enabled by a desktop manager like gnome).
         # sound.enable = true;
         # hardware.pulseaudio.enable = true;
 
