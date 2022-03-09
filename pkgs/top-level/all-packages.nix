@@ -8717,7 +8717,7 @@ with pkgs;
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { };
+  packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_6; };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
