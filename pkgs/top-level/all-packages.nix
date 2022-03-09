@@ -390,6 +390,8 @@ with pkgs;
 
   protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
 
+  protoc-gen-validate = callPackage ../development/tools/protoc-gen-validate { };
+
   proton-caller = callPackage ../applications/emulators/proton-caller { };
 
   ptags = callPackage ../development/tools/misc/ptags { };
