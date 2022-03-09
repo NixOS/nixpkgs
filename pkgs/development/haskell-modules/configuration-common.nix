@@ -1315,8 +1315,11 @@ self: super: {
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
 
-  # Allow building with recent versions of hlint.
-  patch = doJailbreak super.patch;
+  # 2022-02-27: https://github.com/reflex-frp/patch/pull/40 for bump bounds
+  patch = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/reflex-frp/patch/commit/6affb9a665361377346fac8c579fdf41c9ece844.patch";
+    sha256 = "sha256-m+Z9HpkOcgGel+PgcftPmtsXcS/7Egi2Ka0KQJljr4Q=";
+  }) super.patch;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core)));
