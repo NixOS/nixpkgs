@@ -15,7 +15,9 @@
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk3, wrapGAppsHook
+, pkgsCross
 , debugBuild ? false
+, runCommand
 
 ### optionals
 
@@ -121,6 +123,15 @@ let
                 })
                 else stdenv;
 
+  # Compile the wasm32 sysroot to build the RLBox Sandbox
+  # https://hacks.mozilla.org/2021/12/webassembly-and-back-again-fine-grained-sandboxing-in-firefox-95/
+  # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
+  wasiSysRoot = runCommand "wasi-sysroot" {} ''
+    mkdir -p $out/lib/wasm32-wasi
+    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/* ${pkgsCross.wasi32.llvmPackages.libcxxabi}/lib/*; do
+      ln -s $lib $out/lib/wasm32-wasi
+    done
+  '';
 in
 
 buildStdenv.mkDerivation ({
@@ -213,7 +224,11 @@ buildStdenv.mkDerivation ({
     configureScript="$(realpath ./mach) configure"
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
-  '' + (lib.optionalString googleAPISupport ''
+  '' + (lib.optionalString (lib.versionAtLeast version "95.0") ''
+    # RBox WASM Sandboxing
+    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+  '') + (lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
@@ -258,6 +273,7 @@ buildStdenv.mkDerivation ({
   ++ lib.optional ltoSupport "--enable-lto=cross" # Cross-language LTO.
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
+  ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
@@ -277,7 +293,6 @@ buildStdenv.mkDerivation ({
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
 
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
-  ++ lib.optional (lib.versionAtLeast version "95") "--without-wasm-sandboxed-libraries"
   ++ extraConfigureFlags;
 
   postConfigure = ''
@@ -356,6 +371,7 @@ buildStdenv.mkDerivation ({
     inherit applicationName;
     inherit tests;
     inherit gtk3;
+    inherit wasiSysRoot;
   } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
