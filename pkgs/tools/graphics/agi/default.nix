@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   desktopItems = [(makeDesktopItem {
     name = "agi";
     desktopName = "Android GPU Inspector";
-    exec = "$out/bin/agi";
+    exec = "agi";
     icon = "agi";
     categories = [ "Development" "Debugger" "Graphics" "3DGraphics" ];
   })];
