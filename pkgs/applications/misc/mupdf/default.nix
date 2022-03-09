@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
                       name = pname;
                       desktopName = pname;
                       comment = meta.description;
-                      icon = "mupdf-icon";
+                      icon = "mupdf";
                       exec = "${pname} %f";
                       terminal = false;
                       mimeTypes = [ "application/epub+zip"
@@ -118,6 +118,8 @@ stdenv.mkDerivation rec {
     moveToOutput "bin" "$bin"
   '' + lib.optionalString enableX11 ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
+    mkdir -p $bin/share/icons/hicolor/48x48/apps
+    cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
   '';
 
   enableParallelBuilding = true;
