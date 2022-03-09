@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, brotli
 , ffmpeg
 , rtmpdump
 , phantomjs2
@@ -11,7 +12,7 @@
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
-, hlsEncryptedSupport ? true
+, hlsEncryptedSupport ? true # Keep this attribute, so we don't break configs that override it.
 , withAlias ? false # Provides bin/youtube-dl for backcompat
 }:
 
@@ -20,16 +21,15 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2022.2.4";
+  version = "2022.3.8.2";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-gbUO18+c/MBC2PWhrS0c17E8SLNsB/rxiAaW6sCn3bU=";
+    sha256 = "sha256-aFRleMGObOh0ULU3adXVt/WiPlIJeEl222x8y/eVSyE=";
   };
 
-  propagatedBuildInputs = [ websockets mutagen ]
-    ++ lib.optional hlsEncryptedSupport pycryptodomex;
+  propagatedBuildInputs = [ brotli mutagen pycryptodomex websockets ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString withAlias ''
-      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
   meta = with lib; {
@@ -68,6 +68,6 @@ buildPythonPackage rec {
       you can modify it, redistribute it or use it however you like.
     '';
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 SuperSandro2000 ];
   };
 }
