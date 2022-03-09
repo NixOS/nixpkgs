@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , fetchpatch
+, desktopToDarwinBundle
 , pkg-config
 , freetype
 , harfbuzz
@@ -50,7 +51,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [ pkg-config ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
     ++ lib.optionals enableCurl [ curl openssl ]
