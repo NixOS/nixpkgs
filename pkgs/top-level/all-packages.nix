@@ -19791,6 +19791,7 @@ with pkgs;
   qt6 = qt62;
   libsForQt6 = libsForQt62;
 
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quark-engine = callPackage ../tools/security/quark-engine { };
