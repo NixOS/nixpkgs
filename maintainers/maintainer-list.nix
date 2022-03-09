@@ -14038,6 +14038,12 @@
     github = "jpagex";
     githubId = 635768;
   };
+  vbrandl = {
+    name = "Valentin Brandl";
+    email = "mail+nixpkgs@vbrandl.net";
+    github = "vbrandl";
+    githubId = 20639051;
+  };
   portothree = {
     name = "Gustavo Porto";
     email = "gustavoporto@ya.ru";
