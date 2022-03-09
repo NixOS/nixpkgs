@@ -3,12 +3,16 @@
 , fetchFromGitHub
 , setuptools-scm
 , pyqt5
+, qtpy
 , typing-extensions
 , pytest
 , pytestCheckHook
-}: buildPythonPackage rec {
+}:
+
+buildPythonPackage rec {
   pname = "superqt";
   version = "0.3.1";
+
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
@@ -17,7 +21,7 @@
   };
   format = "pyproject";
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ pyqt5 typing-extensions ];
+  propagatedBuildInputs = [ pyqt5 qtpy typing-extensions ];
   checkInputs = [ pytestCheckHook pytest ];
   doCheck = false; # Segfaults...
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
