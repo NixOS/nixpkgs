@@ -485,22 +485,22 @@ rec {
   # MIPS ABI table transcribed from here: https://wiki.debian.org/Multiarch/Tuples
 
   # can execute on 32bit chip
-  mips-linux-gnu                = { gcc = { arch = "mips32r2"; abi = "o32"; float = "hard"; }; };
-  mipsel-linux-gnu              = { gcc = { arch = "mips32r2"; abi = "o32"; float = "hard"; }; };
-  mipsisa32r6-linux-gnu         = { gcc = { arch = "mips32r6"; abi = "o32"; float = "hard"; }; };
-  mipsisa32r6el-linux-gnu       = { gcc = { arch = "mips32r6"; abi = "o32"; float = "hard"; }; };
+  mips-linux-gnu                = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
+  mipsel-linux-gnu              = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
+  mipsisa32r6-linux-gnu         = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
+  mipsisa32r6el-linux-gnu       = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32        = { gcc = { arch = "mips64r2"; abi = "n32"; float = "hard"; }; };
-  mips64el-linux-gnuabin32      = { gcc = { arch = "mips64r2"; abi = "n32"; float = "hard"; }; };
-  mipsisa64r6-linux-gnuabin32   = { gcc = { arch = "mips64r6"; abi = "n32"; float = "hard"; }; };
-  mipsisa64r6el-linux-gnuabin32 = { gcc = { arch = "mips64r6"; abi = "n32"; float = "hard"; }; };
+  mips64-linux-gnuabin32        = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
+  mips64el-linux-gnuabin32      = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
+  mipsisa64r6-linux-gnuabin32   = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
+  mipsisa64r6el-linux-gnuabin32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
 
   # 64bit pointers
-  mips64-linux-gnuabi64         = { gcc = { arch = "mips64r2"; abi =  "64"; float = "hard"; }; };
-  mips64el-linux-gnuabi64       = { gcc = { arch = "mips64r2"; abi =  "64"; float = "hard"; }; };
-  mipsisa64r6-linux-gnuabi64    = { gcc = { arch = "mips64r6"; abi =  "64"; float = "hard"; }; };
-  mipsisa64r6el-linux-gnuabi64  = { gcc = { arch = "mips64r6"; abi =  "64"; float = "hard"; }; };
+  mips64-linux-gnuabi64         = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
+  mips64el-linux-gnuabi64       = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
+  mipsisa64r6-linux-gnuabi64    = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
+  mipsisa64r6el-linux-gnuabi64  = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
 
   # based on:
   #   https://www.mail-archive.com/qemu-discuss@nongnu.org/msg05179.html
