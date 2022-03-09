@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, supportedGhcVersions ? [ "884" "8107" "902" ]
-    ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ "921" ]
+, supportedGhcVersions ? [ "884" "8107" "902" "922" ]
 , dynamic ? false
 , haskellPackages
 , haskell

@@ -42,11 +42,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Workaround for https://gitlab.haskell.org/ghc/ghc/-/issues/20594
-  tf-random = overrideCabal {
-    doHaddock = !pkgs.stdenv.isAarch64;
-  } super.tf-random;
-
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
