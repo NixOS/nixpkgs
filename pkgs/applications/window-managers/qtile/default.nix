@@ -63,10 +63,20 @@ let
       maintainers = with maintainers; [ kamilchm ];
     };
   };
+
+  # restore qtile name
+  env = (python3.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
+    # otherwise will be exported as "env", this restores `nix search` behavior
+    name = "${unwrapped.pname}-${unwrapped.version}";
+    # export underlying qtile package
+    passthru = { inherit unwrapped; };
+  });
+
+  # allow for qtile subprocesses to also find site packages
+  wrapped = env.override({
+    makeWrapperArgs = [
+      "--suffix PYTHONPATH : $out/${python3.sitePackages}"
+    ];
+  });
 in
-(python3.withPackages (_: [ unwrapped ])).overrideAttrs (_: {
-  # otherwise will be exported as "env", this restores `nix search` behavior
-  name = "${unwrapped.pname}-${unwrapped.version}";
-  # export underlying qtile package
-  passthru = { inherit unwrapped; };
-})
+  wrapped
