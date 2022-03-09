@@ -21,6 +21,7 @@
 , enableGL ? true
 , freeglut
 , libGLU
+, xcbuild
 }:
 let
 
@@ -39,7 +40,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vfyhlqq1a0k0drcggly4bgsjasmf6lmpfbdi5xcrwdbzkagrbr1";
   };
 
-  patches = ./0001-Use-command-v-in-favor-of-which.patch;
+  patches = [ ./0001-Use-command-v-in-favor-of-which.patch
+              ./0002-Add-Darwin-deps.patch
+            ];
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
@@ -54,6 +57,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
+    ++ lib.optional stdenv.isDarwin xcbuild
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
     ++ lib.optionals enableCurl [ curl openssl ]
     ++ lib.optionals enableGL (
