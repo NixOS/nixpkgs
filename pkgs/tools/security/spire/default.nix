@@ -29,7 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The SPIFFE Runtime Environment";
-    homepage = "github.com/spiffe/spire";
+    homepage = "https://github.com/spiffe/spire";
     license = licenses.asl20;
     maintainers = with maintainers; [ jonringer fkautz ];
   };
