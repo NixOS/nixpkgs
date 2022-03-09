@@ -962,7 +962,7 @@ in
               '') onion.authorizedClients ++
               optional (onion.secretKey != null) ''
                 install -d -o tor -g tor -m 0700 ${escapeShellArg onion.path}
-                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey})"
+                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey} | head -1)"
                 case "$key" in
                  ("== ed25519v"*"-secret")
                   install -o tor -g tor -m 0400 ${escapeShellArg onion.secretKey} ${escapeShellArg onion.path}/hs_ed25519_secret_key;;
