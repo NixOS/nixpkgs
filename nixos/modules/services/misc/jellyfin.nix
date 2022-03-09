@@ -84,7 +84,7 @@ in
 
         RestrictNamespaces = true;
         # AF_NETLINK needed because Jellyfin monitors the network connection
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 
