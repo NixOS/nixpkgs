@@ -694,6 +694,17 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-zoxide = super.telescope-zoxide.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+
+    buildInputs = [ zoxide ];
+
+    postPatch = ''
+      substituteInPlace lua/telescope/_extensions/zoxide/config.lua \
+        --replace "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
+    '';
+  });
+
   tup =
     let
       # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim

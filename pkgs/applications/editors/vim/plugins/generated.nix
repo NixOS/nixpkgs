@@ -6712,6 +6712,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-z.nvim/";
   };
 
+  telescope-zoxide = buildVimPluginFrom2Nix {
+    pname = "telescope-zoxide";
+    version = "2021-10-21";
+    src = fetchFromGitHub {
+      owner = "jvgrootveld";
+      repo = "telescope-zoxide";
+      rev = "b51b7f4ba0e2a08bc764fb2ee39e0bc68eec79b5";
+      sha256 = "0dm7h00hz2qh73gfzypv1lm2vzk7nawp7wz1y1ar5nh6gg4zf2rl";
+    };
+    meta.homepage = "https://github.com/jvgrootveld/telescope-zoxide/";
+  };
+
   telescope-nvim = buildVimPluginFrom2Nix {
     pname = "telescope.nvim";
     version = "2022-03-08";
