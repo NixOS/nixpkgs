@@ -1609,6 +1609,8 @@ in {
 
   chispa = callPackage ../development/python-modules/chispa { };
 
+  chromaprint = callPackage ../development/python-modules/chromaprint { };
+
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
