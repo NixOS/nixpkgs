@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.pango.org/";
+    changelog = "https://gitlab.gnome.org/GNOME/pango/-/blob/${version}/NEWS";
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
