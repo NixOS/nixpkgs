@@ -44,6 +44,12 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
+  disabledTests = [
+    # uses pytest.approx which is not supported in a boolean context in pytest7
+    "test_to_dec"
+    "test_roundtrip"
+  ];
+
   meta = with lib; {
     description = "CSV on the Web";
     homepage = "https://github.com/cldf/csvw";
