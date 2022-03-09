@@ -39,6 +39,7 @@
 , which
 , xkb-switch
 , ycmd
+, zoxide
 , nodejs
 
 # test dependencies
@@ -1074,6 +1075,15 @@ self: super: {
       maintainers = with maintainers; [ marcweber jagajaga ];
       platforms = platforms.unix;
     };
+  });
+
+  zoxide-vim = super.zoxide-vim.overrideAttrs (old: {
+    buildInputs = [ zoxide ];
+
+    postPatch = ''
+      substituteInPlace autoload/zoxide.vim \
+        --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
+    '';
   });
 
 } // (

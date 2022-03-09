@@ -12036,4 +12036,16 @@ final: prev:
     meta.homepage = "https://github.com/troydm/zoomwintab.vim/";
   };
 
+  zoxide-vim = buildVimPluginFrom2Nix {
+    pname = "zoxide.vim";
+    version = "2021-12-10";
+    src = fetchFromGitHub {
+      owner = "nanotee";
+      repo = "zoxide.vim";
+      rev = "c4e96f34b1b3160d6b6a6519588024412df27cd7";
+      sha256 = "0zisr1r1z9ys0jkab1lvwy4klwkay07p0095f03r9qydnig8jgsm";
+    };
+    meta.homepage = "https://github.com/nanotee/zoxide.vim/";
+  };
+
 }

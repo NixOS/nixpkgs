@@ -520,6 +520,7 @@ mzlogin/vim-markdown-toc
 mzlogin/vim-smali
 nacro90/numb.nvim
 nanotech/jellybeans.vim
+nanotee/zoxide.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
