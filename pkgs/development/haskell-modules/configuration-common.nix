@@ -1774,28 +1774,6 @@ self: super: {
   #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
   hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
-  # Apply unreleased upstream patches allowing to build with GHC >= 9.0
-  # https://github.com/noinia/hgeometry/pull/164#issuecomment-1057478339
-  hgeometry = appendPatch [
-    (pkgs.fetchpatch {
-      name = "hgeometry-ghc-9.0.patch";
-      url = "https://github.com/noinia/hgeometry/pull/164.patch";
-      includes = [
-        "**/Data/Geometry/Box/Internal.hs"
-        "**/Data/Geometry/HyperPlane.hs"
-        "**/Data/Geometry/KDTree.hs"
-        "**/Data/Geometry/Point/*"
-        "**/Data/Geometry/PolyLine.hs"
-        "**/Data/Geometry/RangeTree**"
-        "**/Data/Geometry/Transformation/**"
-        "**/Data/Geometry/Vector**"
-        "**/Algorithms/Geometry/WSPD.hs"
-      ];
-      sha256 = "0wmp0lpns17ixlhkslmakrnkvrjkfg6gc120mlr4lbi6lmlgflm4";
-      stripLen = 1;
-    })
-  ] super.hgeometry;
-
   # Too strict version bounds on ansi-terminal
   # https://github.com/kowainik/co-log/pull/218
   co-log = doJailbreak super.co-log;
