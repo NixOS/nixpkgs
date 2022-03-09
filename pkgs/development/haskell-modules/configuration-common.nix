@@ -2372,6 +2372,8 @@ self: super: {
   colourista = assert super.colourista.version == "0.1.0.1";
     doJailbreak super.colourista;
 
+  # 2022-02-26: https://github.com/emilypi/base64/issues/39
+  base64 = dontCheck super.base64;
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
