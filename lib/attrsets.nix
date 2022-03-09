@@ -327,7 +327,7 @@ rec {
        isDerivation "foobar"
        => false
   */
-  isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
+  isDerivation = x: x.type or null == "derivation";
 
   /* Converts a store path to a fake derivation. */
   toDerivation = path:
