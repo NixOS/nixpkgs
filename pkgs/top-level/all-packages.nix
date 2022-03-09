@@ -1069,6 +1069,8 @@ with pkgs;
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
+  goflow = callPackage ../tools/networking/goflow { };
+
   gofu = callPackage ../applications/misc/gofu { };
 
   godns = callPackage ../tools/networking/godns { };
@@ -1292,6 +1294,8 @@ with pkgs;
   twine = with python3Packages; toPythonApplication twine;
 
   aldo = callPackage ../applications/radio/aldo { };
+
+  alglib = callPackage ../development/libraries/alglib { };
 
   almanah = callPackage ../applications/misc/almanah { };
 
@@ -25463,6 +25467,8 @@ with pkgs;
   gspeech = callPackage ../applications/audio/gspeech { };
 
   haruna = libsForQt5.callPackage ../applications/video/haruna { };
+
+  hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
 
   helix = callPackage ../applications/editors/helix { };
 
