@@ -94,6 +94,10 @@ stdenv.mkDerivation rec {
                                     "application/x-cbz"
                                     "application/x-pdf"
                                   ];
+                      categories = [ "Graphics" "Viewer" ];
+                      keywords = [ "mupdf" "comic" "document" "ebook" "viewer"
+                                   "cbz" "epub" "fb2" "pdf" "xps"
+                                 ];
                     })
                  ];
 
