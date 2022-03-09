@@ -1,3 +1,10 @@
+# Note: lib/systems/default.nix takes care of producing valid,
+# fully-formed "platform" values (e.g. hostPlatform, buildPlatform,
+# targetPlatform, etc) containing at least the minimal set of attrs
+# required (see types.parsedPlatform in lib/systems/parse.nix).  This
+# file takes an already-valid platform and further elaborates it with
+# optional fields such as linux-kernel, gcc, etc.
+
 { lib }:
 rec {
   pc = {
@@ -548,6 +555,9 @@ rec {
     };
   };
 
+  # This function takes a minimally-valid "platform" and returns an
+  # attrset containing zero or more additional attrs which should be
+  # included in the platform in order to further elaborate it.
   select = platform:
     # x86
     /**/ if platform.isx86 then pc
