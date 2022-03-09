@@ -116,11 +116,14 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + lib.optionalString enableX11 ''
-    ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
+  '' + lib.optionalString (enableX11 || enableGL) ''
     mkdir -p $bin/share/icons/hicolor/48x48/apps
     cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
-  '';
+  '' + (if enableGL then ''
+    ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
+  '' else lib.optionalString (enableX11) ''
+    ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
+  '');
 
   enableParallelBuilding = true;
 
