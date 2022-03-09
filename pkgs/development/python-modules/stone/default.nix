@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , mock
 , ply
-, pytest-runner
 , pytestCheckHook
 , six
 }:
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i '/pytest-runner/d' setup.py
   '';
-
-  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ ply six ];
 
