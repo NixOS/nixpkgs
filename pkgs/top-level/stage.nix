@@ -66,7 +66,7 @@
 let
   # This is a function from parsed platforms (like
   # stdenv.hostPlatform.parsed) to parsed platforms.
-  makeStaticParsedPlatform = parsed:
+  makeMuslParsedPlatform = parsed:
     # The following line guarantees that the output of this function
     # is a well-formed platform with no missing fields.  It will be
     # uncommented in a separate PR, in case it breaks the build.
