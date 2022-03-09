@@ -16,6 +16,7 @@
   filepath,
   generic-optics,
   HUnit,
+  installShellFiles,
   lib,
   lock-file,
   MemoTrie,
@@ -140,11 +141,18 @@ mkDerivation {
   maintainers = with lib.maintainers; [maralorn];
   passthru.updateScript = ./update.sh;
   testTarget = "unit-tests";
+  buildTools = [installShellFiles];
   postInstall = ''
     cat > $out/bin/nom-build << EOF
     #!${runtimeShell}
     ${expect}/bin/unbuffer nix-build "\$@" 2>&1 | exec $out/bin/nom
     EOF
     chmod a+x $out/bin/nom-build
+    installShellCompletion --zsh --name _nom-build ${
+      builtins.toFile "completion.zsh" ''
+        #compdef nom-build
+        compdef nom-build=nix-build
+      ''
+    }
   '';
 }
