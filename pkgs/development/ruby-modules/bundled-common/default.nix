@@ -118,9 +118,12 @@ let
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
+
         nativeBuildInputs = [ makeBinaryWrapper ];
-        inherit (ruby) gemPath meta;
-        buildCommand = ''
+
+        dontUnpack = true;
+
+        buildPhase = ''
           mkdir -p $out/bin
           for i in ${ruby}/bin/*; do
             makeWrapper "$i" $out/bin/$(basename "$i") \
@@ -131,6 +134,15 @@ let
               --set GEM_PATH ${basicEnv}/${ruby.gemPath}
           done
         '';
+
+        dontInstall = true;
+
+        doCheck = true;
+        checkPhase = ''
+          $out/bin/ruby --help > /dev/null
+        '';
+
+        inherit (ruby) meta;
       };
 
       env = let
