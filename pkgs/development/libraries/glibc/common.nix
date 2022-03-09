@@ -182,6 +182,14 @@ stdenv.mkDerivation ({
       "libc_cv_as_needed=no"
     ] ++ lib.optional withGd "--with-gd";
 
+  # Glibc's configuration machinery cannot parse *-muslabi64, and
+  # fails with a very cryptic error message.  This goes in
+  # extraConfigureFlags so it comes after the --host= added by stdenv,
+  # thereby overriding it.
+  extraConfigureFlags = if (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isMips64n64 && stdenv.hostPlatform.isLittleEndian) then [
+      "--host=mips64el-linux-musl"
+  ] else null;  # "if..then..else null" is used instead of "lib.optionals" to prevent mass-rebuilds
+
   makeFlags = [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
