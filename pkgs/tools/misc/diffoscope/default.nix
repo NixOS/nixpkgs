@@ -80,6 +80,9 @@ python3Packages.buildPythonApplication rec {
 
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
+
+    # We don't care if the is correctly formatted
+    "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
