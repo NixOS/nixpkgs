@@ -366,6 +366,20 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.k3s.enable</literal> no longer implies
+          <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>,
+          and will default to the <quote>systemd</quote> cgroup driver
+          when using <literal>services.k3s.docker = true</literal>. This
+          change may require a reboot to take effect, and k3s may not be
+          able to run if the boot cgroup hierarchy does not match its
+          configuration. The previous behavior may be retained by
+          explicitly setting
+          <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>
+          in your configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The DHCP server (<literal>services.dhcpd4</literal>,
           <literal>services.dhcpd6</literal>) has been hardened. The
           service is now using the systemd’s
@@ -754,6 +768,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>dendrite</literal> package has been upgraded from
+          0.5.1 to
+          <link xlink:href="https://github.com/matrix-org/dendrite/releases/tag/v0.6.5">0.6.5</link>.
+          Instances configured with split sqlite databases, which has
+          been the default in NixOS, require merging of the federation
+          sender and signing key databases. See upstream
+          <link xlink:href="https://github.com/matrix-org/dendrite/releases/tag/v0.6.0">release
+          notes</link> on version 0.6.0 for details on database changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The existing <literal>pkgs.opentelemetry-collector</literal>
           has been moved to
           <literal>pkgs.opentelemetry-collector-contrib</literal> to
@@ -1066,6 +1092,12 @@
           place upstream. A combined <literal>influxdb2</literal>
           package is still provided in this release for backwards
           compatibilty, but will be removed at a later date.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>programs.zsh.autosuggestions.strategy</literal> now
+          takes a list of strings instead of a string.
         </para>
       </listitem>
       <listitem>

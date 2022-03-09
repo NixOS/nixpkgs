@@ -25,8 +25,8 @@ from pathlib import Path
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
 
-ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent
-from pluginupdate import Editor, update_plugins, PluginDesc, CleanEnvironment, LOG_LEVELS, Cache
+ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent # type: ignore
+from pluginupdate import Editor, update_plugins, FetchConfig, CleanEnvironment
 
 PKG_LIST="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
@@ -118,7 +118,7 @@ class LuaEditor(Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, proc: int):
+    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
@@ -126,14 +126,14 @@ class LuaEditor(Editor):
             sorted_plugin_specs = sorted(plugin_specs, key=lambda v: v.name.lower())
 
             try:
-                pool = Pool(processes=proc)
+                pool = Pool(processes=config.proc)
                 results = pool.map(_prefetch, sorted_plugin_specs)
             finally:
                 pass
 
             self.generate_nix(results, outfile)
 
-            redirects = []
+            redirects = {}
             return redirects
 
         return update
@@ -181,10 +181,8 @@ def generate_pkg_nix(plug: LuaPlugin):
 
             cmd.append(plug.version)
 
-    #
     if plug.server != "src" and plug.server:
         cmd.append(f"--only-server={plug.server}")
-
 
     if plug.luaversion:
         with CleanEnvironment():
@@ -209,7 +207,6 @@ def main():
 
     parser = editor.create_parser()
     args = parser.parse_args()
-    log.setLevel(LOG_LEVELS[args.debug])
 
     update_plugins(editor, args)
 

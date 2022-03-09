@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, cppo }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, cppo }:
 
 buildDunePackage rec {
   pname = "camomile";
@@ -21,6 +21,10 @@ buildDunePackage rec {
     runHook preConfigure
     ocaml configure.ml --share $out/share/camomile
     runHook postConfigure
+  '';
+
+  postInstall = ''
+    echo "version = \"${version}\"" >> $out/lib/ocaml/${ocaml.version}/site-lib/camomile/META
   '';
 
   meta = {

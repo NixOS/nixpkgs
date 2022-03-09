@@ -1,64 +1,80 @@
 { lib
-, dbus
 , stdenv
+, rustPlatform
+, fetchFromGitHub
+, dbus
+, ffmpeg
+, x264
+, libva
 , gst_all_1
 , xorg
 , libdrm
-, libva
-, fetchzip
-, copyDesktopItems
-, fontconfig
-, libpng
-, pipewire
-, makeWrapper
-, autoPatchelfHook
+, pkg-config
+, pango
+, cmake
+, autoconf
+, libtool
+, nodePackages
+, ApplicationServices
+, Carbon
+, Cocoa
+, VideoToolbox
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "weylus";
   version = "0.11.4";
 
-  src = fetchzip {
-    url = "https://github.com/H-M-H/Weylus/releases/download/v${version}/linux.zip";
-    sha256 = "sha256-EW3TdI4F4d4X/BeSqI05QtS77ym1U5jdswFfNtSFyFk=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "H-M-H";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0gq2czxvahww97j4i3k18np29zl6wx85f8253wn3ibqrpfnklz6l";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ./weylus $out/bin/weylus
-    copyDesktopItems ./weylus.desktop
-
-    runHook postInstall
-  '';
-
   buildInputs = [
-    libpng
+    ffmpeg
+    x264
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
+    Carbon
+    Cocoa
+    VideoToolbox
+  ] ++ lib.optionals stdenv.isLinux [
     dbus
-    libdrm
-    fontconfig
     libva
     gst_all_1.gst-plugins-base
-    pipewire
-    # autoPatchelfHook complains if these are missing, even on wayland
+    xorg.libXext
     xorg.libXft
     xorg.libXinerama
     xorg.libXcursor
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXtst
     xorg.libXrandr
     xorg.libXcomposite
-    xorg.libXtst
+    xorg.libXi
+    xorg.libXv
+    pango
+    libdrm
   ];
 
-  nativeBuildInputs = [ copyDesktopItems autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    nodePackages.typescript
+  ] ++ lib.optionals stdenv.isLinux [
+    pkg-config
+    autoconf
+    libtool
+  ];
 
-  postFixup = let
-    GST_PLUGIN_PATH = lib.makeSearchPathOutput  "lib" "lib/gstreamer-1.0" [
-      gst_all_1.gst-plugins-base
-      pipewire
-    ];
-  in ''
-    wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
+  cargoSha256 = "1pigmch0sy9ipsafd83b8q54xwqjxdaif363n1q8n46arq4v81j0";
+
+  cargoBuildFlags = [ "--features=ffmpeg-system" ];
+  cargoTestFlags = [ "--features=ffmpeg-system" ];
+
+  postInstall = ''
+    install -vDm755 weylus.desktop $out/share/applications/weylus.desktop
   '';
 
   meta = with lib; {
@@ -66,6 +82,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ lom ];
-    platforms = [ "x86_64-linux" ];
   };
 }
