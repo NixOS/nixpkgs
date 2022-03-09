@@ -13214,6 +13214,7 @@ with pkgs;
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  cargo-call-stack = callPackage ../development/tools/rust/cargo-call-stack { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
     inherit (darwin.apple_sdk.frameworks) Security;
