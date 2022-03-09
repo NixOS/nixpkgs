@@ -92,6 +92,7 @@ mapAliases ({
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-pep8 = pytestpep8; # added 2021-01-04
+  pytest-pythonpath = throw "pytest-pythonpath is obsolete as of pytest 7.0.0 and has been removed"; # added 2022-03-09
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04

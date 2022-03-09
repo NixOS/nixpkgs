@@ -7891,8 +7891,6 @@ in {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
-  pytest-pythonpath = callPackage ../development/python-modules/pytest-pythonpath { };
-
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
   pytest-quickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
