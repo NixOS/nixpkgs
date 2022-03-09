@@ -1,0 +1,30 @@
+diff --git a/src/core/jobs/httpworker.cpp b/src/core/jobs/httpworker.cpp
+index b81edd2d..82f12e38 100644
+--- a/src/core/jobs/httpworker.cpp
++++ b/src/core/jobs/httpworker.cpp
+@@ -41,7 +41,6 @@ public:
+         return nam.get(request);
+     }
+ 
+-private:
+     QNetworkDiskCache cache;
+ };
+ 
+@@ -102,6 +101,17 @@ static void addUserAgent(QNetworkRequest &request)
+         agentHeader += QStringLiteral("-%1/%2").arg(QCoreApplication::instance()->applicationName(), QCoreApplication::instance()->applicationVersion());
+     }
+     request.setHeader(QNetworkRequest::UserAgentHeader, agentHeader);
++
++    // Assume that no cache expiration time will be longer than a week, but otherwise prefer the cache
++    // This is mildly hacky, but if we don't do this, we end up with infinite cache expirations in some
++    // cases, which of course isn't really acceptable... See ed62ee20 for a situation where that happened.
++    QNetworkCacheMetaData cacheMeta{s_httpWorkerNAM->cache.metaData(request.url())};
++    if (cacheMeta.isValid()) {
++        const QDateTime nextWeek{QDateTime::currentDateTime().addDays(7)};
++        if (cacheMeta.expirationDate().isValid() && cacheMeta.expirationDate() < nextWeek) {
++            request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
++        }
++    }
+ }
+ 
+ void HTTPWorker::startRequest()
