@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "downloader-cli";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
     rev = version;
-    sha256 = "0hjwy3qa6al6p35pv01sdl3szh7asf6vlmhwjbkpppn4zi239k0y";
+    sha256 = "sha256-Dl5XIvdZInz+edL9uQv7V6Kc6FB+7hFAGe/nybnqvQU=";
   };
 
   propagatedBuildInputs = [ urllib3 ];
