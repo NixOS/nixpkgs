@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # does not find argp-standalone
   };
 }
