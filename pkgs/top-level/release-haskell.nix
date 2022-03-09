@@ -52,7 +52,7 @@ let
     ghc884
     ghc8107
     ghc902
-    ghc921
+    ghc922
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -407,11 +407,11 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc921
+          jobs.pkgsMusl.haskell.compiler.ghc922
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc921
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc922
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
