@@ -2380,8 +2380,4 @@ self: super: {
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core  = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
 
-  # Fixes a segfault breaking the test suite, bump until stackage follows suit
-  foundation = doDistribute self.foundation_0_0_28;
-  basement = doDistribute self.basement_0_0_14;
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
