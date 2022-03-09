@@ -166,6 +166,30 @@ rec {
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
 
+  /* The latest release that is supported, at the time of release branch-off,
+     if applicable.
+
+     Ideally, out-of-tree modules should be able to evaluate cleanly with all
+     supported Nixpkgs versions (master, release and old release until EOL).
+     So if possible, deprecation warnings should take effect only when all
+     out-of-tree expressions/libs/modules can upgrade to the new way without
+     losing support for supported Nixpkgs versions.
+
+     This release number allows deprecation warnings to be implemented such that
+     they take effect as soon as the oldest release reaches end of life. */
+  oldestSupportedRelease =
+    # Update on master only. Do not backport.
+    2111;
+
+  /* Whether a feature is supported in all supported releases (at the time of
+     release branch-off, if applicable). See `oldestSupportedRelease`. */
+  isInOldestRelease =
+    /* Release number of feature introduction as an integer, e.g. 2111 for 21.11.
+       Set it to the upcoming release, matching the nixpkgs/.version file.
+    */
+    release:
+      release <= lib.trivial.oldestSupportedRelease;
+
   /* Returns the current nixpkgs release code name.
 
      On each release the first letter is bumped and a new animal is chosen
