@@ -43,6 +43,10 @@ stdenvNoCC.mkDerivation rec {
   # MoltenVK requires specific versions of its dependencies.
   # Pin them here except for cereal, which is four years old and has several CVEs.
   passthru = {
+    # The patch required to support DXVK may different from version to version. This should never
+    # be used except with DXVK, so there’s no package for it. To emphasize that this patch should
+    # never be used except with DXVK, `dxvk` provides a function for applying this patch.
+    dxvkPatch = ./dxvk-moltenvk-compat.patch;
     glslang = (glslang.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";

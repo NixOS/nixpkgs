@@ -72,6 +72,7 @@ let
 
     # DXVK with MoltenVK requires a patched MoltenVK in addition to its own patches. Provide a
     # convenience function to handle the necessary patching.
+    #
     # Usage:
     # let
     #   patchedMoltenVK = dxvk.patchMoltenVK darwin.moltenvk;
@@ -80,9 +81,10 @@ let
     passthru.patchMoltenVK = moltenvk:
       moltenvk.overrideAttrs (old: {
         patches = old.patches or [ ] ++ [
-          # Lie to DXVK about certain features that DXVK expects to be available and set defaults
-          # for better performance/compatability on certain hardware.
-          ./darwin-moltenvk-compat.patch
+          # Apply MoltenVK’s DXVK compatability patch. This is needed to fake support for certain
+          # extensions. There is no package for a patched MoltenVK to avoid any confusion by users
+          # whether they should use it. Except with DXVK, the answer is always no.
+          old.passthru.dxvkPatch
         ];
       });
 
