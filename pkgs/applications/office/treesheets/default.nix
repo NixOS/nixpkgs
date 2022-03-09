@@ -17,24 +17,24 @@ stdenv.mkDerivation rec {
   preConfigure = "cd src";
 
   postInstall = ''
-    mkdir "$out/share" -p
-    cp -av ../TS "$out/share/libexec"
+    mkdir -p "$out/libexec"
+    cp -av ../TS "$out/libexec/treesheets"
 
-    mkdir "$out/bin" -p
-    makeWrapper "$out/share/libexec/treesheets" "$out/bin/treesheets"
+    mkdir -p "$out/bin"
+    makeWrapper "$out/libexec/treesheets/treesheets" "$out/bin/treesheets"
 
-    mkdir "$out/share/doc" -p
+    mkdir -p "$out/share/doc/treesheets"
 
     for f in readme.html docs examples
     do
-      mv -v "$out/share/libexec/$f" "$out/share/doc"
-      ln -sv "$out/share/doc/$f" "$out/share/libexec/$f"
+      mv -v "$out/libexec/treesheets/$f" "$out/share/doc/treesheets"
+      ln -sv "$out/share/doc/treesheets/$f" "$out/libexec/treesheets/$f"
     done
 
     mkdir "$out/share/applications" -p
-    mv -v "$out/share/libexec/treesheets.desktop" "$out/share/applications"
+    mv -v "$out/libexec/treesheets/treesheets.desktop" "$out/share/applications"
     substituteInPlace "$out/share/applications/treesheets.desktop" \
-      --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
+      --replace "Icon=images/treesheets.svg" "Icon=$out/libexec/treesheets/images/treesheets.svg"
   '';
 
   meta = with lib; {
