@@ -35,11 +35,11 @@
 }:
 
 let
-  version = "1.10.0";
+  version = "1.10.1";
   libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-3j7fvcfbgyk71MmbUUKYi+/0cpQFNbYXO+DMDUjDqkQ=";
+    sha256 = "sha256-9HpfzVv1XG5fE15yM+XiVWjr+fE3xj7oRYp0LHZ/3Xg=";
     rev = "v${version}";
   };
   runtimeLibs = lib.optional withVulkan vulkan-loader
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-bpTSzODVRKRs1OW6JafjbU3e/AqdQeGzWcg1lb9SIyo=";
+    sha256 = "sha256-E0tY5YRBcew6NIVDgTNGBuxSRR0qM9bCBE+gYn61eQQ";
     rev = "v${version}";
   };
 
   patches = [
-    ./0001-Disable-menu_show_core_updater.patch
-    ./0002-Use-fixed-paths-on-libretro_info_path.patch
+    ./disable-menu_show_core_updater.patch
+    ./use-fixed-paths-on-libretro_info_path.patch
   ];
 
   postPatch = ''
