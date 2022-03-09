@@ -28963,6 +28963,8 @@ with pkgs;
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
+  psst = callPackage ../applications/audio/psst { };
+
   squeezelite = callPackage ../applications/audio/squeezelite { };
 
   ltunify = callPackage ../tools/misc/ltunify { };
