@@ -9922,6 +9922,8 @@ with pkgs;
 
   snapdragon-profiler = callPackage ../tools/graphics/snapdragon-profiler { };
 
+  snet = callPackage ../tools/networking/snet { };
+
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
   };
