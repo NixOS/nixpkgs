@@ -34734,4 +34734,6 @@ with pkgs;
   honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
 
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
+
+  keep-presence = callPackage ../tools/misc/keep-presence { };
 }
