@@ -10,7 +10,7 @@ rec {
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
       # package dependencies
-      , stdenv, fetchFromGitHub, buildGoPackage
+      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
@@ -76,6 +76,16 @@ rec {
       buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
 
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+
+      patches = [
+        # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
+        # It could be removed when a version incorporating this patch is released.
+        (fetchpatch {
+          name = "buildkit-zfs.patch";
+          url = "https://github.com/moby/moby/pull/43136.patch";
+          sha256 = "1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
+        })
+      ];
 
       postPatch = ''
         patchShebangs hack/make.sh hack/make/
