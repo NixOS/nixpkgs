@@ -55,17 +55,15 @@ mkDerivation rec {
       desktopName = "HDRMerge";
       comment = meta.description;
       icon = "hdrmerge";
-      exec = "@out@/bin/hdrmerge -F";
+      exec = "hdrmerge %F";
       categories = [ "Graphics" ];
       mimeTypes = [ "image/x-dcraw" "image/x-adobe-dng" ];
       terminal = false;
     })
   ];
 
-  postInstallPhase = ''
-    # Make a desktop item
-    mkdir -p $out/share/icons/ $out/share/applications/
-    cp ../data/images/logo.png $out/share/icons/hdrmerge.png
+  postInstall = ''
+    install -Dm444 ../data/images/icon.png $out/share/icons/hicolor/128x128/apps/hdrmerge.png
   '';
 
   meta = with lib; {
