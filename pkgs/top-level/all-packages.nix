@@ -33329,6 +33329,8 @@ with pkgs;
 
   brmodelo = callPackage ../applications/science/engineering/brmodelo { };
 
+  osrmt = callPackage ../applications/science/engineering/osrmt { };
+
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
