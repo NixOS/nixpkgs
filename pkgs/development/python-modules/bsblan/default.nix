@@ -5,6 +5,8 @@
 , aresponses
 , coverage
 , mypy
+, poetry-core
+, pydantic
 , pytest-asyncio
 , pytest-cov
 , pytest-mock
@@ -18,7 +20,7 @@
 buildPythonPackage rec {
   pname = "bsblan";
   version = "0.5.5";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -29,10 +31,15 @@ buildPythonPackage rec {
     sha256 = "sha256-kq4cML7D9XC/QRPjGfaWcs0H78OOc2IXGua7qJpWYOQ=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     attrs
     cattrs
+    pydantic
     yarl
   ];
 
