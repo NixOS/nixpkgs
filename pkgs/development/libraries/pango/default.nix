@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.4";
+  version = "1.50.5";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "9K1j6H3CsUUwBUKk+wBNB6n5GzQVL64N2+UOzdhRwWI=";
+    sha256 = "bRNoctpiB/6Ixc0slcNryvTtKUArhUZjqGzX7+mbDPU=";
   };
 
   strictDeps = !withIntrospection;
@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
     "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
+  ] ++ lib.optionals withDocs [
+    "-Ddatadir=${placeholder "devdoc"}"
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -83,14 +85,6 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = false; # test-font: FAIL
-
-  postInstall = lib.optionalString withDocs ''
-    # So that devhelp can find this.
-    # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
-    mkdir -p "$devdoc/share/devhelp"
-    mv "$out/share/doc/pango/reference" "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc/pango"
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
