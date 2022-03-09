@@ -32,7 +32,6 @@ let
       rev = "jdk${version}";
       sha256 = "sha256-e39Yv+NDQG7z6fGmpKEnkKd5MoHZ50SXlq/Q7lzWcDA=";
     };
-
     outputs = [ "out" "jre" ];
 
     nativeBuildInputs = [ pkg-config lndir unzip ];
