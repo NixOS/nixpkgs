@@ -10,7 +10,7 @@
 , libjpeg
 , darwin
 , gumbo
-, enableX11 ? true
+, enableX11 ? (!stdenv.isDarwin)
 , libX11
 , libXext
 , libXi
