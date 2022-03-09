@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , docbook_xml_dtd_43
 , docbook_xsl
 , glib
@@ -30,6 +31,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./installed-tests-path.patch
+    # Fix darwin build, can be removed on next release
+    # `--version-script` isn't supported by the macOS linker
+    # https://github.com/hughsie/libxmlb/pull/119
+    (fetchpatch {
+      url = "https://github.com/hughsie/libxmlb/commit/d83aac5bd78cfbbfa2ecd428ff54b811071dfe4d.patch";
+      sha256 = "sha256-UNRMbyNzdxfTZ8xV6J8a622hPnr3mowooP1q8Dg19yw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -72,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
