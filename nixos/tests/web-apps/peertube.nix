@@ -120,6 +120,9 @@ import ../make-test-python.nix ({pkgs, ...}:
     # Check if PeerTube is running
     client.succeed("curl --fail http://peertube.local:9000/api/v1/config/about | jq -r '.instance.name' | grep 'PeerTube\ Test\ Server'")
 
+    # Check PeerTube CLI version
+    assert "${pkgs.peertube.version}" in server.succeed('su - peertube -s /bin/sh -c "peertube --version"')
+
     client.shutdown()
     server.shutdown()
     database.shutdown()
