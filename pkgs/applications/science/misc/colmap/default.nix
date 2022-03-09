@@ -7,13 +7,13 @@ assert !cudaSupport || cudatoolkit != null;
 let boost_static = boost17x.override { enableStatic = true; };
 in
 mkDerivation rec {
-  version = "3.6";
+  version = "3.7";
   pname = "colmap";
   src = fetchFromGitHub {
      owner = "colmap";
      repo = "colmap";
      rev = version;
-     sha256 = "1kfivdmhpmdxjjf30rr57y2iy7xmdpg4h8aw3qgacv8ckfpgda3n";
+     sha256 = "sha256-uVAw6qwhpgIpHkXgxttKupU9zU+vD0Za0maw2Iv4x+I=";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ mkDerivation rec {
        with a graphical and command-line interface.
     '';
     homepage = "https://colmap.github.io/index.html";
-    license = licenses.bsd2;
+    license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lebastr ];
   };

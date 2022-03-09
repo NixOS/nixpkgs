@@ -1,7 +1,7 @@
 { lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
 
 stdenv.mkDerivation rec {
-  pname = "1password";
+  pname = "1password-cli";
   version = "1.12.2";
   src =
     if stdenv.isLinux then

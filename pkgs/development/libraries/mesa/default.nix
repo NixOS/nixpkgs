@@ -252,12 +252,14 @@ self = stdenv.mkDerivation {
     inherit (libglvnd) driverLink;
     inherit llvmPackages;
 
-    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
-      name = "mesa-dev-does-not-depend-on-llvm";
-      buildCommand = ''
-        echo ${self.dev} >>$out
-      '';
-      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    tests = lib.optionalAttrs stdenv.isLinux {
+      devDoesNotDependOnLLVM = stdenv.mkDerivation {
+        name = "mesa-dev-does-not-depend-on-llvm";
+        buildCommand = ''
+          echo ${self.dev} >>$out
+        '';
+        disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+      };
     };
   };
 

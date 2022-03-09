@@ -100,9 +100,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://nuclearelephant.com/";
+    homepage = "http://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

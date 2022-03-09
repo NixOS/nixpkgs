@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "43.0.2";
+  version = "44.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9LLE7cUJhJ+0/rFtVkSdiXUohrXW0JFy3XcYMAAivfw=";
+    sha256 = "sha256-gzLsBwq3wrFde5cEb5+oFLW4KrwoiZpr22JbJhNr1yk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256:1qi7zn2278jpry466w3xj1wpyy5f82bffi55i6nva591i3r1z4am";
+    sha256 = "sha256-lWFv8eiA3QHp5bhcg4qon/dvKUbFbtH1Q2oXGkk0Me0=";
   };
 
   nativeBuildInputs = [

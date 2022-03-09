@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flaky
 , hypothesis
 , pytest
 , pytestCheckHook
 , pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.16.0";
+  version = "0.17.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,14 +20,21 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4zMbzdDtiLRKo5C12wZRoBNguXLn3f26NuDwQ+pHA0I=";
+    sha256 = "sha256-4wDXvO6pDK0dQLnyfJTTa+GXf9Qtsi6ywYDUIdhkgGo=";
   };
 
-  buildInputs = [
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
     pytest
   ];
 
   checkInputs = [
+    flaky
     hypothesis
     pytestCheckHook
   ];

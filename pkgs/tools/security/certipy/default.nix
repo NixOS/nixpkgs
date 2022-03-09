@@ -5,22 +5,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "certipy";
-  version = "unstable-2021-11-08";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
-    rev = "c2f5581505c54f3bf9fe4e6f07c17fa9ef501cab";
-    sha256 = "0m2n30prqd9d02kmryk8vry4cabcad1892qr8a02qfg6r98x8q3q";
+    rev = version;
+    hash = "sha256-84nGRKZ0UlMDAZ1Wo5Hgy9XSAyEh0Tio9+3OZVFZG5k=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     asn1crypto
-    pycryptodome
+    dnspython
+    dsinternals
     impacket
     ldap3
     pyasn1
-    dnspython
+    pycryptodome
   ];
 
   # Project has no tests

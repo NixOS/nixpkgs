@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , meson
 , fetchurl
 , python3
@@ -7,12 +8,12 @@
 , glib
 , adwaita-icon-theme
 , libpeas
+, libxml2
 , gtksourceview4
 , gsettings-desktop-schemas
 , wrapGAppsHook
 , ninja
 , libsoup
-, tepl
 , gnome
 , gspell
 , perl
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "40.1";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "149ngl9qw6h59546lir1pa7hvw23ppsnqlj9mfqphmmn5jl99qsm";
+    sha256 = "epsYsViAjRiSmJFl83BsTxooKXkHmrdFinnTwkrU3rU=";
   };
 
   patches = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     itstool
+    libxml2
     meson
     ninja
     perl
@@ -57,7 +59,6 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     libsoup
-    tepl
   ];
 
   postPatch = ''
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Gedit";
     description = "Official text editor of the GNOME desktop environment";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

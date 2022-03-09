@@ -208,6 +208,7 @@ in
                 token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
                 RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
                   --unattended \
+                  --disableupdate \
                   --work "$RUNTIME_DIRECTORY" \
                   --url ${escapeShellArg cfg.url} \
                   --token "$token" \

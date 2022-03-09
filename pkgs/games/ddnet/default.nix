@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "15.8.1";
+  version = "15.9.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZxLaGAKBACR65CRCjt3NPSjMNm7GQkESxF6sLv3q4lQ=";
+    sha256 = "sha256-QGtXI4Dbua5LBXSvB17tnSTGEvCCoopvg1XKBuDIEoQ=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];

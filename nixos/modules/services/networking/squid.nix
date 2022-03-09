@@ -81,7 +81,9 @@ let
     http_access deny all
 
     # Squid normally listens to port 3128
-    http_port ${toString cfg.proxyPort}
+    http_port ${
+      optionalString (cfg.proxyAddress != null) "${cfg.proxyAddress}:"
+    }${toString cfg.proxyPort}
 
     # Leave coredumps in the first cache dir
     coredump_dir /var/cache/squid
@@ -107,6 +109,12 @@ in
         type = types.bool;
         default = false;
         description = "Whether to run squid web proxy.";
+      };
+
+      proxyAddress = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "IP address on which squid will listen.";
       };
 
       proxyPort = mkOption {

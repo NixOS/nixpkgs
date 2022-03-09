@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell
-, attr, libcap, libcap_ng
+, makeWrapper, runtimeShell, removeReferencesTo
+, attr, libcap, libcap_ng, socat
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
@@ -31,31 +31,25 @@
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
+, doCheck ? false
+, qemu  # for passthru.tests
 }:
-
-let
-  audio = lib.optionalString alsaSupport "alsa,"
-    + lib.optionalString pulseSupport "pa,"
-    + lib.optionalString sdlSupport "sdl,"
-    + lib.optionalString jackSupport "jack,";
-
-in
 
 stdenv.mkDerivation rec {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
+    sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -101,55 +95,7 @@ stdenv.mkDerivation rec {
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
     })
-    (fetchpatch {
-      name = "CVE-2021-3713.patch"; # remove with next release
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
-      sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
-    })
-    # Fixes a crash that frequently happens in some setups that share /nix/store over 9p like nixos tests
-    # on some systems. Remove with next release.
-    (fetchpatch {
-      name = "fix-crash-in-v9fs_walk.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
-      sha256 = "sha256-LYGbBLS5YVgq8Bf7NVk7HBFxXq34NmZRPCEG79JPwk8=";
-    })
-    # Fixes an io error on discard/unmap operation for aio/file backend. Remove with next release.
-    (fetchpatch {
-      name = "fix-aio-discard-return-value.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
-      sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
-    })
-    # Fixes managedsave (snapshot creation) with QXL video device. Remove with next release.
-    (fetchpatch {
-      name = "qxl-fix-pre-save-logic.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
-      sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
-    })
-    # Fixes socket_sockaddr_to_address_unix assertion errors in some setups. Remove with next release.
-    (fetchpatch {
-      name = "fix-unix-socket-path-copy-again.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/118d527f2e4baec5fe8060b22a6212468b8e4d3f.patch";
-      sha256 = "sha256-ox+JSpc0pqd3bMi5Ot7ljQyk70SX8g+BLufR06mZPps=";
-    })
-  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ./sigrtminmax.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
-      sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # The Hypervisor.framework support patch converted something that can be applied:
-    # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
-    # The base revision is whatever commit there is before the series starts:
-    # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
-    # The target revision is what patchew has as the series tag from patchwork:
-    # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
-    (fetchpatch {
-      url = "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
-      sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
-    })
-  ];
+  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -180,12 +126,9 @@ stdenv.mkDerivation rec {
       --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace "'VERSION'" "'QEMU_VERSION'"
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags = [
-    "--audio-drv-list=${audio}"
     "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
@@ -217,7 +160,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring";
 
-  doCheck = false; # tries to access /dev
   dontWrapGApps = true;
 
   # QEMU attaches entitlements with codesign and strip removes those,
@@ -233,6 +175,7 @@ stdenv.mkDerivation rec {
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
     cp $out/bin/qemu-ga $ga/bin/
+    remove-references-to -t $out $ga/bin/qemu-ga
   '' + lib.optionalString gtkSupport ''
     # wrap GTK Binaries
     for f in $out/bin/qemu-system-*; do
@@ -241,13 +184,51 @@ stdenv.mkDerivation rec {
   '';
   preBuild = "cd build";
 
+  # tests can still timeout on slower systems
+  inherit doCheck;
+  checkInputs = [ socat ];
+  preCheck = ''
+    # time limits are a little meagre for a build machine that's
+    # potentially under load.
+    substituteInPlace ../tests/unit/meson.build \
+      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+    substituteInPlace ../tests/qtest/meson.build \
+      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
+    substituteInPlace ../tests/fp/meson.build \
+      --replace 'timeout: 90)' 'timeout: 300)'
+
+    # point tests towards correct binaries
+    substituteInPlace ../tests/unit/test-qga.c \
+      --replace '/bin/echo' "$(type -P echo)"
+    substituteInPlace ../tests/unit/test-io-channel-command.c \
+      --replace '/bin/socat' "$(type -P socat)"
+
+    # combined with a long package name, some temp socket paths
+    # can end up exceeding max socket name len
+    substituteInPlace ../tests/qtest/bios-tables-test.c \
+      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+
+    # get-fsinfo attempts to access block devices, disallowed by sandbox
+    sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
+      ../tests/unit/test-qga.c
+  '' + lib.optionalString stdenv.isDarwin ''
+    # skip test that stalls on darwin, perhaps due to subtle differences
+    # in fifo behaviour
+    substituteInPlace ../tests/unit/meson.build \
+      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+  '';
+
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
+    ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
+    tests = {
+      qemu-tests = qemu.override { doCheck = true; };
+    };
   };
 
   # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
@@ -260,5 +241,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qemu-kvm";
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
+    priority = 10; # Prefer virtiofsd from the virtiofsd package.
   };
 }

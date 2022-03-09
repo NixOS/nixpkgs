@@ -68,7 +68,7 @@ luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
 luuid,,,,,,
-luv,,,,1.42.0-0,,
+luv,,,,1.43.0-0,,
 lyaml,,,,,,lblasc
 markdown,,,,,,
 mediator_lua,,,,,,

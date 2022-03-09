@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Vulkan Header files and API registry";
     homepage    = "https://www.lunarg.com";
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };

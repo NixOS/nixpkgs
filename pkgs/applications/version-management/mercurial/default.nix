@@ -20,12 +20,12 @@ let
   inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
 
   self = python3Packages.buildPythonApplication rec {
-    pname = "mercurial";
-    version = "6.0.1";
+    pname = "mercurial${lib.optionalString fullBuild "-full"}";
+    version = "6.0.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-Bf0LSAOJyWVH9abHaekO4A8dE/esDUZeQKOBxs86VuI=";
+      sha256 = "sha256-Z/E2R6RlF6K1Z83Lc8mHIdddNqBDLeuxUCK3f5wTgzM=";
     };
 
     format = "other";
@@ -34,9 +34,9 @@ let
 
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
-      name = "${pname}-${version}";
-      sha256 = "sha256-leyLb6RqntiuEhmJSUkZRUuO8ah0BZI5OhKkGbWRjxs=";
-      sourceRoot = "${pname}-${version}/rust";
+      name = "mercurial-${version}";
+      sha256 = "sha256-i4WROxezeqLX4hTdcPrqsf6dBqsNZz6fFAPzItYuklE=";
+      sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
@@ -180,7 +180,7 @@ in
         buildInputs = self.buildInputs ++ self.propagatedBuildInputs;
         nativeBuildInputs = self.nativeBuildInputs;
 
-        phases = [ "installPhase" "installCheckPhase" ];
+        dontUnpack = true;
 
         installPhase = ''
           runHook preInstall

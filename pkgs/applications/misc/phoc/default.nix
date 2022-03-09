@@ -43,7 +43,7 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oUZtJzclVRSbLG3flF3ryLuvp1kPUtYNsmCG0csSC2A=";
+    sha256 = "sha256-kfMM/YjgAktpOKHNcxxl1FPVbgATPDNRhEJ/sVT1LYs=";
   };
 
   nativeBuildInputs = [

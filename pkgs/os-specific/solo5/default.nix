@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, libseccomp, util-linux, qemu }:
+{ lib, stdenv, fetchurl, dosfstools, libseccomp, makeWrapper, mtools, parted
+, pkg-config, qemu, syslinux, util-linux }:
 
 let
   version = "0.6.9";
@@ -15,7 +16,7 @@ in stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux) libseccomp;
 
   src = fetchurl {
@@ -46,6 +47,14 @@ in stdenv.mkDerivation {
     ${lib.concatMapStrings (bind: ''
       [ -n "$CONFIG_${lib.toUpper bind}" ] && make install-opam-${bind}
     '') targets}
+
+    substituteInPlace $out/bin/solo5-virtio-mkimage \
+      --replace "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
+      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux" \
+      --replace "cp " "cp --no-preserve=mode "
+
+    wrapProgram $out/bin/solo5-virtio-mkimage \
+      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
 
     runHook postInstall
   '';

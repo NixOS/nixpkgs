@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.10";
+  version = "3.0.11";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-fLmEJlkZLYLcKZqZwitf8rH261QDPTJZf/+/+FMsGIg=";
+    sha256 = "sha256-9kMYqWITZ2LlBDebJUZFWyVclAjfIZtc3Dm7lii9ZMc=";
   };
 
   nativeBuildInputs = [

@@ -200,7 +200,7 @@ let
     };
 
     manta = super.manta.override {
-      nativeBuildInputs = with pkgs; [ nodejs-12_x installShellFiles ];
+      nativeBuildInputs = with pkgs; [ nodejs-14_x installShellFiles ];
       postInstall = ''
         # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
         completion_cmds=$(find ./bin -type f -printf "%f\n")
@@ -224,6 +224,15 @@ let
         wrapProgram "$out/bin/node-gyp" \
           --set npm_config_nodedir ${nodejs}
       '';
+    };
+
+    near-cli = super.near-cli.override {
+      nativeBuildInputs = with pkgs; [
+        libusb
+        nodePackages.prebuild-install
+        nodePackages.node-gyp-build
+        pkg-config
+      ];
     };
 
     node-inspector = super.node-inspector.override {
@@ -305,6 +314,13 @@ let
       '';
     };
 
+    parcel = super.parcel.override {
+      buildInputs = [ self.node-gyp-build ];
+      preRebuild = ''
+        sed -i -e "s|#!/usr/bin/env node|#! ${pkgs.nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+      '';
+    };
+
     postcss-cli = super.postcss-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -327,7 +343,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-xLmVyO/L6C4ZdHzHqiJVq3ZfDWSym29x75JcwJx746ps61UcNEg4ozSwN9ud7UjXLntdXe1xDLNOUO1lc7LN5g==";
+        sha512 = "sha512-dAld12vtwdz9Rz01nOjmnXe+vHana5PSog8t0XGgLemKsUVsaupYpr74AHaS3s78SaTS5s2HOghnJF+jn91ZrA==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
@@ -373,18 +389,24 @@ let
       meta.broken = since "10";
     };
 
-    tailwindcss = super.tailwindcss.override {
+    tailwindcss = super.tailwindcss.overrideAttrs (oldAttrs: {
+      plugins = [ ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
+        nodePath=""
+        for p in "$out" "${self.postcss}" $plugins; do
+          nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
+        done
         wrapProgram "$out/bin/tailwind" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : "$nodePath"
         wrapProgram "$out/bin/tailwindcss" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : "$nodePath"
+        unset nodePath
       '';
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
       };
-    };
+    });
 
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -413,6 +435,10 @@ let
     teck-programmer = super.teck-programmer.override {
       nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
+    };
+
+    uppy-companion = super."@uppy/companion".override {
+      name = "uppy-companion";
     };
 
     vega-cli = super.vega-cli.override {

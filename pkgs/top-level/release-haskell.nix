@@ -311,11 +311,7 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = [
-        compilerNames.ghc884
-        compilerNames.ghc8107
-        compilerNames.ghc902
-      ];
+      haskell-language-server = released;
       hoogle = released;
       hlint = released;
       hsdns = released;

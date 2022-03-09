@@ -1,7 +1,7 @@
 { stdenv,
   lib,
   fetchFromGitHub,
-  sconsPackages,
+  scons,
   ragel,
   gengetopt,
   pkg-config,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    sconsPackages.scons_3_0_1
+    scons
     ragel
     gengetopt
     pkg-config
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       "--host=${stdenv.hostPlatform.config}"
       "--prefix=${placeholder "out"}"
       "--disable-sox"
+      "--disable-doc"
       "--disable-tests" ] ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++
     lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
@@ -54,6 +55,12 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isAarch64
     "sed -i 's/c++98/c++11/g' SConstruct";
+
+  # TODO: Remove these patches in the next version.
+  patches = [
+    ./0001-Remove-deprecated-scons-call.patch
+    ./0002-Fix-compatibility-with-new-SCons.patch
+  ];
 
   meta = with lib; {
     description = "Roc is a toolkit for real-time audio streaming over the network";

@@ -13,7 +13,7 @@
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , gnome, glib, ncurses, libepoxy, gpgme
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
+, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
 , ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
@@ -25,7 +25,7 @@ assert builtins.elem variant [ "fresh" "still" ];
 
 let
   jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" ];
+    modules = [ "java.base" "java.desktop" "java.logging" ];
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");

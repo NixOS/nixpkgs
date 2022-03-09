@@ -1,9 +1,8 @@
-{ lib, fetchFromGitHub, buildGo117Module, installShellFiles }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 { channel, version, sha256, vendorSha256 }:
 
-# Fix-Me: Unlock buildGoModule version when #154059 is merged.
-buildGo117Module rec {
+buildGoModule rec {
   pname = "linkerd-${channel}";
   inherit version vendorSha256;
 

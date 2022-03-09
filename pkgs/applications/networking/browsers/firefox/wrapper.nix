@@ -27,6 +27,7 @@ let
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
+    , wmClass ? null
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , forceWayland ? false
@@ -37,10 +38,12 @@ let
     # For more information about anti tracking (german website)
     # visit https://wiki.kairaven.de/open/app/firefox
     , extraPrefs ? ""
+    , extraPrefsFiles ? []
     # For more information about policies visit
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
-    , libName ? "firefox" # Important for tor package or the like
+    , extraPoliciesFiles ? []
+    , libName ? browser.libName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -102,7 +105,7 @@ let
 
       enterprisePolicies =
       {
-        policies = lib.optionalAttrs usesNixExtensions  {
+        policies = {
           DisableAppUpdate = true;
         } //
         lib.optionalAttrs usesNixExtensions {
@@ -150,35 +153,17 @@ let
       #                           #
       #############################
 
-      # TODO: remove this after the next release (21.03)
-      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
-        "enableAdobeFlash"
-        "enableAdobeReader"
-        "enableBluejeans"
-        "enableDjvu"
-        "enableFriBIDPlugin"
-        "enableGoogleTalkPlugin"
-        "enableMPlayer"
-        "enableVLC"
-        "icedtea"
-        "jre"
-      ];
-      pluginsError =
-        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: applicationName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
-
-    in if configPlugins != [] then throw pluginsError else
-      (stdenv.mkDerivation {
+    in stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = applicationName;
         exec = "${applicationName}${nameSuffix} %U";
         inherit icon;
-        comment = "";
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
-        categories = "Network;WebBrowser;";
-        mimeType = lib.concatStringsSep ";" [
+        categories = [ "Network" "WebBrowser" ];
+        mimeTypes = [
           "text/html"
           "text/xml"
           "application/xhtml+xml"
@@ -187,9 +172,10 @@ let
           "x-scheme-handler/https"
           "x-scheme-handler/ftp"
         ];
+        startupWMClass = wmClass;
       };
 
-      nativeBuildInputs = [ makeWrapper lndir replace ];
+      nativeBuildInputs = [ makeWrapper lndir replace jq ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -217,8 +203,8 @@ let
 
         find . -type f \( -not -name "${applicationName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
 
-        find . -type f -name "${applicationName}" -print0 | while read -d $'\0' f; do
-          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+        find . -type f \( -name "${applicationName}" -o -name "${applicationName}-bin" \) -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership --remove-destination "${browser}/$f" "$out/$f"
           chmod a+rwx "$out/$f"
         done
 
@@ -325,6 +311,12 @@ let
         rm -f "$POL_PATH"
         cat ${policiesJson} >> "$POL_PATH"
 
+        extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
+        for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
+          jq -s '.[0] + .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
+          mv .tmp.json "$POL_PATH"
+        done
+
         # preparing for autoconfig
         mkdir -p "$out/lib/${libName}/defaults/pref"
 
@@ -332,6 +324,11 @@ let
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+
+        extraPrefsFiles=(${builtins.toString extraPrefsFiles})
+        for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
+          cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
+        done
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 
@@ -356,5 +353,5 @@ let
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    });
+    };
 in lib.makeOverridable wrapper

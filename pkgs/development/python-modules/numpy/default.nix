@@ -40,14 +40,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.21.4";
+
+  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
+  # build both to verify they don't break.
+  # https://github.com/scipy/scipy/issues/15414
+  version = "1.21.5";
+
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e6c76a87633aa3fa16614b61ccedfae45b91df2767cf097aa9c933932a7ed1e0";
+    sha256 = "sha256-alkovGJBJk3OXtUJ5m8zZ2/Jf0ZOepGe3GcvtVMiIe4=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [

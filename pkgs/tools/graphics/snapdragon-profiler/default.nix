@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "snapdragon-profiler";
-  version = "v2021.2";
+  version = "2021.2";
 
   src = archive;
 
@@ -72,10 +72,8 @@ stdenv.mkDerivation rec {
     desktopName = "Snapdragon Profiler";
     exec = "$out/bin/snapdragon-profiler";
     icon = "snapdragon-profiler";
-    type = "Application";
     comment = meta.description;
-    categories = "Development;Debugger;Graphics;3DGraphics";
-    terminal = "false";
+    categories = [ "Development" "Debugger" "Graphics" "3DGraphics" ];
   })];
 
   dontStrip = true; # Always needed on Mono

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flink";
-  version = "1.14.2";
+  version = "1.14.3";
 
   src = fetchurl {
     url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.11.tgz";
-    sha256 = "1rm2x66179ybfyc8v3va3svjxrnkslqn3dc84qkglqjaiqciadnr";
+    sha256 = "sha256-dst0Q1AlDdggtOwYROoV6QcBLRNfmGTo7DL2BV/5PB4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,8 +1,8 @@
-{lib, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
+{lib, python3Packages, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
-  version = "4.0.4";
+  version = "4.1.1";
 
   format = "other";
 
@@ -10,18 +10,9 @@ python3Packages.buildPythonApplication rec {
     owner = "arsenetar";
     repo = "dupeguru";
     rev = version;
-    sha256 = "0ma4f1c6vmpz8gi4sdy43x1ik7wh42wayvk1iq520d3i714kfcpy";
+    sha256 = "sha256-0lJocrNQHTrpslbPE6xjZDWhzza8cAt2js35LvicZKg=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # already merged to master, remove next version bump
-    (fetchpatch {
-      name = "remove-m-from-so-var.patch";
-      url = "https://github.com/arsenetar/dupeguru/commit/bd0f53bcbe463c48fe141b73af13542da36d82ba.patch";
-      sha256 = "07iisz8kcr7v8lb21inzj1avlpfhh9k8wcivbd33w49cr3mmnr26";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -31,6 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonPath = with python3Packages; [
     pyqt5
+    pyqt5_sip
     send2trash
     sphinx
     polib
@@ -42,9 +34,12 @@ python3Packages.buildPythonApplication rec {
     "NO_VENV=1"
   ];
 
-  # TODO: package pytest-monkeyplus for running tests
-  # https://github.com/NixOS/nixpkgs/pull/75054/files#r357690123
-  doCheck = false;
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   # Avoid double wrapping Python programs.
   dontWrapQtApps = true;
@@ -66,6 +61,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.novoxudonoser ];
+    maintainers = [ maintainers.novoxd ];
   };
 }

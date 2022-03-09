@@ -1,6 +1,7 @@
 { lib
 , brotli
 , buildPythonPackage
+, django
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
@@ -9,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "5.3.0";
-  disabled = pythonOlder "3.5";
+  version = "6.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "17j1rml1hb43c7fs7kf4ygkpmnjppzgsbnyw3plq9w3yh9w5hkhg";
+    rev = version;
+    hash = "sha256-mUjyX4eQOiMweje6UPyfyJsiHwzF5OQ93KuxFedWxbQ=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    django
     pytestCheckHook
     requests
   ];
@@ -40,7 +44,9 @@ buildPythonPackage rec {
     "test_modified"
   ];
 
-  pythonImportsCheck = [ "whitenoise" ];
+  pythonImportsCheck = [
+    "whitenoise"
+  ];
 
   meta = with lib; {
     description = "Radically simplified static file serving for WSGI applications";

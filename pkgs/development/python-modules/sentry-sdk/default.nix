@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.5.4";
+  version = "1.5.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    sha256 = "sha256-MZ1J2Stq+pRoeJ05hv8cSpxtaeRGaJEWAtidbr8YP88=";
+    sha256 = "sha256-PxoxOeFdmmfpXBnGs9D5aKP6vlGKx9nPO3ngYuTa+Rs=";
   };
 
   propagatedBuildInputs = [
@@ -107,8 +107,9 @@ buildPythonPackage rec {
     "test_start_sentry_listener"
     # Failing threading test
     "test_circular_references"
-    # Failing wsgi test
+    # Failing wsgi tests
     "test_session_mode_defaults_to_request_mode_in_wsgi_handler"
+    "test_auto_session_tracking_with_aggregates"
     # Network requests to public web
     "test_crumb_capture"
   ];

@@ -5,18 +5,21 @@
 , oauthlib
 , python-dateutil
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "discogs-client";
-  version = "2.3.12";
+  version = "2.3.13";
+  format = "setuptools";
 
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joalla";
     repo = "discogs_client";
     rev = "v${version}";
-    sha256 = "0y553x8rkgmqqg980n62pwdxbp75xalkhlb6k5g0cms42ggy5fsc";
+    sha256 = "sha256-TOja0pCJv8TAI0ns8M/tamZ5Pp8k5sSKDnvN4SeKtW8=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +32,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "discogs_client" ];
+  pythonImportsCheck = [
+    "discogs_client"
+  ];
 
   meta = with lib; {
     description = "Unofficial Python API client for Discogs";

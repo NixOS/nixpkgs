@@ -1,84 +1,128 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, setfile
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, gtk2
+, libGL
+, libGLU
+, libSM
+, libXinerama
+, libXxf86vm
+, pkg-config
+, xorgproto
+, compat24 ? false
+, compat26 ? true
+, unicode ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
-, compat24 ? false, compat26 ? true, unicode ? true
-, Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QuickTime
+, setfile
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
-
-with lib;
-
 stdenv.mkDerivation rec {
-  pname = "wxwidgets";
-  version = "2.9.4";
+  pname = "wxGTK";
+  version = "2.9.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";
-    sha256 = "04jda4bns7cmp7xy68qz112yg0lribpc6xs5k9gilfqcyhshqlvc";
+  src = fetchFromGitHub {
+    owner = "wxWidgets";
+    repo = "wxWidgets";
+    rev = "v${version}";
+    hash = "sha256-izefAPU4lORZxQja7/InHyElJ1++2lDloR+xPudsRNE=";
   };
 
   patches = [
-    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
-      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
-          + "fix_assertion_using_hide_in_destroy.diff";
-      sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
-    })
+    # https://github.com/wxWidgets/wxWidgets/issues/17942
+    ../patches/0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
-  buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xorgproto ]
-    ++ optional withMesa libGLU
-    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
+  nativeBuildInputs = [
+    autoconf
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    gtk2
+    libSM
+    libXinerama
+    libXxf86vm
+    xorgproto
+  ]
+  ++ lib.optional withMesa libGLU
+  ++ lib.optionals stdenv.isDarwin [
+    Carbon
+    Cocoa
+    Kernel
+    QuickTime
+    setfile
+  ];
 
-  propagatedBuildInputs = optional stdenv.isDarwin AGL;
+  propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
 
-  configureFlags =
-    [ "--enable-gtk2" "--disable-precomp-headers"
-      (if compat24 then "--enable-compat24" else "--disable-compat24")
-      (if compat26 then "--enable-compat26" else "--disable-compat26") ]
-    ++ optional unicode "--enable-unicode"
-    ++ optional withMesa "--with-opengl"
-    ++ optionals stdenv.isDarwin
-      # allow building on 64-bit
-      [ "--with-cocoa" "--enable-universal-binaries" "--with-macosx-version-min=10.7" ];
+  configureFlags = [
+    "--disable-precomp-headers"
+    "--enable-gtk2"
+    (if compat24 then "--enable-compat24" else "--disable-compat24")
+    (if compat26 then "--enable-compat26" else "--disable-compat26")
+  ]
+  ++ lib.optional unicode "--enable-unicode"
+  ++ lib.optional withMesa "--with-opengl"
+  ++ lib.optionals stdenv.isDarwin [ # allow building on 64-bit
+    "--enable-universal-binaries"
+    "--with-cocoa"
+    "--with-macosx-version-min=10.7"
+  ];
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
-  preConfigure = "
-    substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
-    substituteInPlace configure --replace 'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
-    substituteInPlace configure --replace /usr /no-such-path
-  " + optionalString stdenv.isDarwin ''
+  preConfigure = ''
+    ./autogen.sh
+    substituteInPlace configure --replace \
+      'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
+    substituteInPlace configure --replace \
+      'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
+    substituteInPlace configure --replace \
+      /usr /no-such-path
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
       'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
     substituteInPlace configure --replace \
-      "-framework System" \
-      -lSystem
+      "-framework System" "-lSystem"
   '';
 
-  postInstall = "
-    (cd $out/include && ln -s wx-*/* .)
-  ";
+  postInstall = ''
+    pushd $out/include
+    ln -s wx-*/* .
+    popd
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://www.wxwidgets.org/";
+    description = "A Cross-Platform C++ GUI Library";
+    longDescription = ''
+      wxWidgets gives you a single, easy-to-use API for writing GUI applications
+      on multiple platforms that still utilize the native platform's controls
+      and utilities. Link with the appropriate library for your platform and
+      compiler, and your application will adopt the look and feel appropriate to
+      that platform. On top of great GUI functionality, wxWidgets gives you:
+      online help, network programming, streams, clipboard and drag and drop,
+      multithreading, image loading and saving in a variety of popular formats,
+      database support, HTML viewing and printing, and much more.
+    '';
+    license = licenses.wxWindows;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.darwin ++ platforms.linux;
+    badPlatforms = [ "x86_64-darwin" ];
+  };
 
   passthru = {
     inherit compat24 compat26 unicode;
     gtk = gtk2;
-  };
-
-  enableParallelBuilding = true;
-
-  meta = {
-    platforms = with platforms; darwin ++ linux;
-    license = licenses.wxWindows;
-    homepage = "https://www.wxwidgets.org/";
-    description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
-    longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

@@ -5,8 +5,8 @@ let
   description = "PrusaSlicer fork with more features and faster development cycle";
 
   versions = {
-    stable = { version = "2.3.57.9"; sha256 = "sha256-JWZ6PdzKwxdyp7StYuW69XGbTPoxaIJ2R4Ynmc65hvE="; };
-    latest = { version = "2.3.57.9"; sha256 = "sha256-JWZ6PdzKwxdyp7StYuW69XGbTPoxaIJ2R4Ynmc65hvE="; };
+    stable = { version = "2.3.57.10"; sha256 = "sha256-/1oZgmZpRoizVpklKaI12qP4bVIGYyVpybmuCIz3Y0M="; };
+    latest = { version = "2.3.57.10"; sha256 = "sha256-/1oZgmZpRoizVpklKaI12qP4bVIGYyVpybmuCIz3Y0M="; };
   };
 
   override = { version, sha256 }: super: {
@@ -33,13 +33,13 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = appname;
+        name = "superslicer";
         exec = "superslicer";
         icon = appname;
         comment = description;
         desktopName = appname;
         genericName = "3D printer tool";
-        categories = "Development;";
+        categories = [ "Development" ];
       })
     ];
 

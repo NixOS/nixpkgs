@@ -10,7 +10,7 @@ jobs:
     if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v16
       - name: setup
         id: setup
@@ -21,7 +21,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           pushd pkgs/applications/networking/cluster/terraform-providers
-          ./update-all-providers
+          ./update-all-providers --no-build
           git commit -m "${{ steps.setup.outputs.title }}" providers.json
           popd
       - name: create PR

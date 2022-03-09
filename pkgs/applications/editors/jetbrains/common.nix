@@ -27,11 +27,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = mainProgram;
-    extraEntries = ''
-      StartupWMClass=${wmClass}
-    '';
+    startupWMClass = wmClass;
   };
 
   vmoptsFile = optionalString (vmopts != null) (writeText vmoptsName vmopts);
@@ -82,10 +80,10 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         libnotify
       ] ++ extraLdPath)}" \
       ${lib.concatStringsSep " " extraWrapperArgs} \
-      --set JDK_HOME "$jdk" \
+      --set-default JDK_HOME "$jdk" \
+      --set-default ANDROID_JAVA_HOME "$jdk" \
+      --set-default JAVA_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
-      --set ANDROID_JAVA_HOME "$jdk" \
-      --set JAVA_HOME "$jdk" \
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$item/share/applications" $out/share

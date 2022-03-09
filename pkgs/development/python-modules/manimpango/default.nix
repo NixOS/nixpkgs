@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ManimCommunity/ManimPango";
     license = licenses.mit;
     description = "Binding for Pango";
-    maintainers = [ maintainers.angustrau ];
+    maintainers = [ maintainers.emilytrau ];
   };
 }

@@ -203,6 +203,8 @@ with self;
     meta.description = "Trivial metaprogramming tool";
     propagatedBuildInputs = [ re ];
     checkInputs = [ ppx_jane ];
+    # This currently fails with dune
+    strictDeps = false;
   };
 
   core = janePackage {
@@ -664,6 +666,7 @@ with self;
     pname = "pythonlib";
     hash = "0qr0mh9jiv1ham5zlz9i4im23a1vh6x1yp6dp2db2s4icmfph639";
     meta.description = "A library to help writing wrappers around ocaml code for python";
+    meta.broken = lib.versionAtLeast ocaml.version "4.13";
     propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
   };
 
@@ -761,6 +764,8 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
+    # This currently fails with dune
+    strictDeps = false;
   };
 
   shexp = janePackage {

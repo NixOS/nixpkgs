@@ -330,7 +330,7 @@ in with self; {
   excluderanges = derive2 { name="excluderanges"; version="0.99.6"; sha256="1ryp2ghbx1b1268fpgza5rn6brhalff9hsr6fxpr5x5mc35hkd68"; depends=[]; };
   fitCons_UCSC_hg19 = derive2 { name="fitCons.UCSC.hg19"; version="3.7.1"; sha256="19isa4x8js0pdb4k8a11bw3bzmzv6jc4jphzrvav7piqkvrgykzx"; depends=[BSgenome GenomeInfoDb GenomicRanges GenomicScores IRanges S4Vectors]; };
   fly_db0 = derive2 { name="fly.db0"; version="3.14.0"; sha256="0jk5k5zpr4r9yn2l7vpb01xdmhi0pm3jg333jr7rv0c6fzjq5279"; depends=[AnnotationDbi]; };
-  geneplast_data = derive2 { name="geneplast.data"; version="0.99.4"; sha256="070g5a1xh1m3yar6dk3p1m86hpw8ll4xjir2n6sh2rfjw5kijmld"; depends=[]; };
+  geneplast_data = derive2 { name="geneplast.data"; version="0.99.5"; sha256="0bwhc20jkjs3n1n4xv7xmkgjzf6ghssvbsmx3dm347smk54wgjsw"; depends=[]; };
   geneplast_data_string_v91 = derive2 { name="geneplast.data.string.v91"; version="0.99.6"; sha256="0mc26d0sgmpmfmqsqinqv5k6vhg0hlc8hsjkcnvf369yav224nq1"; depends=[]; };
   genomewidesnp5Crlmm = derive2 { name="genomewidesnp5Crlmm"; version="1.0.6"; sha256="06dmwnjy3gb53y6nr02dmp22qzfl5d63wppazrabcqbzwimhnvp8"; depends=[]; };
   genomewidesnp6Crlmm = derive2 { name="genomewidesnp6Crlmm"; version="1.0.7"; sha256="16qcxa32fmbdcv5dck0grsnqyfcqql7wpxa1l6andv9hrvabv2jx"; depends=[]; };

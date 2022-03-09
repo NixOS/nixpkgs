@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tilix";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
     rev = version;
-    sha256 = "sha256:020gr4q7kmqq8vnsh8rw97gf1p2n1yq4d7ncyjjh9l13zkaxqqv9";
+    sha256 = "sha256-sPVL5oYDOmloRVm/nONKkC20vZc907c7ixBF6E2PQ8Y=";
   };
 
   # Default upstream else LDC fails to link

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
+    "--with-versioned-syms"
   ] ++ lib.optional unicodeSupport "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"

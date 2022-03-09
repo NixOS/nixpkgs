@@ -11,17 +11,18 @@
 
 # Tests
 , python3, which
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-5MKQmZxTW8WofmTkV9kGeGN5RxsgVVMFZEF3rPDUO6Q=";
+    sha256 = "sha256-LJQF8PlRkhCJ8rjZzDetg1BFuTb7GBJ8lW6u5hO134k=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "man" ];
+
+  passthru.tests = { inherit (nixosTests) systemd-cryptenroll; };
 
   meta = with lib; {
     description = "Libtpms-based TPM emulator";

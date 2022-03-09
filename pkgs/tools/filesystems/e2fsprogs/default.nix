@@ -1,14 +1,15 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
 , shared ? !stdenv.hostPlatform.isStatic
+, e2fsprogs, runCommand
 }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.46.4";
+  version = "1.46.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0ra2d1wasksy1zy3rgviwdni40dnamchisjrrqqi940y545m493m";
+    sha256 = "1fgvwbj9ihz5svzrd2l0s18k16r4qg3wimrniv71fn3vdcg0shxp";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -65,8 +66,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    simple-filesystem = runCommand "e2fsprogs-create-fs" {} ''
+      mkdir -p $out
+      truncate -s10M $out/disc
+      ${e2fsprogs}/bin/mkfs.ext4 $out/disc | tee $out/success
+      ${e2fsprogs}/bin/e2fsck -n $out/disc | tee $out/success
+      [ -e $out/success ]
+    '';
+  };
   meta = with lib; {
     homepage = "http://e2fsprogs.sourceforge.net/";
+    changelog = "http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = with licenses; [
       gpl2Plus

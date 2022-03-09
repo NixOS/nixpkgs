@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, gettext, libgpg-error, enableCapabilities ? false, libcap, buildPackages }:
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, libgpg-error
+, enableCapabilities ? false, libcap
+, buildPackages
+# for passthru.tests
+, gnupg
+, libotr
+, rsyslog
+}:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -55,6 +66,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit gnupg libotr rsyslog;
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libgcrypt/";

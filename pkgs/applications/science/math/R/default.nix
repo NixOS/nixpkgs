@@ -94,6 +94,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/158730
+  # see https://github.com/NixOS/nixpkgs/issues/127608 for a similar issue
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {

@@ -17,7 +17,7 @@ let
 
       machine = { pkgs, ... }: {
         environment.systemPackages = [ pkgs."${packageSet}"."${variant}" ];
-        virtualisation.diskSize = "800";
+        virtualisation.diskSize = 800;
       };
 
       testScript = ''

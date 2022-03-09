@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpcsvc-proto";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "006l1f824r9bcbwn1s1vbs33cdwhs66jn6v97yas597y884y40z9";
+    sha256 = "sha256-DXRLEpOanWcxCSTC8OxEw5SWKpgFz7oTPukzfnPrAOk=";
   };
 
   outputs = [ "out" "man" ];

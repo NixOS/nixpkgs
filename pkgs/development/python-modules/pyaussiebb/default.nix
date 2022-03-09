@@ -2,24 +2,29 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , loguru
+, poetry-core
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.0.9";
-  format = "setuptools";
+  version = "0.0.11";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "v${version}";
-    hash = "sha256-DMU29dTqDaPLQS20iuHIph6mhBdj6ni3+MA9KkRMtzg=";
+    hash = "sha256-aL+n2ut7n6UUyymMEHoFMhRvK9iFRRunYE9ZirKFXhc=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -27,8 +32,12 @@ buildPythonPackage rec {
     loguru
   ];
 
-  # Tests require network access
-  # https://github.com/yaleman/aussiebb/issues/6
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requests = "^2.27.1"' 'requests = "*"'
+  '';
+
+  # Tests require credentials and requests-testing
   doCheck = false;
 
   pythonImportsCheck = [

@@ -65,23 +65,19 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "smartgit";
     desktopName = "SmartGit";
-    categories = concatStringsSep ";" [
+    categories = [
       "Application"
       "Development"
       "RevisionControl"
     ];
-    mimeType = concatStringsSep ";" [
+    mimeTypes = [
       "x-scheme-handler/git"
       "x-scheme-handler/smartgit"
       "x-scheme-handler/sourcetree"
     ];
-    startupNotify = "true";
-    extraEntries = ''
-      Keywords=git
-      StartupWMClass=${name}
-      Version=1.0
-      Encoding=UTF-8
-    '';
+    startupNotify = true;
+    startupWMClass = name;
+    keywords = [ "git" ];
   };
 
   meta = with lib; {

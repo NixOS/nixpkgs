@@ -129,6 +129,10 @@ stdenv.mkDerivation rec {
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
 
+    # https://github.com/sysown/proxysql/issues/3679
+    # TODO: remove when upgrading past 2.3.2
+    sed -i -e 's@^\(\s\+cd curl/curl \&\& ./configure .*\) \(--with-ssl=.*\)$@\1 --without-zstd \2@' Makefile
+
     popd
     patchShebangs .
   '';

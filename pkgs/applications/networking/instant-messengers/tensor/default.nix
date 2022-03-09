@@ -32,8 +32,8 @@ mkDerivation rec {
     comment = meta.description;
     desktopName = "Tensor Matrix Client";
     genericName = meta.description;
-    categories = "Chat;Utility";
-    mimeType = "application/x-chat";
+    categories = [ "Chat" "Utility" ];
+    mimeTypes = [ "application/x-chat" ];
   };
 
   installPhase = if stdenv.isDarwin then ''

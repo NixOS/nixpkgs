@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "19fnrlw05njib13ljh7pmi48myfclra1xhy4b6hi74c6w6yz2fgj";
+    sha256 = "sha256-7CEL2ddlABM7SYjMVUs3pu0O+2cVsz04slsdUIbgZuM=";
   };
 
   nativeBuildInputs = [ pkg-config gettext which autoreconfHook ];

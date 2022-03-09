@@ -215,21 +215,22 @@ lib.mkOption {
             manager backend (sddm, gdm ...).
           </para>
           <para>
-            There are two approach to this module structure:
+            There are two approaches we could take with this module
+            structure:
           </para>
           <itemizedlist>
             <listitem>
               <para>
-                Managing the display managers independently by adding an
-                enable option to every display manager module backend.
-                (NixOS)
+                Configuring the display managers independently by adding
+                an enable option to every display manager module
+                backend. (NixOS)
               </para>
             </listitem>
             <listitem>
               <para>
-                Managing the display managers in the central module by
-                adding an option to select which display manager backend
-                to use.
+                Configuring the display managers in the central module
+                by adding an option to select which display manager
+                backend to use.
               </para>
             </listitem>
           </itemizedlist>
@@ -238,16 +239,16 @@ lib.mkOption {
           </para>
           <para>
             Making backends independent can quickly become hard to
-            manage. For display managers, there can be only one enabled
-            at a time, but the type system can not enforce this
-            restriction as there is no relation between each backend
+            manage. For display managers, there can only be one enabled
+            at a time, but the type system cannot enforce this
+            restriction as there is no relation between each backend’s
             <literal>enable</literal> option. As a result, this
-            restriction has to be done explicitely by adding assertions
+            restriction has to be done explicitly by adding assertions
             in each display manager backend module.
           </para>
           <para>
-            On the other hand, managing the display managers backends in
-            the central module will require to change the central module
+            On the other hand, managing the display manager backends in
+            the central module will require changing the central module
             option every time a new backend is added or removed.
           </para>
           <para>
@@ -268,7 +269,7 @@ lib.mkOption {
           <para>
             As a result, <literal>displayManager.enable</literal> option
             values can be added without changing the main service module
-            file and the type system automatically enforce that there
+            file and the type system automatically enforces that there
             can only be a single display manager enabled.
           </para>
           <anchor xml:id="ex-option-declaration-eot-service" />

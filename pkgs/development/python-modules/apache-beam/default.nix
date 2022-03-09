@@ -29,6 +29,7 @@
 , pytest-xdist
 , pytestCheckHook
 , python
+, pythonAtLeast
 , python-dateutil
 , pytz
 , pyyaml
@@ -43,6 +44,7 @@
 buildPythonPackage rec {
   pname = "apache-beam";
   version = "2.35.0";
+  disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "apache";
@@ -60,7 +62,8 @@ buildPythonPackage rec {
   # See https://github.com/NixOS/nixpkgs/issues/156957.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "typing-extensions>=3.7.0,<4" "typing-extensions"
+      --replace "typing-extensions>=3.7.0,<4" "typing-extensions" \
+      --replace "pyarrow>=0.15.1,<7.0.0" "pyarrow"
   '';
 
   sourceRoot = "source/sdks/python";

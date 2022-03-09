@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyatag";
-  version = "0.3.5.3";
+  version = "3.5.1";
 
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "MatsNl";
     repo = "pyatag";
     rev = version;
-    sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
+    sha256 = "17x2m7icbby1y2zfc79jpbir2kvyqlrkix9pvvxanm658arsh8c7";
   };
 
   propagatedBuildInputs = [

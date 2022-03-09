@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pycountry
 , pythonOlder
 , requests
 , websocket-client
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyskyqremote";
-  version = "0.2.54";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +18,10 @@ buildPythonPackage rec {
     owner = "RogerSelwyn";
     repo = "skyq_remote";
     rev = version;
-    sha256 = "sha256-Z3fcihyK8QHtdREXWt2ESqjwAwxFZFEI9OXf3Y9onmw=";
+    sha256 = "sha256-/BhNoU1dnZj07ZvG126srSb6eW00n8htFuDttq006QE=";
   };
 
   propagatedBuildInputs = [
-    pycountry
     requests
     websocket-client
     xmltodict

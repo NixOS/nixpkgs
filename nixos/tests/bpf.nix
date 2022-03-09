@@ -18,8 +18,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # simple BEGIN probe (user probe on bpftrace itself)
     print(machine.succeed("bpftrace -e 'BEGIN { print(\"ok\"); exit(); }'"))
     # tracepoint
-    print(machine.succeed("bpftrace -e 'tracepoint:syscalls:sys_enter_* { print(probe); exit(); }'"))
+    print(machine.succeed("bpftrace -e 'tracepoint:syscalls:sys_enter_* { print(probe); exit() }'"))
     # kprobe
     print(machine.succeed("bpftrace -e 'kprobe:schedule { print(probe); exit() }'"))
+    # BTF
+    print(machine.succeed("bpftrace -e 'kprobe:schedule { "
+        "    printf(\"tgid: %d\", ((struct task_struct*) curtask)->tgid); exit() "
+        "}'"))
   '';
 })

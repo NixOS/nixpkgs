@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, python
 , fetchPypi
 , pytestCheckHook
 , blis
@@ -39,6 +40,11 @@ buildPythonPackage rec {
     sha256 = "sha256-R2YqOuM9RFp3tup7dyREgFx7uomR8SLjUNr3Le3IFxo=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
+  '';
+
   buildInputs = [
     cython
   ] ++ lib.optionals stdenv.isDarwin [
@@ -73,12 +79,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-  pytestFlagsArray = [
-    "thinc/tests"
-  ];
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
+  '';
 
   pythonImportsCheck = [
     "thinc"

@@ -32,6 +32,7 @@
 , nss
 , systemd
 , which
+, callPackage
 }:
 let
   drvName = "flutter-${version}";
@@ -146,6 +147,8 @@ let
   };
 
 in
+let
+self = (self:
 runCommand drvName
 {
   startScript = ''
@@ -159,6 +162,9 @@ runCommand drvName
   passthru = {
     unwrapped = flutter;
     inherit dart;
+    mkFlutterApp = callPackage ../../../build-support/flutter {
+      flutter = self;
+    };
   };
   meta = with lib; {
     description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
@@ -179,4 +185,6 @@ runCommand drvName
 
   echo -n "$startScript" > $out/bin/${pname}
   chmod +x $out/bin/${pname}
-''
+'') self;
+in
+self

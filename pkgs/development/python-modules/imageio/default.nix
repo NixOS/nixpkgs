@@ -13,22 +13,13 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.13.5";
+  version = "2.14.1";
   disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "0gc41aiz2i0napk1y00v9bgb4m7dd21sz3lghfm6w6s0ivjjpv67";
+    sha256 = "sha256-cJwY+ACYHkKGq+S9hrbJtbtuKFtrkztboJYu+OeZQFg=";
     inherit pname version;
   };
-
-  patches = [
-    # already present in master, remove on next bump
-    (fetchpatch {
-      name = "pillow-9-gif-rgba.patch";
-      url = "https://github.com/imageio/imageio/commit/836b7a9b077a96de8adab5b67ea53b1292048275.patch";
-      sha256 = "0rlyppa4w16n6qn5hr4wrg8xiy7ifs8c5dhmq8a9yncypx87glpv";
-    })
-  ];
 
   propagatedBuildInputs = [
     imageio-ffmpeg

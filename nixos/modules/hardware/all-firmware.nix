@@ -83,6 +83,7 @@ in {
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
         b43FirmwareCutter
+        xow_dongle-firmware
       ] ++ optional pkgs.stdenv.hostPlatform.isx86 facetimehd-firmware;
     })
     (mkIf cfg.wirelessRegulatoryDatabase {

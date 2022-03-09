@@ -1,4 +1,5 @@
 { lib
+, aenum
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "0.5";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,10 +20,11 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = pname;
     rev = version;
-    hash = "sha256-ESNFTlzwxv0SZA/vVU3aIjkt5nCX3D4VbwIRNSzMIK4=";
+    hash = "sha256-lQV5KpASbrz+wCi9x/0rNYrQE+dLCZzsNBFhYAQvPH4=";
   };
 
   propagatedBuildInputs = [
+    aenum
     aiohttp
     pydantic
     requests
@@ -30,6 +32,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test file is missing
+    "test_json_files"
   ];
 
   pythonImportsCheck = [

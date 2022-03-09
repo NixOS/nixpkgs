@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "qownnotes";
-  version = "22.1.11";
+  version = "22.2.9";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Fetch the checksum of current version with curl:
     # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
-    sha256 = "7fa21ca9b8b0df6f1bda7a7dc21d53642eccf8de6a31a9a29a251e0a17c00c83";
+    sha256 = "ced99f4b2106148c683267c2c5ccc5902dc6b98249eb7c132dde2bd6ea37bc34";
   };
 
   nativeBuildInputs = [ qmake qttools ];

@@ -63,6 +63,12 @@ self: super: {
   # works fine there.
   fakedata = dontCheck super.fakedata;
 
+  # The latest release on hackage has an upper bound on containers which
+  # breaks the build, though it works with the version of containers present
+  # and the upper bound doesn't exist in code anymore:
+  # > https://github.com/roelvandijk/numerals
+  numerals = doJailbreak (dontCheck super.numerals);
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -77,7 +83,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "14zzs4j9dpc6rdnna80m0vi7s1awlz0mrmwfh8l4zvglx75avpw5";
+      sha256 = "11idvicisp4wnw15lk7f9fs0kqpssngs1j8f98050f3jrqsccj0j";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -86,6 +92,12 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
+
+    # Git annex provides a restricted login shell. Setting
+    # passthru.shellPath here allows a user's login shell to be set to
+    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
+    # https://git-annex.branchable.com/git-annex-shell/
+    passthru.shellPath = "/bin/git-annex-shell";
   }) super.git-annex;
 
   # Fix test trying to access /home directory
@@ -307,7 +319,6 @@ self: super: {
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
-  numerals = dontCheck super.numerals;
   odpic-raw = dontCheck super.odpic-raw; # needs a running oracle database server
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
@@ -1263,13 +1274,6 @@ self: super: {
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core)));
 
-  # add unreleased commit fixing version constraint as a patch
-  # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
-  utc = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/lpeterse/haskell-utc/commit/e4502c08591e80d411129bb7c0414539f6302aaf.diff";
-    sha256 = "0v6kv1d4syjzgzc2s7a76c6k4vminlcq62n7jg3nn9xd00gwmmv7";
-  }) super.utc;
-
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
 
@@ -1453,10 +1457,6 @@ self: super: {
   # 2021-11-20: Testsuite hangs.
   # https://github.com/haskell/haskell-language-server/issues/2375
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-
-  # 2021-11-23: Too strict bounds on ghcide, pending new release
-  hls-rename-plugin = assert super.hls-rename-plugin.version == "1.0.0.0";
-    doJailbreak super.hls-rename-plugin;
 
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
@@ -2038,13 +2038,13 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
+  # 2021-09-13: hls 1.6 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
   # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
-  lsp = doDistribute self.lsp_1_2_0_1;
-  lsp-types = doDistribute self.lsp-types_1_3_0_1;
+  lsp = doDistribute self.lsp_1_4_0_0;
+  lsp-types = doDistribute self.lsp-types_1_4_0_1;
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
-  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_1);
+  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_2);
 
   # 2021-09-14: Tests are flaky.
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
@@ -2101,7 +2101,7 @@ self: super: {
 
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
-    brick = self.brick_0_66_1;
+    brick = self.brick_0_67;
   };
 
   # build newer version for `pkgs.shellcheck`

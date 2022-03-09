@@ -6,8 +6,8 @@
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-prometheus";
-    rev = "d71565f7ee4d3fe5cef8c8831a20cec5e52a1367";
-    sha256 = "sha256-Zn/ZzbMyHImQ9vc7KJI2gtVKYyqbWOZWK3qg7BK0xxQ=";
+    rev = "1c3e2d75c33a0ed8563977d7c4919e3d06788dcd";
+    sha256 = "sha256-tj/IYUjuUs6foV4goIm+HACccmHjAiI1/EAOKibwUMs=";
   };
 
   patches = [

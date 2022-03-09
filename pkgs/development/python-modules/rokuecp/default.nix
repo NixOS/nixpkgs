@@ -1,9 +1,12 @@
 { lib
 , aiohttp
 , aresponses
+, awesomeversion
+, backoff
 , buildPythonPackage
 , cachetools
 , fetchFromGitHub
+, poetry
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -13,22 +16,29 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.12.0";
-  format = "setuptools";
+  version = "0.15.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = version;
-    sha256 = "1pqiba4zgx7knm1k53p6w6b9a81dalqfq2agdyrz3734nhl6gx1h";
+    hash = "sha256-yNmnCoHIBlpQCLd+YcsKCKd1wWh8WZNpILWmChZGWH4=";
   };
+
+  nativeBuildInputs = [
+    # Requires poetry not poetry-core
+    poetry
+  ];
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     cachetools
     xmltodict
+    awesomeversion
     yarl
   ];
 
@@ -38,9 +48,16 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
+
   disabledTests = [
     # https://github.com/ctalkington/python-rokuecp/issues/249
     "test_resolve_hostname"
+    # Assertion issue
+    "test_guess_stream_format"
   ];
 
   pythonImportsCheck = [

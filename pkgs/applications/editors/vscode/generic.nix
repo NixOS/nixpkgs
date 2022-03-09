@@ -37,19 +37,16 @@ let
       genericName = "Text Editor";
       exec = "${executableName} %F";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "text/plain;inode/directory;";
-      extraEntries = ''
-        StartupWMClass=${shortName}
-        Actions=new-empty-window;
-        Keywords=vscode;
-
-        [Desktop Action new-empty-window]
-        Name=New Empty Window
-        Exec=${executableName} --new-window %F
-        Icon=code
-      '';
+      startupNotify = true;
+      startupWMClass = shortName;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "text/plain" "inode/directory" ];
+      keywords = [ "vscode" ];
+      actions.new-empty-window = {
+        name = "New Empty Window";
+        exec = "${executableName} --new-window %F";
+        icon = "code";
+      };
     };
 
     urlHandlerDesktopItem = makeDesktopItem {
@@ -59,13 +56,11 @@ let
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "x-scheme-handler/vscode;";
-      extraEntries = ''
-        NoDisplay=true
-        Keywords=vscode;
-      '';
+      startupNotify = true;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "x-scheme-handler/vscode" ];
+      keywords = [ "vscode" ];
+      noDisplay = true;
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
@@ -125,7 +120,7 @@ let
       rm -rf "$packed"
 
       # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
+      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
 
     inherit meta;

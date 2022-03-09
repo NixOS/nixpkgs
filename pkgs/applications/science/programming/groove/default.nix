@@ -7,7 +7,7 @@ let
     icon = "groove";
     desktopName = "GROOVE Simulator";
     comment = "GRaphs for Object-Oriented VErification";
-    categories = "Science;ComputerScience;";
+    categories = [ "Science" "ComputerScience" ];
   };
 
 in stdenv.mkDerivation rec {

@@ -8,11 +8,10 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "World of Goo";
     genericName = "World of Goo";
-    categories = "Game;";
+    categories = [ "Game" ];
     exec = "WorldOfGoo.bin.${arch}";
     icon = "2dboy-worldofgoo";
     name = "worldofgoo";
-    type = "Application";
   };
 
 in

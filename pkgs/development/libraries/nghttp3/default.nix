@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
-, cunit, file
+, cunit, file, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pV1xdQa5RBz17jDINC2uN1Q+jpa2edDwqTqf8D5VU3E=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config cunit file ];
+  nativeBuildInputs = [ autoreconfHook pkg-config file ];
+  checkInputs = [ cunit ncurses ];
 
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -23,12 +24,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   doCheck = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/nghttp3";
     description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C.";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];
   };
 }

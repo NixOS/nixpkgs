@@ -138,7 +138,7 @@ rec {
             # support for that, in turn it's lazy in its values. This means e.g.
             # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
             # start a download when `pkgs` wasn't evaluated.
-            type = types.lazyAttrsOf types.unspecified;
+            type = types.lazyAttrsOf types.raw;
             internal = true;
             description = "Arguments passed to each module.";
           };
@@ -151,8 +151,7 @@ rec {
           };
 
           _module.freeformType = mkOption {
-            # Disallow merging for now, but could be implemented nicely with a `types.optionType`
-            type = types.nullOr (types.uniq types.attrs);
+            type = types.nullOr types.optionType;
             internal = true;
             default = null;
             description = ''
@@ -333,6 +332,10 @@ rec {
 
     in modulesPath: initialModules: args:
       filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+
+  /* Wrap a module with a default location for reporting errors. */
+  setDefaultModuleLocation = file: m:
+    { _file = file; imports = [ m ]; };
 
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
@@ -534,11 +537,9 @@ rec {
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls =
    let
-    packSubmodule = file: m:
-      { _file = file; imports = [ m ]; };
     coerceOption = file: opt:
-      if isFunction opt then packSubmodule file opt
-      else packSubmodule file { options = opt; };
+      if isFunction opt then setDefaultModuleLocation file opt
+      else setDefaultModuleLocation file { options = opt; };
    in loc: opts:
     foldl' (res: opt:
       let t  = res.type;
@@ -568,7 +569,7 @@ rec {
 
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
-            if getSubModules != null then map (packSubmodule opt._file) getSubModules ++ res.options
+            if getSubModules != null then map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
             else if opt.options ? options then map (coerceOption opt._file) options' ++ res.options
             else res.options;
         in opt.options // res //

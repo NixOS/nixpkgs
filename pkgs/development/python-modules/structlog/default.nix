@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.4.0";
+  version = "21.5.0";
   format = "flit";
 
   # sdist is missing conftest.py
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "hynek";
     repo = "structlog";
     rev = version;
-    sha256 = "sha256-uXFSrC1TvQV46uu0sadC3eMq7yk5TnrpQE8m6NSv1Bg=";
+    sha256 = "0bc5lj0732j0hjq89llgrncyzs6k3aaffvg07kr3la44w0hlrb4l";
   };
 
   checkInputs = [ pytestCheckHook pytest-asyncio pretend freezegun simplejson twisted ];

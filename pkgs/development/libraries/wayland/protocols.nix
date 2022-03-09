@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
-  version = "1.24";
+  version = "1.25";
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1hlb6gvyqlmsdkv5179ccj07p04cn6xacjkgklakbszczv7xiw5z";
+    sha256 = "0q0laxdvf8p8b7ks2cbpqf6q0rwrjycqrp8pf8rxm86hk5qhzzzi";
   };
 
   postPatch = lib.optionalString doCheck ''

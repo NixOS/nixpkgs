@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString useNcurses "-cursesUI"
     + lib.optionalString withQt5 "-qt5UI";
-  version = "3.22.1";
+  version = "3.22.2";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    sha256 = "sha256-DpmCKVSdez82hwPSDiSOfuH4U5ENQnBKqHkYwhPqgsA=";
+    sha256 = "sha256-PBxHi5ZQsQfUUsW9VFxy4vrU43wJuJoZhLmi9G32rO0=";
   };
 
   patches = [

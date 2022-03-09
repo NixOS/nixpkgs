@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pycritty";
-  version = "0.3.5";
+  version = "0.4.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lrmd4a1ps3h9z0pndfjfrd2qa7v3abd6np75fd2q2ffsqv7ar6x";
+    sha256 = "sha256-Lh2zAEJTyzI8dJTNuyaf7gzhySMpui+CF9qRiubwFhE=";
   };
 
   postPatch = ''

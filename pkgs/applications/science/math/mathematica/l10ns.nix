@@ -8,6 +8,13 @@ let allVersions = with lib; flip map
   # N.B. Versions in this list should be ordered from newest to oldest.
   [
     {
+      version = "13.0.1";
+      lang = "en";
+      language = "English";
+      sha256 = "3672a920c1b4af1afd480733f6d67665baf8258757dfe59a6ed6d7440cf26dba";
+      installer = "Mathematica_13.0.1_BNDL_LINUX.sh";
+    }
+    {
       version = "13.0.0";
       lang = "en";
       language = "English";

@@ -17,15 +17,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.18.1";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YaQOYhnbzoLyMpEPYyGXdVTWKN8dvcpLcb++8HO51qQ=";
+    sha256 = "sha256-BqwiconG5hn5RPV+hlKu6e6+GjZA4Im/dD+no3IduYw=";
   };
-  cargoSha256 = "sha256-2+77mILB5vaiejeXJ75l5LedQ55ibq/nlEzxfbANvgI=";
+  cargoSha256 = "sha256-q/5AezLQgN7WdGsbHoxX5riJMlxw3cTFhVs5OvCeI5U=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];

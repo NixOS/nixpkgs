@@ -4,20 +4,20 @@ let
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-  version = "2.8.0";
+  version = "2.10.1";
   channel = "stable";
   filename = "flutter_linux_${version}-${channel}.tar.xz";
 
   # Decouples flutter derivation from dart derivation,
   # use specific dart version to not need to bump dart derivation when bumping flutter.
-  dartVersion = "2.15.0";
+  dartVersion = "2.16.1";
   dartSourceBase = "https://storage.googleapis.com/dart-archive/channels";
   dartForFlutter = dart.override {
     version = dartVersion;
     sources = {
       "${dartVersion}-x86_64-linux" = fetchurl {
         url = "${dartSourceBase}/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-        sha256 = "sha256-U1V1OPmFeNZCdBxFy7yqAbAE0cxh9f2UqKQmreJu9YA=";
+        sha256 = "sha256-PMY6DCFQC8XrlnFzOEPcwgBAs5/cAvNd78969Z+I1Fk=";
       };
     };
   };
@@ -29,7 +29,7 @@ in {
     pname = "flutter";
     src = fetchurl {
       url = "https://storage.googleapis.com/flutter_infra_release/releases/${channel}/linux/${filename}";
-      sha256 = "sha256-sSz/owGdCMB5b9+cAWvLkrfFcIIq5665Xopd4JKv1G4=";
+      sha256 = "sha256-rSfwcglDV2rvJl10j7FByAWmghd2FYxrlkgYnvRO54Y=";
     };
     patches = getPatches ./patches;
   };

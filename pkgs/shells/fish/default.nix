@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , coreutils
 , which
 , gnused
@@ -146,6 +147,8 @@ let
       sha256 = "sha256-tbTuGlJpdiy76ZOkvWUH5nXkEAzpu+hCFKXusrGfrok=";
     };
 
+    patches = [ ./tests-pcre2-update.patch ]; # should be included in >= 3.4
+
     # Fix FHS paths in tests
     postPatch = ''
       # src/fish_tests.cpp
@@ -183,6 +186,7 @@ let
 
     nativeBuildInputs = [
       cmake
+      gettext
     ];
 
     buildInputs = [
@@ -197,8 +201,14 @@ let
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
+    # The optional string is kind of an inelegant way to get fish to cross compile.
+    # Fish needs coreutils as a runtime dependency, and it gets put into
+    # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
+    # was clobbering the PATH. It probably needs to be fixed at a lower level.
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
+    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      export CMAKE_PREFIX_PATH=
     '';
 
     # Required binaries during execution

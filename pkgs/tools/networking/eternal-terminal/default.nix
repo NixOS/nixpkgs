@@ -42,15 +42,11 @@ stdenv.mkDerivation rec {
     "-std=c++17"
   ];
 
-  LDFLAGS = lib.optional stdenv.cc.isClang [
-    "-lc++fs"
-  ];
-
   meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dezgeg pingiun ];
+    maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

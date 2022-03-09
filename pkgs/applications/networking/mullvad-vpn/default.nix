@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
+, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
 , xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 , makeWrapper
 }:
@@ -16,7 +16,6 @@ let deps = [
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     pango
     gtk3
     libappindicator

@@ -19,7 +19,7 @@ let
   majorVersion = versions.major version;
   minorVersion = versions.minor version;
 
-  baseName = if enableNpm then "nodejs" else "nodejs-slim";
+  pname = if enableNpm then "nodejs" else "nodejs-slim";
 
   useSharedHttpParser = !stdenv.isDarwin && versionOlder "${majorVersion}.${minorVersion}" "11.4";
 
@@ -43,9 +43,7 @@ let
 
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
   self = stdenv.mkDerivation {
-    inherit version;
-
-    name = "${baseName}-${version}";
+    inherit pname version;
 
     src = fetchurl {
       url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";

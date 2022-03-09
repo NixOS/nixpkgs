@@ -94,13 +94,12 @@ stdenv.mkDerivation rec {
     name = "zotero-${version}";
     exec = "zotero -url %U";
     icon = "zotero";
-    type = "Application";
     comment = meta.description;
     desktopName = "Zotero";
     genericName = "Reference Management";
-    categories = "Office;Database;";
-    startupNotify = "true";
-    mimeType = "text/plain";
+    categories = [ "Office" "Database" ];
+    startupNotify = true;
+    mimeTypes = [ "text/plain" ];
   };
 
   installPhase = ''

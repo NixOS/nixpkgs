@@ -2,27 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.12.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-A6Z3g6fbYBynyN4OhRrZNO0ZghvT3XnIahdUQ8SE8tU=";
+    sha256 = "sha256-pZyQnPIdyS8XkzP9KwGKRjF21YWGgCVNeQSie9g5NcE=";
   };
 
-  cargoSha256 = "sha256-6/JwrPymtpj/CXqx3Pe43v+MJTNONArU2WEo/zgJhT4=";
-
-  postPatch = ''
-    pushd vendor
-    for grammar in */; do
-      if [ -d "${tree-sitter.grammars}/$grammar" ]; then
-        rm -r "$grammar"
-        ln -s "${tree-sitter.grammars}/$grammar"
-      fi
-    done
-    popd
-  '';
+  cargoSha256 = "sha256-VXbCrhoGF6bCzQ02Y1LQkbEVrmIfDIKFWF9vx43tt94=";
 
   meta = with lib; {
     description = "A syntax-aware diff";

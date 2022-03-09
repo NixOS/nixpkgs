@@ -10,7 +10,7 @@ let
     icon = "quartus";
     desktopName = "Quartus";
     genericName = "Quartus Prime";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSUserEnv rec {
@@ -25,6 +25,7 @@ in buildFHSUserEnv rec {
     # qsys requirements
     xorg.libXtst
     xorg.libXi
+    libudev0-shim
   ];
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?

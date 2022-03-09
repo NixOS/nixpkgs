@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Giving you a random User-Agent Header";
     homepage = "https://github.com/Animenosekai/useragents";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

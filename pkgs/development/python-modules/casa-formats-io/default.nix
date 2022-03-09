@@ -4,6 +4,7 @@
 , astropy
 , dask
 , numpy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     sha256 = "16rypj65wdfxxrilxfhbk563lxv86if4vvs9zfq3f8bkzdr8xl9s";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [ astropy dask numpy ];
 
   # Tests require a large (800 Mb) dataset
@@ -25,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Dask-based reader for CASA data";
-    homepage = "http://radio-astro-tools.github.io";
+    homepage = "https://casa-formats-io.readthedocs.io/";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ smaret ];
   };

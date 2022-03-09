@@ -111,8 +111,8 @@ let
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsRegularFile pathIsGitRepo;
-    inherit (self.modules) evalModules unifyModuleSyntax
-      applyIfFunction mergeModules
+    inherit (self.modules) evalModules setDefaultModuleLocation
+      unifyModuleSyntax applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
@@ -126,7 +126,7 @@ let
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
-      showOption showFiles unknownModule mkOption;
+      showOption showFiles unknownModule mkOption mkPackageOption;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

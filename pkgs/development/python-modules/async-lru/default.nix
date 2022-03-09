@@ -8,19 +8,19 @@
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "unstable-2020-10-24";
+  version = "unstable-2022-02-03";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
-    rev = "ae252508f9c5aecf9c02ddeb879d06c28dbffc42";
-    sha256 = "1gk5qzdvhl2j1mw7xzchbw7bcgk9mzhvqa62nwwmvlbnx88pkwnc";
+    rev = "3574af7691371015c47faf77e0abf8c7b06a3cdc";
+    hash = "sha256-EsadpQlRNnebp0UUybzQwzyK4zwFlortutv3VTUsprU=";
   };
 
   postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
+    sed -i -e '/^addopts/d' -e '/^filterwarnings/,+2d' setup.cfg
   '';
 
   checkInputs = [

@@ -16,7 +16,7 @@
   - nixos/modules/services/editors/emacs.nix
   - nixos/modules/services/editors/emacs.xml
   - nixos/tests/emacs-daemon.nix
-  - pkgs/applications/editors/emacs-modes/**/*
+  - pkgs/applications/editors/emacs/elisp-packages/**/*
   - pkgs/applications/editors/emacs/**/*
   - pkgs/build-support/emacs/**/*
   - pkgs/top-level/emacs-packages.nix
@@ -142,7 +142,7 @@
 "6.topic: vim":
   - doc/languages-frameworks/vim.section.md
   - pkgs/applications/editors/vim/**/*
-  - pkgs/misc/vim-plugins/**/*
+  - pkgs/applications/editors/vim/plugins/**/*
   - nixos/modules/programs/neovim.nix
   - pkgs/applications/editors/neovim/**/*
 

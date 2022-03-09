@@ -19,10 +19,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
-  '';
-
   # boehm-gc whitelists GCC threading models
   patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 

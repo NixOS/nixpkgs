@@ -18,7 +18,7 @@ in
 with lib;
 
 stdenv.mkDerivation {
-  name = "texinfo-${optionalString interactive "interactive-"}${version}";
+  pname = "texinfo${optionalString interactive "-interactive"}";
   inherit version;
 
   src = fetchurl {

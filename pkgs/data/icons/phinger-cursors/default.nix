@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/icons
-    cp -r ./ $out/share/icons
+    cp -r ./phinger-cursors* $out/share/icons
     runHook postInstall
   '';
 

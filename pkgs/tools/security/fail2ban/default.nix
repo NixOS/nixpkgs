@@ -1,5 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
-
+{ lib, stdenv, fetchFromGitHub
+, python3
+, fetchpatch
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fail2ban";
@@ -17,7 +19,21 @@ python3.pkgs.buildPythonApplication rec {
       systemd
     ];
 
+  patches = [
+    # remove references to use_2to3, for setuptools>=58
+    # has been merged into master, remove next release
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497.patch";
+      sha256 = "sha256-aozQJHwPcJTe/D/PLQzBk1YH3OAP6Qm7wO7cai5CVYI=";
+    })
+  ];
+
   preConfigure = ''
+    # workaround for setuptools 58+
+    # https://github.com/fail2ban/fail2ban/issues/3098
+    patchShebangs fail2ban-2to3
+    ./fail2ban-2to3
+
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail \

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "0.13.0";
+  version = "0.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Skyscanner";
     repo = pname;
     rev = version;
-    hash = "sha256-BlnLf0C/wxPXhoAH0SRB22eGWbbZ05L20rNy6qfOI+A=";
+    hash = "sha256-Rw0sZ2k+tXo04mvlL83hUgdHIND5NIsVH/CzrfmbKlE=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_cloudformation_actions"
+    "test_auxiliar_cast"
+    "test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built"
+    "test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be_built"
+    "test_resolve_booleans_different_properties_for_generic_resource"
   ];
 
   pythonImportsCheck = [

@@ -314,7 +314,7 @@ in with self; {
   humanStemCell = derive2 { name="humanStemCell"; version="0.34.0"; sha256="0lvy1n389wsc85yi7kmwq2qda0nl3hpl5bqak01fr3d6040v7g27"; depends=[Biobase hgu133plus2_db]; };
   imcdatasets = derive2 { name="imcdatasets"; version="1.2.0"; sha256="1qgg2cnalx9kiv73g0n9axc6y5b25kwxbmn7cg9syvlrfn0iynlz"; depends=[cytomapper DelayedArray ExperimentHub HDF5Array S4Vectors SingleCellExperiment]; };
   kidpack = derive2 { name="kidpack"; version="1.36.0"; sha256="094b1jhyal4h3k4ilmayz77mbjqkmn7b5bsw799jmsqyg93f4r7g"; depends=[Biobase]; };
-  leeBamViews = derive2 { name="leeBamViews"; version="1.30.0"; sha256="1f0lc8k14canmp124qqys6pwp9v88z7cwr7kgxi5mrzk92r2jiz6"; depends=[Biobase BSgenome GenomicAlignments GenomicRanges IRanges Rsamtools S4Vectors]; };
+  leeBamViews = derive2 { name="leeBamViews"; version="1.30.1"; sha256="1pa1i7mb7ixs7zrj9h93s4kgbc1dq3nx40knsm5i7a43jxsl6ggw"; depends=[Biobase BSgenome GenomicAlignments GenomicRanges IRanges Rsamtools S4Vectors]; };
   leukemiasEset = derive2 { name="leukemiasEset"; version="1.30.0"; sha256="0hnqi0qm7caipjkp3asabby5jrjl57vvshnwiwqnjsf87xx19cjx"; depends=[Biobase]; };
   lumiBarnes = derive2 { name="lumiBarnes"; version="1.34.0"; sha256="103iz7vjhh1w8zyb4n3kf1w9qfa7li9p2jql48cjsadvil4bfl09"; depends=[Biobase lumi]; };
   lungExpression = derive2 { name="lungExpression"; version="0.32.1"; sha256="00dm271n1lnj5myscmkm9g4a361lfsfg8cl7ii5z8br9v4wyw2y8"; depends=[Biobase]; };
@@ -374,7 +374,7 @@ in with self; {
   restfulSEData = derive2 { name="restfulSEData"; version="1.16.0"; sha256="1bx41xwxnvx6712wsy5qljji2w3wiybvddkxic8xc9l2hrcmfhrz"; depends=[ExperimentHub SummarizedExperiment]; };
   rheumaticConditionWOLLBOLD = derive2 { name="rheumaticConditionWOLLBOLD"; version="1.32.0"; sha256="0k2klx4rpyzcq346c3ak2lf6w47zkhnhiqn4rs70xnxnsbjn2ca5"; depends=[]; };
   sampleClassifierData = derive2 { name="sampleClassifierData"; version="1.18.0"; sha256="12k7xhd2axmcpmv970xbhx5r9b0jdmkxxqm01a0v2jfx3imzz9jb"; depends=[SummarizedExperiment]; };
-  scATAC_Explorer = derive2 { name="scATAC.Explorer"; version="1.0.0"; sha256="16qscpjbbphrd1qfp85r9bw8v98866kzsf20fk270m2aq378y4i8"; depends=[BiocFileCache data_table Matrix S4Vectors SingleCellExperiment]; };
+  scATAC_Explorer = derive2 { name="scATAC.Explorer"; version="1.0.1"; sha256="0iz0i58afr58y4mc6iyajzdblpd1s2mng693nhb49rka4bf1fx0j"; depends=[BiocFileCache data_table Matrix S4Vectors SingleCellExperiment]; };
   scRNAseq = derive2 { name="scRNAseq"; version="2.8.0"; sha256="19caas79yarf3vww60bnn92v9ns82pawqbbw78kmy0x94hvsfdbk"; depends=[AnnotationDbi AnnotationHub BiocGenerics ensembldb ExperimentHub GenomicFeatures GenomicRanges S4Vectors SingleCellExperiment SummarizedExperiment]; };
   scTHI_data = derive2 { name="scTHI.data"; version="1.6.0"; sha256="0n794kicpylibqgi4z9mwdgmk5ni3yhqzaqcdr2mij844s079fx4"; depends=[]; };
   scanMiRData = derive2 { name="scanMiRData"; version="1.0.0"; sha256="0z6nl4w4r8m1mara0zyzlg7xx6y9fa8psvln0695wvpxzmps4y9h"; depends=[scanMiR]; };
@@ -389,7 +389,7 @@ in with self; {
   signatureSearchData = derive2 { name="signatureSearchData"; version="1.8.4"; sha256="0k5j35jsdfk3qza3kzp2ih9irz4d4xbwr64wd4ibmzydkjrjdrcz"; depends=[affy Biobase dplyr ExperimentHub limma magrittr R_utils rhdf5]; };
   simpIntLists = derive2 { name="simpIntLists"; version="1.30.0"; sha256="0q2lqfhsjncdj42hblrh389j2m47x26nn58s31s1448pddhrp7z1"; depends=[]; };
   spatialDmelxsim = derive2 { name="spatialDmelxsim"; version="1.0.0"; sha256="1h5crcjrzapj5j31285ana48g3b2iscxwlzxxdx9i03jsl39dlp8"; depends=[ExperimentHub SummarizedExperiment]; };
-  spatialLIBD = derive2 { name="spatialLIBD"; version="1.6.4"; sha256="0lpp5w04szgqs0nvlhc6a7hsybsvpy9vdx4dqs9ncrb4qg6fxchp"; depends=[AnnotationHub benchmarkme BiocFileCache BiocGenerics cowplot DT ExperimentHub fields GenomicRanges ggplot2 golem IRanges jsonlite magick Matrix plotly png Polychrome RColorBrewer rtracklayer S4Vectors scater sessioninfo shiny shinyWidgets SingleCellExperiment SpatialExperiment SummarizedExperiment tibble viridisLite]; };
+  spatialLIBD = derive2 { name="spatialLIBD"; version="1.6.5"; sha256="1m25wk2np5yj0wygw3gg3kq8ykzx14jqj73aqs0yhsr04pp7qm8x"; depends=[AnnotationHub benchmarkme BiocFileCache BiocGenerics cowplot DT ExperimentHub fields GenomicRanges ggplot2 golem IRanges jsonlite magick Matrix plotly png Polychrome RColorBrewer rtracklayer S4Vectors scater sessioninfo shiny shinyWidgets SingleCellExperiment SpatialExperiment SummarizedExperiment tibble viridisLite]; };
   spqnData = derive2 { name="spqnData"; version="1.6.0"; sha256="0dwmgwz88g8fzpa2nl2zs4y32wrlf4ca142d8siak14wl089nm4y"; depends=[SummarizedExperiment]; };
   stemHypoxia = derive2 { name="stemHypoxia"; version="1.30.0"; sha256="05jly60gg5xr9511jlymzbpjysapfz2qq81rxhdz7cjbjkkgvykr"; depends=[]; };
   stjudem = derive2 { name="stjudem"; version="1.34.0"; sha256="005wy7b8naaph9krsdw234sk8fprccclnj7y4rfrs2f3lbrw4b2g"; depends=[]; };

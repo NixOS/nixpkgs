@@ -115,7 +115,7 @@ let
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
-    sha256 = "1q1mkqb6fk515g556yn8ks3gqrimfbadprmbv5rill1lpipq5xbj";
+    sha256 = "sha256-6HD3wcBo21Dep4ckx+oDWAC4nuTvCzlp0bwQxZox2b4=";
   };
 
-  vendorSha256 = "12p77a97lbff6qhncs5qx13k3wmf9hrr09mhh12isw5s0p0n53xm";
+  vendorSha256 = "sha256-tY9iwQW6cB1FgLAmkDNMrvIxR+i4aGYhNs4tepI654o=";
 
   checkPhase = "go test ./...";
 

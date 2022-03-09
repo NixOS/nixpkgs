@@ -11,19 +11,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zig";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    hash = "sha256-Hfl1KKtGcopMrn+U9r0/qr/wReWJIgb8+IgwMoguv/0=";
+    hash = "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=";
   };
 
   nativeBuildInputs = [
     cmake
     llvmPackages.llvm.dev
   ];
+
   buildInputs = [
     libxml2
     zlib

@@ -1,6 +1,9 @@
 {
-  "version": "1.9.7-sc.1",
-  "srcHash": "0qrjjwcxa141phsgdz325rrkfmjqdmxc3h917cs9c9kf6cblkxaq",
-  "webYarnHash": "19c594pql2yz1z15phfdlkwcvrcbm8k058fcq7p0k6840dhif5fd",
-  "desktopYarnHash": "058ihkljb1swjzvgf8gqci5ghvwapmpcf2bsab3yr66lhps7fhci"
+  "version": "1.10.4-sc.1",
+  "rev": "v1.10.4-sc.1",
+  "srcHash": "0sxibzskbw9pa6wmbk1y3n7p74cfj9zvm2hsw76sp6wfac1wnbwl",
+  "webYarnHash": "1z8xr35gh74y2iv9kfk6d6b6f3iclcrpkdds5q7rh2irpf14fwpw",
+  "jsSdkYarnHash": "1cwvb0hwq19dh2937fmcbfvnkkfmalk9wrxf1yv81nsbyjnx86di",
+  "reactSdkYarnHash": "0j4rxg11q35idfzvjrpmyrwkz9yqgzpwps3xqx1k4qcs844jjs9f",
+  "desktopYarnHash": "0akmgib212gkygvs2snn9c43k3ika3ipg85d480j3hqyb6yxwqmn"
 }

@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchurl, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr, git }:
 
 stdenv.mkDerivation rec {
   pname = "irssi";
   version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://github.com/irssi/irssi/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "09cwz5ff1i5lp35qhhmw6kbw5dwcn9pl16gpzkc92xg5sx3bgjr9";
+
+  src = fetchFromGitHub {
+    "owner" = "irssi";
+    "repo" = "irssi";
+    "rev" = "91dc3e4dfa1a9558c5a7fe0ea982cb9df0e2de65";
+    "sha256" = "efnE4vuDd7TnOBxMPduiV0/nez1jVhTjbJ0vzN4ZMcg=";
+    "leaveDotGit" = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool git ];
   buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [
     "--with-proxy"

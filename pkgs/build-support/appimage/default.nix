@@ -123,7 +123,6 @@ rec {
       atk
       at-spi2-atk
       libudev0-shim
-      networkmanager098
 
       xorg.libXt
       xorg.libXmu
@@ -179,6 +178,8 @@ rec {
       libjack2
       fribidi
       p11-kit
+
+      gmp
 
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage

@@ -1,19 +1,61 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, openssh
+, ps
+, psutil
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
   version = "1.7.2";
 
-  checkInputs = [ pytest ];
+  src = fetchFromGitHub {
+    owner = "tomerfiliba";
+    repo = "plumbum";
+    rev = "v${version}";
+    sha256 = "sha256-bCCcNFz+ZsbKSF7aCfy47lBHb873tDYN0qFuSCxJp1w=";
+  };
 
-  # No tests in archive
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-config=setup.cfg" ""
+  '';
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d1bf908076bbd0484d16412479cb97d6843069ee19f99e267e11dd980040523";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  checkInputs = [
+    openssh
+    ps
+    psutil
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMP
+  '';
+
+  disabledTests = [
+    # broken in nix env
+    "test_change_env"
+    "test_dictlike"
+    "test_local"
+  ];
+
+  meta = with lib; {
+    description = " Plumbum: Shell Combinators ";
+    homepage = " https://github.com/tomerfiliba/plumbum ";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

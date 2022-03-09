@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.16.1";
+  version = "1.16.3";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_archive_${version}.tar.gz";
-    sha256 = "sha256-o3FMuMvWxj9ECj77H/q5QkpcFbcZ0eNQ1OS51pUal3c=";
+    sha256 = "sha256-PpvTHG/EBKBhtlgIrAz/B+U1aHbZURN2cWTlZ/DkZQs=";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
     exec = "vintagestory";
     icon = "vintagestory";
     comment = "Innovate and explore in a sandbox world";
-    type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   installPhase = ''

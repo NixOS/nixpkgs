@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = "Aether";
       genericName = meta.description;
-      categories = "Network;";
-      mimeType = "x-scheme-handler/aether";
+      categories = [ "Network" ];
+      mimeTypes = [ "x-scheme-handler/aether" ];
     })
   ];
 

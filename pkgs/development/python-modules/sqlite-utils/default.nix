@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.22.1";
+  version = "3.25";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35ebb4f7e2b09f1818b36e7da6dc62f1ca57e2c0d99a9cbc8151e634d75a7906";
+    sha256 = "sha256-OKlwuXwXGU2WBauE33SYAuHzvPBhNdwYB3nQo5V2sUI=";
   };
 
   propagatedBuildInputs = [

@@ -10,13 +10,13 @@
 }@args:
 
 let
-  version = "2.8.0.beta11";
+  version = "2.9.0.beta1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-dTem4or0SunXCJFpNkeM0CSXY+58AeQAuMaLzhfGMY0=";
+    sha256 = "sha256-mf2Niyv1H+Zq7RfnV93O1Ul9RdRrtmtAJMBJrb8hp3U=";
   };
 
   runtimeDeps = [

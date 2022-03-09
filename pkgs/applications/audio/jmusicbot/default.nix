@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp $src $out/lib/JMusicBot
 
     makeWrapper ${jre}/bin/java $out/bin/JMusicBot \
-      --add-flags "-Xmx1G -Dnogui=true -jar $out/lib/JMusicBot"
+      --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
   '';
 
   meta = with lib; {

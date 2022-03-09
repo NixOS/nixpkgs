@@ -251,12 +251,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2021.3.2"; /* updated by script */
+    version = "2021.3.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "029xim3a6ijqdbzwxan189ydcy5b0ry2qqc70fipp8ic5z5iai3b"; /* updated by script */
+      sha256 = "03gil00srq3jljc13iyb7v1yc6l6yhdhqm9d1ld2j2pympl6p61m"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -316,13 +316,13 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2021.2.3"; /* updated by script */
-    versionMajorMinor = "2021.2"; /* updated by script */
+    version = "2021.3"; /* updated by script */
+    versionMajorMinor = "2021.3"; /* updated by script */
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/mps/${versionMajorMinor}/MPS-${version}.tar.gz";
-      sha256 = "1j33b48ki1xw7xb1hr8k2jz7d78h0qcr1b5gql7i40d7szq0iy10"; /* updated by script */
+      sha256 = "0zw5xqdlhjfg0smfjl8xy7drf9spiwqbmqq8z22x4zb61lpvdbp9"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -330,12 +330,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2021.3.1"; /* updated by script */
+    version = "2021.3.2"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "011i3jgfnb2h64ikbm3wi1vfhzm50mwwy9nksl71nzllj3kz111x"; /* updated by script */
+      sha256 = "1qi0zq3gzcfnikky37g2dqgmzm7r1883k6asris8nph389qk86vn"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -395,12 +395,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2021.3.1"; /* updated by script */
+    version = "2021.3.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1f918cj76b79x0d2hhv78mvmki5d1dps8nsx7i50wn2qzdml4kc6"; /* updated by script */
+      sha256 = "0q2hn48499hv7licpl84ly0bhiizya8a69dl2vjvgscj3cdkr98q"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

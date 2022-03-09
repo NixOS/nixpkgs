@@ -29,8 +29,8 @@ in stdenv.mkDerivation rec {
     icon = "webbrowser";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
       "text/html"
       "text/xml"
       "application/xhtml+xml"

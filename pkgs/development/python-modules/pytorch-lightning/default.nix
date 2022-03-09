@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "0.8.5";
+  version = "1.5.8";
 
   disabled = isPy27;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "PyTorchLightning";
     repo = pname;
     rev = version;
-    sha256 = "12zhq4pnfcwbgcx7cs99c751gp3w0ysaf5ykv2lv8f4i360w3r5a";
+    sha256 = "161mz66l11z4350q93fmmq3x0jzbp5761lf4fx3yvz17qzp7ygkn";
   };
 
   propagatedBuildInputs = [

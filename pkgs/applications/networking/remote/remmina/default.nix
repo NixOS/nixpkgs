@@ -7,19 +7,20 @@
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
+, withLibsecret ? true
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.23";
+  version = "1.4.24";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-MyemiSAMZEa9Ng6WHEyHgrze8YtIbzMCR8CTb86PDsg=";
+    sha256 = "sha256-rcxgr3HVOWA3mTfX8tka9bPGDRDtKhBRsfQ3hv9XHf0=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -29,15 +30,16 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsecret libsoup spice-protocol spice-gtk libepoxy at-spi2-core
+    libsoup spice-protocol spice-gtk libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
     harfbuzz
-  ];
+  ] ++ optionals withLibsecret [ libsecret ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
+    "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
     "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
     "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"

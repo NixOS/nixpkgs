@@ -474,10 +474,8 @@ dont-distribute-packages:
  - atomic-primops-foreign
  - atp
  - attoparsec-enumerator
- - attoparsec-ip
  - attoparsec-iteratee
  - attoparsec-text-enumerator
- - attoparsec-uri
  - atuin
  - audiovisual
  - aura
@@ -527,6 +525,9 @@ dont-distribute-packages:
  - base64-bytes
  - baserock-schema
  - batchd
+ - batchd-core
+ - batchd-docker
+ - batchd-libvirt
  - batching
  - battlenet-yesod
  - battleships
@@ -588,7 +589,6 @@ dont-distribute-packages:
  - bla
  - blakesum-demo
  - blastxml
- - blatex
  - blaze-builder-enumerator
  - blaze-colonnade
  - blink1
@@ -637,7 +637,6 @@ dont-distribute-packages:
  - bv-sized-lens
  - bytehash
  - bytelog
- - bytesmith
  - bytestring-read
  - c0check
  - cabal-bounds
@@ -700,7 +699,6 @@ dont-distribute-packages:
  - chainweb-mining-client
  - chalkboard-viewer
  - charade
- - chart-cli
  - chart-svg
  - chart-svg-various
  - chart-unit
@@ -716,7 +714,6 @@ dont-distribute-packages:
  - chr-core
  - chr-lang
  - chromatin
- - chronos_1_1_3
  - chu2
  - chuchu
  - chunks
@@ -729,8 +726,12 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
+ - clash-ghc_1_6_1
  - clash-lib
+ - clash-lib-hedgehog
+ - clash-lib_1_6_1
  - clash-multisignal
+ - clash-prelude-hedgehog
  - clash-prelude-quickcheck
  - clash-shake
  - clash-systemverilog
@@ -788,6 +789,7 @@ dont-distribute-packages:
  - comic
  - commsec-keyexchange
  - comonad-random
+ - compaREST
  - compact-mutable
  - complexity
  - computational-algebra
@@ -815,7 +817,6 @@ dont-distribute-packages:
  - consumers
  - container
  - containers-accelerate
- - contiguous-fft
  - continuum
  - continuum-client
  - control
@@ -838,6 +839,7 @@ dont-distribute-packages:
  - coroutine-iteratee
  - couch-simple
  - couchdb-enumerator
+ - cpkg
  - cprng-aes-effect
  - cql-io-tinylog
  - cqrs-example
@@ -897,10 +899,8 @@ dont-distribute-packages:
  - data-structure-inferrer
  - datadog-tracing
  - dataflow
- - date-conversions
  - dbjava
  - dbus-client
- - ddate
  - ddc-build
  - ddc-core
  - ddc-core-babel
@@ -1196,7 +1196,7 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fused-effects-squeal
- - futhark_0_21_4
+ - futhark_0_21_6
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -1487,6 +1487,12 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
+ - hasql-streams-conduit
+ - hasql-streams-core
+ - hasql-streams-example
+ - hasql-streams-pipes
+ - hasql-streams-streaming
+ - hasql-streams-streamly
  - hasql-th
  - hastache-aeson
  - haste-app
@@ -1627,6 +1633,7 @@ dont-distribute-packages:
  - hreader-lens
  - hreq-client
  - hreq-conduit
+ - hriemann
  - hs-blake2
  - hs-brotli
  - hs-duktape
@@ -1789,7 +1796,6 @@ dont-distribute-packages:
  - invertible-hlist
  - invertible-hxt
  - ion
- - ip
  - ipatch
  - ipc
  - ipld-cid
@@ -2094,7 +2100,6 @@ dont-distribute-packages:
  - markdown-pap
  - markdown2svg
  - markov-processes
- - markup
  - marmalade-upload
  - marquise
  - marvin
@@ -2140,9 +2145,7 @@ dont-distribute-packages:
  - mkbndl
  - mlist
  - mmark-cli
- - mmark-cli_0_0_5_1
  - mmark-ext
- - mmark-ext_0_2_1_4
  - mmtl-base
  - moan
  - modify-fasta
@@ -2178,7 +2181,6 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp
  - mptcpanalyzer
  - msgpack-aeson
  - msgpack-idl
@@ -2314,7 +2316,7 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
- - pandoc_2_17_0_1
+ - pandoc_2_17_1_1
  - papa
  - papa-base
  - papa-base-implement
@@ -2437,8 +2439,6 @@ dont-distribute-packages:
  - prednote-test
  - presto-hdbc
  - preview
- - primitive-containers
- - primitive-sort
  - primula-board
  - primula-bot
  - proc
@@ -2552,7 +2552,6 @@ dont-distribute-packages:
  - reactor
  - readpyc
  - reanimate
- - reanimate_1_1_5_0
  - record-aeson
  - record-gl
  - record-preprocessor
@@ -2631,7 +2630,6 @@ dont-distribute-packages:
  - ribosome-root
  - ribosome-test
  - ridley-extras
- - ring-buffers
  - rio-process-pool
  - riot
  - ripple
@@ -2705,7 +2703,6 @@ dont-distribute-packages:
  - scholdoc
  - scholdoc-citeproc
  - scholdoc-texmath
- - scientific-notation
  - scion
  - scion-browser
  - scope
@@ -2808,7 +2805,6 @@ dont-distribute-packages:
  - smallstring
  - smartword
  - smcdel
- - smith
  - smith-cli
  - smith-client
  - smtlib2-debug
@@ -3039,7 +3035,6 @@ dont-distribute-packages:
  - tn
  - to-string-instances
  - toboggan
- - todos
  - toktok
  - too-many-cells
  - top
@@ -3148,8 +3143,6 @@ dont-distribute-packages:
  - urembed
  - uri-enumerator
  - uri-enumerator-file
- - url-bytes
- - urlpath
  - usb
  - usb-enumerator
  - usb-hid
@@ -3161,7 +3154,6 @@ dont-distribute-packages:
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
- - uuid-bytes
  - uuid-crypto
  - uvector-algorithms
  - v4l2
@@ -3209,7 +3201,6 @@ dont-distribute-packages:
  - wai-middleware-cache
  - wai-middleware-cache-redis
  - wai-middleware-consul
- - wai-middleware-content-type
  - wai-middleware-rollbar
  - wai-middleware-route
  - wai-session-tokyocabinet
@@ -3251,7 +3242,6 @@ dont-distribute-packages:
  - wrecker-ui
  - wright
  - writer-cps-full
- - ws
  - wss-client
  - wtk-gtk
  - wu-wei
@@ -3279,7 +3269,6 @@ dont-distribute-packages:
  - xml-push
  - xml-query-xml-conduit
  - xml-query-xml-types
- - xml-syntax
  - xml-tydom-conduit
  - xml2x
  - xmltv
@@ -3311,7 +3300,6 @@ dont-distribute-packages:
  - ycextra
  - yeamer
  - yeshql
- - yesod-articles
  - yesod-auth-ldap
  - yesod-colonnade
  - yesod-continuations

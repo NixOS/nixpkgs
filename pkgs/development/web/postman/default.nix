@@ -2,16 +2,16 @@
 , atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
+, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "9.7.1";
+  version = "9.13.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "sha256-Ioh2FfcKkpLGQdYmRnJC5cj7bNCwCMkg/gsXwPdQa1U=";
+    sha256 = "sha256-ZlCIqQ4i/jaf/uDBonVXf6kAuKEhinnKTk3nO7mnBV4=";
     name = "${pname}.tar.gz";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     comment = "API Development Environment";
     desktopName = "Postman";
     genericName = "Postman";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   buildInputs = [
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     libXtst
     libXScrnSaver
     libxkbcommon
+    xorg.libxshmfence
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];

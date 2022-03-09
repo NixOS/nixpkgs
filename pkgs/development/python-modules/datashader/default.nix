@@ -46,7 +46,7 @@ buildPythonPackage rec {
     param
     pyct
     scipy
-  ];
+  ] ++ dask.extras-require.complete;
 
   checkInputs = [
     pytestCheckHook

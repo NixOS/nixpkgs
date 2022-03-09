@@ -4,7 +4,7 @@
 , libffi
 , gdbm
 , xz
-, mime-types ? null, mimetypesSupport ? true
+, mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
@@ -17,6 +17,7 @@
 , configd
 , autoreconfHook
 , autoconf-archive
+, pkg-config
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -62,8 +63,6 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-assert mimetypesSupport -> mime-types != null;
-
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
 
@@ -105,7 +104,7 @@ let
 
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
-  ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
+    pkg-config
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
   ] ++ [
     nukeReferences
@@ -277,7 +276,7 @@ in with passthru; stdenv.mkDerivation {
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
-      --replace "@mime-types@" "${mime-types}"
+      --replace "@mime-types@" "${mailcap}"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
