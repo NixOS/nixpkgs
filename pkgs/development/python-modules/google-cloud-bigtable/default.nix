@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.6.0";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z6qhLNPfZnFJE6CStAByqxHBv3Itfzn1FtxDE+JPci8=";
+    hash = "sha256-TUgC/6IZ9kNE5iDtbhKPHJqo3sv9W+nl7KcxuXfrbyM=";
   };
 
   propagatedBuildInputs = [
