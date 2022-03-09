@@ -130,6 +130,10 @@ let
       inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
     };
 
+    mlir = callPackage ./mlir {
+      inherit llvm_meta;
+    };
+
     # Below, is the LLVM bootstrapping logic. It handles building a
     # fully LLVM toolchain from scratch. No GCC toolchain should be
     # pulled in. As a consequence, it is very quick to build different
