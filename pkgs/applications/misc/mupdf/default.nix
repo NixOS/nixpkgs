@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vfyhlqq1a0k0drcggly4bgsjasmf6lmpfbdi5xcrwdbzkagrbr1";
   };
 
+  patches = ./0001-Use-command-v-in-favor-of-which.patch;
+
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
   '';
