@@ -11,7 +11,7 @@
 , systemdSupport ? stdenv.isLinux
 , dbusSupport ? true
 , dbus
-, trayEnabled ? dbusSupport
+, trayEnabled ? systemdSupport && dbusSupport
 }:
 
 # The "sd-bus-provider" meson option does not include a "none" option,
