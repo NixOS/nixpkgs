@@ -3363,6 +3363,8 @@ in {
 
   garminconnect = callPackage ../development/python-modules/garminconnect { };
 
+  gasp = callPackage ../development/python-modules/gasp { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
