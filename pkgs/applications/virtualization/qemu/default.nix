@@ -142,8 +142,6 @@ stdenv.mkDerivation rec {
     # set was removed during the process of upstreaming this functionality, and
     # will still be needed in nix until the macOS SDK reaches 10.13+.
     ./provide-fallback-for-utimensat.patch
-    # Still needed indefinitely
-    ./9p-ignore-noatime.patch
   ]
     ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
