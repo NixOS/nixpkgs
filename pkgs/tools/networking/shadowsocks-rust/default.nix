@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
+  cargoBuildFlags = [
+    "--features=aead-cipher-extra,local-dns,local-http-native-tls,local-redir,local-tun"
+  ];
+
   # all of these rely on connecting to www.example.com:80
   checkFlags = [
     "--skip=http_proxy"
