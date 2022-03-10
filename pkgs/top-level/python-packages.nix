@@ -6960,6 +6960,8 @@ self: super: with self; {
 
   pi1wire = callPackage ../development/python-modules/pi1wire { };
 
+  piano-transcription-inference = callPackage ../development/python-modules/piano-transcription-inference { };
+
   piccata = callPackage ../development/python-modules/piccata { };
 
   pick = callPackage ../development/python-modules/pick { };
