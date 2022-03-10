@@ -12,7 +12,7 @@
   numactl,
 
   # Propagated build inputs
-  dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
+  numpy, pyyaml, cffi, click, typing-extensions,
 
   # Unit tests
   hypothesis, psutil,
@@ -117,9 +117,10 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.10.2";
+  version = "1.11.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7.0";
 
   outputs = [
     "out"   # output standard python package
@@ -132,19 +133,14 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-QcvoJqpZJXPSc9HLCJHetrp/hMESuC5kYl90d7Id0ZU=";
+    sha256 = "sha256-CEu63tdRBAF8CTchO3Qu8gUNObQylX6U08yDTI4/c/0=";
   };
 
   patches = [
-    (fetchpatch {
-      # Import distutils directly, not from setuptools
-      url = "https://github.com/pytorch/pytorch/commit/07767569c964552702bf374da753212eb9cde327.patch";
-      hash = "sha256-XNqKzIG3JYlQFeyng3UDkuEI9CC6mFD3aislM0H6W34=";
-      excludes = [
-        # we don't run the tests anyway
-        "test/run_test.py"
-      ];
-    })
+    # Fix for a breakpad incompatibility with glibc>2.33
+    # https://github.com/pytorch/pytorch/issues/70297
+    # https://github.com/google/breakpad/commit/605c51ed96ad44b34c457bbca320e74e194c317e
+    ./breakpad-sigstksz.patch
   ] ++ lib.optionals stdenv.isDarwin [
     # pthreadpool added support for Grand Central Dispatch in April
     # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
@@ -153,13 +149,6 @@ in buildPythonPackage rec {
     # pthread support.
     ./pthreadpool-disable-gcd.diff
   ];
-
-  # The dataclasses module is included with Python >= 3.7. This should
-  # be fixed with the next PyTorch release.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'dataclasses'" "'dataclasses; python_version < \"3.7\"'"
-  '';
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
@@ -218,7 +207,7 @@ in buildPythonPackage rec {
   # https://github.com/pytorch/pytorch/issues/22346
   #
   # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
-  # https://github.com/pytorch/pytorch/blob/v1.2.0/setup.py#L17
+  # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
   NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ];
 
   nativeBuildInputs = [
@@ -241,8 +230,7 @@ in buildPythonPackage rec {
     typing-extensions
     # the following are required for tensorboard support
     pillow six future tensorboard protobuf
-  ] ++ lib.optionals MPISupport [ mpi ]
-    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
+  ] ++ lib.optionals MPISupport [ mpi ];
 
   checkInputs = [ hypothesis ninja psutil ];
 
