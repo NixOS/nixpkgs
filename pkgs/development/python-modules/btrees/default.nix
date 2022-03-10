@@ -10,14 +10,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "BTrees";
+  pname = "btrees";
   version = "4.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "BTrees";
+    inherit version;
     hash = "sha256-1qsONBDQdNcVQkXW3GSTrobxtQvWCA0TEOuz7N6l3rY=";
   };
 
