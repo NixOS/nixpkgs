@@ -68,17 +68,17 @@ let
     };
 in
 {
-  spark3_2_1 = spark rec {
+  spark_3_2 = spark rec {
     pname = "spark";
     version = "3.2.1";
     sha256 = "0kxdqczwmj6pray0h8h1qhygni9m82jzznw5fbv9hrxrkq1v182d";
   };
-  spark3_1_2 = spark rec {
+  spark_3_1 = spark rec {
     pname = "spark";
     version = "3.1.2";
     sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
   };
-  spark2 = spark rec {
+  spark_2_4 = spark rec {
     pname = "spark";
     version = "2.4.8";
     sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
