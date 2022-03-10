@@ -43,7 +43,21 @@
       legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
+        # Profiles included by nixos-generate-config
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
+
+        # Additional profiles described in the manual
+        allHardware = import ./nixos/modules/profiles/all-hardware.nix;
+        base = import ./nixos/modules/profiles/base.nix;
+        cloneConfig = import ./nixos/modules/profiles/clone-config.nix;
+        demo = import ./nixos/modules/profiles/demo.nix;
+        dockerContainer = import ./nixos/modules/profiles/docker-container.nix;
+        graphical = import ./nixos/modules/profiles/graphical.nix;
+        hardened = import ./nixos/modules/profiles/hardened.nix;
+        headless = import ./nixos/modules/profiles/headless.nix;
+        installationDevice = import ./nixos/modules/profiles/installation-device.nix;
+        minimal = import ./nixos/modules/profiles/minimal.nix;
+        qemuGuest = import ./nixos/modules/profiles/qemu-guest.nix;
       };
     };
 }
