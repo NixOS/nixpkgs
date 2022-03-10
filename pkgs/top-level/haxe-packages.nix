@@ -29,7 +29,7 @@ let
     stdenv.mkDerivation (attrs // {
       name = "${libname}-${version}";
 
-      buildInputs = (attrs.buildInputs or [ ]) ++ [ haxe neko ]; # for setup-hook.sh to work
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ haxe neko ]; # for setup-hook.sh to work
       src = attrs.src or (fetchzip rec {
         name = "${libname}-${version}";
         url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
