@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pygraphviz";
-  version = "1.8";
+  version = "1.9";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6y4losZHBE57ZrWhWb5k2q7yS1Sfz1NcJBNp1ubgnEU=";
+    hash = "sha256-+hj3xs6ig0Gk5GbtDPBWgrCmgoiv6N18lCZ4L3wa4Bw=";
     extension = "zip";
   };
 

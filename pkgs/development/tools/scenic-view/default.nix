@@ -66,8 +66,8 @@ let
     desktopName = pname;
     exec = pname;
     comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {

@@ -90,6 +90,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ pingiun ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

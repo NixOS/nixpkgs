@@ -59,10 +59,9 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        nativeBuildInputs = optionals withDoc [ graphviz lua ];
         mlPlugin = versions.isLe "8.6" coq.coq-version;
-        extraBuildInputs = [ ncurses which ];
-        propagatedBuildInputs = mathcomp-deps;
+        extraNativeBuildInputs = [ which ] ++ optionals withDoc [ graphviz lua ];
+        extraBuildInputs = [ ncurses ] ++ mathcomp-deps;
 
         buildFlags = optional withDoc "doc";
 

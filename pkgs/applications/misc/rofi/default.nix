@@ -19,6 +19,8 @@
 , flex
 , librsvg
 , check
+, glib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -39,14 +41,13 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  depsBuildBuild = [ buildPackages.stdenv.cc pkg-config glib ];
+  nativeBuildInputs = [ meson ninja pkg-config flex bison ];
   buildInputs = [
     libxkbcommon
     pango
     cairo
     git
-    bison
-    flex
     librsvg
     check
     libstartup_notification

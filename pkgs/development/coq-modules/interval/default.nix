@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, bignums ? null, gnuplot_qt, version ? null }:
+{ lib, mkCoqDerivation, which, autoconf, coq, coquelicot, flocq, mathcomp-ssreflect, mathcomp-fingroup, bignums ? null, gnuplot_qt, version ? null }:
 
 mkCoqDerivation rec {
   pname = "interval";
@@ -20,8 +20,8 @@ mkCoqDerivation rec {
   release."3.3.0".sha256 = "0lz2hgggzn4cvklvm8rpaxvwaryf37i8mzqajqgdxdbd8f12acsz";
   releaseRev = v: "interval-${v}";
 
-  nativeBuildInputs = [ which autoconf ];
-  propagatedBuildInputs = [ bignums coquelicot flocq ]
+  extraNativeBuildInputs = [ which autoconf ];
+  propagatedBuildInputs = [ bignums coquelicot flocq mathcomp-ssreflect mathcomp-fingroup ]
     ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
   useMelquiondRemake.logpath = "Interval";
   mlPlugin = true;

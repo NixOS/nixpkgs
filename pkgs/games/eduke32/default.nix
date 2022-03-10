@@ -11,7 +11,7 @@ let
     comment = "Duke Nukem 3D port";
     desktopName = "Enhanced Duke Nukem 3D";
     genericName = "Duke Nukem 3D port";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   wrapper = "eduke32-wrapper";

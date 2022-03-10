@@ -1,5 +1,6 @@
-{ lib, stdenv
-, fetchgit
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoreconfHook
 , help2man
 , pkg-config
@@ -11,24 +12,25 @@
 , boost
 , ecasound
 , glibcLocales
-, libGLU, libGL # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
+, libGLU
+, libGL # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
 }:
 
 stdenv.mkDerivation {
-  pname = "soundscape-renderer-unstable";
+  pname = "soundscape-renderer";
+  version = "unstable-2016-11-03";
 
-  version = "2016-11-03";
-
-  src = fetchgit {
-    url = "https://github.com/SoundScapeRenderer/ssr";
+  src = fetchFromGitHub {
+    owner = "SoundScapeRenderer";
+    repo = "ssr";
     rev = "0dd0136dd24e47b63d8a4e05de467f5c7b047ec9";
-    sha256 = "095x2spv9bmg6pi71mpajnghbqj58ziflg16f9854awx0qp9d8x7";
+    sha256 = "sha256-9s+Elaxz9kX+Nle1CqBU/9r0hdI4dhsJ6GrNqvP5HIs=";
   };
 
   # Without it doesn't find all of the boost libraries.
-  BOOST_LIB_DIR="${boost}/lib";
+  BOOST_LIB_DIR = "${boost}/lib";
   # uses the deprecated get_generic_category() in boost_system
-  NIX_CFLAGS_COMPILE="-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
+  NIX_CFLAGS_COMPILE = "-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
 
   LC_ALL = "en_US.UTF-8";
 

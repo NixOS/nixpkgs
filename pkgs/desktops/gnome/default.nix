@@ -255,8 +255,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gitg = callPackage ./misc/gitg { };
 
-  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
-
   gnome-applets = callPackage ./misc/gnome-applets { };
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
@@ -283,6 +281,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 }) // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
+  libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
+
   bijiben = throw "The ‘gnome.bijiben’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-notes’ directly."; # added 2018-09-26
   evolution_data_server = throw "The ‘gnome.evolution_data_server’ alias was removed on 2022-01-13. Please use ‘gnome.evolution-data-server’ directly."; # added 2018-02-25
   geocode_glib = throw "The ‘gnome.geocode_glib’ alias was removed on 2022-01-13. Please use ‘pkgs.geocode-glib’ directly."; # added 2018-02-25
@@ -300,7 +300,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_themes_standard = throw "The ‘gnome.gnome_themes_standard’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-themes-standard’ directly."; # added 2018-02-25
   gnome-tweak-tool = throw "The ‘gnome.gnome-tweak-tool’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-tweaks’ directly."; # added 2018-03-21
   gsettings_desktop_schemas = throw "The ‘gnome.gsettings_desktop_schemas’ alias was removed on 2022-01-13. Please use ‘gnome.gsettings-desktop-schemas’ directly."; # added 2018-02-25
-  libgames-support = throw "The ‘gnome.libgames-support’ alias was removed on 2022-01-13. Please use ‘gnome.libgnome-games-support’ directly."; # added 2018-03-14
+  libgames-support = throw "The ‘gnome.libgames-support’ alias was removed on 2022-01-13. Please use ‘pkgs.libgnome-games-support’ directly."; # added 2018-03-14
   libgnome_keyring = throw "The ‘gnome.libgnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.libgnome-keyring’ directly."; # added 2018-02-25
   rarian = throw "The ‘gnome.rarian’ alias was removed on 2022-01-13. Please use ‘pkgs.rarian’ directly."; # added 2018-04-25
   networkmanager_fortisslvpn = throw "The ‘gnome.networkmanager_fortisslvpn’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-fortisslvpn’ directly."; # added 2018-02-25

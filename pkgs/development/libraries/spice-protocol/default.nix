@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spice-protocol";
-  version = "0.14.3";
+  version = "0.14.4";
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.xz";
-    sha256 = "0yj8k7gcirrsf21w0q6146n5g4nzn2pqky4p90n5760m5ayfb1pr";
+    sha256 = "sha256-BP+6YQ2f1EHPxH36oTXXAJbmCxBG0hGdjbL46g0X2RI=";
   };
 
   nativeBuildInputs = [ meson ninja ];

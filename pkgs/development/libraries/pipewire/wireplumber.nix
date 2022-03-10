@@ -39,6 +39,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xwfggrjKHh5mZdvH6dKqQo6o1ltxuYdjoGYaWl31C/Y=";
   };
 
+  patches = [
+    # backport a patch to fix hangs in some applications
+    # ref: https://gitlab.freedesktop.org/pipewire/wireplumber/-/issues/213
+    # FIXME: drop this in 0.4.9
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/afbc0ce57aac7aee8dc1651de4620f15c73dbace.patch";
+      sha256 = "sha256-8ycFnrzDq7QHgjwJ/772OTMsSsN3m7gjbdvTmlMJ+mU=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     pkg-config
@@ -67,6 +77,9 @@ stdenv.mkDerivation rec {
     "-Delogind=disabled"
     "-Ddoc=${mesonEnableFeature enableDocs}"
     "-Dintrospection=${mesonEnableFeature enableGI}"
+    "-Dsystemd-system-service=true"
+    "-Dsystemd-system-unit-dir=${placeholder "out"}/lib/systemd/system"
+    "-Dsysconfdir=/etc"
   ];
 
   passthru.updateScript = nix-update-script {

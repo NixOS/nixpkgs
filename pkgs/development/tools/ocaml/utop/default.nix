@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, ocaml, findlib
-, lambdaTerm, cppo, makeWrapper, buildDunePackage
+, lambda-term, cppo, makeWrapper, buildDunePackage
 }:
 
 if !lib.versionAtLeast ocaml.version "4.03"
@@ -17,10 +17,9 @@ buildDunePackage rec {
     sha256 = "0mi571ifjzq4wcjarn8q1b7yl8nxjm1jfx3afac224lqwn6bhb2d";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ makeWrapper cppo ];
 
-  propagatedBuildInputs = [ lambdaTerm ];
+  propagatedBuildInputs = [ lambda-term ];
 
   postFixup =
    let

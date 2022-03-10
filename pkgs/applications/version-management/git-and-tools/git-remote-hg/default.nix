@@ -4,13 +4,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-remote-hg";
-  version = "1.0.2.1";
+  version = "1.0.3.2";
 
   src = fetchFromGitHub {
     owner = "mnauw";
     repo = "git-remote-hg";
     rev = "v${version}";
-    sha256 = "1crgq13v2p9wmw1yhckmyzybh8h1nz3839qhqvzh48vxqkailzmn";
+    sha256 = "0b5lfbrcrvzpz380817md00lbgy5yl4y76vs3vm0bpm5wmr7c027";
   };
 
   nativeBuildInputs = [

@@ -14,20 +14,13 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-fpjzc2HiWP6nV8YZOwxsIOhy4ht/tQqcvCkcLMIFUaQ=";
 
   nativeBuildInputs = with pkgs; [
-    clang
-    llvmPackages.libclang
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = with pkgs; [
     pkg-config
-    clangStdenv
-    llvmPackages.libclang.lib
     rocksdb
   ];
-
-  preBuild = with pkgs; ''
-    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
-  '';
 
   cargoBuildFlags = "--bin conduit";
 

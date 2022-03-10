@@ -11,15 +11,13 @@
 
 let
   desktopItem = makeDesktopItem {
-    type = "Application";
-    name = "Domination";
+    name = "domination";
     desktopName = "Domination";
     exec = "domination";
     icon = "domination";
   };
   editorDesktopItem = makeDesktopItem {
-    type = "Application";
-    name = "Domination Map Editor";
+    name = "domination-map-editor";
     desktopName = "Domination Map Editor";
     exec = "domination-map-editor";
     icon = "domination";

@@ -2,14 +2,14 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2022-01-32";
+  version = "unstable-2022-02-11";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "cdb4efadfeb5102b501c7ff79261fefc7327edb9";
-    sha256 = "sha256-kNK0UQd1whkaZwj98b2JYtYwjUSE1qBcAYytqnSaK1o=";
+    rev = "6695784050605c77a301c0a66764fa9a9580a2f5";
+    sha256 = "1lddzf6m74bw5kkv465cp211xxqbwnfacav7ia3y9i38rrnqwk6m";
   };
 
   buildInputs = with nimPackages; [

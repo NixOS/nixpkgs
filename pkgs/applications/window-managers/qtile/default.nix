@@ -12,6 +12,10 @@ let
       sha256 = "TRmul3t//izJRdViTvxFz29JZeGYsWc7WsJjagQ35nw=";
     };
 
+    patches = [
+      ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
+    ];
+
     postPatch = ''
       substituteInPlace libqtile/pangocffi.py \
         --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
@@ -65,4 +69,7 @@ in
   name = "${unwrapped.pname}-${unwrapped.version}";
   # export underlying qtile package
   passthru = { inherit unwrapped; };
+
+  # restore original qtile attrs
+  inherit (unwrapped) pname version meta;
 })

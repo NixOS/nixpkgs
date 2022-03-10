@@ -13,10 +13,14 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildInputs =
+  strictDeps = true;
+
+  nativeBuildInputs =
     [
       ocaml findlib ocamlbuild ocamlmod ocamlify
     ];
+
+  buildInputs = [ ocamlbuild ];
 
   configurePhase = ''
     runHook preConfigure

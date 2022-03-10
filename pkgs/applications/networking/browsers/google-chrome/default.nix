@@ -1,7 +1,7 @@
 { lib, stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
-, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
+, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
@@ -57,7 +57,7 @@ let
   version = chromium.upstream-info.version;
 
   deps = [
-    glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
+    glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib

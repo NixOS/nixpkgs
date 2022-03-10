@@ -34,7 +34,9 @@ let
           touch $out
         '';
       };
-    } ''
+    }
+    # if you modify the logic to find the right clang flags, also modify rustPlatform.bindgenHook
+    ''
     mkdir -p $out/bin
     export cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
     export cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"

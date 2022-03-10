@@ -57,11 +57,19 @@ buildDunePackage {
 
   useDune2 = true;
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    menhir
+    jq
+  ];
   buildInputs = [
     dot-merlin-reader
     yojson
     csexp
     result
+    menhirSdk
+    menhirLib
   ];
 
   doCheck = true;
@@ -71,12 +79,6 @@ buildDunePackage {
     dune runtest # filtering with -p disables tests
     runHook postCheck
   '';
-  checkInputs = [
-    jq
-    menhir
-    menhirLib
-    menhirSdk
-  ];
 
   meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";

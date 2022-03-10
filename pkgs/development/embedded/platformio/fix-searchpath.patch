@@ -2,7 +2,7 @@ diff --git a/platformio/proc.py b/platformio/proc.py
 index 80e50201..15cee5a5 100644
 --- a/platformio/proc.py
 +++ b/platformio/proc.py
-@@ -167,7 +167,7 @@ def copy_pythonpath_to_osenv():
+@@ -181,7 +181,7 @@ def copy_pythonpath_to_osenv():
              conditions.append(isdir(join(p, "click")) or isdir(join(p, "platformio")))
          if all(conditions):
              _PYTHONPATH.append(p)

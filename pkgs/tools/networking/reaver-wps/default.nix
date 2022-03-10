@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
   '';
 
+  enableParallelBuilding = true;
+
+  patches = [ ./parallel-build.patch ];
+
   meta = with lib; {
     description = "Brute force attack against Wifi Protected Setup";
     homepage = "https://code.google.com/archive/p/reaver-wps/";

@@ -1,36 +1,36 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , aiofiles
 , aiohttp
 , async_generator
+, buildPythonPackage
+, fetchFromGitHub
 , pypubsub
 , pyserial
 , pyserial-asyncio
-, pyyaml
-, pytestCheckHook
-, pythonOlder
-, pytest-cov
 , pytest-asyncio
 , pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.0.14";
+  version = "1.0.16";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-1ByCd7PymRLm67msNu6TXSm37C9KnmEl0v/+flfqz1A=";
+    hash = "sha256-V0niLQAplN/uZ0YeN6g8uax3U/d0LUT4aXxe3ENXIHc=";
   };
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
-    async_generator
     pypubsub
     pyserial
     pyserial-asyncio
@@ -38,13 +38,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    async_generator
     pytest-asyncio
-    pytest-cov
     pytest-timeout
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyinsteon" ];
+  pythonImportsCheck = [
+    "pyinsteon"
+  ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";

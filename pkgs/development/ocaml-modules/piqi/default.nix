@@ -12,22 +12,18 @@ stdenv.mkDerivation rec {
     sha256 = "0v04hs85xv6d4ysqxyv1dik34dx49yab9shpi4x7iv19qlzl7csb";
   };
 
-  buildInputs = [ ocaml findlib which ];
+  nativeBuildInputs = [ ocaml findlib which ];
   propagatedBuildInputs = [ sedlex_2 xmlm easy-format base64 ];
+
+  strictDeps = true;
 
   patches = [ ./no-ocamlpath-override.patch ];
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make
-    make -C piqilib piqilib.cma
-  '';
+  postBuild = "make -C piqilib piqilib.cma";
 
-  installPhase = ''
-    make install;
-    make ocaml-install;
-  '';
+  installTargets = [ "install" "ocaml-install" ];
 
   meta = with lib; {
     homepage = "https://piqi.org";

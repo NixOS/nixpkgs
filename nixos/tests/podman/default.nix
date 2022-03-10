@@ -126,7 +126,7 @@ import ../make-test-python.nix (
           podman.succeed("docker network create default")
           podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           podman.succeed(
-            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
           )
           podman.succeed("docker ps | grep sleeping")
           podman.succeed("podman ps | grep sleeping")

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.19.1";
+  version = "4.21.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    sha256 = "sha256-kIXMBXKcM9EHECJiegnjeFnccF68hmL/7I/QnePJdIw=";
+    sha256 = "sha256-283xe7FVHYSsRl4cZD7WDzIW1gqNAFsNrWYJkthZheU=";
   };
 
-  vendorSha256 = "sha256-samz70Dybu/Xf9+ftgIKgd2pyQcXw6Ybs/0oJN47IFE=";
+  vendorSha256 = "sha256-F11FnDYJ59aKrdRXDPpKlhX52yQXdaN1sblSkVI2j9w=";
 
   doCheck = false;
 

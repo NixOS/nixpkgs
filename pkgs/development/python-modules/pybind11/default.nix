@@ -8,18 +8,18 @@
 , python
 , catch
 , numpy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zYDgXXpn8Z1Zti8Eje8qxDvbQV70/LmezG3AtxzDG+o=";
+    hash = "sha256-wBvEWQlZhHoSCMbGgYtB3alWBLA8mA8Mz6JPLhXa3Pc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -49,16 +49,18 @@ buildPythonPackage rec {
   checkInputs = [
     catch
     numpy
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    make check
-
-    runHook postCheck
-  '';
+  disabledTestPaths = [
+    # require dependencies not available in nixpkgs
+    "tests/test_embed/test_trampoline.py"
+    "tests/test_embed/test_interpreter.py"
+    # numpy changed __repr__ output of numpy dtypes
+    "tests/test_numpy_dtypes.py"
+    # no need to test internal packaging
+    "tests/extra_python_package/test_files.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";

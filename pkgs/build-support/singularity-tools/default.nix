@@ -38,7 +38,8 @@ rec {
     contents ? [],
     diskSize ? 1024,
     runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-    runAsRoot ? null
+    runAsRoot ? null,
+    memSize ? 512
   }:
     let layer = mkLayer {
           inherit name;
@@ -54,6 +55,7 @@ rec {
               size = diskSize;
               fullName = "singularity-run-disk";
             };
+            inherit memSize;
           }
           ''
             rm -rf $out

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, attrs
 , beautifulsoup4
 , requests
 , future
@@ -18,6 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    attrs
     beautifulsoup4
     requests
     future

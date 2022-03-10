@@ -32,6 +32,7 @@ in
   acme = handleTest ./acme.nix {};
   adguardhome = handleTest ./adguardhome.nix {};
   aesmd = handleTest ./aesmd.nix {};
+  agate = handleTest ./web-servers/agate.nix {};
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
@@ -51,6 +52,7 @@ in
   bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
+  blocky = handleTest ./blocky.nix {};
   boot = handleTestOn ["x86_64-linux" "aarch64-linux"] ./boot.nix {};
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
@@ -187,9 +189,9 @@ in
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
   gvisor = handleTest ./gvisor.nix {};
-  hadoop.all = handleTestOn [ "x86_64-linux" ] ./hadoop/hadoop.nix {};
-  hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
-  hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
+  hadoop.all = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hadoop.nix {};
+  hadoop.hdfs = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hdfs.nix {};
+  hadoop.yarn = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/yarn.nix {};
   haka = handleTest ./haka.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
@@ -222,6 +224,7 @@ in
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   initrd-secrets = handleTest ./initrd-secrets.nix {};
+  input-remapper = handleTest ./input-remapper.nix {};
   inspircd = handleTest ./inspircd.nix {};
   installer = handleTest ./installer.nix {};
   invoiceplane = handleTest ./invoiceplane.nix {};
@@ -268,6 +271,7 @@ in
   litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
+  logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
   lxd = handleTest ./lxd.nix {};
   lxd-image = handleTest ./lxd-image.nix {};
@@ -319,7 +323,6 @@ in
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
   n8n = handleTest ./n8n.nix {};
   nagios = handleTest ./nagios.nix {};
-  nano = handleTest ./nano.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
@@ -345,6 +348,7 @@ in
   nginx = handleTest ./nginx.nix {};
   nginx-auth = handleTest ./nginx-auth.nix {};
   nginx-etag = handleTest ./nginx-etag.nix {};
+  nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
@@ -390,6 +394,8 @@ in
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
+  pgadmin4 = handleTest ./pgadmin4.nix {};
+  pgadmin4-standalone = handleTest ./pgadmin4-standalone.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   php = handleTest ./php {};
@@ -441,6 +447,7 @@ in
   resolv = handleTest ./resolv.nix {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
   restic = handleTest ./restic.nix {};
+  retroarch = handleTest ./retroarch.nix {};
   riak = handleTest ./riak.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
@@ -496,6 +503,7 @@ in
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
+  systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
   systemd-networkd-dhcpserver-static-leases = handleTest ./systemd-networkd-dhcpserver-static-leases.nix {};
@@ -547,6 +555,7 @@ in
   vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscodium = discoverTests (import ./vscodium.nix);
+  vsftpd = handleTest ./vsftpd.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
@@ -565,6 +574,7 @@ in
   xxh = handleTest ./xxh.nix {};
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  zammad = handleTest ./zammad.nix {};
   zfs = handleTest ./zfs.nix {};
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
   zoneminder = handleTest ./zoneminder.nix {};

@@ -376,7 +376,7 @@ in
           "~ \\.php$" = {
             extraConfig = ''
               try_files $uri $uri/ /doku.php;
-              include ${pkgs.nginx}/conf/fastcgi_params;
+              include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};

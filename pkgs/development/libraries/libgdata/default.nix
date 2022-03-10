@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcr
-    glib
-    libsoup
-    libxml2
     openssl
     p11-kit
     uhttpmock
   ];
 
   propagatedBuildInputs = [
+    glib
+    libsoup
+    libxml2
     gnome-online-accounts
     json-glib
   ];

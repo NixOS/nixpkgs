@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "scilla";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xg8qnpYRdSGaFkjmQLbjMFIU419ASEHtFA8h8ads/50=";
+    sha256 = "sha256-1gSuKxNpls7B+pSGnGj3k/E93lnj2FPNtAAciPPNAeM=";
   };
 
-  vendorSha256 = "sha256-PFfzlqBuasTNeCNnu5GiGyQzBQkbe83q1EqCsWTor18=";
+  vendorSha256 = "sha256-gHZj8zpc7yFthCCBM8WGw4WwoW46bdQWe4yWjOkkQE8=";
 
   meta = with lib; {
     description = "Information gathering tool for DNS, ports and more";

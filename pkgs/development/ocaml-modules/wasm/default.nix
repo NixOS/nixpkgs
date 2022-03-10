@@ -1,11 +1,12 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
 if !lib.versionAtLeast ocaml.version "4.02"
+|| lib.versionOlder "4.13" ocaml.version
 then throw "wasm is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-wasm-${version}";
+  pname = "ocaml${ocaml.version}-wasm";
   version = "1.1.1";
 
   src = fetchFromGitHub {

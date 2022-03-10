@@ -28,6 +28,7 @@
 , requests
 , scikit-learn
 , sentry-sdk
+, setproctitle
 , setuptools
 , shortuuid
 , stdenv
@@ -37,13 +38,13 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.10";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "client";
     rev = "v${version}";
-    sha256 = "198c6zx7xih74cw0dwfqw7s7b7whik7wv4nfq6x6xw0kw86r6hby";
+    sha256 = "0av4vv4llan40678bw0vlah0gn6hjg5pdqwq0c5cv15lqrdb8g32";
   };
 
   # The wandb requirements.txt does not distinguish python2/3 dependencies. We
@@ -70,6 +71,7 @@ buildPythonPackage rec {
     pyyaml
     requests
     sentry-sdk
+    setproctitle
     setuptools
     shortuuid
     yaspin
@@ -99,11 +101,11 @@ buildPythonPackage rec {
     "tests/test_telemetry_full.py"
     "tests/wandb_agent_test.py"
     "tests/wandb_artifacts_test.py"
-    "tests/wandb_history_test.py"
     "tests/wandb_integration_test.py"
     "tests/wandb_run_test.py"
     "tests/wandb_settings_test.py"
     "tests/wandb_sweep_test.py"
+    "tests/wandb_verify_test.py"
 
     # Fails and borks the pytest runner as well.
     "tests/wandb_test.py"

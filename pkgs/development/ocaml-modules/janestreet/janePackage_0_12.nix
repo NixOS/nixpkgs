@@ -5,7 +5,7 @@
 buildDunePackage (args // {
   inherit version;
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "janestreet";
@@ -13,6 +13,8 @@ buildDunePackage (args // {
     rev = "v${version}";
     sha256 = hash;
   };
+
+  strictDeps = true;
 
   meta = {
     license = lib.licenses.mit;

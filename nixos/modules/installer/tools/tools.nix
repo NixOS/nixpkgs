@@ -33,8 +33,9 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+    detectvirt = "${pkgs.systemd}/bin/systemd-detect-virt";
+    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
   };
@@ -133,12 +134,13 @@ in
 
       $bootLoaderConfig
         # networking.hostName = "nixos"; # Define your hostname.
+        # Pick only one of the below networking options.
         # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+        # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
         # Set your time zone.
         # time.timeZone = "Europe/Amsterdam";
 
-      $networkingDhcpConfig
         # Configure network proxy if necessary
         # networking.proxy.default = "http://user:password\@proxy:port/";
         # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -148,6 +150,7 @@ in
         # console = {
         #   font = "Lat2-Terminus16";
         #   keyMap = "us";
+        #   useXkbConfig = true; # use xkbOptions in tty.
         # };
 
       $xserverConfig
@@ -155,7 +158,10 @@ in
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = "eurosign:e";
+        # services.xserver.xkbOptions = {
+        #   "eurosign:e";
+        #   "caps:escape" # map caps to escape.
+        # };
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;

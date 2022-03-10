@@ -14,9 +14,11 @@ buildDunePackage {
     tezos-protocol-updater
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     tezos-protocol-compiler
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

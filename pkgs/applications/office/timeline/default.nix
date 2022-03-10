@@ -37,9 +37,8 @@ python3.pkgs.buildPythonApplication rec {
       name = "timeline";
       comment = "Display and navigate information on a timeline";
       icon = "timeline";
-      terminal = false;
       exec = "timeline";
-      categories = "Office;Calendar;";
+      categories = [ "Office" "Calendar" ];
     })
   ];
 

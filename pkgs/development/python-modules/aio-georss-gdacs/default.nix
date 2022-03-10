@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-gdacs";
-  version = "0.5";
+  version = "0.6";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-gdacs";
     rev = "v${version}";
-    sha256 = "sha256-CIQoQRk5KIPEa/Y/7C1NPctuHvoiZ/o2bDa5YSWY+9M=";
+    sha256 = "sha256-sUHVmueu70ZnXP8KoJ2mDzzEedzXYHM2yeGC4oVsZZU=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aio_georss_gdacs" ];
+  pythonImportsCheck = [
+    "aio_georss_gdacs"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";

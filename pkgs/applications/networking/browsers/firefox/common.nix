@@ -1,7 +1,8 @@
 { pname, version, meta, updateScript ? null
 , binaryName ? "firefox", application ? "browser"
 , src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
+, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? []
+, extraPostPatch ? "", extraPassthru ? {} }:
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
@@ -10,7 +11,7 @@
 , hunspell, libevent, libstartup_notification
 , libvpx
 , icu70, libpng, glib, pciutils
-, autoconf213, which, gnused, rustPackages
+, autoconf213, which, gnused, rustPackages, rustPlatform
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk3, wrapGAppsHook
@@ -177,7 +178,7 @@ buildStdenv.mkDerivation ({
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
 
     patchShebangs mach
- '';
+  '' + extraPostPatch;
 
   nativeBuildInputs =
     [
@@ -195,6 +196,7 @@ buildStdenv.mkDerivation ({
       which
       unzip
       wrapGAppsHook
+      rustPlatform.bindgenHook
     ]
     ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
@@ -209,28 +211,8 @@ buildStdenv.mkDerivation ({
     rm -f .mozconfig*
     # this will run autoconf213
     configureScript="$(realpath ./mach) configure"
-    export MOZCONFIG=$(pwd)/mozconfig
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
-    # Set C flags for Rust's bindgen program. Unlike ordinary C
-    # compilation, bindgen does not invoke $CC directly. Instead it
-    # uses LLVM's libclang. To make sure all necessary flags are
-    # included we need to look in a few places.
-    # TODO: generalize this process for other use-cases.
-
-    BINDGEN_CFLAGS="$(< ${buildStdenv.cc}/nix-support/libc-crt1-cflags) \
-      $(< ${buildStdenv.cc}/nix-support/libc-cflags) \
-      $(< ${buildStdenv.cc}/nix-support/cc-cflags) \
-      $(< ${buildStdenv.cc}/nix-support/libcxx-cxxflags) \
-      ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc.lib}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
-      ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${lib.getDev buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
-      $NIX_CFLAGS_COMPILE"
-    ${
-    # Bindgen doesn't like the flag added by `separateDebugInfo`.
-    lib.optionalString enableDebugSymbols ''
-      BINDGEN_CFLAGS="''${BINDGEN_CFLAGS/ -Wa,--compress-debug-sections/}"
-    ''}
-    echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
   '' + (lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -374,7 +356,7 @@ buildStdenv.mkDerivation ({
     inherit applicationName;
     inherit tests;
     inherit gtk3;
-  };
+  } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
 

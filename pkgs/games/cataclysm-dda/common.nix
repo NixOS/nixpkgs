@@ -68,6 +68,7 @@ stdenv.mkDerivation {
   );
 
   dontStrip = debug;
+  enableParallelBuilding = true;
 
   passthru = {
     isTiles = tiles;

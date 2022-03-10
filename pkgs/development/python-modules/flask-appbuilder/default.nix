@@ -18,6 +18,7 @@
 , marshmallow-enum
 , marshmallow-sqlalchemy
 , python-dateutil
+, pythonOlder
 , prison
 , pyjwt
 , pyyaml
@@ -26,12 +27,15 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "3.4.1";
+  version = "3.4.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "c0830935077c4d06d57237ca4791fcabfc682fe3e315c1c9444a2bd6f94e7514";
+    sha256 = "sha256-uZzuvNusqMzAS/vmg3CuZ+D442J4LbFwsBboVIx/srE=";
   };
 
   # See here: https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch
@@ -83,7 +87,7 @@ buildPythonPackage rec {
       --replace "Flask-Babel>=1, <2" "Flask-Babel >=1, <3" \
       --replace "Flask-WTF>=0.14.2, <0.15.0" "Flask-WTF" \
       --replace "WTForms<3.0.0" "WTForms" \
-      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
       --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended>=4.1.0" \
       --replace "PyJWT>=1.7.1, <2.0.0" "PyJWT>=2.0.1" \
       --replace "prison>=0.2.1, <1.0.0" "prison" \
@@ -93,10 +97,12 @@ buildPythonPackage rec {
   # Majority of tests require network access or mongo
   doCheck = false;
 
-  pythonImportsCheck = [ "flask_appbuilder" ];
+  pythonImportsCheck = [
+    "flask_appbuilder"
+  ];
 
   meta = with lib; {
-    description = "Simple and rapid application development framework, built on top of Flask";
+    description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

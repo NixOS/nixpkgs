@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libscrypt";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "technion";
     repo = "libscrypt";
     rev = "v${version}";
-    sha256 = "1d76ys6cp7fi4ng1w3mz2l0p9dbr7ljbk33dcywyimzjz8bahdng";
+    sha256 = "sha256-QWWqC10bENemG5FYEog87tT7IxDaBJUDqu6j/sO3sYE=";
   };
 
   buildFlags = lib.optional stdenv.isDarwin "LDFLAGS= CFLAGS_EXTRA=";

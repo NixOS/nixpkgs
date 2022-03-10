@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, fetchpatch
 , perl, pkg-config
-, libcap, libtool, libxml2, openssl, libuv
+, libcap, libtool, libxml2, openssl, libuv, nghttp2, jemalloc
 , enableGSSAPI ? true, libkrb5
 , enablePython ? false, python3
 , enableSeccomp ? false, libseccomp
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.16.25";
+  version = "9.18.0";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-n6MohQ+ChD74t78f9TIstosRAnOjPzdbpB81Jw9eH/M=";
+    sha256 = "sha256-VlJb9crwH9j9nZCRCIDMD4qQonqX0WkYfWUdTs8MQRw=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ libtool libxml2 openssl libuv ]
+  buildInputs = [ libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enableGSSAPI libkrb5
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
     ++ lib.optional enableSeccomp "--enable-seccomp"
-    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}"
+    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) bind; };
 
   meta = with lib; {
-    homepage = "https://www.isc.org/downloads/bind/";
+    homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
 

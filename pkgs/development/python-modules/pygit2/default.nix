@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  preCheck = ''
+  disabledTestPaths = [
     # disable tests that require networking
-    rm test/test_repository.py
-    rm test/test_credentials.py
-    rm test/test_submodule.py
-  '';
+    "test/test_repository.py"
+    "test/test_credentials.py"
+    "test/test_submodule.py"
+  ];
 
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
@@ -44,11 +44,10 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
   doCheck = false;
 
-  disabled = !isPy3k;
-
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";
     homepage = "https://pypi.python.org/pypi/pygit2";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
 }

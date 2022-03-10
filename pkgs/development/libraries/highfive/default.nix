@@ -11,7 +11,7 @@
 assert mpiSupport -> mpi != null;
 
 stdenv.mkDerivation rec {
-  pname = "highfive";
+  pname = "highfive${lib.optionalString mpiSupport "-mpi"}";
   version = "2.3.1";
 
   src = fetchFromGitHub {

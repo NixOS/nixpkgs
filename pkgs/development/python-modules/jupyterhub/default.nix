@@ -149,6 +149,8 @@ buildPythonPackage rec {
     "test_upgrade"
     # Testcase fails to find requests import
     "test_external_service"
+    # attempts to do ssl connection
+    "test_connection_notebook_wrong_certs"
   ];
 
   meta = with lib; {

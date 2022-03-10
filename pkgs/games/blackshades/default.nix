@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "blackshades";
-  version = "2.4.7";
+  version = "2.4.9";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-hvJwWUUmGeb7MQgKe79cPS2ckPZ9z0Yc5S9IiwuXPD8=";
+    sha256 = "sha256-Hg+VcWI28GzY/CPm1lUftP0RGztOnzizrKJQVTmeJ9I=";
   };
 
   nativeBuildInputs = [ zig ];

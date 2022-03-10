@@ -13,8 +13,7 @@
 let
 
   deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+    inherit pname version src;
 
     buildInputs = [ unzip ];
     unpackPhase = ''
@@ -40,7 +39,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
+      package=$out/lib/dotnet/${pname}/${version}
       mkdir -p $package
       cp -r . $package
       echo "{}" > $package/.nupkg.metadata

@@ -34,7 +34,7 @@ let
     icon = "ghidra";
     desktopName = "Ghidra";
     genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   # postPatch scripts.

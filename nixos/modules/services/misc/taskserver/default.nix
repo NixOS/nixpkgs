@@ -106,7 +106,7 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
+  nixos-taskserver = with pkgs.python2.pkgs; buildPythonApplication {
     name = "nixos-taskserver";
 
     src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
@@ -129,7 +129,7 @@ let
       EOF
     '';
 
-    propagatedBuildInputs = [ pkgs.pythonPackages.click ];
+    propagatedBuildInputs = [ click ];
   };
 
 in {
@@ -138,12 +138,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = let
+          url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
+        in ''
           Whether to enable the Taskwarrior server.
 
           More instructions about NixOS in conjuction with Taskserver can be
-          found in the NixOS manual at
-          <olink targetdoc="manual" targetptr="module-taskserver"/>.
+          found <link xlink:href="${url}">in the NixOS manual</link>.
         '';
       };
 

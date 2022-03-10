@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencbm";
-  version = "0.4.99.103";
+  version = "0.4.99.104";
 
   src = fetchFromGitHub {
     owner = "OpenCBM";
     repo = "OpenCBM";
     rev = "v${version}";
-    sha256 = "06844yfgcbbwrp3iz5k8zd1zjawzbpvl131lgmkwz6d542c2k4k9";
+    sha256 = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
   };
 
   makefile = "LINUX/Makefile";
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
       disk copier included. Successor of cbm4linux. Also supports the XU1541
       and the XUM1541 devices (a.k.a. "ZoomFloppy").
     '';
-    license = licenses.gpl2;
+    homepage = "https://spiro.trikaliotis.net/opencbm";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.sander ];
   };

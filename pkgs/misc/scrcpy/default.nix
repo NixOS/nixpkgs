@@ -2,6 +2,7 @@
 , meson
 , ninja
 , pkg-config
+, installShellFiles
 
 , platform-tools
 , ffmpeg
@@ -10,10 +11,10 @@
 }:
 
 let
-  version = "1.22";
+  version = "1.23";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-wF0nPux1M8DhBiguAlTPBOf16PDCkgyjlEiGX6sqQZs=";
+    sha256 = "sha256-KpE/1HR4wLMG/KUHywvrYl5JoZ/5/Hq5BONu9bn+fmg=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bYLvrCw6NNCZqgLWIEObnytgD74cE9pm/Z7dgB8S5x0=";
+    sha256 = "sha256-WR70wV+EfNFFkMFkffnwaTridd33CpJ0zTAlXYyjZgM=";
   };
 
   # postPatch:
@@ -36,11 +37,9 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [ ffmpeg SDL2 ] ++ lib.optionals stdenv.isLinux [
-    libusb1
-  ];
+  buildInputs = [ ffmpeg SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''

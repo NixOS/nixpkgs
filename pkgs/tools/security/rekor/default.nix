@@ -4,22 +4,22 @@ let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.4.0";
+      version = "0.5.0";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "sha256-15p4hm4Cvs/yLaQIcxctVdMKRWPjIIFwBcbru6QcjXo=";
+        sha256 = "sha256-y8klkb0hyITxLhcNWF7RYRVwF8rclDKzQF/MJs6y//Y=";
       };
 
-      vendorSha256 = "sha256-XCCO4Vamzj5pJFmu1A8mpTLlVAtocrn20myYJVWtBrY=";
+      vendorSha256 = "sha256-0PPdnE3ND/YNIk50XkgBROpe5OhFiFre5Lwsml02DQU=";
 
       nativeBuildInputs = [ installShellFiles ];
 
       subPackages = [ packageToBuild ];
 
-      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/${packageToBuild}/app.GitVersion=v${version}" ];
+      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/pkg/api.GitVersion=v${version}" ];
 
       postInstall = ''
         installShellCompletion --cmd ${pname} \

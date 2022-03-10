@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ clang lld llvm ];
 
-  cmakeBuildType = "Release";
-
   cmakeFlags = [
     "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${clang-unwrapped}/lib/cmake/clang"
     "-DLLVM_TARGETS_TO_BUILD='AMDGPU;X86'"

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     exec = "IPMIView";
     desktopName = name;
     genericName = "Supermicro BMC manager";
-    categories = "Network";
+    categories = [ "Network" ];
   };
 
   installPhase = ''

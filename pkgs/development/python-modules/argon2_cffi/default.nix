@@ -9,21 +9,26 @@
 , isPy3k
 , lib
 , stdenv
+, argon2-cffi-bindings
 }:
 
 buildPythonPackage rec {
   pname = "argon2_cffi";
-  version = "21.1.0";
+  version = "21.3.0";
+  format = "flit";
 
   src = fetchPypi {
     pname = "argon2-cffi";
     inherit version;
-    sha256 = "sha256-9xC2EQPRofaSyj7L0Tc+KKpeVFrGJboGf/L+yhsruHA=";
+    sha256 = "d384164d944190a7dd7ef22c6aa3ff197da12962bd04b17f64d4e93d934dba5b";
   };
 
   propagatedBuildInputs = [ cffi six ] ++ lib.optional (!isPy3k) enum34;
 
-  propagatedNativeBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [
+    argon2-cffi-bindings
+    cffi
+  ];
 
   ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
 

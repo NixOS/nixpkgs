@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "psysh";
-  version = "0.11.0";
+  version = "0.11.2";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-    sha256 = "sha256-UIAeOVbKWcfNV3bXaBhkK06wezhtig8aBZfB27umwFU=";
+    sha256 = "sha256-u7VTlZw9k7VDWKGK/8fzFw0bjNu6DMGsoQnDedHgCWg=";
   };
 
   dontUnpack = true;
@@ -26,6 +26,6 @@ mkDerivation {
     description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
     license = licenses.mit;
     homepage = "https://psysh.org/";
-    maintainers = with maintainers; [ caugner ] ++ teams.php.members;
+    maintainers = teams.php.members;
   };
 }

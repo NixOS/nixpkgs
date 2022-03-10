@@ -68,16 +68,14 @@ let
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Network;InstantMessaging;Chat;VideoConference";
+      categories = [ "Network" "InstantMessaging" "Chat" "VideoConference" ];
       comment = "Secure messenger for everyone";
       desktopName = "Wire";
       exec = "wire-desktop %U";
       genericName = "Secure messenger";
       icon = "wire-desktop";
       name = "wire-desktop";
-      extraEntries = ''
-        StartupWMClass=Wire
-      '';
+      startupWMClass = "Wire";
     };
 
     dontBuild = true;

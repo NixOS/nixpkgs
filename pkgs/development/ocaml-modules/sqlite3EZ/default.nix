@@ -17,9 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pKysvth0efxJeyJQY2Dnqarg7OtsKyyLnFV/1ZhsfDY=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild twt ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ twt ];
 
   propagatedBuildInputs = [ ocaml_sqlite3 ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

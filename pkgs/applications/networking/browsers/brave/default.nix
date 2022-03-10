@@ -12,7 +12,6 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gnome
 , gsettings-desktop-schemas
 , gtk3
@@ -60,7 +59,6 @@ rpath = lib.makeLibraryPath [
   freetype
   gdk-pixbuf
   glib
-  gnome2.GConf
   gtk3
   libdrm
   libpulseaudio
@@ -93,11 +91,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.35.100";
+  version = "1.36.111";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "ToPh2uhWHMR6CS7wtos26iVuyKLXi3ctOP/dFyeosoM=";
+    sha256 = "bXZsUqLaP43wJV3Cehgblw1G179HgGhToSL36v5QseA=";
   };
 
   dontConfigure = true;

@@ -3,13 +3,14 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
-  updateScript = pkgs.genericUpdater;
+  genericUpdater = pkgs.genericUpdater;
 
-  gitLister = url:
-    "${pkgs.common-updater-scripts}/bin/list-git-tags ${url}";
-
-  archiveLister = category: name:
-    "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions https://archive.xfce.org/src/${category}/${name}";
+  archiveUpdater = { category, pname, version }:
+    pkgs.httpTwoLevelsUpdater {
+      inherit pname version;
+      attrPath = "xfce.${pname}";
+      url = "https://archive.xfce.org/src/${category}/${pname}";
+    };
 
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 

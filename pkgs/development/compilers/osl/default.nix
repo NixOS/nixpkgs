@@ -7,7 +7,7 @@ let boost_static = boost165.override { enableStatic = true; };
 in clangStdenv.mkDerivation rec {
   # In theory this could use GCC + Clang rather than just Clang,
   # but https://github.com/NixOS/nixpkgs/issues/29877 stops this
-  name = "openshadinglanguage-${version}";
+  pname = "openshadinglanguage";
   version = "1.10.9";
 
   src = fetchFromGitHub {

@@ -20,11 +20,11 @@ let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-cpugraph-plugin";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-wvbb1/g8ebY7g8mCMsedBQ4YZA6CRkueyNNkOpLDobA=";
+    sha256 = "sha256-dzJG9XwYJKhUaNQRnBeusHFw7R66zo+kBsf7z1tHr5k=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +45,7 @@ in stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-cpugraph-plugin";

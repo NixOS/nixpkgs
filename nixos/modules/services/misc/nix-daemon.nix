@@ -680,7 +680,7 @@ in
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
               (toString machine.speedFactor)
-              (concatStringsSep "," machine.supportedFeatures)
+              (concatStringsSep "," (machine.supportedFeatures ++ machine.mandatoryFeatures))
               (concatStringsSep "," machine.mandatoryFeatures)
             ]
             ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
@@ -730,6 +730,40 @@ in
           };
 
         restartTriggers = [ nixConf ];
+
+        # `stopIfChanged = false` changes to switch behavior
+        # from   stop -> update units -> start
+        #   to   update units -> restart
+        #
+        # The `stopIfChanged` setting therefore controls a trade-off between a
+        # more predictable lifecycle, which runs the correct "version" of
+        # the `ExecStop` line, and on the other hand the availability of
+        # sockets during the switch, as the effectiveness of the stop operation
+        # depends on the socket being stopped as well.
+        #
+        # As `nix-daemon.service` does not make use of `ExecStop`, we prefer
+        # to keep the socket up and available. This is important for machines
+        # that run Nix-based services, such as automated build, test, and deploy
+        # services, that expect the daemon socket to be available at all times.
+        #
+        # Notably, the Nix client does not retry on failure to connect to the
+        # daemon socket, and the in-process RemoteStore instance will disable
+        # itself. This makes retries infeasible even for services that are
+        # aware of the issue. Failure to connect can affect not only new client
+        # processes, but also new RemoteStore instances in existing processes,
+        # as well as existing RemoteStore instances that have not saturated
+        # their connection pool.
+        #
+        # Also note that `stopIfChanged = true` does not kill existing
+        # connection handling daemons, as one might wish to happen before a
+        # breaking Nix upgrade (which is rare). The daemon forks that handle
+        # the individual connections split off into their own sessions, causing
+        # them not to be stopped by systemd.
+        # If a Nix upgrade does require all existing daemon processes to stop,
+        # nix-daemon must do so on its own accord, and only when the new version
+        # starts and detects that Nix's persistent state needs an upgrade.
+        stopIfChanged = false;
+
       };
 
     # Set up the environment variables for running Nix.
@@ -762,7 +796,7 @@ in
     nix.settings = mkMerge [
       {
         trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-        substituters = [ "https://cache.nixos.org/" ];
+        substituters = mkAfter [ "https://cache.nixos.org/" ];
 
         system-features = mkDefault (
           [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++

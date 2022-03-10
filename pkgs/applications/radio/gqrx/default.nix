@@ -5,7 +5,6 @@
 , qt5
 , gnuradio3_8Minimal
 , thrift
-, log4cpp
 , mpir
 , fftwFloat
 , alsa-lib
@@ -24,13 +23,13 @@ assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.15.7";
+  version = "2.15.8";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-4tXWwBkVmNZ4s3d6/n6XBdbh9Fv7821L3vkYmjgv1ds=";
+    sha256 = "sha256-RxwkiJdPHWyhU3azSpWV2M0tG5GInQBpc/ls16V1B94=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    log4cpp
+    gnuradio3_8Minimal.unwrapped.log4cpp
     mpir
     fftwFloat
     alsa-lib

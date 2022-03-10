@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "indicator-sound-switcher";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "APU8Y0xUhRd9RbMSG9TD0TBvFLu/VlLGauf56z8gZDw=";
+    sha256 = "sha256-agzU3Z3E6NvCnlsz9L719LqMTm8EmYg3TY/2lWTYgKs=";
   };
 
   postPatch = ''

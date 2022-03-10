@@ -35,6 +35,8 @@
 , grass
 , withWebKit ? true
 , qtwebkit
+, pdal
+, zstd
 , makeWrapper
 }:
 
@@ -67,14 +69,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.16.16";
+  version = "3.22.4";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "85RlV1Ik1BeN9B7UE51ktTWMiGkMga2E/fnhyiVwjIs=";
+    sha256 = "sha256-z2dCdaIJUKpZgJHtn1/qA07uMJpAWKL0cDx6B/n1Oxg=";
   };
 
   passthru = {
@@ -108,6 +110,8 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
     qt3d
+    pdal
+    zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
@@ -126,6 +130,7 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DWITH_3D=True"
+    "-DWITH_PDAL=TRUE"
     "-DPYQT5_SIP_DIR=${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
     "-DQSCI_SIP_DIR=${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
@@ -138,11 +143,11 @@ in mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ grass ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lsix sikmir erictapen ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen willcohen ];
   };
 }

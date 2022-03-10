@@ -56,7 +56,7 @@ Use `programs.steam.enable = true;` if you want to add steam to systemPackages a
 
 ## steam-run {#sec-steam-run}
 
-The FHS-compatible chroot used for Steam can also be used to run other Linux games that expect a FHS environment. To use it, install the `steam-run-native` package and run the game with
+The FHS-compatible chroot used for Steam can also be used to run other Linux games that expect a FHS environment. To use it, install the `steam-run` package and run the game with
 
 ```
 steam-run ./foo

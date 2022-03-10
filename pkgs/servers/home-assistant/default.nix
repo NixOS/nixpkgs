@@ -15,6 +15,9 @@
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
+# Write out info about included extraComponents and extraPackages
+, writeText
+
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -26,7 +29,27 @@
 let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
+    (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+
+    # pytest-aiohttp>0.3.0 breaks home-assistant tests
+    (self: super: {
+      pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0kx4mbs9bflycd8x9af0idcjhdgnzri3nw1qb0vpfyb3751qaaf9";
+        };
+      });
+      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+    })
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -55,10 +78,20 @@ let
     })
 
     # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
+    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
 
-    # Requirements for recorder not found: ['sqlalchemy==1.4.27'].
-    #(mkOverride "sqlalchemy" "1.4.27" "031jbd0svrvwr3n52iibp9mkwsj9wicnck45yd26da5kmsfkas6p")
+    # Pinned due to API changes >0.3.5.3
+    (self: super: {
+      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.5.3";
+        src = fetchFromGitHub {
+          owner = "MatsNl";
+          repo = "pyatag";
+          rev = version;
+          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
+        };
+      });
+    })
 
     # Pinned due to API changes in 0.4.0
     (self: super: {
@@ -92,12 +125,12 @@ let
     })
   ];
 
-  mkOverride = attrname: version: sha256:
+  mkOverride = attrName: version: hash:
     self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
-          inherit version sha256;
+          inherit version hash;
         };
       });
     };
@@ -120,8 +153,12 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
+  # Create info about included packages and components
+  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
+  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
+
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.2.3";
+  hassVersion = "2022.3.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -139,7 +176,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256:OqyWm7O8ajxBlWGzvNhZvFmy5p2dINfMQ3cQ304Er18=";
+    hash = "sha256-qe9/VFcEBDfSa7AYrkmj1b6UGLHcm7CtLHiPwzZz8jg=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -148,7 +185,6 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
     })
-    ./patches/tests-ignore-OSErrors-in-hass-fixture.patch
   ];
 
   postPatch = let
@@ -201,6 +237,8 @@ in python.pkgs.buildPythonApplication rec {
     yarl
     # Not in setup.py, but used in homeassistant/util/package.py
     setuptools
+    # Not in setup.py, but uncounditionally imported via tests/conftest.py
+    paho-mqtt
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -272,6 +310,11 @@ in python.pkgs.buildPythonApplication rec {
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
+  '';
+
+  postInstall = ''
+    cp -v ${extraComponentsFile} $out/extra_components
+    cp -v ${extraPackagesFile} $out/extra_packages
   '';
 
   passthru = {

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper
 , cairo, fontconfig, freetype, gdk-pixbuf, glib
-, glibc, gtk2, libX11, nspr, nss, pango, gconf
+, glibc, gtk2, libX11, nspr, nss, pango
 , libxcb, libXi, libXrender, libXext, dbus
 , testVersion, chromedriver
 }:
@@ -30,9 +30,9 @@ let
   libs = lib.makeLibraryPath [
     stdenv.cc.cc.lib
     cairo fontconfig freetype
-    gdk-pixbuf glib gtk2 gconf
+    gdk-pixbuf glib gtk2
     libX11 nspr nss pango libXrender
-    gconf libxcb libXext libXi
+    libxcb libXext libXi
     dbus
   ];
 

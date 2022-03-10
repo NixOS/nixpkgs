@@ -24,7 +24,7 @@
 , expat
 , libid3tag
 , libopus
-, ffmpeg
+, ffmpeg_4
 , soundtouch
 , pcre
 /*, portaudio - given up fighting their portaudio.patch */
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    ffmpeg
+    ffmpeg_4
     file
     flac
     libid3tag

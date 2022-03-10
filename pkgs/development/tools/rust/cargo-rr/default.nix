@@ -1,7 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, nix-update-script
+, genericUpdater
+, common-updater-scripts
 , makeWrapper
 , rr
 }:
@@ -20,8 +21,9 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0fjs76n6bbbv83s213h2dgsszgxy4hbjsclyk9m81b3bfbmmb9sa";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = genericUpdater {
+      inherit pname version;
+      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     };
   };
 

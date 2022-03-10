@@ -1,6 +1,0 @@
---- a/tools/Makefile.in
-+++ b/tools/Makefile.in
-@@ -68,2 +68,2 @@
- install: all
--	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir) $(DESTDIR)/$(runstatedir)
-+	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir)

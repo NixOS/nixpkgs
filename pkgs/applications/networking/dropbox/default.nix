@@ -24,8 +24,8 @@ let
     comment = "Sync your files across computers and to the web";
     desktopName = "Dropbox";
     genericName = "File Synchronizer";
-    categories = "Network;FileTransfer;";
-    startupNotify = "false";
+    categories = [ "Network" "FileTransfer" ];
+    startupNotify = false;
     icon = "dropbox";
   };
 in

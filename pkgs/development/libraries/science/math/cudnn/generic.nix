@@ -35,12 +35,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ addOpenGLRunpath ];
 
+  # Some cuDNN libraries depend on things in cudatoolkit, eg.
+  # libcudnn_ops_infer.so.8 tries to load libcublas.so.11. So we need to patch
+  # cudatoolkit into RPATH. See also https://github.com/NixOS/nixpkgs/blob/88a2ad974692a5c3638fcdc2c772e5770f3f7b21/pkgs/development/python-modules/jaxlib/bin.nix#L78-L98.
   installPhase = ''
     runHook preInstall
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc ]}:\$ORIGIN/" $1
+      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc cudatoolkit.lib ]}:${cudatoolkit}/lib:\$ORIGIN/" $1
     }
 
     for lib in lib64/lib*.so; do

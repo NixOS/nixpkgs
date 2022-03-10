@@ -15,6 +15,8 @@
 , mobile-broadband-provider-info
 , gobject-introspection
 , gtk3
+, withGtk4 ? false
+, gtk4
 , withGnome ? true
 , gcr
 , glib
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     networkmanager
     isocodes
     mobile-broadband-provider-info
+  ] ++ lib.optionals withGtk4 [
+    gtk4
   ] ++ lib.optionals withGnome [
     # advanced certificate chooser
     gcr
@@ -63,6 +67,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgcr=${lib.boolToString withGnome}"
+    "-Dlibnma_gtk4=${lib.boolToString withGtk4}"
   ];
 
   postPatch = ''

@@ -124,20 +124,17 @@ let
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
-    in buildPackages.stdenv.mkDerivation {
-      name = "cabal2nix-${name}";
+    in buildPackages.runCommand "cabal2nix-${name}" {
       nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
       preferLocalBuild = true;
       allowSubstitutes = false;
-      phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-      installPhase = ''
-        export HOME="$TMP"
-        mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
-      '';
-  };
+    } ''
+      export HOME="$TMP"
+      mkdir -p "$out"
+      cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
+    '';
 
   all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
     tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}

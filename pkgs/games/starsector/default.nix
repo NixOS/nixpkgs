@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       genericName = "starsector";
       desktopName = "Starsector";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

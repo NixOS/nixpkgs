@@ -17,7 +17,7 @@ mkCoqDerivation {
     { cases = [ (range "8.12" "8.14") (isGe "1.12") ]; out = "1.0"; }
   ] null;
 
-  propagatedBuildInputs = [ mathcomp.algebra ];
+  propagatedBuildInputs = [ mathcomp.algebra mathcomp.ssreflect mathcomp.fingroup ];
 
   meta = {
     description = "Yet Another Coq Library on Machine Words";

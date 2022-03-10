@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-h76NHEPY3ABq2NbRQXNR+zSkriBasi550rfSkl3Xdas=";
+    sha256 = "sha256-KF+aD9vJYqNJkJftx27ZsxmOIXZ/2ciKwjwcTw0GBvY=";
   };
 
   patches = [
     ./0001-remove-jaeger-test-dep.patch
   ];
 
-  vendorSha256 = "sha256-PxmTS8fSh21BcLS4PsSfHhKOXWWJLboPR6E8/Jx/UGY=";
+  vendorSha256 = "sha256-/cjRM8CrOKnx0BcRu2+MLV28MYLOrG5x1DN24mRUJzQ=";
 
   ldflags = [
     "-s"

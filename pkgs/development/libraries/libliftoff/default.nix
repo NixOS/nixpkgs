@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitLab
 , meson, pkg-config, ninja
 , libdrm
 }:
 
 stdenv.mkDerivation rec {
   pname = "libliftoff";
-  version = "0.1.0";
+  version = "0.2.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s53jsll3c7272bhmh4jr6k5m1nvn8i1ld704qmzsm852ilmgrla";
+    sha256 = "1ysxm7kg1gwrsn29lw8kngvkxp46g4m2pvbwcvscgvr54ikirn4q";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

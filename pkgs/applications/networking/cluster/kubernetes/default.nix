@@ -1,12 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, removeReferencesTo
 , which
 , go
 , makeWrapper
 , rsync
 , installShellFiles
+, kubectl
 , nixosTests
 
 , components ? [
@@ -21,16 +21,16 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.22.6";
+  version = "1.23.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-NL00GOdkVLVHTlj1RK1+stssioy+0xbtiKn4FZnCuzs=";
+    sha256 = "sha256-srJHW/wvrFKKgxVwJB4h0FGeaT7iSJYOTtSeTkcR3FE=";
   };
 
-  nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
+  nativeBuildInputs = [ makeWrapper which go rsync installShellFiles ];
 
   outputs = [ "out" "man" "pause" ];
 
@@ -51,12 +51,10 @@ stdenv.mkDerivation rec {
 
   WHAT = lib.concatStringsSep " " ([
     "cmd/kubeadm"
-    "cmd/kubectl"
   ] ++ components);
 
   postBuild = ''
     ./hack/update-generated-docs.sh
-    (cd build/pause/linux && cc pause.c -o pause)
   '';
 
   installPhase = ''
@@ -65,8 +63,13 @@ stdenv.mkDerivation rec {
       install -D _output/local/go/bin/''${p##*/} -t $out/bin
     done
 
-    install -D build/pause/linux/pause -t $pause/bin
+    cc build/pause/linux/pause.c -o pause
+    install -D pause -t $pause/bin
+
+    rm docs/man/man1/kubectl*
     installManPage docs/man/man1/*.[1-9]
+
+    ln -s ${kubectl}/bin/kubectl $out/bin/kubectl
 
     # Unfortunately, kube-addons-main.sh only looks for the lib file in either the
     # current working dir or in /opt. We have to patch this for now.
@@ -79,24 +82,22 @@ stdenv.mkDerivation rec {
 
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
 
-    for tool in kubeadm kubectl; do
-      installShellCompletion --cmd $tool \
-        --bash <($out/bin/$tool completion bash) \
-        --zsh <($out/bin/$tool completion zsh)
-    done
+    installShellCompletion --cmd kubeadm \
+      --bash <($out/bin/kubeadm completion bash) \
+      --zsh <($out/bin/kubeadm completion zsh)
     runHook postInstall
   '';
 
-  preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
-  '';
+  disallowedReferences = [ go ];
+
+  GOFLAGS = [ "-trimpath" ];
 
   meta = with lib; {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = "https://kubernetes.io";
     maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 
   passthru.tests = nixosTests.kubernetes;

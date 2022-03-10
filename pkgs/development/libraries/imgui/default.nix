@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imgui";
-  version = "1.86";
+  version = "1.87";
 
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
     rev = "v${version}";
-    sha256 = "sha256-NuyWrtD+/bRkMlsvU0gNkQhDJVlSPPWhBELN/AtYRwk=";
+    sha256 = "sha256-H5rqXZFw+2PfVMsYvAK+K+pxxI8HnUC0GlPhooWgEYM=";
   };
 
   dontBuild = true;

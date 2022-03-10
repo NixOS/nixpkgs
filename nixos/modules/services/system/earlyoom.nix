@@ -39,20 +39,12 @@ in
         '';
       };
 
-      useKernelOOMKiller= mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Use kernel OOM killer instead of own user-space implementation.
-        '';
-      };
-
+      # TODO: remove or warn after 1.7 (https://github.com/rfjakob/earlyoom/commit/7ebc4554)
       ignoreOOMScoreAdjust = mkOption {
         type = types.bool;
         default = false;
         description = ''
           Ignore oom_score_adjust values of processes.
-          User-space implementation only.
         '';
       };
 
@@ -87,16 +79,21 @@ in
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "earlyoom" "useKernelOOMKiller" ] ''
+      This option is deprecated and ignored by earlyoom since 1.2.
+    '')
+  ];
+
   config = mkIf ecfg.enable {
     assertions = [
       { assertion = ecfg.freeMemThreshold > 0 && ecfg.freeMemThreshold <= 100;
         message = "Needs to be a positive percentage"; }
       { assertion = ecfg.freeSwapThreshold > 0 && ecfg.freeSwapThreshold <= 100;
         message = "Needs to be a positive percentage"; }
-      { assertion = !ecfg.useKernelOOMKiller || !ecfg.ignoreOOMScoreAdjust;
-        message = "Both options in conjunction do not make sense"; }
     ];
 
+    # TODO: reimplement this option as -N after 1.7 (https://github.com/rfjakob/earlyoom/commit/afe03606)
     warnings = optional (ecfg.notificationsCommand != null)
       "`services.earlyoom.notificationsCommand` is deprecated and ignored by earlyoom since 1.6.";
 
@@ -107,15 +104,13 @@ in
       serviceConfig = {
         StandardOutput = "null";
         StandardError = "journal";
-        ExecStart = ''
-          ${pkgs.earlyoom}/bin/earlyoom \
-          -m ${toString ecfg.freeMemThreshold} \
-          -s ${toString ecfg.freeSwapThreshold} \
-          ${optionalString ecfg.useKernelOOMKiller "-k"} \
-          ${optionalString ecfg.ignoreOOMScoreAdjust "-i"} \
-          ${optionalString ecfg.enableDebugInfo "-d"} \
-          ${optionalString ecfg.enableNotifications "-n"}
-        '';
+        ExecStart = concatStringsSep " " ([
+          "${pkgs.earlyoom}/bin/earlyoom"
+          "-m ${toString ecfg.freeMemThreshold}"
+          "-s ${toString ecfg.freeSwapThreshold}"
+        ] ++ optional ecfg.ignoreOOMScoreAdjust "-i"
+          ++ optional ecfg.enableDebugInfo "-d"
+          ++ optional ecfg.enableNotifications "-n");
       };
     };
 

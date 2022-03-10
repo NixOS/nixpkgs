@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-898";
+  version = "1.8-903";
 
   src =
     let
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-khp2E5BYb7bGEW6xfCKEqYDqAdElOFLbAkaHjILfyqo=";
+      sha256 = "sha256-FkB3sh1uwOctBOAW7eO8HFNr9a9RG3Yq4hKKscYYER4=";
     };
 
   dontConfigure = true;

@@ -1,16 +1,16 @@
 { lib, fetchzip }:
 
 fetchzip {
-  name = "ipaexfont-003.01";
+  name = "ipaexfont-004.01";
 
-  url = "https://web.archive.org/web/20160616003021/http://dl.ipafont.ipa.go.jp/IPAexfont/IPAexfont00301.zip";
+  url = "https://moji.or.jp/wp-content/ipafont/IPAexfont/IPAexfont00401.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "02a6sj990cnig5lq0m54nmbmfkr3s57jpxl9fiyzrjmigvd1qmhj";
+  sha256 = "0wp369kri33kb1mmiq4lpl9i4xnacw9fj63ycmkmlkq64s8qnjnx";
 
   meta = with lib; {
     description = "Japanese font package with Mincho and Gothic fonts";
@@ -21,7 +21,7 @@ fetchzip {
 
       This is the successor to the IPA fonts.
     '';
-    homepage = "http://ipafont.ipa.go.jp/";
+    homepage = "https://moji.or.jp/ipafont/";
     license = licenses.ipa;
     maintainers = with maintainers; [ gebner ];
   };

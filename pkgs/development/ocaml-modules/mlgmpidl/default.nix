@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, perl, ocaml, findlib, camlidl, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-mlgmpidl-${version}";
+  pname = "ocaml${ocaml.version}-mlgmpidl";
   version = "1.2.12";
   src = fetchFromGitHub {
     owner = "nberth";
@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "17xqiclaqs4hmnb92p9z6z9a1xfr31vcn8nlnj8ykk57by31vfza";
   };
 
-  buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];
+  nativeBuildInputs = [ perl ocaml findlib mpfr camlidl ];
+  buildInputs = [ gmp mpfr ];
+
+  strictDeps = true;
 
   prefixKey = "-prefix ";
   configureFlags = [
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     sed -i Makefile \
-      -e 's|^	/bin/rm |	rm |'
+      -e 's|/bin/rm|rm|'
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
   '';
 

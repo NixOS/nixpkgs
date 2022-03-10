@@ -466,7 +466,8 @@ let
           inherit version;
           sha256 = "sha256-109FuBMXRU2W6YL9HFDm+1yZrCIjcorqh2RDOjn1ZvE=";
         };
-        # sdist lacks tests
+
+        # sdist doesn't provide tests
         doCheck = false;
       });
 
@@ -499,6 +500,16 @@ let
           inherit (oldAttrs) pname;
           inherit version;
           sha256 = "7fcab17585c0236885eaef311c01a1e626d84c982aabcac81703afda3f89c81f";
+        };
+      });
+
+      argcomplete = super.argcomplete.overridePythonAttrs(oldAttrs: rec {
+        version = "1.8.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-SreailmO/AgRBGv3dnj4VkMnbokAzWT5xPEPEQ4QEb0=";
         };
       });
 

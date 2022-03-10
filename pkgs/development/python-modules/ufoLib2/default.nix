@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ufoLib2";
-  version = "0.13.0";
+  version = "0.13.1";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "xJfvyNE+30BgNirX8u1xhKcD8pM3owRAVC4WX+qFqEM=";
+    sha256 = "sha256-MnWi2mI+bUt+4pyYTNs6W4a7wj8KHOlEhti7XDCKpHs=";
   };
 
   propagatedBuildInputs = [

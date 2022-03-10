@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, ocaml, perl }:
 
 if lib.versionOlder ocaml.version "4.02"
+|| lib.versionOlder "4.13" ocaml.version
 then throw "camlp5 is not available for OCaml ${ocaml.version}"
 else
 

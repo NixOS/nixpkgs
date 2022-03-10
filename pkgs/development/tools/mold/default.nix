@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.0.2";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0TXk+6hS6TJHwhowYzL8ABw3iyfVwPttJWKQ9RfzMSI=";
+    sha256 = "sha256-+uIP/U7H9P7oy78TL1edX9+JNYUzpwro105PYj3D6Yk=";
   };
 
   buildInputs = [ zlib openssl ];

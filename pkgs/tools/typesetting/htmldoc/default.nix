@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
-  version = "1.9.14";
+  version = "1.9.15";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
     rev = "v${version}";
-    sha256 = "sha256-mPykntRKu2NrIIGYGNCATUC3k/dvRmVkjHyhBeFfQ2U=";
+    sha256 = "sha256-WNsYJacZBYoZ8Bxj+InQ9ePvelqhU5y9nY7aikUNxEk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

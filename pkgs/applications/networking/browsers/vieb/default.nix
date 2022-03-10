@@ -2,13 +2,13 @@
 
 mkYarnPackage rec {
   pname = "vieb";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MJJeHnwfXouBygRT/wFWFMRHxQVf/3k2c7vp/tkD5co=";
+    sha256 = "sha256-FuaN9iUxR5Y6SnNmuegmNJXn1BYKgcobquTL3thuByM=";
   };
 
   packageJSON = ./package.json;
@@ -24,8 +24,8 @@ mkYarnPackage rec {
     icon = "vieb";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
       "text/html"
       "application/xhtml+xml"
       "x-scheme-handler/http"

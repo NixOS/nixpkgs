@@ -1,5 +1,7 @@
 { pkgs
 , withDoc ? false
+, requireSageTests ? true
+, extraPythonPackages ? ps: []
 }:
 
 # Here sage and its dependencies are put together. Some dependencies may be pinned
@@ -109,7 +111,7 @@ let
     rpy2
     sphinx
     pillow
-  ];
+  ] ++ extraPythonPackages python3.pkgs;
 
   pythonEnv = python3.buildEnv.override {
     extraLibs = pythonRuntimeDeps;
@@ -166,5 +168,5 @@ in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
   inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
-  inherit withDoc;
+  inherit withDoc requireSageTests;
 }

@@ -90,7 +90,7 @@ installPhase() {
             fi
 
             # nvidia currently only supports x86_64 and i686
-            if [ "$system" = "i686-linux" ]; then
+            if [ "$i" == "$lib32" ]; then
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
             else
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.x86_64.json

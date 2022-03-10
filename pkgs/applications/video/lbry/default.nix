@@ -2,7 +2,7 @@
 
 let
   pname = "lbry-desktop";
-  version = "0.52.0";
+  version = "0.52.4";
 in appimageTools.wrapAppImage rec {
   name = "${pname}-${version}";
 
@@ -12,7 +12,7 @@ in appimageTools.wrapAppImage rec {
     src = fetchurl {
       url = "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
       # Gotten from latest-linux.yml
-      sha512 = "FMsO1tUhym11hxot/0S4pXwjvt1YhOUahwiQU+HhOxrZhcrOwwyXUzMy3sAzKdZjidKpA5DbLjkgwPlg2kGWwg==";
+      sha512 = "TWRFCVktSKs5PORtm8FvM6qNWuiL/1HN98ilr1busVUGvain0QXGZwB/Dzvsox1c+X9VofUdapzozSOT6r58qw==";
     };
   };
 

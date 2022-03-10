@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     comment = "Robot game";
     desktopName = "Orthorobot";
     genericName = "orthorobot";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   nativeBuildInputs = [ makeWrapper ];

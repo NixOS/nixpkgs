@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       name = "quakespasm";
       exec = "quake";
       desktopName = "Quakespasm";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

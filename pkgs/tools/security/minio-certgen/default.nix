@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "minio-certgen";
-  version = "0.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "certgen";
     rev = "v${version}";
-    sha256 = "sha256-HtzcoEUMt3LpQNyT0wGcmc4Q70QqHx7QpjrDh4YSO/Q=";
+    sha256 = "sha256-Qs+wpx9pRdWdY9FrBaKM8gdB0+POy80I6DB4UaBsJEE=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "A simple Minio tool to generate self-signed certificates, and provides SAN certificates with DNS and IP entries";

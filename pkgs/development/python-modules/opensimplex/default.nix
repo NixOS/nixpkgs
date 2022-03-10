@@ -32,6 +32,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/lmas/opensimplex";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

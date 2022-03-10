@@ -38,9 +38,8 @@ in {
     services.pipewire.media-session = {
       enable = mkOption {
         type = types.bool;
-        default = config.services.pipewire.enable;
-        defaultText = literalExpression "config.services.pipewire.enable";
-        description = "Example pipewire session manager";
+        default = false;
+        description = "Whether to enable the deprecated example Pipewire session manager";
       };
 
       package = mkOption {

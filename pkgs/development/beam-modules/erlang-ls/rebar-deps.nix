@@ -137,11 +137,12 @@ let
     };
     erlfmt = builder {
       name = "erlfmt";
-      version = "1.0.0";
-      src = fetchHex {
-        pkg = "erlfmt";
-        version = "1.0.0";
-        sha256 = "sha256-RL4L4DzmmQLcbc2PZeezre1qr10L5wlkGIyr1K0k8E4=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "gomoripeti";
+        repo = "erlfmt";
+        rev = "d4422d1fd79a73ef534c2bcbe5b5da4da5338833";
+        sha256 = "07jp4g6a41w7318lh8ndsvgivkj0ahz3spnrsnx4cqkdb97yjaid";
       };
       beamDeps = [ ];
     };
@@ -157,11 +158,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "1.1.1";
+      version = "1.3.1";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "1.1.1";
-        sha256 = "sha256-ORyVuqSfJxjX+0mLzwgEbd/CAs8Kq2Oy5DknFIXJ3EI=";
+        version = "1.3.1";
+        sha256 = "sha256-eoiQv4GFoyUs1OvYJv5fita5MCTt+IV26yeunl3BnWk=";
       };
       beamDeps = [ katana_code zipper ];
     };

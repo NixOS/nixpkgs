@@ -13,6 +13,7 @@
 , urls ? []
 , extraPostFetch ? ""
 , name ? "source"
+, nativeBuildInputs ? [ ]
 , # Allows to set the extension for the intermediate downloaded
   # file. This can be used as a hint for the unpackCmdHooks to select
   # an appropriate unpacking tool.
@@ -30,6 +31,8 @@ in {
   recursiveHash = true;
 
   downloadToTemp = true;
+
+  nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
 
   postFetch =
     ''
@@ -64,7 +67,4 @@ in {
     + ''
       chmod 755 "$out"
     '';
-} // removeAttrs args [ "stripRoot" "extraPostFetch" "extension" ])).overrideAttrs (x: {
-  # Hackety-hack: we actually need unzip hooks, too
-  nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
-})
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "extension" "nativeBuildInputs" ]))

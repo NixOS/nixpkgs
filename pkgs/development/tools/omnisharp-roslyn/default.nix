@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ tesq0 ericdallo corngood ];
   };

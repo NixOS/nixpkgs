@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
-    categories = "Game;RolePlaying;";
+    categories = [ "Game" "RolePlaying" ];
     genericName = pname;
   };
 

@@ -18,7 +18,7 @@ config:
 
 # Documentation
 # python2Packages.markdown
-, transfig, ghostscript, texinfo, pandoc
+, fig2dev, ghostscript, texinfo, pandoc
 
 , binutils-unwrapped
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (rec {
     python2Packages.wrapPython
 
     # Documentation
-    python2Packages.markdown transfig ghostscript texinfo pandoc
+    python2Packages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
   ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))

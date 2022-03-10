@@ -79,7 +79,7 @@ in {
     in {
       services.rsync = {
         enable = !cfg.socketActivated;
-        aliases = [ "rsyncd" ];
+        aliases = [ "rsyncd.service" ];
 
         description = "fast remote file copy program daemon";
         after = [ "network.target" ];

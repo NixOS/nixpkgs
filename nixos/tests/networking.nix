@@ -246,13 +246,13 @@ let
         networking = {
           useNetworkd = networkd;
           useDHCP = false;
-          bonds.bond = {
+          bonds.bond0 = {
             interfaces = [ "eth1" "eth2" ];
-            driverOptions.mode = "balance-rr";
+            driverOptions.mode = "802.3ad";
           };
           interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
           interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.bond.ipv4.addresses = mkOverride 0
+          interfaces.bond0.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 30; } ];
         };
       };
@@ -274,6 +274,10 @@ let
 
               client2.wait_until_succeeds("ping -c 2 192.168.1.1")
               client2.wait_until_succeeds("ping -c 2 192.168.1.2")
+
+          with subtest("Verify bonding mode"):
+              for client in client1, client2:
+                  client.succeed('grep -q "Bonding Mode: IEEE 802.3ad Dynamic link aggregation" /proc/net/bonding/bond0')
         '';
     };
     bridge = let
@@ -864,7 +868,7 @@ let
         print(client.succeed("ip l add name foo type dummy"))
         print(client.succeed("stat /etc/systemd/network/50-foo.link"))
         client.succeed("udevadm settle")
-        assert "mtu 1442" in client.succeed("ip l show dummy0")
+        assert "mtu 1442" in client.succeed("ip l show dev foo")
       '';
     };
     wlanInterface = let

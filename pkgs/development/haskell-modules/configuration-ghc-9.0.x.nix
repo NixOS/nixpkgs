@@ -87,10 +87,6 @@ self: super: {
   generic-lens_2_2_1_0 = dontCheck super.generic-lens_2_2_1_0;
 
   # Apply patches from head.hackage.
-  alex = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/fe192e12b88b09499d4aff0e562713e820544bd6/patches/alex-3.2.6.patch";
-    sha256 = "1rzs764a0nhx002v4fadbys98s6qblw4kx4g46galzjf5f7n2dn4";
-  }) (dontCheck super.alex);
   doctest = dontCheck (doJailbreak super.doctest_0_18_2);
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";

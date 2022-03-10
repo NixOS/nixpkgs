@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, boost, ffmpeg, darwin, zlib }:
+{ lib, stdenv, fetchurl, cmake, boost, ffmpeg_4, darwin, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "chromaprint";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost ffmpeg ] ++ lib.optionals stdenv.isDarwin
+  buildInputs = [ boost ffmpeg_4 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo zlib]);
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];

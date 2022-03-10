@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Checks for out-of-date package versions";
     homepage = "https://github.com/jumptrading/luddite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

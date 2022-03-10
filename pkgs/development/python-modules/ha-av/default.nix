@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchPypi
 , pkg-config
-, ffmpeg
+, ffmpeg_4
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_4
   ];
 
   pythonImportsCheck = [

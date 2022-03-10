@@ -19,7 +19,7 @@ let
     icon = "ghidra";
     desktopName = "Ghidra";
     genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {

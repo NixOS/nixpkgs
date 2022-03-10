@@ -25,16 +25,16 @@ rustPlatform.buildRustPackage rec {
   pname = "sequoia";
   # Upstream has separate version numbering for the library and the CLI frontend.
   # This derivation provides the CLI frontend, and thus uses its version number.
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia";
     rev = "sq/v${version}";
-    sha256 = "13f582g10vba0cpbdmqkkfzgd5jgagb640jaz1w425wf5nbh6q50";
+    sha256 = "1rcbv1s7wpxhrzw082q6vfrq1ja2ssfxn53c90h8fh5wrj7ns751";
   };
 
-  cargoSha256 = "sha256-qIGP48uj2iQ6MVgy5anKI9QrX9vnuKh46Fmmcczda4w=";
+  cargoSha256 = "0f3b8rh4pl03n8j9ihazaak214sv1rsksbgrb1nfcy8sq2yqfj4g";
 
   nativeBuildInputs = [
     pkg-config
@@ -76,15 +76,6 @@ rustPlatform.buildRustPackage rec {
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   CARGO_TEST_ARGS = "--workspace --exclude sequoia-store";
-
-  # Without this, the examples won't build
-  postPatch = ''
-    substituteInPlace openpgp-ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-    substituteInPlace ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-  '';
-
 
   preInstall = lib.optionalString pythonSupport ''
     export installFlags="PYTHONPATH=$PYTHONPATH:$out/${pythonPackages.python.sitePackages}"

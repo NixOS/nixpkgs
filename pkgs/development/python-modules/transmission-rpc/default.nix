@@ -18,10 +18,10 @@ buildPythonPackage rec {
   format = "pyproject";
 
   src = fetchFromGitHub {
-      owner = "Trim21";
-      repo = "transmission-rpc";
-      rev = "v${version}";
-      sha256 = "sha256-Ys9trQMCHqxBSaTobWt8WZwi1F8HKTUKaIxvyo6ZPP0=";
+    owner = "Trim21";
+    repo = "transmission-rpc";
+    rev = "v${version}";
+    sha256 = "sha256-Ys9trQMCHqxBSaTobWt8WZwi1F8HKTUKaIxvyo6ZPP0=";
   };
 
   # remove once upstream has tagged version with dumped typing-extensions

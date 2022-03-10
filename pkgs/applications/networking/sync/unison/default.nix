@@ -60,12 +60,9 @@ stdenv.mkDerivation rec {
     genericName = "File synchronization tool";
     exec = "unison";
     icon = "unison";
-    categories = "Utility;FileTools;GTK;";
-    extraDesktopEntries = {
-      StartupWMClass = "Unison";
-      StartupNotify = "true";
-      X-MultipleArgs = "false";
-    };
+    categories = [ "Utility" "FileTools" "GTK" ];
+    startupNotify = true;
+    startupWMClass = "Unison";
   });
 
   meta = with lib; {

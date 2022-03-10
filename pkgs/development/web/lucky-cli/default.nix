@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";
-  version = "0.26.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "luckyframework";
     repo = "lucky_cli";
     rev = "v${version}";
-    sha256 = "sha256-bZWyAZrAYG45fqmEQYXsk8YLKurpppaahOkALAQXGhY=";
+    sha256 = "sha256-OmvKd35jR003qQnA/NBI4MjGRw044bYUYa59RKbz+lI=";
   };
 
   # the integration tests will try to clone a remote repos
@@ -35,6 +35,7 @@ crystal.buildCrystalPackage rec {
   meta = with lib; {
     description =
       "A Crystal library for creating and running tasks. Also generates Lucky projects";
+    homepage = "https://luckyframework.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

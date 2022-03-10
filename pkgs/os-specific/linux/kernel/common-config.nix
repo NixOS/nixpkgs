@@ -65,7 +65,7 @@ let
       X86_INTEL_PSTATE                 = yes;
       INTEL_IDLE                       = yes;
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
-      CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
+      CPU_FREQ_GOV_SCHEDUTIL           = yes;
       PM_WAKELOCKS                     = yes;
       # Power-capping framework and support for INTEL RAPL
       POWERCAP                         = yes;
@@ -148,12 +148,12 @@ let
       IPV6_MROUTE                 = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
-      IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_FOU_TUNNEL             = module;
       IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
       IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
       IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
-      NET_CLS_BPF                 = whenAtLeast "4.4" module;
-      NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_CLS_BPF                 = module;
+      NET_ACT_BPF                 = module;
       NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
@@ -168,7 +168,7 @@ let
       PPP_FILTER    = yes;
 
       # needed for iwd WPS support (wpa_supplicant replacement)
-      KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
+      KEY_DH_OPERATIONS = yes;
 
       # needed for nftables
       # Networking Options
@@ -208,7 +208,7 @@ let
       INET_TCP_DIAG     = mkDefault module;
       INET_UDP_DIAG     = mkDefault module;
       INET_RAW_DIAG     = whenAtLeast "4.14" (mkDefault module);
-      INET_DIAG_DESTROY = whenAtLeast "4.9" (mkDefault yes);
+      INET_DIAG_DESTROY = mkDefault yes;
 
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
@@ -267,11 +267,11 @@ let
       # necessary for amdgpu polaris support
       DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
       # (experimental) amdgpu support for verde and newer chipsets
-      DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
+      DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
-      DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
+      DRM_AMDGPU_CIK = yes;
       # Allow device firmware updates
-      DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      DRM_DP_AUX_CHARDEV = yes;
       # amdgpu display core (DC) support
       DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
       DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
@@ -403,7 +403,6 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_PNFS              = whenBetween "4.0" "4.6" yes;
       NFSD_V2_ACL            = yes;
       NFSD_V3                = yes;
       NFSD_V3_ACL            = yes;
@@ -460,7 +459,7 @@ let
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
-      IO_STRICT_DEVMEM                 = whenAtLeast "4.5" (mkDefault yes);
+      IO_STRICT_DEVMEM                 = mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
@@ -515,10 +514,9 @@ let
       MEMCG                    = yes;
       MEMCG_SWAP               = yes;
 
-      DEVPTS_MULTIPLE_INSTANCES = whenOlder "4.7" yes;
       BLK_DEV_THROTTLING        = yes;
       CFQ_GROUP_IOSCHED         = whenOlder "5.0" yes; # Removed in 5.0-RC1
-      CGROUP_PIDS               = whenAtLeast "4.3" yes;
+      CGROUP_PIDS               = yes;
     };
 
     staging = {
@@ -543,9 +541,9 @@ let
       STACK_TRACER          = yes;
       UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
       UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
-      BPF_SYSCALL           = whenAtLeast "4.4" yes;
+      BPF_SYSCALL           = yes;
       BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.15" yes;
-      BPF_EVENTS            = whenAtLeast "4.4" yes;
+      BPF_EVENTS            = yes;
       FUNCTION_PROFILER     = yes;
       RING_BUFFER_BENCHMARK = no;
     };
@@ -556,11 +554,10 @@ let
       HYPERVISOR_GUEST = yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
-      KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
       KVM_ASYNC_PF                      = yes;
       KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
       KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
-      KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
+      KVM_GENERIC_DIRTYLOG_READ_PROTECT = yes;
       KVM_GUEST                         = yes;
       KVM_MMIO                          = yes;
       KVM_VFIO                          = yes;
@@ -774,14 +771,14 @@ let
       SERIAL_DEV_CTRL_TTYPORT = whenAtLeast "4.11" yes; # enables support for TTY serial devices
 
       BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
-      BT_HCIUART_QCA = whenAtLeast "4.3" yes; # Qualcomm Atheros protocol support
+      BT_HCIUART_QCA = yes; # Qualcomm Atheros protocol support
       BT_HCIUART_SERDEV = whenAtLeast "4.12" yes; # required by BT_HCIUART_QCA
-      BT_HCIUART = whenAtLeast "2.5.45" module; # required for BT devices with serial port interface (QCA6390)
+      BT_HCIUART = module; # required for BT devices with serial port interface (QCA6390)
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
-      BT_QCA = whenAtLeast "4.3" module; # enables QCA6390 bluetooth
+      BT_QCA = module; # enables QCA6390 bluetooth
 
       CLEANCACHE = option yes;
       CRASH_DUMP = option no;
@@ -820,14 +817,12 @@ let
       MEDIA_ATTACH          = yes;
       MEGARAID_NEWGEN       = yes;
 
-      MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
 
       NVME_MULTIPATH = whenAtLeast "4.15" yes;
 
       PSI = whenAtLeast "4.20" yes;
 
-      MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
       MOUSE_PS2_VMMOUSE  = yes;

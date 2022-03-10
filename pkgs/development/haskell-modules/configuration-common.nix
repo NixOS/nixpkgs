@@ -63,6 +63,12 @@ self: super: {
   # works fine there.
   fakedata = dontCheck super.fakedata;
 
+  # The latest release on hackage has an upper bound on containers which
+  # breaks the build, though it works with the version of containers present
+  # and the upper bound doesn't exist in code anymore:
+  # > https://github.com/roelvandijk/numerals
+  numerals = doJailbreak (dontCheck super.numerals);
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -86,6 +92,12 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
+
+    # Git annex provides a restricted login shell. Setting
+    # passthru.shellPath here allows a user's login shell to be set to
+    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
+    # https://git-annex.branchable.com/git-annex-shell/
+    passthru.shellPath = "/bin/git-annex-shell";
   }) super.git-annex;
 
   # Fix test trying to access /home directory
@@ -307,7 +319,6 @@ self: super: {
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
-  numerals = dontCheck super.numerals;
   odpic-raw = dontCheck super.odpic-raw; # needs a running oracle database server
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
@@ -1263,13 +1274,6 @@ self: super: {
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core)));
 
-  # add unreleased commit fixing version constraint as a patch
-  # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
-  utc = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/lpeterse/haskell-utc/commit/e4502c08591e80d411129bb7c0414539f6302aaf.diff";
-    sha256 = "0v6kv1d4syjzgzc2s7a76c6k4vminlcq62n7jg3nn9xd00gwmmv7";
-  }) super.utc;
-
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
 
@@ -1453,10 +1457,6 @@ self: super: {
   # 2021-11-20: Testsuite hangs.
   # https://github.com/haskell/haskell-language-server/issues/2375
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-
-  # 2021-11-23: Too strict bounds on ghcide, pending new release
-  hls-rename-plugin = assert super.hls-rename-plugin.version == "1.0.0.0";
-    doJailbreak super.hls-rename-plugin;
 
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562

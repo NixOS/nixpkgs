@@ -103,7 +103,8 @@ Sample template for a new package review is provided below.
 - [ ] `meta.maintainers` is set
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
 - [ ] source is fetched using the appropriate function
-- [ ] phases are respected
+- [ ] the list of `phases` is not overridden
+- [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches that are remotely available are fetched with `fetchpatch`
 
 ##### Possible improvements

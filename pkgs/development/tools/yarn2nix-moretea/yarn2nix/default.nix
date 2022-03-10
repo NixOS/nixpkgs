@@ -174,7 +174,7 @@ in rec {
   let
     package = lib.importJSON packageJSON;
 
-    packageGlobs = package.workspaces;
+    packageGlobs = if lib.isList package.workspaces then package.workspaces else package.workspaces.packages;
 
     globElemToRegex = lib.replaceStrings ["*"] [".*"];
 

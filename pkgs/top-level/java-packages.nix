@@ -8,9 +8,10 @@ let
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
+  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
 
 in {
-  inherit mavenbuild fetchMaven openjfx11 openjfx15;
+  inherit mavenbuild fetchMaven openjfx11 openjfx15 openjfx17;
 
   compiler = let
 
@@ -170,7 +171,7 @@ in {
       ../development/compilers/openjdk/darwin/17.nix
       {
         inherit openjdk17-bootstrap;
-        openjfx = openjfx15;
+        openjfx = openjfx17;
       };
   };
 

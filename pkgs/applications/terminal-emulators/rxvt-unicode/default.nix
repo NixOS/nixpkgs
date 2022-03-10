@@ -21,7 +21,7 @@ let
     comment = description;
     desktopName = "URxvt";
     genericName = pname;
-    categories = "System;TerminalEmulator;";
+    categories = [ "System" "TerminalEmulator" ];
   };
 
   fetchPatchFromAUR = { package, name, rev, sha256 }:

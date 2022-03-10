@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     desktopName = "Wasabi";
     genericName = "Bitcoin wallet";
     comment = meta.description;
-    categories = "Network;Utility;";
+    categories = [ "Network" "Utility" ];
   };
 
   installPhase = ''

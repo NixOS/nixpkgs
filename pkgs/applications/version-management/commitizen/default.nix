@@ -1,33 +1,46 @@
 { buildPythonApplication
-, lib
-, fetchFromGitHub
-, poetry
-, termcolor
-, questionary
 , colorama
 , decli
-, tomlkit
+, fetchFromGitHub
+, git
 , jinja2
-, pyyaml
-, argcomplete
-, typing-extensions
+, lib
 , packaging
-, pytestCheckHook
+, poetry
 , pytest-freezegun
 , pytest-mock
 , pytest-regressions
-, git
+, pytestCheckHook
+, pyyaml
+, questionary
+, termcolor
+, tomlkit
+, typing-extensions
+
+, argcomplete, fetchPypi
 }:
+
+let
+  # NOTE: Upstream requires argcomplete <2, so we make it here.
+  argcomplete_1 = argcomplete.overrideAttrs (old: rec {
+    version = "1.12.3";
+    src = fetchPypi {
+      inherit (old) pname;
+      inherit version;
+      sha256 = "sha256-LH2//YwEXqU0kh5jsL5v5l6IWZmQ2NxAisjFQrcqVEU=";
+    };
+  });
+in
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.20.4";
+  version = "2.21.2";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2DhWiUAkAkyNxYB1CGzUB2nGZeCWvFqSztrxasUPSXw=";
+    sha256 = "sha256-ZFKUG8dE1hpWPGitdQlYeBSzWn3LPR7VGWsuq1Le5OQ=";
     deepClone = true;
   };
 
@@ -43,7 +56,7 @@ buildPythonApplication rec {
     tomlkit
     jinja2
     pyyaml
-    argcomplete
+    argcomplete_1
     typing-extensions
     packaging
   ];
@@ -54,7 +67,7 @@ buildPythonApplication rec {
     pytest-freezegun
     pytest-mock
     pytest-regressions
-    argcomplete
+    argcomplete_1
     git
   ];
 

@@ -39,7 +39,7 @@ in
       comment = "Kode Studio is an IDE for Kha based on Visual Studio Code";
       desktopName = "Kode Studio";
       genericName = "Text Editor";
-      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+      categories = [ "GNOME" "GTK" "Utility" "TextEditor" "Development" ];
     };
 
     sourceRoot = ".";

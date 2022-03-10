@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
@@ -31,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
-    sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
+    sha256 = "sha256-0chBM8JuCYgZXHneiSxSICZwBVm2Vgx+bas9wUjbnyg=";
   };
 
   patches = [
@@ -46,24 +45,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./hardcode-fallback-background.patch;
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
-    # Revert "UserCard: use accent color for logged_in check (#566)"
-    # https://github.com/elementary/greeter/pull/566
-    # Fixes crash issue reported in:
-    # https://github.com/elementary/greeter/issues/578
-    # https://github.com/NixOS/nixpkgs/issues/151609
-    # Probably also fixes:
-    # https://github.com/elementary/greeter/issues/568
-    # https://github.com/elementary/greeter/issues/583
-    # https://github.com/NixOS/nixpkgs/issues/140513
-    # Revisit this when the greeter is ported to GTK 4:
-    # https://github.com/elementary/greeter/pull/591
-    ./revert-pr566.patch
-    # Fix build with meson 0.61
-    # https://github.com/elementary/greeter/pull/590
-    (fetchpatch {
-      url = "https://github.com/elementary/greeter/commit/a4b25244058fce794a9f13f6b22a8ff7735ebde9.patch";
-      sha256 = "sha256-qPXhdvmYG8YMDU/CjbEkfZ0glgRzxnu0TsOPtvWHxLY=";
     })
   ];
 
@@ -89,7 +70,6 @@ stdenv.mkDerivation rec {
     libhandy
     lightdm
     mutter
-    wingpanel-with-indicators
   ];
 
   mesonFlags = [

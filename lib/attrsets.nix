@@ -276,7 +276,7 @@ rec {
 
 
   /* Like `mapAttrsRecursive', but it takes an additional predicate
-     function that tells it whether to recursive into an attribute
+     function that tells it whether to recurse into an attribute
      set.  If it returns false, `mapAttrsRecursiveCond' does not
      recurse, but does apply the map function.  If it returns true, it
      does recurse, and does not apply the map function.
@@ -327,7 +327,7 @@ rec {
        isDerivation "foobar"
        => false
   */
-  isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
+  isDerivation = x: x.type or null == "derivation";
 
   /* Converts a store path to a fake derivation. */
   toDerivation = path:

@@ -133,7 +133,7 @@ let
   '';
 
   desktopItem = makeDesktopItem rec {
-    categories = "Utility;";
+    categories = [ "Utility" ];
     desktopName = "Toggl";
     genericName = desktopName;
     name = "toggldesktop";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, polyml, z3, veriT, vampire, eprover-ho, rlwrap, makeDesktopItem }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, rlwrap, perl, makeDesktopItem }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -77,6 +77,10 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/Tools/env \
       --replace /usr/bin/env ${coreutils}/bin/env
 
+    substituteInPlace src/Tools/Setup/src/Environment.java \
+      --replace 'cmd.add("/usr/bin/env");' "" \
+      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+
     rm -r heaps
   '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
@@ -90,6 +94,24 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     export HOME=$TMP # The build fails if home is not set
+    setup_name=$(basename contrib/isabelle_setup*)
+
+    #The following is adapted from https://isabelle.sketis.net/repos/isabelle/file/Isabelle2021-1/Admin/lib/Tools/build_setup
+    TARGET_DIR="contrib/$setup_name/lib"
+    rm -rf "$TARGET_DIR"
+    mkdir -p "$TARGET_DIR/isabelle/setup"
+    declare -a ARGS=("-Xlint:unchecked")
+
+    SOURCES="$(${perl}/bin/perl -e 'while (<>) { if (m/(\S+\.java)/)  { print "$1 "; } }' "src/Tools/Setup/etc/build.props")"
+    for SRC in $SOURCES
+    do
+      ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
+    done
+    ${java}/bin/javac -d "$TARGET_DIR" -classpath ${scala}/lib/scala-compiler.jar "''${ARGS[@]}"
+    ${java}/bin/jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
+    rm -rf "$TARGET_DIR/isabelle"
+
+    # Prebuild HOL Session
     bin/isabelle build -v -o system_heaps -b HOL
   '';
 
@@ -114,7 +136,7 @@ stdenv.mkDerivation rec {
     icon = "isabelle";
     desktopName = "Isabelle";
     comment = meta.description;
-    categories = "Education;Science;Math;";
+    categories = [ "Education" "Science" "Math" ];
   };
 
   meta = with lib; {

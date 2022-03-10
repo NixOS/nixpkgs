@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.11.0" }:
 
-{ pname, version ? defaultVersion, hash, ...}@args:
+{ pname, version ? defaultVersion, hash, buildInputs ? [], ...}@args:
 
 buildDunePackage (args // {
-  inherit version;
+  inherit version buildInputs;
 
   minimumOCamlVersion = "4.04";
 
@@ -13,6 +13,8 @@ buildDunePackage (args // {
     rev = "v${version}";
     sha256 = hash;
   };
+
+  strictDeps = true;
 
   meta = {
     license = lib.licenses.asl20;

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.11.1";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "sha256-mqtlxQDIFee93wpdn8oNWmMPDyjYTCmVqF6IJvJbRBM=";
+    sha256 = "sha256-snp9+PlffU9Ay8o42PM8SqyP60hu9nozp457HM+0bM8=";
   };
 
   patches = [

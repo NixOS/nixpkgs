@@ -9,11 +9,19 @@ buildPythonPackage rec {
     sha256 = "0bvshly83c4h5jhxaa97z192viczymz5fxp6vl8awjmmrs9l9x8i";
   };
 
+  postPatch = ''
+    sed -i '/use_2to3=True/d' setup.py
+  '';
+
   propagatedBuildInputs = [ numpy matplotlib ];
+
+  preBuild = ''
+    2to3 -wn deap
+  '';
 
   checkInputs = [ nose ];
   checkPhase = ''
-    ${python.interpreter} setup.py nosetests --verbosity=3
+    nosetests --verbosity=3
   '';
 
   meta = with lib; {

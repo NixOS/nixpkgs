@@ -12,12 +12,16 @@
 , Security
 , AppKit
 , CoreServices
+, desktopToDarwinBundle
+, useKeytar ? true
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
   electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
+  keytar = callPackage ./keytar { inherit Security AppKit; };
+  seshat = callPackage ./seshat { inherit CoreServices; };
 in
 mkYarnPackage rec {
   pname = "element-desktop";
@@ -36,10 +40,9 @@ mkYarnPackage rec {
     sha256 = pinData.desktopYarnHash;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
-  seshat = callPackage ./seshat { inherit CoreServices; };
-  keytar = callPackage ./keytar { inherit Security AppKit; };
+  inherit seshat;
 
   buildPhase = ''
     runHook preBuild
@@ -50,12 +53,14 @@ mkYarnPackage rec {
     node ./scripts/copy-res.js
     popd
     rm -rf node_modules/matrix-seshat node_modules/keytar
-    ln -s $keytar node_modules/keytar
+    ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
     ln -s $seshat node_modules/matrix-seshat
     runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # resources
     mkdir -p "$out/share/element"
     ln -s '${element-web}' "$out/share/element/webapp"
@@ -82,6 +87,8 @@ mkYarnPackage rec {
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+
+    runHook postInstall
   '';
 
   # Do not attempt generating a tarball for element-web again.
@@ -99,14 +106,25 @@ mkYarnPackage rec {
     desktopName = "Element";
     genericName = "Matrix Client";
     comment = meta.description;
-    categories = "Network;InstantMessaging;Chat;";
-    extraEntries = ''
-      StartupWMClass=element
-      MimeType=x-scheme-handler/element;
-    '';
+    categories = [ "Network" "InstantMessaging" "Chat" ];
+    startupWMClass = "element";
+    mimeTypes = [ "x-scheme-handler/element" ];
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+
+    # TL;DR: keytar is optional while seshat isn't.
+    #
+    # This prevents building keytar when `useKeytar` is set to `false`, because
+    # if libsecret is unavailable (e.g. set to `null` or fails to build), then
+    # this package wouldn't even considered for building because
+    # "one of the dependencies failed to build",
+    # although the dependency wouldn't even be used.
+    #
+    # It needs to be `passthru` anyways because other packages do depend on it.
+    inherit keytar;
+  };
 
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [];
 
-  buildInputs = [
+  nativeBuildInputs = [
     which
     ocaml
     findlib
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   checkInputs = [
     cppo
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

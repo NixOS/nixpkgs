@@ -60,7 +60,7 @@ let
         name = "gzdoom";
         exec = "gzdoom";
         desktopName = "GZDoom";
-        categories = "Game;";
+        categories = [ "Game" ];
       })
     ];
 

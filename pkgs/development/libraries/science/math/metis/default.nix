@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "metis";
+  pname = "metis";
   version = "5.1.0";
 
   src = fetchurl {

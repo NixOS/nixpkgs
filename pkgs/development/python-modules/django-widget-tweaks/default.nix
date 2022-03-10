@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
-  version = "1.4.8";
+  version = "1.4.12";
 
   src = fetchFromGitHub { # package from Pypi missing runtests.py
     owner = "jazzband";
     repo = pname;
     rev = version;
-    sha256 = "00w1ja56dc7cyw7a3mph69ax6mkch1lsh4p98ijdhzfpjdy36rbg";
+    sha256 = "1rhn2skx287k6nnkxlwvl9snbia6w6z4c2rqg22hwzbz5w05b24h";
   };
 
   checkPhase = "${python.interpreter} runtests.py";

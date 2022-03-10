@@ -103,11 +103,9 @@ in nodePackages.deltachat-desktop.override rec {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = meta.description;
-    categories = "Network;InstantMessaging;Chat;";
-    extraEntries = ''
-      StartupWMClass=DeltaChat
-      MimeType=x-scheme-handler/openpgp4fpr;x-scheme-handler/mailto;
-    '';
+    categories = [ "Network" "InstantMessaging" "Chat" ];
+    startupWMClass = "DeltaChat";
+    mimeTypes = [ "x-scheme-handler/openpgp4fpr" "x-scheme-handler/mailto" ];
   });
 
   passthru.updateScript = ./update.sh;

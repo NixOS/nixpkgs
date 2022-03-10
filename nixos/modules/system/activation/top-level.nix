@@ -117,7 +117,7 @@ let
     configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
-    perl = pkgs.perl.withPackages (p: with p; [ FileSlurp NetDBus XMLParser XMLTwig ConfigIniFiles ]);
+    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp NetDBus ]);
   };
 
   # Handle assertions and warnings

@@ -1,42 +1,60 @@
 { lib
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
-, requests
+, mypy
 , pyjwt
 , pytestCheckHook
+, pythonOlder
+, requests
 , responses
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "2.0.1";
+  version = "3.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = version;
-    sha256 = "1kqnr50iwcq9nx40lblbqzf327cdcbkrir6vh70067hk33rq0gm9";
+    hash = "sha256-doyKTGPm4tpmLrXQgsDOGklG54HSN8VFCAXa4Q73Uos=";
   };
 
   propagatedBuildInputs = [
+    cryptography
     requests
     pyjwt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ];
 
   checkInputs = [
+    mypy
     pytestCheckHook
     responses
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-    --replace "pyjwt[crypto]>=1.5.3,<2.0.0" "pyjwt[crypto] >=1.5.3, <3.0.0"
+    --replace "pyjwt[crypto]>=2.0.0,<3.0.0" "pyjwt[crypto]>=2.0.0,<3.0.0"
   '';
 
-  pythonImportsCheck = [ "globus_sdk" ];
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  pythonImportsCheck = [
+    "globus_sdk"
+  ];
 
   meta = with lib; {
-    description = "A convenient Pythonic interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
+    description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
     homepage =  "https://github.com/globus/globus-sdk-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];

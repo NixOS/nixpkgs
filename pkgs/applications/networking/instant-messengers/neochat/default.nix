@@ -61,7 +61,7 @@ mkDerivation rec {
     description = "A client for matrix, the decentralized communication protocol.";
     homepage = "https://apps.kde.org/en/neochat";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mjlbach peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux;
   };
 }

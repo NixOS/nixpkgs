@@ -18,7 +18,6 @@
 , httpx
 # Check Inputs
 , pytestCheckHook
-, pytest-runner
 , pytest-asyncio
 , pytest-timeout
 , aiohttp
@@ -31,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.59.4";
+  version = "0.60.2";
 
   disabled = pythonOlder "3.6";
 
@@ -39,10 +38,8 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bH/VREo2f84wloA2jgXnQkGNSRRRYmSvUXmI0wMfmYM=";
+    sha256 = "sha256-GehtjukmSVHffAnDeDwjopgnuycD1CLQRHzLtO1iLsE=";
   };
-
-  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -74,6 +71,8 @@ buildPythonPackage rec {
   ];
 
   postConfigure = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
     substituteInPlace setup.py \
       --replace "click-default-group~=1.2.2" "click-default-group" \
       --replace "hupper~=1.9" "hupper" \

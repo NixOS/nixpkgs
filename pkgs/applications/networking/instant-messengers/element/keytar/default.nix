@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
     cp ${./yarn.lock} ./yarn.lock
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
@@ -37,16 +38,19 @@ in stdenv.mkDerivation rec {
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     node_modules/.bin/node-gyp rebuild
+    runHook postBuild
   '';
 
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
     shopt -s extglob
     rm -rf node_modules
     rm -rf $HOME
     mkdir -p $out
     cp -r ./!(build) $out
     install -D -t $out/build/Release build/Release/keytar.node
+    runHook postInstall
   '';
 }

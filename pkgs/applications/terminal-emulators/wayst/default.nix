@@ -21,15 +21,12 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "Wayst";
     name = "wayst";
+    genericName = "Terminal";
     exec = "wayst";
     icon = "wayst";
-    terminal = "false";
-    categories = "System;TerminalEmulator";
+    categories = [ "System" "TerminalEmulator" ];
+    keywords = [ "wayst" "terminal" ];
     comment = "A simple terminal emulator";
-    extraEntries = ''
-      GenericName=Terminal
-      Keywords=wayst;terminal;
-    '';
   };
 in
 stdenv.mkDerivation rec {

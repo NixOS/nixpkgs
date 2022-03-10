@@ -2,16 +2,15 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-
+, ftfy
 , mailchecker
 , phonenumbers
+, pytestCheckHook
 , python-dateutil
 , python-fsutil
+, pythonOlder
 , python-slugify
 , pyyaml
-, ftfy
 , requests
 , six
 , toml
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.24.3";
+  version = "0.25.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = version;
-    hash = "sha256-06n8MNoGQRSrBK2XeEBBoQ2NIXWf0qXPVBeP9ERMEj0=";
+    hash = "sha256-G7pTbxNcESMUiKpQxjiF0gwN5mBhmuwIDlzauN5JCB4=";
   };
 
   propagatedBuildInputs = [

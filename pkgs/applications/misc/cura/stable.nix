@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     comment = "Cura";
     desktopName = "Cura";
     genericName = "3D printing host software";
-    categories = "GNOME;GTK;Utility;";
+    categories = [ "GNOME" "GTK" "Utility" ];
   };
 
   python_deps = with python27Packages; [ pyopengl pyserial numpy wxPython30 power setuptools ];

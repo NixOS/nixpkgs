@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "realvnc-vnc-viewer";
-  version = "6.21.920";
+  version = "6.21.1109";
 
   src = {
     "x86_64-linux" = fetchurl {
       url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
-      sha256 = "1qghc5380h4b2pczksmky3kcffz5wn9shw033w4f969wl96p31fz";
+      sha256 = "12zxp9kvi070nzxbrnrfsyla38ryb69zlidw6cvypmsgqnylfxj7";
     };
     "i686-linux" = fetchurl {
       url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x86.rpm";
-      sha256 = "034iwqxpqhnm6i292fakva7vkwrrzamwcvbm7xyccpd54adj0grn";
+      sha256 = "03vhdmzyd16r0kdxpkq9azyy1h705lk4sbgnbw5fr8gkifwng60f";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
     };
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

@@ -125,13 +125,18 @@ in
     virtualisation.memorySize = 2 * 1024;
     networking.domain = domain;
     networking.extraHosts = ''
-      ${config.networking.primaryIPAddress} meta.${domain}
       ${config.networking.primaryIPAddress} builds.${domain}
+      ${config.networking.primaryIPAddress} git.${domain}
+      ${config.networking.primaryIPAddress} meta.${domain}
     '';
 
     services.sourcehut = {
       enable = true;
-      services = [ "meta" "builds" ];
+      services = [
+        "builds"
+        "git"
+        "meta"
+      ];
       nginx.enable = true;
       nginx.virtualHost = {
         forceSSL = true;
@@ -148,6 +153,8 @@ in
         #enableWorker = true;
         inherit images;
       };
+      git.enable = true;
+
       settings."sr.ht" = {
         global-domain = config.networking.domain;
         service-key = pkgs.writeText "service-key" "8b327279b77e32a3620e2fc9aabce491cc46e7d821fd6713b2a2e650ce114d01";
@@ -156,6 +163,10 @@ in
       settings."builds.sr.ht" = {
         oauth-client-secret = pkgs.writeText "buildsrht-oauth-client-secret" "2260e9c4d9b8dcedcef642860e0504bc";
         oauth-client-id = "299db9f9c2013170";
+      };
+      settings."git.sr.ht" = {
+        oauth-client-secret = pkgs.writeText "gitsrht-oauth-client-secret" "3597288dc2c716e567db5384f493b09d";
+        oauth-client-id = "d07cb713d920702e";
       };
       settings.webhooks.private-key = pkgs.writeText "webhook-key" "Ra3IjxgFiwG9jxgp4WALQIZw/BMYt30xWiOsqD0J7EA=";
     };
@@ -193,5 +204,9 @@ in
     machine.wait_for_open_port(5002)
     machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
     #machine.wait_for_unit("buildsrht-worker.service")
+
+    # Testing gitsrht
+    machine.wait_for_unit("gitsrht.service")
+    machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
   '';
 })

@@ -4,11 +4,11 @@ gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "birdfont";
-  version = "2.29.6";
+  version = "2.30.0";
 
   src = fetchurl {
     url = "https://birdfont.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-INHLH3wv1Rr3RLECAN2CQvctIjWdksxdfVfBkWnx+Is=";
+    sha256 = "sha256-aIhJXmzLY2Sw9mFe2AmLkXb+YRnFu1pMnFeDF+zfHRE=";
   };
 
   nativeBuildInputs = [ python3 pkg-config vala gobject-introspection wrapGAppsHook ];

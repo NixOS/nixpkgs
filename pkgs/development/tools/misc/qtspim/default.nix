@@ -1,22 +1,16 @@
 { lib, stdenv, fetchsvn, wrapQtAppsHook, qtbase, qttools, qmake, bison, flex, ... }:
 stdenv.mkDerivation rec {
   pname = "qtspim";
-  version = "9.1.22";
+  version = "9.1.23";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/spimsimulator/code/";
-    rev = "r739";
-    sha256 = "1kazfgrbmi4xq7nrkmnqw1280rhdyc1hmr82flrsa3g1b1rlmj1s";
+    rev = "r749";
+    sha256 = "0iazl7mlcilrdbw8gb98v868a8ldw2lmkn1xs8hnfvr93l6aj0rp";
   };
 
   postPatch = ''
     cd QtSpim
-
-    # Patches from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qtspim
-    sed -i 's/zero_imm/is_zero_imm/g' parser_yacc.cpp
-    sed -i 's/^int data_dir/bool data_dir/g' parser_yacc.cpp
-    sed -i 's/^int text_dir/bool text_dir/g' parser_yacc.cpp
-    sed -i 's/^int parse_error_occurred/bool parse_error_occurred/g' parser_yacc.cpp
 
     substituteInPlace QtSpim.pro --replace /usr/lib/qtspim/lib $out/lib
     substituteInPlace menu.cpp \
@@ -55,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "New user interface for spim, a MIPS simulator";
     homepage = "http://spimsimulator.sourceforge.net/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.linux;
   };
 }

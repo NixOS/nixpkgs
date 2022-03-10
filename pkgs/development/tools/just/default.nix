@@ -2,28 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.10.7";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-53dyy/jpmQCjOoZ9Wvec0iQMWKVVrt1WQDCGhXH53Mg=";
+    sha256 = "sha256-ssc6djhSk0xV4jdlTmehWX6UMBPAuebtYlzWRZ/32mM=";
   };
 
-  cargoSha256 = "sha256-cDwuhOJ5/SFCQKJqmN6rPYahW/ctjE0hFr6SpgVzyis=";
+  cargoSha256 = "sha256-ynYK37nCfIiy1CHBEQ/vMHOAPY/pp/lF/tSl9MJD7fY=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
-  postInstall = ''
-    installManPage man/just.1
-
-    installShellCompletion --cmd just \
-      --bash completions/just.bash \
-      --fish completions/just.fish \
-      --zsh  completions/just.zsh
-  '';
 
   checkInputs = [ coreutils bash ];
 
@@ -49,9 +40,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
     "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
-    "--skip=status_error" # "exit status" instead of "exit code"
-    "--skip=exit_status" # "exit status" instead of "exit code"
   ];
+
+  postInstall = ''
+    installManPage man/just.1
+
+    installShellCompletion --cmd just \
+      --bash completions/just.bash \
+      --fish completions/just.fish \
+      --zsh completions/just.zsh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/casey/just";

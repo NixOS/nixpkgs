@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   pname = "lablgtk";
   inherit (param) version src;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib gtk2 libgnomecanvas gtksourceview ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  buildInputs = [ gtk2 libgnomecanvas gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];

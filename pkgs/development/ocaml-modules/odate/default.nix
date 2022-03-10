@@ -17,7 +17,9 @@ buildDunePackage rec {
     sha256 = "1dk33lr0g2jnia2gqsm6nnc7nf256qgkm3v30w477gm6y2ppfm3h";
   };
 
-  buildInputs = [ menhir ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ menhir ];
 
   meta = {
     description = "Date and duration in OCaml";

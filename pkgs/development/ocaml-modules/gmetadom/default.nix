@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     configureFlags="--with-ocaml-lib-prefix=$out/lib/ocaml/${ocaml.version}/site-lib"
   '';
 
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ocaml findlib gdome2 libxslt];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  buildInputs = [ gdome2 libxslt];
   propagatedBuildInputs = [gdome2];
+
+  strictDeps = true;
 
   meta = {
     homepage = "http://gmetadom.sourceforge.net/";

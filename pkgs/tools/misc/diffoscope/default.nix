@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "203";
+  version = "207";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-xDH4Bd87hRnQ0xOeJijeon2RNAnvD3vfpvJgXoAXWAA=";
+    sha256 = "sha256-0PWnaOQV4Pj0hFMpn98xYhZDexctkweIE2ZM3ppYfvg=";
   };
 
   outputs = [ "out" "man" ];
@@ -77,6 +77,9 @@ python3Packages.buildPythonApplication rec {
     # Failing because of file-v5.40 has a slightly different output.
     # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
     "test_text_proper_indentation"
+
+    # fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"

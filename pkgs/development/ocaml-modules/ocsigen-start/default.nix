@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
-, cohttp-lwt-unix
+, cohttp-lwt-unix, eliom
 , resource-pooling
 , ocamlnet
 }:
@@ -8,8 +8,10 @@ stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocsigen-start";
   version = "4.3.0";
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib eliom ];
   propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ocamlnet ];
+
+  strictDeps = true;
 
   patches = [ ./templates-dir.patch ];
 

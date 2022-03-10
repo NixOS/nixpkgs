@@ -15,8 +15,8 @@ let
     desktopName = "Geogebra";
     genericName = "Geogebra";
     comment = meta.description;
-    categories = "Education;Science;Math;";
-    mimeType = "application/vnd.geogebra.file;application/vnd.geogebra.tool;";
+    categories = [ "Education" "Science" "Math" ];
+    mimeTypes = [ "application/vnd.geogebra.file" "application/vnd.geogebra.tool" ];
   };
 
   meta = with lib; {

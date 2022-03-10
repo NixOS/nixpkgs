@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     comment = "Launcher for Pharo distributions";
     desktopName = "Pharo";
     genericName = "Pharo";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   # because upstream tarball has no top-level directory.

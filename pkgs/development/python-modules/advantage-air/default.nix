@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "advantage-air";
-  version = "0.2.6";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "advantage_air";
     inherit version;
-    hash = "sha256-n7Vl5fLEpkAEi4NrsoJlwwdaGcxnXURLdGN0etHgmOE=";
+    hash = "sha256-C+cB6oHmbr9mHZKnbls42yenQy3+L8huLk9wKazIWfU=";
   };
 
   propagatedBuildInputs = [

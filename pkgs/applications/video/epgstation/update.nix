@@ -13,7 +13,7 @@ let
     inherit pname version;
     attrPath = lib.toLower pname;
     rev-prefix = "v";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${homepage}";
+    versionLister = "${common-updater-scripts}/bin/list-git-tags --url=${homepage}";
   };
   updateScript = builtins.elemAt updater 0;
   updateArgs = map (lib.escapeShellArg) (builtins.tail updater);

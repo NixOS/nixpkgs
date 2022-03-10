@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "amcrest";
-  version = "1.9.3";
+  version = "1.9.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tchellomello";
     repo = "python-amcrest";
     rev = version;
-    sha256 = "0f9l8xbn40xwx2zzssx5qmkpmv82j6syj8ncnmm6z9dc5wpr6sw7";
+    sha256 = "sha256-smwPKZLevolNvpkLxoFR3NGL9YFPlBk3WYQqJXBaS7s=";
   };
 
   propagatedBuildInputs = [

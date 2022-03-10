@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , jupyter_console
 , jupyter_core
@@ -8,7 +8,7 @@
 , txzmq
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "ilua";
   version = "0.2.1";
   format = "pyproject";

@@ -17,7 +17,7 @@ let
 
     # exclude prerelease versions
     versionLister = writers.writeBash "list-mirakurun-versions" ''
-      ${common-updater-scripts}/bin/list-git-tags ${homepage} \
+      ${common-updater-scripts}/bin/list-git-tags --url=${homepage} \
         | grep '^[0-9]\+\.[0-9]\+\.[0-9]\+$'
     '';
   };

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor";
-  version = "5.8.20";
+  version = "5.8.33";
 
   src = fetchurl {
     url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
-    sha256 = "sha256-2YfjTRTC/ZvgnV4tEY4wwoqUeUG8+0SCYuRPBzQ8ba4=";
+    sha256 = "sha256-sgLF/NpaNlkL5iA1l7QzMiYKwRcMDu2DHdTIaeHOtfI=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];

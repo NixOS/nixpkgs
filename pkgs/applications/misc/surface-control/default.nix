@@ -1,19 +1,20 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, coreutils }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, installShellFiles, udev, coreutils }:
 
 rustPlatform.buildRustPackage rec {
   pname = "surface-control";
-  version = "0.3.1-2";
+  version = "0.4.1-2";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SLJ4mwBafLGL5pneMTHLc4S4Tgds2xLqByWFH95TK1k=";
+    sha256 = "sha256-ZgtEmjk1HwoKkyuOiMWalK5RPb3ML8HM/wwz8OM9HoI=";
   };
 
-  cargoSha256 = "sha256-NH33AMuwf4bOF9zZJlONVMYgrrYSBq5VQClYW/rbzsM=";
+  cargoSha256 = "sha256-CsPyY/NA2+Lecemuor2nHd6yzf2PvMK7NZyvY3vewpI=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
+  buildInputs = [ udev ];
 
   postInstall = ''
     installShellCompletion \

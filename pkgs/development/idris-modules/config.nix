@@ -7,7 +7,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "config";
+  pname = "config";
   version = "2017-11-06";
 
   idrisDeps = [ effects containers lightyear test ];

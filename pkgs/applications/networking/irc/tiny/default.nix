@@ -3,9 +3,11 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, dbus
-, openssl
 , Foundation
+, dbusSupport ? stdenv.isLinux, dbus
+# rustls will be used for TLS if useOpenSSL=false
+, useOpenSSL ? stdenv.isLinux, openssl
+, notificationSupport ? stdenv.isLinux
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +24,11 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "05q3f1wp48mwkz8n0102rwb6jzrgpx3dlbxzf3zcw8r1mblgzim1";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
-  buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
+  buildInputs = lib.optionals dbusSupport [ dbus ]
+                ++ lib.optionals useOpenSSL [ openssl ]
+                ++ lib.optional stdenv.isDarwin Foundation;
 
-  buildFeatures = lib.optional stdenv.isLinux "desktop-notifications";
+  buildFeatures = lib.optional notificationSupport "desktop-notifications";
 
   meta = with lib; {
     description = "A console IRC client";

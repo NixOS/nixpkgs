@@ -26,6 +26,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "resolvelib"
+  ];
+
   meta = with lib; {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";

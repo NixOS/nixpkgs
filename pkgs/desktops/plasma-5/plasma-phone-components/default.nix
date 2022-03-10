@@ -16,7 +16,7 @@
 let inherit (lib) getBin getLib; in
 
 mkDerivation {
-  name = "plasma-phone-components";
+  pname = "plasma-phone-components";
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

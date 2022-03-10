@@ -42,6 +42,26 @@
           upgrade notes</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          systemd services can now set
+          <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>
+          instead of <literal>reloadIfChanged</literal> for a more
+          granular distinction between reloads and restarts.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
+          defaults to 1.22.4, which will enable
+          <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
+          Metadata Service Version 2</link> and require tokens on new
+          clusters with Kubernetes 1.22. This will increase security by
+          default, but may break some types of workloads. See the
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">release
+          notes</link> for details.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -90,7 +110,7 @@
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
           OSPF, IS-IS, VVRP and others). Available as
-          <link linkend="opt-services.ffr.babel.enable">services.frr</link>
+          <link linkend="opt-services.frr.babel.enable">services.frr</link>
         </para>
       </listitem>
       <listitem>
@@ -98,6 +118,13 @@
           <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
           a bouncer-style Matrix IRC bridge. Available as
           <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://snowflake.torproject.org/">snowflake-proxy</link>,
+          a system to defeat internet censorship. Available as
+          <link xlink:href="options.html#opt-services.snowflake-proxy.enable">services.snowflake-proxy</link>.
         </para>
       </listitem>
       <listitem>
@@ -112,6 +139,21 @@
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
+          an admin interface for the PostgreSQL database. Available at
+          <link xlink:href="options.html#opt-services.pgadmin.enable">services.pgadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/sezanzeb/input-remapper">input-remapper</link>,
+          an easy to use tool to change the mapping of your input device
+          buttons. Available at
+          <link xlink:href="options.html#opt-services.input-remapper.enable">services.input-remapper</link>.
         </para>
       </listitem>
       <listitem>
@@ -131,6 +173,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.scorchworks.com/K40whisperer/k40whisperer.html">K40-Whisperer</link>,
+          a program to control cheap Chinese laser cutters. Available as
+          <link xlink:href="options.html#opt-programs.k4-whisperer.enable">programs.k40-whisperer.enable</link>.
+          Users must add themselves to the <literal>k40</literal> group
+          to be able to access the device.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
           a Prometheus exporter for mtr metrics. Available as
           <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
@@ -142,6 +193,14 @@
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
           <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
+          a very simple server for the Gemini hypertext protocol.
+          Available as
+          <link xlink:href="options.html#opt-services.agate.enable">services.agate</link>.
         </para>
       </listitem>
       <listitem>
@@ -172,7 +231,7 @@
         <para>
           <link xlink:href="https://moosefs.com">moosefs</link>, fault
           tolerant petabyte distributed file system. Available as
-          <link linkend="opt-services.moosefs">moosefs</link>.
+          <link linkend="opt-services.moosefs.client.enable">moosefs</link>.
         </para>
       </listitem>
       <listitem>
@@ -212,6 +271,13 @@
           <link xlink:href="https://tailscale.io">Tailscale</link>
           Control Server. Available as
           <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
+          fast and lightweight DNS proxy as ad-blocker for local network
+          with many features.
         </para>
       </listitem>
     </itemizedlist>
@@ -255,6 +321,23 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>home-assistant</literal> module now requires
+          users that don’t want their configuration to be managed
+          declaratively to set
+          <literal>services.home-assistant.config = null;</literal>.
+          This is required due to the way default settings are handled
+          with the new settings style.
+        </para>
+        <para>
+          Additionally the default list of
+          <literal>extraComponents</literal> now includes the minimal
+          dependencies to successfully complete the
+          <link xlink:href="https://www.home-assistant.io/getting-started/onboarding/">onboarding</link>
+          procedure.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.emacsPackages.orgPackages</literal> is removed
           because org elpa is deprecated. The packages in the top level
           of <literal>pkgs.emacsPackages</literal>, such as org and
@@ -268,6 +351,31 @@
         <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.kubernetes.scheduler.{port,address}</literal>
+          now set <literal>--secure-port</literal> and
+          <literal>--bind-address</literal> instead of
+          <literal>--port</literal> and <literal>--address</literal>,
+          since the former have been deprecated and are no longer
+          functional in kubernetes&gt;=1.23. Ensure that you are not
+          relying on the insecure behaviour before upgrading.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.k3s.enable</literal> no longer implies
+          <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>,
+          and will default to the <quote>systemd</quote> cgroup driver
+          when using <literal>services.k3s.docker = true</literal>. This
+          change may require a reboot to take effect, and k3s may not be
+          able to run if the boot cgroup hierarchy does not match its
+          configuration. The previous behavior may be retained by
+          explicitly setting
+          <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>
+          in your configuration.
         </para>
       </listitem>
       <listitem>
@@ -292,6 +400,116 @@
           The <literal>mailpile</literal> email webclient
           (<literal>services.mailpile</literal>) has been removed due to
           its reliance on python2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>matrix-synapse</literal> service
+          (<literal>services.matrix-synapse</literal>) has been
+          converted to use the <literal>settings</literal> option
+          defined in RFC42. This means that options that are part of
+          your <literal>homeserver.yaml</literal> configuration, and
+          that were specified at the top-level of the module
+          (<literal>services.matrix-synapse</literal>) now need to be
+          moved into
+          <literal>services.matrix-synapse.settings</literal>. And while
+          not all options you may use are defined in there, they are
+          still supported, because you can set arbitrary values in this
+          freeform type.
+        </para>
+        <para>
+          An example to make the required migration clearer:
+        </para>
+        <para>
+          Before:
+        </para>
+        <programlisting language="bash">
+{
+  services.matrix-synapse = {
+    enable = true;
+
+    server_name = &quot;example.com&quot;;
+    public_baseurl = &quot;https://example.com:8448&quot;;
+
+    enable_registration = false;
+    registration_shared_secret = &quot;xohshaeyui8jic7uutuDogahkee3aehuaf6ei3Xouz4iicie5thie6nohNahceut&quot;;
+    macaroon_secret_key = &quot;xoo8eder9seivukaiPh1cheikohquuw8Yooreid0The4aifahth3Ou0aiShaiz4l&quot;;
+
+    tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+    tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+
+    listeners = [ {
+      port = 8448;
+      bind_address = &quot;&quot;;
+      type = &quot;http&quot;;
+      tls = true;
+      resources = [ {
+        names = [ &quot;client&quot; ];
+        compress = true;
+      } {
+        names = [ &quot;federation&quot; ];
+        compress = false;
+      } ];
+    } ];
+
+  };
+}
+</programlisting>
+        <para>
+          After:
+        </para>
+        <programlisting language="bash">
+{
+  services.matrix-synapse = {
+    enable = true;
+
+    # this attribute set holds all values that go into your homeserver.yaml configuration
+    # See https://github.com/matrix-org/synapse/blob/develop/docs/sample_config.yaml for
+    # possible values.
+    settings = {
+      server_name = &quot;example.com&quot;;
+      public_baseurl = &quot;https://example.com:8448&quot;;
+
+      enable_registration = false;
+      # pass `registration_shared_secret` and `macaroon_secret_key` via `extraConfigFiles` instead
+
+      tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+      tls_certificate_path = &quot;/var/lib/acme/example.com/fullchain.pem&quot;;
+
+      listeners = [ {
+        port = 8448;
+        bind_address = [
+          &quot;::&quot;
+          &quot;0.0.0.0&quot;
+        ];
+        type = &quot;http&quot;;
+        tls = true;
+        resources = [ {
+          names = [ &quot;client&quot; ];
+          compress = true;
+        } {
+          names = [ &quot;federation&quot; ];
+          compress = false;
+        } ];
+      } ];
+    };
+
+    extraConfigFiles = [
+      /run/keys/matrix-synapse/secrets.yaml
+    ];
+  };
+}
+</programlisting>
+        <para>
+          The secrets in your original config should be migrated into a
+          YAML file that is included via
+          <literal>extraConfigFiles</literal>.
+        </para>
+        <para>
+          Additionally a few option defaults have been synced up with
+          upstream default values, for example the
+          <literal>max_upload_size</literal> grew from
+          <literal>10M</literal> to <literal>50M</literal>.
         </para>
       </listitem>
       <listitem>
@@ -356,6 +574,15 @@
       </listitem>
       <listitem>
         <para>
+          Ntopng (<literal>services.ntopng</literal>) is updated to
+          5.2.1 and uses a separate Redis instance if
+          <literal>system.stateVersion</literal> is at least
+          <literal>22.05</literal>. Existing setups shouldn’t be
+          affected.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The backward compatibility in
           <literal>services.wordpress</literal> to configure sites with
           the old interface has been removed. Please use
@@ -374,6 +601,13 @@
         <para>
           opensmtpd-extras is no longer build with python2 scripting
           support due to python2 deprecation in nixpkgs
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.miniflux.adminCredentialFiles</literal> is
+          now required, instead of defaulting to
+          <literal>admin</literal> and <literal>password</literal>.
         </para>
       </listitem>
       <listitem>
@@ -464,6 +698,21 @@
       </listitem>
       <listitem>
         <para>
+          The F-PROT antivirus (<literal>fprot</literal> package) and
+          its service module were removed because it reached
+          <link xlink:href="https://kb.cyren.com/av-support/index.php?/Knowledgebase/Article/View/434/0/end-of-sale--end-of-life-for-f-prot-and-csam">end-of-life</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>bird1</literal> and its modules
+          <literal>services.bird</literal> as well as
+          <literal>services.bird6</literal> have been removed. Upgrade
+          to <literal>services.bird2</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The options
           <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
           and
@@ -492,6 +741,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>systemd-nspawn@.service</literal> settings have been
+          reverted to the default systemd behaviour. User namespaces are
+          now activated by default. If you want to keep running nspawn
+          containers without user namespaces you need to set
+          <literal>systemd.nspawn.&lt;name&gt;.execConfig.PrivateUsers = false</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The terraform 0.12 compatibility has been removed and the
           <literal>terraform.withPlugins</literal> and
           <literal>terraform-providers.mkProvider</literal>
@@ -510,6 +768,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>dendrite</literal> package has been upgraded from
+          0.5.1 to
+          <link xlink:href="https://github.com/matrix-org/dendrite/releases/tag/v0.6.5">0.6.5</link>.
+          Instances configured with split sqlite databases, which has
+          been the default in NixOS, require merging of the federation
+          sender and signing key databases. See upstream
+          <link xlink:href="https://github.com/matrix-org/dendrite/releases/tag/v0.6.0">release
+          notes</link> on version 0.6.0 for details on database changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The existing <literal>pkgs.opentelemetry-collector</literal>
           has been moved to
           <literal>pkgs.opentelemetry-collector-contrib</literal> to
@@ -520,6 +790,13 @@
           you refer to. If you don’t need them update your commands from
           <literal>otelcontribcol</literal> to
           <literal>otelcorecol</literal> and enjoy a 7x smaller binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.pgadmin</literal> now refers to
+          <literal>pkgs.pgadmin4</literal>. If you still need pgadmin3,
+          use <literal>pkgs.pgadmin3</literal>.
         </para>
       </listitem>
       <listitem>
@@ -550,6 +827,15 @@
               honors <literal>restartIfChanged</literal> and
               <literal>reloadIfChanged</literal> of the units.
             </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  Preferring to reload instead of restarting can still
+                  be achieved using
+                  <literal>/run/nixos/activation-reload-list</literal>.
+                </para>
+              </listitem>
+            </itemizedlist>
           </listitem>
           <listitem>
             <para>
@@ -611,10 +897,93 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>vpnc</literal> package has been changed to use
+          GnuTLS instead of OpenSSL by default for licensing reasons.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.vimPlugins.onedark-nvim</literal> now refers to
           <link xlink:href="https://github.com/navarasu/onedark.nvim">navarasu/onedark.nvim</link>
           (formerly refers to
           <link xlink:href="https://github.com/olimorris/onedarkpro.nvim">olimorris/onedarkpro.nvim</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.pipewire.enable</literal> will default to
+          enabling the WirePlumber session manager instead of
+          pipewire-media-session. pipewire-media-session is deprecated
+          by upstream and not recommended, but can still be manually
+          enabled by setting
+          <literal>services.pipewire.media-session.enable</literal> to
+          <literal>true</literal> and
+          <literal>services.pipewire.wireplumber.enable</literal> to
+          <literal>false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.makeDesktopItem</literal> has been refactored to
+          provide a more idiomatic API. Specifically:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              All valid options as of FDO Desktop Entry specification
+              version 1.4 can now be passed in as explicit arguments
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>exec</literal> can now be null, for entries that
+              are not of type Application
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>mimeType</literal> argument is renamed to
+              <literal>mimeTypes</literal> for consistency
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>mimeTypes</literal>,
+              <literal>categories</literal>,
+              <literal>implements</literal>,
+              <literal>keywords</literal>, <literal>onlyShowIn</literal>
+              and <literal>notShowIn</literal> take lists of strings
+              instead of one string with semicolon separators
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>extraDesktopEntries</literal> renamed to
+              <literal>extraConfig</literal> for consistency
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Actions should now be provided as an attrset
+              <literal>actions</literal>, the <literal>Actions</literal>
+              line will be autogenerated.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>extraEntries</literal> is removed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Additional validation is added both at eval time and at
+              build time.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          See the <literal>vscode</literal> package for a more detailed
+          example.
         </para>
       </listitem>
     </itemizedlist>
@@ -727,6 +1096,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>programs.zsh.autosuggestions.strategy</literal> now
+          takes a list of strings instead of a string.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.unifi.openPorts</literal> option default
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
@@ -804,11 +1179,28 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nixos-generate-config</literal> now puts the dhcp
+          configuration in <literal>hardware-configuration.nix</literal>
+          instead of <literal>configuration.nix</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>fetchFromSourcehut</literal> now allows fetching
           repositories recursively using <literal>fetchgit</literal> or
           <literal>fetchhg</literal> if the argument
           <literal>fetchSubmodules</literal> is set to
           <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>element-desktop</literal> package now has an
+          <literal>useKeytar</literal> option (defaults to
+          <literal>true</literal>), which allows disabling
+          <literal>keytar</literal> and in turn
+          <literal>libsecret</literal> usage (which binds to native
+          credential managers / keychain libraries).
         </para>
       </listitem>
       <listitem>
@@ -824,6 +1216,14 @@
         <para>
           The <literal>firmwareLinuxNonfree</literal> package has been
           renamed to <literal>linux-firmware</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          It is now possible to specify wordlists to include as handy to
+          access environment variables using the
+          <literal>config.environment.wordlist</literal> configuration
+          options.
         </para>
       </listitem>
       <listitem>
@@ -853,9 +1253,22 @@
       </listitem>
       <listitem>
         <para>
+          The <link xlink:href="https://dino.im">Dino</link> XMPP client
+          was updated to 0.3, adding support for audio and video calls.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mattermost.plugins</literal> has been added
           to allow the declarative installation of Mattermost plugins.
           Plugins are automatically repackaged using autoPatchelf.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.logrotate.enable</literal> now defaults to
+          true if any rotate path has been defined, and some paths have
+          been added by default.
         </para>
       </listitem>
       <listitem>
@@ -896,11 +1309,30 @@
       </listitem>
       <listitem>
         <para>
+          The option
+          <link linkend="opt-networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
+          was added to support FCC unlock procedures. Since release
+          1.18.4, the ModemManager daemon no longer automatically
+          performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the
+          docs</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>programs.tmux</literal> has a new option
           <literal>plugins</literal> that accepts a list of packages
           from the <literal>tmuxPlugins</literal> group. The specified
           packages are added to the system and loaded by
           <literal>tmux</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The polkit service, available at
+          <literal>security.polkit.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed.
         </para>
       </listitem>
     </itemizedlist>

@@ -15,13 +15,10 @@ buildPythonPackage rec {
     sha256 = "76ff14fe5d304708ccad1284e4b11f96a658949a31ee7faed9e0995279549b91";
   };
 
-  nativeBuildInputs = [
-    pbr
-  ];
-
   propagatedBuildInputs = [
     attrs
     jsonpickle
+    pbr
   ];
 
   checkInputs =[

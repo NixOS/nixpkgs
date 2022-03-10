@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.6";
+  version = "4.3.0";
   pname = "randoop";
 
   src = fetchurl {
     url = "https://github.com/randoop/randoop/releases/download/v${version}/${pname}-${version}.zip";
-    sha256 = "sha256-69cKAyMwORG4A91OARmY4uQKgBZIx9N/zc7TZ086CK0=";
+    sha256 = "sha256-3svBmXcRvscaK8YD4qm/geQSJ6cAm0en/d7H09h41PQ=";
   };
 
   nativeBuildInputs = [ unzip ];

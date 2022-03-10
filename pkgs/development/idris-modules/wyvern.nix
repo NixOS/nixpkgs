@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "wyvern";
+  pname = "wyvern";
   version = "2017-06-26";
 
   idrisDeps = [ contrib effects ];

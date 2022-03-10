@@ -9,6 +9,7 @@
 , num
 , ppxlib
 , re
+, findlib
 }:
 
 buildDunePackage rec {
@@ -26,16 +27,20 @@ buildDunePackage rec {
     sha256 = "15cjb9ygnvp2kv85rrb7ncz7yalifyl7wd2hp2cl8r1qrpgi1d0w";
   };
 
+  nativeBuildInputs = [ cppo ];
+
   buildInputs = [
     bigarray-compat
     containers
-    cppo
     ctypes
     integers
     num
     ppxlib
     re
+    findlib
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/fdopen/ppx_cstubs";

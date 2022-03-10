@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodbus";
-  version = "3.1.6";
+  version = "3.1.7";
 
   src = fetchurl {
     url = "http://libmodbus.org/releases/libmodbus-${version}.tar.gz";
-    sha256 = "05kwz0n5gn9m33cflzv87lz3zp502yp8fpfzbx70knvfl6agmnfp";
+    sha256 = "sha256-ff6VhDHQVwsnHhpbMpt2pljonGFM8RnrWq23Jch/j70=";
   };
 
   configureFlags = [

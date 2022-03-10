@@ -24,24 +24,13 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     udev
-    v4l-utils.lib
+    v4l-utils
   ];
-
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
-
-  # Works around the issue with rust-bindgen and the Nix gcc wrapper:
-  # https://hoverbear.org/blog/rust-bindgen-in-nix/
-  preBuild = ''
-    export BINDGEN_EXTRA_CLANG_ARGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
-    $(< ${stdenv.cc}/nix-support/cc-cflags) \
-    -isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include \
-    -idirafter ${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.config}/${lib.getVersion stdenv.cc.cc}/include \
-    -idirafter ${v4l-utils.dev}/include"
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/wluma \

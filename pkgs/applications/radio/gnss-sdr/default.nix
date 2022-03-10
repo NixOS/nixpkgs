@@ -7,78 +7,97 @@
 , gtest
 , openssl
 , gflags
-, gnuradio3_8
+, gnuradio
 , thrift
-, libpcap
+, enableRawUdp ? true, libpcap
 , orc
 , pkg-config
-, uhd
-, log4cpp
 , blas, lapack
 , matio
 , pugixml
 , protobuf
 }:
 
-gnuradio3_8.pkgs.mkDerivation rec {
+gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  # There's an issue with cpufeatures on 0.0.15, see:
-  # https://github.com/NixOS/nixpkgs/pull/142557#issuecomment-950217925
-  version = "0.0.13";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "0a3k47fl5dizzhbqbrbmckl636lznyjby2d2nz6fz21637hvrnby";
+    sha256 = "sha256-ODe4k6PDGtDX11FrbggEbN3tc4UtATaItUIpCKl4JjM=";
   };
+
+  patches = [
+    # Use the relative install location for volk_gnsssdr_module and
+    # cpu_features which is bundled in the source. NOTE: Perhaps this patch
+    # should be sent upstream.
+    ./fix_libcpu_features_install_path.patch
+  ];
 
   nativeBuildInputs = [
     cmake
-    gnuradio3_8.unwrapped.python
-    gnuradio3_8.unwrapped.python.pkgs.Mako
-    gnuradio3_8.unwrapped.python.pkgs.six
+    pkg-config
+    gnuradio.unwrapped.python
+    gnuradio.unwrapped.python.pkgs.Mako
+    gnuradio.unwrapped.python.pkgs.six
+  ];
+  checkInputs = [
+    gtest
   ];
 
   buildInputs = [
     gmp
     armadillo
-    gnuradio3_8.unwrapped.boost
     glog
-    gtest
-    openssl
     gflags
+    openssl
     orc
-    # UHD support is optional, but gnuradio is built with it, so there's
-    # nothing to be gained by leaving it out.
-    gnuradio3_8.unwrapped.uhd
-    log4cpp
     blas lapack
     matio
     pugixml
     protobuf
-    gnuradio3_8.pkgs.osmosdr
+    gnuradio.unwrapped.boost
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
+    gnuradio.unwrapped.uhd
+  ] ++ (if (lib.versionAtLeast gnuradio.unwrapped.versionAttr.major "3.10") then [
+    gnuradio.unwrapped.spdlog
+  ] else [
+    gnuradio.unwrapped.log4cpp
+  ]) ++ lib.optionals (enableRawUdp) [
     libpcap
-  ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift
-    gnuradio3_8.unwrapped.python.pkgs.thrift
+    gnuradio.unwrapped.python.pkgs.thrift
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-pdu" || gnuradio.hasFeature "gr-iio") [
+    gnuradio.unwrapped.libiio
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-pdu") [
+    gnuradio.unwrapped.libad9361
   ];
 
   cmakeFlags = [
-    "-DGFlags_ROOT_DIR=${gflags}/lib"
+    "-DGFlags_INCLUDE_DIRS=${gflags}/include"
     "-DGLOG_INCLUDE_DIR=${glog}/include"
+    # Should use .dylib if darwin support is requested
+    "-DGFlags_LIBS=${gflags}/lib/libgflags.so"
+    "-DGLOG_LIBRARIES=${glog}/lib/libglog.so"
+    # Use our dependencies glog, gflags and armadillo dependencies
+    "-DENABLE_OWN_GLOG=OFF"
+    "-DENABLE_OWN_ARMADILLO=OFF"
+    "-DENABLE_ORC=ON"
+    "-DENABLE_LOG=ON"
+    "-DENABLE_RAW_UDP=${if enableRawUdp then "ON" else "OFF"}"
+    "-DENABLE_UHD=${if (gnuradio.hasFeature "gr-uhd") then "ON" else "OFF"}"
+    "-DENABLE_FMCOMMS2=${if (gnuradio.hasFeature "gr-iio" && gnuradio.hasFeature "gr-pdu") then "ON" else "OFF"}"
+    "-DENABLE_PLUTOSDR=${if (gnuradio.hasFeature "gr-iio") then "ON" else "OFF"}"
+    "-DENABLE_AD9361=${if (gnuradio.hasFeature "gr-pdu") then "ON" else "OFF"}"
     "-DENABLE_UNIT_TESTING=OFF"
 
     # gnss-sdr doesn't truly depend on BLAS or LAPACK, as long as
     # armadillo is built using both, so skip checking for them.
-    "-DBLAS=YES"
-    "-DLAPACK=YES"
     "-DBLAS_LIBRARIES=-lblas"
     "-DLAPACK_LIBRARIES=-llapack"
-
-    # Similarly, it doesn't actually use gfortran despite checking for
-    # its presence.
-    "-DGFORTRAN=YES"
   ];
 
   meta = with lib; {
