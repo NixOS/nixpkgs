@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "teletype";
   version = "1.3.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
