@@ -1,35 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, electron, runtimeShell } :
+{ lib
+, stdenv
+, fetchFromGitHub
+, electron
+, runtimeShell
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";
   version = "0.0.1";
 
-  buildInputs = [ electron ];
-
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "tour_of_nix";
     rev = "v${version}";
-    sha256 = "sha256-a/P2ZMc9OpM4PxRFklSO6oVCc96AGWkxtGF/EmnfYSU=";
+    sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ electron ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share
-    cp -R * $out/share
-    chmod 0755 $out/share/ -R
-    echo "#!${runtimeShell}" > $out/bin/nix-tour
-    echo "cd $out/share/" >> $out/bin/nix-tour
-    echo "${electron}/bin/electron $out/share/electron-main.js" >> $out/bin/nix-tour
-    chmod 0755 $out/bin/nix-tour
+    install -d $out/bin $out/share/nix-tour
+    cp -R * $out/share/nix-tour
+    makeWrapper ${electron}/bin/electron $out/bin/nix-tour \
+      --add-flags $out/share/nix-tour/electron-main.js
   '';
 
   meta = with lib; {
     description = "'the tour of nix' from nixcloud.io/tour as offline version";
     homepage = "https://nixcloud.io/tour";
     license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [ qknight yuu ];
   };
-
 }
