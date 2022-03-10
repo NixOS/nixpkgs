@@ -24,6 +24,9 @@ let
     customMemoryManagement = false;
   }).overrideDerivation (args: {
     patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
+
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = null;
   });
 
   common = args:

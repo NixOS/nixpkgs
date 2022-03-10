@@ -21,16 +21,29 @@ cat > "$derivation_file" << EOF
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh"
 EOF
-cabal2nix --extra-arguments expect --extra-arguments runtimeShell --maintainer maralorn "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/${new_version}.tar.gz" | head -n-1 >> "$derivation_file"
+
+cabal2nix \
+  --extra-arguments expect \
+  --extra-arguments runtimeShell\
+  --extra-arguments installShellFiles\
+  --maintainer maralorn \
+  "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/${new_version}.tar.gz" \
+  | head -n-1 >> "$derivation_file"
+
 cat >> "$derivation_file" << EOF
     passthru.updateScript = ./update.sh;
     testTarget = "unit-tests";
+    buildTools = [ installShellFiles ];
     postInstall = ''
         cat > \$out/bin/nom-build << EOF
         #!\${runtimeShell}
         \${expect}/bin/unbuffer nix-build "\\\$@" 2>&1 | exec \$out/bin/nom
         EOF
         chmod a+x \$out/bin/nom-build
+        installShellCompletion --zsh --name _nom-build \${builtins.toFile "completion.zsh" ''
+            #compdef nom-build
+            compdef nom-build=nix-build
+        ''}
     '';
 }
 EOF

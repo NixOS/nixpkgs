@@ -1156,6 +1156,10 @@ let
     systemd = {
       exporterConfig = {
         enable = true;
+
+        extraFlags = [
+          "--collector.enable-restart-count"
+        ];
       };
       metricProvider = { };
       exporterTest = ''
@@ -1164,6 +1168,11 @@ let
         succeed(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep '{}'".format(
+                'systemd_service_restart_total{state="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';
