@@ -20,7 +20,7 @@ The Emacs package comes with some extra helpers to make it easier to configure. 
 }
 ```
 
-You can install it like any other packages via `nix-env -iA myEmacs`. However, this will only install those packages. It will not `configure` them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provide a `default.el` file in `/share/emacs/site-start/`. Emacs knows to load this file automatically when it starts.
+You can install it like any other packages via `nix-env -iA myEmacs`. However, this will only install those packages. It will not `configure` them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provides a `default.el` file in `/share/emacs/site-start/`. Emacs knows to load this file automatically when it starts.
 
 ```nix
 {
@@ -101,9 +101,9 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
 }
 ```
 
-This provides a fairly full Emacs start file. It will load in addition to the user's presonal config. You can always disable it by passing `-q` to the Emacs command.
+This provides a fairly full Emacs start file. It will load in addition to the user's personal config. You can always disable it by passing `-q` to the Emacs command.
 
-Sometimes `emacs.pkgs.withPackages` is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to Melpa Unstable, and the highest for packages manually defined in `pkgs/top-level/emacs-packages.nix`). But you can't control this priorities when some package is installed as a dependency. You can override it on per-package-basis, providing all the required dependencies manually - but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package you can use `overrideScope'`.
+Sometimes `emacs.pkgs.withPackages` is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to Melpa Unstable, and the highest for packages manually defined in `pkgs/top-level/emacs-packages.nix`). But you can't control these priorities when some package is installed as a dependency. You can override it on a per-package-basis, providing all the required dependencies manually, but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package, you can use `overrideScope'`.
 
 ```nix
 overrides = self: super: rec {

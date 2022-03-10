@@ -4,7 +4,7 @@ Urxvt, also known as rxvt-unicode, is a highly customizable terminal emulator.
 
 ## Configuring urxvt {#sec-urxvt-conf}
 
-In `nixpkgs`, urxvt is provided by the package `rxvt-unicode`. It can be configured to include your choice of plugins, reducing its closure size from the default configuration which includes all available plugins. To make use of this functionality, use an overlay or directly install an expression that overrides its configuration, such as
+In `nixpkgs`, urxvt is provided by the package `rxvt-unicode`. It can be configured to include your choice of plugins, reducing its closure size from the default configuration which includes all available plugins. To make use of this functionality, use an overlay or directly install an expression that overrides its configuration, such as:
 
 ```nix
 rxvt-unicode.override {
@@ -58,14 +58,14 @@ rxvt-unicode.override {
 
 ## Packaging urxvt plugins {#sec-urxvt-pkg}
 
-Urxvt plugins resides in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
+Urxvt plugins resides in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin, create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
 
 A plugin can be any kind of derivation, the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`. Look for existing plugins for examples.
 
-If the plugin is itself a perl package that needs to be imported from other plugins or scripts, add the following passthrough:
+If the plugin is itself a Perl package that needs to be imported from other plugins or scripts, add the following passthrough:
 
 ```nix
 passthru.perlPackages = [ "self" ];
 ```
 
-This will make the urxvt wrapper pick up the dependency and set up the perl path accordingly.
+This will make the urxvt wrapper pick up the dependency and set up the Perl path accordingly.

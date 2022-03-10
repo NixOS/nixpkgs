@@ -33,7 +33,7 @@ in snapTools.makeSnap {
 
 ## Build a Graphical Snap {#ssec-pkgs-snapTools-build-a-snap-firefox}
 
-Graphical programs require many more integrations with the host. This example uses Firefox as an example, because it is one of the most complicated programs we could package.
+Graphical programs require many more integrations with the host. This example uses Firefox as an example because it is one of the most complicated programs we could package.
 
 ``` {#ex-snapTools-buildSnap-firefox .nix}
 let
