@@ -28882,6 +28882,8 @@ with pkgs;
 
   styx = callPackage ../applications/misc/styx { };
 
+  sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
