@@ -6001,6 +6001,8 @@ with pkgs;
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
+  gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
+
   gitstats = callPackage ../applications/version-management/gitstats { };
 
   gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
