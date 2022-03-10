@@ -7,7 +7,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "hydro";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-nXeDnqqOuZyrqGTPEQtYlFvrFvy1bZVMF4CA37b0lsE=";
   };
 
