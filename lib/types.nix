@@ -539,6 +539,14 @@ rec {
       modules = toList modules;
     };
 
+    # A module to be imported in some other part of the configuration.
+    deferredModule = mkOptionType {
+      name = "deferredModule";
+      description = "module";
+      check = t: isAttrs t || isFunction t;
+      merge = loc: defs: map (def: lib.setDefaultModuleLocation "${showOption loc} from ${def.file}" def.value) defs;
+    };
+
     # The type of a type!
     optionType = mkOptionType {
       name = "optionType";
