@@ -26073,6 +26073,8 @@ with pkgs;
 
   got = callPackage ../applications/version-management/got { };
 
+  gtkterm = callPackage ../tools/misc/gtkterm { };
+
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
