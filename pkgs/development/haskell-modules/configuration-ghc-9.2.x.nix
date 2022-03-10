@@ -147,6 +147,7 @@ self: super: {
   th-desugar = self.th-desugar_1_13;
   these = doJailbreak super.these;
   time-compat = doJailbreak super.time-compat;
+  tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
   unordered-containers = doJailbreak super.unordered-containers;
   vector = doJailbreak (dontCheck super.vector);
