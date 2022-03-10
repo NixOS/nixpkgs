@@ -8917,6 +8917,8 @@ in {
 
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
+  sabyenc3_4 = callPackage ../development/python-modules/sabyenc3/4.x.nix { };
+
   sabyenc = callPackage ../development/python-modules/sabyenc { };
 
   sacn = callPackage ../development/python-modules/sacn { };

@@ -17,7 +17,7 @@ let
     cryptography
     configobj
     feedparser
-    sabyenc3
+    sabyenc3_4
     puremagic
     guessit
     pysocks
