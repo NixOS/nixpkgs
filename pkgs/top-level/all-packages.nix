@@ -9995,6 +9995,8 @@ with pkgs;
 
   sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
 
+  soundconverter = callPackage ../applications/audio/soundconverter { };
+
   soundkonverter = libsForQt5.soundkonverter;
 
   soundwireserver = callPackage ../applications/audio/soundwireserver { };
@@ -20032,6 +20034,8 @@ with pkgs;
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
   shhopt = callPackage ../development/libraries/shhopt { };
+
+  shine = callPackage ../development/libraries/shine { };
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
