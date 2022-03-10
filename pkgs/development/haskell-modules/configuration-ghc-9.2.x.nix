@@ -126,6 +126,18 @@ self: super: {
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
+  servant = doJailbreak super.servant;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-server = appendPatches [
+    # awaiting release
+    (pkgs.fetchpatch {
+      url = "https://github.com/haskell-servant/servant/commit/61d0d14b5cb01db3d589101b3f17b0178f52e386.diff";
+      stripLen = 1;
+      sha256 = "sha256-trkXnzT4ZGLT2GKRJXQryuscR4K/FqKxSvTf26eePm0=";
+    })
+  ] (doJailbreak super.servant-server);
+  servant-swagger = doJailbreak super.servant-swagger;
+  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
   shelly = doJailbreak super.shelly;
   split = doJailbreak super.split;
   splitmix = doJailbreak super.splitmix;
