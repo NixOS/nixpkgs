@@ -108,6 +108,7 @@ self: super: {
   indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
+  lzma-conduit = doJailbreak super.lzma-conduit;
   ormolu = self.ormolu_0_4_0_0;
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
