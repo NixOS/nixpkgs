@@ -34,11 +34,6 @@
 , extraConfig ? {} # Additional values to be added literally to the final item, e.g. vendor extensions
 }:
 let
-  # FIXME: workaround until https://github.com/NixOS/nixpkgs/pull/162246 lands
-  cleanName = if lib.hasInfix " " name
-                then throw "makeDesktopItem: name must not contain spaces!"
-                else name;
-
   # There are multiple places in the FDO spec that make "boolean" values actually tristate,
   # e.g. StartupNotify, where "unset" is literally defined as "do something reasonable".
   # So, handle null values separately.
@@ -116,8 +111,8 @@ let
   content = [ mainSectionRendered ] ++ actionsRendered;
 in
 writeTextFile {
-  name = "${cleanName}.desktop";
-  destination = "/share/applications/${cleanName}.desktop";
+  name = "${name}.desktop";
+  destination = "/share/applications/${name}.desktop";
   text = builtins.concatStringsSep "\n" content;
-  checkPhase = "${buildPackages.desktop-file-utils}/bin/desktop-file-validate $target";
+  checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
 }
