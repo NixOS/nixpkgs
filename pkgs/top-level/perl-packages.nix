@@ -17611,8 +17611,8 @@ let
     pname = "PDF-API2";
     version = "2.042";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.038.tar.gz";
-      sha256 = "dEfEdJsCp4T1JdPH7OmdNLChBHXbZQlvYxZ0jdL5vQk=";
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.042.tar.gz";
+      sha256 = "0p9wsnn60mcxr4032ahai0d56x8gw76ydym2l4qxq086a10jk6db";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
