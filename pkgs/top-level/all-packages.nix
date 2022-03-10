@@ -5533,6 +5533,8 @@ with pkgs;
 
   flawfinder = callPackage ../development/tools/flawfinder { };
 
+  flintlock = callPackage ../applications/virtualization/flintlock { };
+
   flip-link = callPackage ../development/tools/flip-link { };
 
   flips = callPackage ../tools/compression/flips { };
