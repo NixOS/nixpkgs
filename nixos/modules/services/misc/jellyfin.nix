@@ -73,7 +73,8 @@ in
         PrivateDevices = true;
         PrivateUsers = true;
 
-        ProtectClock = true;
+        # Disabled as it does not allow Jellyfin to interface with CUDA devices
+        # ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
