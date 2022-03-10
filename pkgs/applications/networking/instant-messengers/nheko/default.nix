@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, asciidoc
 , cmark
 , lmdb
 , lmdbxx
@@ -29,26 +30,37 @@
 , libnice
 }:
 
-mkDerivation rec {
+let mtxclient_0_7 = mtxclient.overrideAttrs (old: rec {
+  version = "0.7.0";
+  src = fetchFromGitHub {
+    owner = "Nheko-Reborn";
+    repo = "mtxclient";
+    rev = "v${version}";
+    sha256 = "sha256-iGw+qdw7heL5q7G0dwtl4PX2UA0Kka0FUmH610dM/00=";
+  };
+});
+
+in mkDerivation rec {
   pname = "nheko";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "sha256-KnWZ1DSTg8vtNSlpG5LGUG8YDHt25s9pMLpLuj0WLnM=";
+    sha256 = "sha256-roC1OIq0Vmj5rABNtH4IOMHX9aSlOMFC7ZHueuj/PmE=";
   };
 
   nativeBuildInputs = [
     lmdbxx
     cmake
     pkg-config
+    asciidoc
   ];
 
   buildInputs = [
     nlohmann_json
-    mtxclient
+    mtxclient_0_7
     olm
     boost17x
     libsecret
