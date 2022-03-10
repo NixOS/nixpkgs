@@ -22,6 +22,8 @@ python3Packages.buildPythonApplication rec {
   pname = "bottles";
   version = "2022.2.28-trento-1";
   sha256 = "tE6YuuZZcs3RKxs1S6OoGt0CXz3oHUi/sopFN0iywds=";
+  # Note: Update via pkgs/applications/misc/bottles/update.py
+  # mostly copypasted from pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
@@ -95,6 +97,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = ./update.py;
+  };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
