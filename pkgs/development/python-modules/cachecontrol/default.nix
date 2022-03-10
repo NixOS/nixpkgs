@@ -21,10 +21,11 @@ buildPythonPackage rec {
     owner = "ionrock";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mgvL0q10UbPHY1H3tJprke5p8qNl3HNYoeLAERZTcTs=";
+    hash = "sha256-mgvL0q10UbPHY1H3tJprke5p8qNl3HNYoeLAERZTcTs=";
   };
 
   propagatedBuildInputs = [
+    lockfile
     msgpack
     requests
   ];
@@ -32,7 +33,6 @@ buildPythonPackage rec {
   checkInputs = [
     cherrypy
     mock
-    lockfile
     pytestCheckHook
   ];
 
