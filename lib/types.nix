@@ -535,7 +535,9 @@ rec {
       description = "optionType";
       check = value: value._type or null == "option-type";
       merge = loc: defs:
-        let
+        if length defs == 1
+        then (head defs).value
+        else let
           # Prepares the type definitions for mergeOptionDecls, which
           # annotates submodules types with file locations
           optionModules = map ({ value, file }:
