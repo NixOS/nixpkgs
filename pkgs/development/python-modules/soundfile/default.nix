@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, pytest
+, pytestCheckHook
 , numpy
 , libsndfile
 , cffi
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
   propagatedBuildInputs = [ numpy libsndfile cffi ];
   propagatedNativeBuildInputs = [ cffi ];
 
