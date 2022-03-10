@@ -15926,6 +15926,8 @@ with pkgs;
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
+  wails = callPackage ../development/tools/wails { };
+
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
@@ -29037,6 +29039,8 @@ with pkgs;
   };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
+
+  psst = callPackage ../applications/audio/psst { };
 
   squeezelite = callPackage ../applications/audio/squeezelite { };
 
