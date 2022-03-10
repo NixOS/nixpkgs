@@ -10,24 +10,35 @@
 buildPythonPackage rec {
   pname = "neo";
   version = "0.10.2";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-LUIYsIJtruqIDhVSJwYAKew4oAI4zrXwlxONlGfGOZs=";
   };
 
-  propagatedBuildInputs = [ numpy quantities ];
+  propagatedBuildInputs = [
+    numpy
+    quantities
+  ];
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    nose
+  ];
 
   checkPhase = ''
     nosetests --exclude=iotest
   '';
 
+  pythonImportsCheck = [
+    "neo"
+  ];
+
   meta = with lib; {
+    description = "Package for representing electrophysiology data";
     homepage = "https://neuralensemble.org/neo/";
-    description = "Package for representing electrophysiology data in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
