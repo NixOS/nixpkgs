@@ -11349,6 +11349,8 @@ self: super: with self; {
 
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
+  torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
+
   torchvision = callPackage ../development/python-modules/torchvision { };
 
   torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix { };
