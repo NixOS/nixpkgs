@@ -14,13 +14,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
-  version = "22.04.1";
+  version = "22.04.4";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
     repo = pname;
     rev = version;
-    sha256 = "FcXJc8tlpP9RCrO6EVGvHPFF6qXorImzi9UccgZU+co=";
+    sha256 = "ncBN1wjCcMtuasnXk7WMge+9MK7BMmTu89/R+hiY/Ks=";
   };
 
   nativeBuildInputs = [

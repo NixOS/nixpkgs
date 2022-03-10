@@ -1,8 +1,6 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
 , dotnetCorePackages
 , libX11
 , libgdiplus
@@ -19,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.54"; # Versioning is based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.64"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "3705c206688c69d3348f5cec84dc480d8d7c578e";
-    sha256 = "1lhnr11x46yjpka865m0dzkbkdxmrrhjcpvq4ab4wll6j0ipy908";
+    rev = "54bfaa125d9b6ae1be53ec431d40326fba51d0de";
+    sha256 = "0p8wmnm8sjx7wqb5z62mp8c3cwrv241ji3fawj2qgqx3k9jlb31i";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -41,7 +39,6 @@ buildDotnetModule rec {
   executables = [ "Ryujinx" ];
 
   nativeBuildInputs = [
-    copyDesktopItems
     wrapGAppsHook
   ];
 
@@ -54,7 +51,6 @@ buildDotnetModule rec {
     gtk3
     libX11
     libgdiplus
-    ffmpeg
     SDL2_mixer
     openal
     libsoundio
@@ -63,34 +59,31 @@ buildDotnetModule rec {
   ];
 
   patches = [
-    ./log.patch # Without this, Ryujinx attempts to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
+    ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
   ];
 
   preInstall = ''
-    # TODO: fix this hack https://github.com/Ryujinx/Ryujinx/issues/2349
-    mkdir -p $out/lib/sndio-6
-    ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
-
+    # Ryujinx tries to use ffmpeg from PATH
     makeWrapperArgs+=(
-      --suffix LD_LIBRARY_PATH : "$out/lib/sndio-6"
+      --suffix PATH : ${lib.makeBinPath [ ffmpeg ]}
     )
-
-    for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ${src}/Ryujinx/Ui/Resources/Logo_Ryujinx.png $out/share/icons/hicolor/''${i}x$i/apps/ryujinx.png
-    done
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      desktopName = "Ryujinx";
-      name = "ryujinx";
-      exec = "Ryujinx";
-      icon = "ryujinx";
-      comment = meta.description;
-      type = "Application";
-      categories = [ "Game" ];
-    })
-  ];
+  preFixup = ''
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
+    pushd ${src}/distribution/linux
+
+    install -D ./ryujinx.desktop $out/share/applications/ryujinx.desktop
+    install -D ./ryujinx-mime.xml $out/share/mime/packages/ryujinx-mime.xml
+    install -D ./ryujinx-logo.svg $out/share/icons/hicolor/scalable/apps/ryujinx.svg
+
+    substituteInPlace $out/share/applications/ryujinx.desktop --replace \
+      "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+
+    popd
+  '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     homepage = "https://ryujinx.org/";
@@ -108,5 +101,4 @@ buildDotnetModule rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "Ryujinx";
   };
-  passthru.updateScript = ./updater.sh;
 }

@@ -73,7 +73,8 @@ in
         PrivateDevices = true;
         PrivateUsers = true;
 
-        ProtectClock = true;
+        # Disabled as it does not allow Jellyfin to interface with CUDA devices
+        # ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
@@ -84,7 +85,7 @@ in
 
         RestrictNamespaces = true;
         # AF_NETLINK needed because Jellyfin monitors the network connection
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 
