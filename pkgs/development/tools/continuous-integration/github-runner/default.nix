@@ -102,11 +102,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    # Set up Nuget dependencies
-    export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
-
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
 

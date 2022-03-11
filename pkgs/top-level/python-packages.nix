@@ -4070,6 +4070,8 @@ in {
 
   invoke = callPackage ../development/python-modules/invoke { };
 
+  iodata = callPackage ../development/python-modules/iodata { };
+
   iocapture = callPackage ../development/python-modules/iocapture { };
 
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
