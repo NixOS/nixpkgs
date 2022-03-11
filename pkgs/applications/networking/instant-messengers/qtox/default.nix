@@ -28,13 +28,13 @@
 
 mkDerivation rec {
   pname = "qtox";
-  version = "1.17.4";
+  version = "1.17.5";
 
   src = fetchFromGitHub {
     owner = "qTox";
     repo = "qTox";
     rev = "v${version}";
-    sha256 = "sha256-j1aAry4wjb4RResdu8PQzyVazvVxnxvZMoC59sO0frw=";
+    sha256 = "sha256-H3qFEw/TkzOxEXtZs0k89wWMnhrOkF7VapUKtCUhGns=";
   };
 
   buildInputs = [

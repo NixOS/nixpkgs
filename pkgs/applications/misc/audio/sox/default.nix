@@ -1,7 +1,9 @@
 { config
 , lib
 , stdenv
-, fetchurl
+, fetchzip
+, autoreconfHook
+, autoconf-archive
 , pkg-config
 , CoreAudio
 , enableAlsa ? true
@@ -35,15 +37,16 @@
 
 stdenv.mkDerivation rec {
   pname = "sox";
-  version = "14.4.2";
+  version = "unstable-2021-05-09";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sox/sox-${version}.tar.gz";
-    sha256 = "0v2znlxkxxcd3f48hf3dx9pq7i6fdhb62kgj7wv8xggz8f35jpxl";
+  src = fetchzip {
+    url = "https://sourceforge.net/code-snapshots/git/s/so/sox/code.git/sox-code-42b3557e13e0fe01a83465b672d89faddbe65f49.zip";
+    sha256 = "15rp55vr0h2954zl1rllsnriv64qab8fzsp0aprnpx1s5b14xjpm";
   };
 
-  # configure.ac uses pkg-config only to locate libopusfile
-  nativeBuildInputs = lib.optional enableOpusfile pkg-config;
+  nativeBuildInputs = [ autoreconfHook autoconf-archive ]
+    # configure.ac uses pkg-config only to locate libopusfile
+    ++ lib.optional enableOpusfile pkg-config;
 
   patches = [ ./0001-musl-rewind-pipe-workaround.patch ];
 
