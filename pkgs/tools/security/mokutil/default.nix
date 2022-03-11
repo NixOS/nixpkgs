@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, openssl, efivar, keyutils }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, openssl
+, efivar
+, keyutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "mokutil";
@@ -11,10 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dt41TCr6RkmE9H+NN8LWv3ogGsK38JtLjVN/b2mbGJs=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ openssl efivar keyutils ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  meta = with lib;{
+  buildInputs = [
+    openssl
+    efivar
+    keyutils
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/lcp/mokutil";
     description = "Utility to manipulate machines owner keys";
     license = licenses.gpl3Plus;
