@@ -2181,6 +2181,12 @@
     githubId = 42220376;
     name = "Charlotte Van Petegem";
   };
+  cigrainger = {
+    name = "Christopher Grainger";
+    email = "chris@amplified.ai";
+    github = "cigrainger";
+    githubId = 3984794;
+  };
   ciil = {
     email = "simon@lackerbauer.com";
     github = "ciil";
