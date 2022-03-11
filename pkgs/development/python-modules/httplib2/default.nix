@@ -55,6 +55,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin) [
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
+    # fails on aarch64-darwin with a connection reset by peer
+    "test_get_301_no_redirect"
   ];
 
   pytestFlagsArray = [
