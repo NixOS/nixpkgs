@@ -70,4 +70,3 @@ if __name__ == "__main__":
     tg_owt_version = get_commit_date('desktop-app/tg_owt', tg_owt_ref)
     tg_owt_hash = nix_prefetch_git('https://github.com/desktop-app/tg_owt.git', tg_owt_ref)
     update_file('tg_owt.nix', tg_owt_version, tg_owt_hash, tg_owt_ref)
-    tg_owt_ref = github_api_request('repos/desktop-app/tg_owt/commits/master')['sha']

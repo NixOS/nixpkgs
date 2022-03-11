@@ -83,9 +83,6 @@ env.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Telegram/CMakeLists.txt \
-      --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
-
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
@@ -94,6 +91,10 @@ env.mkDerivation rec {
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
       --replace '"libwebkit2gtk-4.0.so.37"' '"${webkitgtk}/lib/libwebkit2gtk-4.0.so.37"'
+    substituteInPlace Telegram/SourceFiles/core/application.cpp \
+      --replace "cExeDir() + cExeName()" '"telegram-desktop"'
+    substituteInPlace Telegram/SourceFiles/platform/linux/specific_linux.cpp \
+      --replace "cExeDir() + cExeName()" '"telegram-desktop"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -168,7 +169,7 @@ env.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
