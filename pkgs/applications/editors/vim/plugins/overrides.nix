@@ -39,6 +39,7 @@
 , which
 , xkb-switch
 , ycmd
+, zoxide
 , nodejs
 
 # test dependencies
@@ -693,6 +694,17 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-zoxide = super.telescope-zoxide.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+
+    buildInputs = [ zoxide ];
+
+    postPatch = ''
+      substituteInPlace lua/telescope/_extensions/zoxide/config.lua \
+        --replace "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
+    '';
+  });
+
   tup =
     let
       # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim
@@ -1074,6 +1086,15 @@ self: super: {
       maintainers = with maintainers; [ marcweber jagajaga ];
       platforms = platforms.unix;
     };
+  });
+
+  zoxide-vim = super.zoxide-vim.overrideAttrs (old: {
+    buildInputs = [ zoxide ];
+
+    postPatch = ''
+      substituteInPlace autoload/zoxide.vim \
+        --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
+    '';
   });
 
 } // (
