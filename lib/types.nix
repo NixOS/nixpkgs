@@ -368,13 +368,21 @@ rec {
       emptyValue = { value = {}; };
     };
 
-    # derivation is a reserved keyword.
+    # A package is a top-level store path (/nix/store/hash-name). This includes:
+    # - derivations
+    # - more generally, attribute sets with an `outPath` or `__toString` attribute
+    #   pointing to a store path, e.g. flake inputs
+    # - strings with context, e.g. "${pkgs.foo}" or (toString pkgs.foo)
+    # - hardcoded store path literals (/nix/store/hash-foo) or strings without context
+    #   ("/nix/store/hash-foo"). These get a context added to them using builtins.storePath.
     package = mkOptionType {
       name = "package";
       check = x: isDerivation x || isStorePath x;
       merge = loc: defs:
         let res = mergeOneOption loc defs;
-        in if isDerivation res then res else toDerivation res;
+        in if builtins.isPath res || (builtins.isString res && ! builtins.hasContext res)
+          then toDerivation res
+          else res;
     };
 
     shellPackage = package // {
