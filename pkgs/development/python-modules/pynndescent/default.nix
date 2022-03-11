@@ -34,6 +34,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # numpy.core._exceptions._UFuncNoLoopError
+    "test_sparse_nn_descent_query_accuracy_angular"
+    "test_nn_descent_query_accuracy_angular"
+    "test_alternative_distances"
+    # scipy: ValueError: Unknown Distance Metric: wminkowski
+    # https://github.com/scikit-learn/scikit-learn/pull/21741
+    "test_weighted_minkowski"
+  ];
+
   pythonImportsCheck = [
     "pynndescent"
   ];
