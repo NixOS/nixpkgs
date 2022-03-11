@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libva" + lib.optionalString minimal "minimal";
+  pname = "libva" + lib.optionalString minimal "-minimal";
   version = "2.14.0";
 
   src = fetchFromGitHub {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/linuxmedia/vaapi";
     changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ primeos SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }
