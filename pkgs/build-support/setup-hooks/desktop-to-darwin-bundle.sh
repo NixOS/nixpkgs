@@ -176,8 +176,16 @@ convertDesktopFile() {
     local -r file=$1
     local -r sharePath=$(dirname "$(dirname "$file")")
     local -r name=$(getDesktopParam "${file}" "^Name")
-    local -r exec=$(getDesktopParam "${file}" "Exec" \
-      | sed -e 's/ %[fFuUick]//g')
+    local -r macOSExec=$(getDesktopParam "${file}" "X-macOS-Exec")
+    if [[ "$macOSExec" ]]; then
+      local -r exec="$macOSExec"
+    else
+      local -r execRaw=$(getDesktopParam "${file}" "Exec")
+      local -r exec="${execRaw// %[fFuUick]}"
+      if [[ "$exec" != "$execRaw" ]]; then
+        echo "desktopToDarwinBundle: Application bundles do not understand desktop entry field codes. Changed '$execRaw' to '$exec'."
+      fi
+    fi
     local -r iconName=$(getDesktopParam "${file}" "^Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
