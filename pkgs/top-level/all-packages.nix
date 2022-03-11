@@ -15264,6 +15264,8 @@ with pkgs;
 
   kubei = callPackage ../tools/security/kubei { };
 
+  kubemq-community = callPackage ../servers/kubemq-community { };
+
   kubeone = callPackage ../applications/networking/cluster/kubeone { };
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
