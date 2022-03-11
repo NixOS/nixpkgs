@@ -8,12 +8,7 @@ let
   homeDir = "/var/lib/tox-node";
 
   configFile = let
-    # fetchurl should be switched to getting this file from tox-node.src once
-    # the dpkg directory is in a release
-    src = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/tox-rs/tox-node/master/dpkg/config.yml";
-      sha256 = "1431wzpzm786mcvyzk1rp7ar418n45dr75hdggxvlm7pkpam31xa";
-    };
+    src = "${pkg.src}/dpkg/config.yml";
     confJSON = pkgs.writeText "config.json" (
       builtins.toJSON {
         log-type = cfg.logType;
