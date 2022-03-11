@@ -1,83 +1,115 @@
 { lib
-, stdenv
-, fetchurl
-, fetchFromGitLab
-, makeWrapper
 , autoreconfHook
-, fetchpatch
+, bash-completion
+, bridge-utils
+, cmake
 , coreutils
-, libxml2
-, gnutls
-, perl
-, python3
-, attr
-, glib
+, curl
+, darwin
+, dbus
+, dnsmasq
 , docutils
-, iproute2
-, readline
-, lvm2
-, util-linux
-, systemd
-, libpciaccess
+, fetchFromGitLab
+, fetchurl
 , gettext
-, libtasn1
+, glib
+, gnutls
+, iproute2
 , iptables
 , libgcrypt
-, yajl
-, pmutils
-, libcap_ng
-, libapparmor
-, dnsmasq
-, libnl
 , libpcap
+, libtasn1
+, libxml2
 , libxslt
-, xhtml1
-, numad
-, numactl
-, perlPackages
-, curl
-, parted
-, bridge-utils
-, dmidecode
-, dbus
-, libtirpc
-, rpcsvc-proto
-, darwin
+, makeWrapper
 , meson
 , ninja
-, audit
-, cmake
-, bash-completion
+, perl
+, perlPackages
 , pkg-config
-, enableCeph ? false, ceph ? null
-, enableGlusterfs ? false, glusterfs ? null
-, enableIscsi ? false, openiscsi ? null
-, enableXen ? false, xen ? null
-, enableZfs ? true, zfs ? null
-# Darwin
-, gmp
-, libiconv
+, pmutils
+, python3
+, readline
+, rpcsvc-proto
+, stdenv
+, xhtml1
+, yajl
+
+  # Linux
+, acl ? null
+, attr ? null
+, audit ? null
+, dmidecode ? null
+, fuse ? null
+, kmod ? null
+, libapparmor ? null
+, libcap_ng ? null
+, libnl ? null
+, libpciaccess ? null
+, libtirpc ? null
+, lvm2 ? null
+, numactl ? null
+, numad ? null
+, parted ? null
+, systemd ? null
+, util-linux ? null
+
+  # Darwin
+, gmp ? null
+, libiconv ? null
 , Carbon ? null
 , AppKit ? null
+
+  # Options
+, enableCeph ? false
+, ceph ? null
+, enableGlusterfs ? false
+, glusterfs ? null
+, enableIscsi ? false
+, openiscsi ? null
+, libiscsi ? null
+, enableXen ? false
+, xen ? null
+, enableZfs ? stdenv.isLinux
+, zfs ? null
 }:
 
 with lib;
 
-assert enableXen -> stdenv.isLinux && stdenv.isx86_64;
-assert enableCeph -> stdenv.isLinux;
-assert enableGlusterfs -> stdenv.isLinux;
-assert enableZfs -> stdenv.isLinux;
+let
+  inherit (stdenv) isDarwin isLinux isx86_64;
+  binPath = makeBinPath ([
+    dnsmasq
+  ] ++ optionals isLinux [
+    bridge-utils
+    dmidecode
+    dnsmasq
+    iproute2
+    iptables
+    kmod
+    lvm2
+    numactl
+    numad
+    pmutils
+    systemd
+  ] ++ optionals enableIscsi [
+    libiscsi
+    openiscsi
+  ]);
+in
+
+assert enableXen -> isLinux && isx86_64;
+assert enableCeph -> isLinux;
+assert enableGlusterfs -> isLinux;
+assert enableZfs -> isLinux;
 
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-let
-  buildFromTarball = stdenv.isDarwin;
-in
 stdenv.mkDerivation rec {
   pname = "libvirt";
   version = "8.1.0";
 
   src =
-    if buildFromTarball then
+    if isDarwin then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
@@ -99,67 +131,64 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    ninja
     meson
+
     cmake
-    makeWrapper
-    pkg-config
     docutils
-  ] ++ optional (!stdenv.isDarwin) [
-    rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
-    darwin.developer_cmds # needed for rpcgen
-  ];
+    makeWrapper
+    ninja
+    pkg-config
+  ]
+  ++ optional (!isDarwin) rpcsvc-proto
+  # NOTE: needed for rpcgen
+  ++ optional isDarwin darwin.developer_cmds;
 
   buildInputs = [
     bash-completion
-    pkg-config
-    libxml2
+    curl
+    dbus
+    gettext
+    glib
     gnutls
+    libgcrypt
+    libpcap
+    libtasn1
+    libxml2
+    libxslt
     perl
+    perlPackages.XMLXPath
+    pkg-config
     python3
     readline
-    gettext
-    libtasn1
-    libgcrypt
-    yajl
-    libxslt
     xhtml1
-    perlPackages.XMLXPath
-    curl
-    libpcap
-    glib
-    dbus
-  ] ++ optionals stdenv.isLinux [
+    yajl
+  ] ++ optionals isLinux [
+    acl
+    attr
     audit
-    libpciaccess
-    lvm2
-    util-linux
-    systemd
-    libnl
-    numad
+    fuse
     libapparmor
     libcap_ng
-    numactl
-    attr
-    parted
+    libnl
+    libpciaccess
     libtirpc
-  ] ++ optionals enableCeph [
-    ceph
-  ] ++ optionals enableGlusterfs [
-    glusterfs
-  ] ++ optionals enableIscsi [
-    openiscsi
-  ] ++ optionals enableXen [
-    xen
-  ] ++ optionals enableZfs [
-    zfs
-  ] ++ optionals stdenv.isDarwin [
-    libiconv
-    gmp
-    Carbon
+    lvm2
+    numactl
+    numad
+    parted
+    systemd
+    util-linux
+  ] ++ optionals isDarwin [
     AppKit
-  ];
+    Carbon
+    gmp
+    libiconv
+  ]
+  ++ optionals enableCeph [ ceph ]
+  ++ optionals enableGlusterfs [ glusterfs ]
+  ++ optionals enableIscsi [ libiscsi openiscsi ]
+  ++ optionals enableXen [ xen ]
+  ++ optionals enableZfs [ zfs ];
 
   preConfigure =
     let
@@ -167,87 +196,118 @@ stdenv.mkDerivation rec {
         QEMU_BRIDGE_HELPER = "/run/wrappers/bin/qemu-bridge-helper";
         QEMU_PR_HELPER = "/run/libvirt/nix-helpers/qemu-pr-helper";
       };
+
       patchBuilder = var: value: ''
         sed -i meson.build -e "s|conf.set_quoted('${var}',.*|conf.set_quoted('${var}','${value}')|"
       '';
     in
     ''
-      PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+      PATH="${binPath}:$PATH"
       # the path to qemu-kvm will be stored in VM's .xml and .save files
       # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
       substituteInPlace src/lxc/lxc_conf.c \
         --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
+
       substituteInPlace build-aux/meson.build \
         --replace "gsed" "sed" \
         --replace "gmake" "make" \
         --replace "ggrep" "grep"
+
       patchShebangs .
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
 
-  mesonAutoFeatures = "auto";
+  mesonAutoFeatures = "disabled";
 
   mesonFlags =
     let
-      opt = option: enable: "-D${option}=${if enable then "enabled" else "disabled"}";
-      enableDrivers = map (name: opt "driver_${name}" true);
+      cfg = option: val: "-D${option}=${val}";
+      feat = option: enable: cfg option (if enable then "enabled" else "disabled");
+      driver = name: feat "driver_${name}";
+      storage = name: feat "storage_${name}";
     in
     [
       "--localstatedir=${placeholder "out"}/var/"
-      "-Drunstatedir=${placeholder "out"}/run/"
-      "-Dlibpcap=enabled"
-      "-Dpolkit=enabled"
-      (opt "storage_iscsi" enableIscsi)
-    ] ++ optionals stdenv.isLinux [
-      "-Dattr=enabled"
-      "-Dapparmor=enabled"
-      "-Dsecdriver_apparmor=enabled"
-      "-Dnumad=enabled"
-      "-Dstorage_disk=enabled"
-      (opt "glusterfs" enableGlusterfs)
-      (opt "storage_rbd" enableCeph)
-      (opt "storage_zfs" enableZfs)
-    ] ++ optionals stdenv.isDarwin [
-      "-Dinit_script=none"
-    ] ++ (enableDrivers [
-      "ch"
-      "esx"
-      "interface"
-      "libvirtd"
-      "lxc"
-      "network"
-      "openvz"
-      "qemu"
-      "remote"
-      "secrets"
-      "test"
-      "vbox"
-      "vmware"
-    ] ++ lib.optional enableXen "libxl");
+      (cfg "init_script" (if isDarwin then "none" else "systemd"))
 
-  postInstall =
-    let
-      binPath = [ iptables iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
-    in
-    ''
-      substituteInPlace $out/bin/virt-xml-validate \
-        --replace xmllint ${libxml2}/bin/xmllint
+      (feat "apparmor" isLinux)
+      (feat "attr" isLinux)
+      (feat "audit" isLinux)
+      (feat "bash_completion" true)
+      (feat "blkid" isLinux)
+      (feat "capng" isLinux)
+      (feat "curl" true)
+      (feat "docs" true)
+      (feat "expensive_tests" true)
+      (feat "firewalld" isLinux)
+      (feat "firewalld_zone" isLinux)
+      (feat "fuse" isLinux)
+      (feat "glusterfs" enableGlusterfs)
+      (feat "host_validate" true)
+      (feat "libiscsi" enableIscsi)
+      (feat "libnl" isLinux)
+      (feat "libpcap" true)
+      (feat "libssh2" true)
+      (feat "login_shell" isLinux)
+      (feat "nss" isLinux)
+      (feat "numactl" isLinux)
+      (feat "numad" isLinux)
+      (feat "pciaccess" isLinux)
+      (feat "polkit" true)
+      (feat "readline" true)
+      (feat "secdriver_apparmor" isLinux)
+      (feat "tests" true)
+      (feat "udev" isLinux)
+      (feat "yajl" true)
 
-      substituteInPlace $out/libexec/libvirt-guests.sh \
-        --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
-        --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
-        --replace "$out/bin"              '${gettext}/bin' \
-        --replace 'lock/subsys'           'lock' \
-        --replace 'gettext.sh'            'gettext.sh
-      # Added in nixpkgs:
-      gettext() { "${gettext}/bin/gettext" "$@"; }
-      '
-    '' + optionalString stdenv.isLinux ''
-      substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
-      rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
-      wrapProgram $out/sbin/libvirtd \
-        --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
-    '';
+      (driver "ch" isLinux)
+      (driver "esx" true)
+      (driver "interface" isLinux)
+      (driver "libvirtd" true)
+      (driver "libxl" enableXen)
+      (driver "lxc" isLinux)
+      (driver "network" true)
+      (driver "openvz" isLinux)
+      (driver "qemu" true)
+      (driver "remote" true)
+      (driver "secrets" true)
+      (driver "test" true)
+      (driver "vbox" true)
+      (driver "vmware" true)
+
+      (storage "dir" true)
+      (storage "disk" isLinux)
+      (storage "fs" isLinux)
+      (storage "gluster" enableGlusterfs)
+      (storage "iscsi" enableIscsi)
+      (storage "iscsi_direct" enableIscsi)
+      (storage "lvm" isLinux)
+      (storage "mpath" isLinux)
+      (storage "rbd" enableCeph)
+      (storage "scsi" true)
+      (storage "vstorage" isLinux)
+      (storage "zfs" enableZfs)
+    ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/virt-xml-validate \
+      --replace xmllint ${libxml2}/bin/xmllint
+
+    substituteInPlace $out/libexec/libvirt-guests.sh \
+      --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
+      --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+      --replace "$out/bin"              '${gettext}/bin' \
+      --replace 'lock/subsys'           'lock' \
+      --replace 'gettext.sh'            'gettext.sh
+    # Added in nixpkgs:
+    gettext() { "${gettext}/bin/gettext" "$@"; }
+    '
+  '' + optionalString isLinux ''
+    substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
+    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
+    wrapProgram $out/sbin/libvirtd \
+      --prefix PATH : /run/libvirt/nix-emulators:${binPath}
+  '';
 
   meta = {
     homepage = "https://libvirt.org/";
@@ -258,6 +318,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin lovesegfault ];
   };
 }
