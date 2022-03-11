@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , googleapis-common-protos
+, protobuf
 , lib
 }:
 
@@ -31,7 +32,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     absl-py
     googleapis-common-protos
+    protobuf
   ];
+
+  # has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "tensorflow_metadata"
