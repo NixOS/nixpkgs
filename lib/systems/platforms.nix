@@ -489,30 +489,18 @@ rec {
     };
   };
 
-  # MIPS ABI table transcribed from here: https://wiki.debian.org/Multiarch/Tuples
-
   # can execute on 32bit chip
-  mips-linux-gnu                = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
-  mipsel-linux-gnu              = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
-  mipsisa32r6-linux-gnu         = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
-  mipsisa32r6el-linux-gnu       = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
-
-  # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32        = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
-  mips64el-linux-gnuabin32      = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
-  mipsisa64r6-linux-gnuabin32   = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
-  mipsisa64r6el-linux-gnuabin32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
-
-  # 64bit pointers
-  mips64-linux-gnuabi64         = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
-  mips64el-linux-gnuabi64       = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
-  mipsisa64r6-linux-gnuabi64    = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
-  mipsisa64r6el-linux-gnuabi64  = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
+  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
+  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
+  gcc_mips64r2_n32 = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
+  gcc_mips64r6_n32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
+  gcc_mips64r2_64  = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
+  gcc_mips64r6_64  = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
 
   # based on:
   #   https://www.mail-archive.com/qemu-discuss@nongnu.org/msg05179.html
   #   https://gmplib.org/~tege/qemu.html#mips64-debian
-  mips64el-qemu-linux-gnuabi64 = mips64el-linux-gnuabi64 // {
+  mips64el-qemu-linux-gnuabi64 = (import ./examples).mips64el-linux-gnuabi64 // {
     linux-kernel = {
       name = "mips64el";
       baseConfig = "64r2el_defconfig";
