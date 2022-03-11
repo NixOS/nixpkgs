@@ -194,6 +194,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/prometheus-pve/prometheus-pve-exporter">prometheus-pve-exporter</link>,
+          a tool that exposes information from the Proxmox VE API for
+          use by Prometheus. Available as
+          <link xlink:href="options.html#opt-services.prometheus.exporters.pve">services.prometheus.exporters.pve</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://tetrd.app">tetrd</link>, share your
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
