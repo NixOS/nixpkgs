@@ -390,6 +390,8 @@ with pkgs;
 
   protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
 
+  protoc-gen-validate = callPackage ../development/tools/protoc-gen-validate { };
+
   proton-caller = callPackage ../applications/emulators/proton-caller { };
 
   ptags = callPackage ../development/tools/misc/ptags { };
@@ -5999,6 +6001,8 @@ with pkgs;
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
+  gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
+
   gitstats = callPackage ../applications/version-management/gitstats { };
 
   gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
@@ -6881,7 +6885,9 @@ with pkgs;
 
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
-  jless = callPackage ../development/tools/jless { };
+  jless = callPackage ../development/tools/jless {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   jmespath = callPackage ../development/tools/jmespath { };
 
@@ -8717,7 +8723,7 @@ with pkgs;
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { };
+  packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_6; };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
@@ -9989,6 +9995,8 @@ with pkgs;
   sonata = callPackage ../applications/audio/sonata { };
 
   sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
+
+  soundconverter = callPackage ../applications/audio/soundconverter { };
 
   soundkonverter = libsForQt5.soundkonverter;
 
@@ -20022,6 +20030,8 @@ with pkgs;
 
   shhopt = callPackage ../development/libraries/shhopt { };
 
+  shine = callPackage ../development/libraries/shine { };
+
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
   s2n-tls = callPackage ../development/libraries/s2n-tls { };
@@ -21919,6 +21929,7 @@ with pkgs;
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
   prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
+  prometheus-pve-exporter = callPackage ../servers/monitoring/prometheus/pve-exporter.nix { };
   prometheus-redis-exporter = callPackage ../servers/monitoring/prometheus/redis-exporter.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-rtl_433-exporter = callPackage ../servers/monitoring/prometheus/rtl_433-exporter.nix { };
@@ -23853,6 +23864,8 @@ with pkgs;
   };
 
   layan-gtk-theme = callPackage ../data/themes/layan-gtk-theme { };
+
+  layan-kde = callPackage ../data/themes/layan-kde { };
 
   lato = callPackage ../data/fonts/lato {};
 
@@ -28873,6 +28886,8 @@ with pkgs;
   };
 
   styx = callPackage ../applications/misc/styx { };
+
+  sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
   tecoc = callPackage ../applications/editors/tecoc { };
 
