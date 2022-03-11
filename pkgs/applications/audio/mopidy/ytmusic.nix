@@ -21,8 +21,6 @@ python3Packages.buildPythonApplication rec {
       --replace 'ytmusicapi>=0.20.0,<0.21.0' 'ytmusicapi>=0.20.0'
   '';
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Mopidy extension for playing music from YouTube Music";
     homepage = "https://github.com/OzymandiasTheGreat/mopidy-ytmusic";
