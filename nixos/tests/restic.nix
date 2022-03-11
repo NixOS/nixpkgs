@@ -49,6 +49,10 @@ import ./make-test-python.nix (
                     inherit repository passwordFile;
                     pruneOpts = [ "--keep-last 1" ];
                   };
+                  remotenotimer = {
+                    inherit repository passwordFile;
+                    timerConfig = null;
+                  };
                 };
 
                 environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -61,6 +65,7 @@ import ./make-test-python.nix (
           server.fail(
               "${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots",
               "${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots",
+              "systemctl status restic-backups-remotenotimer.timer",
           )
           server.succeed(
               "mkdir -p /opt",

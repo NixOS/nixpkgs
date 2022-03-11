@@ -118,12 +118,13 @@ in
         };
 
         timerConfig = mkOption {
-          type = types.attrsOf unitOption;
+          type = types.nullOr (types.attrsOf unitOption);
           default = {
             OnCalendar = "daily";
           };
           description = ''
             When to run the backup. See man systemd.timer for details.
+            Set to <literal>null</literal> to disable automatically running backup.
           '';
           example = {
             OnCalendar = "00:05";
@@ -282,9 +283,10 @@ in
         })
       ) config.services.restic.backups;
     systemd.timers =
-      mapAttrs' (name: backup: nameValuePair "restic-backups-${name}" {
+      let backupsWithTimer = lib.attrsets.filterAttrs ( name: backup: backup.timerConfig != null ) config.services.restic.backups;
+      in mapAttrs' (name: backup: nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
         timerConfig = backup.timerConfig;
-      }) config.services.restic.backups;
+      }) backupsWithTimer;
   };
 }
