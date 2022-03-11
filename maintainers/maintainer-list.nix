@@ -5613,6 +5613,12 @@
     githubId = 117874;
     name = "Jeroen de Haas";
   };
+  jdheyburn = {
+    email = "jdheyburn@gmail.com";
+    github = "jdheyburn";
+    githubId = 34041368;
+    name = "Joe Heyburn";
+  };
   jdreaver = {
     email = "johndreaver@gmail.com";
     github = "jdreaver";
