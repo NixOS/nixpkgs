@@ -263,6 +263,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
+          Network Block Device server. Available as
+          <link xlink:href="options.html#opt-services.nbd.server.enable">services.nbd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://timetagger.app">timetagger</link>,
           an open source time-tracker with an intuitive user experience
           and powerful reporting.

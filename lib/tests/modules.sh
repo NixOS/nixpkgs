@@ -311,6 +311,9 @@ checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
 # Test that types.optionType correctly annotates option locations
 checkConfigError 'The option .theOption.nested. in .other.nix. is already declared in .optionTypeFile.nix.' config.theOption.nested ./optionTypeFile.nix
 
+# Test that types.optionType leaves types untouched as long as they don't need to be merged
+checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survives-type-merge.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
