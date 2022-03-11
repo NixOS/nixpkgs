@@ -6778,9 +6778,7 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs {
     buildGoModule = buildGo116Module;
   };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
-    buildGoModule = buildGo116Module;
-  };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix {
     buildGoModule = buildGo116Module;
@@ -14095,7 +14093,7 @@ with pkgs;
 
   regina = callPackage ../development/interpreters/regina { };
 
-  inherit (ocaml-ng.ocamlPackages_4_12) reason;
+  inherit (ocamlPackages) reason;
 
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
@@ -26131,6 +26129,8 @@ with pkgs;
   goffice = callPackage ../development/libraries/goffice { };
 
   got = callPackage ../applications/version-management/got { };
+
+  gtkterm = callPackage ../tools/misc/gtkterm { };
 
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 

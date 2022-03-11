@@ -70,11 +70,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
-
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
-
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"
 
