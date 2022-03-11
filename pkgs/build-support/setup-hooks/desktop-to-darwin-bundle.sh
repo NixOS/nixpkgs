@@ -176,7 +176,8 @@ convertDesktopFile() {
     local -r file=$1
     local -r sharePath=$(dirname "$(dirname "$file")")
     local -r name=$(getDesktopParam "${file}" "^Name")
-    local -r exec=$(getDesktopParam "${file}" "Exec" | sed -e 's/ %[fFuU]$//')
+    local -r exec=$(getDesktopParam "${file}" "Exec" \
+      | sed -e 's/ %[fFuUick]//g')
     local -r iconName=$(getDesktopParam "${file}" "^Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
