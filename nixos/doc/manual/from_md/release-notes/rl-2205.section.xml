@@ -1324,6 +1324,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>pomerium-cli</literal> command has been moved out
+          of the <literal>pomerium</literal> package into the
+          <literal>pomerium-cli</literal> package, following upstream’s
+          repository split. If you are using the
+          <literal>pomerium-cli</literal> command, you should now
+          install the <literal>pomerium-cli</literal> package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option
           <link linkend="opt-networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
           was added to support FCC unlock procedures. Since release
