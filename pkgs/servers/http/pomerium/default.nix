@@ -4,6 +4,7 @@
 , envoy
 , zip
 , nixosTests
+, pomerium-cli
 }:
 
 let
@@ -77,6 +78,7 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) pomerium;
+    inherit pomerium-cli;
   };
 
   meta = with lib; {
