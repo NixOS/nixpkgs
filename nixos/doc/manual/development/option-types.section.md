@@ -22,7 +22,8 @@ merging is handled.
 
 `types.package`
 
-:   A derivation or a store path.
+:   A top-level store path. This can be an attribute set pointing
+    to a store path, like a derivation or a flake input.
 
 `types.anything`
 
