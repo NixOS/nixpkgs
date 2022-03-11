@@ -41,12 +41,16 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://sourceforge.net/code-snapshots/git/s/so/sox/code.git/sox-code-42b3557e13e0fe01a83465b672d89faddbe65f49.zip";
-    sha256 = "15rp55vr0h2954zl1rllsnriv64qab8fzsp0aprnpx1s5b14xjpm";
+    hash = "sha256-9cpOwio69GvzVeDq79BSmJgds9WU5kA/KUlAkHcpN5c=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive ]
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+  ] ++ lib.optional enableOpusfile [
     # configure.ac uses pkg-config only to locate libopusfile
-    ++ lib.optional enableOpusfile pkg-config;
+    pkg-config
+  ];
 
   patches = [ ./0001-musl-rewind-pipe-workaround.patch ];
 

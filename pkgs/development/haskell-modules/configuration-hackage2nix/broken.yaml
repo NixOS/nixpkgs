@@ -5186,7 +5186,6 @@ broken-packages:
   - unfix-binders
   - unfoldable
   - unicode-prelude
-  - unicode-show
   - unicode-symbols
   - unicode-tricks
   - uniform-fileio

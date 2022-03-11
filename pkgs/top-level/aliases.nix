@@ -1123,8 +1123,6 @@ mapAliases ({
   source-han-serif-korean = source-han-serif;
   source-han-serif-simplified-chinese = source-han-serif;
   source-han-serif-traditional-chinese = source-han-serif;
-  source-sans-pro = source-sans; # Added 2021-10-20
-  source-serif-pro = source-serif; # Added 2021-10-20
 
   spaceOrbit = throw "'spaceOrbit' has been renamed to/replaced by 'space-orbit'"; # Converted to throw 2022-02-22
   spectral = neochat; # Added 2020-12-27

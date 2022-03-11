@@ -329,6 +329,7 @@ in
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   nats = handleTest ./nats.nix {};
   navidrome = handleTest ./navidrome.nix {};
+  nbd = handleTest ./nbd.nix {};
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
   nebula = handleTest ./nebula.nix {};
