@@ -33734,6 +33734,8 @@ with pkgs;
 
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
+  qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
+
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
 
   qdl = callPackage ../tools/misc/qdl { };
