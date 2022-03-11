@@ -108,16 +108,36 @@ self: super: {
   indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
+  lzma-conduit = doJailbreak super.lzma-conduit;
   ormolu = self.ormolu_0_4_0_0;
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
+  # https://github.com/protolude/protolude/pull/136
+  protolude = appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/protolude/protolude/commit/47820a36c25ea6f0c6e44382f7d4f3507358b8e7.diff";
+      sha256 = "sha256-PtHx5SyTgqFzI03YVeQD+RqglO6ASMQWSxdpy4ROMDY=";
+    })
+  ] (doJailbreak super.protolude);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
+  servant = doJailbreak super.servant;
+  servant-auth = doJailbreak super.servant-auth;
+  servant-server = appendPatches [
+    # awaiting release
+    (pkgs.fetchpatch {
+      url = "https://github.com/haskell-servant/servant/commit/61d0d14b5cb01db3d589101b3f17b0178f52e386.diff";
+      stripLen = 1;
+      sha256 = "sha256-trkXnzT4ZGLT2GKRJXQryuscR4K/FqKxSvTf26eePm0=";
+    })
+  ] (doJailbreak super.servant-server);
+  servant-swagger = doJailbreak super.servant-swagger;
+  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
   shelly = doJailbreak super.shelly;
   split = doJailbreak super.split;
   splitmix = doJailbreak super.splitmix;
@@ -127,6 +147,7 @@ self: super: {
   th-desugar = self.th-desugar_1_13;
   these = doJailbreak super.these;
   time-compat = doJailbreak super.time-compat;
+  tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
   unordered-containers = doJailbreak super.unordered-containers;
   vector = doJailbreak (dontCheck super.vector);
