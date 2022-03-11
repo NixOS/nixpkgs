@@ -2080,6 +2080,8 @@ in {
 
   dbutils = callPackage ../development/python-modules/dbutils { };
 
+  dbx = callPackage ../development/python-modules/dbx { };
+
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
   ddt = callPackage ../development/python-modules/ddt { };
