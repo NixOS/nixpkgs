@@ -21,7 +21,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "intensity_normalization";
+    inherit version;
     sha256 = "sha256-0tc21NBj3Cajklk9mWbKfBzbSwjUrBWs/SlakjEHC1U=";
   };
 
