@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   cargoBuildFlags = [
     "--features=aead-cipher-extra,local-dns,local-http-native-tls,local-redir,local-tun"
