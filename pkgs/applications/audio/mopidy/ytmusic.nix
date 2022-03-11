@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Mopidy extension for playing music from YouTube Music";
+    homepage = "https://github.com/OzymandiasTheGreat/mopidy-ytmusic";
     license = licenses.asl20;
     maintainers = [ maintainers.nickhu ];
   };
