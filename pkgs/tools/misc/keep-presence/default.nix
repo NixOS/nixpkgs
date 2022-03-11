@@ -24,10 +24,10 @@ let
       # to carrot69's (original author) repo to see if they would like
       # to merge.
       src = fetchFromGitHub {
-        owner = "mwdomino";
-        repo = "keep-presence-1";
-        rev = "1c65b84525c290c2633992028073ade45081361e";
-        sha256 = "0hha6z2ljh4ggks2d31wksxzk908wwqrm39y5j900kbg5x3aabz6";
+        owner = "carrot69";
+        repo = "keep-presence";
+        rev = "f55ba91bf78681e4e99e39ed63be4810c81e28c6";
+        sha256 = "1a4r35pbdmd73767x3g41c3chjxjwqf3y4n3dhmh31s1lx7cahmv";
       } + /src;
 
       propagatedBuildInputs = with pythonPkgs; [ setuptools pynput ];
