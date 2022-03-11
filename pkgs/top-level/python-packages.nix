@@ -5964,6 +5964,8 @@ in {
 
   patch-ng = callPackage ../development/python-modules/patch-ng { };
 
+  path = callPackage ../development/python-modules/path { };
+
   path-and-address = callPackage ../development/python-modules/path-and-address { };
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
@@ -5972,7 +5974,8 @@ in {
 
   pathos = callPackage ../development/python-modules/pathos { };
 
-  pathpy = callPackage ../development/python-modules/path.py { };
+  # backward compatibility in nixpkgs
+  pathpy = self.path;
 
   pathspec = callPackage ../development/python-modules/pathspec { };
 
