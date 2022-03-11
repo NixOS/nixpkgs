@@ -134,6 +134,10 @@ let
       inherit llvm_meta;
     };
 
+    flang = callPackage ./flang {
+      inherit llvm_meta;
+    };
+
     # Below, is the LLVM bootstrapping logic. It handles building a
     # fully LLVM toolchain from scratch. No GCC toolchain should be
     # pulled in. As a consequence, it is very quick to build different
