@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaybg";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
     rev = "v${version}";
-    sha256 = "17508q9wsw6c1lsxlcbxj74z2naqhwi5c7lkbq24m4lk8qmy0576";
+    hash = "sha256-Lt/hn/K+CjcmU3Bs5wChiZq0VGNcraH4tSVYsmYnKjc=";
   };
 
   depsBuildBuild = [ pkg-config ];
