@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "bsdiff4";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87cffc7522effdda03fd1564b212ad2279c0af50d16c3e65776f80acb6705d4b";
+    sha256 = "sha256-GICsP1KmxGrmvMbbEX5Ps1+bDM1a91/U/uaQfQDWmDw=";
   };
 
   checkPhase = ''
