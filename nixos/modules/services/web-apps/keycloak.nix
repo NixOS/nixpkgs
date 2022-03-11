@@ -691,6 +691,7 @@ in
             RemainAfterExit = true;
             User = "postgres";
             Group = "postgres";
+            LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
           };
           script = ''
             set -o errexit -o pipefail -o nounset -o errtrace
@@ -699,7 +700,8 @@ in
             create_role="$(mktemp)"
             trap 'rm -f "$create_role"' ERR EXIT
 
-            echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$(<'${cfg.database.passwordFile}')' CREATEDB" > "$create_role"
+            db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
+            echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB" > "$create_role"
             psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tA --file="$create_role"
             psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
           '';
@@ -715,14 +717,14 @@ in
             RemainAfterExit = true;
             User = config.services.mysql.user;
             Group = config.services.mysql.group;
+            LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
           };
           script = ''
             set -o errexit -o pipefail -o nounset -o errtrace
             shopt -s inherit_errexit
-
-            db_password="$(<'${cfg.database.passwordFile}')"
+            db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
             ( echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
-              echo "CREATE DATABASE keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+              echo "CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
               echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
             ) | mysql -N
           '';

@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.4.4'
+gem 'rails', '~> 6.1.4.6'
 
 gem 'bootsnap', '~> 1.9.1', require: false
 
@@ -72,7 +72,7 @@ gem 'u2f', '~> 0.2.1'
 
 # GitLab Pages
 gem 'validates_hostname', '~> 1.0.11'
-gem 'rubyzip', '~> 2.0.0', require: 'zip'
+gem 'rubyzip', '~> 2.3.2', require: 'zip'
 # GitLab Pages letsencrypt support
 gem 'acme-client', '~> 2.0', '>= 2.0.9'
 
@@ -183,7 +183,7 @@ gem 'rack', '~> 2.2.3'
 gem 'rack-timeout', '~> 0.5.1', require: 'rack/timeout/base'
 
 group :puma do
-  gem 'puma', '~> 5.5.2', require: false
+  gem 'puma', '~> 5.6.2', require: false
   gem 'puma_worker_killer', '~> 0.3.1', require: false
   gem 'sd_notify', '~> 0.1.0', require: false
 end
@@ -195,7 +195,7 @@ gem 'state_machines-activerecord', '~> 0.8.0'
 gem 'acts-as-taggable-on', '~> 9.0'
 
 # Background jobs
-gem 'sidekiq', '~> 6.3'
+gem 'sidekiq', '~> 6.4'
 gem 'sidekiq-cron', '~> 1.2'
 gem 'redis-namespace', '~> 1.8.1'
 gem 'gitlab-sidekiq-fetcher', '0.8.0', require: 'sidekiq-reliable-fetch'
@@ -295,7 +295,7 @@ gem 'gon', '~> 6.4.0'
 gem 'request_store', '~> 1.5'
 gem 'base32', '~> 0.3.0'
 
-gem 'gitlab-license', '~> 2.0'
+gem 'gitlab-license', '~> 2.1.0'
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.3.0'
@@ -310,7 +310,7 @@ gem 'pg_query', '~> 2.1'
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.21.3'
+gem 'gitlab-labkit', '~> 0.22.0'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -396,7 +396,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 2.6.1', require: false
+  gem 'gitlab-dangerfiles', '~> 2.8.0', require: false
 end
 
 group :development, :test, :coverage do
@@ -466,21 +466,14 @@ gem 'sys-filesystem', '~> 1.4.3'
 # NTP client
 gem 'net-ntp'
 
-# SSH host key support
-gem 'net-ssh', '~> 6.0'
-gem 'sshkey', '~> 2.0'
-
-# Required for ED25519 SSH host key support
-group :ed25519 do
-  gem 'ed25519', '~> 1.2'
-  gem 'bcrypt_pbkdf', '~> 1.1'
-end
+# SSH keys support
+gem 'ssh_data', '~> 1.2'
 
 # Spamcheck GRPC protocol definitions
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.6.0.pre.rc1'
+gem 'gitaly', '~> 14.8.0.pre.rc1'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
@@ -496,7 +489,7 @@ gem 'flipper', '~> 0.21.0'
 gem 'flipper-active_record', '~> 0.21.0'
 gem 'flipper-active_support_cache_store', '~> 0.21.0'
 gem 'unleash', '~> 3.2.2'
-gem 'gitlab-experiment', '~> 0.6.5'
+gem 'gitlab-experiment', '~> 0.7.0'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
