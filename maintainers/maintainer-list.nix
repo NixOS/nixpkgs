@@ -1688,6 +1688,12 @@
     githubId = 355401;
     name = "Brian Hicks";
   };
+  brianmcgee = {
+    name = "Brian McGee";
+    email = "brian@41north.dev";
+    github = "brianmcgee";
+    githubId = 1173648;
+  };
   Br1ght0ne = {
     email = "brightone@protonmail.com";
     github = "Br1ght0ne";
