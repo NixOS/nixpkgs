@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    mandown $src/docs/MANPAGE.md > ./zellij.1
-    installManPage ./zellij.1
+    mandown docs/MANPAGE.md > zellij.1
+    installManPage zellij.1
 
     installShellCompletion --cmd $pname \
       --bash <($out/bin/zellij setup --generate-completion bash) \
