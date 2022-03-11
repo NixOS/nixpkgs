@@ -6,11 +6,12 @@
 let
   steamPackagesFun = self: let
     inherit (self) callPackage;
-  in {
+  in rec {
     steamArch = if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
                 else if stdenv.hostPlatform.system == "i686-linux" then "i386"
                 else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
+    steam-main = if stdenv.isLinux then steam-fhsenv else steam;
     steam-runtime = callPackage ./runtime.nix { };
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
@@ -29,7 +30,7 @@ let
     selfBuildHost = pkgsBuildHost.${steamPackagesAttr};
     selfBuildTarget = pkgsBuildTarget.${steamPackagesAttr};
     selfHostHost = pkgsHostHost.${steamPackagesAttr};
-    selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr};
+    selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr} or {};
   };
   keep = self: { };
   extra = spliced0: { };
