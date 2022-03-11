@@ -4057,6 +4057,12 @@
     githubId = 40620903;
     name = "figsoda";
   };
+  fintohaps = {
+    email = "fintan.halpenny@gmail.com";
+    github = "FintanH";
+    githubId = 3503528;
+    name = "Fintan Halpenny";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
