@@ -36,9 +36,6 @@
 , numactl
 , perlPackages
 , curl
-, libiconv
-, gmp
-, zfs
 , parted
 , bridge-utils
 , dmidecode
@@ -52,19 +49,24 @@
 , cmake
 , bash-completion
 , pkg-config
-, enableXen ? false
-, xen ? null
-, enableIscsi ? false
-, openiscsi
-, enableCeph ? false
-, ceph
-, enableGlusterfs ? false
-, glusterfs
-, Carbon
-, AppKit
+, enableCeph ? false, ceph ? null
+, enableGlusterfs ? false, glusterfs ? null
+, enableIscsi ? false, openiscsi ? null
+, enableXen ? false, xen ? null
+, enableZfs ? true, zfs ? null
+# Darwin
+, gmp
+, libiconv
+, Carbon ? null
+, AppKit ? null
 }:
 
 with lib;
+
+assert enableXen -> stdenv.isLinux && stdenv.isx86_64;
+assert enableCeph -> stdenv.isLinux;
+assert enableGlusterfs -> stdenv.isLinux;
+assert enableZfs -> stdenv.isLinux;
 
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
@@ -72,14 +74,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.10.0";
+  version = "8.1.0";
 
   src =
     if buildFromTarball then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-yzGAFK8JcyeSjG49cpIuO+AqPmQBJHsqpS2auOC0gPk=";
+          sha256 = "sha256-PGxDvs/+s0o/OXxhYgaqaaiT/4v16CCDk8hOjnU1KTQ=";
         }
     else
       fetchFromGitLab
@@ -87,13 +89,13 @@ stdenv.mkDerivation rec {
           owner = pname;
           repo = pname;
           rev = "v${version}";
-          sha256 = "sha256-bB8LsjZFeJbMmmC0YRPyMag2MBhwagUFC7aB1KhZEkA=";
+          sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
           fetchSubmodules = true;
         };
 
   patches = [
-    ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-    ./0002-meson-patch-ch-install-prefix.patch
+    ./do-not-use-sysconfig.patch
+    ./qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
   ];
 
   nativeBuildInputs = [
@@ -136,21 +138,22 @@ stdenv.mkDerivation rec {
     systemd
     libnl
     numad
-    zfs
     libapparmor
     libcap_ng
     numactl
     attr
     parted
     libtirpc
-  ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
-    xen
-  ] ++ optionals enableIscsi [
-    openiscsi
   ] ++ optionals enableCeph [
     ceph
   ] ++ optionals enableGlusterfs [
     glusterfs
+  ] ++ optionals enableIscsi [
+    openiscsi
+  ] ++ optionals enableXen [
+    xen
+  ] ++ optionals enableZfs [
+    zfs
   ] ++ optionals stdenv.isDarwin [
     libiconv
     gmp
@@ -187,23 +190,15 @@ stdenv.mkDerivation rec {
   mesonFlags =
     let
       opt = option: enable: "-D${option}=${if enable then "enabled" else "disabled"}";
+      enableDrivers = map (name: opt "driver_${name}" true);
     in
     [
-      "--sysconfdir=/var/lib"
-      "-Dinstall_prefix=${placeholder "out"}"
-      "-Dlocalstatedir=/var"
-      "-Drunstatedir=/run"
+      "--localstatedir=${placeholder "out"}/var/"
+      "-Drunstatedir=${placeholder "out"}/run/"
       "-Dlibpcap=enabled"
-      "-Ddriver_qemu=enabled"
-      "-Ddriver_vmware=enabled"
-      "-Ddriver_vbox=enabled"
-      "-Ddriver_test=enabled"
-      "-Ddriver_esx=enabled"
-      "-Ddriver_remote=enabled"
       "-Dpolkit=enabled"
       (opt "storage_iscsi" enableIscsi)
     ] ++ optionals stdenv.isLinux [
-      (opt "storage_zfs" (zfs != null))
       "-Dattr=enabled"
       "-Dapparmor=enabled"
       "-Dsecdriver_apparmor=enabled"
@@ -211,9 +206,24 @@ stdenv.mkDerivation rec {
       "-Dstorage_disk=enabled"
       (opt "glusterfs" enableGlusterfs)
       (opt "storage_rbd" enableCeph)
+      (opt "storage_zfs" enableZfs)
     ] ++ optionals stdenv.isDarwin [
       "-Dinit_script=none"
-    ];
+    ] ++ (enableDrivers [
+      "ch"
+      "esx"
+      "interface"
+      "libvirtd"
+      "lxc"
+      "network"
+      "openvz"
+      "qemu"
+      "remote"
+      "secrets"
+      "test"
+      "vbox"
+      "vmware"
+    ] ++ lib.optional enableXen "libxl");
 
   postInstall =
     let
