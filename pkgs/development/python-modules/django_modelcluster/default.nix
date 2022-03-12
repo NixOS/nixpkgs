@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "5.2";
+  version = "5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e541a46a0a899ef4778a4708be22e71cac3efacc09a6ff44bc065c5c9194c054";
+    sha256 = "sha256-A0fNyssZoQeO5WzD5tVBO6J7ilkAcQxTu5K12P84Gc0=";
   };
 
   disabled = pythonOlder "3.5";
