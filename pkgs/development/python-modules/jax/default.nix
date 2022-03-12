@@ -19,7 +19,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "${pname}-v${version}";
-    sha256 = "0bpqmyc4hg25i8cfnrx3y2bwgp6h5rri2a1q9i8gb6r0id97zvcn";
+    rev = "jaxlib-v${version}";
+    sha256 = "sha256-WzxuMDR1PRLs2cVaIGY3LrL1+vQ3ToQWDG4UrJnGiXE=";
   };
 
   patches = [
