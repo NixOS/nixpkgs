@@ -38,6 +38,43 @@ A user's nixpkgs configuration is stored in a user-specific configuration file l
 }
 ```
 
+## Configure with Flakes {#sec-configure-with-flakes}
+
+Users of the experimental Flakes feature, can set arguments using the `parameters` input. This is an input to the `nixpkgs` flake, which must provide the attribute `lib.pkgsParameters`.
+
+First, create a subflake; a flake in a subdirectory.
+
+```nix
+# ./nixpkgs-parameters/flake.nix
+{
+  description = "Parameters for Nixpkgs";
+  outputs = { self }: {
+    lib.pkgsParameters = {
+      overlays = [ ];
+      buildSystem = null; # same as host system
+      config = {
+        allowBroken = true;
+      };
+    };
+  };
+}
+```
+
+Then, inject it into nixpkgs with `follows`.
+
+```nix
+# ./flake.nix (section)
+{
+  inputs.nixpkgs.inputs.parameters.follows = "parameters";
+  inputs.parameters.url = "./nixpkgs-parameters";
+
+  outputs = { nixpkgs, ... }:
+    {
+      # ...
+    };
+}
+```
+
 ## Installing broken packages {#sec-allow-broken}
 
 There are two ways to try compiling a package which has been marked as broken.
