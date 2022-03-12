@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     # "All of the code is dual licensed under the MIT license and the UIUC
     # License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
-    broken = true; # TODO: gnu-install-dirs.patch fails to apply
   };
 }
