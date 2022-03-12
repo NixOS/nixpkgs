@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "ropgadget";
-  version = "6.6";
+  version = "6.7";
 
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
     rev = "v${version}";
-    sha256 = "1i0gx0cwhxk6d8byvck17hh83szz3k6ndd118ha3q0r0msap0lz1";
+    sha256 = "sha256-zOTbncsOvmLQMZGpcRLviSZP/d1cQTQHXCLUKyEgVBk=";
   };
 
   propagatedBuildInputs = [
