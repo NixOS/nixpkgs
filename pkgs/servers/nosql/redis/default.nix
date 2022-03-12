@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
+, tcl, which, ps
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
@@ -44,7 +45,26 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
 
-  doCheck = false; # needs tcl
+  # darwin currently lacks a pure `pgrep` which is extensively used here
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ which tcl ps ];
+  checkPhase = ''
+    runHook preCheck
+
+    # disable test "Connect multiple replicas at the same time": even
+    # upstream find this test too timing-sensitive
+    substituteInPlace tests/integration/replication.tcl \
+      --replace 'foreach mdl {no yes}' 'foreach mdl {}'
+
+    ./runtest \
+      --no-latency \
+      --timeout 2000 \
+      --clients $NIX_BUILD_CORES \
+      --tags -leaks \
+      --skipunit integration/failover # flaky and slow
+
+    runHook postCheck
+  '';
 
   passthru.tests.redis = nixosTests.redis;
 
