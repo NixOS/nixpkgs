@@ -12,26 +12,26 @@
 }:
 
 let
-  version = "12.107.0";
+  version = "12.108.1";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     rev = version;
-    sha256 = "sha256-ovoqqFnWZe99yeYWKfiGR0BgyvOnWyb2wa026qKL8Io=";
+    sha256 = "sha256-NTspyTNy3cqc43+YLeCKRR46D7BvtIWoNCmwgqykHgs=";
   };
 
   deps = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-c8R5w0DffBtEkaePyPjJsb3OsNaN9lCDzf4QWSTfMPk=";
+    sha256 = "sha256-1NEeuBVp5e7RtFzYeT4nTGxGs2oeTxqiz20pEZXmcbo=";
   };
   backendDeps = fetchYarnDeps {
     yarnLock = "${src}/packages/backend/yarn.lock";
-    sha256 = "sha256-AJ9RB0fJTHELPoqshM9Tvaq/fXpwiiU55n4zvSvZRN4=";
+    sha256 = "sha256-G01hkYthBCZnsvPNaTIXSgTN9/1inJXhh34umxfxUsc=";
   };
   clientDeps = fetchYarnDeps {
     yarnLock = "${src}/packages/client/yarn.lock";
-    sha256 = "sha256-Jk3XCsrSUyRAaUC6tJBqBslmU2J26bJyw64TAovCLH8=";
+    sha256 = "sha256-LwGjqHN59KditL3igVP1/TZ7cZSbrZopOl9A0c1nlW8=";
   };
 
 in stdenv.mkDerivation {
