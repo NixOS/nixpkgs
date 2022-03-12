@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.tcpdump.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ globin ];
-    platforms = platforms.unix;
+    platforms = with platforms; filter (p: ! elem p darwin) unix;
   };
 }
