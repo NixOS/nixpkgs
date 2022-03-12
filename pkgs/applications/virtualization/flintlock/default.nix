@@ -21,7 +21,7 @@ buildGoModule rec{
 
   vendorSha256 = "sha256-EjVlM6AD+O/z6+R5TRBmmRWbrP4C+qyvsnEjwOkDkUE=";
 
-  subPackages = ["cmd/flintlock-metrics" "cmd/flintlockd"];
+  subPackages = [ "cmd/flintlock-metrics" "cmd/flintlockd" ];
 
   ldflags = [ "-s" "-w" "-X github.com/weaveworks/flintlock/internal/version.Version=v${version}" ];
 
@@ -35,7 +35,7 @@ buildGoModule rec{
 
   postInstall = ''
     for prog in flintlockd flintlock-metrics; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ cni-plugins firecracker containerd runc ]}
+      wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ cni-plugins firecracker containerd runc ]}
     done
   '';
 
