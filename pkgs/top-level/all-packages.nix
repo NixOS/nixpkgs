@@ -2726,6 +2726,8 @@ with pkgs;
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
+  wl-gammactl = callPackage ../tools/wayland/wl-gammactl { };
+
   wluma = callPackage ../tools/wayland/wluma {  };
 
   wob = callPackage ../tools/wayland/wob { };
