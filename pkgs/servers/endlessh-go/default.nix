@@ -1,4 +1,7 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "endlessh-go";
@@ -8,15 +11,17 @@ buildGoModule rec {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = version;
-    sha256 = "sha256-U+h/WmTVwwUIBEOiNa/EKS6HvkeoGNmP3NpeP1fcqYw=";
+    hash = "sha256-U+h/WmTVwwUIBEOiNa/EKS6HvkeoGNmP3NpeP1fcqYw=";
   };
+
   vendorSha256 = "sha256-h/DpbXO+LUsB9NOAXUfNx3VOfEsiolfBEMBrAqVlU3A=";
+
   proxyVendor = true;
 
   meta = with lib; {
-    homepage = "https://github.com/shizunge/endlessh-go";
     description = "An implementation of endlessh exporting Prometheus metrics";
-    license = licenses.gpl3;
+    homepage = "https://github.com/shizunge/endlessh-go";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
   };
 }
