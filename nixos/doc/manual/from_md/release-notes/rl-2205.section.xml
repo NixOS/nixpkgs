@@ -1281,6 +1281,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.dendrite.httpPort</literal> and
+          <literal>services.dendrite.httpsPort</literal> have been
+          replaced with <literal>services.dendrite.httpAddress</literal>
+          and <literal>services.dendrite.httpsAddress</literal>
+          respectively.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.logrotate.enable</literal> now defaults to
           true if any rotate path has been defined, and some paths have
           been added by default.

@@ -6,20 +6,24 @@ let
   workingDir = "/var/lib/dendrite";
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "dendrite" "httpPort" ] "Use services.dendrite.httpAddress instead")
+    (lib.mkRemovedOptionModule [ "services" "dendrite" "httpsPort" ] "Use services.dendrite.httpsAddress instead")
+  ];
   options.services.dendrite = {
     enable = lib.mkEnableOption "matrix.org dendrite";
-    httpPort = lib.mkOption {
-      type = lib.types.nullOr lib.types.port;
-      default = 8008;
+    httpAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = ":8008";
       description = ''
-        The port to listen for HTTP requests on.
+        The address to listen for HTTP requests on.
       '';
     };
-    httpsPort = lib.mkOption {
-      type = lib.types.nullOr lib.types.port;
+    httpsAddress = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
-        The port to listen for HTTPS requests on.
+        The address to listen for HTTPS requests on.
       '';
     };
     tlsCert = lib.mkOption {
@@ -226,7 +230,7 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions = [{
-      assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
+      assertion = cfg.httpsAddress != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
       message = ''
         If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
@@ -259,10 +263,10 @@ in
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/dendrite/dendrite.yaml"
-        ] ++ lib.optionals (cfg.httpPort != null) [
-          "--http-bind-address :${builtins.toString cfg.httpPort}"
-        ] ++ lib.optionals (cfg.httpsPort != null) [
-          "--https-bind-address :${builtins.toString cfg.httpsPort}"
+        ] ++ lib.optionals (cfg.httpAddress != null) [
+          "--http-bind-address ${cfg.httpAddress}"
+        ] ++ lib.optionals (cfg.httpsAddress != null) [
+          "--https-bind-address ${cfg.httpsAddress}"
           "--tls-cert ${cfg.tlsCert}"
           "--tls-key ${cfg.tlsKey}"
         ]);
