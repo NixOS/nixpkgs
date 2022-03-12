@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    curses (1.4.2)
+    ffi (1.15.3)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  curses
+  ffi
+
+BUNDLED WITH
+   2.2.20

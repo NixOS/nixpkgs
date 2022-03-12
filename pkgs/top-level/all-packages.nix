@@ -1100,6 +1100,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  redtimer = callPackage ../tools/misc/redtimer { };
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   tauon = callPackage ../applications/audio/tauon { };
@@ -19031,6 +19033,8 @@ with pkgs;
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
   live555 = callPackage ../development/libraries/live555 { };
+
+  livesplit-core = callPackage ../development/libraries/livesplit-core { };
 
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
