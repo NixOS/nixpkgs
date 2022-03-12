@@ -5,6 +5,7 @@
 , runCommand
 , cmake
 , llvm
+, lit
 , clang-unwrapped
 , perl
 , pkg-config
@@ -26,16 +27,20 @@ stdenv.mkDerivation rec {
   patches = [
     ./gnu-install-dirs.patch
     ./fix-find-tool.patch
+    ./run-lit-directly.patch
   ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake perl pkg-config clang-unwrapped ];
+  nativeBuildInputs = [ cmake perl pkg-config clang-unwrapped lit ];
   buildInputs = [ llvm ];
 
-  cmakeFlags = [
-    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL currently fails
-  ];
+  doCheck = true;
+  checkTarget = "check-openmp";
+
+  preCheck = ''
+    patchShebangs ../tools/archer/tests/deflake.bash
+  '';
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";
