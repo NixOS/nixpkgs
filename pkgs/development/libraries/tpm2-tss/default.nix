@@ -14,7 +14,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "3.0.3";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ ];
   };
 }
