@@ -1261,8 +1261,19 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
-  # 2021-08-18: Erroneously  claims that it needs a newer HStringTemplate (>= 0.8.8) than stackage.
-  gitit = doJailbreak super.gitit;
+  # 2022-03-12: Pick patches from master for compat with Stackage Nightly
+  gitit = appendPatches [
+    (pkgs.fetchpatch {
+      name = "gitit-allow-pandoc-2.17.patch";
+      url = "https://github.com/jgm/gitit/commit/9eddd1d3bde46bccb23c6d21e15b289f2a9ebe66.patch";
+      sha256 = "09ahvwyaqzqaa9gnpbffncs9574d20mfy30zz2ww67cmm8f2a8iv";
+    })
+    (pkgs.fetchpatch {
+      name = "gitit-fix-build-with-hoauth2-2.3.0.patch";
+      url = "https://github.com/jgm/gitit/commit/fd534c0155eef1790500c834e612ab22cf9b67b6.patch";
+      sha256 = "0hmlqkavn8hr0b4y4hxs1yyg0r79ylkzhzwy1dzbb3a2q86ydd2f";
+    })
+  ] super.gitit;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
