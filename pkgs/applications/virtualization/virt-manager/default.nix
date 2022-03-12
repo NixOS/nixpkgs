@@ -49,8 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
 
   preFixup = ''
-    mkdir -p $out/share/glib-2.0/schemas
-    cp $src/data/*.gschema.xml $out/share/glib-2.0/schemas/
+    glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
 
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
