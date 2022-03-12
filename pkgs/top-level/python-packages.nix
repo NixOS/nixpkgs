@@ -3200,6 +3200,8 @@ in {
     inherit (pkgs) bluez glib pkg-config;
   };
 
+  gb-io = callPackage ../development/python-modules/gb-io { };
+
   gbinder-python = callPackage ../development/python-modules/gbinder-python { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
