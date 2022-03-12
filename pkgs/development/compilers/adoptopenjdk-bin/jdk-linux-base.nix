@@ -111,7 +111,7 @@ let result = stdenv.mkDerivation rec {
   passthru.home = result;
 
   meta = with lib; {
-    license = licenses.gpl2Classpath;
+    license = with licenses; [ gpl2Only /* WITH */ classpath-exception ];
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];

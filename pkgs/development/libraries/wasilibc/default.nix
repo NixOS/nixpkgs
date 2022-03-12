@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage    = "https://wasi.dev";
     platforms   = platforms.wasi;
     maintainers = [ maintainers.matthewbauer ];
-    license = with licenses; [ asl20 mit llvm-exception ];
+    license = with licenses; [ asl20 /* WITH */ llvm-exception /* AND */ mit ];
   };
 }

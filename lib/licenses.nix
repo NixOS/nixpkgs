@@ -404,16 +404,6 @@ in mkLicense lset) ({
     fullName = "GNU General Public License v2.0 only";
   };
 
-  gpl2Classpath = {
-    spdxId = "GPL-2.0-with-classpath-exception";
-    fullName = "GNU General Public License v2.0 only (with Classpath exception)";
-  };
-
-  gpl2ClasspathPlus = {
-    fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
-    url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
-  };
-
   gpl2Oss = {
     fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
     url = "https://www.mysql.com/about/legal/licensing/foss-exception";
@@ -432,11 +422,6 @@ in mkLicense lset) ({
   gpl3Plus = {
     spdxId = "GPL-3.0-or-later";
     fullName = "GNU General Public License v3.0 or later";
-  };
-
-  gpl3ClasspathPlus = {
-    fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
-    url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
   hpnd = {
@@ -563,11 +548,6 @@ in mkLicense lset) ({
   llgpl21 = {
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
     url = "https://opensource.franz.com/preamble.html";
-  };
-
-  llvm-exception = {
-    spdxId = "LLVM-exception";
-    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
   };
 
   lppl12 = {
@@ -720,6 +700,7 @@ in mkLicense lset) ({
 
   publicDomain = {
     fullName = "Public Domain";
+    url = "https://opensource.org/faq#public-domain";
   };
 
   purdueBsd = {
@@ -741,11 +722,6 @@ in mkLicense lset) ({
   qpl = {
     spdxId = "QPL-1.0";
     fullName = "Q Public License 1.0";
-  };
-
-  qwt = {
-    fullName = "Qwt License, Version 1.0";
-    url = "https://qwt.sourceforge.io/qwtlicense.html";
   };
 
   ruby = {
@@ -875,11 +851,6 @@ in mkLicense lset) ({
     fullName = "Do What The F*ck You Want To Public License";
   };
 
-  wxWindows = {
-    spdxId = "wxWindows";
-    fullName = "wxWindows Library Licence, Version 3.1";
-  };
-
   xfig = {
     fullName = "xfig";
     url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken
@@ -899,8 +870,178 @@ in mkLicense lset) ({
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
+
 } // {
-  # TODO: remove legacy aliases
+  /*
+    Below is the list of known license exceptions introduced with SPDX 2.0
+    https://spdx.org/licenses/exceptions-index.html
+  */
+
+  autoconf-exception2 = {
+    spdxId = "Autoconf-exception-2.0"; # Typically used with GPL-2.0
+    fullName = "Autoconf exception 2.0";
+  };
+
+  autoconf-exception3 = {
+    spdxId = "Autoconf-exception-3.0"; # Typically used with GPL-3.0
+    fullName = "Autoconf exception 3.0";
+  };
+
+  bison-exception = {
+    spdxId = "Bison-exception-2.2"; # Typically used with GPL-2.0 or GPL-3.0
+    fullName = "Bison exception 2.2";
+  };
+
+  classpath-exception = {
+    spdxId = "Classpath-exception-2.0"; # Applies to GPL-2.0 / GPL-3.0
+    fullName = "Classpath exception 2.0";
+  };
+
+  clisp-exception = {
+    spdxId = "CLISP-exception-2.0"; # Typically used with GPL-2.0
+    fullName = "CLISP exception 2.0";
+  };
+
+  fltk-exception = {
+    spdxId = "FLTK-exception"; # Applies to LGPL-2.0-only
+    fullName = "FLTK exception";
+  };
+
+  font-exception = {
+    spdxId = "Font-exception-2.0"; # Typically used with GPL-2.0-or-later
+    fullName = "Font exception 2.0";
+  };
+
+  gcc-exception2 = {
+    spdxId = "GCC-exception-2.0"; # Typically used with GPL-2.0-or-later
+    fullName = "GCC Runtime Library exception 2.0";
+  };
+
+  gcc-exception31 = {
+    spdxId = "GCC-exception-3.1"; # Typically used with GPL-3.0
+    fullName = "GCC Runtime Library exception 3.1";
+  };
+
+  gpl3-linking-exception = {
+    spdxId = "GPL-3.0-linking-exception"; # Applies to GPL-3.0
+    fullName = "GPL-3.0 Linking Exception";
+  };
+
+  gpl3-linking-source-exception = {
+    spdxId = "GPL-3.0-linking-source-exception"; # Applies to GPL-3.0
+    fullName = "GPL-3.0 Linking Exception (with Corresponding Source)";
+  };
+
+  gplcc-exception = {
+    spdxId = "GPL-CC-1.0"; # Applies to GPL-2.0 / LGPL-2.0 / LGPL-2.1
+    fullName = "GPL Cooperation Commitment 1.0";
+  };
+
+  i2p-exception = {
+    spdxId = "i2p-gpl-java-exception"; # Typically used with GPL-2.0-or-later
+    fullName = "i2p GPL+Java Exception";
+  };
+
+  javamail-exception = {
+    spdxId = "gnu-javamail-exception"; # Typically used with GPL (any version)
+    fullName = "GNU JavaMail exception";
+  };
+
+  lgpl3-linking-exception = {
+    spdxId = "LGPL-3.0-linking-exception"; # Applies to LGPL-3.0
+    fullName = "LGPL-3.0 Linking Exception";
+  };
+
+  libtool-exception = {
+    spdxId = "Libtool-exception"; # Applies to GPL-2.0-or-later
+    fullName = "Libtool Exception";
+  };
+
+  linux-syscall-exception = {
+    spdxId = "Linux-syscall-note"; # Applies to GPL-2.0-only
+    fullName = "Linux Syscall Note";
+  };
+
+  llvm-exception = {
+    spdxId = "LLVM-exception"; # Applies to Apache-2.0
+    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
+  };
+
+  lzma-exception = {
+    spdxId = "LZMA-exception"; # Applies to CPL-1.0
+    fullName = "LZMA exception";
+  };
+
+  mif-exception = {
+    spdxId = "mif-exception"; # Typically used with GPL-2.0
+    fullName = "Macros and Inline Functions Exception";
+  };
+
+  ocaml-exception = {
+    spdxId = "OCaml-LGPL-linking-exception"; # Applies to LGPL-2.0-or-later
+    fullName = "OCaml LGPL Linking Exception";
+  };
+
+  opencascade-exception = {
+    spdxId = "OCCT-exception-1.0"; # Applies to LGPL-2.1
+    fullName = "Open CASCADE Exception 1.0";
+  };
+
+  openjdk-assembly-exception = {
+    spdxId = "OpenJDK-assembly-exception-1.0"; # Applies to GPL-2.0-only
+    fullName = "OpenJDK Assembly exception 1.0";
+  };
+
+  openvpn-openssl-exception = {
+    spdxId = "openvpn-openssl-exception"; # Typically used with GPL 2.0
+    fullName = "OpenVPN OpenSSL Exception";
+  };
+
+  pspdf-exception = {
+    spdxId = "PS-or-PDF-font-exception-20170817"; # Applies to AGPL-3.0
+    fullName = "PS/PDF font exception (2017-08-17)";
+  };
+
+  qtgpl-exception = {
+    spdxId = "Qt-GPL-exception-1.0"; # Typically used with the GPL-3.0
+    fullName = "Qt GPL exception 1.0";
+  };
+
+  qtlgpl-exception = {
+    spdxId = "Qt-LGPL-exception-1.1"; # Applies to LGPL-2.1
+    fullName = "Qt LGPL exception 1.1";
+  };
+
+  qwt-exception = {
+    spdxId = "Qwt-exception-1.0"; # Applies to LGPL-2.1
+    fullName = "Qwt exception 1.0";
+  };
+
+  swift-exception = {
+    spdxId = "Swift-exception"; # Applies to Apache-2.0
+    fullName = "Swift Exception";
+  };
+
+  uboot-exception = {
+    spdxId = "u-boot-exception-2.0"; # Typically used with GPL-2.0-or-later
+    fullName = "U-Boot exception 2.0";
+  };
+
+  unifoss-exception = {
+    spdxId = "Universal-FOSS-exception-1.0";
+    fullName = "Universal FOSS Exception, Version 1.0";
+  };
+
+  wx-exception = {
+    spdxId = "WxWindows-exception-3.1"; # Typically used with LGPL-2.0-or-later
+    fullName = "WxWindows Library Exception 3.1";
+  };
+
+} // {
+  /*
+    Below are old SPDX identifiers that were deprecated with SPDX 3.0
+    TODO: remove legacy aliases
+  */
   agpl3 = {
     spdxId = "AGPL-3.0";
     fullName = "GNU Affero General Public License v3.0";
@@ -931,9 +1072,24 @@ in mkLicense lset) ({
     fullName = "GNU General Public License v2.0";
     deprecated = true;
   };
+  gpl2Classpath = {
+    spdxId = "GPL-2.0-with-classpath-exception";
+    fullName = "GNU General Public License v2.0 only (with Classpath exception)";
+    deprecated = true;
+  };
+  gpl2ClasspathPlus = {
+    fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
+    url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
+    deprecated = true;
+  };
   gpl3 = {
     spdxId = "GPL-3.0";
     fullName = "GNU General Public License v3.0";
+    deprecated = true;
+  };
+  gpl3ClasspathPlus = {
+    fullName = "GNU General Public License v3.0 or later (with Classpath exception)";
+    url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
     deprecated = true;
   };
   lgpl2 = {
@@ -949,6 +1105,16 @@ in mkLicense lset) ({
   lgpl3 = {
     spdxId = "LGPL-3.0";
     fullName = "GNU Lesser General Public License v3.0";
+    deprecated = true;
+  };
+  qwt = {
+    fullName = "Qwt License, Version 1.0";
+    url = "https://qwt.sourceforge.io/qwtlicense.html";
+    deprecated = true;
+  };
+  wxWindows = {
+    spdxId = "wxWindows";
+    fullName = "wxWindows Library Licence, Version 3.1";
     deprecated = true;
   };
 })

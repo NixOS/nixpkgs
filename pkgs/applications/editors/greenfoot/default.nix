@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
-    license = licenses.gpl2ClasspathPlus;
+    license = with licenses; [ gpl2Plus /* WITH */ classpath-exception ];
     maintainers = [ maintainers.chvp ];
     platforms = platforms.unix;
   };

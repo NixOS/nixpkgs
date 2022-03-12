@@ -318,7 +318,9 @@ let
       inherit platforms;
       homepage = "https://www.graalvm.org/";
       description = "High-Performance Polyglot VM";
-      license = with licenses; [ upl gpl2Classpath bsd3 ];
+      license = with licenses; [
+        upl /* AND */ gpl2Only /* WITH */ classpath-exception /* AND */ bsd3
+      ];
       maintainers = with maintainers; [
         bandresen
         volth
