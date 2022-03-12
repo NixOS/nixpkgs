@@ -7693,6 +7693,8 @@ with pkgs;
 
   mjolnir = callPackage ../servers/mjolnir { };
 
+  mmutils = callPackage ../tools/X11/mmutils { };
+
   mmv = callPackage ../tools/misc/mmv { };
 
   mmv-go = callPackage ../tools/misc/mmv-go { };
