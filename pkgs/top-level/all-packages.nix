@@ -8480,6 +8480,8 @@ with pkgs;
 
   opensnitch-ui = libsForQt5.callPackage ../tools/networking/opensnitch/ui.nix { };
 
+  openswitcher = callPackage ../applications/video/openswitcher { };
+
   obexfs = callPackage ../tools/bluetooth/obexfs { };
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
