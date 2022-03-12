@@ -9,29 +9,65 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
-  # patch runs on remote machine hence use of which
-  # links to local node if version is 12
+  # As VS Code executes this code on the remote machine
+  # we test to see if we can build Node 14 from Nixpkgs
+  # otherwise we use the local Node if it is version 14
   patch = ''
-    f="$HOME/.vscode-server/bin/$COMMIT_ID/node"
-    localNodePath=''$(which node)
-    if [ -x "''$localNodePath" ]; then
-      localNodeVersion=''$(node -v)
-      if [ "\''${localNodeVersion:1:2}" = "12" ]; then
-        echo PATCH: replacing ''$f with ''$localNodePath
-        rm ''$f
-        ln -s ''$localNodePath ''$f
+    d="$HOME/.vscode-server/bin/$COMMIT_ID"
+    f="$d/node"
+    echo "VS Code Node: $f"
+
+    # Check if VS Code Server has a non-working Node or the wrong version of Node
+    if ! nodeVersion=$($f -v) || [ "\''${nodeVersion:1:2}" != "14" ]; then
+      echo "VS Code Node Version: $nodeVersion"
+
+      if [ -e $(nix-build "<nixpkgs>" -A nodejs-14_x --out-link "$d/nix")/bin/node ]; then
+        nodePath="$d/nix/bin/node"
+      fi
+
+      echo "Node from Nix: $nodePath"
+
+      nodeVersion=$($nodePath -v)
+      echo "Node from Nix Version: $nodeVersion"
+
+      if [ "\''${nodeVersion:1:2}" != "14" ]; then
+        echo "Getting Node from Nix failed, use Local Node instead"
+        nodePath=$(which node)
+        echo "Local Node: $nodePath"
+        nodeVersion=$($nodePath -v)
+        echo "Local Node Version: $nodeVersion"
+      fi
+
+      if [ "\''${nodeVersion:1:2}" == "14" ]; then
+        echo PATCH: replacing $f with $nodePath
+        rm $f
+        ln -s $nodePath $f
       fi
     fi
+
+    nodeVersion=$($f -v)
+    echo "VS Code Node Version: $($f -v)"
+
+    if [ "\''${nodeVersion:1:2}" != "14" ]; then
+      echo "Unsupported VS Code Node version: $nodeVersion", quitting
+      fail_with_exitcode ''${o.InstallExitCode.ServerTransferFailed}
+    fi
+
     ${lib.optionalString useLocalExtensions ''
       # Use local extensions
       if [ -d $HOME/.vscode/extensions ]; then
-        if ! test -L "$HOME/.vscode-server/extensions"; then
+        if ! [ -L $HOME/.vscode-server/extensions ]; then
+          if [ -e $HOME/.vscode-server/extensions ]; then
+            mv $HOME/.vscode-server/extensions $HOME/.vscode-server/extensions.bak
+          fi
+
           mkdir -p $HOME/.vscode-server
-          ln -s $HOME/.vscode/extensions $HOME/.vscode-server/
+          ln -s $HOME/.vscode/extensions $HOME/.vscode-server/extensions
         fi
       fi
     ''}
-  '';
+
+    echo "Checking $VSCH_LOGFILE''; # Don't add a trailing newline as we only matched part of a command
 in
 buildVscodeMarketplaceExtension {
   mktplcRef = {
@@ -43,7 +79,7 @@ buildVscodeMarketplaceExtension {
 
   postPatch = ''
     substituteInPlace "out/extension.js" \
-      --replace "# install extensions" '${patch}'
+      --replace 'echo "Checking $VSCH_LOGFILE' '${patch}'
   '';
 
   meta = with lib; {
