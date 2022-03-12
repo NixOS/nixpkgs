@@ -62,11 +62,9 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = with python3.pkgs; [ cpio cdrtools pytestCheckHook ];
 
   disabledTestPaths = [
-    "tests/test_cli.py"
-    "tests/test_disk.py"
-    "tests/test_checkprops.py"
-    "tests/test_storage.py"
-  ]; # Error logs: https://gist.github.com/superherointj/fee040872beaafaaa19b8bf8f3ff0be5
+    "tests/test_misc.py"
+    "tests/test_xmlparse.py"
+  ];
 
   preCheck = ''
     export HOME=.
