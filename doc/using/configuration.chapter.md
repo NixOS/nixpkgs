@@ -14,6 +14,8 @@ Note that all this is checked during evaluation already, and the check includes 
 
 Each of these criteria can be altered in the nixpkgs configuration.
 
+## Configure Nixpkgs for NixOS {#sec-configure-nixpkgs-for-nixos}
+
 The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, as in the following example:
 
 ```nix
@@ -23,6 +25,8 @@ The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, 
   };
 }
 ```
+
+## Configure user-invoked Nixpkgs {#sec-configure-nixpkgs-for-user}
 
 However, this does not allow unfree software for individual users. Their configurations are managed separately.
 
