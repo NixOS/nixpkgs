@@ -228,7 +228,7 @@ let
 
     near-cli = super.near-cli.override {
       nativeBuildInputs = with pkgs; [
-        libusb
+        libusb1
         nodePackages.prebuild-install
         nodePackages.node-gyp-build
         pkg-config

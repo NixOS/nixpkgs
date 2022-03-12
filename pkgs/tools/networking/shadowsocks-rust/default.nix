@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, CoreServices, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
@@ -15,7 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   cargoBuildFlags = [
     "--features=aead-cipher-extra,local-dns,local-http-native-tls,local-redir,local-tun"

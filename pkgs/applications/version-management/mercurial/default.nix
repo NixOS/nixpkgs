@@ -181,6 +181,10 @@ in
         nativeBuildInputs = self.nativeBuildInputs;
 
         dontUnpack = true;
+        dontPatch = true;
+        dontConfigure = true;
+        dontBuild = true;
+        doCheck = false;
 
         installPhase = ''
           runHook preInstall
