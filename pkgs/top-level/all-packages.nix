@@ -3371,6 +3371,8 @@ with pkgs;
 
   iotools = callPackage ../tools/misc/iotools { };
 
+  jellycli = callPackage ../applications/audio/jellycli { };
+
   jellyfin = callPackage ../servers/jellyfin { };
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
