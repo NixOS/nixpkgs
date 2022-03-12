@@ -2181,6 +2181,12 @@
     githubId = 42220376;
     name = "Charlotte Van Petegem";
   };
+  cigrainger = {
+    name = "Christopher Grainger";
+    email = "chris@amplified.ai";
+    github = "cigrainger";
+    githubId = 3984794;
+  };
   ciil = {
     email = "simon@lackerbauer.com";
     github = "ciil";
@@ -11675,6 +11681,17 @@
       github = "stehessel";
       githubId = 55607356;
       name = "Stephan Heßelmann";
+  };
+  steinybot = {
+    name = "Jason Pickens";
+    email = "jasonpickensnz@gmail.com";
+    matrix = "@steinybot:matrix.org";
+    github = "steinybot";
+    githubId = 4659562;
+    keys = [{
+      longkeyid = "ed25519/0x21DE1CAE59762A0F";
+      fingerprint = "2709 1DEC CC42 4635 4299  569C 21DE 1CAE 5976 2A0F";
+    }];
   };
   stelcodes = {
     email = "stel@stel.codes";
