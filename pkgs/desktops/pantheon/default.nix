@@ -85,8 +85,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   evince = pkgs.evince.override { withPantheon = true; };
 
-  file-roller = pkgs.gnome.file-roller.override { withPantheon = true; };
-
   sideload = callPackage ./apps/sideload { };
 
   #### DESKTOP
@@ -243,6 +241,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
+
+  file-roller = pkgs.gnome.file-roller; # added 2022-03-12
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 
