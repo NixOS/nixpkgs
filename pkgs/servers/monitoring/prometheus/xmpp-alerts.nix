@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qmmmlcanbrhyyxi32gy3gibgvj7jdjwpa8cf5ci9czvbyxg4rld";
+    sha256 = "sha256-gb7lFRqqw4w/B+Sw0iteDkuGsPfw/ZZ+sRMTu5vxIUo=";
   };
 
   propagatedBuildInputs = [
