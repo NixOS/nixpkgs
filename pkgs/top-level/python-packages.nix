@@ -7649,6 +7649,8 @@ in {
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
+  pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
+
   pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
