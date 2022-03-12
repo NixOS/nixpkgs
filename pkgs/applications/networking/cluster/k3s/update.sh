@@ -7,7 +7,7 @@ WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
-NIXPKGS_K3S_FOLDER=${NIXPKGS_ROOT}$(dirname "${BASH_SOURCE[0]}")/
+NIXPKGS_K3S_FOLDER=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
 cd ${NIXPKGS_K3S_FOLDER}
 
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
