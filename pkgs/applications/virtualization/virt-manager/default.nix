@@ -1,22 +1,21 @@
-{ lib, fetchurl, python3Packages, intltool, file
-, wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, libosinfo, gnome
-, gtksourceview4, docutils
+{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
+, vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
+, gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
+, e2fsprogs, findutils, gzip, cdrtools
 , spiceSupport ? true, spice-gtk ? null
-, cpio, e2fsprogs, findutils, gzip
-, cdrtools
 }:
 
 with lib;
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "virt-manager";
-  version = "3.2.0";
+  version = "4.0.0";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/virt-manager/${pname}-${version}.tar.gz";
-    sha256 = "11kvpzcmyir91qz0dsnk7748jbb4wr8mrc744w117qc91pcy6vrb";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-3ycXNBuf91kI2cJCRw0ZzaWkaIVwb/lmkOKeHNwpH9Y=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     pygobject3 ipaddress libvirt libxml2 requests cdrtools
   ];
 
@@ -42,14 +41,17 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postConfigure = ''
-    ${python3Packages.python.interpreter} setup.py configure --prefix=$out
+    ${python3.interpreter} setup.py configure --prefix=$out
   '';
 
-  setupPyGlobalFlags = [ "--no-update-icon-cache" ];
+  setupPyGlobalFlags = [ "--no-update-icon-cache" "--no-compile-schemas" ];
 
   dontWrapGApps = true;
 
   preFixup = ''
+    mkdir -p $out/share/glib-2.0/schemas
+    cp $src/data/*.gschema.xml $out/share/glib-2.0/schemas/
+
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
     gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
@@ -57,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  checkInputs = with python3Packages; [ cpio cdrtools pytestCheckHook ];
+  checkInputs = with python3.pkgs; [ cpio cdrtools pytestCheckHook ];
 
   disabledTestPaths = [
     "tests/test_cli.py"
