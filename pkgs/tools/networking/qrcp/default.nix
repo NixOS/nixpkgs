@@ -39,6 +39,6 @@ buildGoModule rec {
       complete.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz SuperSandro2000 ];
   };
 }
