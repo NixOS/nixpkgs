@@ -65,6 +65,9 @@ in
         type = types.package;
         default = pkgs.pounce;
         defaultText = "pkgs.pounce";
+        description = ''
+          Set version of pounce package to use.
+        '';
       };
 
       hostAddress = mkOption {
