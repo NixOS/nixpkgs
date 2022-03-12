@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./dont-keep-configure-flags.patch
+    # https://gitlab.isc.org/isc-projects/bind9/-/merge_requests/5771
+    (fetchurl {
+      url = "https://gitlab.isc.org/isc-projects/bind9/-/commit/b465b29eaf5ad8b8882debff1f993b8288617f22.patch";
+      sha256 = "sha256-mjbvGs99Xs44mjMq40NmE0AEPZFETsi6317RR+LngLU=";
+    })
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
