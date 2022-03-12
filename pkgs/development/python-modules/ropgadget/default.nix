@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , capstone
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ropgadget";
   version = "6.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
     rev = "v${version}";
-    sha256 = "sha256-zOTbncsOvmLQMZGpcRLviSZP/d1cQTQHXCLUKyEgVBk=";
+    hash = "sha256-zOTbncsOvmLQMZGpcRLviSZP/d1cQTQHXCLUKyEgVBk=";
   };
 
   propagatedBuildInputs = [
