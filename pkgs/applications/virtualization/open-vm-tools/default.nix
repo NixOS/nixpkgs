@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     # Will be fixed in the release after 12.0.0
     (fetchpatch {
       url = "https://github.com/vmware/open-vm-tools/commit/de6d129476724668b8903e2a87654f50ba21b1b2.patch";
-      sha256 = "1xn76idqqilabmcr53h3skff3zb683kw3863im72aj04s6mzp40l";
+      sha256 = "1cqhm868g40kcp8qzzwq10zd4bah9ypaw1qawnli5d240mlkpfhh";
     })
   ];
 
