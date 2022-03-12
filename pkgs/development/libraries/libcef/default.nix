@@ -70,17 +70,17 @@ let
       projectArch = "x86_64";
     };
   };
-  platforms."aarch64-linux".sha256 = "0m12adzcs6xsmgnqsdc5g0xs6xmjbj560x4d9rnv9fpf1p7jv2fa";
-  platforms."i686-linux".sha256 = "00cy5kxx8hpifkwhn9qbfch7ng3crx0zb6ypllzip6qms956mama";
-  platforms."x86_64-linux".sha256 = "1f1hxx4xl0wljyrgj0m3zq47yz2cyqd52qigrkpcvavr1d2sx6m3";
+  platforms."aarch64-linux".sha256 = "07f8kxlanz1qakx9jr404hgqjn7vrqhhyqcaa9zh551sc0i6wq8r";
+  platforms."i686-linux".sha256 = "1dcq4lqsbpk6rzm6srdli69bib49ms00bqp12ywhvc69crmk3fpn";
+  platforms."x86_64-linux".sha256 = "0igx2v9iijb2c1rvhgmqfy4m6nxd7gwrs6ycbxf1lvm0xni2layd";
 
   platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "98.1.21";
-  gitRevision = "9782362";
-  chromiumVersion = "98.0.4758.102";
+  version = "99.2.10";
+  gitRevision = "fecf7ca";
+  chromiumVersion = "99.0.4844.51";
 
   src = fetchurl {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
