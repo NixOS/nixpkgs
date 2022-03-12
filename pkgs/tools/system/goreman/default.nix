@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "goreman";
-  version = "0.3.9";
-  rev = "df1209e7cdbad10aecc0aa75d332bc32822925f5";
+  version = "0.3.11";
+  rev = "6006c6e410ec5a5ba22b50e96227754a42f2834d";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
     rev = "v${version}";
-    sha256 = "1irjf5i5ybdchyn42bamfq8pj3w00p633h1gg202n0vsr39h0bxw";
+    sha256 = "sha256-TbJfeU94wakI2028kDqU+7dRRmqXuqpPeL4XBaA/HPo=";
   };
 
   ldflags = [
@@ -18,7 +18,7 @@ buildGoModule rec {
     "-X main.revision=${builtins.substring 0 7 rev}"
   ];
 
-  vendorSha256 = "sha256-+RFh6Ppxxs7P7DWqOBeEJTvPsBgOfopMjx22hPEI1/U=";
+  vendorSha256 = "sha256-87aHBRWm5Odv6LeshZty5N31sC+vdSwGlTYhk3BZkPo=";
 
   doCheck = false;
 
