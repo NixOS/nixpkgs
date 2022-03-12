@@ -21,6 +21,7 @@
 , zlib
 , icu
 , systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +46,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  mesonFlags = lib.optionals (!systemdSupport) [ "-D_systemd=false" ];
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
