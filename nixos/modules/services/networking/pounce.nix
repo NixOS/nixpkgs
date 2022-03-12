@@ -17,7 +17,7 @@ let
     port = ${toString cfg.ircHostPort}
     user = ${cfg.ircUser}
     nick = ${cfg.ircNick}
-    ${optionalString (cfg.certFP != null) "client-cert = "+cfg.certFP+"\nsasl-external"} 
+    ${optionalString (cfg.certFP != null) "client-cert = "+cfg.certFP+"\nsasl-external"}
     ${optionalString (cfg.ircPass != "") "pass = "+cfg.ircPass}
     ${cfg.extraConfig}
   '';
