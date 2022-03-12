@@ -324,7 +324,7 @@ in {
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
+    nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
 
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;

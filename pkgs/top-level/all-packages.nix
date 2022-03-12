@@ -6057,6 +6057,8 @@ with pkgs;
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos { };
 
+  gnome-randr = callPackage ../tools/wayland/gnome-randr { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
@@ -14078,7 +14080,7 @@ with pkgs;
 
   regina = callPackage ../development/interpreters/regina { };
 
-  inherit (ocaml-ng.ocamlPackages_4_12) reason;
+  inherit (ocamlPackages) reason;
 
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
@@ -22100,6 +22102,8 @@ with pkgs;
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
   slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
+
+  slurm-spank-stunnel = callPackage ../servers/computing/slurm-spank-stunnel { };
 
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 

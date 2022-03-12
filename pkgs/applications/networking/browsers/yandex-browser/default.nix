@@ -132,5 +132,12 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
+
+    knownVulnerabilities = [
+      ''
+      Trusts a Russian government issued CA certificate for some websites.
+      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
+      ''
+    ];
   };
 }
