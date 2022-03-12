@@ -9831,6 +9831,8 @@ with pkgs;
 
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
+  sigma-cli = callPackage ../tools/security/sigma-cli { };
+
   signify = callPackage ../tools/security/signify { };
 
   # aka., pgp-tools
