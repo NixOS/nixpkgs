@@ -26,13 +26,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
-    ./fix-find-tool.patch
     ./run-lit-directly.patch
   ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake perl pkg-config clang-unwrapped lit ];
+  nativeBuildInputs = [ cmake perl pkg-config lit ];
   buildInputs = [ llvm ];
 
   doCheck = true;
@@ -41,6 +40,12 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs ../tools/archer/tests/deflake.bash
   '';
+
+  cmakeFlags = [
+    "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
+    "-DOPT_TOOL=${llvm}/bin/opt"
+    "-DLINK_TOOL=${llvm}/bin/llvm-link"
+  ];
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";
