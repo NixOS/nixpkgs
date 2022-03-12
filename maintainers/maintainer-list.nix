@@ -7223,6 +7223,12 @@
     githubId = 1267527;
     name = "Daniel Firth";
   };
+  lodi = {
+    email = "anthony.lodi@gmail.com";
+    github = "lodi";
+    githubId = 918448;
+    name = "Anthony Lodi";
+  };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
     github = "lopsided98";

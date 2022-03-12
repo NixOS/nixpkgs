@@ -2731,6 +2731,8 @@ with pkgs;
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
+  wl-gammactl = callPackage ../tools/wayland/wl-gammactl { };
+
   wluma = callPackage ../tools/wayland/wluma {  };
 
   wob = callPackage ../tools/wayland/wob { };
@@ -3373,6 +3375,8 @@ with pkgs;
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
   iotools = callPackage ../tools/misc/iotools { };
+
+  jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin = callPackage ../servers/jellyfin { };
 
