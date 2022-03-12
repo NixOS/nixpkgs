@@ -19,7 +19,7 @@ The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, 
 ```nix
 {
   nixpkgs.config = {
-    allowUnfree = true;
+    allowBroken = true;
   };
 }
 ```
@@ -30,11 +30,9 @@ A user's nixpkgs configuration is stored in a user-specific configuration file l
 
 ```nix
 {
-  allowUnfree = true;
+  allowBroken = true;
 }
 ```
-
-Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
 
 ## Installing broken packages {#sec-allow-broken}
 
@@ -77,12 +75,22 @@ The difference between a package being unsupported on some system and being brok
 
 ## Installing unfree packages {#sec-allow-unfree}
 
+Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
+
 There are several ways to tweak how Nix handles a package which has been marked as unfree.
 
 -   To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
 
     ```ShellSession
     $ export NIXPKGS_ALLOW_UNFREE=1
+    ```
+
+-   To allow all unfree software to be used, add to the Nixpkgs configuration:
+
+     ```nix
+    {
+      allowUnfree = true;
+    }
     ```
 
 -   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
