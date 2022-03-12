@@ -172,6 +172,7 @@
   ./programs/java.nix
   ./programs/k40-whisperer.nix
   ./programs/kclock.nix
+  ./programs/k3b.nix
   ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
