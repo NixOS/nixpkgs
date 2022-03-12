@@ -49,7 +49,7 @@ let
       desktopName = "Obsidian";
       comment = "Knowledge base";
       icon = "obsidian";
-      exec = "obsidian";
+      exec = "obsidian %u";
       categories = [ "Office" ];
     };
 
