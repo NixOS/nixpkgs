@@ -49,12 +49,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "11.0.0";
+  version = "11.0.1";
   pname = "geant4";
 
   src = fetchurl{
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
+    sha256 = "sha256-PpsOaLAGwd3Yxfbe0IT82AKaVo7NDkUCbX74GN9GoCs=";
   };
 
   cmakeFlags = [
