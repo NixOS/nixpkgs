@@ -21618,6 +21618,7 @@ with pkgs;
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   pomerium = callPackage ../servers/http/pomerium { };
+  pomerium-cli = callPackage ../tools/security/pomerium-cli { };
 
   postgrey = callPackage ../servers/mail/postgrey { };
 
