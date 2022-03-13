@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, pkg-config, python3, xmlto
 , zstd
-, acl, attr, e2fsprogs, libuuid, lzo, systemd, zlib
+, acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     python3 python3.pkgs.setuptools
   ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ systemd ];
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ udev ];
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
