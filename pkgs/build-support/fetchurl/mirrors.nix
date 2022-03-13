@@ -108,13 +108,6 @@
     "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
-  # Metalab (to be removed)
-  metalab = [
-    "ftp://ftp.gwdg.de/pub/linux/metalab/"
-    "ftp://ftp.metalab.unc.edu/pub/linux/"
-  ];
-
-
   # ImageMagick mirrors, see https://www.imagemagick.org/script/mirror.php
   imagemagick = [
     "https://www.imagemagick.org/download/"
