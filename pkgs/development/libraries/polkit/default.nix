@@ -71,6 +71,12 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/polkit/raw/0a203bd46a1e2ec8cc4b3626840e2ea9d0d13a9a/f/CVE-2021-4115.patch";
       sha256 = "sha256-BivHVVpYB4Ies1YbBDyKwUmNlqq2D1MpMipH9/dZM54=";
     })
+    # Fix build with meson 0.61
+    # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/99
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/a96c5119f726225f8d79b222c85d71a9f0e32419.patch";
+      sha256 = "sha256-/hm/m22dKA50sDmw4L1VAlgvCm8CuIyNjHxF/2YgMKo=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
