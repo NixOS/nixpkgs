@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    homepage = "https://berrywm.org/";
     description = "A healthy, bite-sized window manager";
     longDescription = ''
       berry is a healthy, bite-sized window manager written in C for unix
@@ -69,7 +70,6 @@ stdenv.mkDerivation rec {
       - Intuitively place new windows in unoccupied spaces.
       - Virtual desktops.
     '';
-    homepage = "https://berrywm.org/";
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
