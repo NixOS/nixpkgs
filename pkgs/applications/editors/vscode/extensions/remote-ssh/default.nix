@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , vscode-utils
 , useLocalExtensions ? false
 }:
@@ -81,6 +82,8 @@ buildVscodeMarketplaceExtension {
     substituteInPlace "out/extension.js" \
       --replace 'echo "Checking $VSCH_LOGFILE' '${patch}'
   '';
+
+  passthru.tests = { inherit (nixosTests) vscode-remote-ssh; };
 
   meta = with lib; {
     description = "Use any remote machine with a SSH server as your development environment.";

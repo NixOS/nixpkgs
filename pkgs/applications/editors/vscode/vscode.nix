@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl, nixosTests, isInsiders ? false }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -38,6 +38,8 @@ in
     };
 
     sourceRoot = "";
+
+    tests = { inherit (nixosTests) vscode-remote-ssh; };
 
     updateScript = ./update-vscode.sh;
 
