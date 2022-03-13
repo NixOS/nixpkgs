@@ -1,13 +1,17 @@
 { lib, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
 let
-  # When updating, always update the following:
-  #  * the git revision
-  #  * the version attribute
-  #  * the source hash (sha256)
-  # If the shards.lock file changed, also the following:
-  #  * shards.nix (by running `crystal2nix` in invidious’ source tree)
-  #  * If the lsquic.cr dependency changed: lsquic in lsquic.nix (version, sha256)
-  #  * If the lsquic version changed: boringssl' in lsquic.nix (version, sha256)
+  # All versions, revisions, and checksums are stored in ./versions.json.
+  # The update process is the following:
+  #   * pick the latest commit
+  #   * update .invidious.rev, .invidious.version, and .invidious.sha256
+  #   * prefetch the videojs dependencies with scripts/fetch-player-dependencies.cr
+  #     and update .videojs.sha256 (they are normally fetched during build
+  #     but nix's sandboxing does not allow that)
+  #   * if shard.lock changed
+  #     * recreate shards.nix by running crystal2nix
+  #     * update lsquic and boringssl if necessarry, lsquic.cr depends on
+  #       the same version of lsquic and lsquic requires the boringssl
+  #       commit mentioned in its README
   versions = builtins.fromJSON (builtins.readFile ./versions.json);
 in
 crystal.buildCrystalPackage rec {
