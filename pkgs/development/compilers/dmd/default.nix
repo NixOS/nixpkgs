@@ -88,6 +88,9 @@ stdenv.mkDerivation rec {
     rm dmd/test/runnable/gdb4149.d
     rm dmd/test/runnable/gdb4181.d
 
+    # We're using gnused on all platforms, this tries to use BSD sed flag formatting
+    substituteInPlace druntime/test/coverage/Makefile \
+      --replace 'freebsd osx' 'none'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   '' + lib.optionalString stdenv.isDarwin ''
