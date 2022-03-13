@@ -502,6 +502,10 @@ in {
     machine.succeed(
         "${stderrRunner} ${originalSystem}/bin/switch-to-configuration test"
     )
+    # This tests whether the /etc/os-release parser works which is a fallback
+    # when /etc/NIXOS is missing. If the parser does not work, switch-to-configuration
+    # would fail.
+    machine.succeed("rm /etc/NIXOS")
     machine.succeed(
         "${stderrRunner} ${otherSystem}/bin/switch-to-configuration test"
     )
