@@ -24,6 +24,7 @@ in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
+    # Please update the commit hash in the vscode-remote-ssh test as well.
     version = "1.65.2";
     pname = "vscode";
 
@@ -59,7 +60,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 Enzime ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }
