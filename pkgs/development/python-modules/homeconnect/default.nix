@@ -2,26 +2,33 @@
 , buildPythonPackage
 , fetchPypi
 , requests
-, requests_oauthlib
+, requests-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "homeconnect";
   version = "0.7.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/h0dEVmP0R9tVt56mvu72Ksrvnuox1FA7BgrZMOhV6Q=";
+    hash = "sha256-/h0dEVmP0R9tVt56mvu72Ksrvnuox1FA7BgrZMOhV6Q=";
   };
 
   propagatedBuildInputs = [
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "homeconnect" ];
+
+  pythonImportsCheck = [
+    "homeconnect"
+  ];
 
   meta = with lib; {
     description = "Python client for the BSH Home Connect REST API";
