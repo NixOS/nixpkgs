@@ -6160,6 +6160,8 @@ in {
 
   pipdate = callPackage ../development/python-modules/pipdate { };
 
+  pipdeptree = callPackage ../development/python-modules/pipdeptree { };
+
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools { };
