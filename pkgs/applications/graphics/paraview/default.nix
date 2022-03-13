@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "5.9.1";
+  version = "5.10.0";
 
   docFiles = [
     (fetchurl {
@@ -35,7 +35,7 @@ in mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    sha256 = "0pzic95br0vr785jnpxqmfxcljw3wk7bhm2xy0jfmwm1dh2b7xac";
+    sha256 = "0ipx6zq44hpic7gvv0s2jvjncak6vlmrz5sp9ypc15b15bna0gs2";
     fetchSubmodules = true;
   };
 
