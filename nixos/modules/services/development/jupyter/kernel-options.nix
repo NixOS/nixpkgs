@@ -56,5 +56,14 @@ with lib;
         Path to 64x64 logo png.
       '';
     };
+
+    extraPaths = mkOption {
+      type = types.attrsOf types.path;
+      default = { };
+      example = literalExpression ''"{ examples = ''${env.sitePack}/IRkernel/kernelspec/kernel.js"; }'';
+      description = ''
+        Extra paths to link in kernel directory
+      '';
+    };
   };
 }
