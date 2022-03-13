@@ -7441,6 +7441,12 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+  lyrain = {
+    email = "myles.offord+nix@gmail.com";
+    github = "Lyrain";
+    githubId = 2564924;
+    name = "Myles Offord";
+  };
   lyt = {
     email = "wheatdoge@gmail.com";
     name = "Tim Liou";
