@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , dataclasses
-, isPy3k
+, pythonOlder
 , fetchPypi
 , jedi
 , pygments
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   version = "2022.1.1";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2zvdZkI8nSkHTBwsSfyyJL0Nbwgxn+0bTn6taDkUCD8=";
+    hash = "sha256-2zvdZkI8nSkHTBwsSfyyJL0Nbwgxn+0bTn6taDkUCD8=";
   };
 
   propagatedBuildInputs = [
