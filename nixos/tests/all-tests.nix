@@ -461,6 +461,7 @@ in
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
+  tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   trac = handleTest ./trac.nix {};
   # traefik test relies on docker-containers
