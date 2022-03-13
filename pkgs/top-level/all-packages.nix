@@ -5476,6 +5476,7 @@ with pkgs;
   findutils = callPackage ../tools/misc/findutils { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
+  fingerd_bsd = finger_bsd.override({ buildClient = false; });
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix {};
 
@@ -21263,8 +21264,6 @@ with pkgs;
   felix = callPackage ../servers/felix { };
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
-
-  fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
   inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
 
