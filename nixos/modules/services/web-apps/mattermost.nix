@@ -7,7 +7,12 @@ let
   cfg = config.services.mattermost;
 
   defaultConfig = builtins.fromJSON (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
-    (readFile "${pkgs.mattermost}/config/config.json")
+    # Use `unsafeDiscardStringContext` to support evaluation with Nix >= 2.6 where the
+    # string passed to `fromJSON` is not allowed to have a context.
+    # This is safe because `config.json` does not reference any store paths.
+    (builtins.unsafeDiscardStringContext
+      (readFile "${pkgs.mattermost}/config/config.json")
+    )
   );
 
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
