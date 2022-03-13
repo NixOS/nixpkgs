@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, zlib, openssl, libre }:
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "2.0.0";
   pname = "librem";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "rem";
     rev = "v${version}";
-    sha256 = "sha256-6Xe9zT0qLLGe1+QCQ9NALoDTaRhHpaTLbCbA+kV7hOA=";
+    sha256 = "sha256-w3aWvrCbqfm30F+U2kBSd+bJYd9KWCzo6QLJvskjy8Y=";
   };
   buildInputs = [ zlib openssl libre ];
   makeFlags = [
