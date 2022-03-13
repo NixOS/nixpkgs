@@ -1,4 +1,8 @@
-{ stdenv, lib, callPackage, fetchurl
+{ stdenv
+, lib
+, callPackage
+, fetchurl
+, nixosTests
 , isInsiders ? false
 , commandLineArgs ? ""
 , useVSCodeRipgrep ? stdenv.isDarwin
@@ -47,6 +51,8 @@ in
     tests = {};
 
     sourceRoot = "";
+
+    tests = { inherit (nixosTests) vscode-remote-ssh; };
 
     updateScript = ./update-vscode.sh;
 
