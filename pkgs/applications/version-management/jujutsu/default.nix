@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "unstable-2022-02-21";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
-    rev = "f9298582a78a4d06e6b9c5b51c67e034e7406739";
-    sha256 = "sha256-BQldf1AQr91cvfvlajjfzXt8BVToKV7eq5k11MiX9QY=";
+    rev = "v${version}";
+    sha256 = "sha256-FG+Wibd45YOjQlHdQ4cQzPmOzLphpc6UaBoGYLE+OEM=";
   };
 
-  cargoSha256 = "sha256-VWI3GQImPMy5a/c3QkDNXONoXvuuI2ofAmdZaiWSFvc=";
+  cargoSha256 = "sha256-YfbHHEDrCmxo133+w38ykj5uphSDVa7cYw0gJ2u2c+c=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,14 +44,13 @@ rustPlatform.buildRustPackage rec {
     version = testVersion {
       package = jujutsu;
       command = "jj --version";
-      # Remove version on release builds
-      version = "0.2.0";
     };
   };
 
   meta = with lib; {
     description = "A Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/martinvonz/jj";
+    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ _0x4A6F ];
   };
