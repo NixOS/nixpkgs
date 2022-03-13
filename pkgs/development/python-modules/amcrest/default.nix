@@ -15,6 +15,8 @@
 buildPythonPackage rec {
   pname = "amcrest";
   version = "1.9.6";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -38,7 +40,9 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [ "amcrest" ];
+  pythonImportsCheck = [
+    "amcrest"
+  ];
 
   meta = with lib; {
     description = "Python module for Amcrest and Dahua Cameras";
