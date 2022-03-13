@@ -3,7 +3,6 @@
 python3Packages.buildPythonApplication rec {
   version = "1.3.1";
   pname = "wllvm";
-  name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
