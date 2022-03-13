@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "nextdns";
-  version = "1.37.7";
+  version = "1.37.10";
 
   src = fetchFromGitHub {
     owner = "nextdns";
     repo = "nextdns";
     rev = "v${version}";
-    sha256 = "sha256-L5PeT4Y2oWM1WUJaBK9xgrpfkpvKM1+sA29A3AiDE38=";
+    sha256 = "sha256-iwxgDBIuTClikvXF+3mCjFKKV0upN+K+aL85ewYkMXo=";
   };
 
   vendorSha256 = "sha256-6hWD05lXteqL7egj9tiRVHlevKM33i+a+zBUZs7PF7I=";
