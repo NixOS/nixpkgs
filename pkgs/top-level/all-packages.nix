@@ -20818,6 +20818,8 @@ with pkgs;
 
   networkaudiod = callPackage ../servers/networkaudiod { };
 
+  netbox = callPackage ../servers/web-apps/netbox { };
+
   unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
 
   unit = callPackage ../servers/http/unit { };
