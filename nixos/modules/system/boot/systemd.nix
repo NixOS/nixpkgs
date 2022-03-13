@@ -80,18 +80,6 @@ let
       "printer.target"
       "smartcard.target"
 
-      # Journal.
-      "systemd-journald.socket"
-      "systemd-journald@.socket"
-      "systemd-journald-varlink@.socket"
-      "systemd-journald.service"
-      "systemd-journald@.service"
-      "systemd-journal-flush.service"
-      "systemd-journal-catalog-update.service"
-      ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
-      "systemd-journald-dev-log.socket"
-      "syslog.socket"
-
       # Coredumps.
       "systemd-coredump.socket"
       "systemd-coredump@.service"
@@ -179,9 +167,6 @@ let
       "systemd-hostnamed.service"
       "systemd-exit.service"
       "systemd-update-done.service"
-    ] ++ optionals config.services.journald.enableHttpGateway [
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
     ] ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
@@ -396,79 +381,6 @@ in
       description = ''
         Extra config options for systemd. See man systemd-system.conf for
         available options.
-      '';
-    };
-
-    services.journald.console = mkOption {
-      default = "";
-      type = types.str;
-      description = "If non-empty, write log messages to the specified TTY device.";
-    };
-
-    services.journald.rateLimitInterval = mkOption {
-      default = "30s";
-      type = types.str;
-      description = ''
-        Configures the rate limiting interval that is applied to all
-        messages generated on the system. This rate limiting is applied
-        per-service, so that two services which log do not interfere with
-        each other's limit. The value may be specified in the following
-        units: s, min, h, ms, us. To turn off any kind of rate limiting,
-        set either value to 0.
-
-        See <option>services.journald.rateLimitBurst</option> for important
-        considerations when setting this value.
-      '';
-    };
-
-    services.journald.rateLimitBurst = mkOption {
-      default = 10000;
-      type = types.int;
-      description = ''
-        Configures the rate limiting burst limit (number of messages per
-        interval) that is applied to all messages generated on the system.
-        This rate limiting is applied per-service, so that two services
-        which log do not interfere with each other's limit.
-
-        Note that the effective rate limit is multiplied by a factor derived
-        from the available free disk space for the journal as described on
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/journald.conf.html">
-        journald.conf(5)</link>.
-
-        Note that the total amount of logs stored is limited by journald settings
-        such as <literal>SystemMaxUse</literal>, which defaults to a 4 GB cap.
-
-        It is thus recommended to compute what period of time that you will be
-        able to store logs for when an application logs at full burst rate.
-        With default settings for log lines that are 100 Bytes long, this can
-        amount to just a few hours.
-      '';
-    };
-
-    services.journald.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "Storage=volatile";
-      description = ''
-        Extra config options for systemd-journald. See man journald.conf
-        for available options.
-      '';
-    };
-
-    services.journald.enableHttpGateway = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to enable the HTTP gateway to the journal.
-      '';
-    };
-
-    services.journald.forwardToSyslog = mkOption {
-      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
-      defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
-      type = types.bool;
-      description = ''
-        Whether to forward log messages to syslog.
       '';
     };
 
@@ -738,21 +650,6 @@ in
         ${config.systemd.user.extraConfig}
       '';
 
-      "systemd/journald.conf".text = ''
-        [Journal]
-        Storage=persistent
-        RateLimitInterval=${config.services.journald.rateLimitInterval}
-        RateLimitBurst=${toString config.services.journald.rateLimitBurst}
-        ${optionalString (config.services.journald.console != "") ''
-          ForwardToConsole=yes
-          TTYPath=${config.services.journald.console}
-        ''}
-        ${optionalString (config.services.journald.forwardToSyslog) ''
-          ForwardToSyslog=yes
-        ''}
-        ${config.services.journald.extraConfig}
-      '';
-
       "systemd/coredump.conf".text =
         ''
           [Coredump]
@@ -872,11 +769,6 @@ in
         "TMPFS_XATTR" "SECCOMP"
       ];
 
-    users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
-    users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
-    users.users.systemd-journal-gateway.group = "systemd-journal-gateway";
-    users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
-
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
       mapAttrs (name: service:
@@ -893,9 +785,6 @@ in
         })
         (filterAttrs (name: service: service.startAt != []) cfg.user.services);
 
-    systemd.sockets.systemd-journal-gatewayd.wantedBy =
-      optional config.services.journald.enableHttpGateway "sockets.target";
-
     # Provide the systemd-user PAM service, required to run systemd
     # user instances.
     security.pam.services.systemd-user =
@@ -909,16 +798,11 @@ in
     systemd.services."systemd-fsck@".restartIfChanged = false;
     systemd.services."systemd-fsck@".path = [ config.system.path ];
     systemd.services."user@".restartIfChanged = false;
-    systemd.services.systemd-journal-flush.restartIfChanged = false;
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
     systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
-    systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
-    systemd.services.systemd-journald.stopIfChanged = false;
-    systemd.services."systemd-journald@".restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
-    systemd.services."systemd-journald@".stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
