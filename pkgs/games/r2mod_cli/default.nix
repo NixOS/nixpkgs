@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "sha256-FS9P/uTZU4d6zpM3TlEW6i6PLGHxqqO2fc8D7VsPCig=";
+    sha256 = "sha256-mVZCCQMKg9IErBkU7/sRuB3CEK61epbVcQ2MOYLlE1o=";
   };
 
   buildInputs = [ bashInteractive ];
