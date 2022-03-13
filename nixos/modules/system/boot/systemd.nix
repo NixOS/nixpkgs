@@ -2,7 +2,6 @@
 
 with utils;
 with systemdUtils.unitOptions;
-with systemdUtils.lib;
 with lib;
 
 let
@@ -12,6 +11,8 @@ let
   systemd = cfg.package;
 
   inherit (systemdUtils.lib)
+    makeUnit
+    generateUnits
     makeJobScript
     unitConfig
     serviceConfig
