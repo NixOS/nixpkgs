@@ -21,6 +21,7 @@
 , zlib
 , icu
 , systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
@@ -71,6 +73,10 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     pango
+  ];
+
+  mesonFlags = lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
   ];
 
   postPatch = ''
