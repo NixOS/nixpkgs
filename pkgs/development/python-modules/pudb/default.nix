@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , dataclasses
-, pythonOlder
 , fetchPypi
 , jedi
 , pygments
