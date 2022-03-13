@@ -8305,6 +8305,8 @@ in {
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
+  pyinfra = callPackage ../development/python-modules/pyinfra { };
+
   pytibber = callPackage ../development/python-modules/pytibber { };
 
   pytile = callPackage ../development/python-modules/pytile { };

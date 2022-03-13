@@ -9189,6 +9189,8 @@ with pkgs;
 
   pydf = callPackage ../applications/misc/pydf { };
 
+  pyinfra = with python3Packages; toPythonApplication pyinfra;
+
   pympress = callPackage ../applications/office/pympress { };
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
