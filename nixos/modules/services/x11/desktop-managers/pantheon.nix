@@ -226,6 +226,7 @@ in
       # Settings from elementary-default-settings
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
+      xdg.portal.enable = true;
       xdg.portal.extraPortals = with pkgs; [
         pantheon.elementary-files
         pantheon.elementary-settings-daemon
