@@ -73,13 +73,13 @@ in lib.makeExtensible (self: {
   stable = self.nix_2_7;
 
   unstable = lib.lowPrio (common rec {
-    version = "2.7";
-    suffix = "pre20220221_${lib.substring 0 7 src.rev}";
+    version = "2.8";
+    suffix = "pre20220311_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "caf51729450d4c57d48ddbef8e855e9bf65f8792";
-      sha256 = "sha256-2fbza6fWPjyTyVEqWIp0jk/Z4epjSDe1u4lbEu+v7Iw=";
+      rev = "d5322698a2abbc6d141e1d244e17b0d226a2f18b";
+      sha256 = "sha256-7rQSktGC8+DmeyGOnzFMy1QwAYnw4JJphv+lEwFCwfU=";
     };
   });
 })
