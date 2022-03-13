@@ -68,15 +68,15 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  mesonFlags = lib.optionals (!systemdSupport) [
-    "-D_systemd=false"
-  ];
-
   propagatedBuildInputs = [
     # Required by vte-2.91.pc.
     gtk3
     glib
     pango
+  ];
+
+  mesonFlags = lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
   ];
 
   postPatch = ''
