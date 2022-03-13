@@ -1,5 +1,8 @@
 #! @perl@/bin/perl
 
+## no critic(CodeLayout::ProhibitParensWithBuiltins)
+## no critic(ValuesAndExpressions::ProhibitInterpolationOfLiterals)
+
 use strict;
 use warnings;
 use Config::IniFiles;
@@ -8,9 +11,7 @@ use File::Basename;
 use File::Slurp qw(read_file write_file edit_file);
 use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
-use Cwd 'abs_path';
-
-## no critic(CodeLayout::ProhibitParensWithBuiltins)
+use Cwd "abs_path";
 
 my $out = "@out@";
 
@@ -60,7 +61,7 @@ $ENV{NIXOS_ACTION} = $action;
 
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
-if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => 'quiet') // "") !~ /ID="?nixos"?/s) {
+if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /ID="?nixos"?/s) {
     die("This is not a NixOS installation!\n");
 }
 
@@ -79,12 +80,12 @@ if (($ENV{"NIXOS_NO_SYNC"} // "") ne "1") {
     system("@coreutils@/bin/sync", "-f", "/nix/store");
 }
 
-if ($action eq 'boot') {
+if ($action eq "boot") {
     exit(0);
 }
 
 # Check if we can activate the new configuration.
-my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
+my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => "quiet") // "";
 my $newVersion = read_file("$out/init-interface-version");
 
 if ($newVersion ne $oldVersion) {
@@ -107,10 +108,10 @@ sub getActiveUnits {
     for my $item (@$units) {
         my ($id, $description, $load_state, $active_state, $sub_state,
             $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
-        if ($following ne '') {
+        if ($following ne "") {
             next;
         }
-        if ($job_id == 0 and $active_state eq 'inactive') {
+        if ($job_id == 0 and $active_state eq "inactive") {
             next;
         }
         $res->{$id} = { load => $load_state, state => $active_state, substate => $sub_state };
@@ -122,19 +123,19 @@ sub getActiveUnits {
 sub unit_is_active {
     my ($unit_name) = @_;
 
-    my $mgr = Net::DBus->system->get_service('org.freedesktop.systemd1')->get_object('/org/freedesktop/systemd1');
+    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
     my $units = $mgr->ListUnitsByNames([$unit_name]);
     if (scalar(@{$units}) == 0) {
         return 0;
     }
     my $active_state = $units->[0]->[3]; ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
-    return $active_state eq 'active' || $active_state eq 'activating';
+    return $active_state eq "active" || $active_state eq "activating";
 }
 
 sub parseFstab {
     my ($filename) = @_;
     my ($fss, $swaps);
-    foreach my $line (read_file($filename, err_mode => 'quiet')) {
+    foreach my $line (read_file($filename, err_mode => "quiet")) {
         chomp($line);
         $line =~ s/^\s*#.*//;
         if ($line =~ /^\s*$/) {
@@ -162,7 +163,7 @@ sub parseFstab {
 sub parseSystemdIni {
     my ($unitContents, $path) = @_;
     # Tie the ini file to a hash for easier access
-    tie(my %fileContents, 'Config::IniFiles', (-file => $path, -allowempty => 1, -allowcontinue => 1)); ## no critic(Miscellanea::ProhibitTies)
+    tie(my %fileContents, "Config::IniFiles", (-file => $path, -allowempty => 1, -allowcontinue => 1)); ## no critic(Miscellanea::ProhibitTies)
 
     # Copy over all sections
     foreach my $sectionName (keys(%fileContents)) {
@@ -233,7 +234,7 @@ sub parseSystemdBool {
 
 sub recordUnit {
     my ($fn, $unit) = @_;
-    if ($action ne 'dry-activate') {
+    if ($action ne "dry-activate") {
         write_file($fn, { append => 1 }, "$unit\n");
     }
 }
@@ -241,7 +242,7 @@ sub recordUnit {
 # The opposite of recordUnit, removes a unit name from a file
 sub unrecord_unit {
     my ($fn, $unit) = @_;
-    if ($action ne 'dry-activate') {
+    if ($action ne "dry-activate") {
         edit_file(sub { s/^$unit\n//msx }, $fn);
     }
 }
@@ -282,8 +283,8 @@ sub compare_units {
         if (not exists($section_cmp{$section_name})) {
             # If the [Unit] section was removed, make sure that only keys
             # were in it that are ignored
-            if ($section_name eq 'Unit') {
-                foreach my $ini_key (keys(%{$old_unit->{'Unit'}})) {
+            if ($section_name eq "Unit") {
+                foreach my $ini_key (keys(%{$old_unit->{"Unit"}})) {
                     if (not defined($unit_section_ignores{$ini_key})) {
                         return 1;
                     }
@@ -292,7 +293,7 @@ sub compare_units {
             } else {
                 return 1;
             }
-            if ($section_name eq 'Unit' and %{$old_unit->{'Unit'}} == 1 and defined(%{$old_unit->{'Unit'}}{'X-Reload-Triggers'})) {
+            if ($section_name eq "Unit" and %{$old_unit->{"Unit"}} == 1 and defined(%{$old_unit->{"Unit"}}{"X-Reload-Triggers"})) {
                 # If a new [Unit] section was removed that only contained X-Reload-Triggers,
                 # do nothing.
                 next;
@@ -310,7 +311,7 @@ sub compare_units {
             # If the key is missing in the new unit, they are different...
             if (not $new_unit->{$section_name}{$ini_key}) {
                 # ... unless the key that is now missing is one of the ignored keys
-                if ($section_name eq 'Unit' and defined($unit_section_ignores{$ini_key})) {
+                if ($section_name eq "Unit" and defined($unit_section_ignores{$ini_key})) {
                     next;
                 }
                 return 1;
@@ -319,8 +320,8 @@ sub compare_units {
             # If the contents are different, the units are different
             if (not $comp_array->(\@old_value, \@new_value)) {
                 # Check if only the reload triggers changed or one of the ignored keys
-                if ($section_name eq 'Unit') {
-                    if ($ini_key eq 'X-Reload-Triggers') {
+                if ($section_name eq "Unit") {
+                    if ($ini_key eq "X-Reload-Triggers") {
                         $ret = 2;
                         next;
                     } elsif (defined($unit_section_ignores{$ini_key})) {
@@ -332,9 +333,9 @@ sub compare_units {
         }
         # A key was introduced that was missing in the old unit
         if (%ini_cmp) {
-            if ($section_name eq 'Unit') {
+            if ($section_name eq "Unit") {
                 foreach my $ini_key (keys(%ini_cmp)) {
-                    if ($ini_key eq 'X-Reload-Triggers') {
+                    if ($ini_key eq "X-Reload-Triggers") {
                         $ret = 2;
                     } elsif (defined($unit_section_ignores{$ini_key})) {
                         next;
@@ -349,11 +350,11 @@ sub compare_units {
     }
     # A section was introduced that was missing in the old unit
     if (%section_cmp) {
-        if (%section_cmp == 1 and defined($section_cmp{'Unit'})) {
-            foreach my $ini_key (keys(%{$new_unit->{'Unit'}})) {
+        if (%section_cmp == 1 and defined($section_cmp{"Unit"})) {
+            foreach my $ini_key (keys(%{$new_unit->{"Unit"}})) {
                 if (not defined($unit_section_ignores{$ini_key})) {
                     return 1;
-                } elsif ($ini_key eq 'X-Reload-Triggers') {
+                } elsif ($ini_key eq "X-Reload-Triggers") {
                     $ret = 2;
                 }
             }
@@ -470,13 +471,13 @@ my (%unitsToStop, %unitsToSkip, %unitsToStart, %unitsToRestart, %unitsToReload);
 my %unitsToFilter; # units not shown
 
 %unitsToStart = map { $_ => 1 }
-    split('\n', read_file($startListFile, err_mode => 'quiet') // "");
+    split("\n", read_file($startListFile, err_mode => "quiet") // "");
 
 %unitsToRestart = map { $_ => 1 }
-    split('\n', read_file($restartListFile, err_mode => 'quiet') // "");
+    split("\n", read_file($restartListFile, err_mode => "quiet") // "");
 
 %unitsToReload = map { $_ => 1 }
-    split('\n', read_file($reloadListFile, err_mode => 'quiet') // "");
+    split("\n", read_file($reloadListFile, err_mode => "quiet") // "");
 
 my $activePrev = getActiveUnits();
 while (my ($unit, $state) = each(%{$activePrev})) {
@@ -513,7 +514,7 @@ while (my ($unit, $state) = each(%{$activePrev})) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                if (!(parseSystemdBool(\%unitInfo, 'Unit', 'RefuseManualStart', 0) || parseSystemdBool(\%unitInfo, 'Unit', 'X-OnlyManualStart', 0))) {
+                if (!(parseSystemdBool(\%unitInfo, "Unit", "RefuseManualStart", 0) || parseSystemdBool(\%unitInfo, "Unit", "X-OnlyManualStart", 0))) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
                     # Don't spam the user with target units that always get started.
@@ -558,7 +559,7 @@ sub pathToUnitName {
         or die "Unable to escape $path!\n";
     my $escaped = join("", <$cmd>);
     chomp($escaped);
-    close($cmd) or die('Unable to close systemd-escape pipe');
+    close($cmd) or die("Unable to close systemd-escape pipe");
     return $escaped;
 }
 
@@ -647,7 +648,7 @@ if ($action eq "dry-activate") {
     system("$out/dry-activate", "$out");
 
     # Handle the activation script requesting the restart or reload of a unit.
-    foreach (split('\n', read_file($dryRestartByActivationFile, err_mode => 'quiet') // "")) {
+    foreach (split("\n", read_file($dryRestartByActivationFile, err_mode => "quiet") // "")) {
         my $unit = $_;
         my $baseUnit = $unit;
         my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
@@ -671,7 +672,7 @@ if ($action eq "dry-activate") {
     }
     unlink($dryRestartByActivationFile);
 
-    foreach (split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "")) {
+    foreach (split("\n", read_file($dryReloadByActivationFile, err_mode => "quiet") // "")) {
         my $unit = $_;
 
         if (defined($activePrev->{$unit}) and not $unitsToRestart{$unit} and not $unitsToStop{$unit}) {
@@ -719,7 +720,7 @@ print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
 # Handle the activation script requesting the restart or reload of a unit.
-foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') // "")) {
+foreach (split("\n", read_file($restartByActivationFile, err_mode => "quiet") // "")) {
     my $unit = $_;
     my $baseUnit = $unit;
     my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
@@ -745,7 +746,7 @@ foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') //
 # We can remove the file now because it has been propagated to the other restart/reload files
 unlink($restartByActivationFile);
 
-foreach (split('\n', read_file($reloadByActivationFile, err_mode => 'quiet') // "")) {
+foreach (split("\n", read_file($reloadByActivationFile, err_mode => "quiet") // "")) {
     my $unit = $_;
 
     if (defined($activePrev->{$unit}) and not $unitsToRestart{$unit} and not $unitsToStop{$unit}) {
@@ -771,7 +772,7 @@ system("@systemd@/bin/systemctl", "reset-failed");
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
 # Reload user units
-open(my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend');
+open(my $listActiveUsers, "-|", "@systemd@/bin/loginctl", "list-users", "--no-legend");
 while (my $f = <$listActiveUsers>) {
     if ($f !~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/) {
         next;
@@ -799,7 +800,7 @@ if (scalar(keys(%unitsToReload)) > 0) {
         if (!unit_is_active($unit)) {
             # Figure out if we need to start the unit
             my %unit_info = parse_unit("$out/etc/systemd/system/$unit");
-            if (!(parseSystemdBool(\%unit_info, 'Unit', 'RefuseManualStart', 0) || parseSystemdBool(\%unit_info, 'Unit', 'X-OnlyManualStart', 0))) {
+            if (!(parseSystemdBool(\%unit_info, "Unit", "RefuseManualStart", 0) || parseSystemdBool(\%unit_info, "Unit", "X-OnlyManualStart", 0))) {
                 $unitsToStart{$unit} = 1;
                 recordUnit($startListFile, $unit);
             }
