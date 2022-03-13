@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
       blkid = "${util-linux}/bin/blkid";
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
+      mkswap = "${util-linux}/bin/mkswap";
       sed = "${gnused}/bin/sed";
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
+      swapon = "${util-linux}/bin/swapon";
       true = "${coreutils}/bin/true";
     })
     (substituteAll {
