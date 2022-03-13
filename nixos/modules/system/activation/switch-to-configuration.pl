@@ -60,8 +60,9 @@ $ENV{NIXOS_ACTION} = $action;
 
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
-die("This is not a NixOS installation!\n") unless
-    -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID="?nixos"?/s;
+if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => 'quiet') // "") !~ /ID="?nixos"?/s) {
+    die("This is not a NixOS installation!\n");
+}
 
 openlog("nixos", "", LOG_USER);
 
@@ -74,9 +75,13 @@ EOFBOOTLOADER
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
-system("@coreutils@/bin/sync", "-f", "/nix/store") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
+if (($ENV{"NIXOS_NO_SYNC"} // "") ne "1") {
+    system("@coreutils@/bin/sync", "-f", "/nix/store");
+}
 
-exit(0) if $action eq "boot";
+if ($action eq 'boot') {
+    exit(0);
+}
 
 # Check if we can activate the new configuration.
 my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
@@ -102,8 +107,12 @@ sub getActiveUnits {
     for my $item (@$units) {
         my ($id, $description, $load_state, $active_state, $sub_state,
             $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
-        next unless $following eq '';
-        next if $job_id == 0 and $active_state eq 'inactive';
+        if ($following ne '') {
+            next;
+        }
+        if ($job_id == 0 and $active_state eq 'inactive') {
+            next;
+        }
         $res->{$id} = { load => $load_state, state => $active_state, substate => $sub_state };
     }
     return $res;
@@ -128,7 +137,9 @@ sub parseFstab {
     foreach my $line (read_file($filename, err_mode => 'quiet')) {
         chomp($line);
         $line =~ s/^\s*#.*//;
-        next if $line =~ /^\s*$/;
+        if ($line =~ /^\s*$/) {
+            next;
+        }
         my @xs = split(/ /, $line);
         if ($xs[2] eq "swap") {
             $swaps->{$xs[0]} = { options => $xs[3] // "" };
@@ -222,13 +233,17 @@ sub parseSystemdBool {
 
 sub recordUnit {
     my ($fn, $unit) = @_;
-    write_file($fn, { append => 1 }, "$unit\n") if $action ne "dry-activate";
+    if ($action ne 'dry-activate') {
+        write_file($fn, { append => 1 }, "$unit\n");
+    }
 }
 
 # The opposite of recordUnit, removes a unit name from a file
 sub unrecord_unit {
     my ($fn, $unit) = @_;
-    edit_file(sub { s/^$unit\n//msx }, $fn) if $action ne "dry-activate";
+    if ($action ne 'dry-activate') {
+        edit_file(sub { s/^$unit\n//msx }, $fn);
+    }
 }
 
 # Compare the contents of two unit files and return whether the unit
@@ -454,13 +469,13 @@ my (%unitsToStop, %unitsToSkip, %unitsToStart, %unitsToRestart, %unitsToReload);
 
 my %unitsToFilter; # units not shown
 
-$unitsToStart{$_} = 1 foreach
+%unitsToStart = map { $_ => 1 }
     split('\n', read_file($startListFile, err_mode => 'quiet') // "");
 
-$unitsToRestart{$_} = 1 foreach
+%unitsToRestart = map { $_ => 1 }
     split('\n', read_file($restartListFile, err_mode => 'quiet') // "");
 
-$unitsToReload{$_} = 1 foreach
+%unitsToReload = map { $_ => 1 }
     split('\n', read_file($reloadListFile, err_mode => 'quiet') // "");
 
 my $activePrev = getActiveUnits();
@@ -483,7 +498,9 @@ while (my ($unit, $state) = each(%{$activePrev})) {
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
             my %unitInfo = parse_unit($prevUnitFile);
-            $unitsToStop{$unit} = 1 if parseSystemdBool(\%unitInfo, "Unit", "X-StopOnRemoval", 1);
+            if (parseSystemdBool(\%unitInfo, "Unit", "X-StopOnRemoval", 1)) {
+                $unitsToStop{$unit} = 1;
+            }
         }
 
         elsif ($unit =~ /\.target$/) {
@@ -496,7 +513,7 @@ while (my ($unit, $state) = each(%{$activePrev})) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                unless (parseSystemdBool(\%unitInfo, "Unit", "RefuseManualStart", 0) || parseSystemdBool(\%unitInfo, "Unit", "X-OnlyManualStart", 0)) {
+                if (!(parseSystemdBool(\%unitInfo, 'Unit', 'RefuseManualStart', 0) || parseSystemdBool(\%unitInfo, 'Unit', 'X-OnlyManualStart', 0))) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
                     # Don't spam the user with target units that always get started.
@@ -607,7 +624,9 @@ sub filterUnits {
     my ($units) = @_;
     my @res;
     foreach my $unit (sort(keys(%{$units}))) {
-        push(@res, $unit) if !defined($unitsToFilter{$unit});
+        if (!defined($unitsToFilter{$unit})) {
+            push(@res, $unit);
+        }
     }
     return @res;
 }
@@ -617,10 +636,12 @@ my @unitsToStopFiltered = filterUnits(\%unitsToStop);
 
 # Show dry-run actions.
 if ($action eq "dry-activate") {
-    print STDERR "would stop the following units: ", join(", ", @unitsToStopFiltered), "\n"
-        if scalar(@unitsToStopFiltered) > 0;
-    print STDERR "would NOT stop the following changed units: ", join(", ", sort(keys(%unitsToSkip))), "\n"
-        if scalar(keys(%unitsToSkip)) > 0;
+    if (scalar(@unitsToStopFiltered) > 0) {
+        print STDERR "would stop the following units: ", join(", ", @unitsToStopFiltered), "\n";
+    }
+    if (scalar(keys(%unitsToSkip)) > 0) {
+        print STDERR "would NOT stop the following changed units: ", join(", ", sort(keys(%unitsToSkip))), "\n";
+    }
 
     print STDERR "would activate the configuration...\n";
     system("$out/dry-activate", "$out");
@@ -660,14 +681,19 @@ if ($action eq "dry-activate") {
     }
     unlink($dryReloadByActivationFile);
 
-    print STDERR "would restart systemd\n" if $restartSystemd;
-    print STDERR "would reload the following units: ", join(", ", sort(keys(%unitsToReload))), "\n"
-        if scalar(keys(%unitsToReload)) > 0;
-    print STDERR "would restart the following units: ", join(", ", sort(keys(%unitsToRestart))), "\n"
-        if scalar(keys(%unitsToRestart)) > 0;
+    if ($restartSystemd) {
+        print STDERR "would restart systemd\n";
+    }
+    if (scalar(keys(%unitsToReload)) > 0) {
+        print STDERR "would reload the following units: ", join(", ", sort(keys(%unitsToReload))), "\n";
+    }
+    if (scalar(keys(%unitsToRestart)) > 0) {
+        print STDERR "would restart the following units: ", join(", ", sort(keys(%unitsToRestart))), "\n";
+    }
     my @unitsToStartFiltered = filterUnits(\%unitsToStart);
-    print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
-        if scalar(@unitsToStartFiltered);
+    if (scalar(@unitsToStartFiltered)) {
+        print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n";
+    }
     exit 0;
 }
 
@@ -675,14 +701,16 @@ if ($action eq "dry-activate") {
 syslog(LOG_NOTICE, "switching to system configuration $out");
 
 if (scalar(keys(%unitsToStop)) > 0) {
-    print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
-        if scalar(@unitsToStopFiltered);
+    if (scalar(@unitsToStopFiltered)) {
+        print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n";
+    }
     # Use current version of systemctl binary before daemon is reexeced.
     system("$curSystemd/systemctl", "stop", "--", sort(keys(%unitsToStop)));
 }
 
-print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys(%unitsToSkip))), "\n"
-    if scalar(keys(%unitsToSkip)) > 0;
+if (scalar(keys(%unitsToSkip)) > 0) {
+    print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys(%unitsToSkip))), "\n";
+}
 
 # Activate the new configuration (i.e., update /etc, make accounts,
 # and so on).
@@ -745,7 +773,9 @@ system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 # Reload user units
 open(my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend');
 while (my $f = <$listActiveUsers>) {
-    next unless $f =~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/;
+    if ($f !~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/) {
+        next;
+    }
     my ($uid, $name) = ($+{uid}, $+{user});
     print STDERR "reloading user units for $name...\n";
 
@@ -802,8 +832,9 @@ if (scalar(keys(%unitsToRestart)) > 0) {
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
 my @unitsToStartFiltered = filterUnits(\%unitsToStart);
-print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
-    if scalar(@unitsToStartFiltered);
+if (scalar(@unitsToStartFiltered)) {
+    print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
+}
 system("@systemd@/bin/systemctl", "start", "--", sort(keys(%unitsToStart))) == 0 or $res = 4;
 unlink($startListFile);
 
