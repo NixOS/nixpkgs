@@ -1220,6 +1220,19 @@
       </listitem>
       <listitem>
         <para>
+          <literal>buildDunePackage</literal> now defaults to using Dune
+          2 and the option <literal>useDune2</literal> is therefore
+          deprecated and a warning has been added. In its place
+          <literal>useDune1</literal> is added for packages that doesn’t
+          work with Dune 2. During the deprecation period
+          <literal>useDune2</literal> will be inversed and used as
+          <literal>useDune1</literal>, eg.
+          <literal>useDune2 = false</literal> will be treated as
+          <literal>useDune1</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option <literal>services.thelounge.plugins</literal> has
           been added to allow installing plugins for The Lounge. Plugins
           can be found in
