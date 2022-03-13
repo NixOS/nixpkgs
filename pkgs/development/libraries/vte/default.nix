@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  mesonFlags = lib.optionals (!systemdSupport) [ "-D_systemd=false" ];
-
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -68,6 +66,10 @@ stdenv.mkDerivation rec {
     icu
   ] ++ lib.optionals systemdSupport [
     systemd
+  ];
+
+  mesonFlags = lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
   ];
 
   propagatedBuildInputs = [
