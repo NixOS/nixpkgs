@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sockperf";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "sockperf";
     rev = version;
-    sha256 = "MtpV21lCEAv7ARxk0dAxoOxxlqDM+skdQnPlqOvksjw=";
+    sha256 = "sha256-S5ZSGctOOnMD+AqlSAkRHMW8O1Rt8/952fali0kv/EU=";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
