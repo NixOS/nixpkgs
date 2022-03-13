@@ -11,6 +11,22 @@ let
 
   systemd = cfg.package;
 
+  inherit (systemdUtils.lib)
+    makeJobScript
+    unitConfig
+    serviceConfig
+    mountConfig
+    automountConfig
+    commonUnitText
+    targetToUnit
+    serviceToUnit
+    socketToUnit
+    timerToUnit
+    pathToUnit
+    mountToUnit
+    automountToUnit
+    sliceToUnit;
+
   upstreamSystemUnits =
     [ # Targets.
       "basic.target"
@@ -209,207 +225,6 @@ let
       "xdg-desktop-autostart.target"
     ];
 
-  makeJobScript = name: text:
-    let
-      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = (pkgs.writeShellScriptBin scriptName ''
-        set -e
-        ${text}
-      '').overrideAttrs (_: {
-        # The derivation name is different from the script file name
-        # to keep the script file name short to avoid cluttering logs.
-        name = "unit-script-${scriptName}";
-      });
-    in "${out}/bin/${scriptName}";
-
-  unitConfig = { config, options, ... }: {
-    config = {
-      unitConfig =
-        optionalAttrs (config.requires != [])
-          { Requires = toString config.requires; }
-        // optionalAttrs (config.wants != [])
-          { Wants = toString config.wants; }
-        // optionalAttrs (config.after != [])
-          { After = toString config.after; }
-        // optionalAttrs (config.before != [])
-          { Before = toString config.before; }
-        // optionalAttrs (config.bindsTo != [])
-          { BindsTo = toString config.bindsTo; }
-        // optionalAttrs (config.partOf != [])
-          { PartOf = toString config.partOf; }
-        // optionalAttrs (config.conflicts != [])
-          { Conflicts = toString config.conflicts; }
-        // optionalAttrs (config.requisite != [])
-          { Requisite = toString config.requisite; }
-        // optionalAttrs (config.restartTriggers != [])
-          { X-Restart-Triggers = toString config.restartTriggers; }
-        // optionalAttrs (config.reloadTriggers != [])
-          { X-Reload-Triggers = toString config.reloadTriggers; }
-        // optionalAttrs (config.description != "") {
-          Description = config.description; }
-        // optionalAttrs (config.documentation != []) {
-          Documentation = toString config.documentation; }
-        // optionalAttrs (config.onFailure != []) {
-          OnFailure = toString config.onFailure; }
-        // optionalAttrs (options.startLimitIntervalSec.isDefined) {
-          StartLimitIntervalSec = toString config.startLimitIntervalSec;
-        } // optionalAttrs (options.startLimitBurst.isDefined) {
-          StartLimitBurst = toString config.startLimitBurst;
-        };
-    };
-  };
-
-  serviceConfig = { name, config, ... }: {
-    config = mkMerge
-      [ { # Default path for systemd services.  Should be quite minimal.
-          path = mkAfter
-            [ pkgs.coreutils
-              pkgs.findutils
-              pkgs.gnugrep
-              pkgs.gnused
-              systemd
-            ];
-          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
-        }
-        (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre =
-              [ (makeJobScript "${name}-pre-start" config.preStart) ];
-          })
-        (mkIf (config.script != "")
-          { serviceConfig.ExecStart =
-              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
-          })
-        (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost =
-              [ (makeJobScript "${name}-post-start" config.postStart) ];
-          })
-        (mkIf (config.reload != "")
-          { serviceConfig.ExecReload =
-              makeJobScript "${name}-reload" config.reload;
-          })
-        (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop =
-              makeJobScript "${name}-pre-stop" config.preStop;
-          })
-        (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost =
-              makeJobScript "${name}-post-stop" config.postStop;
-          })
-      ];
-  };
-
-  mountConfig = { config, ... }: {
-    config = {
-      mountConfig =
-        { What = config.what;
-          Where = config.where;
-        } // optionalAttrs (config.type != "") {
-          Type = config.type;
-        } // optionalAttrs (config.options != "") {
-          Options = config.options;
-        };
-    };
-  };
-
-  automountConfig = { config, ... }: {
-    config = {
-      automountConfig =
-        { Where = config.where;
-        };
-    };
-  };
-
-  commonUnitText = def: ''
-      [Unit]
-      ${attrsToSection def.unitConfig}
-    '';
-
-  targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text =
-        ''
-          [Unit]
-          ${attrsToSection def.unitConfig}
-        '';
-    };
-
-  serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Service]
-          ${let env = cfg.globalEnvironment // def.environment;
-            in concatMapStrings (n:
-              let s = optionalString (env.${n} != null)
-                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
-              # systemd max line length is now 1MiB
-              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
-              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
-          ${if def.reloadIfChanged then ''
-            X-ReloadIfChanged=true
-          '' else if !def.restartIfChanged then ''
-            X-RestartIfChanged=false
-          '' else ""}
-          ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
-          ${attrsToSection def.serviceConfig}
-        '';
-    };
-
-  socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Socket]
-          ${attrsToSection def.socketConfig}
-          ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
-          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
-        '';
-    };
-
-  timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Timer]
-          ${attrsToSection def.timerConfig}
-        '';
-    };
-
-  pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Path]
-          ${attrsToSection def.pathConfig}
-        '';
-    };
-
-  mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Mount]
-          ${attrsToSection def.mountConfig}
-        '';
-    };
-
-  automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Automount]
-          ${attrsToSection def.automountConfig}
-        '';
-    };
-
-  sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
-      text = commonUnitText def +
-        ''
-          [Slice]
-          ${attrsToSection def.sliceConfig}
-        '';
-    };
 
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
