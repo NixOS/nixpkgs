@@ -1,8 +1,5 @@
 #! @perl@/bin/perl
 
-## no critic(CodeLayout::ProhibitParensWithBuiltins)
-## no critic(ValuesAndExpressions::ProhibitInterpolationOfLiterals, Variables::ProhibitPunctuationVars)
-
 use strict;
 use warnings;
 use Config::IniFiles;
@@ -11,7 +8,15 @@ use File::Basename;
 use File::Slurp qw(read_file write_file edit_file);
 use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
-use Cwd "abs_path";
+use Cwd qw(abs_path);
+
+## no critic(ControlStructures::ProhibitDeepNests)
+## no critic(ErrorHandling::RequireCarping)
+## no critic(CodeLayout::ProhibitParensWithBuiltins)
+## no critic(Variables::ProhibitPunctuationVars, Variables::RequireLocalizedPunctuationVars)
+## no critic(InputOutput::RequireCheckedSyscalls, InputOutput::RequireBracedFileHandleWithPrint, InputOutput::RequireBriefOpen)
+## no critic(ValuesAndExpressions::ProhibitNoisyQuotes, ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::ProhibitEmptyQuotes, ValuesAndExpressions::ProhibitInterpolationOfLiterals)
+## no critic(RegularExpressions::ProhibitEscapedMetacharacters)
 
 # System closure path to switch to
 my $out = "@out@";
@@ -53,7 +58,7 @@ if ("@localeArchive@" ne "") {
 }
 
 if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
-    print STDERR <<EOF;
+    print STDERR <<"EOF";
 Usage: $0 [switch|boot|test]
 
 switch:       make the configuration the boot default and activate now
@@ -66,7 +71,7 @@ EOF
 
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
-if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /ID="?nixos"?/s) {
+if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /^ID="?nixos"?/msx) {
     die("This is not a NixOS installation!\n");
 }
 
@@ -95,10 +100,10 @@ my $cur_init_interface_version = read_file("/run/current-system/init-interface-v
 my $new_init_interface_version = read_file("$out/init-interface-version");
 
 if ($new_init_interface_version ne $cur_init_interface_version) {
-    print STDERR <<EOF;
+    print STDERR <<'EOF';
 Warning: the new NixOS configuration has an ‘init’ that is
 incompatible with the current configuration.  The new configuration
-won\'t take effect until you reboot the system.
+won't take effect until you reboot the system.
 EOF
     exit(100);
 }
@@ -114,9 +119,9 @@ sub get_active_units {
     my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
     my $units = $mgr->ListUnitsByPatterns([], []);
     my $res = {};
-    for my $item (@$units) {
+    for my $item (@{$units}) {
         my ($id, $description, $load_state, $active_state, $sub_state,
-            $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
+            $following, $unit_path, $job_id, $job_type, $job_path) = @{$item};
         if ($following ne "") {
             next;
         }
@@ -138,7 +143,7 @@ sub unit_is_active {
     if (scalar(@{$units}) == 0) {
         return 0;
     }
-    my $active_state = $units->[0]->[3]; ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+    my $active_state = $units->[0]->[3];
     return $active_state eq "active" || $active_state eq "activating";
 }
 
@@ -152,11 +157,11 @@ sub parse_fstab {
     my ($fss, $swaps);
     foreach my $line (read_file($filename, err_mode => "quiet")) {
         chomp($line);
-        $line =~ s/^\s*#.*//;
-        if ($line =~ /^\s*$/) {
+        $line =~ s/^\s*\#.*//msx;
+        if ($line =~ /^\s*$/msx) {
             next;
         }
-        my @xs = split(/ /, $line);
+        my @xs = split(/\s+/msx, $line);
         if ($xs[2] eq "swap") {
             $swaps->{$xs[0]} = { options => $xs[3] // "" };
         } else {
@@ -238,7 +243,7 @@ sub parse_systemd_bool {
 
     my @values = @{$unit_config->{$section_name}{$bool_name} // []};
     # Return default if value is not set
-    if (scalar(@values) lt 1 || not defined($values[-1])) {
+    if ((scalar(@values) < 1) || (not defined($values[-1]))) {
         return $default;
     }
     # If value is defined multiple times, use the last definition
@@ -254,6 +259,7 @@ sub record_unit {
     if ($action ne "dry-activate") {
         write_file($fn, { append => 1 }, "$unit\n");
     }
+    return;
 }
 
 # The opposite of record_unit, removes a unit name from a file
@@ -262,6 +268,7 @@ sub unrecord_unit {
     if ($action ne "dry-activate") {
         edit_file(sub { s/^$unit\n//msx }, $fn);
     }
+    return;
 }
 
 # Compare the contents of two unit files and return whether the unit
@@ -273,7 +280,7 @@ sub unrecord_unit {
 # - 0 if the units are equal
 # - 1 if the units are different and a restart action is required
 # - 2 if the units are different and a reload action is required
-sub compare_units {
+sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
     my ($cur_unit, $new_unit) = @_;
     my $ret = 0;
     # Keys to ignore in the [Unit] section
@@ -348,7 +355,7 @@ sub compare_units {
                 return 1;
             }
         }
-        # A key was introduced that was missing in the previos unit
+        # A key was introduced that was missing in the previous unit
         if (%ini_cmp) {
             if ($section_name eq "Unit") {
                 foreach my $ini_key (keys(%ini_cmp)) {
@@ -365,7 +372,7 @@ sub compare_units {
             }
         };
     }
-    # A section was introduced that was missing in the previos unit
+    # A section was introduced that was missing in the previous unit
     if (%section_cmp) {
         if (%section_cmp == 1 and defined($section_cmp{"Unit"})) {
             foreach my $ini_key (keys(%{$new_unit->{"Unit"}})) {
@@ -385,21 +392,21 @@ sub compare_units {
 
 # Called when a unit exists in both the old systemd and the new system and the units
 # differ. This figures out of what units are to be stopped, restarted, reloaded, started, and skipped.
-sub handle_modified_unit {
+sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutines::ProhibitExcessComplexity)
     my ($unit, $base_name, $new_unit_file, $new_unit_info, $active_cur, $units_to_stop, $units_to_start, $units_to_reload, $units_to_restart, $units_to_skip) = @_;
 
-    if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+    if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.path$/msx || $unit =~ /\.slice$/msx) {
         # Do nothing.  These cannot be restarted directly.
 
         # Slices and Paths don't have to be restarted since
         # properties (resource limits and inotify watches)
         # seem to get applied on daemon-reload.
-    } elsif ($unit =~ /\.mount$/) {
+    } elsif ($unit =~ /\.mount$/msx) {
         # Reload the changed mount unit to force a remount.
         # FIXME: only reload when Options= changed, restart otherwise
         $units_to_reload->{$unit} = 1;
         record_unit($reload_list_file, $unit);
-    } elsif ($unit =~ /\.socket$/) {
+    } elsif ($unit =~ /\.socket$/msx) {
         # FIXME: do something?
         # Attempt to fix this: https://github.com/NixOS/nixpkgs/pull/141192
         # Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
@@ -415,7 +422,7 @@ sub handle_modified_unit {
         } else {
             # It doesn't make sense to stop and start non-services because
             # they can't have ExecStop=
-            if (!parse_systemd_bool(\%new_unit_info, "Service", "X-StopIfChanged", 1) || $unit !~ /\.service$/) {
+            if (!parse_systemd_bool(\%new_unit_info, "Service", "X-StopIfChanged", 1) || $unit !~ /\.service$/msx) {
                 # This unit should be restarted instead of
                 # stopped and started.
                 $units_to_restart->{$unit} = 1;
@@ -430,8 +437,8 @@ sub handle_modified_unit {
                 # socket unit(s) as well, and restart the
                 # socket(s) instead of the service.
                 my $socket_activated = 0;
-                if ($unit =~ /\.service$/) {
-                    my @sockets = split(/ /, join(" ", @{$new_unit_info{Service}{Sockets} // []}));
+                if ($unit =~ /\.service$/msx) {
+                    my @sockets = split(/\s+/msx, join(" ", @{$new_unit_info{Service}{Sockets} // []}));
                     if (scalar(@sockets) == 0) {
                         @sockets = ("$base_name.socket");
                     }
@@ -482,6 +489,7 @@ sub handle_modified_unit {
             }
         }
     }
+    return;
 }
 
 # Figure out what units need to be stopped, started, restarted or reloaded.
@@ -490,13 +498,13 @@ my (%units_to_stop, %units_to_skip, %units_to_start, %units_to_restart, %units_t
 my %units_to_filter; # units not shown
 
 %units_to_start = map { $_ => 1 }
-    split("\n", read_file($start_list_file, err_mode => "quiet") // "");
+    split(/\n/msx, read_file($start_list_file, err_mode => "quiet") // "");
 
 %units_to_restart = map { $_ => 1 }
-    split("\n", read_file($restart_list_file, err_mode => "quiet") // "");
+    split(/\n/msx, read_file($restart_list_file, err_mode => "quiet") // "");
 
 %units_to_reload = map { $_ => 1 }
-    split("\n", read_file($reload_list_file, err_mode => "quiet") // "");
+    split(/\n/msx, read_file($reload_list_file, err_mode => "quiet") // "");
 
 my $active_cur = get_active_units();
 while (my ($unit, $state) = each(%{$active_cur})) {
@@ -506,14 +514,14 @@ while (my ($unit, $state) = each(%{$active_cur})) {
     my $new_unit_file = "$out/etc/systemd/system/$base_unit";
 
     # Detect template instances.
-    if (!-e $cur_unit_file && !-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+    if (!-e $cur_unit_file && !-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
       $cur_unit_file = "/etc/systemd/system/$base_unit";
       $new_unit_file = "$out/etc/systemd/system/$base_unit";
     }
 
     my $base_name = $base_unit;
-    $base_name =~ s/\.[a-z]*$//;
+    $base_name =~ s/\.[[:lower:]]*$//msx;
 
     if (-e $cur_unit_file && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $new_unit_file || abs_path($new_unit_file) eq "/dev/null") {
@@ -523,7 +531,7 @@ while (my ($unit, $state) = each(%{$active_cur})) {
             }
         }
 
-        elsif ($unit =~ /\.target$/) {
+        elsif ($unit =~ /\.target$/msx) {
             my %new_unit_info = parse_unit($new_unit_file);
 
             # Cause all active target units to be restarted below.
@@ -578,7 +586,7 @@ sub path_to_unit_name {
     # Use current version of systemctl binary before daemon is reexeced.
     open(my $cmd, "-|", "$cur_systemd/systemd-escape", "--suffix=mount", "-p", $path)
         or die "Unable to escape $path!\n";
-    my $escaped = join("", <$cmd>);
+    my $escaped = do { local $/ = undef; <$cmd> };
     chomp($escaped);
     close($cmd) or die("Unable to close systemd-escape pipe");
     return $escaped;
@@ -591,7 +599,7 @@ sub path_to_unit_name {
 # unit checking code above.
 my ($cur_fss, $cur_swaps) = parse_fstab("/etc/fstab");
 my ($new_fss, $new_swaps) = parse_fstab("$out/etc/fstab");
-foreach my $mount_point (keys(%$cur_fss)) {
+foreach my $mount_point (keys(%{$cur_fss})) {
     my $cur = $cur_fss->{$mount_point};
     my $new = $new_fss->{$mount_point};
     my $unit = path_to_unit_name($mount_point);
@@ -611,7 +619,7 @@ foreach my $mount_point (keys(%$cur_fss)) {
 }
 
 # Also handles swap devices.
-foreach my $device (keys(%$cur_swaps)) {
+foreach my $device (keys(%{$cur_swaps})) {
     my $cur = $cur_swaps->{$device};
     my $new = $new_swaps->{$device};
     if (!defined($new)) {
@@ -670,19 +678,19 @@ if ($action eq "dry-activate") {
     system("$out/dry-activate", "$out");
 
     # Handle the activation script requesting the restart or reload of a unit.
-    foreach (split("\n", read_file($dry_restart_by_activation_file, err_mode => "quiet") // "")) {
+    foreach (split(/\n/msx, read_file($dry_restart_by_activation_file, err_mode => "quiet") // "")) {
         my $unit = $_;
         my $base_unit = $unit;
         my $new_unit_file = "$out/etc/systemd/system/$base_unit";
 
         # Detect template instances.
-        if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+        if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
           $base_unit = "$1\@.$2";
           $new_unit_file = "$out/etc/systemd/system/$base_unit";
         }
 
         my $base_name = $base_unit;
-        $base_name =~ s/\.[a-z]*$//;
+        $base_name =~ s/\.[[:lower:]]*$//msx;
 
         # Start units if they were not active previously
         if (not defined($active_cur->{$unit})) {
@@ -694,7 +702,7 @@ if ($action eq "dry-activate") {
     }
     unlink($dry_restart_by_activation_file);
 
-    foreach (split("\n", read_file($dry_reload_by_activation_file, err_mode => "quiet") // "")) {
+    foreach (split(/\n/msx, read_file($dry_reload_by_activation_file, err_mode => "quiet") // "")) {
         my $unit = $_;
 
         if (defined($active_cur->{$unit}) and not $units_to_restart{$unit} and not $units_to_stop{$unit}) {
@@ -742,19 +750,19 @@ print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
 # Handle the activation script requesting the restart or reload of a unit.
-foreach (split("\n", read_file($restart_by_activation_file, err_mode => "quiet") // "")) {
+foreach (split(/\n/msx, read_file($restart_by_activation_file, err_mode => "quiet") // "")) {
     my $unit = $_;
     my $base_unit = $unit;
     my $new_unit_file = "$out/etc/systemd/system/$base_unit";
 
     # Detect template instances.
-    if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+    if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
       $new_unit_file = "$out/etc/systemd/system/$base_unit";
     }
 
     my $base_name = $base_unit;
-    $base_name =~ s/\.[a-z]*$//;
+    $base_name =~ s/\.[[:lower:]]*$//msx;
 
     # Start units if they were not active previously
     if (not defined($active_cur->{$unit})) {
@@ -768,7 +776,7 @@ foreach (split("\n", read_file($restart_by_activation_file, err_mode => "quiet")
 # We can remove the file now because it has been propagated to the other restart/reload files
 unlink($restart_by_activation_file);
 
-foreach (split("\n", read_file($reload_by_activation_file, err_mode => "quiet") // "")) {
+foreach (split(/\n/msx, read_file($reload_by_activation_file, err_mode => "quiet") // "")) {
     my $unit = $_;
 
     if (defined($active_cur->{$unit}) and not $units_to_restart{$unit} and not $units_to_stop{$unit}) {
@@ -794,9 +802,9 @@ system("$new_systemd/bin/systemctl", "reset-failed");
 system("$new_systemd/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
 # Reload user units
-open(my $list_active_users, "-|", "$new_systemd/bin/loginctl", "list-users", "--no-legend");
+open(my $list_active_users, "-|", "$new_systemd/bin/loginctl", "list-users", "--no-legend") || die("Unable to call loginctl");
 while (my $f = <$list_active_users>) {
-    if ($f !~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/) {
+    if ($f !~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/msx) {
         next;
     }
     my ($uid, $name) = ($+{uid}, $+{user});
@@ -808,7 +816,7 @@ while (my $f = <$list_active_users>) {
            "$new_systemd/bin/systemctl --user start nixos-activation.service");
 }
 
-close($list_active_users);
+close($list_active_users) || die("Unable to close the file handle to loginctl");
 
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";
@@ -873,7 +881,9 @@ while (my ($unit, $state) = each(%{$active_new})) {
 
     if ($state->{substate} eq "auto-restart") {
         # A unit in auto-restart substate is a failure *if* it previously failed to start
-        my $main_status = `$new_systemd/bin/systemctl show --value --property=ExecMainStatus '$unit'`;
+        open(my $main_status_fd, "-|", "$new_systemd/bin/systemctl", "show", "--value", "--property=ExecMainStatus", $unit) || die("Unable to call 'systemctl show'");
+        my $main_status = do { local $/ = undef; <$main_status_fd> };
+        close($main_status_fd) || die("Unable to close 'systemctl show' fd");
         chomp($main_status);
 
         if ($main_status ne "0") {
