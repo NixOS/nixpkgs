@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hilbish";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
     rev = "v${version}";
-    sha256 = "sha256-BsN2v6OEWOtk8ENKr5G+lSmNIUA89VfpO+QQoBizx9g=";
+    sha256 = "sha256-JVAyE6iSfRres2YalQF3CWK5Jtn5HoW6p6RHVbwzoVQ=";
     fetchSubmodules = true;
   };
 
