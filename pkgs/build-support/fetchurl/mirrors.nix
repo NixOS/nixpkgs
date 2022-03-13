@@ -263,6 +263,18 @@
     "https://public.abbradar.moe/steamrt/"
   ];
 
+  # TCSH shell
+  tcsh = [
+    "https://astron.com/pub/tcsh/"
+    "https://astron.com/pub/tcsh/old/"
+    "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/"
+    "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/old/"
+    "ftp://ftp.astron.com/pub/tcsh/"
+    "ftp://ftp.astron.com/pub/tcsh/old/"
+    "ftp://ftp.funet.fi/pub/unix/shells/tcsh/"
+    "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/"
+  ];
+
   # XFCE
   xfce = [
     "https://archive.xfce.org/"
