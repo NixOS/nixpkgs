@@ -43,7 +43,17 @@
           This means, <literal>ip[6]tables</literal>,
           <literal>arptables</literal> and <literal>ebtables</literal>
           commands will actually show rules from some specific tables in
-          the <literal>nf_tables</literal> kernel subsystem.
+          the <literal>nf_tables</literal> kernel subsystem. In case
+          you’re migrating from an older release without rebooting,
+          there might be cases where you end up with iptable rules
+          configured both in the legacy <literal>iptables</literal>
+          kernel backend, as well as in the <literal>nf_tables</literal>
+          backend. This can lead to confusing firewall behaviour. An
+          <literal>iptables-save</literal> after switching will complain
+          about <quote>iptables-legacy tables present</quote>. It’s
+          probably best to reboot after the upgrade, or manually
+          removing all legacy iptables rules (via the
+          <literal>iptables-legacy</literal> package).
         </para>
       </listitem>
       <listitem>
