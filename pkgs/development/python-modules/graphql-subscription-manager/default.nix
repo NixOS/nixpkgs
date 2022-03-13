@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "graphql-subscription-manager";
-  version = "0.5.1";
+  version = "0.5.4";
 
   disabled = pythonOlder "3.7";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "PyGraphqlWebsocketManager";
     rev = version;
-    sha256 = "sha256-PVQa6JmBnToXuL/wNkYO0b+K1e9yrQgRUzWNUbFN5mM=";
+    sha256 = "sha256-J3us0xZN1jOFRcvUQg8PQP6AVHa/swGjKU8IivmfjQE=";
   };
 
   propagatedBuildInputs = [
