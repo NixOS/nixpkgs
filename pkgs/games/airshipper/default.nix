@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "airshipper";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
     rev = "v${version}";
-    sha256 = "sha256-m3H2FE1DoV/uk9PGgf9PCagwmWWSQO/gCi7zpS02/WY=";
+    sha256 = "sha256-nOE9ZNHxLEAnMkuBSpxmeq3DxkRIlcoase6AxU+eFug=";
   };
 
-  cargoSha256 = "sha256-ddy4TjT/ia+sLBnpwcXBVUzAS07ar+Jjc04KS5/arlU=";
+  cargoSha256 = "sha256-s3seKVEhXyOVlt3a8cubzRWoB4SVQpdCmq12y0FpDUw=";
 
   buildInputs = [
     openssl
