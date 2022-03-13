@@ -155,6 +155,9 @@ stdenv.mkDerivation rec {
       rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
       sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
     })
+
+    # adapted from https://trac.sagemath.org/ticket/23712#comment:22
+    ./patches/tachyon-renamed-focallength.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
