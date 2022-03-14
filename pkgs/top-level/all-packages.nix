@@ -12913,7 +12913,7 @@ with pkgs;
       else if platform.isFreeBSD then 7
       else if platform.isAndroid then 12
       else if platform.isLinux then 11
-      else if platform.isWasm then 8
+      else if platform.isWasm then 12
       else latest_version;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
@@ -15285,6 +15285,8 @@ with pkgs;
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
   kubei = callPackage ../tools/security/kubei { };
+
+  kubemq-community = callPackage ../servers/kubemq-community { };
 
   kubeone = callPackage ../applications/networking/cluster/kubeone { };
 
@@ -21905,6 +21907,7 @@ with pkgs;
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
+  prometheus-dmarc-exporter = callPackage ../servers/monitoring/prometheus/dmarc-exporter { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
   prometheus-domain-exporter = callPackage ../servers/monitoring/prometheus/domain-exporter.nix { };
@@ -27003,6 +27006,8 @@ with pkgs;
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
+
+  kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 

@@ -98,6 +98,16 @@
     "http://www.ring.gr.jp/pub/net/"
   ];
 
+  # IBiblio (former metalab/sunsite)
+  # Most of the time the expressions refer to the /pub/Linux/ subdirectory;
+  # however there are other useful files outside it
+  ibiblioPubLinux = [
+    "https://www.ibiblio.org/pub/Linux/"
+    "ftp://ftp.ibiblio.org/pub/linux/"
+    "ftp://ftp.gwdg.de/pub/linux/metalab/"
+    "ftp://ftp.metalab.unc.edu/pub/linux/"
+  ];
+
   # ImageMagick mirrors, see https://www.imagemagick.org/script/mirror.php
   imagemagick = [
     "https://www.imagemagick.org/download/"
@@ -122,12 +132,6 @@
     "https://cdn.kernel.org/pub/"
     "http://linux-kernel.uio.no/pub/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/"
-  ];
-
-  # Metalab, now IBiblio
-  metalab = [
-    "ftp://ftp.gwdg.de/pub/linux/metalab/"
-    "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
   # MySQL
