@@ -1688,6 +1688,12 @@
     githubId = 355401;
     name = "Brian Hicks";
   };
+  brianmcgee = {
+    name = "Brian McGee";
+    email = "brian@41north.dev";
+    github = "brianmcgee";
+    githubId = 1173648;
+  };
   Br1ght0ne = {
     email = "brightone@protonmail.com";
     github = "Br1ght0ne";
@@ -5631,6 +5637,12 @@
     github = "jduan";
     githubId = 452450;
   };
+  jdupak = {
+    name = "Jakub Dupak";
+    email = "dev@jakubdupak.com";
+    github = "jdupak";
+    githubId = 22683640;
+  };
   jecaro = {
     email = "jeancharles.quillet@gmail.com";
     github = "jecaro";
@@ -7222,6 +7234,12 @@
     github = "locallycompact";
     githubId = 1267527;
     name = "Daniel Firth";
+  };
+  lodi = {
+    email = "anthony.lodi@gmail.com";
+    github = "lodi";
+    githubId = 918448;
+    name = "Anthony Lodi";
   };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";

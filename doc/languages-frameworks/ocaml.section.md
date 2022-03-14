@@ -38,8 +38,8 @@ Here is a simple package example.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- `useDune2 = true` ensures that the latest version of Dune is used for the
-  build (this may become the default value in a future release).
+- `useDune2 = true` ensures that Dune version 2 is used for the
+  build (this is the default; set to `false` to use Dune version 1).
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is

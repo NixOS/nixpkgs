@@ -10,6 +10,8 @@ use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
 
+## no critic(CodeLayout::ProhibitParensWithBuiltins)
+
 my $out = "@out@";
 
 my $curSystemd = abs_path("/run/current-system/sw/bin");
@@ -36,13 +38,13 @@ my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
 
 make_path("/run/nixos", { mode => oct(755) });
 
-my $action = shift @ARGV;
+my $action = shift(@ARGV);
 
 if ("@localeArchive@" ne "") {
     $ENV{LOCALE_ARCHIVE} = "@localeArchive@";
 }
 
-if (!defined $action || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
+if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<EOF;
 Usage: $0 [switch|boot|test]
 
@@ -51,27 +53,30 @@ boot:         make the configuration the boot default
 test:         activate the configuration, but don\'t make it the boot default
 dry-activate: show what would be done if this configuration were activated
 EOF
-    exit 1;
+    exit(1);
 }
 
 $ENV{NIXOS_ACTION} = $action;
 
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
-die "This is not a NixOS installation!\n" unless
+die("This is not a NixOS installation!\n") unless
     -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID="?nixos"?/s;
 
 openlog("nixos", "", LOG_USER);
 
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
-    system("@installBootLoader@ $out") == 0 or exit 1;
+    chomp(my $installBootLoader = <<'EOFBOOTLOADER');
+@installBootLoader@
+EOFBOOTLOADER
+    system("$installBootLoader $out") == 0 or exit 1;
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
 system("@coreutils@/bin/sync", "-f", "/nix/store") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
 
-exit 0 if $action eq "boot";
+exit(0) if $action eq "boot";
 
 # Check if we can activate the new configuration.
 my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
@@ -83,7 +88,7 @@ Warning: the new NixOS configuration has an ‘init’ that is
 incompatible with the current configuration.  The new configuration
 won\'t take effect until you reboot the system.
 EOF
-    exit 100;
+    exit(100);
 }
 
 # Ignore SIGHUP so that we're not killed if we're running on (say)
@@ -104,14 +109,27 @@ sub getActiveUnits {
     return $res;
 }
 
+# Returns whether a systemd unit is active
+sub unit_is_active {
+    my ($unit_name) = @_;
+
+    my $mgr = Net::DBus->system->get_service('org.freedesktop.systemd1')->get_object('/org/freedesktop/systemd1');
+    my $units = $mgr->ListUnitsByNames([$unit_name]);
+    if (scalar(@{$units}) == 0) {
+        return 0;
+    }
+    my $active_state = $units->[0]->[3]; ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+    return $active_state eq 'active' || $active_state eq 'activating';
+}
+
 sub parseFstab {
     my ($filename) = @_;
     my ($fss, $swaps);
     foreach my $line (read_file($filename, err_mode => 'quiet')) {
-        chomp $line;
+        chomp($line);
         $line =~ s/^\s*#.*//;
         next if $line =~ /^\s*$/;
-        my @xs = split / /, $line;
+        my @xs = split(/ /, $line);
         if ($xs[2] eq "swap") {
             $swaps->{$xs[0]} = { options => $xs[3] // "" };
         } else {
@@ -133,17 +151,16 @@ sub parseFstab {
 sub parseSystemdIni {
     my ($unitContents, $path) = @_;
     # Tie the ini file to a hash for easier access
-    my %fileContents;
-    tie %fileContents, "Config::IniFiles", (-file => $path, -allowempty => 1, -allowcontinue => 1);
+    tie(my %fileContents, 'Config::IniFiles', (-file => $path, -allowempty => 1, -allowcontinue => 1)); ## no critic(Miscellanea::ProhibitTies)
 
     # Copy over all sections
-    foreach my $sectionName (keys %fileContents) {
+    foreach my $sectionName (keys(%fileContents)) {
         if ($sectionName eq "Install") {
             # Skip the [Install] section because it has no relevant keys for us
             next;
         }
         # Copy over all keys
-        foreach my $iniKey (keys %{$fileContents{$sectionName}}) {
+        foreach my $iniKey (keys(%{$fileContents{$sectionName}})) {
             # Ensure the value is an array so it's easier to work with
             my $iniValue = $fileContents{$sectionName}{$iniKey};
             my @iniValues;
@@ -181,7 +198,7 @@ sub parse_unit {
     # Replace \ with \\ so glob() still works with units that have a \ in them
     # Valid characters in unit names are ASCII letters, digits, ":", "-", "_", ".", and "\"
     $unit_path =~ s/\\/\\\\/gmsx;
-    foreach (glob "${unit_path}{,.d/*.conf}") {
+    foreach (glob("${unit_path}{,.d/*.conf}")) {
         parseSystemdIni(\%unit_data, "$_")
     }
     return %unit_data;
@@ -194,7 +211,7 @@ sub parseSystemdBool {
 
     my @values = @{$unitConfig->{$sectionName}{$boolName} // []};
     # Return default if value is not set
-    if (scalar @values lt 1 || not defined $values[-1]) {
+    if (scalar(@values) lt 1 || not defined($values[-1])) {
         return $default;
     }
     # If value is defined multiple times, use the last definition
@@ -211,7 +228,7 @@ sub recordUnit {
 # The opposite of recordUnit, removes a unit name from a file
 sub unrecord_unit {
     my ($fn, $unit) = @_;
-    edit_file { s/^$unit\n//msx } $fn if $action ne "dry-activate";
+    edit_file(sub { s/^$unit\n//msx }, $fn) if $action ne "dry-activate";
 }
 
 # Compare the contents of two unit files and return whether the unit
@@ -226,6 +243,16 @@ sub unrecord_unit {
 sub compare_units {
     my ($old_unit, $new_unit) = @_;
     my $ret = 0;
+    # Keys to ignore in the [Unit] section
+    my %unit_section_ignores = map { $_ => 1 } qw(
+        X-Reload-Triggers
+        Description Documentation
+        OnFailure OnSuccess OnFailureJobMode
+        IgnoreOnIsolate StopWhenUnneeded
+        RefuseManualStart RefuseManualStop
+        AllowIsolate CollectMode
+        SourcePath
+    );
 
     my $comp_array = sub {
       my ($a, $b) = @_;
@@ -233,11 +260,23 @@ sub compare_units {
     };
 
     # Comparison hash for the sections
-    my %section_cmp = map { $_ => 1 } keys %{$new_unit};
+    my %section_cmp = map { $_ => 1 } keys(%{$new_unit});
     # Iterate over the sections
-    foreach my $section_name (keys %{$old_unit}) {
+    foreach my $section_name (keys(%{$old_unit})) {
         # Missing section in the new unit?
-        if (not exists $section_cmp{$section_name}) {
+        if (not exists($section_cmp{$section_name})) {
+            # If the [Unit] section was removed, make sure that only keys
+            # were in it that are ignored
+            if ($section_name eq 'Unit') {
+                foreach my $ini_key (keys(%{$old_unit->{'Unit'}})) {
+                    if (not defined($unit_section_ignores{$ini_key})) {
+                        return 1;
+                    }
+                }
+                next; # check the next section
+            } else {
+                return 1;
+            }
             if ($section_name eq 'Unit' and %{$old_unit->{'Unit'}} == 1 and defined(%{$old_unit->{'Unit'}}{'X-Reload-Triggers'})) {
                 # If a new [Unit] section was removed that only contained X-Reload-Triggers,
                 # do nothing.
@@ -248,15 +287,15 @@ sub compare_units {
         }
         delete $section_cmp{$section_name};
         # Comparison hash for the section contents
-        my %ini_cmp = map { $_ => 1 } keys %{$new_unit->{$section_name}};
+        my %ini_cmp = map { $_ => 1 } keys(%{$new_unit->{$section_name}});
         # Iterate over the keys of the section
-        foreach my $ini_key (keys %{$old_unit->{$section_name}}) {
+        foreach my $ini_key (keys(%{$old_unit->{$section_name}})) {
             delete $ini_cmp{$ini_key};
             my @old_value = @{$old_unit->{$section_name}{$ini_key}};
             # If the key is missing in the new unit, they are different...
             if (not $new_unit->{$section_name}{$ini_key}) {
-                # ... unless the key that is now missing was the reload trigger
-                if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
+                # ... unless the key that is now missing is one of the ignored keys
+                if ($section_name eq 'Unit' and defined($unit_section_ignores{$ini_key})) {
                     next;
                 }
                 return 1;
@@ -264,19 +303,30 @@ sub compare_units {
             my @new_value = @{$new_unit->{$section_name}{$ini_key}};
             # If the contents are different, the units are different
             if (not $comp_array->(\@old_value, \@new_value)) {
-                # Check if only the reload triggers changed
-                if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
-                    $ret = 2;
-                } else {
-                    return 1;
+                # Check if only the reload triggers changed or one of the ignored keys
+                if ($section_name eq 'Unit') {
+                    if ($ini_key eq 'X-Reload-Triggers') {
+                        $ret = 2;
+                        next;
+                    } elsif (defined($unit_section_ignores{$ini_key})) {
+                        next;
+                    }
                 }
+                return 1;
             }
         }
         # A key was introduced that was missing in the old unit
         if (%ini_cmp) {
-            if ($section_name eq 'Unit' and %ini_cmp == 1 and defined($ini_cmp{'X-Reload-Triggers'})) {
-                # If the newly introduced key was the reload triggers, reload the unit
-                $ret = 2;
+            if ($section_name eq 'Unit') {
+                foreach my $ini_key (keys(%ini_cmp)) {
+                    if ($ini_key eq 'X-Reload-Triggers') {
+                        $ret = 2;
+                    } elsif (defined($unit_section_ignores{$ini_key})) {
+                        next;
+                    } else {
+                        return 1;
+                    }
+                }
             } else {
                 return 1;
             }
@@ -284,10 +334,14 @@ sub compare_units {
     }
     # A section was introduced that was missing in the old unit
     if (%section_cmp) {
-        if (%section_cmp == 1 and defined($section_cmp{'Unit'}) and %{$new_unit->{'Unit'}} == 1 and defined(%{$new_unit->{'Unit'}}{'X-Reload-Triggers'})) {
-            # If a new [Unit] section was introduced that only contains X-Reload-Triggers,
-            # reload instead of restarting
-            $ret = 2;
+        if (%section_cmp == 1 and defined($section_cmp{'Unit'})) {
+            foreach my $ini_key (keys(%{$new_unit->{'Unit'}})) {
+                if (not defined($unit_section_ignores{$ini_key})) {
+                    return 1;
+                } elsif ($ini_key eq 'X-Reload-Triggers') {
+                    $ret = 2;
+                }
+            }
         } else {
             return 1;
         }
@@ -343,11 +397,11 @@ sub handleModifiedUnit {
                 my $socket_activated = 0;
                 if ($unit =~ /\.service$/) {
                     my @sockets = split(/ /, join(" ", @{$unitInfo{Service}{Sockets} // []}));
-                    if (scalar @sockets == 0) {
+                    if (scalar(@sockets) == 0) {
                         @sockets = ("$baseName.socket");
                     }
                     foreach my $socket (@sockets) {
-                        if (defined $activePrev->{$socket}) {
+                        if (defined($activePrev->{$socket})) {
                             # We can now be sure this is a socket-activate unit
 
                             $unitsToStop->{$socket} = 1;
@@ -355,7 +409,11 @@ sub handleModifiedUnit {
                             # exist in new configuration:
                             if (-e "$out/etc/systemd/system/$socket") {
                                 $unitsToStart->{$socket} = 1;
-                                recordUnit($startListFile, $socket);
+                                if ($unitsToStart eq $unitsToRestart) {
+                                    recordUnit($restartListFile, $socket);
+                                } else {
+                                    recordUnit($startListFile, $socket);
+                                }
                                 $socket_activated = 1;
                             }
                             # Remove from units to reload so we don't restart and reload
@@ -373,7 +431,11 @@ sub handleModifiedUnit {
                 # service gets restarted if we're interrupted.
                 if (!$socket_activated) {
                     $unitsToStart->{$unit} = 1;
-                    recordUnit($startListFile, $unit);
+                    if ($unitsToStart eq $unitsToRestart) {
+                        recordUnit($restartListFile, $unit);
+                    } else {
+                        recordUnit($startListFile, $unit);
+                    }
                 }
 
                 $unitsToStop->{$unit} = 1;
@@ -401,8 +463,8 @@ $unitsToRestart{$_} = 1 foreach
 $unitsToReload{$_} = 1 foreach
     split('\n', read_file($reloadListFile, err_mode => 'quiet') // "");
 
-my $activePrev = getActiveUnits;
-while (my ($unit, $state) = each %{$activePrev}) {
+my $activePrev = getActiveUnits();
+while (my ($unit, $state) = each(%{$activePrev})) {
     my $baseUnit = $unit;
 
     my $prevUnitFile = "/etc/systemd/system/$baseUnit";
@@ -462,9 +524,9 @@ while (my ($unit, $state) = each %{$activePrev}) {
             my %old_unit_info = parse_unit($prevUnitFile);
             my %new_unit_info = parse_unit($newUnitFile);
             my $diff = compare_units(\%old_unit_info, \%new_unit_info);
-            if ($diff eq 1) {
+            if ($diff == 1) {
                 handleModifiedUnit($unit, $baseName, $newUnitFile, \%new_unit_info, $activePrev, \%unitsToStop, \%unitsToStart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
-            } elsif ($diff eq 2 and not $unitsToRestart{$unit}) {
+            } elsif ($diff == 2 and not $unitsToRestart{$unit}) {
                 $unitsToReload{$unit} = 1;
                 recordUnit($reloadListFile, $unit);
             }
@@ -475,11 +537,11 @@ while (my ($unit, $state) = each %{$activePrev}) {
 sub pathToUnitName {
     my ($path) = @_;
     # Use current version of systemctl binary before daemon is reexeced.
-    open my $cmd, "-|", "$curSystemd/systemd-escape", "--suffix=mount", "-p", $path
+    open(my $cmd, "-|", "$curSystemd/systemd-escape", "--suffix=mount", "-p", $path)
         or die "Unable to escape $path!\n";
-    my $escaped = join "", <$cmd>;
-    chomp $escaped;
-    close $cmd or die;
+    my $escaped = join("", <$cmd>);
+    chomp($escaped);
+    close($cmd) or die('Unable to close systemd-escape pipe');
     return $escaped;
 }
 
@@ -488,13 +550,13 @@ sub pathToUnitName {
 # automatically by starting local-fs.target.  FIXME: might be nicer if
 # we generated units for all mounts; then we could unify this with the
 # unit checking code above.
-my ($prevFss, $prevSwaps) = parseFstab "/etc/fstab";
-my ($newFss, $newSwaps) = parseFstab "$out/etc/fstab";
-foreach my $mountPoint (keys %$prevFss) {
+my ($prevFss, $prevSwaps) = parseFstab("/etc/fstab");
+my ($newFss, $newSwaps) = parseFstab("$out/etc/fstab");
+foreach my $mountPoint (keys(%$prevFss)) {
     my $prev = $prevFss->{$mountPoint};
     my $new = $newFss->{$mountPoint};
     my $unit = pathToUnitName($mountPoint);
-    if (!defined $new) {
+    if (!defined($new)) {
         # Filesystem entry disappeared, so unmount it.
         $unitsToStop{$unit} = 1;
     } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
@@ -510,10 +572,10 @@ foreach my $mountPoint (keys %$prevFss) {
 }
 
 # Also handles swap devices.
-foreach my $device (keys %$prevSwaps) {
+foreach my $device (keys(%$prevSwaps)) {
     my $prev = $prevSwaps->{$device};
     my $new = $newSwaps->{$device};
-    if (!defined $new) {
+    if (!defined($new)) {
         # Swap entry disappeared, so turn it off.  Can't use
         # "systemctl stop" here because systemd has lots of alias
         # units that prevent a stop from actually calling
@@ -544,8 +606,8 @@ if ($prevSystemdSystemConfig ne $newSystemdSystemConfig) {
 sub filterUnits {
     my ($units) = @_;
     my @res;
-    foreach my $unit (sort(keys %{$units})) {
-        push @res, $unit if !defined $unitsToFilter{$unit};
+    foreach my $unit (sort(keys(%{$units}))) {
+        push(@res, $unit) if !defined($unitsToFilter{$unit});
     }
     return @res;
 }
@@ -556,9 +618,9 @@ my @unitsToStopFiltered = filterUnits(\%unitsToStop);
 # Show dry-run actions.
 if ($action eq "dry-activate") {
     print STDERR "would stop the following units: ", join(", ", @unitsToStopFiltered), "\n"
-        if scalar @unitsToStopFiltered > 0;
-    print STDERR "would NOT stop the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
-        if scalar(keys %unitsToSkip) > 0;
+        if scalar(@unitsToStopFiltered) > 0;
+    print STDERR "would NOT stop the following changed units: ", join(", ", sort(keys(%unitsToSkip))), "\n"
+        if scalar(keys(%unitsToSkip)) > 0;
 
     print STDERR "would activate the configuration...\n";
     system("$out/dry-activate", "$out");
@@ -579,7 +641,7 @@ if ($action eq "dry-activate") {
         $baseName =~ s/\.[a-z]*$//;
 
         # Start units if they were not active previously
-        if (not defined $activePrev->{$unit}) {
+        if (not defined($activePrev->{$unit})) {
             $unitsToStart{$unit} = 1;
             next;
         }
@@ -599,28 +661,28 @@ if ($action eq "dry-activate") {
     unlink($dryReloadByActivationFile);
 
     print STDERR "would restart systemd\n" if $restartSystemd;
-    print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
-        if scalar(keys %unitsToReload) > 0;
-    print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
-        if scalar(keys %unitsToRestart) > 0;
+    print STDERR "would reload the following units: ", join(", ", sort(keys(%unitsToReload))), "\n"
+        if scalar(keys(%unitsToReload)) > 0;
+    print STDERR "would restart the following units: ", join(", ", sort(keys(%unitsToRestart))), "\n"
+        if scalar(keys(%unitsToRestart)) > 0;
     my @unitsToStartFiltered = filterUnits(\%unitsToStart);
     print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
-        if scalar @unitsToStartFiltered;
+        if scalar(@unitsToStartFiltered);
     exit 0;
 }
 
 
 syslog(LOG_NOTICE, "switching to system configuration $out");
 
-if (scalar (keys %unitsToStop) > 0) {
+if (scalar(keys(%unitsToStop)) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
-        if scalar @unitsToStopFiltered;
+        if scalar(@unitsToStopFiltered);
     # Use current version of systemctl binary before daemon is reexeced.
-    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop));
+    system("$curSystemd/systemctl", "stop", "--", sort(keys(%unitsToStop)));
 }
 
-print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
-    if scalar(keys %unitsToSkip) > 0;
+print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys(%unitsToSkip))), "\n"
+    if scalar(keys(%unitsToSkip)) > 0;
 
 # Activate the new configuration (i.e., update /etc, make accounts,
 # and so on).
@@ -644,7 +706,7 @@ foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') //
     $baseName =~ s/\.[a-z]*$//;
 
     # Start units if they were not active previously
-    if (not defined $activePrev->{$unit}) {
+    if (not defined($activePrev->{$unit})) {
         $unitsToStart{$unit} = 1;
         recordUnit($startListFile, $unit);
         next;
@@ -681,7 +743,7 @@ system("@systemd@/bin/systemctl", "reset-failed");
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
 # Reload user units
-open my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend';
+open(my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend');
 while (my $f = <$listActiveUsers>) {
     next unless $f =~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/;
     my ($uid, $name) = ($+{uid}, $+{user});
@@ -693,25 +755,43 @@ while (my $f = <$listActiveUsers>) {
            "@systemd@/bin/systemctl --user start nixos-activation.service");
 }
 
-close $listActiveUsers;
+close($listActiveUsers);
 
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";
 system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
 
+# Before reloading we need to ensure that the units are still active. They may have been
+# deactivated because one of their requirements got stopped. If they are inactive
+# but should have been reloaded, the user probably expects them to be started.
+if (scalar(keys(%unitsToReload)) > 0) {
+    for my $unit (keys(%unitsToReload)) {
+        if (!unit_is_active($unit)) {
+            # Figure out if we need to start the unit
+            my %unit_info = parse_unit("$out/etc/systemd/system/$unit");
+            if (!(parseSystemdBool(\%unit_info, 'Unit', 'RefuseManualStart', 0) || parseSystemdBool(\%unit_info, 'Unit', 'X-OnlyManualStart', 0))) {
+                $unitsToStart{$unit} = 1;
+                recordUnit($startListFile, $unit);
+            }
+            # Don't reload the unit, reloading would fail
+            delete %unitsToReload{$unit};
+            unrecord_unit($reloadListFile, $unit);
+        }
+    }
+}
 # Reload units that need it. This includes remounting changed mount
 # units.
-if (scalar(keys %unitsToReload) > 0) {
-    print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
-    system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
+if (scalar(keys(%unitsToReload)) > 0) {
+    print STDERR "reloading the following units: ", join(", ", sort(keys(%unitsToReload))), "\n";
+    system("@systemd@/bin/systemctl", "reload", "--", sort(keys(%unitsToReload))) == 0 or $res = 4;
     unlink($reloadListFile);
 }
 
 # Restart changed services (those that have to be restarted rather
 # than stopped and started).
-if (scalar(keys %unitsToRestart) > 0) {
-    print STDERR "restarting the following units: ", join(", ", sort(keys %unitsToRestart)), "\n";
-    system("@systemd@/bin/systemctl", "restart", "--", sort(keys %unitsToRestart)) == 0 or $res = 4;
+if (scalar(keys(%unitsToRestart)) > 0) {
+    print STDERR "restarting the following units: ", join(", ", sort(keys(%unitsToRestart))), "\n";
+    system("@systemd@/bin/systemctl", "restart", "--", sort(keys(%unitsToRestart))) == 0 or $res = 4;
     unlink($restartListFile);
 }
 
@@ -723,17 +803,17 @@ if (scalar(keys %unitsToRestart) > 0) {
 # systemd.
 my @unitsToStartFiltered = filterUnits(\%unitsToStart);
 print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
-    if scalar @unitsToStartFiltered;
-system("@systemd@/bin/systemctl", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;
+    if scalar(@unitsToStartFiltered);
+system("@systemd@/bin/systemctl", "start", "--", sort(keys(%unitsToStart))) == 0 or $res = 4;
 unlink($startListFile);
 
 
 # Print failed and new units.
 my (@failed, @new);
-my $activeNew = getActiveUnits;
-while (my ($unit, $state) = each %{$activeNew}) {
+my $activeNew = getActiveUnits();
+while (my ($unit, $state) = each(%{$activeNew})) {
     if ($state->{state} eq "failed") {
-        push @failed, $unit;
+        push(@failed, $unit);
         next;
     }
 
@@ -743,7 +823,7 @@ while (my ($unit, $state) = each %{$activeNew}) {
         chomp($main_status);
 
         if ($main_status ne "0") {
-            push @failed, $unit;
+            push(@failed, $unit);
             next;
         }
     }
@@ -751,19 +831,19 @@ while (my ($unit, $state) = each %{$activeNew}) {
     # Ignore scopes since they are not managed by this script but rather
     # created and managed by third-party services via the systemd dbus API.
     # This only lists units that are not failed (including ones that are in auto-restart but have not failed previously)
-    if ($state->{state} ne "failed" && !defined $activePrev->{$unit} && $unit !~ /\.scope$/msx) {
-        push @new, $unit;
+    if ($state->{state} ne "failed" && !defined($activePrev->{$unit}) && $unit !~ /\.scope$/msx) {
+        push(@new, $unit);
     }
 }
 
-if (scalar @new > 0) {
+if (scalar(@new) > 0) {
     print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"
 }
 
-if (scalar @failed > 0) {
-    my @failed_sorted = sort @failed;
+if (scalar(@failed) > 0) {
+    my @failed_sorted = sort(@failed);
     print STDERR "warning: the following units failed: ", join(", ", @failed_sorted), "\n\n";
-    system "@systemd@/bin/systemctl status --no-pager --full '" . join("' '", @failed_sorted) . "' >&2";
+    system("@systemd@/bin/systemctl status --no-pager --full '" . join("' '", @failed_sorted) . "' >&2");
     $res = 4;
 }
 
@@ -773,4 +853,4 @@ if ($res == 0) {
     syslog(LOG_ERR, "switching to system configuration $out failed (status $res)");
 }
 
-exit $res;
+exit($res);

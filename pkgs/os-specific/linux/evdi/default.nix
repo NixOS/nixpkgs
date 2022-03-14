@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kernel libdrm ];
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

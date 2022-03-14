@@ -16,8 +16,8 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkg-config cpio ];
-    buildInputs = [ elfutils gettext python3 python3.pkgs.setuptools ];
+    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
+    buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
   };
 

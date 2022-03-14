@@ -256,6 +256,17 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/rfjakob/systembus-notify">systembus-notify</link>,
+          allow system level notifications to reach the users. Available
+          as
+          <link xlink:href="opt-services.systembus-notify.enable">services.systembus-notify</link>.
+          Please keep in mind that this service should only be enabled
+          on machines with fully trusted users, as any local user is
+          able to DoS user sessions by spamming notifications.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
           an online collaborative spreadsheet. Available as
           <link xlink:href="options.html#opt-services.ethercalc.enable">services.ethercalc</link>.
@@ -839,6 +850,58 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.epgstation</literal> has been upgraded from v1
+          to v2, resulting in incompatible changes in the database
+          scheme and configuration format.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Some top-level settings under
+          <link linkend="opt-services.epgstation.enable">services.epgstation</link>
+          is now deprecated because it was redudant due to the same
+          options being present in
+          <link linkend="opt-services.epgstation.settings">services.epgstation.settings</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.epgstation.basicAuth</literal>
+          was removed because basic authentication support was dropped
+          by upstream.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.epgstation.database.passwordFile">services.epgstation.database.passwordFile</link>
+          no longer has a default value. Make sure to set this option
+          explicitly before upgrading. Change the database password if
+          necessary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link linkend="opt-services.epgstation.settings">services.epgstation.settings</link>
+          option now expects options for <literal>config.yml</literal>
+          in EPGStation v2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Existing data for the
+          <link linkend="opt-services.epgstation.enable">services.epgstation</link>
+          module would have to be backed up prior to the upgrade. To
+          back up exising data to
+          <literal>/tmp/epgstation.bak</literal>, run
+          <literal>sudo -u epgstation epgstation run backup /tmp/epgstation.bak</literal>.
+          To import that data after to the upgrade, run
+          <literal>sudo -u epgstation epgstation run v1migrate /tmp/epgstation.bak</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>switch-to-configuration</literal> (the script that is
           run when running <literal>nixos-rebuild switch</literal> for
           example) has been reworked
@@ -1331,6 +1394,16 @@
           Reason is that the old name has been deprecated upstream.
           Using the old option name will still work, but produce a
           warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>pomerium-cli</literal> command has been moved out
+          of the <literal>pomerium</literal> package into the
+          <literal>pomerium-cli</literal> package, following upstream’s
+          repository split. If you are using the
+          <literal>pomerium-cli</literal> command, you should now
+          install the <literal>pomerium-cli</literal> package.
         </para>
       </listitem>
       <listitem>

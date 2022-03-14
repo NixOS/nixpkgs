@@ -16,10 +16,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
     makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
       --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {

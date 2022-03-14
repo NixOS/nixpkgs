@@ -10,6 +10,6 @@
     "${patchSet}/patches/ruby/3.0/head/railsexpress/01-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/3.0/head/railsexpress/02-malloc-trim.patch"
   ];
-  "3.1.0" = ops useRailsExpress [ # no patches yet (2021-12-25)
+  "3.1.1" = ops useRailsExpress [ # no patches yet (2021-12-25)
   ];
 }

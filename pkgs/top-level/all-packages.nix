@@ -1105,6 +1105,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  sdlookup = callPackage ../tools/security/sdlookup { };
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   tauon = callPackage ../applications/audio/tauon { };
@@ -2731,6 +2733,8 @@ with pkgs;
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
+  wl-gammactl = callPackage ../tools/wayland/wl-gammactl { };
+
   wluma = callPackage ../tools/wayland/wluma {  };
 
   wob = callPackage ../tools/wayland/wob { };
@@ -3373,6 +3377,8 @@ with pkgs;
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
   iotools = callPackage ../tools/misc/iotools { };
+
+  jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin = callPackage ../servers/jellyfin { };
 
@@ -5541,6 +5547,8 @@ with pkgs;
   flamegraph = callPackage ../development/tools/flamegraph { };
 
   flawfinder = callPackage ../development/tools/flawfinder { };
+
+  flintlock = callPackage ../applications/virtualization/flintlock { };
 
   flip-link = callPackage ../development/tools/flip-link { };
 
@@ -9023,6 +9031,8 @@ with pkgs;
   pngcrush = callPackage ../tools/graphics/pngcrush { };
 
   pngnq = callPackage ../tools/graphics/pngnq { };
+
+  pngoptimizer = callPackage ../tools/graphics/pngoptimizer { };
 
   pngtoico = callPackage ../tools/graphics/pngtoico {
     libpng = libpng12;
@@ -12903,7 +12913,7 @@ with pkgs;
       else if platform.isFreeBSD then 7
       else if platform.isAndroid then 12
       else if platform.isLinux then 11
-      else if platform.isWasm then 8
+      else if platform.isWasm then 12
       else latest_version;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
@@ -14819,10 +14829,7 @@ with pkgs;
 
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
-    # with gcc-7: undefined reference to `__divmoddi4'
-    if stdenv.targetPlatform.isi686
-      then gcc6.cc
-    else if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
+    if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
     # Can only do this is in the native case, otherwise we might get infinite
     # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
       then targetPackages.stdenv.cc.cc
@@ -15278,6 +15285,8 @@ with pkgs;
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
   kubei = callPackage ../tools/security/kubei { };
+
+  kubemq-community = callPackage ../servers/kubemq-community { };
 
   kubeone = callPackage ../applications/networking/cluster/kubeone { };
 
@@ -21620,6 +21629,7 @@ with pkgs;
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   pomerium = callPackage ../servers/http/pomerium { };
+  pomerium-cli = callPackage ../tools/security/pomerium-cli { };
 
   postgrey = callPackage ../servers/mail/postgrey { };
 
@@ -21903,6 +21913,7 @@ with pkgs;
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
+  prometheus-dmarc-exporter = callPackage ../servers/monitoring/prometheus/dmarc-exporter { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
   prometheus-domain-exporter = callPackage ../servers/monitoring/prometheus/domain-exporter.nix { };
@@ -26995,6 +27006,8 @@ with pkgs;
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
 
+  kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
+
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
@@ -29066,7 +29079,9 @@ with pkgs;
 
   psst = callPackage ../applications/audio/psst { };
 
-  squeezelite = callPackage ../applications/audio/squeezelite { };
+  squeezelite = callPackage ../applications/audio/squeezelite { audioBackend = "alsa"; };
+
+  squeezelite-pulse = callPackage ../applications/audio/squeezelite { audioBackend = "pulse"; };
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
@@ -32701,6 +32716,8 @@ with pkgs;
 
   fped = callPackage ../applications/science/electronics/fped { };
 
+  gaw = callPackage ../applications/science/electronics/gaw {};
+
   horizon-eda = callPackage ../applications/science/electronics/horizon-eda {};
 
   # this is a wrapper for kicad.base and kicad.libraries
@@ -32733,6 +32750,8 @@ with pkgs;
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
+
+  xschem = callPackage ../applications/science/electronics/xschem { };
 
   xyce = callPackage ../applications/science/electronics/xyce { };
 
@@ -33792,6 +33811,8 @@ with pkgs;
   };
 
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
+
+  qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
 
