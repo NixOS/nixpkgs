@@ -103,16 +103,21 @@ let
           }).${ver.majMinTiny}
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
-          # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
-          # the resulting error was swallowed. Newer rubygems no longer swallows
-          # this error. We upgrade rubygems when rubygemsSupport is enabled, so
-          # we have to fix this bug to prevent the install step from failing.
-          # See https://github.com/ruby/ruby/pull/2930
-          ++ op (!atLeast30 && rubygemsSupport)
+          ++ ops (!atLeast30 && rubygemsSupport) [
+            # We upgrade rubygems to a version that isn't compatible with the
+            # ruby 2.7 installer. Backport the upstream fix.
+            ./rbinstall-new-rubygems-compat.patch
+
+            # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
+            # the resulting error was swallowed. Newer rubygems no longer swallows
+            # this error. We upgrade rubygems when rubygemsSupport is enabled, so
+            # we have to fix this bug to prevent the install step from failing.
+            # See https://github.com/ruby/ruby/pull/2930
             (fetchpatch {
               url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
               sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
-            });
+            })
+          ];
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -189,6 +194,11 @@ let
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
+          # Remove unnecessary external intermediate files created by gems
+          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          for makefile in $extMakefiles; do
+            make -C "$(dirname "$makefile")" distclean
+          done
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
