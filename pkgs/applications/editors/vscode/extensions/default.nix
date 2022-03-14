@@ -1604,8 +1604,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "1.3.0";
-          sha256 = "sha256-Tz6bLcBUATn8cYIzGoLJwgaJZGbBVr1CISmJHz+iM60=";
+          version = "1.5.1";
+          sha256 = "sha256-JXhmgBFZdKNjgX6K7U+M/T7HEmIOBQOzQEJ5957TUuM=";
         };
         meta = {
           license = lib.licenses.mit;
