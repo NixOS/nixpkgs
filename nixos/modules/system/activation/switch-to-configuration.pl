@@ -67,7 +67,10 @@ openlog("nixos", "", LOG_USER);
 
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
-    system('@installBootLoader@', $out) == 0 or exit 1;
+    chomp(my $installBootLoader = <<'EOFBOOTLOADER');
+@installBootLoader@
+EOFBOOTLOADER
+    system("$installBootLoader $out") == 0 or exit 1;
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
