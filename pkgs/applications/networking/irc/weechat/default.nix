@@ -40,6 +40,18 @@ let
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
+      patches = [
+        (fetchpatch {
+          # Fix certificate validiation with modified GnuTLS options
+          # https://weechat.org/doc/security/WSA-2022-1/
+          url = "https://github.com/weechat/weechat/commit/600413909804edfd32c53ea3d47db5b6d2871a89.patch";
+          sha256 = "sha256-56m/XoTiQhh2WGCSCdHxuA0bpgOxC6QGKZ25hm7dfdg=";
+          excludes = [
+            "ChangeLog.adoc"
+          ];
+        })
+      ];
+
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
