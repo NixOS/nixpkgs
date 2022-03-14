@@ -4906,14 +4906,6 @@
       };
     }
     {
-      name = "mime_db___mime_db_1.51.0.tgz";
-      path = fetchurl {
-        name = "mime_db___mime_db_1.51.0.tgz";
-        url  = "https://registry.yarnpkg.com/mime-db/-/mime-db-1.51.0.tgz";
-        sha512 = "5y8A56jg7XVQx2mbv1lu49NR4dokRnhZYTtL+KGfaa27uq4pSTXkwQkFJl4pkRMyNFz/EtYDSkiiEHx3F7UN6g==";
-      };
-    }
-    {
       name = "mime_db___mime_db_1.52.0.tgz";
       path = fetchurl {
         name = "mime_db___mime_db_1.52.0.tgz";
@@ -4922,11 +4914,11 @@
       };
     }
     {
-      name = "mime_types___mime_types_2.1.34.tgz";
+      name = "mime_types___mime_types_2.1.35.tgz";
       path = fetchurl {
-        name = "mime_types___mime_types_2.1.34.tgz";
-        url  = "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.34.tgz";
-        sha512 = "6cP692WwGIs9XXdOO4++N+7qjqv0rqxxVvJ3VHPh/Sc9mVZcQP+ZGhkKiTvWMQRr2tbHkJP/Yn7Y0npb3ZBs4A==";
+        name = "mime_types___mime_types_2.1.35.tgz";
+        url  = "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.35.tgz";
+        sha512 = "ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==";
       };
     }
     {
