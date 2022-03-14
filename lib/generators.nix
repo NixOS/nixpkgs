@@ -10,7 +10,7 @@
  * are mostly generators themselves, called with
  * their respective default values; they can be reused.
  *
- * Tests can be found in ./tests.nix
+ * Tests can be found in ./tests/misc.nix
  * Documentation in the manual, #sec-generators
  */
 { lib }:
@@ -108,7 +108,7 @@ rec {
    * The mk* configuration attributes can generically change
    * the way sections and key-value strings are generated.
    *
-   * For more examples see the test cases in ./tests.nix.
+   * For more examples see the test cases in ./tests/misc.nix.
    */
   toINI = {
     # apply transformations (e.g. escapes) to section names
@@ -155,7 +155,7 @@ rec {
    * The mk* configuration attributes can generically change
    * the way sections and key-value strings are generated.
    *
-   * For more examples see the test cases in ./tests.nix.
+   * For more examples see the test cases in ./tests/misc.nix.
    *
    * If you don’t need a global section, you can also use
    * `generators.toINI` directly, which only takes
