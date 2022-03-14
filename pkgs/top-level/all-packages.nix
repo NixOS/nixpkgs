@@ -15271,6 +15271,8 @@ with pkgs;
 
   kubei = callPackage ../tools/security/kubei { };
 
+  kubemq-community = callPackage ../servers/kubemq-community { };
+
   kubeone = callPackage ../applications/networking/cluster/kubeone { };
 
   kubeprompt = callPackage ../development/tools/kubeprompt { };
@@ -26999,6 +27001,8 @@ with pkgs;
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
+
+  kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
