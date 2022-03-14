@@ -1426,8 +1426,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.19.0";
-          sha256 = "sha256-buIAbsyKUvX3blO1AbCq/tJ1KAcqaFpciqQovmOZ5GE=";
+          version = "1.20.0";
+          sha256 = "sha256-i3gYTP76YEDItG2oXR9pEXuGv0qmyf1Xv6HQvDBEOyg=";
         };
         meta = {
           license = lib.licenses.mit;
