@@ -27619,6 +27619,11 @@ with pkgs;
 
   clerk = callPackage ../applications/audio/clerk { };
 
+  jujutsu = callPackage ../applications/version-management/jujutsu {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin) libiconv;
+  };
+
   nbstripout = callPackage ../applications/version-management/nbstripout { python = python3; };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
