@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "rencode";
-  version = "1.0.3";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "aresch";
     repo = "rencode";
     rev = "v${version}";
-    sha256 = "sha256-tL2ChS1CIOipST08+uy8V7EyVwii1IwPis8mLtsQ3EA=";
+    sha256 = "sha256-PGjjrZuoGYSPMNqXG1KXoZnOoWIe4g6s056jFhqrJ60=";
   };
 
   buildInputs = [ cython ];
