@@ -79,13 +79,13 @@ in stdenv.mkDerivation rec {
              ExtendPersistentImg.sh_ventoy-extend-persistent; do
         makeWrapper "$VENTOY_PATH/''${f%_*}" "$out/bin/''${f#*_}" \
                     --prefix PATH : "${lib.makeBinPath buildInputs}" \
-                    --run "cd '$VENTOY_PATH' || exit 1"
+                    --chdir "$VENTOY_PATH"
     done
   '' + lib.optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
                 --prefix PATH : "${lib.makeBinPath buildInputs}" \
-                --run "cd '$VENTOY_PATH' || exit 1"
+                --chdir "$VENTOY_PATH"
   '' + lib.optionalString (!withGtk3) ''
     rm "$out"/share/ventoy/tool/"$ARCH"/Ventoy2Disk.gtk3
   '' + lib.optionalString (!withQt5) ''

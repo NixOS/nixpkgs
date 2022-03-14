@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath $rpath:${bundle}/lib $bin
 
       name=$(basename $bin)
-      makeWrapper $bin $out/bin/$name --run "cd ${bundle}"
+      makeWrapper $bin $out/bin/$name --chdir "${bundle}"
     done
   '';
 

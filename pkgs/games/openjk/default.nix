@@ -44,9 +44,9 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/128x128/apps
     prefix=$out/opt/JediAcademy
 
-    makeWrapper $prefix/openjk.* $out/bin/jamp --run "cd $prefix"
-    makeWrapper $prefix/openjk_sp.* $out/bin/jasp --run "cd $prefix"
-    makeWrapper $prefix/openjkded.* $out/bin/openjkded --run "cd $prefix"
+    makeWrapper $prefix/openjk.* $out/bin/jamp --chdir "$prefix"
+    makeWrapper $prefix/openjk_sp.* $out/bin/jasp --chdir "$prefix"
+    makeWrapper $prefix/openjkded.* $out/bin/openjkded --chdir "$prefix"
 
     cp $src/shared/icons/OpenJK_Icon_128.png $out/share/icons/hicolor/128x128/apps
     ln -s ${jamp}/share/applications/* $out/share/applications

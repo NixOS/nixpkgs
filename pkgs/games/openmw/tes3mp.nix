@@ -131,11 +131,11 @@ symlinkJoin rec {
     dir=\''${XDG_CONFIG_HOME:-\$HOME/.config}/openmw
 
     makeWrapper ${unwrapped}/libexec/tes3mp-browser $out/bin/tes3mp-browser \
-      --run "cd $out/bin"
+      --chdir "$out/bin"
 
     makeWrapper ${unwrapped}/libexec/tes3mp-server $out/bin/tes3mp-server \
       --run "mkdir -p $dir" \
       --run "${crudini}/bin/crudini --merge $dir/${cfgFile.name} < ${cfgFile}" \
-      --run "cd $out/bin"
+      --chdir "$out/bin"
   '';
 }

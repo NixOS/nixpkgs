@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp -R ${lib.optionalString stdenv.hostPlatform.isDarwin "Foxotron.app/Contents/MacOS/"}Foxotron \
       ../{config.json,Shaders,Skyboxes} $out/lib/foxotron/
     wrapProgram $out/lib/foxotron/Foxotron \
-      --run "cd $out/lib/foxotron"
+      --chdir "$out/lib/foxotron"
     ln -s $out/{lib/foxotron,bin}/Foxotron
 
     runHook postInstall

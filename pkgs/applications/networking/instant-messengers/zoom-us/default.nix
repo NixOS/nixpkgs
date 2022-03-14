@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     # Clear Qt paths to prevent tripping over "foreign" Qt resources.
     # Clear Qt screen scaling settings to prevent over-scaling.
     makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
-      --run "cd $out/opt/zoom" \
+      --chdir "$out/opt/zoom" \
       --unset QML2_IMPORT_PATH \
       --unset QT_PLUGIN_PATH \
       --unset QT_SCREEN_SCALE_FACTORS \

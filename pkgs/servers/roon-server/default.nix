@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
             --prefix PATH : "$dotnetDir" \
             --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
-            --run "cd $binDir" \
+            --chdir "$binDir" \
             --set DOTNET_ROOT "$dotnetDir"
         )
       '';
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       ${wrapBin "$out/Server/RoonServer"}
 
       mkdir -p $out/bin
-      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --run "cd $out"
+      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --chdir "$out"
 
       # This is unused and depends on an ancient version of lttng-ust, so we
       # just patch it out

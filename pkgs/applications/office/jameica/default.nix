@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
         lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
-      --run "cd $out/share/java/"
+      --chdir "$out/share/java/"
   '';
 
   meta = with lib; {

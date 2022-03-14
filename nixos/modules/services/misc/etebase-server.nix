@@ -166,7 +166,7 @@ in
       } ''
         makeWrapper ${pythonEnv}/bin/etebase-server \
           $out/bin/etebase-server \
-          --run "cd ${cfg.dataDir}" \
+          --chdir ${escapeShellArg cfg.dataDir} \
           --prefix ETEBASE_EASY_CONFIG_PATH : "${configIni}"
       '')
     ];

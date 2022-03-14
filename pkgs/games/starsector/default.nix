@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/starsector.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
-      --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector; cd '"$out"
+      --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
+      --chdir "$out"
     ln -s $out/starsector.sh $out/bin/starsector
 
     runHook postInstall
