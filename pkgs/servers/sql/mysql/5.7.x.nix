@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, bison, pkg-config
+{ lib, stdenv, fetchurl, cmake, bison, pkg-config, nukeReferences
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
 , libtirpc, rpcsvc-proto, nixosTests
@@ -21,7 +21,7 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
+  nativeBuildInputs = [ bison cmake pkg-config nukeReferences ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
@@ -66,6 +66,7 @@ self = stdenv.mkDerivation rec {
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
   '';
   postInstall = ''
+    nuke-refs "$out/share/mysql/docs/INFO_BIN"
     moveToOutput "lib/*.a" $static
     ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
