@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
-, isPy38
-, isPy39
 , python
 , nose
 , mock
@@ -21,11 +19,16 @@ buildPythonPackage rec {
     sha256 = "ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a";
   };
 
+  patches = [
+    # fixes hmac tests
+    # https://sources.debian.org/src/python-boto/2.49.0-4/debian/patches/bug-953970_python3.8-compat.patch/
+    ./bug-953970_python3.8-compat.patch
+  ];
+
   checkPhase = ''
     ${python.interpreter} tests/test.py default
   '';
 
-  doCheck = !isPy38 && !isPy39; # hmac functionality has changed
   checkInputs = [ nose mock ];
   propagatedBuildInputs = [ requests httpretty ];
 
