@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonAtLeast
 , isPy38
+, isPy39
 , python
 , nose
 , mock
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
-  disabled = pythonAtLeast "3.9"; # no longer compatible with hmac std lib package
+  disabled = pythonAtLeast "3.10"; # cannot import name 'Mapping' from 'collections'
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  doCheck = !isPy38; # hmac functionality has changed
+  doCheck = !isPy38 && !isPy39; # hmac functionality has changed
   checkInputs = [ nose mock ];
   propagatedBuildInputs = [ requests httpretty ];
 
