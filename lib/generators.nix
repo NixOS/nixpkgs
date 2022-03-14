@@ -130,6 +130,51 @@ rec {
       # map input to ini sections
       mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
 
+  /* Generate an INI-style config file from an attrset
+   * specifying the global section (no header), and an
+   * attrset of sections to an attrset of key-value pairs.
+   *
+   * generators.toINIWithGlobalSection {} {
+   *   globalSection = {
+   *     someGlobalKey = "hi";
+   *   };
+   *   sections = {
+   *     foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
+   *     baz = { "also, integers" = 42; };
+   * }
+   *
+   *> someGlobalKey=hi
+   *>
+   *> [baz]
+   *> also, integers=42
+   *>
+   *> [foo]
+   *> ciao=bar
+   *> hi=/nix/store/y93qql1p5ggfnaqjjqhxcw0vqw95rlz0-hello-2.10
+   *
+   * The mk* configuration attributes can generically change
+   * the way sections and key-value strings are generated.
+   *
+   * For more examples see the test cases in ./tests.nix.
+   *
+   * If you don’t need a global section, you can also use
+   * `generators.toINI` directly, which only takes
+   * the part in `sections`.
+   */
+  toINIWithGlobalSection = {
+    # apply transformations (e.g. escapes) to section names
+    mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
+    # format a setting line from key and value
+    mkKeyValue    ? mkKeyValueDefault {} "=",
+    # allow lists as values for duplicate keys
+    listsAsDuplicateKeys ? false
+  }: { globalSection, sections }:
+    ( if globalSection == {}
+      then ""
+      else (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection)
+           + "\n")
+    + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
+
   /* Generate a git-config file from an attrset.
    *
    * It has two major differences from the regular INI format:
