@@ -51,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/soywod/himalaya";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ yanganto ];
+    maintainers = with maintainers; [ toastal yanganto ];
   };
 }
