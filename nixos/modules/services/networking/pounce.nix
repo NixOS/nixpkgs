@@ -6,7 +6,7 @@ let
   cfg = config.services.pounce;
   defaultUser = "pounce";
   configFile = pkgs.writeText "pounce" ''
-    ${optionalString (cfg.sslCa != null) "local-ca = "+cfg.sslCa}
+    ${optionalString (cfg.sslCa != null) "local-ca = ${cfg.sslCa}"}
     local-host = ${cfg.hostAddress}
     local-port = ${toString cfg.hostPort}
     local-priv = ${cfg.sslKey}
@@ -25,14 +25,7 @@ in
 {
   options = {
     services.pounce = {
-
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-        Whether to enable Pounce
-        '';
-      };
+      enable = mkEnableOption "the Pounce IRC bouncer";
 
       user = mkOption {
         default = defaultUser;
@@ -53,18 +46,10 @@ in
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
-        default = "/var/lib/pounce";
-        description = ''
-          The data directory for pounce.
-        '';
-      };
-
       package = mkOption {
         type = types.package;
         default = pkgs.pounce;
-        defaultText = "pkgs.pounce";
+        defaultText = literalExpression "pkgs.pounce";
         description = ''
           Set version of pounce package to use.
         '';
@@ -72,16 +57,17 @@ in
 
       hostAddress = mkOption {
         type = types.str;
-        default = "127.0.0.1";
+        default = "localhost";
         description = ''
-         Where pounce should listen for incoming connections
+          Where pounce should listen for incoming connections.
         '';
       };
 
       hostPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 6697;
         description = ''
+          The port on which Pounce listens.
         '';
       };
 
@@ -118,15 +104,16 @@ in
         default = null;
         example = "/etc/pounce/libera-user.pem";
         description = ''
-           Path to certFP certificate for login to IRC server
+           Path to certFP certificate for login to IRC server.
         '';
       };
 
-      # If you want to use password, you need to generate it with pounce -x
       hashedPass = mkOption {
         type = types.str;
         default = "";
         description = ''
+          Use password instead of TLS certificate for login.
+          Generate using: pounce -x
         '';
       };
 
@@ -135,7 +122,7 @@ in
         example = "irc.libera.chat";
         default = "";
         description = ''
-          IRC channel
+          IRC Host to connect.
         '';
       };
 
@@ -143,6 +130,7 @@ in
         type = types.int;
         default = 6697;
         description = ''
+          IRC Port to connect.
         '';
       };
 
@@ -197,26 +185,9 @@ in
         Group = cfg.group;
         ExecStart = "${pkgs.pounce}/bin/pounce ${configFile}";
         Restart = "always";
-        RuntimeDirectory = "pounce";
-        RuntimeDirectoryMode = "0700";
+        DynamicUser = true;
+        StateDirectory = "pounce";
       };
-    };
-
-    users.users = optionalAttrs (cfg.user == defaultUser) {
-      ${defaultUser} =
-        { description = "Pounce server daemon owner";
-          group = cfg.group;
-          home = cfg.dataDir;
-          isNormalUser = true;
-          createHome = true;
-        };
-      };
-
-    users.groups = optionalAttrs (cfg.user == defaultUser) {
-      ${defaultUser} =
-       {
-         members = [ defaultUser ];
-       };
     };
   };
 
