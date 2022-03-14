@@ -4,11 +4,11 @@
 
 let
 
-  version = "3.1";
+  version = "3.2.1";
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/0/0a/Full-Maude-${version}.zip";
-    sha256 = "8b13af02c6243116c2ef9592622ecaa06d05dbe1dd6b1e595551ff33855948f2";
+    url = "http://maude.cs.illinois.edu/w/images/b/bc/Full-Maude-${version}.zip";
+    sha256 = "B1GzxGGSg7PwrfHDqsET8dQzSjyoWe0A1m3l9YV1Y+w=";
   };
 
 in
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/d/d3/Maude-${version}.tar.gz";
-    sha256 = "b112d7843f65217e3b5a9d40461698ef8dab7cbbe830af21216dfb924dc88a2f";
+    url = "https://github.com/SRI-CSL/Maude/archive/refs/tags/${version}.tar.gz";
+    sha256 = "Hs0ASz8cOo3BcTddjPihNRgE8rw0jFogeYnkTklM8Vk=";
   };
 
   nativeBuildInputs = [ unzip ];
