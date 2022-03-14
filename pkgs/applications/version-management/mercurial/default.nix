@@ -31,6 +31,12 @@ let
     patches = [
       # Fix the type of libc buffer for aarch64-linux
       ./fix-rhg-type-aarch64.patch
+
+      (fetchpatch {
+        name = "revlog-fix-wrong-type-of-rank_unknown-variable.patch";
+        url = "https://phab.mercurial-scm.org/D12374?id=32639&download=true";
+        sha256 = "sha256-5+7FW1ghTqfUKjqzfiTDHZXilYVfhCi7rKfYOnHWoD0=";
+      })
     ];
 
     format = "other";
