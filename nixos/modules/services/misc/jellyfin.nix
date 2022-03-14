@@ -70,7 +70,8 @@ in
         LockPersonality = true;
 
         PrivateTmp = true;
-        PrivateDevices = true;
+        # Disabled to allow Jellyfin to access hw accel devices endpoints
+        # PrivateDevices = true;
         PrivateUsers = true;
 
         # Disabled as it does not allow Jellyfin to interface with CUDA devices

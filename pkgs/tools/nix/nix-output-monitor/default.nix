@@ -6,6 +6,7 @@
   async,
   attoparsec,
   base,
+  bytestring,
   cassava,
   containers,
   data-default,
@@ -36,13 +37,14 @@
   unix,
   vector,
   wcwidth,
+  word8,
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "1.1.1.0";
+  version = "1.1.2.0";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v1.1.1.0.tar.gz";
-    sha256 = "1zw7x1snyycl1bp5w7jh8wwnynqvw3g4glr293bnzi5jyirj5wlg";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v1.1.2.0.tar.gz";
+    sha256 = "03qhy4xzika41pxlmvpz3psgy54va72ipn9v1lv33l6369ikrhl1";
   };
   isLibrary = true;
   isExecutable = true;
@@ -51,6 +53,7 @@ mkDerivation {
     async
     attoparsec
     base
+    bytestring
     cassava
     containers
     data-default
@@ -74,12 +77,14 @@ mkDerivation {
     unix
     vector
     wcwidth
+    word8
   ];
   executableHaskellDepends = [
     ansi-terminal
     async
     attoparsec
     base
+    bytestring
     cassava
     containers
     data-default
@@ -103,12 +108,14 @@ mkDerivation {
     unix
     vector
     wcwidth
+    word8
   ];
   testHaskellDepends = [
     ansi-terminal
     async
     attoparsec
     base
+    bytestring
     cassava
     containers
     data-default
@@ -134,6 +141,7 @@ mkDerivation {
     unix
     vector
     wcwidth
+    word8
   ];
   homepage = "https://github.com/maralorn/nix-output-monitor";
   description = "Parses output of nix-build to show additional information";
@@ -148,11 +156,9 @@ mkDerivation {
     ${expect}/bin/unbuffer nix-build "\$@" 2>&1 | exec $out/bin/nom
     EOF
     chmod a+x $out/bin/nom-build
-    installShellCompletion --zsh --name _nom-build ${
-      builtins.toFile "completion.zsh" ''
-        #compdef nom-build
-        compdef nom-build=nix-build
-      ''
-    }
+    installShellCompletion --zsh --name _nom-build ${builtins.toFile "completion.zsh" ''
+      #compdef nom-build
+      compdef nom-build=nix-build
+    ''}
   '';
 }

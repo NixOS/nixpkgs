@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
+  makeFlags = kernel.makeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
   KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -18,10 +21,9 @@ stdenv.mkDerivation rec {
   preBuild = "cd linux/igb_uio";
 
   installPhase = ''
-    make -C ${KSRC} M=$(pwd) modules_install
+    make -C ${KSRC} M=$(pwd) modules_install $makeFlags
   '';
 
-  INSTALL_MOD_PATH = placeholder "out";
   enableParallelBuilding = true;
 
   meta = with lib; {

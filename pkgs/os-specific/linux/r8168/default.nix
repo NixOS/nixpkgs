@@ -27,11 +27,13 @@ in stdenv.mkDerivation rec {
   # avoid using the Makefile directly -- it doesn't understand
   # any kernel but the current.
   # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
+  makeFlags = kernel.makeFlags ++ [
+    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)/src"
+    "modules"
+  ];
   preBuild = ''
-    makeFlagsArray+=("-C${kernel.dev}/lib/modules/${kernel.modDirVersion}/build")
-    makeFlagsArray+=("M=$PWD/src")
     makeFlagsArray+=("EXTRA_CFLAGS=-DCONFIG_R8168_NAPI -DCONFIG_R8168_VLAN -DCONFIG_ASPM -DENABLE_S5WOL -DENABLE_EEE")
-    makeFlagsArray+=("modules")
   '';
 
   enableParallelBuilding = true;

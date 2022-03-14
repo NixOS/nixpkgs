@@ -3,17 +3,15 @@
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
+{ name, product, productShort ? product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
 
 with lib;
 
-let loName = toLower product;
-    hiName = toUpper product;
+let loName = toLower productShort;
+    hiName = toUpper productShort;
     mainProgram = concatStringsSep "-" (init (splitString "-" name));
     vmoptsName = loName
-               + ( if (with stdenv.hostPlatform; (is32bit || isDarwin))
-                   then ""
-                   else "64" )
+               + lib.optionalString stdenv.hostPlatform.is64bit "64"
                + ".vmoptions";
 in
 
@@ -36,7 +34,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -73,7 +71,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     item=${desktopItem}
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${mainProgram}" \
-      --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --prefix PATH : "$out/libexec/${name}:${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret e2fsprogs
