@@ -130,6 +130,8 @@ stdenv.mkDerivation rec {
     "-Dps=enabled"
   ] ++ lib.optionals (!withLibsecret) [
     "-Dkeyring=disabled"
+  ] ++ lib.optionals (!supportMultimedia) [
+    "-Dmultimedia=disabled"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
