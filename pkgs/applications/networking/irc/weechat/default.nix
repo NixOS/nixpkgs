@@ -42,7 +42,7 @@ let
 
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=ON"
+        "-DENABLE_DOC=OFF"         # TODO: Documentation fails to build, was deactivated to push through security update
         "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
         "-DENABLE_PHP=OFF"
       ]
