@@ -4,7 +4,7 @@ with lib;
 
 {
   imports = [
-    ../../../modules/virtualisation/lxc-container.nix
+    ../../../modules/virtualisation/lxc-image.nix
   ];
 
   virtualisation.lxc.templates.nix = {
@@ -19,7 +19,7 @@ with lib;
     if [ ! -e /etc/nixos/configuration.nix ]; then
       mkdir -p /etc/nixos
       cat ${./lxd-image-inner.nix} > /etc/nixos/configuration.nix
-      sed 's|../../../modules/virtualisation/lxc-container.nix|<nixpkgs/nixos/modules/virtualisation/lxc-container.nix>|g' -i /etc/nixos/configuration.nix
+      sed 's|../../../modules/virtualisation/lxc-image.nix|<nixpkgs/nixos/modules/virtualisation/lxc-image.nix>|g' -i /etc/nixos/configuration.nix
     fi
   '';
 

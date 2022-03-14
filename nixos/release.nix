@@ -320,7 +320,7 @@ in rec {
 
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
-    module = ./modules/virtualisation/lxc-container.nix;
+    module = ./modules/virtualisation/lxc-image.nix;
     inherit system;
   });
 

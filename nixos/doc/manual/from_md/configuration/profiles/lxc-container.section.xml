@@ -1,0 +1,12 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-profile-lxc-container">
+  <title>LXC Container</title>
+  <para>
+    This profile contains common configuration for NixOS running inside
+    a LXC container.
+  </para>
+  <para>
+    It also provides the <literal>system.build.tarball</literal>
+    attribute, which generates a readily deployable container image of
+    the system.
+  </para>
+</section>

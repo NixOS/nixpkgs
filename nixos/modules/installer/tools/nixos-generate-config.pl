@@ -317,10 +317,14 @@ if ($virt eq "microsoft") {
     push @attrs, "virtualisation.hypervGuest.enable = true;"
 }
 
-
 # Pull in NixOS configuration for containers.
 if ($virt eq "systemd-nspawn") {
     push @attrs, "boot.isContainer = true;";
+}
+
+# NixOS configuration for LXC containers.
+if ($virt eq "lxc") {
+    push @imports, "(modulesPath + \"/profiles/lxc-container.nix\")";
 }
 
 
