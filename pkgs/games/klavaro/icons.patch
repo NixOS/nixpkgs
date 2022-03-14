@@ -9,6 +9,15 @@
                        </object>
                        <packing>
                          <property name="expand">False</property>
+@@ -708,7 +708,7 @@
+                     <property name="can-default">True</property>
+                     <property name="has-default">True</property>
+                     <property name="tooltip-text" translatable="yes">Drag and drop text here to practice with it.</property>
+-                    <property name="secondary-icon-name">gtk-clear</property>
++                    <property name="secondary-icon-name">edit-clear</property>
+                     <property name="secondary-icon-tooltip-text" translatable="yes">Press here to restart the exercise. Hotkey: [Ctrl-R]</property>
+                     <property name="secondary-icon-tooltip-markup" translatable="yes">Press here to restart the exercise. Hotkey: [Ctrl-R]</property>
+                     <signal name="activate" handler="on_entry_mesg_activate" after="yes" swapped="no"/>
 @@ -1232,7 +1232,7 @@
                        <object class="GtkImage" id="image27">
                          <property name="visible">True</property>
