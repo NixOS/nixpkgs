@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
   '';
 
-  patches = [ ./trans_lang_get_similar.patch ];
+  patches = [ ./icons.patch ./trans_lang_get_similar.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \
