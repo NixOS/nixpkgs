@@ -28,7 +28,7 @@ let
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      sha256 = "sha256-PJ4/R1pHbfoSBHhIyiqcGoE13FSWQapxj4Lq+ZdcYCQ=";
+      sha256 = "0dccipqjb0q0xlm4nc10fxcd1k5v8vwdavvf580wj6xxdafwd6zk";
     };
   };
 
