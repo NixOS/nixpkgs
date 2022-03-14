@@ -22488,6 +22488,8 @@ with pkgs;
 
   extrace = callPackage ../os-specific/linux/extrace { };
 
+  facetimehd-calibration = callPackage ../os-specific/linux/firmware/facetimehd-calibration { };
+
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
