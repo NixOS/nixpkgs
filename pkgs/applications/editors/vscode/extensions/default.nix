@@ -1229,8 +1229,8 @@ let
         mktplcRef = {
           name = "svg";
           publisher = "jock";
-          version = "1.4.15";
-          sha256 = "0a5w6qxvsdzcmgc0yfiagpmz25y90pmzgrxz9899na5qy3pjcbmz";
+          version = "1.4.17";
+          sha256 = "sha256-CDxh/YRyDGocxG4qOcyLXA0zHCg0YJ7XUu3OjFFjleI=";
         };
         meta = with lib; {
           license = licenses.mit;
