@@ -75,6 +75,10 @@ buildPythonPackage rec {
     "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
     "test_requote_redirect_url_default"
+    # Disable tests that trigger deprecation warnings in pytest
+    "test_async_with_session"
+    "test_session_close_awaitable"
+    "test_close_run_until_complete_not_deprecated"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [

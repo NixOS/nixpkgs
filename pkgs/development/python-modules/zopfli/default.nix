@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "zopfli";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78de3cc08a8efaa8013d61528907d91ac4d6cc014ffd8a41cc10ee75e9e60d7b";
+    sha256 = "sha256-x9PzVcSR84TkNNsuYmheq269pmuWTonhdUuxFLLTjOo=";
     extension = "zip";
   };
 

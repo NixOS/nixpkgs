@@ -37,8 +37,11 @@ let
         version = "0.3.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0kx4mbs9bflycd8x9af0idcjhdgnzri3nw1qb0vpfyb3751qaaf9";
+          hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
+        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        doCheck = false;
+        patches = [];
       });
       aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
@@ -46,8 +49,23 @@ let
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
+      snitun = super.snitun.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
       zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
+      });
+    })
+
+    (self: super: {
+      hatasmota = super.hatasmota.overridePythonAttrs (oldAttrs: {
+        version = "0.3.1";
+        src = fetchFromGitHub {
+          owner = "emontnemery";
+          repo = "hatasmota";
+          rev = "0.3.1";
+          sha256 = "sha256-/am6cRhAdiqMq0u7Ed4qhIA+Em2O0gIt7HfP19+2XHw=";
+        };
       });
     })
 

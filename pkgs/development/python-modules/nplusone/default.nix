@@ -8,7 +8,6 @@
 , mock
 , peewee
 , pytest-django
-, pytest-pythonpath
 , pytestCheckHook
 , six
 , sqlalchemy
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     mock
     peewee
     pytest-django
-    pytest-pythonpath
     pytestCheckHook
     sqlalchemy
     webtest
@@ -54,6 +52,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
+      --replace "python_paths" "pythonpath" \
       --replace "--cov nplusone --cov-report term-missing" ""
   '';
 

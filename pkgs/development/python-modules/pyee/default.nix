@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "8.2.2";
+  version = "9.0.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XH5g+N+VcQ2+F1UOFs4BU/g5kMAO90SEG0Pzce1T6+o=";
+    sha256 = "sha256-J3DEkoq8ch9GtwXmpysMWUgMSmnJqDygsAu5lPHqSzI=";
   };
 
   buildInputs = [

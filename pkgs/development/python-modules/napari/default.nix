@@ -28,12 +28,12 @@
 , wrapQtAppsHook
 }: mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.4.12";
+  version = "0.4.14";
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0QSI0mgDjF70/X58fE7uWwlBUCGY5gsvbCm4oJkp2Yk=";
+    sha256 = "sha256-uDDj5dzsT4tRVV0Y+CYegiCpLM77XFaXEXEZXTnX808=";
   };
   nativeBuildInputs = [ setuptools-scm wrapQtAppsHook ];
   propagatedBuildInputs = [

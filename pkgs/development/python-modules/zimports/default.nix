@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "zimports";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "sqlalchemyorg";
     repo = "zimports";
     rev = "v${version}";
-    sha256 = "11mg7j7xiypv9hki4qbnp9jsgwgfdrgdzfqyrzk5x0s4hycgi4q0";
+    sha256 = "sha256-O8MHUt9yswL9fK9pEddkvnNS2E4vWA/S1BTs1OD1VbU=";
   };
 
   disabled = !isPy3k;

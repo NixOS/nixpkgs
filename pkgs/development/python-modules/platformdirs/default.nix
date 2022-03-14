@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "2.5.0";
+  version = "2.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-fppwtY8VX8IQ96H930xItO7mS8LlxxHgBcKlwIL5P2E=";
+    sha256 = "sha256-z6WIwTWLlc/chNRxt3dqqa/IxYj1BBTcQ6OcfliHrvA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

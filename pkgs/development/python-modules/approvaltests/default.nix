@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.0";
+  version = "4.0.0";
   pname = "approvaltests";
 
   # no tests included in PyPI tarball
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "v${version}";
-    sha256 = "sha256-pgGuIoYV6JRM9h7hR8IeNduqsGm+UrKq+P/T1LM30NE=";
+    sha256 = "sha256-4dg5xTswqLFRBaZagKrkilCvsAnky9donb03MT/PiWM=";
   };
 
   propagatedBuildInputs = [

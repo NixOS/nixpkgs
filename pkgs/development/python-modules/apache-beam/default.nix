@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.35.0";
+  version = "2.36.0";
   disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "v${version}";
-    sha256 = "0qxkas33d8i6yj133plnadbfm74ak7arn7ldpziyiwdav3hj68sy";
+    sha256 = "sha256-f+ICbKSwNjkhrTCCZwxbmqZlQ1+dQSTRag1IflWsqYg=";
   };
 
   patches = [

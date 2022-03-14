@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchurl {
     url = "mirror://pypi/h/hmmlearn/${pname}-${version}.tar.gz";
-    sha256 = "2a289cf28b31be59fa8ba5d3253d4a2a992401d45a8cdc221ae484fbf390c0d7";
+    sha256 = "sha256-a0snIPJ6912pNnq02Q3LAPONozFo322Rf57F3mZw9uE=";
   };
 
   buildInputs = [ setuptools-scm cython ];

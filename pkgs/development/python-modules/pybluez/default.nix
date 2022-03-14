@@ -2,11 +2,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pkgs
+, isPy3k
 }:
 
 buildPythonPackage rec {
   version = "unstable-20160819";
   pname = "pybluez";
+  # requires use2to3, which is no longer supported in setuptools>58
+  disabled = isPy3k;
 
   propagatedBuildInputs = [ pkgs.bluez ];
 

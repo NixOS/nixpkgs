@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
-  version = "2.0.2";
+  version = "2.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e6f98b54dafde8d70e4088467ff621260b641eb64895c4195b6e5c8f45638112";
+    sha256 = "sha256-wHygdATGEvirviIpSyPDaOLlEEtSHBeQGVVh834aw9k=";
   };
 
   buildInputs = [

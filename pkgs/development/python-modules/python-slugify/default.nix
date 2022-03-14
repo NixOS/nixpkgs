@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-slugify";
-  version = "6.1.0";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7/GQ5N+sl9L4wYkO5oJwns0jZQdCNhaH24LZXh5eJfU=";
+    hash = "sha256-AAAzl/TjFBTpIs5WezpNoozxQ2pT0zLJrutRx9jEaf0=";
   };
 
   propagatedBuildInputs = [
