@@ -887,8 +887,8 @@ let
         mktplcRef = {
           name = "auto-close-tag";
           publisher = "formulahendry";
-          version = "0.5.13";
-          sha256 = "0swyxhcibv6cl54gmfpnbz6bqidjzc77nx369wndhlq264idnwkw";
+          version = "0.5.14";
+          sha256 = "sha256-XYYHS2QTy8WYjtUYYWsIESzmH4dRQLlXQpJq78BolMw=";
         };
         meta = {
           license = lib.licenses.mit;
