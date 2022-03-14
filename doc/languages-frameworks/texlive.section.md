@@ -6,7 +6,7 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 
 - For basic usage just pull `texlive.combined.scheme-basic` for an environment with basic LaTeX support.
 
-- It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this:
+- It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this. Most CTAN packages should be available:
 
   ```nix
   texlive.combine {
