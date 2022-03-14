@@ -6843,6 +6843,8 @@ with pkgs;
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
+  ipfetch = callPackage ../tools/networking/ipfetch { };
+
   ipfs = callPackage ../applications/networking/ipfs {
     buildGoModule = buildGo116Module;
   };
