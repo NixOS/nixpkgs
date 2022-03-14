@@ -55,6 +55,13 @@ mkDerivation rec {
   ] ++ lib.optional withGui qtbase
     ++ lib.optional stdenv.isDarwin libiconv;
 
+  # If /etc/debian_version, recoll passes the unsupported --install-layout=deb option to setup.py
+  # This is only needed when the nix sandbox is not available; if the sandbox is used nix will
+  # prevent the build process from seeing that /etc/debian exists.
+  postPatch = ''
+    substituteInPlace Makefile --replace "shell test -f /etc/debian_version" "shell false"
+  '';
+
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
   # the absolute path to the filtering command.
