@@ -33283,6 +33283,8 @@ with pkgs;
 
   gummi = callPackage ../applications/misc/gummi { };
 
+  gummy = callPackage ../tools/misc/gummy { };
+
   gxemul = callPackage ../applications/emulators/gxemul { };
 
   hatari = callPackage ../applications/emulators/hatari { };
