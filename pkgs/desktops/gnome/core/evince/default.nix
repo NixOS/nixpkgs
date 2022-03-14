@@ -30,7 +30,7 @@
 , gspell
 , adwaita-icon-theme
 , gsettings-desktop-schemas
-, gnome-desktop
+, withGnome ? stdenv.isLinux, gnome-desktop
 , dbus
 , pantheon
 , python3
@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     ghostscriptX
     glib
-    gnome-desktop
     gsettings-desktop-schemas
     gspell
     gtk3
@@ -110,6 +109,8 @@ stdenv.mkDerivation rec {
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
+  ] ++ lib.optionals withGnome [
+    gnome-desktop
   ] ++ lib.optionals withLibsecret [
     libsecret
   ] ++ lib.optionals supportXPS [
@@ -132,6 +133,8 @@ stdenv.mkDerivation rec {
     "-Dkeyring=disabled"
   ] ++ lib.optionals (!supportMultimedia) [
     "-Dmultimedia=disabled"
+  ] ++ lib.optionals (!withGnome) [
+    "-Dthumbnail_cache=disabled"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
