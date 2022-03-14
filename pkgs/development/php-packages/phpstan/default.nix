@@ -16,10 +16,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpstan/phpstan.phar
     makeWrapper ${php}/bin/php $out/bin/phpstan \
       --add-flags "$out/libexec/phpstan/phpstan.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {
