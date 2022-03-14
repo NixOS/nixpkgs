@@ -74,6 +74,18 @@ in
         <literal>dendrite</literal> is running.
       '';
     };
+    loadCredential = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "private_key:/path/to/my_private_key" ];
+      description = ''
+        This can be used to pass secrets to the systemd service without adding them to
+        the nix store.
+        To use the example setting, see the example of
+        <option>services.dendrite.settings.global.private_key</option>.
+        See the LoadCredential section of systemd.exec manual for more information.
+      '';
+    };
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
@@ -88,8 +100,10 @@ in
             '';
           };
           private_key = lib.mkOption {
-            type = lib.types.path;
-            example = "${workingDir}/matrix_key.pem";
+            type = lib.types.either
+              lib.types.path
+              (lib.types.strMatching "^\\$CREDENTIALS_DIRECTORY/.+");
+            example = "$CREDENTIALS_DIRECTORY/private_key";
             description = ''
               The path to the signing private key file, used to sign
               requests and events.
@@ -256,6 +270,7 @@ in
         RuntimeDirectoryMode = "0700";
         LimitNOFILE = 65535;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        LoadCredential = cfg.loadCredential;
         ExecStartPre = ''
           ${pkgs.envsubst}/bin/envsubst \
             -i ${configurationYaml} \
