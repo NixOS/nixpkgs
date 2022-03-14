@@ -31,7 +31,6 @@
 , adwaita-icon-theme
 , gsettings-desktop-schemas
 , gnome-desktop
-, dbus
 , pantheon
 , python3
 , texlive
@@ -45,13 +44,14 @@
 , supportXPS ? true # Open XML Paper Specification via libgxps
 , withPantheon ? false
 , withLibsecret ? true
+, dbusSupport ? !stdenv.isDarwin, dbus
 }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
   version = "41.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals dbusSupport [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     adwaita-icon-theme
     atk
-    dbus # only needed to find the service directory
     djvulibre
     gdk-pixbuf
     ghostscriptX
@@ -110,6 +109,8 @@ stdenv.mkDerivation rec {
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
+  ] ++ lib.optionals dbusSupport [
+    dbus # only needed to find the service directory
   ] ++ lib.optionals withLibsecret [
     libsecret
   ] ++ lib.optionals supportXPS [
@@ -128,6 +129,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
+  ] ++ lib.optionals (!dbusSupport) [
+    "-Ddbus=false"
+    "-Dgtk_doc=false"  # doc builds break if dbus is disabled
   ] ++ lib.optionals (!withLibsecret) [
     "-Dkeyring=disabled"
   ];
