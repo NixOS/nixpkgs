@@ -28066,6 +28066,8 @@ with pkgs;
 
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
+  gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate { };
+
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
   };
