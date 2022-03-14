@@ -14,7 +14,7 @@
   # we can't rebuild those without also rebuilding the compiler itself,
   # we opt to always build everything unlike our usual policy.
   enableShared ? true
-, enableLTO ? true
+, enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf
