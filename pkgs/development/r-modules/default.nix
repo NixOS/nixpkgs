@@ -1297,6 +1297,10 @@ let
     geomorph = old.geomorph.overrideDerivation (attrs: {
       RGL_USE_NULL = "true";
     });
+
+    RNifti = old.RNifti.overrideDerivation (attrs: {
+      patches = [ ./patches/RNifti.patch ];
+    });
   };
 in
   self
