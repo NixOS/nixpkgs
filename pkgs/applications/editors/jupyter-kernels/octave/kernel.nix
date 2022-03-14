@@ -4,20 +4,18 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "octave-kernel";
-  version = "0.32.0";
+  version = "0.34.2";
 
   src = fetchPypi {
     pname = "octave_kernel";
     inherit version;
-    sha256 = "0dfbxfcf3bz4jswnpkibnjwlkgy0y4j563nrhaqxv3nfa65bksif";
+    sha256 = "sha256-5ki2lekfK7frPsmPBIzYQOfANCUY9x+F2ZRAQSdPTxo=";
   };
 
   propagatedBuildInputs = [ metakernel ipykernel ];
 
-  # Tests require jupyter_kernel_test to run, but it hasn't seen a
-  # release since 2017 and seems slightly abandoned.
-  # Doing fetchPypi on it doesn't work, even though it exists here:
-  # https://pypi.org/project/jupyter_kernel_test/.
+  # Tests fail because the kernel appears to be halting or failing to launch
+  # There appears to be a similar problem with metakernel's tests
   doCheck = false;
 
   meta = with lib; {
