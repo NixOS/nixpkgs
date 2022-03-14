@@ -109,14 +109,14 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "7.10.0";
+  version = "8.1.0";
 
   src =
     if isDarwin then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-yzGAFK8JcyeSjG49cpIuO+AqPmQBJHsqpS2auOC0gPk=";
+          sha256 = "sha256-PGxDvs/+s0o/OXxhYgaqaaiT/4v16CCDk8hOjnU1KTQ=";
         }
     else
       fetchFromGitLab
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
           owner = pname;
           repo = pname;
           rev = "v${version}";
-          sha256 = "sha256-bB8LsjZFeJbMmmC0YRPyMag2MBhwagUFC7aB1KhZEkA=";
+          sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
           fetchSubmodules = true;
         };
 
@@ -138,6 +138,8 @@ stdenv.mkDerivation rec {
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+  '' + optionalString isDarwin ''
+    sed -i '/qemucapabilitiestest/d' tests/meson.build
   '';
 
 
@@ -228,7 +230,7 @@ stdenv.mkDerivation rec {
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
 
-  mesonAutoFeatures = "auto";
+  mesonAutoFeatures = "disabled";
 
   mesonFlags =
     let

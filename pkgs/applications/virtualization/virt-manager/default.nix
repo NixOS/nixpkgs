@@ -66,8 +66,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    "testCLI0001virt_install_many_devices"
-    "test_disk_dir_searchable"
+    "testAlterDisk"
+    "test_misc_nonpredicatble_generate"
   ];
 
   preCheck = ''
