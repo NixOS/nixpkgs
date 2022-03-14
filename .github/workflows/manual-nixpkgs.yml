@@ -24,7 +24,7 @@ jobs:
           extra_nix_config: sandbox = true
       - uses: cachix/cachix-action@v10
         with:
-          # This cache is for the nixos/nixpkgs manual builds and should not be trusted or used elsewhere.
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
       - name: Building Nixpkgs manual
