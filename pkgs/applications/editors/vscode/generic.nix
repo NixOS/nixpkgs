@@ -72,6 +72,7 @@ let
 
     dontBuild = true;
     dontConfigure = true;
+    noDumpEnvVars = true;
 
     installPhase = ''
       runHook preInstall
