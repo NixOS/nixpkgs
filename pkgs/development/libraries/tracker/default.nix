@@ -25,26 +25,18 @@
 , json-glib
 , systemd
 , dbus
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.3.0.beta";
+  version = "3.3.0.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "JvOoH1FOWsz8mBcpWAOK9Mw421rdp2u7yaB8gnorGjs=";
+    sha256 = "J4ypi46GGYxYpwBfzEqVHvP7w18zdbIUo5l1D1KI5ig=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
-  ];
 
   nativeBuildInputs = [
     meson
