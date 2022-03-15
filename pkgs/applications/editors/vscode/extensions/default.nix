@@ -1679,6 +1679,18 @@ let
         };
       };
 
+      richie5um2.snake-trail = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "snake-trail";
+          publisher = "richie5um2";
+          version = "0.6.0";
+          sha256 = "0wkpq9f48hplrgabb0v1ij6fc4sb8h4a93dagw4biprhnnm3qx49";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       ritwickdey.liveserver = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "liveserver";
