@@ -34,13 +34,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "42.beta";
+  version = "42.rc";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lhL6XiigaN4lAi0d5/OWrBRjArySLTTvGG5YeEJR96M=";
+    sha256 = "LKaKC90G4N1TGsxeGUHvwyQUbzxa0l9esjJt4b8SMo8=";
   };
 
   patches = [
