@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , meson
 , ninja
-, nix
+, nix_2_4
 , nlohmann_json
 , pkg-config
 , stdenv
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [
     boost
-    nix
+    nix_2_4
     nlohmann_json
   ];
   nativeBuildInputs = [
