@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, substituteAll
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.3.0.beta";
+  version = "3.3.0.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "a0spkyekdk5H0d9bJTiBbr5LhMsyX9nlrloHMQexAcU=";
+    sha256 = "dr861BhgwrhICNLuWfe6a4CjrQylvE1H0tav0sn+lwY=";
   };
 
   nativeBuildInputs = [
@@ -111,13 +111,6 @@ stdenv.mkDerivation rec {
     # security issue since then. Despite a patch now being availab, we're opting
     # to be safe due to the general state of the project
     "-Dminer_rss=false"
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
   ];
 
   postInstall = ''
