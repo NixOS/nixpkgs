@@ -63,11 +63,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "42.beta";
+  version = "42.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-973QoT+FLQsQyU8oT54wmYuHDZBkfn3TftfvebJQEt0=";
+    sha256 = "sha256-5yXQ+HzmMQz9/jWxqYcfvxj2JxfcmHaOMeDRQiT6EpI=";
   };
 
   patches = [
