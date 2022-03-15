@@ -13328,6 +13328,7 @@ with pkgs;
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-nextest = callPackage ../development/tools/rust/cargo-nextest { };
   cargo-play = callPackage ../development/tools/rust/cargo-play { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -26901,6 +26902,8 @@ with pkgs;
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
+
+  kchmviewer = libsForQt5.callPackage ../applications/misc/kchmviewer { };
 
   kappanhang = callPackage ../applications/radio/kappanhang { };
 
