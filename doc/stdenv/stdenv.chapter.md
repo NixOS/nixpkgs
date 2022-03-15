@@ -336,8 +336,7 @@ The `rec` keyword works at the syntax level and is unaware of overriding.
 Instead, the definition references `finalAttrs`, allowing users to change `withFeature`
 consistently with `overrideAttrs`.
 
-`finalAttrs` also contains the attribute `public`, which represents the final package,
-including the output paths, etc.
+`finalAttrs` also contains the attribute `finalPackage`, which includes the output paths, etc.
 
 Let's look at a more elaborate example to understand the differences between
 various bindings:
@@ -352,11 +351,11 @@ let pkg =
     packages = [];
 
     # `passthru.tests` is a commonly defined attribute.
-    passthru.tests.simple = f finalAttrs.public;
+    passthru.tests.simple = f finalAttrs.finalPackage;
 
     # An example of an attribute containing a function
     passthru.appendPackages = packages':
-      finalAttrs.public.overrideAttrs (newSelf: super: {
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
         packages = super.packages ++ packages';
       });
 
@@ -368,7 +367,7 @@ let pkg =
 in pkg
 ```
 
-Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.public` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
+Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
 
 See also the section about [`passthru.tests`](#var-meta-tests).
 

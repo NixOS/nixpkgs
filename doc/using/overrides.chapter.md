@@ -48,7 +48,7 @@ In the above example, the `separateDebugInfo` attribute is overridden to be true
 
 The argument `previousAttrs` is conventionally used to refer to the attr set originally passed to `stdenv.mkDerivation`.
 
-The argument `finalAttrs` refers to the final attributes passed to `mkDerivation`, plus the `public` attribute which is the result of `mkDerivation` — the derivation or package.
+The argument `finalAttrs` refers to the final attributes passed to `mkDerivation`, plus the `finalPackage` attribute which is equal to the result of `mkDerivation` or subsequent `overrideAttrs` calls.
 
 If only a one-argument function is written, the argument has the meaning of `previousAttrs`.
 

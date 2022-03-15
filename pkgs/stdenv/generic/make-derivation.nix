@@ -24,10 +24,10 @@ let
       # separate lines, because Nix would only show the last line of the comment.
 
       # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit public; });
+      args = rattrs (args // { inherit finalPackage; });
       #              ^^^^
 
-      public =
+      finalPackage =
         mkDerivationSimple
           (f0:
             let
@@ -51,7 +51,7 @@ let
               makeDerivationExtensible mkDerivationSimple
                 (self: let super = rattrs self; in super // f self super))
           args;
-    in public;
+    in finalPackage;
 
   # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
   # but pre-evaluated for a slight improvement in performance.

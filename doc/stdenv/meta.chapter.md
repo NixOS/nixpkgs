@@ -178,7 +178,7 @@ NixOS tests run in a VM, so they are slower than regular package tests. For more
 Alternatively, you can specify other derivations as tests. You can make use of
 the optional parameter to inject the correct package without
 relying on non-local definitions, even in the presence of `overrideAttrs`.
-Here that's `finalAttrs.public`, but you could choose a different name if
+Here that's `finalAttrs.finalPackage`, but you could choose a different name if
 `finalAttrs` already exists in your scope.
 
 `(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
@@ -190,7 +190,7 @@ all places.
 { stdenv, callPackage }:
 stdenv.mkDerivation (finalAttrs: {
   # ...
-  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.public; }
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
 })
 ```
 
