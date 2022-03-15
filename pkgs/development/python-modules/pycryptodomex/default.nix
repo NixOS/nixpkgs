@@ -6,13 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pycryptodomex";
-  version = "3.12.0";
+  version = "3.14.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ki6drAFm5GF+XHmA0s/2kSputctcE+fs4iJDhlC9f2Y=";
-    extension = "zip";
+    hash = "sha256-LOdu0Agf1qyMdO3HW50U7KIGQXOveYQ8JPpiVzJjwfI=";
   };
 
   pythonImportsCheck = [

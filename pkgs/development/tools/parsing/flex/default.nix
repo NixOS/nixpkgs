@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
 
+  postInstall = ''
+    ln -s $out/bin/flex $out/bin/lex
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/westes/flex";
     description = "A fast lexical analyser generator";

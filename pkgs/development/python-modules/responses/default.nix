@@ -5,25 +5,23 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.17.0";
+  version = "0.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7GdeCA0Gv40fteWmih5c0N9GsJx4IwMV9lCvXkA2vsc=";
+    hash = "sha256-OAytTBwdyULl6KjqrgtNTt9wj08BDbi3vPr60fzSVP8=";
   };
 
   propagatedBuildInputs = [
     requests
-    six
     urllib3
   ];
 

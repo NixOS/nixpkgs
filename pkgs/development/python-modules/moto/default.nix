@@ -264,6 +264,8 @@ buildPythonPackage rec {
     "test_state_machine_creation_fails_with_invalid_names"
     # needs graphql
     "test_get_schema_creation_status"
+    # only appears in aarch64 currently, but best to be safe
+    "test_state_machine_list_executions_with_filter"
   ];
 
   meta = with lib; {

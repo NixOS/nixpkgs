@@ -1,8 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoconf
+, gst_all_1
 , gtk2
+, gtk3
 , libGL
 , libGLU
 , libSM
@@ -10,63 +11,72 @@
 , libXxf86vm
 , pkg-config
 , xorgproto
-, compat24 ? false
-, compat26 ? true
-, unicode ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, compat26 ? false
+, compat28 ? true
+, unicode ? true
+, withGtk2 ? true
+, withWebKit ? false, webkitgtk
 , AGL
 , Carbon
 , Cocoa
 , Kernel
-, QuickTime
+, QTKit
 , setfile
 }:
 
-assert withMesa -> libGLU != null && libGL != null;
+assert withGtk2 -> (!withWebKit);
+
+let
+  inherit (gst_all_1) gstreamer gst-plugins-base;
+  gtk = if withGtk2 then gtk2 else gtk3;
+in
 stdenv.mkDerivation rec {
-  pname = "wxGTK";
-  version = "2.9.5";
+  pname = "wxwidgets";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-izefAPU4lORZxQja7/InHyElJ1++2lDloR+xPudsRNE=";
+    hash = "sha256-p69nNCg552j+nldGY0oL65uFRVu4xXCkoE10F5MwY9A=";
   };
 
-  patches = [
-    # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ../patches/0001-fix-assertion-using-hide-in-destroy.patch
-  ];
-
   nativeBuildInputs = [
-    autoconf
     pkg-config
   ];
 
   buildInputs = [
-    gtk2
+    gstreamer
+    gst-plugins-base
+    gtk
     libSM
     libXinerama
     libXxf86vm
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
+  ++ lib.optional withWebKit webkitgtk
   ++ lib.optionals stdenv.isDarwin [
     Carbon
     Cocoa
     Kernel
-    QuickTime
+    QTKit
     setfile
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
 
+  patches = [
+    # https://github.com/wxWidgets/wxWidgets/issues/17942
+    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
+  ];
+
   configureFlags = [
     "--disable-precomp-headers"
-    "--enable-gtk2"
-    (if compat24 then "--enable-compat24" else "--disable-compat24")
+    "--enable-mediactrl"
     (if compat26 then "--enable-compat26" else "--disable-compat26")
+    (if compat28 then "--enable-compat28" else "--disable-compat28")
   ]
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
@@ -74,12 +84,15 @@ stdenv.mkDerivation rec {
     "--enable-universal-binaries"
     "--with-cocoa"
     "--with-macosx-version-min=10.7"
+  ]
+  ++ lib.optionals withWebKit [
+    "--enable-webview"
+    "--enable-webview-webkit"
   ];
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
-    ./autogen.sh
     substituteInPlace configure --replace \
       'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
     substituteInPlace configure --replace \
@@ -117,12 +130,12 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.wxWindows;
     maintainers = with maintainers; [ ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     badPlatforms = [ "x86_64-darwin" ];
   };
 
   passthru = {
-    inherit compat24 compat26 unicode;
-    gtk = gtk2;
+    inherit gtk;
+    inherit compat26 compat28 unicode;
   };
 }

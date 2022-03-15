@@ -218,6 +218,11 @@ let
       # Kernel TLS
       TLS         = whenAtLeast "4.13" module;
       TLS_DEVICE  = whenAtLeast "4.18" yes;
+
+      # infiniband
+      INFINIBAND = module;
+      INFINIBAND_IPOIB = module;
+      INFINIBAND_IPOIB_CM = yes;
     };
 
     wireless = {
@@ -719,7 +724,12 @@ let
 
       HID_ACRUX_FF       = yes;
       DRAGONRISE_FF      = yes;
+      GREENASIA_FF       = yes;
       HOLTEK_FF          = yes;
+      JOYSTICK_PSXPAD_SPI_FF = whenAtLeast "4.14" yes;
+      LOGIG940_FF        = yes;
+      NINTENDO_FF        = whenAtLeast "5.16" yes;
+      PLAYSTATION_FF     = whenAtLeast "5.12" yes;
       SONY_FF            = yes;
       SMARTJOYPLUS_FF    = yes;
       THRUSTMASTER_FF    = yes;
