@@ -21,39 +21,113 @@ Meta-attributes are not passed to the builder of the package. Thus, a change to 
 The meta-attributes of a package can be queried from the command-line using `nix-env`:
 
 ```ShellSession
-$ nix-env -qa hello --json
+$ nix-env --meta -qa hello --json
 {
-    "hello": {
-        "meta": {
-            "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "https://www.gnu.org/software/hello/manual/",
-            "license": {
-                "fullName": "GNU General Public License version 3 or later",
-                "shortName": "GPLv3+",
-                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
-            },
-            "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
-            "maintainers": [
-                "Ludovic Court\u00e8s <ludo@gnu.org>"
-            ],
-            "platforms": [
-                "i686-linux",
-                "x86_64-linux",
-                "armv5tel-linux",
-                "armv7l-linux",
-                "mips32-linux",
-                "x86_64-darwin",
-                "i686-cygwin",
-                "i686-freebsd",
-                "x86_64-freebsd",
-                "i686-openbsd",
-                "x86_64-openbsd"
-            ],
-            "position": "/home/user/dev/nixpkgs/pkgs/applications/misc/hello/default.nix:14"
-        },
-        "name": "hello-2.9",
-        "system": "x86_64-linux"
+  "nixpkgs.hello": {
+    "name": "hello-2.12",
+    "pname": "hello",
+    "version": "2.12",
+    "system": "x86_64-linux",
+    "meta": {
+      "available": true,
+      "broken": false,
+      "changelog": "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v2.12",
+      "description": "A program that produces a familiar, friendly greeting",
+      "homepage": "https://www.gnu.org/software/hello/manual/",
+      "insecure": false,
+      "license": {
+        "deprecated": false,
+        "free": true,
+        "fullName": "GNU General Public License v3.0 or later",
+        "redistributable": true,
+        "shortName": "gpl3Plus",
+        "spdxId": "GPL-3.0-or-later",
+        "url": "https://spdx.org/licenses/GPL-3.0-or-later.html"
+      },
+      "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
+      "maintainers": [
+        {
+          "email": "edolstra+nixpkgs@gmail.com",
+          "github": "edolstra",
+          "githubId": 1148549,
+          "name": "Eelco Dolstra"
+        }
+      ],
+      "name": "hello-2.12",
+      "outputsToInstall": [
+        "out"
+      ],
+      "platforms": [
+        "i686-cygwin",
+        "x86_64-cygwin",
+        "x86_64-darwin",
+        "i686-darwin",
+        "aarch64-darwin",
+        "armv7a-darwin",
+        "i686-freebsd",
+        "x86_64-freebsd",
+        "aarch64-genode",
+        "i686-genode",
+        "x86_64-genode",
+        "x86_64-solaris",
+        "js-ghcjs",
+        "aarch64-linux",
+        "armv5tel-linux",
+        "armv6l-linux",
+        "armv7a-linux",
+        "armv7l-linux",
+        "i686-linux",
+        "m68k-linux",
+        "mipsel-linux",
+        "powerpc64-linux",
+        "powerpc64le-linux",
+        "riscv32-linux",
+        "riscv64-linux",
+        "s390-linux",
+        "s390x-linux",
+        "x86_64-linux",
+        "mmix-mmixware",
+        "aarch64-netbsd",
+        "armv6l-netbsd",
+        "armv7a-netbsd",
+        "armv7l-netbsd",
+        "i686-netbsd",
+        "m68k-netbsd",
+        "mipsel-netbsd",
+        "powerpc-netbsd",
+        "riscv32-netbsd",
+        "riscv64-netbsd",
+        "x86_64-netbsd",
+        "aarch64_be-none",
+        "aarch64-none",
+        "arm-none",
+        "armv6l-none",
+        "avr-none",
+        "i686-none",
+        "msp430-none",
+        "or1k-none",
+        "m68k-none",
+        "powerpc-none",
+        "powerpcle-none",
+        "riscv32-none",
+        "riscv64-none",
+        "s390-none",
+        "s390x-none",
+        "vc4-none",
+        "x86_64-none",
+        "i686-openbsd",
+        "x86_64-openbsd",
+        "x86_64-redox",
+        "wasm64-wasi",
+        "wasm32-wasi",
+        "x86_64-windows",
+        "i686-windows"
+      ],
+      "position": "/nix/store/51n3h1zpsnr67ggvp4ny923gylrl02vb-nixpkgs/nixpkgs/pkgs/applications/misc/hello/default.nix:32",
+      "unfree": false,
+      "unsupported": false
     }
+  }
 }
 ```
 
