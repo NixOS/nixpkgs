@@ -1374,6 +1374,18 @@ let
         };
       };
 
+      marp-team.marp-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "marp-vscode";
+          publisher = "marp-team";
+          version = "1.5.0";
+          sha256 = "0wqsj8rp58vl3nafkjvyw394h5j4jd7d24ra6hkvfpnlzrgv4yhs";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
