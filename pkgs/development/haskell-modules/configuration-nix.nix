@@ -975,7 +975,6 @@ self: super: builtins.intersectAttrs super {
 {
   inherit (super)
     hls-brittany-plugin
-    hls-call-hierarchy-plugin
     hls-eval-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
@@ -983,7 +982,6 @@ self: super: builtins.intersectAttrs super {
     hls-ormolu-plugin
     hls-pragmas-plugin
     hls-rename-plugin
-    hls-selection-range-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
@@ -995,4 +993,6 @@ self: super: builtins.intersectAttrs super {
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
 }
