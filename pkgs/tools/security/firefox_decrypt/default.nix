@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "firefox_decrypt";
-  version = "unstable-2021-12-29";
+  version = "unstable-2022-09-28";
 
   src = fetchFromGitHub {
     owner = "unode";
     repo = pname;
-    rev = "a3daadc09603a6cf8c4b7e49a59776340bc885e7";
-    sha256 = "0g219zqbdnhh9j09d9a0b81vr6j44zzk13ckl5fzkr10gqndiscc";
+    rev = "53325de4fe7f502397799d2eb25844dd1f935e3b";
+    sha256 = "sha256-bRH7PVJXMg6Xv9niOCSZRHATkB7Wbb8iLak0VtjJV7I=";
   };
 
   nativeBuildInputs = [ wrapPython ];
