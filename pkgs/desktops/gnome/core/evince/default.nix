@@ -35,11 +35,8 @@
 , pantheon
 , python3
 , texlive
-, t1lib
 , gst_all_1
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
 , supportMultimedia ? true # PDF multimedia
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
@@ -49,13 +46,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "41.4";
+  version = "42.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "/yRSQPIwkivsMqTXsKHZGyR6g9E0hPmbdANdUesjITA=";
+    sha256 = "XtLiXcPrxbJDdNgyVlTBICcDg5A42GANUWk52JJjte8=";
   };
 
   patches = lib.optionals withPantheon [
@@ -75,11 +72,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream
-    docbook-xsl-nons
-    docbook_xml_dtd_43
     gettext
     gobject-introspection
-    gtk-doc
+    gi-docgen
     itstool
     meson
     ninja
@@ -108,7 +103,6 @@ stdenv.mkDerivation rec {
     libxml2
     pango
     poppler
-    t1lib
     texlive.bin.core # kpathsea for DVI support
   ] ++ lib.optionals withLibsecret [
     libsecret
@@ -138,6 +132,11 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
