@@ -7,13 +7,15 @@
 
 buildPythonPackage rec {
   pname = "markupsafe";
-  version = "2.1.0";
-  disabled = pythonOlder "3.6";
+  version = "2.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "MarkupSafe";
     inherit version;
-    sha256 = "sha256-gL6vY937xkoEUrhB2ANsoGEeBJZQ4gr8uIL108Jm1l8=";
+    sha256 = "sha256-f5EZfMnkj5idEuTm+8RklcRGY238gbnM9Quw7HS5HUs=";
   };
 
   checkInputs = [
