@@ -538,6 +538,8 @@ with pkgs;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
 
+  gomi = callPackage ../tools/misc/gomi { };
+
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   packer = callPackage ../development/tools/packer { };
