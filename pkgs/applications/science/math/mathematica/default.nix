@@ -35,9 +35,27 @@
 , xorg
 , zlib
 , lang ? "en"
+, cudaSupport ? false
+, nvidia_x11 ? null
+, cudatoolkit ? null
 }:
 
 let
+  cudaDeps = [
+    cudatoolkit
+    cudatoolkit.lib
+    (nvidia_x11.override { libsOnly = true; })
+  ];
+
+  cudaEnv = buildEnv {
+    name = "mathematica-cuda";
+    paths = cudaDeps;
+    pathsToLink = [ "/bin" "/include" "/lib" ];
+    postBuild = ''
+      ln -s $out/lib $out/lib64
+    '';
+  };
+
   l10n = import ./l10ns.nix {
     inherit lib requireFile lang;
   };
@@ -94,7 +112,7 @@ in stdenv.mkDerivation {
     libXrender
     libXtst
     libxcb
-  ]);
+  ]) ++ lib.optionals cudaSupport cudaDeps;
 
   wrapProgramFlags = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"
@@ -103,6 +121,8 @@ in stdenv.mkDerivation {
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
     # Fix xkeyboard config path for Qt
     "--set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
+  ] ++ lib.optionals cudaSupport [
+    "--set CUDA_PATH ${cudaEnv}"
   ];
 
   unpackPhase = ''
