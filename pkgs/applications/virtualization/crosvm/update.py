@@ -12,9 +12,7 @@ from lxml import etree
 from lxml.etree import HTMLParser
 from urllib.request import urlopen
 
-# ChromiumOS components required to build crosvm.
-components = ['chromiumos/platform/crosvm', 'chromiumos/third_party/adhd']
-
+git_path = 'chromiumos/platform/crosvm'
 git_root = 'https://chromium.googlesource.com/'
 manifest_versions = f'{git_root}chromiumos/manifest-versions'
 buildspecs_url = f'{manifest_versions}/+/refs/heads/master/full/buildspecs/'
@@ -54,32 +52,27 @@ with urlopen(f'{buildspecs_url}{chrome_major_version}/?format=TEXT') as resp:
     buildspecs.sort(reverse=True)
     buildspec = splitext(buildspecs[0])[0]
 
-revisions = {}
-
-# Read the buildspec, and extract the git revisions for each component.
+# Read the buildspec, and extract the git revision.
 with urlopen(f'{buildspecs_url}{chrome_major_version}/{buildspec}.xml?format=TEXT') as resp:
     xml = base64.decodebytes(resp.read())
     root = etree.fromstring(xml)
-    for project in root.findall('project'):
-        revisions[project.get('name')] = project.get('revision')
+    revision = root.find(f'./project[@name="{git_path}"]').get('revision')
 
 # Initialize the data that will be output from this script.  Leave the
 # rc number in buildspec so nobody else is subject to the same level
 # of confusion I have been.
-data = {'version': f'{chrome_major_version}.{buildspec}', 'components': {}}
+data = {'version': f'{chrome_major_version}.{buildspec}'}
 
-# Fill in the 'components' dictionary with the output from
-# nix-prefetch-git, which can be passed straight to fetchGit when
-# imported by Nix.
-for component in components:
-    argv = ['nix-prefetch-git',
-            '--url', git_root + component,
-            '--rev', revisions[component]]
+# Fill in the 'src' key with the output from nix-prefetch-git, which
+# can be passed straight to fetchGit when imported by Nix.
+argv = ['nix-prefetch-git',
+        '--fetch-submodules',
+        '--url', git_root + git_path,
+        '--rev', revision]
+output = subprocess.check_output(argv)
+data['src'] = json.loads(output.decode('utf-8'))
 
-    output = subprocess.check_output(argv)
-    data['components'][component] = json.loads(output.decode('utf-8'))
-
-# Find the path to crosvm's default.nix, so the srcs data can be
+# Find the path to crosvm's default.nix, so the src data can be
 # written into the same directory.
 argv = ['nix-instantiate', '--eval', '--json', '-A', 'crosvm.meta.position']
 position = json.loads(subprocess.check_output(argv).decode('utf-8'))
