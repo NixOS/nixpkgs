@@ -84,7 +84,10 @@ in {
         b43Firmware_6_30_163_46
         b43FirmwareCutter
         xow_dongle-firmware
-      ] ++ optional pkgs.stdenv.hostPlatform.isx86 facetimehd-firmware;
+      ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
+        facetimehd-calibration
+        facetimehd-firmware
+      ];
     })
     (mkIf cfg.wirelessRegulatoryDatabase {
       hardware.firmware = [ pkgs.wireless-regdb ];
