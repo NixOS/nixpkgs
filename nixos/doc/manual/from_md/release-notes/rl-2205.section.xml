@@ -1067,6 +1067,14 @@
       </listitem>
       <listitem>
         <para>
+          GNOME now defaults to using pipewire only, whereas before the
+          default configuration would lead to both pulseaudio and
+          pipewire being enabled. This should fix some issues that arose
+          due to the two being enabled before.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.mbpfan</literal> module was converted to
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
