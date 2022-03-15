@@ -33,22 +33,17 @@ let
     };
   };
 in {
-  nextcloud20 = throw ''
-    Nextcloud v20 has been removed from `nixpkgs` as the support for it was dropped
-    by upstream in 2021-10. Please upgrade to at least Nextcloud v21 by declaring
+  nextcloud21 = throw ''
+    Nextcloud v21 has been removed from `nixpkgs` as the support for it was dropped
+    by upstream in 2022-02. Please upgrade to at least Nextcloud v22 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud21;
+        services.nextcloud.package = pkgs.nextcloud22;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 19 on NixOS 21.05 you have to upgrade to Nextcloud 20
-    first on 21.05 because Nextcloud doesn't support upgrades accross multiple major versions!
+    WARNING: if you were on Nextcloud 20 on NixOS 21.11 you have to upgrade to Nextcloud 21
+    first on 21.11 because Nextcloud doesn't support upgrades accross multiple major versions!
   '';
-
-  nextcloud21 = generic {
-    version = "21.0.9";
-    sha256 = "sha256-p6bvgTXmmjGN3TRQpG88f3YPksh0QzWG9j9KnEjcrqE=";
-  };
 
   nextcloud22 = generic {
     version = "22.2.5";
