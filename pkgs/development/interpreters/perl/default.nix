@@ -229,8 +229,8 @@ in {
   perl534 = common {
     perl = pkgs.perl534;
     buildPerl = buildPackages.perl534;
-    version = "5.34.0";
-    sha256 = "16mywn5afpv1mczv9dlc1w84rbgjgrr0pyr4c0hhb2wnif0zq7jm";
+    version = "5.34.1";
+    sha256 = "sha256-NXlRpJGwuhzjYRJjki/ux4zNWB3dwkpEawM+JazyQqE=";
   };
 
   # the latest Devel version
