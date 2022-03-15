@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "42.beta1";
+  version = "42.rc1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cEgZ7J/W7Mb6S489mFsCEs+hZWlhAMzalGGPiBKzKio=";
+    sha256 = "s0rehJp+0lOpf+I6ObFpqgnatnQXIawWOORa/IA+D8M=";
   };
 
   nativeBuildInputs = [
