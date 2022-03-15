@@ -200,6 +200,17 @@ isELF() {
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
+# Return success if the specified file is an AR archive
+isAR() {
+    local fn="$1"
+    local fd
+    local magic
+    exec {fd}< "$fn"
+    read -r -N 8 -u "$fd" magic
+    exec {fd}<&-
+    if [ "$magic" = $'!<arch>\n' ]; then return 0; else return 1; fi
+}
+
 # Return success if the specified file is a Mach-O object.
 isMachO() {
     local fn="$1"
