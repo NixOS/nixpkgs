@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
     sha256 = "sha256-eRKxSIfWKEUYX3zktH21gOqnuLiX3LHJVV3+D6xe+uM=";
   };
+  # redact configure flags from version output to reduce closure size
+  patches = [ ./version.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
