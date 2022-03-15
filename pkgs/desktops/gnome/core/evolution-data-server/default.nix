@@ -45,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.43.2";
+  version = "3.43.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jmV4HGQPoNm0+AEP9Q6Cpo11VTZWrVDZPxMRJ1y7RBw=";
+    sha256 = "bSt+XXN1l95aDOZVxZj3TTN262CpcqRr+5Q/Gu4HAEE=";
   };
 
   patches = [
@@ -59,10 +59,6 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
-
-    # Fix build with gweather4
-    # https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/93
-    ./0001-M-93-Port-to-libgweather4.patch
   ];
 
   prePatch = ''
@@ -139,7 +135,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
     homepage = "https://wiki.gnome.org/Apps/Evolution";
-    license = licenses.lgpl2;
+    license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
