@@ -206,10 +206,10 @@ stdenv.mkDerivation rec {
       fi
     done < <(find $out $lib $doc -type f -print0)
   '' + lib.optionalString (lib.versionAtLeast version "11") ''
-    while IFS= read -r -d $'\0' i; do
-      echo "patching $i..."
-      patchelf --set-rpath "$rpath:\$ORIGIN" $i
-    done < <(find $out/target-linux-x64 -type f -name '*.so' -print0)
+    for file in $out/target-linux-x64/*.so; do
+      echo "patching $file..."
+      patchelf --set-rpath "$rpath:\$ORIGIN" $file
+    done
   '';
 
   # Set RPATH so that libcuda and other libraries in
