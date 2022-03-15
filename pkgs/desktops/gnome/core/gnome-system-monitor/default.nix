@@ -12,7 +12,6 @@
 , wrapGAppsHook
 , meson
 , ninja
-, python3
 , gsettings-desktop-schemas
 , itstool
 , gnome
@@ -24,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "42.alpha";
+  version = "42.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "puK3mIgkm/YQpVaOCvjq2gFNiQ1PwXxWb2Gk21lHqMo=";
+    sha256 = "CfScgbZZVvHW3ZnumpQRJkvzSPRRbIu6m6sLX/x8D0c=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     meson
     ninja
-    python3
   ];
 
   buildInputs = [
@@ -57,12 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
