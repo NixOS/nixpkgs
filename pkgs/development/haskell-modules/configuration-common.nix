@@ -1339,6 +1339,13 @@ self: super: {
     })
   ] super.patch;
 
+  # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
+  jsaddle-dom = overrideCabal (old: {
+    postPatch = old.postPatch or "" + ''
+      sed -i 's/lens.*4.20/lens/' jsaddle-dom.cabal
+    '';
+  }) super.jsaddle-dom;
+
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core)));
 
