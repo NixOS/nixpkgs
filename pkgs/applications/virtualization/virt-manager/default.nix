@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
-, e2fsprogs, findutils, gzip, cdrtools
+, e2fsprogs, findutils, gzip, cdrtools, xorriso
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -58,11 +58,16 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  checkInputs = with python3.pkgs; [ cpio cdrtools pytestCheckHook ];
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+    cpio
+    cdrtools
+    xorriso
+  ];
 
-  disabledTestPaths = [
-    "tests/test_misc.py"
-    "tests/test_xmlparse.py"
+  disabledTests = [
+    "testAlterDisk"
+    "test_misc_nonpredicatble_generate"
   ];
 
   preCheck = ''

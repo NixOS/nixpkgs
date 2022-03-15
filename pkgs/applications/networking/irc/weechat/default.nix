@@ -28,21 +28,21 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.3";
+      version = "3.4.1";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "sha256-GnSi7uMxiyWSQau75q07NlX1ikaBeWOdrzOf9f0jnBM=";
+        sha256 = "sha256-TJ4JI97WiobkBxgnkUGh/XQAIlDV+PDgIxCzTqefiMw=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=ON"
+        "-DENABLE_DOC=OFF"         # TODO: Documentation fails to build, was deactivated to push through security update
         "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
         "-DENABLE_PHP=OFF"
       ]

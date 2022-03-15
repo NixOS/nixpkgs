@@ -13,7 +13,7 @@
 , buildPackages }:
 
 let
-  version = "5.8";
+  version = "5.8.1";
 in
 
 stdenv.mkDerivation {
@@ -22,19 +22,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
+    sha256 = "sha256-tpc1ILrOYAtHeSACabHl155fUFrElSBYwRrVu/DdmRk=";
   };
 
   patches = [
     # fix location of timezone data for TZ= completion
     ./tz_completion.patch
-    # This commit will be released with the next version of zsh
-    (fetchpatch {
-      name = "fix-git-stash-drop-completions.patch";
-      url = "https://github.com/zsh-users/zsh/commit/754658aff38e1bdf487c58bec6174cbecd019d11.patch";
-      sha256 = "sha256-ud/rLD+SqvyTzT6vwOr+MWH+LY5o5KACrU1TpmL15Lo=";
-      excludes = [ "ChangeLog" ];
-    })
   ];
 
   nativeBuildInputs = [ autoreconfHook perl groff texinfo ]

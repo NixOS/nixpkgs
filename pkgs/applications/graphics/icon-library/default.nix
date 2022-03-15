@@ -1,25 +1,21 @@
 { lib, stdenv, fetchurl, wrapGAppsHook
-, cargo, desktop-file-utils, meson, ninja, pkg-config, python3, rustc
-, dbus, gdk-pixbuf, glib, gtk3, gtksourceview4, libhandy
+, cargo, desktop-file-utils, meson, ninja, pkg-config, rustc
+, gdk-pixbuf, glib, gtk4, gtksourceview5, libadwaita
 }:
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
-  version = "0.0.8";
+  version = "0.0.11";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/fdf890706e0eef2458a5285e3bf65dd5/icon-library-${version}.tar.xz";
-    sha256 = "0807b56bgm8j1gpq4nf8x31gq9wqhcmpzpkqw6s4wissw3cb7q96";
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/93d183b17d216bbed7b03b2f3698059c/icon-library-${version}.tar.xz";
+    sha256 = "1zrcnc5dn5fgcl3vklfpbp3m0qzi2n2viw59vw5fhwkysvp670y7";
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config python3 rustc wrapGAppsHook
+    cargo desktop-file-utils meson ninja pkg-config rustc wrapGAppsHook
   ];
-  buildInputs = [ dbus gdk-pixbuf glib gtk3 gtksourceview4 libhandy ];
-
-  postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-  '';
+  buildInputs = [ gdk-pixbuf glib gtk4 gtksourceview5 libadwaita ];
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
