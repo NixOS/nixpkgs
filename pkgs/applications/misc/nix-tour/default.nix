@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";
-  version = "0.0.1";
+  version = "unstable-2022-01-03";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "tour_of_nix";
-    rev = "v${version}";
-    sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
+    rev = "6a6784983e6dc121574b97eb9b1d03592c8cb9a7";
+    sha256 = "sha256-BhQz59wkwwY0ShXzqUD6MQl4NE/jUik5RbLzseEc5Bc=";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
