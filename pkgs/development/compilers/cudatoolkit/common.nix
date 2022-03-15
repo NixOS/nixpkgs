@@ -223,6 +223,7 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (lib.versionAtLeast version "11") ''
       addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
       addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
+      addOpenGLRunpath $out/target-linux-x64/*
     ''}
   '';
 
