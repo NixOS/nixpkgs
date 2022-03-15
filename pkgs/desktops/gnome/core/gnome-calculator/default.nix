@@ -13,7 +13,6 @@
 , gtksourceview5
 , wrapGAppsHook
 , gobject-introspection
-, python3
 , gnome
 , mpfr
 , gmp
@@ -26,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "42.beta";
+  version = "42.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "9nruUc/Ql9pdJ7uU/o0JCkpopfd90boL5fN4X6KFKu0=";
+    sha256 = "1quQqyiDQc/WQYAkmT5FdW8+es8CVSV2IH9q1R5qBlA=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    python3
     gobject-introspection # for finding vapi files
   ];
 
@@ -60,11 +58,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   preCheck = ''
     # Currency conversion test tries to store currency data in $HOME/.cache.
