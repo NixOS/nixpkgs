@@ -1,42 +1,23 @@
---- a/Makefile	2012-02-04 01:24:21.000000000 +0000
-+++ b/Makefile	2014-10-29 14:42:08.690188302 +0000
-@@ -4,6 +4,8 @@
-   version.ml pipeline.mli pipeline.ml common.mli common.ml \
-   utils.mli utils.ml ocaml.mli ocaml.ml
- 
-+CAMLP4 := $(shell ocamlfind query camlp4)
-+
- STDBIN = $(shell dirname `which ocamlfind`)
- ifndef PREFIX
-   PREFIX = $(shell dirname $(STDBIN))
-@@ -15,7 +17,7 @@
+diff --git a/Makefile b/Makefile
+index 894e94d..9adc44b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,7 +17,7 @@ ifndef BINDIR
  endif
  export BINDIR
  
 -PACKS = unix str
 +PACKS = unix str findlib
- PP = camlp4o -I . -parser pa_tryfinally.cmo -parser pa_opt.cmo
- export PP
+ # PP = camlp4o -I . -parser pa_opt.cmo
+ # export PP
  
-@@ -36,11 +38,11 @@
- 
- common: version.ml
- 	ocamlc -pp 'camlp4orf -loc _loc' -c \
--		-I +camlp4 pa_opt310.ml && \
-+		-I $(CAMLP4) pa_opt310.ml && \
- 		cp pa_opt310.cmo pa_opt.cmo && \
- 		cp pa_opt310.cmi pa_opt.cmi
- 	ocamlc -pp 'camlp4orf -loc _loc' -c \
--		-I +camlp4 pa_tryfinally310.ml && \
-+		-I $(CAMLP4) pa_tryfinally310.ml && \
- 		cp pa_tryfinally310.cmo pa_tryfinally.cmo && \
- 		cp pa_tryfinally310.cmi pa_tryfinally.cmi
- 
---- a/main.ml	2014-11-08 09:05:12.516401313 +0000
-+++ b/main.ml	2014-11-08 09:09:59.801311230 +0000
-@@ -250,9 +250,15 @@
- 			Sys.getcwd ())
-       | `File script_name -> "", get_dir script_name in
+diff --git a/main.ml b/main.ml
+index 288526a..b67c5e9 100644
+--- a/main.ml
++++ b/main.ml
+@@ -247,6 +247,11 @@ let write_header ~pos ~source ~source_option ~verbose ~prog_file lines =
+ 		    Sys.getcwd ())
+     | `File script_name -> "", get_dir script_name in
  
 +  let findlibdir =
 +    Filename.(
@@ -46,20 +27,24 @@
    let file, oc = Filename.open_temp_file "meta" ".ml" in
    fprintf oc "\
  #%i %S;;
+@@ -255,6 +260,7 @@ let () =
+   try Topdirs.dir_directory (Sys.getenv \"OCAML_TOPLEVEL_PATH\")
+   with Not_found -> ()
+ ;;
 +#directory \"%s\";;
  #use \"topfind\";;
  #require \"ocamlscript\";;
  Ocamlscript.Common.verbose := %s;;
-@@ -261,7 +267,7 @@
+@@ -263,7 +269,7 @@ Ocamlscript.Common.script_dir := %S;;
  open Ocamlscript;;
  open Utils;;
  #%i %S;;\n"
--     pos source verbose script_dir extra_args trash pos source;
-+     pos source findlibdir verbose script_dir extra_args trash pos source;
-   
+-    pos source verbose script_dir extra_args trash pos source;
++    pos source findlibdir verbose script_dir extra_args trash pos source;
+ 
    List.iter (output_line oc) lines;
  
-@@ -544,6 +550,7 @@
+@@ -550,6 +556,7 @@ let main () =
        exit compilation_status
  
  let _ =
@@ -67,4 +52,16 @@
    try main ()
    with Failure s ->
      eprintf "ocamlscript: %s\n%!" s;
- 
+diff --git a/ocaml.ml b/ocaml.ml
+index a1824c6..b8f287e 100644
+--- a/ocaml.ml
++++ b/ocaml.ml
+@@ -14,7 +14,7 @@ let ocamlfind = ref "ocamlfind"
+ let packs = ref []         (* findlib packages *)
+ let sources = ref []       (* extra sources *)
+ let use_ocamllex = ref false (* preprocess with ocamllex before camlp4 *)
+-let use_camlp4 = ref true  (* by default camlp4 is used *)
++let use_camlp4 = ref false  (* by default camlp4 is not used *)
+ let use_ocamlc = ref false (* by default we want native code *)
+ let use_ocamlfind = ref false (* used only if necessary *)
+ let revised = ref false    (* use this to use the revised syntax *)
