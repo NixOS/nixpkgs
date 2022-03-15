@@ -1292,6 +1292,15 @@
       </listitem>
       <listitem>
         <para>
+          The option
+          <literal>services.xserver.videoDriver = [ &quot;nvidia&quot; ];</literal>
+          will now also install
+          <link xlink:href="https://github.com/elFarto/nvidia-vaapi-driver">nvidia
+          VA-API drivers</link> by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>firmwareLinuxNonfree</literal> package has been
           renamed to <literal>linux-firmware</literal>.
         </para>
