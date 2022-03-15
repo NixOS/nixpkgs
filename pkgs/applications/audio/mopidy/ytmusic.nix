@@ -16,6 +16,11 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytube
   ];
 
+  pythonImportsCheck = [ "mopidy_ytmusic" ];
+
+  # has no tests
+  doCheck = false;
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'ytmusicapi>=0.20.0,<0.21.0' 'ytmusicapi>=0.20.0'
