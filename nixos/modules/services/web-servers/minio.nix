@@ -217,19 +217,13 @@ in {
             EnvironmentFile = config.services.minio.rootCredentialsFile;
           };
 
-          # TODO
-          # environment = {
-          #   USER_SECRET_KEY_PATH = value.secret-key-path;
-          #   POLICY_NAME = value.policy;
-          # };
-          # script = ''
-          #   set -e
-          #   CONFIG_DIR=$RUNTIME_DIRECTORY
-          #   export USER_SECRET_KEY=$(<"$USER_SECRET_KEY_PATH")
-          #   mc --config-dir "$CONFIG_DIR" config host add minio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
-          #   mc --config-dir "$CONFIG_DIR" admin user add minio "${name}" "$USER_SECRET_KEY"
-          #   mc --config-dir "$CONFIG_DIR" admin policy set minio "$POLICY_NAME" user="${name}"
-          # '';
+          script = ''
+            set -e
+            CONFIG_DIR=$RUNTIME_DIRECTORY
+            mc --config-dir "$CONFIG_DIR" config host add minio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+            mc --config-dir "$CONFIG_DIR" admin group add minio "${name}" ${toString value.members}
+          '';
+
         })) cfg.ensureGroups //
 
       mapAttrs' (name: value:
