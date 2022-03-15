@@ -10,6 +10,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0pncyxfqxvznb9y4ksndbny1yf5mxh4089ak0yz86dp2qi5j99iv";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'ytmusicapi>=0.20.0,<0.21.0' 'ytmusicapi>=0.20.0'
+  '';
+
   propagatedBuildInputs = [
     mopidy
     python3Packages.ytmusicapi
@@ -20,11 +25,6 @@ python3Packages.buildPythonApplication rec {
 
   # has no tests
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'ytmusicapi>=0.20.0,<0.21.0' 'ytmusicapi>=0.20.0'
-  '';
 
   meta = with lib; {
     description = "Mopidy extension for playing music from YouTube Music";
