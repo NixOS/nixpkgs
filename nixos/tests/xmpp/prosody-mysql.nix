@@ -31,7 +31,7 @@ let
     prosodyctl deluser azurediamond@example.com
   '';
 in import ../make-test-python.nix {
-  name = "prosody";
+  name = "prosody-mysql";
   nodes = {
     client = { nodes, pkgs, config, ... }: {
       security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
@@ -46,6 +46,13 @@ in import ../make-test-python.nix {
       ];
     };
     server = { config, pkgs, ... }: {
+      nixpkgs.overlays = [
+        (self: super: {
+          prosody = super.prosody.override {
+            withExtraLuaPackages = p: [ p.luadbi-mysql ];
+          };
+        })
+      ];
       security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
       console.keyMap = "fr-bepo";
       networking.extraHosts = ''
@@ -76,12 +83,37 @@ in import ../make-test-python.nix {
         uploadHttp = {
           domain = "uploads.example.com";
         };
+        extraConfig = ''
+          storage = "sql"
+          sql = {
+            driver = "MySQL";
+            database = "prosody";
+            host = "mysql";
+            port = 3306;
+            username = "prosody";
+            password = "password123";
+          };
+        '';
+      };
+    };
+    mysql = { config, pkgs, ... }: {
+      networking.firewall.enable = false;
+      services.mysql = {
+        enable = true;
+        initialScript = pkgs.writeText "mysql_init.sql" ''
+          CREATE DATABASE prosody;
+          CREATE USER 'prosody'@'server' IDENTIFIED BY 'password123';
+          GRANT ALL PRIVILEGES ON prosody.* TO 'prosody'@'server';
+          FLUSH PRIVILEGES;
+        '';
+        package = pkgs.mariadb;
       };
     };
   };
 
   testScript = { nodes, ... }: ''
-    # Check with sqlite storage
+    # Check with mysql storage
+    mysql.wait_for_unit("mysql.service")
     server.wait_for_unit("prosody.service")
     server.succeed('prosodyctl status | grep "Prosody is running"')
 
