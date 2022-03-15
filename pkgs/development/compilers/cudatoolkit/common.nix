@@ -214,6 +214,10 @@ stdenv.mkDerivation rec {
   # --force-rpath prevents changing RPATH (set above) to RUNPATH.
   postFixup = ''
     addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
+    ${lib.optionalString (lib.versionAtLeast version "11") ''
+      addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
+      addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
+    ''}
   '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so
