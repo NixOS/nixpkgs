@@ -14,10 +14,11 @@ let lispPackages = rec {
 
     description = "The Common Lisp package manager";
     deps = [];
-    src = pkgs.fetchgit {
-      url = "https://github.com/quicklisp/quicklisp-client/";
-      rev = "refs/tags/version-${version}";
-      sha256 = "sha256:102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
+    src = pkgs.fetchFromGitHub {
+      owner = "quicklisp";
+      repo = "quicklisp-client";
+      rev = "version-${version}";
+      sha256 = "sha256-1HLVPhl8aBaeG8dRLxBh0j0X/0wqFeNYK1CEfiELToA=";
     };
     overrides = x: rec {
       inherit clwrapper;
