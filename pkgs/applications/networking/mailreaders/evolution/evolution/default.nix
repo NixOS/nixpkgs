@@ -46,18 +46,12 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.43.2";
+  version = "3.43.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "nBAQtBOGT5fE4VB96MWaNR9LMXT3DSIiig+dXjmz3pg=";
+    sha256 = "lnh+6kfHDvPL9+5HX0nK4DKS+wi3sWRJi5ccM38ju80=";
   };
-
-  patches = [
-    # Fix build with gweather4
-    # https://gitlab.gnome.org/GNOME/evolution/-/merge_requests/102
-    ./0001-M-102-Port-to-libgweather4.patch
-  ];
 
   nativeBuildInputs = [
     cmake
