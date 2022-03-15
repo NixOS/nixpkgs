@@ -2376,4 +2376,18 @@ self: super: {
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core  = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
 
+  mustache = overrideCabal (drv: {
+    # allow building with unordered-containers 0.2.17
+    patches = drv.mustache or [] ++ [
+      (pkgs.fetchpatch {
+        name = "mustache-unordered-containers-0.2.17-compat.patch";
+        url = "https://github.com/JustusAdam/mustache/commit/19b97b58b35ee746fdae1fc34ba97d7967175a62.patch";
+        sha256 = "02cxxmm3ymh64lzl1kp47rmfpar9358ksj0g4q963i40lg9y0g55";
+      })
+    ];
+    # hackage revisions forbid unordered-containers 0.2.17
+    editedCabalFile = null;
+    revision = null;
+  }) super.mustache;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
