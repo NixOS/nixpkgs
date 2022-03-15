@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "0.52.0";
+  version = "0.53.0";
 
   disabled = isPy27;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "v${version}";
-    hash = "sha256-la2+cpTnHZQn/FXtySp+3zDCBTONiLC16Tm+hDiIERc=";
+    hash = "sha256-NKaCX+vXaLaccJXL/9hTxkvtKdym0CUVNFMPTkwy7nc=";
   };
 
   checkInputs = [
