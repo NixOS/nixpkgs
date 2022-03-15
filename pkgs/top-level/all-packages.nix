@@ -703,6 +703,8 @@ with pkgs;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
 
+  gomi = callPackage ../tools/misc/gomi { };
+
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
