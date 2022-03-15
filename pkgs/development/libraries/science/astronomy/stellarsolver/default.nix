@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "stellarsolver";
-  version = "1.9";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "rlancaste";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PiRXNiemJ+UjVhmd2KPcTKJoDW9K9QBf62nkP1LlOfw=";
+    sha256 = "sha256-pqTSsey1CgOHiEm/C+7sTl9uGe3RVpL7Rdm04KgY+Z8=";
   };
 
   nativeBuildInputs = [ cmake ];
