@@ -191,12 +191,12 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    while IFS= read -r -d ''$'\0' i; do
+    while IFS= read -r -d $'\0' i; do
       if ! isELF "$i"; then continue; fi
       echo "patching $i..."
       if [[ ! $i =~ \.so ]]; then
         patchelf \
-          --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
       fi
       if [[ $i =~ libcudart ]]; then
         patchelf --remove-rpath $i
