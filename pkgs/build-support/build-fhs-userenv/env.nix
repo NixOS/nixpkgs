@@ -60,6 +60,9 @@ let
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
+    # XDG_DATA_DIRS is used by pressure-vessel (steam proton) and vulkan loaders to find the corresponding icd
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
+
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
     export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
