@@ -70,13 +70,13 @@ buildPythonPackage rec {
     homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
-      youtube-dl is a small, Python-based command-line program
-      to download videos from YouTube.com and a few more sites.
-      youtube-dl is released to the public domain, which means
-      you can modify it, redistribute it or use it however you like.
+      youtube-dl is a small, Python-based command-line program to download
+      videos from YouTube.com and a few more sites.  youtube-dl is released to
+      the public domain, which means you can modify it, redistribute it or use
+      it however you like.
     '';
     license = licenses.publicDomain;
+    maintainers = with maintainers; [ bluescreen303 fpletz ma27 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 AndersonTorres fpletz ma27 ];
   };
 }
