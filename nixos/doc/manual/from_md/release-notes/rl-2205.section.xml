@@ -306,6 +306,12 @@
           with many features.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://clusterlabs.org/pacemaker/">pacemaker</link>
+          cluster resource manager
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
