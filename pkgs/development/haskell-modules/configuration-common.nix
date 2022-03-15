@@ -2376,6 +2376,21 @@ self: super: {
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core  = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
 
+  elm2nix = appendPatches [
+      # unreleased, prereq for aeson-2 patch
+      (pkgs.fetchpatch {
+        name = "elm2nix-pull-44.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/cachix/elm2nix/pull/44.patch";
+        sha256 = "sha256-d6Ra3mIVKCA/5pEavsPi2TdN0qcRwU3gc634oWdYZq8=";
+      })
+      # https://github.com/cachix/elm2nix/issues/46#issuecomment-1056236009
+      (pkgs.fetchpatch {
+        name = "elm2nix-aeson-2.patch";
+        url = "https://github.com/cachix/elm2nix/commit/1a35f07ad5d63085ffd7e5634355412e1112c4e9.patch";
+        sha256 = "sha256-HAwMvOyp2IdPyjwt+aKYogMqg5NZYlu897UqJy59eFc=";
+      })
+     ] super.elm2nix;
+
   mustache = overrideCabal (drv: {
     # allow building with unordered-containers 0.2.17
     patches = drv.mustache or [] ++ [
