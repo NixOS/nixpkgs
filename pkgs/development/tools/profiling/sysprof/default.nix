@@ -8,8 +8,10 @@
 , json-glib
 , itstool
 , libdazzle
+, libunwind
 , libxml2
-, meson, ninja
+, meson
+, ninja
 , pango
 , pkg-config
 , polkit
@@ -21,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.42.1";
+  version = "3.43.90";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "F5a4FATudf0eus9URkrXr/6/YvKFHu9STZ+OrAxKIAE=";
+    sha256 = "6PMXiS9d3A5cUdN1nEk443VQOvNM18h2ttPYzrqdc0c=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
     polkit
     systemd
     libdazzle
+    libunwind
   ];
 
   mesonFlags = [
