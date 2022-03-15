@@ -61,8 +61,6 @@ stdenv.mkDerivation rec {
     gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
 
-  rpath = "${lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
-
   unpackPhase = ''
     sh $src --keep --noexec
 
@@ -190,27 +188,35 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preFixup = ''
-    while IFS= read -r -d $'\0' i; do
-      if ! isELF "$i"; then continue; fi
-      echo "patching $i..."
-      if [[ ! $i =~ \.so ]]; then
-        patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-      fi
-      if [[ $i =~ libcudart ]]; then
-        patchelf --remove-rpath $i
-      else
-        rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
-        patchelf --set-rpath "$rpath2" --force-rpath $i
-      fi
-    done < <(find $out $lib $doc -type f -print0)
-  '' + lib.optionalString (lib.versionAtLeast version "11") ''
-    for file in $out/target-linux-x64/*.so; do
-      echo "patching $file..."
-      patchelf --set-rpath "$rpath:\$ORIGIN" $file
-    done
-  '';
+  preFixup =
+    let rpath = lib.concatStringsSep ":" [
+      (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
+      "${stdenv.cc.cc.lib}/lib64"
+      "$out/jre/lib/amd64/jli"
+      "$out/lib64"
+      "$out/nvvm/lib64"
+    ];
+    in
+    ''
+      while IFS= read -r -d $'\0' i; do
+        if ! isELF "$i"; then continue; fi
+        echo "patching $i..."
+        if [[ ! $i =~ \.so ]]; then
+          patchelf \
+            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+        fi
+        if [[ $i =~ libcudart ]]; then
+          patchelf --remove-rpath $i
+        else
+          patchelf --set-rpath "${rpath}" --force-rpath $i
+        fi
+      done < <(find $out $lib $doc -type f -print0)
+    '' + lib.optionalString (lib.versionAtLeast version "11") ''
+      for file in $out/target-linux-x64/*.so; do
+        echo "patching $file..."
+        patchelf --set-rpath "${rpath}:\$ORIGIN" $file
+      done
+    '';
 
   # Set RPATH so that libcuda and other libraries in
   # /run/opengl-driver(-32)/lib can be found. See the explanation in
