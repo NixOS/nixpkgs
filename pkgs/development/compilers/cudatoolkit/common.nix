@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (lib.versionAtLeast version "11") ''
       while IFS= read -r -d $'\0' i; do
         echo "patching $i..."
-        patchelf --set-rpath "$rpath:$out/target-linux-x64" $i
+        patchelf --set-rpath "$rpath:\$ORIGIN" $i
       done < <(find $out/target-linux-x64 -type f -name '*.so' -print0)
     ''}
   '';
