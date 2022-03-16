@@ -330,6 +330,8 @@ let
 
     duration =  callPackage ../development/ocaml-modules/duration { };
 
+    dyn =  callPackage ../development/ocaml-modules/dyn { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earlybird = callPackage ../development/ocaml-modules/earlybird { };
