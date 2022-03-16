@@ -2425,6 +2425,8 @@ in {
 
   docx2python = callPackage ../development/python-modules/docx2python { };
 
+  docx2txt = callPackage ../development/python-modules/docx2txt { };
+
   dodgy = callPackage ../development/python-modules/dodgy { };
 
   dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
