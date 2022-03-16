@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-0y2m8T/xzYZwUlcZ6g956fdtLef2Bphg4Kd/xpo2AGg=";
+    sha256 = "sha256-34Am3QscKF68V+gg5rKeh8PQ8hC7CJn2tTFyYfjgHFw=";
   };
 
   enableParallelBuilding = true;
