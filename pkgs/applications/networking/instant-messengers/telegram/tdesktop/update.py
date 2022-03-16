@@ -66,6 +66,10 @@ if __name__ == "__main__":
     tdesktop_version = tdesktop_tag.lstrip('v')
     tdesktop_hash = nix_prefetch_git('https://github.com/telegramdesktop/tdesktop.git', tdesktop_tag)
     update_file('default.nix', tdesktop_version, tdesktop_hash)
+    tdesktop_beta_tag = github_api_request('repos/telegramdesktop/tdesktop/releases')[0]['tag_name']
+    tdesktop_beta_version = tdesktop_beta_tag.lstrip('v')
+    tdesktop_beta_hash = nix_prefetch_git('https://github.com/telegramdesktop/tdesktop.git', tdesktop_beta_tag)
+    update_file('beta.nix', tdesktop_beta_version, tdesktop_beta_hash)
     tg_owt_ref = github_api_request('repos/desktop-app/tg_owt/commits/master')['sha']
     tg_owt_version = get_commit_date('desktop-app/tg_owt', tg_owt_ref)
     tg_owt_hash = nix_prefetch_git('https://github.com/desktop-app/tg_owt.git', tg_owt_ref)

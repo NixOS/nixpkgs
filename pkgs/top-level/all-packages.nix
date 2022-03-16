@@ -29292,6 +29292,10 @@ with pkgs;
     abseil-cpp = abseil-cpp_202111;
   };
 
+  tdesktop-beta = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop/beta.nix {
+    abseil-cpp = abseil-cpp_202111;
+  };
+
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
