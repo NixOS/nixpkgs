@@ -230,7 +230,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.35.4";
-    sha256 = "1ss2r0qq5li6d2qghfv1iah5nl6nraymd7b7ib1iy1395rwyhl4q";
+    version = "5.35.9";
+    sha256 = "sha256-/nmSCIIXHXoC68DxFM9b5GM2AKU4WlLbfWLgduanL7U=";
   };
 }
