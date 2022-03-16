@@ -8,8 +8,12 @@ let
     concatStringsSep mapAttrsToList toLower
     literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
 
+  needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
+  escapeIfNeccessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText = attrs:
-    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}="${toString v}"'') attrs);
+    concatStringsSep "\n" (
+      mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
+    );
 
 in
 {
