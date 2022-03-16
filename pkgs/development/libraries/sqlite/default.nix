@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, zlib, interactive ? false, readline, ncurses
 , python3Packages
 , enableDeserialize ? false
+, sqldiff, sqlite-analyzer
 }:
 
 with lib;
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3Packages) sqlalchemy;
+    inherit sqldiff sqlite-analyzer;
   };
 
   meta = {
