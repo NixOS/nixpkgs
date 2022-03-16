@@ -25290,6 +25290,8 @@ with pkgs;
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
+  decoder = callPackage ../applications/graphics/decoder { };
+
   drawing = callPackage ../applications/graphics/drawing { };
 
   drawio = callPackage ../applications/graphics/drawio {};
