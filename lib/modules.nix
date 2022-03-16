@@ -9,7 +9,7 @@ let
     catAttrs
     concatLists
     concatMap
-    count
+    concatStringsSep
     elem
     filter
     findFirst
@@ -47,6 +47,20 @@ let
     showOption
     unknownModule
     ;
+
+  showDeclPrefix = loc: decl: prefix:
+    " - option(s) with prefix `${showOption (loc ++ [prefix])}' in module `${decl._file}'";
+  showRawDecls = loc: decls:
+    concatStringsSep "\n"
+      (sort (a: b: a < b)
+        (concatMap
+          (decl: map
+            (showDeclPrefix loc decl)
+            (attrNames decl.options)
+          )
+          decls
+      ));
+
 in
 
 rec {
@@ -474,26 +488,61 @@ rec {
           [{ inherit (module) file; inherit value; }]
         ) configs;
 
+      # Convert an option tree decl to a submodule option decl
+      optionTreeToOption = decl:
+        if isOption decl.options
+        then decl
+        else decl // {
+            options = mkOption {
+              type = types.submoduleWith {
+                modules = [ { options = decl.options; } ];
+                # `null` is not intended for use by modules. It is an internal
+                # value that means "whatever the user has declared elsewhere".
+                # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
+                shorthandOnlyDefinesConfig = null;
+              };
+            };
+          };
+
       resultsByName = mapAttrs (name: decls:
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
           defns = defnsByName.${name} or [];
           defns' = defnsByName'.${name} or [];
-          nrOptions = count (m: isOption m.options) decls;
+          optionDecls = filter (m: isOption m.options) decls;
         in
-          if nrOptions == length decls then
+          if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
             in {
               matchedOptions = evalOptionValue loc opt defns';
               unmatchedDefns = [];
             }
-          else if nrOptions != 0 then
-            let
-              firstOption = findFirst (m: isOption m.options) "" decls;
-              firstNonOption = findFirst (m: !isOption m.options) "" decls;
-            in
-              throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
+          else if optionDecls != [] then
+              if all (x: x.options.type.name == "submodule") optionDecls
+              # Raw options can only be merged into submodules. Merging into
+              # attrsets might be nice, but ambiguous. Suppose we have
+              # attrset as a `attrsOf submodule`. User declares option
+              # attrset.foo.bar, this could mean:
+              #  a. option `bar` is only available in `attrset.foo`
+              #  b. option `foo.bar` is available in all `attrset.*`
+              #  c. reject and require "<name>" as a reminder that it behaves like (b).
+              #  d. magically combine (a) and (c).
+              # All of the above are merely syntax sugar though.
+              then
+                let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
+                in {
+                  matchedOptions = evalOptionValue loc opt defns';
+                  unmatchedDefns = [];
+                }
+              else
+                let
+                  firstNonOption = findFirst (m: !isOption m.options) "" decls;
+                  nonOptions = filter (m: !isOption m.options) decls;
+                in
+                throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
+                  showRawDecls loc nonOptions
+                }"
           else
             mergeModules' loc decls defns) declsByName;
 
@@ -753,13 +802,14 @@ rec {
       compare = a: b: (a.priority or 1000) < (b.priority or 1000);
     in sort compare defs';
 
-  /* Hack for backward compatibility: convert options of type
-     optionSet to options of type submodule.  FIXME: remove
-     eventually. */
   fixupOptionType = loc: opt:
     let
       options = opt.options or
         (throw "Option `${showOption loc}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
+
+      # Hack for backward compatibility: convert options of type
+      # optionSet to options of type submodule.  FIXME: remove
+      # eventually.
       f = tp:
         if tp.name == "option set" || tp.name == "submodule" then
           throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
