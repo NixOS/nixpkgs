@@ -1614,8 +1614,11 @@ self: super: {
   # base upper bound is incompatible with ghc 8.10
   neuron = doJailbreak super.neuron;
 
-  # 2020-04-16: https://github.com/reflex-frp/reflex/issues/449
-  reflex = dontCheck (doJailbreak super.reflex);
+  # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
+  reflex = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/reflex-frp/reflex/compare/823afd9424234cbe0134051f09a6710e54509cec...469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
+    sha256 = "sha256-EwW7QBXHGlcJkKiLDmsXCZPwQz24+mg2Vuiu0Vb/T6w=";
+  }) (dontCheck super.reflex);
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
