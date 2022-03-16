@@ -196,6 +196,6 @@ rec {
 
   systemdUtils = {
     lib = import ./systemd-lib.nix { inherit lib config pkgs; };
-    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
+    unitOptions = import ./systemd-unit-options.nix { inherit pkgs lib systemdUtils; };
   };
 }

@@ -1,4 +1,4 @@
-{ lib, systemdUtils }:
+{ pkgs, lib, systemdUtils }:
 
 with systemdUtils.lib;
 with lib;
@@ -242,6 +242,82 @@ in rec {
   };
 
 
+  systemdCommandExpansion = types.attrsOf types.str // {
+    name = "systemdCommandExpansion";
+    description = "systemd-expanded string";
+    check = x: isAttrs x && elem (attrNames x) [ ["env"] ["substitute"] ];
+    merge = mergeEqualOption;
+  };
+
+  serviceCommandType = types.submodule ({ config, options, ... }: {
+    options = {
+      argv0 = mkOption {
+        default = null;
+        type = with types; nullOr (oneOf [ str systemdCommandExpansion ]);
+        description = ''
+          Override argv[0] (the executable name given to the command).
+        '';
+      };
+
+      mayFail = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Do not consider it a failure when this command returns a non-zero
+          exit status.
+        '';
+      };
+
+      unrestricted = mkOption {
+        default = null;
+        type = with types; enum [ null "all" "credentials" ];
+        description = ''
+          If "all": run this command with full privileges, regardless of configured
+          privilege restrictions (equivalent to the system "+" command prefix).
+
+          If "credentials": do not apply user and group settings when running the
+          command (equivalent to the systemd "!" command prefix).
+        '';
+      };
+
+      exe = mkOption {
+        type = with types; nullOr path;
+        description = ''
+          Command to run. Mutually exclusive with `script`.
+        '';
+      };
+
+      script = mkOption {
+        default = null;
+        type = with types; nullOr lines;
+        description = ''
+          Script to run. Mutually exclusive with `exe`.
+        '';
+      };
+
+      args = mkOption {
+        default = [ ];
+        type = with types; listOf (oneOf [ str systemdCommandExpansion int float ]);
+        description = ''
+          Arguments passed to the command. Arguments will not be expanded
+          by systemd unless requested.
+
+          To expand an environment variable `X` use `{ env = "X"; }`.
+
+          To apply all systemd substitutions to a string use `{ substitute = "..."; }`.
+          See "Specifiers" in <literal>man systemd.unit</literal> for `%` syntax and
+          "Command Lines" in <literal>man systemd.service</literal> for environment
+          variable expansion.
+        '';
+      };
+    };
+
+    config = {
+      exe = mkIf (config.script != null)
+        (mkDerivedConfig options.script (pkgs.writeScript "script"));
+    };
+  });
+
   serviceOptions = commonUnitOptions // {
 
     environment = mkOption {
@@ -276,10 +352,22 @@ in rec {
       '';
     };
 
+    startCommands = mkOption {
+      type = types.listOf serviceCommandType;
+      default = [ ];
+      description = ''
+        Command executed as the service's main process.
+        Mutually exclusive with script.
+      '';
+    };
+
     script = mkOption {
-      type = types.lines;
+      type = with types; nullOr lines;
       default = "";
-      description = "Shell commands executed as the service's main process.";
+      description = ''
+        Shell commands executed as the service's main process.
+        Mutually exclusive with startCommands.
+      '';
     };
 
     scriptArgs = mkOption {
@@ -288,12 +376,30 @@ in rec {
       description = "Arguments passed to the main process script.";
     };
 
+    preStartCommands = mkOption {
+      type = types.listOf serviceCommandType;
+      default = [ ];
+      description = ''
+        Commands executed before the service's main process
+        is started. Mutually exclusive with preStart.
+      '';
+    };
+
     preStart = mkOption {
       type = types.lines;
       default = "";
       description = ''
         Shell commands executed before the service's main process
-        is started.
+        is started. Mutually exclusive with preStartCommands.
+      '';
+    };
+
+    postStartCommands = mkOption {
+      type = types.listOf serviceCommandType;
+      default = [ ];
+      description = ''
+        Commands executed after the service's main process
+        is started. Mutually exclusive with postStart.
       '';
     };
 
@@ -302,7 +408,16 @@ in rec {
       default = "";
       description = ''
         Shell commands executed after the service's main process
-        is started.
+        is started. Mutually exclusive with postStartCommands.
+      '';
+    };
+
+    reloadCommands = mkOption {
+      type = types.listOf serviceCommandType;
+      default = [ ];
+      description = ''
+        Commands executed to reload the service's main process.
+        Mutually exclusive with reload.
       '';
     };
 
@@ -311,7 +426,16 @@ in rec {
       default = "";
       description = ''
         Shell commands executed when the service's main process
-        is reloaded.
+        is reloaded. Mutually exclusive with reloadStartCommands.
+      '';
+    };
+
+    stopCommands = mkOption {
+      type = types.listOf serviceCommandType;
+      default = [ ];
+      description = ''
+        Commands executed to stop the service.
+        Mutually exclusive with preStop.
       '';
     };
 
@@ -320,6 +444,16 @@ in rec {
       default = "";
       description = ''
         Shell commands executed to stop the service.
+        Mutually exclusive with stopCommands.
+      '';
+    };
+
+    postStopCommands = mkOption {
+      type = types.listOf serviceCommandType;
+      default = [ ];
+      description = ''
+        Commands executed after the service's main process
+        has exited. Mutually exclusive with postStop.
       '';
     };
 
@@ -328,7 +462,7 @@ in rec {
       default = "";
       description = ''
         Shell commands executed after the service's main process
-        has exited.
+        has exited. Mutually exclusive with postStopCommands.
       '';
     };
 

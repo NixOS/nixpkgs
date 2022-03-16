@@ -259,7 +259,31 @@ let
     };
   };
 
-  serviceConfig = { name, config, ... }: {
+  serviceCommand = { argv0, mayFail, unrestricted, exe, args, ... }:
+    let
+      prefixes =
+        optionalString (argv0 != null) "@"
+        + optionalString mayFail "-"
+        + optionalString (unrestricted == "all") "+"
+        + optionalString (unrestricted == "credentials") "!";
+      format = arg:
+        if arg ? env
+          then "\${${arg.env}}"
+        else if arg ? substitute
+          then arg.substitute
+        else
+          replaceChars [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON arg);
+      maybeArgv0 = optionalString (argv0 != null) (format argv0);
+    in
+      "${prefixes}${exe} ${maybeArgv0} ${concatMapStringsSep " " format args}";
+
+  scriptToCommands = name: args: script:
+    [ {
+      exe = makeJobScript name script;
+      args = mkIf (args != "") [ { substitute = args; } ];
+    } ];
+
+  serviceConfig = { name, config, options, ... }: {
     config = mkMerge
       [ { # Default path for systemd services.  Should be quite minimal.
           path = mkAfter
@@ -272,28 +296,46 @@ let
           environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre =
-              [ (makeJobScript "${name}-pre-start" config.preStart) ];
+          { preStartCommands = mkDerivedConfig options.preStart
+              (scriptToCommands "${name}-pre-start" "");
+          })
+        (mkIf (config.preStartCommands != [ ])
+          { serviceConfig.ExecStartPre = map serviceCommand config.preStartCommands;
           })
         (mkIf (config.script != "")
-          { serviceConfig.ExecStart =
-              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
+          { startCommands = mkDerivedConfig options.script
+              (scriptToCommands "${name}-start" config.scriptArgs);
+          })
+        (mkIf (config.startCommands != [ ])
+          { serviceConfig.ExecStart = map serviceCommand config.startCommands;
           })
         (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost =
-              [ (makeJobScript "${name}-post-start" config.postStart) ];
+          { postStartCommands = mkDerivedConfig options.postStart
+              (scriptToCommands "${name}-post-start" "");
+          })
+        (mkIf (config.postStartCommands != [ ])
+          { serviceConfig.ExecStartPost = map serviceCommand config.postStartCommands;
           })
         (mkIf (config.reload != "")
-          { serviceConfig.ExecReload =
-              makeJobScript "${name}-reload" config.reload;
+          { reloadCommands = mkDerivedConfig options.reload
+              (scriptToCommands "${name}-reload" "");
+          })
+        (mkIf (config.reloadCommands != [ ])
+          { serviceConfig.ExecReload = map serviceCommand config.reloadCommands;
           })
         (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop =
-              makeJobScript "${name}-pre-stop" config.preStop;
+          { stopCommands = mkDerivedConfig options.preStop
+              (scriptToCommands "${name}-pre-stop" "");
+          })
+        (mkIf (config.stopCommands != [ ])
+          { serviceConfig.ExecStop = map serviceCommand config.stopCommands;
           })
         (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost =
-              makeJobScript "${name}-post-stop" config.postStop;
+          { postStopCommands = mkDerivedConfig options.postStop
+              (scriptToCommands "${name}-post-stop" "");
+          })
+        (mkIf (config.postStopCommands != [ ])
+          { serviceConfig.ExecStopPost = map serviceCommand config.postStopCommands;
           })
       ];
   };
