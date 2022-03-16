@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.90";
+  version = "1.2.92";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = version;
-    sha256 = "sha256-n/M1Q6YS3EkUcn45ffiTy0wuj9yKf6qBLLfD2XJkhHU=";
+    sha256 = "sha256-tK711Lewr5Zc6dy/cDe9UEnq9zOEvuJg4mZyO3zBLR0=";
   };
 
   propagatedBuildInputs = [
