@@ -5426,7 +5426,9 @@ with pkgs;
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
-  fend = callPackage ../tools/misc/fend { };
+  fend = callPackage ../tools/misc/fend {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ferm = callPackage ../tools/networking/ferm { };
 
