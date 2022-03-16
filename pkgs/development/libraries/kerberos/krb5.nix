@@ -19,11 +19,11 @@ in
 with lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
-  version = "1.19.2";
+  version = "1.19.3";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "0snz1jm2w4dkk65zcz953jmmv9mqa30fanch2bk8r3rs9vp3yi8h";
+    sha256 = "sha256-VtBIY8/dydnrevF1VuBD41N9QcblRWEHeGds9VG53NA=";
   };
 
   outputs = [ "out" "dev" ];
