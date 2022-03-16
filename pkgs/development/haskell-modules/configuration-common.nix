@@ -1936,13 +1936,15 @@ self: super: {
     extraPrefix = "";
   }) super.yi-language;
 
-  # https://github.com/ghcjs/jsaddle/issues/123
+  # 2022-03-16: Upstream is not bumping bounds https://github.com/ghcjs/jsaddle/issues/123
   jsaddle = overrideCabal (drv: {
     # lift conditional version constraint on ref-tf
     postPatch = ''
       sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
+      sed -i 's/attoparsec.*,/attoparsec,/' jsaddle.cabal
+      sed -i 's/(!name)/(! name)/' src/Language/Javascript/JSaddle/Object.hs
     '' + (drv.postPatch or "");
-  }) super.jsaddle;
+  }) (doJailbreak super.jsaddle);
 
   # Tests need to lookup target triple x86_64-unknown-linux
   # https://github.com/llvm-hs/llvm-hs/issues/334
