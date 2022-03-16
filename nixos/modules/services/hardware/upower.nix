@@ -8,6 +8,22 @@ let
 
   cfg = config.services.upower;
 
+  configFile = generators.toINI {} {
+    UPower = {
+      EnableWattsUpPro = cfg.enableWattsUpPro;
+      NoPollBatteries = cfg.noPollBatteries;
+      IgnoreLid = cfg.ignoreLid;
+      UsePercentageForPolicy = cfg.usePercentageForPolicy;
+      PercentageLow = cfg.percentageLow;
+      PercentageCritical = cfg.percentageCritical;
+      PercentageAction = cfg.percentageAction;
+      TimeLow = cfg.timeLow;
+      TimeCritical = cfg.timeCritical;
+      TimeAction = cfg.timeAction;
+      CriticalPowerAction = cfg.criticalPowerAction;
+    };
+  };
+
 in
 
 {
@@ -219,21 +235,10 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = generators.toINI {} {
-      UPower = {
-        EnableWattsUpPro = cfg.enableWattsUpPro;
-        NoPollBatteries = cfg.noPollBatteries;
-        IgnoreLid = cfg.ignoreLid;
-        UsePercentageForPolicy = cfg.usePercentageForPolicy;
-        PercentageLow = cfg.percentageLow;
-        PercentageCritical = cfg.percentageCritical;
-        PercentageAction = cfg.percentageAction;
-        TimeLow = cfg.timeLow;
-        TimeCritical = cfg.timeCritical;
-        TimeAction = cfg.timeAction;
-        CriticalPowerAction = cfg.criticalPowerAction;
-      };
-    };
+    # this implicitly assumes the package has a `upower.service` unit file
+    systemd.services."upower".restartTriggers = [ configFile ];
+
+    environment.etc."UPower/UPower.conf".text = configFile;
   };
 
 }
