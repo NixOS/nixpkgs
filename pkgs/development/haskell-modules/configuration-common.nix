@@ -1021,17 +1021,22 @@ self: super: {
   }));
   ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
 
-  # Currently only builds with GHC-8.10.7 and old aeson:
-  # https://github.com/commercialhaskell/stack/issues/5670
-  # https://github.com/commercialhaskell/stack/issues/5558
   stack =
     generateOptparseApplicativeCompletion "stack"
-      (super.stack.overrideScope (self: super: {
-        # pantry-0.5.2.1 requires aeson < 2.
-        aeson = self.aeson_1_5_6_0;
-        # stack-2.7.3 requires old version of pantry.
-        pantry = self.pantry_0_5_2_1;
-      }));
+      (doJailbreak # for Cabal constraint added on hackage
+        (appendPatch
+          (pkgs.fetchpatch {
+            # https://github.com/commercialhaskell/stack/pull/5559
+            # When removing, also remove doJailbreak.
+            name = "stack-pull-5559.patch";
+            url = "https://github.com/hercules-ci/stack/compare/v2.7.5...brandon-leapyear/chinn/cabal-0.patch";
+            sha256 = "sha256-OXmdGgQ2KSKtQKOK6eePLgvUOTlzac544HQYKJpcjnU=";
+          })
+          (super.stack.overrideScope (self: super: {
+            # stack 2.7.5 requires aeson <= 1.6.
+            aeson = self.aeson_1_5_6_0;
+          }))
+      ));
 
   # Too strict version bound on hashable-time.
   # Tests require newer package version.
