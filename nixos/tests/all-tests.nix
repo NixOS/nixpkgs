@@ -485,7 +485,7 @@ in
   sonarr = handleTest ./sonarr.nix {};
   sourcehut = handleTest ./sourcehut.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
-  spark = handleTestOn ["x86_64-linux"] ./spark {};
+  spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sslh = handleTest ./sslh.nix {};
   sssd = handleTestOn ["x86_64-linux"] ./sssd.nix {};
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
