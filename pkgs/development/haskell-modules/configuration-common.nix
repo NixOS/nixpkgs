@@ -2361,6 +2361,9 @@ self: super: {
     jailbreak = true;
   }) super.aws;
 
+  # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
+  shower = doJailbreak (dontCheck super.shower);
+
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
