@@ -14,6 +14,7 @@
 , glib
 , gtk3
 , gnome
+, gnome-desktop
 , gcr
 , pam
 , systemd
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     networkmanager
     polkit
     gnome.gnome-control-center
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-session
     gtk3
     pam

@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-desktop";
-      attrPath = "gnome.gnome-desktop";
     };
   };
 
