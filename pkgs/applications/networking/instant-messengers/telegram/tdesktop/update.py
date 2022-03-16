@@ -55,7 +55,7 @@ def update_file(relpath, version, sha256, rev=None):
         for line in f:
             result = line
             result = re.sub(r'^  version = ".+";', f'  version = "{version}";', result)
-            result = re.sub(r'^    sha256 = ".+";', f'    sha256 = "{sha256}";', result)
+            result = re.sub(r'^(\s*)sha256 = ".+";', fr'\g<1>sha256 = "{sha256}";', result)
             if rev:
                 result = re.sub(r'^    rev = ".*";', f'    rev = "{rev}";', result)
             print(result, end='')
