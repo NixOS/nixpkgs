@@ -32,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.954";
+  version = "2.0.962";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-gCUciYTEL+4Pt9vAGbun0WFQWneOhDDXh7Dn9+sZbWw=";
+    hash = "sha256-hpoOOU1Z8xVqoJJdGcSoWujm3amiPkZ1Qjiqh66J+ZM=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -53,6 +53,7 @@ buildPythonApplication rec {
     bc-python-hcl2
     boto3
     cachetools
+    charset-normalizer
     cloudsplaining
     colorama
     configargparse
