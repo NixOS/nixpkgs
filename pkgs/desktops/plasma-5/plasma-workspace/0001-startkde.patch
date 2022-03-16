@@ -71,10 +71,10 @@ index 008fdfcaf..72468f21c 100644
  }
  
  void cleanupPlasmaEnvironment(const std::optional<QProcessEnvironment> &oldSystemdEnvironment)
-@@ -500,7 +500,7 @@ QProcess *setupKSplash()
-         KConfigGroup ksplashCfg = cfg.group("KSplash");
+@@ -501,7 +501,7 @@ QProcess *setupKSplash()
          if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
              p = new QProcess;
+             p->setProcessChannelMode(QProcess::ForwardedChannels);
 -            p->start(QStringLiteral("ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
 +            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
          }

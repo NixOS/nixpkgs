@@ -7,7 +7,7 @@
 
   kdeclarative, kdelibs4support, kpeople, kconfig, krunner, kinit, kwayland, kwin,
   plasma-framework, telepathy, libphonenumber, protobuf, libqofono, modemmanager-qt,
-  plasma-workspace,
+  networkmanager-qt, plasma-workspace,
   maliit-framework, maliit-keyboard,
 
   qtwayland, qttools
@@ -16,14 +16,14 @@
 let inherit (lib) getBin getLib; in
 
 mkDerivation {
-  pname = "plasma-phone-components";
+  pname = "plasma-mobile";
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     appstream libdbusmenu pam wayland
     kdeclarative kdelibs4support kpeople kconfig krunner kinit kwayland kwin
     plasma-framework telepathy libphonenumber protobuf libqofono modemmanager-qt
-    maliit-framework maliit-keyboard
+    networkmanager-qt maliit-framework maliit-keyboard
   ];
 
   postPatch = ''

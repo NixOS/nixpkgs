@@ -133,10 +133,10 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
-      plasma-phone-components = callPackage ./plasma-phone-components {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-disks = callPackage ./plasma-disks.nix {};
       plasma-integration = callPackage ./plasma-integration {};
+      plasma-mobile = callPackage ./plasma-mobile {};
       plasma-nano = callPackage ./plasma-nano {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
@@ -168,6 +168,7 @@ let
 
     } // lib.optionalAttrs (config.allowAliases or true) {
       ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
+      plasma-phone-components = throw "'plasma-phone-components' has been renamed to/replaced by 'plasma-mobile'";
     };
 in
 lib.makeScope libsForQt5.newScope packages
