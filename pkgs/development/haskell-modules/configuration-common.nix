@@ -1615,13 +1615,16 @@ self: super: {
   # https://github.com/obsidiansystems/dependent-sum/issues/55
   dependent-sum = doJailbreak super.dependent-sum;
 
-  # 2020-11-18: https://github.com/srid/rib/issues/169
-  # aeson bound out of sync
-  rib-core = doJailbreak super.rib-core;
-
-  # 2020-11-18: https://github.com/srid/neuron/issues/474
-  # base upper bound is incompatible with ghc 8.10
-  neuron = doJailbreak super.neuron;
+  # 2022-03-16 upstream is not updating bounds: https://github.com/srid/rib/issues/169
+  rib-core = doJailbreak (super.rib-core.override { relude = doJailbreak super.relude_0_7_0_0; });
+  neuron = overrideCabal {
+    # neuron is soon to be deprecated
+    # Fixing another ghc 9.0 bug here
+    postPatch = ''
+      sed -i 's/asks routeConfigRouteLink/asks (\\x -> routeConfigRouteLink x)/' src/lib/Neuron/Web/Route.hs
+    '';
+  }
+  (doJailbreak (super.neuron.override { relude = doJailbreak super.relude_0_7_0_0; }));
 
   # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
   reflex = appendPatch (pkgs.fetchpatch {
