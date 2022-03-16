@@ -1022,6 +1022,8 @@ let
 
     opus = callPackage ../development/ocaml-modules/opus { };
 
+    ordering = callPackage ../development/ocaml-modules/ordering { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otoml = callPackage ../development/ocaml-modules/otoml { };
