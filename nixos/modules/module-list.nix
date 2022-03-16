@@ -118,6 +118,7 @@
   ./misc/version.nix
   ./misc/wordlist.nix
   ./misc/nixops-autoluks.nix
+  ./programs/_1password-gui.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
   ./programs/atop.nix
