@@ -2796,6 +2796,8 @@ with pkgs;
 
   crosvm = callPackage ../applications/virtualization/crosvm { };
 
+  crowdsec = callPackage ../tools/security/crowdsec { };
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
