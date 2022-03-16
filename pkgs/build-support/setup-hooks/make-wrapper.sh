@@ -51,7 +51,19 @@ makeWrapper() {
         local varName="$2"    # name of list variable to add to
         local separator="$3"  # character used to separate elements of list
         local value="$4"      # one value, or multiple values separated by `separator`, to add to list
-        if test -n "$value"; then
+
+        # Disable file globbing, since bash will otherwise try to find
+        # filenames matching the the value to be prefixed/suffixed if
+        # it contains characters considered wildcards, such as `?` and
+        # `*`. We want the value as is, except we also want to split
+        # it on on the separator; hence we can't quote it.
+        local reenableGlob=0
+        if [[ ! -o noglob ]]; then
+            reenableGlob=1
+        fi
+        set -o noglob
+
+        if [[ -n "$value" ]]; then
             local old_ifs=$IFS
             IFS=$separator
 
@@ -85,6 +97,10 @@ makeWrapper() {
                 } >> "$wrapper"
             done
             IFS=$old_ifs
+        fi
+
+        if (( reenableGlob )); then
+            set +o noglob
         fi
     }
 

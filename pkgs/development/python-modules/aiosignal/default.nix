@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiosignal";
-  version = "1.2.0"; # re-enable tests after 1.2.0
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -23,8 +23,6 @@ buildPythonPackage rec {
     frozenlist
   ];
 
-  # not compatible w ith latest asyncio
-  doCheck = false;
   checkInputs = [
     pytest-asyncio
     pytestCheckHook
@@ -32,6 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
+      --replace "filterwarnings = error" "" \
       --replace "--cov=aiosignal" ""
   '';
 

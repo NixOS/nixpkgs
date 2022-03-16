@@ -92,7 +92,10 @@ buildPythonPackage rec {
   # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
     cd tests
-  '';
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+   '';
 
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";

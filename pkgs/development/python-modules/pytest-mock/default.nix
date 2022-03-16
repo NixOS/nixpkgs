@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytest
 , pytest-asyncio
 , pytestCheckHook
 , setuptools-scm
@@ -8,14 +9,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40217a058c52a63f1042f0784f62009e976ba824c418cced42e88d5f40ab0e62";
+    hash = "sha256-URK9ksyfGG7pbhqS78hJaepJSTnDrq05xQ9CHEzGlTQ=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    pytest
+  ];
 
   checkInputs = [
     pytest-asyncio
@@ -34,6 +39,6 @@ buildPythonPackage rec {
     description = "Thin-wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

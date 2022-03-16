@@ -5,6 +5,8 @@
 , gfortran
 , cmake
 , shared ? true
+# Compile with ILP64 interface
+, blas64 ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +38,19 @@ stdenv.mkDerivation rec {
     "-DLAPACKE=ON"
     "-DCBLAS=ON"
     "-DBUILD_TESTING=ON"
-  ] ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON";
+  ] ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON"
+    ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
+
+  passthru = { inherit blas64; };
+
+  postInstall =  let
+    canonicalExtension = if stdenv.hostPlatform.isLinux
+                       then "${stdenv.hostPlatform.extensions.sharedLibrary}.${lib.versions.major version}"
+                       else stdenv.hostPlatform.extensions.sharedLibrary;
+  in lib.optionalString blas64 ''
+    ln -s $out/lib/liblapack64${canonicalExtension} $out/lib/liblapack${canonicalExtension}
+    ln -s $out/lib/liblapacke64${canonicalExtension} $out/lib/liblapacke${canonicalExtension}
+  '';
 
   doCheck = true;
 
@@ -63,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ markuskowa ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

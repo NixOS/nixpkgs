@@ -18,10 +18,6 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       django = super.django_3;
-      django-picklefield = super.django-picklefield.overrideAttrs (oldAttrs: {
-        # Checks do not pass with django 3
-        doInstallCheck = false;
-      });
       # Avoid warning in django-q versions > 1.3.4
       # https://github.com/jonaswinkler/paperless-ng/issues/857
       # https://github.com/Koed00/django-q/issues/526

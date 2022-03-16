@@ -7241,6 +7241,12 @@
     githubId = 918448;
     name = "Anthony Lodi";
   };
+  loicreynier = {
+    email = "loic@loireynier.fr";
+    github = "loicreynier";
+    githubId = 88983487;
+    name = "Loïc Reynier";
+  };
   lopsided98 = {
     email = "benwolsieffer@gmail.com";
     github = "lopsided98";

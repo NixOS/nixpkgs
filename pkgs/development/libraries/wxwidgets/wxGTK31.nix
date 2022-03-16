@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
+, gnome2
 , gst_all_1
 , gtk2
 , gtk3
@@ -8,52 +10,62 @@
 , libGLU
 , libSM
 , libXinerama
+, libXtst
 , libXxf86vm
 , pkg-config
 , xorgproto
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, compat24 ? false
-, compat26 ? true
+, compat28 ? false
+, compat30 ? true
 , unicode ? true
 , withGtk2 ? true
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withWebKit ? false, webkitgtk
-, AGL
-, Carbon
-, Cocoa
-, Kernel
-, QTKit
-, setfile
+, darwin
 }:
+
+assert withMesa -> libGLU != null && libGL != null;
+assert withWebKit -> webkitgtk != null;
 
 assert withGtk2 -> (!withWebKit);
 
 let
-  inherit (gst_all_1) gstreamer gst-plugins-base;
+  inherit (darwin.stubs) setfile;
+  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+  inherit (gnome2) GConf;
+  inherit (gst_all_1) gst-plugins-base gstreamer;
   gtk = if withGtk2 then gtk2 else gtk3;
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.0.5";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-p69nNCg552j+nldGY0oL65uFRVu4xXCkoE10F5MwY9A=";
+    hash = "sha256-2zMvcva0GUDmSYK0Wk3/2Y6R3F7MgdqGBrOhmWgVA6g=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
+  patches = [
+    # https://github.com/wxWidgets/wxWidgets/issues/17942
+    ./patches/0001-fix-assertion-using-hide-in-destroy.patch
   ];
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    gstreamer
     gst-plugins-base
+    gstreamer
     gtk
     libSM
     libXinerama
+    libXtst
     libXxf86vm
     xorgproto
+  ]
+  ++ lib.optionals withGtk2 [
+    GConf
   ]
   ++ lib.optional withMesa libGLU
   ++ lib.optional withWebKit webkitgtk
@@ -67,27 +79,23 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
 
-  patches = [
-    # https://github.com/wxWidgets/wxWidgets/issues/17942
-    ../patches/0001-fix-assertion-using-hide-in-destroy.patch
-  ];
-
   configureFlags = [
     "--disable-precomp-headers"
     "--enable-mediactrl"
-    (if compat24 then "--enable-compat24" else "--disable-compat24")
-    (if compat26 then "--enable-compat26" else "--disable-compat26")
+    (if compat28 then "--enable-compat28" else "--disable-compat28")
+    (if compat30 then "--enable-compat30" else "--disable-compat30")
   ]
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
-  ++ lib.optionals stdenv.isDarwin [ # allow building on 64-bit
+  ++ lib.optionals stdenv.isDarwin [
+    # allow building on 64-bit
     "--enable-universal-binaries"
     "--with-cocoa"
     "--with-macosx-version-min=10.7"
   ]
   ++ lib.optionals withWebKit [
     "--enable-webview"
-    "--enable-webview-webkit"
+    "--enable-webviewwebkit"
   ];
 
   SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
@@ -107,11 +115,11 @@ stdenv.mkDerivation rec {
       "-framework System" "-lSystem"
   '';
 
-  postInstall = ''
+  postInstall = "
     pushd $out/include
     ln -s wx-*/* .
     popd
-  '';
+  ";
 
   enableParallelBuilding = true;
 
@@ -129,13 +137,13 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin;
-    badPlatforms = [ "x86_64-darwin" ];
+    maintainers = with maintainers; [ AndersonTorres tfmoraes ];
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin; # ofBorg is failing, don't know if internal
   };
 
   passthru = {
     inherit gtk;
-    inherit compat24 compat26 unicode;
+    inherit compat28 compat30 unicode;
   };
 }

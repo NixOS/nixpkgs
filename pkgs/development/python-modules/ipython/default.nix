@@ -26,7 +26,7 @@
 , testpath
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "ipython";
   version = "8.0.1";
   format = "pyproject";
@@ -76,14 +76,15 @@ buildPythonPackage (rec {
     testpath
   ];
 
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
+  ];
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = "http://ipython.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };
-} // lib.optionalAttrs stdenv.isDarwin {
-  disabledTests = [
-    "test_clipboard_get" # uses pbpaste
-  ];
-})
+}
