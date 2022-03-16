@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "mapillary";
     repo = pname;
     rev = "536b6e1414c8a93f0815dbae85d03749daaa5432";
-    sha256 = "sha256-Nfl20dFF2PKOkIvHbRxu1naU+qhz4whLXJvX5c5Wnwo=";
+    sha256 = "Nfl20dFF2PKOkIvHbRxu1naU+qhz4whLXJvX5c5Wnwo=";
   };
   patches = [
     ./0002-cmake-find-system-distributed-gtest.patch
