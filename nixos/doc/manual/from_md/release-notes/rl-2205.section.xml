@@ -311,6 +311,12 @@
           with many features.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://clusterlabs.org/pacemaker/">pacemaker</link>
+          cluster resource manager
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -414,6 +420,24 @@
           <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>
           in your configuration.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>fonts.fonts</literal> no longer includes ancient
+          bitmap fonts when both
+          <literal>config.services.xserver.enable</literal> and
+          <literal>config.nixpkgs.config.allowUnfree</literal> are
+          enabled. If you still want these fonts, use:
+        </para>
+        <programlisting language="bash">
+{
+  fonts.fonts = [
+    pkgs.xorg.fontbhlucidatypewriter100dpi
+    pkgs.xorg.fontbhlucidatypewriter75dpi
+    pkgs.xorg.fontbh100dpi
+  ];
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>
@@ -1303,6 +1327,15 @@
       </listitem>
       <listitem>
         <para>
+          The option
+          <literal>services.xserver.videoDriver = [ &quot;nvidia&quot; ];</literal>
+          will now also install
+          <link xlink:href="https://github.com/elFarto/nvidia-vaapi-driver">nvidia
+          VA-API drivers</link> by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>firmwareLinuxNonfree</literal> package has been
           renamed to <literal>linux-firmware</literal>.
         </para>
@@ -1433,6 +1466,46 @@
           default. It will automatically be enabled through services and
           desktop environments as needed.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>hadoop</literal> package has added support for
+          <literal>aarch64-linux</literal> and
+          <literal>aarch64-darwin</literal> as of 3.3.1
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/158613">#158613</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>R</literal> package now builds again on
+          <literal>aarch64-darwin</literal>
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/158992">#158992</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>spark3</literal> package has been updated from
+          3.1.2 to 3.2.1
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/160075">#160075</link>):
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Testing has been enabled for
+              <literal>aarch64-linux</literal> in addition to
+              <literal>x86_64-linux</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <literal>spark3</literal> package is now usable on
+              <literal>aarch64-darwin</literal> as a result of
+              <link xlink:href="https://github.com/NixOS/nixpkgs/pull/158613">#158613</link>
+              and
+              <link xlink:href="https://github.com/NixOS/nixpkgs/pull/158992">#158992</link>.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

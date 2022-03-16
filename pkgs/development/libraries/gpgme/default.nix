@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libassuan
     libgpg-error
     pth
-  ] ++ lib.optional (qtbase != null) [
+  ] ++ lib.optionals (qtbase != null) [
     qtbase
   ];
 

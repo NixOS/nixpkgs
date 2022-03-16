@@ -168,6 +168,7 @@ mapAliases ({
   claws-mail-gtk2 = throw "claws-mail-gtk2 was removed to get rid of Python 2, please use claws-mail"; # Added 2021-12-05
   claws-mail-gtk3 = claws-mail; # Added 2021-07-10
   clawsMail = throw "'clawsMail' has been renamed to/replaced by 'claws-mail'"; # Converted to throw 2022-02-22
+  clearsilver = throw "clearsilver has been removed: abandoned by upstream"; # Added 2022-03-15
   clutter_gtk = throw "'clutter_gtk' has been renamed to/replaced by 'clutter-gtk'"; # Converted to throw 2022-02-22
   cmakeWithQt4Gui = throw "cmakeWithQt4Gui has been removed in favor of cmakeWithGui (Qt 5)"; # Added 2021-05
   codimd = hedgedoc; # Added 2020-11-29
@@ -320,6 +321,8 @@ mapAliases ({
   fedora-coreos-config-transpiler = throw "fedora-coreos-config-transpiler has been renamed to 'butane'."; # Added 2021-04-13
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H.";
   ffadoFull = throw "'ffadoFull' has been renamed to/replaced by 'ffado'"; # Converted to throw 2022-02-22
+  finger_bsd = bsd-finger;
+  fingerd_bsd = bsd-fingerd;
   firefox-esr-68 = throw "Firefox 68 ESR was removed because it reached end of life with its final release 68.12esr on 2020-08-25.";
   firefox-esr-wrapper = throw "'firefox-esr-wrapper' has been renamed to/replaced by 'firefox-esr'"; # Converted to throw 2022-02-22
   firefoxWrapper = throw "'firefoxWrapper' has been renamed to/replaced by 'firefox'"; # Converted to throw 2022-02-22
@@ -1193,6 +1196,7 @@ mapAliases ({
   thunderbird-bin-68 = thunderbird-68;
   timescale-prometheus = promscale; # Added 2020-09-29
   timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # Added 2021-09-05
+  tkcvs = tkrev; # Added 2022-03-07
   togglesg-download = throw "togglesg-download was removed 2021-04-30 as it's unmaintained"; # Added 2021-04-30
   tomboy = throw "tomboy is not actively developed anymore and was removed."; # Added 2022-01-27
   tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # Added 2021-06-16

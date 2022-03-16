@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
     rev = "v${version}";
-    sha256 = "sha256-uyYVxBHkIiZVFcKZ1OKhcCQv42CISNKbCrfDCjKCeUA=";
+    sha256 = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
   };
 
   postConfigure = ''

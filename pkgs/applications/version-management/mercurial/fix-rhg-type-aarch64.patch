@@ -1,0 +1,12 @@
+diff --git a/rust/hg-core/src/lock.rs b/rust/hg-core/src/lock.rs
+--- a/rust/hg-core/src/lock.rs
++++ b/rust/hg-core/src/lock.rs
+@@ -145,7 +145,7 @@ lazy_static::lazy_static! {
+ 
+         /// Same as https://github.com/python/cpython/blob/v3.10.0/Modules/socketmodule.c#L5414
+         const BUFFER_SIZE: usize = 1024;
+-        let mut buffer = [0_i8; BUFFER_SIZE];
++        let mut buffer = [0 as libc::c_char; BUFFER_SIZE];
+         let hostname_bytes = unsafe {
+             let result = libc::gethostname(buffer.as_mut_ptr(), BUFFER_SIZE);
+             if result != 0 {

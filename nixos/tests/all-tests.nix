@@ -384,6 +384,7 @@ in
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
+  pacemaker = handleTest ./pacemaker.nix {};
   packagekit = handleTest ./packagekit.nix {};
   pam-file-contents = handleTest ./pam/pam-file-contents.nix {};
   pam-oath-login = handleTest ./pam/pam-oath-login.nix {};
@@ -433,6 +434,7 @@ in
   prometheus = handleTest ./prometheus.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
   prosody = handleTest ./xmpp/prosody.nix {};
+  prosody-mysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   prowlarr = handleTest ./prowlarr.nix {};
   pt2-clone = handleTest ./pt2-clone.nix {};
@@ -483,7 +485,7 @@ in
   sonarr = handleTest ./sonarr.nix {};
   sourcehut = handleTest ./sourcehut.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
-  spark = handleTestOn ["x86_64-linux"] ./spark {};
+  spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sslh = handleTest ./sslh.nix {};
   sssd = handleTestOn ["x86_64-linux"] ./sssd.nix {};
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
