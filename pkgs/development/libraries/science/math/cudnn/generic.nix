@@ -91,6 +91,6 @@ stdenv.mkDerivation {
     homepage = "https://developer.nvidia.com/cudnn";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mdaiter ];
+    maintainers = with maintainers; [ mdaiter samuela ];
   };
 }
