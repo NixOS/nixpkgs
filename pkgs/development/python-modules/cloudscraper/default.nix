@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cloudscraper";
-  version = "1.2.58";
+  version = "1.2.60";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wnzv2k8cm8q1x18r4zg8pcnpm4gsdp82hywwjimp2v2qll918nx";
+    sha256 = "sha256-DTQTsv/59895UTsMmqxYtSfFosUWPRx8wMT4zKHQ9Oc=";
   };
 
   propagatedBuildInputs = [
