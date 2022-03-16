@@ -117,6 +117,7 @@ buildPythonPackage rec {
   meta = {
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.bsd2;
+    changelog = "${src.meta.homepage}/blob/${src.rev}/CHANGELOG.md";
     description = "Open source Structure-from-Motion pipeline from Mapillary";
     homepage = "https://opensfm.org/";
   };
