@@ -2388,6 +2388,8 @@ with pkgs;
 
   borgmatic = callPackage ../tools/backup/borgmatic { };
 
+  borg-sans-mono = callPackage ../data/fonts/borg-sans-mono { };
+
   boringtun = callPackage ../tools/networking/boringtun { };
 
   bookstack = callPackage ../servers/web-apps/bookstack { };
