@@ -14,6 +14,8 @@ buildGoPackage rec {
     sha256 = "sha256-VdYyui0fyoNf1q3M1xTg/UMlxIFABqAbqQaD0bLpKCY=";
   };
 
+  patches = [ ./2.2.1-CVE-2022-26652.patch ];
+
   meta = {
     description = "NATS Streaming System Server";
     license = licenses.asl20;
