@@ -28,6 +28,10 @@ buildPythonPackage rec {
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # unable to get local issuer certificate
+    "test_async"
+    "test_query"
     # fails if IPv6 isn't available
     "test_resolver_override"
   ];
