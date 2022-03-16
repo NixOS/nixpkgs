@@ -1,7 +1,29 @@
-{ alsa-lib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups
-, dbus, electron_9, expat, fetchurl, gdk-pixbuf, glib, gtk3, lib
-, libappindicator-gtk3, libdbusmenu-gtk3, libuuid, makeWrapper
-, nspr, nss, pango, squashfsTools, stdenv, systemd, xorg
+{ alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, autoPatchelfHook
+, cairo
+, cups
+, dbus
+, electron_9
+, expat
+, fetchurl
+, gdk-pixbuf
+, glib
+, gtk3
+, lib
+, libappindicator-gtk3
+, libdbusmenu-gtk3
+, libuuid
+, makeWrapper
+, nspr
+, nss
+, pango
+, squashfsTools
+, stdenv
+, systemd
+, xorg
 }:
 
 let
@@ -11,8 +33,9 @@ in
 
 stdenv.mkDerivation rec {
   pname = "authy";
-  version = "1.9.0";
-  rev = "7";
+  # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
+  version = "2.1.0";
+  rev = "9";
 
   buildInputs = [
     alsa-lib
@@ -50,7 +73,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "10az47cc3lgsdi0ixmmna08nqf9xm7gsl1ph00wfwrxzsi05ygx3";
+    sha256 = "sha256-RxjxOYrbneVctyTJTMvoN/UdREohaZWb1kTdEeI6mUU=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];
