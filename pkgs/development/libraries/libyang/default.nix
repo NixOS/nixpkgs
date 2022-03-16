@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "2.0.112";
+  version = "2.0.164";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    sha256 = "sha256-f8x0tC3XcQ9fnUE987GYw8qEo/B+J759vpCImqG3QWs=";
+    sha256 = "sha256-0Ou0j9KaNkX/SFmid+wphvtu3wDTXkw+8xdck6lEE3w=";
   };
 
   nativeBuildInputs = [
