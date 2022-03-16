@@ -6,6 +6,7 @@
 , gettext
 , glib
 , gnome
+, gnome-desktop
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
@@ -43,7 +44,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gdk-pixbuf
     glib
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-settings-daemon
     gnome.gnome-shell
     # Makes it possible to select user themes through the `user-theme` extension
