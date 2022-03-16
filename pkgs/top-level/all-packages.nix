@@ -6065,6 +6065,8 @@ with pkgs;
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
+  gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
+
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
@@ -27315,7 +27317,6 @@ with pkgs;
   luppp = callPackage ../applications/audio/luppp { };
 
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
-    inherit (gnome) gnome-desktop;
     wine = wineWowPackages.staging;
   };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix {

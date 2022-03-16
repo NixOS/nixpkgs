@@ -58,8 +58,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-common = callPackage ./core/gnome-common { };
 
-  gnome-desktop = callPackage ./core/gnome-desktop { };
-
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
   gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
@@ -281,6 +279,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 }) // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
+  gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
   libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
 
   bijiben = throw "The ‘gnome.bijiben’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-notes’ directly."; # added 2018-09-26
@@ -289,7 +288,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   glib_networking = throw "The ‘gnome.glib_networking’ alias was removed on 2022-01-13. Please use ‘pkgs.glib-networking’ directly."; # added 2018-02-25
   gnome_common = throw "The ‘gnome.gnome_common’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-common’ directly."; # added 2018-02-25
   gnome_control_center = throw "The ‘gnome.gnome_control_center’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-control-center’ directly."; # added 2018-02-25
-  gnome_desktop = throw "The ‘gnome.gnome_desktop’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-desktop’ directly."; # added 2018-02-25
+  gnome_desktop = throw "The ‘gnome.gnome_desktop’ alias was removed on 2022-01-13. Please use pkgs.gnome-desktop’ directly."; # added 2018-02-25
   gnome_keyring = throw "The ‘gnome.gnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-keyring’ directly."; # added 2018-02-25
   gnome_online_accounts = throw "The ‘gnome.gnome_online_accounts’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-online-accounts’ directly."; # added 2018-02-25
   gnome_session = throw "The ‘gnome.gnome_session’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-session’ directly."; # added 2018-02-25

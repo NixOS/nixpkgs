@@ -9,6 +9,7 @@
 , wrapGAppsHook
 , libinput
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
@@ -68,7 +69,7 @@ in stdenv.mkDerivation rec {
     libinput
     glib
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     # For keybindings settings schemas
     gnome.mutter
     wayland
