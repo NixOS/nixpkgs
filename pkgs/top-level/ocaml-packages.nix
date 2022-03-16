@@ -1321,6 +1321,8 @@ let
 
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
+    stdune = callPackage ../development/ocaml-modules/stdune { };
+
     stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
