@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-json-report";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "numirias";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OS9ASUp9iJ12Ovr931RQU/DHEAXqbgcRMCBP4h+GAhk=";
+    sha256 = "sha256-hMB/atDuo7CjwhHFUOxVfgJ7Qp4AA9J428iv7hyQFcs=";
   };
 
   buildInputs = [
