@@ -57,6 +57,12 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # i18n: merge_file() deprecate positional arguments instead of a hardfail
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/022c0357ae4cd6c1d7e9a0f3a2672ba410a71fa2.patch";
+      sha256 = "sha256-tKiInBIA6gPifHuNAh5ARsPGtyEajfCInN8wDwAzWlw=";
+    })
   ];
 
   setupHook = ./setup-hook.sh;
