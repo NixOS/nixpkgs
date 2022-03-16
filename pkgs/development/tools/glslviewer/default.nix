@@ -1,53 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, glfw, pkg-config, libXrandr, libXdamage
-, libXext, libXrender, libXinerama, libXcursor, libXxf86vm, libXi
-, libX11, libGLU, python3Packages, ensureNewerSourcesForZipFilesHook
-, Cocoa
+{
+    withFFMPG ? true,
+    stdenv, cmake, ninja, lib, fetchFromGitHub,
+    libX11, libXrandr, libXinerama, libXcursor, libXi, libXext, libGLU, ffmpeg,
+    Cocoa
 }:
 
 stdenv.mkDerivation rec {
   pname = "glslviewer";
-  version = "1.6.8";
-
+  version = "2.0.4";
   src = fetchFromGitHub {
-    owner = "patriciogonzalezvivo";
-    repo = "glslViewer";
-    rev = version;
-    sha256 = "0v7x93b61ama0gmzlx1zc56jgi7bvzsfvbkfl82xzwf2h5g1zni7";
+      owner = "patriciogonzalezvivo";
+      repo = "glslViewer";
+      fetchSubmodules = true;
+      rev = version;
+      sha256 = "sha256-Jrj8WlKrkPpmME50oVcZLQZs0bqbODAYibLJGPF7ock=";
   };
-
-  nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];
+  nativeBuildInputs = [cmake ninja];
   buildInputs = [
-    glfw libGLU glfw libXrandr libXdamage
-    libXext libXrender libXinerama libXcursor libXxf86vm
-    libXi libX11
-  ] ++ (with python3Packages; [ python setuptools wrapPython ])
-    ++ lib.optional stdenv.isDarwin Cocoa;
-  pythonPath = with python3Packages; [ pyyaml requests ];
+      libX11
+      libXrandr
+      libXinerama
+      libXcursor
+      libXi
+      libXext
+      libGLU
+  ] ++ lib.optional withFFMPG ffmpeg ++ lib.optional stdenv.isDarwin Cocoa;
 
-  # Makefile has /usr/local/bin hard-coded for 'make install'
-  preConfigure = ''
-    substituteInPlace Makefile \
-        --replace '/usr/local' "$out" \
-        --replace '/usr/bin/clang++' 'clang++'
-    substituteInPlace Makefile \
-        --replace 'python setup.py install' "python setup.py install --prefix=$out"
-    2to3 -w bin/*
-  '';
-
-  preInstall = ''
-    mkdir -p $out/bin $(toPythonPath "$out")
-    export PYTHONPATH=$PYTHONPATH:$(toPythonPath "$out")
-  '';
-
-  postInstall = ''
-    wrapPythonPrograms
-  '';
+  cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE='Release'"
+      "-GNinja"
+  ];
 
   meta = with lib; {
-    description = "Live GLSL coding renderer";
-    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.hodapp ];
+      description = "Live GLSL coding renderer";
+      homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
+      license = licenses.bsd3;
+      platforms = platforms.linux ++ platforms.darwin;
+      maintainers = [ maintainers.hodapp ];
   };
 }
