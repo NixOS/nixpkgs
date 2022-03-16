@@ -46,10 +46,10 @@ let
           patchShebangs ./template-coq/update_plugin.sh
           patchShebangs ./template-coq/gen-src/to-lower.sh
           patchShebangs ./pcuic/clean_extraction.sh
-          patchShebangs ./pcuic/theories/replace.sh
           patchShebangs ./safechecker/clean_extraction.sh
           patchShebangs ./erasure/clean_extraction.sh
           echo "CAMLFLAGS+=-w -60 # Unused module" >> ./safechecker/Makefile.plugin.local
+          sed -i -e 's/mv $i $newi;/mv $i tmp; mv tmp $newi;/' ./template-coq/gen-src/to-lower.sh ./pcuic/clean_extraction.sh ./safechecker/clean_extraction.sh ./erasure/clean_extraction.sh
         '' ;
 
         configurePhase = optionalString (package == "all") pkgallMake + ''
