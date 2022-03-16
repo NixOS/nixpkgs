@@ -1334,6 +1334,52 @@
       </listitem>
       <listitem>
         <para>
+          ORY Kratos was updated to version 0.8.3-alpha.1.pre.0, which
+          introduces some breaking changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              If you are relying on the SQLite images, update your
+              Docker Pull commands as follows:
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>docker pull oryd/kratos:{version}</literal>
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              Additionally, all passwords now have to be at least 8
+              characters long.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              For more details, see:
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.1-alpha.1">Release
+                  Notes for v0.8.1-alpha-1</link>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.2-alpha.1">Release
+                  Notes for v0.8.2-alpha-1</link>
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>fetchFromSourcehut</literal> now allows fetching
           repositories recursively using <literal>fetchgit</literal> or
           <literal>fetchhg</literal> if the argument
