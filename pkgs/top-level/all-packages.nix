@@ -4589,21 +4589,27 @@ with pkgs;
   cudnnPackages = callPackages ../development/libraries/science/math/cudnn { };
   inherit (cudnnPackages)
     cudnn_7_4_cudatoolkit_10_0
-    cudnn_7_6_cudatoolkit_10_2
+    cudnn_7_6_cudatoolkit_10_0
+    cudnn_7_6_cudatoolkit_10_1
     cudnn_7_6_cudatoolkit_10
+    cudnn_8_1_cudatoolkit_10_2
     cudnn_8_1_cudatoolkit_11_0
     cudnn_8_1_cudatoolkit_11_1
     cudnn_8_1_cudatoolkit_11_2
+    cudnn_8_1_cudatoolkit_10
     cudnn_8_1_cudatoolkit_11
+    cudnn_8_3_cudatoolkit_10_2
     cudnn_8_3_cudatoolkit_11_0
     cudnn_8_3_cudatoolkit_11_1
     cudnn_8_3_cudatoolkit_11_2
     cudnn_8_3_cudatoolkit_11_3
     cudnn_8_3_cudatoolkit_11_4
     cudnn_8_3_cudatoolkit_11_5
+    cudnn_8_3_cudatoolkit_10
     cudnn_8_3_cudatoolkit_11;
 
-  cudnn = cudnn_7_6_cudatoolkit_10;
+  # TODO(samuela): This is old and should be upgraded to 8.3 at some point.
+  cudnn = cudnn_7_6_cudatoolkit_10_1;
 
   cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
   inherit (cutensorPackages)
