@@ -60,6 +60,8 @@ self: super: {
   # Tests fail in GHC 9.2
   extra = dontCheck super.extra;
 
+  knob = appendPatch ./patches/knob-ghc9.patch super.knob;
+
   # Jailbreaks & Version Updates
 
   # This `doJailbreak` can be removed once the following PR is released to Hackage:
