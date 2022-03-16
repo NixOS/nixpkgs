@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.5.6";
+  version = "dev66";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
