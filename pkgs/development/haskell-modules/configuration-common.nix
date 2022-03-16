@@ -2372,6 +2372,21 @@ self: super: {
 
   # 2022-02-26: https://github.com/emilypi/base64/issues/39
   base64 = dontCheck super.base64;
+
+  # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
+  base-noprelude = doJailbreak super.base-noprelude;
+
+  # 2022-03-16: Test bounds need to be loosened https://github.com/sebastiaanvisser/clay/issues/229
+  clay = doJailbreak super.clay;
+
+  # 2022-04-16: package qualified import issue: https://github.com/ghcjs/ghcjs-dom/issues/101
+  ghcjs-dom = assert super.ghcjs-dom.version == "0.9.5.0"; overrideCabal (old: {
+    postPatch = ''
+      sed -i 's/import "jsaddle-dom" GHCJS.DOM.Document/import "ghcjs-dom-jsaddle" GHCJS.DOM.Document/' src/GHCJS/DOM/Document.hs
+    '' + (old.postPatch or "");
+    })
+    super.ghcjs-dom;
+
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
