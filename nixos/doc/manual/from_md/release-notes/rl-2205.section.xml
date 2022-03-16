@@ -582,6 +582,25 @@
       </listitem>
       <listitem>
         <para>
+          Services in the <literal>hadoop</literal> module previously
+          set <literal>openFirewall</literal> to true by default. This
+          has now been changed to false. Node definitions for multi-node
+          clusters would need <literal>openFirewall = true;</literal> to
+          be added to to hadoop services when upgrading from NixOS
+          21.11.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.hadoop.yarn.nodemanager</literal> now uses
+          cgroup-based CPU limit enforcement by default. Additionally,
+          the option <literal>useCGroups</literal> was added to
+          nodemanagers as an easy way to switch back to the old
+          behavior.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>wafHook</literal> hook now honors
           <literal>NIX_BUILD_CORES</literal> when
           <literal>enableParallelBuilding</literal> is not set
@@ -1183,6 +1202,33 @@
           convenience functions to create executable Python 2/3 scripts
           using the PyPy interpreter were added.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Some improvements have been made to the
+          <literal>hadoop</literal> module:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              A <literal>gatewayRole</literal> option has been added,
+              for deploying hadoop cluster configuration files to a node
+              that does not have any active services
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Support for older versions of hadoop have been added to
+              the module
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Overriding and extending site XML files has been made
+              easier
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
