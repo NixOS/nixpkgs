@@ -17906,6 +17906,8 @@ with pkgs;
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
+  libctl = callPackage ../development/libraries/libctl { };
+
   libcotp = callPackage ../development/libraries/libcotp { };
 
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
