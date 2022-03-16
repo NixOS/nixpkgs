@@ -264,11 +264,14 @@ let
           + (if ssl && vhost.http3 then ''
           # UDP listener for **QUIC+HTTP/3
           listen ${addr}:${toString port} http3 reuseport;
+          '' else "");
+
+        advertiseHttp3 = optionalString (hasSSL && vhost.http3) ''
           # Advertise that HTTP/3 is available
           add_header Alt-Svc 'h3=":443"';
           # Sent when QUIC was used
           add_header QUIC-Status $quic;
-          '' else "");
+        '';
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
@@ -301,6 +304,7 @@ let
 
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
+          ${advertiseHttp3}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
