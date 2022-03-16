@@ -153,13 +153,13 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      export GOPROXY=off
       export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString (go-modules != "") ''
+    '' + lib.optionalString (vendorSha256 != null) ''
       ${if proxyVendor then ''
         export GOPROXY=file://${go-modules}
       '' else ''
-        export GOPROXY=off
         rm -rf vendor
         cp -r --reflink=auto ${go-modules} vendor
       ''}
