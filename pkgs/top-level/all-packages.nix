@@ -16342,8 +16342,6 @@ with pkgs;
 
   classads = callPackage ../development/libraries/classads { };
 
-  clearsilver = callPackage ../development/libraries/clearsilver { };
-
   clfft = callPackage ../development/libraries/clfft { };
 
   clipp  = callPackage ../development/libraries/clipp { };
