@@ -1319,14 +1319,6 @@
       </listitem>
       <listitem>
         <para>
-          A new option
-          <literal>boot.initrd.extraModprobeConfig</literal> has been
-          added which can be used to configure kernel modules that are
-          loaded in the initrd.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <literal>nixos-generate-config</literal> now puts the dhcp
           configuration in <literal>hardware-configuration.nix</literal>
           instead of <literal>configuration.nix</literal>.
