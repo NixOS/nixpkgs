@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchPypi
 , requests
 , requests-toolbelt
@@ -10,11 +10,13 @@
 buildPythonPackage rec {
   pname = "cloudscraper";
   version = "1.2.60";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DTQTsv/59895UTsMmqxYtSfFosUWPRx8wMT4zKHQ9Oc=";
+    hash = "sha256-DTQTsv/59895UTsMmqxYtSfFosUWPRx8wMT4zKHQ9Oc=";
   };
 
   propagatedBuildInputs = [
@@ -27,10 +29,12 @@ buildPythonPackage rec {
   # nixpkgs yet, and also aren't included in the PyPI bundle.  TODO.
   doCheck = false;
 
-  pythonImportsCheck = [ "cloudscraper" ];
+  pythonImportsCheck = [
+    "cloudscraper"
+  ];
 
   meta = with lib; {
-    description = "A Python module to bypass Cloudflare's anti-bot page";
+    description = "Python module to bypass Cloudflare's anti-bot page";
     homepage = "https://github.com/venomous/cloudscraper";
     license = licenses.mit;
     maintainers = with maintainers; [ kini ];
