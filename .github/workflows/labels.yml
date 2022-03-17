@@ -16,4 +16,8 @@ jobs:
     - uses: actions/labeler@v4
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        sync-labels: true
+        # By setting this to the empty string, it appears that we can allow only
+        # adding labels and not removing them (useful for allowing both this and
+        # the ofborg title-based tagging to work together)
+        # https://github.com/actions/labeler/issues/112#issuecomment-1000491676
+        sync-labels: ''
