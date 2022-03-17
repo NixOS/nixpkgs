@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "volatility3";
-  version = "2.0.0";
+  version = "2.0.1";
 
   disabled = python3.pythonOlder "3.6";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "volatilityfoundation";
     repo = pname;
     rev = "v${version}";
-    sha256 = "141n09cdc17pfdhs01aw8l4cvsqpcz8ji5l4gi7r88cyf4ix2lnz";
+    sha256 = "sha256-rEqp+V5r4Sk4D+r2ukR1uy4IDj9XQGhYwoYSPeMyKpA=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
