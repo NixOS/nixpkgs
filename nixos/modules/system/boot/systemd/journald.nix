@@ -1,5 +1,10 @@
 { config, lib, pkgs, ... }:
-with lib; {
+
+with lib;
+
+let
+  cfg = config.services.journald;
+in {
   options = {
     services.journald.console = mkOption {
       default = "";
@@ -88,7 +93,7 @@ with lib; {
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
-      ] ++ optionals config.services.journald.enableHttpGateway [
+      ] ++ optionals cfg.enableHttpGateway [
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
       ];
@@ -97,16 +102,16 @@ with lib; {
       "systemd/journald.conf".text = ''
         [Journal]
         Storage=persistent
-        RateLimitInterval=${config.services.journald.rateLimitInterval}
-        RateLimitBurst=${toString config.services.journald.rateLimitBurst}
-        ${optionalString (config.services.journald.console != "") ''
+        RateLimitInterval=${cfg.rateLimitInterval}
+        RateLimitBurst=${toString cfg.rateLimitBurst}
+        ${optionalString (cfg.console != "") ''
           ForwardToConsole=yes
-          TTYPath=${config.services.journald.console}
+          TTYPath=${cfg.console}
         ''}
-        ${optionalString (config.services.journald.forwardToSyslog) ''
+        ${optionalString (cfg.forwardToSyslog) ''
           ForwardToSyslog=yes
         ''}
-        ${config.services.journald.extraConfig}
+        ${cfg.extraConfig}
       '';
     };
 
@@ -116,7 +121,7 @@ with lib; {
     users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     systemd.sockets.systemd-journal-gatewayd.wantedBy =
-      optional config.services.journald.enableHttpGateway "sockets.target";
+      optional cfg.enableHttpGateway "sockets.target";
 
     systemd.services.systemd-journal-flush.restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
