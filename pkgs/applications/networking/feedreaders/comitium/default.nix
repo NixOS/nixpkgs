@@ -1,17 +1,25 @@
-{ buildGoModule, scdoc, fetchgit, lib }:
+{ buildGoModule, scdoc, fetchurl, lib }:
 
 buildGoModule rec {
   pname = "comitium";
   version = "1.8.1";
 
-  src = fetchgit {
-    url = "git://git.nytpu.com/comitium";
-    rev = "cf20f5877ef1fa258849f8a283dbd4080a96eb83";
-    sha256 = "01k09q9376lw8v2gh32anzf44139nym2acir11h8zpcsrb8ka9n5";
+  src = fetchurl {
+    url = "https://git.nytpu.com/${pname}/snapshot/${pname}-${version}.tar.bz2";
+    sha256 = "0xvnv8wmgpyl16vignnf8mfkah6agc5j83nnz04hk7kk1ai0y5j7";
   };
 
   nativeBuildInputs = [ scdoc ];
 
+  buildPhase = ''
+    make COMMIT=tarball
+  '';
+
+  installPhase = ''
+    make PREFIX=$out install
+  '';
+
+  doCheck = false;
   vendorSha256 = "sha256-6xtXTmSqaN2me0kyRk948ASNNtv7P5XBvtv9UWjNHoo=";
 
   meta = with lib; {
