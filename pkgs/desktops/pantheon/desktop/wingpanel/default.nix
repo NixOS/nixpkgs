@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
     gala
     granite
