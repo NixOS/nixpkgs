@@ -9,7 +9,7 @@ let archString = if stdenv.isAarch64 then "arm64"
                      else throw "unsupported platform";
     platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-h5zjn8wtgHmsJFiGq1rja6kZTZj3Q72W2kH3AexRDQs="
                      else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-NHM9ZUpBJb59Oq0Ke7DcvaN+bZ9MjSpXBRu5Ng9OVZ0="
-                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-kidPtDMkEZ/1r4WIApPZ/BsdJkolpSZ3f72JyDv3798="
+                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-QSL0lmxa7rGoNOx7JB310wF3VoUy96e9ZFop5rAvdBM="
                      else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-bUacA4DwjDNlIG7yooXxUGL9AysAogNWuQDvcTqo1sE="
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
@@ -20,7 +20,7 @@ let archString = if stdenv.isAarch64 then "arm64"
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-${archString}.tar.gz";
