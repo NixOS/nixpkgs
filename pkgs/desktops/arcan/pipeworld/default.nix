@@ -5,14 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "pipeworld";
-  version = "0.pre+date=2021-11-26";
+  version = "0.pre+date=2021-12-03";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = pname;
-    rev = "9f816db154ca5c54af952ad11c2186ccac5bdd2d";
-    hash = "sha256-uwnrRsMP0RLEGr2mEVQ6kEtV/c6t5qSCHY0ynywPzkw=";
+    rev = "c653414670cafb0c73a57492aa3d9510460b16a9";
+    hash = "sha256-XuAsuTC+P6yoNlDnsT2fiWoqKW+1JKc9NF+Vn/ta0pk=";
   };
+
+  dontConfigure = true;
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
