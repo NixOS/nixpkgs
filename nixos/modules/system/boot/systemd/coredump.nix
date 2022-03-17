@@ -3,6 +3,7 @@
 with lib;
 
 let
+  cfg = config.systemd.coredump;
   systemd = config.systemd.package;
 in {
   options = {
@@ -38,7 +39,7 @@ in {
       "systemd/coredump.conf".text =
       ''
         [Coredump]
-        ${config.systemd.coredump.extraConfig}
+        ${cfg.extraConfig}
       '';
 
       # install provided sysctl snippets
@@ -52,6 +53,6 @@ in {
     };
     users.groups.systemd-coredump = {};
 
-    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!config.systemd.coredump.enable) "core";
+    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!cfg.enable) "core";
   };
 }
