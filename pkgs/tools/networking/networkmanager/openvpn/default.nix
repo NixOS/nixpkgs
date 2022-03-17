@@ -36,6 +36,7 @@ in stdenv.mkDerivation {
       attrPath = "networkmanager-openvpn";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-openvpn-service.name";
   };
 
   meta = with lib; {

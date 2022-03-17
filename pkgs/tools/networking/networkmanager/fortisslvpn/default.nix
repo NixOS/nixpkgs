@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
       attrPath = "networkmanager-fortisslvpn";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-fortisslvpn-service.name";
   };
 
   meta = with lib; {
