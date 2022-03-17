@@ -3,6 +3,8 @@
 with lib;
 
 let
+  cfg = config.services.logind;
+
   logindHandlerType = types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
     "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
@@ -61,7 +63,7 @@ in
     };
 
     services.logind.lidSwitchExternalPower = mkOption {
-      default = config.services.logind.lidSwitch;
+      default = cfg.lidSwitch;
       defaultText = literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
@@ -90,11 +92,11 @@ in
     environment.etc = {
       "systemd/logind.conf".text = ''
         [Login]
-        KillUserProcesses=${if config.services.logind.killUserProcesses then "yes" else "no"}
-        HandleLidSwitch=${config.services.logind.lidSwitch}
-        HandleLidSwitchDocked=${config.services.logind.lidSwitchDocked}
-        HandleLidSwitchExternalPower=${config.services.logind.lidSwitchExternalPower}
-        ${config.services.logind.extraConfig}
+        KillUserProcesses=${if cfg.killUserProcesses then "yes" else "no"}
+        HandleLidSwitch=${cfg.lidSwitch}
+        HandleLidSwitchDocked=${cfg.lidSwitchDocked}
+        HandleLidSwitchExternalPower=${cfg.lidSwitchExternalPower}
+        ${cfg.extraConfig}
       '';
     };
 
