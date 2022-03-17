@@ -609,17 +609,9 @@ rec {
         throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
       else
         let
-          /* Add the modules of the current option to the list of modules
-             already collected.  The options attribute except either a list of
-             submodules or a submodule. For each submodule, we add the file of the
-             current option declaration as the file use for the submodule.  If the
-             submodule defines any filename, then we ignore the enclosing option file. */
-          options' = toList opt.options.options;
-
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
             if getSubModules != null then map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
-            else if opt.options ? options then map (coerceOption opt._file) options' ++ res.options
             else res.options;
         in opt.options // res //
           { declarations = res.declarations ++ [opt._file];
@@ -802,27 +794,13 @@ rec {
       compare = a: b: (a.priority or 1000) < (b.priority or 1000);
     in sort compare defs';
 
+  # This calls substSubModules, whose entire purpose is only to ensure that
+  # option declarations in submodules have accurate position information.
+  # TODO: Merge this into mergeOptionDecls
   fixupOptionType = loc: opt:
-    let
-      options = opt.options or
-        (throw "Option `${showOption loc}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
-
-      # Hack for backward compatibility: convert options of type
-      # optionSet to options of type submodule.  FIXME: remove
-      # eventually.
-      f = tp:
-        if tp.name == "option set" || tp.name == "submodule" then
-          throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
-        else if (tp.functor.wrapped.name or null) == "optionSet" then
-          if tp.name == "attrsOf" then types.attrsOf (types.submodule options)
-          else if tp.name == "listOf" then types.listOf  (types.submodule options)
-          else if tp.name == "nullOr" then types.nullOr  (types.submodule options)
-          else tp
-        else tp;
-    in
-      if opt.type.getSubModules or null == null
-      then opt // { type = f (opt.type or types.unspecified); }
-      else opt // { type = opt.type.substSubModules opt.options; options = []; };
+    if opt.type.getSubModules or null == null
+    then opt // { type = opt.type or types.unspecified; }
+    else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
   /* Properties. */
