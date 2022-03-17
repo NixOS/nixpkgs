@@ -2971,6 +2971,8 @@ with pkgs;
 
   dsvpn = callPackage ../applications/networking/dsvpn { };
 
+  dtail = callPackage ../tools/system/dtail { };
+
   dtools = callPackage ../development/tools/dtools { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
