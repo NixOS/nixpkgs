@@ -140,7 +140,6 @@ let
 
       # Slices / containers.
       "slices.target"
-      "user.slice"
       "machine.slice"
       "machines.target"
       "systemd-importd.service"
@@ -172,31 +171,6 @@ let
       "multi-user.target.wants"
       "timers.target.wants"
     ];
-
-    upstreamUserUnits = [
-      "app.slice"
-      "background.slice"
-      "basic.target"
-      "bluetooth.target"
-      "default.target"
-      "exit.target"
-      "graphical-session-pre.target"
-      "graphical-session.target"
-      "paths.target"
-      "printer.target"
-      "session.slice"
-      "shutdown.target"
-      "smartcard.target"
-      "sockets.target"
-      "sound.target"
-      "systemd-exit.service"
-      "systemd-tmpfiles-clean.service"
-      "systemd-tmpfiles-clean.timer"
-      "systemd-tmpfiles-setup.service"
-      "timers.target"
-      "xdg-desktop-autostart.target"
-    ];
-
 
   proxy_env = config.networking.proxy.envVars;
 
@@ -370,16 +344,6 @@ in
       '';
     };
 
-    systemd.user.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultCPUAccounting=yes";
-      description = ''
-        Extra config options for systemd user instances. See man systemd-user.conf for
-        available options.
-      '';
-    };
-
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -409,54 +373,6 @@ in
         If there is no <filename>lib</filename> output it will fall back to <filename>out</filename>
         and if that does not exist either, the default output will be used.
       '';
-    };
-
-    systemd.user.units = mkOption {
-      description = "Definition of systemd per-user units.";
-      default = {};
-      type = with types; attrsOf (submodule (
-        { name, config, ... }:
-        { options = concreteUnitOptions;
-          config = {
-            unit = mkDefault (makeUnit name config);
-          };
-        }));
-    };
-
-    systemd.user.paths = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = pathOptions; } unitConfig ]);
-      description = "Definition of systemd per-user path units.";
-    };
-
-    systemd.user.services = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ] );
-      description = "Definition of systemd per-user service units.";
-    };
-
-    systemd.user.slices = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = sliceOptions; } unitConfig ] );
-      description = "Definition of systemd per-user slice units.";
-    };
-
-    systemd.user.sockets = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = socketOptions; } unitConfig ] );
-      description = "Definition of systemd per-user socket units.";
-    };
-
-    systemd.user.targets = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
-      description = "Definition of systemd per-user target units.";
-    };
-
-    systemd.user.timers = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
-      description = "Definition of systemd per-user timer units.";
     };
 
     systemd.additionalUpstreamSystemUnits = mkOption {
@@ -594,8 +510,6 @@ in
     in ({
       "systemd/system".source = generateUnits "system" enabledUnits enabledUpstreamSystemUnits upstreamSystemWants;
 
-      "systemd/user".source = generateUnits "user" cfg.user.units upstreamUserUnits [];
-
       "systemd/system.conf".text = ''
         [Manager]
         ${optionalString config.systemd.enableCgroupAccounting ''
@@ -619,11 +533,6 @@ in
         ''}
 
         ${config.systemd.extraConfig}
-      '';
-
-      "systemd/user.conf".text = ''
-        [Manager]
-        ${config.systemd.user.extraConfig}
       '';
 
       "systemd/sleep.conf".text = ''
@@ -715,14 +624,6 @@ in
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
-    systemd.user.units =
-         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.user.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
-      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.user.slices
-      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.user.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.user.targets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.user.timers;
-
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
         "SYSFS" "PROC_FS" "FHANDLE" "CRYPTO_USER_API_HASH" "CRYPTO_HMAC"
@@ -746,23 +647,13 @@ in
         })
         (filterAttrs (name: service: service.startAt != []) cfg.user.services);
 
-    # Provide the systemd-user PAM service, required to run systemd
-    # user instances.
-    security.pam.services.systemd-user =
-      { # Ensure that pam_systemd gets included. This is special-cased
-        # in systemd to provide XDG_RUNTIME_DIR.
-        startSession = true;
-      };
-
     # Some overrides to upstream units.
     systemd.services."systemd-backlight@".restartIfChanged = false;
     systemd.services."systemd-fsck@".restartIfChanged = false;
     systemd.services."systemd-fsck@".path = [ config.system.path ];
-    systemd.services."user@".restartIfChanged = false;
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
-    systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
     systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
