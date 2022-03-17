@@ -4591,7 +4591,6 @@ with pkgs;
     cudnn_7_4_cudatoolkit_10_0
     cudnn_7_6_cudatoolkit_10_0
     cudnn_7_6_cudatoolkit_10_1
-    cudnn_7_6_cudatoolkit_10
     cudnn_8_1_cudatoolkit_10_2
     cudnn_8_1_cudatoolkit_11_0
     cudnn_8_1_cudatoolkit_11_1
