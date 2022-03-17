@@ -10,6 +10,7 @@
 , callPackage
 , wrapGAppsHook
 , writeTextFile
+, gdk-pixbuf
 }:
 
 makeSetupHook {
@@ -36,7 +37,12 @@ makeSetupHook {
     # We use the wrapProgram function.
     makeWrapper
   ];
-  substitutions = {
+  substitutions = let
+    loadersPath = (lib.strings.removeSuffix "/" gdk-pixbuf.moduleDir) + ".cache";
+  in {
+    STANDARD_GDK_PIXBUF_MODULES = "${gdk-pixbuf}/${loadersPath}:${librsvg}/${loadersPath}";
+    LOADERS_PATH = loadersPath;
+
     passthru.tests = let
       sample-project = ./tests/sample-project;
 

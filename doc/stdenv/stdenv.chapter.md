@@ -1077,10 +1077,6 @@ Adds the `share/texmf-nix` subdirectory of each build input to the `TEXINPUTS` e
 
 Sets the `QTDIR` environment variable to Qt’s path.
 
-### gdk-pixbuf {#setup-hook-gdk-pixbuf}
-
-Exports `GDK_PIXBUF_MODULE_FILE` environment variable to the builder. Add librsvg package to `buildInputs` to get svg support. See also the [setup hook description in GNOME platform docs](#ssec-gnome-hooks-gdk-pixbuf).
-
 ### GHC {#ghc}
 
 Creates a temporary package database and registers every Haskell build input in it (TODO: how?).

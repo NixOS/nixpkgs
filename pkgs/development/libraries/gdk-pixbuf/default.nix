@@ -130,8 +130,6 @@ stdenv.mkDerivation rec {
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit doCheck;
 
-  setupHook = ./setup-hook.sh;
-
   separateDebugInfo = stdenv.isLinux;
 
   passthru = {
