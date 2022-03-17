@@ -1319,6 +1319,14 @@
       </listitem>
       <listitem>
         <para>
+          The options <literal>boot.extraModprobeConfig</literal> and
+          <literal>boot.blacklistedKernelModules</literal> now also take
+          effect in the initrd by copying the file
+          <literal>/etc/modprobe.d/nixos.conf</literal> into the initrd.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>nixos-generate-config</literal> now puts the dhcp
           configuration in <literal>hardware-configuration.nix</literal>
           instead of <literal>configuration.nix</literal>.
