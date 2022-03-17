@@ -70,6 +70,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Application.vala \
       --replace '"gtk-theme-name", "elementary"' '"gtk-theme-name", "io.elementary.stylesheet.blueberry"'
 
+    # Fix build with vala 0.56
+    # https://github.com/alainm23/planner/pull/884
+    substituteInPlace src/Application.vala \
+      --replace "public const OptionEntry[] PLANNER_OPTIONS" "private const OptionEntry[] PLANNER_OPTIONS"
+
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
   '';
