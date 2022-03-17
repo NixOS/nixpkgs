@@ -28497,7 +28497,7 @@ with pkgs;
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
-  protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
+  protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
