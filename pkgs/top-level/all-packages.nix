@@ -12553,10 +12553,7 @@ with pkgs;
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
-  # stack doesn't build with ghc902 (Cabal-3.4) yet:
-  # https://github.com/commercialhaskell/stack/issues/5670
-  # https://github.com/commercialhaskell/stack/issues/5558
-  stack = haskell.lib.compose.justStaticExecutables haskell.packages.ghc8107.stack;
+  stack = haskell.lib.compose.justStaticExecutables haskellPackages.stack;
 
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
 
