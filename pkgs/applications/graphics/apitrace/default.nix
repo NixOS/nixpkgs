@@ -1,28 +1,61 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
+{ lib, stdenv
+, fetchFromGitHub
+, wrapQtAppsHook
+, brotli
+, cmake
+, gtest
+, libX11
+, libdwarf
+, libglvnd
+, libpng
+, pkg-config
+, procps
+, python3Packages
+, qtbase
+, qtwebkit
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "apitrace";
-  version = "7.1-572-g${builtins.substring 0 8 src.rev}";
+  version = "11.0";
 
   src = fetchFromGitHub {
-    sha256 = "11bwb0l8cr1bf9bj1s6cbmi77d5fy4qrphj9cgmcd8jpa862anp5";
-    rev = "26966134f15d28f6b4a9a0a560017b3ba36d60bf";
-    repo = "apitrace";
     owner = "apitrace";
+    repo = pname;
+    rev = version;
+    hash = "sha256-90Dx1gk2uqXUDHaaaQFMLHB9NAM2yBruGX1AD9OStVA=";
+    fetchSubmodules = true;
   };
 
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
-  buildInputs = [ libX11 procps python2 libdwarf qtbase qtwebkit ];
+  buildInputs = [
+    brotli.dev
+    brotli.lib
+    gtest
+    libX11
+    libdwarf
+    libpng
+    procps
+    python3Packages.pillow
+    python3Packages.python
+    qtbase
+    qtwebkit
+    zlib
+  ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   # Don't automatically wrap all binaries, I prefer to explicitly only wrap
   # `qapitrace`.
   dontWrapQtApps = true;
 
   postFixup = ''
-
     # Since https://github.com/NixOS/nixpkgs/pull/60985, we add `/run-opengl-driver[-32]`
     # to the `RUNPATH` of dispatcher libraries `dlopen()` ing OpenGL drivers.
     # `RUNPATH` doesn't propagate throughout the whole application, but only
