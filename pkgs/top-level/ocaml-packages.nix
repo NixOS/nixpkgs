@@ -709,8 +709,6 @@ let
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
-    magick = callPackage ../development/ocaml-modules/magick { };
-
     mariadb = callPackage ../development/ocaml-modules/mariadb {
       inherit (pkgs) mariadb;
     };
