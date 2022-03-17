@@ -140,7 +140,7 @@ builder rec {
       # Expect the text in format of '"https://ftp.gnu.org/gnu/guile/guile-3.0.8.tar.gz"'
       new_version="$(curl -s https://www.gnu.org/software/guile/download/ |
           pcregrep -o1 '"https://ftp.gnu.org/gnu/guile/guile-(3[.0-9]+).tar.gz"')"
-      update-source-version ${pname} "$new_version"
+      update-source-version guile_3_0 "$new_version"
     '';
   };
 

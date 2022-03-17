@@ -128,8 +128,13 @@ let
 
         # If the target package is in a workspace, or if it's the top-level
         # crate, we should find the crate path using `cargo metadata`.
-        crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
+        # Some packages do not have a Cargo.toml at the top-level,
+        # but only in nested directories.
+        # Only check the top-level Cargo.toml, if it actually exists
+        if [[ -f $tree/Cargo.toml ]]; then
+          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
           ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
+        fi
 
         # If the repository is not a workspace the package might be in a subdirectory.
         if [[ -z $crateCargoTOML ]]; then

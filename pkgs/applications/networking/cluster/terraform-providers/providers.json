@@ -772,12 +772,12 @@
   },
   "oci": {
     "owner": "oracle",
-    "provider-source-address": "registry.terraform.io/hashicorp/oci",
+    "provider-source-address": "registry.terraform.io/oracle/oci",
     "repo": "terraform-provider-oci",
-    "rev": "v4.67.0",
-    "sha256": "sha256-kgnyGLF6UbWRbrjXDkh7y11jx4JO3hFo7/qdJzwX0rU=",
+    "rev": "v4.68.0",
+    "sha256": "sha256-f1Nk5NurQvJuGyGrZQnZIXIpaH1qFAX+oTBNan6rORI=",
     "vendorSha256": null,
-    "version": "4.67.0"
+    "version": "4.68.0"
   },
   "okta": {
     "owner": "okta",
