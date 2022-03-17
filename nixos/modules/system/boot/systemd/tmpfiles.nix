@@ -1,6 +1,9 @@
 { config, lib, pkgs, utils, ... }:
+
 with lib;
+
 let
+  cfg = config.systemd.tmpfiles;
   systemd = config.systemd.package;
 in
 {
@@ -55,7 +58,7 @@ in
     environment.etc = {
       "tmpfiles.d".source = (pkgs.symlinkJoin {
         name = "tmpfiles.d";
-        paths = map (p: p + "/lib/tmpfiles.d") config.systemd.tmpfiles.packages;
+        paths = map (p: p + "/lib/tmpfiles.d") cfg.packages;
         postBuild = ''
           for i in $(cat $pathsPath); do
             (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
@@ -94,7 +97,7 @@ in
           # This file is created automatically and should not be modified.
           # Please change the option ‘systemd.tmpfiles.rules’ instead.
 
-          ${concatStringsSep "\n" config.systemd.tmpfiles.rules}
+          ${concatStringsSep "\n" cfg.rules}
         '';
       })
     ];
