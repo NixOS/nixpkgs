@@ -39,9 +39,6 @@ let
     "sockets.target"
     "sound.target"
     "systemd-exit.service"
-    "systemd-tmpfiles-clean.service"
-    "systemd-tmpfiles-clean.timer"
-    "systemd-tmpfiles-setup.service"
     "timers.target"
     "xdg-desktop-autostart.target"
   ] ++ config.systemd.additionalUpstreamUserUnits;
