@@ -572,14 +572,18 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        coerce = unify: value: if isFunction value
-          then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
+        shorthandToModule = if shorthandOnlyDefinesConfig == false
+          then value: value
+          else value: { config = value; };
 
         allModules = defs: imap1 (n: { value, file }:
-          if isAttrs value || isFunction value then
-            # Annotate the value with the location of its definition for better error messages
-            coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+          if isFunction value
+          then setFunctionArgs
+                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (value args))
+                (functionArgs value)
+          else if isAttrs value
+          then
+            lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (shorthandToModule value)
           else value
         ) defs;
 
@@ -647,7 +651,11 @@ rec {
               then lhs.specialArgs // rhs.specialArgs
               else throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
             shorthandOnlyDefinesConfig =
-              if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
+              if lhs.shorthandOnlyDefinesConfig == null
+              then rhs.shorthandOnlyDefinesConfig
+              else if rhs.shorthandOnlyDefinesConfig == null
+              then lhs.shorthandOnlyDefinesConfig
+              else if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
           };

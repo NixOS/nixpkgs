@@ -1374,6 +1374,18 @@ let
         };
       };
 
+      marp-team.marp-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "marp-vscode";
+          publisher = "marp-team";
+          version = "1.5.0";
+          sha256 = "0wqsj8rp58vl3nafkjvyw394h5j4jd7d24ra6hkvfpnlzrgv4yhs";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
@@ -1676,6 +1688,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      richie5um2.snake-trail = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "snake-trail";
+          publisher = "richie5um2";
+          version = "0.6.0";
+          sha256 = "0wkpq9f48hplrgabb0v1ij6fc4sb8h4a93dagw4biprhnnm3qx49";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 

@@ -571,6 +571,25 @@
       </listitem>
       <listitem>
         <para>
+          Services in the <literal>hadoop</literal> module previously
+          set <literal>openFirewall</literal> to true by default. This
+          has now been changed to false. Node definitions for multi-node
+          clusters would need <literal>openFirewall = true;</literal> to
+          be added to to hadoop services when upgrading from NixOS
+          21.11.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.hadoop.yarn.nodemanager</literal> now uses
+          cgroup-based CPU limit enforcement by default. Additionally,
+          the option <literal>useCGroups</literal> was added to
+          nodemanagers as an easy way to switch back to the old
+          behavior.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>wafHook</literal> hook now honors
           <literal>NIX_BUILD_CORES</literal> when
           <literal>enableParallelBuilding</literal> is not set
@@ -1175,6 +1194,33 @@
       </listitem>
       <listitem>
         <para>
+          Some improvements have been made to the
+          <literal>hadoop</literal> module:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              A <literal>gatewayRole</literal> option has been added,
+              for deploying hadoop cluster configuration files to a node
+              that does not have any active services
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Support for older versions of hadoop have been added to
+              the module
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Overriding and extending site XML files has been made
+              easier
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           If you are using Wayland you can choose to use the Ozone
           Wayland support in Chrome and several Electron apps by setting
           the environment variable <literal>NIXOS_OZONE_WL=1</literal>
@@ -1285,6 +1331,52 @@
           configuration in <literal>hardware-configuration.nix</literal>
           instead of <literal>configuration.nix</literal>.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          ORY Kratos was updated to version 0.8.3-alpha.1.pre.0, which
+          introduces some breaking changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              If you are relying on the SQLite images, update your
+              Docker Pull commands as follows:
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>docker pull oryd/kratos:{version}</literal>
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+              Additionally, all passwords now have to be at least 8
+              characters long.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              For more details, see:
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.1-alpha.1">Release
+                  Notes for v0.8.1-alpha-1</link>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.2-alpha.1">Release
+                  Notes for v0.8.2-alpha-1</link>
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -1455,6 +1547,46 @@
           default. It will automatically be enabled through services and
           desktop environments as needed.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>hadoop</literal> package has added support for
+          <literal>aarch64-linux</literal> and
+          <literal>aarch64-darwin</literal> as of 3.3.1
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/158613">#158613</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>R</literal> package now builds again on
+          <literal>aarch64-darwin</literal>
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/158992">#158992</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>spark3</literal> package has been updated from
+          3.1.2 to 3.2.1
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/160075">#160075</link>):
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Testing has been enabled for
+              <literal>aarch64-linux</literal> in addition to
+              <literal>x86_64-linux</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <literal>spark3</literal> package is now usable on
+              <literal>aarch64-darwin</literal> as a result of
+              <link xlink:href="https://github.com/NixOS/nixpkgs/pull/158613">#158613</link>
+              and
+              <link xlink:href="https://github.com/NixOS/nixpkgs/pull/158992">#158992</link>.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

@@ -189,9 +189,9 @@ in
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
   gvisor = handleTest ./gvisor.nix {};
-  hadoop.all = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hadoop.nix {};
-  hadoop.hdfs = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/hdfs.nix {};
-  hadoop.yarn = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hadoop/yarn.nix {};
+  hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
+  hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };
+  hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
   haka = handleTest ./haka.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
@@ -485,7 +485,7 @@ in
   sonarr = handleTest ./sonarr.nix {};
   sourcehut = handleTest ./sourcehut.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
-  spark = handleTestOn ["x86_64-linux"] ./spark {};
+  spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sslh = handleTest ./sslh.nix {};
   sssd = handleTestOn ["x86_64-linux"] ./sssd.nix {};
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
