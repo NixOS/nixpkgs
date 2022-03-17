@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
-    elementary-gtk-theme
     elementary-icon-theme
     gnome-settings-daemon
     gdk-pixbuf
