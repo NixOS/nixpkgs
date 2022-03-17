@@ -165,6 +165,9 @@ let
 
     # doesn't like the extra setlocale warnings emitted by our bash wrappers
     test-locale.t
+
+    # tricky and flaky on busy machines
+    test-racy-mutations.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
