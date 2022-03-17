@@ -574,6 +574,7 @@ in
   unifi = handleTest ./unifi.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
   upnp = handleTest ./upnp.nix {};
+  uptermd = handleTest ./uptermd.nix {};
   usbguard = handleTest ./usbguard.nix {};
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   uwsgi = handleTest ./uwsgi.nix {};

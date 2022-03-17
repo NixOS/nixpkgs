@@ -2,6 +2,7 @@
 , buildGo118Module
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 }:
 
 buildGo118Module rec {
@@ -28,6 +29,8 @@ buildGo118Module rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) uptermd; };
 
   __darwinAllowLocalNetworking = true;
 
