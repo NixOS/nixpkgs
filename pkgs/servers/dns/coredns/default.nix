@@ -13,12 +13,19 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-Vxs+k4WF55xwjgdlW/1NM4NWnYqj2EOLOONflj+BoY4=";
 
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace test/file_cname_proxy_test.go \
+      --replace "TestZoneExternalCNAMELookupWithProxy" \
+                "SkipZoneExternalCNAMELookupWithProxy"
+
+    substituteInPlace test/readme_test.go \
+      --replace "TestReadme" "SkipReadme"
+  '';
 
   meta = with lib; {
     homepage = "https://coredns.io";
     description = "A DNS server that runs middleware";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
+    maintainers = with maintainers; [ rushmorem rtreffer deltaevo superherointj ];
   };
 }
