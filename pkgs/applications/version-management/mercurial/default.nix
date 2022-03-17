@@ -37,6 +37,12 @@ let
         url = "https://phab.mercurial-scm.org/D12374?id=32639&download=true";
         sha256 = "sha256-5+7FW1ghTqfUKjqzfiTDHZXilYVfhCi7rKfYOnHWoD0=";
       })
+
+      (fetchpatch {
+        name = "tests-fix-glob-pattern-for-dynamic-timer-alignment.patch";
+        url = "https://phab.mercurial-scm.org/D12381?id=32652&download=true";
+        sha256 = "sha256-TBJ1XmuWhwIqd7eH+tV8VHBwfW+GzDugsFKr4C+wT2o=";
+      })
     ];
 
     format = "other";
