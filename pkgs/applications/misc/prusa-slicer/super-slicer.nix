@@ -45,7 +45,7 @@ let
 
     meta = with lib; {
       inherit description;
-      homepage = "https://github.com/supermerili/SuperSlicer";
+      homepage = "https://github.com/supermerill/SuperSlicer";
       license = licenses.agpl3;
       maintainers = with maintainers; [ cab404 moredread ];
       mainProgram = "superslicer";
