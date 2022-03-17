@@ -113,6 +113,13 @@ in
     };
     users.groups.aerospike.gid = config.ids.gids.aerospike;
 
+    boot.kernel.sysctl = {
+      "kernel.shmall" = mkOverride 813 4294967296;
+      "kernel.shmmax" = mkOverride 819 1073741824;
+      "net.core.rmem_max" = mkOverride 838 15728640;
+      "net.core.wmem_max" = mkOverride 843 5242880;
+    };
+
     systemd.services.aerospike = rec {
       description = "Aerospike server";
 
@@ -128,22 +135,6 @@ in
       };
 
       preStart = ''
-        if [ $(echo "$(${pkgs.procps}/bin/sysctl -n kernel.shmall) < 4294967296" | ${pkgs.bc}/bin/bc) == "1"  ]; then
-          echo "kernel.shmall too low, setting to 4G pages"
-          ${pkgs.procps}/bin/sysctl -w kernel.shmall=4294967296
-        fi
-        if [ $(echo "$(${pkgs.procps}/bin/sysctl -n kernel.shmmax) < 1073741824" | ${pkgs.bc}/bin/bc) == "1"  ]; then
-          echo "kernel.shmmax too low, setting to 1GB"
-          ${pkgs.procps}/bin/sysctl -w kernel.shmmax=1073741824
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/rmem_max) < 15728640" | ${pkgs.bc}/bin/bc) == "1" ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/rmem_max): $(cat /proc/sys/net/core/rmem_max) -> 15728640"
-          echo 15728640 > /proc/sys/net/core/rmem_max
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/wmem_max) <  5242880" | ${pkgs.bc}/bin/bc) == "1"  ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/wmem_max): $(cat /proc/sys/net/core/wmem_max) -> 5242880"
-          echo  5242880 > /proc/sys/net/core/wmem_max
-        fi
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}"
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}/smd"
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}/udf"

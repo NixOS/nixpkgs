@@ -423,8 +423,8 @@ in
       # https://trac.transmissionbt.com/browser/trunk/libtransmission/tr-udp.c?rev=11956.
       # at least up to the values hardcoded here:
       (mkIf cfg.settings.utp-enabled {
-        "net.core.rmem_max" = mkDefault "4194304"; # 4MB
-        "net.core.wmem_max" = mkDefault "1048576"; # 1MB
+        "net.core.rmem_max" = mkOverride 844 "4194304"; # 4MB
+        "net.core.wmem_max" = mkOverride 850 "1048576"; # 1MB
       })
       (mkIf cfg.performanceNetParameters {
         # Increase the number of available source (local) TCP and UDP ports to 49151.

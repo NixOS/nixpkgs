@@ -270,8 +270,10 @@ in
 
     # (from videobridge2 .deb)
     # this sets the max, so that we can bump the JVB UDP single port buffer size.
-    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 10485760;
-    boot.kernel.sysctl."net.core.netdev_max_backlog" = mkDefault 100000;
+    boot.kernel.sysctl = {
+      "net.core.rmem_max" = mkOverride 840 10485760;
+      "net.core.netdev_max_backlog" = mkOverride 860 100000;
+    };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall
       [ jvbConfig.videobridge.ice.tcp.port ];

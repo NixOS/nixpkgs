@@ -909,6 +909,15 @@ rec {
       inherit priority content;
     };
 
+  # The priority range from 801 to 899 is reserved for ordering of numbers.
+  # Nothing bad will happen if these priorities are used for other purposes as well.
+  # For example: boot.kernel.sysctl."net.core.rmem_max"
+  # Where higher numbers are supposed to "win" by having a lower priority,
+  # use this formula for calculating a good priority for a given number:
+  # 900-(log(number)-1)*10
+  # I chose this formula because it seems to give somewhat reasonable outputs for all values in Nixpkgs.
+  # If it doesn't fit, just make up your own priorities
+
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
