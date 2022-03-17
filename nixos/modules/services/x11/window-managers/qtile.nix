@@ -16,7 +16,6 @@ in
         type = types.package;
         default = pkgs.qtile;
         defaultText = literalExpression "pkgs.qtile";
-        example = literalExpression "pkgs.unstable.qtile";
         description = ''
           Qtile package to use.
         '';
@@ -25,10 +24,10 @@ in
       configFile = mkOption {
         type = with types; nullOr path;
         default = null;
-        defaultText = literalExpression "~/.config/qtile/config.py";
         example = literalExpression "./your_config.py";
         description = ''
           Path to the qtile configuration file.
+          If null, $HOME/.config/qtile/config.py will be used.
         '';
       };
 
