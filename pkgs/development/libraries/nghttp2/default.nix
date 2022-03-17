@@ -13,8 +13,8 @@
 , enableJemalloc ? false, jemalloc ? null
 , enablePython ? false, python ? null, cython ? null, ncurses ? null, setuptools ? null
 
-# Unit tests ; on Darwin CUnit brings an additional dependency on ncurses which is inconvenient here
-, enableTests ? (!stdenv.isDarwin), cunit ? null, tzdata ? null
+# Unit tests ; we have to set TZDIR, which is a GNUism.
+, enableTests ? stdenv.hostPlatform.isGnu, cunit ? null, tzdata ? null
 
 # downstream dependencies, for testing
 , curl
