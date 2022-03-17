@@ -118,7 +118,7 @@ in {
         # Better be safe than sorry migration-wise.
         ExecStartPre =
           let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
-            if [ ! -f "${cookieFile}" ]
+            if [ ! -f "${cookieFile}" ] || [ ! -s "${cookieFile}" ]
             then
               echo "Creating cookie file"
               dd if=/dev/urandom bs=1 count=16 | ${pkgs.hexdump}/bin/hexdump -e '16/1 "%02x"' > "${cookieFile}"
