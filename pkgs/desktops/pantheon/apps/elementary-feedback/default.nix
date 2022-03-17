@@ -13,7 +13,6 @@
 , granite
 , libgee
 , libhandy
-, elementary-icon-theme
 , gettext
 , wrapGAppsHook
 , appstream
@@ -51,7 +50,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-icon-theme
     granite
     gtk3
     libgee

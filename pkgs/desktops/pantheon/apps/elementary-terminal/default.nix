@@ -16,7 +16,6 @@
 , libnotify
 , vte
 , libgee
-, elementary-icon-theme
 , appstream
 , pcre2
 , wrapGAppsHook
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
