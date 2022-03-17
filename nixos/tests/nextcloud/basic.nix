@@ -1,4 +1,4 @@
-args@{ pkgs, nextcloudVersion ? 22, ... }:
+args@{ pkgs, nextcloudVersion ? 22, webserver ? "nginx", ... }:
 
 (import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "notproduction";
@@ -34,13 +34,14 @@ in {
       networking.firewall.allowedTCPPorts = [ 80 ];
 
       systemd.tmpfiles.rules = [
-        "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
+        "d /var/lib/nextcloud-data 0750 nextcloud ${webserver} - -"
       ];
 
       services.nextcloud = {
         enable = true;
         datadir = "/var/lib/nextcloud-data";
         hostName = "nextcloud";
+        webserver = webserver;
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!

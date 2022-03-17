@@ -1,4 +1,4 @@
-args@{ pkgs, nextcloudVersion ? 22, ... }:
+args@{ pkgs, nextcloudVersion ? 22, webserver ? "nginx", ... }:
 
 (import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "hunter2";
@@ -20,6 +20,7 @@ in {
         enable = true;
         hostName = "nextcloud";
         package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
+        webserver = webserver;
         caching = {
           apcu = false;
           redis = true;

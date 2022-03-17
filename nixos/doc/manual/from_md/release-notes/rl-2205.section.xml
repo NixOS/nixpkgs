@@ -1184,6 +1184,15 @@
       </listitem>
       <listitem>
         <para>
+          The nextcloud module now offers the ability to select a
+          different webserver backend via
+          <link xlink:href="options.html#opt-services.nextcloud.webserver"><literal>services.nextcloud.webserver</literal></link>.
+          Currently <literal>nginx</literal> and
+          <literal>caddy</literal> are supported.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding

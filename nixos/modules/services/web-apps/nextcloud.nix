@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
+  webserver = config.services.${cfg.webserver};
 
   inherit (cfg) datadir;
 
@@ -506,6 +507,16 @@ in {
       '';
     };
 
+    webserver = mkOption {
+      type = types.enum [ "nginx" "caddy" ];
+      default = "nginx";
+      description = ''
+        Whether to use nginx or caddy for virtual host management.
+        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+      '';
+    };
+
     nginx.recommendedHttpHeaders = mkOption {
       type = types.bool;
       default = true;
@@ -795,8 +806,8 @@ in {
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
           settings = mapAttrs (name: mkDefault) {
-            "listen.owner" = config.services.nginx.user;
-            "listen.group" = config.services.nginx.group;
+            "listen.owner" = webserver.user;
+            "listen.group" = webserver.group;
           } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
@@ -807,124 +818,169 @@ in {
         group = "nextcloud";
         isSystemUser = true;
       };
-      users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
+      users.groups.nextcloud.members = [ "nextcloud" webserver.user ];
 
       environment.systemPackages = [ occ ];
 
-      services.nginx.enable = mkDefault true;
+      # Webserver configuration
 
-      services.nginx.virtualHosts.${cfg.hostName} = {
-        root = cfg.package;
-        locations = {
-          "= /robots.txt" = {
-            priority = 100;
+      services = {
+
+        nginx = lib.mkIf (cfg.webserver == "nginx") {
+          enable = mkDefault true;
+          virtualHosts.${cfg.hostName} = {
+            root = cfg.package;
+            locations = {
+              "= /robots.txt" = {
+                priority = 100;
+                extraConfig = ''
+                  allow all;
+                  log_not_found off;
+                  access_log off;
+                '';
+              };
+              "= /" = {
+                priority = 100;
+                extraConfig = ''
+                  if ( $http_user_agent ~ ^DavClnt ) {
+                    return 302 /remote.php/webdav/$is_args$args;
+                  }
+                '';
+              };
+              "/" = {
+                priority = 900;
+                extraConfig = "rewrite ^ /index.php;";
+              };
+              "~ ^/store-apps" = {
+                priority = 201;
+                extraConfig = "root ${cfg.home};";
+              };
+              "~ ^/nix-apps" = {
+                priority = 201;
+                extraConfig = "root ${cfg.home};";
+              };
+              "^~ /.well-known" = {
+                priority = 210;
+                extraConfig = ''
+                  absolute_redirect off;
+                  location = /.well-known/carddav {
+                    return 301 /remote.php/dav;
+                  }
+                  location = /.well-known/caldav {
+                    return 301 /remote.php/dav;
+                  }
+                  location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
+                    return 301 /index.php$request_uri;
+                  }
+                  try_files $uri $uri/ =404;
+                '';
+              };
+              "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
+                return 404;
+              '';
+              "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
+                return 404;
+              '';
+              "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+                priority = 500;
+                extraConfig = ''
+                  include ${config.services.nginx.package}/conf/fastcgi.conf;
+                  fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
+                  set $path_info $fastcgi_path_info;
+                  try_files $fastcgi_script_name =404;
+                  fastcgi_param PATH_INFO $path_info;
+                  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                  fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
+                  fastcgi_param modHeadersAvailable true;
+                  fastcgi_param front_controller_active true;
+                  fastcgi_pass unix:${fpm.socket};
+                  fastcgi_intercept_errors on;
+                  fastcgi_request_buffering off;
+                  fastcgi_read_timeout 120s;
+                '';
+              };
+              "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
+                try_files $uri /index.php$request_uri;
+                expires 6M;
+                access_log off;
+              '';
+              "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
+                try_files $uri/ =404;
+                index index.php;
+              '';
+              "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
+                try_files $uri /index.php$request_uri;
+                access_log off;
+              '';
+            };
             extraConfig = ''
-              allow all;
-              log_not_found off;
-              access_log off;
+              index index.php index.html /index.php$request_uri;
+              ${optionalString (cfg.nginx.recommendedHttpHeaders) ''
+                add_header X-Content-Type-Options nosniff;
+                add_header X-XSS-Protection "1; mode=block";
+                add_header X-Robots-Tag none;
+                add_header X-Download-Options noopen;
+                add_header X-Permitted-Cross-Domain-Policies none;
+                add_header X-Frame-Options sameorigin;
+                add_header Referrer-Policy no-referrer;
+                add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+              ''}
+              client_max_body_size ${cfg.maxUploadSize};
+              fastcgi_buffers 64 4K;
+              fastcgi_hide_header X-Powered-By;
+              gzip on;
+              gzip_vary on;
+              gzip_comp_level 4;
+              gzip_min_length 256;
+              gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
+              gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+
+              ${optionalString cfg.webfinger ''
+                rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+                rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+              ''}
             '';
           };
-          "= /" = {
-            priority = 100;
-            extraConfig = ''
-              if ( $http_user_agent ~ ^DavClnt ) {
-                return 302 /remote.php/webdav/$is_args$args;
-              }
-            '';
-          };
-          "/" = {
-            priority = 900;
-            extraConfig = "rewrite ^ /index.php;";
-          };
-          "~ ^/store-apps" = {
-            priority = 201;
-            extraConfig = "root ${cfg.home};";
-          };
-          "~ ^/nix-apps" = {
-            priority = 201;
-            extraConfig = "root ${cfg.home};";
-          };
-          "^~ /.well-known" = {
-            priority = 210;
-            extraConfig = ''
-              absolute_redirect off;
-              location = /.well-known/carddav {
-                return 301 /remote.php/dav;
-              }
-              location = /.well-known/caldav {
-                return 301 /remote.php/dav;
-              }
-              location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
-                return 301 /index.php$request_uri;
-              }
-              try_files $uri $uri/ =404;
-            '';
-          };
-          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
-            priority = 500;
-            extraConfig = ''
-              include ${config.services.nginx.package}/conf/fastcgi.conf;
-              fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
-              set $path_info $fastcgi_path_info;
-              try_files $fastcgi_script_name =404;
-              fastcgi_param PATH_INFO $path_info;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
-              fastcgi_param modHeadersAvailable true;
-              fastcgi_param front_controller_active true;
-              fastcgi_pass unix:${fpm.socket};
-              fastcgi_intercept_errors on;
-              fastcgi_request_buffering off;
-              fastcgi_read_timeout 120s;
-            '';
-          };
-          "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            expires 6M;
-            access_log off;
-          '';
-          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
-            try_files $uri/ =404;
-            index index.php;
-          '';
-          "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            access_log off;
-          '';
         };
-        extraConfig = ''
-          index index.php index.html /index.php$request_uri;
-          ${optionalString (cfg.nginx.recommendedHttpHeaders) ''
-            add_header X-Content-Type-Options nosniff;
-            add_header X-XSS-Protection "1; mode=block";
-            add_header X-Robots-Tag none;
-            add_header X-Download-Options noopen;
-            add_header X-Permitted-Cross-Domain-Policies none;
-            add_header X-Frame-Options sameorigin;
-            add_header Referrer-Policy no-referrer;
-            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
-          ''}
-          client_max_body_size ${cfg.maxUploadSize};
-          fastcgi_buffers 64 4K;
-          fastcgi_hide_header X-Powered-By;
-          gzip on;
-          gzip_vary on;
-          gzip_comp_level 4;
-          gzip_min_length 256;
-          gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
-          gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
 
-          ${optionalString cfg.webfinger ''
-            rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-            rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
-          ''}
-        '';
+        caddy = lib.mkIf (cfg.webserver == "caddy") {
+          enable = mkDefault true;
+          virtualHosts."${if cfg.https then "https" else "http"}://${cfg.hostName}" = {
+            extraConfig = ''
+              root * ${cfg.package}
+              file_server
+
+              php_fastcgi unix/${fpm.socket} {
+                env font_controller_active true
+              }
+
+              header {
+                # enable HSTS
+                Strict-Transport-Security max-age=31536000;
+              }
+
+              redir /.well-known/carddav /remote.php/dav 301
+              redir /.well-known/caldav /remote.php/dav 301
+
+              # .htaccess / data / config / ... shouldn't be accessible from outside
+              @forbidden {
+                path    /.htaccess
+                path    /data/*
+                path    /config/*
+                path    /db_structure
+                path    /.xml
+                path    /README
+                path    /3rdparty/*
+                path    /lib/*
+                path    /templates/*
+                path    /occ
+                path    /console.php
+              }
+
+              respond @forbidden 404
+            '';
+          };
+        };
       };
     }
   ]);
