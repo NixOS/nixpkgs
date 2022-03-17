@@ -44,7 +44,7 @@ let
     "systemd-tmpfiles-setup.service"
     "timers.target"
     "xdg-desktop-autostart.target"
-  ];
+  ] ++ config.systemd.additionalUpstreamUserUnits;
 in {
   options = {
     systemd.user.extraConfig = mkOption {
@@ -103,6 +103,15 @@ in {
       default = {};
       type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
       description = "Definition of systemd per-user timer units.";
+    };
+
+    systemd.additionalUpstreamUserUnits = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      example = [];
+      description = ''
+        Additional user units shipped with systemd that shall be enabled.
+      '';
     };
   };
 
