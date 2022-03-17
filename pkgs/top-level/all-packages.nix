@@ -6775,6 +6775,8 @@ with pkgs;
   invidious = callPackage ../servers/invidious {
     # needs a specific version of lsquic
     lsquic = callPackage ../servers/invidious/lsquic.nix { };
+    # normally video.js is downloaded at build time
+    videojs = callPackage ../servers/invidious/videojs.nix { };
   };
 
   invoice2data  = callPackage ../tools/text/invoice2data  { };
