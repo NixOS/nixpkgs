@@ -5045,6 +5045,8 @@ in {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  meilisearch = callPackage ../development/python-modules/meilisearch { };
+
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
