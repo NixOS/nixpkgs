@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitLab, libvirt, autoreconfHook, pkg-config, ocaml, findlib, perl }:
 
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
+  "libvirt is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml-libvirt";
   version = "0.6.1.5";
