@@ -1330,10 +1330,10 @@
       </listitem>
       <listitem>
         <para>
-          A new option
-          <literal>boot.initrd.extraModprobeConfig</literal> has been
-          added which can be used to configure kernel modules that are
-          loaded in the initrd.
+          The options <literal>boot.extraModprobeConfig</literal> and
+          <literal>boot.blacklistedKernelModules</literal> now also take
+          effect in the initrd by copying the file
+          <literal>/etc/modprobe.d/nixos.conf</literal> into the initrd.
         </para>
       </listitem>
       <listitem>
