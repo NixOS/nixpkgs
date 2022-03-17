@@ -832,7 +832,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "12xaxpg4ws09rnp9prrqcac8581ggr36mpy39xyfngjy5xvcalaq";
+          cargoSha256 = "035v8mm8v7aj8qwhvxsp6k0afn05gi2xb1achzsvm0m4a8a9xs65";
         };
       in
       ''
