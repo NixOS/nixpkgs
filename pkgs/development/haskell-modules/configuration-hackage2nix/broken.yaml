@@ -3693,7 +3693,6 @@ broken-packages:
   - persistent-discover
   - persistent-documentation
   - persistent-equivalence
-  - persistent-migration
   - persistent-mongoDB
   - persistent-mysql-haskell
   - persistent-odbc
