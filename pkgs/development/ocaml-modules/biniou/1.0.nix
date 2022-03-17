@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
-    mkdir $out/bin
+    mkdir -p $out/bin
   '';
 
   meta = with lib; {
