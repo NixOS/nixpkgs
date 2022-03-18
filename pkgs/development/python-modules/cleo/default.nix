@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi
-, clikit }:
+{ lib
+, buildPythonPackage
+, clikit
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pytest-mock
+}:
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "0.8.1";
+  version = "1.0.0a4";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3d0e22d30117851b45970b6c14aca4ab0b18b1b53c8af57bed13208147e4069f";
+  src = fetchFromGitHub {
+    owner = "sdispater";
+    repo = pname;
+    rev = version;
+    hash = "sha256-w4WzGK7Q055iPF5wkpVXHoHvwr8ewKDqDUPCdoGhAQ0=";
   };
 
-  propagatedBuildInputs = [
-    clikit
-  ];
+  propagatedBuildInputs = [ clikit poetry-core ];
 
-  # The Pypi tarball doesn't include tests, and the GitHub source isn't
-  # buildable until we bootstrap poetry, see
-  # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
-  doCheck = false;
+  doCheck = true;
+
+  checkInputs = [ pytestCheckHook pytest-mock ];
+
+  pythonImportsCheck = [ "cleo" ];
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/cleo";
