@@ -20,5 +20,4 @@ buildGoModule rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ wolfangaukang ];
   };
-
 }
