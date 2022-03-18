@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     export PATH="${lib.makeBinPath [ jre ]}:\$PATH"
     export JAVA_HOME='${jre}'
-    if ! [ -f "~/.ZAP/config.xml" ];then
+    if ! [ -f "\$HOME/.ZAP/config.xml" ];then
       mkdir -p "\$HOME/.ZAP"
       head -n 2 $out/share/${pname}/xml/config.xml > "\$HOME/.ZAP/config.xml"
       echo "<version>${version_tag}</version>" >> "\$HOME/.ZAP/config.xml"
