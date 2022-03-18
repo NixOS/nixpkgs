@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libdazzle";
-  version = "3.43.90";
+  version = "3.44.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LPTtCoKcw0awqGD5QRyrJ6rkJjScT+wCgUZAyzmEyiY=";
+    sha256 = "PNPkXrbiaAywXVLh6A3Y+dWdR2UhLw4o945sF4PRjq4=";
   };
 
   nativeBuildInputs = [
