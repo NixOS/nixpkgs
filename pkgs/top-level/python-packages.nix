@@ -844,6 +844,8 @@ in {
 
   azure-common = callPackage ../development/python-modules/azure-common { };
 
+  azure-containerregistry = callPackage ../development/python-modules/azure-containerregistry { };
+
   azure-core = callPackage ../development/python-modules/azure-core { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
