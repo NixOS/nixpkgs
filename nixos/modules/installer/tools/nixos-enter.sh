@@ -87,7 +87,7 @@ chroot_add_resolv_conf() {
     mount --bind /etc/resolv.conf "$resolv_conf"
 }
 
-chroot_add_resolv_conf "$mountPoint" || print "ERROR: failed to set up resolv.conf"
+chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" >&2
 
 (
     # If silent, write both stdout and stderr of activation script to /dev/null
