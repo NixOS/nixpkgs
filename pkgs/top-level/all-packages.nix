@@ -30737,6 +30737,9 @@ with pkgs;
 
   ace-of-penguins = callPackage ../games/ace-of-penguins { };
 
+  am2r = callPackage_i686 ../games/am2r { };
+  am2r-multitroid = callPackage_i686 ../games/am2r/multitroid.nix { };
+
   among-sus = callPackage ../games/among-sus { };
 
   antsimulator = callPackage ../games/antsimulator { };
