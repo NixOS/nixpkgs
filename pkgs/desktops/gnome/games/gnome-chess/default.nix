@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "42.alpha";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "53vLHtI+o0Xb/qP3Z0RM29aHTxYohOG81n1OLKaOx1k=";
+    sha256 = "Eq9Uk6YiBaxrt0VA8KhYQT2okolmo0boVDMLQdc7w5M=";
   };
 
   nativeBuildInputs = [
