@@ -10386,6 +10386,12 @@
     githubId = 22803888;
     name = "Lu Hongxu";
   };
+  rgnns = {
+    email = "jglievano@gmail.com";
+    github = "rgnns";
+    githubId = 811827;
+    name = "Gabriel Lievano";
+  };
   rgrunbla = {
     email = "remy@grunblatt.org";
     github = "rgrunbla";

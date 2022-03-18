@@ -11565,6 +11565,8 @@ with pkgs;
 
   zimwriterfs = callPackage ../tools/text/zimwriterfs { };
 
+  zld = callPackage ../development/tools/zld { };
+
   par = callPackage ../tools/text/par { };
 
   zip = callPackage ../tools/archivers/zip { };
