@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, bash, perl, python2 }:
-
-# There are fixes for python3 compatibility on master
+{ lib, stdenv, fetchFromGitHub, bash, perl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "dmtcp";
-  version = "unstable-2021-03-01";
+  version = "unstable-2022-02-28";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "f999adbb8e88fe452a0e57ceb43b6eed7b4409f9";
-    sha256 = "sha256-codCHQui3fGfUZSNq8GuH4ad/GjD6I/S9rX83o8oFPc=";
+    rev = "133687764c6742906006a1d247e3b83cd860fa1d";
+    hash = "sha256-9Vr8IhoeATCfyt7Lp7kYe/7e87mFX9KMNGTqxJgIztE=";
   };
 
   dontDisableStatic = true;
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace test/autotest.py \
       --replace /bin/bash ${bash}/bin/bash \
       --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace /usr/bin/python ${python2}/bin/python \
+      --replace /usr/bin/python ${python3.interpreter} \
       --replace "os.environ['USER']" "\"nixbld1\"" \
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';
