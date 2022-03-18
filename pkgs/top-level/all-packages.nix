@@ -2854,8 +2854,6 @@ with pkgs;
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
 
-  ddar = callPackage ../tools/backup/ddar { };
-
   ddate = callPackage ../tools/misc/ddate { };
 
   ddosify = callPackage ../development/tools/ddosify { };
