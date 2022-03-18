@@ -49,5 +49,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    # sendto device selection is removed in gnome-bluetooth 42
+    # https://github.com/elementary/gnome-bluetooth-contract/issues/1
+    broken = true;
   };
 }
