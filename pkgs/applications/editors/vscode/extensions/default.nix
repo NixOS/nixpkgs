@@ -5,6 +5,7 @@
 , vscode-utils
 , asciidoctor
 , nodePackages
+, python3Packages
 , jdk
 , llvmPackages_8
 , nixpkgs-fmt
@@ -1310,6 +1311,33 @@ let
           homepage = "https://github.com/kamadorueda/alejandra";
           license = licenses.unlicense;
           maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
+      kddejong.vscode-cfn-lint = let
+        inherit (python3Packages) cfn-lint;
+      in buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-cfn-lint";
+          publisher = "kddejong";
+          version = "0.21.0";
+          sha256 = "sha256-IueXiN+077tiecAsVCzgYksWYTs00mZv6XJVMtRJ/PQ=";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [ cfn-lint ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
+        '';
+
+        meta = with lib; {
+          description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
+          homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
+          license = lib.licenses.asl20;
+          maintainers = with maintainers; [ wolfangaukang ];
         };
       };
 
