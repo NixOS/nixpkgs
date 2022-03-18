@@ -71,13 +71,13 @@ rec {
 
   legacy_340 = generic {
     version = "340.108";
-    sha256_32bit = "1jkwa1phf0x4sgw8pvr9d6krmmr3wkgwyygrxhdazwyr2bbalci0";
-    sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
+    sha256_32bit = "4a221941e7697c30de4e1136694b93ef7a3045bd4f75712f3047bf697c2da9c0";
+    sha256_64bit = "4a221941e7697c30de4e1136694b93ef7a3045bd4f75712f3047bf697c2da9c0";
     settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
-    useGLVND = false;
-
-    broken = with kernel; kernelAtLeast "5.5";
-    patches = [ ./vm_operations_struct-fault.patch ];
-  };
+    url="http://localhost/nvidia-340-516.run";
+ useGLVND = false;
+   # patches = [./0001_kernel_5.7.patch ./0002_kernel_5.8.patch ./0003_kernel_5.9.patch ./0004_kernel_5.10.patch ./0005_kernel_5.11.patch ./0006_kernel_5.14.patch ./0007_kernel_5.15.patch ./0008_kernel_5.16.patch  ./vm_operations_struct-fault.patch ];
+	  
+};
 }

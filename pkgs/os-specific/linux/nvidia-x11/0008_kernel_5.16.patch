@@ -1,0 +1,30 @@
+--- a/kernel/os-interface.h	2019-12-11 22:04:24.000000000 +0000
++++ b/kernel/os-interface.h	2022-01-10 02:04:26.740899810 +0000
+@@ -24,7 +24,12 @@
+ *                                                                           *
+ \***************************************************************************/
+ 
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 16, 0)
++#include <linux/stdarg.h>
++#else
+ #include <stdarg.h>
++#endif
+ 
+ /*
+  * Define away Microsoft compiler extensions when possible
+--- a/kernel/nv.h	2019-12-11 22:04:24.000000000 +0000
++++ b/kernel/nv.h	2022-01-10 02:29:07.828733372 +0000
+@@ -13,7 +13,12 @@
+ #define _NV_H_
+ 
+ #include <nvtypes.h>
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 16, 0)
++#include <linux/stdarg.h>
++#else
+ #include <stdarg.h>
++#endif
+ 
+ #if !defined(NV_MIN)
+ #define NV_MIN(_a,_b) ((_a) < (_b) ? (_a) : (_b))

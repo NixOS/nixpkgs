@@ -1,0 +1,107 @@
+From fea401df7500bfbead5a42b1e74560dbddf2f5a3 Mon Sep 17 00:00:00 2001
+From: graysky <graysky@archlinux.us>
+Date: Thu, 22 Oct 2020 07:00:35 -0400
+Subject: [PATCH 3/3] kernel-5.9
+
+credit: https://github.com/warpme/minimyth2/blob/master/script/nvidia/nvidia-340.108/files/nvidia-340.108-fix-5.9-kernel-compile.patch
+---
+ kernel/nv-drm.c               | 8 ++++++++
+ kernel/nv-linux.h             | 9 +++++++--
+ kernel/nv.c                   | 4 ++++
+ kernel/uvm/nvidia_uvm_linux.h | 2 ++
+ 4 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/nv-drm.c b/kernel/nv-drm.c
+index 85db07e..f0c1299 100644
+--- a/kernel/nv-drm.c
++++ b/kernel/nv-drm.c
+@@ -415,7 +415,11 @@ static struct drm_driver nv_drm_driver = {
+     .set_busid = drm_pci_set_busid,
+ #endif
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
++    .gem_free_object_unlocked = nv_gem_free,
++#else
+     .gem_free_object = nv_gem_free,
++#endif
+ 
+     .prime_handle_to_fd = drm_gem_prime_handle_to_fd,
+     .gem_prime_export = drm_gem_prime_export,
+@@ -511,8 +515,12 @@ RM_STATUS NV_API_CALL nv_alloc_os_descriptor_handle(
+ 
+ #if defined(NV_DRM_GEM_OBJECT_PUT_UNLOCKED_PRESENT)
+     drm_gem_object_put_unlocked(&nv_obj->base);
++#else
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
++    drm_gem_object_put_locked(&nv_obj->base);
+ #else
+     drm_gem_object_unreference_unlocked(&nv_obj->base);
++#endif
+ #endif
+ 
+     status = RM_OK;
+diff --git a/kernel/nv-linux.h b/kernel/nv-linux.h
+index d055552..524a8fe 100644
+--- a/kernel/nv-linux.h
++++ b/kernel/nv-linux.h
+@@ -136,8 +136,10 @@
+ 
+ #if defined(NVCPU_X86_64) && !defined(HAVE_COMPAT_IOCTL)
+ #include <linux/syscalls.h>         /* sys_ioctl()                      */
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 9, 0)
+ #include <linux/ioctl32.h>          /* register_ioctl32_conversion()    */
+ #endif
++#endif
+ 
+ #if !defined(NV_FILE_OPERATIONS_HAS_IOCTL) && \
+   !defined(NV_FILE_OPERATIONS_HAS_UNLOCKED_IOCTL)
+@@ -2249,10 +2251,13 @@ static inline NvU64 nv_node_end_pfn(int nid)
+                                             pages, vmas, NULL);
+ 
+         #else
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
++               return get_user_pages_remote(mm, start, nr_pages, flags,
++                                            pages, vmas, NULL);
++#else
+                return get_user_pages_remote(tsk, mm, start, nr_pages, flags,
+                                             pages, vmas);
+-
++#endif
+         #endif
+ 
+         }
+diff --git a/kernel/nv.c b/kernel/nv.c
+index a218f83..be4e0f8 100644
+--- a/kernel/nv.c
++++ b/kernel/nv.c
+@@ -2785,7 +2785,11 @@ nvidia_probe
+ 
+ #if defined(CONFIG_VGA_ARB)
+ #if defined(VGA_DEFAULT_DEVICE)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
++    vga_get(VGA_DEFAULT_DEVICE, VGA_RSRC_LEGACY_MASK, 0);
++#else
+     vga_tryget(VGA_DEFAULT_DEVICE, VGA_RSRC_LEGACY_MASK);
++#endif
+ #endif
+     vga_set_legacy_decoding(dev, VGA_RSRC_NONE);
+ #endif
+diff --git a/kernel/uvm/nvidia_uvm_linux.h b/kernel/uvm/nvidia_uvm_linux.h
+index 1625209..efc181f 100644
+--- a/kernel/uvm/nvidia_uvm_linux.h
++++ b/kernel/uvm/nvidia_uvm_linux.h
+@@ -158,8 +158,10 @@
+ 
+ #if defined(NVCPU_X86_64) && !defined(HAVE_COMPAT_IOCTL)
+ #include <linux/syscalls.h>         /* sys_ioctl()                      */
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 9, 0)
+ #include <linux/ioctl32.h>          /* register_ioctl32_conversion()    */
+ #endif
++#endif
+ 
+ #if !defined(NV_FILE_OPERATIONS_HAS_IOCTL) && \
+   !defined(NV_FILE_OPERATIONS_HAS_UNLOCKED_IOCTL)
+-- 
+2.29.0
+

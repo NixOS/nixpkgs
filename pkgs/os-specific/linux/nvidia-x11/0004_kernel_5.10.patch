@@ -1,0 +1,18 @@
+https://github.com/warpme/minimyth2/tree/master/script/nvidia/nvidia-340.108/files
+
+diff -Naur NVIDIA-Linux-x86_64-340.108-old/kernel/nv-drm.c NVIDIA-Linux-x86_64-340.108-new/kernel/nv-drm.c
+--- NVIDIA-Linux-x86_64-340.108-old/kernel/nv-drm.c	2020-12-13 19:10:56.759999937 +0100
++++ NVIDIA-Linux-x86_64-340.108-new/kernel/nv-drm.c	2020-12-13 19:09:02.039999925 +0100
+@@ -322,8 +322,11 @@
+ {
+     struct nv_gem_object *nv_obj = container_of(obj, struct nv_gem_object, base);
+     int page_count = obj->size >> PAGE_SHIFT;
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
++    return drm_prime_pages_to_sg(obj->dev, nv_obj->pages, page_count);
++#else
+     return drm_prime_pages_to_sg(nv_obj->pages, page_count);
++#endif
+ }
+ 
+ static void* nv_gem_prime_vmap(

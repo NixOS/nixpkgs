@@ -55,6 +55,7 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = args.url or "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
+
           sha256 = sha256_64bit;
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
