@@ -8,13 +8,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.16";
+  version = "0.9.17";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-NXuYUmo80rrBZCcuISKon48SKyyJrkzCEhggxaJNfBM=";
+    sha256 = "sha256-m47Y4IXGc43XLs5d6ehlD0A53BWC5kO3K2BS/xbYgl8=";
 
     # see the comment below on fakeGit for how this is used
     leaveDotGit = true;
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-PIORMTzQbMdlrKwuF4MiGrLlg2nQpgLRsaHHeiCbqrg=";
+  cargoSha256 = "sha256-JBacioy2woAfKQuK6tXU9as4DNc+3uY3F3GWksCf6WU=";
 
   nativeBuildInputs =
     let
