@@ -95,7 +95,7 @@ let
               (lib.strings.replaceStrings [ "-" ] [ "_" ]
                 (lib.strings.removePrefix "tree-sitter-"
                   (lib.strings.removeSuffix "-grammar" name)))
-              + stdenv.hostPlatform.extensions.sharedLibrary;
+              + ".so";
             path = "${drv}/parser";
           }
         )
