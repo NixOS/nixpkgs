@@ -11,7 +11,6 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gtk2
 , gtk3
 , libkrb5
 , libX11
@@ -110,7 +109,6 @@ stdenv.mkDerivation {
       gdk-pixbuf
       glib
       glibc
-      gtk2
       gtk3
       libkrb5
       mesa
