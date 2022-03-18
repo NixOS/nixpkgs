@@ -23,31 +23,17 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "2.6.0";
+  version = "2.8.0";
   format = "wheel";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "tensorboard";
     inherit version format;
     dist = "py3";
     python = "py3";
-    sha256 = "sha256-99rEzftS0UyeP3RYXOKq+OYgNiCoZOUfr4SYiwn3u9s=";
+    sha256 = "sha256:1vqd2w2z1pdkls6yc6yf5b7av4hp62zbs8s9c3r7k42f8bj3i8v5";
   };
-
-  postPatch = ''
-    chmod u+rwx -R ./dist
-    pushd dist
-    wheel unpack --dest unpacked ./*.whl
-    pushd unpacked/tensorboard-${version}
-
-    substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth (<2,>=1.6.3)" "google-auth (<3,>=1.6.3)"
-
-    popd
-    wheel pack ./unpacked/tensorboard-${version}
-    popd
-  '';
 
   propagatedBuildInputs = [
     absl-py
