@@ -48,7 +48,7 @@ let
       sudo
       ceph
       xfsprogs
-      netcat-openbsd
+      libressl.nc
     ];
 
     boot.kernelModules = [ "xfs" ];

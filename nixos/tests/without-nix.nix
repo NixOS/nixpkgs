@@ -4,12 +4,6 @@ import ./make-test-python.nix ({ lib, ... }: {
     maintainers = [ ericson2314 ];
   };
 
-  nixpkgs.overlays = [
-    (self: super: {
-      nix = throw "don't want to use this";
-    })
-  ];
-
   nodes.machine = { ... }: {
     nix.enable = false;
   };
