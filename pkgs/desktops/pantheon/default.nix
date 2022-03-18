@@ -83,8 +83,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   epiphany = pkgs.epiphany.override { withPantheon = true; };
 
-  evince = pkgs.evince.override { withPantheon = true; };
-
   sideload = callPackage ./apps/sideload { };
 
   #### DESKTOP
@@ -239,6 +237,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1."; # added 2020-04-06
 
   elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
+
+  evince = pkgs.gnome.evince; # added 2022-03-18
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
