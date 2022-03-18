@@ -1261,6 +1261,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>unifi</literal> package was switched from
+          <literal>unifi6</literal> to <literal>unifi7</literal>. Direct
+          downgrades from Unifi 7 to Unifi 6 are not possible and
+          require restoring from a backup made by Unifi 6.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>programs.zsh.autosuggestions.strategy</literal> now
           takes a list of strings instead of a string.
         </para>
