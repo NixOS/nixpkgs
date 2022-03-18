@@ -20,7 +20,7 @@ chmod -R +w "$tmpdir"
 pushd "$tmpdir" > /dev/null
 mkdir home
 echo "Running dotnet restore for $sln"
-HOME=home DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+HOME=home \
   dotnet restore $customFlags -v normal --no-cache "$sln" > restore_log
 
 echo "{ fetchNuGet }: [" > "$depsFile"

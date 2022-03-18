@@ -51,7 +51,7 @@ chmod -R +w "$SRC"
 pushd "$SRC"
 
 mkdir nuget_tmp.packages
-DOTNET_CLI_TELEMETRY_OPTOUT=1 dotnet restore Ryujinx.sln --packages nuget_tmp.packages
+dotnet restore Ryujinx.sln --packages nuget_tmp.packages
 
 nuget-to-nix ./nuget_tmp.packages >"$DEPS_FILE"
 

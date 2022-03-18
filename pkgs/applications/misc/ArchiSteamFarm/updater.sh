@@ -23,9 +23,6 @@ chmod -R +w "$src"
 
 pushd "$src"
 
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
 for i in $platforms; do
   nix-shell -p dotnet-sdk_6 --argstr system $i --run "
      mkdir ./nuget_pkgs-$i
