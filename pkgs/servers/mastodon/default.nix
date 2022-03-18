@@ -1,4 +1,4 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, fetchpatch, bundlerEnv
+{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, fetchpatch, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 
   # Allow building a fork or custom version of Mastodon:
@@ -118,6 +118,8 @@ stdenv.mkDerivation rec {
     cp -r * $out/
     ln -s ${run-streaming} $out/run-streaming.sh
   '';
+
+  passthru.tests.mastodon = nixosTests.mastodon;
 
   meta = with lib; {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
