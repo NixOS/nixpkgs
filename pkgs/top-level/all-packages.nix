@@ -33613,7 +33613,7 @@ with pkgs;
             then import test
             else test;
           calledTest = if lib.isFunction loadedTest
-            then callPackage loadedTest {}
+            then loadedTest { inherit pkgs lib; }
             else loadedTest;
         in
           nixosTesting.makeTest calledTest;
