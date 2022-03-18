@@ -5,6 +5,7 @@
 , projectDir ? ./.
 , pyproject ? projectDir + "/pyproject.toml"
 , poetrylock ? projectDir + "/poetry.lock"
+, installShellFiles
 }:
 
 
@@ -27,18 +28,21 @@ poetry2nix.mkPoetryApplication {
     done
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     # Figure out the location of poetry.core
     # As poetry.core is using the same root import name as the poetry package and the python module system wont look for the root
     # in the separate second location we need to link poetry.core to poetry
     ln -s $(python -c 'import poetry.core; import os.path; print(os.path.dirname(poetry.core.__file__))') $out/${python.sitePackages}/poetry/core
 
-    mkdir -p "$out/share/bash-completion/completions"
-    "$out/bin/poetry" completions bash > "$out/share/bash-completion/completions/poetry"
-    mkdir -p "$out/share/zsh/vendor-completions"
-    "$out/bin/poetry" completions zsh > "$out/share/zsh/vendor-completions/_poetry"
-    mkdir -p "$out/share/fish/vendor_completions.d"
-    "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
+    # Completions
+    installShellCompletion --cmd poetry \
+      --bash <($out/bin/poetry completions bash) \
+      --fish <($out/bin/poetry completions fish) \
+      --zsh <($out/bin/poetry completions zsh) \
   '';
 
   # Propagating dependencies leads to issues downstream
