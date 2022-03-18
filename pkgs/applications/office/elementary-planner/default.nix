@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # The GTK theme is hardcoded.
       --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
 
