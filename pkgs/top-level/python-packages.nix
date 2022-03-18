@@ -3027,6 +3027,8 @@ in {
     inherit (pkgs) flatbuffers;
   };
 
+  flatdict = callPackage ../development/python-modules/flatdict { };
+
   flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
   flax = callPackage ../development/python-modules/flax { };
