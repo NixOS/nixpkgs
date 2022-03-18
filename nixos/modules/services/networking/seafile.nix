@@ -168,7 +168,7 @@ in {
         RestrictSUIDSGID = true;
         MemoryDenyWriteExecute = true;
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
       };
     in {
       seaf-server = {
