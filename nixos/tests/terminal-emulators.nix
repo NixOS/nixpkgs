@@ -77,6 +77,7 @@ let tests = {
       sakura.pkg = p: p.sakura;
 
       st.pkg = p: p.st;
+      st.kill = true;
 
       stupidterm.pkg = p: p.stupidterm;
       stupidterm.cmd = "stupidterm -- $command";
