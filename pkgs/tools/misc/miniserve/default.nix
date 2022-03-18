@@ -17,13 +17,21 @@ rustPlatform.buildRustPackage rec {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-JlpjDUX8v7sGADhdKNQXoklbl/fw8DT0A6hEaUG61TQ=";
+    hash = "sha256-JlpjDUX8v7sGADhdKNQXoklbl/fw8DT0A6hEaUG61TQ=";
   };
 
   cargoSha256 = "sha256-5V8+Mcuu3fxG399QjW++/uWpPMvVWBfhI/L/6pmbkVY=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config zlib ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    zlib
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
@@ -38,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "For when you really just want to serve some files over HTTP right now!";
+    description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];
