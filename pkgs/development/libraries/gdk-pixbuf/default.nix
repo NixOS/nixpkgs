@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.6";
+  version = "2.42.8";
 
   outputs = [ "out" "dev" "man" ]
     ++ lib.optional withGtkDoc "devdoc"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zz7pmw2z46g7mr1yjxbsdldd5pd03xbjc58inj8rxfqgrdvg9n4";
+    sha256 = "hKzqOsskEbKRNLMgFaWxqqYoRLGcSx74uJccawdZ9MY=";
   };
 
   patches = [
