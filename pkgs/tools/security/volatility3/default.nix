@@ -7,13 +7,11 @@ python3.pkgs.buildPythonApplication rec {
   pname = "volatility3";
   version = "2.0.1";
 
-  disabled = python3.pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rEqp+V5r4Sk4D+r2ukR1uy4IDj9XQGhYwoYSPeMyKpA=";
+    hash = "sha256-rEqp+V5r4Sk4D+r2ukR1uy4IDj9XQGhYwoYSPeMyKpA=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -31,7 +29,9 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "volatility3" ];
+  pythonImportsCheck = [
+    "volatility3"
+  ];
 
   meta = with lib; {
     description = "Volatile memory extraction frameworks";
