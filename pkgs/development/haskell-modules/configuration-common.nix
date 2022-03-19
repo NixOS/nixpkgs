@@ -774,7 +774,9 @@ self: super: {
   diagrams-braille = doJailbreak super.diagrams-braille;
 
   # https://github.com/timbod7/haskell-chart/pull/231#issuecomment-953745932
-  Chart-diagrams = doJailbreak super.Chart-diagrams;
+  Chart-diagrams = doJailbreak (super.Chart-diagrams.override {
+    SVGFonts = super.SVGFonts_1_7_0_1;
+  });
 
   # https://github.com/xu-hao/namespace/issues/1
   namespace = doJailbreak super.namespace;

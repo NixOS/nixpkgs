@@ -127,6 +127,7 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
+  - SVGFonts < 1.8                      # 2022-03-19: Needed for Chart-diagrams 1.9.3
 
 package-maintainers:
   abbradar:
