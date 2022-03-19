@@ -1,0 +1,213 @@
+diff -Naur NVIDIA-Linux-x86_64-340.108-no-compat32.5.13/kernel/nv-drm.c NVIDIA-Linux-x86_64-340.108-no-compat32.5.14/kernel/nv-drm.c
+--- NVIDIA-Linux-x86_64-340.108-no-compat32.5.13/kernel/nv-drm.c	2021-07-25 10:29:29.336505688 +0200
++++ NVIDIA-Linux-x86_64-340.108-no-compat32.5.14/kernel/nv-drm.c	2021-09-16 16:49:10.929858547 +0200
+@@ -57,8 +57,11 @@
+ #if defined(NV_DRM_GET_PCI_DEV_PRESENT)
+ #define nv_drm_get_pci_dev drm_get_pci_dev
+ #else
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+ #include <drm/drm_agpsupport.h>
+-
++#else
++#include <drm/drm_legacy.h>
++#endif
+ #include "linux/dma-buf.h"
+ 
+ struct nv_drm_agp_head {
+@@ -82,6 +85,11 @@
+     struct list_head head;
+ };
+ 
++struct nv_drm_extra_priv_data {
++    struct pci_dev *pdev;
++    struct drm_agp_head *agp;
++};
++
+ /*
+  * Code from drm_agp_init/nv_drm_{free,unbind}_agp
+  * Extracted from commit: 5b8b9d0c6d0e0f1993c6c56deaf9646942c49d94, file: drivers/gpu/drm/drm_agpsupport.c
+@@ -89,13 +97,14 @@
+ struct drm_agp_head *nv_drm_agp_init(struct drm_device *dev)
+ {
+     struct nv_drm_agp_head *head = NULL;
++    struct nv_drm_extra_priv_data *extra = dev->dev_private;
+ 
+     head = kzalloc(sizeof(*head), GFP_KERNEL);
+     if (!head)
+         return NULL;
+-    head->bridge = agp_find_bridge(dev->pdev);
++    head->bridge = agp_find_bridge(extra->pdev);
+     if (!head->bridge) {
+-        head->bridge = agp_backend_acquire(dev->pdev);
++        head->bridge = agp_backend_acquire(extra->pdev);
+         if (!head->bridge) {
+             kfree(head);
+             return NULL;
+@@ -133,48 +142,71 @@
+ static void nv_drm_pci_agp_init(struct drm_device *dev)
+ {
+     if (drm_core_check_feature(dev, DRIVER_USE_AGP)) {
+-        if (pci_find_capability(dev->pdev, PCI_CAP_ID_AGP))
+-            dev->agp = nv_drm_agp_init(dev);
+-        if (dev->agp) {
+-            dev->agp->agp_mtrr = arch_phys_wc_add(
+-                dev->agp->agp_info.aper_base,
+-                dev->agp->agp_info.aper_size *
++        struct nv_drm_extra_priv_data *extra = dev->dev_private;
++
++        if (pci_find_capability(extra->pdev, PCI_CAP_ID_AGP))
++            extra->agp = nv_drm_agp_init(dev);
++        if (extra->agp) {
++            extra->agp->agp_mtrr = arch_phys_wc_add(
++                extra->agp->agp_info.aper_base,
++                extra->agp->agp_info.aper_size *
+                 1024 * 1024);
+         }
+     }
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
++
++#else
++/* copied from v5.14.5 */
++int nv_drm_legacy_agp_release(struct drm_device *dev)
++{
++    struct nv_drm_extra_priv_data *extra = dev->dev_private;
++
++    if (!extra->agp || !extra->agp->acquired)
++        return -EINVAL;
++    agp_backend_release(extra->agp->bridge);
++    extra->agp->acquired = 0;
++    return 0;
++}
++#endif
++
+ void nv_drm_legacy_agp_clear(struct drm_device *dev)
+ {
+     struct nv_drm_agp_mem *entry, *tempe;
++    struct nv_drm_extra_priv_data *extra = dev->dev_private;
+ 
+-    if (!dev->agp)
++    if (!extra->agp)
+         return;
+     if (!drm_core_check_feature(dev, DRIVER_LEGACY))
+         return;
+ 
+-    list_for_each_entry_safe(entry, tempe, &dev->agp->memory, head) {
++    list_for_each_entry_safe(entry, tempe, &extra->agp->memory, head) {
+         if (entry->bound)
+             nv_drm_unbind_agp(entry->memory);
+         nv_drm_free_agp(entry->memory, entry->pages);
+         kfree(entry);
+     }
+-    INIT_LIST_HEAD(&dev->agp->memory);
++    INIT_LIST_HEAD(&extra->agp->memory);
+ 
+-    if (dev->agp->acquired)
++    if (extra->agp->acquired)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+         drm_agp_release(dev);
+-
+-    dev->agp->acquired = 0;
+-    dev->agp->enabled = 0;
++#else
++        nv_drm_legacy_agp_release(dev);
++#endif
++    extra->agp->acquired = 0;
++    extra->agp->enabled = 0;
+ }
+ 
+ void nv_drm_pci_agp_destroy(struct drm_device *dev)
+ {
+-    if (dev->agp) {
+-        arch_phys_wc_del(dev->agp->agp_mtrr);
++    struct nv_drm_extra_priv_data *extra = dev->dev_private;
++    if (extra->agp) {
++        arch_phys_wc_del(extra->agp->agp_mtrr);
+         nv_drm_legacy_agp_clear(dev);
+-        kfree(dev->agp);
+-        dev->agp = NULL;
++        kfree(extra->agp);
++        extra->agp = NULL;
+     }
+ }
+ 
+@@ -183,6 +215,7 @@
+                struct drm_driver *driver)
+ {
+     struct drm_device *dev;
++    struct nv_drm_extra_priv_data *extra;
+     int ret;
+ 
+     DRM_DEBUG("\n");
+@@ -191,11 +224,18 @@
+     if (IS_ERR(dev))
+         return PTR_ERR(dev);
+ 
++    extra = kzalloc(sizeof(*extra), GFP_KERNEL);
++    if (IS_ERR(extra))
++        goto err_free;
++
++    extra->pdev = pdev;
++
+     ret = pci_enable_device(pdev);
+     if (ret)
+-        goto err_free;
++        goto err_free2;
+ 
+-    dev->pdev = pdev;
++    /* use the not used (i hope) dev_private to store deprecated/legacy pointers */
++    dev->dev_private = extra;
+ #ifdef __alpha__
+     dev->hose = pdev->sysdata;
+ #endif
+@@ -221,6 +261,8 @@
+ err_agp:
+     nv_drm_pci_agp_destroy(dev);
+     pci_disable_device(pdev);
++err_free2:
++    kfree(extra);
+ err_free:
+     drm_dev_put(dev);
+     return ret;
+@@ -303,10 +345,11 @@
+ )
+ {
+     nv_linux_state_t *nvl;
++    struct nv_drm_extra_priv_data *extra = dev->dev_private;
+ 
+     for (nvl = nv_linux_devices; nvl != NULL; nvl = nvl->next)
+     {
+-        if (nvl->dev == dev->pdev)
++        if (nvl->dev == extra->pdev)
+         {
+             nvl->drm = dev;
+             return 0;
+@@ -327,10 +370,11 @@
+ )
+ {
+     nv_linux_state_t *nvl;
++    struct nv_drm_extra_priv_data *extra = dev->dev_private;
+ 
+     for (nvl = nv_linux_devices; nvl != NULL; nvl = nvl->next)
+     {
+-        if (nvl->dev == dev->pdev)
++        if (nvl->dev == extra->pdev)
+         {
+             BUG_ON(nvl->drm != dev);
+             nvl->drm = NULL;
+diff -Naur NVIDIA-Linux-x86_64-340.108-no-compat32.5.13/kernel/os-interface.c NVIDIA-Linux-x86_64-340.108-no-compat32.5.14/kernel/os-interface.c
+--- NVIDIA-Linux-x86_64-340.108-no-compat32.5.13/kernel/os-interface.c	2021-07-25 10:29:29.083168593 +0200
++++ NVIDIA-Linux-x86_64-340.108-no-compat32.5.14/kernel/os-interface.c	2021-09-16 13:17:43.345906445 +0200
+@@ -549,7 +549,11 @@
+         // the requested timeout has expired, loop until less
+         // than a jiffie of the desired delay remains.
+         //
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 14, 0)
++        current->__state = TASK_INTERRUPTIBLE;
++#else
+         current->state = TASK_INTERRUPTIBLE;
++#endif
+         do
+         {
+             schedule_timeout(jiffies);

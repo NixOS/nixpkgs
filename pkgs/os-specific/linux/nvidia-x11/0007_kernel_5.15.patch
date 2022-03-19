@@ -1,0 +1,14 @@
+diff -Naur NVIDIA-Linux-x86_64-340.108-old/kernel/nv-drm.c NVIDIA-Linux-x86_64-340.108-new/kernel/nv-drm.c
+--- NVIDIA-Linux-x86_64-340.108-old/kernel/nv-drm.c	2021-11-06 20:08:18.779739237 +0200
++++ NVIDIA-Linux-x86_64-340.108-new/kernel/nv-drm.c	2021-11-06 20:42:13.443288819 +0200
+@@ -529,7 +529,9 @@ RM_STATUS NV_API_CALL nv_alloc_os_descri
+ #if defined(NV_DRM_GEM_OBJECT_PUT_UNLOCKED_PRESENT)
+     drm_gem_object_put_unlocked(&nv_obj->base);
+ #else
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
++    drm_gem_object_put(&nv_obj->base);
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
+     drm_gem_object_put_locked(&nv_obj->base);
+ #else
+     drm_gem_object_unreference_unlocked(&nv_obj->base);

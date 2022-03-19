@@ -1,0 +1,92 @@
+From 2cc3342b4b3c96bcc4062513011d35c079b009a2 Mon Sep 17 00:00:00 2001
+From: graysky <graysky@archlinux.us>
+Date: Thu, 22 Oct 2020 06:59:59 -0400
+Subject: [PATCH 2/3] kernel-5.8
+
+credit: https://launchpad.net/~kelebek333/+archive/ubuntu/nvidia-legacy/+packages
+extracted from: https://launchpadlibrarian.net/492468557/nvidia-graphics-drivers-340_340.108-1lmtrfocal3_340.108-2lmtrfocal.diff.gz
+---
+ kernel/nv-linux.h                | 8 ++++++++
+ kernel/nvidia-modules-common.mk  | 1 +
+ kernel/os-mlock.c                | 8 ++++++++
+ kernel/uvm/nvidia_uvm_lite_api.c | 4 ++++
+ 4 files changed, 21 insertions(+)
+
+diff --git a/kernel/nv-linux.h b/kernel/nv-linux.h
+index 83e6433..d055552 100644
+--- a/kernel/nv-linux.h
++++ b/kernel/nv-linux.h
+@@ -669,11 +669,19 @@ extern nv_spinlock_t km_lock;
+ #  define KM_FREE_RECORD(a,b,c)
+ #endif
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
++#define NV_VMALLOC(ptr, size)                     \
++    {                                             \
++        (ptr) = __vmalloc(size, GFP_KERNEL);      \
++        VM_ALLOC_RECORD(ptr, size, "vm_vmalloc"); \
++    }
++#else
+ #define NV_VMALLOC(ptr, size)                               \
+     {                                                       \
+         (ptr) = __vmalloc(size, GFP_KERNEL, PAGE_KERNEL);   \
+         VM_ALLOC_RECORD(ptr, size, "vm_vmalloc");           \
+     }
++#endif
+ 
+ #define NV_VFREE(ptr, size)                         \
+     {                                               \
+diff --git a/kernel/nvidia-modules-common.mk b/kernel/nvidia-modules-common.mk
+index b94591b..0e4c228 100644
+--- a/kernel/nvidia-modules-common.mk
++++ b/kernel/nvidia-modules-common.mk
+@@ -222,6 +222,7 @@ build-sanity-checks:
+ define BUILD_MODULE_RULE
+  $(1): build-sanity-checks $(3)
+ 	@echo "NVIDIA: calling KBUILD..."; \
++	touch .nv-kernel.o.cmd; \
+ 	$$(MAKE) "CC=$$(CC)" NV_MODULE_SUFFIX=$$(strip $(2)) $$(KBUILD_PARAMS) modules; \
+ 	echo "NVIDIA: left KBUILD."; \
+ 	if ! [ -f $(1) ]; then \
+diff --git a/kernel/os-mlock.c b/kernel/os-mlock.c
+index 8a1fa2f..fc50543 100644
+--- a/kernel/os-mlock.c
++++ b/kernel/os-mlock.c
+@@ -44,11 +44,19 @@ RM_STATUS NV_API_CALL os_lock_user_pages(
+         return rmStatus;
+     }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
++    down_read(&mm->mmap_lock);
++    ret = NV_GET_USER_PAGES((unsigned long)address,
++                            page_count, write, force, user_pages, NULL);
++    up_read(&mm->mmap_lock);
++    pinned = ret;
++#else
+     down_read(&mm->mmap_sem);
+     ret = NV_GET_USER_PAGES((unsigned long)address,
+                             page_count, write, force, user_pages, NULL);
+     up_read(&mm->mmap_sem);
+     pinned = ret;
++#endif
+ 
+     if (ret < 0)
+     {
+diff --git a/kernel/uvm/nvidia_uvm_lite_api.c b/kernel/uvm/nvidia_uvm_lite_api.c
+index 8448eb6..97a4818 100644
+--- a/kernel/uvm/nvidia_uvm_lite_api.c
++++ b/kernel/uvm/nvidia_uvm_lite_api.c
+@@ -30,6 +30,10 @@
+ #include "uvm_gpu_ops_tests.h"
+ #endif
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
++#define mmap_sem mmap_lock
++#endif
++
+ //
+ // nvidia_uvm_lite_api.c
+ //
+-- 
+2.29.0
+

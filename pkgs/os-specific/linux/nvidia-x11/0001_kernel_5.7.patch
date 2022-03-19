@@ -1,0 +1,780 @@
+From 2154cc447a2377cfd60a7b7c5b619e689ebf71b1 Mon Sep 17 00:00:00 2001
+From: graysky <graysky@archlinux.us>
+Date: Thu, 22 Oct 2020 06:58:53 -0400
+Subject: [PATCH 1/3] kernel-5.7
+
+credit: https://gitlab.manjaro.org/packages?utf8=%E2%9C%93&filter=nvidia-340xx
+---
+ kernel/Makefile              |   5 +
+ kernel/conftest.sh           |  81 +++++++++++++
+ kernel/dkms.conf             |   8 +-
+ kernel/nv-drm.c              | 229 ++++++++++++++++++++++++++++++++++-
+ kernel/nv-linux.h            |  49 ++++++++
+ kernel/nv-procfs.c           |  20 +++
+ kernel/nv-time.h             |   9 +-
+ kernel/nv.c                  |   2 +-
+ kernel/os-interface.c        |   8 +-
+ kernel/uvm/Makefile          |   1 +
+ kernel/uvm/conftest.sh       |   4 +
+ kernel/uvm/nvidia_uvm_lite.c |  29 ++++-
+ 12 files changed, 431 insertions(+), 14 deletions(-)
+
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 125a690..2597080 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -108,12 +108,14 @@ COMPILE_TESTS = \
+ 	acquire_console_sem \
+ 	console_lock \
+ 	kmem_cache_create \
++	kmem_cache_create_usercopy \
+ 	outer_flush_all \
+ 	on_each_cpu \
+ 	smp_call_function \
+ 	nvmap_support \
+ 	acpi_evaluate_integer \
+ 	ioremap_cache \
++	ioremap_nocache \
+ 	ioremap_wc \
+ 	proc_dir_entry \
+ 	INIT_WORK \
+@@ -122,6 +124,7 @@ COMPILE_TESTS = \
+ 	pci_domain_nr \
+ 	pci_dma_mapping_error \
+ 	file_operations \
++	proc_ops \
+ 	sg_alloc_table \
+ 	sg_init_table \
+ 	pci_get_domain_bus_and_slot \
+@@ -147,6 +150,8 @@ COMPILE_TESTS = \
+ 	vm_fault_present \
+ 	vm_fault_has_address \
+ 	drm_driver_unload_has_int_return_type \
++	drm_get_pci_dev \
++	drm_pci_init \
+ 	drm_legacy_pci_init \
+ 	timer_setup \
+ 	do_gettimeofday \
+diff --git a/kernel/conftest.sh b/kernel/conftest.sh
+index b7a85f0..a5225e5 100755
+--- a/kernel/conftest.sh
++++ b/kernel/conftest.sh
+@@ -176,6 +176,7 @@ test_headers() {
+     FILES="$FILES linux/ktime.h"
+     FILES="$FILES linux/file.h"
+ 
++    FILES_ARCH="$FILES_ARCH asm/pgtable.h"
+     FILES_ARCH="$FILES_ARCH asm/set_memory.h"
+ 
+     translate_and_find_header_files $HEADERS      $FILES
+@@ -440,6 +441,9 @@ compile_test() {
+             # Determine if the set_memory_array_uc() function is present.
+             #
+             CODE="
++            #if defined(NV_ASM_PGTABLE_H_PRESENT)
++            #include <asm/pgtable.h>
++            #endif
+             #if defined(NV_ASM_SET_MEMORY_H_PRESENT)
+             #include <asm/set_memory.h>
+             #else
+@@ -914,6 +918,21 @@ compile_test() {
+             fi
+         ;;
+ 
++        kmem_cache_create_usercopy)
++            #
++            # Determine if the kmem_cache_create_usercopy function exists.
++            #
++            # This function was added by:
++            #   2017-06-10  8eb8284b412906181357c2b0110d879d5af95e52
++            CODE="
++            #include <linux/slab.h>
++            void kmem_cache_create_usercopy(void) {
++                kmem_cache_create_usercopy();
++            }"
++
++            compile_check_conftest "$CODE" "NV_KMEM_CACHE_CREATE_USERCOPY_PRESENT" "" "functions"
++        ;;
++
+         smp_call_function)
+             #
+             # Determine if the smp_call_function() function is
+@@ -1188,6 +1207,22 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_IOREMAP_CACHE_PRESENT" "" "functions"
+         ;;
+ 
++        ioremap_nocache)
++            #
++            # Determine if the ioremap_nocache() function is present.
++            #
++            # Removed by commit 4bdc0d676a64 ("remove ioremap_nocache and
++            # devm_ioremap_nocache") in v5.6 (2020-01-06)
++            #
++            CODE="
++            #include <asm/io.h>
++            void conftest_ioremap_nocache(void) {
++                ioremap_nocache();
++            }"
++
++            compile_check_conftest "$CODE" "NV_IOREMAP_NOCACHE_PRESENT" "" "functions"
++        ;;
++
+         ioremap_wc)
+             #
+             # Determine if the ioremap_wc() function is present.
+@@ -1371,6 +1406,16 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_FILE_OPERATIONS_HAS_COMPAT_IOCTL" "" "types"
+         ;;
+ 
++        proc_ops)
++            CODE="
++            #include <linux/proc_fs.h>
++            int conftest_proc_ops(void) {
++                return offsetof(struct proc_ops, proc_open);
++            }"
++
++            compile_check_conftest "$CODE" "NV_HAVE_PROC_OPS" "" "types"
++        ;;
++
+         sg_init_table)
+             #
+             # Determine if the sg_init_table() function is present.
+@@ -2044,6 +2089,42 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_DRM_DRIVER_UNLOAD_HAS_INT_RETURN_TYPE" "" "types"
+         ;;
+ 
++        drm_get_pci_dev)
++            #
++            # Determine if drm_get_pci_dev() is present.
++            #
++            CODE="
++            #if defined(NV_DRM_DRMP_H_PRESENT)
++            #include <drm/drmP.h>
++            #endif
++
++            #if defined(NV_DRM_DRM_PCI_H_PRESENT)
++            #include <drm/drm_pci.h>
++            #endif
++
++            void conftest_drm_legacy_pci_init(void) {
++                drm_get_pci_dev();
++            }"
++
++            compile_check_conftest "$CODE" "NV_DRM_GET_PCI_DEV_PRESENT" "" "functions"
++        ;;
++
++        drm_pci_init)
++            #
++            # Determine if drm_pci_init() is present.
++            #
++            CODE="
++            #if defined(NV_DRM_DRMP_H_PRESENT)
++            #include <drm/drmP.h>
++            #endif
++
++            void conftest_drm_legacy_pci_init(void) {
++                drm_pci_init();
++            }"
++
++            compile_check_conftest "$CODE" "NV_DRM_PCI_INIT_PRESENT" "" "functions"
++        ;;
++
+         drm_legacy_pci_init)
+             #
+             # Determine if drm_legacy_pci_init() is present. drm_pci_init() was
+diff --git a/kernel/dkms.conf b/kernel/dkms.conf
+index 79a02ae..3140f03 100644
+--- a/kernel/dkms.conf
++++ b/kernel/dkms.conf
+@@ -1,7 +1,13 @@
++if [ -x /usr/bin/nproc ]; then
++  num_cpu_cores=$(nproc)
++else
++  num_cpu_cores=1
++fi
++
+ PACKAGE_NAME="nvidia"
+ PACKAGE_VERSION="340.108"
+ BUILT_MODULE_NAME[0]="$PACKAGE_NAME"
+ DEST_MODULE_LOCATION[0]="/kernel/drivers/video"
+-MAKE[0]="make module KERNEL_UNAME=${kernelver}"
++MAKE[0]="make -j$num_cpu_cores module KERNEL_UNAME=${kernelver}"
+ CLEAN="make clean"
+ AUTOINSTALL="yes"
+diff --git a/kernel/nv-drm.c b/kernel/nv-drm.c
+index 0d1cdbf..85db07e 100644
+--- a/kernel/nv-drm.c
++++ b/kernel/nv-drm.c
+@@ -50,9 +50,236 @@
+ #if defined(NV_DRM_LEGACY_PCI_INIT_PRESENT)
+ #define nv_drm_pci_init drm_legacy_pci_init
+ #define nv_drm_pci_exit drm_legacy_pci_exit
+-#else
++#elif defined(NV_DRM_PCI_INIT_PRESENT)
+ #define nv_drm_pci_init drm_pci_init
+ #define nv_drm_pci_exit drm_pci_exit
++#else
++#if defined(NV_DRM_GET_PCI_DEV_PRESENT)
++#define nv_drm_get_pci_dev drm_get_pci_dev
++#else
++#include <drm/drm_agpsupport.h>
++
++struct nv_drm_agp_head {
++    struct agp_kern_info agp_info;
++    struct list_head memory;
++    unsigned long mode;
++    struct agp_bridge_data *bridge;
++    int enabled;
++    int acquired;
++    unsigned long base;
++    int agp_mtrr;
++    int cant_use_aperture;
++    unsigned long page_mask;
++};
++
++struct nv_drm_agp_mem {
++    unsigned long handle;
++    struct agp_memory *memory;
++    unsigned long bound;
++    int pages;
++    struct list_head head;
++};
++
++/*
++ * Code from drm_agp_init/nv_drm_{free,unbind}_agp
++ * Extracted from commit: 5b8b9d0c6d0e0f1993c6c56deaf9646942c49d94, file: drivers/gpu/drm/drm_agpsupport.c
++ */
++struct drm_agp_head *nv_drm_agp_init(struct drm_device *dev)
++{
++    struct nv_drm_agp_head *head = NULL;
++
++    head = kzalloc(sizeof(*head), GFP_KERNEL);
++    if (!head)
++        return NULL;
++    head->bridge = agp_find_bridge(dev->pdev);
++    if (!head->bridge) {
++        head->bridge = agp_backend_acquire(dev->pdev);
++        if (!head->bridge) {
++            kfree(head);
++            return NULL;
++        }
++        agp_copy_info(head->bridge, &head->agp_info);
++        agp_backend_release(head->bridge);
++    } else {
++        agp_copy_info(head->bridge, &head->agp_info);
++    }
++    if (head->agp_info.chipset == NOT_SUPPORTED) {
++        kfree(head);
++        return NULL;
++    }
++    INIT_LIST_HEAD(&head->memory);
++    head->cant_use_aperture = head->agp_info.cant_use_aperture;
++    head->page_mask = head->agp_info.page_mask;
++    head->base = head->agp_info.aper_base;
++    return (struct drm_agp_head *)head;
++}
++
++void nv_drm_free_agp(struct agp_memory *handle, int pages)
++{
++    agp_free_memory(handle);
++}
++
++int nv_drm_unbind_agp(struct agp_memory *handle)
++{
++    return agp_unbind_memory(handle);
++}
++
++/*
++ * Code from drm_pci_agp_{clear,destroy,init}/drm_get_pci_dev
++ * Extracted from commit: 5b8b9d0c6d0e0f1993c6c56deaf9646942c49d94, file: drivers/gpu/drm/drm_pci.c
++ */
++static void nv_drm_pci_agp_init(struct drm_device *dev)
++{
++    if (drm_core_check_feature(dev, DRIVER_USE_AGP)) {
++        if (pci_find_capability(dev->pdev, PCI_CAP_ID_AGP))
++            dev->agp = nv_drm_agp_init(dev);
++        if (dev->agp) {
++            dev->agp->agp_mtrr = arch_phys_wc_add(
++                dev->agp->agp_info.aper_base,
++                dev->agp->agp_info.aper_size *
++                1024 * 1024);
++        }
++    }
++}
++
++void nv_drm_legacy_agp_clear(struct drm_device *dev)
++{
++    struct nv_drm_agp_mem *entry, *tempe;
++
++    if (!dev->agp)
++        return;
++    if (!drm_core_check_feature(dev, DRIVER_LEGACY))
++        return;
++
++    list_for_each_entry_safe(entry, tempe, &dev->agp->memory, head) {
++        if (entry->bound)
++            nv_drm_unbind_agp(entry->memory);
++        nv_drm_free_agp(entry->memory, entry->pages);
++        kfree(entry);
++    }
++    INIT_LIST_HEAD(&dev->agp->memory);
++
++    if (dev->agp->acquired)
++        drm_agp_release(dev);
++
++    dev->agp->acquired = 0;
++    dev->agp->enabled = 0;
++}
++
++void nv_drm_pci_agp_destroy(struct drm_device *dev)
++{
++    if (dev->agp) {
++        arch_phys_wc_del(dev->agp->agp_mtrr);
++        nv_drm_legacy_agp_clear(dev);
++        kfree(dev->agp);
++        dev->agp = NULL;
++    }
++}
++
++static int nv_drm_get_pci_dev(struct pci_dev *pdev,
++               const struct pci_device_id *ent,
++               struct drm_driver *driver)
++{
++    struct drm_device *dev;
++    int ret;
++
++    DRM_DEBUG("\n");
++
++    dev = drm_dev_alloc(driver, &pdev->dev);
++    if (IS_ERR(dev))
++        return PTR_ERR(dev);
++
++    ret = pci_enable_device(pdev);
++    if (ret)
++        goto err_free;
++
++    dev->pdev = pdev;
++#ifdef __alpha__
++    dev->hose = pdev->sysdata;
++#endif
++
++    if (drm_core_check_feature(dev, DRIVER_MODESET))
++        pci_set_drvdata(pdev, dev);
++
++    nv_drm_pci_agp_init(dev);
++
++    ret = drm_dev_register(dev, ent->driver_data);
++    if (ret)
++        goto err_agp;
++
++    /* No locking needed since shadow-attach is single-threaded since it may
++     * only be called from the per-driver module init hook. */
++    if (drm_core_check_feature(dev, DRIVER_LEGACY))
++        list_add_tail(&dev->legacy_dev_list, &driver->legacy_dev_list);
++
++    return 0;
++
++err_agp:
++    nv_drm_pci_agp_destroy(dev);
++    pci_disable_device(pdev);
++err_free:
++    drm_dev_put(dev);
++    return ret;
++}
++#endif
++
++/*
++ * Code from drm_legacy_pci_{init,exit}
++ * Extracted from tag: v5.6.3, file: drivers/gpu/drm/drm_pci.c
++ */
++int nv_drm_pci_init(struct drm_driver *driver, struct pci_driver *pdriver)
++{
++    struct pci_dev *pdev = NULL;
++    const struct pci_device_id *pid;
++    int i;
++
++    DRM_DEBUG("\n");
++
++    if (WARN_ON(!(driver->driver_features & DRIVER_LEGACY)))
++        return -EINVAL;
++
++    /* If not using KMS, fall back to stealth mode manual scanning. */
++    INIT_LIST_HEAD(&driver->legacy_dev_list);
++    for (i = 0; pdriver->id_table[i].vendor != 0; i++) {
++        pid = &pdriver->id_table[i];
++
++        /* Loop around setting up a DRM device for each PCI device
++         * matching our ID and device class.  If we had the internal
++         * function that pci_get_subsys and pci_get_class used, we'd
++         * be able to just pass pid in instead of doing a two-stage
++         * thing.
++         */
++        pdev = NULL;
++        while ((pdev =
++            pci_get_subsys(pid->vendor, pid->device, pid->subvendor,
++                       pid->subdevice, pdev)) != NULL) {
++            if ((pdev->class & pid->class_mask) != pid->class)
++                continue;
++
++            /* stealth mode requires a manual probe */
++            pci_dev_get(pdev);
++            nv_drm_get_pci_dev(pdev, pid, driver);
++        }
++    }
++    return 0;
++}
++
++void nv_drm_pci_exit(struct drm_driver *driver, struct pci_driver *pdriver)
++{
++    struct drm_device *dev, *tmp;
++    DRM_DEBUG("\n");
++
++    if (!(driver->driver_features & DRIVER_LEGACY)) {
++        WARN_ON(1);
++    } else {
++        list_for_each_entry_safe(dev, tmp, &driver->legacy_dev_list,
++                     legacy_dev_list) {
++            list_del(&dev->legacy_dev_list);
++            drm_put_dev(dev);
++        }
++    }
++    DRM_INFO("Module unloaded\n");
++}
+ #endif
+ 
+ extern nv_linux_state_t *nv_linux_devices;
+diff --git a/kernel/nv-linux.h b/kernel/nv-linux.h
+index a1d2c68..83e6433 100644
+--- a/kernel/nv-linux.h
++++ b/kernel/nv-linux.h
+@@ -688,11 +688,16 @@ extern nv_spinlock_t km_lock;
+         VM_ALLOC_RECORD(ptr, size, "vm_ioremap"); \
+     }
+ 
++#if defined(NV_IOREMAP_NOCACHE_PRESENT)
+ #define NV_IOREMAP_NOCACHE(ptr, physaddr, size) \
+     { \
+         (ptr) = ioremap_nocache(physaddr, size); \
+         VM_ALLOC_RECORD(ptr, size, "vm_ioremap_nocache"); \
+     }
++#else
++#define NV_IOREMAP_NOCACHE(ptr, physaddr, size) \
++    NV_IOREMAP(ptr, physaddr, size)
++#endif
+ 
+ #if defined(NV_IOREMAP_CACHE_PRESENT)
+ #define NV_IOREMAP_CACHE(ptr, physaddr, size)            \
+@@ -774,6 +779,17 @@ extern nv_spinlock_t km_lock;
+ #error "NV_KMEM_CACHE_CREATE() undefined (kmem_cache_create() unavailable)!"
+ #endif
+ 
++#if defined(NV_KMEM_CACHE_CREATE_USERCOPY_PRESENT)
++#define NV_KMEM_CACHE_CREATE_USERCOPY(kmem_cache, name, type)       \
++    {                                                               \
++        kmem_cache = kmem_cache_create_usercopy(name, sizeof(type), \
++                        0, 0, 0, sizeof(type), NULL);               \
++    }
++#else
++#define NV_KMEM_CACHE_CREATE_USERCOPY(kmem_cache, name, type)       \
++        NV_KMEM_CACHE_CREATE(kmem_cache, name, type)
++#endif
++
+ #define NV_KMEM_CACHE_ALLOC(ptr, kmem_cache, type)              \
+     {                                                           \
+         (ptr) = kmem_cache_alloc(kmem_cache, GFP_KERNEL);       \
+@@ -1971,6 +1987,19 @@ extern NvU32 nv_assign_gpu_count;
+     })
+ #endif
+ 
++#if defined(NV_HAVE_PROC_OPS)
++#define NV_CREATE_PROC_FILE(filename,parent,__name,__data)               \
++   ({                                                                    \
++        struct proc_dir_entry *__entry;                                  \
++        int mode = (S_IFREG | S_IRUGO);                                  \
++        const struct proc_ops *fops = &nv_procfs_##__name##_fops;        \
++        if (fops->proc_write != 0)                                       \
++            mode |= S_IWUSR;                                             \
++        __entry = NV_CREATE_PROC_ENTRY(filename, mode, parent, fops,     \
++            __data);                                                     \
++        __entry;                                                         \
++    })
++#else
+ #define NV_CREATE_PROC_FILE(filename,parent,__name,__data)               \
+    ({                                                                    \
+         struct proc_dir_entry *__entry;                                  \
+@@ -1982,6 +2011,7 @@ extern NvU32 nv_assign_gpu_count;
+             __data);                                                     \
+         __entry;                                                         \
+     })
++#endif
+ 
+ /*
+  * proc_mkdir_mode exists in Linux 2.6.9, but isn't exported until Linux 3.0.
+@@ -2023,6 +2053,24 @@ extern NvU32 nv_assign_gpu_count;
+     remove_proc_entry(entry->name, entry->parent);
+ #endif
+ 
++#if defined(NV_HAVE_PROC_OPS)
++#define NV_DEFINE_PROCFS_SINGLE_FILE(__name)                                  \
++    static int nv_procfs_open_##__name(                                       \
++        struct inode *inode,                                                  \
++        struct file *filep                                                    \
++    )                                                                         \
++    {                                                                         \
++        return single_open(filep, nv_procfs_read_##__name,                    \
++            NV_PDE_DATA(inode));                                              \
++    }                                                                         \
++                                                                              \
++    static const struct proc_ops nv_procfs_##__name##_fops = {                \
++        .proc_open       = nv_procfs_open_##__name,                           \
++        .proc_read       = seq_read,                                          \
++        .proc_lseek      = seq_lseek,                                         \
++        .proc_release    = single_release,                                    \
++    };
++#else
+ #define NV_DEFINE_PROCFS_SINGLE_FILE(__name)                                  \
+     static int nv_procfs_open_##__name(                                       \
+         struct inode *inode,                                                  \
+@@ -2040,6 +2088,7 @@ extern NvU32 nv_assign_gpu_count;
+         .llseek     = seq_lseek,                                              \
+         .release    = single_release,                                         \
+     };
++#endif
+ 
+ #endif  /* CONFIG_PROC_FS */
+ 
+diff --git a/kernel/nv-procfs.c b/kernel/nv-procfs.c
+index ebca3e8..9365c3c 100644
+--- a/kernel/nv-procfs.c
++++ b/kernel/nv-procfs.c
+@@ -409,6 +409,15 @@ done:
+     return ((status < 0) ? status : (int)count);
+ }
+ 
++#if defined(NV_HAVE_PROC_OPS)
++static struct proc_ops nv_procfs_registry_fops = {
++    .proc_open    = nv_procfs_open_registry,
++    .proc_read    = seq_read,
++    .proc_write   = nv_procfs_write_file,
++    .proc_lseek   = seq_lseek,
++    .proc_release = nv_procfs_close_registry,
++};
++#else
+ static struct file_operations nv_procfs_registry_fops = {
+     .owner   = THIS_MODULE,
+     .open    = nv_procfs_open_registry,
+@@ -417,6 +426,7 @@ static struct file_operations nv_procfs_registry_fops = {
+     .llseek  = seq_lseek,
+     .release = nv_procfs_close_registry,
+ };
++#endif
+ 
+ static int
+ nv_procfs_read_unbind_lock(
+@@ -538,6 +548,15 @@ done:
+     return rc;
+ }
+ 
++#if defined(NV_HAVE_PROC_OPS)
++static struct proc_ops nv_procfs_unbind_lock_fops = {
++    .proc_open    = nv_procfs_open_unbind_lock,
++    .proc_read    = seq_read,
++    .proc_write   = nv_procfs_write_file,
++    .proc_lseek   = seq_lseek,
++    .proc_release = nv_procfs_close_unbind_lock,
++};
++#else
+ static struct file_operations nv_procfs_unbind_lock_fops = {
+     .owner   = THIS_MODULE,
+     .open    = nv_procfs_open_unbind_lock,
+@@ -546,6 +565,7 @@ static struct file_operations nv_procfs_unbind_lock_fops = {
+     .llseek  = seq_lseek,
+     .release = nv_procfs_close_unbind_lock,
+ };
++#endif
+ 
+ static int
+ nv_procfs_read_text_file(
+diff --git a/kernel/nv-time.h b/kernel/nv-time.h
+index a34ceb2..780f8bc 100644
+--- a/kernel/nv-time.h
++++ b/kernel/nv-time.h
+@@ -28,7 +28,12 @@
+ #include <linux/ktime.h>
+ #endif
+ 
+-static inline void nv_gettimeofday(struct timeval *tv)
++struct nv_timeval {
++    __kernel_long_t      tv_sec;
++    __kernel_suseconds_t tv_usec;
++};
++
++static inline void nv_gettimeofday(struct nv_timeval *tv)
+ {
+ #ifdef NV_DO_GETTIMEOFDAY_PRESENT
+     do_gettimeofday(tv);
+@@ -37,7 +42,7 @@ static inline void nv_gettimeofday(struct timeval *tv)
+ 
+     ktime_get_real_ts64(&now);
+ 
+-    *tv = (struct timeval) {
++    *tv = (struct nv_timeval) {
+         .tv_sec = now.tv_sec,
+         .tv_usec = now.tv_nsec/1000,
+     };
+diff --git a/kernel/nv.c b/kernel/nv.c
+index a167be9..a218f83 100644
+--- a/kernel/nv.c
++++ b/kernel/nv.c
+@@ -752,7 +752,7 @@ int __init nvidia_init_module(void)
+     NV_SPIN_LOCK_INIT(&km_lock);
+ #endif
+ 
+-    NV_KMEM_CACHE_CREATE(nv_stack_t_cache, NV_STACK_CACHE_STR, nv_stack_t);
++    NV_KMEM_CACHE_CREATE_USERCOPY(nv_stack_t_cache, NV_STACK_CACHE_STR, nv_stack_t);
+     if (nv_stack_t_cache == NULL)
+     {
+         nv_printf(NV_DBG_ERRORS, "NVRM: stack cache allocation failed!\n");
+diff --git a/kernel/os-interface.c b/kernel/os-interface.c
+index 7190b26..0c0dc05 100644
+--- a/kernel/os-interface.c
++++ b/kernel/os-interface.c
+@@ -439,7 +439,7 @@ RM_STATUS NV_API_CALL os_get_current_time(
+     NvU32 *useconds
+ )
+ {
+-    struct timeval tm;
++    struct nv_timeval tm;
+ 
+     nv_gettimeofday(&tm);
+ 
+@@ -474,7 +474,7 @@ RM_STATUS NV_API_CALL os_delay_us(NvU32 MicroSeconds)
+     unsigned long usec;
+ 
+ #ifdef NV_CHECK_DELAY_ACCURACY
+-    struct timeval tm1, tm2;
++    struct nv_timeval tm1, tm2;
+ 
+     nv_gettimeofday(&tm1);
+ #endif
+@@ -514,9 +514,9 @@ RM_STATUS NV_API_CALL os_delay(NvU32 MilliSeconds)
+     unsigned long MicroSeconds;
+     unsigned long jiffies;
+     unsigned long mdelay_safe_msec;
+-    struct timeval tm_end, tm_aux;
++    struct nv_timeval tm_end, tm_aux;
+ #ifdef NV_CHECK_DELAY_ACCURACY
+-    struct timeval tm_start;
++    struct nv_timeval tm_start;
+ #endif
+ 
+     nv_gettimeofday(&tm_aux);
+diff --git a/kernel/uvm/Makefile b/kernel/uvm/Makefile
+index 0cad8ff..043a08d 100644
+--- a/kernel/uvm/Makefile
++++ b/kernel/uvm/Makefile
+@@ -207,6 +207,7 @@ ccflags-y += $(EXTRA_CFLAGS)
+ 
+ RM_MODULE_SYMVERS:= $(RM_OUT_DIR)/Module.symvers
+ UVM_MODULE_SYMVERS:= $(obj)/Module.symvers
++KBUILD_EXTRA_SYMBOLS:= $(UVM_MODULE_SYMVERS)
+ 
+ module $(MODULE_NAME).ko: $(UVM_MODULE_SYMVERS) debug_diagnostics_printing
+ 
+diff --git a/kernel/uvm/conftest.sh b/kernel/uvm/conftest.sh
+index b7a85f0..33e2a63 100755
+--- a/kernel/uvm/conftest.sh
++++ b/kernel/uvm/conftest.sh
+@@ -176,6 +176,7 @@ test_headers() {
+     FILES="$FILES linux/ktime.h"
+     FILES="$FILES linux/file.h"
+ 
++    FILES_ARCH="$FILES_ARCH asm/pgtable.h"
+     FILES_ARCH="$FILES_ARCH asm/set_memory.h"
+ 
+     translate_and_find_header_files $HEADERS      $FILES
+@@ -440,6 +441,9 @@ compile_test() {
+             # Determine if the set_memory_array_uc() function is present.
+             #
+             CODE="
++            #if defined(NV_ASM_PGTABLE_H_PRESENT)
++            #include <asm/pgtable.h>
++            #endif
+             #if defined(NV_ASM_SET_MEMORY_H_PRESENT)
+             #include <asm/set_memory.h>
+             #else
+diff --git a/kernel/uvm/nvidia_uvm_lite.c b/kernel/uvm/nvidia_uvm_lite.c
+index 6943e7c..9a7e3b6 100644
+--- a/kernel/uvm/nvidia_uvm_lite.c
++++ b/kernel/uvm/nvidia_uvm_lite.c
+@@ -131,8 +131,8 @@ static
+ RM_STATUS _preexisting_error_on_channel(UvmGpuMigrationTracking *pMigTracker,
+                                          UvmCommitRecord *pRecord);
+ 
+-static void _set_timeout_in_usec(struct timeval *src,
+-                                 struct timeval *result,
++static void _set_timeout_in_usec(struct nv_timeval *src,
++                                 struct nv_timeval *result,
+                                  unsigned long timeoutInUsec)
+ {
+     if (!src || !result)
+@@ -820,7 +820,13 @@ done:
+ }
+ 
+ #if defined(NV_VM_OPERATIONS_STRUCT_HAS_FAULT)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0)
++vm_fault_t _fault(struct vm_fault *vmf)
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++int _fault(struct vm_fault *vmf)
++#else
+ int _fault(struct vm_area_struct *vma, struct vm_fault *vmf)
++#endif
+ {
+ #if defined(NV_VM_FAULT_HAS_ADDRESS)
+     unsigned long vaddr = vmf->address;
+@@ -828,8 +834,15 @@ int _fault(struct vm_area_struct *vma, struct vm_fault *vmf)
+     unsigned long vaddr = (unsigned long)vmf->virtual_address;
+ #endif
+     struct page *page = NULL;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0)
++    vm_fault_t retval;
++#else
+     int retval;
+ 
++#endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++   struct vm_area_struct *vma = vmf->vma;
++#endif
+     retval = _fault_common(vma, vaddr, &page, vmf->flags);
+ 
+     vmf->page = page;
+@@ -868,7 +881,13 @@ static struct vm_operations_struct uvmlite_vma_ops =
+ // it's dealing with anonymous mapping (see handle_pte_fault).
+ //
+ #if defined(NV_VM_OPERATIONS_STRUCT_HAS_FAULT)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0)
++vm_fault_t _sigbus_fault(struct vm_fault *vmf)
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++int _sigbus_fault(struct vm_fault *vmf)
++#else
+ int _sigbus_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
++#endif
+ {
+     vmf->page = NULL;
+     return VM_FAULT_SIGBUS;
+@@ -1992,9 +2011,9 @@ void umvlite_destroy_per_process_gpu_resources(UvmGpuUuid *gpuUuidStruct)
+ static RM_STATUS _check_ecc_errors(UvmGpuMigrationTracking *pMigTracker,
+                                     NvBool *pIsEccErrorSet)
+ {
+-    struct timeval eccErrorStartTime = {0};
+-    struct timeval eccErrorCurrentTime = {0};
+-    struct timeval eccTimeout = {0};
++    struct nv_timeval eccErrorStartTime = {0};
++    struct nv_timeval eccErrorCurrentTime = {0};
++    struct nv_timeval eccTimeout = {0};
+     NvBool bEccErrorTimeout = NV_FALSE;
+     NvBool bEccIncomingError = NV_FALSE;
+     unsigned rmInterruptSet = 0;
+-- 
+2.29.0
+
