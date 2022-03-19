@@ -107,7 +107,7 @@ in {
       type = types.listOf types.str;
       example = [];
       description = ''
-        Additional user units shipped with systemd that shall be enabled.
+        Additional units shipped with systemd that shall be enabled for per-user systemd instances.
       '';
     };
   };
