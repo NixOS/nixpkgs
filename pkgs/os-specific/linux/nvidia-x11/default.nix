@@ -69,15 +69,13 @@ rec {
     persistencedSha256 = "1ad81y4qfpxrx0vqsk81a3h0bi1yg8hw5gi5y5d58p76vc8083i9";
   };
 
-  legacy_340 = generic {
+    legacy_340 = generic {
     version = "340.108";
     sha256_32bit = "1jkwa1phf0x4sgw8pvr9d6krmmr3wkgwyygrxhdazwyr2bbalci0";
     sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
     settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
-
-    broken = with kernel; kernelAtLeast "5.5";
-    patches = [ ./vm_operations_struct-fault.patch ];
+    patches = [./0001_kernel_5.7.patch ./0002_kernel_5.8.patch ./0003_kernel_5.9.patch ./0004_kernel_5.10.patch ./0005_kernel_5.11.patch ./0006_kernel_5.14.patch ./0007_kernel_5.15.patch ./0008_kernel_5.16.patch ];
   };
 }
