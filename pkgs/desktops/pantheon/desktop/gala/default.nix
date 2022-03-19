@@ -19,7 +19,6 @@
 , gnome-desktop
 , mutter
 , clutter
-, elementary-icon-theme
 , gnome-settings-daemon
 , wrapGAppsHook
 , gexiv2
@@ -67,7 +66,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter
-    elementary-icon-theme
     gnome-settings-daemon
     gexiv2
     gnome-desktop
