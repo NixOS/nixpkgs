@@ -43,7 +43,12 @@ stdenv.mkDerivation rec {
 
     # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
     # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
-    printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=84632 conv=notrunc
+    if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]]; then
+      printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=84632 conv=notrunc
+    fi
+    if [[ "${stdenv.hostPlatform.system}" == "i686-linux" ]]; then
+      printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=77396 conv=notrunc
+    fi
   '';
 
   installPhase = with lib; ''
