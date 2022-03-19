@@ -139,6 +139,9 @@ self: super: {
   tree-diff = doJailbreak super.tree-diff;
   zinza = doJailbreak super.zinza;
 
+  # Too strict upper bound on base, no upstream issue tracker nor repository
+  mmsyn5 = doJailbreak super.mmsyn5;
+
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
 
