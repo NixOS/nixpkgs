@@ -2729,6 +2729,8 @@ with pkgs;
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
 
+  wl-color-picker = callPackage ../tools/wayland/wl-color-picker { };
+
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
   wlogout = callPackage ../tools/wayland/wlogout { };
