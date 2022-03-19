@@ -622,6 +622,10 @@ self: super: {
     '';
   }) super.ghc-mod;
 
+  # 2022-03-16: descriptive is unmaintained since 2018 and archived on github.com
+  # It does not support aeson 2.0
+  descriptive = super.descriptive.override { aeson = self.aeson_1_5_6_0; };
+
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = overrideCabal (drv: {
