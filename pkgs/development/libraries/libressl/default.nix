@@ -89,6 +89,9 @@ in {
   libressl_3_2 = generic {
     version = "3.2.7";
     sha256 = "112bjfrwwqlk0lak7fmfhcls18ydf62cp7gxghf4gklpfl1zyckw";
+    patches = [
+      ./3.2-CVE-2022-0778.patch
+    ];
   };
   libressl_3_4 = generic {
     version = "3.4.1";
