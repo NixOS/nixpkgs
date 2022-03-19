@@ -4,7 +4,6 @@
 , pname
 , version
 , meta
-, ...
 }:
 
 let
@@ -19,12 +18,13 @@ let
       arch = "64";
       sha256 = "sha256-kTgbqGPgOn5dyjL/IMl3hg2+VUfB+jpPJsqXof8UL+c=";
     };
-  }."${stdenvNoCC.hostPlatform.system}";
+  }.${stdenvNoCC.hostPlatform.system}
+    or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
 in
 
 stdenvNoCC.mkDerivation {
-  inherit pname version;
+  inherit pname version meta;
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/osx_${dist.arch}";
