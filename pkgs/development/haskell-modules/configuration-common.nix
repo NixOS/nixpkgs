@@ -378,6 +378,7 @@ self: super: {
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
   snap-core = doJailbreak (dontCheck super.snap-core); # attoparsec bound is too strict. This has been fixed on master
+  snap-server = doJailbreak super.snap-server; # attoparsec bound is too strict
   sourcemap = dontCheck super.sourcemap;
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
@@ -2214,11 +2215,23 @@ self: super: {
   }) super.katip;
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   # 2021-12-22: https://github.com/snapframework/heist/issues/131
-  heist = assert super.heist.version == "1.1.0.1"; overrideCabal (drv: {
-    testFlags = [
-      "-t" "!*/compiled/ns*"
-    ] ++ drv.testFlags or [];
-  }) (doJailbreak super.heist);
+
+
+  heist = assert super.heist.version == "1.1.0.1"; 
+    # aeson 2.0 compat https://github.com/snapframework/heist/pull/132
+    # not merged in master yet
+    appendPatch (pkgs.fetchpatch {
+      url = "https://github.com/snapframework/heist/compare/de802b0ed5055bd45cfed733524b4086c7e71660...d76adf749d14d7401963d36a22597584c52fc55f.patch";
+      sha256 = "sha256-GEIPGYYJO6S4t710AQe1uk3EvBu4UpablrlMDZLBSTk=";
+      includes = [ "src/*" "heist.cabal"];
+    })
+    (overrideCabal (drv: {
+      revision = null;
+      editedCabalFile = null;
+      doCheck = false;
+    })
+    (doJailbreak super.heist));
+  
   # https://github.com/emc2/HUnit-Plus/issues/26
   HUnit-Plus = dontCheck super.HUnit-Plus;
   # https://github.com/ewestern/haskell-postgis/issues/7
