@@ -2219,7 +2219,7 @@ self: super: {
   # 2021-12-22: https://github.com/snapframework/heist/issues/131
 
 
-  heist = assert super.heist.version == "1.1.0.1"; 
+  heist = assert super.heist.version == "1.1.0.1";
     # aeson 2.0 compat https://github.com/snapframework/heist/pull/132
     # not merged in master yet
     appendPatch (pkgs.fetchpatch {
@@ -2233,7 +2233,7 @@ self: super: {
       doCheck = false;
     })
     (doJailbreak super.heist));
-  
+
   # https://github.com/emc2/HUnit-Plus/issues/26
   HUnit-Plus = dontCheck super.HUnit-Plus;
   # https://github.com/ewestern/haskell-postgis/issues/7
