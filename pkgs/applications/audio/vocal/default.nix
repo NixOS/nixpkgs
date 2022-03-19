@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     libgee
     libnotify
     libunity
-    pantheon.elementary-icon-theme
     pantheon.granite
     sqlite
     webkitgtk

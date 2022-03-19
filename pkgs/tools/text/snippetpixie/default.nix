@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     pantheon.granite
     pantheon.elementary-gtk-theme
-    pantheon.elementary-icon-theme
   ];
 
   doCheck = true;
