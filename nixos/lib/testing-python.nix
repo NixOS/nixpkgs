@@ -224,12 +224,7 @@ rec {
         interactive = true;
       };
 
-      test =
-        let
-          passMeta = drv: drv // lib.optionalAttrs (meta != {}) {
-            meta = (drv.meta or { }) // meta;
-          };
-        in passMeta (runTests { inherit driver pos driverInteractive; });
+      test = lib.addMetaAttrs meta (runTests { inherit driver pos driverInteractive; });
 
     in
       test // {
