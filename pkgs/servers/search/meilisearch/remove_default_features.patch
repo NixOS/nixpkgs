@@ -1,11 +1,11 @@
 diff --git a/meilisearch-http/Cargo.toml b/meilisearch-http/Cargo.toml
-index de418cd4..ecc78d6f 100644
+index 65f71bbf..3ae4fc08 100644
 --- a/meilisearch-http/Cargo.toml
 +++ b/meilisearch-http/Cargo.toml
-@@ -92,7 +92,7 @@ mini-dashboard = [
+@@ -100,7 +100,7 @@ mini-dashboard = [
      "zip",
  ]
- analytics = ["whoami", "reqwest"]
+ analytics = ["segment"]
 -default = ["analytics", "mini-dashboard"]
 +default = []
  
