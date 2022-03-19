@@ -11349,6 +11349,8 @@ with pkgs;
 
   wkhtmltopdf = libsForQt514.callPackage ../tools/graphics/wkhtmltopdf { };
 
+  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin { };
+
   wml = callPackage ../development/web/wml { };
 
   wmc-mpris = callPackage ../applications/misc/web-media-controller { };
