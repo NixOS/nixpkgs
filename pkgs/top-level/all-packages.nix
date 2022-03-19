@@ -1121,6 +1121,8 @@ with pkgs;
 
   topicctl = callPackage ../tools/misc/topicctl { };
 
+  ttchat = callPackage ../tools/misc/ttchat { };
+
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
@@ -14749,6 +14751,8 @@ with pkgs;
 
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare {};
 
+  cloudflare-warp = callPackage ../tools/networking/cloudflare-warp { };
+
   cloudfoundry-cli = callPackage ../applications/networking/cluster/cloudfoundry-cli { };
 
   clpm = callPackage ../development/tools/clpm {};
@@ -25139,7 +25143,6 @@ with pkgs;
   comical = callPackage ../applications/graphics/comical { };
 
   containerd = callPackage ../applications/virtualization/containerd { };
-  containerd_1_4 = callPackage ../applications/virtualization/containerd/1.4.nix { };
 
   convchain = callPackage ../tools/graphics/convchain {};
 
