@@ -1,0 +1,52 @@
+Based on upstream d7d89ce1965473da97b65fe0620c2ad49bd80839 and
+d798aac9af69e052ddb9c58a9bf3642d388abb90 adjusted to apply cleanly
+to NetSSLeay 1.88
+
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -2,6 +2,7 @@ use 5.8.1;
+ 
+ use strict;
+ use warnings;
++use English qw( $OSNAME -no_match_vars );
+ use ExtUtils::MakeMaker;
+ use Config;
+ use File::Spec;
+@@ -33,6 +34,7 @@ my %eumm_args = (
+   VERSION_FROM => 'lib/Net/SSLeay.pm',
+   MIN_PERL_VERSION => '5.8.1',
+   CONFIGURE_REQUIRES => {
++    'English' => '0',
+     'ExtUtils::MakeMaker' => '0',
+   },
+   TEST_REQUIRES => {
+@@ -142,8 +144,27 @@ sub ssleay_get_build_opts {
+     for ("$prefix/include", "$prefix/inc32", '/usr/kerberos/include') {
+       push @{$opts->{inc_paths}}, $_ if -f "$_/openssl/ssl.h";
+     }
+-    for ($prefix, "$prefix/lib64", "$prefix/lib", "$prefix/out32dll") {
+-      push @{$opts->{lib_paths}}, $_ if -d $_;
++
++    # Directory order matters. With macOS Monterey a poisoned dylib is
++    # returned if the directory exists without the desired
++    # library. See GH-329 for more information. With Strawberry Perl
++    # 5.26 and later the paths must be in different order or the link
++    # phase fails.
++    my @try_lib_paths = (
++	["$prefix/lib64", "$prefix/lib", "$prefix/out32dll", $prefix] => sub {$OSNAME eq 'darwin' },
++	[$prefix, "$prefix/lib64", "$prefix/lib", "$prefix/out32dll"] => sub { 1 },
++	);
++
++    while (
++	!defined $opts->{lib_paths}
++	&& defined( my $dirs = shift @try_lib_paths )
++	&& defined( my $cond = shift @try_lib_paths )
++    ) {
++	if ( $cond->() ) {
++	    foreach my $dir (@{$dirs}) {
++		push @{$opts->{lib_paths}}, $dir if -d $dir;
++	    }
++	}
+     }
+ 
+     my $rsaref  = ssleay_is_rsaref();
