@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mysocketw";
-  version = "3.10.27";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "RigsOfRods";
     repo = "socketw";
     rev = version;
-    sha256 = "0xqcgwb1lyc2d8834sq5adbmggyn6vvb26jw20862sxa15j0qfd4";
+    sha256 = "sha256-mpfhmKE2l59BllkOjmURIfl17lAakXpmGh2x9SFSaAo=";
   };
 
   nativeBuildInputs = [ cmake ];
