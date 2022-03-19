@@ -1959,13 +1959,15 @@ self: super: {
 
   # Fixes too strict version bounds on regex libraries
   # Presumably to be removed at the next release
+  # Test suite doesn't support hspec 2.8
+  # https://github.com/yi-editor/yi/issues/1124
   yi-language = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
     sha256 = "0r4mzngs0x1akqpajzx7ssa9rax977fvj5ra8d3grfbpx6z0nm01";
     includes = [ "yi-language.cabal" ];
     stripLen = 2;
     extraPrefix = "";
-  }) super.yi-language;
+  }) (dontCheck super.yi-language);
 
   # 2022-03-16: Upstream is not bumping bounds https://github.com/ghcjs/jsaddle/issues/123
   jsaddle = overrideCabal (drv: {
