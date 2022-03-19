@@ -3534,6 +3534,10 @@ with pkgs;
 
   metabase = callPackage ../servers/metabase { };
 
+  micropad = callPackage ../applications/office/micropad {
+    electron = electron_17;
+  };
+
   midicsv = callPackage ../tools/audio/midicsv { };
 
   miniscript = callPackage ../applications/blockchains/miniscript { };
