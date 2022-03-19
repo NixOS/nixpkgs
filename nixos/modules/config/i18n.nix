@@ -93,5 +93,10 @@ with lib;
         ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
       '';
 
+    system.replaceRuntimeDependencies = singleton {
+      original = pkgs.glibcLocales;
+      replacement = config.i18n.glibcLocales;
+    };
+
   };
 }
