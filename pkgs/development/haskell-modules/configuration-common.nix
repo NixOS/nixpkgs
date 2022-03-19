@@ -622,9 +622,12 @@ self: super: {
     '';
   }) super.ghc-mod;
 
-  # 2022-03-16: descriptive is unmaintained since 2018 and archived on github.com
+  # 2022-03-20: descriptive is unmaintained since 2018 and archived on github.com
   # It does not support aeson 2.0
   descriptive = super.descriptive.override { aeson = self.aeson_1_5_6_0; };
+
+  # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
+  jwt = dontCheck super.jwt;
 
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
