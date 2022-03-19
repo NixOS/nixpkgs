@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pytest
+, pythonOlder
 , xclip
 , xvfb-run
 }:
@@ -10,12 +11,15 @@
 buildPythonPackage rec {
   pname = "pyclip";
   version = "0.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyoungtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NCWmCp4VGwwvubqN8FUUJ0kcZbXjOEyB6+BfGky1Kj4=";
+    hash = "sha256-NCWmCp4VGwwvubqN8FUUJ0kcZbXjOEyB6+BfGky1Kj4=";
   };
 
   postPatch = ''
@@ -23,7 +27,12 @@ buildPythonPackage rec {
       --replace docs/README.md README.md
   '';
 
-  checkInputs = [ pytest ] ++ lib.optionals stdenv.isLinux [ xclip xvfb-run ];
+  checkInputs = [
+    pytest
+  ] ++ lib.optionals stdenv.isLinux [
+    xclip
+    xvfb-run
+  ];
 
   checkPhase = ''
     runHook preCheck
