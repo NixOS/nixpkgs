@@ -136,6 +136,15 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/d3671fd972cd185a6923433aa4802f54d8b62112.patch";
       sha256 = "sha256-GUh5o7mbFTm/dm6CqcGdoMlC+YrV8RlcEwu/mxrfTzo=";
     })
+    # The next two commits are to make Linux v5.17 work on aarch64-darwin. These are included in QEMU v7.
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/ad99f64f1cfff7c5e7af0e697523d9b7e45423b6.patch";
+      sha256 = "sha256-e6WtfQIPEiXhWucd5ab7UIoccbWEAv3bwksn4hR85CY=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/7f6c295cdfeaa229c360cac9a36e4e595aa902ae.patch";
+      sha256 = "sha256-mORtgfU1CYQFKO5UrXgM9cJyZxeF2bz8iAoq0UlFQeY=";
+    })
     ./allow-virtfs-on-darwin.patch
     # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
     # support on nix requires utimensat fallback. The patch adding this fallback
