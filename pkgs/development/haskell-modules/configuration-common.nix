@@ -1706,6 +1706,21 @@ self: super: {
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
 
+  # DerivingVia is not allowed in safe Haskell
+  # https://github.com/strake/util.hs/issues/1
+  util = appendConfigureFlags [
+    "--ghc-option=-fno-safe-haskell"
+    "--haddock-option=--optghc=-fno-safe-haskell"
+  ] super.util;
+  category = appendConfigureFlags [
+    "--ghc-option=-fno-safe-haskell"
+    "--haddock-option=--optghc=-fno-safe-haskell"
+  ] super.category;
+  alg = appendConfigureFlags [
+    "--ghc-option=-fno-safe-haskell"
+    "--haddock-option=--optghc=-fno-safe-haskell"
+  ] super.alg;
+
   # Break out of overspecified constraint on QuickCheck.
   algebraic-graphs = dontCheck super.algebraic-graphs;
   attoparsec = doJailbreak super.attoparsec;      # https://github.com/haskell/attoparsec/pull/168
