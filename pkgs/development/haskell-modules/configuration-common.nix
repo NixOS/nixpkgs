@@ -2123,9 +2123,8 @@ self: super: {
   # https://github.com/dagit/zenc/issues/5
   zenc = doJailbreak super.zenc;
 
-  # Indeterministic tests
-  # Fixed on upstream: https://github.com/softwarefactory-project/matrix-client-haskell/commit/4ca4963cfd06379d9bdce49742af854aed6a0d37
-  matrix-client = dontCheck super.matrix-client;
+  # 2022-03-19: retry bounds to strict: https://github.com/softwarefactory-project/matrix-client-haskell/pull/24
+  matrix-client = assert super.matrix-client.version == "0.1.4.1"; doJailbreak super.matrix-client;
 
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.
