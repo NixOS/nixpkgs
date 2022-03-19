@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pyclip";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "spyoungtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19ff9cgnfx03mbmy5zpbdi986ppx38a5jf97vkqnic4g5sd1qyrn";
+    sha256 = "sha256-NCWmCp4VGwwvubqN8FUUJ0kcZbXjOEyB6+BfGky1Kj4=";
   };
 
   postPatch = ''
