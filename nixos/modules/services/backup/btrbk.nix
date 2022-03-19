@@ -51,6 +51,8 @@ let
     '';
 in
 {
+  meta.maintainers = with lib.maintainers; [ oxalica ];
+
   options = {
     services.btrbk = {
       extraPackages = lib.mkOption {
@@ -76,9 +78,12 @@ in
             submodule {
               options = {
                 onCalendar = lib.mkOption {
-                  type = lib.types.str;
+                  type = lib.types.nullOr lib.types.str;
                   default = "daily";
-                  description = "How often this btrbk instance is started. See systemd.time(7) for more information about the format.";
+                  description = ''
+                    How often this btrbk instance is started. See systemd.time(7) for more information about the format.
+                    Setting it to null disables the timer, thus this instance can only be started manually.
+                  '';
                 };
                 settings = lib.mkOption {
                   type = let t = lib.types.attrsOf (lib.types.either lib.types.str (t // { description = "instances of this type recursively"; })); in t;
@@ -214,7 +219,8 @@ in
           };
         }
       )
-      cfg.instances;
+      (lib.filterAttrs (name: instance: instance.onCalendar != null)
+        cfg.instances);
   };
 
 }
