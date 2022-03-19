@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
-    elementary-gtk-theme
     elementary-icon-theme
     gnome-settings-daemon
     gdk-pixbuf
@@ -91,8 +90,11 @@ stdenv.mkDerivation rec {
       # for the compositor
       --prefix PATH : "$out/bin"
 
-      # the theme is hardcoded
+      # the GTK theme is hardcoded
       --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+
+      # the icon theme is hardcoded
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
 

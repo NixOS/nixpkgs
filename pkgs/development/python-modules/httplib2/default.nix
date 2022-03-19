@@ -61,6 +61,7 @@ buildPythonPackage rec {
     "test_connection_close"
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
+    "test_connection_close"
   ];
 
   pytestFlagsArray = [

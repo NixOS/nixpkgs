@@ -11,7 +11,6 @@
 , vala
 , wrapGAppsHook
 , clutter
-, elementary-icon-theme
 , evolution-data-server
 , folks
 , geoclue2
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clutter
-    elementary-icon-theme
     evolution-data-server
     folks
     geoclue2
