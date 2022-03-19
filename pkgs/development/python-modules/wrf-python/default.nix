@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "wrf-python";
-  version = "1.3.2.6";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
     rev = version;
-    sha256 = "046kflai71r7xrmdw6jn0ifn5656wj9gpnwlgxkx430dgk7zbc2y";
+    sha256 = "sha256-+v4FEK0FVE0oAIb18XDTOInHKfxXyykb1ngk9Uxwf0c=";
   };
 
   propagatedBuildInputs = [
