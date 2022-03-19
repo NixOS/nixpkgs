@@ -8,7 +8,6 @@
 , numpy
 , netcdf4
 , setuptools
-, pythonOlder
 }:
 
 buildPythonPackage rec {
