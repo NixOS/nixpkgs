@@ -844,6 +844,8 @@ in {
 
   azure-common = callPackage ../development/python-modules/azure-common { };
 
+  azure-containerregistry = callPackage ../development/python-modules/azure-containerregistry { };
+
   azure-core = callPackage ../development/python-modules/azure-core { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
@@ -3027,6 +3029,8 @@ in {
     inherit (pkgs) flatbuffers;
   };
 
+  flatdict = callPackage ../development/python-modules/flatdict { };
+
   flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
   flax = callPackage ../development/python-modules/flax { };
@@ -4461,6 +4465,8 @@ in {
   keyring = callPackage ../development/python-modules/keyring { };
 
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
+
+  keyrings-google-artifactregistry-auth = callPackage ../development/python-modules/keyrings-google-artifactregistry-auth { };
 
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
