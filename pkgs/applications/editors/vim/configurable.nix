@@ -25,7 +25,6 @@
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
 , darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
-, ...
 }:
 
 
