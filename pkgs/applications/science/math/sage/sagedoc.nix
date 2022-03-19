@@ -89,6 +89,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    ${sage-with-env}/bin/sage -t --optional=sagemath_doc_html --all
+    # sagemath_doc_html tests assume sage tests are being run, so we
+    # compromise: we run standard tests, but only on files containing
+    # relevant tests. as of Sage 9.6, there are only 4 such files.
+    grep -PRl "#.*optional.*sagemath_doc_html" ${src}/src/sage{,_docbuild} | \
+      xargs ${sage-with-env}/bin/sage -t --optional=sage,sagemath_doc_html
   '';
 }
