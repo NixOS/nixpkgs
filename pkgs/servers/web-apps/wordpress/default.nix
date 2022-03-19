@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
-  version = "5.9";
+  version = "5.9.2";
 
   src = fetchurl {
     url = "https://wordpress.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-RVg45GvS0wqEka6b0lv3Acgu1p28fImAbioTCGjG/7c=";
+    sha256 = "sha256-d2Xy3SpWzpIHmXh8x5BKWF9jNlvKK6D3uwbqIGDGn4s=";
   };
 
   installPhase = ''
