@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.4.0";
+  version = "0.5.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f05df8da52619da4b8c7f155d8a15af19083c0c7ad941d8c1de799560ad994ca";
+    sha256 = "sha256-BbanndMaepk9+y6Dhqkcl+O4xs8otyVT6AjmJeC4fCA=";
   };
 
   doCheck = false; # infinite recursion with Scrapy
