@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     json-glib
     xorg.libXtst
     pantheon.granite
-    pantheon.elementary-gtk-theme
   ];
 
   doCheck = true;
