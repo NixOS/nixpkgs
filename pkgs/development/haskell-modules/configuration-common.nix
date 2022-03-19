@@ -1651,7 +1651,7 @@ self: super: {
   # 2022-03-19: strict upper bounds https://github.com/poscat0x04/hinit/issues/2
   hinit = doJailbreak (generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_2; }));
 
-  # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
+  # 2022-03-19: Keeping jailbreak because of tons of strict bounds: https://github.com/snapframework/snap/issues/220
   snap = doJailbreak super.snap;
 
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
