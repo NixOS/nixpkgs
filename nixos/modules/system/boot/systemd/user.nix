@@ -109,6 +109,7 @@ in {
       description = ''
         Additional units shipped with systemd that shall be enabled for per-user systemd instances.
       '';
+      internal = true;
     };
   };
 
