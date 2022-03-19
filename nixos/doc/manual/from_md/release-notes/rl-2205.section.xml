@@ -796,6 +796,54 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>vim.customize</literal> function produced by
+          <literal>vimUtils.makeCustomizable</literal> now has a
+          slightly different interface:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The wrapper now includes everything in the given Vim
+              derivation if <literal>name</literal> is
+              <literal>&quot;vim&quot;</literal> (the default). This
+              makes the <literal>wrapManual</literal> argument obsolete,
+              but this behavior can be overriden by setting the
+              <literal>standalone</literal> argument.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              All the executables present in the given derivation (or,
+              in <literal>standalone</literal> mode, only the
+              <literal>*vim</literal> ones) are wrapped. This makes the
+              <literal>wrapGui</literal> argument obsolete.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <literal>vimExecutableName</literal> and
+              <literal>gvimExecutableName</literal> arguments were
+              replaced by a single <literal>executableName</literal>
+              argument in which the shell variable
+              <literal>$exe</literal> can be used to refer to the
+              wrapped executable’s name.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          See the comments in
+          <literal>pkgs/applications/editors/vim/plugins/vim-utils.nix</literal>
+          for more details.
+        </para>
+        <para>
+          <literal>vimUtils.vimWithRC</literal> was removed. You should
+          instead use <literal>customize</literal> on a Vim derivation,
+          which now accepts <literal>vimrcFile</literal> and
+          <literal>gvimrcFile</literal> arguments.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>tilp2</literal> was removed together with its module
         </para>
       </listitem>

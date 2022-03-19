@@ -1,5 +1,6 @@
 # tests available at pkgs/test/vim
-{ lib, stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin
+{ lib, stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText
+, runCommand, makeWrapper
 , nix-prefetch-hg, nix-prefetch-git
 , fetchFromGitHub, runtimeShell
 , hasLuaModule
@@ -16,7 +17,7 @@ Install Vim like this eg using nixos option environment.systemPackages which wil
 vim-with-plugins in PATH:
 
   vim_configurable.customize {
-    name = "vim-with-plugins";
+    name = "vim-with-plugins"; # optional
 
     # add custom .vimrc lines like this:
     vimrcConfig.customRC = ''
@@ -404,63 +405,80 @@ rec {
   inherit vimrcContent;
   inherit packDir;
 
-  # shell script with custom name passing [-u vimrc] [-U gvimrc] to vim
-  vimWithRC = {
-    vimExecutable,
-    gvimExecutable,
-    vimManPages,
-    wrapManual,
-    wrapGui,
-    name ? "vim",
-    vimrcFile ? null,
-    gvimrcFile ? null,
-    vimExecutableName,
-    gvimExecutableName,
-  }:
-    let
-      rcOption = o: file: lib.optionalString (file != null) "-${o} ${file}";
-      vimWrapperScript = writeScriptBin vimExecutableName ''
-        #!${runtimeShell}
-        exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
-      '';
-      gvimWrapperScript = writeScriptBin gvimExecutableName ''
-        #!${stdenv.shell}
-        exec ${gvimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
-      '';
-    in
-      buildEnv {
-        inherit name;
-        paths = [
-          vimWrapperScript
-        ] ++ lib.optional wrapGui gvimWrapperScript
-          ++ lib.optional wrapManual vimManPages
-        ;
-      };
+  makeCustomizable = let
+    mkVimrcFile = vimrcFile; # avoid conflict with argument name
+  in vim: vim // {
+    # Returns a customized vim that uses the specified vimrc configuration.
+    customize =
+      { # The name of the derivation.
+        name ? "vim"
+      , # A shell word used to specify the names of the customized executables.
+        # The shell variable $exe can be used to refer to the wrapped executable's name.
+        # Examples: "my-$exe", "$exe-with-plugins", "\${exe/vim/v1m}"
+        executableName ?
+          if lib.hasInfix "vim" name then
+            lib.replaceStrings [ "vim" ] [ "$exe" ] name
+          else
+            "\${exe/vim/${lib.escapeShellArg name}}"
+      , # A custom vimrc configuration, treated as an argument to vimrcContent (see the documentation in this file).
+        vimrcConfig ? null
+      , # A custom vimrc file.
+        vimrcFile ? null
+      , # A custom gvimrc file.
+        gvimrcFile ? null
+      , # If set to true, return the *vim wrappers only.
+        # If set to false, overlay the wrappers on top of the original vim derivation.
+        # This ensures that things like man pages and .desktop files are available.
+        standalone ? name != "vim" && wrapManual != true
 
-  # add a customize option to a vim derivation
-  makeCustomizable = vim: vim // {
-    customize = {
-      name,
-      vimrcConfig,
-      wrapManual ? true,
-      wrapGui ? false,
-      vimExecutableName ? name,
-      gvimExecutableName ? (lib.concatStrings [ "g" name ]),
-    }: vimWithRC {
-      vimExecutable = "${vim}/bin/vim";
-      gvimExecutable = "${vim}/bin/gvim";
-      inherit name wrapManual wrapGui vimExecutableName gvimExecutableName;
-      vimrcFile = vimrcFile vimrcConfig;
-      vimManPages = buildEnv {
-        name = "vim-doc";
-        paths = [ vim ];
-        pathsToLink = [ "/share/man" ];
-      };
-    };
+      , # deprecated arguments (TODO: remove eventually)
+        wrapManual ? null, wrapGui ? null, vimExecutableName ? null, gvimExecutableName ? null,
+      }:
+      lib.warnIf (wrapManual != null) ''
+        vim.customize: wrapManual is deprecated: the manual is now included by default if `name == "vim"`.
+        ${if wrapManual == true && name != "vim" then "Set `standalone = false` to include the manual."
+        else if wrapManual == false && name == "vim" then "Set `standalone = true` to get the *vim wrappers only."
+        else ""}''
+      lib.warnIf (wrapGui != null)
+        "vim.customize: wrapGui is deprecated: gvim is now automatically included if present"
+      lib.throwIfNot (vimExecutableName == null && gvimExecutableName == null)
+        "vim.customize: (g)vimExecutableName is deprecated: use executableName instead (see source code for examples)"
+      (let
+        vimrc =
+          if vimrcFile != null then vimrcFile
+          else if vimrcConfig != null then mkVimrcFile vimrcConfig
+          else throw "at least one of vimrcConfig and vimrcFile must be specified";
+        bin = runCommand "${name}-bin" { buildInputs = [ makeWrapper ]; } ''
+          vimrc=${lib.escapeShellArg vimrc}
+          gvimrc=${if gvimrcFile != null then lib.escapeShellArg gvimrcFile else ""}
+
+          mkdir -p "$out/bin"
+          for exe in ${
+            if standalone then "{,g,r,rg,e}vim {,g}vimdiff"
+            else "{,g,r,rg,e}{vim,view} {,g}vimdiff ex"
+          }; do
+            if [[ -e ${vim}/bin/$exe ]]; then
+              dest="$out/bin/${executableName}"
+              if [[ -e $dest ]]; then
+                echo "ambiguous executableName: ''${dest##*/} already exists"
+                continue
+              fi
+              makeWrapper ${vim}/bin/"$exe" "$dest" \
+                --add-flags "-u ''${vimrc@Q} ''${gvimrc:+-U ''${gvimrc@Q}}"
+            fi
+          done
+        '';
+      in if standalone then bin else
+        buildEnv {
+          inherit name;
+          paths = [ (lib.lowPrio vim) bin ];
+        });
 
     override = f: makeCustomizable (vim.override f);
     overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
+
+  vimWithRC = throw "vimWithRC was removed, please use vim.customize instead";
 
   pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
     inherit name;
