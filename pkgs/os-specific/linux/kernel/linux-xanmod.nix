@@ -1,9 +1,9 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.15.27";
+  version = "5.16.15";
   release = "1";
-  suffix = "xanmod${release}-tt";
+  suffix = "xanmod${release}";
 in
 buildLinux (args // rec {
   inherit version;
@@ -13,7 +13,7 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-ycUvTXDKnffxs8FKZJurX2bDr85gMQlSIFD0nST2Q98=";
+    hash = "sha256-Zon8f7rwJ2Wk93e7QYTKf56zWWt4hEORGXv2ZyXJETg=";
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -60,7 +60,7 @@ buildLinux (args // rec {
   };
 
   extraMeta = {
-    branch = "5.15-tt";
+    branch = "5.16";
     maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
     description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;
