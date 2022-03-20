@@ -4164,6 +4164,8 @@ with pkgs;
     stdenv = gcc9Stdenv;
   };
 
+  cider = callPackage ../applications/audio/cider { };
+
   isolyzer = callPackage ../tools/cd-dvd/isolyzer { };
 
   isomd5sum = callPackage ../tools/cd-dvd/isomd5sum { };
