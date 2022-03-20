@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "jax-v${version}";
-    sha256 = "sha256-RZqSJP2vtt8U6nmftV2VzfkMGkkk3100QqsjI7PpQbc=";
+    sha256 = "1ds1x6rj68xb88s5vpr494d0ryfdjmfvb7vrx8adzdmgzlj956j5";
   };
 
   patches = [
