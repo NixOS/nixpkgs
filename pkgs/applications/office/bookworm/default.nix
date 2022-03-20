@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
     pantheon.granite
     glib
     libgee
