@@ -521,6 +521,7 @@ in
   telegraf = handleTest ./telegraf.nix {};
   teleport = handleTest ./teleport.nix {};
   thelounge = handleTest ./thelounge.nix {};
+  terminal-emulators = handleTest ./terminal-emulators.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
   timezone = handleTest ./timezone.nix {};

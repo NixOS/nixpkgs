@@ -23,6 +23,7 @@
 , pcre2
 , libxslt
 , docbook-xsl-nons
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -81,6 +82,8 @@ stdenv.mkDerivation rec {
       attrPath = "gnome.gnome-terminal";
     };
   };
+
+  passthru.tests.test = nixosTests.terminal-emulators.gnome-terminal;
 
   meta = with lib; {
     description = "The GNOME Terminal Emulator";
