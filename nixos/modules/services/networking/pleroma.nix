@@ -1,7 +1,7 @@
 { config, options, lib, pkgs, stdenv, ... }:
 let
   cfg = config.services.pleroma;
-  cookieFile = "/var/lib/pleroma/.cookie";
+  inherit (config.services.pleroma.package) cookieFile;
 in {
   options = {
     services.pleroma = with lib; {
@@ -9,7 +9,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pleroma.override { inherit cookieFile; };
+        default = pkgs.pleroma;
         defaultText = literalExpression "pkgs.pleroma";
         description = "Pleroma package to use.";
       };
