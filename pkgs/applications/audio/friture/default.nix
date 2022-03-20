@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 let
   py = python3Packages;
