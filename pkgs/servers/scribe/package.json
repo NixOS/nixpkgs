@@ -1,0 +1,28 @@
+{
+  "license": "UNLICENSED",
+  "name": "scribe",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@rails/ujs": "^6.0.0",
+    "compression-webpack-plugin": "^8.0.1",
+    "laravel-mix": "^6.0.28",
+    "modern-normalize": "^1.1.0",
+    "postcss": "^8.3.6",
+    "tufte-css": "^1.8.0",
+    "turbolinks": "^5.2.0"
+  },
+  "scripts": {
+    "heroku-postbuild": "yarn prod",
+    "dev": "yarn run mix",
+    "watch": "yarn run mix watch",
+    "prod": "yarn run mix --production"
+  },
+  "devDependencies": {
+    "@babel/compat-data": "^7.9.0",
+    "browser-sync": "^2.26.7",
+    "resolve-url-loader": "^3.1.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2"
+  }
+}
