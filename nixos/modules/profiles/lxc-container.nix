@@ -42,4 +42,6 @@
     "sys-kernel-debug.mount"
   ];
 
+  systemd.services."container-getty@1".wantedBy = [ "getty.target" ];
+
 }
