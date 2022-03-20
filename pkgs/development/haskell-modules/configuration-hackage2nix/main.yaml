@@ -249,7 +249,6 @@ package-maintainers:
     - cabal-fmt
     - ema
     - generic-optics
-    - ghcup
     - ghcid
     - ghcide
     - haskell-language-server
