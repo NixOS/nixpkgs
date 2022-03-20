@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "0.11.1";
+  version = "1.0.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gcyOeUyRAwU5s+XoQO/yM0tx7QHjDsBeyoe5HRZHtIs=";
+    sha256 = "sha256-c+iOb1F8+9IoRbwpMTdyDfOPW2ZEo4xDAlbzLAxgSfk=";
   };
 
   nativeBuildInputs = [
