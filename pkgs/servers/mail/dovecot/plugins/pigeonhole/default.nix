@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dovecot, openssl }:
+{ lib, stdenv, fetchurl, dovecot, openssl, withManagesieve ? true }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
 in stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     "--with-dovecot=${dovecot}/lib/dovecot"
     "--without-dovecot-install-dirs"
     "--with-moduledir=$(out)/lib/dovecot"
-  ];
+  ] ++ lib.optional withManagesieve "--with-managesieve";
 
   enableParallelBuilding = true;
 
