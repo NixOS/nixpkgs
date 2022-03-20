@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -33,6 +34,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "CQn8SeqK1IMtJ1ZP8v0dxmZpbioHxzlBxIgp5gVy2gE=";
   };
+
+  patches = [
+    # Pull upstream fix for meson-0.60:
+    #  https://gitlab.gnome.org/GNOME/gcr/-/merge_requests/81
+    (fetchpatch {
+      name = "meson-0.60.patch";
+      url = "https://gitlab.gnome.org/GNOME/gcr/-/commit/b3ca1d02bb0148ca787ac4aead164d7c8ce2c4d8.patch";
+      sha256 = "15gwxkcm5q5p87p5lrqwgykpzx5gmk179xd3481yak93yhbvy165";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
