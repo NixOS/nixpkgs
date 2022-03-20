@@ -12,6 +12,7 @@ rec {
     }));
 
   services = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ]);
+  initrdServices = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig initrdServiceConfig ]);
 
   targets = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig ]);
 

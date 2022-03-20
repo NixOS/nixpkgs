@@ -11,10 +11,7 @@ let
   systemd = cfg.package;
 
   inherit (systemdUtils.lib)
-    makeUnit
     generateUnits
-    makeJobScript
-    commonUnitText
     targetToUnit
     serviceToUnit
     socketToUnit

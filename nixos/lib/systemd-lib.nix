@@ -291,16 +291,10 @@ in rec {
     };
   };
 
-  serviceConfig = { name, config, ... }: {
+  mkServiceConfig = path: { name, config, ... }: {
     config = mkMerge
       [ { # Default path for systemd services.  Should be quite minimal.
-          path = mkAfter
-            [ pkgs.coreutils
-              pkgs.findutils
-              pkgs.gnugrep
-              pkgs.gnused
-              systemd
-            ];
+          path = mkAfter path;
           environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
@@ -329,6 +323,16 @@ in rec {
           })
       ];
   };
+
+  serviceConfig = mkServiceConfig [
+    pkgs.coreutils
+    pkgs.findutils
+    pkgs.gnugrep
+    pkgs.gnused
+    systemd
+  ];
+
+  initrdServiceConfig = mkServiceConfig [];
 
   mountConfig = { config, ... }: {
     config = {
@@ -383,6 +387,15 @@ in rec {
             X-RestartIfChanged=false
           '' else ""}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
+          ${attrsToSection def.serviceConfig}
+        '';
+    };
+
+  initrdServiceToUnit = name: def:
+    { inherit (def) aliases wantedBy requiredBy enable;
+      text = commonUnitText def +
+        ''
+          [Service]
           ${attrsToSection def.serviceConfig}
         '';
     };

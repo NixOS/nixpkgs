@@ -603,7 +603,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup;
+    inherit withCryptsetup util-linux;
 
     tests = {
       inherit (nixosTests) switchTest;
