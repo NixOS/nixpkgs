@@ -2237,6 +2237,8 @@ in {
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
+  django-cache-memoize = callPackage ../development/python-modules/django-cache-memoize { };
+
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
