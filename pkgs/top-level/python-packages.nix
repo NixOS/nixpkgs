@@ -6303,6 +6303,8 @@ in {
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 
+  pyzbar = callPackage ../development/python-modules/pyzbar { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
