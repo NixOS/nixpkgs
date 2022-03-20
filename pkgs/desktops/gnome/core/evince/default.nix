@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "42.0";
+  version = "42.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rGD/FKr1bWQ5lcO0um9XJcyc4k4nkIc7XIfttKIALUI=";
+    sha256 = "skdnuz1RA7TjWw4VzwM9viSI+IcAzdiC0ipDre7C6Ao=";
   };
 
   postPatch = ''
