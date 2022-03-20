@@ -1,4 +1,4 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, fetchpatch, bundlerEnv, nixosTests
+{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
 
@@ -16,17 +16,9 @@ stdenv.mkDerivation rec {
   # Putting the callPackage up in the arguments list also does not work.
   src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-0432.patch";
-      url = "https://github.com/mastodon/mastodon/commit/4d6d4b43c6186a13e67b92eaf70fe1b70ea24a09.patch";
-      sha256 = "sha256-C18X2ErBqP/dIEt8NrA7hdiqxUg5977clouuu7Lv4/E=";
-    })
-  ];
-
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-Z+nFMJcC2f+nDUxa2vPYnNezMLBGXfLdh+xMXPHqYyw=";
+    sha256 = "sha256-Ngfs15YKLfSBOKju3BzpZFnenB370jId2G1g9Qy1y5w=";
   };
 
   mastodon-gems = bundlerEnv {
@@ -53,7 +45,7 @@ stdenv.mkDerivation rec {
     pname = "${pname}-modules";
     inherit src version;
 
-    nativeBuildInputs = [ fixup_yarn_lock mastodon-gems nodejs-slim yarn ];
+    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -63,7 +55,12 @@ stdenv.mkDerivation rec {
       fixup_yarn_lock ~/yarn.lock
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+
+      patchShebangs ~/bin
       patchShebangs ~/node_modules
+
+      # skip running yarn install
+      rm -rf ~/bin/yarn
 
       OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder \
         rails assets:precompile
