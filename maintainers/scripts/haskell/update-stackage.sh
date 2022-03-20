@@ -6,7 +6,7 @@ set -eu -o pipefail
 
 # Stackage solver to use, LTS or Nightly
 # (should be capitalized like the display name)
-SOLVER=Nightly
+SOLVER=LTS
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
 readonly TMP_TEMPLATE
