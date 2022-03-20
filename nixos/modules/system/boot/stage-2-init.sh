@@ -173,4 +173,4 @@ echo "starting systemd..."
 PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive @systemdUnitPathEnvVar@ \
     TZDIR=/etc/zoneinfo \
-    exec @systemdExecutable@
+    exec @systemdExecutable@ "$@"
