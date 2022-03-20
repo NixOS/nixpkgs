@@ -2032,6 +2032,18 @@ self: super: {
     doCheck = pkgs.stdenv.targetPlatform.system == "x86_64-linux";
   } super.llvm-hs;
 
+  # Fix build with bytestring >= 0.11 (GHC 9.2)
+  # https://github.com/llvm-hs/llvm-hs/pull/389
+  llvm-hs-pure = appendPatches [
+    (pkgs.fetchpatch {
+      name = "llvm-hs-pure-bytestring-0.11.patch";
+      url = "https://github.com/llvm-hs/llvm-hs/commit/fe8fd556e8d2cc028f61d4d7b4b6bf18c456d090.patch";
+      sha256 = "0gjgcvy3jx15nhq4jgarn8ff2nk1dc0k7w64knhhr17isw91gikp";
+      stripLen = 1;
+      excludes = [ "**/Triple.hs" ]; # doesn't exist in 9.0.0
+    })
+  ] super.llvm-hs-pure;
+
   # * Fix build failure by picking patch from 8.5, we need
   #   this version of sbv for petrinizer
   # * Pin version of crackNum that still exposes its library
