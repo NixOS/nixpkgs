@@ -7,6 +7,7 @@
 , pytestCheckHook
 , toml
 , twisted
+, setuptools
 , git # shells out to git
 }:
 
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     incremental
     jinja2
     toml
+    setuptools # ModuleNotFoundError: No module named 'pkg_resources' otherwise
   ];
 
   # zope.interface collision
