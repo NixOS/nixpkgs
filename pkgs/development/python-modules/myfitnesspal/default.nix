@@ -8,11 +8,11 @@
 , measurement
 , python-dateutil
 , requests
-, six
 , rich
 , pytestCheckHook
 , mock
 , nose
+, pythonOlder
 }:
 
 # TODO: Define this package in "all-packages.nix" using "toPythonApplication".
@@ -22,6 +22,8 @@ buildPythonPackage rec {
   pname = "myfitnesspal";
   version = "1.17.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,7 +38,6 @@ buildPythonPackage rec {
     measurement
     python-dateutil
     requests
-    six
     rich
   ];
 
