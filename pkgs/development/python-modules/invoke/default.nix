@@ -9,9 +9,9 @@ buildPythonPackage rec {
   pname = "invoke";
   version = "1.7.0";
   format = "setuptools";
- 
- disabled = pythonOlder "3.7";
- 
+
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-4zLkneQEY/IBYxX1HfQjE4VXcr6GQ1aGFWvBj0W1zGw=";
