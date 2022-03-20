@@ -9836,6 +9836,8 @@ with pkgs;
 
   shocco = callPackage ../tools/text/shocco { };
 
+  shopify-cli = callPackage ../development/web/shopify-cli { };
+
   shopify-themekit = callPackage ../development/web/shopify-themekit { };
 
   shorewall = callPackage ../tools/networking/shorewall { };
@@ -10553,6 +10555,8 @@ with pkgs;
   };
 
   tokio-console = callPackage ../development/tools/tokio-console { };
+
+  toml2json = callPackage ../development/tools/toml2json { };
 
   toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
 
@@ -11348,6 +11352,8 @@ with pkgs;
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
   wkhtmltopdf = libsForQt514.callPackage ../tools/graphics/wkhtmltopdf { };
+
+  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin { };
 
   wml = callPackage ../development/web/wml { };
 
@@ -19555,11 +19561,8 @@ with pkgs;
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_2
     libressl_3_4;
 
-  # Please keep this pointed to the latest version. See also
-  # https://discourse.nixos.org/t/nixpkgs-policy-regarding-libraries-available-in-multiple-versions/7026/2
   libressl = libressl_3_4;
 
   boringssl = callPackage ../development/libraries/boringssl { };
@@ -34309,7 +34312,6 @@ with pkgs;
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
-    libressl = libressl_3_2;
   };
 
   wavegain = callPackage ../applications/audio/wavegain { };

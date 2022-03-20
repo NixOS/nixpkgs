@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [
-    " circup "
+    "circup"
   ];
 
   meta = with lib; {
