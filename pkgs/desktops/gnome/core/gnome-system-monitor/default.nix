@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "42.rc";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "CfScgbZZVvHW3ZnumpQRJkvzSPRRbIu6m6sLX/x8D0c=";
+    sha256 = "EyOdIgMiAaIr0pgzxXW2hIFnANLeFooVMCI1d8XAddw=";
   };
 
   nativeBuildInputs = [
