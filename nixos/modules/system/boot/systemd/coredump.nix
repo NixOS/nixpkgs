@@ -30,7 +30,6 @@ in {
 
   config = {
     systemd.additionalUpstreamSystemUnits = [
-      # Coredumps.
       "systemd-coredump.socket"
       "systemd-coredump@.service"
     ];

@@ -42,7 +42,6 @@ in
 
   config = {
     systemd.additionalUpstreamSystemUnits = [
-      # Temporary file creation / cleanup.
       "systemd-tmpfiles-clean.service"
       "systemd-tmpfiles-clean.timer"
       "systemd-tmpfiles-setup.service"

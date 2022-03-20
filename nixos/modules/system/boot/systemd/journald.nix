@@ -82,7 +82,6 @@ in {
 
   config = {
     systemd.additionalUpstreamSystemUnits = [
-      # Journal.
       "systemd-journald.socket"
       "systemd-journald@.socket"
       "systemd-journald-varlink@.socket"

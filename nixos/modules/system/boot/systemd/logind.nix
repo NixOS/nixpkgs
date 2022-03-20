@@ -78,7 +78,6 @@ in
 
   config = {
     systemd.additionalUpstreamSystemUnits = [
-      # Login stuff.
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
