@@ -16685,8 +16685,8 @@ let
       url = "mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.88.tar.gz";
       sha256 = "1pfgh4h3szcpvqlcimc60pjbk9zwls99x5863sva0wc47i4dl010";
     };
-    patches = [ ../development/perl-modules/net-ssleay-1.88-macos-monterey.patch ];
-    buildInputs = [ pkgs.openssl pkgs.zlib ];
+    patches = lib.optional stdenv.isDarwin ../development/perl-modules/net-ssleay-1.88-macos-monterey.patch;
+    buildInputs = [ pkgs.openssl ] ++ lib.optional stdenv.isDarwin pkgs.zlib;
     doCheck = false; # Test performs network access.
     preConfigure = ''
       mkdir openssl
