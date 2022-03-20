@@ -120,10 +120,15 @@ in rec {
         (if isList value then value else [value]))
         as));
 
-  generateUnits = generateUnits' true;
-
-  generateUnits' = allowCollisions: type: units: upstreamUnits: upstreamWants:
-    pkgs.runCommand "${type}-units"
+  generateUnits = { allowCollisions ? true, type, units, upstreamUnits, upstreamWants, packages ? cfg.packages, package ? cfg.package }:
+    let
+      typeDir = ({
+        system = "system";
+        initrd = "system";
+        user = "user";
+        nspawn = "nspawn";
+      }).${type};
+    in pkgs.runCommand "${type}-units"
       { preferLocalBuild = true;
         allowSubstitutes = false;
       } ''
@@ -131,7 +136,7 @@ in rec {
 
       # Copy the upstream systemd units we're interested in.
       for i in ${toString upstreamUnits}; do
-        fn=${cfg.package}/example/systemd/${type}/$i
+        fn=${package}/example/systemd/${typeDir}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
           target="$(readlink "$fn")"
@@ -148,7 +153,7 @@ in rec {
       # Copy .wants links, but only those that point to units that
       # we're interested in.
       for i in ${toString upstreamWants}; do
-        fn=${cfg.package}/example/systemd/${type}/$i
+        fn=${package}/example/systemd/${typeDir}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         x=$out/$(basename $fn)
         mkdir $x
@@ -160,14 +165,14 @@ in rec {
       done
 
       # Symlink all units provided listed in systemd.packages.
-      packages="${toString cfg.packages}"
+      packages="${toString packages}"
 
       # Filter duplicate directories
       declare -A unique_packages
       for k in $packages ; do unique_packages[$k]=1 ; done
 
       for i in ''${!unique_packages[@]}; do
-        for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
+        for fn in $i/etc/systemd/${typeDir}/* $i/lib/systemd/${typeDir}/*; do
           if ! [[ "$fn" =~ .wants$ ]]; then
             if [[ -d "$fn" ]]; then
               targetDir="$out/$(basename "$fn")"

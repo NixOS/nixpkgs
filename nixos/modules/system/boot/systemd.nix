@@ -461,7 +461,12 @@ in
       enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
       enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedSystemUnits) cfg.units;
     in ({
-      "systemd/system".source = generateUnits "system" enabledUnits enabledUpstreamSystemUnits upstreamSystemWants;
+      "systemd/system".source = generateUnits {
+        type = "system";
+        units = enabledUnits;
+        upstreamUnits = enabledUpstreamSystemUnits;
+        upstreamWants = upstreamSystemWants;
+      };
 
       "systemd/system.conf".text = ''
         [Manager]

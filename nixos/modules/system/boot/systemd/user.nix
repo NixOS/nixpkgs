@@ -109,7 +109,12 @@ in {
     ];
 
     environment.etc = {
-      "systemd/user".source = generateUnits "user" cfg.units upstreamUserUnits [];
+      "systemd/user".source = generateUnits {
+        type = "user";
+        inherit (cfg) units;
+        upstreamUnits = upstreamUserUnits;
+        upstreamWants = [];
+      };
 
       "systemd/user.conf".text = ''
         [Manager]
