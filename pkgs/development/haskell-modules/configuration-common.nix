@@ -2378,6 +2378,17 @@ self: super: {
     editedCabalFile = null;
   }) super.misfortune);
 
+  # GHC 9 support https://github.com/lambdabot/dice/pull/2
+  dice = appendPatch (pkgs.fetchpatch {
+    name = "dice-ghc9.patch";
+    url = "https://github.com/lambdabot/dice/commit/80d6fd443cb17b21d91b725f994ece6e8274e0a0.patch";
+    excludes = [ ".gitignore" ];
+    sha256 = "sha256-MtS1n7v5D6MRWWzzTyKl3Lqd/NhD1bV+g80wnhZ3P/Y=";
+  }) (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.dice);
+
   # Ships a custom cabal-doctest Setup.hs in the release tarball, but the actual
   # test suite is commented out, so the required dependency is missing naturally.
   # We need to use a default Setup.hs instead. Current master doesn't exhibit
