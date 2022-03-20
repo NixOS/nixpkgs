@@ -1041,6 +1041,8 @@ with pkgs;
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  allure = callPackage ../development/tools/allure {};
+
   aquosctl = callPackage ../tools/misc/aquosctl { };
 
   arch-install-scripts = callPackage ../tools/misc/arch-install-scripts {};
