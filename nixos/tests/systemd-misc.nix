@@ -31,7 +31,7 @@ in
 {
   name = "systemd-misc";
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     boot.extraSystemdUnitPaths = [ "/etc/systemd-rw/system" ];
 
     users.users.limited = {

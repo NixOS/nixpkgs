@@ -39,7 +39,7 @@ in makeTest {
 
   nodes = {
     # System configuration used for installing the installedConfig from above.
-    machine = { config, lib, pkgs, ... }: with lib; {
+    nodes.machine = { config, lib, pkgs, ... }: with lib; {
       imports = [
         ../modules/profiles/installation-device.nix
         ../modules/profiles/base.nix

@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd";
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     imports = [ common/user-account.nix common/x11.nix ];
 
     virtualisation.emptyDiskImages = [ 512 512 ];
