@@ -9,6 +9,7 @@
 , SDL
 , python3
 , callPackage
+, nixosTests
 }:
 
 mkDerivation rec {
@@ -44,6 +45,7 @@ mkDerivation rec {
 
   passthru.tests = {
     export-square-wave = callPackage ./test-export-square-wave {};
+    sfxr-qt-starts = nixosTests.sfxr-qt;
   };
 
   meta = with lib; {
