@@ -108,8 +108,9 @@ let
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   fstab = pkgs.writeText "fstab" (lib.concatMapStringsSep "\n"
-    ({ fsType, mountPoint, device, options, ... }:
-      "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," options}") fileSystems);
+    ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
+        opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
+      in "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
@@ -294,7 +295,7 @@ in {
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     system.build = { inherit initialRamdisk; };
     boot.initrd.systemd = {
-      initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package];
+      initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package] ++ config.system.fsPackages;
 
       objects = [
         { object = "${cfg.package}/lib/systemd/systemd"; symlink = "/init"; }
@@ -357,6 +358,21 @@ in {
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+
+      # The unit in /run/systemd/generator shadows the unit in
+      # /etc/systemd/system, but will still apply drop-ins from
+      # /etc/systemd/system/foo.service.d/
+      #
+      # We need IgnoreOnIsolate, otherwise the Requires dependency of
+      # a mount unit on its makefs unit causes it to be unmounted when
+      # we isolate for switch-root. Use a dummy package so that
+      # generateUnits will generate drop-ins instead of unit files.
+      packages = [(pkgs.runCommand "dummy" {} ''
+        mkdir -p $out/etc/systemd/system
+        touch $out/etc/systemd/system/systemd-{makefs,growfs}@.service
+      '')];
+      services."systemd-makefs@".unitConfig.IgnoreOnIsolate = true;
+      services."systemd-growfs@".unitConfig.IgnoreOnIsolate = true;
     };
   };
 }

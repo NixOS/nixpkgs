@@ -923,6 +923,8 @@ in
       mkVMOverride (cfg.fileSystems //
       {
         "/".device = cfg.bootDevice;
+        "/".fsType = "ext4";
+        "/".autoFormat = true;
 
         "/tmp" = mkIf config.boot.tmpOnTmpfs
           { device = "tmpfs";
