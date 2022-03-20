@@ -128,6 +128,7 @@ extra-packages:
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
   - SVGFonts < 1.8                      # 2022-03-19: Needed for Chart-diagrams 1.9.3
+  - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
 
 package-maintainers:
   abbradar:
