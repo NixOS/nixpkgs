@@ -1,5 +1,6 @@
 { python, fetchurl, lib, stdenv,
-  cmake, ninja, qt5, shiboken2 }:
+  cmake, ninja, qt5, shiboken2,
+  enableQtwebengine ? true }:
 
 stdenv.mkDerivation rec {
   pname = "pyside2";
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja qt5.qmake python ];
   buildInputs = with qt5; [
     qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
-    qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
-  ];
+    qtwebsockets qtwebchannel qtcharts qtsensors qtsvg
+  ] ++ lib.optional enableQtwebengine qt5.qtwebengine;
   propagatedBuildInputs = [ shiboken2 ];
 
   dontWrapQtApps = true;
