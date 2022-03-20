@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "42.beta";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "wKXhOnuXryq4aZechRketErQ6l9Iqc56ORGnsKZVwpA=";
+    sha256 = "TAjDFSgvPr96LabyDg/58McdqlIp/NL+C1wKqqoG8K0=";
   };
 
   nativeBuildInputs = [
