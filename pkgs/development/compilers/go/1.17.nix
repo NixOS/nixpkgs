@@ -46,6 +46,7 @@ let
     "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
     "mips64el" = "mips64le";
+    "mips64" = "mips64";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
