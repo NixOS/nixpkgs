@@ -307,6 +307,14 @@ in {
         { object = "${cfg.package.util-linux}/bin/umount"; }
         { object = "${cfg.package.util-linux}/bin/sulogin"; }
 
+        {
+          object = builtins.toFile "system.conf" ''
+            [Manager]
+            DefaultEnvironment=PATH=/bin:/sbin
+          '';
+          symlink = "/etc/systemd/system.conf";
+        }
+
         # TODO: Not sure why this needs to be here for the recovery shell to work
         { object = "${pkgs.glibc}/lib/libnss_files.so"; }
 
@@ -332,7 +340,6 @@ in {
         }
         { object = "${initrdBinEnv}/bin"; symlink = "/bin"; }
         { object = "${initrdBinEnv}/sbin"; symlink = "/sbin"; }
-        { object = builtins.toFile "bashrc" "PATH=/bin:/sbin"; symlink = "/etc/bashrc"; }
         { object = builtins.toFile "sysctl.conf" "kernel.modprobe = /sbin/modprobe"; symlink = "/etc/sysctl.d/nixos.conf"; }
       ];
 
