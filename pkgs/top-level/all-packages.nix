@@ -3745,6 +3745,8 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
 
+  rare = python3Packages.callPackage ../games/rare { };
+
   reg = callPackage ../tools/virtualization/reg { };
 
   river = callPackage ../applications/window-managers/river { };
