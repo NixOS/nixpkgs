@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , gettext
+, gi-docgen
 , gnome
 , glib
 , gtk3
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   pname = "libpeas";
   version = "1.32.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
+    gi-docgen
     gobject-introspection
   ];
 
@@ -44,6 +46,15 @@ stdenv.mkDerivation rec {
     # Required by libpeas-1.0.pc
     gobject-introspection
   ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
