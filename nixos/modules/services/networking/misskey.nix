@@ -66,4 +66,5 @@ in {
     };
   };
   meta.maintainers = with lib.maintainers; [ yuka ];
+  meta.doc = ./misskey.xml;
 }

@@ -1,0 +1,103 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="misskey">
+  <title>Misskey</title>
+  <para>
+    <link xlink:href="https://misskey-hub.net">Misskey</link> is an
+    ActivityPub Server.
+  </para>
+  <section xml:id="setting-up-misskey">
+    <title>Setting up Misskey</title>
+    <para>
+      Misskey needs PostgreSQL and Redis as dependencies.
+    </para>
+    <section xml:id="postgresql">
+      <title>PostgreSQL</title>
+      <para>
+        For PostgreSQL, add the following snippet to your
+        <literal>configuration.nix</literal>:
+      </para>
+      <programlisting language="bash">
+services.postgresql = {
+  enable = true;
+  ensureDatabases = [ &quot;misskey&quot; ];
+  ensureUsers = [
+    {
+      name = &quot;misskey&quot;;
+      ensurePermissions.&quot;DATABASE misskey&quot; = &quot;ALL PRIVILEGES&quot;;
+    }
+  ];
+};
+</programlisting>
+    </section>
+    <section xml:id="redis">
+      <title>Redis</title>
+      <para>
+        For Redis, add the following snippet to your
+        <literal>configuration.nix</literal>:
+      </para>
+      <programlisting language="bash">
+services.redis.servers.misskey = {
+  enable = true;
+  bind = &quot;127.0.0.1&quot;;
+  port = 16434;
+};
+</programlisting>
+    </section>
+    <section xml:id="nginx">
+      <title>nginx</title>
+      <para>
+        An example nginx config could look like the following:
+      </para>
+      <programlisting language="bash">
+services.nginx = {
+  enable = true;
+
+  recommendedTlsSettings = true;
+  recommendedOptimisation = true;
+  recommendedGzipSettings = true;
+  recommendedProxySettings = true;
+
+  nginx.virtualHosts.&quot;misskey.example.net&quot; = {
+    enableACME = true;
+    forceSSL = true;
+    locations = {
+      &quot;/&quot; = {
+        proxyPass = &quot;http://127.0.0.1:${toString config.services.misskey.settings.port}/&quot;;
+        proxyWebsockets = true;
+      };
+    };
+  };
+};
+</programlisting>
+    </section>
+    <section xml:id="misskey-1">
+      <title>Misskey</title>
+      <para>
+        Example misskey config:
+      </para>
+      <programlisting language="bash">
+services.misskey = {
+  enable = true;
+  settings = {
+    url = &quot;https://misskey.example.net/&quot;;
+    port = 11231;
+    id = &quot;aid&quot;;
+    db = {
+      host = &quot;/run/postgresql&quot;;
+      port = config.services.postgresql.port;
+      user = &quot;misskey&quot;;
+    };
+    redis = {
+      host = &quot;localhost&quot;;
+      port = config.services.redis.servers.misskey.port;
+    };
+  };
+};
+</programlisting>
+      <para>
+        Additional configuration options can be found on
+        <link xlink:href="https://github.com/misskey-dev/misskey/blob/develop/.config/example.yml">misskey's
+        GitHub repository</link>.
+      </para>
+    </section>
+  </section>
+</section>
