@@ -7,5 +7,5 @@
   };
 in applyPatches {
   inherit src;
-  patches = [./resolutions.patch ./version.patch ];
+  patches = [ ];
 }
