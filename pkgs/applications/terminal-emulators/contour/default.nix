@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre, nixosTests }:
 
 mkDerivation rec {
   pname = "contour";
@@ -15,6 +15,8 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ freetype libGL pcre ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.contour;
 
   meta = with lib; {
     description = "Modern C++ Terminal Emulator";

@@ -9,6 +9,7 @@
 , pefile
 , pyelftools
 , python-registry
+, pyyaml
 , unicorn
 }:
 
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     pefile
     pyelftools
     python-registry
+    pyyaml
     unicorn
   ];
 

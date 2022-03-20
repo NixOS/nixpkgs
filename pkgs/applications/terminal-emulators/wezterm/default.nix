@@ -22,6 +22,7 @@
 , Cocoa
 , Foundation
 , libiconv
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -98,6 +99,8 @@ rustPlatform.buildRustPackage rec {
     cp -r assets/shell-integration/* "$OUT_APP"
     ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.wezterm;
 
   meta = with lib; {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";

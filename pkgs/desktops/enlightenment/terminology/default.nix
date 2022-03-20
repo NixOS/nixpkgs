@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs data/colorschemes/*.py
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.terminology;
 
   meta = with lib; {
     description = "Powerful terminal emulator based on EFL";

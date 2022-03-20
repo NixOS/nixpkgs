@@ -9,6 +9,7 @@
 , tmux
 , vte
 , wrapGAppsHook
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,8 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
     runHook postFixup
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.germinal;
 
   meta = with lib; {
     description = "A minimal terminal emulator";
