@@ -1552,7 +1552,14 @@ self: super: {
           pkgs.lib.makeBinPath deps
         }"
       '';
-    }) (addTestToolDepends deps super.update-nix-fetchgit));
+    }) (addTestToolDepends deps (
+        appendPatch (pkgs.fetchpatch {
+            url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/2a4229b04aaeec025f1400a39f4e6390af760b54.patch";
+            sha256 = "sha256-G3abFWykpvtsh8l3GZhkNUpBo7zRb9Ve4d6mjizysIo=";
+            includes = [ "src/Update/Nix/FetchGit/Prefetch.hs" ];
+        })
+        super.update-nix-fetchgit)));
+
 
   # Our quickcheck-instances is too old for the newer binary-instances, but
   # quickcheck-instances is only used in the tests of binary-instances.
