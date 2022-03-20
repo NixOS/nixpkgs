@@ -2212,14 +2212,9 @@ self: super: {
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  hadolint = overrideCabal (drv: {
-    # Test suite depends on ordering of unordered-containers returned values
-    # which was upgraded in LTS 18.19
-    # https://github.com/hadolint/hadolint/issues/753
-    testFlags = [
-      "--skip" "/Hadolint.Formatter.Sarif/Formatter: Sarif/print empty results/"
-    ] ++ drv.testFlags or [];
-  }) super.hadolint;
+  # Too strict bound on deepseq
+  # https://github.com/hadolint/hadolint/issues/800
+  hadolint = doJailbreak super.hadolint;
 
   nix-tree = super.nix-tree;
 
