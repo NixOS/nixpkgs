@@ -8,6 +8,7 @@
 , multiprocess
 , pefile
 , pyelftools
+, pythonOlder
 , python-registry
 , pyyaml
 , unicorn
@@ -15,12 +16,14 @@
 
 buildPythonPackage rec {
   pname = "qiling";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e72dc5856cbda975f962ddf063063a32bd6c3b825f75e0795e94ba6840a7d45f";
+    hash = "sha256-myUGzNP4bf90d2gY5ZlYbVlTG640dj/Qha8/aMydvuw=";
   };
 
   propagatedBuildInputs = [
@@ -34,11 +37,6 @@ buildPythonPackage rec {
     pyyaml
     unicorn
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pefile==2021.5.24" "pefile>=2021.5.24"
-  '';
 
   # Tests are broken (attempt to import a file that tells you not to import it,
   # amongst other things)
