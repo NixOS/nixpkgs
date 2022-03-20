@@ -7,18 +7,21 @@ set -eu -o pipefail
 # Stackage solver to use, LTS or Nightly
 # (should be capitalized like the display name)
 SOLVER=Nightly
+TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
+readonly TMP_TEMPLATE
 
 toLower() {
     printf "%s" "$1" | tr '[:upper:]' '[:lower:]'
 }
 
-tmpfile=$(mktemp "update-stackage.XXXXXXX")
+tmpfile=$(mktemp "$TMP_TEMPLATE")
+tmpfile_new=$(mktemp "$TMP_TEMPLATE")
 
 stackage_config="pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml"
 
-trap 'rm "${tmpfile}" "${tmpfile}.new"' 0
-touch "$tmpfile" "$tmpfile.new" # Creating files here so that trap creates no errors.
+trap 'rm "${tmpfile}" "${tmpfile_new}"' 0
+touch "$tmpfile" "$tmpfile_new" # Creating files here so that trap creates no errors.
 
 curl -L -s "https://stackage.org/$(toLower "$SOLVER")/cabal.config" >"$tmpfile"
 old_version=$(grep '^# Stackage' $stackage_config | sed -e 's/.\+ \([A-Za-z]\+ [0-9.-]\+\)$/\1/g')
@@ -39,7 +42,7 @@ sed -r \
     -e 's|,$||' \
     -e '/installed$/d' \
     -e '/^$/d' \
-    < "${tmpfile}" | sort --ignore-case >"${tmpfile}.new"
+    < "${tmpfile}" | sort --ignore-case >"${tmpfile_new}"
 
 cat > $stackage_config << EOF
 # Stackage $version
@@ -55,7 +58,7 @@ sed -r \
     -e '/ jailbreak-cabal /d' \
     -e '/ language-nix /d' \
     -e '/ cabal-install /d' \
-    < "${tmpfile}.new" >> $stackage_config
+    < "${tmpfile_new}" >> $stackage_config
 
 if [[ "${1:-}" == "--do-commit" ]]; then
 git add $stackage_config
