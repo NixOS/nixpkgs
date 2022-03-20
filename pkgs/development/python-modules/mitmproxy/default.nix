@@ -98,8 +98,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  doCheck = !stdenv.isDarwin;
-
   postPatch = ''
     # remove dependency constraints
     sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
