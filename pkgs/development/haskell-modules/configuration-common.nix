@@ -2372,6 +2372,12 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
+  # compatibility with random-fu 0.3 https://github.com/mokus0/misfortune/pull/5
+  misfortune = appendPatch ./patches/misfortune-ghc9.patch (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.misfortune);
+
   # Ships a custom cabal-doctest Setup.hs in the release tarball, but the actual
   # test suite is commented out, so the required dependency is missing naturally.
   # We need to use a default Setup.hs instead. Current master doesn't exhibit
