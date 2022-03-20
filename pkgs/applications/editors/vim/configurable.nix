@@ -175,10 +175,6 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi
   '' + lib.optionalString stdenv.isLinux ''
-    patchelf --set-rpath \
-      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
-      "$out"/bin/vim
-
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '';
 
