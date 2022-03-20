@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p nix curl jq nix-prefetch-github git gnused gnugrep -I nixpkgs=.
+# shellcheck shell=bash
 
 set -eu -o pipefail
 
@@ -13,11 +14,10 @@ toLower() {
 }
 
 tmpfile=$(mktemp "update-stackage.XXXXXXX")
-# shellcheck disable=SC2064
 
 stackage_config="pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml"
 
-trap "rm ${tmpfile} ${tmpfile}.new" 0
+trap 'rm "${tmpfile}" "${tmpfile}.new"' 0
 touch "$tmpfile" "$tmpfile.new" # Creating files here so that trap creates no errors.
 
 curl -L -s "https://stackage.org/$(toLower "$SOLVER")/cabal.config" >"$tmpfile"
