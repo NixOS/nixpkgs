@@ -219,24 +219,7 @@ in
 
       session = mkOption {
         default = [];
-        type = with types; listOf (submodule ({ ... }: {
-          options = {
-            manage = mkOption {
-              description = "Whether this is a desktop or a window manager";
-              type = enum [ "desktop" "window" ];
-            };
-
-            name = mkOption {
-              description = "Name of this session";
-              type = str;
-            };
-
-            start = mkOption {
-              description = "Commands to run to start this session";
-              type = lines;
-            };
-          };
-        }));
+        type = types.listOf types.attrs;
         example = literalExpression
           ''
             [ { manage = "desktop";
