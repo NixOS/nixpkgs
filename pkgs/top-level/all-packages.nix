@@ -13923,6 +13923,7 @@ with pkgs;
   })
     alloy4
     alloy5
+    alloy6
     alloy;
 
   altair = callPackage ../development/tools/altair-graphql-client { };

@@ -67,7 +67,7 @@ in rec {
       url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/org.alloytools.alloy.dist.jar";
     };
   };
-  
+
   alloy6 = let version = "6.0.0"; in generic {
     major = "6";
     inherit version;
@@ -77,5 +77,5 @@ in rec {
     };
   };
 
-  alloy = alloy6;
+  alloy = alloy5;
 }
