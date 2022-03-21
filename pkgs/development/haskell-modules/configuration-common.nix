@@ -2085,32 +2085,37 @@ self: super: {
     };
   } self.haskell-ci;
 
-  # 2021-05-09: compilation requires patches from master,
-  # remove at next release (current is 0.1.0.4).
-  large-hashable = overrideCabal (drv: {
-    # fix line endings which are an issue all of a sudden for an unknown reason
-    prePatch = ''
-      find . -type f -print0 | xargs -0 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
-    '' + (drv.prePatch or "");
-    # allow newer template haskell
-    jailbreak = true;
-    patches = [
-      # Fix compilation of TH code for GHC >= 8.8
+  large-hashable = pkgs.lib.pipe super.large-hashable [
+    # 2022-03-21: use version from git which includes support for GHC 9.0.1
+    (assert super.large-hashable.version == "0.1.0.4"; overrideSrc {
+      version = "unstable-2021-11-01";
+      src = pkgs.fetchFromGitHub {
+        owner = "factisresearch";
+        repo = "large-hashable";
+        rev = "b4e6b3d23c2b1af965ffcc055f5405ff673e66cf";
+        sha256 = "1bgf37qfzdyjhpgnj9aipwzpa06nc7b1g4f64xsmknyds7ffhixz";
+      };
+    })
+    # Provide newly added dependencies
+    (overrideCabal (drv: {
+      libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
+        self.cryptonite
+        self.memory
+      ];
+      testHaskellDepends = drv.testHaskellDepends or [] ++ [
+        self.inspection-testing
+      ];
+    }))
+    # 2022-03-21: patch for aeson 2.0
+    # https://github.com/factisresearch/large-hashable/pull/22
+    (appendPatches [
       (pkgs.fetchpatch {
-        url = "https://github.com/factisresearch/large-hashable/commit/ee7afe4bd181cf15a324c7f4823f7a348e4a0e6b.patch";
-        sha256 = "1ha77v0bc6prxacxhpdfgcsgw8348gvhl9y81smigifgjbinphxv";
-        excludes = [
-          ".travis.yml"
-          "stack**"
-        ];
+        name = "large-hashable-aeson-2.0.patch";
+        url = "https://github.com/factisresearch/large-hashable/commit/7094ef0ba55b4848cb57bae73d119acfb496a4c9.patch";
+        sha256 = "0ckiii0s697h817z65jwlmjzqw2ckpm815wqcnxjigf6v9kxps8j";
       })
-      # Fix cpp invocation
-      (pkgs.fetchpatch {
-        url = "https://github.com/factisresearch/large-hashable/commit/7b7c2ed6ac6e096478e8ee00160fa9d220df853a.patch";
-        sha256 = "1sf9h3k8jbbgfshzrclaawlwx7k2frb09z2a64f93jhvk6ci6vgx";
-      })
-    ];
-  }) super.large-hashable;
+    ])
+  ];
 
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
