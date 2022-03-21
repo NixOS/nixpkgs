@@ -181,6 +181,7 @@
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/nbd.nix
+  ./programs/nix-ld.nix
   ./programs/neovim.nix
   ./programs/nm-applet.nix
   ./programs/npm.nix
