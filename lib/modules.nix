@@ -916,19 +916,11 @@ rec {
     */
     sinceRelease,
 
-    /*
-      Options intended for reading by user modules/configuration should set this
-      to false.
-
-      Usually the user modules don't read the option and we want to hold nixpkgs
-      itself to a high standard immediately.
-      */
-    warnWhenRead ? true
   }: doRename {
     inherit from to;
     visible = false;
     warn = lib.isInOldestRelease sinceRelease;
-    use = lib.warnIf (warnWhenRead || lib.isInOldestRelease sinceRelease)
+    use = lib.warnIf (lib.isInOldestRelease sinceRelease)
       "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
