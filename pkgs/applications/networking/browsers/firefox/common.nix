@@ -262,7 +262,6 @@ buildStdenv.mkDerivation ({
     "--enable-system-pixman"
     #"--enable-system-cairo"
     "--disable-tests"
-    "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
     "--enable-default-toolkit=${default-toolkit}"
     "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
@@ -286,6 +285,7 @@ buildStdenv.mkDerivation ({
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
   ++ flag jemallocSupport "jemalloc"
+  ++ flag geolocationSupport "necko-wifi"
   ++ flag gssSupport "negotiateauth"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
