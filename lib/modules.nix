@@ -954,6 +954,26 @@ rec {
     use = builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
+  mkRenamedOptionModuleWith = {
+    /* Old option path as list of strings. */
+    from,
+    /* New option path as list of strings. */
+    to,
+
+    /*
+      Release number of the first release that contains the rename, ignoring backports.
+      Set it to the upcoming release, matching the nixpkgs/.version file.
+    */
+    sinceRelease,
+
+  }: doRename {
+    inherit from to;
+    visible = false;
+    warn = lib.isInOldestRelease sinceRelease;
+    use = lib.warnIf (lib.isInOldestRelease sinceRelease)
+      "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
+  };
+
   /* Return a module that causes a warning to be shown if any of the "from"
      option is defined; the defined values can be used in the "mergeFn" to set
      the "to" value.

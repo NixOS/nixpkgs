@@ -62,6 +62,14 @@
           notes</link> for details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Module authors can use
+          <literal>mkRenamedOptionModuleWith</literal> to automate the
+          deprecation cycle without annoying out-of-tree module authors
+          and their users.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -1200,7 +1208,8 @@
               Legacy options have been mapped to the corresponding
               options under under
               <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
-              but may be deprecated in the future.
+              and will be deprecated when NixOS 21.11 reaches end of
+              life.
             </para>
           </listitem>
           <listitem>
