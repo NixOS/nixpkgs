@@ -1436,13 +1436,12 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/YUZU
 
-  yuzu-mainline = import ../applications/emulators/yuzu {
+  yuzu-mainline = callPackage ../applications/emulators/yuzu {
     branch = "mainline";
-    inherit libsForQt5 fetchFromGitHub;
   };
-  yuzu-ea = import ../applications/emulators/yuzu {
+
+  yuzu-ea = callPackage ../applications/emulators/yuzu {
     branch = "early-access";
-    inherit libsForQt5 fetchFromGitHub;
   };
 
   ### APPLICATIONS/EMULATORS/COMMANDERX16
