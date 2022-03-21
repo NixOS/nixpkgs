@@ -1,5 +1,6 @@
 { stdenv, lib, rustPlatform, fetchgit
-, pkg-config, wayland-scanner, libcap, minijail, wayland, wayland-protocols
+, pkg-config, wayland-scanner
+, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 , linux
 }:
 
@@ -28,7 +29,9 @@ in
 
     nativeBuildInputs = [ pkg-config wayland-scanner ];
 
-    buildInputs = [ libcap minijail wayland wayland-protocols ];
+    buildInputs = [
+      libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    ];
 
     postPatch = ''
       cp ${./Cargo.lock} Cargo.lock
@@ -39,6 +42,8 @@ in
     preBuild = ''
       export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
     '';
+
+    buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 
     postInstall = ''
       mkdir -p $out/share/policy/
