@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "distrobox";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = pname;
     rev = version;
-    sha256 = "047mrhsfi88mgwylnnyxg6xa7hjjrajn2pf7vfmb6161myqybvfy";
+    sha256 = "sha256-gHKyuIL4K/SLBJw8xNuPdNifDcHI91AFTiHaiv38gus=";
   };
 
   dontConfigure = true;

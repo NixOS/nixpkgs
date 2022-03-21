@@ -23693,6 +23693,8 @@ with pkgs;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
+  mmdoc = callPackage ../tools/text/mmdoc { };
+
   documize-community = callPackage ../servers/documize-community { };
 
   doge = callPackage ../misc/doge { };
