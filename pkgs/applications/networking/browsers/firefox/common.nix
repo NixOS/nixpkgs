@@ -7,11 +7,11 @@
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss
-, yasm, libGLU, libGL, sqlite, unzip, makeWrapper
+, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx
-, icu70, libpng, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPlatform
+, icu, libpng, glib, pciutils
+, autoconf, which, gnused, rustPackages, rustPlatform
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk3, wrapGAppsHook
@@ -157,18 +157,14 @@ buildStdenv.mkDerivation ({
     gnum4 gtk3 perl zip libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    xorg.pixman yasm libGLU libGL
+    xorg.pixman libGLU libGL
     xorg.xorgproto
     xorg.libXdamage
     xorg.libXext
     xorg.libXtst
-    libevent libstartup_notification /* cairo */
+    libevent libstartup_notification
     libpng glib
-    nasm icu70 libvpx
-    # >= 66 requires nasm for the AV1 lib dav1d
-    # yasm can potentially be removed in future versions
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
-    # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
+    nasm icu libvpx
     nspr nss
   ]
   ++ lib.optional  alsaSupport alsa-lib
@@ -193,7 +189,7 @@ buildStdenv.mkDerivation ({
 
   nativeBuildInputs =
     [
-      autoconf213
+      autoconf
       cargo
       gnused
       llvmPackages.llvm # llvm-objdump
@@ -220,7 +216,7 @@ buildStdenv.mkDerivation ({
     rm -f configure
     rm -f js/src/configure
     rm -f .mozconfig*
-    # this will run autoconf213
+    # this will run autoconf
     configureScript="$(realpath ./mach) configure"
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
