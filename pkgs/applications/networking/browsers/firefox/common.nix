@@ -1,46 +1,91 @@
-{ pname, version, meta, updateScript ? null
-, binaryName ? "firefox", application ? "browser"
-, src, unpackPhase ? null
+{ pname
+, version
+, meta
+, updateScript ? null
+, binaryName ? "firefox"
+, application ? "browser"
+, src
+, unpackPhase ? null
 , extraPatches ? []
 , extraPostPatch ? ""
 , extraNativeBuildInputs ? []
 , extraConfigureFlags ? []
+, extraBuildInputs ? []
 , extraMakeFlags ? []
 , extraPassthru ? {}
 , tests ? []
 }:
 
 
-{ lib, stdenv, pkg-config, pango, perl, python3, zip
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss
-, libGLU, libGL, sqlite, unzip, makeWrapper
-, hunspell, libevent, libstartup_notification
+{ lib
+, stdenv
+, fetchpatch
+
+# build time
+, autoconf
+, cargo
+, gnused
+, makeWrapper
+, nodejs
+, perl
+, pkg-config
+, pkgsCross # wasm32 rlbox
+, python3
+, runCommand
+, rustc
+, rust-cbindgen
+, rustPlatform
+, unzip
+, which
+, wrapGAppsHook
+
+# runtime
+, bzip2
+, dbus
+, dbus-glib
+, file
+, fontconfig
+, freetype
+, glib
+, gnum4
+, gtk3
+, icu
+, libGL
+, libGLU
+, libevent
 , libffi
+, libjpeg
+, libpng
+, libstartup_notification
 , libvpx
 , libwebp
-, icu, libpng, glib
-, autoconf, which, gnused, rustPackages, rustPlatform
-, rust-cbindgen, nodejs, nasm, fetchpatch
-, gnum4
-, gtk3, wrapGAppsHook
-, pkgsCross
-, debugBuild ? false
-, runCommand
+, nasm
+, nspr
+, nss
+, pango
+, xorg
+, zip
+, zlib
 
-### optionals
+# optionals
+
+## debugging
+
+, debugBuild ? false
+
+# On 32bit platforms, we disable adding "-g" for easier linking.
+, enableDebugSymbols ? !stdenv.is32bit
 
 ## optional libraries
 
 , alsaSupport ? stdenv.isLinux, alsa-lib
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
-, waylandSupport ? true, libxkbcommon, libdrm
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , gssSupport ? true, libkrb5
-, pipewireSupport ? waylandSupport && webrtcSupport
-# Jemalloc could reduce memory consumption.
 , jemallocSupport ? true, jemalloc
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, pipewireSupport ? waylandSupport && webrtcSupport
+, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, waylandSupport ? true, libxkbcommon, libdrm
 
 ## privacy-related options
 
@@ -49,17 +94,15 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? !privacySupport
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
-, crashreporterSupport ? false
-
-, safeBrowsingSupport ? false
-, drmSupport ? false
+, webrtcSupport ? !privacySupport
 
 ## other
+
+, crashreporterSupport ? false
+, drmSupport ? false
+, safeBrowsingSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -80,9 +123,6 @@
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
 , enableOfficialBranding ? true
-
-# On 32bit platforms, we disable adding "-g" for easier linking.
-, enableDebugSymbols ? !stdenv.is32bit
 }:
 
 assert stdenv.cc.libc or null != null;
@@ -91,9 +131,7 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSu
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
-  inherit (rustPackages) rustc cargo;
-
-  # Target the LLVM version that rustc -Vv reports it is built with for LTO.
+  # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
@@ -103,11 +141,11 @@ let
   };
 
   buildStdenv = if ltoSupport
-                # LTO requires LLVM bintools including ld.lld and llvm-ar.
-                then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
-                  inherit (llvmPackages) bintools;
-                })
-                else stdenv;
+    # LTO requires LLVM bintools including ld.lld and llvm-ar.
+    then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
+      inherit (llvmPackages) bintools;
+    })
+    else stdenv;
 
   # Compile the wasm32 sysroot to build the RLBox Sandbox
   # https://hacks.mozilla.org/2021/12/webassembly-and-back-again-fine-grained-sandboxing-in-firefox-95/
@@ -136,77 +174,61 @@ buildStdenv.mkDerivation ({
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
     patchShebangs mach
-  '' + extraPostPatch;
+  ''
+  + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
   # two patches.
   patchFlags = [ "-p1" "-l" ];
 
-  buildInputs = [
-    gnum4 gtk3 perl zip libjpeg zlib bzip2
-    dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
-    xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    xorg.pixman libGLU libGL
-    xorg.xorgproto
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXtst
-    libevent libstartup_notification
-    libpng glib
-    nasm icu libvpx
-    libffi
-    libwebp
-    nspr nss
+  nativeBuildInputs = [
+    autoconf
+    cargo
+    gnused
+    llvmPackages.llvm # llvm-objdump
+    makeWrapper
+    nodejs
+    perl
+    pkg-config
+    python3
+    rust-cbindgen
+    rustPlatform.bindgenHook
+    rustc
+    unzip
+    which
+    wrapGAppsHook
   ]
-  ++ lib.optional  alsaSupport alsa-lib
-  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  gssSupport libkrb5
-  ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
-  ++ lib.optional  jemallocSupport jemalloc;
+  ++ extraNativeBuildInputs;
 
-  MACH_USE_SYSTEM_PYTHON = "1";
-
-  nativeBuildInputs =
-    [
-      autoconf
-      cargo
-      gnused
-      llvmPackages.llvm # llvm-objdump
-      makeWrapper
-      nodejs
-      perl
-      pkg-config
-      python3
-      rust-cbindgen
-      rustc
-      which
-      unzip
-      wrapGAppsHook
-      rustPlatform.bindgenHook
-    ]
-    ++ extraNativeBuildInputs;
-
-  separateDebugInfo = enableDebugSymbols;
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
     # remove distributed configuration files
-    rm -f configure
-    rm -f js/src/configure
-    rm -f .mozconfig*
-    # this will run autoconf
+    rm -f configure js/src/configure .mozconfig*
+
+    # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
+
+    # Set predictable directories for build and state
+    export MOZ_OBJDIR=$(pwd)/mozobj
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
     # Set consistent remoting name to ensure wmclass matches with desktop file
     export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-  '' + (lib.optionalString (lib.versionAtLeast version "95.0") ''
+    # Use our own python
+    export MACH_USE_SYSTEM_PYTHON=1
+
+    # AS=as in the environment causes build failure
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+    unset AS
+
+  '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
-  '') + (lib.optionalString googleAPISupport ''
+  '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
@@ -214,36 +236,36 @@ buildStdenv.mkDerivation ({
     # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
     configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
     configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
-  '') + ''
-    # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
-    unset AS
-  '' + (lib.optionalString enableOfficialBranding ''
+  '' + lib.optionalString enableOfficialBranding ''
     export MOZILLA_OFFICIAL=1
-  '');
+  '';
 
   configureFlags = [
-    "--enable-application=${application}"
-    "--with-system-ffi"
-    "--with-system-jpeg"
-    "--with-system-zlib"
-    "--with-system-libevent"
-    "--with-system-libvpx"
-    "--with-system-png" # needs APNG support
-    "--with-system-icu"
-    "--enable-system-pixman"
     "--disable-tests"
     "--disable-updater"
+    "--enable-application=${application}"
     "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
+    "--enable-system-pixman"
     "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
+    "--with-system-ffi"
+    "--with-system-icu"
+    "--with-system-jpeg"
+    "--with-system-libevent"
+    "--with-system-libvpx"
     "--with-system-nspr"
     "--with-system-nss"
+    "--with-system-png" # needs APNG support
     "--with-system-webp"
+    "--with-system-zlib"
   ]
   ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
   # LTO is done using clang and lld on Linux.
+  ++ lib.optionals ltoSupport [
+     "--enable-lto=cross" # Cross-Language LTO
+     "--enable-linker=lld"
+  ]
   # elf-hack is broken when using clang+lld:
-  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optionals ltoSupport [ "--enable-lto=cross" "--enable-linker=lld" ]
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
 
@@ -268,14 +290,62 @@ buildStdenv.mkDerivation ({
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
 
-  postConfigure = ''
-    cd obj-*
+  buildInputs = [
+    bzip2
+    dbus
+    dbus-glib
+    file
+    fontconfig
+    freetype
+    glib
+    gnum4
+    gtk3
+    icu
+    libffi
+    libGL
+    libGLU
+    libevent
+    libjpeg
+    libpng
+    libstartup_notification
+    libvpx
+    libwebp
+    nasm
+    nspr
+    nss
+    pango
+    perl
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXft
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.pixman
+    xorg.xorgproto
+    zip
+    zlib
+  ]
+  ++ lib.optional  alsaSupport alsa-lib
+  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
+  ++ lib.optional  gssSupport libkrb5
+  ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
+  ++ lib.optional  jemallocSupport jemalloc
+  ++ extraBuildInputs;
+
+  preBuild = ''
+    cd mozobj
   '';
 
   makeFlags = extraMakeFlags;
-
+  separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
-  doCheck = false; # "--disable-tests" above
+
+  # tests were disabled in configureFlags
+  doCheck = false;
 
   postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -287,7 +357,7 @@ buildStdenv.mkDerivation ({
 
   # Workaround: The separateDebugInfo hook skips artifacts whose build ID's length is not 40.
   # But we got 16-length build ID here. The function body is mainly copied from pkgs/build-support/setup-hooks/separate-debug-info.sh
-  # Remove it when PR #146275 is merged.
+  # Remove it when https://github.com/NixOS/nixpkgs/pull/146275 is merged.
   preFixup = lib.optionalString enableDebugSymbols ''
     _separateDebugInfo() {
         [ -e "$prefix" ] || return 0
