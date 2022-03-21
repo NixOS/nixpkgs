@@ -15,9 +15,6 @@
 , pythonOlder
 }:
 
-# TODO: Define this package in "all-packages.nix" using "toPythonApplication".
-# This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "propagatedBuildInputs".
-
 buildPythonPackage rec {
   pname = "myfitnesspal";
   version = "1.17.0";
