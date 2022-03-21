@@ -5,9 +5,9 @@ let
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      if builtins.length l == 1 then generators.mkValueStringDefault { } (head l)
       else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
-    mkKeyValue = generators.mkKeyValueDefault {} ":";
+    mkKeyValue = generators.mkKeyValueDefault { } ":";
   };
 in
 {
@@ -46,7 +46,6 @@ in
         default = null;
         description = ''
           User account under which Klipper runs.
-
           If null is specified (default), a temporary user will be created by systemd.
         '';
       };
@@ -56,7 +55,6 @@ in
         default = null;
         description = ''
           Group account under which Klipper runs.
-
           If null is specified (default), a temporary user will be created by systemd.
         '';
       };
@@ -68,6 +66,26 @@ in
           Configuration for Klipper. See the <link xlink:href="https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides">documentation</link>
           for supported values.
         '';
+      };
+
+      firmware = mkOption {
+        description = "Firmwares klipper should manage";
+        default = { };
+        type = with types; attrsOf
+          (submodule {
+            options = {
+              enableFlashing = mkEnableOption ''
+                automatic flashing of firmware to microcontroller
+
+                WARNING: Be careful with this option. Enabling this will automatically flash your microcontroller on e.g. nixos-rebuild.
+                This can potentially brick your microcontroller. Alternatively, use `klipper-flash-$mcu` to flash manually.
+              '';
+              firmwareConfig = mkOption {
+                type = path;
+                description = "Path to firmware config which is generated using `klipper-genconf`";
+              };
+            };
+          });
       };
     };
   };
@@ -83,6 +101,10 @@ in
         assertion = cfg.user != null -> cfg.group != null;
         message = "Option klipper.group is not set when a user is specified.";
       }
+      {
+        assertion = foldl (a: b: a && b) true (mapAttrsToList (mcu: _: mcu != null -> (hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) cfg.firmware);
+        message = "Option klipper.settings.$mcu.serial is not set when klipper.firmware.$mcu is specified";
+      }
     ];
 
     environment.etc."klipper.cfg".source = format.generate "klipper.cfg" cfg.settings;
@@ -92,26 +114,48 @@ in
       group = config.services.octoprint.group;
     };
 
-    systemd.services.klipper = let
-      klippyArgs = "--input-tty=${cfg.inputTTY}"
-        + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
-    in {
-      description = "Klipper 3D Printer Firmware";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+    systemd.services.klipper =
+      let
+        klippyArgs = "--input-tty=${cfg.inputTTY}"
+          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+      in
+      {
+        description = "Klipper 3D Printer Firmware";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      serviceConfig = {
-        ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
-        RuntimeDirectory = "klipper";
-        SupplementaryGroups = [ "dialout" ];
-        WorkingDirectory = "${cfg.package}/lib";
-      } // (if cfg.user != null then {
-        Group = cfg.group;
-        User = cfg.user;
-      } else {
-        DynamicUser = true;
-        User = "klipper";
-      });
-    };
+        serviceConfig = {
+          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
+          RuntimeDirectory = "klipper";
+          SupplementaryGroups = [ "dialout" ];
+          WorkingDirectory = "${cfg.package}/lib";
+        } // (if cfg.user != null then {
+          Group = cfg.group;
+          User = cfg.user;
+        } else {
+          DynamicUser = true;
+          User = "klipper";
+        });
+      };
+
+    environment.systemPackages =
+      with pkgs;
+      let
+        firmwares = mapAttrs
+          (mcu: { enableFlashing, firmwareConfig }: pkgs.klipper-firmware.override {
+            flashDevice = if enableFlashing then cfg.settings."${mcu}".serial else null;
+            mcu = lib.strings.sanitizeDerivationName mcu;
+            inherit firmwareConfig;
+          })
+          cfg.firmware;
+        firmwareFlasher = mapAttrsToList
+          (mcu: firmware: pkgs.callPackage pkgs.klipper-flash.override {
+            mcu = lib.strings.sanitizeDerivationName mcu;
+            klipper-firmware = firmware;
+            flashDevice = cfg.settings."${mcu}".serial;
+          })
+          firmwares;
+      in
+      [ klipper-genconf ] ++ firmwareFlasher ++ attrValues firmwares;
   };
 }
