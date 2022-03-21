@@ -82,7 +82,7 @@ in
                 WARNING: Be careful with this option. Enabling this will automatically flash your microcontroller on e.g. nixos-rebuild.
                 This can potentially brick your microcontroller. Alternatively, use `klipper-flash-$mcu` to flash manually.
               '';
-              firmwareConfig = mkOption {
+              configFile = mkOption {
                 type = path;
                 description = "Path to firmware config which is generated using `klipper-genconf`";
               };
@@ -144,10 +144,10 @@ in
       with pkgs;
       let
         firmwares = mapAttrs
-          (mcu: { flashing, firmwareConfig }: pkgs.klipper-firmware.override {
+          (mcu: { flashing, configFile }: pkgs.klipper-firmware.override {
             flashDevice = if flashing.enable then cfg.settings."${mcu}".serial else null;
             mcu = lib.strings.sanitizeDerivationName mcu;
-            inherit firmwareConfig;
+            firmwareConfig = configFile;
           })
           cfg.firmwares;
         firmwareFlasher = mapAttrsToList
@@ -155,7 +155,7 @@ in
             mcu = lib.strings.sanitizeDerivationName mcu;
             klipper-firmware = firmware;
             flashDevice = cfg.settings."${mcu}".serial;
-            firmwareConfig = cfg.firmwares."${mcu}".firmwareConfig;
+            firmwareConfig = cfg.firmwares."${mcu}".configFile;
           })
           firmwares;
       in
