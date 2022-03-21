@@ -1733,6 +1733,17 @@ self: super: {
     })
   ] super.pipes-aeson;
 
+  moto-postgresql = appendPatches [
+    # https://gitlab.com/k0001/moto/-/merge_requests/3
+    (pkgs.fetchpatch {
+      name = "moto-postgresql-monadfail.patch";
+      url = "https://gitlab.com/k0001/moto/-/commit/09cc1c11d703c25f6e81325be6482dc7ec6cbf58.patch";
+      # includes = ["moto/lib/Moto/File.hs"];
+      stripLen = 1;
+      sha256 = "sha256-ZKo0csaSM51bDGmzcasIklkRyg54O+8U5w6OwRHt8ms=";
+    })
+  ] (unmarkBroken super.moto-postgresql);
+
   moto = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
     (pkgs.fetchpatch {
