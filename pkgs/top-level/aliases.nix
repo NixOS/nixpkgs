@@ -639,6 +639,7 @@ mapAliases ({
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
   linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
   linuxPackages_5_16 = linuxKernel.packages.linux_5_16;
+  linuxPackages_5_17 = linuxKernel.packages.linux_5_17;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_hardkernel_4_14 = linuxKernel.packages.hardkernel_4_14;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
@@ -656,6 +657,7 @@ mapAliases ({
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
   linux_5_16 = linuxKernel.kernels.linux_5_16;
+  linux_5_17 = linuxKernel.kernels.linux_5_17;
   linux_5_4 = linuxKernel.kernels.linux_5_4;
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
