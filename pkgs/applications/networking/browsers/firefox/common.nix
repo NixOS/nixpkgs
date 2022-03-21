@@ -1,8 +1,15 @@
 { pname, version, meta, updateScript ? null
 , binaryName ? "firefox", application ? "browser"
-, src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? []
-, extraPostPatch ? "", extraPassthru ? {} }:
+, src, unpackPhase ? null
+, extraPatches ? []
+, extraPostPatch ? ""
+, extraNativeBuildInputs ? []
+, extraConfigureFlags ? []
+, extraMakeFlags ? []
+, extraPassthru ? {}
+, tests ? []
+}:
+
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
@@ -141,12 +148,19 @@ buildStdenv.mkDerivation ({
   inherit src unpackPhase meta;
 
   patches = [
-  ] ++
-  lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
-  lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch ++
-  lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch ++
+  ]
+  ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
+  ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
+  ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
+  ++ extraPatches;
 
-  patches;
+  postPatch = ''
+    rm -rf obj-x86_64-pc-linux-gnu
+    substituteInPlace toolkit/xre/glxtest.cpp \
+      --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
+
+    patchShebangs mach
+  '' + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
@@ -178,14 +192,6 @@ buildStdenv.mkDerivation ({
                                           Foundation libobjc AddressBook cups ];
 
   MACH_USE_SYSTEM_PYTHON = "1";
-
-  postPatch = ''
-    rm -rf obj-x86_64-pc-linux-gnu
-    substituteInPlace toolkit/xre/glxtest.cpp \
-      --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
-
-    patchShebangs mach
-  '' + extraPostPatch;
 
   nativeBuildInputs =
     [
