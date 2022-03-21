@@ -33612,9 +33612,7 @@ with pkgs;
           loadedTest = if builtins.typeOf test == "path"
             then import test
             else test;
-          calledTest = if lib.isFunction loadedTest
-            then loadedTest { inherit pkgs lib; }
-            else loadedTest;
+          calledTest = lib.toFunction loadedTest pkgs;
         in
           nixosTesting.makeTest calledTest;
 
