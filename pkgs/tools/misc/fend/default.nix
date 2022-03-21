@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
@@ -12,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-lNpFdrriAglLaiWjxVP4JoiBuU+zdLlerAIApIvHHZw=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   doInstallCheck = true;
 
