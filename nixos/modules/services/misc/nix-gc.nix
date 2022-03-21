@@ -81,8 +81,14 @@ in
   ###### implementation
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.automatic -> config.nix.enable;
+        message = ''nix.gc.automatic requires nix.enable'';
+      }
+    ];
 
-    systemd.services.nix-gc = {
+    systemd.services.nix-gc = lib.mkIf config.nix.enable {
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       startAt = optional cfg.automatic cfg.dates;
