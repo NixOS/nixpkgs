@@ -51,6 +51,12 @@ in {
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
+      # For boot/switch testing
+      system.build.installBootLoader = lib.mkForce (pkgs.writeShellScript "install-dummy-loader" ''
+        echo "installing dummy bootloader"
+        touch /tmp/bootloader-installed
+      '');
+
       specialisation = rec {
         simpleService.configuration = {
           systemd.services.test = {
@@ -502,9 +508,32 @@ in {
     machine.succeed(
         "${stderrRunner} ${originalSystem}/bin/switch-to-configuration test"
     )
+    # This tests whether the /etc/os-release parser works which is a fallback
+    # when /etc/NIXOS is missing. If the parser does not work, switch-to-configuration
+    # would fail.
+    machine.succeed("rm /etc/NIXOS")
     machine.succeed(
         "${stderrRunner} ${otherSystem}/bin/switch-to-configuration test"
     )
+
+
+    with subtest("actions"):
+        # boot action
+        machine.fail("test -f /tmp/bootloader-installed")
+        out = switch_to_specialisation("${machine}", "simpleService", action="boot")
+        assert_contains(out, "installing dummy bootloader")
+        assert_lacks(out, "activating the configuration...")  # good indicator of a system activation
+        machine.succeed("test -f /tmp/bootloader-installed")
+        machine.succeed("rm /tmp/bootloader-installed")
+
+        # switch action
+        machine.fail("test -f /tmp/bootloader-installed")
+        out = switch_to_specialisation("${machine}", "", action="switch")
+        assert_contains(out, "installing dummy bootloader")
+        assert_contains(out, "activating the configuration...")  # good indicator of a system activation
+        machine.succeed("test -f /tmp/bootloader-installed")
+
+        # test and dry-activate actions are tested further down below
 
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
@@ -519,6 +548,7 @@ in {
 
         # Start a simple service
         out = switch_to_specialisation("${machine}", "simpleService")
+        assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: dbus.service\n")  # huh
