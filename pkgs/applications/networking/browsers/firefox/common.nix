@@ -17,6 +17,7 @@
 , libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx
+, libwebp
 , icu, libpng, glib, pciutils
 , autoconf, which, gnused, rustPackages, rustPlatform
 , rust-cbindgen, nodejs, nasm, fetchpatch
@@ -179,6 +180,7 @@ buildStdenv.mkDerivation ({
     libevent libstartup_notification
     libpng glib
     nasm icu libvpx
+    libwebp
     nspr nss
   ]
   ++ lib.optional  alsaSupport alsa-lib
@@ -267,6 +269,7 @@ buildStdenv.mkDerivation ({
     "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-system-nspr"
     "--with-system-nss"
+    "--with-system-webp"
   ]
   ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
   ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
