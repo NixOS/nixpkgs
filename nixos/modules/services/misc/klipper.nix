@@ -46,6 +46,7 @@ in
         default = null;
         description = ''
           User account under which Klipper runs.
+
           If null is specified (default), a temporary user will be created by systemd.
         '';
       };
@@ -55,6 +56,7 @@ in
         default = null;
         description = ''
           Group account under which Klipper runs.
+
           If null is specified (default), a temporary user will be created by systemd.
         '';
       };
@@ -68,7 +70,7 @@ in
         '';
       };
 
-      firmware = mkOption {
+      firmwares = mkOption {
         description = "Firmwares klipper should manage";
         default = { };
         type = with types; attrsOf
@@ -102,7 +104,7 @@ in
         message = "Option klipper.group is not set when a user is specified.";
       }
       {
-        assertion = foldl (a: b: a && b) true (mapAttrsToList (mcu: _: mcu != null -> (hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) cfg.firmware);
+        assertion = foldl (a: b: a && b) true (mapAttrsToList (mcu: _: mcu != null -> (hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) cfg.firmwares);
         message = "Option klipper.settings.$mcu.serial must be set when klipper.firmware.$mcu is specified";
       }
     ];
@@ -147,13 +149,13 @@ in
             mcu = lib.strings.sanitizeDerivationName mcu;
             inherit firmwareConfig;
           })
-          cfg.firmware;
+          cfg.firmwares;
         firmwareFlasher = mapAttrsToList
           (mcu: firmware: pkgs.callPackage pkgs.klipper-flash.override {
             mcu = lib.strings.sanitizeDerivationName mcu;
             klipper-firmware = firmware;
             flashDevice = cfg.settings."${mcu}".serial;
-            firmwareConfig = cfg.firmware."${mcu}".firmwareConfig;
+            firmwareConfig = cfg.firmwares."${mcu}".firmwareConfig;
           })
           firmwares;
       in
