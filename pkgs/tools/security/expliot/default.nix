@@ -22,13 +22,11 @@ buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
 
-  disabled = python3.pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
+    hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 
   propagatedBuildInputs = [
@@ -50,10 +48,21 @@ buildPythonApplication rec {
     zeroconf
   ];
 
+  postPatch = ''
+    # https://gitlab.com/expliot_framework/expliot/-/merge_requests/113
+    substituteInPlace setup.py \
+      --replace "pynetdicom>=1.5.1,<2" "pynetdicom>=2,<3" \
+      --replace "cryptography>=3.0,<4" "cryptography>=35,<40" \
+      --replace "python-can>=3.3.3,<4" "python-can>=3.3.3,<5" \
+      --replace "pyparsing>=2.4.7,<3" "pyparsing>=2.4.7,<4"
+  '';
+
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "expliot" ];
+  pythonImportsCheck = [
+    "expliot"
+  ];
 
   meta = with lib; {
     description = "IoT security testing and exploitation framework";

@@ -1,21 +1,35 @@
-{ lib, fetchPypi, buildPythonPackage
-, importlib-metadata, importlib-resources, six, traits
+{ lib
+, fetchPypi
+, buildPythonPackage
+, importlib-metadata
+, importlib-resources
+, traits
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyface";
-  version = "7.3.0";
+  version = "7.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7031ec4cfff034affc822e47ff5e6c1a0272e576d79465cdbbe25f721740322";
+    sha256 = "sha256-UtzzZ5yj5hCjynxLmQSpbGkWiASNtdflKvjlAZ5HrbY=";
   };
 
-  propagatedBuildInputs = [ importlib-metadata importlib-resources six traits ];
+  propagatedBuildInputs = [
+    importlib-metadata
+    importlib-resources
+    traits
+  ];
 
   doCheck = false; # Needs X server
 
-  pythonImportsCheck = [ "pyface" ];
+  pythonImportsCheck = [
+    "pyface"
+  ];
 
   meta = with lib; {
     description = "Traits-capable windowing framework";

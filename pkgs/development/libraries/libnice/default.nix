@@ -13,6 +13,7 @@
 , gupnp-igd
 , gst_all_1
 , gnutls
+, graphviz
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
+    graphviz
   ];
 
   buildInputs = [

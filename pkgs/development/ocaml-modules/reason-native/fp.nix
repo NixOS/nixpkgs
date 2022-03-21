@@ -3,7 +3,7 @@
 {
   pname = "fp";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

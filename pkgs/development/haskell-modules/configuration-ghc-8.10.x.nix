@@ -49,11 +49,6 @@ self: super: {
   # cabal-install-parsers is written for Cabal 3.6
   cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_2_0; };
 
-  # older version of cabal-install-parsers for reverse dependencies that use Cabal 3.4
-  cabal-install-parsers_0_4_2 = super.cabal-install-parsers_0_4_2.override {
-    Cabal = self.Cabal_3_4_1_0;
-  };
-
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   system-fileio = doJailbreak super.system-fileio;

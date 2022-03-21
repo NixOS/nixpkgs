@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.6.2";
 
   src = fetchurl {
-    url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "sha256-P7u/KIf/1YkJ2uWsuVThILP87vaYSbHpx5CtnSR3YbU=";
+    url = "mirror://kde/stable/kdevelop/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-8Qg9rsK4x1LeGgRB0Pn3InSx4tKccjAF7Xjc+Lpxfgw=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

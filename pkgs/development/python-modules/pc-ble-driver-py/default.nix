@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
-  version = "0.16.1";
+  version = "0.16.3";
 
   disabled = pythonOlder "3.7" || pythonAtLeast "3.10";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver-py";
     rev = "v${version}";
-    sha256 = "0q2zag77drcjkjm0cbvy2sf6fq2a4yl5li1zv1xfwmy53ami9b5l";
+    sha256 = "sha256-X21GQsyRZu1xdoTlD9DjceIWKpcuTLdIDf8UahntS3s=";
   };
 
   nativeBuildInputs = [

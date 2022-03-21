@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, libestr, json_c, zlib, docutils, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -14,18 +14,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2110.0";
+  version = "8.2202.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-P5BOwTfKZBLoJz94ltli7LWJ99DFib3xaxcJ7CfiTzE=";
+    sha256 = "sha256-5BMIpaFxk5s8vCRunUvTC+ROgBUh4EzZXQUfo4Z9Zzg=";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
+    fastJson libestr json_c zlib docutils libkrb5 jemalloc
     postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc libmaxminddb

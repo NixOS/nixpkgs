@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "21.5.0";
+  version = "22.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02ea86383fc4b57539c45a965eaa1e9fd28302cdf382d21da8430050c97be9b8";
+    sha256 = "sha256-33V+PxQfx4Lt4HamBFIRlP/LQPomRc9I5aNwYDB/Uuw=";
   };
 
   propagatedBuildInputs = [

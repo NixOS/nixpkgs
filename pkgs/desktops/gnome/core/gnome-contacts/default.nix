@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gsettings-desktop-schemas
     folks
-    libgdata # required by some dependency transitively
     gnome-desktop
     libhandy
     libxml2

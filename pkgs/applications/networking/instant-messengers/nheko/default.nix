@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, asciidoc
 , cmark
 , lmdb
 , lmdbxx
@@ -12,6 +13,7 @@
 , qtkeychain
 , qtmacextras
 , qtmultimedia
+, qtimageformats
 , qttools
 , qtquickcontrols2
 , qtgraphicaleffects
@@ -31,19 +33,20 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1akhnngxkxbjwjkg5ispl6j5s2ylbcj92r3zxqqry4gbfxbjpx8k";
+    sha256 = "sha256-roC1OIq0Vmj5rABNtH4IOMHX9aSlOMFC7ZHueuj/PmE=";
   };
 
   nativeBuildInputs = [
     lmdbxx
     cmake
     pkg-config
+    asciidoc
   ];
 
   buildInputs = [
@@ -57,6 +60,7 @@ mkDerivation rec {
     cmark
     qtbase
     qtmultimedia
+    qtimageformats
     qttools
     qtquickcontrols2
     qtgraphicaleffects

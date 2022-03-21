@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_5
+#!nix-shell -i bash -p curl gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_6 dotnet-sdk_5
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -35,7 +35,7 @@ export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mkdir ./nuget_pkgs
-for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
+for project in OpenTabletDriver.{Console,Daemon,UX.Gtk,Tests}; do
   dotnet restore $project --packages ./nuget_pkgs
 done
 

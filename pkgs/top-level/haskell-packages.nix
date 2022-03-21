@@ -12,14 +12,18 @@ let
     "ghcjs810"
     "integer-simple"
     "native-bignum"
+    "ghc902"
+    "ghc921"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
+    "ghc902"
+    "ghc921"
     "ghcHEAD"
   ];
 
-  haskellLibUncomposable = import ../development/haskell-modules/lib.nix {
+  haskellLibUncomposable = import ../development/haskell-modules/lib {
     inherit (pkgs) lib;
     inherit pkgs;
   };
@@ -101,7 +105,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
+    ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         # the oldest ghc with aarch64-darwin support is 8.10.5
@@ -110,9 +114,9 @@ in {
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      inherit (buildPackages.darwin) autoSignDarwinBinariesHook;
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
+      inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
       bootPkgs =
@@ -215,9 +219,9 @@ in {
       ghc = bh.compiler.ghc8107;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
-    ghc901 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc901;
-      ghc = bh.compiler.ghc901;
+    ghc902 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc902;
+      ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
     ghc921 = callPackage ../development/haskell-modules {

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pykrakenapi";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dominiktraxl";
     repo = "pykrakenapi";
     rev = "v${version}";
-    sha256 = "0yvhgk5wyklwqd67hfajnd7ims79h4h89pp65xb3x5mcmdcfz4ss";
+    hash = "sha256-ZhP4TEWFEGIqI/nk2It1IVFKrX4HKP+dWxu+gLJNIeg=";
   };
 
   propagatedBuildInputs = [

@@ -2,18 +2,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "mgl-pax";
-  version = "20211020-git";
+  version = "20211209-git";
 
-  parasites = [ "mgl-pax/full" ];
+  parasites = [ "mgl-pax/document" "mgl-pax/navigate" ];
 
   description = "Exploratory programming tool and documentation
   generator.";
 
-  deps = [ args."_3bmd" args."_3bmd-ext-code-blocks" args."alexandria" args."babel" args."cl-fad" args."colorize" args."ironclad" args."named-readtables" args."pythonic-string-reader" args."swank" ];
+  deps = [ args."_3bmd" args."_3bmd-ext-code-blocks" args."alexandria" args."colorize" args."md5" args."named-readtables" args."pythonic-string-reader" args."swank" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/mgl-pax/2021-10-20/mgl-pax-20211020-git.tgz";
-    sha256 = "04vddyvyxja8dabksfqqr80xjnvdiiv61zidjvijlpkk8shwaw1g";
+    url = "http://beta.quicklisp.org/archive/mgl-pax/2021-12-09/mgl-pax-20211209-git.tgz";
+    sha256 = "19d47msc8240bldkc0fi60cpzsx1q9392dxhmqn28gn7998pdkgh";
   };
 
   packageName = "mgl-pax";
@@ -23,18 +23,17 @@ rec {
 }
 /* (SYSTEM mgl-pax DESCRIPTION Exploratory programming tool and documentation
   generator.
-    SHA256 04vddyvyxja8dabksfqqr80xjnvdiiv61zidjvijlpkk8shwaw1g URL
-    http://beta.quicklisp.org/archive/mgl-pax/2021-10-20/mgl-pax-20211020-git.tgz
-    MD5 2ad25d62d83b98e3e855b35414a5093d NAME mgl-pax FILENAME mgl-pax DEPS
+    SHA256 19d47msc8240bldkc0fi60cpzsx1q9392dxhmqn28gn7998pdkgh URL
+    http://beta.quicklisp.org/archive/mgl-pax/2021-12-09/mgl-pax-20211209-git.tgz
+    MD5 605583bb2910e0fe2211c8152fe38e0e NAME mgl-pax FILENAME mgl-pax DEPS
     ((NAME 3bmd FILENAME _3bmd)
      (NAME 3bmd-ext-code-blocks FILENAME _3bmd-ext-code-blocks)
-     (NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
-     (NAME cl-fad FILENAME cl-fad) (NAME colorize FILENAME colorize)
-     (NAME ironclad FILENAME ironclad)
-     (NAME named-readtables FILENAME named-readtables)
+     (NAME alexandria FILENAME alexandria) (NAME colorize FILENAME colorize)
+     (NAME md5 FILENAME md5) (NAME named-readtables FILENAME named-readtables)
      (NAME pythonic-string-reader FILENAME pythonic-string-reader)
      (NAME swank FILENAME swank))
     DEPENDENCIES
-    (3bmd 3bmd-ext-code-blocks alexandria babel cl-fad colorize ironclad
-     named-readtables pythonic-string-reader swank)
-    VERSION 20211020-git SIBLINGS NIL PARASITES (mgl-pax/full)) */
+    (3bmd 3bmd-ext-code-blocks alexandria colorize md5 named-readtables
+     pythonic-string-reader swank)
+    VERSION 20211209-git SIBLINGS NIL PARASITES
+    (mgl-pax/document mgl-pax/navigate)) */

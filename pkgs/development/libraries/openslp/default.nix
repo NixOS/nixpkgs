@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
-stdenv.mkDerivation {
-  name = "openslp-2.0.0";
+stdenv.mkDerivation rec {
+  pname = "openslp";
+  version = "2.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openslp/2.0.0/2.0.0/openslp-2.0.0.tar.gz";
+    url = "mirror://sourceforge/openslp/${version}/${version}/openslp-${version}.tar.gz";
     sha256 = "16splwmqp0400w56297fkipaq9vlbhv7hapap8z09gp5m2i3fhwj";
   };
 

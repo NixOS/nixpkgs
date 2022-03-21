@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.ergo;
+  opt = options.services.ergo;
 
-  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+  inherit (lib) literalExpression mkEnableOption mkIf mkOption optionalString types;
 
   configFile = pkgs.writeText "ergo.conf" (''
 ergo {
@@ -92,6 +93,7 @@ in {
       group = mkOption {
         type = types.str;
         default = cfg.user;
+        defaultText = literalExpression "config.${opt.user}";
         description = "The group as which to run the Ergo node.";
       };
 

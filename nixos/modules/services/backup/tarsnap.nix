@@ -1,9 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 
 let
   gcfg = config.services.tarsnap;
+  opt = options.services.tarsnap;
 
   configFile = name: cfg: ''
     keyfile ${cfg.keyfile}
@@ -59,12 +60,13 @@ in
       };
 
       archives = mkOption {
-        type = types.attrsOf (types.submodule ({ config, ... }:
+        type = types.attrsOf (types.submodule ({ config, options, ... }:
           {
             options = {
               keyfile = mkOption {
                 type = types.str;
                 default = gcfg.keyfile;
+                defaultText = literalExpression "config.${opt.keyfile}";
                 description = ''
                   Set a specific keyfile for this archive. This defaults to
                   <literal>"/root/tarsnap.key"</literal> if left unspecified.
@@ -87,6 +89,9 @@ in
               cachedir = mkOption {
                 type = types.nullOr types.path;
                 default = "/var/cache/tarsnap/${utils.escapeSystemdPath config.keyfile}";
+                defaultText = literalExpression ''
+                  "/var/cache/tarsnap/''${utils.escapeSystemdPath config.${options.keyfile}}"
+                '';
                 description = ''
                   The cache allows tarsnap to identify previously stored data
                   blocks, reducing archival time and bandwidth usage.
@@ -320,21 +325,22 @@ in
                         ${optionalString cfg.explicitSymlinks "-H"} \
                         ${optionalString cfg.followSymlinks "-L"} \
                         ${concatStringsSep " " cfg.directories}'';
+          cachedir = escapeShellArg cfg.cachedir;
           in if (cfg.cachedir != null) then ''
-            mkdir -p ${cfg.cachedir}
-            chmod 0700 ${cfg.cachedir}
+            mkdir -p ${cachedir}
+            chmod 0700 ${cachedir}
 
             ( flock 9
-              if [ ! -e ${cfg.cachedir}/firstrun ]; then
+              if [ ! -e ${cachedir}/firstrun ]; then
                 ( flock 10
                   flock -u 9
                   ${tarsnap} --fsck
                   flock 9
-                ) 10>${cfg.cachedir}/firstrun
+                ) 10>${cachedir}/firstrun
               fi
-            ) 9>${cfg.cachedir}/lockf
+            ) 9>${cachedir}/lockf
 
-             exec flock ${cfg.cachedir}/firstrun ${run}
+             exec flock ${cachedir}/firstrun ${run}
           '' else "exec ${run}";
 
         serviceConfig = {
@@ -356,22 +362,23 @@ in
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
           lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
+          cachedir = escapeShellArg cfg.cachedir;
 
         in if (cfg.cachedir != null) then ''
-          mkdir -p ${cfg.cachedir}
-          chmod 0700 ${cfg.cachedir}
+          mkdir -p ${cachedir}
+          chmod 0700 ${cachedir}
 
           ( flock 9
-            if [ ! -e ${cfg.cachedir}/firstrun ]; then
+            if [ ! -e ${cachedir}/firstrun ]; then
               ( flock 10
                 flock -u 9
                 ${tarsnap} --fsck
                 flock 9
-              ) 10>${cfg.cachedir}/firstrun
+              ) 10>${cachedir}/firstrun
             fi
-          ) 9>${cfg.cachedir}/lockf
+          ) 9>${cachedir}/lockf
 
-           exec flock ${cfg.cachedir}/firstrun ${run}
+           exec flock ${cachedir}/firstrun ${run}
         '' else "exec ${run}";
 
         serviceConfig = {

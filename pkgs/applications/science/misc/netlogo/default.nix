@@ -8,7 +8,7 @@ let
     icon = name;
     comment = "A multi-agent programmable modeling environment";
     desktopName = "NetLogo";
-    categories = "Science;";
+    categories = [ "Science" ];
   };
 
 in

@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
     rev = version;
-    sha256 = "sha256-UrLy+j8YDWuS9pciEDKb/+UoCcw54XWiIUAEYC72/W0=";
+    sha256 = "sha256-2gex50QEN55uUa8SfAQA7iDZ3SVnpOTXfD3Sxq7KvNw=";
   };
+
+  PACKAGE_VERSION = version;
 
   propagatedBuildInputs = [
     aiodns

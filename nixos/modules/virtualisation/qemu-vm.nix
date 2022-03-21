@@ -632,6 +632,15 @@ in
             Enable the Qemu guest agent.
           '';
         };
+
+      virtioKeyboard =
+        mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Enable the virtio-keyboard device.
+          '';
+        };
     };
 
     virtualisation.useNixStoreImage =
@@ -835,7 +844,9 @@ in
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
-      [ "-device virtio-keyboard" ]
+      (mkIf cfg.qemu.virtioKeyboard [
+        "-device virtio-keyboard"
+      ])
       (mkIf pkgs.stdenv.hostPlatform.isx86 [
         "-usb" "-device usb-tablet,bus=usb-bus.0"
       ])
@@ -999,4 +1010,7 @@ in
       ];
 
   };
+
+  # uses types of services/x11/xserver.nix
+  meta.buildDocsInSandbox = false;
 }

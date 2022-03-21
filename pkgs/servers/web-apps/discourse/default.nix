@@ -10,13 +10,13 @@
 }@args:
 
 let
-  version = "2.8.0.beta9";
+  version = "2.9.0.beta1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-cTedMbf0N50ysRQqA9Fm1WQmI5J5hsqDSi2JZIa49jg=";
+    sha256 = "sha256-mf2Niyv1H+Zq7RfnV93O1Ul9RdRrtmtAJMBJrb8hp3U=";
   };
 
   runtimeDeps = [
@@ -313,7 +313,11 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse

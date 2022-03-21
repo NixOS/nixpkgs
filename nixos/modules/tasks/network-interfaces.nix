@@ -6,9 +6,11 @@ with utils;
 let
 
   cfg = config.networking;
+  opt = options.networking;
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
+  hasGres = cfg.greTunnels != { };
   hasBonds = cfg.bonds != { };
   hasFous = cfg.fooOverUDP != { }
     || filterAttrs (_: s: s.encapsulation != null) cfg.sits != { };
@@ -101,6 +103,11 @@ let
         description = ''
           Other route options. See the symbol <literal>OPTIONS</literal>
           in the <literal>ip-route(8)</literal> manual page for the details.
+          You may also specify <literal>metric</literal>,
+          <literal>src</literal>, <literal>protocol</literal>,
+          <literal>scope</literal>, <literal>from</literal>
+          and <literal>table</literal>, which are technically
+          not route options, in the sense used in the manual.
         '';
       };
 
@@ -206,6 +213,14 @@ let
         type = with types; listOf (submodule (routeOpts 4));
         description = ''
           List of extra IPv4 static routes that will be assigned to the interface.
+          <warning><para>If the route type is the default <literal>unicast</literal>, then the scope
+          is set differently depending on the value of <option>networking.useNetworkd</option>:
+          the script-based backend sets it to <literal>link</literal>, while networkd sets
+          it to <literal>global</literal>.</para></warning>
+          If you want consistency between the two implementations,
+          set the scope of the route manually with
+          <literal>networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]</literal>
+          for example.
         '';
       };
 
@@ -290,7 +305,7 @@ let
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = "Wether to enable wol on this interface.";
+          description = "Whether to enable wol on this interface.";
         };
       };
     };
@@ -996,6 +1011,76 @@ in
       });
     };
 
+    networking.greTunnels = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          greBridge = {
+            remote = "10.0.0.1";
+            local = "10.0.0.22";
+            dev = "enp4s0f0";
+            type = "tap";
+          };
+          gre6Tunnel = {
+            remote = "fd7a:5634::1";
+            local = "fd7a:5634::2";
+            dev = "enp4s0f0";
+            type = "tun6";
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define Generic Routing Encapsulation (GRE) tunnels.
+      '';
+      type = with types; attrsOf (submodule {
+        options = {
+
+          remote = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10.0.0.1";
+            description = ''
+              The address of the remote endpoint to forward traffic over.
+            '';
+          };
+
+          local = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10.0.0.22";
+            description = ''
+              The address of the local endpoint which the remote
+              side should send packets to.
+            '';
+          };
+
+          dev = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "enp4s0f0";
+            description = ''
+              The underlying network device on which the tunnel resides.
+            '';
+          };
+
+          type = mkOption {
+            type = with types; enum [ "tun" "tap" "tun6" "tap6" ];
+            default = "tap";
+            example = "tap";
+            apply = v: {
+              tun = "gre";
+              tap = "gretap";
+              tun6 = "ip6gre";
+              tap6 = "ip6gretap";
+            }.${v};
+            description = ''
+              Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
+            '';
+          };
+        };
+      });
+    };
+
     networking.vlans = mkOption {
       default = { };
       example = literalExpression ''
@@ -1169,6 +1254,9 @@ in
 
     networking.tempAddresses = mkOption {
       default = if cfg.enableIPv6 then "default" else "disabled";
+      defaultText = literalExpression ''
+        if ''${config.${opt.enableIPv6}} then "default" else "disabled"
+      '';
       type = types.enum (lib.attrNames tempaddrValues);
       description = ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
@@ -1225,6 +1313,7 @@ in
     boot.kernelModules = [ ]
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
+      ++ optional hasGres "gre"
       ++ optional hasBonds "bonding"
       ++ optional hasFous "fou";
 
@@ -1247,20 +1336,11 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
-    # Capabilities won't work unless we have at-least a 4.3 Linux
-    # kernel because we need the ambient capability
-    security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
+    security.wrappers = {
       ping = {
         owner = "root";
         group = "root";
         capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
-    } else {
-      ping = {
-        setuid = true;
-        owner = "root";
-        group = "root";
         source = "${pkgs.iputils.out}/bin/ping";
       };
     };

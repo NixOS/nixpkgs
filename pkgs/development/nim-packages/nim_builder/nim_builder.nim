@@ -97,7 +97,7 @@ proc configurePhase*() =
   for def in getEnv("nimDefines").split:
     if def != "":
       switch("define", def)
-  for input in getEnv("buildInputs").split:
+  for input in getEnv("NIX_NIM_BUILD_INPUTS").split:
     if input != "":
       for nimbleFile in walkFiles(input / "*.nimble"):
         let inputSrc = normalizedPath(

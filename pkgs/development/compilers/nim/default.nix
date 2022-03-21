@@ -98,12 +98,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.0";
+    version = "1.6.4";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-UgZdSNcqcnAuwa/l96mDHhFnNTHiec3/nK7AGgfuxj0=";
+      hash = "sha256-f8MJKFW1wiAM2f7tEz0EYFgj8lDXO01KxQEwA3DgoMI=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];

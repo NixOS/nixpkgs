@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 
 , autoreconfHook
 , pkg-config
@@ -21,8 +22,32 @@ stdenv.mkDerivation rec {
     sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
   };
 
-  # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  patches = [
+    # FreeImage needs this patch
+    ./headers.patch
+    # libc++abi 11 has an `#include <version>`, this picks up files name
+    # `version` in the project's include paths
+    ./rename-version.patch
+    (fetchpatch {
+      name = "CVE-2022-22844.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/03047a26952a82daaa0792957ce211e0aa51bc64.patch";
+      sha256 = "0cfih55f5qpc84mvlwsffik80bgz6drkflkhrdyqq8m84jw3mbwb";
+    })
+    (fetchpatch {
+      name = "CVE-2022-0561.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/eecb0712f4c3a5b449f70c57988260a667ddbdef.patch";
+      sha256 = "0m57fdxyvhhr9cc260lvkkn2g4zr4n4v9nricc6lf9h6diagd7mk";
+    })
+    (fetchpatch {
+      name = "CVE-2022-0562.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/561599c99f987dc32ae110370cfdd7df7975586b.patch";
+      sha256 = "0ycirjjc1vigj03kwjb92n6jszsl9p17ccw5hry7lli9gxyyr0an";
+    })
+  ];
+
+  postPatch = ''
+    mv VERSION VERSION.txt
+  '';
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
@@ -38,7 +63,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
 
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  buildInputs = [ libdeflate ];
 
   enableParallelBuilding = true;
 

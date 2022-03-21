@@ -1,30 +1,28 @@
-{lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib, libwpg, libwpd, librevenge}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="libodfgen";
-    version="0.1.7";
-    name="${baseName}-${version}";
-    hash="0cdq48wlpp8m0qmndybv64r0m4vh0qsqx69cn6ms533cjlgljgij";
-    url="mirror://sourceforge/project/libwpd/libodfgen/libodfgen-0.1.7/libodfgen-0.1.7.tar.xz";
-    sha256="0cdq48wlpp8m0qmndybv64r0m4vh0qsqx69cn6ms533cjlgljgij";
+{ lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib, libwpg, libwpd, librevenge }:
+
+stdenv.mkDerivation rec {
+  pname = "libodfgen";
+  version = "0.1.7";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/libwpd/libodfgen/libodfgen-${version}/libodfgen-${version}.tar.xz";
+    sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
   };
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost cppunit zlib libwpg libwpd librevenge
+    boost
+    cppunit
+    zlib
+    libwpg
+    libwpd
+    librevenge
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit nativeBuildInputs buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
-  meta = {
-    inherit (s) version;
+
+  meta = with lib; {
     description = "A base library for generating ODF documents";
-    license = lib.licenses.mpl20 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.unix;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
   };
 }

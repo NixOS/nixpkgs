@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "2.7.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a4ad2832be3b86c8f0fb57b2d382a1f67218137c6f6051372647ac5147d6421";
+    sha256 = "sha256-RS42Hh3Lwo8iCMCAXBp8usAwdkVWcD2XZW0FIYuTNwg=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
 
-  pythonImortsCheck = [
+  pythonImportsCheck = [
     "google.cloud.logging"
     "google.cloud.logging_v2"
   ];

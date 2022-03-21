@@ -28,38 +28,45 @@ let
       }
     '';
 
-  dhcpdService = postfix: cfg: optionalAttrs cfg.enable {
-    "dhcpd${postfix}" = {
-      description = "DHCPv${postfix} server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+  dhcpdService = postfix: cfg:
+    let
+      configFile =
+        if cfg.configFile != null
+          then cfg.configFile
+          else writeConfig cfg;
+      leaseFile = "/var/lib/dhcpd${postfix}/dhcpd.leases";
+      args = [
+        "@${pkgs.dhcp}/sbin/dhcpd" "dhcpd${postfix}" "-${postfix}"
+        "-pf" "/run/dhcpd${postfix}/dhcpd.pid"
+        "-cf" configFile
+        "-lf" leaseFile
+      ] ++ cfg.extraFlags
+        ++ cfg.interfaces;
+    in
+      optionalAttrs cfg.enable {
+        "dhcpd${postfix}" = {
+          description = "DHCPv${postfix} server";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -m 755 -p ${cfg.stateDir}
-        chown dhcpd:nogroup ${cfg.stateDir}
-        touch ${cfg.stateDir}/dhcpd.leases
-      '';
-
-      serviceConfig =
-        let
-          configFile = if cfg.configFile != null then cfg.configFile else writeConfig cfg;
-          args = [ "@${pkgs.dhcp}/sbin/dhcpd" "dhcpd${postfix}" "-${postfix}"
-                   "-pf" "/run/dhcpd${postfix}/dhcpd.pid"
-                   "-cf" "${configFile}"
-                   "-lf" "${cfg.stateDir}/dhcpd.leases"
-                   "-user" "dhcpd" "-group" "nogroup"
-                 ] ++ cfg.extraFlags
-                   ++ cfg.interfaces;
-
-        in {
-          ExecStart = concatMapStringsSep " " escapeShellArg args;
-          Type = "forking";
-          Restart = "always";
-          RuntimeDirectory = [ "dhcpd${postfix}" ];
-          PIDFile = "/run/dhcpd${postfix}/dhcpd.pid";
+          preStart = "touch ${leaseFile}";
+          serviceConfig = {
+            ExecStart = concatMapStringsSep " " escapeShellArg args;
+            Type = "forking";
+            Restart = "always";
+            DynamicUser = true;
+            User = "dhcpd";
+            Group = "dhcpd";
+            AmbientCapabilities = [
+              "CAP_NET_RAW"          # to send ICMP messages
+              "CAP_NET_BIND_SERVICE" # to bind on DHCP port (67)
+            ];
+            StateDirectory   = "dhcpd${postfix}";
+            RuntimeDirectory = "dhcpd${postfix}";
+            PIDFile = "/run/dhcpd${postfix}/dhcpd.pid";
+          };
         };
-    };
-  };
+      };
 
   machineOpts = { ... }: {
 
@@ -99,15 +106,6 @@ let
       default = false;
       description = ''
         Whether to enable the DHCPv${postfix} server.
-      '';
-    };
-
-    stateDir = mkOption {
-      type = types.path;
-      # We use /var/lib/dhcp for DHCPv4 to save backwards compatibility.
-      default = "/var/lib/dhcp${if postfix == "4" then "" else postfix}";
-      description = ''
-        State directory for the DHCP server.
       '';
     };
 
@@ -194,7 +192,13 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ])
-  ];
+  ] ++ flip map [ "4" "6" ] (postfix:
+    mkRemovedOptionModule [ "services" "dhcpd${postfix}" "stateDir" ] ''
+      The DHCP server state directory is now managed with the systemd's DynamicUser mechanism.
+      This means the directory is named after the service (dhcpd${postfix}), created under
+      /var/lib/private/ and symlinked to /var/lib/.
+    ''
+  );
 
   ###### interface
 
@@ -209,15 +213,6 @@ in
   ###### implementation
 
   config = mkIf (cfg4.enable || cfg6.enable) {
-
-    users = {
-      users.dhcpd = {
-        isSystemUser = true;
-        group = "dhcpd";
-        description = "DHCP daemon user";
-      };
-      groups.dhcpd = {};
-    };
 
     systemd.services = dhcpdService "4" cfg4 // dhcpdService "6" cfg6;
 

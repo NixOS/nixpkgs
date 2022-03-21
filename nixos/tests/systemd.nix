@@ -31,6 +31,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       umount /tmp/shared
     '';
 
+    systemd.services.oncalendar-test = {
+      description = "calendar test";
+      # Japan does not have DST which makes the test a little bit simpler
+      startAt = "Wed 10:00 Asia/Tokyo";
+      script = "true";
+    };
+
     systemd.services.testservice1 = {
       description = "Test Service 1";
       wantedBy = [ "multi-user.target" ];
@@ -68,6 +75,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_x()
     # wait for user services
     machine.wait_for_unit("default.target", "alice")
+
+    # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
+    with subtest("systemd reads timezone database in /etc/zoneinfo"):
+        timer = machine.succeed("TZ=UTC systemctl show --property=TimersCalendar oncalendar-test.timer")
+        assert re.search("next_elapse=Wed ....-..-.. 01:00:00 UTC", timer), f"got {timer.strip()}"
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
     with subtest("configuration files are recognized by systemd"):

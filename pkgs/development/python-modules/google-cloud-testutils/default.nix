@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d79051b6ca170c2a4f159bf56ac3f66c1e5360486121e72c06fdaa3911154bf";
+    sha256 = "sha256-X85NRgGZt7+OpL4poOyS+UWec4fuABiTxEYyFpkUpqs=";
   };
 
   propagatedBuildInputs = [ click google-auth six ];

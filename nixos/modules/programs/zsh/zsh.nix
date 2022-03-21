@@ -1,6 +1,6 @@
 # This module defines global configuration for the zshell.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -9,6 +9,7 @@ let
   cfge = config.environment;
 
   cfg = config.programs.zsh;
+  opt = options.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
@@ -147,6 +148,7 @@ in
 
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
+        defaultText = literalExpression "config.${opt.enableCompletion}";
         description = ''
           Enable execution of compinit call for all interactive zsh shells.
 

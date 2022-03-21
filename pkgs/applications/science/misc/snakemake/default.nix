@@ -1,8 +1,8 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "6.10.0";
+  version = "6.15.5";
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
@@ -29,12 +29,31 @@ python3Packages.buildPythonApplication rec {
     wrapt
   ];
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "199a86c8d1fcfdb88c4271a1507b0ab371a15bc407f2dad9b0ab8c43438adff8";
+  src = fetchFromGitHub {
+    owner = "snakemake";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-i8C7gPLzUzSxNH9xwpr+fUKI1SvpYFsFBlspS74LoWU=";
   };
 
-  doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
+  # See
+  # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
+  # for the current basic test suite. Tibanna and Tes require extra
+  # setup.
+
+  checkInputs = with python3Packages; [
+    pandas
+    pytestCheckHook
+    requests-mock
+  ];
+
+  disabledTestPaths = [
+    "tests/test_tes.py"
+    "tests/test_tibanna.py"
+    "tests/test_linting.py"
+  ];
+
+  pythonImportsCheck = [ "snakemake" ];
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";

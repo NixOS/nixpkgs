@@ -1,26 +1,24 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
-, pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27 }:
+, pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27
+, poetry-core }:
 
 buildPythonPackage rec {
   pname = "SwSpotify";
-  version = "1.2.2";
+  version = "1.2.3";
   disabled = isPy27;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";
     repo = "SwSpotify";
     rev = "v${version}";
-    sha256 = "sha256-571knnY8LegIbqyPeKUfl+d0suTWAMQHYLN7edKFNdI=";
+    sha256 = "sha256-xGLvc154xnje45Akf7H1qqQRUc03gGVt8AhGlkcP3kY=";
   };
 
-  propagatedBuildInputs = [
-    requests flask flask-cors dbus-python
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'flask==2.0.1' 'flask'
-  '';
+  propagatedBuildInputs = [ requests flask flask-cors ]
+    ++ lib.optionals stdenv.isLinux [ dbus-python ];
 
   doCheck = !stdenv.isDarwin;
 

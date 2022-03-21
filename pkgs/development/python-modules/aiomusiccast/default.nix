@@ -8,18 +8,22 @@
 
 buildPythonPackage rec {
   pname = "aiomusiccast";
-  version = "0.14.2";
+  version = "0.14.3";
 
   format = "pyproject";
-
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "aiomusiccast";
     rev = version;
-    sha256 = "sha256-5xIz36FgNwcaesmkYp3EWTxCe/8RaUJOJW9dqK+eang=";
+    hash = "sha256-ELdNxeU9dajWr4VeOyuvNrSi7B+ImVJM/BlZsw3tcKE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"'
+  '';
 
   nativeBuildInputs = [
     poetry-core

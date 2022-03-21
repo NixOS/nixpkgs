@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "georss-ign-sismologia-client";
-  version = "0.4";
+  version = "0.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ign-sismologia-client";
     rev = "v${version}";
-    sha256 = "sha256-g7lZC5ZiJV8dNZJceLROqyBRZSuqaivGFhaQrKe4B7g=";
+    hash = "sha256-i3VdxntFwieCmB4ihHRSCV5YKDyYytl3XnU/G1LwLhg=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +28,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "georss_ign_sismologia_client" ];
+  pythonImportsCheck = [
+    "georss_ign_sismologia_client"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing the IGN Sismologia GeoRSS feed";

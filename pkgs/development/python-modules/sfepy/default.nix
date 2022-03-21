@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "sfepy";
-  version = "2021.2";
+  version = "2021.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sfepy";
     repo = "sfepy";
     rev = "release_${version}";
-    sha256 = "sha256-zFtm4KrpqjYfxVHcMrTU4tMyHYnD9VPEvuId2lR1MHU=";
+    sha256 = "sha256-+wvFcME02la5JwzD5bvPgBBlkQKF5LWz5MC3+0s5jSs=";
   };
 
   propagatedBuildInputs = [

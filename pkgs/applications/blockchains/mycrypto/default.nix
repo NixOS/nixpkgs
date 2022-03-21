@@ -23,7 +23,7 @@ let
     comment = "MyCrypto is a free, open-source interface for interacting with the blockchain";
     exec = pname;
     icon = "mycrypto";
-    categories = "Finance;";
+    categories = [ "Finance" ];
   };
 
 in appimageTools.wrapType2 rec {

@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   # To enable lazy loading via. bash-completion we need a symlink to the script
   # from every command name.
   installPhase = ''
+    runHook preInstall
+
     commands=$(
       function complete() { shift 2; echo "$@"; }
       shopt -s extglob
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
     for c in $commands; do
       ln -s _nix $c
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

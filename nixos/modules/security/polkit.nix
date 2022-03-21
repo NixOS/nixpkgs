@@ -12,11 +12,7 @@ in
 
   options = {
 
-    security.polkit.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Whether to enable PolKit.";
-    };
+    security.polkit.enable = mkEnableOption "polkit";
 
     security.polkit.extraConfig = mkOption {
       type = types.lines;

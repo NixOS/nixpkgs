@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
-  version = "1.4.1";
+  version = "1.4.3";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/OpenImageDenoise/oidn/releases/download/v${version}/oidn-${version}.src.tar.gz";
-    sha256 = "sha256-TQ7cL0/6pnSTuW21DESA5I3S/C1BHStrWK9yaPoim6E=";
+    sha256 = "sha256-i73w/Vkr5TPLB1ulPbPU4OVGwdNlky1brfarueD7akE=";
   };
 
   nativeBuildInputs = [ cmake python3 ispc ];

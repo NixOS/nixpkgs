@@ -2,22 +2,23 @@
 , buildDunePackage
 , tezos-stdlib
 , tezos-protocol-compiler
+, tezos-protocol-environment
 }:
 
 buildDunePackage {
   pname = "tezos-protocol-010-PtGRANAD";
   inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src/proto_010_PtGRANAD/lib_protocol";
+  src = "${tezos-stdlib.base_src}/src";
 
-  preBuild = ''
-    rm dune
-    cp -f ${tezos-protocol-compiler.src}/dune_protocol dune
-    sed -i.back -e s/-nostdlib//g dune.inc
-  '';
-
-  buildInputs = [
+  nativeBuildInputs = [
     tezos-protocol-compiler
   ];
+
+  buildInputs = [
+    tezos-protocol-environment
+  ];
+
+  strictDeps = true;
 
   doCheck = true;
 

@@ -4,7 +4,7 @@
   automake, autoconf, libtool, clangStdenv } :
 
 clangStdenv.mkDerivation rec {
-  name = "ios-cross-compile-${version}";
+  pname = "ios-cross-compile";
   version = "9.2";
   sdk = "iPhoneOS9.2.sdk";
   cctools_port = fetchFromGitHub {

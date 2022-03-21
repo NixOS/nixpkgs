@@ -7,7 +7,8 @@
 
 buildPythonPackage rec {
   pname = "mutf8";
-  version = "1.0.5";
+  version = "1.0.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     owner = "TkTech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0blp6gb7q3f7if326xard8zlfg2rcmb3a7mxvaxgkvxigipjb9af";
+    hash = "sha256-4Ojn3t0EbOVdrYEiY8JegJuvW9sz8jt9tKFwOluiGQo=";
   };
 
   checkInputs = [
@@ -27,7 +28,9 @@ buildPythonPackage rec {
     pytest
   '';
 
-  pythonImportsCheck = [ "mutf8" ];
+  pythonImportsCheck = [
+    "mutf8"
+  ];
 
   meta = with lib; {
     description = "Fast MUTF-8 encoder & decoder";

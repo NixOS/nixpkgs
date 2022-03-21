@@ -2,12 +2,11 @@
   pkg-config, pure, haskellPackages }:
 
 stdenv.mkDerivation rec {
-  baseName = "gen";
+  pname = "pure-gen";
   version = "0.20";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-gen-${version}.tar.gz";
     sha256 = "cfadd99a378b296325937d2492347611cc1e1d9f24594f91f3c2293eca01a4a8";
   };
 

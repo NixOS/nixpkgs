@@ -222,14 +222,12 @@ let
         in concatStringsSep "\n" inTunOpts))];
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 
-  i2pdSh = pkgs.writeScriptBin "i2pd" ''
-    #!/bin/sh
-    exec ${pkgs.i2pd}/bin/i2pd \
-      ${if cfg.address == null then "" else "--host="+cfg.address} \
-      --service \
-      --conf=${i2pdConf} \
-      --tunconf=${tunnelConf}
-  '';
+  i2pdFlags = concatStringsSep " " (
+    optional (cfg.address != null) ("--host=" + cfg.address) ++ [
+    "--service"
+    ("--conf=" + i2pdConf)
+    ("--tunconf=" + tunnelConf)
+  ]);
 
 in
 
@@ -250,6 +248,15 @@ in
           Enables I2Pd as a running service upon activation.
           Please read http://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.i2pd;
+        defaultText = literalExpression "pkgs.i2pd";
+        description = ''
+          i2pd package to use.
         '';
       };
 
@@ -677,7 +684,7 @@ in
         User = "i2pd";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${i2pdSh}/bin/i2pd";
+        ExecStart = "${cfg.package}/bin/i2pd ${i2pdFlags}";
       };
     };
   };

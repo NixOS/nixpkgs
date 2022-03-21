@@ -19,15 +19,23 @@ stdenv.mkDerivation rec {
   patches = [ ./patch.patch ./0001-Use-strerror-rather-than-sys_errlist-to-fix-compilat.patch ];
 
   postPatch = ''
+    echo 'InstallBinSubdirs(packlib scripts)' >> 2006/src/Imakefile
     substituteInPlace 2006/src/config/site.def \
       --replace "# define MakeCmd gmake" "# define MakeCmd make"
     substituteInPlace 2006/src/config/lnxLib.rules \
       --replace "# lib" "// lib"
+
+    substituteInPlace 2006/src/config/linux.cf \
+      --replace "# ifdef Hasgfortran" "# if 1" \
+      --replace "# define CcCmd			gcc4" "# define CcCmd			gcc"
+    substituteInPlace 2006/src/scripts/cernlib \
+      --replace "-lnsl" ""
+
     # binutils 2.37 fix
     substituteInPlace 2006/src/config/Imake.tmpl --replace "clq" "cq"
   '';
 
-  configurePhase = ''
+  preConfigure = ''
     export CERN=`pwd`
     export CERN_LEVEL=${version}
     export CERN_ROOT=$CERN/$CERN_LEVEL
@@ -43,32 +51,39 @@ stdenv.mkDerivation rec {
     "-fallow-argument-mismatch"
   ];
 
+  NIX_CFLAGS = [ "-Wno-return-type" ];
+
   makeFlags = [
     "FORTRANOPTIONS=$(FFLAGS)"
+    "CCOPTIONS=$(NIX_CFLAGS)"
   ];
 
-  buildPhase = ''
-    cd $CERN_ROOT
-    mkdir -p build bin lib
+  configurePhase = ''
+    runHook preConfigure
 
+    cd $CERN_ROOT
+    mkdir -p build
     cd $CERN_ROOT/build
     $CVSCOSRC/config/imake_boot
+
+    runHook postConfigure
+  '';
+
+  preBuild = ''
     make -j $NIX_BUILD_CORES $makeFlags bin/kuipc
     make -j $NIX_BUILD_CORES $makeFlags scripts/Makefile
     pushd scripts
-    make -j $NIX_BUILD_CORES $makeFlags install.bin
+    make -j $NIX_BUILD_CORES $makeFlags bin/cernlib
     popd
-    make -j $NIX_BUILD_CORES $makeFlags
   '';
 
-  installPhase = ''
-    mkdir "$out"
-    cp -r "$CERN_ROOT/bin" "$out"
-    cp -r "$CERN_ROOT/lib" "$out"
-    mkdir "$out/$CERN_LEVEL"
-    ln -s "$out/bin" "$out/$CERN_LEVEL/bin"
-    ln -s "$out/lib" "$out/$CERN_LEVEL/lib"
-  '';
+  installTargets = [ "install.bin" "install.lib" "install.include" ];
+  installFlags = [
+    "CERN_BINDIR=${placeholder "out"}/bin"
+    "CERN_INCLUDEDIR=${placeholder "out"}/include"
+    "CERN_LIBDIR=${placeholder "out"}/lib"
+    "CERN_SHLIBDIR=${placeholder "out"}/libexec"
+  ];
 
   setupHook = ./setup-hook.sh;
 

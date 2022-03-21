@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     comment = "Eclipse-based LDAP browser and directory client";
     desktopName = "Apache Directory Studio";
     genericName = "Apache Directory Studio";
-    categories = "Java;Network";
+    categories = [ "Java" "Network" ];
   };
 
   buildInputs = [ glib libsecret ];

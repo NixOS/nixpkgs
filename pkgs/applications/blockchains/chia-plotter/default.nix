@@ -4,7 +4,7 @@
 , libsodium
 , cmake
 , substituteAll
-, pythonPackages
+, python3Packages
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     # prevent CMake from trying to get libraries on the Internet
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
-      pybind11_src = pythonPackages.pybind11.src;
+      pybind11_src = python3Packages.pybind11.src;
       relic_src = fetchFromGitHub {
         owner = "relic-toolkit";
         repo = "relic";

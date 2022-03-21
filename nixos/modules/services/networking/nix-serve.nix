@@ -26,6 +26,12 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for nix-serve.";
+      };
+
       secretKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -76,6 +82,10 @@ in
         LoadCredential = lib.optionalString (cfg.secretKeyFile != null)
           "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
     };
   };
 }

@@ -17,7 +17,7 @@ rec {
   inherit pkgs;
 
   # Run an automated test suite in the given virtual network.
-  runTests = { driver, pos }:
+  runTests = { driver, driverInteractive, pos }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -30,11 +30,11 @@ rec {
           # effectively mute the XMLLogger
           export LOGFILE=/dev/null
 
-          ${driver}/bin/nixos-test-driver
+          ${driver}/bin/nixos-test-driver -o $out
         '';
 
       passthru = driver.passthru // {
-        inherit driver;
+        inherit driver driverInteractive;
       };
 
       inherit pos; # for better debugging
@@ -51,6 +51,7 @@ rec {
     , enableOCR ? false
     , skipLint ? false
     , passthru ? {}
+    , interactive ? false
   }:
     let
       # Reifies and correctly wraps the python test driver for
@@ -139,7 +140,8 @@ rec {
         wrapProgram $out/bin/nixos-test-driver \
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
-          --set vlans '${toString vlans}'
+          --set vlans '${toString vlans}' \
+          ${lib.optionalString (interactive) "--add-flags --interactive"}
       '');
 
   # Make a full-blown test
@@ -217,6 +219,7 @@ rec {
         testName = name;
         qemu_pkg = pkgs.qemu;
         nodes = nodes pkgs.qemu;
+        interactive = true;
       };
 
       test =
@@ -224,7 +227,7 @@ rec {
           passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
             meta = (drv.meta or { }) // t.meta;
           };
-        in passMeta (runTests { inherit driver pos; });
+        in passMeta (runTests { inherit driver pos driverInteractive; });
 
     in
       test // {

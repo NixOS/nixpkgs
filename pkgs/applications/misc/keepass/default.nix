@@ -2,7 +2,7 @@
   unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
 
 with builtins; buildDotnetPackage rec {
-  baseName = "keepass";
+  pname = "keepass";
   version = "2.49";
 
   src = fetchurl {
@@ -69,11 +69,8 @@ with builtins; buildDotnetPackage rec {
     icon = "keepass";
     desktopName = "Keepass";
     genericName = "Password manager";
-    categories = "Utility;";
-    mimeType = lib.concatStringsSep ";" [
-      "application/x-keepass2"
-      ""
-    ];
+    categories = [ "Utility" ];
+    mimeTypes = [ "application/x-keepass2" ];
   };
 
   outputFiles = [

@@ -17,7 +17,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "cups-brother-hl3140cw";
+  pname = "cups-brother-hl3140cw";
+  inherit version;
   nativeBuildInputs = [ makeWrapper dpkg ];
   buildInputs = [ cups ghostscript a2ps ];
 

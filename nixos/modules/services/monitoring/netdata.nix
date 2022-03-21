@@ -19,8 +19,17 @@ let
     "${wrappedPlugins}/libexec/netdata/plugins.d"
   ] ++ cfg.extraPluginPaths;
 
+  configDirectory = pkgs.runCommand "netdata-config-d" { } ''
+    mkdir $out
+    ${concatStringsSep "\n" (mapAttrsToList (path: file: ''
+        mkdir -p "$out/$(dirname ${path})"
+        ln -s "${file}" "$out/${path}"
+      '') cfg.configDir)}
+  '';
+
   localConfig = {
     global = {
+      "config directory" = "/etc/netdata/conf.d";
       "plugins directory" = concatStringsSep " " plugins;
     };
     web = {
@@ -130,6 +139,26 @@ in {
         '';
       };
 
+      configDir = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = ''
+          Complete netdata config directory except netdata.conf.
+          The default configuration is merged with changes
+          defined in this option.
+          Each top-level attribute denotes a path in the configuration
+          directory as in environment.etc.
+          Its value is the absolute path and must be readable by netdata.
+          Cannot be combined with configText.
+        '';
+        example = literalExpression ''
+          "health_alarm_notify.conf" = pkgs.writeText "health_alarm_notify.conf" '''
+            sendmail="/path/to/sendmail"
+          ''';
+          "health.d" = "/run/secrets/netdata/health.d";
+        '';
+      };
+
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
@@ -150,11 +179,14 @@ in {
         }
       ];
 
+    environment.etc."netdata/netdata.conf".source = configFile;
+    environment.etc."netdata/conf.d".source = configDirectory;
+
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk iproute2 which ])
+      path = (with pkgs; [ curl gawk iproute2 which procps ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
@@ -162,8 +194,12 @@ in {
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
+      restartTriggers = [
+        config.environment.etc."netdata/netdata.conf".source
+        config.environment.etc."netdata/conf.d".source
+      ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
         Restart = "on-failure";

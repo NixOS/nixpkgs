@@ -2,15 +2,15 @@
 { version, artifactId, groupId, sha512, type ? "jar", suffix ? "" }:
 
 let
-  name = "${artifactId}-${version}";
   m2Path = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}";
-  m2File = "${name}${suffix}.${type}";
+  m2File = "${artifactId}-${version}${suffix}.${type}";
   src = fetchurl {
       inherit sha512;
       url = "mirror://maven/${m2Path}/${m2File}";
   };
 in stdenv.mkDerivation {
-  inherit name m2Path m2File src;
+  inherit version m2Path m2File src;
+  pname = artifactId;
 
   dontUnpack = true;
 

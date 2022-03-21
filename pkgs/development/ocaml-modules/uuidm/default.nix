@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ivxb3hxn9bk62rmixx6px4fvn52s4yr1bpla7rgkcn8981v45r8";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
   configurePlatforms = [];
   buildInputs = [ topkg cmdliner ];
 

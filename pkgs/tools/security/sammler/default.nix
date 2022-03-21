@@ -15,16 +15,14 @@ buildGoModule rec {
     sha256 = "1gsv83sbqc9prkigbjvkhh547w12l3ynbajpnbqyf8sz4bd1nj5c";
   };
 
-  vendorSha256 = "1510rhdac8v21kpp00q8yy6b13hgac8547d7f5q7nwrgnihg03w4";
+  vendorSha256 = "sha256-0ZBPLONUZyazZ22oLO097hdX5xuHx2G6rZCAsCwqq4s=";
 
   subPackages = [ "." ];
-
-  runVend = true;
 
   meta = with lib; {
     description = "Tool to extract useful data from documents";
     homepage = "https://github.com/redcode-labs/Sammler";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
   };
 }

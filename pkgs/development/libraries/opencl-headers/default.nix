@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opencl-headers-${version}";
+  pname = "opencl-headers";
   version = "2021.06.30";
 
   src = fetchFromGitHub {

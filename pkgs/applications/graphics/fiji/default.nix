@@ -26,20 +26,15 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "fiji";
       exec = "fiji %F";
+      tryExec = "fiji";
       icon = "fiji";
-      mimeType = "image/*;";
+      mimeTypes = [ "image/*" ];
       comment = "Scientific Image Analysis";
       desktopName = "Fiji Is Just ImageJ";
       genericName = "Fiji Is Just ImageJ";
-      categories = "Education;Science;ImageProcessing;";
-      terminal = false;
+      categories = [ "Education" "Science" "ImageProcessing" ];
       startupNotify = true;
-      extraEntries = ''
-        Version=1.0
-        TryExec=fiji
-        X-GNOME-FullName=Fiji Is Just ImageJ
-        StartupWMClass=fiji-Main
-      '';
+      startupWMClass = "fiji-Main";
     })
   ];
 

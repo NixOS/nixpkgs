@@ -1,5 +1,4 @@
 { lib
-, backports-datetime-fromisoformat
 , backports-zoneinfo
 , buildPythonPackage
 , cached-property
@@ -27,16 +26,16 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.6.2";
+  version = "4.7.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vax4xqjav6nr3kfkz390ism3cs69dxnbx6sc0f9ci4mn3rxjwdy";
+    sha256 = "sha256-fdYc+fJEePgCzAkUWz7pmL/CI/O9zm5G9xh1f4bhrH4=";
   };
 
   propagatedBuildInputs = [
@@ -55,8 +54,6 @@ buildPythonPackage rec {
     tzlocal
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports-datetime-fromisoformat
   ];
 
   checkInputs = [

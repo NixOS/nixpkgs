@@ -1,12 +1,15 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
+, python
 , fetchPypi
 , pytestCheckHook
 , blis
 , catalogue
 , cymem
 , cython
+, contextvars
+, dataclasses
 , Accelerate
 , CoreFoundation
 , CoreGraphics
@@ -27,17 +30,24 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.10";
+  version = "8.0.15";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-teTbjSTmvopfHkoXhUdyt5orVgIkUZ9Qoh85UcokAB8=";
+    sha256 = "sha256-LjFQINqFw3keGR+/N8SiQz9XzzIuJzgNoM1N6Z2WBTs=";
   };
 
-  buildInputs = [ cython ]
-    ++ lib.optionals stdenv.isDarwin [
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
+  '';
+
+  buildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin [
     Accelerate
     CoreFoundation
     CoreGraphics
@@ -56,7 +66,12 @@ buildPythonPackage rec {
     tqdm
     pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optional (pythonOlder "3.7") [
+    contextvars
+    dataclasses
+  ];
 
   checkInputs = [
     hypothesis
@@ -64,14 +79,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-  pytestFlagsArray = [
-    "thinc/tests"
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
+  '';
+
+  pythonImportsCheck = [
+    "thinc"
   ];
-
-  pythonImportsCheck = [ "thinc" ];
 
   meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";

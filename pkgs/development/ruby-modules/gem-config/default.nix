@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool
+, CoreServices, DarwinTools, cctools, libtool, discount
 }@args:
 
 let
@@ -133,6 +133,17 @@ in
 
   digest-sha3 = attrs: {
     hardeningDisable = [ "format" ];
+  };
+
+  rdiscount = attrs: {
+    # Use discount from nixpkgs instead of vendored version
+    dontBuild = false;
+    buildInputs = [ discount ];
+    patches = [
+      # Adapted from Debian:
+      # https://sources.debian.org/data/main/r/ruby-rdiscount/2.1.8-1/debian/patches/01_use-system-libmarkdown.patch
+      ./rdiscount-use-nixpkgs-libmarkdown.patch
+    ];
   };
 
   ethon = attrs: {
@@ -539,14 +550,6 @@ in
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
-    dontBuild = false;
-    postPatch = ''
-      # https://gitlab.com/libvirt/libvirt-ruby/-/commit/43543991832c9623c00395092bcfb9e178243ba4
-      substituteInPlace ext/libvirt/common.c \
-        --replace 'st.h' 'ruby/st.h'
-      substituteInPlace ext/libvirt/domain.c \
-        --replace 'st.h' 'ruby/st.h'
-    '';
   };
 
   ruby-lxc = attrs: {

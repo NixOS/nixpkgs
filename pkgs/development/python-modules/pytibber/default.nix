@@ -7,21 +7,22 @@
 , graphql-subscription-manager
 , python-dateutil
 , pytz
+, pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.21.0";
+  version = "0.22.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
     rev = version;
-    sha256 = "sha256-lUe79VHlK/2/1SZfC+Ha+27NUoIKoTlqn75XA/mPCNU=";
+    hash = "sha256-kzKY9ixsAkfee5En0IzYl5izeXq3xY/8bc5Kz/qkE7U=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

@@ -2,24 +2,29 @@
 , buildPythonPackage
 , fetchFromGitHub
 , sphinx
+, pytestCheckHook
+, beautifulsoup4
 }:
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.4.2";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
     rev = "v${version}";
-    sha256 = "sha256-978aPtaqUDHcswDdFynzi+IjDYaBmCZDZk+dmDkhajY=";
+    sha256 = "sha256-3bZFFtGW6j/3m/3F4+tapZujzpMZnrIcYTngDCNGylI=";
   };
 
   propagatedBuildInputs = [
     sphinx
   ];
 
-  doCheck = false; # no tests
+  checkInputs = [
+    pytestCheckHook
+    beautifulsoup4
+  ];
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 

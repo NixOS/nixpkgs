@@ -10,6 +10,7 @@
 , readline81 ? null
 , withDocs ? false
 , texinfo ? null
+, forFHSEnv ? false
 }:
 
 with lib;
@@ -39,8 +40,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
+  '' + optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+  '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
   '';
@@ -124,6 +127,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
 
     maintainers = with maintainers; [ dtzWill ];
+
+    mainProgram = "bash";
   };
 
   passthru = {

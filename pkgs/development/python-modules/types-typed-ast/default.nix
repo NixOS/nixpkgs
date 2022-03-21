@@ -5,17 +5,20 @@
 
 buildPythonPackage rec {
   pname = "types-typed-ast";
-  version = "1.5.0";
+  version = "1.5.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2Op5y/vFIL6Nm8jeSHL0SzQtvbwJFmfi8hsDu9eWkVA=";
+    hash = "sha256-bY/S6pCDbLQxEayKrnzYZOCYWTyT7M66kP5G1rewxz4=";
   };
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "typed_ast-stubs" ];
+  pythonImportsCheck = [
+    "typed_ast-stubs"
+  ];
 
   meta = with lib; {
     description = "Typing stubs for typed-ast";

@@ -7,7 +7,8 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       # newest version doesn't support click >8.0 https://github.com/alanhamlett/pip-update-requirements/issues/38
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      # Use click 7
+      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
     };
   };
   inherit (py.pkgs) buildPythonApplication click pytestCheckHook;

@@ -53,6 +53,8 @@ in
       "autoLogin"
       "user"
     ])
+
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "nvidiaWayland" ] "We defer to GDM whether Wayland should be enabled.")
   ];
 
   meta = {
@@ -83,17 +85,6 @@ in
         default = true;
         description = ''
           Allow GDM to run on Wayland instead of Xserver.
-          Note to enable Wayland with Nvidia the <option>nvidiaWayland</option>
-          must not be disabled.
-        '';
-      };
-
-      nvidiaWayland = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to allow wayland to be used with the proprietary
-          NVidia graphics driver.
         '';
       };
 
@@ -149,7 +140,8 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
+          # GDM is needed for gnome-login.session
+          XDG_DATA_DIRS = "${gdm}/share:${cfg.sessionData.desktops}/share";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -229,19 +221,6 @@ in
     services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
-
-    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
-    services.udev.extraRules = ''
-      # disable Wayland on Cirrus chipsets
-      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      # disable Wayland on Hi1710 chipsets
-      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      ${optionalString (!cfg.gdm.nvidiaWayland) ''
-        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      ''}
-      # disable Wayland when modesetting is disabled
-      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-    '';
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 

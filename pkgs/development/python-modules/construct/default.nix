@@ -22,11 +22,9 @@ buildPythonPackage rec {
     lz4
   ];
 
-  checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel-yaml cloudpickle ];
+  checkInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
-
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

@@ -1,53 +1,55 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, isPy27
-, isPy3k
+, dask
+, fetchPypi
+, fsspec
+, lxml
 , numpy
-, imagecodecs-lite
-, enum34 ? null
-, futures ? null
-, pathlib ? null
-, pytest
+, pytestCheckHook
+, pythonOlder
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2021.8.30";
+  version = "2022.2.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8760e61e30106ea0dab9ec42a238d70a3ff55dde9c54456e7b748fe717cb782d";
+    hash = "sha256-ftp0EXZDaBuyyqaVtI854iQ7SIf3z5kdWt/9gT5cg3M=";
   };
-
-  patches = lib.optional isPy27 ./python2-regex-compat.patch;
-
-  # Missing dependencies: imagecodecs, czifile, cmapfile, oiffile, lfdfiles
-  # and test data missing from PyPI tarball
-  doCheck = false;
-
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   propagatedBuildInputs = [
     numpy
-  ] ++ lib.optionals isPy3k [
-    imagecodecs-lite
-  ] ++ lib.optionals isPy27 [
-    futures
-    enum34
-    pathlib
+  ];
+
+  checkInputs = [
+    dask
+    fsspec
+    lxml
+    pytestCheckHook
+    zarr
+  ];
+
+  disabledTests = [
+    # Test require network access
+    "test_class_omexml"
+    "test_write_ome"
+    # Test file is missing
+    "test_write_predictor"
+  ];
+
+  pythonImportsCheck = [
+    "tifffile"
   ];
 
   meta = with lib; {
-    description = "Read and write image data from and to TIFF files.";
-    homepage = "https://www.lfd.uci.edu/~gohlke/";
-    maintainers = [ maintainers.lebastr ];
+    description = "Read and write image data from and to TIFF files";
+    homepage = "https://github.com/cgohlke/tifffile/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ lebastr ];
   };
 }

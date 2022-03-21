@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "khotkeys";
+  pname = "khotkeys";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kdbusaddons kdelibs4support kglobalaccel ki18n kio kxmlgui

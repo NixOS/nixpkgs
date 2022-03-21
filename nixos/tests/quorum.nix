@@ -1,4 +1,29 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }:
+let
+  keystore =  {
+    address = "9377bc3936de934c497e22917b81aa8774ac3bb0";
+    crypto = {
+      cipher = "aes-128-ctr";
+      ciphertext = "ad8341d8ef225650403fd366c955f41095e438dd966a3c84b3d406818c1e366c";
+      cipherparams = {
+        iv = "2a09f7a72fd6dff7c43150ff437e6ac2";
+      };
+      kdf = "scrypt";
+      kdfparams = {
+        dklen = 32;
+        n = 262144;
+        p = 1;
+        r = 8;
+        salt = "d1a153845bb80cd6274c87c5bac8ac09fdfac5ff131a6f41b5ed319667f12027";
+      };
+      mac = "a9621ad88fa1d042acca6fc2fcd711f7e05bfbadea3f30f379235570c8e270d3";
+    };
+    id = "89e847a3-1527-42f6-a321-77de0a14ce02";
+    version = 3;
+  };
+  keystore-file = pkgs.writeText "keystore-file" (builtins.toJSON keystore);
+in
+{
   name = "quorum";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ mmahut ];
@@ -62,18 +87,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     start_all()
-    machine.wait_until_succeeds("mkdir -p /var/lib/quorum/keystore")
-    machine.wait_until_succeeds(
-        'echo \{\\"address\\":\\"9377bc3936de934c497e22917b81aa8774ac3bb0\\",\\"crypto\\":\{\\"cipher\\":\\"aes-128-ctr\\",\\"ciphertext\\":\\"ad8341d8ef225650403fd366c955f41095e438dd966a3c84b3d406818c1e366c\\",\\"cipherparams\\":\{\\"iv\\":\\"2a09f7a72fd6dff7c43150ff437e6ac2\\"\},\\"kdf\\":\\"scrypt\\",\\"kdfparams\\":\{\\"dklen\\":32,\\"n\\":262144,\\"p\\":1,\\"r\\":8,\\"salt\\":\\"d1a153845bb80cd6274c87c5bac8ac09fdfac5ff131a6f41b5ed319667f12027\\"\},\\"mac\\":\\"a9621ad88fa1d042acca6fc2fcd711f7e05bfbadea3f30f379235570c8e270d3\\"\},\\"id\\":\\"89e847a3-1527-42f6-a321-77de0a14ce02\\",\\"version\\":3\}\\" > /var/lib/quorum/keystore/UTC--2020-03-23T11-08-34.144812212Z--9377bc3936de934c497e22917b81aa8774ac3bb0'
+    machine.succeed("mkdir -p /var/lib/quorum/keystore")
+    machine.succeed(
+        'cp ${keystore-file} /var/lib/quorum/keystore/UTC--2020-03-23T11-08-34.144812212Z--${keystore.address}'
     )
-    machine.wait_until_succeeds(
+    machine.succeed(
         "echo fe2725c4e8f7617764b845e8d939a65c664e7956eb47ed7d934573f16488efc1 > /var/lib/quorum/nodekey"
     )
-    machine.wait_until_succeeds("systemctl restart quorum")
+    machine.succeed("systemctl restart quorum")
     machine.wait_for_unit("quorum.service")
     machine.sleep(15)
-    machine.wait_until_succeeds(
-        'geth attach /var/lib/quorum/geth.ipc --exec "eth.accounts" | grep 0x9377bc3936de934c497e22917b81aa8774ac3bb0'
-    )
+    machine.succeed('geth attach /var/lib/quorum/geth.ipc --exec "eth.accounts" | grep ${keystore.address}')
   '';
 })

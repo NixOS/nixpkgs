@@ -2,21 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "3.0.0";
   pname = "dbutils";
+  version = "3.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "DBUtils";
-    sha256 = "549d472197b3eef27e7bb2dd2246b28e880ac0ae9fdf63aadfd3b7def153db0c";
+    hash = "sha256-+t65eeFAbcEj4tuZVfMU4NU2DzBOC9bPBHqqX8P99bM=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "dbutils" ];
+  pythonImportsCheck = [
+    "dbutils"
+  ];
 
   meta = with lib; {
     description = "Database connections for multi-threaded environments";

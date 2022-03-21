@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-mozc";
-  version = "2.26.4423.100";
+  version = "2.26.4660.102";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
-    rev = "7654223979067e3c5ae52ea238d43880c5508f85";
-    sha256 = "aZVuhj4I9ZCsVR9dOplOd9zinYMgYw5SF5wG3IxBTO0=";
+    rev = "063c41f1d7c1a877f44c1f8caad6be1897350336";
+    sha256 = "sha256-sgsfJZALpPHFB5bXu4OkRssViRDaPcgLfEyGhbqvJbI=";
     fetchSubmodules = true;
   };
 

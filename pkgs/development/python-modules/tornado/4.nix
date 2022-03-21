@@ -2,19 +2,13 @@
 , python
 , buildPythonPackage
 , fetchPypi
-, backports_abc ? null
-, backports_ssl_match_hostname ? null
-, certifi ? null
-, singledispatch ? null
-, futures ? null
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
   version = "4.5.3";
-
-  propagatedBuildInputs = lib.optionals isPy27 [ backports_abc certifi singledispatch backports_ssl_match_hostname futures ];
+  disabled = isPy27 || python.pythonAtLeast "3.10";
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634

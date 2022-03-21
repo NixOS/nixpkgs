@@ -9,27 +9,6 @@ let
     modules = [ configuration ];
   };
 
-  # This is for `nixos-rebuild build-vm'.
-  vmConfig = (import ./lib/eval-config.nix {
-    inherit system;
-    modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
-  }).config;
-
-  # This is for `nixos-rebuild build-vm-with-bootloader'.
-  vmWithBootLoaderConfig = (import ./lib/eval-config.nix {
-    inherit system;
-    modules =
-      [ configuration
-        ./modules/virtualisation/qemu-vm.nix
-        { virtualisation.useBootLoader = true; }
-        ({ config, ... }: {
-          virtualisation.useEFIBoot =
-            config.boot.loader.systemd-boot.enable ||
-            config.boot.loader.efi.canTouchEfiVariables;
-        })
-      ];
-  }).config;
-
 in
 
 {
@@ -37,7 +16,5 @@ in
 
   system = eval.config.system.build.toplevel;
 
-  vm = vmConfig.system.build.vm;
-
-  vmWithBootLoader = vmWithBootLoaderConfig.system.build.vm;
+  inherit (eval.config.system.build) vm vmWithBootLoader;
 }

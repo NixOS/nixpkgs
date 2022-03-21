@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
       blkid = "${util-linux}/bin/blkid";
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
+      mkswap = "${util-linux}/bin/mkswap";
       sed = "${gnused}/bin/sed";
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
+      swapon = "${util-linux}/bin/swapon";
       true = "${coreutils}/bin/true";
     })
     (substituteAll {
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf automake pkg-config libtool gettext which gobject-introspection
-    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl util-linux
+    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    expat libgudev libblockdev acl systemd glib libatasmart polkit
+    expat libgudev libblockdev acl systemd glib libatasmart polkit util-linux
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
     homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
     license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = with maintainers; [ johnazoidberg ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ johnazoidberg ]);
     platforms = platforms.linux;
   };
 }

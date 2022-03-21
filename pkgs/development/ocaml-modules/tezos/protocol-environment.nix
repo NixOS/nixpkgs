@@ -1,6 +1,8 @@
 { lib
 , ocaml
 , buildDunePackage
+, bls12-381
+, bls12-381-legacy
 , tezos-stdlib
 , tezos-base
 , tezos-sapling
@@ -18,6 +20,8 @@ buildDunePackage {
   src = "${tezos-stdlib.base_src}/src/lib_protocol_environment";
 
   propagatedBuildInputs = [
+    bls12-381
+    bls12-381-legacy
     tezos-sapling
     tezos-base
     tezos-context

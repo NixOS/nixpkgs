@@ -31,10 +31,9 @@ stdenv.mkDerivation rec {
     exec = "runelite";
     icon = icon;
     comment = "Open source Old School RuneScape client";
-    terminal = "false";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
-    categories = "Game";
+    categories = [ "Game" ];
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];

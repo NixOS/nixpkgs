@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, libjpeg, libtiff, zlib
-, postgresql, libmysqlclient, libgeotiff, python2Packages, proj, geos, openssl
+, postgresql, libmysqlclient, libgeotiff, python3Packages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2
 , netcdfSupport ? true, netcdf, hdf5, curl
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg libtiff libgeotiff libpng proj openssl sqlite
     libspatialite poppler hdf4 qhull giflib expat libxml2 proj ]
-  ++ (with python2Packages; [ python numpy wrapPython ])
+  ++ (with python3Packages; [ python numpy wrapPython ])
   ++ lib.optional stdenv.isDarwin libiconv
   ++ lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 

@@ -10,18 +10,19 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "464";
+  version = "477";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "sha256-ZAndODbl6cH0H1rA3Bhn3AlfIuba0LjxWxusGPDYvlA=";
+    sha256 = "sha256-/Gehlk+eMBPA+OT7xsTri6PDi2PBmzjckMVbqPGXT64=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    python3Packages.mkdocs-material
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -85,6 +86,7 @@ python3Packages.buildPythonPackage rec {
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    mkdocs build -d help
     mv help $out/doc/
 
     # install the hydrus binaries

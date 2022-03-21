@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, coreutils, pkg-config, perl, python3Packages, libiconv, jansson }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, autoreconfHook, coreutils, pkg-config, perl, python3Packages, libiconv, jansson }:
 
 stdenv.mkDerivation rec {
   pname = "universal-ctags";
-  version = "5.9.20210411.0";
+  version = "5.9.20220220.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "p${version}";
-    sha256 = "0c031y0dl2b70pd0mqfbylplf8f27x11b0ch7ljka3rqav0zb1zr";
+    sha256 = "1118iq33snxyw1jk8nwvsl08f3zdainksh0yiapzvg0y5906jjjd";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook coreutils pkg-config python3Packages.docutils ];
   buildInputs = [ jansson ] ++ lib.optional stdenv.isDarwin libiconv;
 
@@ -28,6 +29,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace Tmain/utils.sh \
       --replace /bin/echo ${coreutils}/bin/echo
+
+    # Remove git-related housekeeping from check phase
+    substituteInPlace makefiles/testing.mak \
+      --replace "check: tmain units tlib man-test check-genfile" \
+                "check: tmain units tlib man-test"
   '';
 
   postConfigure = ''
@@ -35,8 +41,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-
-  checkFlags = [ "units" ];
 
   meta = with lib; {
     description = "A maintained ctags implementation";

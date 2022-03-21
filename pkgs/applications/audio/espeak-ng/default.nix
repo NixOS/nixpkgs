@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
   '';
 
+  passthru = {
+    inherit mbrolaSupport;
+  };
+
   meta = with lib; {
     description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
     homepage = "https://github.com/espeak-ng/espeak-ng";

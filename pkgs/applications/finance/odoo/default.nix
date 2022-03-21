@@ -5,16 +5,21 @@
 , python3Packages
 , nodePackages
 , wkhtmltopdf
+, callPackage
 }:
 
 with python3Packages;
+
+let
+  werkzeug = python3Packages.callPackage ../../../development/python-modules/werkzeug/1.nix {};
+in
 
 buildPythonApplication rec {
   pname = "odoo";
 
   major = "15";
   minor = "0";
-  patch = "20211029";
+  patch = "20220126";
 
   version = "${major}.${minor}.${patch}";
 
@@ -22,7 +27,7 @@ buildPythonApplication rec {
   src = fetchurl {
     url = "https://nightly.odoo.com/${major}.${minor}/nightly/src/odoo_${version}.tar.gz";
     name = "${pname}-${version}";
-    sha256 = "sha256-/E+bLBbiz7fRyTwP+0AMpqbuRkOpE4B4P6kREIB4m1Q=";
+    hash = "sha256-mofV0mNCdyzJecp0XegZBR/5NzHjis9kbpsUA/KJbZg=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +61,7 @@ buildPythonApplication rec {
     libsass
     lxml
     markupsafe
+    mock
     num2words
     ofxparse
     passlib
@@ -76,7 +82,7 @@ buildPythonApplication rec {
     reportlab
     requests
     vobject
-    werkzeug1
+    werkzeug
     xlrd
     XlsxWriter
     xlwt
@@ -92,6 +98,6 @@ buildPythonApplication rec {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 ];
   };
 }

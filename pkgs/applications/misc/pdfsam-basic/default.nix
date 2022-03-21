@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "4.2.7";
+  version = "4.2.12";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    sha256 = "sha256-PVG4KZX6KxkrooywgEmqOItyLt5hGs+b/KCaguduGyc=";
+    sha256 = "sha256-B9V3dw5A52yPoNfROI3+wAql+Y0hY4T3sTm9uN70TQQ=";
   };
 
   unpackPhase = ''
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "PDFsam Basic";
     genericName = "PDF Split and Merge";
-    mimeType = "application/pdf;";
-    categories = "Office;";
+    mimeTypes = [ "application/pdf" ];
+    categories = [ "Office" ];
   };
 
   meta = with lib; {

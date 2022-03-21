@@ -33,7 +33,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0n93kb8pajlbidvdrsf3hwcwqzvgdm6dnly7wvk3vpargx6k7y1r";
+    outputHash = "01dkayad68g3zpzdnjwrc0h6s7s6n619y5b576snc35l8g2r5sgd";
   };
 
   # Point to our local deps repo
@@ -64,13 +64,13 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = "Scene Builder";
+    name = "scenebuilder";
     exec = "scenebuilder";
     icon = "scenebuilder";
     comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = pname;
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    desktopName = "Scene Builder";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {

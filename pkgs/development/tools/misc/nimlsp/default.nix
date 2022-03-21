@@ -2,17 +2,17 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nimlsp";
-  version = "0.3.2";
+  version = "0.4.0";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${version}";
-    sha256 = "1lm823nvpp3bj9527jd8n1jxh6y8p8ngkfkj91p94m7ffai6jazq";
+    sha256 = "sha256-eih8JmofLFXkidanRocjtA6wv84HkA1bi0M4dxkiDr4=";
   };
 
-  buildInputs = with nimPackages; [ astpatternmatching jsonschema ];
+  buildInputs = with nimPackages; [ jsonschema ];
 
   nimFlags = [
     "--threads:on"

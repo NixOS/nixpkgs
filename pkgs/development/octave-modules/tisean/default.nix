@@ -1,4 +1,5 @@
 { buildOctavePackage
+, stdenv
 , lib
 , fetchurl
 # Octave dependencies
@@ -29,5 +30,7 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Port of TISEAN 3.0.1";
+    # Some gfortran symbols claimed to be missing
+    broken = stdenv.isDarwin;
   };
 }

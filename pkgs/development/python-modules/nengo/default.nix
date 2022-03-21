@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "nengo";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo";
     rev = "v${version}";
-    sha256 = "1wkayimf2jqkbr6piikh5zd6yw8gf2qv4v4bfrprs4laa6wzh2qh";
+    sha256 = "12lz8lzirxvwnpa74k9k48c64gs6gi092928rh97siya3i6gjs6i";
   };
 
   propagatedBuildInputs = [ numpy ]

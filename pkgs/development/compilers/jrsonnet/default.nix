@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lach ];
     license = lib.licenses.mit;
     homepage = "https://github.com/CertainLach/jrsonnet";
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jrsonnet.x86_64-darwin
   };
 }

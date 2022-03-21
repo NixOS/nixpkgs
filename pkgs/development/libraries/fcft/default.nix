@@ -20,14 +20,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.5.0";
+  version = "3.0.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "0agqldh68hn898d3f6k99kjbz8had5j5k0jyvi71d4k9vhx8cy7c";
+    sha256 = "0jxy92ny8b7s7yvz1mr8zpf7l2zsn506fi9f98pvh9k25jprg0cx";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   ) availableShapingTypes;
 
   doCheck = true;
+
+  outputs = [ "out" "doc" "man" ];
 
   passthru.tests = {
     noShaping = fcft.override { withShapingTypes = []; };

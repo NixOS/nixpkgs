@@ -3,22 +3,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
+, boost
 , eigen
 , python
 , catch
 , numpy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kmyfRNZM9AtF0QA1MnWEPwWb6BebkkpanTvQwsraSJo=";
+    hash = "sha256-wBvEWQlZhHoSCMbGgYtB3alWBLA8mA8Mz6JPLhXa3Pc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +27,8 @@ buildPythonPackage rec {
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
     "-DBUILD_TESTING=on"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
@@ -47,16 +49,18 @@ buildPythonPackage rec {
   checkInputs = [
     catch
     numpy
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    make check
-
-    runHook postCheck
-  '';
+  disabledTestPaths = [
+    # require dependencies not available in nixpkgs
+    "tests/test_embed/test_trampoline.py"
+    "tests/test_embed/test_interpreter.py"
+    # numpy changed __repr__ output of numpy dtypes
+    "tests/test_numpy_dtypes.py"
+    # no need to test internal packaging
+    "tests/extra_python_package/test_files.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";

@@ -6,11 +6,11 @@ rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "5" "7" "";
 jruby = stdenv.mkDerivation rec {
   pname = "jruby";
 
-  version = "9.3.2.0";
+  version = "9.3.3.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "sha256-JmmcoCvur6gyZXPBElxXpZcbqLlNFfhOazuvJZQkTzM=";
+    sha256 = "sha256-Pagoy+KH1UaFB/HCxCvvbPNLxTYbzWpdmcIHshuf3Fw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

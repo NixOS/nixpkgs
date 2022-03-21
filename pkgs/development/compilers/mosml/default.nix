@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gmp, perl }:
+{ lib, stdenv, fetchFromGitHub, gmp, perl }:
 
 stdenv.mkDerivation rec {
   pname = "mosml";
@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  src = fetchurl {
-    url = "https://github.com/kfl/mosml/archive/ver-${version}.tar.gz";
-    sha256 = "13x7wj94p0inn84pzpj52dch5s9lznqrj287bd3nk3dqd0v3kmgy";
+  src = fetchFromGitHub {
+    owner = "kfl";
+    repo = "mosml";
+    rev = "ver-${version}";
+    sha256 = "sha256-GK39WvM7NNhoC5f0Wjy4/5VWT+Rbh2qo+W71hWrbPso=";
   };
 
   setSourceRoot = ''export sourceRoot="$(echo */src)"'';

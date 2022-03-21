@@ -48,6 +48,8 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
+  disabled = pythonAtLeast "3.10";
+
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
     platform = if stdenv.isDarwin then "mac" else "linux";

@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.30.0";
+  version = "2.32.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,7 +9,7 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-b4hNacraNomhiFGEiHcMweqbEq3vTHus+xbFPv5X5HQ=";
+    sha256 = "sha256-PXY32bfuK0bQGI0N+XHs9lakF6K7+WjrHMvuNgDFSJM=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -29,6 +29,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
       --replace "javaproperties~=0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
       --replace "scp~=0.13.2" "scp" \
+      --replace "PyNaCl~=1.4.0" "PyNaCl" \
       --replace "jsondiff~=1.2.0" "jsondiff~=1.2" \
       --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
       --replace "mock~=4.0" "mock"
@@ -141,6 +142,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     pydocumentdb
     PyGithub
     pygments
+    pynacl
     pyopenssl
     pytz
     pyyaml

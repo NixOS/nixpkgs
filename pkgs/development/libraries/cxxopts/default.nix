@@ -1,21 +1,29 @@
-{ cmake, fetchFromGitHub, icu, lib, pkg-config, stdenv, enableUnicodeHelp ? true }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, icu
+, pkg-config
+, enableUnicodeHelp ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "cxxopts";
-  version = "unstable-2020-12-14";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
     repo = name;
-    rev = "2d8e17c4f88efce80e274cb03eeb902e055a91d3";
-    sha256 = "0pwrac81zfqjs17g3hx8r3ds2xf04npb6mz111qjy4bx17314ib7";
+    rev = "v${version}";
+    sha256 = "08x7j168l1xwj0r3rv89cgghmfhsx98lpq35r3vkh504m1pd55a6";
   };
+
+  # CMake does not set CMAKE_LIBRARY_ARCHITECTURE variable in Nix, which breaks architecture-independent library path generation
+  patches = [ ./fix-install-path.patch ];
 
   buildInputs = lib.optional enableUnicodeHelp [ icu.dev ];
   cmakeFlags = [ "-DCXXOPTS_BUILD_EXAMPLES=OFF" ]
-    ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE"
-    # Due to -Wsuggest-override, remove when cxxopts is updated
-    ++ lib.optional stdenv.isDarwin "-DCXXOPTS_ENABLE_WARNINGS=OFF";
+    ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
   nativeBuildInputs = [ cmake ] ++ lib.optional enableUnicodeHelp [ pkg-config ];
 
   doCheck = true;

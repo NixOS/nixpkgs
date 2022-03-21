@@ -7,20 +7,32 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "3.1.1";
+  version = "4.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e012d76aa32b918c71392c11e1c727328c1570364f8d8e0676e52bc64c57a7af";
+    sha256 = "sha256-IAnsz7UxMf3GqaPYPltis0WWPM+IIWwpK1iTSV7Kl5c=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # requires credentials

@@ -19,10 +19,10 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "495.44";
-      sha256_64bit = "0j4agxfdswadxkd9hz9j5cq4q3jmhwdnvqclxxkhl5jvh5knm1zi";
-      settingsSha256 = "0v8gqbhjsjjsc83cqacikj9bvs10bq6i34ca8l07zvsf8hfr2ziz";
-      persistencedSha256 = "19rv7vskv61q4gh59nyrfyqyqi565wzjbcfddp8wfvng4dcy18ld";
+      version = "510.54";
+      sha256_64bit = "TCDezK4/40et/Q5piaMG+QJP2t+DGtwejmCFVnUzUWE=";
+      settingsSha256 = "ZWz5UN6Pa69NlmerKu30G+X8WfGlAwnVerDrO7TRO6w=";
+      persistencedSha256 = "MgWrBjKXJeRqF+ouT72tTiLPtn+lsS/Cp3oS61AWV8Q=";
     }
     else legacy_390;
 
@@ -30,10 +30,10 @@ rec {
   production = legacy_470;
 
   beta = generic {
-    version = "495.29.05";
-    sha256_64bit = "sha256-9yVLl9QAxpJQR5ZJb059j2TpOx4xxCeGCk8hmhhvEl4=";
-    settingsSha256 = "sha256-dcEI+3bxSTwVbHcR6IgvIUFt4vWtK5T4NMGVhmmeVJ0=";
-    persistencedSha256 = "sha256-OT/hOXEPatc6pAKrxDe0jsmaDFCtVXAbdW4elKe6xE8=";
+    version = "510.39.01";
+    sha256_64bit = "sha256-Lj7cOvulhApeuRycIiyYy5kcPv3ZlM8qqpPUWl0bmRs=";
+    settingsSha256 = "sha256-qlSwNq0wC/twvrbQjY+wSTcDaV5KG4Raq6WkzTizyXw=";
+    persistencedSha256 = "sha256-UNrl/hfiNXKGACQ7aHpsNcfcHPWVnycQ51yaa3eKXhI=";
   };
 
   # Vulkan developer beta driver
@@ -54,19 +54,19 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.86";
-      sha256_64bit = "sha256:0krwcxc0j19vjnk8sv6mx1lin2rm8hcfhc2hg266846jvcws1dsg";
-      settingsSha256 = "sha256:1lnj5hwmfkzs664fxlhljqy323394s1i7qzlpsjyrpm07sa93bky";
-      persistencedSha256 = "sha256:0apj764zc81ayb8nm9bf7cdicfinarv0gfijy2dxynbwz2xdlyvq";
+      version = "470.94";
+      sha256_64bit = "lYWqKTMOutm98izjyiusICbIWpoy8D18WfcUp3mFAOs=";
+      settingsSha256 = "blJNKuFu/Th/ceexkKhTH/eYk8miUlTT+ESrcIyJNn0=";
+      persistencedSha256 = "xnccQ/EgafwnReBlk5Y7iClAj4hwXyFq9gUmwqyEuwE=";
   };
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.143";
-    sha256_32bit = "AelrdTTeo/3+ZdXK0iniZDB8gJUkeZQtNoRm25z+bQY=";
-    sha256_64bit = "tyKqcPM71ErK8ZZHLPtxmgrWzv6tfEmxBRveCSwTlO8=";
-    settingsSha256 = "EJPXZbxZS1CMENAYk9dCAIsHsRTXJpj473+JLuhGkWI=";
-    persistencedSha256 = "FtlPF3jCNr18NnImTmr8zJsaK9wbj/aWZ9LwoLr5SeE=";
+    version = "390.147";
+    sha256_32bit = "00avsns7l0j1ai8bf8gav2qshvphfdngy388bwzz24p61mfv1i1a";
+    sha256_64bit = "09qcdfn4j5jza3iw59wqwgq4a489qf7kx355yssrcahaw9g87lxz";
+    settingsSha256 = "16qqw0jy31da65cdi17y3j2kcdhw09vra7g17bkcimaqnf70j0ni";
+    persistencedSha256 = "1ad81y4qfpxrx0vqsk81a3h0bi1yg8hw5gi5y5d58p76vc8083i9";
   };
 
   legacy_340 = generic {
@@ -77,6 +77,7 @@ rec {
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
+    broken = with kernel; kernelAtLeast "5.5";
     patches = [ ./vm_operations_struct-fault.patch ];
   };
 }

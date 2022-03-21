@@ -108,6 +108,8 @@ stdenv.mkDerivation rec {
     "-Dkeyring=false"
     "-Dhttp=false"
     "-Dgoogle=false"
+  ] ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"

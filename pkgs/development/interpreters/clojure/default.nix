@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.3.1040";
+  version = "1.10.3.1087";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "+21o3usbxeOoac7umPzZaDNVify1fjHuTujgNKtNeXc=";
+    sha256 = "sha256-prOzVHrcbabKXP4Q4Dfx/eiKePlINyu1mO9NCFnaPpQ=";
   };
 
   nativeBuildInputs = [

@@ -3,24 +3,36 @@
 , cffi
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "0.6.0";
+  version = "0.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec2bf8d5799c4b5bbfbae30a4a1dfcb06512f2e17e9ee60ba7e1d390318582fc";
+    sha256 = "sha256-/oWbDpjSIrS0WAIgB9qsJ1fpcPBnHUXlXQGTHBtLs8s=";
   };
 
-  propagatedNativeBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [
+    cffi
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "cmarkgfm" ];
+  pythonImportsCheck = [
+    "cmarkgfm"
+  ];
 
   meta = with lib; {
     description = "Minimal bindings to GitHub's fork of cmark";

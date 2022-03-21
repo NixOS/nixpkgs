@@ -4,7 +4,7 @@
   * limitations under the License.
   */
  
--const { installBrowsersWithProgressBar } = require('./lib/install/installer');
+-const { installDefaultBrowsersForNpmInstall } = require('playwright-core/lib/utils/registry');
 -
--installBrowsersWithProgressBar();
+-installDefaultBrowsersForNpmInstall();
 +process.stdout.write('Browser install disabled by Nix build script\n');

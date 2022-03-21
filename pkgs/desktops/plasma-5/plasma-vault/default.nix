@@ -14,7 +14,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-vault";
+  pname = "plasma-vault";
   nativeBuildInputs = [ extra-cmake-modules ];
 
   patches = [

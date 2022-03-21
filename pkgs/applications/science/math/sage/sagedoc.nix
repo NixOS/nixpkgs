@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     jmol
     cddlib
   ] ++ (with python3.pkgs; [
-    sage_docbuild
+    sage-docbuild
     psutil
     future
     sphinx
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    ${sage-with-env}/bin/sage -t --optional=dochtml --all
+    ${sage-with-env}/bin/sage -t --optional=sagemath_doc_html --all
   '';
 }

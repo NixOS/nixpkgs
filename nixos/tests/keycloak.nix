@@ -42,7 +42,7 @@ let
 
           environment.systemPackages = with pkgs; [
             xmlstarlet
-            libtidy
+            html-tidy
             jq
           ];
         };

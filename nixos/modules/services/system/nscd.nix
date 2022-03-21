@@ -50,7 +50,9 @@ in
     systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
-        wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
+        before = [ "nss-lookup.target" "nss-user-lookup.target" ];
+        wants = [ "nss-lookup.target" "nss-user-lookup.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 

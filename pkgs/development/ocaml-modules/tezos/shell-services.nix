@@ -4,6 +4,7 @@
 , tezos-workers
 , tezos-p2p-services
 , tezos-version
+, alcotest-lwt
 }:
 
 buildDunePackage {
@@ -18,6 +19,10 @@ buildDunePackage {
   ];
 
   doCheck = true;
+
+  checkInputs = [
+    alcotest-lwt
+  ];
 
   meta = tezos-stdlib.meta // {
     description = "Tezos: descriptions of RPCs exported by `tezos-shell`";

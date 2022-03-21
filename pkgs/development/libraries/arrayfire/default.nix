@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , opencl-clhpp, ocl-icd, fftw, fftwFloat
 , blas, lapack, boost, mesa, libGLU, libGL
 , freeimage, python3, clfft, clblas
@@ -8,11 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "arrayfire";
-  version = "3.6.4";
+  version = "3.7.3";
 
-  src = fetchurl {
-    url = "http://arrayfire.com/arrayfire_source/arrayfire-full-${version}.tar.bz2";
-    sha256 = "1fin7a9rliyqic3z83agkpb8zlq663q6gdxsnm156cs8s7f7rc9h";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0gcbg6b6gs38xhks5pp0vkcqs89zl7rh9982jqlzsd0h724qddw0";
+    fetchSubmodules = true;
   };
 
   cmakeFlags = [

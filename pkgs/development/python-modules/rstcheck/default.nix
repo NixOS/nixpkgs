@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "v3.3.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "myint";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "sha256-4AhENuT+LtUMCi+aaI/rKa2gHti8sKGLdVGjdRithXI=";
   };
 

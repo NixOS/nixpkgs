@@ -72,6 +72,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin globin ];
     platforms = platforms.unix;
     downloadPage = "https://stedolan.github.io/jq/download/";
-    updateWalker = true;
   };
 }

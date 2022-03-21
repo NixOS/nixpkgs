@@ -10,11 +10,11 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.12.4";
+  version = "2.12.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-UrBt0QkSk7IP4mZYFoxFNJQ1Qmcb53CemvlYfsxjZ/s=";
+    url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
+    sha256 = "sha256-MFWW9DTJ/svtgN3fbw+zeGpgg3pgIoC9jZ1HkG5p6sc=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];

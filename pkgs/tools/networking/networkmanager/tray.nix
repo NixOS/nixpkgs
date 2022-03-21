@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, qtbase, networkmanager-qt, modemmanager-qt }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, qttools, qtbase, networkmanager-qt, modemmanager-qt }:
 
 mkDerivation rec {
   pname = "nm-tray";
@@ -15,7 +15,7 @@ mkDerivation rec {
     sed -i -e '1i#include <QMetaEnum>' src/nmmodel.cpp
   '';
 
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   cmakeFlags = [ "-DWITH_MODEMMANAGER_SUPPORT=ON" ];
 

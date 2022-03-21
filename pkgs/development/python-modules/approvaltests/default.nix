@@ -1,21 +1,34 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyperclip }:
+{ lib, buildPythonPackage, fetchFromGitHub
+, beautifulsoup4
+, empty-files
+, numpy
+, pyperclip
+, pytest
+}:
 
 buildPythonPackage rec {
-  version = "0.2.6";
+  version = "3.6.0";
   pname = "approvaltests";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    rev = version;
-    sha256 = "1k1bj8q1qm89a8xm4az6qk4qswwmgxw5jpdjcxmf93zh5hrcy9h9";
+    rev = "v${version}";
+    sha256 = "sha256-pgGuIoYV6JRM9h7hR8IeNduqsGm+UrKq+P/T1LM30NE=";
   };
 
-  propagatedBuildInputs = [ pyperclip ];
+  propagatedBuildInputs = [
+    beautifulsoup4
+    empty-files
+    numpy
+    pyperclip
+    pytest
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace bs4 beautifulsoup4 \
       --replace "pyperclip==1.5.27" "pyperclip>=1.5.27"
   '';
 

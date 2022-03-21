@@ -1,4 +1,4 @@
-{ buildFHSUserEnv, callPackage, lib, stdenvNoCC }:
+{ buildFHSUserEnv, callPackage, lib }:
 let
 
   shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix { };
@@ -7,11 +7,12 @@ in buildFHSUserEnv {
   name = "shticker_book_unwritten";
   targetPkgs = pkgs: with pkgs; [
       alsa-lib
+      libglvnd
+      libpulseaudio
+      shticker-book-unwritten-unwrapped
       xorg.libX11
       xorg.libXcursor
       xorg.libXext
-      libglvnd
-      shticker-book-unwritten-unwrapped
   ];
   runScript = "shticker_book_unwritten";
 

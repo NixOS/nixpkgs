@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   cfgIni = cfg.settings;
   scfg = cfg.meta;
   iniKey = "meta.sr.ht";
@@ -39,6 +40,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/metasrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/metasrht"'';
       description = ''
         State path for meta.sr.ht.
       '';

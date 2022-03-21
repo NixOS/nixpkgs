@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pywemo";
-  version = "0.6.8";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-4EvS1f9l1HXf+b/t4NavIxUsBkFomEqZgpumM+O8RZg=";
+    hash = "sha256-bGoqhrjoRKUGPBNfmr2XP+1HL5mdRi6XoCi0BdvY9x8=";
   };
 
   nativeBuildInputs = [

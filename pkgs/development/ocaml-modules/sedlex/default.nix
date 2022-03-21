@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VhzlDTYBFXgKWT69PqZYLuHkiaDwzhmyX2XfaqzHFl4=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
 
   propagatedBuildInputs = [ gen ocaml-migrate-parsetree ppx_tools_versioned ];
+
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 

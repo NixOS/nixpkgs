@@ -50,14 +50,10 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "vis";
     genericName = "Text editor";
-    categories = lib.concatStringsSep ";" [
-      "Application" "Development" "IDE"
-    ];
-    mimeType = lib.concatStringsSep ";" [
-      "text/plain" "application/octet-stream"
-    ];
-    startupNotify = "false";
-    terminal = "true";
+    categories = [ "Application" "Development" "IDE" ];
+    mimeTypes = [ "text/plain" "application/octet-stream" ];
+    startupNotify = false;
+    terminal = true;
   };
 
   meta = with lib; {

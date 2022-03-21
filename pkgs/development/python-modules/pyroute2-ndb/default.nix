@@ -2,16 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , pyroute2-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2-ndb";
-  version = "0.6.5";
+  version = "0.6.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pyroute2.ndb";
     inherit version;
-    sha256 = "sha256-pNMJWE6e9seEKvT4MrSPxTRKsiXnDjhLrtG3/iuU2fg=";
+    hash = "sha256-90DAbXCkoIFUbWZotKYkCSGsQvb7LrEpf6xGCviP40w=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +25,9 @@ buildPythonPackage rec {
   # pyroute2 sub-modules have no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pr2modules.ndb" ];
+  pythonImportsCheck = [
+    "pr2modules.ndb"
+  ];
 
   meta = with lib; {
     description = "NDB module for pyroute2";

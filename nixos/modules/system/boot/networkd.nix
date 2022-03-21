@@ -513,7 +513,7 @@ let
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
         (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
-        (assertValueOneOf "IPMasquerade" boolValues)
+        (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
         (assertInt "IPv6DuplicateAddressDetection")

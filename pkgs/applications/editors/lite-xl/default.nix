@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    sha256 = "sha256-8Hw2zDYynWG/NwxtWgbEVUCzrtRVkOhwtsisURNqUn8=";
+    sha256 = "sha256-7ppO5ITijhJ37OL6xlQgu1SaQ/snXDH5xJOwuXZNUVA=";
   };
 
   patches = [

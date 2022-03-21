@@ -13,7 +13,7 @@ mkCoqDerivation rec {
   ] null;
 
   mlPlugin = true;
-  extraBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
+  extraNativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
   enableParallelBuilding = false;
 
   meta = {

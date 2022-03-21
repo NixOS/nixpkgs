@@ -49,6 +49,15 @@ let # Rename the function arguments
 in let
   lib = import ../../lib;
 
+  inherit (lib) throwIfNot;
+
+  checked =
+    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+    throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
+    ;
+
   localSystem = lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
@@ -121,4 +130,4 @@ in let
 
   pkgs = boot stages;
 
-in pkgs
+in checked pkgs

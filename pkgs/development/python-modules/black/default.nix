@@ -1,8 +1,12 @@
-{ stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, attrs
 , click
 , colorama
 , dataclasses
@@ -10,7 +14,6 @@
 , pathspec
 , parameterized
 , platformdirs
-, regex
 , tomli
 , typed-ast
 , typing-extensions
@@ -20,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.10b0";
+  version = "22.1.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qZUiKQkuMl/l89rlbYH2ObI/cTHrhAeBlH5LKIYDDzM=";
+    hash = "sha256-p8AZLTVjX2/BF0vldct5FekuXdYp7nn9rw3PpBqAr7U=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -62,18 +65,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     aiohttp-cors
-    attrs
     click
     colorama
     mypy-extensions
     pathspec
     platformdirs
-    regex
     tomli
-    typed-ast # required for tests and python2 extra
     uvloop
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses
-    ++ lib.optional (pythonOlder "3.8") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.8") typed-ast
+  ++ lib.optional (pythonOlder "3.10") typing-extensions;
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

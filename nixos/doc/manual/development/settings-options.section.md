@@ -66,6 +66,45 @@ have a predefined type and string generator already declared under
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
+
+:   A function taking an attribute set with values
+
+    `elixir`
+
+    :   The Elixir package which will be used to format the generated output
+
+    It returns a set with Elixir-Config-specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special Elixir values:
+
+    `mkRaw elixirCode`
+
+    :   Outputs the given string as raw Elixir code
+
+    `mkGetEnv { envVariable, fallback ? null }`
+
+    :   Makes the configuration fetch an environment variable at runtime
+
+    `mkAtom atom`
+
+    :   Outputs the given string as an Elixir atom, instead of the default
+        Elixir binary string. Note: lowercase atoms still needs to be prefixed
+        with `:`
+
+    `mkTuple array`
+
+    :   Outputs the given array as an Elixir tuple, instead of the default
+        Elixir list
+
+    `mkMap attrset`
+
+    :   Outputs the given attribute set as an Elixir map, instead of the
+        default Elixir keyword list
+
+
 ::: {#pkgs-formats-result}
 These functions all return an attribute set with these values:
 :::
@@ -73,6 +112,12 @@ These functions all return an attribute set with these values:
 `type`
 
 :   A module system type representing a value of the format
+
+`lib`
+
+:   Utility functions for convenience, or special interactions with the format.
+    This attribute is optional. It may contain inside a `types` attribute
+    containing types specific to this format.
 
 `generate` *`filename jsonValue`*
 

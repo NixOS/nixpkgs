@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     gfbgraph
     glib
     gnome-online-accounts
-    gnome.adwaita-icon-theme
     grilo
     grilo-plugins
     gsettings-desktop-schemas

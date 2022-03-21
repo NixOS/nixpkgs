@@ -620,9 +620,6 @@ in
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
-      { assertion = config.security.polkit.enable;
-        message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
-      }
       (let primaryHeads = filter (x: x.primary) cfg.xrandrHeads; in {
         assertion = length primaryHeads < 2;
         message = "Only one head is allowed to be primary in "
@@ -703,7 +700,7 @@ in
 
         environment =
           optionalAttrs config.hardware.opengl.setLdLibraryPath
-            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+            { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
           // cfg.displayManager.job.environment;
 
         preStart =
@@ -865,4 +862,6 @@ in
 
   };
 
+  # uses relatedPackages
+  meta.buildDocsInSandbox = false;
 }

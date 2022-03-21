@@ -1,28 +1,57 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils }:
-let
-  webassets = fetchFromGitHub {
-    owner = "gravitational";
-    repo = "webassets";
-    rev = "07493a5e78677de448b0e35bd72bf1dc6498b5ea";
-    sha256 = "sha256-V1vGGC8Q257iQMhxCBEBkZntt0ckppCJMCEr2Nqxo/M=";
-  };
-in
-buildGoModule rec {
-  pname = "teleport";
-  version = "7.3.2";
+{ lib
+, buildGoModule
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, protobuf
+, stdenv
+, xdg-utils
+, nixosTests
 
+, withRoleTester ? true
+}:
+let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-ZigVfz4P5bVn+5qApmLGlNmzU52ncFjkSbwbPOKI4MA=";
+    sha256 = "sha256-ir2NMNIjSpv7l6dVNHczARg6b+doFofinsJy1smEC7o=";
+  };
+  version = "8.1.3";
+
+  roleTester = rustPlatform.buildRustPackage {
+    name = "teleport-roletester";
+    inherit version;
+
+    src = "${src}/lib/datalog";
+    cargoSha256 = "sha256-cpW7kel02t/fB2CvDvVqWlzgS3Vg2qLnemF/bW2Ii1A=";
+    sourceRoot = "datalog/roletester";
+
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+
+    postInstall = ''
+      cp -r target $out
+    '';
   };
 
+  webassets = fetchFromGitHub {
+    owner = "gravitational";
+    repo = "webassets";
+    rev = "ea3c67c941c56cfb6c228612e88100df09fb6f9c";
+    sha256 = "sha256-oKvDXkxA73IJOi+ciBFVLkYcmeRUsTC+3rcYf64vDoY=";
+  };
+in
+buildGoModule rec {
+  pname = "teleport";
+
+  inherit src version;
   vendorSha256 = null;
 
   subPackages = [ "tool/tctl" "tool/teleport" "tool/tsh" ];
-  tags = [ "webassets_embed" ];
+  tags = [ "webassets_embed" ] ++
+    lib.optional withRoleTester "roletester";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -41,7 +70,12 @@ buildGoModule rec {
     echo "making webassets"
     cp -r ${webassets}/* webassets/
     make lib/web/build/webassets
+
+    ${lib.optionalString withRoleTester
+      "cp -r ${roleTester}/target lib/datalog/roletester/."}
   '';
+
+  doCheck = !stdenv.isDarwin;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -62,8 +96,10 @@ buildGoModule rec {
     $out/bin/teleport version | grep ${version} > /dev/null
   '';
 
+  passthru.tests = nixosTests.teleport;
+
   meta = with lib; {
-    description = "A SSH CA management suite";
+    description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ sigma tomberek freezeboy ];

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchurl
 , cmake
@@ -65,5 +66,6 @@ in mkDerivation rec {
     homepage = "https://www.gplates.org";
     license = licenses.gpl2Only;
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gplates.x86_64-darwin
   };
 }

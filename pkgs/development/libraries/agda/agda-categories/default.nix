@@ -11,6 +11,13 @@ mkDerivation rec {
     sha256 = "1acb693ad2nrmnn6jxsyrlkc0di3kk2ksj2w9wnyfxrgvfsil7rn";
   };
 
+  # Remove this once new version of agda-categories is released which
+  # directly references standard-library-1.7.1
+  postPatch = ''
+    substituteInPlace agda-categories.agda-lib \
+      --replace 'standard-library-1.7' 'standard-library-1.7.1'
+  '';
+
   buildInputs = [ standard-library ];
 
   meta = with lib; {

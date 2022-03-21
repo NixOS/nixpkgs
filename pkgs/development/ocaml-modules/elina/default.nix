@@ -2,15 +2,17 @@
 
 stdenv.mkDerivation rec {
   version = "1.1";
-  name = "ocaml${ocaml.version}-elina-${version}";
+  pname = "ocaml${ocaml.version}-elina";
   src = fetchurl {
     url = "http://files.sri.inf.ethz.ch/elina-${version}.tar.gz";
     sha256 = "1nymykskq1yx87y4xl6hl9i4q6kv0qaq25rniqgl1bfn883p1ysc";
   };
 
-  buildInputs = [ perl ocaml findlib ];
+  nativeBuildInputs = [ perl ocaml findlib ];
 
   propagatedBuildInputs = [ apron camlidl gmp mpfr ];
+
+  strictDeps = true;
 
   prefixKey = "--prefix ";
   configureFlags = [

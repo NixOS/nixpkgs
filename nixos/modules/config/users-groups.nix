@@ -204,6 +204,16 @@ let
         '';
       };
 
+      autoSubUidGidRange = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Automatically allocate subordinate user and group ids for this user.
+          Allocated range is currently always of size 65536.
+        '';
+      };
+
       createHome = mkOption {
         type = types.bool;
         default = false;
@@ -320,6 +330,9 @@ let
         (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
         })
+        (mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
+          autoSubUidGidRange = mkDefault true;
+        })
       ];
 
   };
@@ -419,7 +432,7 @@ let
       { inherit (u)
           name uid group description home createHome isSystemUser
           password passwordFile hashedPassword
-          isNormalUser subUidRanges subGidRanges
+          autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
@@ -436,16 +449,10 @@ in {
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
-    (mkChangedOptionModule
-      [ "security" "initialRootPassword" ]
-      [ "users" "users" "root" "initialHashedPassword" ]
-      (cfg: if cfg.security.initialRootPassword == "!"
-            then null
-            else cfg.security.initialRootPassword))
+    (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
   ###### interface
-
   options = {
 
     users.mutableUsers = mkOption {
@@ -513,6 +520,17 @@ in {
       '';
     };
 
+
+    users.allowNoPasswordLogin = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Disable checking that at least the <literal>root</literal> user or a user in the <literal>wheel</literal> group can log in using
+        a password or an SSH key.
+
+        WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
+      '';
+    };
   };
 
 
@@ -527,6 +545,7 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
+        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -603,9 +622,11 @@ in {
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
-          any id ((mapAttrsToList (_: cfg:
-            (cfg.name == "root"
+        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.mutableUsers
+        assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
+          any id (mapAttrsToList (name: cfg:
+            (name == "root"
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
@@ -614,12 +635,16 @@ in {
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users) ++ [
+          ) cfg.users ++ [
             config.security.googleOsLogin.enable
           ]);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
-          You must set one to prevent being locked out of your system.'';
+          You must set one to prevent being locked out of your system.
+          If you really want to be locked out of your system, set users.allowNoPasswordLogin = true;
+          However you are most probably better off by setting users.mutableUsers = true; and
+          manually running passwd root to set the root password.
+          '';
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [

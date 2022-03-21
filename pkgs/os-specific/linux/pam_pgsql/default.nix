@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pam_pgsql";
-  version = "0.7.3.2";
+  version = "unstable-2020-05-05";
 
   src = fetchFromGitHub {
     owner = "pam-pgsql";
     repo = "pam-pgsql";
-    rev = "release-${version}";
-    sha256 = "1a68krq5m07zspdxwl1wmkr5j98zr9bdg4776kvplrsdcg97h4jk";
+    rev = "f9fd1e1a0daf754e6764a31db5cbec6f9fc02b3d";
+    sha256 = "1bvddrwyk1479wibyayzc24h62qzfnlbk9qvdhb31yw9yn17gp6k";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -41,6 +41,7 @@ buildDotnetModule rec {
   buildInputs = [
     stdenv.cc.cc.lib
     fontconfig
+    gtk3
   ];
 
   runtimeDeps = [
@@ -52,12 +53,13 @@ buildDotnetModule rec {
   ];
 
   autoPatchelfIgnoreMissingDeps = true; # Attempts to patchelf unneeded SOs
-  dontWrapGApps = true; # gappsWrapperArgs gets included when wrapping the application for dotnet.
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "OpenTracker";
+    platforms = platforms.linux;
   };
 }

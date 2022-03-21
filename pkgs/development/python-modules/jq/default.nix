@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73ce588025495e6ebcda20bb9e64b6d9f3f1657c22895143ae243899ac710cbc";
+    sha256 = "sha256-hqzixD8XtaZKOIh+3nLHuM4qsLz6ge4o/2Q06TUBCr4=";
   };
 
   patches = [

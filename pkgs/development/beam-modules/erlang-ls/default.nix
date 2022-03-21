@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
 , stdenv, writeScript, lib }:
 let
-  version = "0.20.0";
+  version = "0.23.1";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -19,7 +19,7 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-XBCauvPalIPjVOYlMfWC+5mKku28b/qqKhp9NgSkoyA=";
+    sha256 = "sha256-N0jkdzwNi9dx0dmN4qL+mb8S60OII4C/MnR/y8G3GUY=";
     rev = version;
   };
   releaseType = "escript";
@@ -51,7 +51,7 @@ rebar3Relx {
     #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
 
     set -ox errexit
-    latest=$(list-git-tags https://github.com/${owner}/${repo}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+    latest=$(list-git-tags --url=https://github.com/${owner}/${repo}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
     if [[ "$latest" != "${version}" ]]; then
       nixpkgs="$(git rev-parse --show-toplevel)"
       nix_path="$nixpkgs/pkgs/development/beam-modules/erlang-ls"

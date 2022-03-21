@@ -8,24 +8,23 @@
 , measurement
 , python-dateutil
 , requests
-, six
 , rich
 , pytestCheckHook
 , mock
 , nose
+, pythonOlder
 }:
-
-# TODO: Define this package in "all-packages.nix" using "toPythonApplication".
-# This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "propagatedBuildInputs".
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.16.5";
+  version = "1.17.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v7lYaZLHxQs3/2uJnj+9y0xCXfPO1C38jLwzF7IMbb0=";
+    sha256 = "sha256-UXFvKQtC44EvscYWXK7KI/do3U0wTWI3zKwvsRdzKrs=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +35,6 @@ buildPythonPackage rec {
     measurement
     python-dateutil
     requests
-    six
     rich
   ];
 

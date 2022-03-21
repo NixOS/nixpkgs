@@ -9,7 +9,7 @@ in
   inherit mkGraal;
 
   graalvm11-ce = mkGraal rec {
-    version = "21.3.0";
+    version = "22.0.0.2";
     javaVersion = "11";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
@@ -20,7 +20,7 @@ in
   # directory"/tmp/SVM-4194439592488143713"): error=0, Failed to exec spawn
   # helper: pid: 19865, exit value: 1"
   graalvm17-ce = mkGraal rec {
-    version = "21.3.0";
+    version = "22.0.0.2";
     javaVersion = "17";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };

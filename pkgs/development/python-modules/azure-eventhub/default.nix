@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
-  version = "5.6.1";
+  version = "5.7.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-ssjTesjPFITaB5Uy061podqL14ojeCIVm3LWsF3kY40=";
+    sha256 = "6ac364e5f1c5b376604c3b5a25ad0be5e3a5f96368f590e05b47e6745f1006ee";
   };
 
   propagatedBuildInputs = [

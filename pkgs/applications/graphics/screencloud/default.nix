@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, python2Packages }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 quazip qt-mobility qxt pythonPackages.python pythonPackages.pycrypto ];
+  buildInputs = [ qt4 quazip qt-mobility qxt python2Packages.python python2Packages.pycrypto ];
 
   patchPhase = ''
     # Required to make the configure script work. Normally, screencloud's
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     patchShebangs $prefix/opt/screencloud/screencloud.sh
     substituteInPlace "$prefix/opt/screencloud/screencloud.sh" --replace "/opt" "$prefix/opt"
-    sed -i "2 i\export PYTHONPATH=$(toPythonPath ${pythonPackages.pycrypto}):\$PYTHONPATH" "$prefix/opt/screencloud/screencloud.sh"
+    sed -i "2 i\export PYTHONPATH=$(toPythonPath ${python2Packages.pycrypto}):\$PYTHONPATH" "$prefix/opt/screencloud/screencloud.sh"
     mkdir $prefix/bin
     mkdir $prefix/lib
     ln -s $prefix/opt/screencloud/screencloud.sh $prefix/bin/screencloud

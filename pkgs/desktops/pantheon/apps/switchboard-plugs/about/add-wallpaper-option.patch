@@ -1,0 +1,82 @@
+From cc47fa33893e6840463ef8d59f9f4de4b7563726 Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Sat, 4 Dec 2021 22:00:38 +0800
+Subject: [PATCH] Add meson option for overlaying logo on wallpaper
+
+---
+ meson.build                        | 8 ++++++++
+ meson_options.txt                  | 1 +
+ src/Views/OperatingSystemView.vala | 8 ++++++++
+ 3 files changed, 17 insertions(+)
+ create mode 100644 meson_options.txt
+
+diff --git a/meson.build b/meson.build
+index 2125de6e..cbe3cadd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -20,6 +20,14 @@ add_project_arguments(
+ vapi_dir = join_paths(meson.current_source_dir(), 'vapi')
+ add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
+ 
++vala_flags = []
++
++if get_option('wallpaper')
++    vala_flags += ['--define', 'WALLPAPER']
++endif
++
++add_project_arguments(vala_flags, language: 'vala')
++
+ subdir('data')
+ subdir('src')
+ subdir('po')
+diff --git a/meson_options.txt b/meson_options.txt
+new file mode 100644
+index 00000000..8cef0bb3
+--- /dev/null
++++ b/meson_options.txt
+@@ -0,0 +1 @@
++option('wallpaper', type : 'boolean', value : true, description : 'Overlay logo on default wallpaper')
+diff --git a/src/Views/OperatingSystemView.vala b/src/Views/OperatingSystemView.vala
+index fdb92e7e..6110d1aa 100644
+--- a/src/Views/OperatingSystemView.vala
++++ b/src/Views/OperatingSystemView.vala
+@@ -39,6 +39,7 @@ public class About.OperatingSystemView : Gtk.Grid {
+             logo_icon_name = "distributor-logo";
+         }
+ 
++#if WALLPAPER
+         var logo = new Hdy.Avatar (128, "", false) {
+             // In case the wallpaper can't be loaded, we don't want an icon or text
+             icon_name = "invalid-icon-name",
+@@ -53,6 +54,7 @@ public class About.OperatingSystemView : Gtk.Grid {
+             }
+         });
+         logo.get_style_context ().add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
++#endif
+ 
+         var icon = new Gtk.Image () {
+             icon_name = logo_icon_name + "-symbolic",
+@@ -64,9 +66,11 @@ public class About.OperatingSystemView : Gtk.Grid {
+         icon_style_context.add_class ("logo");
+         icon_style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+ 
++#if WALLPAPER
+         var logo_overlay = new Gtk.Overlay ();
+         logo_overlay.add (logo);
+         logo_overlay.add_overlay (icon);
++#endif
+ 
+         // Intentionally not using GLib.OsInfoKey.PRETTY_NAME here because we
+         // want more granular control over text formatting
+@@ -145,7 +149,11 @@ public class About.OperatingSystemView : Gtk.Grid {
+             valign = Gtk.Align.CENTER,
+             vexpand = true
+         };
++#if WALLPAPER
+         software_grid.attach (logo_overlay, 0, 0, 1, 4);
++#else
++        software_grid.attach (icon, 0, 0, 1, 4);
++#endif
+         software_grid.attach (title, 1, 0, 3);
+ 
+         software_grid.attach (kernel_version_label, 1, 2, 3);

@@ -347,6 +347,9 @@ let
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
+        { object = config.environment.etc."modprobe.d/nixos.conf".source;
+          symlink = "/etc/modprobe.d/nixos.conf";
+        }
         { object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
         }
@@ -575,7 +578,7 @@ in
         else "gzip"
       );
       defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
-      type = types.unspecified; # We don't have a function type...
+      type = types.either types.str (types.functionTo types.str);
       description = ''
         The compressor to use on the initrd image. May be any of:
 
@@ -633,7 +636,7 @@ in
 
           <itemizedlist>
             <listitem><para><literal>boot.consoleLogLevel = 0;</literal></para></listitem>
-            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_priority=3" ];</literal></para></listitem>
+            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_level=3" ];</literal></para></listitem>
           </itemizedlist>
         '';
     };

@@ -1,26 +1,30 @@
 { lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
 , aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
-, hcxdumptool, pyrit, which, bully, pixiewps }:
+, hcxdumptool, which, bully, pixiewps }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "2.5.7";
+  version = "2.6.0";
   pname = "wifite2";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "wifite2";
     rev = version;
-    sha256 = "sha256-dJ+UOSIR48m8nGoci/6iblLsX296ZGL1hZ74RUsa9lw=";
+    sha256 = "sha256-q8aECegyIoAtYFsm8QEr8OnX+GTqjEeWfYQyESk27SA=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-aircrack-failing-test.patch";
-      sha256 = "04qql8w27c1lqk59ghkr1n6r08jwdrb1dcam5k88szkk2bxv8yx1";
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.5.8-2/debian/patches/Disable-aircrack-failing-test.patch";
+      sha256 = "1kj2m973l067fdg9dj61vbjf4ym9x1m9kn0q8ci9r6bb30yg6sv2";
     })
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-two-failing-tests.patch";
-      sha256 = "1sixcqz1kbkhxf38yq55pwycm54adjx22bq46dfnl44mg69nx356";
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.5.8-2/debian/patches/Disable-two-failing-tests.patch";
+      sha256 = "15vas7zvpdk2lr1pzv8hli6jhdib0dibp7cmikiai53idjxay56z";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.5.8-2/debian/patches/fix-for-new-which.patch";
+      sha256 = "0p6sa09qpq9qarkjrai2ksx9nz2v2hs6dk1y01qnfbsmc4hhm30g";
     })
   ];
 
@@ -33,23 +37,16 @@ python3.pkgs.buildPythonApplication rec {
     hcxtools
     hcxdumptool
     wirelesstools
-    pyrit
     which
     bully
     pixiewps
   ];
 
-  postFixup = let
-    sitePackagesDir = "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
-  in ''
-    mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
-  '';
-
   checkInputs = propagatedBuildInputs;
   checkPhase = "python -m unittest discover tests -v";
 
   meta = with lib; {
-    homepage = "https://github.com/derv82/wifite2";
+    homepage = "https://github.com/kimocoder/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
     license = licenses.gpl2;
     platforms = platforms.linux;

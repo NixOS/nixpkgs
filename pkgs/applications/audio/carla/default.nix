@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WxhG9X6jVcu10bl5p0f61+SYZmJw4W7DYvezbpAlNjg=";
+    sha256 = "sha256-A0QmyphjsNU06kh2f9rXrR+GkDEI5HqXRA9J82E6qJU=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kxstudio.sf.net/carla";
+    homepage = "https://kx.studio/Applications:Carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

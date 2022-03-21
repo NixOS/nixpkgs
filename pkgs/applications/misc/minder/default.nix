@@ -15,6 +15,7 @@
 , gtk3
 , gtksourceview4
 , hicolor-icon-theme # for setup-hook
+, json-glib
 , libarchive
 , libgee
 , libhandy
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minder";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = pname;
     rev = version;
-    sha256 = "07mq595c1vxwsnwkr2zdci0r06yhs75ph2db09mc63k5fjvi8rya";
+    sha256 = "sha256-0x+MMVa9/jOVp9n9JFM1MGndh9H9MzmmHepcez4aT+Q=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview4
     hicolor-icon-theme
+    json-glib
     libarchive
     libgee
     libhandy

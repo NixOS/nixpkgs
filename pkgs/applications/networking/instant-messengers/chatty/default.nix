@@ -11,6 +11,7 @@
 , evolution-data-server
 , feedbackd
 , glibmm
+, gnome
 , gspell
 , gtk3
 , json-glib
@@ -27,14 +28,15 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.4.0";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "chatty";
     rev = "v${version}";
-    sha256 = "12k1a5xrwd6zk4x0m53hbzggk695z3bpbzy1wcikzy0jvch7h13d";
+    fetchSubmodules = true;
+    hash = "sha256-AufxwuOibTx5OvLBVbJqay/mYLmcDpE2BgwVv6Y5IlY=";
   };
 
   postPatch = ''
@@ -55,6 +57,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     feedbackd
     glibmm
+    gnome.gnome-desktop
     gspell
     gtk3
     json-glib

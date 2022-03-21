@@ -2,6 +2,7 @@
 , substituteAll
 , buildPythonPackage
 , fetchPypi
+, catch2
 , cmake
 , cxxopts
 , ghc_filesystem
@@ -14,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "chiapos";
-  version = "1.0.6";
+  version = "1.0.9";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Zh5AULPgbG0oYPcBZMp/vm94MPyfdtYn4P5V+1LeMqA=";
+    sha256 = "sha256-emEHIR74RiIDK04etO/6G7tjzTufOVl4rLRWbEsQit0=";
   };
 
   patches = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
       inherit cxxopts ghc_filesystem;
+      catch2_src = catch2.src;
       pybind11_src = pybind11.src;
     })
   ];

@@ -28,6 +28,7 @@
 buildPythonPackage rec {
   pname = "zeep";
   version = "4.1.0";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -71,9 +72,15 @@ buildPythonPackage rec {
   disabledTests = [
     # lxml.etree.XMLSyntaxError: Extra content at the end of the document, line 2, column 64
     "test_mime_content_serialize_text_xml"
+    # Tests are outdated
+    "test_load"
+    "test_load_cache"
+    "test_post"
   ];
 
-  pythonImportsCheck = [ "zeep" ];
+  pythonImportsCheck = [
+    "zeep"
+  ];
 
   meta = with lib; {
     description = "Python SOAP client";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
-, pcre, liblinear, libssh2
+, pcre, libssh2
 , graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
+    "--with-liblinear=included"
   ] ++ optionals (!graphicalSupport) [ "--without-ndiff" "--without-zenmap" ];
 
   makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ] ++ optionals graphicalSupport [ python2.pkgs.wrapPython ];
-  buildInputs = [ pcre liblinear libssh2 libpcap openssl ] ++ optionals graphicalSupport (with python2.pkgs; [
+  buildInputs = [ pcre libssh2 libpcap openssl ] ++ optionals graphicalSupport (with python2.pkgs; [
     python2 libX11 gtk2
   ]);
 

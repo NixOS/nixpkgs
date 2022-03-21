@@ -1,16 +1,17 @@
-{ lib, fetchurl, appimageTools, python }:
+{ lib, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "heroic";
-  version = "1.10.3";
+  version = "2.2.1";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
-    sha256 = "sha256-0VQ5rSGGsEAsOLB4H/Hn2w7wCOrCSoVFzCBqNV5NyVE=";
+    sha256 = "sha256-zzxf3eM1fUWTVtzzABcwlmptNuCVQafvotnbOiCzu0c=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraInstallCommands = ''
@@ -26,6 +27,10 @@ in appimageTools.wrapType2 {
 
     substituteInPlace $out/share/applications/heroic.desktop \
       --replace 'Exec=AppRun' 'Exec=heroic'
+  '';
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   meta = with lib; {

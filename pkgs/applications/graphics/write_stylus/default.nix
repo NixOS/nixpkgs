@@ -7,7 +7,7 @@ let
     icon = "write_stylus";
     desktopName = "Write";
     genericName = "Write";
-    categories = "Office;Graphics";
+    categories = [ "Office" "Graphics" ];
   };
 in
 mkDerivation rec {

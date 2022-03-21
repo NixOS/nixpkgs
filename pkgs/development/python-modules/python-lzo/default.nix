@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-lzo";
-  version = "1.12";
+  version = "1.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iakqgd51n1cd7r3lpdylm2rgbmd16y74cra9kcapwg84mlf9a4p";
+    sha256 = "83cbd8ecaae284735250e31d6c0ecc18ac08763fab2a8c910dc5a6910db6250c";
   };
 
   buildInputs = [ lzo ];

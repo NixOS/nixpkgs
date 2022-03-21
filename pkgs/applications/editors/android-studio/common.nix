@@ -46,6 +46,7 @@
 , stdenv
 , systemd
 , unzip
+, usbutils
 , which
 , runCommand
 , xkeyboard_config
@@ -102,6 +103,7 @@ let
           # Runtime stuff
           git
           ps
+          usbutils
         ]}" \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
 
@@ -157,14 +159,14 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = drvName;
+    name = pname;
     exec = pname;
-    icon = drvName;
+    icon = pname;
     desktopName = "Android Studio (${channel} channel)";
     comment = "The official Android IDE";
-    categories = "Development;IDE;";
-    startupNotify = "true";
-    extraEntries="StartupWMClass=jetbrains-studio";
+    categories = [ "Development" "IDE" ];
+    startupNotify = true;
+    startupWMClass = "jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
@@ -214,9 +216,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ meutraa fabianhjr ];
-        beta = [ meutraa fabianhjr ];
-        canary = [ meutraa fabianhjr ];
+        stable = [ fabianhjr ];
+        beta = [ fabianhjr ];
+        canary = [ fabianhjr ];
         dev = canary;
       }."${channel}";
     };
@@ -227,6 +229,6 @@ in runCommand
     echo -n "$startScript" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
 
-    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
+    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${pname}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''

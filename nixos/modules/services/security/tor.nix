@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with builtins;
 with lib;
 
 let
   cfg = config.services.tor;
+  opt = options.services.tor;
   stateDir = "/var/lib/tor";
   runDir = "/run/tor";
   descriptionGeneric = option: ''
@@ -793,12 +794,22 @@ in
               };
             }));
           };
+          options.ShutdownWaitLength = mkOption {
+            type = types.int;
+            default = 30;
+            description = descriptionGeneric "ShutdownWaitLength";
+          };
           options.SocksPolicy = optionStrings "SocksPolicy" // {
             example = ["accept *:*"];
           };
           options.SOCKSPort = mkOption {
             description = descriptionGeneric "SOCKSPort";
             default = if cfg.settings.HiddenServiceNonAnonymousMode == true then [{port = 0;}] else [];
+            defaultText = literalExpression ''
+              if config.${opt.settings}.HiddenServiceNonAnonymousMode == true
+              then [ { port = 0; } ]
+              else [ ]
+            '';
             example = [{port = 9090;}];
             type = types.listOf (optionSOCKSPort true);
           };
@@ -899,6 +910,11 @@ in
         ORPort = mkForce [];
         PublishServerDescriptor = mkForce false;
       })
+      (mkIf (!cfg.client.enable) {
+        # Make sure application connections via SOCKS are disabled
+        # when services.tor.client.enable is false
+        SOCKSPort = mkForce [ 0 ];
+      })
       (mkIf cfg.client.enable (
         { SOCKSPort = [ cfg.client.socksListenAddress ];
         } // optionalAttrs cfg.client.transparentProxy.enable {
@@ -951,7 +967,7 @@ in
               '') onion.authorizedClients ++
               optional (onion.secretKey != null) ''
                 install -d -o tor -g tor -m 0700 ${escapeShellArg onion.path}
-                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey})"
+                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey} | head -1)"
                 case "$key" in
                  ("== ed25519v"*"-secret")
                   install -o tor -g tor -m 0400 ${escapeShellArg onion.secretKey} ${escapeShellArg onion.path}/hs_ed25519_secret_key;;
@@ -971,7 +987,7 @@ in
         ExecStart = "${cfg.package}/bin/tor -f ${torrc}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         KillSignal = "SIGINT";
-        TimeoutSec = 30;
+        TimeoutSec = cfg.settings.ShutdownWaitLength + 30; # Wait a bit longer than ShutdownWaitLength before actually timing out
         Restart = "on-failure";
         LimitNOFILE = 32768;
         RuntimeDirectory = [
@@ -997,7 +1013,11 @@ in
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
         BindPaths = [ stateDir ];
-        BindReadOnlyPaths = [ storeDir "/etc" ];
+        BindReadOnlyPaths = [ storeDir "/etc" ] ++
+          optionals config.services.resolved.enable [
+            "/run/systemd/resolve/stub-resolv.conf"
+            "/run/systemd/resolve/resolv.conf"
+          ];
         AmbientCapabilities   = [""] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = [""] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r

@@ -6,36 +6,22 @@ let
   py = python3.override {
     packageOverrides = self: super: {
 
-      boto3 = super.boto3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.17.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1byqrffbgpp1mq62gnn3w3hnm54dfar0cwgvmkl7mrgbwz5xmdh8";
-        };
-      });
-
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.20.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1ksdjh3mwbzgqgfj58vyrhann23b9gqam8id2svmpdmmdq5vgffh";
-        };
-      });
-
-      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1cp169vz9rvng7dwbn33fgdbl3b014zpsdqsnfxxw7jm2r5jy0nb";
-        };
-      });
-
       dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "06rn91n2izw7czncgql71w7acsa8wwni51njw0c6s8w4xas1arj9";
         };
+        doCheck = false;
+      });
+
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
         doCheck = false;
       });
 
@@ -46,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.648";
+  version = "2.0.975";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WhBbZiLPGA9Dvn8xJaPOvOjEeVOWHBVLyEav4Mw/Xy8=";
+    hash = "sha256-vzq6HKugjM9LBaklv0IlMauSAl3bqHOikDCzrhVBVPA=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -63,9 +49,11 @@ buildPythonApplication rec {
     aiodns
     aiohttp
     aiomultiprocess
+    argcomplete
     bc-python-hcl2
     boto3
     cachetools
+    charset-normalizer
     cloudsplaining
     colorama
     configargparse
@@ -77,10 +65,14 @@ buildPythonApplication rec {
     dpath
     GitPython
     jmespath
+    jsonpath-ng
+    jsonschema
     junit-xml
     networkx
     packaging
     policyuniverse
+    prettytable
+    pycep-parser
     pyyaml
     semantic-version
     tabulate
@@ -92,7 +84,6 @@ buildPythonApplication rec {
 
   checkInputs = with py.pkgs; [
     aioresponses
-    jsonschema
     mock
     pytest-asyncio
     pytest-mock
@@ -100,11 +91,29 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
+      --replace "prettytable>=3.0.0" "prettytable"
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
   disabledTests = [
     # No API key available
     "api_key"
     # Requires network access
     "TestSarifReport"
+    # Will probably be fixed in one of the next releases
+    "test_valid_cyclonedx_bom"
+    "test_record_relative_path_with"
+    "test_record_relative_path_with_relative_dir"
+    # Requires prettytable release which is only available in staging
+    "test_skipped_check_exists"
+    # AssertionError: 0 not greater than 0
+    "test_skip_mapping_default"
   ];
 
   disabledTestPaths = [
@@ -114,6 +123,9 @@ buildPythonApplication rec {
     "tests/terraform/"
     # Performance tests have no value for us
     "performance_tests/test_checkov_performance.py"
+    # Requires prettytable release which is only available in staging
+    "tests/sca_package/"
+    "tests/test_runner_filter.py"
   ];
 
   pythonImportsCheck = [

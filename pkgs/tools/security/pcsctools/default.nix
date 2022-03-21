@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsc-tools";
-  version = "1.5.8";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-h8HtvbjJc1Bj9oiqPgXjiTqI54syLcaa+AdX7ZAoIhI=";
+    sha256 = "sha256-ZRyN10vLM9tMFpNc5dgN0apusgup1cS5YxoJgybvi58=";
   };
 
   postPatch = ''

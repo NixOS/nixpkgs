@@ -9,54 +9,32 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "asgiref";
-          rev = version;
-          sha256 = "0440321alpqb1cdsmfzmiiy8rpq0ic0wvraalzk39cgrl7mghw39";
-        };
-      });
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "8.0.3";
-        src = fetchFromGitHub {
-          owner = "pallets";
-          repo = "click";
-          rev = version;
-          sha256 = "0pxvxgfhqjgsjbgfnilqjki1l24r0rdfd98cl77i71yqdd2f497g";
+      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
+        version = "2.9.0";
+        src = fetchPypi {
+          pname = "semantic_version";
+          version = version;
+          sha256 = "1chjd8019wnwb5mnd4x4jw9f8nhzg0xnapsdznk0fpiyamrlixdb";
         };
       });
 
       starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
+        version = "0.18.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "starlette";
           rev = version;
-          sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
+          sha256 = "1dpj33cggjjvpd3qdf6hv04z5ckcn9f5dfn98p5a8hx262kgsr9p";
         };
-        disabledTestPaths = [];
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
+        version = "0.17.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "uvicorn";
           rev = version;
-          sha256 = "074smp3448wcazlhc7sb8r54l4kfavr6yks3w5x60zl1qpijf52r";
-        };
-      });
-
-      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.36.13";
-        src = fetchFromGitHub {
-          owner = "jstasiak";
-          repo = "python-zeroconf";
-          rev = version;
-          sha256 = "aYNb67ESyz2Q2CKLhG+/Z8Xtt0Js8uf+xrVSEpY0X8c=";
+          sha256 = "142x8skb1yfys6gndfaay2r240j56dkr006p49pw4y9i0v85kynp";
         };
       });
     };
@@ -80,6 +58,7 @@ with python.pkgs; buildPythonApplication rec {
     pyserial
     requests
     semantic-version
+    spdx-license-list-data.json
     starlette
     tabulate
     uvicorn
@@ -171,16 +150,16 @@ with python.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace "zeroconf==0.28.*" "zeroconf"
+      --replace "zeroconf==0.37.*" "zeroconf"
   '';
 
   meta = with lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = "http://platformio.org";
+    homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
   };

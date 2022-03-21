@@ -82,14 +82,14 @@ in
       git = 41;
       #fourstore = 42; # dropped in 20.03
       #fourstorehttp = 43; # dropped in 20.03
-      virtuoso = 44;
+      #virtuoso = 44;  dropped module
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       # bind = 53; #dynamically allocated as of 2021-09-03
       wwwrun = 54;
       #adm = 55; # unused
@@ -182,7 +182,7 @@ in
       yandexdisk = 143;
       mxisd = 144; # was once collectd
       #consul = 145;# dynamically allocated as of 2021-09-03
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -296,7 +296,7 @@ in
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
-      couchpotato = 267;
+      # couchpotato = 267; # unused, removed 2022-01-01
       gogs = 268;
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
@@ -352,6 +352,8 @@ in
       moonraker = 320;
       distcc = 321;
       webdav = 322;
+      pipewire = 323;
+      rstudio-server = 324;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -410,7 +412,7 @@ in
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       #bind = 53; # unused
       wwwrun = 54;
       adm = 55;
@@ -501,7 +503,7 @@ in
       #yandexdisk = 143; # unused
       mxisd = 144; # was once collectd
       #consul = 145; # unused
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -603,7 +605,7 @@ in
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
-      couchpotato = 267;
+      # couchpotato = 267; # unused, removed 2022-01-01
       gogs = 268;
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
@@ -658,6 +660,8 @@ in
       moonraker = 320;
       distcc = 321;
       webdav = 322;
+      pipewire = 323;
+      rstudio-server = 324;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

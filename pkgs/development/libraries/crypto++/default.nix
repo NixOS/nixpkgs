@@ -1,61 +1,69 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !enableStatic
+# Multi-threading with OpenMP is disabled by default
+# more info on https://www.cryptopp.com/wiki/OpenMP
+, withOpenMP ? false
+, llvmPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "crypto++";
-  version = "8.4.0";
+  version = "8.6.0";
   underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
     repo = "cryptopp";
     rev = "CRYPTOPP_${underscoredVersion}";
-    sha256 = "1gwn8yh1mh41hkh6sgnhb9c3ygrdazd7645msl20i0zdvcp7f5w3";
+    hash = "sha256-a3TYaK34WvKEXN7LKAfGwQ3ZL6a3k/zMZyyVfnkQqO4=";
   };
 
   outputs = [ "out" "dev" ];
 
   postPatch = ''
     substituteInPlace GNUmakefile \
-        --replace "AR = libtool" "AR = ar" \
-        --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
-
-    # See https://github.com/weidai11/cryptopp/issues/1011
-    substituteInPlace GNUmakefile \
-      --replace "ZOPT = -O0" "ZOPT ="
+      --replace "AR = /usr/bin/libtool" "AR = ar" \
+      --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
   '';
 
-  preConfigure = ''
-    sh TestScripts/configure.sh
-  '';
+  buildInputs = lib.optionals (stdenv.cc.isClang && withOpenMP) [ llvmPackages.openmp ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   buildFlags =
        lib.optional enableStatic "static"
     ++ lib.optional enableShared "shared"
     ++ [ "libcryptopp.pc" ];
+
   enableParallelBuilding = true;
+  hardeningDisable = [ "fortify" ];
+  CXXFLAGS = lib.optionals (withOpenMP) [ "-fopenmp" ];
 
   doCheck = true;
 
-  # built for checks but we don't install static lib into the nix store
-  preInstall = lib.optionalString (!enableStatic) "rm libcryptopp.a";
+  # always built for checks but install static lib only when necessary
+  preInstall = lib.optionalString (!enableStatic) "rm -f libcryptopp.a";
 
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
+  # TODO: remove postInstall hook with v8.7 -> https://github.com/weidai11/cryptopp/commit/230c558a
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${lib.versions.majorMinor version}
     ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${lib.versions.major version}
   '';
 
-  meta = {
-    description = "Crypto++, a free C++ class library of cryptographic schemes";
+  meta = with lib; {
+    description = "A free C++ class library of cryptographic schemes";
     homepage = "https://cryptopp.com/";
-    changelog = "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt";
-    license = with lib.licenses; [ boost publicDomain ];
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    changelog = [
+      "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt"
+      "https://github.com/weidai11/cryptopp/releases/tag/CRYPTOPP_${underscoredVersion}"
+    ];
+    license = with licenses; [ boost publicDomain ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }

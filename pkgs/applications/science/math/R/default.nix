@@ -14,11 +14,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "R";
-  version = "4.1.2";
+  version = "4.1.3";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IDYiXp9yB9TOCX5Ulyrs2qi0DX2ZEc0mSR+sWg+rOK8=";
+    sha256 = "sha256-Ff9bMzxhCUBgsqUunB2OxVzELdAp45yiKr2qkJUm/tY=";
   };
 
   dontUseImakeConfigure = true;
@@ -93,6 +93,11 @@ stdenv.mkDerivation rec {
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
+
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/158730
+  # see https://github.com/NixOS/nixpkgs/issues/127608 for a similar issue
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   setupHook = ./setup-hook.sh;
 

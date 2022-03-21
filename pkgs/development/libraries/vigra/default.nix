@@ -12,12 +12,11 @@
 , libpng
 , libtiff
 , openexr
-, python2Packages
+, python3
 }:
 
 let
-  inherit (python2Packages) python numpy;
-  # Might want to use `python2.withPackages(ps: [ps.numpy]);` here...
+  python = python3.withPackages (py: with py; [ numpy ]);
 in
 stdenv.mkDerivation rec {
   pname = "vigra";
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    numpy
     openexr
     python
   ];

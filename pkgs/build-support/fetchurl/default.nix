@@ -95,6 +95,9 @@ in
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that by default
 , preferLocalBuild ? true
+
+  # Additional packages needed as part of a fetch
+, nativeBuildInputs ? [ ]
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
@@ -128,7 +131,7 @@ stdenvNoCC.mkDerivation {
 
   builder = ./builder.sh;
 
-  nativeBuildInputs = [ curl ];
+  nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
 
   urls = urls_;
 
@@ -139,7 +142,7 @@ stdenvNoCC.mkDerivation {
   # New-style output content requirements.
   inherit (hash_) outputHashAlgo outputHash;
 
-  SSL_CERT_FILE = if hash_.outputHash == ""
+  SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
                   then "${cacert}/etc/ssl/certs/ca-bundle.crt"
                   else "/no-cert-file.crt";
 

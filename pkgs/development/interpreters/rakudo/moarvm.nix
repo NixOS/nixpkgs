@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchurl, perl
-, CoreServices, ApplicationServices }:
+{ lib
+, stdenv
+, fetchurl
+, perl
+, CoreServices
+, ApplicationServices
+}:
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2021.10";
+  version = "2022.02";
 
   src = fetchurl {
     url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "sha256-fzSHpw6Ld74OTi8SsUxJ9qAdA3jglAyGlYyQFsSVrXU=";
-   };
+    sha256 = "sha256-T5PNzmuKVloyKCuzjMlxzv63H10CLIUMM47oFFV07pY=";
+  };
 
   postPatch = ''
     patchShebangs .
@@ -28,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
-    homepage    = "https://moarvm.org";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
+    homepage = "https://moarvm.org";
+    license = licenses.artistic2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
   };
 }

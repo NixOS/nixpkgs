@@ -5,7 +5,8 @@ with lib;
 assert versionAtLeast linux.version "4.6";
 
 stdenv.mkDerivation {
-  name = "gpio-utils-${linux.version}";
+  pname = "gpio-utils";
+  version = linux.version;
 
   inherit (linux) src makeFlags;
 

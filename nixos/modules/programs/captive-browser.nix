@@ -1,8 +1,33 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.programs.captive-browser;
+
+  inherit (lib)
+    concatStringsSep escapeShellArgs optionalString
+    literalExpression mkEnableOption mkIf mkOption mkOptionDefault types;
+
+  browserDefault = chromium: concatStringsSep " " [
+    ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
+    ''${chromium}/bin/chromium''
+    ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
+    ''--proxy-server="socks5://$PROXY"''
+    ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
+    ''--no-first-run''
+    ''--new-window''
+    ''--incognito''
+    ''-no-default-browser-check''
+    ''http://cache.nixos.org/''
+  ];
+
+  desktopItem = pkgs.makeDesktopItem {
+    name = "captive-browser";
+    desktopName = "Captive Portal Browser";
+    exec = "/run/wrappers/bin/captive-browser";
+    icon = "nix-snowflake";
+    categories = [ "Network" ];
+  };
+
 in
 {
   ###### interface
@@ -26,18 +51,8 @@ in
       # the options below are the same as in "captive-browser.toml"
       browser = mkOption {
         type = types.str;
-        default = concatStringsSep " " [
-          ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
-          ''${pkgs.chromium}/bin/chromium''
-          ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
-          ''--proxy-server="socks5://$PROXY"''
-          ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-          ''--no-first-run''
-          ''--new-window''
-          ''--incognito''
-          ''-no-default-browser-check''
-          ''http://cache.nixos.org/''
-        ];
+        default = browserDefault pkgs.chromium;
+        defaultText = literalExpression (browserDefault "\${pkgs.chromium}");
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
           When browser exits, the proxy exits. An extra env var PROXY is available.
@@ -82,6 +97,11 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+      (pkgs.runCommandNoCC "captive-browser-desktop-item" { } ''
+        install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
+      '')
+    ];
 
     programs.captive-browser.dhcp-dns =
       let

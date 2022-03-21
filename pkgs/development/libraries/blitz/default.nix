@@ -4,7 +4,7 @@
 , pkg-config
 , gfortran
 , texinfo
-, python
+, python2
 , boost
   # Select SIMD alignment width (in bytes) for vectorization.
 , simdWidth ? 1
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nq84vwvvbq7m0my6h835ijfw53bxdp42qjc6kjhk436888qy9rh";
   };
 
-  nativeBuildInputs = [ pkg-config python texinfo ];
+  nativeBuildInputs = [ pkg-config python2 texinfo ];
   buildInputs = [ gfortran texinfo boost ];
 
   configureFlags =

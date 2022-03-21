@@ -2,13 +2,31 @@
 , lib
 , go
 , pkgs
-, nodejs
+, nodejs-14_x
 , nodePackages
 , buildGoModule
 , fetchFromGitHub
 , mkYarnPackage
 , nixosTests
 , fetchpatch
+, enableAWS ? true
+, enableAzure ? true
+, enableConsul ? true
+, enableDigitalOcean ? true
+, enableEureka ? true
+, enableGCE ? true
+, enableHetzner ? true
+, enableKubernetes ? true
+, enableLinode ? true
+, enableMarathon ? true
+, enableMoby ? true
+, enableOpenstack ? true
+, enablePuppetDB ? true
+, enableScaleway ? true
+, enableTriton ? true
+, enableUyuni ? true
+, enableXDS ? true
+, enableZookeeper ? true
 }:
 
 let
@@ -24,11 +42,13 @@ let
   goPackagePath = "github.com/prometheus/prometheus";
 
   codemirrorNode = import ./webui/codemirror-promql {
-    inherit pkgs nodejs;
+    inherit pkgs;
+    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
   webuiNode = import ./webui/webui {
-    inherit pkgs nodejs;
+    inherit pkgs;
+    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
 
@@ -36,7 +56,7 @@ let
     name = "prometheus-webui-codemirror-promql";
     src = "${src}/web/ui/module/codemirror-promql";
 
-    buildInputs = [ nodejs nodePackages.typescript codemirrorNode.nodeDependencies ];
+    buildInputs = [ nodejs-14_x nodePackages.typescript codemirrorNode.nodeDependencies ];
 
     configurePhase = ''
       ln -s ${codemirrorNode.nodeDependencies}/lib/node_modules node_modules
@@ -56,7 +76,7 @@ let
     name = "prometheus-webui";
     src = "${src}/web/ui/react-app";
 
-    buildInputs = [ nodejs webuiNode.nodeDependencies ];
+    buildInputs = [ nodejs-14_x webuiNode.nodeDependencies ];
 
     # create `node_modules/.cache` dir (we need writeable .cache)
     # and then copy the rest over.
@@ -77,7 +97,7 @@ buildGoModule rec {
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
-  nativeBuildInputs = [ nodejs ];
+  nativeBuildInputs = [ nodejs-14_x ];
 
   postPatch = ''
     # we don't want this anyways, as we
@@ -90,6 +110,44 @@ buildGoModule rec {
     # webui-codemirror
     ln -s ${codemirror}/dist web/ui/module/codemirror-promql/dist
     ln -s ${codemirror}/lib web/ui/module/codemirror-promql/lib
+
+    # Disable some service discovery to shrink binaries.
+    ${lib.optionalString (!enableAWS)
+      "sed -i -e '/register aws/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableAzure)
+      "sed -i -e '/register azure/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableConsul)
+      "sed -i -e '/register consul/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableDigitalOcean)
+      "sed -i -e '/register digitalocean/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableEureka)
+      "sed -i -e '/register eureka/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableGCE)
+      "sed -i -e '/register gce/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableHetzner)
+      "sed -i -e '/register hetzner/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableKubernetes)
+      "sed -i -e '/register kubernetes/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableLinode)
+      "sed -i -e '/register linode/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableMarathon)
+      "sed -i -e '/register marathon/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableMoby)
+      "sed -i -e '/register moby/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableOpenstack)
+      "sed -i -e '/register openstack/d' discovery/install/install.go"}
+    ${lib.optionalString (!enablePuppetDB)
+      "sed -i -e '/register puppetdb/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableScaleway)
+      "sed -i -e '/register scaleway/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableTriton)
+      "sed -i -e '/register triton/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableUyuni)
+      "sed -i -e '/register uyuni/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableXDS)
+      "sed -i -e '/register xds/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableZookeeper)
+      "sed -i -e '/register zookeeper/d' discovery/install/install.go"}
   '';
 
   tags = [ "builtinassets" ];

@@ -1,10 +1,9 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kconfig, kcoreaddons, kcrash, kdbusaddons, kdnssd, knotifications, kwallet,
-  kwidgetsaddons, kwindowsystem, kxmlgui,
-  libvncserver, libXtst, libXdamage,
-  qtx11extras
+{ mkDerivation, lib
+, extra-cmake-modules, kdoctools
+, kconfig, kcoreaddons, kcrash, kdbusaddons, kdnssd, knotifications, kwallet
+, kwidgetsaddons, kwindowsystem, kxmlgui, kwayland
+, libvncserver, libXtst, libXdamage
+, qtx11extras
 }:
 
 mkDerivation {
@@ -19,7 +18,7 @@ mkDerivation {
   buildInputs = [
     libvncserver libXtst libXdamage
     kconfig kcoreaddons kcrash kdbusaddons knotifications kwallet kwidgetsaddons
-    kwindowsystem kxmlgui
+    kwindowsystem kxmlgui kwayland
     qtx11extras
   ];
   propagatedBuildInputs = [ kdnssd ];

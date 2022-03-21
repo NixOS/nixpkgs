@@ -2,18 +2,21 @@
 , bluepy
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.13.0";
+  version = "0.13.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = version;
-    sha256 = "sha256-dx3OMzWJohOYCg7TnrqL4FLZoC+Q1dyJyUAdreDyfl0=";
+    hash = "sha256-Zgpnw4It3yyy9RQqt5SxeJXl1Z3J3Rp9baLfiw5Bgow=";
   };
 
   propagatedBuildInputs = [

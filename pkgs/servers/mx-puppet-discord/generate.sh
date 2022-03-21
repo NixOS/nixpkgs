@@ -2,14 +2,15 @@
 #! nix-shell -i bash -p nodePackages.node2nix
 
 # No official release
-rev=c17384a6a12a42a528e0b1259f8073e8db89b8f4
+rev=bb6438a504182a7a64048b992179427587ccfded
 u=https://raw.githubusercontent.com/matrix-discord/mx-puppet-discord/$rev
 # Download package.json and package-lock.json
 curl -O $u/package.json
-curl -O $u/package-lock.json
+curl $u/package-lock.json |
+  sed -e 's|git+ssh://git@|git+https://|g' > package-lock.json
 
 node2nix \
-  --nodejs-12 \
+  --nodejs-14 \
   --node-env ../../development/node-packages/node-env.nix \
   --input package.json \
   --lock package-lock.json \

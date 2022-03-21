@@ -6,7 +6,6 @@
 , psutil
 , pytest
 , setuptools-scm
-, subprocess32 ? null
 , toml
 , zc_lockfile
 }:
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     requests
     psutil
     zc_lockfile
-  ] ++ lib.optional (!isPy3k) subprocess32;
+  ];
 
   # no tests in PyPI tarball
   doCheck = false;

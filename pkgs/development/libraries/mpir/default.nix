@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     downloadPage = "https://mpir.org/downloads.html";
     homepage = "https://mpir.org/";
-    updateWalker = true;
   };
 }

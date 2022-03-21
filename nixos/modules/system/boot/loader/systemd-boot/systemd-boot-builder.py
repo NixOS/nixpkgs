@@ -15,9 +15,12 @@ import re
 import datetime
 import glob
 import os.path
-from typing import Tuple, List, Optional
+from typing import NamedTuple, List, Optional
 
-SystemIdentifier = Tuple[Optional[str], int, Optional[str]]
+class SystemIdentifier(NamedTuple):
+    profile: Optional[str]
+    generation: int
+    specialisation: Optional[str]
 
 
 def copy_if_not_exists(source: str, dest: str) -> None:
@@ -44,16 +47,6 @@ linux {kernel}
 initrd {initrd}
 options {kernel_params}
 """
-
-# The boot loader entry for memtest86.
-#
-# TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
-# be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
-# app filename is BOOTIA32.efi.
-MEMTEST_BOOT_ENTRY = """title MemTest86
-efi /efi/memtest86/BOOTX64.efi
-"""
-
 
 def generation_conf_filename(profile: Optional[str], generation: int, specialisation: Optional[str]) -> str:
     pieces = [
@@ -161,7 +154,14 @@ def get_generations(profile: Optional[str] = None) -> List[SystemIdentifier]:
     gen_lines.pop()
 
     configurationLimit = @configurationLimit@
-    configurations: List[SystemIdentifier] = [ (profile, int(line.split()[0]), None) for line in gen_lines ]
+    configurations = [
+        SystemIdentifier(
+            profile=profile,
+            generation=int(line.split()[0]),
+            specialisation=None
+        )
+        for line in gen_lines
+    ]
     return configurations[-configurationLimit:]
 
 
@@ -170,7 +170,7 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
             system_dir(profile, generation, None), "specialisation")
     if not os.path.exists(specialisations_dir):
         return []
-    return [(profile, generation, spec) for spec in os.listdir(specialisations_dir)]
+    return [SystemIdentifier(profile, generation, spec) for spec in os.listdir(specialisations_dir)]
 
 
 def remove_old_entries(gens: List[SystemIdentifier]) -> None:
@@ -281,25 +281,27 @@ def main() -> None:
             if os.readlink(system_dir(*gen)) == args.default_config:
                 write_loader_conf(*gen)
         except OSError as e:
-            print("ignoring profile '{}' in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
+            print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
 
-    memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
-    if os.path.exists(memtest_entry_file):
-        os.unlink(memtest_entry_file)
-    shutil.rmtree("@efiSysMountPoint@/efi/memtest86", ignore_errors=True)
-    if "@memtest86@" != "":
-        mkdir_p("@efiSysMountPoint@/efi/memtest86")
-        for path in glob.iglob("@memtest86@/*"):
-            if os.path.isdir(path):
-                shutil.copytree(path, os.path.join("@efiSysMountPoint@/efi/memtest86", os.path.basename(path)))
-            else:
-                shutil.copy(path, "@efiSysMountPoint@/efi/memtest86/")
+    for root, _, files in os.walk('@efiSysMountPoint@/efi/nixos/.extra-files', topdown=False):
+        relative_root = root.removeprefix("@efiSysMountPoint@/efi/nixos/.extra-files").removeprefix("/")
+        actual_root = os.path.join("@efiSysMountPoint@", relative_root)
 
-        memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
-        memtest_entry_file_tmp_path = "%s.tmp" % memtest_entry_file
-        with open(memtest_entry_file_tmp_path, 'w') as f:
-            f.write(MEMTEST_BOOT_ENTRY)
-        os.rename(memtest_entry_file_tmp_path, memtest_entry_file)
+        for file in files:
+            actual_file = os.path.join(actual_root, file)
+
+            if os.path.exists(actual_file):
+                os.unlink(actual_file)
+            os.unlink(os.path.join(root, file))
+
+        if not len(os.listdir(actual_root)):
+            os.rmdir(actual_root)
+        os.rmdir(root)
+
+    mkdir_p("@efiSysMountPoint@/efi/nixos/.extra-files")
+
+    subprocess.check_call("@copyExtraFiles@")
 
     # Since fat32 provides little recovery facilities after a crash,
     # it can leave the system in an unbootable state, when a crash/outage

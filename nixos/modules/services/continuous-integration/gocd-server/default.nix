@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gocd-server;
+  opt = options.services.gocd-server;
 in {
   options = {
     services.gocd-server = {
@@ -106,6 +107,20 @@ in {
           "-Dcruise.server.port=${toString cfg.port}"
           "-Dcruise.server.ssl.port=${toString cfg.sslPort}"
         ];
+        defaultText = literalExpression ''
+          [
+            "-Xms''${config.${opt.initialJavaHeapSize}}"
+            "-Xmx''${config.${opt.maxJavaHeapMemory}}"
+            "-Dcruise.listen.host=''${config.${opt.listenAddress}}"
+            "-Duser.language=en"
+            "-Djruby.rack.request.size.threshold.bytes=30000000"
+            "-Duser.country=US"
+            "-Dcruise.config.dir=''${config.${opt.workDir}}/conf"
+            "-Dcruise.config.file=''${config.${opt.workDir}}/conf/cruise-config.xml"
+            "-Dcruise.server.port=''${toString config.${opt.port}}"
+            "-Dcruise.server.ssl.port=''${toString config.${opt.sslPort}}"
+          ]
+        '';
 
         description = ''
           Specifies startup command line arguments to pass to Go.CD server

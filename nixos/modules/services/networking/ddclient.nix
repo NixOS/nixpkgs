@@ -13,7 +13,7 @@ let
     foreground=YES
     use=${cfg.use}
     login=${cfg.username}
-    password=
+    password=${lib.optionalString (cfg.protocol == "nsupdate") "/run/${RuntimeDirectory}/ddclient.key"}
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
@@ -30,7 +30,9 @@ let
 
   preStart = ''
     install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-    ${lib.optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
+    ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
+      install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+    '' else if (cfg.passwordFile != null) then ''
       password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
       sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
     '' else ''
@@ -85,7 +87,9 @@ with lib;
       };
 
       username = mkOption {
-        default = "";
+        # For `nsupdate` username contains the path to the nsupdate executable
+        default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
+        defaultText = "";
         type = str;
         description = ''
           User name.
@@ -96,7 +100,7 @@ with lib;
         default = null;
         type = nullOr str;
         description = ''
-          A file containing the password.
+          A file containing the password or a TSIG key in named format when using the nsupdate protocol.
         '';
       };
 

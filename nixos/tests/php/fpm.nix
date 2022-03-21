@@ -17,7 +17,7 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
           locations."~ \\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};
             fastcgi_index index.php;
-            include ${pkgs.nginx}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi_params;
             include ${pkgs.nginx}/conf/fastcgi.conf;
           '';
           locations."/" = {

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dunst";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${version}";
-    sha256 = "LGLo+K0FxQQ3hrPYwvjApcOnNliZ5j0T6yEtcxZAFOU=";
+    sha256 = "sha256-aMla5mzQpN9CNDc4QSxjcKR+Ufej+8WLBYxCntApcKU=";
   };
 
   nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];

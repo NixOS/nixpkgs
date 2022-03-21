@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "python-louvain";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KoVu374plSpgpVOKhLt4zKGPaISoi5Ml6FoRyN1JF+s=";
+    sha256 = "sha256-t7ot9QAv0o0+54mklTK6rRH+ZI5PIRfPB5jnUgodpWs=";
   };
 
   propagatedBuildInputs = [ networkx numpy ];

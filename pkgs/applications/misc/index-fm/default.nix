@@ -16,16 +16,21 @@
 }:
 
 mkDerivation rec {
-  pname = "index";
-  version = "2.1.0";
+  pname = "index-fm";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "index-fm";
     rev = "v${version}";
-    sha256 = "sha256-Os/5igKGYBeY/FxO6I+7mpFohuk3yHGLd7vE2GewFpU=";
+    hash = "sha256-F4qgewkPxkbAbeR+MaeRDiw9KIsd/Xx4C0cYEYDkPOE=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-Werror" ""
+  '';
 
   nativeBuildInputs = [
     cmake

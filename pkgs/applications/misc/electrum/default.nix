@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 , python3
 , zbar
@@ -73,10 +74,23 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
       --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
+
+    # according to upstream, this is fine
+    # https://github.com/spesmilo/electrum/issues/7361
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "qdarkstyle<2.9" "qdarkstyle>=2.7"
   '';
+
+  patches = [
+    # trezorlib 0.13 compatibility
+    (fetchpatch {
+      url = "https://github.com/spesmilo/electrum/commit/97e61cfacdca374103e4184f0f9a07a0c5757afb.patch";
+      sha256 = "sha256-RGVBO9IskC+lQOHNGjrqH6EM/inNPJlcD9sSWedyT5E=";
+    })
+  ];
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 

@@ -1,31 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, nix-update-script, Security }:
+{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.4.2";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TWpCmHG07dv0/hXGpo71Ie0uDRqs6yywHzcv0Hpi8Sc=";
+    sha256 = "sha256-IMNHsmL1L+zfGxfdTxJ4HBGiQOzWmYVE0P3ZInbMVl0=";
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-tJhbIsmh4zw1Dhvc2jE0N1cTE4//DOe3rDzDVNiTigA=";
-
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  cargoSha256 = "sha256-Q8Xl6L41cDeDN370owAAL9xZhdyUuDKrPlZxG3eg87c=";
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     license = licenses.mit;
     maintainers = with maintainers; [ lom ];
-    mainProgram = "wiki-tui";
   };
 }

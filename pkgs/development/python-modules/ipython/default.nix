@@ -3,63 +3,82 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+
 # Build dependencies
 , glibcLocales
-# Test dependencies
-, nose
-, pygments
+
 # Runtime dependencies
-, jedi
-, decorator
-, matplotlib-inline
-, pickleshare
-, traitlets
-, prompt-toolkit
-, pexpect
 , appnope
 , backcall
+, black
+, decorator
+, jedi
+, matplotlib-inline
+, pexpect
+, pickleshare
+, prompt-toolkit
+, pygments
+, stack-data
+, traitlets
+
+# Test dependencies
+, pytestCheckHook
+, testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.28.0";
-  disabled = pythonOlder "3.7";
+  version = "8.0.1";
+  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2097be5c814d1b974aea57673176a924c4c8c9583890e7a5f082f547b9975b11";
+    sha256 = "0x19sj4dlq7r4p1mqnpx9245r8dwvpjwd8n34snfm37a452lsmmb";
   };
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace setup.py --replace "'gnureadline'" " "
-  '';
-
-  buildInputs = [ glibcLocales ];
-
-  checkInputs = [ nose pygments ];
+  buildInputs = [
+    glibcLocales
+  ];
 
   propagatedBuildInputs = [
-    jedi
+    backcall
+    black
     decorator
+    jedi
     matplotlib-inline
+    pexpect
     pickleshare
-    traitlets
     prompt-toolkit
     pygments
-    pexpect
-    backcall
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
+    stack-data
+    traitlets
+  ] ++ lib.optionals stdenv.isDarwin [
+    appnope
+  ];
 
   LC_ALL="en_US.UTF-8";
 
-  doCheck = false; # Circular dependency with ipykernel
-
-  checkPhase = ''
-    nosetests
-  '';
-
   pythonImportsCheck = [
     "IPython"
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+
+    # doctests try to fetch an image from the internet
+    substituteInPlace pytest.ini \
+      --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+    testpath
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
   ];
 
   meta = with lib; {

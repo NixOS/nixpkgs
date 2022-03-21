@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "philter";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"/{bin,share/philter}
     cp .philterrc "$out"/share/philter/philterrc
-    sed -i 's@/usr/local/bin@${python}/bin@' src/philter.py
+    sed -i 's@/usr/local/bin@${python2}/bin@' src/philter.py
     cp src/philter.py "$out"/bin/philter
     chmod +x "$out"/bin/philter
   '';

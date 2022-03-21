@@ -19,16 +19,9 @@ let
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
 
-  onlyLicenses = list:
-    lib.lists.all (license:
-      let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
-      if license == l then true else
-        throw ''‘${showLicense license}’ is not an attribute of lib.licenses''
-    ) list;
-
   areLicenseListsValid =
     if lib.mutuallyExclusive allowlist blocklist then
-      assert onlyLicenses allowlist; assert onlyLicenses blocklist; true
+      true
     else
       throw "allowlistedLicenses and blocklistedLicenses are not mutually exclusive.";
 
@@ -119,13 +112,20 @@ let
         }
     '';
 
+    # flakeNote will be printed in the remediation messages below.
+    flakeNote = "
+ Note: For `nix shell`, `nix build`, `nix develop` or any other Nix 2.4+
+ (Flake) command, `--impure` must be passed in order to read this
+ environment variable.
+    ";
+
   remediate_allowlist = allow_attr: rebuild_amendment: attrs:
     ''
       a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
          for a single invocation of the nix tools.
 
            $ export ${remediation_env_var allow_attr}=1
-
+           ${flakeNote}
       b) For `nixos-rebuild` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
@@ -148,7 +148,7 @@ let
            variable for a single invocation of the nix tools:
 
              $ export NIXPKGS_ALLOW_INSECURE=1
-
+             ${flakeNote}
         b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
@@ -236,7 +236,6 @@ let
     name = str;
     version = str;
     tag = str;
-    updateWalker = bool;
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
@@ -244,7 +243,6 @@ let
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
-    downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;
     isGutenprint = bool;

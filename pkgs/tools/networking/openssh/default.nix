@@ -19,29 +19,30 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "8.4p1";
+    version = "8.9p1";
     extraDesc = " with high performance networking patches";
 
-    src = fetchFromGitHub {
-      owner = "rapier1";
-      repo = "openssh-portable";
-      rev = "hpn-KitchenSink-${builtins.replaceStrings [ "." "p" ] [ "_" "_P" ] version}";
-      hash = "sha256-SYQPDGxZR41m4g603RaZaOYm4vCr9uZnFnZoKhruueY=";
+    src = fetchurl {
+      url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
+      sha256 = "1ry5prcax0134v6srkgznpl9ch5snkgq7yvjqvd8c5mbnxa7cjgx";
     };
 
     extraPatches = [
-      ./ssh-keysign-8.4.patch
+      ./ssh-keysign-8.5.patch
 
-      # See https://github.com/openssh/openssh-portable/pull/206
-      ./ssh-copy-id-fix-eof.patch
+      # HPN Patch from FreeBSD ports
+      (fetchpatch {
+        name = "ssh-hpn.patch";
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/ae66cffc19f357cbd51d5841c9b110a9ffd63e32/security/openssh-portable/files/extra-patch-hpn";
+        stripLen = 1;
+        sha256 = "sha256-p3CmMqTgrqFZUo4ZuqaPLczAhjmPufkCvptVW5dI+MI=";
+      })
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
 
-    extraMeta.knownVulnerabilities = [
-      "CVE-2021-28041"
-      "CVE-2021-41617"
-    ];
+    extraConfigureFlags = [ "--with-hpn" ];
+    extraMeta.maintainers = with lib.maintainers; [ abbe ];
   };
 
   openssh_gssapi = common rec {

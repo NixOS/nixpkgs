@@ -4,11 +4,11 @@
 }:
 buildPythonPackage rec {
   pname = "PyHamcrest";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "412e00137858f04bde0729913874a48485665f2d36fe9ee449f26be864af9316";
+    sha256 = "dfb19cf6d71743e086fbb761ed7faea5aacbc8ec10c17a08b93ecde39192a3db";
   };
 
   checkInputs = [ mock pytest ];

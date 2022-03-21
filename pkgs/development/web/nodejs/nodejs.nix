@@ -19,7 +19,7 @@ let
   majorVersion = versions.major version;
   minorVersion = versions.minor version;
 
-  baseName = if enableNpm then "nodejs" else "nodejs-slim";
+  pname = if enableNpm then "nodejs" else "nodejs-slim";
 
   useSharedHttpParser = !stdenv.isDarwin && versionOlder "${majorVersion}.${minorVersion}" "11.4";
 
@@ -43,9 +43,7 @@ let
 
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
   self = stdenv.mkDerivation {
-    inherit version;
-
-    name = "${baseName}-${version}";
+    inherit pname version;
 
     src = fetchurl {
       url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
@@ -181,6 +179,7 @@ let
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
+      knownVulnerabilities = optional (versionOlder version "12") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

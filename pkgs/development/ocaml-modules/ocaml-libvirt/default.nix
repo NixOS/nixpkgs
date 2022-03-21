@@ -13,15 +13,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libvirt ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ];
+  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ocaml ];
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
 
-  createFindlibDestdir = true;
-
-  buildPhase = "make all opt CPPFLAGS=-Wno-error";
-
-  installPhase = "make install-opt";
+  buildFlags = [ "all" "opt" "CPPFLAGS=-Wno-error" ];
+  installTargets = "install-opt";
+  preInstall = ''
+    # Fix 'dllmllibvirt.so' install failure into non-existent directory.
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
+  '';
 
   meta = with lib; {
     description = "OCaml bindings for libvirt";

@@ -1,37 +1,48 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, dataclasses
 , fetchPypi
 , jedi
 , pygments
 , urwid
+, urwid-readline
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2021.1";
-  disabled = !isPy3k;
+  version = "2022.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "309ee82b45a0ffca0bc4c7f521fd3e357589c764f339bdf9dcabb7ad40692d6e";
+    hash = "sha256-2zvdZkI8nSkHTBwsSfyyJL0Nbwgxn+0bTn6taDkUCD8=";
   };
 
   propagatedBuildInputs = [
     jedi
     pygments
     urwid
+    urwid-readline
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
+  ];
+
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
   ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
-    pytest-mock
-    pytestCheckHook
+  pythonImportsCheck = [
+    "pudb"
   ];
 
   meta = with lib; {

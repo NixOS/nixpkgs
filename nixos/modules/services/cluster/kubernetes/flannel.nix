@@ -95,4 +95,6 @@ in
 
     };
   };
+
+  meta.buildDocsInSandbox = false;
 }

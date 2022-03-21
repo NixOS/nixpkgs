@@ -36,13 +36,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-m1BB5OIeCIQuJpxEO1xmb/Z8tzeHF31jYg67OpVWWRM=";
+    sha256 = "sha256-/pwHWmQTV1QBK+5SS0/NC6wMm2QQm+iCZArxiHjn4M4=";
   };
 
   buildInputs = [
@@ -72,6 +72,7 @@ mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
     gst-plugins-ugly
   ]) ++ lib.optional withVlc libvlc;
 

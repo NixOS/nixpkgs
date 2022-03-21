@@ -60,20 +60,15 @@ stdenv.mkDerivation rec {
   ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./nuget-deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
+    fetchNuGet = { pname, version, sha256 }: fetchurl {
+      name = "${pname}-${version}.nupkg";
+      url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
       inherit sha256;
     };
   });
 
   configurePhase = ''
     runHook preConfigure
-
-    export HOME=$(mktemp -d)
-
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
 
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"

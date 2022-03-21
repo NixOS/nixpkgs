@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "CopyQ";
-  version = "4.1.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "1iacnd9dn0mrajff80r2g5nlks5sch9lmpl633mnyqmih9dwx2li";
+    sha256 = "sha256-edrRgnjbszqJLbGLE4anCJSGApymvK0O+2ks5jWe8aw=";
   };
 
   nativeBuildInputs = [
@@ -40,15 +40,6 @@ mkDerivation rec {
     knotifications
     qtwayland
     wayland
-  ];
-
-  patches = [
-    # Install the bash completion script correctly
-    # Remove once 4.1.1 is released
-    (fetchpatch {
-      url = "https://github.com/hluk/CopyQ/commit/aca7222ec28589af0b08f63686104b992d63ee42.patch";
-      sha256 = "0d440d0zsdzm9cd0b6c42y9qbrvxg7gdam0qmif62mr8qa0ylidl";
-    })
   ];
 
   postPatch = ''

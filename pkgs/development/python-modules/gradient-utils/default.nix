@@ -7,30 +7,27 @@
 , poetry-core
 , prometheus-client
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
-  version = "0.3.2";
+  version = "0.5.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Paperspace";
     repo = pname;
     rev = "v${version}";
-    sha256 = "083hnkv19mhvdc8nx28f1nph50c903gxh9g9q8531abv0w8m0744";
+    sha256 = "19plkgwwfs6298vjplgsvhirixi3jbngq5y07x9c0fjxk39fa2dk";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'numpy = "1.18.5"' 'numpy = "^1.18.5"' \
-      --replace 'hyperopt = "0.1.2"' 'hyperopt = ">=0.1.2"' \
-      --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
-      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"'
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     hyperopt
@@ -44,15 +41,24 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
+      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"'
+  '';
+
   preCheck = ''
     export HOSTNAME=myhost-experimentId
   '';
 
-  disabledTests = [
-    "test_add_metrics_pushes_metrics" # requires a working prometheus push gateway
+  disabledTestPaths = [
+    # Requires a working Prometheus push gateway
+    "tests/integration/test_metrics.py"
   ];
 
-  pythonImportsCheck = [ "gradient_utils" ];
+  pythonImportsCheck = [
+    "gradient_utils"
+  ];
 
   meta = with lib; {
     description = "Python utils and helpers library for Gradient";

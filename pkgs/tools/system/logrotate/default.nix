@@ -1,17 +1,18 @@
 { lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
 , mailutils ? null
 , aclSupport ? true, acl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "logrotate";
-  version = "3.18.1";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
     rev = version;
-    sha256 = "sha256-OJOV++rtN9ry+l0c0eanpu/Pwu8cOHfyEaDWp3FZjkw=";
+    sha256 = "sha256-YAoMRLgKPqHsXdXBigl6dPJDkZIAMYK/likhTd/LpkY=";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.
@@ -24,6 +25,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
+
+  passthru.tests = {
+    nixos-logrotate = nixosTests.logrotate;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/logrotate/logrotate";

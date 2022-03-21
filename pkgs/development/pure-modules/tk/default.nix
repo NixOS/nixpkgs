@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, tcl, tk, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
-  baseName = "tk";
+  pname = "pure-tk";
   version = "0.5";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-tk-${version}.tar.gz";
     sha256 = "3b6e97e2d723d5a05bf25f4ac62068ac17a1fd81db03e1986366097bf071a516";
   };
 

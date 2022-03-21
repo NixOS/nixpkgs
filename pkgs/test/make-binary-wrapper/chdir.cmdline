@@ -1,1 +1,1 @@
-    --chdir /tmp/foo
+    --chdir ./tmp/foo

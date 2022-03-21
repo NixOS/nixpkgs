@@ -18,12 +18,11 @@
 , pythonOlder
 , pyyaml
 , toolz
-, withExtraComplete ? false
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.10.0";
+  version = "2022.02.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,18 +31,8 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "07ysrs46x5w8rc2df0j06rsw58ahcysd6lwjk5riqpjlpwdfmg7p";
+    hash = "sha256-tDqpIS8j6a16YbJak+P1GkCEZvJyheWV5vkUrkhScRY=";
   };
-
-  patches = [
-    # remove with next bump
-    (fetchpatch {
-      name = "fix-tests-against-distributed-2021.10.0.patch";
-      url = "https://github.com/dask/dask/commit/cd65507841448ad49001cf27564102e2fb964d0a.patch";
-      includes = [ "dask/tests/test_distributed.py" ];
-      sha256 = "1i4i4k1lzxcydq9l80jyifq21ny0j3i47rviq07ai488pvx1r2al";
-    })
-  ];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -56,9 +45,6 @@ buildPythonPackage rec {
     jinja2
     bokeh
     numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
-    distributed
   ];
 
   doCheck = true;
@@ -82,7 +68,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # parallelize
-    "--numprocesses auto"
+    "--numprocesses $NIX_BUILD_CORES"
     # rerun failed tests up to three times
     "--reruns 3"
     # don't run tests that require network access
@@ -113,6 +99,10 @@ buildPythonPackage rec {
     "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
+
+  passthru.extras-require = {
+    complete = [ distributed ];
+  };
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

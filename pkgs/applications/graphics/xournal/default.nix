@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     icon = "xournal";
     desktopName = "Xournal";
     comment = meta.description;
-    categories = "Office;Graphics;";
-    mimeType = "application/pdf;application/x-xoj";
+    categories = [ "Office" "Graphics" ];
+    mimeTypes = [ "application/pdf" "application/x-xoj" ];
     genericName = "PDF Editor";
   };
 

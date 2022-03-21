@@ -67,6 +67,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  aom = {
+    fullName = "Alliance for Open Media Patent License 1.0";
+    url = "https://aomedia.org/license/patent-license/";
+  };
+
   apsl20 = {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
@@ -460,6 +465,11 @@ in mkLicense lset) ({
     spdxId = "imagemagick";
   };
 
+  imlib2 = {
+    spdxId = "Imlib2";
+    fullName = "Imlib2 License";
+  };
+
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "https://compcert.org/doc/LICENSE.txt";
@@ -585,6 +595,16 @@ in mkLicense lset) ({
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
+  };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
+
+  mitAdvertising = {
+    spdxId = "MIT-advertising";
+    fullName = "Enlightenment License (e16)";
   };
 
   mpl10 = {

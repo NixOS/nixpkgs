@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, pure-ffi, gtk2 }:
 
 stdenv.mkDerivation rec {
-  baseName = "gtk";
+  pname = "pure-gtk";
   version = "0.13";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-gtk-${version}.tar.gz";
     sha256 = "e659ff1bc5809ce35b810f8ac3fb7e8cadaaef13996537d8632e2f86ed76d203";
   };
 

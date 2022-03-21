@@ -120,7 +120,17 @@ in lib.makeScopeWithSplicing
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
-  } // attrs));
+  } // attrs // {
+    postPatch = lib.optionalString (!stdenv'.hostPlatform.isNetBSD) ''
+      # Files that use NetBSD-specific macros need to have nbtool_config.h
+      # included ahead of them on non-NetBSD platforms.
+      set +e
+      grep -Zlr "^__RCSID
+      ^__BEGIN_DECLS" | xargs -0r grep -FLZ nbtool_config.h |
+          xargs -0tr sed -i '0,/^#/s//#include <nbtool_config.h>\n\0/'
+      set -e
+    '' + attrs.postPatch or "";
+  }));
 
   ##
   ## START BOOTSTRAPPING
@@ -182,6 +192,12 @@ in lib.makeScopeWithSplicing
     configurePlatforms = [ "build" "host" ];
     configureFlags = [
       "--cache-file=config.cache"
+    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # We include this header in our musl package only for legacy
+      # compatibility, and compat works fine without it (and having it
+      # know about sys/cdefs.h breaks packages like glib when built
+      # statically).
+      "ac_cv_header_sys_cdefs_h=no"
     ];
 
     nativeBuildInputs = with buildPackages.netbsd; commonDeps ++ [

@@ -4,6 +4,11 @@ on:
   pull_request_target:
     types: [edited, opened, synchronize, reopened]
 
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows some write
+# access to the GitHub API. This means that it should not evaluate user input in
+# a way that allows code injection.
+
 permissions:
   contents: read
   pull-requests: write
@@ -13,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
-    - uses: actions/labeler@v3
+    - uses: actions/labeler@v4
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         sync-labels: true

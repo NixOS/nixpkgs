@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.18.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "v${version}";
-    sha256 = "sha256-f9sp5sAWysOOoIdCiCJxTWRhyt0wfpO5p4pxW6jj0xc=";
+    sha256 = "sha256-BhPup3q2muYGWzAa/9b4vnIjBces4GhUHZ/mg4CWMRc=";
   };
 
-  vendorSha256 = "sha256-iDfPCRU91cuZsKqNOjkLGYmWf8i5FO4NmDsfD5Xqip0=";
+  vendorSha256 = "sha256-oVaziWZGslZCVqkEXL32XvOVU54VOf41Qg+VoVWo7x0=";
 
   ldflags = [ "-buildid=" ];
 

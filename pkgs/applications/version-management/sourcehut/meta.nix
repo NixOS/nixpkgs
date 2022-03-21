@@ -18,25 +18,30 @@
 , python
 }:
 let
-  version = "0.53.14";
+  version = "0.57.5";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-/+r/XLDkcSTW647xPMh5bcJmR2xZNNH74AJ5jemna2k=";
+    sha256 = "sha256-qsCwZaCiqvY445U053OCWD98jlIUi9NB2jWVP2oW3Vk=";
   };
 
   buildApi = src: buildGoModule {
     inherit src version;
     pname = "metasrht-api";
-    vendorSha256 = "sha256-eZyDrr2VcNMxI++18qUy7LA1Q1YDlWCoRtl00L8lfR4=";
+    vendorSha256 = "sha256-8Ubrr9qRlgW2wsLHrPHwulSWLz+gp4VPcTvOZpg8TYM=";
   };
 
 in
 buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
+
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/meta/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -66,10 +71,12 @@ buildPythonPackage rec {
     cp ${buildApi "${src}/api/"}/bin/api $out/bin/metasrht-api
   '';
 
+  pythonImportsCheck = [ "metasrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

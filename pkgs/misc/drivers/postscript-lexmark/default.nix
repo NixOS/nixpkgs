@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://www.openprinting.org/driver/Postscript-Lexmark/";
+    homepage = "https://www.openprinting.org/driver/Postscript-Lexmark/";
     description = "Lexmark Postscript Drivers";
     platforms = platforms.linux;
   };

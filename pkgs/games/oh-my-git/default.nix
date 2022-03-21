@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       desktopName = "oh-my-git";
       comment = "An interactive Git learning game!";
       genericName = "An interactive Git learning game!";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

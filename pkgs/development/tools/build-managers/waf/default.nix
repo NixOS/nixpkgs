@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "waf";
-  version = "2.0.22";
+  version = "2.0.23";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = "${pname}-${version}";
-    sha256 = "sha256-WGGyhvQdFYmC0NOA5VVqCRMF1fvfPcTI42x1nHvz0W0=";
+    sha256 = "sha256-AASjkXb3eCVjbuT0GOwhagoNHxG7/XP1Mj0i1U4j13Q=";
   };
 
   nativeBuildInputs = [ python3 ensureNewerSourcesForZipFilesHook ];

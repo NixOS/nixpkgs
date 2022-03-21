@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       desktopName = "TrenchBroom level editor";
       icon = "trenchbroom";
       comment = meta.description;
-      categories = "Development";
+      categories = [ "Development" ];
       exec = "trenchbroom";
     })
   ];

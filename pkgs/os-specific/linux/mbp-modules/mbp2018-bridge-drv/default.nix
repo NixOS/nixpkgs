@@ -11,14 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-o6yGiR+Y5SnX1johdi7fQWP5ts7HdDMqeju75UOhgik=";
   };
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
+
   buildPhase = ''
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
-      -j$NIX_BUILD_CORES M=$(pwd) modules
+      -j$NIX_BUILD_CORES M=$(pwd) modules $makeFlags
   '';
 
   installPhase = ''
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build  \
-      INSTALL_MOD_PATH=$out M=$(pwd) modules_install
+      INSTALL_MOD_PATH=$out M=$(pwd) modules_install $makeFlags
   '';
 
   meta = with lib; {

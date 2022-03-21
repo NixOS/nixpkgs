@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -44,6 +45,13 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit asciidoc;
     })
+
+    # Filter out hidden (wrapped) subcommands
+    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/481
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/8c28c24e447f13da8cf804cd7a00f9b909c5d3f9.patch";
+      sha256 = "EYo1nOtEr4semaPC5wk6A7bliRXu8qsBHaltd0DEI6Y=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -61,7 +69,8 @@ stdenv.mkDerivation rec {
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkg-config to install dbus service/s
-  ];
+  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
+                    # whether tests are enabled
 
   buildInputs = [
     glib
@@ -77,7 +86,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = with python3.pkgs; [
     pygobject3
-    tappy
   ];
 
   mesonFlags = [
@@ -124,7 +132,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

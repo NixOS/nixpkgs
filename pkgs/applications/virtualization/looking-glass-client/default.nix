@@ -1,8 +1,7 @@
-
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeDesktopItem, cmake, pkg-config
-, SDL, SDL2_ttf, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig
-, libXi, libXScrnSaver, libXinerama
-, wayland, wayland-protocols
+{ stdenv, lib, fetchFromGitHub, makeDesktopItem, cmake, pkg-config
+, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libffi, expat
+, libxkbcommon, libGL, libXext, libXrandr, libXi, libXScrnSaver, libXinerama
+, libXcursor, libXpresent, wayland, wayland-protocols
 }:
 
 let
@@ -17,29 +16,43 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
-  version = "B4";
+  version = "B5.0.1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0fwmz0l1dcfwklgvxmv0galgj2q3nss90kc3jwgf6n80x27rsnhf";
+    sha256 = "sha256-UzZQU5SzJ2mo9QBweQB0VJSnKfzgTG5QaKpIQN/6LCE=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL SDL2_ttf freefont_ttf spice-protocol
-    libbfd nettle fontconfig
-    libXi libXScrnSaver libXinerama
-    wayland wayland-protocols
+    libGL
+    freefont_ttf
+    spice-protocol
+    expat
+    libbfd
+    nettle
+    fontconfig
+    libffi
+    libxkbcommon
+    libXi
+    libXScrnSaver
+    libXinerama
+    libXcursor
+    libXpresent
+    libXext
+    libXrandr
+    wayland
+    wayland-protocols
   ];
 
-  NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
+  cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ];
 
   postUnpack = ''
-    echo $version > source/VERSION
+    echo ${src.rev} > source/VERSION
     export sourceRoot="source/client"
   '';
 

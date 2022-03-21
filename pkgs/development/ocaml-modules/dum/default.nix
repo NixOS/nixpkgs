@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-dum-${version}";
+  pname = "ocaml${ocaml.version}-dum";
   version = "1.0.1";
 
   src = fetchFromGitHub {
@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0yrxl97szjc0s2ghngs346x3y0xszx2chidgzxk93frjjpsr1mlr";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ easy-format ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

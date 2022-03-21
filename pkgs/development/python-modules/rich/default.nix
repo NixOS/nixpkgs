@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "10.12.0";
+  version = "11.0.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "willmcgugan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qq4k0pxq3r0463z4h65i9rb8cvilpnqmparklj5y5qk6svz0y2n";
+    sha256 = "0vkwar22rv1j6a3kqj3c016j0vnnha0kwi79fkd90ib1n501m7rn";
   };
 
   nativeBuildInputs = [ poetry-core ];

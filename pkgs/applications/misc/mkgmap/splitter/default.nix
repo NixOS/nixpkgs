@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "splitter";
-  version = "645";
+  version = "647";
 
   src = fetchurl {
     url = "https://www.mkgmap.org.uk/download/splitter-r${version}-src.tar.gz";
-    sha256 = "Y9feRNDjmwUbSOwxfMIaYIycCvOBMihq5LkuKbALVDY=";
+    sha256 = "j9TJ+9WuItueztWjYoD9s9x8wfsga2QCIY5X2+s3Z1c=";
   };
 
   patches = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utility for splitting OpenStreetMap maps into tiles";
-    homepage = "http://www.mkgmap.org.uk";
+    homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/splitter.html";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];

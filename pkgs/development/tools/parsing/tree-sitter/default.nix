@@ -27,10 +27,11 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.1";
-  sha256 = "sha256-JKbL05hFWI0jhAnRT9D0SWCoRPFqoMD4+LQQ1zyWc7g=";
-  cargoSha256 = "sha256-64O+3GrDqhRGth20B2/+jNDYSnwvT3SqYVqYNthiCB0=";
+  # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
+  # 4) run the ./result script that is output by that (it updates ./grammars)
+  version = "0.20.6";
+  sha256 = "sha256-zaxy8VCfJKK8NtfuFFojmmP5a19FP1zO/eB5q1EoQPw=";
+  cargoSha256 = "sha256-sOOhzm2nz+HC6dvT+8hj/wh19o+OB2zQ6Uz+H89txSA=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -57,7 +58,7 @@ let
     let
       change = name: grammar:
         callPackage ./grammar.nix { } {
-          language = name;
+          language = if grammar ? language then grammar.language else name;
           inherit version;
           source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
@@ -66,6 +67,7 @@ let
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
     in
@@ -90,10 +92,10 @@ let
           in
           {
             name =
-              (lib.strings.replaceStrings ["-"] ["_"]
+              (lib.strings.replaceStrings [ "-" ] [ "_" ]
                 (lib.strings.removePrefix "tree-sitter-"
                   (lib.strings.removeSuffix "-grammar" name)))
-              + stdenv.hostPlatform.extensions.sharedLibrary;
+              + ".so";
             path = "${drv}/parser";
           }
         )

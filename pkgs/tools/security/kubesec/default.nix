@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-z1v+xm0ZWs8F5KtltBSDx9W+xNqRsfvAgQUKgrZa+28=";
   };
 
-  vendorSha256 = "sha256-/2u92KvfzbJxJjh1cy9+4AuM5Qw1tK9Hu0xjRs0nhBE=";
+  vendorSha256 = "sha256-t2GZaLa/Pc/TCjqTNGuLnOFSepExmE2xA8pc9HkUtcs=";
 
   # Tests wants to download the kubernetes schema for use with kubeval
   doCheck = false;

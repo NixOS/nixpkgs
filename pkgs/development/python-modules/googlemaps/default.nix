@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "googlemaps";
-  version = "4.5.3";
+  version = "4.6.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "googlemaps";
     repo = "google-maps-services-python";
     rev = "v${version}";
-    sha256 = "1yfsfspvjngrb1lwaq04ahm94j9y2dwzdf4dsg3yl1c8w0vgf9yw";
+    sha256 = "sha256-pzCM1uZupqJgoogwacuuy1P8I9LF65w7ZS6vY10VgeU=";
   };
 
   propagatedBuildInputs = [ requests ];

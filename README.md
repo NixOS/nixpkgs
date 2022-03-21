@@ -1,10 +1,15 @@
 <p align="center">
-  <a href="https://nixos.org/nixos"><img src="https://nixos.org/logo/nixos-hires.png" width="500px" alt="NixOS logo" /></a>
+  <a href="https://nixos.org#gh-light-mode-only">
+    <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo"/>
+  </a>
+  <a href="https://nixos.org#gh-dark-mode-only">
+    <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png" width="500px" alt="NixOS logo"/>
+  </a>
 </p>
 
 <p align="center">
-  <a href="https://www.codetriage.com/nixos/nixpkgs"><img src="https://www.codetriage.com/nixos/nixpkgs/badges/users.svg" alt="Code Triagers badge" /></a>
-  <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen" alt="Open Collective supporters" /></a>
+  <a href="https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md"><img src="https://img.shields.io/github/contributors-anon/NixOS/nixpkgs" alt="Contributors badge" /></a>
+  <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=supporters&color=brightgreen" alt="Open Collective supporters" /></a>
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over

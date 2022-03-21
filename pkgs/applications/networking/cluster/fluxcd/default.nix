@@ -1,18 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.23.0";
-  sha256 = "15j4r43hy3slyahx4am7lj7jns4x3axrcbr9qwiznmk8qbvrzrdy";
-  manifestsSha256 = "10rh0q1la5dq6n9y1yvw9ilj5lhzx8vh1zi2lznfjsvc5niwx7wf";
+  version = "0.27.4";
+  sha256 = "06951i332gr17nsbns8mh4kcjilqfw5w95shaznpaksx93f554g0";
+  manifestsSha256 = "0fvzh7j3vi5hw8jbw2gisjnn53bffwnp7zm3dwcbv3svwpw7823d";
 
   manifests = fetchzip {
-    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    url =
+      "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
     sha256 = manifestsSha256;
     stripRoot = false;
   };
-in
 
-buildGoModule rec {
+in buildGoModule rec {
   pname = "fluxcd";
   inherit version;
 
@@ -23,15 +23,13 @@ buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "sha256-vFm9ai+VWOPLRckKJ7gfD/0iQ8b4o5HNQE4cekb0vA0=";
+  vendorSha256 = "sha256-7sHLXjyYMWSFckDPeVGJYK+nwhbRpD76tV334PCVYwA=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
 
-  patches = [
-    ./patches/disable-tests-ssh_key.patch
-  ];
+  patches = [ ./patches/disable-tests-ssh_key.patch ];
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -39,7 +37,7 @@ buildGoModule rec {
 
   # Required to workaround test error:
   #   panic: mkdir /homeless-shelter: permission denied
-  HOME="$TMPDIR";
+  HOME = "$TMPDIR";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -58,7 +56,8 @@ buildGoModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Open and extensible continuous delivery solution for Kubernetes";
+    description =
+      "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
       Flux is a tool for keeping Kubernetes clusters in sync
       with sources of configuration (like Git repositories), and automating

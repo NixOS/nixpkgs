@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "039ryhwfbbrrhavzyr999kngj10nk9n81i6qigxj6igfl4fzjy87";
+    sha256 = "sha256-ogA7ycqdMUTN/KHV2oZzytnhZ7XVuhx+ArXZqLlmwjk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc ];

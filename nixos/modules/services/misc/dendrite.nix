@@ -110,6 +110,15 @@ in
             '';
           };
         };
+        options.app_service_api.database = {
+          connection_string = lib.mkOption {
+            type = lib.types.str;
+            default = "file:federationapi.db";
+            description = ''
+              Database for the Appservice API.
+            '';
+          };
+        };
         options.client_api = {
           registration_disabled = lib.mkOption {
             type = lib.types.bool;
@@ -118,6 +127,91 @@ in
               Whether to disable user registration to the server
               without the shared secret.
             '';
+          };
+        };
+        options.federation_api.database = {
+          connection_string = lib.mkOption {
+            type = lib.types.str;
+            default = "file:federationapi.db";
+            description = ''
+              Database for the Federation API.
+            '';
+          };
+        };
+        options.key_server.database = {
+          connection_string = lib.mkOption {
+            type = lib.types.str;
+            default = "file:keyserver.db";
+            description = ''
+              Database for the Key Server (for end-to-end encryption).
+            '';
+          };
+        };
+        options.media_api = {
+          database = {
+            connection_string = lib.mkOption {
+              type = lib.types.str;
+              default = "file:mediaapi.db";
+              description = ''
+                Database for the Media API.
+              '';
+            };
+          };
+          base_path = lib.mkOption {
+            type = lib.types.str;
+            default = "${workingDir}/media_store";
+            description = ''
+              Storage path for uploaded media.
+            '';
+          };
+        };
+        options.room_server.database = {
+          connection_string = lib.mkOption {
+            type = lib.types.str;
+            default = "file:roomserver.db";
+            description = ''
+              Database for the Room Server.
+            '';
+          };
+        };
+        options.sync_api.database = {
+          connection_string = lib.mkOption {
+            type = lib.types.str;
+            default = "file:syncserver.db";
+            description = ''
+              Database for the Sync API.
+            '';
+          };
+        };
+        options.user_api = {
+          account_database = {
+            connection_string = lib.mkOption {
+              type = lib.types.str;
+              default = "file:userapi_accounts.db";
+              description = ''
+                Database for the User API, accounts.
+              '';
+            };
+          };
+          device_database = {
+            connection_string = lib.mkOption {
+              type = lib.types.str;
+              default = "file:userapi_devices.db";
+              description = ''
+                Database for the User API, devices.
+              '';
+            };
+          };
+        };
+        options.mscs = {
+          database = {
+            connection_string = lib.mkOption {
+              type = lib.types.str;
+              default = "file:mscs.db";
+              description = ''
+                Database for exerimental MSC's.
+              '';
+            };
           };
         };
       };

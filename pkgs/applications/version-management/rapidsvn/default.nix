@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python }:
+{ lib, stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "rapidsvn";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bmcqjc12k5w0z40k7fkk8iysqv4fw33i80gvcmbakby3d4d4i4p";
   };
 
-  buildInputs = [ wxGTK subversion apr aprutil python ];
+  buildInputs = [ wxGTK subversion apr aprutil python2 ];
 
   configureFlags = [ "--with-svn-include=${subversion.dev}/include"
     "--with-svn-lib=${subversion.out}/lib" ];

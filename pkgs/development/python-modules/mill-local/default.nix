@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mill-local";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyMillLocal";
     rev = version;
-    sha256 = "0q0frwj9yxdmqi5axl7gxirfflgn8xh1932c6lhp9my2v1d0gdrk";
+    sha256 = "sha256-OKaR0hpNVBlaZrEmEmHxqRG1i03XP2Z4c7c35YIqe+I=";
   };
 
   propagatedBuildInputs = [

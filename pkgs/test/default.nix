@@ -27,6 +27,10 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
+  fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
+  fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+
   install-shell-files = callPackage ./install-shell-files {};
 
   kernel-config = callPackage ./kernel.nix {};
@@ -34,8 +38,6 @@ with pkgs;
   ld-library-path = callPackage ./ld-library-path {};
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
-
-  make-binary-wrapper = callPackage ./make-binary-wrapper { inherit makeBinaryWrapper; };
 
   cross = callPackage ./cross {};
 
@@ -59,9 +61,12 @@ with pkgs;
     writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
     references = callPackage ../build-support/trivial-builders/test/references.nix {};
     overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+    concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
   };
 
   writers = callPackage ../build-support/writers/test.nix {};
 
   dhall = callPackage ./dhall { };
+
+  makeWrapper = callPackage ./make-wrapper {};
 }

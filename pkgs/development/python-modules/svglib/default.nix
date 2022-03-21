@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "svglib";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "520ee5290ee2ebeebd20ca0d7d995c08c903b364fcf515826bab43a1288d422e";
+    sha256 = "c77a0702fafd367c0fdca08ca1b7e1ee10058bde3bae252f49a3836e51e54519";
   };
 
   disabled = !isPy3k;

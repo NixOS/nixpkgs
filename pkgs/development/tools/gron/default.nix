@@ -19,7 +19,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "0va88c3rjlc2nbpqx4ila36rwrx57wcdhig4jp9q58vv4zqc2yxy";
+  vendorSha256 = "sha256-Evn5R/LzripRgG0zOVP/DJrtjwNRwgKapsRdtZaZhlU=";
 
   meta = with lib; {
     description = "Make JSON greppable!";

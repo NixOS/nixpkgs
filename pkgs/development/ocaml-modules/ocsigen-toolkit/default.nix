@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
  version = "3.0.1";
 
  propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
- buildInputs = [ ocaml findlib opaline ];
+ nativeBuildInputs = [ ocaml findlib opaline eliom ];
+
+  strictDeps = true;
 
  installPhase = ''
     runHook preInstall

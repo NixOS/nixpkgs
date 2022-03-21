@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.etcd;
+  opt = options.services.etcd;
 
 in {
 
@@ -24,6 +25,7 @@ in {
     advertiseClientUrls = mkOption {
       description = "Etcd list of this member's client URLs to advertise to the rest of the cluster.";
       default = cfg.listenClientUrls;
+      defaultText = literalExpression "config.${opt.listenClientUrls}";
       type = types.listOf types.str;
     };
 
@@ -42,12 +44,14 @@ in {
     initialAdvertisePeerUrls = mkOption {
       description = "Etcd list of this member's peer URLs to advertise to rest of the cluster.";
       default = cfg.listenPeerUrls;
+      defaultText = literalExpression "config.${opt.listenPeerUrls}";
       type = types.listOf types.str;
     };
 
     initialCluster = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
       default = ["${cfg.name}=http://127.0.0.1:2380"];
+      defaultText = literalExpression ''["''${config.${opt.name}}=http://127.0.0.1:2380"]'';
       type = types.listOf types.str;
     };
 
@@ -96,18 +100,21 @@ in {
     peerCertFile = mkOption {
       description = "Cert file to use for peer to peer communication";
       default = cfg.certFile;
+      defaultText = literalExpression "config.${opt.certFile}";
       type = types.nullOr types.path;
     };
 
     peerKeyFile = mkOption {
       description = "Key file to use for peer to peer communication";
       default = cfg.keyFile;
+      defaultText = literalExpression "config.${opt.keyFile}";
       type = types.nullOr types.path;
     };
 
     peerTrustedCaFile = mkOption {
       description = "Certificate authority file to use for peer to peer communication";
       default = cfg.trustedCaFile;
+      defaultText = literalExpression "config.${opt.trustedCaFile}";
       type = types.nullOr types.path;
     };
 

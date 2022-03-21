@@ -47,22 +47,25 @@ mkDerivation rec {
   ] ++ pythonPath;
 
   pythonPath = with python3Packages; [
+    pillow
     aiofiles
     appdirs
-    blist
     cairosvg
     filetype
     html-sanitizer
-    hsluv
-    matrix-nio
+    lxml
     mistune
-    plyer
     pymediainfo
-    pyotherside
+    plyer
+    sortedcontainers
+    watchgod
     redbaron
+    hsluv
     simpleaudio
     setuptools
     watchgod
+    dbus-python
+    matrix-nio
   ];
 
   qmakeFlags = [
@@ -84,6 +87,6 @@ mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ colemickens AndersonTorres ];
     inherit (qtbase.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin || python3Packages.isPy37 || python3Packages.isPy38;
   };
 }

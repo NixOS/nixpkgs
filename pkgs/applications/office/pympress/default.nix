@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , python3Packages
 , wrapGAppsHook
 , gtk3
@@ -13,21 +12,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-f+OjE0x/3yfJYHCLB+on7TT7MJ2vNu87SHRi67qFDCM=";
+    sha256 = "sha256-AxH0PyAWYEEIqQAx9gG2eYyXMijLZGZqXkRhld32ieE=";
   };
-
-  patches = [
-    # Should not be needed once v1.6.4 is released
-    (fetchpatch {
-      name = "fix-setuptools-version-parsing.patch";
-      url = "https://github.com/Cimbali/pympress/commit/474514d71396ac065e210fd846e07ed1139602d0.diff";
-      sha256 = "sha256-eiw54sjMrXrNrhtkAXxiSTatzoA0NDA03L+HpTDax58=";
-    })
-  ];
 
   nativeBuildInputs = [
     wrapGAppsHook

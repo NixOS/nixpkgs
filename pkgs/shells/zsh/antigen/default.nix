@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The plugin manager for zsh";
-    homepage = "http://antigen.sharats.me";
+    homepage = "https://antigen.sharats.me/";
     license = lib.licenses.mit;
   };
 }

@@ -23,7 +23,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "meson", "ninja" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -229,6 +229,7 @@ while (<>) {
 
     push @nativeRequires, "gettext" if $file =~ /USE_GETTEXT/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @nativeRequires, "meson", "ninja" if $pkg =~ /libxcvt/;
     push @nativeRequires, "m4" if $pkg =~ /xcbutil/;
     push @requires, "gperf", "xorgproto" if $pkg =~ /xcbutil/;
 

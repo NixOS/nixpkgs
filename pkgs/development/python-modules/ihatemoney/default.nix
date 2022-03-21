@@ -39,24 +39,8 @@
 , psycopg2 # optional, for postgresql support
 , flask_testing
 , pytestCheckHook
+, fetchpatch
 }:
-
-# ihatemoney is not really a library. It will only ever be imported
-# by the interpreter of uwsgi. So overrides for its depencies are fine.
-let
-  # sqlalchemy-continuum requires sqlalchemy < 1.4
-  pinned_sqlalchemy = sqlalchemy.overridePythonAttrs (
-    old: rec {
-      pname = "SQLAlchemy";
-      version = "1.3.24";
-
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "06bmxzssc66cblk1hamskyv5q3xf1nh1py3vi6dka4lkpxy7gfzb";
-      };
-    }
-  );
-in
 
 buildPythonPackage rec {
   pname = "ihatemoney";
@@ -81,16 +65,7 @@ buildPythonPackage rec {
     flask-babel
     flask-cors
     flask_mail
-    (
-      flask_migrate.override {
-        flask_sqlalchemy = flask_sqlalchemy.override {
-          sqlalchemy = pinned_sqlalchemy;
-        };
-        alembic = alembic.override {
-          sqlalchemy = pinned_sqlalchemy;
-        };
-      }
-    )
+    flask_migrate
     flask-restful
     flask-talisman
     flask_wtf
@@ -103,46 +78,36 @@ buildPythonPackage rec {
     pytz
     requests
     six
-    (
-      (
-        sqlalchemy-continuum.override {
-          sqlalchemy = pinned_sqlalchemy;
-          sqlalchemy-utils = sqlalchemy-utils.override {
-            sqlalchemy = pinned_sqlalchemy;
-          };
-          sqlalchemy-i18n = sqlalchemy-i18n.override {
-            sqlalchemy = pinned_sqlalchemy;
-            sqlalchemy-utils = sqlalchemy-utils.override {
-              sqlalchemy = pinned_sqlalchemy;
-            };
-          };
-          flask_sqlalchemy = flask_sqlalchemy.override {
-            sqlalchemy = pinned_sqlalchemy;
-          };
-        }
-      ).overridePythonAttrs (
-        old: {
-          doCheck = false;
-        }
-      )
-    )
+    sqlalchemy-continuum
     werkzeug
     wtforms
     psycopg2
     debts
   ];
 
-  # upstream performed the update without needing to patch the code
-  # the original patch does not apply, sadly
-  # https://github.com/spiral-project/ihatemoney/pull/912
+  patches = [
+    # fix build with wtforms 3. remove with next release
+    (fetchpatch {
+      url = "https://github.com/spiral-project/ihatemoney/commit/40ce32d9fa58a60d26a4d0df547b8deb709c330d.patch";
+      sha256 = "sha256-2ewOu21qhq/AOZaE9qrF5J6HH0h6ohFgjDb+BYjJnuQ=";
+      excludes = [ "setup.cfg" ];
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace setup.cfg --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2"
+    substituteInPlace setup.cfg \
+      --replace "cachetools>=4.1,<5" "cachetools>=4.1" \
+      --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2" \
+      --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
+      --replace "WTForms>=2.3.1,<2.4" "WTForms"
   '';
 
   checkInputs = [
     flask_testing
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "ihatemoney" ];
 
   disabledTests = [
     "test_notifications"  # requires running service.

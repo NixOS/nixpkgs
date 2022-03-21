@@ -8,10 +8,11 @@
 }:
 
 stdenv.mkDerivation (rec {
-  name = "sphinxbase-5prealpha";
+  pname = "sphinxbase";
+  version = "5prealpha";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cmusphinx/${name}.tar.gz";
+    url = "mirror://sourceforge/cmusphinx/sphinxbase-${version}.tar.gz";
     sha256 = "0vr4k8pv5a8nvq9yja7kl13b5lh0f9vha8fc8znqnm8bwmcxnazp";
   };
 

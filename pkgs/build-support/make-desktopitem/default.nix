@@ -1,67 +1,123 @@
-{ lib, runCommandLocal, desktop-file-utils }:
+{ lib, writeTextFile, buildPackages }:
 
+# All possible values as defined by the spec, version 1.4.
+# Please keep in spec order for easier maintenance.
+# When adding a new value, don't forget to update the Version field below!
 # See https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
 { name # The name of the desktop file
 , type ? "Application"
-, exec
-, icon ? null
-, comment ? null
-, terminal ? false
+# version is hardcoded
 , desktopName # The name of the application
 , genericName ? null
-, mimeType ? null
-, categories ? null
-, startupNotify ? null
 , noDisplay ? null
+, comment ? null
+, icon ? null
+# we don't support the Hidden key - if you don't need something, just don't install it
+, onlyShowIn ? []
+, notShowIn ? []
+, dbusActivatable ? null
+, tryExec ? null
+, exec ? null
+, path ? null
+, terminal ? null
+, actions ? {} # An attrset of [internal name] -> { name, exec?, icon? }
+, mimeTypes ? [] # The spec uses "MimeType" as singular, use plural here to signify list-ness
+, categories ? []
+, implements ? []
+, keywords ? []
+, startupNotify ? null
+, startupWMClass ? null
+, url ? null
 , prefersNonDefaultGPU ? null
-, extraDesktopEntries ? { } # Extra key-value pairs to add to the [Desktop Entry] section. This may override other values
-, extraEntries ? "" # Extra configuration. Will be appended to the end of the file and may thus contain extra sections
-, fileValidation ? true # whether to validate resulting desktop file.
+# not supported until version 1.5, which is not supported by our desktop-file-utils as of 2022-02-23
+# , singleMainWindow ? null
+, extraConfig ? {} # Additional values to be added literally to the final item, e.g. vendor extensions
 }:
 let
-  # like builtins.toString, but null -> null instead of null -> ""
-  nullableToString = value:
+  # FIXME: workaround until https://github.com/NixOS/nixpkgs/pull/162246 lands
+  cleanName = if lib.hasInfix " " name
+                then throw "makeDesktopItem: name must not contain spaces!"
+                else name;
+
+  # There are multiple places in the FDO spec that make "boolean" values actually tristate,
+  # e.g. StartupNotify, where "unset" is literally defined as "do something reasonable".
+  # So, handle null values separately.
+  boolOrNullToString = value:
     if value == null then null
     else if builtins.isBool value then lib.boolToString value
-    else builtins.toString value;
+    else throw "makeDesktopItem: value must be a boolean or null!";
 
-  # The [Desktop entry] section of the desktop file, as attribute set.
+  # Multiple values are represented as one string, joined by semicolons.
+  # Technically, it's possible to escape semicolons in values with \;, but this is currently not implemented.
+  renderList = key: value:
+    if !builtins.isList value then throw "makeDesktopItem: value for ${key} must be a list!"
+    else if builtins.any (item: lib.hasInfix ";" item) value then throw "makeDesktopItem: values in ${key} list must not contain semicolons!"
+    else if value == [] then null
+    else builtins.concatStringsSep ";" value;
+
+  # The [Desktop Entry] section of the desktop file, as an attribute set.
+  # Please keep in spec order.
   mainSection = {
-    "Type" = toString type;
-    "Exec" = nullableToString exec;
-    "Icon" = nullableToString icon;
-    "Comment" = nullableToString comment;
-    "Terminal" = nullableToString terminal;
-    "Name" = toString desktopName;
-    "GenericName" = nullableToString genericName;
-    "MimeType" = nullableToString mimeType;
-    "Categories" = nullableToString categories;
-    "StartupNotify" = nullableToString startupNotify;
-    "NoDisplay" = nullableToString noDisplay;
-    "PrefersNonDefaultGPU" = nullableToString prefersNonDefaultGPU;
-  } // extraDesktopEntries;
+    "Type" = type;
+    "Version" = "1.4";
+    "Name" = desktopName;
+    "GenericName" = genericName;
+    "NoDisplay" = boolOrNullToString noDisplay;
+    "Comment" = comment;
+    "Icon" = icon;
+    "OnlyShowIn" = renderList "onlyShowIn" onlyShowIn;
+    "NotShowIn" = renderList "notShowIn" notShowIn;
+    "DBusActivatable" = boolOrNullToString dbusActivatable;
+    "TryExec" = tryExec;
+    "Exec" = exec;
+    "Path" = path;
+    "Terminal" = boolOrNullToString terminal;
+    "Actions" = renderList "actions" (builtins.attrNames actions);
+    "MimeType" = renderList "mimeTypes" mimeTypes;
+    "Categories" = renderList "categories" categories;
+    "Implements" = renderList "implements" implements;
+    "Keywords" = renderList "keywords" keywords;
+    "StartupNotify" = boolOrNullToString startupNotify;
+    "StartupWMClass" = startupWMClass;
+    "URL" = url;
+    "PrefersNonDefaultGPU" = boolOrNullToString prefersNonDefaultGPU;
+    # "SingleMainWindow" = boolOrNullToString singleMainWindow;
+  } // extraConfig;
 
-  # Map all entries to a list of lines
-  desktopFileStrings =
-    [ "[Desktop Entry]" ]
-    ++ builtins.filter
-      (v: v != null)
-      (lib.mapAttrsToList
-        (name: value: if value != null then "${name}=${value}" else null)
-        mainSection
-      )
-    ++ (if extraEntries == "" then [ ] else [ "${extraEntries}" ]);
+  # Render a single attribute pair to a Key=Value line.
+  # FIXME: this isn't entirely correct for arbitrary strings, as some characters
+  # need to be escaped. There are currently none in nixpkgs though, so this is OK.
+  renderLine = name: value: if value != null then "${name}=${value}" else null;
+
+  # Render a full section of the file from an attrset.
+  # Null values are intentionally left out.
+  renderSection = sectionName: attrs:
+    lib.pipe attrs [
+      (lib.mapAttrsToList renderLine)
+      (builtins.filter (v: !isNull v))
+      (builtins.concatStringsSep "\n")
+      (section: ''
+        [${sectionName}]
+        ${section}
+      '')
+    ];
+
+  mainSectionRendered = renderSection "Desktop Entry" mainSection;
+
+  # Convert from javaCase names as used in Nix to PascalCase as used in the spec.
+  preprocessAction = { name, icon ? null, exec ? null }: {
+    "Name" = name;
+    "Icon" = icon;
+    "Exec" = exec;
+  };
+  renderAction = name: attrs: renderSection "Desktop Action ${name}" (preprocessAction attrs);
+  actionsRendered = lib.mapAttrsToList renderAction actions;
+
+  content = [ mainSectionRendered ] ++ actionsRendered;
 in
-runCommandLocal "${name}.desktop"
-{
-  nativeBuildInputs = [ desktop-file-utils ];
+writeTextFile {
+  name = "${cleanName}.desktop";
+  destination = "/share/applications/${cleanName}.desktop";
+  text = builtins.concatStringsSep "\n" content;
+  checkPhase = "${buildPackages.desktop-file-utils}/bin/desktop-file-validate $target";
 }
-  (''
-    mkdir -p "$out/share/applications"
-    cat > "$out/share/applications/${name}.desktop" <<EOF
-    ${builtins.concatStringsSep "\n" desktopFileStrings}
-    EOF
-  '' + lib.optionalString fileValidation ''
-    echo "Running desktop-file validation"
-    desktop-file-validate "$out/share/applications/${name}.desktop"
-  '')

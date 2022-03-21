@@ -3,12 +3,12 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "moreutils";
-  version = "0.66";
+  version = "0.67";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-y+imKvLbaegpI4GTVPuHFT43OGFGnzOnWP2J3LSX1BQ=";
+    sha256 = "sha256-8Mu7L3KqOsW9OmidMkWB+q9TofHd1P1sbsNrtE4MUoA=";
   };
 
   preBuild = ''

@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "coeurl";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     domain = "nheko.im";
     owner = "nheko-reborn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10a5klr44m2xy6law8s3s5rynk1q268fa4pkhilbn52yyv0fwajq";
+    sha256 = "sha256-IIIl+/5Omv0lYTNAjeA63ofJlBmNe3+yTOxDsvL+ak0=";
   };
 
   nativeBuildInputs = [ ninja pkg-config meson ];

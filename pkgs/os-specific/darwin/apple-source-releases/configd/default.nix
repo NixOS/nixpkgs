@@ -1,14 +1,15 @@
-{ stdenv, appleDerivation', launchd, bootstrap_cmds, xnu, ppp, IOKit, eap8021x, Security }:
+{ lib, stdenv, appleDerivation', launchd, bootstrap_cmds, xnu, ppp, IOKit, eap8021x, Security
+, headersOnly ? false }:
 
 appleDerivation' stdenv {
   meta.broken = stdenv.cc.nativeLibc;
 
-  nativeBuildInputs = [ bootstrap_cmds ];
-  buildInputs = [ launchd ppp IOKit eap8021x ];
+  nativeBuildInputs = lib.optionals (!headersOnly) [ bootstrap_cmds ];
+  buildInputs = lib.optionals (!headersOnly) [ launchd ppp IOKit eap8021x ];
 
-  propagatedBuildInputs = [ Security ];
+  propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
 
-  patchPhase = ''
+  patchPhase = lib.optionalString (!headersOnly) ''
     HACK=$PWD/hack
     mkdir $HACK
     cp -r ${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders/net $HACK
@@ -62,6 +63,8 @@ appleDerivation' stdenv {
     #define XPC_CONNECTION_MACH_SERVICE_PRIVILEGED (1 << 1)
     EOF
   '';
+
+  dontBuild = headersOnly;
 
   buildPhase = ''
     pushd SystemConfiguration.fproj >/dev/null
@@ -206,7 +209,7 @@ appleDerivation' stdenv {
   installPhase = ''
     mkdir -p $out/include
     cp dnsinfo/*.h $out/include/
-
+  '' + lib.optionalString (!headersOnly) ''
     mkdir -p $out/Library/Frameworks/
     mv SystemConfiguration.fproj/SystemConfiguration.framework $out/Library/Frameworks
   '';

@@ -3,13 +3,14 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
-  updateScript = pkgs.genericUpdater;
+  genericUpdater = pkgs.genericUpdater;
 
-  gitLister = url:
-    "${pkgs.common-updater-scripts}/bin/list-git-tags ${url}";
-
-  archiveLister = category: name:
-    "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions https://archive.xfce.org/src/${category}/${name}";
+  archiveUpdater = { category, pname, version }:
+    pkgs.httpTwoLevelsUpdater {
+      inherit pname version;
+      attrPath = "xfce.${pname}";
+      url = "https://archive.xfce.org/src/${category}/${pname}";
+    };
 
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
@@ -214,13 +215,13 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtk = pkgs.gtk2;
   libxfcegui4 = throw "libxfcegui4 is the deprecated Xfce GUI library. It has been superseded by the libxfce4ui library";
   xinitrc = xfce4-session.xinitrc;
-  inherit (pkgs.gnome2) libglade;
-  inherit (pkgs.gnome) vte gtksourceview;
+  libglade = throw "libglade has been removed";
+  inherit (pkgs.gnome) gtksourceview;
   xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {
     thunarPlugins = [];
   };
 
   # added 2019-11-30
-  inherit (pkgs) dconf;
+  inherit (pkgs) dconf vte;
 })

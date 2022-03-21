@@ -61,11 +61,11 @@ rec {
   pipe = val: functions:
     let reverseApply = x: f: f x;
     in builtins.foldl' reverseApply val functions;
-  /* note please don’t add a function like `compose = flip pipe`.
-     This would confuse users, because the order of the functions
-     in the list is not clear. With pipe, it’s obvious that it
-     goes first-to-last. With `compose`, not so much.
-  */
+
+  # note please don’t add a function like `compose = flip pipe`.
+  # This would confuse users, because the order of the functions
+  # in the list is not clear. With pipe, it’s obvious that it
+  # goes first-to-last. With `compose`, not so much.
 
   ## Named versions corresponding to some builtin operators.
 
@@ -165,6 +165,30 @@ rec {
 
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
+
+  /* The latest release that is supported, at the time of release branch-off,
+     if applicable.
+
+     Ideally, out-of-tree modules should be able to evaluate cleanly with all
+     supported Nixpkgs versions (master, release and old release until EOL).
+     So if possible, deprecation warnings should take effect only when all
+     out-of-tree expressions/libs/modules can upgrade to the new way without
+     losing support for supported Nixpkgs versions.
+
+     This release number allows deprecation warnings to be implemented such that
+     they take effect as soon as the oldest release reaches end of life. */
+  oldestSupportedRelease =
+    # Update on master only. Do not backport.
+    2111;
+
+  /* Whether a feature is supported in all supported releases (at the time of
+     release branch-off, if applicable). See `oldestSupportedRelease`. */
+  isInOldestRelease =
+    /* Release number of feature introduction as an integer, e.g. 2111 for 21.11.
+       Set it to the upcoming release, matching the nixpkgs/.version file.
+    */
+    release:
+      release <= lib.trivial.oldestSupportedRelease;
 
   /* Returns the current nixpkgs release code name.
 
@@ -324,6 +348,45 @@ rec {
     Type: bool -> string -> a -> a
   */
   warnIf = cond: msg: if cond then warn msg else id;
+
+  /*
+    Like the `assert b; e` expression, but with a custom error message and
+    without the semicolon.
+
+    If true, return the identity function, `r: r`.
+
+    If false, throw the error message.
+
+    Calls can be juxtaposed using function application, as `(r: r) a = a`, so
+    `(r: r) (r: r) a = a`, and so forth.
+
+    Type: bool -> string -> a -> a
+
+    Example:
+
+        throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+        lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+        pkgs
+
+  */
+  throwIfNot = cond: msg: if cond then x: x else throw msg;
+
+  /* Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
+
+     Example:
+       let colorVariants = ["bright" "dark" "black"]
+       in checkListOfEnum "color variants" [ "standard" "light" "dark" ] colorVariants;
+       =>
+       error: color variants: bright, black unexpected; valid ones: standard, light, dark
+
+     Type: String -> List ComparableVal -> List ComparableVal -> a -> a
+  */
+  checkListOfEnum = msg: valid: given:
+    let
+      unexpected = lib.subtractLists valid given;
+    in
+      lib.throwIfNot (unexpected == [])
+        "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
 
   info = msg: builtins.trace "INFO: ${msg}";
 

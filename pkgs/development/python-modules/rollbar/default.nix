@@ -1,20 +1,24 @@
-{ aiocontextvars
+{ lib
+, aiocontextvars
 , blinker
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , httpx
-, lib
 , mock
 , pytestCheckHook
 , requests
 , six
-, unittest2
+, pythonOlder
 , webob
 }:
 
 buildPythonPackage rec {
   pname = "rollbar";
   version = "0.16.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,14 +33,20 @@ buildPythonPackage rec {
   checkInputs = [
     webob
     blinker
-    unittest2
     mock
     httpx
     aiocontextvars
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "rollbar" ];
+  # Still supporting unittest2
+  # https://github.com/rollbar/pyrollbar/pull/346
+  # https://github.com/rollbar/pyrollbar/pull/340
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "rollbar"
+  ];
 
   meta = with lib; {
     description = "Error tracking and logging from Python to Rollbar";

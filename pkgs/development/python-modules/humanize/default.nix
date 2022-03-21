@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
+, pythonOlder
 , setuptools-scm
 , setuptools
 , pytestCheckHook
@@ -9,18 +9,33 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.12.0";
+  version = "3.13.1";
   pname = "humanize";
-  disabled = isPy27; # setup.py no longer compatible
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5ec1a66e230a3e31fb3f184aab9436ea13d4e37c168e0ffc345ae5bb57e58be6";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "jmoiron";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-lgGBvYb3ciqETBOR31gxQVD7YyopTtmr++nCwvm63Zs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ setuptools ];
-  checkInputs = [ pytestCheckHook freezegun ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python humanize utilities";

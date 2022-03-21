@@ -23,11 +23,15 @@ let src =
       "0.17.0" = "0f1lxp697yq61z8gqxjjaqd2ns8fd1vjfggn55x0gh9dx098p138";
       "0.18.0" = "0571kzmb1h03qj74090n3mg8wfbh29qqrkdjkai6rnl5chll86lq";
       "0.19.0" = "0ihgwl7d489g938m1jvgx8azdgq9f5np5mzqwwya797hx2m4dz32";
+      "0.20.0" = "sha256-JtmNCgwjbCyUE4bWqdH5Nc2YSit+rekwS43DcviIfgk=";
+      "0.20.1" = "sha256-fTpRZFQW+ngoc0T6A69reEUAZ6GmHkeQvxspd5zRAjU=";
     }."${version}";
   };
   ocamlPackages =
-  if lib.versionAtLeast version "0.17.0"
+  if lib.versionAtLeast version "0.19.0"
   then ocaml-ng.ocamlPackages
+  else if lib.versionAtLeast version "0.17.0"
+  then ocaml-ng.ocamlPackages_4_12
   else if lib.versionAtLeast version "0.14.3"
   then ocaml-ng.ocamlPackages_4_10
   else ocaml-ng.ocamlPackages_4_07
@@ -46,8 +50,32 @@ buildDunePackage {
 
   useDune2 = true;
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    menhir
+  ];
+
   buildInputs =
-    if lib.versionAtLeast version "0.19.0"
+    if lib.versionAtLeast version "0.20.0"
+    then [
+      base
+      cmdliner
+      dune-build-info
+      either
+      fix
+      fpath
+      menhirLib
+      menhirSdk
+      ocaml-version
+      ocp-indent
+      (if version == "0.20.0" then odoc-parser.override { version = "0.9.0"; } else odoc-parser)
+      re
+      stdio
+      uuseg
+      uutf
+    ]
+    else if lib.versionAtLeast version "0.19.0"
     then [
       base
       cmdliner
@@ -57,12 +85,11 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       ocp-indent
       dune-build-info
-      odoc-parser
+      (odoc-parser.override { version = "0.9.0"; })
     ]
     else if lib.versionAtLeast version "0.18.0"
     then [
@@ -75,7 +102,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       dune-build-info
@@ -94,7 +120,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       dune-build-info
@@ -114,7 +139,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       (ppxlib.override { version = "0.18.0"; })
@@ -133,7 +157,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
     ] else [

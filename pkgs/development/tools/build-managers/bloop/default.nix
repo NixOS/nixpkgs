@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.4.11";
+  version = "1.4.13";
 
   bloop-coursier-channel = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
-    sha256 = "CoF/1nggjaL17SWmWDcKicfgoyqpOSZUse8f+3TgD0E=";
+    sha256 = "bf3uHuGfmJukf0Qeudv8ZXz/9Uql/qsmvPS0XBb7oTQ=";
   };
 
   bloop-bash = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   bloop-fish = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
-    sha256 = "oBKlzHa1fbzhf60jfzuXvqaUb/xuoLYawigRQQOCSN0=";
+    sha256 = "eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
   };
 
   bloop-zsh = fetchurl {
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "0c02n779z4l7blzla5820bzfhblbp5nlizx9f8wns4miwnph357f"
-    else if stdenv.isDarwin && stdenv.isx86_64 then "1gy5k9ii86rxyv2v9if4n1clvmb1hi4ym32mp6miwgcjla10sv30"
+    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "sha256-jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
+    else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-WJytRIbsygi4zoIVfkJmzWyFe2p8mQuT4DDO5KDKopY="
     else throw "unsupported platform";
   };
 

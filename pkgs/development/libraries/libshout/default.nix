@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       bad data from getting to the icecast server.
     '';
 
-    homepage = "http://www.icecast.org";
+    homepage = "https://www.icecast.org";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = with lib.platforms; unix;

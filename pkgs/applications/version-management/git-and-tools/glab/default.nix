@@ -2,17 +2,16 @@
 
 buildGoModule rec {
   pname = "glab";
-  version = "1.21.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "profclems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-naCCJ9s63UPDxRWbVjVikXtGUlM4Lp7vyDHlESEtXeI=";
+    sha256 = "sha256-7w6cbeZYhmV0EXXcWlXFq2pQGGxc5Ok4bba0g3fcgmE=";
   };
 
-  vendorSha256 = "sha256-iiHDxiP6Dg7MK5jhSwly5oEhFZ8ByCx5WEyrbzL/u4w=";
-  runVend = true;
+  vendorSha256 = "sha256-hGpJXCs5lZ6QQHr6LW1fCT+CVtOaUpYXJPchDPDdbaM=";
 
   ldflags = [
     "-X main.version=${version}"

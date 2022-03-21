@@ -55,5 +55,6 @@ buildGoModule rec {
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ ckie ];
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/pufferpanel.x86_64-darwin
   };
 }

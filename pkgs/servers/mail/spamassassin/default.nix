@@ -9,11 +9,18 @@ perlPackages.buildPerlPackage rec {
     sha256 = "044ng2aazqy8g0m17q0a4939ck1ca4x230q2q7q7jndvwkrpaj5w";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  # ExtUtil::MakeMaker is bundled with Perl, but the bundled version
+  # causes build errors for aarch64-darwin, so we override it with the
+  # latest version.  We can drop the dependency to go back to the
+  # bundled version when the version that comes with Perl is ≥7.57_02.
+  #
+  # Check the version bundled with Perl like this:
+  #   perl -e 'use ExtUtils::MakeMaker qw($VERSION); print "$VERSION\n"'
+  nativeBuildInputs = [ makeWrapper perlPackages.ExtUtilsMakeMaker ];
   buildInputs = (with perlPackages; [
     HTMLParser NetCIDRLite NetDNS NetAddrIP DBFile HTTPDate MailDKIM LWP
-    IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF
-    NetDNSResolverProgrammable Socket6
+    LWPProtocolHttps IOSocketSSL DBI EncodeDetect IPCountry NetIdent
+    Razor2ClientAgent MailSPF NetDNSResolverProgrammable Socket6
   ]);
 
   # Enabling 'taint' mode is desirable, but that flag disables support
@@ -34,7 +41,7 @@ perlPackages.buildPerlPackage rec {
   '';
 
   meta = {
-    homepage = "http://spamassassin.apache.org/";
+    homepage = "https://spamassassin.apache.org/";
     description = "Open-Source Spam Filter";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2021.11.0";
+  version = "2022.3.1";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "sha256-amwzMSPMaXbIj95RhSVnl0kwHnEluKj4L7q4Zu2HPgE=";
+    hash   = "sha256-iVg+AXSBO+caeYxUR41infCvsCTZkJTf7K0oZnOQmnY=";
   };
 
   vendorSha256 = null;
@@ -18,9 +18,9 @@ buildGoModule rec {
   ldflags = [ "-X main.Version=${version}" ];
 
   meta = with lib; {
-    description = "CloudFlare Argo Tunnel daemon (and DNS-over-HTTPS client)";
-    homepage    = "https://www.cloudflare.com/products/argo-tunnel";
-    license     = licenses.unfree;
+    description = "CloudFlare Tunnel daemon (and DNS-over-HTTPS client)";
+    homepage    = "https://www.cloudflare.com/products/tunnel";
+    license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ bbigras enorris thoughtpolice ];
   };

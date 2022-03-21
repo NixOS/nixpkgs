@@ -1,20 +1,20 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchurl, unzip }:
 
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20210805";
+  version = "1.20220118";
 
-  src = fetchFromGitHub {
-    owner = "raspberrypi";
-    repo = "firmware";
-    rev = version;
-    sha256 = "1nndhjv4il42yw3pq8ni3r4nlp1m0r229fadrf4f9v51mgcg11i1";
+  src = fetchurl {
+    url = "https://github.com/raspberrypi/firmware/archive/${version}.zip";
+    sha256 = "sha256-98rbwKIuB7vb4MWbFCr7TYsvJB0HzPdH8Tw0+bktK/M=";
   };
 
+  nativeBuildInputs = [ unzip ];
+
   installPhase = ''
-    mkdir -p $out/share/raspberrypi/boot
-    cp -R boot/* $out/share/raspberrypi/boot
+    mkdir -p $out/share/raspberrypi/
+    mv boot "$out/share/raspberrypi/"
   '';
 
   dontConfigure = true;

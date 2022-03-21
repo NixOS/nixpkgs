@@ -22,11 +22,11 @@
 }:
 
 let
-  version = "11.50.19";
-  openjdk = "11.0.12";
+  version = "11.52.13";
+  openjdk = "11.0.13";
 
-  sha256_linux = "b8e8a63b79bc312aa90f3558edbea59e71495ef1a9c340e38900dd28a1c579f3";
-  sha256_darwin = "9bc6874932f7f88d0a48220d3200449ddf7dc5c0e82af2df2738bc13d21b0e4e";
+  sha256_linux = "77a126669b26b3a89e0117b0f28cddfcd24fcd7699b2c1d35f921487148b9a9f";
+  sha256_darwin = "a96f9f859350f977319ebb5c2a999c182ab6b99b24c60e19d97c54367868a63e";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;

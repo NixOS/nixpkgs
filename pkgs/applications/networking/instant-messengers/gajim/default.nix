@@ -1,4 +1,4 @@
-{ lib, fetchurl, gettext, wrapGAppsHook
+{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome
@@ -41,6 +41,21 @@ python3.pkgs.buildPythonApplication rec {
     gettext wrapGAppsHook
   ];
 
+  # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/10719.
+  # We don't use plugin release URL because it's updated in place.
+  plugins = fetchFromGitLab {
+    domain = "dev.gajim.org";
+    owner = "gajim";
+    repo = "gajim-plugins";
+    rev = "fea522e4360cec6ceacbf1df92644ab3343d4b99";
+    sha256 = "sha256-CmwEiLsdldoOfgHfWL/5hf/dp0HEDNAIlc5N0Np20KE=";
+  };
+
+  postPatch = ''
+    mkdir -p gajim/data/plugins
+    cp -r $plugins/plugin_installer gajim/data/plugins
+  '';
+
   dontWrapGApps = true;
 
   preFixup = ''
@@ -59,7 +74,8 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     xvfb-run dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      ${python3.interpreter} setup.py test
+      ${python3.interpreter} -m unittest discover -s test/unit -v
+    ${python3.interpreter} -m unittest discover -s test/no_gui -v
   '';
 
   # necessary for wrapGAppsHook
@@ -71,7 +87,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin abbradar ];
     downloadPage = "http://gajim.org/downloads.php";
-    updateWalker = true;
     platforms = lib.platforms.linux;
   };
 }

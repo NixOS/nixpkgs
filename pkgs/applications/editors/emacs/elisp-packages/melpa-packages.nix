@@ -73,6 +73,15 @@ let
       overrides = lib.optionalAttrs (variant == "stable") {
 
         # upstream issue: missing file header
+        abridge-diff =
+          if super.abridge-diff.version == "0.1"
+          then markBroken super.abridge-diff
+          else super.abridge-diff;
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
 
         # upstream issue: missing file header
@@ -100,10 +109,37 @@ let
         dictionary = markBroken super.dictionary;
 
         # upstream issue: missing file header
+        fold-dwim =
+          if super.fold-dwim.version == "1.2"
+          then markBroken super.fold-dwim
+          else super.fold-dwim;
+
+        # upstream issue: missing file header
+        gl-conf-mode =
+          if super.gl-conf-mode.version == "0.3"
+          then markBroken super.gl-conf-mode
+          else super.gl-conf-mode;
+
+        # upstream issue: missing file header
+        ligo-mode =
+          if super.ligo-mode.version == "0.3"
+          then markBroken super.ligo-mode
+          else super.ligo-mode;
+
+        # upstream issue: missing file header
         link = markBroken super.link;
 
         # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
+        org-dp =
+          if super.org-dp.version == "1"
+          then markBroken super.org-dp
+          else super.org-dp;
+
+        # upstream issue: missing file header
+        revbufs =
+          if super.revbufs.version == "1.2"
+          then markBroken super.revbufs
+          else super.revbufs;
 
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
@@ -371,7 +407,8 @@ let
               --replace 'defcustom telega-server-command "telega-server"' \
                         "defcustom telega-server-command \"$out/bin/telega-server\""
 
-            substituteInPlace telega-sticker.el --replace '"dwebp"' '"${pkgs.libwebp}/bin/dwebp"'
+            substituteInPlace telega-sticker.el --replace '"dwebp' '"${pkgs.libwebp}/bin/dwebp'
+            substituteInPlace telega-sticker.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
 
             substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
           '';

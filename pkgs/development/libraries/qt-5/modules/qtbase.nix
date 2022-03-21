@@ -184,6 +184,10 @@ stdenv.mkDerivation {
     ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
     ++ lib.optional stdenv.isLinux "-DUSE_X11"
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+      # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
+      "-Wno-error=unguarded-availability"
+    ]
     ++ lib.optionals withGtk3 [
          ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
          ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
@@ -358,7 +362,12 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
+    # Qt5 is broken on aarch64-darwin
+    # the build ends up with the following error:
+    #   error: unknown target CPU 'armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc'
+    #   note: valid target CPU values are: nocona, core2, penryn, ..., znver1, znver2, x86-64
+    # it seems the qmake/cmake passes x86_64 as preferred architecture somewhere
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 
 }

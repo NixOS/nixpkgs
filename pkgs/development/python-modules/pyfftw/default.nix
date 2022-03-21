@@ -2,12 +2,12 @@
 , fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
-  version = "0.12.0";
+  version = "0.13.0";
   pname = "pyFFTW";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "60988e823ca75808a26fd79d88dbae1de3699e72a293f812aa4534f8a0a58cb0";
+    sha256 = "da85102405c0bd95d57eb19e99b01a0729d8406cb204c3900894b873784253da";
   };
 
   preConfigure = ''

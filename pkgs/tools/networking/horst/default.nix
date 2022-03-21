@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
-    homepage = "http://br1.einfach.org/tech/horst/";
+    homepage = "https://github.com/br101/horst";
     maintainers = [ maintainers.fpletz ];
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

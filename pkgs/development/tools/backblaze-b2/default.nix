@@ -1,23 +1,13 @@
 { fetchFromGitHub, lib, python3Packages }:
 
-let
-  python3Packages2 = python3Packages.override {
-    overrides = self: super: {
-      arrow = self.callPackage ../../python-modules/arrow/2.nix { };
-    };
-  };
-in
-let
-  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
-in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.0.3";
+  version = "3.2.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-asrhinANGlTsSBbtGToOxTRGGSCf+1c4VWnoE3ezoIA=";
+    sha256 = "sha256-dE4eLTNU6O0DscwN8+m1UaG46dbI0DiWzeJK49GUvKA=";
   };
 
   postPatch = ''

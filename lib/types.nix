@@ -32,7 +32,6 @@ let
     last
     length
     tail
-    unique
     ;
   inherit (lib.attrsets)
     attrNames
@@ -48,6 +47,7 @@ let
     mergeDefaultOption
     mergeEqualOption
     mergeOneOption
+    mergeUniqueOption
     showFiles
     showOption
     ;
@@ -61,7 +61,11 @@ let
     boolToString
     ;
 
-  inherit (lib.modules) mergeDefinitions;
+  inherit (lib.modules)
+    mergeDefinitions
+    fixupOptionType
+    mergeOptionDecls
+    ;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -161,6 +165,13 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
+
+    raw = mkOptionType rec {
+      name = "raw";
+      description = "raw value";
+      check = value: true;
+      merge = mergeOneOption;
+    };
 
     anything = mkOptionType {
       name = "anything";
@@ -300,6 +311,19 @@ rec {
       inherit (str) merge;
     };
 
+    # Allow a newline character at the end and trim it in the merge function.
+    singleLineStr =
+      let
+        inherit (strMatching "[^\n\r]*\n?") check merge;
+      in
+      mkOptionType {
+        name = "singleLineStr";
+        description = "(optionally newline-terminated) single-line string";
+        inherit check;
+        merge = loc: defs:
+          lib.removeSuffix "\n" (merge loc defs);
+      };
+
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
       description = "string matching the pattern ${pattern}";
@@ -344,13 +368,21 @@ rec {
       emptyValue = { value = {}; };
     };
 
-    # derivation is a reserved keyword.
+    # A package is a top-level store path (/nix/store/hash-name). This includes:
+    # - derivations
+    # - more generally, attribute sets with an `outPath` or `__toString` attribute
+    #   pointing to a store path, e.g. flake inputs
+    # - strings with context, e.g. "${pkgs.foo}" or (toString pkgs.foo)
+    # - hardcoded store path literals (/nix/store/hash-foo) or strings without context
+    #   ("/nix/store/hash-foo"). These get a context added to them using builtins.storePath.
     package = mkOptionType {
       name = "package";
       check = x: isDerivation x || isStorePath x;
       merge = loc: defs:
         let res = mergeOneOption loc defs;
-        in if isDerivation res then res else toDerivation res;
+        in if builtins.isPath res || (builtins.isString res && ! builtins.hasContext res)
+          then toDerivation res
+          else res;
     };
 
     shellPackage = package // {
@@ -377,7 +409,7 @@ rec {
             ).optionalValue
           ) def.value
         ) defs)));
-      emptyValue = { value = {}; };
+      emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -389,7 +421,7 @@ rec {
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
         description = "non-empty " + list.description;
-        # Note: emptyValue is left as is, because another module may define an element.
+        emptyValue = { }; # no .value attr, meaning unset
       };
 
     attrsOf = elemType: mkOptionType rec {
@@ -457,6 +489,18 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    unique = { message }: type: mkOptionType rec {
+      name = "unique";
+      inherit (type) description check;
+      merge = mergeUniqueOption { inherit message; };
+      emptyValue = type.emptyValue;
+      getSubOptions = type.getSubOptions;
+      getSubModules = type.getSubModules;
+      substSubModules = m: uniq (type.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = type; };
+      nestedTypes.elemType = type;
+    };
+
     # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
@@ -478,7 +522,7 @@ rec {
 
     functionTo = elemType: mkOptionType {
       name = "functionTo";
-      description = "function that evaluates to a(n) ${elemType.name}";
+      description = "function that evaluates to a(n) ${elemType.description}";
       check = isFunction;
       merge = loc: defs:
         fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
@@ -493,6 +537,33 @@ rec {
       modules = toList modules;
     };
 
+    # The type of a type!
+    optionType = mkOptionType {
+      name = "optionType";
+      description = "optionType";
+      check = value: value._type or null == "option-type";
+      merge = loc: defs:
+        if length defs == 1
+        then (head defs).value
+        else let
+          # Prepares the type definitions for mergeOptionDecls, which
+          # annotates submodules types with file locations
+          optionModules = map ({ value, file }:
+            {
+              _file = file;
+              # There's no way to merge types directly from the module system,
+              # but we can cheat a bit by just declaring an option with the type
+              options = lib.mkOption {
+                type = value;
+              };
+            }
+          ) defs;
+          # Merges all the types into a single one, including submodule merging.
+          # This also propagates file information to all submodules
+          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+        in mergedOption.type;
+    };
+
     submoduleWith =
       { modules
       , specialArgs ? {}
@@ -501,14 +572,18 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        coerce = unify: value: if isFunction value
-          then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
+        shorthandToModule = if shorthandOnlyDefinesConfig == false
+          then value: value
+          else value: { config = value; };
 
         allModules = defs: imap1 (n: { value, file }:
-          if isAttrs value || isFunction value then
-            # Annotate the value with the location of its definition for better error messages
-            coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+          if isFunction value
+          then setFunctionArgs
+                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (value args))
+                (functionArgs value)
+          else if isAttrs value
+          then
+            lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (shorthandToModule value)
           else value
         ) defs;
 
@@ -576,7 +651,11 @@ rec {
               then lhs.specialArgs // rhs.specialArgs
               else throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
             shorthandOnlyDefinesConfig =
-              if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
+              if lhs.shorthandOnlyDefinesConfig == null
+              then rhs.shorthandOnlyDefinesConfig
+              else if rhs.shorthandOnlyDefinesConfig == null
+              then lhs.shorthandOnlyDefinesConfig
+              else if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
           };
@@ -586,6 +665,7 @@ rec {
     # A value from a set of allowed ones.
     enum = values:
       let
+        inherit (lib.lists) unique;
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v

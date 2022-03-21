@@ -444,15 +444,15 @@ let
             account sufficient ${pam_krb5}/lib/security/pam_krb5.so
           '' +
           optionalString cfg.googleOsLoginAccountVerification ''
-            account [success=ok ignore=ignore default=die] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so
-            account [success=ok default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so
+            account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
+            account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
           '' +
           ''
 
             # Authentication management.
           '' +
           optionalString cfg.googleOsLoginAuthentication ''
-            auth [success=done perm_denied=bad default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so
+            auth [success=done perm_denied=die default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
           '' +
           optionalString cfg.rootOK ''
             auth sufficient pam_rootok.so
@@ -518,7 +518,7 @@ let
                 auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly " store-only"}
               '' +
               optionalString cfg.googleAuthenticator.enable ''
-                auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
+                auth required ${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
               '' +
               optionalString cfg.duoSecurity.enable ''
                 auth required ${pkgs.duo-unix}/lib/security/pam_duo.so
@@ -1035,7 +1035,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        source = "${pkgs.pam}/bin/unix_chkpwd";
       };
     };
 
@@ -1072,8 +1072,8 @@ in
     security.apparmor.includes."abstractions/pam" = let
       isEnabled = test: fold or false (map test (attrValues config.security.pam.services));
       in
-      lib.concatMapStringsSep "\n"
-        (name: "r ${config.environment.etc."pam.d/${name}".source},")
+      lib.concatMapStrings
+        (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
         (attrNames config.security.pam.services) +
       ''
       mr ${getLib pkgs.pam}/lib/security/pam_filter/*,
@@ -1091,11 +1091,11 @@ in
         mr ${pam_ccreds}/lib/security/pam_ccreds.so,
       '' +
       optionalString (isEnabled (cfg: cfg.googleOsLoginAccountVerification)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so,
       '' +
       optionalString (isEnabled (cfg: cfg.googleOsLoginAuthentication)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
       '' +
       optionalString (config.security.pam.enableSSHAgentAuth
                      && isEnabled (cfg: cfg.sshAgentAuth)) ''

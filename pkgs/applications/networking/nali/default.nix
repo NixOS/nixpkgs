@@ -11,9 +11,8 @@ buildGoModule rec {
     sha256 = "sha256-iRLoUBA+Kzv1/LZQ8HCvR79K1riYErxEWhB0OmvFy2g=";
   };
 
-  vendorSha256 = "sha256-Kb2T+zDUuH+Rx8amYsTIhR5L3DIx5nGcDGqxHOn90NU=";
+  vendorSha256 = "sha256-0u6n53hL2+GvqbYpAKN54n7uiTHSsgyjedt20nT1yRc=";
   subPackages = [ "." ];
-  runVend = true;
 
   meta = with lib; {
     description = "An offline tool for querying IP geographic information and CDN provider";

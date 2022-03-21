@@ -240,7 +240,7 @@ rec {
           # Unpack all of the parent layers into the image.
           lowerdir=""
           extractionID=0
-          for layerTar in $(tac layer-list); do
+          for layerTar in $(cat layer-list); do
             echo "Unpacking layer $layerTar"
             extractionID=$((extractionID + 1))
 
@@ -827,6 +827,8 @@ rec {
       # this on, but tooling may disable this to insert the store paths more
       # efficiently via other means, such as bind mounting the host store.
       includeStorePaths ? true
+    , # Passthru arguments for the underlying derivation.
+      passthru ? {}
     ,
     }:
       assert
@@ -987,7 +989,7 @@ rec {
         result = runCommand "stream-${baseName}"
           {
             inherit (conf) imageName;
-            passthru = {
+            passthru = passthru // {
               inherit (conf) imageTag;
 
               # Distinguish tarballs and exes at the Nix level so functions that

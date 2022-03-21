@@ -68,7 +68,7 @@ tcl.mkTclDerivation rec {
     comment = meta.description;
     icon = "scid";
     exec = "scid";
-    categories = "Game;BoardGame;";
+    categories = [ "Game" "BoardGame" ];
   };
 
   meta = with lib; {

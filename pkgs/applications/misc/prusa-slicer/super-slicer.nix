@@ -5,8 +5,8 @@ let
   description = "PrusaSlicer fork with more features and faster development cycle";
 
   versions = {
-    stable = { version = "2.3.56.9"; sha256 = "sha256-vv01wGQkrasKKjpGSDeDqZbd1X5/iTfGXYN5Jwz+FKE="; };
-    latest = { version = "2.3.57.6"; sha256 = "sha256-ZCOtVmvNXDWLo9UMzxARCp+iyRTcy/ogd5sV0k86JG8="; };
+    stable = { version = "2.3.57.10"; sha256 = "sha256-/1oZgmZpRoizVpklKaI12qP4bVIGYyVpybmuCIz3Y0M="; };
+    latest = { version = "2.3.57.10"; sha256 = "sha256-/1oZgmZpRoizVpklKaI12qP4bVIGYyVpybmuCIz3Y0M="; };
   };
 
   override = { version, sha256 }: super: {
@@ -20,6 +20,8 @@ let
       fetchSubmodules = true;
     };
 
+    patches = null;
+
     # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
     postInstall = null;
     separateDebugInfo = true;
@@ -31,21 +33,22 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = appname;
+        name = "superslicer";
         exec = "superslicer";
         icon = appname;
         comment = description;
         desktopName = appname;
         genericName = "3D printer tool";
-        categories = "Development;";
+        categories = [ "Development" ];
       })
     ];
 
     meta = with lib; {
       inherit description;
-      homepage = "https://github.com/supermerili/SuperSlicer";
+      homepage = "https://github.com/supermerill/SuperSlicer";
       license = licenses.agpl3;
       maintainers = with maintainers; [ cab404 moredread ];
+      mainProgram = "superslicer";
     };
 
     passthru = allVersions;

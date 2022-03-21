@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python } :
+{lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python2 } :
 
 stdenv.mkDerivation rec {
   pname = "tennix";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0np5kw1y7i0z0dsqx4r2nvmq86qj8hv3mmgavm3hxraqnds5z8cm";
   };
 
-  buildInputs = [ python SDL SDL_mixer SDL_image SDL_ttf SDL_net ];
+  buildInputs = [ python2 SDL SDL_mixer SDL_image SDL_ttf SDL_net ];
 
   patches = [ ./fix_FTBFS.patch ];
 

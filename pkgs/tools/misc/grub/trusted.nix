@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchgit, fetchpatch, autogen, flex, bison, python, autoconf, automake
+{ lib, stdenv, fetchurl, fetchgit, fetchpatch, autogen, flex, bison, python2, autoconf, automake
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2
 , for_HP_laptop ? false
 }:
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
           sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
         };
 
-  nativeBuildInputs = [ autogen flex bison python autoconf automake ];
+  nativeBuildInputs = [ autogen flex bison python2 autoconf automake ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 ]
     ++ optional doCheck qemu;
 

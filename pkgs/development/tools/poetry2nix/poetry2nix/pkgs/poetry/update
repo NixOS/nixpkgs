@@ -7,4 +7,5 @@ echo >> src.json
 
 src=$(nix-build --no-out-link --expr 'with import <nixpkgs> {}; fetchFromGitHub (lib.importJSON ./src.json)')
 cp $src/pyproject.toml $src/poetry.lock .
+nix-shell -p poetry --run 'poetry lock'
 nix-build --expr '(import <nixpkgs> { overlays = [ (import ../../overlay.nix) ]; }).poetry'

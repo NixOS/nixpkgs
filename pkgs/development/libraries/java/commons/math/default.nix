@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "http://commons.apache.org/proper/commons-math/";
+    homepage    = "https://commons.apache.org/proper/commons-math/";
     description = "A library of lightweight, self-contained mathematics and statistics components";
     maintainers = with lib.maintainers; [ copumpkin ];
     license     = lib.licenses.asl20;

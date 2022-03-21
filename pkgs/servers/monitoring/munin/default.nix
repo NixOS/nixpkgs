@@ -89,6 +89,10 @@ stdenv.mkDerivation rec {
     sed -i '/ENV{PATH}/d' node/lib/Munin/Node/Service.pm
   '';
 
+  # Disable parallel build, errors:
+  #  Can't locate Munin/Common/Defaults.pm in @INC ...
+  enableParallelBuilding = false;
+
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
   # developers have forgotten to use PREFIX everywhere, so we use DESTDIR to
   # ensure that everything is installed in $out.

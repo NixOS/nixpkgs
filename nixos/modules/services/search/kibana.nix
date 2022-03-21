@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.kibana;
+  opt = options.services.kibana;
 
   ge7 = builtins.compareVersions cfg.package.version "7" >= 0;
   lt6_6 = builtins.compareVersions cfg.package.version "6.6" < 0;
@@ -130,6 +131,9 @@ in {
           This defaults to the singleton list [ca] when the <option>ca</option> option is defined.
         '';
         default = if cfg.elasticsearch.ca == null then [] else [ca];
+        defaultText = literalExpression ''
+          if config.${opt.elasticsearch.ca} == null then [ ] else [ ca ]
+        '';
         type = types.listOf types.path;
       };
 

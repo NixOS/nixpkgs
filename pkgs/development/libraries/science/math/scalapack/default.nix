@@ -1,22 +1,36 @@
 { lib, stdenv, fetchFromGitHub, cmake, openssh
-, gfortran, mpi, blas, lapack
+, mpi, blas, lapack
 } :
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c10d18gj3kvpmyv5q246x35hjxaqn4ygy1cygaydhyxnm4klzdj";
+    sha256 = "sha256-GNVGWrIWdfyTfbz7c31Vjt9eDlVzCd/aLHoWq2DMyX4=";
   };
 
-  nativeBuildInputs = [ cmake openssh gfortran ];
-  buildInputs = [ mpi blas lapack ];
+  passthru = { inherit (blas) isILP64; };
+
+  # Required to activate ILP64.
+  # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19
+  postPatch = lib.optionalString passthru.isILP64 ''
+    sed -i 's/INTSZ = 4/INTSZ = 8/g'   TESTING/EIG/* TESTING/LIN/*
+    sed -i 's/INTGSZ = 4/INTGSZ = 8/g' TESTING/EIG/* TESTING/LIN/*
+
+    # These tests are not adapted to ILP64
+    sed -i '/xssep/d;/xsgsep/d;/xssyevr/d' TESTING/CMakeLists.txt
+  '';
+
+  nativeBuildInputs = [ cmake ];
+  checkInputs = [ openssh ];
+  buildInputs = [ blas lapack ];
+  propagatedBuildInputs = [ mpi ];
 
   doCheck = true;
 
@@ -25,6 +39,11 @@ stdenv.mkDerivation rec {
       -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
+      -DCMAKE_Fortran_COMPILER=${mpi}/bin/mpif90
+      ${lib.optionalString passthru.isILP64 ''
+        -DCMAKE_Fortran_FLAGS="-fdefault-integer-8"
+        -DCMAKE_C_FLAGS="-DInt=long"
+      ''}
       )
   '';
 
@@ -52,5 +71,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ costrouc markuskowa ];
   };
-
 }

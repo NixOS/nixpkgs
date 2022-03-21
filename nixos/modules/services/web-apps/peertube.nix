@@ -1,7 +1,8 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, options, ... }:
 
 let
   cfg = config.services.peertube;
+  opt = options.services.peertube;
 
   settingsFormat = pkgs.formats.json {};
   configFile = settingsFormat.generate "production.json" cfg.settings;
@@ -153,6 +154,11 @@ in {
       host = lib.mkOption {
         type = lib.types.str;
         default = if cfg.database.createLocally then "/run/postgresql" else null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.database.createLocally}
+          then "/run/postgresql"
+          else null
+        '';
         example = "192.168.15.47";
         description = "Database host address or unix socket.";
       };
@@ -193,12 +199,22 @@ in {
       host = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then "127.0.0.1" else null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.redis.createLocally} && !config.${opt.redis.enableUnixSocket}
+          then "127.0.0.1"
+          else null
+        '';
         description = "Redis host.";
       };
 
       port = lib.mkOption {
         type = lib.types.nullOr lib.types.port;
         default = if cfg.redis.createLocally && cfg.redis.enableUnixSocket then null else 6379;
+        defaultText = lib.literalExpression ''
+          if config.${opt.redis.createLocally} && config.${opt.redis.enableUnixSocket}
+          then null
+          else 6379
+        '';
         description = "Redis port.";
       };
 
@@ -212,6 +228,7 @@ in {
       enableUnixSocket = lib.mkOption {
         type = lib.types.bool;
         default = cfg.redis.createLocally;
+        defaultText = lib.literalExpression "config.${opt.redis.createLocally}";
         description = "Use Unix socket.";
       };
     };
@@ -303,6 +320,7 @@ in {
         };
         storage = {
           tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";
+          bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
           videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
@@ -315,6 +333,15 @@ in {
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
+        };
+        import = {
+          videos = {
+            http = {
+              youtube_dl_release = {
+                python_path = "${pkgs.python3}/bin/python";
+              };
+            };
+          };
         };
       }
       (lib.mkIf cfg.redis.enableUnixSocket { redis = { socket = "/run/redis/redis.sock"; }; })
@@ -363,7 +390,7 @@ in {
 
       environment = env;
 
-      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn youtube-dl ];
+      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn python3 ];
 
       script = ''
         #!/bin/sh

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blueberry";
-  version = "1.4.5";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DDxrreo133DIn5XhXKgWvbhPV2NXdyyywC+e73W5aY4=";
+    sha256 = "sha256-ziAdLFSZS8bh+OBSYLqxJ3g7mgFai/psvlBw3Qt17w0=";
   };
 
   nativeBuildInputs = [

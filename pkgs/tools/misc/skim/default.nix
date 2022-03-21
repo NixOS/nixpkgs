@@ -32,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/sk-share
   '';
 
+  # https://github.com/lotabout/skim/issues/440
+  doCheck = !stdenv.isAarch64;
+
   meta = with lib; {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";

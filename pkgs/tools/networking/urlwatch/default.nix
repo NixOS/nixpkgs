@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     appdirs
     cssselect
+    jq
     keyring
     lxml
     markdown2

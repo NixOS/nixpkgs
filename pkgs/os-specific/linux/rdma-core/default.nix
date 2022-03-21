@@ -5,17 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rdma-core";
-  version = "38.0";
+  version = "39.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "1z9yrkqdknzidg4g1g5rqrs7i0325nmzzw0nf2ki1nzlfwqxy9qv";
+    sha256 = "sha256-7Z06bdCtv/gdZKzKfcU+JrWl4+b6b/cdKp8pMLCZZo0=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config pandoc docutils ];
-  buildInputs = [ libnl ethtool iproute2 udev python3 perl ];
+  strictDeps = true;
+  nativeBuildInputs = [ cmake pkg-config pandoc docutils python3 ];
+  buildInputs = [ libnl ethtool iproute2 udev perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"

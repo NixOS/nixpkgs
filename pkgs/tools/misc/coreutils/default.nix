@@ -21,11 +21,11 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation (rec {
-  pname = "coreutils";
+  pname = "coreutils${optionalString (!minimal) "-full"}";
   version = "9.0";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
     sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
   };
 
@@ -33,6 +33,9 @@ stdenv.mkDerivation (rec {
     ./fix-chmod-exit-code.patch
     # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
     ./disable-seek-hole.patch
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=52330
+    # This patch can be dropped, once we upgrade to the next coreutils version after 9.0
+    ./fix-arm64-macos.patch
   ];
 
   postPatch = ''

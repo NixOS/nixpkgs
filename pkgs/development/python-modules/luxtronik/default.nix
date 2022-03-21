@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "luxtronik";
-  version = "0.3.9";
+  version = "0.3.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Bouni";
     repo = "python-luxtronik";
     rev = version;
-    sha256 = "mScdTQ82tV5fyy1S0YDDOz1UC4VB0OmSXD5gHp53WsE=";
+    sha256 = "sha256-JPY1HbNZanEsUpQ5W2kAwEFvwNGQI2hoogTZUGIg3YY=";
   };
 
   # Project has no tests

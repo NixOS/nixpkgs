@@ -16,12 +16,12 @@ with lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.15.7";
+  version = "1.16.4";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "sha256-Ckg8XKCPnyp4a0kXJrqju2jAJvD4tzjomaeJxlFwYzg=";
+    sha256 = "sha256-7zlreX05pkhn381FMgQ8Nj3OP+BUr6o3u5f4ouo/Khg=";
   };
 
   unpackPhase = ''
@@ -77,6 +77,6 @@ buildGoPackage rec {
     description = "Git with a cup of tea";
     homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ma27 ];
+    maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
   };
 }

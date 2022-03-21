@@ -1,8 +1,8 @@
-diff --git a/kde-modules/KDEInstallDirs.cmake b/kde-modules/KDEInstallDirs.cmake
+diff --git a/kde-modules/KDEInstallDirsCommon.cmake b/kde-modules/KDEInstallDirsCommon.cmake
 index c1d056b..d9e19f0 100644
---- a/kde-modules/KDEInstallDirs.cmake
-+++ b/kde-modules/KDEInstallDirs.cmake
-@@ -242,35 +242,6 @@
+--- a/kde-modules/KDEInstallDirsCommon.cmake
++++ b/kde-modules/KDEInstallDirsCommon.cmake
+@@ -15,35 +15,6 @@
  # GNUInstallDirs code deals with re-configuring, but that is dealt with
  # by the _define_* macros in this module).
  set(_LIBDIR_DEFAULT "lib")

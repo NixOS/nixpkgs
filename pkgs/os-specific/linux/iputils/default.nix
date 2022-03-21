@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "20210722";
+  version = "20211215";
   sunAsIsLicense = {
     fullName = "AS-IS, SUN MICROSYSTEMS license";
     url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
@@ -19,13 +19,8 @@ in stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "139fyifsjm0i012rhcx3ra3pxx2wxh77dfd551d8lgiv2mqd742j";
+    sha256 = "1vzdch1xi2x2j8mvnsr4wwwh7kdkgf926xafw5kkb74yy1wac5qv";
   };
-
-  postPatch = lib.optionalString (!doCheck) ''
-    # There isn't a Meson option for this yet:
-    sed -i '/##### TESTS #####/q' ping/meson.build
-  '';
 
   outputs = ["out" "apparmor"];
 
@@ -35,11 +30,10 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-DBUILD_RARPD=true"
-    "-DBUILD_TRACEROUTE6=true"
-    "-DBUILD_TFTPD=true"
     "-DNO_SETCAP_OR_SUID=true"
     "-Dsystemdunitdir=etc/systemd/system"
     "-DINSTALL_SYSTEMD_UNITS=true"
+    "-DSKIP_TESTS=${lib.boolToString (!doCheck)}"
   ]
     # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
     ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
@@ -87,9 +81,7 @@ in stdenv.mkDerivation rec {
       ping
       rarpd
       rdisc
-      tftpd
       tracepath
-      traceroute6
     '';
   };
 }

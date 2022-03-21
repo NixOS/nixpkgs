@@ -9,15 +9,19 @@
 , google-cloud-testutils
 , google-resumable-media
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.42.3";
+  version = "2.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d1TU3KpFl1UUtATs4NortCkqy8Z8pVmmnhKhnVT82wY=";
+    hash = "sha256-AkT0YScQy17ERfxndDh1ZOI/mCM2P7QIsock4hAkAbc=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +44,7 @@ buildPythonPackage rec {
     "download"
     "get"
     "post"
+    "upload"
     "test_build_api_url"
     "test_ctor_mtls"
     "test_hmac_key_crud"

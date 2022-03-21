@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.38";
+  version = "6.47";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
     hash = {
-      x86_64-linux = "sha256-K5EnrmzP8pyW9dR1fbMzkPzpS6aHm8JF1+m3afnH4rU=";
-      aarch64-linux = "sha256-6wNWDXjQNyfU2l9Xi9JtmAuoKtHuIY5cvNMjYkwh2Sk=";
+      x86_64-linux = "sha256-31HmIx/ohbrzu5uj8KOOZiHNCmXwng9h+fIGaJfYyqA=";
+      aarch64-linux = "sha256-CMmcBpaZ6BEZJ1144aQhOJ/o2NrGD7/8aq+ObLVMXYE=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -78,6 +78,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ilian orivej ];
+    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer ];
   };
 }

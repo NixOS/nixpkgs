@@ -1,13 +1,14 @@
 { boto3
 , buildPythonPackage
 , crc32c
+, which
 , fetchFromGitHub
 , lib
 , matplotlib
 , moto
 , numpy
 , pillow
-, protobuf
+, protobuf3_8
 , pytestCheckHook
 , pytorch
 , six
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "lanpa";
     repo = "tensorboardX";
     rev = "v${version}";
-    sha256 = "1kcw062bcqvqva5kag9j7q72wk3vdqgf5cnn0lxmsvhlmq5sjdfn";
+    sha256 = "sha256-1jWpC64Ubl07Bday4h5ue0wuDj4yPTWL2nhjtoQBnM0=";
   };
 
   # apparently torch API changed a bit at 1.6
@@ -34,10 +35,16 @@ buildPythonPackage rec {
       "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
   '';
 
+  # Wanted protobuf version is mentioned here:
+  # https://github.com/lanpa/tensorboardX/blob/0d08112618a2bbda4c028a15a137fed3afe77401/compile.sh#L6
+  nativeBuildInputs = [ which protobuf3_8 ];
+
+  # required to make tests deterministic
+  PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
   propagatedBuildInputs = [
     crc32c
     numpy
-    protobuf
     six
     soundfile
   ];

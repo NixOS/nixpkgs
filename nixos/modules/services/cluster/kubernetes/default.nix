@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.kubernetes;
+  opt = options.services.kubernetes;
 
   defaultContainerdSettings = {
     version = 2;
@@ -25,10 +26,7 @@ let
 
       containerd.runtimes.runc = {
         runtime_type = "io.containerd.runc.v2";
-      };
-
-      containerd.runtimes."io.containerd.runc.v2".options = {
-        SystemdCgroup = true;
+        options.SystemdCgroup = true;
       };
     };
   };
@@ -87,6 +85,7 @@ let
       description = "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = cfg.caFile;
+      defaultText = literalExpression "config.${opt.caFile}";
     };
 
     certFile = mkOption {
@@ -104,6 +103,7 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
@@ -196,6 +196,9 @@ in {
       description = "Default location for kubernetes secrets. Not a store location.";
       type = types.path;
       default = cfg.dataDir + "/secrets";
+      defaultText = literalExpression ''
+        config.${opt.dataDir} + "/secrets"
+      '';
     };
   };
 
@@ -307,4 +310,6 @@ in {
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
     })
   ];
+
+  meta.buildDocsInSandbox = false;
 }

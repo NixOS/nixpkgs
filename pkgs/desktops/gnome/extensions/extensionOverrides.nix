@@ -3,10 +3,13 @@
 , gjs
 , gnome
 , gobject-introspection
-, xprop
+, pulseaudio
+, python3
+, substituteAll
 , touchegg
 , vte
 , wrapGAppsHook
+, xprop
 }:
 let
   # Helper method to reduce redundancy
@@ -23,10 +26,6 @@ in
 super: lib.trivial.pipe super [
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
-  }))
-
-  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
@@ -60,6 +59,18 @@ super: lib.trivial.pipe super [
         substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
       done
     '';
+  }))
+
+  (patchExtension "shell-volume-mixer@derhofbauer.at" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/shell-volume-mixer_at_derhofbauer.at.patch;
+        inherit pulseaudio;
+        inherit python3;
+      })
+    ];
+
+    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   }))
 
   (patchExtension "unite@hardpixel.eu" (old: {

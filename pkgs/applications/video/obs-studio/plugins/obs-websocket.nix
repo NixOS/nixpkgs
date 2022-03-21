@@ -4,24 +4,48 @@
 , fetchpatch
 , cmake
 , qtbase
+, qtsvg
 , obs-studio
 , asio_1_10
 , websocketpp
+, nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-websocket";
-  version = "4.9.1";
+
+  # We have updated to the alpha version when OBS Studio 27.2 was
+  # released, because this is the only version of obs-websocket that
+  # builds against the new OBS Studio.
+  version = "5.0.0-alpha3";
 
   src = fetchFromGitHub {
     owner = "Palakis";
     repo = "obs-websocket";
     rev = version;
-    sha256 = "sha256-XCiSNWTiA/u+3IbYlhIc5bCjKjLHDRVjYIG5MEoYnr0=";
+    sha256 = "Lr6SBj5rRTAWmn9Tnlu4Sl7SAkOCRCTP6sFWSp4xB+I=";
+    fetchSubmodules = true;
   };
 
+  patches = [
+    # This patch can be dropped when obs-websocket is updated to the
+    # next version.
+    (fetchpatch {
+      url = "https://github.com/obsproject/obs-websocket/commit/13c7b83c34eb67b2ee80af05071d81f10d0d2997.patch";
+      sha256 = "TNap/T8+058vhfWzRRr4vmlblFk9tHMUNyG6Ob5PwiM=";
+      name = "obs-addref-werror-fix.patch";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase obs-studio asio_1_10 websocketpp ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    obs-studio
+    asio_1_10
+    websocketpp
+    nlohmann_json
+  ];
 
   dontWrapQtApps = true;
 

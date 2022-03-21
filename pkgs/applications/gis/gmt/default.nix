@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "gmt";
-  version = "6.2.0";
+  version = "6.3.0";
   src = fetchurl {
     url = "https://github.com/GenericMappingTools/gmt/releases/download/${version}/gmt-${version}-src.tar.gz";
-    sha256 = "sha256-q3BikSrurRAhdw+tR1bgqZhg/ejqm0KPsAwi+hWju/w=";
+    sha256 = "sha256-LNBz2LHxG4elmziqeq+OOceUDStVpGoyZ+I4AuyKCNE=";
   };
 
   nativeBuildInputs = [ cmake ];

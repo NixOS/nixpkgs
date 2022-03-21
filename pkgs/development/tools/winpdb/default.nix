@@ -1,6 +1,6 @@
-{ lib, fetchurl, pythonPackages, makeDesktopItem }:
+{ lib, fetchurl, python2Packages, makeDesktopItem }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "winpdb";
   version = "1.4.8";
   namePrefix = "";
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
-  propagatedBuildInputs = [ pythonPackages.wxPython ];
+  propagatedBuildInputs = [ python2Packages.wxPython ];
 
   desktopItem = makeDesktopItem {
     name = "winpdb";
@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
     comment = "Platform independend Python debugger";
     desktopName = "Winpdb";
     genericName = "Python Debugger";
-    categories = "Development;Debugger;";
+    categories = [ "Development" "Debugger" ];
   };
 
   # Don't call gnome-terminal with "--disable-factory" flag, which is

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -14,28 +13,19 @@
 , granite
 , libgee
 , libhandy
-, elementary-icon-theme
 , appstream
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.7.1";
-
-  repoName = "calculator";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "calculator";
     rev = version;
-    sha256 = "sha256-GoQFWhEhUBVLYL1vsIIBMT8pKc0dK/ploiGfUtJAJQU=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-U0wXrw9ZJwkqZAtTTHmTzqYhwF9V2JZEZZdDak3kPIc=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -62,6 +51,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/elementary/calculator";

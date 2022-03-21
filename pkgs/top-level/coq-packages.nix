@@ -58,6 +58,7 @@ let
       iris = callPackage ../development/coq-modules/iris {};
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
+      LibHyps = callPackage ../development/coq-modules/LibHyps {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp {};
@@ -73,6 +74,7 @@ let
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
+      mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metalib = callPackage ../development/coq-modules/metalib { };
@@ -95,9 +97,7 @@ let
       topology = callPackage ../development/coq-modules/topology {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
-      VST = callPackage ../development/coq-modules/VST {
-        compcert = self.compcert.override { version = "3.9"; };
-      };
+      VST = callPackage ../development/coq-modules/VST {};
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };

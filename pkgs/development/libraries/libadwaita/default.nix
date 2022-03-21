@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.0.alpha.3";
+  version = "1.0.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    sha256 = "sha256-4ED2m8hZMWbu5sFbkH0W6q05+cYCCkx+ubeDqg3W3a0=";
+    hash = "sha256-D7Qq8yAWkr/G5I4k8G1+viJkEJSrCBAg31Q+g3U9FcQ=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fribidi
     gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
     gtk4
   ];
 
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
       # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
       # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
       # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
-      "XDG_DATA_DIRS=${glib.getSchemaPath gsettings-desktop-schemas}/../.."
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
 
       # Tests need a cache directory
       "HOME=$TMPDIR"
@@ -92,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
     platforms = platforms.linux;
   };
 }

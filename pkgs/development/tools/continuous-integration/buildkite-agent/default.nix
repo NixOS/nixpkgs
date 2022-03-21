@@ -2,7 +2,7 @@
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
   nixosTests }:
 buildGoModule rec {
-  name = "buildkite-agent-${version}";
+  pname = "buildkite-agent";
   version = "3.33.3";
 
   src = fetchFromGitHub {

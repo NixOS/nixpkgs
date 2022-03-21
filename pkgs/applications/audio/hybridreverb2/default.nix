@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www2.ika.ruhr-uni-bochum.de/HybridReverb2";
+    homepage = "https://github.com/jpcima/HybridReverb2";
     description = "Reverb effect using hybrid impulse convolution";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];

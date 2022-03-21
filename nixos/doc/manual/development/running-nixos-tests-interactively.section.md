@@ -4,19 +4,19 @@ The test itself can be run interactively. This is particularly useful
 when developing or debugging a test:
 
 ```ShellSession
-$ nix-build nixos/tests/login.nix -A driverInteractive
-$ ./result/bin/nixos-test-driver --interactive
-starting VDE switch for network 1
->
+$ nix-build . -A nixosTests.login.driverInteractive
+$ ./result/bin/nixos-test-driver
+[...]
+>>>
 ```
 
 You can then take any Python statement, e.g.
 
 ```py
-> start_all()
-> test_script()
-> machine.succeed("touch /tmp/foo")
-> print(machine.succeed("pwd")) # Show stdout of command
+>>> start_all()
+>>> test_script()
+>>> machine.succeed("touch /tmp/foo")
+>>> print(machine.succeed("pwd")) # Show stdout of command
 ```
 
 The function `test_script` executes the entire test script and drops you
@@ -28,7 +28,7 @@ You can re-use the VM states coming from a previous run by setting the
 `--keep-vm-state` flag.
 
 ```ShellSession
-$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
+$ ./result/bin/nixos-test-driver --keep-vm-state
 ```
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`

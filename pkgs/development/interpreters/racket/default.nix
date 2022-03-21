@@ -37,6 +37,7 @@ let
     libjpeg
     libpng
     mpfr
+    ncurses
     openssl
     pango
     poppler
@@ -48,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.3"; # always change at once with ./minimal.nix
+  version = "8.4"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-M90MIIRsfF/fhK8twlD3ZRBO0ztQkb4VKp9o8eJUFFc=";
+    sha256 = "sha256-uJ+vL+FtBNILkFbwi7qZ6yBA1Rcr7o886zmZ/tFuatM=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -69,14 +70,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
-  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
+  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   patches = [
     # Hardcode variant detection because we wrap the Racket binary making it
     # fail to detect its variant at runtime.
     # See: https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
     ./force-cs-variant.patch
+
+    # The entry point binary $out/bin/racket is codesigned at least once. The
+    # following error is triggered as a result.
+    # (error 'add-ad-hoc-signature "file already has a signature")
+    # We always remove the existing signature then call add-ad-hoc-signature to
+    # circumvent this error.
+    ./force-remove-codesign-then-add.patch
   ];
 
   preConfigure = ''
@@ -89,10 +97,34 @@ stdenv.mkDerivation rec {
         --replace /bin/rm ${coreutils}/bin/rm \
         --replace /bin/true ${coreutils}/bin/true
     done
+
+    # The configure script forces using `libtool -o` as AR on Darwin. But, the
+    # `-o` option is only available from Apple libtool. GNU ar works here.
+    substituteInPlace src/ChezScheme/zlib/configure \
+        --replace 'ARFLAGS="-o"' 'AR=ar; ARFLAGS="rc"'
+
     mkdir src/build
     cd src/build
 
-    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${LD_LIBRARY_PATH})
+  '' + lib.optionalString stdenv.isLinux ''
+    gappsWrapperArgs+=("--prefix"   "LD_LIBRARY_PATH" ":" ${libPath})
+  '' + lib.optionalString stdenv.isDarwin ''
+    gappsWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" ${libPath})
+  ''
+  ;
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    # Cannot set DYLD_LIBRARY_PATH as an attr of this drv, becasue dynamic
+    # linker environment variables like this are purged.
+    # See: https://apple.stackexchange.com/a/212954/167199
+
+    # Make builders feed it to dlopen(...). Do not expose all of $libPath to
+    # DYLD_LIBRARY_PATH as the order of looking up symbols like
+    # `__cg_jpeg_resync_to_restart` will be messed up. Our libJPEG.dyllib
+    # expects it from our libTIFF.dylib, but instead it could not be found from
+    # the system `libTIFF.dylib`. DYLD_FALLBACK_LIBRARY_PATH has its own problem
+    # , too.
+    export DYLD_FALLBACK_LIBRARY_PATH="${libPath}"
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
@@ -118,6 +150,6 @@ stdenv.mkDerivation rec {
     homepage = "https://racket-lang.org/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }

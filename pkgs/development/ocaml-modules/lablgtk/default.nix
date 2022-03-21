@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, libglade, gtksourceview }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview }:
 
 let param =
   let check = lib.versionAtLeast ocaml.version; in
   if check "4.06" then rec {
-    version = "2.18.10";
+    version = "2.18.12";
     src = fetchFromGitHub {
       owner = "garrigue";
       repo = "lablgtk";
       rev = version;
-      sha256 = "0w8cdfcv2wc19sd3qzj3qq77qc6rbnbynsz02gzbl15kgrvgrfxi";
+      sha256 = "sha256:0asib87c42apwf1ln8541x6i3mvyajqbarifvz11in0mqn5k7g7h";
     };
   } else if check "3.12" then {
     version = "2.18.5";
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   pname = "lablgtk";
   inherit (param) version src;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  buildInputs = [ gtk2 libgnomecanvas gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];

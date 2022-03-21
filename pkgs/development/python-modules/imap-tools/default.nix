@@ -7,15 +7,17 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "0.50.2";
+  version = "0.52.0";
 
   disabled = isPy27;
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "v${version}";
-    hash = "sha256-ki38Kr+eDEIQPRuoQePR7dCRDSgq2ZLXws1pq2gtQrI=";
+    hash = "sha256-la2+cpTnHZQn/FXtySp+3zDCBTONiLC16Tm+hDiIERc=";
   };
 
   checkInputs = [
@@ -25,9 +27,10 @@ buildPythonPackage rec {
   disabledTests = [
     # tests require a network connection
     "test_action"
-    "test_folders"
-    "test_connection"
     "test_attributes"
+    "test_connection"
+    "test_folders"
+    "test_idle"
     "test_live"
   ];
 

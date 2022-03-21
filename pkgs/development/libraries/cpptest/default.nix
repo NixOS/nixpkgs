@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cpptest-2.0.0";
+  pname = "cpptest";
+  version = "2.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/cpptest/cpptest/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/cpptest/cpptest/cpptest-${version}/cpptest-${version}.tar.gz";
     sha256 = "0lpy3f2fjx1srh02myanlp6zfi497whlldcrnij39ghfhm0arcnm";
   };
 

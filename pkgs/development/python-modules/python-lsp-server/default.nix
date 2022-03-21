@@ -20,6 +20,7 @@
 , pythonOlder
 , rope
 , setuptools
+, stdenv
 , ujson
 , yapf
 , withAutopep8 ? true
@@ -35,14 +36,15 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.2.4";
-  disabled = pythonOlder "3.6";
+  version = "1.3.3";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c1g46hpzjhqbjcmv6xm3by3jprcjhzjslqzrp95hdkbykvrgs5x";
+    sha256 = "sha256-F8f9NAjPWkm01D/KwFH0oA6nQ3EF4ZVCCckZTL4A35Y=";
   };
 
   postPatch = ''
@@ -72,14 +74,17 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
-    pyqt5
     pytestCheckHook
-  ];
+  ]
+  # pyqt5 is broken on aarch64-darwin
+  ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
 
   disabledTests = [
     # pytlint output changed
     "test_lint_free_pylint"
-  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config";
+  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
+  # pyqt5 is broken on aarch64-darwin
+  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "test_pyqt_completion";
 
   disabledTestPaths = lib.optional (!withAutopep8) "test/plugins/test_autopep8_format.py"
     ++ lib.optional (!withRope) "test/plugins/test_completion.py"
@@ -96,7 +101,9 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [ "pylsp" ];
+  pythonImportsCheck = [
+    "pylsp"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";

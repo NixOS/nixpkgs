@@ -1,0 +1,31 @@
+From 15b37bb12a362c7889ac431eca4a47d6b2bdb97c Mon Sep 17 00:00:00 2001
+From: Victor Gaydov <victor@enise.org>
+Date: Sat, 5 Dec 2020 18:38:36 +0300
+Subject: [PATCH] Fix compatibility with new SCons
+
+---
+ site_scons/site_tools/roc/config.py | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/site_scons/site_tools/roc/config.py b/site_scons/site_tools/roc/config.py
+index b42b3adb..03b76be7 100644
+--- a/site_scons/site_tools/roc/config.py
++++ b/site_scons/site_tools/roc/config.py
+@@ -13,7 +13,13 @@ def _run_prog(context, src, suffix):
+     # RunProg may incorrectly use cached results from a previous run saved for
+     # different file contents but the same invocation number. To prevent this, we
+     # monkey patch its global counter with a hashsum of the file contents.
+-    SCons.SConf._ac_build_counter = int(hashlib.md5(src.encode()).hexdigest(), 16)
++    # The workaround is needed only for older versions of SCons, where
++    # _ac_build_counter was an integer.
++    try:
++        if type(SCons.SConf._ac_build_counter) is int:
++            SCons.SConf._ac_build_counter = int(hashlib.md5(src.encode()).hexdigest(), 16)
++    except:
++        pass
+     return context.RunProg(src, suffix)
+ 
+ def CheckLibWithHeaderExt(context, libs, headers, language, expr='1', run=True):
+-- 
+2.34.1
+

@@ -17,7 +17,8 @@ lprdeb = fetchurl {
 };
   in
 stdenv.mkDerivation {
-  name = "cups-brother-hl1110";
+  pname = "cups-brother-hl1110";
+  inherit version;
 
   srcs = [ lprdeb cupssrc cupsdeb ];
   nativeBuildInputs = [ makeWrapper ];

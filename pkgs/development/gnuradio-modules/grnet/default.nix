@@ -52,6 +52,7 @@ mkDerivation {
   pname = "gr-grnet";
   version = version.name;
   inherit src;
+  disabledForGRafter = "3.10";
 
   buildInputs = [
     boost

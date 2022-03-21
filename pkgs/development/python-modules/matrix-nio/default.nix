@@ -28,25 +28,26 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.18.7";
+  version = "0.19.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    hash = "sha256-eti9kvfv3y7m+mJzcxftyn8OyVSd2Ehqd3eU2ezMV5Q=";
+    hash = "sha256-+WZk2m05y/bYj8zSuWTzm+rnCC0L9H9WNQ2RLXv7hDk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"' \
+      --replace 'jsonschema = "^3.2.0"' 'jsonschema = "*"' \
+      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "*", optional = true }'
   '';
 
   nativeBuildInputs = [
     git
     poetry-core
-    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -73,7 +74,10 @@ buildPythonPackage rec {
     hypothesis
     pytest-aiohttp
     pytest-benchmark
+    pytestCheckHook
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [
     # touches network

@@ -7,20 +7,32 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "2.6.2";
+  version = "2.7.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "542a300f4b79ed9574cdeb4eb47cf8899f0915041e8bf0058e8192a620087d30";
+    hash = "sha256-Ty80C73K3/TebsdSHinmp2y8TKgOftqT5PIDafq1GgM=";
   };
 
-  propagatedBuildInputs = [ libcst google-api-core proto-plus];
+  propagatedBuildInputs = [
+    libcst
+    google-api-core
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   pythonImportsCheck = [
     "google.cloud.vision"

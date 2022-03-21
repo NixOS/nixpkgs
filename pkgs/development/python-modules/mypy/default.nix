@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "unstable-2021-11-14";
+  version = "0.931";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "053a1beb94ee4e5b3260725594315d1b6776e42f";
-    sha256 = "sha256-q2ntj3y3GgXrw4v+yMvcqWFv4y/6YwunIj3bNzU9CH0=";
+    rev = "v${version}";
+    sha256 = "1v83flrdxh8grcp40qw04q4hzjflih9xwib64078vsxv2w36f817";
   };
 
   patches = [
@@ -32,11 +32,6 @@ buildPythonPackage rec {
       sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tomli>=1.1.0,<1.2.0" "tomli"
-  '';
 
   buildInputs = [
     types-typed-ast

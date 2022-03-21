@@ -8,11 +8,15 @@
 , mnemonic
 , pyaes
 , typing-extensions
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hwi";
   version = "2.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
@@ -34,18 +38,22 @@ buildPythonPackage rec {
   # make compatible with libusb1 2.x
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'libusb1>=1.7,<2.0' 'libusb1>=1.7'
+      --replace 'libusb1>=1.7,<2.0' 'libusb1>=1.7' \
+      --replace "'python_requires': '>=3.6,<3.10'," "'python_requires': '>=3.6,<4'," \
+      --replace 'typing-extensions>=3.7,<4.0' 'typing-extensions>=3.7'
   '';
 
   # tests require to clone quite a few firmwares
   doCheck = false;
 
-  pythonImportsCheck = [ "hwilib" ];
+  pythonImportsCheck = [
+    "hwilib"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ prusnak ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ prusnak ];
   };
 }

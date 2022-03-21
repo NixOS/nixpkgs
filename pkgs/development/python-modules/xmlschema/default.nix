@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.9.1";
+  version = "1.9.2";
   pname = "xmlschema";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "0z1mqjilnmbsdr8hw787irdk7419df2x8k765l9n5pb6ykdgz131";
+    sha256 = "1d18x150g0jz3nw5al5dygizwkjgzdnmd5kf46v8ribfz48iirr6";
   };
 
   propagatedBuildInputs = [

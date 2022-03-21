@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     icon = "abuse";
     desktopName = "Abuse";
     comment     = "Side-scroller action game that pits you against ruthless alien killers";
-    categories  = "Game;ActionGame;";
+    categories  = [ "Game" "ActionGame" ];
   }) ];
 
   postInstall = ''

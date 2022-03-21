@@ -1,4 +1,4 @@
-{ lib, buildOcaml, fetchFromGitHub, type_conv }:
+{ lib, buildOcaml, fetchFromGitHub, type_conv, camlp4 }:
 
 buildOcaml rec {
   pname = "comparelib";
@@ -13,6 +13,7 @@ buildOcaml rec {
     sha256 = "sha256-gtJvXAUxiIt/L9bCzS+8wHcCQ+QpBubwcjDcyN0K2MA=";
   };
 
+  buildInputs = [ camlp4 ];
   propagatedBuildInputs = [ type_conv ];
 
   meta = with lib; {

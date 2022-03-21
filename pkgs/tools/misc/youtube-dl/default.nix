@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.06.06";
+  version = "2021.12.17";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1hqan9h55x9gfdakw554vic68w9gpvhblchwxlw265zxp56hxjrw";
+    sha256 = "sha256-nzuZyLd4RVFltFJfIVBehsf/Vl86wxnhlzPYEBlBNd8=";
   };
 
   patches = [
@@ -70,13 +70,13 @@ buildPythonPackage rec {
     homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
-      youtube-dl is a small, Python-based command-line program
-      to download videos from YouTube.com and a few more sites.
-      youtube-dl is released to the public domain, which means
-      you can modify it, redistribute it or use it however you like.
+      youtube-dl is a small, Python-based command-line program to download
+      videos from YouTube.com and a few more sites.  youtube-dl is released to
+      the public domain, which means you can modify it, redistribute it or use
+      it however you like.
     '';
     license = licenses.publicDomain;
+    maintainers = with maintainers; [ bluescreen303 fpletz ma27 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fpletz ma27 ];
   };
 }

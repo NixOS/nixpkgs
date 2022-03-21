@@ -10,14 +10,14 @@
 
 mkDerivation rec {
   pname = "mauikit-filebrowsing";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "mauikit-filebrowsing";
     rev = "v${version}";
-    sha256 = "sha256-j6VoNtMkDB5BSET/RUiQlWdL0D1dAHlW929WNCDC+PE=";
+    hash = "sha256-2LzGvjh2t4RVZS9Js7ky3hM51L7bx0SHmDlKKPjl3LM=";
   };
 
   nativeBuildInputs = [

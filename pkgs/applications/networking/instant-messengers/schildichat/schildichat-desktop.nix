@@ -7,13 +7,13 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchYarnDeps
-, yarn, nodejs, fixup_yarn_lock
+, yarn
+, nodejs
+, fixup_yarn_lock
 , electron
 , Security
 , AppKit
 , CoreServices
-
-, useWayland ? false
 }:
 
 let
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/SchildiChat/schildichat-desktop/";
-    rev = "v${version}";
+    inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
   };
@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
 
     # executable wrapper
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --add-flags "$out/share/element/electron" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
   '';
@@ -101,17 +102,15 @@ stdenv.mkDerivation rec {
   # https://github.com/schildichat/element-desktop/blob/sc/package.json
   desktopItems = [
     (makeDesktopItem {
-     name = "schildichat-desktop";
-     exec = "${executableName} %u";
-     icon = "schildichat";
-     desktopName = "SchildiChat";
-     genericName = "Matrix Client";
-     comment = meta.description;
-     categories = "Network;InstantMessaging;Chat;";
-     extraEntries = ''
-       StartupWMClass=schildichat
-       MimeType=x-scheme-handler/element;
-     '';
+      name = "schildichat-desktop";
+      exec = "${executableName} %u";
+      icon = "schildichat";
+      desktopName = "SchildiChat";
+      genericName = "Matrix Client";
+      comment = meta.description;
+      categories = [ "Network" "InstantMessaging" "Chat" ];
+      startupWMClass = "schildichat";
+      mimeTypes = [ "x-scheme-handler/element" ];
     })
   ];
 
@@ -121,7 +120,7 @@ stdenv.mkDerivation rec {
     description = "Matrix client / Element Desktop fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members;
+    maintainers = lib.teams.matrix.members ++ [ lib.maintainers.kloenk ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };

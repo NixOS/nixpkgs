@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Command Line Interface for AWS EC2 Instance Connect";
     homepage = "https://github.com/aws/aws-ec2-instance-connect-cli";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
   };
 }

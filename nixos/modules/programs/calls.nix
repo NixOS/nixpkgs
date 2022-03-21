@@ -14,6 +14,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    programs.dconf.enable = true;
+
     environment.systemPackages = [
       pkgs.calls
     ];

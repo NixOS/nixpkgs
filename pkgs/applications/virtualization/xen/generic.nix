@@ -18,7 +18,7 @@ config:
 
 # Documentation
 # python2Packages.markdown
-, transfig, ghostscript, texinfo, pandoc
+, fig2dev, ghostscript, texinfo, pandoc
 
 , binutils-unwrapped
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (rec {
     python2Packages.wrapPython
 
     # Documentation
-    python2Packages.markdown transfig ghostscript texinfo pandoc
+    python2Packages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
   ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
@@ -254,5 +254,9 @@ stdenv.mkDerivation (rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ eelco tstrobel oxij ];
     license = lib.licenses.gpl2;
+    # https://xenbits.xen.org/docs/unstable/support-matrix.html
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "4.13") [
+      "This version of Xen has reached its end of life. See https://xenbits.xen.org/docs/unstable/support-matrix.html"
+    ];
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -7,12 +8,13 @@
 , alabaster
 , docutils
 , imagesize
+, importlib-metadata
 , jinja2
 , packaging
 , pygments
 , requests
-, setuptools
 , snowballstemmer
+, sphinxcontrib-apidoc
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -28,14 +30,20 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.2.0";
+  version = "4.4.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1i38n5bxqiycjwmiv9dl72r3f5ks4zmif30znqg8zilclbx6g16x";
+    sha256 = "sha256-Q4CqPO08AfR+CDB02al65A+FHRFUDUfFTba0u8YQx+8=";
+    extraPostFetch = ''
+      cd $out
+      mv tests/roots/test-images/testimäge.png \
+        tests/roots/test-images/testimæge.png
+      patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
+    '';
   };
 
   propagatedBuildInputs = [
@@ -47,7 +55,6 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    setuptools
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -57,6 +64,11 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+
+    # extra plugins which are otherwise not found by sphinx-build
+    sphinxcontrib-apidoc
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   checkInputs = [
@@ -76,6 +88,27 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
+  ] ++ lib.optional stdenv.isDarwin [
+    # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
+    "test_inspect_main_url"
+    "test_auth_header_uses_first_match"
+    "test_linkcheck_request_headers"
+    "test_linkcheck_request_headers_no_slash"
+    "test_follows_redirects_on_HEAD"
+    "test_invalid_ssl"
+    "test_connect_to_selfsigned_with_tls_verify_false"
+    "test_connect_to_selfsigned_with_tls_cacerts"
+    "test_connect_to_selfsigned_with_requests_env_var"
+    "test_connect_to_selfsigned_nonexistent_cert_file"
+    "test_TooManyRedirects_on_HEAD"
+    "test_too_many_requests_retry_after_int_del"
+    "test_too_many_requests_retry_after_HTTP_date"
+    "test_too_many_requests_retry_after_without_header"
+    "test_too_many_requests_user_timeout"
+    "test_raises_for_invalid_status"
+    "test_auth_header_no_match"
+    "test_follows_redirects_on_GET"
+    "test_connect_to_selfsigned_fails"
   ];
 
   meta = with lib; {
@@ -86,6 +119,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.sphinx-doc.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.sphinx.members;
   };
 }

@@ -4,6 +4,7 @@ let
   json = pkgs.formats.json {};
 
   cfg = config.services.discourse;
+  opt = options.services.discourse;
 
   # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
@@ -327,6 +328,7 @@ in
         useSSL = lib.mkOption {
           type = lib.types.bool;
           default = cfg.redis.host != "localhost";
+          defaultText = lib.literalExpression ''config.${opt.redis.host} != "localhost"'';
           description = ''
             Connect to Redis with SSL.
           '';
@@ -399,6 +401,7 @@ in
           domain = lib.mkOption {
             type = lib.types.str;
             default = cfg.hostname;
+            defaultText = lib.literalExpression "config.${opt.hostname}";
             description = ''
               HELO domain to use for outgoing mail.
             '';

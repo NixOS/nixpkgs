@@ -1,6 +1,7 @@
-{ callPackage, varnish60, varnish70, fetchFromGitHub }: {
+{ callPackages, callPackage, varnish60, varnish70, fetchFromGitHub }: {
   varnish60Packages = rec {
     varnish = varnish60;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules15;
     digest  = callPackage ./digest.nix {
       inherit varnish;
       version = "libvmod-digest-1.0.2";
@@ -14,6 +15,7 @@
   };
   varnish70Packages = rec {
     varnish = varnish70;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules19;
     digest  = callPackage ./digest.nix {
       inherit varnish;
       version = "6.6";

@@ -11,6 +11,8 @@ buildDunePackage {
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src/lib_protocol_environment";
 
+  minimalOCamlVersion = "4.12";
+
   postPatch = ''
     ls ./sigs/v0
     cp -f ${zarith}/lib/ocaml/${ocaml.version}/site-lib/zarith/z.mli ./sigs/v1/z.mli

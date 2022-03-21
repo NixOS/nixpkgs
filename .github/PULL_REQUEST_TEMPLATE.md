@@ -1,15 +1,9 @@
+###### Description of changes
+
 <!--
-To help with the large amounts of pull requests, we would appreciate your
-reviews of other pull requests, especially simple package updates. Just leave a
-comment describing what you have tested in the relevant package/service.
-Reviewing helps to reduce the average time-to-merge for everyone.
-Thanks a lot if you do!
-List of open PRs: https://github.com/NixOS/nixpkgs/pulls
-Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
+For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
+For new packages please briefly describe the package or provide a link to its homepage.
 -->
-
-###### Motivation for this change
-
 
 ###### Things done
 
@@ -34,3 +28,14 @@ Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
   - [ ] (Release notes changes) Ran `nixos/doc/manual/md-to-db.sh` to update generated release notes
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
+
+<!--
+To help with the large amounts of pull requests, we would appreciate your
+reviews of other pull requests, especially simple package updates. Just leave a
+comment describing what you have tested in the relevant package/service.
+Reviewing helps to reduce the average time-to-merge for everyone.
+Thanks a lot if you do!
+
+List of open PRs: https://github.com/NixOS/nixpkgs/pulls
+Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
+-->

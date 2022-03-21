@@ -7,10 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pocketsphinx-5prealpha";
+  pname = "pocketsphinx";
+  version = "5prealpha";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cmusphinx/${name}.tar.gz";
+    url = "mirror://sourceforge/cmusphinx/pocketsphinx-${version}.tar.gz";
     sha256 = "1n9yazzdgvpqgnfzsbl96ch9cirayh74jmpjf7svs4i7grabanzg";
   };
 

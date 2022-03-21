@@ -8,7 +8,7 @@ set -euo pipefail
 #       this script is inspired:
 #       - pkgs/servers/nosql/eventstore/create-deps.sh
 #       - pkgs/development/dotnet-modules/python-language-server/create_deps.sh
-#       - pkgs/misc/emulators/ryujinx/updater.sh
+#       - pkgs/applications/emulators/ryujinx/updater.sh
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -28,9 +28,9 @@ DEPS_HEADER="
 { fetchurl }:
 let
   nugetUrlBase = \"$URLBASE\";
-  fetchNuGet = { name, version, sha256 }: fetchurl {
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
     inherit sha256;
-    url = \"\${nugetUrlBase}/\${name}/\${version}\";
+    url = \"\${nugetUrlBase}/\${pname}/\${version}\";
   };
 in ["
 
@@ -38,7 +38,7 @@ DEPS_FOOTER="]"
 
 DEPS_TEMPLATE="
 (fetchNuGet {
-  name = \"%s\";
+  pname = \"%s\";
   version = \"%s\";
   sha256 = \"%s\";
 })"

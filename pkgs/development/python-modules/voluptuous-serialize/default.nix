@@ -8,7 +8,7 @@
 
 buildPythonPackage rec  {
   pname = "voluptuous-serialize";
-  version = "2.4.0";
+  version = "2.5.0";
 
   disabled = !isPy3k;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec  {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    sha256 = "1km2y1xaagkdvsy3bmi1sc040x5yyfdw6llmwdv9z8nz67m9v1ya";
+    sha256 = "sha256-8rWMz8tBanxHdU/F4HhBxxz3ltqbdRoP4JED2dmZfTk=";
   };
 
   propagatedBuildInputs = [ voluptuous ];

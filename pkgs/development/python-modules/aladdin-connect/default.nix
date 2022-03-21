@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "aladdin-connect";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "shoejosh";
     repo = pname;
     rev = version;
-    sha256 = "0nimd1nw1haxn8s2207fcrmpjyfp6nx97n560l6hzqyqqmf2d1d1";
+    sha256 = "sha256-kLvMpSGa5WyDOH3ejAJyFGsB9IiMXp+nvVxM/ZkxyFw=";
   };
 
   propagatedBuildInputs = [

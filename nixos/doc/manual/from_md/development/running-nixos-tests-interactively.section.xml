@@ -5,19 +5,19 @@
     useful when developing or debugging a test:
   </para>
   <programlisting>
-$ nix-build nixos/tests/login.nix -A driverInteractive
-$ ./result/bin/nixos-test-driver --interactive
-starting VDE switch for network 1
-&gt;
+$ nix-build . -A nixosTests.login.driverInteractive
+$ ./result/bin/nixos-test-driver
+[...]
+&gt;&gt;&gt;
 </programlisting>
   <para>
     You can then take any Python statement, e.g.
   </para>
   <programlisting language="python">
-&gt; start_all()
-&gt; test_script()
-&gt; machine.succeed(&quot;touch /tmp/foo&quot;)
-&gt; print(machine.succeed(&quot;pwd&quot;)) # Show stdout of command
+&gt;&gt;&gt; start_all()
+&gt;&gt;&gt; test_script()
+&gt;&gt;&gt; machine.succeed(&quot;touch /tmp/foo&quot;)
+&gt;&gt;&gt; print(machine.succeed(&quot;pwd&quot;)) # Show stdout of command
 </programlisting>
   <para>
     The function <literal>test_script</literal> executes the entire test
@@ -30,7 +30,7 @@ starting VDE switch for network 1
     the <literal>--keep-vm-state</literal> flag.
   </para>
   <programlisting>
-$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
+$ ./result/bin/nixos-test-driver --keep-vm-state
 </programlisting>
   <para>
     The machine state is stored in the

@@ -37,7 +37,7 @@ buildDunePackage rec {
     ocaml_pcre xml-light
   ];
 
-  configureFlags = [ "--root $(out)" "--prefix /" ];
+  configureFlags = [ "--root $(out)" "--prefix /" "--temproot ''" ];
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
@@ -45,6 +45,10 @@ buildDunePackage rec {
 
   postConfigure = ''
     make -C src confs
+  '';
+
+  postInstall = ''
+    make install.files
   '';
 
   postFixup =

@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.6.2";
 
   src = fetchurl {
-    url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "sha256-Iw3puQ3ZS0eNfBvaZ4cxsP49IRqIMX3R+r3OPG771RI=";
+    url = "mirror://kde/stable/kdevelop/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-IPm3cblhJi3tmGpPMrjSWa2fe8SLsp6sCl1YU74dkX8=";
   };
 
   cmakeFlags = [

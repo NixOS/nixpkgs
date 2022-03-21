@@ -4,6 +4,7 @@
 , cmake
 , qtbase
 , qtmultimedia
+, qtimageformats
 , qtx11extras
 , qttools
 , libidn
@@ -42,13 +43,13 @@ assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
-  version = "1.5.1582";
+  version = "1.5.1615";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-ZMJxGxwDuY2fW+W68JiH0X+FpowdAPm70EQ9pHNnrG4=";
+    sha256 = "sha256-aD+JVGmBWHUav2bH9rXGtgqI+/5lJTMrYLRP7E65JxI=";
   };
 
   cmakeFlags = [
@@ -67,6 +68,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtmultimedia
+    qtimageformats
     qtx11extras
     libidn
     qca-qt5

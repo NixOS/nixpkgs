@@ -16,19 +16,19 @@ let
 
   dotnetPkgs = [
     (fetchNuGet {
-      baseName = "UnmanagedExports";
+      pname = "UnmanagedExports";
       version = "1.2.7";
       sha256 = "0bfrhpmq556p0swd9ssapw4f2aafmgp930jgf00sy89hzg2bfijf";
       outputFiles = [ "*" ];
     })
     (fetchNuGet {
-      baseName = "NUnit";
+      pname = "NUnit";
       version = "3.12.0";
       sha256 = "1880j2xwavi8f28vxan3hyvdnph4nlh5sbmh285s4lc9l0b7bdk2";
       outputFiles = [ "*" ];
     })
     (fetchNuGet {
-      baseName = "System.ValueTuple";
+      pname = "System.ValueTuple";
       version = "4.5.0";
       sha256 = "00k8ja51d0f9wrq4vv5z2jhq8hy31kac2rg0rv06prylcybzl8cy";
       outputFiles = [ "*" ];
@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
     ${builtins.concatStringsSep "\n" (
         builtins.map (
-            x: ''ln -s ${x}/lib/dotnet/${x.baseName} ./packages/${x.baseName}.${x.version}''
+            x: ''ln -s ${x}/lib/dotnet/${x.pname} ./packages/${x.pname}.${x.version}''
           ) dotnetPkgs)}
 
     # Setting TERM=xterm fixes an issue with terminfo in mono: System.Exception: Magic number is wrong: 542

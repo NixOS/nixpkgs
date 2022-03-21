@@ -1,16 +1,20 @@
-{ lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
+{ lib, stdenv, haskellPackages, symlinkJoin, makeWrapper
 # GHC will have LLVM available if necessary for the respective target,
 # so useLLVM only needs to be changed if -fllvm is to be used for a
 # platform that has NCG support
 , useLLVM ? false
+, withHoogle ? false
+, hoogleWithPackages
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
 
-assert ghcLibdir != null -> (ghc.isGhcjs or false);
-
-# This wrapper works only with GHC 6.12 or later.
-assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
+# This argument is a function which selects a list of Haskell packages from any
+# passed Haskell package set.
+#
+# Example:
+#   (hpkgs: [ hpkgs.mtl hpkgs.lens ])
+selectPackages:
 
 # It's probably a good idea to include the library "ghc-paths" in the
 # compiler environment, because we have a specially patched version of
@@ -34,6 +38,11 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 #   fi
 
 let
+  inherit (haskellPackages) llvmPackages ghc;
+
+  packages      = selectPackages haskellPackages
+                  ++ lib.optional withHoogle (hoogleWithPackages selectPackages);
+
   isGhcjs       = ghc.isGhcjs or false;
   isHaLVM       = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
@@ -53,6 +62,9 @@ let
                   ([ llvmPackages.llvm ]
                    ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
+
+assert ghcLibdir != null -> (ghc.isGhcjs or false);
+
 if paths == [] && !useLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
@@ -152,5 +164,20 @@ symlinkJoin {
   passthru = {
     preferLocalBuild = true;
     inherit (ghc) version meta;
+
+    # Inform users about backwards incompatibilities with <= 21.05
+    override = _: throw ''
+      The ghc.withPackages wrapper itself can now be overridden, but no longer
+      the result of calling it (as before). Consequently overrides need to be
+      adjusted: Instead of
+
+        (ghc.withPackages (p: [ p.my-package ])).override { withLLLVM = true; }
+
+      use
+
+        (ghc.withPackages.override { useLLVM = true; }) (p: [ p.my-package ])
+
+      Also note that withLLVM has been renamed to useLLVM for consistency with
+      the GHC Nix expressions.'';
   };
 }

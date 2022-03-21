@@ -103,7 +103,8 @@ Sample template for a new package review is provided below.
 - [ ] `meta.maintainers` is set
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
 - [ ] source is fetched using the appropriate function
-- [ ] phases are respected
+- [ ] the list of `phases` is not overridden
+- [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches that are remotely available are fetched with `fetchpatch`
 
 ##### Possible improvements
@@ -124,7 +125,7 @@ Reviewing process:
   - Type should be appropriate (string related types differs in their merging capabilities, `optionSet` and `string` types are deprecated).
   - Description, default and example should be provided.
 - Ensure that option changes are backward compatible.
-  - `mkRenamedOptionModule` and `mkAliasOptionModule` functions provide way to make option changes backward compatible.
+  - `mkRenamedOptionModuleWith` provides a way to make option changes backward compatible.
 - Ensure that removed options are declared with `mkRemovedOptionModule`
 - Ensure that changes that are not backward compatible are mentioned in release notes.
 - Ensure that documentations affected by the change is updated.

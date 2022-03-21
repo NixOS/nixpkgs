@@ -64,6 +64,11 @@ let
 in
 
 {
+  imports = [
+    ./assertions.nix
+    ./meta.nix
+  ];
+
   options.nixpkgs = {
 
     pkgs = mkOption {
@@ -248,4 +253,7 @@ in
       )
     ];
   };
+
+  # needs a full nixpkgs path to import nixpkgs
+  meta.buildDocsInSandbox = false;
 }

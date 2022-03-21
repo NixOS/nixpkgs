@@ -13,7 +13,10 @@ let
     };
   };
 
-  boostPython = boost.override { enablePython = true; };
+  boostPython = boost.override {
+    enablePython = true;
+    python = python2;
+  };
 
 in stdenv.mkDerivation rec {
   pname = "twister";

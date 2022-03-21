@@ -181,8 +181,8 @@ in
 
       rgwMimeTypesFile = mkOption {
         type = with types; nullOr path;
-        default = "${pkgs.mime-types}/etc/mime.types";
-        defaultText = literalExpression ''"''${pkgs.mime-types}/etc/mime.types"'';
+        default = "${pkgs.mailcap}/etc/mime.types";
+        defaultText = literalExpression ''"''${pkgs.mailcap}/etc/mime.types"'';
         description = ''
           Path to mime types used by radosgw.
         '';

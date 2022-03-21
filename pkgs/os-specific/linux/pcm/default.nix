@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcm";
-  version = "202110";
+  version = "202112";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
     rev = version;
-    sha256 = "sha256-YcTsC1ceCXKALroyZtgRYpqK3ysJhgzRJ8fBiCx7CCM=";
+    sha256 = "sha256-uuQvj8BcUmuYDwV4r3oqkT+QTcSFcGjBeGUM2NZRFcA=";
   };
 
   enableParallelBuilding = true;

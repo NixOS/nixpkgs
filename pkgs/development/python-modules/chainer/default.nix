@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "7.8.0";
+  version = "7.8.1";
   disabled = !isPy3k; # python2.7 abandoned upstream
 
   # no tests in Pypi tarball
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "chainer";
     repo = "chainer";
     rev = "v${version}";
-    sha256 = "1zfj3pk54gzxd4nid0qjx4kw1wdngwscvn4hk4cijxvwqi4a5zxj";
+    sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
   };
 
   checkInputs = [

@@ -1,8 +1,8 @@
 diff --git a/data/installed-tests/meson.build b/data/installed-tests/meson.build
-index adadbcdd..1b51bb9c 100644
+index b8ec916f0..38209b363 100644
 --- a/data/installed-tests/meson.build
 +++ b/data/installed-tests/meson.build
-@@ -65,5 +65,5 @@ configure_file(
+@@ -83,5 +83,5 @@ configure_file(
    output : 'fwupd-tests.conf',
    configuration : con2,
    install: true,
@@ -10,10 +10,10 @@ index adadbcdd..1b51bb9c 100644
 +  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index 772b7bbe..f59302cd 100644
+index 32fe6e408..b35d741e0 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -177,8 +177,8 @@ else
+@@ -183,8 +183,8 @@ else
    datadir = join_paths(prefix, get_option('datadir'))
    sysconfdir = join_paths(prefix, get_option('sysconfdir'))
    localstatedir = join_paths(prefix, get_option('localstatedir'))
@@ -24,6 +24,14 @@ index 772b7bbe..f59302cd 100644
  endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
+@@ -484,6 +484,7 @@ gnome = import('gnome')
+ i18n = import('i18n')
+ 
+ conf.set_quoted('FWUPD_PREFIX', prefix)
++conf.set_quoted('FWUPD_INSTALLED_TEST_PREFIX', get_option('installed_test_prefix'))
+ conf.set_quoted('FWUPD_BINDIR', bindir)
+ conf.set_quoted('FWUPD_LIBDIR', libdir)
+ conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
 index 0a0e2853..5f68d78b 100644
 --- a/meson_options.txt
@@ -36,3 +44,16 @@ index 0a0e2853..5f68d78b 100644
  option('tests', type : 'boolean', value : true, description : 'enable tests')
  option('tpm', type : 'boolean', value : true, description : 'enable TPM support')
  option('udevdir', type: 'string', value: '', description: 'Directory for udev rules')
+diff --git a/plugins/redfish/fu-self-test.c b/plugins/redfish/fu-self-test.c
+index c507fabc8..0cddc3248 100644
+--- a/plugins/redfish/fu-self-test.c
++++ b/plugins/redfish/fu-self-test.c
+@@ -27,7 +27,7 @@ fu_test_is_installed_test(void)
+ 	const gchar *builddir = g_getenv("G_TEST_BUILDDIR");
+ 	if (builddir == NULL)
+ 		return FALSE;
+-	return g_str_has_prefix(builddir, FWUPD_PREFIX);
++	return g_str_has_prefix(builddir, FWUPD_INSTALLED_TEST_PREFIX);
+ }
+ 
+ static void

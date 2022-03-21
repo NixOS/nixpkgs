@@ -1,30 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, halide
 , libpng, libjpeg, libtiff, libraw
 }:
 
 stdenv.mkDerivation rec {
-  pname = "hdr-plus-unstable";
-  version = "2020-10-29";
+  pname = "hdr-plus";
+  version = "unstable-2021-12-10";
 
   src = fetchFromGitHub {
     owner = "timothybrooks";
     repo = "hdr-plus";
-    rev = "132bd73ccd4eaef9830124605c93f06a98607cfa";
-    sha256 = "1n49ggrppf336p7n510kapzh376791bysxj3f33m3bdzksq360ps";
+    rev = "0ab70564493bdbcd5aca899b5885505d0c824435";
+    sha256 = "sha256-QV8bGxkwFpbNzJG4kmrWwFQxUo2XzLPnoI1e32UmM6g=";
   };
-
-  patches = [
-    # PR #70, fixes incompatibility with Halide 10.0.0
-    (fetchpatch {
-      url = "https://github.com/timothybrooks/hdr-plus/pull/70/commits/077e1a476279539c72e615210762dca27984c57b.patch";
-      sha256 = "1sg2l1bqs2smpfpy4flwg86fzhcc4yf7zx998v1bfhim43yyrx59";
-    })
-  ];
-
-  postPatch = ''
-    sed -i '2a #include <array>' src/InputSource.h
-  '';
 
   nativeBuildInputs = [ cmake ];
 

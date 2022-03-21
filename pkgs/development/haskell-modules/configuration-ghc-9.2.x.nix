@@ -83,7 +83,7 @@ self: super: {
   # Jailbreaks & Version Updates
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
-  attoparsec = super.attoparsec_0_14_2;
+  attoparsec = super.attoparsec_0_14_4;
   base64-bytestring = doJailbreak super.base64-bytestring;
   base-compat = self.base-compat_0_12_1;
   base-compat-batteries = self.base-compat-batteries_0_12_1;
@@ -101,11 +101,25 @@ self: super: {
   genvalidity-property = self.genvalidity-property_1_0_0_0;
   genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = self.ghc-lib_9_2_1_20211101;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+  ghc-exactprint = overrideCabal (drv: {
+    # HACK: ghc-exactprint 1.4.1 is not buildable for GHC < 9.2,
+    # but hackage2nix evaluates the cabal file with GHC 8.10.*,
+    # causing the build-depends to be skipped. Since the dependency
+    # list hasn't changed much since 0.6.4, we can just reuse the
+    # normal expression.
+    inherit (self.ghc-exactprint_1_4_1) src version;
+    revision = null; editedCabalFile = null;
+    libraryHaskellDepends = [
+      self.fail
+      self.ordered-containers
+      self.data-default
+    ] ++ drv.libraryHaskellDepends or [];
+  }) super.ghc-exactprint;
+  ghc-lib = self.ghc-lib_9_2_1_20220109;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_1;
+  hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time_0_3;
   hedgehog = doJailbreak super.hedgehog;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
@@ -114,16 +128,17 @@ self: super: {
   indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
-  network = super.network_3_1_2_5;
+  network = super.network_3_1_2_7;
   ormolu = self.ormolu_0_4_0_0;
   OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
-  path = doJailbreak super.path_0_9_1;
+  path = doJailbreak super.path_0_9_2;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
   quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
+  retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   semialign = super.semialign_1_2_0_1;
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
@@ -174,11 +189,6 @@ self: super: {
     sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
   }) (doJailbreak super.language-haskell-extract);
 
-  haskell-src-meta = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
-    sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
-  }) (doJailbreak super.haskell-src-meta);
-
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
 
@@ -207,11 +217,61 @@ self: super: {
   semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
 
   # Tests have a circular dependency on quickcheck-instances
-  text-short = dontCheck super.text-short_0_1_4;
+  text-short = dontCheck super.text-short_0_1_5;
 
-  # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
-  hlint = super.hlint_3_3_4.overrideScope (self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
+  # Use hlint from git for GHC 9.2.1 support
+  hlint = doDistribute (
+    overrideSrc {
+      version = "unstable-2021-12-12";
+      src = pkgs.fetchFromGitHub {
+        owner = "ndmitchell";
+        repo = "hlint";
+        rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
+        sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
+      };
+    } (super.hlint_3_3_6.overrideScope (self: super: {
+      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
+      ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
+    }))
+  );
+
+  # https://github.com/sjakobi/bsb-http-chunked/issues/38
+  bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+  # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
+  regex-rure = doDistribute (markUnbroken super.regex-rure);
+  jacinda = doDistribute super.jacinda;
+  some = doJailbreak super.some;
+  fourmolu = super.fourmolu_0_5_0_1;
+  implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
+  lucid = doJailbreak super.lucid;
+  hashtables = doJailbreak super.hashtables;
+  primitive-extras = super.primitive-extras_0_10_1_4;
+  hiedb = doJailbreak super.hiedb;
+
+  # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
+  # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
+  haskell-language-server = appendConfigureFlags [
+    "-f-alternateNumberFormat"
+    "-f-class"
+    "-f-eval"
+    "-f-haddockComments"
+    "-f-hlint"
+    "-f-retrie"
+    "-f-splice"
+    "-f-tactics"
+    "-f-brittany"
+    "-f-stylish-haskell"
+  ] (super.haskell-language-server.override {
+    hls-alternate-number-format-plugin = null;
+    hls-class-plugin = null;
+    hls-eval-plugin = null;
+    hls-haddock-comments-plugin = null;
+    hls-hlint-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+    hls-tactics-plugin = null;
+    hls-brittany-plugin = null;
+    hls-stylish-haskell-plugin = null;
   });
 }

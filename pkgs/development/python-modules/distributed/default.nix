@@ -19,13 +19,15 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2021.10.0";
-  disabled = pythonOlder "3.6";
+  version = "2022.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kfq7lwv2n2wiws4v2rj36wx56jvkp2fl6zxg04p2lc3vcgha9za";
+    hash = "sha256-Gi9u7JczpnAEg53E7N5tXBfAeWZaLBVzRU3SpbU3bZU=";
   };
 
   propagatedBuildInputs = [
@@ -44,10 +46,17 @@ buildPythonPackage rec {
     zict
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "dask == 2022.02.0" "dask"
+  '';
+
   # when tested random tests would fail and not repeatably
   doCheck = false;
 
-  pythonImportsCheck = [ "distributed" ];
+  pythonImportsCheck = [
+    "distributed"
+  ];
 
   meta = with lib; {
     description = "Distributed computation in Python";

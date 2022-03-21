@@ -72,7 +72,7 @@ services.prosody = {
    a TLS certificate for the three endponits:
     <programlisting>
 security.acme = {
-  <link linkend="opt-security.acme.email">email</link> = "root@example.org";
+  <link linkend="opt-security.acme.defaults.email">email</link> = "root@example.org";
   <link linkend="opt-security.acme.acceptTerms">acceptTerms</link> = true;
   <link linkend="opt-security.acme.certs">certs</link> = {
     "example.org" = {

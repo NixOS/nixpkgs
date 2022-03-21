@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.35.1";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-8Ye2eR9eB7oyYOo46OraOxfLOG/XphWJkk+xPzDthPU=";
+    sha256 = "sha256-mS+q+WOdEMMHjoqoIlDOqkoaRRLlou7FbMjC436k96A=";
   };
 
-  vendorSha256 = "sha256-jr4HEs2mTRPNAiV/OWUnjYyQ1uSUJfVOTNCRi/18tEo=";
+  vendorSha256 = "sha256-LiNnTAI7iJkWL657eBw5OsCdvgWE2ZFZ3e+8vJtMhoE=";
 
   subPackages = ["cmd/skaffold"];
 
@@ -23,6 +23,11 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/skaffold version | grep ${version} > /dev/null
+  '';
 
   postInstall = ''
     installShellCompletion --cmd skaffold \

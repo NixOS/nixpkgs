@@ -5,9 +5,8 @@
 , appstream-glib
 , dbus
 , desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
 , fetchFromGitHub
+, fetchpatch
 , flatpak
 , gettext
 , glib
@@ -40,10 +39,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Introduces a packagekit_backend meson flag.
-    # Makes appcenter actually work by using only the flatpak backend.
-    # https://github.com/elementary/appcenter/pull/1739
-    ./add-packagekit-backend-option.patch
+    # Fix AppStream.PoolFlags being renamed
+    # Though the API break has been fixed in latest appstream,
+    # let's use the non-deprecated version anyway.
+    # https://github.com/elementary/appcenter/pull/1794
+    (fetchpatch {
+      url = "https://github.com/elementary/appcenter/commit/84bc6400713484aa9365f0ba73f59c495da3f08b.patch";
+      sha256 = "sha256-HNRCJ/5mRbEVjCq9nrXtdQOOk1Jj5jalApkghD8ecpk=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -61,8 +64,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
-    elementary-icon-theme
     flatpak
     glib
     granite
@@ -79,8 +80,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dpayments=false"
     "-Dcurated=false"
-    # This option is introduced in add-packagekit-backend-option.patch
-    "-Dpackagekit_backend=false"
   ];
 
   postPatch = ''

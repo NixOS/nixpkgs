@@ -15,11 +15,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
   version = "6.1.0";
 
-  repoName = "icons";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "icons";
     rev = version;
     sha256 = "sha256-WR4HV0nJKj0WeSFHXLK64O0LhX8myAJE4w0aztyhPn4=";
   };
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
       An original set of vector icons designed specifically for elementary OS and its desktop environment: Pantheon.
     '';
     homepage = "https://github.com/elementary/icons";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
   };

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cellphone tool";
-    homepage = "http://www.gnokii.org";
+    homepage = "https://www.gnokii.org";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     broken = true; # 2018-04-10

@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, python3, runCommand, makeWrapper, stress-ng }:
+{ lib, stdenv, fetchFromGitHub, python3, runCommand, makeWrapper, stress-ng }:
 
 lib.fix (self: stdenv.mkDerivation rec {
   pname = "graphene-hardened-malloc";
   version = "8";
 
-  src = fetchurl {
-    url = "https://github.com/GrapheneOS/hardened_malloc/archive/${version}.tar.gz";
-    sha256 = "0lipyd2pb1bmghkyv9zmg25jwcglj7m281f01zlh3ghz3xlfh0ym";
+  src = fetchFromGitHub {
+    owner = "GrapheneOS";
+    repo = "hardened_malloc";
+    rev = version;
+    sha256 = "sha256-+5kJb3hhuFTto7zsIymIXl3tpKUOm3v1DCY4EkAOCgo=";
   };
 
   doCheck = true;

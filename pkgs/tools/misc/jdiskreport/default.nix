@@ -4,10 +4,9 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "JDiskReport";
     genericName = "A graphical utility to visualize disk usage";
-    categories = "Utility;";
+    categories = [ "Utility" ];
     exec = "jdiskreport";
     name = "jdiskreport";
-    type = "Application";
   };
 in
 stdenv.mkDerivation rec {

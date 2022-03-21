@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   scfg = cfg.git;
   iniKey = "git.sr.ht";
 
@@ -41,6 +42,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/gitsrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/gitsrht"'';
       description = ''
         State path for git.sr.ht.
       '';
@@ -205,7 +207,7 @@ in
                 fastcgi_param PATH_INFO $uri;
                 fastcgi_param GIT_PROJECT_ROOT $document_root;
                 fastcgi_read_timeout 500s;
-                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi_params;
                 gzip off;
             }
       '';

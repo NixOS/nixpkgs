@@ -3,30 +3,24 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "1.3.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8SWbbdPx/cC7EWTkSbB/YqR13jaL76fFIjHPGL4rFyk=";
+    sha256 = "sha256-Qz4BNrhK+NPnKBgjXGYl4P2R878LCuMGZxLECawA12E=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_3_1;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
-  dotnetFlags = lib.optionals altcoinSupport [ "/p:Configuration=Altcoins-Release" ];
+  buildType = if altcoinSupport then "Altcoins-Release" else "Release";
 
-  # btcpayserver requires the publish directory as its working dir
-  # https://github.com/btcpayserver/btcpayserver/issues/1894
-  preInstall = ''
-    makeWrapperArgs+=(--run "cd $out/lib/btcpayserver")
-  '';
-
-  postInstall = ''
+  postFixup = ''
     mv $out/bin/{BTCPayServer,btcpayserver}
   '';
 

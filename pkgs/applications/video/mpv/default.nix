@@ -15,7 +15,6 @@
 , freetype
 , libass
 , libpthreadstubs
-, mujs
 , nv-codec-headers
 , lua
 , libuchardet
@@ -56,6 +55,7 @@
 , cmsSupport         ? true,           lcms2
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav
 , jackaudioSupport   ? false,          libjack2
+, javascriptSupport  ? true,           mujs
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
@@ -81,7 +81,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.34.0";
+  version = "0.34.1";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${version}";
-    sha256 = "sha256-qa6xZV4aLcHBMa2bIqoKjte4+KWEGGZre4L0u1+eDE8=";
+    sha256 = "12qxwm1ww5vhjddl8yvj1xa0n1fi9z3lmzwhaiday2v59ca0qgsk";
   };
 
   postPatch = ''
@@ -108,6 +108,7 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature archiveSupport  "libarchive")
     (lib.enableFeature cddaSupport     "cdda")
     (lib.enableFeature dvdnavSupport   "dvdnav")
+    (lib.enableFeature javascriptSupport "javascript")
     (lib.enableFeature openalSupport   "openal")
     (lib.enableFeature sdl2Support     "sdl2")
     (lib.enableFeature sixelSupport    "sixel")
@@ -134,7 +135,6 @@ in stdenv.mkDerivation rec {
     libpthreadstubs
     libuchardet
     luaEnv
-    mujs
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
     ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
@@ -145,6 +145,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals drmSupport         [ libdrm mesa ]
     ++ lib.optionals dvdnavSupport      [ libdvdnav libdvdnav.libdvdread ]
     ++ lib.optionals jackaudioSupport   [ libjack2 ]
+    ++ lib.optionals javascriptSupport  [ mujs ]
     ++ lib.optionals libpngSupport      [ libpng ]
     ++ lib.optionals openalSupport      [ openalSoft ]
     ++ lib.optionals pulseSupport       [ libpulseaudio ]

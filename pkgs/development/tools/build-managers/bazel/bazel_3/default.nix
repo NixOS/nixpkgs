@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
-    maintainers = [ maintainers.mboes ];
+    maintainers = lib.teams.bazel.members;
     inherit platforms;
   };
 
@@ -613,6 +613,10 @@ stdenv.mkDerivation rec {
     # runtime dependencies.
     echo "${python27}" >> $out/nix-support/depends
     echo "${python3}" >> $out/nix-support/depends
+    # The string literal specifying the path to the bazel-rc file is sometimes
+    # stored non-contiguously in the binary due to gcc optimisations, which leads
+    # Nix to miss the hash when scanning for dependencies
+    echo "${bazelRC}" >> $out/nix-support/depends
   '' + lib.optionalString stdenv.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';

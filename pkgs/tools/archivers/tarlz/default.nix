@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tarlz";
-  version = "0.11";
+  version = "0.22";
   outputs = [ "out" "man" "info" ];
 
   nativeBuildInputs = [ lzip texinfo ];
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.lz";
-    sha256 = "sha256-PalRMerepfYDSaDs4irck+1v5Gy/vlB9CyU6omWUXlk=";
+    sha256 = "sha256-/M9yJvoktV0ybKsT926jSb7ERsWo33GkbTQwmaBQkdw=";
   };
 
   enableParallelBuilding = true;
   makeFlags = [ "CXX:=$(CXX)" ];
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/${pname}.html";

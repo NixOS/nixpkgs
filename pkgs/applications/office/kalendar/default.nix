@@ -10,6 +10,7 @@
 , qtsvg
 , qtlocation
 , qtdeclarative
+, qqc2-desktop-style
 
 , kirigami2
 , kdbusaddons
@@ -30,6 +31,7 @@
 , calendarsupport
 
 , akonadi
+, akonadi-search
 , akonadi-contacts
 , akonadi-calendar-tools
 , kdepim-runtime
@@ -37,14 +39,14 @@
 
 mkDerivation rec {
   pname = "kalendar";
-  version = "0.3.1";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "pim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-foG8j/MRbDZyzM9KmxEARfWUQXMz8ylQgersE1/gtnQ=";
+    sha256 = "sha256-kjtLVU+8wbIa7R6J1XOjuvS3AnJNngxNBCx24Dy1QzM=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +61,7 @@ mkDerivation rec {
     qtsvg
     qtlocation
     qtdeclarative
+    qqc2-desktop-style
 
     kirigami2
     kdbusaddons
@@ -78,11 +81,17 @@ mkDerivation rec {
     eventviews
     calendarsupport
 
+    akonadi-search
     akonadi-contacts
     akonadi-calendar-tools
+    kdepim-runtime
   ];
 
-  propagatedUserEnvPkgs = [ akonadi kdepim-runtime ];
+  propagatedUserEnvPkgs = [ akonadi kdepim-runtime akonadi-search ];
+  postFixup = ''
+    wrapProgram "$out/bin/kalendar" \
+      --prefix PATH : "${lib.makeBinPath [ akonadi kdepim-runtime akonadi-search ]}"
+  '';
 
   meta = with lib; {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";

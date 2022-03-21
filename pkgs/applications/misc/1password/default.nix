@@ -1,7 +1,7 @@
 { lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
 
 stdenv.mkDerivation rec {
-  pname = "1password";
+  pname = "1password-cli";
   version = "1.12.2";
   src =
     if stdenv.isLinux then
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
           url = {
             "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
             "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
-            "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip";
+            "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm64_v${version}.zip";
           }.${stdenv.hostPlatform.system};
           sha256 = {
             "i686-linux" = "tCm/vDBASPN9FBSVRJ6BrFc7hdtZWPEAgvokJhjazPg=";
             "x86_64-linux" = "3VkVMuTAfeEowkguJi2fd1kG7GwO1VN5GBPgNaH3Zv4=";
-            "aarch64-linux" = "vWoA/0ZfdwVniHmxC4nH1QIc6bjdb00+SwlkIWc9BPs=";
+            "aarch64-linux" = "12h1s9c97w0gb6bia3hy7773mwpfnyrn40sbjm1zc37y4zyi5dyp";
           }.${stdenv.hostPlatform.system};
           stripRoot = false;
         } else

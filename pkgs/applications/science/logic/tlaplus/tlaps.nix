@@ -11,10 +11,10 @@
 
 stdenv.mkDerivation rec {
   pname = "tlaps";
-  version = "1.4.3";
+  version = "1.4.5";
   src = fetchurl {
-    url = "https://tla.msr-inria.inria.fr/tlaps/dist/current/tlaps-${version}.tar.gz";
-    sha256 = "1w5z3ns5xxmhmp8r4x2kjmy3clqam935gmvx82imyxrr1bamx6gf";
+    url = "https://tla.msr-inria.inria.fr/tlaps/dist/${version}/tlaps-${version}.tar.gz";
+    sha256 = "c296998acd14d5b93a8d5be7ee178007ef179957465966576bda26944b1b7fca";
   };
 
   buildInputs = [ ocaml isabelle cvc3 perl wget which ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tla.msr-inria.inria.fr/tlaps/content/Home.html";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ florentc ];
   };
 
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_3 git gnupg nix
+#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_3 git gnupg nixFlakes
 set -euo pipefail
 
 # This script uses the following env vars:
@@ -17,7 +17,7 @@ scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
 nixpkgs=$(realpath "$scriptDir"/../../../../..)
 
 evalNixpkgs() {
-  nix eval --raw "(with import \"$nixpkgs\" {}; $1)"
+  nix eval --impure --raw --expr "(with import \"$nixpkgs\" {}; $1)"
 }
 
 getRepo() {
@@ -26,7 +26,7 @@ getRepo() {
 }
 
 getLatestVersionTag() {
-  "$nixpkgs"/pkgs/common-updater/scripts/list-git-tags https://github.com/$(getRepo) 2>/dev/null \
+  "$nixpkgs"/pkgs/common-updater/scripts/list-git-tags --url=https://github.com/$(getRepo) 2>/dev/null \
     | sort -V | tail -1 | sed 's|^v||'
 }
 

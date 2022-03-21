@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, perl, gfortran
-, openssh, hwloc
+, openssh, hwloc, python3
 # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
 # these libraries currently build so this argument is ignored on Darwin.
 , ch4backend
@@ -11,11 +11,11 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "3.4.2";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "1gw7qpb27mhsj7ip0hhljshgpwvz2hmyhizhlp6793afp2lbw6aw";
+    sha256 = "11rnljqwz6mr88ybj726mk710h7gvz20hy7labmz4jkkaa0gx8b6";
   };
 
   configureFlags = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation  rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [ gfortran python3 ];
   buildInputs = [ perl openssh hwloc ]
     ++ lib.optional (!stdenv.isDarwin) ch4backend;
 

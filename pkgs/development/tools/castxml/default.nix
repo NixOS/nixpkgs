@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "CastXML";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MschwCEkZrZmNgr8a1ocdukjXzHbXl2gmkPmygJaA6k=";
+    hash = "sha256-VtkMjZOcF5OAHkezlupXOpNwqUD1oKHdRbtG2FZBRL4=";
   };
 
   nativeBuildInputs = [
@@ -30,21 +30,21 @@ stdenv.mkDerivation rec {
     sphinx
   ];
 
-  cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
-    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
-    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
-  ];
-
   buildInputs = [
+    libclang
     libffi
     libxml2
     zlib
-    libclang
   ];
 
   propagatedBuildInputs = [
     libclang
+  ];
+
+  cmakeFlags = [
+    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
+    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
+    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
 
   # 97% tests passed, 97 tests failed out of 2881

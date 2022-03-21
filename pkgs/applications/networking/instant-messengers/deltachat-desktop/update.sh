@@ -20,16 +20,16 @@ if [ "$ver" = "$old_ver" ]; then
 fi
 echo "$old_ver -> $ver"
 
-sha256=$(nix-prefetch -f "$nixpkgs" deltachat-desktop --rev "$rev")
+hash=$(nix-prefetch -f "$nixpkgs" deltachat-desktop --rev "$rev")
 tac default.nix \
     | sed -e "0,/version = \".*\"/s//version = \"$ver\"/" \
-          -e "0,/sha256 = \".*\"/s//sha256 = \"$sha256\"/" \
+          -e "0,/hash = \".*\"/s//hash = \"${hash//\//\\/}\"/" \
     | tac \
     | sponge default.nix
 
 src=$(nix-build "$nixpkgs" -A deltachat-desktop.src --no-out-link)
 
-jq '{ name, version, dependencies: (.dependencies + (.devDependencies | del(.["@typescript-eslint/eslint-plugin","@typescript-eslint/parser","esbuild","electron-builder","electron-devtools-installer","electron-notarize","esbuild","eslint","eslint-config-prettier","eslint-plugin-react-hooks","hallmark","prettier","tape","testcafe","testcafe-browser-provider-electron","testcafe-react-selectors","walk"]))) }' \
+jq '{ name, version, dependencies: (.dependencies + (.devDependencies | del(.["@typescript-eslint/eslint-plugin","@typescript-eslint/parser","electron-builder","electron-devtools-installer","electron-notarize","eslint","eslint-config-prettier","eslint-plugin-react-hooks","hallmark","prettier","tape","testcafe","testcafe-browser-provider-electron","testcafe-react-selectors","walk"]))) }' \
     "$src/package.json" > package.json.new
 
 if cmp --quiet package.json{.new,}; then

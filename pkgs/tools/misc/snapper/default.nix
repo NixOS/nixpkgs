@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, json_c, nixosTests
+, lvm2, pam, python2, util-linux, json_c, nixosTests
 , ncurses }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python util-linux json_c ncurses
+    lvm2 pam python2 util-linux json_c ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;

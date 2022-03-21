@@ -40,17 +40,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.10.0";
-  MZ_DEV_BUILD_SHA = "c14633f59e842fbdd62c7239ffd8c2a16704386e";
+  version = "0.17.0";
+  MZ_DEV_BUILD_SHA = "9f8cf75b461d288335cb6a7a73aaa670bab4a466";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06290l2xrryx7bc9g1ffyfjm18a34pa2k410qk9w2p0psqiw2v8d";
+    hash = "sha256-wKYU5S77VoOX7UA9/d21Puz9NYs/om08eNM69/m3Orc=";
   };
 
-  cargoSha256 = "1bxfp6pidiziiq938ah49pa3qr1dhnfnbihp7jxind9qsb3q9gp0";
+  cargoHash = "sha256-GTkn/fUprkpsDeQxtzdmS7Fub9QODO5/4nh9ERswOY0=";
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage rec {
     "--skip test_client"
     "--skip test_client_errors"
     "--skip test_client_all_subjects"
+    "--skip test_client_subject_and_references"
     "--skip test_no_block"
     "--skip test_safe_mode"
     "--skip test_tls"

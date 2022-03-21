@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
-  version = "1.7.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wSJjA9eZCb3DJed07xuCS0M7ey3DnyuIlp9kvFvDDC8=";
+    sha256 = "sha256-FqlSMTCKtcG2HOA6KaPYArK/rxHG9eJSQmNOWIzJzCs=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

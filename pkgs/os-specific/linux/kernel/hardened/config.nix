@@ -93,4 +93,8 @@ assert (versionAtLeast version "4.9");
 
   # Detect out-of-bound reads/writes and use-after-free
   KFENCE = whenAtLeast "5.12" yes;
+
+  # CONFIG_DEVMEM=n causes these to not exist anymore.
+  STRICT_DEVMEM    = option no;
+  IO_STRICT_DEVMEM = option no;
 }

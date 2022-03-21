@@ -10,6 +10,8 @@
 buildPythonPackage rec {
   pname = "async_stagger";
   version = "0.3.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -23,7 +25,14 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pythonImportsCheck = [ "async_stagger" ];
+  disabledTests = [
+    # RuntimeError: Logic bug in...
+    "test_stagger_coro_gen"
+  ];
+
+  pythonImportsCheck = [
+    "async_stagger"
+  ];
 
   meta = with lib; {
     description = "Happy Eyeballs connection algorithm and underlying scheduling logic in asyncio";

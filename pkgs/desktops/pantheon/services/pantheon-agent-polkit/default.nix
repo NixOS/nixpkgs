@@ -24,12 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "1acqjjarl225yk0f68wkldsamcrzrj0ibpcxma04wq9w7jlmz60c";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -44,6 +38,12 @@ stdenv.mkDerivation rec {
     libgee
     polkit
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Polkit Agent for the Pantheon Desktop";

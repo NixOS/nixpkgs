@@ -3,18 +3,19 @@
 , writeScript
 , cmake
 , pkg-config
+, libdrm
 , numactl
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";
-  version = "4.3.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${version}";
-    hash = "sha256-jpwFL4UbEnWkw1AiM4U1s1t7GiqzBeOwa55VpnOG2Dk=";
+    hash = "sha256-hhDLy92jS/akp1Ozun45OEjVbVcjufkRIfC8bqqFjp4=";
   };
 
   preConfigure = ''
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ numactl ];
+  buildInputs = [ libdrm numactl ];
 
   postInstall = ''
     cp -r $src/include $out

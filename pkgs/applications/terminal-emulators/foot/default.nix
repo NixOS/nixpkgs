@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.10.2";
+  version = "1.11.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "00096c2m8pn4gpafvmg9lhyprwgnsis62bq4qmagnbb49bj5kr9v";
+    sha256 = "1d9bk8lhmw5lc8k0mw80g0vbwgxyh3gw5c7ppy3sir07s9y0y0fn";
   };
 
   depsBuildBuild = [
@@ -163,6 +163,7 @@ stdenv.mkDerivation rec {
     # make sure there is _some_ profiling data on all binaries
     ./footclient --version
     ./foot --version
+    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use

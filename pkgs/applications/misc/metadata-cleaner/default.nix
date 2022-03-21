@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
-  version = "2.0.1";
+  version = "2.1.5";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
     rev = "v${version}";
-    sha256 = "sha256-iTKs3DEZSzqRARXJKPPygvCS5JNUMbQBkfjacwd168Y=";
+    hash = "sha256-G7Azeh8+OQILoYEmlIeacoDzN0NRt5NTGavYM9CH8WA=";
   };
 
   nativeBuildInputs = [

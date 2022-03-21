@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8aNJDu3MuXWcPp/nW1ly9+82YSfiMWc75Q4nQD6eUaA=";
+    sha256 = "sha256-uD+JH42AxXxLMLqBurNDfYc7tLlBlEmaLB5rbip+/D4=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-l/Se0ijSX5zkAoedorsJvj5EhCuwgI4jE+S8lHZh6+4=";
+  cargoSha256 = "sha256-eiX5p2qWUZgoHzoHYXDsp9N6foiX3JovKO6MpoJOXFo=";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Can't use test-jit:
-  # error: Package `wasmer-workspace v2.1.0 (/build/source)` does not have the feature `test-jit`
+  # error: Package `wasmer-workspace v2.1.1 (/build/source)` does not have the feature `test-jit`
   checkFeatures = [ "test-cranelift" ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";

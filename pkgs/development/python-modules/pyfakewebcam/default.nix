@@ -19,7 +19,7 @@ buildPythonPackage rec {
     description = "A library for writing RGB frames to a fake webcam device on Linux";
     homepage = "https://github.com/jremmons/pyfakewebcam";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.linux;
   };
 }

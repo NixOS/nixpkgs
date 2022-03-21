@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bunyan-rs";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "LukeMathWalker";
     repo = "bunyan";
     rev = "v${version}";
-    sha256 = "sha256-oMk17twYfN8BwSfdG59uPOUoHNh7WLUEgIDoWTG15Yw=";
+    sha256 = "sha256-NGM8ryOy5bxF53Ak2/UDCf47MBlx/t6wcPlt+K8qvkg=";
   };
 
-  cargoSha256 = "sha256-nzUFdpRdIVExV8OBdk/LEefj6O/L7yhj4eCpqU5WAJg=";
+  cargoSha256 = "sha256-kzzOEHil7mW+fsstgr4/N4i8c9rzx4TzqGfYDgkzjh0=";
 
   meta = with lib; {
     description = "A CLI to pretty print logs in bunyan format (Rust port of the original JavaScript bunyan CLI)";

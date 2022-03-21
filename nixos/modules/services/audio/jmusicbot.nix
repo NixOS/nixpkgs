@@ -9,6 +9,13 @@ in
     services.jmusicbot = {
       enable = mkEnableOption "jmusicbot, a Discord music bot that's easy to set up and run yourself";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.jmusicbot;
+        defaultText = literalExpression "pkgs.jmusicbot";
+        description = "JMusicBot package to use";
+      };
+
       stateDir = mkOption {
         type = types.path;
         description = ''
@@ -27,7 +34,7 @@ in
       after = [ "network-online.target" ];
       description = "Discord music bot that's easy to set up and run yourself!";
       serviceConfig = mkMerge [{
-        ExecStart = "${pkgs.jmusicbot}/bin/JMusicBot";
+        ExecStart = "${cfg.package}/bin/JMusicBot";
         WorkingDirectory = cfg.stateDir;
         Restart = "always";
         RestartSec = 20;

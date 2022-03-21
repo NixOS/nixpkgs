@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.70.1";
+  version = "2.70.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+be85/UXU6H0OFO7ysqL8J4V6ZQmjinP16dvZWNiY8A=";
+    sha256 = "Iz+khBweGeOW23YH1Y9rdbozE8UL8Pzgey41MtXrfUY=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libelf setupHook pcre
+  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
@@ -143,6 +144,9 @@ stdenv.mkDerivation rec {
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs tests/gen-casefold-txt.py
     patchShebangs tests/gen-casemap-txt.py
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    substituteInPlace gio/win32/meson.build \
+      --replace "libintl, " ""
   '';
 
   DETERMINISTIC_BUILD = 1;
@@ -191,10 +195,17 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
-    makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
+
+    makeSchemaDataDirPath = dir: name: "${dir}/share/gsettings-schemas/${name}";
+    makeSchemaPath = dir: name: "${makeSchemaDataDirPath dir name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
+    getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
+
     inherit flattenInclude;
-    updateScript = gnome.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript {
+      packageName = "glib";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {

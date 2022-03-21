@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.3.1";
+  version = "0.4.0.post2";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "ldZfvv5kloQ0uj0agxOP8cRh+Ix8f9Z0PT+pnhWYjiQ=";
+    sha256 = "sha256-BMRlEdvJJOUbsvKEoZx2qJqHSbL475dhBthUpnsXkn4=";
   };
 
   postPatch = ''
@@ -30,8 +30,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ManimCommunity/ManimPango";
-    license = licenses.gpl3Plus;
+    license = licenses.mit;
     description = "Binding for Pango";
-    maintainers = [ maintainers.angustrau ];
+    maintainers = [ maintainers.emilytrau ];
   };
 }

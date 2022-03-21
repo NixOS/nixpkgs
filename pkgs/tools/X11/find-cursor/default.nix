@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "find-cursor";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "find-cursor";
     rev = "v${version}";
-    sha256 = "sha256-cFvhoEPDFLw6rsPYUF9gqAFzINewnszJEzxRK064NEU=";
+    sha256 = "sha256-/Dw4bOTCnpCbeI0YJ5DJ9Q2AGBognylUk7xYGn0KIA8=";
   };
 
   nativeBuildInputs = [ installShellFiles git ];

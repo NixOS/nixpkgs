@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yle-dl";
-  version = "20210917";
+  version = "20220213";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "sha256-l8Wv15DLWRvJ+I6KeTNbIjp+S5EgoqhLOWd0wEyXckk=";
+    sha256 = "sha256-lFb8NwKg8GBgkVsg01rlGrP31APwhFaCFT7QdqiT6J0=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -1,9 +1,9 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python2Packages, fetchFromGitHub }:
 
 let
   version = "3.13";
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication {
+in python2Packages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

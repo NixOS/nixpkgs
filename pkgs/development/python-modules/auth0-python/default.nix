@@ -4,16 +4,20 @@
 , mock
 , pyjwt
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.19.0";
+  version = "3.20.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
+    sha256 = "sha256-WIH2lMPehrqkXCh+JbEI5nf99nt61OwLhP/pF6BbsnQ=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +37,9 @@ buildPythonPackage rec {
     "test_options_are_used_and_override"
   ];
 
-  pythonImportsCheck = [ "auth0" ];
+  pythonImportsCheck = [
+    "auth0"
+  ];
 
   meta = with lib; {
     description = "Auth0 Python SDK";

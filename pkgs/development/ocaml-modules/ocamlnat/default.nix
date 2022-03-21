@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0dyvy0j6f47laxhnadvm71z1py9hz9zd49hamf6bij99cggb2ij1";
   };
 
-  buildInputs = [ocaml findlib ounit];
+  nativeBuildInputs = [ocaml findlib ];
+  buildInputs = [ ounit];
+
+  strictDeps = true;
 
   prefixKey = "--prefix ";
 

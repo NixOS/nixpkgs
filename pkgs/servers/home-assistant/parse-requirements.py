@@ -34,16 +34,12 @@ from rich.table import Table
 COMPONENT_PREFIX = "homeassistant.components"
 PKG_SET = "home-assistant.python.pkgs"
 
-# If some requirements are matched by multiple Python packages,
-# the following can be used to choose one of them
+# If some requirements are matched by multiple or no Python packages, the
+# following can be used to choose the correct one
 PKG_PREFERENCES = {
-    # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
-    "youtube-dl": "youtube-dl-light",
-    "tensorflow-bin": "tensorflow",
-    "tensorflow-bin_2": "tensorflow",
-    "tensorflowWithoutCuda": "tensorflow",
-    "tensorflow-build_2": "tensorflow",
-    "whois": "python-whois",
+    "youtube_dl": "youtube-dl-light",
+    "tensorflow": "tensorflow",
+    "fiblary3": "fiblary3-fork", # https://github.com/home-assistant/core/issues/66466
 }
 
 
@@ -62,6 +58,7 @@ def get_version():
 
 def parse_components(version: str = "master"):
     components = {}
+    components_with_tests = []
     with tempfile.TemporaryDirectory() as tmp:
         with urlopen(
             f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
@@ -69,9 +66,13 @@ def parse_components(version: str = "master"):
             tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
+
+        for entry in os.scandir(os.path.join(core_path, "tests/components")):
+            if entry.is_dir():
+                components_with_tests.append(entry.name)
+
         sys.path.append(core_path)
         from script.hassfest.model import Integration
-
         integrations = Integration.load_dir(
             pathlib.Path(
                 os.path.join(core_path, "homeassistant/components")
@@ -79,8 +80,10 @@ def parse_components(version: str = "master"):
         )
         for domain in sorted(integrations):
             integration = integrations[domain]
-            components[domain] = integration.manifest
-    return components
+            if not integration.disabled:
+                components[domain] = integration.manifest
+
+    return components, components_with_tests
 
 
 # Recursively get the requirements of a component and its dependencies
@@ -113,39 +116,28 @@ def dump_packages() -> Dict[str, Dict[str, str]]:
 
 
 def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
-    attr_paths = set()
+    if req in PKG_PREFERENCES:
+        return f"{PKG_SET}.{PKG_PREFERENCES[req]}"
+    attr_paths = []
     names = [req]
     # E.g. python-mpd2 is actually called python3.6-mpd2
     # instead of python-3.6-python-mpd2 inside Nixpkgs
     if req.startswith("python-") or req.startswith("python_"):
         names.append(req[len("python-") :])
-    # Add name variant without extra_require, e.g. samsungctl
-    # instead of samsungctl[websocket]
-    if req.endswith("]"):
-        names.append(req[:req.find("[")])
     for name in names:
         # treat "-" and "_" equally
         name = re.sub("[-_]", "[-_]", name)
         # python(minor).(major)-(pname)-(version or unstable-date)
         # we need the version qualifier, or we'll have multiple matches
         # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
-        pattern = re.compile("^python\\d\\.\\d-{}-(?:\\d|unstable-.*)".format(name), re.I)
+        pattern = re.compile(f"^python\\d\\.\\d-{name}-(?:\\d|unstable-.*)", re.I)
         for attr_path, package in packages.items():
             if pattern.match(package["name"]):
-                attr_paths.add(attr_path)
-    if len(attr_paths) > 1:
-        for to_replace, replacement in PKG_PREFERENCES.items():
-            try:
-                attr_paths.remove(PKG_SET + "." + to_replace)
-                attr_paths.add(PKG_SET + "." + replacement)
-            except KeyError:
-                pass
+                attr_paths.append(attr_path)
     # Let's hope there's only one derivation with a matching name
-    assert len(attr_paths) <= 1, "{} matches more than one derivation: {}".format(
-        req, attr_paths
-    )
-    if len(attr_paths) == 1:
-        return attr_paths.pop()
+    assert len(attr_paths) <= 1, f"{req} matches more than one derivation: {attr_paths}"
+    if attr_paths:
+        return attr_paths[0]
     else:
         return None
 
@@ -161,7 +153,7 @@ def main() -> None:
     packages = dump_packages()
     version = get_version()
     print("Generating component-packages.nix for version {}".format(version))
-    components = parse_components(version=version)
+    components, components_with_tests = parse_components(version=version)
     build_inputs = {}
     outdated = {}
     for component in sorted(components.keys()):
@@ -173,6 +165,10 @@ def main() -> None:
             # Therefore, if there's a "#" in the line, only take the part after it
             req = req[req.find("#") + 1 :]
             name, required_version = req.split("==", maxsplit=1)
+            # Remove extra_require from name, e.g. samsungctl instead of
+            # samsungctl[websocket]
+            if name.endswith("]"):
+                name = name[:name.find("[")]
             attr_path = name_to_attr_path(name, packages)
             if our_version := get_pkg_version(name, packages):
                 if Version.parse(our_version) < Version.parse(required_version):
@@ -204,6 +200,13 @@ def main() -> None:
                 f.write(f" # missing inputs: {' '.join(missing)}")
             f.write("\n")
         f.write("  };\n")
+        f.write("  # components listed in tests/components for which all dependencies are packaged\n")
+        f.write("  supportedComponentsWithTests = [\n")
+        for component, deps in build_inputs.items():
+            available, missing = deps
+            if len(missing) == 0 and component in components_with_tests:
+                f.write(f'    "{component}"' + "\n")
+        f.write("  ];\n")
         f.write("}\n")
 
     supported_components = reduce(lambda n, c: n + (build_inputs[c][1] == []),

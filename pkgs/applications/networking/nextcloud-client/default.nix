@@ -17,17 +17,18 @@
 , qtgraphicaleffects
 , sqlite
 , inkscape
+, xdg-utils
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.4.0";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-+b+DJwbYegbeoQmcdBg5Y7rJmKwPjz2XRUroP55ZO+g=";
+    sha256 = "sha256-e4me4mpK0N3UyM5MuJP3jxwM5h1dGBd+JzAr5f3BOGQ=";
   };
 
   patches = [
@@ -62,6 +63,7 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
     # See also: https://bugreports.qt.io/browse/QTBUG-85967
     "--set QML_DISABLE_DISK_CACHE 1"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [

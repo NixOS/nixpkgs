@@ -1,0 +1,27 @@
+--- ./vendor/modules/code-oss-dev/build/gulpfile.reh.js
++++ ./vendor/modules/code-oss-dev/build/gulpfile.reh.js
+@@ -277,8 +277,6 @@
+ 			.pipe(util.stripSourceMappingURL())
+ 			.pipe(jsFilter.restore);
+ 
+-		const nodePath = `.build/node/v${nodeVersion}/${platform}-${platform === 'darwin' ? 'x64' : arch}`;
+-		const node = gulp.src(`${nodePath}/**`, { base: nodePath, dot: true });
+ 
+ 		let web = [];
+ 		if (type === 'reh-web') {
+@@ -296,7 +294,6 @@
+ 			license,
+ 			sources,
+ 			deps,
+-			node,
+ 			...web
+ 		);
+ 
+@@ -376,7 +373,6 @@
+ 			const destinationFolderName = `vscode-${type}${dashed(platform)}${dashed(arch)}`;
+ 
+ 			const serverTaskCI = task.define(`vscode-${type}${dashed(platform)}${dashed(arch)}${dashed(minified)}-ci`, task.series(
+-				gulp.task(`node-${platform}-${platform === 'darwin' ? 'x64' : arch}`),
+ 				util.rimraf(path.join(BUILD_ROOT, destinationFolderName)),
+ 				packageTask(type, platform, arch, sourceFolderName, destinationFolderName)
+ 			));

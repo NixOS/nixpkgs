@@ -1,31 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, EasyProcess, pathpy, pytest }:
+{ lib, buildPythonPackage, fetchPypi, EasyProcess, pathpy, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "entrypoint2";
-  version = "0.2.4";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4770c3afcf3865c606a6e5f7cfcc5c59212f555fcee9b2540270399149c1dde3";
+    sha256 = "sha256-Z+kG9q2VjYP0i07ewo192CZw6SYZiPa0prY6vJ+zvlY=";
   };
-
-  propagatedBuildInputs = [ ];
 
   pythonImportsCheck = [ "entrypoint2" ];
 
-  # argparse is part of the standardlib
-  prePatch = ''
-    substituteInPlace setup.py --replace "argparse" ""
-  '';
-
-  checkInputs = [ EasyProcess pathpy pytest ];
-
-  # 0.2.1 has incompatible pycache files included
-  # https://github.com/ponty/entrypoint2/issues/8
-  checkPhase = ''
-    rm -rf tests/__pycache__
-    pytest tests
-  '';
+  checkInputs = [ EasyProcess pathpy pytestCheckHook ];
 
   meta = with lib; {
     description = "Easy to use command-line interface for python modules";

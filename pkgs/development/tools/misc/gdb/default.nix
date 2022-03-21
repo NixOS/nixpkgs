@@ -1,7 +1,7 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
@@ -27,23 +27,36 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
-  version = "11.1";
+  version = "11.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    sha256 = "151z6d0265hv9cgx9zqqa4bd6vbp20hrljhd6bxl7lr0gd0crkyc";
+    hash = "sha256-FJfDanGIG4ZxqahKDuQPqreIyjDXuhnYRjw8x4cVLjI=";
   };
 
   postPatch = if stdenv.isDarwin then ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+  '' else if stdenv.hostPlatform.isMusl then ''
+    substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
   '' else null;
 
   patches = [
     ./debug-info-from-env.patch
+
+    # Pull upstream fix for gcc-12. Will be included in gdb-12.
+    (fetchpatch {
+      name = "gcc-12.patch";
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=e97436b1b789dcdb6ffb502263f4c86f8bc22996";
+      sha256 = "1mpgw6s9qgnwhwyg3hagc6vhqhvia0l1s8nr22bcahwqxi3wvzcw";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+    name = "musl-fix-pagesize-page_size.patch";
+    url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=fd0975b96b16d96010dce439af9620d3dfb65426";
+    hash = "sha256-M3U7uIIFJnYu0g8/sMLJPhm02q7cGOi6pLjgsUUjeKI=";
+  });
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 

@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xa";
-  version = "2.3.11";
+  version = "2.3.12";
 
   src = fetchurl {
     urls = [
       "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz"
       "https://www.floodgap.com/retrotech/xa/dists/unsupported/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-MvIWTJnjBSGOmSlwhW3Y4jCbXLasR1jXsq/jv+vJAS0=";
+    hash = "sha256-+P0VNgEtZ2/Gy/zdapF5PlZMibbvdH+NuPRnwXj7BwQ=";
   };
 
   checkInputs = [ perl ];

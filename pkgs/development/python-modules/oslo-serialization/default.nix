@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchPypi {
     pname = "oslo.serialization";
     inherit version;
-    sha256 = "3007e1b017ad3754cce54def894054cbcd05887e85928556657434b0fc7e4d83";
+    sha256 = "sha256-OqRy9DSu6LvMByUxK39AmqH6VLvBNJBBJM9JsOhrkRU=";
   };
 
   postPatch = ''

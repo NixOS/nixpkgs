@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "avocode";
-  version = "4.15.1";
+  version = "4.15.6";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "sha256-Cli1tbe/eHS0yk1OhrSgFwjjGx2jvQSYStkKYj6gk4I=";
+    sha256 = "sha256-vNQT4jyMIIAk1pV3Hrp40nawFutWCv7xtwg2gU6ejy0=";
   };
 
   libPath = lib.makeLibraryPath (with xorg; [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     icon = "avocode";
     desktopName = "Avocode";
     genericName = "Design Inspector";
-    categories = "Development;";
+    categories = [ "Development" ];
     comment = "The bridge between designers and developers";
   };
 

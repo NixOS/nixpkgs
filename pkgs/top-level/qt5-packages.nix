@@ -116,8 +116,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
-  libktorrent = callPackage ../development/libraries/libktorrent { };
-
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
@@ -190,9 +188,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla {
-    withQt5 = true;
-  };
+  qscintilla = callPackage ../development/libraries/qscintilla { };
+
+  qt5ct = callPackage ../tools/misc/qt5ct { };
 
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
 
@@ -228,4 +226,5 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
 
+  yuview = callPackage ../applications/video/yuview { };
 })))

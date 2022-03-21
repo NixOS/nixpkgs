@@ -6,8 +6,10 @@
   },
   "context.modules": [
     {
-      "name": "libpipewire-module-rtkit",
-      "args": {},
+      "name": "libpipewire-module-rt",
+      "args": {
+        "nice.level": -11
+      },
       "flags": [
         "ifexists",
         "nofail"
@@ -37,6 +39,61 @@
       }
     }
   ],
-  "context.exec": [],
-  "stream.properties": {}
+  "context.exec": [
+    {
+      "path": "pactl",
+      "args": "load-module module-always-sink"
+    }
+  ],
+  "stream.properties": {},
+  "pulse.rules": [
+    {
+      "matches": [
+        {}
+      ],
+      "actions": {
+        "update-props": {}
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.process.binary": "teams"
+        },
+        {
+          "application.process.binary": "skypeforlinux"
+        }
+      ],
+      "actions": {
+        "quirks": [
+          "force-s16-info"
+        ]
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.process.binary": "firefox"
+        }
+      ],
+      "actions": {
+        "quirks": [
+          "remove-capture-dont-move"
+        ]
+      }
+    },
+    {
+      "matches": [
+        {
+          "application.name": "~speech-dispatcher*"
+        }
+      ],
+      "actions": {
+        "update-props": {
+          "pulse.min.req": "1024/48000",
+          "pulse.min.quantum": "1024/48000"
+        }
+      }
+    }
+  ]
 }

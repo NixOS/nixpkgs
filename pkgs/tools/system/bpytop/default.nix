@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpytop";
-  version = "1.0.67";
+  version = "1.0.68";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nvpIqX16WP9kslFo1ne5+QAZcvG+WFm5kDVOLN4C+b0=";
+    sha256 = "sha256-NHfaWWwNpGhqu/ALcW4p4X6sktEyLbKQuNHpAUUw4LY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A resource monitor; python port of bashtop";
     homepage = src.meta.homepage;
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ aw ];
     platforms = with platforms; linux ++ freebsd ++ darwin;
 

@@ -18,10 +18,10 @@ let
   };
 in stdenv.mkDerivation rec {
   version = "2.3.2";
-  name = "cde-${version}";
+  pname = "cde";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdesktopenv/${name}.tar.gz";
+    url = "mirror://sourceforge/cdesktopenv/cde-${version}.tar.gz";
     sha256 = "029rljhi5r483x8rzdpl8625z0wx8r7k2m0364nbw66h5pig9lbx";
   };
 
@@ -46,6 +46,8 @@ in stdenv.mkDerivation rec {
     bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
     rpcsvc-proto
   ];
+  # build fails otherwise
+  enableParallelBuilding = false;
 
   makeFlags = [
     "World"

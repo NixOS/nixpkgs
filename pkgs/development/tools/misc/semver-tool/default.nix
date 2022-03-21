@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "semver-tool";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "fsaintjacques";
     repo = pname;
     rev = version;
-    sha256 = "sha256-coy/g4nEvSN+0/aqK2r3EEIaoUcnsZhzX66H1qsK9ac=";
+    sha256 = "sha256-LqZTHFiis4BYL1bnJoeuW56wf8+o38Ygs++CV9CKNhM=";
   };
 
   dontBuild = true; # otherwise we try to 'make' which fails.
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/fsaintjacques/semver-tool";
     description = "semver bash implementation";
-    license = licenses.gpl3Plus;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.qyliss ];
   };

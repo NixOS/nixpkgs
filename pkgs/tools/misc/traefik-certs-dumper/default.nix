@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "traefik-certs-dumper";
-  version = "2.7.4";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "ldez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-exkBDrNGvpOz/VD6yfE1PKL4hzs/oZ+RxMwm/ytuV/0=";
+    sha256 = "sha256-o5nTxTyLuKtWcJvcWZuVwK970DMJfEaJw8vDcShulr0=";
   };
 
-  vendorSha256 = "sha256-NmYfdX5BKHZvFzlkh/kkK0voOzNj1EPn53Mz/B7eLd0=";
+  vendorSha256 = "sha256-rBSRZ7gKUx3tBXqhkTOmAyEx9pLw41/Bt3O+AiHqXpw=";
   excludedPackages = "integrationtest";
 
   meta = with lib; {

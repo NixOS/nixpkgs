@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "6.2.0";
+  version = "6.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "v${version}";
-    sha256 = "sha256-VBc2avJiIFQW1LYXQEvIZ/wZKMFJsCF9DDrxwL8dDnk=";
+    sha256 = "sha256-VXkQByaNA02fwBO2yuf7w1ZF/oJwd/h21de1EQlCu2U=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

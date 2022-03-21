@@ -16,7 +16,8 @@ let compcert = mkCoqDerivation rec {
 
   defaultVersion =  with versions; switch coq.version [
       { case = range "8.8" "8.11"; out = "3.8"; }
-      { case = range "8.12" "8.14"; out = "3.10"; }
+      { case = isEq "8.12"       ; out = "3.9"; }
+      { case = range "8.12" "8.15"; out = "3.10"; }
     ] null;
 
   release = {
@@ -106,12 +107,17 @@ compcert.overrideAttrs (o:
           })
         ];
       }
-      { cases = [ (isEq "8.14") "3.10" ];
+      { cases = [ (range "8.14" "8.15") "3.10" ];
         out = [
           # Support for Coq 8.14.1
           (fetchpatch {
             url = "https://github.com/AbsInt/CompCert/commit/a79f0f99831aa0b0742bf7cce459cc9353bd7cd0.patch";
             sha256 = "sha256:0g20x8gfzvplpad9y9vr1p33k6qv6rsp691x6687v9ffvz7zsz94";
+          })
+          # Support for Coq 8.15.0
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/a882f78c069f7337dd9f4abff117d4df98ef38a6.patch";
+            sha256 = "sha256:16i87s608fj9ni7cvd5wrd7gicqniad7w78wi26pxdy0pacl7bjg";
           })
         ];
       }

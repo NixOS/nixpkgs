@@ -2,31 +2,29 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2021-07-18";
+  version = "unstable-2022-02-11";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "6c5cb01b294d4f6e3b438fc47683359eb0fe5057";
-    sha256 = "1dl8ndyv8m1hnydrp5xilcpp2cfbp02d5jap3y42i4nazc9ar6p4";
+    rev = "6695784050605c77a301c0a66764fa9a9580a2f5";
+    sha256 = "1lddzf6m74bw5kkv465cp211xxqbwnfacav7ia3y9i38rrnqwk6m";
   };
 
   buildInputs = with nimPackages; [
     jester
     karax
     sass
-    regex
-    unicodedb
-    unicodeplus
-    segmentation
     nimcrypto
     markdown
     packedjson
     supersnappy
     redpool
-    frosty
     redis
+    zippy
+    flatty
+    jsony
   ];
 
   postBuild = ''
@@ -45,7 +43,6 @@ nimPackages.buildNimPackage rec {
     homepage = "https://github.com/zedeus/nitter";
     maintainers = with maintainers; [ erdnaxe ];
     license = licenses.agpl3Only;
-    platforms = [ "x86_64-linux" ];
     mainProgram = "nitter";
   };
 }

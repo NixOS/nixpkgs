@@ -13,6 +13,7 @@
 , libkscreen
 , liblxqt
 , libqtxdg
+, xkeyboard_config
 , xorg
 , lxqtUpdateScript
 }:
@@ -57,6 +58,10 @@ mkDerivation rec {
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
       --replace 'QStringLiteral("gsettings' \
                 'QStringLiteral("${glib.bin}/bin/gsettings'
+
+    substituteInPlace lxqt-config-input/keyboardlayoutconfig.h \
+      --replace '/usr/share/X11/xkb/rules/base.lst' \
+                '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

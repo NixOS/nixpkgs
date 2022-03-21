@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ii";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
     url = "https://dl.suckless.org/tools/${pname}-${version}.tar.gz";
-    sha256 = "1lk8vjl7i8dcjh4jkg8h8bkapcbs465sy8g9c0chfqsywbmf3ndr";
+    sha256 = "sha256-hQyzI7WD0mG1G9qZk+5zMzQ1Ko5soeLwK1fBVL9WjBc=";
   };
 
   makeFlags = [ "CC:=$(CC)" ];

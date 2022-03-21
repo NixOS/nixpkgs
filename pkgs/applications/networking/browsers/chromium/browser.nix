@@ -17,6 +17,7 @@ mkChromiumDerivation (base: rec {
   installPhase = ''
     mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/libvulkan.so.1" "$libExecPath/"
     cp -v "$buildPath/vk_swiftshader_icd.json" "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"

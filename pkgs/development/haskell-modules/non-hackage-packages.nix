@@ -24,8 +24,6 @@ self: super: {
 
   nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 
-  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
-
   # hasura graphql-engine is not released to hackage.
   # https://github.com/hasura/graphql-engine/issues/7391
   ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};

@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, readline }:
 
 stdenv.mkDerivation rec {
-  baseName = "readline";
+  pname = "pure-readline";
   version = "0.3";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-readline-${version}.tar.gz";
     sha256 = "db8e6663b1c085466c09662fe86d952b6f4ffdafeecffe805c681ab91c910886";
   };
 

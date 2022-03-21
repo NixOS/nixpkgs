@@ -16,17 +16,17 @@
 
 buildDunePackage rec {
   pname = "tezos-stdlib";
-  version = "10.2";
+  version = "11.0";
   base_src = fetchFromGitLab {
     owner = "tezos";
     repo = "tezos";
     rev = "v${version}";
-    sha256 = "1sqwbdclsvzz0781r0830ncy1j048h12jp3hsdy7hz4dpqp80jsq";
+    sha256 = "uUYd1DxH2bdCQlevQt3oGxvg0ai5EiCD2mti5SiueU8=";
   };
 
   src = "${base_src}/src/lib_stdlib";
 
-  minimalOCamlVersion = "4.10.0";
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 

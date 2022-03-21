@@ -1,11 +1,14 @@
 { lib
+, nixosTests
 , buildPythonApplication
 , cloud-utils
 , dmidecode
 , fetchFromGitHub
+, iproute2
 , openssh
 , python3
 , shadow
+, systemd
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,6 +28,13 @@ python3.pkgs.buildPythonApplication rec {
   prePatch = ''
     substituteInPlace setup.py \
       --replace /lib/systemd $out/lib/systemd
+
+    substituteInPlace cloudinit/net/networkd.py \
+      --replace "['/usr/sbin', '/bin']" "['/usr/sbin', '/bin', '${iproute2}/bin', '${systemd}/bin']"
+
+    substituteInPlace tests/unittests/test_net_activators.py \
+      --replace "['/usr/sbin', '/bin']" \
+        "['/usr/sbin', '/bin', '${iproute2}/bin', '${systemd}/bin']"
   '';
 
   postInstall = ''
@@ -107,6 +117,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "cloudinit"
   ];
+
+  passthru.tests.cloud-init = nixosTests.cloud-init;
 
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";

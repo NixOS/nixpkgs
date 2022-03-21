@@ -4,48 +4,50 @@
 , appstream-glib
 , desktop-file-utils
 , libepoxy
-, gettext
 , glib
-, gtk3
+, gtk4
+, wayland
 , meson
 , mpv
 , ninja
 , nix-update-script
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    hash = "sha256-1Jeg1uqWxURGKR/Xg4j4roZ9Pg5MR7geyttdzlOU+rA=";
+    hash = "sha256-QGN8YLtyb9YVNDK2ZDQwHJVg6UTIQssfNK9lQqxMNKQ=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gettext
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
   buildInputs = [
     libepoxy
     glib
-    gtk3
+    gtk4
+    wayland
     mpv
   ];
 
   postPatch = ''
     patchShebangs meson-post-install.py src/generate-authors.py
+    # Remove this for next release
+    substituteInPlace meson-post-install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   doCheck = true;

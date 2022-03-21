@@ -38,15 +38,15 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 
   qtwebengine =
     let
-      branchName = "5.15.7";
+      branchName = "5.15.8";
       rev = "v${branchName}-lts";
     in
     {
-      version = "${branchName}-${lib.substring 0 7 rev}";
+      version = branchName;
 
       src = fetchgit {
         url = "https://github.com/qt/qtwebengine.git";
-        sha256 = "fssBN/CDgXAuiNj14MPeIDI15ZDRBGuF7wxSXns9exU=";
+        sha256 = "04xhg5qpnxm8hzgkanml45za64c9i5pbxhki2l2wcq4b4y7f3hyr";
         inherit rev branchName;
         fetchSubmodules = true;
         leaveDotGit = true;

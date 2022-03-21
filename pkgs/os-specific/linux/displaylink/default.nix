@@ -20,22 +20,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "displaylink";
-  version = "5.4.1-55.174";
+  version = "5.5.0-beta-59.118";
 
   src = requireFile rec {
-    name = "displaylink.zip";
-    sha256 = "1biswvjz91gmx7xf9g05h3ra463hf2yv9mr2nkxclyrd283iiiqc";
+    name = "displaylink-55.zip";
+    sha256 = "0mid6p1mnkhbl96cr763ngdwrlgnpgs6c137rwc2sjf4v33g59ma";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.4.1
+      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.5-Beta
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu ${lib.versions.majorMinor version}.zip" \$PWD/${name}
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu (Beta)5.5 Beta-EXE.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
     '';
   };
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dt $out/lib/displaylink *.spkg
     install -Dm755 ${bins}/DisplayLinkManager $out/bin/DisplayLinkManager
-    mkdir -p $out/lib/udev/rules.d
+    mkdir -p $out/lib/udev/rules.d $out/share
     cp ${./99-displaylink.rules} $out/lib/udev/rules.d/99-displaylink.rules
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
       $out/bin/DisplayLinkManager
     wrapProgram $out/bin/DisplayLinkManager \
       --run "cd $out/lib/displaylink"
+
+    # We introduce a dependency on the source file so that it need not be redownloaded everytime
+    echo $src >> "$out/share/workspace_dependencies.pin"
   '';
 
   dontStrip = true;

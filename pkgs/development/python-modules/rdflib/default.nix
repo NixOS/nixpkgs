@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , html5lib
 , isodate
 , networkx
@@ -16,14 +16,16 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.0.2";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-YTauBWABR07ir/X8W5VuYqEcOpxmuw89nAqqX7tWhU4=";
+  src = fetchFromGitHub {
+    owner = "RDFLib";
+    repo = pname;
+    rev = version;
+    hash = "sha256:1ih7vx4i16np1p8ig5faw74apmbm7kgyj9alya521yvzid6d7pzd";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +41,12 @@ buildPythonPackage rec {
     nose
     tabulate
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # requires network access
+    "--deselect rdflib/__init__.py::rdflib"
+    "--deselect test/jsonld/test_onedotone.py::test_suite"
   ];
 
   disabledTests = [

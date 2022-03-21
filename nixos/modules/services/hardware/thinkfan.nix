@@ -19,7 +19,7 @@ let
         description = "tuple of" + concatMapStrings (t: " (${t.description})") ts;
       };
       level = ints.unsigned;
-      special = enum [ "level auto" "level full-speed" "level disengage" ];
+      special = enum [ "level auto" "level full-speed" "level disengaged" ];
     in
       tuple [ (either level special) level level ];
 
@@ -164,7 +164,7 @@ in {
 
           LEVEL is the fan level to use: it can be an integer (0-7 with thinkpad_acpi),
           "level auto" (to keep the default firmware behavior), "level full-speed" or
-          "level disengage" (to run the fan as fast as possible).
+          "level disengaged" (to run the fan as fast as possible).
           LOW is the temperature at which to step down to the previous level.
           HIGH is the temperature at which to step up to the next level.
           All numbers are integers.

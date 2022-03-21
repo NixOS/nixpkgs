@@ -17,6 +17,9 @@
 , coreutils
 , autoreconfHook
 , autoSignDarwinBinariesHook
+
+# updater only
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
@@ -43,18 +46,20 @@ stdenv.mkDerivation rec {
     libX11
     libssh2
     openssl
-    perl
     slang
     zip
   ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--enable-vfs-smb" ];
+  configureFlags = [ "--enable-vfs-smb" "PERL=${perl}/bin/perl" ];
 
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
       --replace /bin/rm ${coreutils}/bin/rm
+
+    substituteInPlace misc/ext.d/misc.sh.in \
+      --replace /bin/cat ${coreutils}/bin/cat
   '';
 
   preFixup = ''
@@ -69,6 +74,17 @@ stdenv.mkDerivation rec {
       $out/bin/mc
   '';
 
+  passthru.updateScript = writeScript "update-mc" ''
+   #!/usr/bin/env nix-shell
+   #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+   set -eu -o pipefail
+
+   # Expect the text in format of "Current version is: 4.8.27; ...".
+   new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+   update-source-version mc "$new_version"
+ '';
+
   meta = with lib; {
     description = "File Manager and User Shell for the GNU Project";
     downloadPage = "https://www.midnight-commander.org/downloads/";
@@ -77,6 +93,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
     repositories.git = "https://github.com/MidnightCommander/mc.git";
-    updateWalker = true;
   };
 }

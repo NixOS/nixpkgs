@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "p8-platform";
   version = "2.1.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/Pulse-Eight/platform/archive/p8-platform-${version}.tar.gz";
-    sha256 = "18381y54f7d18ckpzf9cfxbz1ws6imprbbm9pvhcg5c86ln8skq6";
+  src = fetchFromGitHub {
+    owner = "Pulse-Eight";
+    repo = "platform";
+    rev = "p8-platform-${version}";
+    sha256 = "sha256-zAI/AOLJAunv+cCQ6bOXrgkW+wl5frj3ktzx2cDeCCk=";
   };
 
   nativeBuildInputs = [ cmake ];

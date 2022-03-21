@@ -10,14 +10,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Pyro4";
-  version = "4.81";
+  pname = "pyro4";
+  version = "4.82";
+  format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "e130da06478b813173b959f7013d134865e07fbf58cc5f1a2598f99479cdac5f";
+    pname = "Pyro4";
+    inherit version;
+    hash = "sha256-UR9bCATpLdd9wzrfnJR3h+P56cWpaxIWLwVXp8TOIfs=";
   };
 
   propagatedBuildInputs = [
@@ -30,13 +32,18 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # add testsupport.py to PATH
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
 
-  # ignore network related tests, which fail in sandbox
-  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
+
+  pytestFlagsArray = [
+    # ignore network related tests, which fail in sandbox
+    "--ignore=tests/PyroTests/test_naming.py"
+  ];
 
   disabledTests = [
     "StartNSfunc"
@@ -46,6 +53,10 @@ buildPythonPackage rec {
 
   # otherwise the tests hang the build
   __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "Pyro4"
+  ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";

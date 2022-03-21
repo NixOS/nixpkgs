@@ -8,13 +8,14 @@
 , icu66
 , krb5
 , lib
+, libtasn1
 , makeWrapper
 , stdenv
 , openssl
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-850";
+  version = "1.8-903";
 
   src =
     let
@@ -22,13 +23,17 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-NSNaL0ERYTSYn9ETjWcQiuI4hY+w/lWVOz3n9lt6O+4=";
+      sha256 = "sha256-FkB3sh1uwOctBOAW7eO8HFNr9a9RG3Yq4hKKscYYER4=";
     };
+
+  dontConfigure = true;
+  dontBuild = true;
 
   buildInputs = [
     alsa-lib
     freetype
     krb5
+    libtasn1
     stdenv.cc.cc.lib
   ];
 

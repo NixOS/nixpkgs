@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://developer.gnome.org/notification-spec/";
+    homepage = "https://gitlab.gnome.org/GNOME/libnotify";
     description = "A library that sends desktop notifications to a notification daemon";
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

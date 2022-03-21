@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper }:
+{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "soapui";
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
       +${jdk}/bin/java $JAVA_OPTS -cp $SOAPUI_CLASSPATH com.eviware.soapui.SoapUI "$@"
     '')
   ];
+
+  passthru.tests = { inherit (nixosTests) soapui; };
 
   meta = with lib; {
     description = "The Most Advanced REST & SOAP Testing Tool in the World";

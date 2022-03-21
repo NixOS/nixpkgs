@@ -14,6 +14,7 @@
 , coreutils
 , CoreServices
 , tzdata
+, cmake
   # kafka is optional but one of the most used features
 , enableKafka ? true
   # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
@@ -28,7 +29,7 @@
 
 let
   pname = "vector";
-  version = "0.18.1";
+  version = "0.20.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -37,11 +38,11 @@ rustPlatform.buildRustPackage {
     owner = "timberio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OD7lYoTlQNdrWT1f+BAp6zI0N+9W2LOHNNgpvAMXKDM=";
+    sha256 = "sha256-OkT1Gj66Z4sj3YtaMlU1lbquTECPG34qydXGbx24Ig4=";
   };
 
-  cargoSha256 = "sha256-BqnXXTNE1TmrF7pSOCQpnHHve0lCb9W6MbJXk2QHAOs=";
-  nativeBuildInputs = [ pkg-config ];
+  cargoSha256 = "sha256-O2uy0wK4pdwjAYzIKJnCzJVsA3n+U+dw731y7OPJfP0=";
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
@@ -70,8 +71,10 @@ rustPlatform.buildRustPackage {
 
     # flaky on linux-x86_64
     "--skip=sources::socket::test::tcp_with_tls_intermediate_ca"
-
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
+    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events"
+    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events_gzip_request"
+    "--skip=sources::aws_kinesis_firehose::tests::handles_acknowledgement_failure"
   ];
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve

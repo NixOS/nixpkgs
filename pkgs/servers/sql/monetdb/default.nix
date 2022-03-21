@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "monetdb";
-  version = "11.41.11";
+  version = "11.43.9";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "sha256-SiZvAvsl2NPa5AxeLtpvWwDhl7ZC0Z/6H/l1hCGpWzw=";
+    sha256 = "sha256-DTpuL5caf4fmJMGq+1L3iyiSkLZYIUnejgJ/4LOk6kQ=";
   };
 
   postPatch = ''

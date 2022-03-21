@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Real-time earthquake map of Japan";
-    homepage = "http://jquake.net";
+    homepage = "https://jquake.net";
     downloadPage = "https://jquake.net/?down";
     changelog = "https://jquake.net/?docu";
     maintainers = with maintainers; [ nessdoor ];

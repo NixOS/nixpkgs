@@ -2,6 +2,7 @@
 , itsdangerous, hypothesis
 , pytestCheckHook, requests
 , pytest-timeout
+, isPy3k
  }:
 
 buildPythonPackage rec {
@@ -58,3 +59,4 @@ buildPythonPackage rec {
     maintainers = [ ];
   };
 }
+

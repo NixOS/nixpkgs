@@ -5,15 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.36.0";
+  version = "1.37.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GJbBhe1l25ZHGWVu1o2oJvd/BNv8dv7aIYor/ebFl9U=";
+    hash = "sha256-XE3g2mKwAiaJvi0ShVScnCKrmz7ujaQgOeFXuYwtP4g=";
   };
-
-  # Tests are not included in the PyPI package
-  doCheck = false;
 
   propagatedBuildInputs = with python3.pkgs; [
     aws-lambda-builders
@@ -42,17 +39,22 @@ python3.pkgs.buildPythonApplication rec {
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
+      --replace "aws_lambda_builders==" "aws-lambda-builders #" \
       --replace "click~=7.1" "click~=8.0" \
-      --replace "Flask~=1.1.2" "Flask~=2.0" \
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "requests==" "requests #" \
-      --replace "watchdog==" "watchdog #" \
-      --replace "aws_lambda_builders==" "aws-lambda-builders #" \
-      --replace "typing_extensions==" "typing-extensions #" \
+      --replace "Flask~=1.1.2" "Flask~=2.0" \
+      --replace "PyYAML~=5.3" "PyYAML #" \
       --replace "regex==" "regex #" \
-      --replace "tzlocal==3.0" "tzlocal"
+      --replace "requests==" "requests #" \
+      --replace "typing_extensions==" "typing-extensions #" \
+      --replace "tzlocal==3.0" "tzlocal #" \
+      --replace "tomlkit==0.7.2" "tomlkit #" \
+      --replace "watchdog==" "watchdog #"
   '';
+
+  # Tests are not included in the PyPI package
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/aws-sam-cli";

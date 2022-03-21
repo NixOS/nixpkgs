@@ -1,27 +1,37 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, httpx }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, httpx
+}:
 
 buildPythonPackage rec {
   pname = "youtube-search-python";
-  version = "1.5.1";
+  version = "1.6.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68c70e1b6a2ce5c2c0ee64ba9c63efc9ab6e6f8acb2f51e19d570b0287e61cc9";
+    hash = "sha256-zAza1XMKLIMZFFS0v/4ATqh6j7aEB2Y+eliE/hNPORw=";
   };
 
-  propagatedBuildInputs = [ httpx ];
+  propagatedBuildInputs = [
+    httpx
+  ];
 
-  pythonImportsCheck = [ "youtubesearchpython" ];
+  pythonImportsCheck = [
+    "youtubesearchpython"
+  ];
 
-  # project has no tests
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "Search for YouTube videos, channels & playlists & get video information using link WITHOUT YouTube Data API v3";
+    description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

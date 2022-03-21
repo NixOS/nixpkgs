@@ -117,7 +117,7 @@ appimageTools.wrapType2 {
     description = "Employee time tracking software";
     homepage = "https://www.timedoctor.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ kamadorueda ];
+    maintainers = with maintainers; [ dsalaza4 ];
     platforms = [ "x86_64-linux" ];
     # gpgme for i686-linux failed to build.
     broken = true;

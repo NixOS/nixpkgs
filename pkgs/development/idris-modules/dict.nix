@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "dict";
+  pname = "dict";
   version = "2016-12-26";
 
   idrisDeps = [ contrib ];

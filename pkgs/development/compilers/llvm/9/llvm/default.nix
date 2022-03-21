@@ -57,6 +57,12 @@ in stdenv.mkDerivation (rec {
   propagatedBuildInputs = [ ncurses zlib ];
 
   patches = [
+    # When cross-compiling we configure llvm-config-native with an approximation
+    # of the flags used for the normal LLVM build. To avoid the need for building
+    # a native libLLVM.so (which would fail) we force llvm-config to be linked
+    # statically against the necessary LLVM components always.
+    ../../llvm-config-link-static.patch
+
     ./gnu-install-dirs.patch
     # Force a test to evaluate the saved benchmark for a CPU for which LLVM has
     # an execution model. See NixOS/nixpkgs#119673.
@@ -83,11 +89,6 @@ in stdenv.mkDerivation (rec {
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}" ''${extra_libdir})' ""
-  ''
-  # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + optionalString (enableSharedLibraries) ''
-    substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
-    patch -p1 < ./outputs.patch
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
@@ -119,6 +120,32 @@ in stdenv.mkDerivation (rec {
     # Fix x86 gold test on non-x86 platforms
     # (similar fix made to others in this directory previously, FWIW)
     patch -p1 -i  ${./fix-test-on-non-x86-like-others.patch}
+  '' + ''
+    # Tweak tests to ignore namespace part of type to support
+    # gcc-12: https://gcc.gnu.org/PR103598.
+    # The change below mangles strings like:
+    #    CHECK-NEXT: Starting llvm::Function pass manager run.
+    # to:
+    #    CHECK-NEXT: Starting {{.*}}Function pass manager run.
+    for f in \
+      test/Other/new-pass-manager.ll \
+      test/Other/new-pm-defaults.ll \
+      test/Other/new-pm-lto-defaults.ll \
+      test/Other/new-pm-thinlto-defaults.ll \
+      test/Other/pass-pipeline-parsing.ll \
+      test/Transforms/Inline/cgscc-incremental-invalidate.ll \
+      test/Transforms/Inline/clear-analyses.ll \
+      test/Transforms/LoopUnroll/unroll-loop-invalidation.ll \
+      test/Transforms/SCCP/ipsccp-preserve-analysis.ll \
+      test/Transforms/SCCP/preserve-analysis.ll \
+      test/Transforms/SROA/dead-inst.ll \
+      test/tools/gold/X86/new-pm.ll \
+      ; do
+      echo "PATCH: $f"
+      substituteInPlace $f \
+        --replace 'Starting llvm::' 'Starting {{.*}}' \
+        --replace 'Finished llvm::' 'Finished {{.*}}'
+    done
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -127,18 +154,28 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
-  cmakeFlags = with stdenv; [
-    "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+  cmakeFlags = with stdenv; let
+    # These flags influence llvm-config's BuildVariables.inc in addition to the
+    # general build. We need to make sure these are also passed via
+    # CROSS_TOOLCHAIN_FLAGS_NATIVE when cross-compiling or llvm-config-native
+    # will return different results from the cross llvm-config.
+    #
+    # Some flags don't need to be repassed because LLVM already does so (like
+    # CMAKE_BUILD_TYPE), others are irrelevant to the result.
+    flagsForLlvmConfig = [
+      "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+      "-DLLVM_ENABLE_RTTI=ON"
+    ] ++ optionals enableSharedLibraries [
+      "-DLLVM_LINK_LLVM_DYLIB=ON"
+    ];
+  in flagsForLlvmConfig ++ [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=ON"
+    "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_ENABLE_RTTI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
-  ] ++ optionals enableSharedLibraries [
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
@@ -164,7 +201,21 @@ in stdenv.mkDerivation (rec {
           "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
           "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
+        # We need to repass the custom GNUInstallDirs values, otherwise CMake
+        # will choose them for us, leading to wrong results in llvm-config-native
+        nativeInstallFlags = [
+          "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+          "-DCMAKE_INSTALL_BINDIR=${placeholder "out"}/bin"
+          "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include"
+          "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
+          "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
+        ];
+      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
+      + lib.concatStringsSep ";" (lib.concatLists [
+        flagsForLlvmConfig
+        nativeToolchainFlags
+        nativeInstallFlags
+      ])
     )
   ];
 
@@ -194,7 +245,8 @@ in stdenv.mkDerivation (rec {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isRiscV);
+  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isRiscV)
+    && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   checkTarget = "check-all";
 

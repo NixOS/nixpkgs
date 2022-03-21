@@ -6,6 +6,7 @@
 , bison
 , ncurses
 , libevent
+, utf8proc
 }:
 
 let
@@ -49,12 +50,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ utf8proc ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 

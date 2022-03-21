@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -21,6 +22,7 @@
 , pycparser
 , pythonOlder
 , pyvex
+, sympy
 , sqlalchemy
 , rpyc
 , sortedcontainers
@@ -44,14 +46,16 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10730";
+  version = "9.1.12332";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vH5TL3l4KQh48iBXQDCH+SsB9z6fFKzHLZbtMds6JV0=";
+    hash = "sha256-GaW1XyFOnjU28HqptFC6+Fe41zYZMR716Nsq0dPy660=";
   };
 
   propagatedBuildInputs = [
@@ -72,20 +76,24 @@ buildPythonPackage rec {
     progressbar2
     protobuf
     psutil
-    sqlalchemy
     pycparser
     pyvex
-    sqlalchemy
     rpyc
     sortedcontainers
+    sqlalchemy
+    sympy
     unicorn'
+  ];
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
-  # See http://angr.io/api-doc/
   pythonImportsCheck = [
     "angr"
     "claripy"

@@ -9,6 +9,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0cn44hryvz2wl7xklaslxsb3l2i3f8jkgmml0n9v2ks22j5l4r4h";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyyaml>=5.1,<6.0" "pyyaml>=5.1"
+  '';
+
   nativeBuildInputs = with python3.pkgs; [
     pytest-runner
   ];

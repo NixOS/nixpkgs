@@ -2,7 +2,6 @@
 , runCommand
 , mutter
 , elementary-default-settings
-, nixos-artwork
 , glib
 , gala
 , epiphany

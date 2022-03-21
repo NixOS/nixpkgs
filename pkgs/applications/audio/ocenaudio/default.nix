@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
-  version = "3.11.0";
+  version = "3.11.5";
 
   src = fetchurl {
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-    sha256 = "1yflpyl0d1mi0zxdyrlbg0px95s2c945ahy0agc8rha01ccf7jwy";
+    sha256 = "sha256-YkSsvhBbju/NEkT7RspZQYnLkcx/5POA8VtxCAL3Wcc=";
   };
 
   nativeBuildInputs = [

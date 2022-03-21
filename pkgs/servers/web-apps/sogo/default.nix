@@ -3,13 +3,13 @@
 , oathToolkit }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.3.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    sha256 = "0f09b2ga43xdd8w14llclrsdxc1y8xb3g1h15lahxq82xkvixjjl";
+    sha256 = "1kyfn3qw299qsyivbrm487h68va99rrb3gmhpgjpwqd2xdg9aypk";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 ];

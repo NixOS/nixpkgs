@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "0ci1dd8g1pgpp6j1v971zg8xpw120hdjblf9zcyhgs4pfvj4l92j";
+      sha256 = "0b4fmcfd5q5wzvasmsfqq838rivpxn274n5y2kza4m3jakp27zmq";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

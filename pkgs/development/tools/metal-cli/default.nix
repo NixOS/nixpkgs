@@ -2,16 +2,20 @@
 
 buildGoModule rec {
   pname = "metal-cli";
-  version = "0.6.0";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "equinix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dGeOFrsqhW0+aQyB4f6pvv4ZBawqKX2+WRskDWoLS7E=";
+    sha256 = "sha256-PsTQuEbo1ReWwZV4D14mEGsU99j49kleiL/6Xyk+g9s=";
   };
 
-  vendorSha256 = "sha256-ifSfeJjrZI1Hrsq64zAGBiLVc8GKvq+Ddg26gQooyTs=";
+  ldflags = [
+    "-X github.com/equinix/metal-cli/cmd.Version=${version}"
+  ];
+
+  vendorSha256 = "sha256-F8d5i9jvjY11Pv6w0ZXI3jr0Wix++B/w9oRTuJGpQfE=";
 
   doCheck = false;
 

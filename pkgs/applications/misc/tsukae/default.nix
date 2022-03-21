@@ -11,9 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-1y/WYLW6/HMGmuaX2wOlQbwYn0LcgQCMb4qw8BtCgxQ=";
   };
 
-  vendorSha256 = "sha256-mVhc9roT7rm9WMwck7jobjn9ykKQRgWJAqM75AmhMN0=";
-
-  runVend = true;
+  vendorSha256 = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";
 
   meta = with lib; {
     description = "Show off your most used shell commands.";

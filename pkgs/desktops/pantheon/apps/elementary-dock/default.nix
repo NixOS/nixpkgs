@@ -28,17 +28,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "unstable-2021-11-08";
+  version = "unstable-2021-12-08";
 
   outputs = [ "out" "dev" ];
 
-  repoName = "dock";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
-    rev = "51e8d3ddfbed0dfce3158d80f997ab183e92567b";
-    sha256 = "sha256-w6HGxEAXNod/uMEEfSz9nRNTRrCbcEqJCP9EFkVbX1U=";
+    repo = "dock";
+    rev = "5e4b5ba2eec3b522e107ad834a59c0f1271d4699";
+    sha256 = "sha256-/Ul21t9VFxhmlQbfx4eY86UKU33hiRfXF9OPHBzPe5o=";
   };
 
   nativeBuildInputs = [

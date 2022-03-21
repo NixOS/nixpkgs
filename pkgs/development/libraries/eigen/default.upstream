@@ -1,4 +1,0 @@
-url http://eigen.tuxfamily.org/
-ensure_choice
-version '.*/([-0-9.]+)[.]tar[.].*' '\1'
-do_overwrite() { do_overwrite_just_version; }

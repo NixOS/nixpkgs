@@ -10,7 +10,8 @@ die() {
 
 usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
-    echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
+    echo "                              [--version-key=<version-key>] [--source-key=<source-key>]"
+    echo "                              [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
     echo "                              [--ignore-same-hash] [--print-changes]"
 }
 
@@ -24,6 +25,9 @@ for arg in "$@"; do
         ;;
         --version-key=*)
             versionKey="${arg#*=}"
+        ;;
+        --source-key=*)
+            sourceKey="${arg#*=}"
         ;;
         --file=*)
             nixFile="${arg#*=}"
@@ -79,6 +83,10 @@ if [[ -z "$versionKey" ]]; then
     versionKey=version
 fi
 
+if [[ -z "$sourceKey" ]]; then
+    sourceKey=src
+fi
+
 # Allow finding packages among flake outputs in repos using flake-compat.
 pname=$(nix-instantiate $systemArg --eval --strict -A "$attr.name" || echo)
 if [[ -z "$pname" ]]; then
@@ -106,7 +114,7 @@ if [[ -z "$nixFile" ]]; then
     fi
 
     # flake-compat will return paths in the Nix store, we need to correct for that.
-    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" | tr -d '"')
+    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" 2>/dev/null | tr -d '"')
     if [[ -n "$possiblyOutPath" ]]; then
         outPathEscaped=$(echo "$possiblyOutPath" | sed 's#[$^*\\.[|]#\\&#g')
         pwdEscaped=$(echo "$PWD" | sed 's#[$^*\\.[|]#\\&#g')
@@ -114,21 +122,21 @@ if [[ -z "$nixFile" ]]; then
     fi
 fi
 
-oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -A "$attr.src.drvAttrs.outputHashAlgo" | tr -d '"')
-oldHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.src.drvAttrs.outputHash" | tr -d '"')
+oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHashAlgo" | tr -d '"')
+oldHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"')
 
 if [[ -z "$oldHashAlgo" || -z "$oldHash" ]]; then
-    die "Couldn't evaluate old source hash from '$attr.src'!"
+    die "Couldn't evaluate old source hash from '$attr.$sourceKey'!"
 fi
 
 if [[ $(grep --count "$oldHash" "$nixFile") != 1 ]]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.src.drvAttrs.urls or [ $attr.src.url ]) 0" | tr -d '"')
+oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
 
 if [[ -z "$oldUrl" ]]; then
-    die "Couldn't evaluate source url from '$attr.src'!"
+    die "Couldn't evaluate source url from '$attr.$sourceKey'!"
 fi
 
 oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
@@ -146,9 +154,9 @@ if [[ "$oldVersion" = "$newVersion" ]]; then
 fi
 
 if [[ -n "$newRevision" ]]; then
-    oldRevision=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.src.rev" | tr -d '"')
+    oldRevision=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.$sourceKey.rev" | tr -d '"')
     if [[ -z "$oldRevision" ]]; then
-        die "Couldn't evaluate source revision from '$attr.src'!"
+        die "Couldn't evaluate source revision from '$attr.$sourceKey'!"
     fi
 fi
 
@@ -228,7 +236,7 @@ fi
 
 # If new hash not given on the command line, recalculate it ourselves.
 if [[ -z "$newHash" ]]; then
-    nix-build $systemArg --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
+    nix-build $systemArg --no-out-link -A "$attr.$sourceKey" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
     newHash=$(sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" | grep --perl-regexp --only-matching 'got: +.+[:-]\K.+')
 
@@ -242,12 +250,12 @@ fi
 
 if [[ -z "$newHash" ]]; then
     cat "$attr.fetchlog" >&2
-    die "Couldn't figure out new hash of '$attr.src'!"
+    die "Couldn't figure out new hash of '$attr.$sourceKey'!"
 fi
 
 if [[ -z "${ignoreSameHash}" && "$oldVersion" != "$newVersion" && "$oldHash" = "$newHash" ]]; then
     mv "$nixFile.bak" "$nixFile"
-    die "Both the old and new source hashes of '$attr.src' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
+    die "Both the old and new source hashes of '$attr.$sourceKey' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
 fi
 
 sed -i "$nixFile" -re "s|\"$tempHashEscaped\"|\"$newHash\"|"

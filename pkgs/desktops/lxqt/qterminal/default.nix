@@ -8,6 +8,7 @@
 , qttools
 , qtx11extras
 , lxqtUpdateScript
+, nixosTests
 }:
 
 mkDerivation rec {
@@ -34,6 +35,8 @@ mkDerivation rec {
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
+  passthru.tests.test = nixosTests.terminal-emulators.qterminal;
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/qterminal";

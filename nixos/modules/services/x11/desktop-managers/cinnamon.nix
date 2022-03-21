@@ -136,7 +136,7 @@ in
         # session requirements
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
-        gnome.networkmanagerapplet # session requirement - also nm-applet not needed
+        networkmanagerapplet # session requirement - also nm-applet not needed
 
         # For a polkit authentication agent
         polkit_gnome
@@ -145,7 +145,7 @@ in
         nemo
         cinnamon-control-center
         cinnamon-settings-daemon
-        gnome.libgnomekbd
+        libgnomekbd
         orca
 
         # theme

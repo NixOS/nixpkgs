@@ -1,20 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.62.0";
+  version = "2.67.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fb51d67a961ea889c5be324f020535ed511c6f483bd13a07f48f6e369fa8df0";
+    hash = "sha256-cYuT1qGBBSQ7zgybSOUY9y8fCD0n8H4HuL2zpUH+ODU=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
   # Tests require network connectivity and there's no easy way to disable them
   doCheck = false;
 
-  pythonImportsCheck = [ "stripe" ];
+  pythonImportsCheck = [
+    "stripe"
+  ];
 
   meta = with lib; {
     description = "Stripe Python bindings";

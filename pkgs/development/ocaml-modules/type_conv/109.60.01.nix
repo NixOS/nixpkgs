@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, camlp4 }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, camlp4 }:
 
 if !lib.versionAtLeast ocaml.version "4.00"
   || lib.versionAtLeast ocaml.version "4.03"
@@ -8,12 +8,17 @@ stdenv.mkDerivation rec {
   pname = "ocaml-type_conv";
   version = "109.60.01";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/type_conv/archive/${version}.tar.gz";
-    sha256 = "0lpxri68glgq1z2pp02rp45cb909xywbff8d4idljrf6fzzil2zx";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "type_conv";
+    rev = version;
+    sha256 = "sha256-8Oz/fPL3+RghyxQp5u6seSEdf0BgfP6XNcsMYty0rNs=";
   };
 
-  buildInputs = [ ocaml findlib camlp4 ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ camlp4 ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

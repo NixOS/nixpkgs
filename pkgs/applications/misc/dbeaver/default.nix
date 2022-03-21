@@ -21,17 +21,44 @@
 
 javaPackages.mavenfod rec {
   pname = "dbeaver";
-  version = "21.3.0"; # When updating also update fetchedMavenDeps.sha256
+  version = "22.0.1"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "iKxnuMm5hpreP706N+XxaBrDVVwVFRWKNmiCyXkOUCQ=";
+    sha256 = "sha256-IG5YWwq3WVzQBvAslQ9Z2Ou6ADzf4n9NkQCtH4Jgkac=";
   };
+
 
   mvnSha256 = "7Sm1hAoi5xc4MLONOD8ySLLkpao0qmlMRRva/8zR210=";
   mvnParameters = "-P desktop,all-platforms";
+
+  fetchedMavenDeps = stdenv.mkDerivation {
+    name = "dbeaver-${version}-maven-deps";
+    inherit src;
+
+    buildInputs = [
+      maven
+    ];
+
+    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}";
+
+    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+    installPhase = ''
+      find $out -type f \
+        -name \*.lastUpdated -or \
+        -name resolver-status.properties -or \
+        -name _remote.repositories \
+        -delete
+    '';
+
+    # don't do any fixup
+    dontFixup = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-WAB15d4UvUOkBXT7K/hvAZWOE3V1Lpl/tr+AFNBM4FI=";
+  };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -62,7 +89,7 @@ javaPackages.mavenfod rec {
       desktopName = "dbeaver";
       comment = "SQL Integrated Development Environment";
       genericName = "SQL Integrated Development Environment";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
 

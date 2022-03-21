@@ -42,7 +42,14 @@ python3.pkgs.buildPythonApplication rec {
       A simulation of a true AI. Go from computer to computer, pursued by the
       entire world. Keep hidden, and you might have a chance
     '';
-    license = lib.licenses.gpl2;
+    # License details are in LICENSE.txt
+    license = with lib.licenses; [
+      gpl2Plus # most of the code, some translations
+      mit # recursive_fix_pickle, polib
+      cc-by-sa-30 # data and artwork, some translations
+      free # earth images from NASA, some fonts
+      cc0 # cick0.wav
+    ];
     maintainers = with lib.maintainers; [ fgaz ];
   };
 }

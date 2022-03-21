@@ -12,23 +12,17 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "42.2.0";
+  version = "44.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X2p6KQnEB6ZHdCHGFVEoEMiI+0R2vfGqel+jFKTcx74=";
+    sha256 = "sha256-gzLsBwq3wrFde5cEb5+oFLW4KrwoiZpr22JbJhNr1yk=";
   };
-
-  patches = [
-    # Fix the environment for spawned process
-    # https://github.com/mozilla/glean/pull/1542
-    ./fix-spawned-process-environment.patch
-  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-/+rKGPYTLovgjTGL2F/pWzlUy1tY207yuJz3Xdhm1hg=";
+    sha256 = "sha256-lWFv8eiA3QHp5bhcg4qon/dvKUbFbtH1Q2oXGkk0Me0=";
   };
 
   nativeBuildInputs = [

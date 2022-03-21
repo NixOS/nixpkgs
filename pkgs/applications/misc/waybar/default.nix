@@ -15,6 +15,7 @@
 , gtk-layer-shell
 , howard-hinnant-date
 , libxkbcommon
+, runTests        ? true,  catch2
 , traySupport     ? true,  libdbusmenu-gtk3
 , pulseSupport    ? true,  libpulseaudio
 , sndioSupport    ? true,  sndio
@@ -29,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.8";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    sha256 = "sha256-XOguhbvlO3iUyk5gWOvimipXV8yqnia0LKoSA1wiKoE=";
+    sha256 = "sha256-NQ/d+eXmc+GRxl5zby97S4U/YQnsRWGpwNZZL0Sqby8=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,9 @@ stdenv.mkDerivation rec {
     ++ optional  swaySupport  sway
     ++ optional  mpdSupport   libmpdclient;
 
+  checkInputs = [ catch2 ];
+  doCheck = runTests;
+
   mesonFlags = (lib.mapAttrsToList
     (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
     {
@@ -70,6 +74,7 @@ stdenv.mkDerivation rec {
       libudev = udevSupport;
       mpd = mpdSupport;
       rfkill = rfkillSupport;
+      tests = runTests;
     }
   ) ++ [
     "-Dsystemd=disabled"

@@ -1,18 +1,21 @@
 diff --git a/data/meson.build b/data/meson.build
-index 1eb3dfb0..623b66ec 100644
+index 53f31cb4..90f40e77 100644
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -26,4 +26,4 @@ i18n.merge_file (
+@@ -68,7 +68,7 @@ test('as-validate_metainfo.cli',
  )
  
- install_data ('appstream.conf',
--              install_dir: get_option('sysconfdir'))
-+              install_dir: get_option('prefix') / 'etc')
+ install_data('appstream.conf',
+-             install_dir: get_option('sysconfdir'))
++             install_dir: get_option('prefix') / 'etc')
+ 
+ if get_option('compose')
+     ascompose_metainfo = 'org.freedesktop.appstream.compose.metainfo.xml'
 diff --git a/meson.build b/meson.build
-index dc1fb1a5..5ee03b73 100644
+index 2efe86b7..9dc79e28 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -108,12 +108,12 @@ if get_option ('gir')
+@@ -107,12 +107,12 @@ if get_option ('gir')
      dependency('gobject-introspection-1.0', version: '>=1.56')
  endif
  

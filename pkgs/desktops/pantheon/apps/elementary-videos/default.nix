@@ -15,21 +15,18 @@
 , clutter-gst
 , clutter-gtk
 , gst_all_1
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.8.0";
-
-  repoName = "videos";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "videos";
     rev = version;
-    sha256 = "sha256-FFCtQ42LygfjowehwZcISWTfv8PBZTH0X8mPrpiG8Ug=";
+    sha256 = "sha256-3V8iDy68ngdFTJxAGimuGi4vPru32pHYevThA0RwNpE=";
   };
 
   nativeBuildInputs = [
@@ -42,21 +39,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     clutter-gst
     clutter-gtk
-    elementary-icon-theme
     granite
+    gtk3
+    libgee
+    libhandy
+  ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    libgee
-    libhandy
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

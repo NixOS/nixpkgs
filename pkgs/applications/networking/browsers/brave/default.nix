@@ -12,7 +12,6 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gnome
 , gsettings-desktop-schemas
 , gtk3
@@ -60,7 +59,6 @@ rpath = lib.makeLibraryPath [
   freetype
   gdk-pixbuf
   glib
-  gnome2.GConf
   gtk3
   libdrm
   libpulseaudio
@@ -93,11 +91,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.32.115";
+  version = "1.36.116";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "6DY3gLyaMSkjZEPR9o1hiuFFsL22bTeq2SN9Nt3DCSc=";
+    sha256 = "whGV0VgCm6JSyrcFQTKbM35b/qLQdBmChTrYuyC+OlI=";
   };
 
   dontConfigure = true;
@@ -174,7 +172,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#" + lib.replaceStrings [ "." ] [ "" ] version;
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you

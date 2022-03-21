@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://github.com/vi3k6i5/flashtext";
+    homepage = "https://github.com/vi3k6i5/flashtext";
     description = "Python package to replace keywords in sentences or extract keywords from sentences";
     maintainers = with maintainers; [ aanderse ];
     license = with licenses; [ mit ];

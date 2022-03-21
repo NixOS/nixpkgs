@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , numpy
 , wheel
 , werkzeug
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
   version = "2.6.0";
   format = "wheel";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     pname = "tensorboard";

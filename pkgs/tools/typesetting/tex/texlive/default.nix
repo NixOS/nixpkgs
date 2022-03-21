@@ -125,8 +125,8 @@ let
 
   snapshot = {
     year = "2021";
-    month = "04";
-    day = "08";
+    month = "12";
+    day = "27";
   };
 
   tlpdb = fetchurl {
@@ -136,7 +136,7 @@ let
       #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
       "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
     ];
-    sha512 = "1dsj4bza84g2f2z0w31yil3iwcnggcyg9f1xxwmp6ljk5xlzyr39cb556prx9691zbwpbrwbb5hnbqxqlnwsivgk0pmbl9mbjbk9cz0";
+    hash = "sha512-PcXTctrO0aL5C7Ci1J2Z5fa5WqKONhOK2q0FnSbT5+iP9WWSCljyQiHE8C4LYMMHii48y6AJVRkjVIukI3+rUQ==";
   };
 
   # create a derivation that contains an unpacked upstream TL package

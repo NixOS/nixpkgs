@@ -1,12 +1,12 @@
 { fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.8";
+  version = "1.6.9";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "0w8af1i57szmxl9vfifwwyal7xh8aixz2l9487wvy6yckqk6m92a";
+    sha256 = "sha256-8l4cNfPQ8bWpnMMezCNTyoPtRqFRY4QvuocBJ9ycggY=";
   };
 
   buildInputs = [ libgcrypt readline libgpg-error ];
@@ -37,7 +37,5 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
-
-    updateWalker = true;
   };
 }

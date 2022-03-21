@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Python language bindings for ev3dev";
     homepage = "https://github.com/ev3dev/ev3dev-lang-python";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

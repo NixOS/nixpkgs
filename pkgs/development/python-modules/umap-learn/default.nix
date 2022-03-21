@@ -52,6 +52,9 @@ buildPythonPackage rec {
 
     # Flaky test. Fails with AssertionError sometimes.
     "test_sparse_hellinger"
+
+    # tensorflow maybe incompatible? https://github.com/lmcinnes/umap/issues/821
+    "test_save_load"
   ];
 
   meta = with lib; {

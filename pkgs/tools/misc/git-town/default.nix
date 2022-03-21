@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "git-town";
-  version = "7.6.0";
+  version = "7.7.0";
 
   goPackagePath = "github.com/git-town/git-town";
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    sha256 = "sha256-yarJWIEIZuBcXXxltkiM7LwrEM8fveD3+JVoPGarhJQ=";
+    sha256 = "sha256-FpBEBx2gb33fGDndvZmvG1A61NoJ4Qy4V3YQSb+Ugsc=";
   };
 
   ldflags = [ "-X github.com/git-town/git-town/src/cmd.version=v${version}" "-X github.com/git-town/git-town/src/cmd.buildDate=nix" ];

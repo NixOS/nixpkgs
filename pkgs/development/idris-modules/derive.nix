@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "derive";
+  pname = "derive";
   version = "2018-07-02";
 
   idrisDeps = [ contrib pruviloj ];

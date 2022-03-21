@@ -1,24 +1,30 @@
-{ buildGoModule, fetchgit, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.4.0";
+  version = "0.4.2";
 
-  src = fetchgit {
-    url = "https://cue.googlesource.com/cue";
+  src = fetchFromGitHub {
+    owner = "cue-lang";
+    repo = "cue";
     rev = "v${version}";
-    sha256 = "sha256-rcGEl+CMFyxZKsOKhVimhv5/ONo3xS6FjgKModZGR2o=";
+    sha256 = "sha256-6HD3wcBo21Dep4ckx+oDWAC4nuTvCzlp0bwQxZox2b4=";
   };
 
-  vendorSha256 = "sha256-eSKVlBgnHR1R0j1lNwtFoIgRuj8GqoMbvuBl/N1SanY=";
+  vendorSha256 = "sha256-tY9iwQW6cB1FgLAmkDNMrvIxR+i4aGYhNs4tepI654o=";
 
-  doCheck = false;
+  checkPhase = "go test ./...";
 
   subPackages = [ "cmd/cue" ];
 
   ldflags = [
     "-s" "-w" "-X cuelang.org/go/cmd/cue/cmd.version=${version}"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/cue eval - <<<'a: "all good"' > /dev/null
+  '';
 
   meta = {
     description = "A data constraint language which aims to simplify tasks involving defining and using data";

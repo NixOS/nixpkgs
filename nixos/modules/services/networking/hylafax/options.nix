@@ -3,7 +3,7 @@
 let
 
   inherit (lib.options) literalExpression mkEnableOption mkOption;
-  inherit (lib.types) bool enum ints lines attrsOf nullOr path str submodule;
+  inherit (lib.types) bool enum ints lines attrsOf nonEmptyStr nullOr path str submodule;
   inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
@@ -16,8 +16,6 @@ let
     The default contains some reasonable
     configuration to yield an operational system.
   '';
-
-  str1 = lib.types.addCheck str (s: s!="");  # non-empty string
 
   configAttrType =
     # Options in HylaFAX configuration files can be
@@ -37,7 +35,7 @@ let
   modemConfigOptions = { name, config, ... }: {
     options = {
       name = mkOption {
-        type = str1;
+        type = nonEmptyStr;
         example = "ttyS1";
         description = ''
           Name of modem device,
@@ -45,7 +43,7 @@ let
         '';
       };
       type = mkOption {
-        type = str1;
+        type = nonEmptyStr;
         example = "cirrus";
         description = ''
           Name of modem configuration file,
@@ -135,14 +133,14 @@ in
     };
 
     countryCode = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "49";
       description = "Country code for server and all modems.";
     };
 
     areaCode = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "30";
       description = "Area code for server and all modems.";
@@ -279,7 +277,7 @@ in
       each time the spooling area is initialized.
     '';
     faxcron.enable.frequency = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
       description = ''
@@ -319,7 +317,7 @@ in
       each time the spooling area is initialized.
     '';
     faxqclean.enable.frequency = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
       description = ''

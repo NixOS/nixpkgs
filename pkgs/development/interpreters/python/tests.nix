@@ -20,7 +20,15 @@ let
     envs = let
       inherit python;
       pythonEnv = python.withPackages(ps: with ps; [ ]);
-      pythonVirtualEnv = python.withPackages(ps: with ps; [ virtualenv ]);
+      pythonVirtualEnv = if python.isPy3k
+        then
+           python.withPackages(ps: with ps; [ virtualenv ])
+        else
+          python.buildEnv.override {
+            extraLibs = with python.pkgs; [ virtualenv ];
+            # Collisions because of namespaces __init__.py
+            ignoreCollisions = true;
+          };
     in {
       # Plain Python interpreter
       plain = rec {

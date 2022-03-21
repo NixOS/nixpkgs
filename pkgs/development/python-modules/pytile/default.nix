@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "2021.10.0";
+  version = "2022.02.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9FbcGhRmXULJgfJOmy6mhiZwQUDNmvxZI/WxjJIbnc8=";
+    sha256 = "sha256-IGjM9yU/3EjO9sV1ZZUX7RUL/a6CcMPzANhVMTcbZGU=";
   };
 
   nativeBuildInputs = [

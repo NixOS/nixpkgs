@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.303.3";
+  version = "2.332.1";
 
   src = fetchurl {
-    url = "http://mirrors.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "8a6ae7367755b3f31a050faa945f7a3991abdb43d941c7294cac890c1e2779d8";
+    url = "http://get.jenkins.io/war-stable/${version}/jenkins.war";
+    sha256 = "0xrrqdwfz19mr4wl4sdzk0qnq9rjdh65vd1386qsn6a4axwv652s";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) jenkins; };
+    tests = { inherit (nixosTests) jenkins jenkins-cli; };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}

@@ -21,6 +21,7 @@ evalConfigArgs@
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , modules
+, modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
 , # !!! See comment about check in lib/modules.nix
   check ? true
 , prefix ? []
@@ -33,6 +34,12 @@ let pkgs_ = pkgs;
 in
 
 let
+  evalModulesMinimal = (import ./default.nix {
+    inherit lib;
+    # Implicit use of feature is noted in implementation.
+    featureFlags.minimalModules = { };
+  }).evalModules;
+
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
@@ -68,13 +75,22 @@ let
         _module.check = lib.mkDefault check;
       };
     };
-  allUserModules = modules ++ legacyModules;
 
-  noUserModules = lib.evalModules ({
-    inherit prefix;
+  allUserModules =
+    let
+      # Add the invoking file (or specified modulesLocation) as error message location
+      # for modules that don't have their own locations; presumably inline modules.
+      locatedModules =
+        if modulesLocation == null then
+          modules
+        else
+          map (lib.setDefaultModuleLocation modulesLocation) modules;
+    in
+      locatedModules ++ legacyModules;
+
+  noUserModules = evalModulesMinimal ({
+    inherit prefix specialArgs;
     modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
-    specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
   });
 
   # Extra arguments that are useful for constructing a similar configuration.
@@ -88,13 +104,8 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-in withWarnings {
-
-  # Merge the option definitions in all modules, forming the full
-  # system configuration.
-  inherit (nixosWithUserModules) config options _module type;
-
+in
+withWarnings nixosWithUserModules // {
   inherit extraArgs;
-
   inherit (nixosWithUserModules._module.args) pkgs;
 }

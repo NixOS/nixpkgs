@@ -31,8 +31,8 @@ assert enableShared || enableStatic;
 assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
-# Boost <1.69 can't be build with clang >8, because pth was removed
-assert with lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
+# Boost <1.69 can't be built on linux with clang >8, because pth was removed
+assert with lib; ((stdenv.isLinux && toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
 
 with lib;
 let
@@ -127,7 +127,14 @@ stdenv.mkDerivation {
     extraPrefix = "libs/context/";
   })
   ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
-  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
+  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch
+  ++ optional (version == "1.77.0") (fetchpatch {
+    url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
+    sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
+    stripLen = 2;
+    extraPrefix = "";
+    includes = [ "boost/math/special_functions/detail/bernoulli_details.hpp" ];
+  });
 
   meta = {
     homepage = "http://boost.org/";

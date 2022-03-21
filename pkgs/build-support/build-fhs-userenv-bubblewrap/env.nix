@@ -41,7 +41,7 @@ let
   basePkgs = with pkgs;
     [ glibcLocales
       (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractive coreutils less shadow su
+      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
     ];
@@ -93,6 +93,32 @@ let
     paths = [ etcPkg ldconfig ] ++ basePkgs ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
+    postBuild = ''
+      if [[ -d  $out/share/gsettings-schemas/ ]]; then
+          # Recreate the standard schemas directory if its a symlink to make it writable
+          if [[ -L $out/share/glib-2.0 ]]; then
+              ln -s $(readlink $out/share/glib-2.0) $out/share/glib-2.0.old
+              rm -rf $out/share/glib-2.0
+          fi
+
+          mkdir -p $out/share/glib-2.0/schemas
+
+          # symlink any schema files or overrides to the standard schema directory
+          if [[ -e $out/share/glib-2.0.old/schemas ]]; then
+              ln -fs $out/share/glib-2.0.old/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fs $out/share/glib-2.0.old/schemas/*.gsettings-schemas.override $out/share/glib-2.0/schemas
+          fi
+
+          for d in $out/share/gsettings-schemas/*; do
+              # Force symlink, in case there are duplicates
+              ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fs $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
+          done
+
+          # and compile them
+          ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+      fi
+    '';
   };
 
   staticUsrProfileMulti = buildEnv {

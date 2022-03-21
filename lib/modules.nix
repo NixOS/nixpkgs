@@ -9,7 +9,7 @@ let
     catAttrs
     concatLists
     concatMap
-    count
+    concatStringsSep
     elem
     filter
     findFirst
@@ -37,6 +37,7 @@ let
     toList
     types
     warnIf
+    zipAttrsWith
     ;
   inherit (lib.options)
     isOption
@@ -46,6 +47,20 @@ let
     showOption
     unknownModule
     ;
+
+  showDeclPrefix = loc: decl: prefix:
+    " - option(s) with prefix `${showOption (loc ++ [prefix])}' in module `${decl._file}'";
+  showRawDecls = loc: decls:
+    concatStringsSep "\n"
+      (sort (a: b: a < b)
+        (concatMap
+          (decl: map
+            (showDeclPrefix loc decl)
+            (attrNames decl.options)
+          )
+          decls
+      ));
+
 in
 
 rec {
@@ -137,7 +152,7 @@ rec {
             # support for that, in turn it's lazy in its values. This means e.g.
             # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
             # start a download when `pkgs` wasn't evaluated.
-            type = types.lazyAttrsOf types.unspecified;
+            type = types.lazyAttrsOf types.raw;
             internal = true;
             description = "Arguments passed to each module.";
           };
@@ -150,8 +165,7 @@ rec {
           };
 
           _module.freeformType = mkOption {
-            # Disallow merging for now, but could be implemented nicely with a `types.optionType`
-            type = types.nullOr (types.uniq types.attrs);
+            type = types.nullOr types.optionType;
             internal = true;
             default = null;
             description = ''
@@ -333,6 +347,10 @@ rec {
     in modulesPath: initialModules: args:
       filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
 
+  /* Wrap a module with a default location for reporting errors. */
+  setDefaultModuleLocation = file: m:
+    { _file = file; imports = [ m ]; };
+
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
@@ -442,10 +460,11 @@ rec {
         }
       */
       byName = attr: f: modules:
-        foldl' (acc: module:
-              if !(builtins.isAttrs module.${attr}) then
+        zipAttrsWith (n: concatLists)
+          (map (module: let subtree = module.${attr}; in
+              if !(builtins.isAttrs subtree) then
                 throw ''
-                  You're trying to declare a value of type `${builtins.typeOf module.${attr}}'
+                  You're trying to declare a value of type `${builtins.typeOf subtree}'
                   rather than an attribute-set for the option
                   `${builtins.concatStringsSep "." prefix}'!
 
@@ -454,11 +473,8 @@ rec {
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                acc // (mapAttrs (n: v:
-                                   (acc.${n} or []) ++ f module v
-                                 ) module.${attr}
-                       )
-               ) {} modules;
+                mapAttrs (n: f module) subtree
+              ) modules);
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
           [{ inherit (module) _file; options = option; }]
@@ -472,26 +488,61 @@ rec {
           [{ inherit (module) file; inherit value; }]
         ) configs;
 
+      # Convert an option tree decl to a submodule option decl
+      optionTreeToOption = decl:
+        if isOption decl.options
+        then decl
+        else decl // {
+            options = mkOption {
+              type = types.submoduleWith {
+                modules = [ { options = decl.options; } ];
+                # `null` is not intended for use by modules. It is an internal
+                # value that means "whatever the user has declared elsewhere".
+                # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
+                shorthandOnlyDefinesConfig = null;
+              };
+            };
+          };
+
       resultsByName = mapAttrs (name: decls:
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
           defns = defnsByName.${name} or [];
           defns' = defnsByName'.${name} or [];
-          nrOptions = count (m: isOption m.options) decls;
+          optionDecls = filter (m: isOption m.options) decls;
         in
-          if nrOptions == length decls then
+          if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
             in {
               matchedOptions = evalOptionValue loc opt defns';
               unmatchedDefns = [];
             }
-          else if nrOptions != 0 then
-            let
-              firstOption = findFirst (m: isOption m.options) "" decls;
-              firstNonOption = findFirst (m: !isOption m.options) "" decls;
-            in
-              throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
+          else if optionDecls != [] then
+              if all (x: x.options.type.name == "submodule") optionDecls
+              # Raw options can only be merged into submodules. Merging into
+              # attrsets might be nice, but ambiguous. Suppose we have
+              # attrset as a `attrsOf submodule`. User declares option
+              # attrset.foo.bar, this could mean:
+              #  a. option `bar` is only available in `attrset.foo`
+              #  b. option `foo.bar` is available in all `attrset.*`
+              #  c. reject and require "<name>" as a reminder that it behaves like (b).
+              #  d. magically combine (a) and (c).
+              # All of the above are merely syntax sugar though.
+              then
+                let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
+                in {
+                  matchedOptions = evalOptionValue loc opt defns';
+                  unmatchedDefns = [];
+                }
+              else
+                let
+                  firstNonOption = findFirst (m: !isOption m.options) "" decls;
+                  nonOptions = filter (m: !isOption m.options) decls;
+                in
+                throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
+                  showRawDecls loc nonOptions
+                }"
           else
             mergeModules' loc decls defns) declsByName;
 
@@ -535,11 +586,9 @@ rec {
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls =
    let
-    packSubmodule = file: m:
-      { _file = file; imports = [ m ]; };
     coerceOption = file: opt:
-      if isFunction opt then packSubmodule file opt
-      else packSubmodule file { options = opt; };
+      if isFunction opt then setDefaultModuleLocation file opt
+      else setDefaultModuleLocation file { options = opt; };
    in loc: opts:
     foldl' (res: opt:
       let t  = res.type;
@@ -569,7 +618,7 @@ rec {
 
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
-            if getSubModules != null then map (packSubmodule opt._file) getSubModules ++ res.options
+            if getSubModules != null then map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
             else if opt.options ? options then map (coerceOption opt._file) options' ++ res.options
             else res.options;
         in opt.options // res //
@@ -614,6 +663,8 @@ rec {
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         inherit (res) isDefined;
+        # This allows options to be correctly displayed using `${options.path.to.it}`
+        __toString = _: showOption loc;
       };
 
   # Merge definitions of a value of a given type.
@@ -751,21 +802,22 @@ rec {
       compare = a: b: (a.priority or 1000) < (b.priority or 1000);
     in sort compare defs';
 
-  /* Hack for backward compatibility: convert options of type
-     optionSet to options of type submodule.  FIXME: remove
-     eventually. */
   fixupOptionType = loc: opt:
     let
       options = opt.options or
         (throw "Option `${showOption loc}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
+
+      # Hack for backward compatibility: convert options of type
+      # optionSet to options of type submodule.  FIXME: remove
+      # eventually.
       f = tp:
-        let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
-        in
         if tp.name == "option set" || tp.name == "submodule" then
           throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
-        else if optionSetIn "attrsOf" then types.attrsOf (types.submodule options)
-        else if optionSetIn "listOf"  then types.listOf  (types.submodule options)
-        else if optionSetIn "nullOr"  then types.nullOr  (types.submodule options)
+        else if (tp.functor.wrapped.name or null) == "optionSet" then
+          if tp.name == "attrsOf" then types.attrsOf (types.submodule options)
+          else if tp.name == "listOf" then types.listOf  (types.submodule options)
+          else if tp.name == "nullOr" then types.nullOr  (types.submodule options)
+          else tp
         else tp;
     in
       if opt.type.getSubModules or null == null
@@ -900,6 +952,26 @@ rec {
     visible = false;
     warn = true;
     use = builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
+  };
+
+  mkRenamedOptionModuleWith = {
+    /* Old option path as list of strings. */
+    from,
+    /* New option path as list of strings. */
+    to,
+
+    /*
+      Release number of the first release that contains the rename, ignoring backports.
+      Set it to the upcoming release, matching the nixpkgs/.version file.
+    */
+    sinceRelease,
+
+  }: doRename {
+    inherit from to;
+    visible = false;
+    warn = lib.isInOldestRelease sinceRelease;
+    use = lib.warnIf (lib.isInOldestRelease sinceRelease)
+      "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
   /* Return a module that causes a warning to be shown if any of the "from"

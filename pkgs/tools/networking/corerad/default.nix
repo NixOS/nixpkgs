@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGo118Module, fetchFromGitHub, nixosTests }:
 
-buildGoModule rec {
+buildGo118Module rec {
   pname = "corerad";
-  version = "0.3.4";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "0sf2r4q57hwdakv0b4skn76b0xy7bwj2j9rpj6frs5fkk6gsi6sm";
+    sha256 = "sha256-2XPWexpr3xGwnvjT08BVq6uf1haPuZGwKswiy/1Z8vE=";
   };
 
-  vendorSha256 = "123f9y1pfayfd5amkw5b8jzi8dbn7a16kbf7lzbmw69c1gj4gx9z";
+  vendorSha256 = "sha256-+9KjgbKuAJexdGEKu9hIsHfHsVbKeB5ZtSgFzM2/bOI=";
 
   doCheck = false;
 

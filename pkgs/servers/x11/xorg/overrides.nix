@@ -604,17 +604,7 @@ self: super:
               sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
             done
           '';}
-        else if (abiCompat == "1.17") then {
-          name = "xorg-server-1.17.4";
-          builder = ./builder.sh;
-          src = fetchurl {
-            url = "mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2";
-            sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
-          };
-          nativeBuildInputs = [ pkg-config ];
-          buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-          meta.platforms = lib.platforms.unix;
-        } else if (abiCompat == "1.18") then {
+        else if (abiCompat == "1.18") then {
             name = "xorg-server-1.18.4";
             builder = ./builder.sh;
             src = fetchurl {
@@ -649,11 +639,30 @@ self: super:
         ];
         postInstall = ":"; # prevent infinite recursion
       });
+
+      fpgit = commit: sha256: name: fetchpatch (
+        {
+          url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/${commit}.diff";
+          inherit sha256;
+        } // lib.optionalAttrs (name != null) {
+            name = name + ".patch";
+          }
+      );
     in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
         patches = [
+          # https://lists.x.org/archives/xorg-announce/2021-December/003122.html
+          (fpgit "ebce7e2d80e7c80e1dda60f2f0bc886f1106ba60"
+            "sNi16FqN4rS4s8j5+PUVeOQBasccCkB5KvywP7xl28M=" "CVE-2021-4008")
+          (fpgit "b5196750099ae6ae582e1f46bd0a6dad29550e02"
+            "5hgzQXBBaJfhSTa9hs8K2N1fQ6+Vp8TTkertmQhkw8Y=" "CVE-2021-4009")
+          (fpgit "6c4c53010772e3cb4cb8acd54950c8eec9c00d21"
+            "1gGG9RpjLMi7Emwh13/z5CN1+ISLsPL3hJXP5gQcNkE=" "CVE-2021-4010")
+          (fpgit "e56f61c79fc3cee26d83cda0f84ae56d5979f768"
+            "e1KgSXGwwI3GgcYeWaF3KHPmkE4tf9VTqvfTYqRpysY=" "CVE-2021-4011")
+
           # The build process tries to create the specified logdir when building.
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail

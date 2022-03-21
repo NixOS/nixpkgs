@@ -1,10 +1,11 @@
 { fetchurl, fetchpatch, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-1.16";
+  pname = "gsl";
+  version = "1.16";
 
   src = fetchurl {
-    url = "mirror://gnu/gsl/${name}.tar.gz";
+    url = "mirror://gnu/gsl/gsl-${version}.tar.gz";
     sha256 = "0lrgipi0z6559jqh82yx8n4xgnxkhzj46v96dl77hahdp58jzg3k";
   };
 

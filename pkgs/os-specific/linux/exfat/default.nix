@@ -1,9 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
-
-# Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
-assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.version "4.0";
-
 stdenv.mkDerivation rec {
   # linux kernel above 5.7 comes with its own exfat implementation https://github.com/arter97/exfat-linux/issues/27
   # Assertion moved here due to some tests unintenionally triggering it,
@@ -41,5 +37,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;
+    broken = true;
   };
 }

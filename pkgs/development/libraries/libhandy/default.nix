@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
         # HdySettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
         # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
         # See hdy_settings_constructed function in https://gitlab.gnome.org/GNOME/libhandy/-/commit/bb68249b005c445947bfb2bee66c91d0fe9c41a4
-        "${glib.getSchemaPath gsettings-desktop-schemas}/../.."
+        (glib.getSchemaDataDirPath gsettings-desktop-schemas)
 
         # Some tests require icons
         "${hicolor-icon-theme}/share"

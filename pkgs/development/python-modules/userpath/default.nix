@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Cross-platform tool for adding locations to the user PATH";
     homepage = "https://github.com/ofek/userpath";
     license = [ licenses.asl20 licenses.mit ];
-    maintainers = with maintainers; [ yevhenshymotiuk ];
+    maintainers = with maintainers; [ yshym ];
   };
 }
