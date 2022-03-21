@@ -948,8 +948,10 @@ This runs the strip command on installed binaries and libraries. This removes un
 This setup hook patches installed scripts to use Nix store paths to their shebang interpreter as found in the build environment's `PATH`. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system what interpreter to use to execute the script's contents.
 
 ::: note
-The [generic builder](https://github.com/NixOS/nixpkgs/blob/6ba632c2a442082f353bf2d7028fda11a888d099/pkgs/stdenv/generic/builder.sh) populates `PATH` from inputs of the derivation.
+The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
 :::
+
+[generic-builder]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/stdenv/generic/builder.sh
 
 `#!/bin/sh` will be rewritten to `#!/nix/store/<hash>-some-bash/bin/sh`.
 `#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`. Interpreter paths that point to a valid Nix store location are not changed.
@@ -971,9 +973,13 @@ stdenv.mkDerivation {
 }
 ```
 
-The file [`patch-shebangs.sh`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh) defines the [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24) function. It is used to implement [`patchShebangsAuto`](https://github.com/NixOS/nixpkgs/blob/ca156a66b75999153d746f57a11a19222fd5cdfb/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107), the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
+The file [`patch-shebangs.sh`][patch-shebangs.sh] defines the [`patchShebangs`][patchShebangs] function. It is used to implement [`patchShebangsAuto`][patchShebangsAuto], the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
 
 If you need to run `patchShebangs` at build time, it must be called explicitly within [one of the build phases](#sec-stdenv-phases).
+
+[patch-shebangs.sh]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh
+[patchShebangs]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24-L105
+[patchShebangsAuto]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107-L119
 
 ### `audit-tmpdir.sh` {#audit-tmpdir.sh}
 
