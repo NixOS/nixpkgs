@@ -19,7 +19,7 @@
 , libffi
 , libvpx
 , libwebp
-, icu, libpng, glib, pciutils
+, icu, libpng, glib
 , autoconf, which, gnused, rustPackages, rustPlatform
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
@@ -135,9 +135,6 @@ buildStdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-    substituteInPlace toolkit/xre/glxtest.cpp \
-      --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
-
     patchShebangs mach
   '' + extraPostPatch;
 

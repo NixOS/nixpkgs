@@ -12,6 +12,7 @@
 , libva
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
+, pciutils
 }:
 
 ## configurability of the wrapper itself
@@ -66,7 +67,7 @@ let
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups ]
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
