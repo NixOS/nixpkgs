@@ -45,7 +45,8 @@ self: super: {
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  cryptonite = appendPatch (pkgs.fetchpatch {
+  # 0.30 introduced support for GHC 9.2.x, so when this assert fails, the whole block can be removed
+  cryptonite = assert super.cryptonite.version == "0.29"; appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
     sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
   }) super.cryptonite;
@@ -64,9 +65,8 @@ self: super: {
 
   # Jailbreaks & Version Updates
 
-  # This `doJailbreak` can be removed once the following PR is released to Hackage:
-  # https://github.com/thsutton/aeson-diff/pull/58
-  aeson-diff = doJailbreak super.aeson-diff;
+  # This `doJailbreak` can be removed once we have doctest v0.20
+  aeson-diff = assert super.doctest.version == "0.18.2"; doJailbreak super.aeson-diff;
 
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
@@ -77,8 +77,6 @@ self: super: {
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
-  cryptohash-md5 = doJailbreak super.cryptohash-md5;
-  cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
@@ -103,7 +101,8 @@ self: super: {
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
-  hedgehog = doJailbreak super.hedgehog;
+  # 1.1.1 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
+  hedgehog = assert super.hedgehog.version == "1.0.5"; doJailbreak super.hedgehog;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
   integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
   indexed-traversable = doJailbreak super.indexed-traversable;
@@ -127,7 +126,6 @@ self: super: {
   resolv = doJailbreak super.resolv;
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
-  scientific = doJailbreak super.scientific;
   servant = doJailbreak super.servant;
   servant-auth = doJailbreak super.servant-auth;
   servant-server = appendPatches [
@@ -141,22 +139,15 @@ self: super: {
   servant-swagger = doJailbreak super.servant-swagger;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
   shelly = doJailbreak super.shelly;
-  split = doJailbreak super.split;
   splitmix = doJailbreak super.splitmix;
-  tar = doJailbreak super.tar;
-  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   tasty-hspec = doJailbreak super.tasty-hspec;
   th-desugar = self.th-desugar_1_13;
-  these = doJailbreak super.these;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
   unordered-containers = doJailbreak super.unordered-containers;
-  vector = doJailbreak (dontCheck super.vector);
+  vector = dontCheck super.vector;
   vector-binary-instances = doJailbreak super.vector-binary-instances;
-  # Upper bound on `hashable` is too restrictive
-  witherable = doJailbreak super.witherable;
-  zlib = doJailbreak super.zlib;
 
   hpack = overrideCabal (drv: {
     # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
@@ -191,25 +182,14 @@ self: super: {
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
 
-  # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
-  memory = appendPatch (pkgs.fetchpatch {
+  # 0.17.0 introduced support for GHC 9.2.x, so when this assert fails, the whole block can be removed
+  memory = assert super.memory.version == "0.16.0"; appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
     sha256 = "1kjganx729a6xfgfnrb3z7q6mvnidl042zrsd9n5n5a3i76nl5nl";
   }) (overrideCabal {
     editedCabalFile = null;
     revision = null;
   } super.memory);
-
-  # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
-  # https://github.com/snoyberg/mono-traversable/issues/192
-  mono-traversable = dontCheck super.mono-traversable;
-
-  # Disable tests pending resolution of
-  # https://github.com/Soostone/retry/issues/71
-  retry = dontCheck super.retry;
-
-  # Upper bound on `hashable` is too restrictive
-  semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
 
   # Use hlint from git for GHC 9.2.1 support
   hlint = doDistribute (
@@ -233,8 +213,8 @@ self: super: {
   some = doJailbreak super.some;
   fourmolu = super.fourmolu_0_5_0_1;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
-  lucid = doJailbreak super.lucid;
-  hashtables = doJailbreak super.hashtables;
+  # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
+  hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
   hiedb = doJailbreak super.hiedb;
 
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
