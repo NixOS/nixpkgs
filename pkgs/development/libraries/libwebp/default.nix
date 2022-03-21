@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
-    rev    = version;
+    rev    = "v${version}";
     sha256 = "1kl6qqa29ygqb2fpv140y59v539gdqx4vcf3mlaxhca2bks98qgm";
   };
 
