@@ -1733,6 +1733,16 @@ self: super: {
     })
   ] super.pipes-aeson;
 
+  moto = appendPatches [
+    # https://gitlab.com/k0001/moto/-/merge_requests/3
+    (pkgs.fetchpatch {
+      name = "moto-ghc-9.0.patch";
+      url = "https://gitlab.com/k0001/moto/-/commit/5b6f015a1271765005f03762f1f1aaed3a3198ed.patch";
+      stripLen = 1;
+      sha256 = "sha256-PqG/Ujvb/IOvX0SAeGZ/vgzNoZC68vIOwmYfhxjiYCg=";
+    })
+  ] super.moto;
+
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not
   # compatible with Cabal 3. No upstream repository found so far
   readline = appendPatch ./patches/readline-fix-for-cabal-3.patch super.readline;
