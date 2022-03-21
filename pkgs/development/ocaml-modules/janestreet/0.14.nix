@@ -465,7 +465,7 @@ with self;
 
   ppx_fields_conv = janePackage {
     pname = "ppx_fields_conv";
-    version = "0.14.2";
+    version = "0.15.0";
     hash = "1zwirwqry24b48bg7d4yc845hvcirxyymzbw95aaxdcck84d30n8";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Generation of accessor and iteration functions for ocaml records";
@@ -639,7 +639,7 @@ with self;
 
   ppx_typerep_conv = janePackage {
     pname = "ppx_typerep_conv";
-    version = "0.14.2";
+    version = "0.15.0";
     minimumOCamlVersion = "4.04.2";
     hash = "0yk9vkpnwr8labgfncqdi4rfkj88d8mb3cr8m4gdqpi3f2r27hf0";
     meta.description = "Generation of runtime types from type declarations";
@@ -648,9 +648,9 @@ with self;
 
   ppx_variants_conv = janePackage {
     pname = "ppx_variants_conv";
-    version = "0.14.2";
+    version = "0.15.0";
     minimumOCamlVersion = "4.04.2";
-    hash = "1p11fiz4m160hs0xzg4g9rxchp053sz3s3d1lyciqixad1xi47a4";
+    hash = "sha256-ejDKuUhG4NvLSnNSc1pfphs6pU/FVX8BmIYI2xJfALY=";
     meta.description = "Generation of accessor and iteration functions for ocaml variant types";
     propagatedBuildInputs = [ variantslib ppxlib ];
   };
