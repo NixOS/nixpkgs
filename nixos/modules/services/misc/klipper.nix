@@ -76,7 +76,7 @@ in
         type = with types; attrsOf
           (submodule {
             options = {
-              enableFlashing = mkEnableOption ''
+              flashing.enable = mkEnableOption ''
                 automatic flashing of firmware to microcontroller
 
                 WARNING: Be careful with this option. Enabling this will automatically flash your microcontroller on e.g. nixos-rebuild.
@@ -144,8 +144,8 @@ in
       with pkgs;
       let
         firmwares = mapAttrs
-          (mcu: { enableFlashing, firmwareConfig }: pkgs.klipper-firmware.override {
-            flashDevice = if enableFlashing then cfg.settings."${mcu}".serial else null;
+          (mcu: { flashing, firmwareConfig }: pkgs.klipper-firmware.override {
+            flashDevice = if flashing.enable then cfg.settings."${mcu}".serial else null;
             mcu = lib.strings.sanitizeDerivationName mcu;
             inherit firmwareConfig;
           })
