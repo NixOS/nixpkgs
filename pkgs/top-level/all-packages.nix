@@ -25603,6 +25603,8 @@ with pkgs;
 
   f1viewer = callPackage ../applications/video/f1viewer {};
 
+  faircamp = callPackage ../applications/misc/faircamp { };
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };
