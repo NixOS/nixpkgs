@@ -22,6 +22,7 @@
 , icu
 , systemd
 , systemdSupport ? stdenv.hostPlatform.isLinux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -90,6 +91,9 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+    };
+    tests = {
+      inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
     };
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, haskellPackages, makeWrapper, packages ? (pkgSet: []) }:
+{ stdenv, haskellPackages, makeWrapper, packages ? (pkgSet: []), nixosTests }:
 
 let
   termonadEnv = haskellPackages.ghcWithPackages (self: [ self.termonad ] ++ packages self);
@@ -16,6 +16,8 @@ in stdenv.mkDerivation {
   # trivial derivation
   preferLocalBuild = true;
   allowSubstitutes = false;
+
+  passthru.tests.test = nixosTests.terminal-emulators.termonad;
 
   meta = haskellPackages.termonad.meta // {
     mainProgram = "termonad";

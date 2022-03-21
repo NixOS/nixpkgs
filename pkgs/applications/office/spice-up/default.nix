@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     libgee
     libgudev
     libsoup
-    pantheon.elementary-icon-theme
     pantheon.granite
   ];
 
