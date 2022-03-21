@@ -2064,6 +2064,19 @@ self: super: {
     '' + (drv.postPatch or "");
   }) (doJailbreak super.jsaddle);
 
+  # 2022-03-22: PR for haskell-gi-base compat https://github.com/ghcjs/jsaddle/pull/129
+  jsaddle-webkit2gtk =
+    appendPatch (
+      pkgs.fetchpatch {
+        name = "haskell-gi-base-0.26-compat-patch";
+        url = "https://github.com/ghcjs/jsaddle/commit/c9a9ad39addea469f7e3f5bc6b1c778fefaab5d8.patch";
+        sha256 = "sha256-4njoOxtJH2jVqiPmW8f9hGUqpzI3yJ1XP4u85QgmvjU=";
+        stripLen = 2;
+        extraPrefix = "";
+      }
+    )
+    super.jsaddle-webkit2gtk;
+
   # Tests need to lookup target triple x86_64-unknown-linux
   # https://github.com/llvm-hs/llvm-hs/issues/334
   llvm-hs = overrideCabal {
