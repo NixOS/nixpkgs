@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
-  # [1] http://www.realtek.com.tw/downloads/downloadsView.aspx?PFid=5&Level=5&Conn=4&DownTypeID=3
+  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
   # I've verified manually (`diff -r`) that the source code for version 8.046.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
@@ -52,5 +52,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ timokau ];
+    broken = kernel.kernelAtLeast "5.17";
   };
 }
