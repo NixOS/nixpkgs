@@ -132,8 +132,8 @@ convertIconTheme() {
     }
 
     iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
-    if [[ ! -z "$(ls -1 "$iconsdir/"*)" ]]; then
         icnsutil compose "$out/${iconName}.icns" "$iconsdir/"*
+    if [[ -n "$(ls -1 "$iconsdir/"*)" ]]; then
     else
         echo "Warning: no icons were found. Creating an empty icon for ${iconName}.icns."
         touch "$out/${iconName}.icns"
