@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "bisect_ppx";
-  version = "2.6.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "bisect_ppx";
     rev = version;
-    sha256 = "sha256-YeLDlH3mUbVEY4OmzlrvSwVUav3uMtSsTFlOsQKnz84=";
+    sha256 = "sha256-aRldfbhT68Ysc1wxewvuP+h//z40hZcJIWW0hFxfPE0=";
   };
 
   minimumOCamlVersion = "4.08";
