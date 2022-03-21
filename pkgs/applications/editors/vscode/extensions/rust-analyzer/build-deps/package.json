@@ -1,26 +1,19 @@
 {
   "name": "rust-analyzer",
-  "version": "0.2.834",
+  "version": "0.2.975",
   "dependencies": {
-    "https-proxy-agent": "^5.0.0",
-    "node-fetch": "^2.6.1",
-    "vscode-languageclient": "8.0.0-next.2",
-    "d3": "^7.1.0",
+    "vscode-languageclient": "8.0.0-next.8",
+    "d3": "^7.3.0",
     "d3-graphviz": "^4.0.0",
-    "@types/glob": "^7.1.4",
-    "@types/mocha": "^8.2.3",
     "@types/node": "~14.17.5",
-    "@types/node-fetch": "^2.5.11",
-    "@types/vscode": "^1.57.0",
-    "@typescript-eslint/eslint-plugin": "^4.28.2",
-    "@typescript-eslint/parser": "^4.28.2",
-    "eslint": "^7.30.0",
-    "glob": "^7.1.6",
-    "mocha": "^9.0.2",
+    "@types/vscode": "~1.63.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "@vscode/test-electron": "^2.1.1",
+    "eslint": "^8.7.0",
     "tslib": "^2.3.0",
-    "typescript": "^4.3.5",
+    "typescript": "^4.5.5",
     "typescript-formatter": "^7.2.2",
-    "vsce": "^1.95.1",
-    "vscode-test": "^1.5.1"
+    "vsce": "^2.6.7"
   }
 }
