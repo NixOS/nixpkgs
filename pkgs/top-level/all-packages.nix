@@ -25972,10 +25972,6 @@ with pkgs;
     callPackage = newScope {
       inherit (rustPackages) cargo rustc;
       gnused = gnused_422;
-      inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
-                                            Kerberos AVFoundation MediaToolbox
-                                            CoreLocation Foundation AddressBook;
-      inherit (darwin) libobjc;
     };
   });
 
@@ -29461,10 +29457,6 @@ with pkgs;
     callPackage = newScope {
       inherit (rustPackages) cargo rustc;
       gnused = gnused_422;
-      inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
-                                            Kerberos AVFoundation MediaToolbox
-                                            CoreLocation Foundation AddressBook;
-      inherit (darwin) libobjc;
     };
   });
 

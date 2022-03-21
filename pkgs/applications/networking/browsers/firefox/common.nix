@@ -58,10 +58,6 @@
 , safeBrowsingSupport ? false
 , drmSupport ? false
 
-# macOS dependencies
-, xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
-, CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
-
 ## other
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
@@ -90,31 +86,14 @@
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
-assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
-  default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
-
-  binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
-
-  applicationName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
-
-  execdir = if stdenv.isDarwin
-            then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
-            else "/bin";
-
   inherit (rustPackages) rustc cargo;
 
-  # Darwin's stdenv provides the default llvmPackages version, match that since
-  # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
-  llvmPackages0 =
-    if stdenv.isDarwin
-      then buildPackages.llvmPackages
-    else rustc.llvmPackages;
+  llvmPackages0 = rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -122,8 +101,6 @@ let
     bootBintools = null;
   };
 
-  # When LTO for Darwin is fixed, the following will need updating as lld
-  # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
                 # LTO requires LLVM bintools including ld.lld and llvm-ar.
                 then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
@@ -187,10 +164,7 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
-  ++ lib.optional  jemallocSupport jemalloc
-  ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                          AVFoundation MediaToolbox CoreLocation
-                                          Foundation libobjc AddressBook cups ];
+  ++ lib.optional  jemallocSupport jemalloc;
 
   MACH_USE_SYSTEM_PYTHON = "1";
 
@@ -212,7 +186,6 @@ buildStdenv.mkDerivation ({
       wrapGAppsHook
       rustPlatform.bindgenHook
     ]
-    ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
   separateDebugInfo = enableDebugSymbols;
@@ -261,22 +234,18 @@ buildStdenv.mkDerivation ({
     "--enable-system-pixman"
     "--disable-tests"
     "--disable-updater"
-    "--enable-default-toolkit=${default-toolkit}"
+    "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
     "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-webp"
   ]
-  ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
   ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
   # LTO is done using clang and lld on Linux.
-  # Darwin needs to use the default linker as lld is not supported (yet?):
-  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
   # elf-hack is broken when using clang+lld:
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional ltoSupport "--enable-lto=cross" # Cross-language LTO.
+  ++ lib.optionals ltoSupport [ "--enable-lto=cross" "--enable-linker=lld" ]
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
-  ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
   ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
 
   ++ flag alsaSupport "alsa"
@@ -308,11 +277,6 @@ buildStdenv.mkDerivation ({
 
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
-
-  installPhase = if buildStdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -LR dist/${binaryNameCapitalized}.app $out/Applications
-  '' else null;
 
   postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -361,19 +325,18 @@ buildStdenv.mkDerivation ({
   doInstallCheck = true;
   installCheckPhase = ''
     # Some basic testing
-    "$out${execdir}/${applicationName}" --version
+    "$out/bin/${binaryName}" --version
   '';
 
   passthru = {
     inherit updateScript;
     inherit version;
     inherit alsaSupport;
+    inherit binaryName;
     inherit pipewireSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;
-    inherit execdir;
-    inherit applicationName;
     inherit tests;
     inherit gtk3;
     inherit wasiSysRoot;

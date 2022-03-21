@@ -20,7 +20,7 @@ browser:
 
 let
   wrapper =
-    { applicationName ? browser.applicationName or (lib.getName browser)
+    { applicationName ? browser.binaryName or (lib.getName browser)
     , pname ? applicationName
     , version ? lib.getVersion browser
     , desktopName ? # applicationName with first letter capitalized
@@ -179,14 +179,10 @@ let
       buildInputs = [ browser.gtk3 ];
 
 
-      buildCommand = lib.optionalString stdenv.isDarwin ''
-        mkdir -p $out/Applications
-        cp -R --no-preserve=mode,ownership ${browser}/Applications/${applicationName}.app $out/Applications
-        rm -f $out${browser.execdir or "/bin"}/${applicationName}
-      '' + ''
-        if [ ! -x "${browser}${browser.execdir or "/bin"}/${applicationName}" ]
+      buildCommand = ''
+        if [ ! -x "${browser}/bin/${applicationName}" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${applicationName}'"
+            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
             exit 1
         fi
 
@@ -223,12 +219,12 @@ let
 
         # create the wrapper
 
-        executablePrefix="$out${browser.execdir or "/bin"}"
+        executablePrefix="$out/bin"
         executablePath="$executablePrefix/${applicationName}"
 
         if [ ! -x "$executablePath" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${applicationName}'"
+            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
             exit 1
         fi
 
@@ -243,18 +239,18 @@ let
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
         fi
 
-        if [ ! -x "${browser}${browser.execdir or "/bin"}/${applicationName}" ]
+        if [ ! -x "${browser}/bin/${applicationName}" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${applicationName}'"
+            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
             exit 1
         fi
 
         makeWrapper "$oldExe" \
-          "$out${browser.execdir or "/bin"}/${applicationName}${nameSuffix}" \
+          "$out/bin/${applicationName}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --prefix PATH ':' "${xdg-utils}/bin" \
-            --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
+            --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${applicationName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
@@ -278,7 +274,7 @@ let
             mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
             icon=$( find "${browser}/lib/" -name "default''${res}.png" )
               if [ -e "$icon" ]; then ln -s "$icon" \
-                "$out/share/icons/hicolor/''${res}x''${res}/apps/${applicationName}.png"
+                "$out/share/icons/hicolor/''${res}x''${res}/apps/${icon}.png"
               fi
             done
         fi
