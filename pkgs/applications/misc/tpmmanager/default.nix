@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Rohde-Schwarz";
     repo = "TPMManager";
-    rev = "9f989206635a6d2c1342576c90fa73eb239519cd";
+    rev = "v${version}";
     sha256 = "sha256-JKYG+I/tZ+0NDmHcIgKV6eGrjbPvPQKPo0sE/zBlLY4=";
   };
 
