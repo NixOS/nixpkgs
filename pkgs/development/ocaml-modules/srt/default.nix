@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "srt";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-srt";
     rev = "v${version}";
-    sha256 = "0xh89w4j7lljvpy2n08x6m9kw88f82snmzf23kp0gw637sjnrj6f";
+    sha256 = "sha256-rnM50IzeiKOrpFf79jTHp+fXn0tdx+vrLuD3kzqLh5g=";
   };
 
   useDune2 = true;
