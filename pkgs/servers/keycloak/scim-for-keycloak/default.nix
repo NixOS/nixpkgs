@@ -16,7 +16,7 @@ javaPackages.mavenfod rec {
     sha256 = "K34c7xISjEETI3jFkRLdZ0C8pZHTWtPtrrIzwC76Tv0=";
   };
 
-  mvnHash = "sha256-L1i9Fn9l6Xun6usvqiDLtMkMscQMEcqgaWXV3OUKrwQ=";
+  mvnHash = "sha256-kDYhXTEOAWH/dcRJalKtbwBpoxcD1aX9eqcRKs6ewbE=";
 
   nativeBuildInputs = [
     maven
