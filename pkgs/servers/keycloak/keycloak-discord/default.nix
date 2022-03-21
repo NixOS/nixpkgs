@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    mkdir -p "$out"
     install "$src" "$out/${pname}-ear-${version}.ear"
   '';
 
