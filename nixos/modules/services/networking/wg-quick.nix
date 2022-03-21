@@ -254,7 +254,7 @@ let
         description = "wg-quick WireGuard Tunnel - ${name}";
         requires = [ "network-online.target" ];
         after = [ "network.target" "network-online.target" ];
-        wantedBy = if values.autostart then [ "multi-user.target" ] else [];
+        wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
         path = [ pkgs.kmod pkgs.wireguard-tools ];
 
