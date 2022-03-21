@@ -260,7 +260,6 @@ buildStdenv.mkDerivation ({
     "--with-system-icu"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    #"--enable-system-cairo"
     "--disable-tests"
     "--disable-updater"
     "--enable-default-toolkit=${default-toolkit}"
