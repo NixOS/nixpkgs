@@ -67,7 +67,7 @@ let
           ++ extraNativeMessagingHosts
         );
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups ]
-            ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
+            ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd

@@ -37,7 +37,7 @@
 , waylandSupport ? true, libxkbcommon, libdrm
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , gssSupport ? true, libkrb5
-, pipewireSupport ? waylandSupport && webrtcSupport, pipewire
+, pipewireSupport ? waylandSupport && webrtcSupport
 # Jemalloc could reduce memory consumption.
 , jemallocSupport ? true, jemalloc
 
@@ -187,7 +187,6 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
-  ++ lib.optional  pipewireSupport pipewire
   ++ lib.optional  jemallocSupport jemalloc
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
