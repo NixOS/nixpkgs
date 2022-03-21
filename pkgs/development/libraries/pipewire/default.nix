@@ -5,6 +5,7 @@
 , fetchpatch
 , removeReferencesTo
 , python3
+, makeWrapper
 , meson
 , ninja
 , systemd
@@ -51,6 +52,7 @@
 , hsphfpdSupport ? true
 , pulseTunnelSupport ? true
 , libpulseaudio
+, pulseaudio
 , zeroconfSupport ? true
 , avahi
 , raopSupport ? true
@@ -108,6 +110,7 @@ let
       docutils
       doxygen
       graphviz
+      makeWrapper
       meson
       ninja
       pkg-config
@@ -199,6 +202,9 @@ let
       moveToOutput "bin/pipewire-pulse" "$pulse"
 
       moveToOutput "bin/pw-jack" "$jack"
+
+      wrapProgram $pulse/bin/pipewire-pulse \
+        --suffix PATH : ${lib.makeBinPath [ pulseaudio ]}
     '';
 
     passthru = {
