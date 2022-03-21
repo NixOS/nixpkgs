@@ -29053,6 +29053,8 @@ with pkgs;
 
   maestral-gui = libsForQt5.callPackage ../applications/networking/maestral-qt { };
 
+  myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
+
   insync = callPackage ../applications/networking/insync { };
 
   insync-v3 = libsForQt515.callPackage ../applications/networking/insync/v3.nix { };
