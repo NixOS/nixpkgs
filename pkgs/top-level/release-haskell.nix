@@ -373,7 +373,6 @@ let
           jobs.haskellPackages.cabal-plan
           jobs.haskellPackages.distribution-nixpkgs
           jobs.haskellPackages.hackage-db
-          jobs.haskellPackages.policeman
           jobs.haskellPackages.xmonad
           jobs.haskellPackages.xmonad-contrib
           # haskell packages maintained by @peti

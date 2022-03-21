@@ -1412,9 +1412,6 @@ self: super: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [self.buildHaskellPackages.c2hs];
   }) super.libsodium;
 
-  # https://github.com/kowainik/policeman/issues/57
-  policeman = doJailbreak super.policeman;
-
   # Too strict version bounds on haskell-gi
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
