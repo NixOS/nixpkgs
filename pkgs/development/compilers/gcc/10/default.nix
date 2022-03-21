@@ -261,7 +261,7 @@ stdenv.mkDerivation ({
   };
 
   enableParallelBuilding = true;
-  inherit enableMultilib;
+  inherit enableMultilib enableShared;
 
   inherit (stdenv) is64bit;
 

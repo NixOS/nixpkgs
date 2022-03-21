@@ -222,6 +222,10 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
     moveToOutput "share/gcc-*/python" "${!outputLib}"
 
+    if [ -z "$enableShared" ]; then
+        moveToOutput "${targetConfig+$targetConfig/}lib/lib*.a" "${!outputLib}"
+    fi
+
     for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "${!outputLib}"
     done
