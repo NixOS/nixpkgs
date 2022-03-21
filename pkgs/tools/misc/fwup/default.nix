@@ -48,10 +48,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     coreutils
-    dosfstools
-    mtools
     unzip
     zip
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    mtools
+    dosfstools
   ];
 
   checkInputs = [
