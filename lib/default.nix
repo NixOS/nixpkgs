@@ -68,7 +68,8 @@ let
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version
-      mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
+      mod compare splitByAndCompare
+      functionArgs setFunctionArgs isFunction toFunction
       toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;

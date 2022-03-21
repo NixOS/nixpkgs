@@ -403,6 +403,25 @@ rec {
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
 
+  /*
+    Turns any non-callable values into constant functions.
+    Returns callable values as is.
+
+    Example:
+
+      nix-repl> lib.toFunction 1 2
+      1
+
+      nix-repl> lib.toFunction (x: x + 1) 2
+      3
+  */
+  toFunction =
+    # Any value
+    v:
+    if isFunction v
+    then v
+    else k: v;
+
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
 
