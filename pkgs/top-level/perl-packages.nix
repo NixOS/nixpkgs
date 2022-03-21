@@ -17611,8 +17611,8 @@ let
     pname = "PDF-API2";
     version = "2.042";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.038.tar.gz";
-      sha256 = "dEfEdJsCp4T1JdPH7OmdNLChBHXbZQlvYxZ0jdL5vQk=";
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.042.tar.gz";
+      sha256 = "0p9wsnn60mcxr4032ahai0d56x8gw76ydym2l4qxq086a10jk6db";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -20782,12 +20782,12 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "7.10.0";
+    version = "8.1.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
-      rev = "v7.10.0";
-      sha256 = "sha256-cXuzg4bBwCftdZhz3e50L+4fO0RWX5Tl8zDOoydECd4=";
+      rev = "v${version}";
+      sha256 = "sha256-9cjH4hIIxB+Pv9+ck6xg8KmfM8jtVFKVQNGLYr2AnAM=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

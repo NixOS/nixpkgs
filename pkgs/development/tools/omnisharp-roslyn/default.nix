@@ -62,6 +62,21 @@ let
     </configuration>
   '';
 
+  # temporary version patch - this needs to be fixed upstream
+  sdkVersionPatch = writeText "global.json.patch" ''
+diff --git a/global.json b/global.json
+index fe0b480a..a2ce2eeb 100644
+--- a/global.json
++++ b/global.json
+@@ -1,5 +1,5 @@
+ {
+     "sdk": {
+-        "version": "6.0.100"
++        "version": "6.0"
+     }
+ }
+'';
+
 in stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
@@ -75,6 +90,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper dotnet-sdk ];
+
+  patches = [ sdkVersionPatch ];
 
   buildPhase = ''
     runHook preBuild

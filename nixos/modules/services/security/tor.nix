@@ -910,6 +910,11 @@ in
         ORPort = mkForce [];
         PublishServerDescriptor = mkForce false;
       })
+      (mkIf (!cfg.client.enable) {
+        # Make sure application connections via SOCKS are disabled
+        # when services.tor.client.enable is false
+        SOCKSPort = mkForce [ 0 ];
+      })
       (mkIf cfg.client.enable (
         { SOCKSPort = [ cfg.client.socksListenAddress ];
         } // optionalAttrs cfg.client.transparentProxy.enable {
@@ -962,7 +967,7 @@ in
               '') onion.authorizedClients ++
               optional (onion.secretKey != null) ''
                 install -d -o tor -g tor -m 0700 ${escapeShellArg onion.path}
-                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey})"
+                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey} | head -1)"
                 case "$key" in
                  ("== ed25519v"*"-secret")
                   install -o tor -g tor -m 0400 ${escapeShellArg onion.secretKey} ${escapeShellArg onion.path}/hs_ed25519_secret_key;;
@@ -1008,7 +1013,11 @@ in
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
         BindPaths = [ stateDir ];
-        BindReadOnlyPaths = [ storeDir "/etc" ];
+        BindReadOnlyPaths = [ storeDir "/etc" ] ++
+          optionals config.services.resolved.enable [
+            "/run/systemd/resolve/stub-resolv.conf"
+            "/run/systemd/resolve/resolv.conf"
+          ];
         AmbientCapabilities   = [""] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = [""] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r

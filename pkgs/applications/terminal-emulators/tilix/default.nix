@@ -17,6 +17,7 @@
 , wrapGAppsHook
 , libunwind
 , appstream
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -65,6 +66,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.tilix;
 
   meta = with lib; {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";

@@ -289,8 +289,14 @@ in
     environment.etc."egl/egl_external_platform.d".source =
       "/run/opengl-driver/share/egl/egl_external_platform.d/";
 
-    hardware.opengl.extraPackages = [ nvidia_x11.out ];
-    hardware.opengl.extraPackages32 = [ nvidia_x11.lib32 ];
+    hardware.opengl.extraPackages = [
+      nvidia_x11.out
+      pkgs.nvidia-vaapi-driver
+    ];
+    hardware.opengl.extraPackages32 = [
+      nvidia_x11.lib32
+      pkgs.pkgsi686Linux.nvidia-vaapi-driver
+    ];
 
     environment.systemPackages = [ nvidia_x11.bin ]
       ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]

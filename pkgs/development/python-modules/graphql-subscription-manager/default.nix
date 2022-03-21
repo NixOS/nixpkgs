@@ -8,7 +8,8 @@
 
 buildPythonPackage rec {
   pname = "graphql-subscription-manager";
-  version = "0.5.1";
+  version = "0.5.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "PyGraphqlWebsocketManager";
     rev = version;
-    sha256 = "sha256-PVQa6JmBnToXuL/wNkYO0b+K1e9yrQgRUzWNUbFN5mM=";
+    hash = "sha256-7MqFsttMNnWmmWKj1zaOORBTDGt6Wm8GU7w56DfPl2c=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +28,9 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [ "graphql_subscription_manager" ];
+  pythonImportsCheck = [
+    "graphql_subscription_manager"
+  ];
 
   meta = with lib; {
     description = "Python3 library for graphql subscription manager";

@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-eUvZc/7gqGkCB2tNKdwqKOmOgEcG9a/7TSvvyQzhNcQ=";
+    hash = "sha256-nH6rCzIQu5oWsdEHa+UkvbWeUGjrtpEKVEcLmSoor5k=";
   };
 
   postPatch = ''
@@ -50,6 +50,7 @@ let chia = python3Packages.buildPythonApplication rec {
     dnslib
     dnspythonchia
     fasteners
+    filelock
     keyrings-cryptfile
     pyyaml
     setproctitle

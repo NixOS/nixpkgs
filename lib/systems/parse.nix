@@ -359,6 +359,13 @@ rec {
       ];
     };
     gnuabi64     = { abi = "64"; };
+    muslabi64    = { abi = "64"; };
+
+    # NOTE: abi=n32 requires a 64-bit MIPS chip!  That is not a typo.
+    # It is basically the 64-bit abi with 32-bit pointers.  Details:
+    # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
+    gnuabin32    = { abi = "n32"; };
+    muslabin32   = { abi = "n32"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };

@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "4.10.1";
-  format = "setuptools";
+  version = "4.11.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-lR8NiltyYOnbXkHUKShbX0UekoR58Z2AgYh4Un026V4=";
+    hash = "sha256-nl5VO7uhhDy0oAgjAUuQdha+Ru5QPSuboAHSFKjaIY8=";
   };
 
   nativeBuildInputs = [

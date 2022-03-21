@@ -55,6 +55,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin) [
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
+    "test_connection_close"
   ];
 
   pytestFlagsArray = [

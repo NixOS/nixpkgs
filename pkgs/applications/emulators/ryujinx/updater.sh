@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils gnused curl common-updater-scripts nuget-to-nix nix-prefetch-git jq dotnet-sdk_6
-set -euxo pipefail
+set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 DEPS_FILE="$(realpath "./deps.nix")"
@@ -31,7 +31,7 @@ NEW_VERSION="${BASE_VERSION}.${PATCH_VERSION}"
 
 OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
-echo "comparing versions $OLD_VERSION => $NEW_VERSION"
+echo "comparing versions $OLD_VERSION -> $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
     echo "Already up to date! Doing nothing"
     exit 0
@@ -41,6 +41,8 @@ SHA="$(nix-prefetch-git https://github.com/ryujinx/ryujinx --rev "$COMMIT" --qui
 
 cd ../../../..
 update-source-version ryujinx "$NEW_VERSION" "$SHA" --rev="$COMMIT"
+
+echo "building Nuget lockfile"
 
 STORE_SRC="$(nix-build . -A ryujinx.src --no-out-link)"
 SRC="$(mktemp -d /tmp/ryujinx-src.XXX)"

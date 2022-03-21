@@ -101,15 +101,17 @@ stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
-  ] ++ lib.optional (atLeast27) [
-    nlohmann_json
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
   ];
 
-  propagatedBuildInputs = [ boehmgc ];
+  propagatedBuildInputs = [
+    boehmgc
+  ] ++ lib.optional (atLeast27) [
+    nlohmann_json
+  ];
 
   NIX_LDFLAGS = lib.optionals (!atLeast24) [
     # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
@@ -205,7 +207,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    inherit boehmgc;
+    inherit aws-sdk-cpp boehmgc;
 
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version;  });
   };

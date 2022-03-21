@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "qrcp";
-  version = "0.8.5";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
     rev = version;
-    sha256 = "sha256-UpSYJ/OXFObqhmGlIm73104tVfEVOjGt1r9GKLgrLtI=";
+    sha256 = "sha256-oXtFkjCnbfjV15XWkmmJmhG82GyaY4FAcF5NrGnxHm0=";
   };
 
   vendorSha256 = "1hn8c72fvih6ws1y2c4963pww3ld64m0yh3pmx62hwcy83bhb0v4";
@@ -24,9 +24,10 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    installShellCompletion --bash --cmd qrcp <($out/bin/qrcp completion bash)
-    installShellCompletion --fish --cmd qrcp <($out/bin/qrcp completion fish)
-    installShellCompletion --zsh  --cmd qrcp <($out/bin/qrcp completion zsh)
+    installShellCompletion --cmd qrcp \
+      --bash <($out/bin/qrcp completion bash) \
+      --fish <($out/bin/qrcp completion fish) \
+      --zsh <($out/bin/qrcp completion zsh)
   '';
 
   meta = with lib; {
@@ -39,6 +40,6 @@ buildGoModule rec {
       complete.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz SuperSandro2000 ];
   };
 }

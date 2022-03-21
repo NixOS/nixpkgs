@@ -111,7 +111,7 @@ let
       homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
 in {
@@ -135,6 +135,12 @@ in {
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };

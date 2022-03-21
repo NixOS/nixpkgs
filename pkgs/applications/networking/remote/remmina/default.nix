@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libX11
-, freerdp, libssh, libgcrypt, gnutls
+, freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup, spice-protocol, spice-gtk, libepoxy, at-spi2-core
@@ -8,19 +8,20 @@
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
 , withLibsecret ? true
+, withVte ? true
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.24";
+  version = "1.4.25";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-rcxgr3HVOWA3mTfX8tka9bPGDRDtKhBRsfQ3hv9XHf0=";
+    sha256 = "sha256-1val/KCClEtw1prVWuXJe8DmmQ7e7oqwAfAnT9G9iHI=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -33,10 +34,11 @@ stdenv.mkDerivation rec {
     libsoup spice-protocol spice-gtk libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
     harfbuzz
-  ] ++ optionals withLibsecret [ libsecret ];
+  ] ++ optionals withLibsecret [ libsecret ]
+    ++ optionals withVte [ vte ];
 
   cmakeFlags = [
-    "-DWITH_VTE=OFF"
+    "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
     "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"

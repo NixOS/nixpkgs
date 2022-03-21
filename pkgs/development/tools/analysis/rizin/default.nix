@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja cmake (python3.withPackages (ps: [ ps.setuptools ])) ];
 
-  # meson's find_library seems to not use our compiler wrapper if static paraemter
+  # meson's find_library seems to not use our compiler wrapper if static parameter
   # is either true/false... We work around by also providing LIBRARY_PATH
   preConfigure = ''
     LIBRARY_PATH=""

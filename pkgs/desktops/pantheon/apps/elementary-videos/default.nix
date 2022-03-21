@@ -15,7 +15,6 @@
 , clutter-gst
 , clutter-gtk
 , gst_all_1
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     clutter-gst
     clutter-gtk
-    elementary-icon-theme
     granite
     gtk3
     libgee

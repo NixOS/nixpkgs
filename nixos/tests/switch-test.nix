@@ -51,6 +51,12 @@ in {
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
+      # For boot/switch testing
+      system.build.installBootLoader = lib.mkForce (pkgs.writeShellScript "install-dummy-loader" ''
+        echo "installing dummy bootloader"
+        touch /tmp/bootloader-installed
+      '');
+
       specialisation = rec {
         simpleService.configuration = {
           systemd.services.test = {
@@ -62,6 +68,11 @@ in {
               ExecReload = "${pkgs.coreutils}/bin/true";
             };
           };
+        };
+
+        simpleServiceDifferentDescription.configuration = {
+          imports = [ simpleService.configuration ];
+          systemd.services.test.description = "Test unit";
         };
 
         simpleServiceModified.configuration = {
@@ -201,6 +212,39 @@ in {
         unitWithBackslashModified.configuration = {
           imports = [ unitWithBackslash.configuration ];
           systemd.services."escaped\\x2ddash".serviceConfig.X-Test = "test";
+        };
+
+        unitWithRequirement.configuration = {
+          systemd.services.required-service = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+          systemd.services.test-service = {
+            wantedBy = [ "multi-user.target" ];
+            requires = [ "required-service.service" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+        };
+
+        unitWithRequirementModified.configuration = {
+          imports = [ unitWithRequirement.configuration ];
+          systemd.services.required-service.serviceConfig.X-Test = "test";
+          systemd.services.test-service.reloadTriggers = [ "test" ];
+        };
+
+        unitWithRequirementModifiedNostart.configuration = {
+          imports = [ unitWithRequirement.configuration ];
+          systemd.services.test-service.unitConfig.RefuseManualStart = true;
         };
 
         restart-and-reload-by-activation-script.configuration = {
@@ -350,6 +394,31 @@ in {
           systemd.timers.test-timer.timerConfig.OnCalendar = lib.mkForce "Fri 2012-11-23 16:00:00";
         };
 
+        hybridSleepModified.configuration = {
+          systemd.targets.hybrid-sleep.unitConfig.X-Test = true;
+        };
+
+        target.configuration = {
+          systemd.targets.test-target.wantedBy = [ "multi-user.target" ];
+          # We use this service to figure out whether the target was modified.
+          # This is the only way because targets are filtered and therefore not
+          # printed when they are started/stopped.
+          systemd.services.test-service = {
+            bindsTo = [ "test-target.target" ];
+            serviceConfig.ExecStart = "${pkgs.coreutils}/bin/sleep infinity";
+          };
+        };
+
+        targetModified.configuration = {
+          imports = [ target.configuration ];
+          systemd.targets.test-target.unitConfig.X-Test = true;
+        };
+
+        targetModifiedStopOnReconfig.configuration = {
+          imports = [ target.configuration ];
+          systemd.targets.test-target.unitConfig.X-StopOnReconfiguration = true;
+        };
+
         path.configuration = {
           systemd.paths.test-watch = {
             wantedBy = [ "paths.target" ];
@@ -439,9 +508,32 @@ in {
     machine.succeed(
         "${stderrRunner} ${originalSystem}/bin/switch-to-configuration test"
     )
+    # This tests whether the /etc/os-release parser works which is a fallback
+    # when /etc/NIXOS is missing. If the parser does not work, switch-to-configuration
+    # would fail.
+    machine.succeed("rm /etc/NIXOS")
     machine.succeed(
         "${stderrRunner} ${otherSystem}/bin/switch-to-configuration test"
     )
+
+
+    with subtest("actions"):
+        # boot action
+        machine.fail("test -f /tmp/bootloader-installed")
+        out = switch_to_specialisation("${machine}", "simpleService", action="boot")
+        assert_contains(out, "installing dummy bootloader")
+        assert_lacks(out, "activating the configuration...")  # good indicator of a system activation
+        machine.succeed("test -f /tmp/bootloader-installed")
+        machine.succeed("rm /tmp/bootloader-installed")
+
+        # switch action
+        machine.fail("test -f /tmp/bootloader-installed")
+        out = switch_to_specialisation("${machine}", "", action="switch")
+        assert_contains(out, "installing dummy bootloader")
+        assert_contains(out, "activating the configuration...")  # good indicator of a system activation
+        machine.succeed("test -f /tmp/bootloader-installed")
+
+        # test and dry-activate actions are tested further down below
 
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
@@ -456,6 +548,7 @@ in {
 
         # Start a simple service
         out = switch_to_specialisation("${machine}", "simpleService")
+        assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: dbus.service\n")  # huh
@@ -465,6 +558,15 @@ in {
 
         # Not changing anything doesn't do anything
         out = switch_to_specialisation("${machine}", "simpleService")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+        # Only changing the description does nothing
+        out = switch_to_specialisation("${machine}", "simpleServiceDifferentDescription")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
@@ -533,6 +635,32 @@ in {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "the following new units were started:")
+
+        # Ensure units that require changed units are properly reloaded
+        out = switch_to_specialisation("${machine}", "unitWithRequirement")
+        assert_contains(out, "stopping the following units: escaped\\x2ddash.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: required-service.service, test-service.service\n")
+
+        out = switch_to_specialisation("${machine}", "unitWithRequirementModified")
+        assert_contains(out, "stopping the following units: required-service.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: required-service.service, test-service.service\n")
+        assert_lacks(out, "the following new units were started:")
+
+        # Unless the unit asks to be not restarted
+        out = switch_to_specialisation("${machine}", "unitWithRequirementModifiedNostart")
+        assert_contains(out, "stopping the following units: required-service.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: required-service.service\n")
         assert_lacks(out, "the following new units were started:")
 
     with subtest("failing units"):
@@ -820,6 +948,55 @@ in {
         # It changed
         out = machine.succeed("systemctl show test-timer.timer")
         assert_contains(out, "OnCalendar=Fri 2012-11-23 16:00:00")
+
+    with subtest("targets"):
+        # Modifying some special targets like hybrid-sleep.target does nothing
+        out = switch_to_specialisation("${machine}", "hybridSleepModified")
+        assert_contains(out, "stopping the following units: test-timer.timer\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+        # Adding a new target starts it
+        out = switch_to_specialisation("${machine}", "target")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test-target.target\n")
+
+        # Changing a target doesn't print anything because the unit is filtered
+        machine.systemctl("start test-service.service")
+        out = switch_to_specialisation("${machine}", "targetModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.succeed("systemctl is-active test-service.service")  # target was not restarted
+
+        # With X-StopOnReconfiguration, the target gets stopped and started
+        out = switch_to_specialisation("${machine}", "targetModifiedStopOnReconfig")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        machine.fail("systemctl is-active test-service.servce")  # target was restarted
+
+        # Remove the target by switching to the old specialisation
+        out = switch_to_specialisation("${machine}", "timerModified")
+        assert_contains(out, "stopping the following units: test-target.target\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test-timer.timer\n")
 
     with subtest("paths"):
         out = switch_to_specialisation("${machine}", "path")

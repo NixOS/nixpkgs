@@ -26,7 +26,7 @@ let
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
-    "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux"
+    "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux" "mips64el-linux"
     "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
     "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux"
 
@@ -87,7 +87,11 @@ in {
   darwin        = filterDoubles predicates.isDarwin;
   freebsd       = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear.
-  gnu           = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; });
+  gnu           = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabin32; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabi64; });
   illumos       = filterDoubles predicates.isSunOS;
   linux         = filterDoubles predicates.isLinux;
   netbsd        = filterDoubles predicates.isNetBSD;

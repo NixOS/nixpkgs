@@ -15,8 +15,8 @@ index a560da3..f723c1e 100644
  type=image
  color=#1d99f3
  fontSize=10
--background=${KDE_INSTALL_FULL_WALLPAPERDIR}/Next/contents/images/5120x2880.png
-+background=${NIXPKGS_BREEZE_WALLPAPERS}/Next/contents/images/5120x2880.png
+-background=${KDE_INSTALL_FULL_WALLPAPERDIR}/Next/contents/images/5120x2880.jpg
++background=${NIXPKGS_BREEZE_WALLPAPERS}/Next/contents/images/5120x2880.jpg
  needsFullUserModel=false
 -- 
 2.30.0

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , gbenchmark
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prometheus-cpp";
-  version = "0.9.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "jupp0r";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pjz29ywzfg3blhg2v8fn7gjvq46k3bqn7y0xvmn468ixxhv21fi";
+    sha256 = "L6CXRup3kU1lY5UnwPbaOwEtCeAySNmFCPmHwsk6cRE=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -20,7 +20,6 @@
 , udev
 , libva
 , libsndfile
-, SDL2
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
@@ -129,7 +128,6 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
@@ -169,6 +167,7 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dsdl2=disabled" # required only to build examples, causes dependency loop
     ];
 
     # Fontconfig error: Cannot load default config file

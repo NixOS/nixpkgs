@@ -6,6 +6,8 @@ buildDunePackage rec {
   version = "3.2.1";
   pname = "js_of_ocaml-camlp4";
 
+  useDune2 = false;
+
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "js_of_ocaml";

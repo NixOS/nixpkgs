@@ -26,4 +26,6 @@ in symlinkJoin {
       ln -sf "$each-${versionBranch}" $out/bin/$each
     done
   '';
+
+  inherit (gimp) meta;
 }

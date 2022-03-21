@@ -180,6 +180,7 @@
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/nbd.nix
   ./programs/neovim.nix
   ./programs/nm-applet.nix
   ./programs/npm.nix
@@ -301,6 +302,7 @@
   ./services/backup/znapzend.nix
   ./services/blockchain/ethereum/geth.nix
   ./services/backup/zrepl.nix
+  ./services/cluster/corosync/default.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/k3s/default.nix
   ./services/cluster/kubernetes/addons/dns.nix
@@ -313,6 +315,7 @@
   ./services/cluster/kubernetes/pki.nix
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
+  ./services/cluster/pacemaker/default.nix
   ./services/cluster/spark/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
@@ -819,6 +822,7 @@
   ./services/networking/nar-serve.nix
   ./services/networking/nat.nix
   ./services/networking/nats.nix
+  ./services/networking/nbd.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/networkmanager.nix
@@ -985,6 +989,7 @@
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
+  ./services/system/systembus-notify.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
@@ -1163,7 +1168,12 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
-  ./system/boot/systemd-nspawn.nix
+  ./system/boot/systemd/coredump.nix
+  ./system/boot/systemd/journald.nix
+  ./system/boot/systemd/logind.nix
+  ./system/boot/systemd/nspawn.nix
+  ./system/boot/systemd/tmpfiles.nix
+  ./system/boot/systemd/user.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc-activation.nix

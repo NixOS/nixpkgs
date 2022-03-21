@@ -153,7 +153,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud21" "nextcloud22" "nextcloud23" ];
+      relatedPackages = [ "nextcloud22" "nextcloud23" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -571,15 +571,6 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          # 21.03 will not be an official release - it was instead 21.05.
-          # This versionOlder statement remains set to 21.03 for backwards compatibility.
-          # See https://github.com/NixOS/nixpkgs/pull/108899 and
-          # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-          # FIXME(@Ma27) remove this else-if as soon as 21.05 is EOL! This is only here
-          # to ensure that users who are on Nextcloud 19 with a stateVersion <21.05 with
-          # no explicit services.nextcloud.package don't upgrade to v21 by accident (
-          # nextcloud20 throws an eval-error because it's dropped).
-          else if versionOlder stateVersion "21.03" then nextcloud20
           else if versionOlder stateVersion "21.11" then nextcloud21
           else if versionOlder stateVersion "22.05" then nextcloud22
           else nextcloud23

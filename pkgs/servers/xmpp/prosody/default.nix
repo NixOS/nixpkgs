@@ -11,7 +11,6 @@
 
 with lib;
 
-
 let
   luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
@@ -22,7 +21,7 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "0.11.12"; # also update communityModules
+  version = "0.11.13"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "03an206bl3h2lqcgv1wfvc2bqjq6m9vjb2idw0vyvczm43c55kan";
+    sha256 = "sha256-OcYbNGoJtRJbYEy5aeFCBsu8uGyBFW/8a6LWJSfPBDI=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -44,8 +43,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "bd0a1f917d98";
-    sha256 = "0figx0b0y5zfk5anf16h20y4crjmpb6bkg30vl7p0m594qnyqjcx";
+    rev = "54fa2116bbf3";
+    sha256 = "sha256-OKZ7tD75q8/GMXruUQ+r9l0BxzdbPHNf41fZ3fHVQVw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
     luaEnv libidn openssl
   ]
   ++ withExtraLibs;
-
 
   configureFlags = [
     "--ostype=linux"
@@ -89,9 +87,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     communityModules = withCommunityModules;
-    tests = {
-      main = nixosTests.prosody;
-    };
+    tests = { inherit (nixosTests) prosody prosody-mysql; };
   };
 
   meta = {

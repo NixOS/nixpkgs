@@ -1110,6 +1110,10 @@ let
 
     seq = callPackage ../development/ocaml-modules/seq { };
 
+    shine = callPackage ../development/ocaml-modules/shine {
+      inherit (pkgs) shine;
+    };
+
     sosa = callPackage ../development/ocaml-modules/sosa { };
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
@@ -1575,6 +1579,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
 
   ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
+
+  ocamlPackages_4_14 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_13;
 

@@ -17,7 +17,8 @@ checks:
   them and comparing their contents. If they are different but only
   `X-Reload-Triggers` in the `[Unit]` section is changed, **reload** the unit.
   The NixOS module system allows setting these triggers with the option
-  [systemd.services.\<name\>.reloadTriggers](#opt-systemd.services). If the
+  [systemd.services.\<name\>.reloadTriggers](#opt-systemd.services). There are
+  some additional keys in the `[Unit]` section that are ignored as well. If the
   unit files differ in any way, the following actions are performed:
 
   - `.path` and `.slice` units are ignored. There is no need to restart them
@@ -33,6 +34,9 @@ checks:
   - The rest of the units (mostly `.service` units) are then **reload**ed if
     `X-ReloadIfChanged` in the `[Service]` section is set to `true` (exposed
     via [systemd.services.\<name\>.reloadIfChanged](#opt-systemd.services)).
+    A little exception is done for units that were deactivated in the meantime,
+    for example because they require a unit that got stopped before. These
+    are **start**ed instead of reloaded.
 
   - If the reload flag is not set, some more flags decide if the unit is
     skipped. These flags are `X-RestartIfChanged` in the `[Service]` section

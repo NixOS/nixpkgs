@@ -43,17 +43,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "3.11";
+  version = "3.14";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256 = "1xwf9vwbr57wmyxfcqzl1jnmfx3ffh7sfqf0zcdq41wqkm8s106n";
+    sha256="sha256-7zaXazGzb36Nwk/meJ3lGD+l+fylWZYnhttDL1CXN9s=";
   };
 
   patches = [
-    ./efi_vars_ensure_writable.patch
     ./input_overrides.patch
   ];
 
