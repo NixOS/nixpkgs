@@ -1,7 +1,15 @@
-From 85b4e6074882d62593ae90d6683e24efccb045f0 Mon Sep 17 00:00:00 2001
+From 3d983eff304c28574c330a52d70a60145c9e157e Mon Sep 17 00:00:00 2001
 From: Jonas Vautherin <jonas.vautherin@gmail.com>
 Date: Fri, 14 Jan 2022 00:14:26 +0100
 Subject: [PATCH] Add support for musl
+
+---
+Based on upstream 77ac9154440bcc216fda1092fd5bb51da62ae09c,
+modified slightly by dtzWill to apply to v0.9.1.
+
+(drop whitespace change to a cmake "if (WITH_OPENSSL)",
+leave the other instance of that change since it applies)
+---
 
 Co-authored-by: Guillaume Papin <guillaume.papin@epitech.eu>
 (cherry picked from commit 77ac9154440bcc216fda1092fd5bb51da62ae09c)
