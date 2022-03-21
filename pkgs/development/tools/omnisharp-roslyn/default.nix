@@ -63,7 +63,6 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-
   pname = "omnisharp-roslyn";
   version = "1.38.1";
 
