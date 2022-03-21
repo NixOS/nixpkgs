@@ -103,7 +103,7 @@ in
       }
       {
         assertion = foldl (a: b: a && b) true (mapAttrsToList (mcu: _: mcu != null -> (hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) cfg.firmware);
-        message = "Option klipper.settings.$mcu.serial is not set when klipper.firmware.$mcu is specified";
+        message = "Option klipper.settings.$mcu.serial must be set when klipper.firmware.$mcu is specified";
       }
     ];
 
