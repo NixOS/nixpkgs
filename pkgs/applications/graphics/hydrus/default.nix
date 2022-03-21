@@ -39,7 +39,7 @@ python3Packages.buildPythonPackage rec {
     psutil
     pylzma
     pyopenssl
-    pyside2
+    (pyside2.override { enableQtwebengine = false;})
     pysocks
     pythonPackages.mpv
     pyyaml
