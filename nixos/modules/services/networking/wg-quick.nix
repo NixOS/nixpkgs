@@ -18,7 +18,7 @@ let
       };
 
       autostart = mkOption {
-        description = "Start the systemd-unit automatically.";
+        description = "Whether to bring up this interface automatically during boot.";
         default = true;
         example = false;
         type = types.bool;
