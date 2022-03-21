@@ -3538,6 +3538,10 @@ with pkgs;
 
   metabase = callPackage ../servers/metabase { };
 
+  micropad = callPackage ../applications/office/micropad {
+    electron = electron_17;
+  };
+
   midicsv = callPackage ../tools/audio/midicsv { };
 
   miniscript = callPackage ../applications/blockchains/miniscript { };
@@ -23614,6 +23618,8 @@ with pkgs;
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
 
+  ccsymbols = callPackage ../data/fonts/ccsymbols { };
+
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
@@ -28282,8 +28288,6 @@ with pkgs;
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon { };
-
-  webbrowser = callPackage ../applications/networking/browsers/webbrowser {};
 
   pamix = callPackage ../applications/audio/pamix { };
 
