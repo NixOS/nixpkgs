@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, openjdk11, gradle, makeWrapper, maven }:
+{ lib, stdenv, fetchzip, openjdk11, gradle, makeWrapper, maven }:
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
   version = "1.3.0";
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
-    sha256 = "sha256-yyqI+87vtggSeAfb3OEftalknqbTDEQ5gTJwB/EMIlY=";
+    hash = "sha256-nqrZoSntomNLUMTni/yoiVhDOJFSFmZeGze8IJhITu0=";
   };
 
   dontBuild = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -r bin/* $out/bin
   '';
 
-  nativeBuildInputs = [ unzip gradle makeWrapper ];
+  nativeBuildInputs = [ gradle makeWrapper ];
   buildInputs = [ openjdk11 gradle ];
 
   postFixup = ''
