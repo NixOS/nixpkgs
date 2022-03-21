@@ -295,7 +295,7 @@ in rec {
     config = mkMerge
       [ { # Default path for systemd services.  Should be quite minimal.
           path = mkAfter path;
-          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+          environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
@@ -396,6 +396,13 @@ in rec {
       text = commonUnitText def +
         ''
           [Service]
+          ${let env = def.environment;
+            in concatMapStrings (n:
+              let s = optionalString (env.${n} != null)
+                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
+              # systemd max line length is now 1MiB
+              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${attrsToSection def.serviceConfig}
         '';
     };
