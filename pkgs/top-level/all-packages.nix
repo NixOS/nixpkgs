@@ -1103,6 +1103,8 @@ with pkgs;
 
   midimonster = callPackage ../tools/audio/midimonster { };
 
+  nominatim = callPackage ../servers/nominatim { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
