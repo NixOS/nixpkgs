@@ -6,7 +6,7 @@ let
   inherit (lib)
     mkDefault mkEnableOption mkIf mkOption types
     mkRemovedOptionModule literalExpression
-    escapeShellArg concatStringsSep optional;
+    escapeShellArg concatStringsSep optional optionalString;
 
 in
 {
@@ -17,10 +17,26 @@ in
       type = types.ints.between 1 100;
       default = 10;
       description = ''
-        Minimum of availabe memory (in percent).
-        If the free memory falls below this threshold and the analog is true for
-        <option>services.earlyoom.freeSwapThreshold</option>
-        the killing begins.
+        Minimum available memory (in percent).
+
+        If the available memory falls below this threshold (and the analog is true for
+        <option>freeSwapThreshold</option>) the killing begins.
+        SIGTERM is sent first to the process that uses the most memory; then, if the available
+        memory falls below <option>freeMemKillThreshold</option> (and the analog is true for
+        <option>freeSwapKillThreshold</option>), SIGKILL is sent.
+
+        See <link xlink:href="https://github.com/rfjakob/earlyoom#command-line-options">README</link> for details.
+      '';
+    };
+
+    freeMemKillThreshold = mkOption {
+      type = types.nullOr (types.ints.between 1 100);
+      default = null;
+      description = ''
+        Minimum available memory (in percent) before sending SIGKILL.
+        If unset, this defaults to half of <option>freeMemThreshold</option>.
+
+        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
       '';
     };
 
@@ -28,10 +44,20 @@ in
       type = types.ints.between 1 100;
       default = 10;
       description = ''
-        Minimum of availabe swap space (in percent).
-        If the available swap space falls below this threshold and the analog
-        is true for <option>services.earlyoom.freeMemThreshold</option>
-        the killing begins.
+        Minimum free swap space (in percent) before sending SIGTERM.
+
+        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+      '';
+    };
+
+    freeSwapKillThreshold = mkOption {
+      type = types.nullOr (types.ints.between 1 100);
+      default = null;
+      description = ''
+        Minimum free swap space (in percent) before sending SIGKILL.
+        If unset, this defaults to half of <option>freeSwapThreshold</option>.
+
+        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
       '';
     };
 
@@ -117,8 +143,10 @@ in
         StandardError = "journal";
         ExecStart = concatStringsSep " " ([
           "${pkgs.earlyoom}/bin/earlyoom"
-          "-m ${toString cfg.freeMemThreshold}"
-          "-s ${toString cfg.freeSwapThreshold}"
+          ("-m ${toString cfg.freeMemThreshold}"
+            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
+          ("-s ${toString cfg.freeSwapThreshold}"
+            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
           "-r ${toString cfg.reportInterval}"
         ]
         ++ optional cfg.enableDebugInfo "-d"
