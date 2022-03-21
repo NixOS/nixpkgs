@@ -78,10 +78,17 @@ in
       '';
     };
 
+    reportInterval = mkOption {
+      type = types.int;
+      default = 3600;
+      example = 0;
+      description = "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
+    };
+
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = [ "-r 60" "-g" "--prefer '(^|/)(java|chromium)$'" ];
+      example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
       description = "Extra command-line arguments to be passed to earlyoom.";
     };
   };
@@ -112,6 +119,7 @@ in
           "${pkgs.earlyoom}/bin/earlyoom"
           "-m ${toString cfg.freeMemThreshold}"
           "-s ${toString cfg.freeSwapThreshold}"
+          "-r ${toString cfg.reportInterval}"
         ]
         ++ optional cfg.enableDebugInfo "-d"
         ++ optional cfg.enableNotifications "-n"
