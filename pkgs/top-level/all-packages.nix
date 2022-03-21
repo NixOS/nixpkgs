@@ -3422,6 +3422,16 @@ with pkgs;
 
   klipper = callPackage ../servers/klipper { };
 
+  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix {
+    inherit libusb1;
+  };
+
+  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix {
+    inherit klipper-firmware;
+  };
+
+  klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
+
   klog = qt5.callPackage ../applications/radio/klog { };
 
   krapslog = callPackage ../tools/misc/krapslog { };
