@@ -3,6 +3,7 @@
 , makeWrapper
 , bundix
 , common-updater-scripts
+, jq
 , nix-prefetch-github
 , yarn
 , yarn2nix
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bundix
     common-updater-scripts
+    jq
     nix-prefetch-github
     yarn
     yarn2nix
