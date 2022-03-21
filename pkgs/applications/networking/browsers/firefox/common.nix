@@ -16,6 +16,7 @@
 , freetype, fontconfig, file, nspr, nss
 , libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
+, libffi
 , libvpx
 , libwebp
 , icu, libpng, glib, pciutils
@@ -157,6 +158,7 @@ buildStdenv.mkDerivation ({
     libevent libstartup_notification
     libpng glib
     nasm icu libvpx
+    libffi
     libwebp
     nspr nss
   ]
@@ -224,13 +226,13 @@ buildStdenv.mkDerivation ({
 
   configureFlags = [
     "--enable-application=${application}"
+    "--with-system-ffi"
     "--with-system-jpeg"
     "--with-system-zlib"
     "--with-system-libevent"
     "--with-system-libvpx"
     "--with-system-png" # needs APNG support
     "--with-system-icu"
-    "--enable-system-ffi"
     "--enable-system-pixman"
     "--disable-tests"
     "--disable-updater"
