@@ -211,6 +211,9 @@ buildStdenv.mkDerivation ({
     export MOZCONFIG=$(pwd)/mozconfig
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
+    # Set consistent remoting name to ensure wmclass matches with desktop file
+    export MOZ_APP_REMOTINGNAME="${binaryName}"
+
     # Set C flags for Rust's bindgen program. Unlike ordinary C
     # compilation, bindgen does not invoke $CC directly. Instead it
     # uses LLVM's libclang. To make sure all necessary flags are
