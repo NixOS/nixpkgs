@@ -1716,6 +1716,23 @@ self: super: {
     (generateOptparseApplicativeCompletion "hci")
   ];
 
+  pipes-aeson = appendPatches [
+    # Dependency of the aeson-2 patch
+    (pkgs.fetchpatch {
+      name = "pipes-aeson-add-loop.patch";
+      url = "https://github.com/k0001/pipes-aeson/commit/d22133b4a678edbb52bcaec5079dc88ccc0de1d3.patch";
+      sha256 = "sha256-5o5ys1P1+QB4rjLCYok5AcPRWCtRiecP/TqCFm8ulVY=";
+      includes = ["src/Pipes/Aeson.hs" "src/Pipes/Aeson/Internal.hs" "src/Pipes/Aeson/Unchecked.hs"];
+    })
+    # https://github.com/k0001/pipes-aeson/pull/20
+    (pkgs.fetchpatch {
+      name = "pipes-aeson-aeson-2.patch";
+      url = "https://github.com/hercules-ci/pipes-aeson/commit/ac735c9cd459c6ef51ba82325d1c55eb67cb7b2c.patch";
+      sha256 = "sha256-viWZ6D5t79x50RXiOjP6UeQ809opgNFYZOP+h+1KJh0=";
+      includes = ["src/Pipes/Aeson.hs" "src/Pipes/Aeson/Internal.hs" "src/Pipes/Aeson/Unchecked.hs"];
+    })
+  ] super.pipes-aeson;
+
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not
   # compatible with Cabal 3. No upstream repository found so far
   readline = appendPatch ./patches/readline-fix-for-cabal-3.patch super.readline;
