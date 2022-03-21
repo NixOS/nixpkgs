@@ -12,7 +12,7 @@
 let
   steam-run = (steam.override {
     # required by wine runner `caffe`
-    extraLibraries = pkgs: with pkgs; [ libunwind libusb1 ]
+    extraLibraries = pkgs: with pkgs; [ libunwind libusb1 gnutls ]
       ++ bottlesExtraLibraries pkgs;
     extraPkgs = pkgs: [ ]
       ++ bottlesExtraPkgs pkgs;
