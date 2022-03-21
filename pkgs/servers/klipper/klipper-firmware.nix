@@ -49,18 +49,14 @@
     mkdir -p $out
     cp ./.config $out/config
     cp -r out/* $out
-
-    if ${lib.boolToString (!isNull flashDevice)}; then
-      make FLASH_DEVICE=${toString flashDevice} OUT=$out/ KCONFIG_CONFIG=$out/config flash
-    fi
-  '';
+  '' + lib.optionalString (flashDevice != null) "make FLASH_DEVICE=${toString flashDevice} OUT=$out/ KCONFIG_CONFIG=$out/config flash";
 
   dontFixup = true;
 
-  meta = {
+  meta = with lib; {
     inherit (klipper.meta) homepage license;
     description = "Firmware part of Klipper";
-    maintainers = with lib.maintainers; [ vtuan10 ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ vtuan10 ];
+    platforms = platforms.linux;
   };
 }

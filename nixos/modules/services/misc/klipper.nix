@@ -153,6 +153,7 @@ in
             mcu = lib.strings.sanitizeDerivationName mcu;
             klipper-firmware = firmware;
             flashDevice = cfg.settings."${mcu}".serial;
+            firmwareConfig = cfg.firmware."${mcu}".firmwareConfig;
           })
           firmwares;
       in

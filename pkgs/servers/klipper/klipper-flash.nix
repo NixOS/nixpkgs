@@ -9,11 +9,11 @@
 , stm32flash
 , mcu ? "mcu"
 , flashDevice ? "/dev/null"
+, firmwareConfig ? ./simulator.cfg
 }:
 let
-  firmwareConfig = builtins.readFile "${klipper-firmware}/config";
-  isNotSupported = with builtins; isNull (match ''^.*CONFIG_BOARD_DIRECTORY="(avr|stm32|lpc176x)".*$'' firmwareConfig);
-  isNotStm = with builtins; isNull (match ''^.*CONFIG_BOARD_DIRECTORY="(stm32)".*$'' firmwareConfig);
+  isNotSupported = with builtins; isNull (match ''^.*CONFIG_BOARD_DIRECTORY="(avr|stm32|lpc176x)".*$'' (readFile firmwareConfig));
+  isNotStm = with builtins; isNull (match ''^.*CONFIG_BOARD_DIRECTORY="(stm32)".*$'' (readFile firmwareConfig));
 in
 writeShellApplication {
   name = "klipper-flash-${mcu}";
@@ -22,6 +22,7 @@ writeShellApplication {
     avrdude
     stm32flash
     pkgsCross.avr.stdenv.cc
+    gnumake
   ];
   text = ''
     NOT_SUPPORTED=${lib.boolToString isNotSupported}
@@ -31,12 +32,10 @@ writeShellApplication {
       printf "Please use the compiled firmware at ${klipper-firmware} and flash it using the tools provided for your microcontroller."
       exit 1
     fi
-    pushd ${klipper.src}
     if $NOT_STM; then
-      ${gnumake}/bin/make FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" flash
+      make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" flash
     else
-      ${gnumake}/bin/make FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" serialflash
+      make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" serialflash
     fi
-    popd
   '';
 }
