@@ -468,6 +468,12 @@
           freeform type.
         </para>
         <para>
+          The <literal>listeners.*.bind_address</literal> option was
+          renamed to <literal>bind_addresses</literal> in order to match
+          the upstream <literal>homeserver.yaml</literal> option name.
+          It is now also a list of strings instead of a string.
+        </para>
+        <para>
           An example to make the required migration clearer:
         </para>
         <para>
@@ -528,7 +534,7 @@
 
       listeners = [ {
         port = 8448;
-        bind_address = [
+        bind_addresses = [
           &quot;::&quot;
           &quot;0.0.0.0&quot;
         ];
@@ -559,7 +565,14 @@
           Additionally a few option defaults have been synced up with
           upstream default values, for example the
           <literal>max_upload_size</literal> grew from
-          <literal>10M</literal> to <literal>50M</literal>.
+          <literal>10M</literal> to <literal>50M</literal>. For the same
+          reason, the default <literal>media_store_path</literal> was
+          changed from <literal>${dataDir}/media</literal> to
+          <literal>${dataDir}/media_store</literal> if
+          <literal>system.stateVersion</literal> is at least
+          <literal>22.05</literal>. Files will need to be manually moved
+          to the new location if the <literal>stateVersion</literal> is
+          updated.
         </para>
       </listitem>
       <listitem>
@@ -821,6 +834,16 @@
           now activated by default. If you want to keep running nspawn
           containers without user namespaces you need to set
           <literal>systemd.nspawn.&lt;name&gt;.execConfig.PrivateUsers = false</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Tor SOCKS proxy is now actually disabled if
+          <literal>services.tor.client.enable</literal> is set to
+          <literal>false</literal> (the default). If you are using this
+          functionality but didn’t change the setting or set it to
+          <literal>false</literal>, you now need to set it to
+          <literal>true</literal>.
         </para>
       </listitem>
       <listitem>

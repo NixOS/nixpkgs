@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview
     libgee
-    pantheon.elementary-icon-theme
     pantheon.granite
     webkitgtk
     # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
