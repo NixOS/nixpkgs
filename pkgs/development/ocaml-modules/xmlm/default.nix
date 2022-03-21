@@ -10,11 +10,11 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1rrdxg5kh9zaqmgapy9bhdqyxbbvxxib3bdfg1vhw4rrkp1z0x8n";
+    sha256 = "sha256-CRJSJY490WMgw85N2yG81X79nIwuv7eZ7mpUPtSS2fo=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
