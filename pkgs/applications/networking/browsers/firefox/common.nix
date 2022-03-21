@@ -248,7 +248,6 @@ buildStdenv.mkDerivation ({
     unset AS
   '' + (lib.optionalString enableOfficialBranding ''
     export MOZILLA_OFFICIAL=1
-    export BUILD_OFFICIAL=1
   '');
 
   configureFlags = [
