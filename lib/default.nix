@@ -112,7 +112,7 @@ let
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsRegularFile pathIsGitRepo;
     inherit (self.modules) evalModules setDefaultModuleLocation
-      unifyModuleSyntax applyIfFunction mergeModules
+      unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
