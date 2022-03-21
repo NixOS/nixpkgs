@@ -5,7 +5,7 @@
 , git
 , nettle
 # Use the same llvmPackages version as Rust
-, llvmPackages_10
+, llvmPackages_12
 , cargo
 , rustc
 , rustPlatform
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage rec {
     cargo
     rustc
     git
-    llvmPackages_10.libclang.lib
-    llvmPackages_10.clang
+    llvmPackages_12.libclang.lib
+    llvmPackages_12.clang
     ensureNewerSourcesForZipFilesHook
     capnproto
   ] ++
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     "build-release"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages_10.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages_12.libclang.lib}/lib";
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   CARGO_TEST_ARGS = "--workspace --exclude sequoia-store";

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gaw";
-  version = "20200922";
+  version = "20220315";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/gaw/download/gaw3-${version}.tar.gz";
-    sha256 = "0qmap11v470a1yj4ypfvdq6wkfni77ijqpknka8b4fndi62sl4wa";
+    sha256 = "0j2bqi9444s1mfbr7x9rqp232xf7ab9z7ifsnl305jsklp6qmrbg";
   };
 
   nativeBuildInputs = [ pkg-config ];

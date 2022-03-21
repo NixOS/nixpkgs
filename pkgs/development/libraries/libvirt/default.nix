@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+    ./0001-qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
   ];
 
   # remove some broken tests

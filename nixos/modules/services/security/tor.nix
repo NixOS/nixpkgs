@@ -910,6 +910,11 @@ in
         ORPort = mkForce [];
         PublishServerDescriptor = mkForce false;
       })
+      (mkIf (!cfg.client.enable) {
+        # Make sure application connections via SOCKS are disabled
+        # when services.tor.client.enable is false
+        SOCKSPort = mkForce [ 0 ];
+      })
       (mkIf cfg.client.enable (
         { SOCKSPort = [ cfg.client.socksListenAddress ];
         } // optionalAttrs cfg.client.transparentProxy.enable {

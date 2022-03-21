@@ -550,14 +550,6 @@ in
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
-    dontBuild = false;
-    postPatch = ''
-      # https://gitlab.com/libvirt/libvirt-ruby/-/commit/43543991832c9623c00395092bcfb9e178243ba4
-      substituteInPlace ext/libvirt/common.c \
-        --replace 'st.h' 'ruby/st.h'
-      substituteInPlace ext/libvirt/domain.c \
-        --replace 'st.h' 'ruby/st.h'
-    '';
   };
 
   ruby-lxc = attrs: {

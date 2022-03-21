@@ -244,6 +244,8 @@ in {
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
 
+  aioairzone = callPackage ../development/python-modules/aioairzone { };
+
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   aioapns = callPackage ../development/python-modules/aioapns { };
@@ -841,6 +843,8 @@ in {
   azure-batch = callPackage ../development/python-modules/azure-batch { };
 
   azure-common = callPackage ../development/python-modules/azure-common { };
+
+  azure-containerregistry = callPackage ../development/python-modules/azure-containerregistry { };
 
   azure-core = callPackage ../development/python-modules/azure-core { };
 
@@ -3025,6 +3029,8 @@ in {
     inherit (pkgs) flatbuffers;
   };
 
+  flatdict = callPackage ../development/python-modules/flatdict { };
+
   flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
   flax = callPackage ../development/python-modules/flax { };
@@ -3595,7 +3601,9 @@ in {
 
   gruut = callPackage ../development/python-modules/gruut { };
 
-  gruut-ipa = callPackage ../development/python-modules/gruut-ipa { };
+  gruut-ipa = callPackage ../development/python-modules/gruut-ipa {
+    inherit (pkgs) espeak;
+  };
 
   gsd = callPackage ../development/python-modules/gsd { };
 
@@ -4460,6 +4468,8 @@ in {
 
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
 
+  keyrings-google-artifactregistry-auth = callPackage ../development/python-modules/keyrings-google-artifactregistry-auth { };
+
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
@@ -5045,6 +5055,8 @@ in {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  meilisearch = callPackage ../development/python-modules/meilisearch { };
+
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
@@ -5147,6 +5159,8 @@ in {
   mizani = callPackage ../development/python-modules/mizani { };
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
+  mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
+  mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 

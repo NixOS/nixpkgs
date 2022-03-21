@@ -1,12 +1,12 @@
-{ buildPythonPackage, fetchPypi, lib, pillow, tesseract, substituteAll }:
+{ buildPythonPackage, fetchPypi, lib, pillow, tesseract, substituteAll, packaging }:
 
 buildPythonPackage rec {
   pname = "pytesseract";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YUigHkN1dghi6PVupxjiK10TsoFFTfRuqNrJgHeT/Fo=";
+    sha256 = "sha256-fiuvx/SNG7cUQ85GM6VvXiGSWpjyIKNsM2KX7c0ZVtA=";
   };
 
   patches = [
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ tesseract ];
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [ pillow packaging ];
 
   # the package doesn't have any tests.
   doCheck = false;

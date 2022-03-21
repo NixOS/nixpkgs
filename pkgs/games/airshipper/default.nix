@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
+, fetchpatch
 , openssl
 , vulkan-loader
 , wayland
@@ -24,6 +25,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-nOE9ZNHxLEAnMkuBSpxmeq3DxkRIlcoase6AxU+eFug=";
   };
+
+  patches = [
+    # this *should* be merged in time for the release following 0.7.0
+    (fetchpatch {
+      url = "https://github.com/veloren/Airshipper/commit/97fc986ab4cbf59f2c764f647710f19db86031b4.patch";
+      hash = "sha256-Sg5et+yP6Z44wV/t9zqKLpg1C0cq6rV+3WrzAH4Za3U=";
+    })
+  ];
 
   cargoSha256 = "sha256-s3seKVEhXyOVlt3a8cubzRWoB4SVQpdCmq12y0FpDUw=";
 
@@ -57,7 +66,8 @@ rustPlatform.buildRustPackage rec {
         libXi
         libXcursor
       ];
-    in ''
+    in
+    ''
       patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
     '';
 

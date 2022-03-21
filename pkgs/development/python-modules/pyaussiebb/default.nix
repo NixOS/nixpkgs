@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.0.12";
+  version = "0.0.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "v${version}";
-    hash = "sha256-4B+eq863G+iVl8UnxDumPVpkj9W8kX5LK0wo4QIYo4w=";
+    hash = "sha256-Z+xLCKnUnBAH9nm0YR11zx1lyNrIb8BZLFmaZdpnfdw=";
   };
 
   nativeBuildInputs = [
