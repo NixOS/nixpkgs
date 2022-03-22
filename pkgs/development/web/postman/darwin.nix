@@ -18,8 +18,7 @@ let
       arch = "64";
       sha256 = "sha256-kTgbqGPgOn5dyjL/IMl3hg2+VUfB+jpPJsqXof8UL+c=";
     };
-  }.${stdenvNoCC.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+  }.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
 in
 

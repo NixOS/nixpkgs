@@ -54,15 +54,17 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  desktopItem = makeDesktopItem {
-    name = "postman";
-    exec = "postman";
-    icon = "postman";
-    comment = "API Development Environment";
-    desktopName = "Postman";
-    genericName = "Postman";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+      (makeDesktopItem {
+      name = "postman";
+      exec = "postman";
+      icon = "postman";
+      comment = "API Development Environment";
+      desktopName = "Postman";
+      genericName = "Postman";
+      categories = [ "Development" ];
+    })
+  ];
 
   buildInputs = [
     stdenv.cc.cc.lib
@@ -104,8 +106,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
 
-  desktopItems = [ desktopItem ];
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/postman
@@ -115,11 +115,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/share/postman/postman $out/bin/postman
 
-    iconRootDir=$out/share/icons
-    iconSizeDir=$out/share/icons/hicolor/128x128/apps
-    mkdir -p $iconSizeDir
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconRootDir/postman.png
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconSizeDir/postman.png
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/postman.png
+    ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/hicolor/128x128/apps/postman.png
     runHook postInstall
   '';
 
