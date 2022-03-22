@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 || kernel.kernelAtLeast "5.17";
     maintainers = with maintainers; [ hhm ivar ];
   };
 }

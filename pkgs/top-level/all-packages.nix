@@ -2731,6 +2731,8 @@ with pkgs;
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
 
+  wl-color-picker = callPackage ../tools/wayland/wl-color-picker { };
+
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
   wlogout = callPackage ../tools/wayland/wlogout { };
@@ -3535,6 +3537,10 @@ with pkgs;
   meson-tools = callPackage ../misc/meson-tools { };
 
   metabase = callPackage ../servers/metabase { };
+
+  micropad = callPackage ../applications/office/micropad {
+    electron = electron_17;
+  };
 
   midicsv = callPackage ../tools/audio/midicsv { };
 
@@ -6559,7 +6565,9 @@ with pkgs;
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
-  headscale = callPackage ../servers/headscale { };
+  headscale = callPackage ../servers/headscale {
+    buildGoModule = buildGo118Module;
+  };
 
   heisenbridge = callPackage ../servers/heisenbridge { };
 
@@ -10920,8 +10928,6 @@ with pkgs;
   vkBasalt = callPackage ../tools/graphics/vkBasalt {
     vkBasalt32 = pkgsi686Linux.vkBasalt;
   };
-
-  vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = callPackage ../tools/video/vncrec { };
 
@@ -23621,6 +23627,8 @@ with pkgs;
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
 
+  ccsymbols = callPackage ../data/fonts/ccsymbols { };
+
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
@@ -23701,6 +23709,8 @@ with pkgs;
   docbook_xsl_ns = docbook-xsl-ns;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
+
+  mmdoc = callPackage ../tools/text/mmdoc { };
 
   documize-community = callPackage ../servers/documize-community { };
 
@@ -25609,6 +25619,8 @@ with pkgs;
   exrtools = callPackage ../applications/graphics/exrtools { };
 
   f1viewer = callPackage ../applications/video/f1viewer {};
+
+  faircamp = callPackage ../applications/misc/faircamp { };
 
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
@@ -27852,6 +27864,8 @@ with pkgs;
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell {};
 
+  nix-ld = callPackage ../os-specific/linux/nix-ld {};
+
   noaa-apt = callPackage ../applications/radio/noaa-apt { };
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
@@ -28283,8 +28297,6 @@ with pkgs;
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon { };
-
-  webbrowser = callPackage ../applications/networking/browsers/webbrowser {};
 
   pamix = callPackage ../applications/audio/pamix { };
 
@@ -28963,6 +28975,10 @@ with pkgs;
 
   sish = callPackage ../tools/networking/sish { };
 
+  sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
+    libjpeg_turbo = libjpeg_turbo.override { enableJpeg8 = true; };
+  };
+
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
 
   SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
@@ -29059,6 +29075,8 @@ with pkgs;
   maestral = with python3Packages; toPythonApplication maestral;
 
   maestral-gui = libsForQt5.callPackage ../applications/networking/maestral-qt { };
+
+  myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   insync = callPackage ../applications/networking/insync { };
 
@@ -30409,6 +30427,8 @@ with pkgs;
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
   ytmdl = callPackage ../tools/misc/ytmdl { };
+
+  yuview = libsForQt5.yuview;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
@@ -31967,6 +31987,7 @@ with pkgs;
     gnome38Extensions
     gnome40Extensions
     gnome41Extensions
+    gnome42Extensions
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
@@ -33009,7 +33030,6 @@ with pkgs;
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly { wxGTK = wxGTK30; };
-  golly-beta = callPackage ../applications/science/misc/golly/beta.nix { wxGTK = wxGTK30; };
 
   megam = callPackage ../applications/science/misc/megam {
     inherit (ocaml-ng.ocamlPackages_4_07) ocaml;

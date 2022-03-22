@@ -62,6 +62,14 @@
           notes</link> for details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Module authors can use
+          <literal>mkRenamedOptionModuleWith</literal> to automate the
+          deprecation cycle without annoying out-of-tree module authors
+          and their users.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -272,6 +280,13 @@
           <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
           Network Block Device server. Available as
           <link xlink:href="options.html#opt-services.nbd.server.enable">services.nbd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Mic92/nix-ld">nix-ld</link>,
+          Run unpatched dynamic binaries on NixOS. Available as
+          <link xlink:href="options.html#opt-programs.nix-ld.enable">programs.nix-ld</link>.
         </para>
       </listitem>
       <listitem>
@@ -1200,7 +1215,8 @@
               Legacy options have been mapped to the corresponding
               options under under
               <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
-              but may be deprecated in the future.
+              and will be deprecated when NixOS 21.11 reaches end of
+              life.
             </para>
           </listitem>
           <listitem>
