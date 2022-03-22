@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gosec";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "securego";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-a3MDGsTqndHlT6fbUkdsBShDqWXOHQiJFUIjyMqvMq8=";
+    sha256 = "sha256-AYD45L1FFT/S1toLK489C2TTasTHVXIs4Tf7TLOaye0=";
   };
 
-  vendorSha256 = "sha256-3ZGzVGKwnNab8wUn0fRepl4FDo43MAqNAO3zijH90/0=";
+  vendorSha256 = "sha256-zzbINVp8EA5aIvwUiFlQRtD6YL0iytbgVzCHbo+clYI=";
 
   subPackages = [
     "cmd/gosec"
