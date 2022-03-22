@@ -29342,6 +29342,8 @@ with pkgs;
 
   tonelib-zoom = callPackage ../applications/audio/tonelib-zoom { };
 
+  tonelib-metal = callPackage ../applications/audio/tonelib-metal { };
+
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
