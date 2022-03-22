@@ -809,7 +809,7 @@ in
               export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
               add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
             ''
-            + lib.optionalString (cfg.plugins != []) (lib.concatStringsSep "\n" (map (pl: "install_plugin ${lib.escapeShellArg pl}") cfg.plugins))
+            + lib.optionalString (cfg.plugins != []) (lib.concatStringsSep "\n" (map (pl: "install_plugin ${lib.escapeShellArg pl}") cfg.plugins)) + "\n"
             + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
               pushd /run/keycloak/ssl/
               cat "$CREDENTIALS_DIRECTORY/ssl_cert" <(echo) \
