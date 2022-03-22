@@ -6458,6 +6458,8 @@ in {
 
   premailer = callPackage ../development/python-modules/premailer { };
 
+  preprocess-cancellation = callPackage ../development/python-modules/preprocess-cancellation { };
+
   preshed = callPackage ../development/python-modules/preshed { };
 
   pretend = callPackage ../development/python-modules/pretend { };
