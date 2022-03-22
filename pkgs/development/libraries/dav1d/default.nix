@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     "-Denable_examples=${lib.boolToString withExamples}"
   ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";
     longDescription = ''
