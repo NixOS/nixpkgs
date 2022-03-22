@@ -212,12 +212,22 @@ in {
       ];
     };
 
-    linux_xanmod = callPackage ../os-specific/linux/kernel/linux-xanmod.nix {
+    # This contains both the STABLE and EDGE variants of the XanMod kernel
+    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
+
+    linux_xanmod = (xanmodKernels {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
-    };
+    }).stable;
+
+    linux_xanmod_latest = (xanmodKernels {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    }).edge;
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
@@ -528,6 +538,7 @@ in {
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
+    linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
 
     hardkernel_4_14 = recurseIntoAttrs (packagesFor kernels.linux_hardkernel_4_14);
 
