@@ -546,6 +546,8 @@ in {
 
   anybadge = callPackage ../development/python-modules/anybadge { };
 
+  anyconfig = callPackage ../development/python-modules/anyconfig { };
+
   anyio = callPackage ../development/python-modules/anyio { };
 
   anytree = callPackage ../development/python-modules/anytree {
