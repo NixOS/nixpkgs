@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pxz";
-  version = "4.999.9beta+git";
+  version = "4.999.9beta";
 
   src = fetchFromGitHub {
     owner = "jnovy";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     rev = "124382a6d0832b13b7c091f72264f8f3f463070a";
     hash = "sha256-NYhPujm5A0j810IKUZEHru/oLXCW7xZf5FjjKAbatZY=";
   };
+
+  patches = [ ./flush-stdout-help-version.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
