@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , setuptools-scm
 , typing-extensions
 , toml
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools # otherwise cross build fails
     setuptools-scm
   ];
 
