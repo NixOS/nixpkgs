@@ -86,5 +86,5 @@ rec {
     gcc = gcc10; # can bump to 11 along with stdenv.cc
   };
 
-  cudatoolkit_11 = cudatoolkit_11_4;
+  cudatoolkit_11 = cudatoolkit_11_6;
 }

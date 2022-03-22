@@ -62,36 +62,24 @@ let
     </configuration>
   '';
 
-  # temporary version patch - this needs to be fixed upstream
-  sdkVersionPatch = writeText "global.json.patch" ''
-diff --git a/global.json b/global.json
-index fe0b480a..a2ce2eeb 100644
---- a/global.json
-+++ b/global.json
-@@ -1,5 +1,5 @@
- {
-     "sdk": {
--        "version": "6.0.100"
-+        "version": "6.0"
-     }
- }
-'';
-
 in stdenv.mkDerivation rec {
-
   pname = "omnisharp-roslyn";
-  version = "1.38.0";
+  version = "1.38.1";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00V+7Z1IoCSuSM0RClM81IslzCzC/FNYxHIKtnI9QDg=";
+    sha256 = "At8yfp5SDwPSoJM/WdQEBM4EG8q2SlHvp8qZIc9ftlE=";
   };
 
   nativeBuildInputs = [ makeWrapper dotnet-sdk ];
 
-  patches = [ sdkVersionPatch ];
+  postPatch = ''
+    # Relax the version requirement
+    substituteInPlace global.json \
+      --replace '6.0.100' '${dotnet-sdk.version}'
+  '';
 
   buildPhase = ''
     runHook preBuild
