@@ -3,7 +3,7 @@
 let
   pwCfg = config.services.pipewire;
   cfg = pwCfg.wireplumber;
-  pwUsedForAudio = pwCfg.pulse.enable || pwCfg.alsa.enable || pwCfg.jack.enable;
+  pwUsedForAudio = pwCfg.audio.enable;
 in
 {
   meta.maintainers = [ lib.maintainers.k900 ];
@@ -36,10 +36,12 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc.wireplumber."main.lua.d"."80-nixos.lua".text = if !pwUsedForAudio then ''
-      # Pipewire is not used for audio, so prevent it from grabbing audio devices
-      alsa_monitor.enable = function() end
-    '' else "";
+    environment.etc."wireplumber/main.lua.d/80-nixos.lua" = lib.mkIf (!pwUsedForAudio) {
+     text = ''
+        # Pipewire is not used for audio, so prevent it from grabbing audio devices
+        alsa_monitor.enable = function() end
+      '';
+    };
 
     systemd.packages = [ cfg.package ];
 
