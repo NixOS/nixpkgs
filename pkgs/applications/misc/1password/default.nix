@@ -1,28 +1,36 @@
 { lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (stdenv.hostPlatform) system;
+  fetch = srcPlatform: sha256: extension:
+    let
+      args = {
+        url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
+        inherit sha256;
+      } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
+    in
+    if extension == "zip" then fetchzip args else fetchurl args;
+
   pname = "1password-cli";
   version = "2.0.0";
+  sources = rec {
+    aarch64-linux = fetch "linux_arm64" "sha256-NhCs68on8LzoeOmM5eP8LwmFaVWz6aghqtHzfUlACiA=" "zip";
+    i686-linux = fetch "linux_386" "sha256-vCxgEBq4YVfljq2zUpvBdZUbIiam4z64P1m9OMWq1f4=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-CDwrJ5ksXf9kwHobw4jvRUi1hLQzq4/yRlk+kHPN7UE=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-DC9hdzRjQ9iNjbe6PfRpMXzDeInq4rYSAa2nDHQMTRo=" "pkg";
+    x86_64-darwin = aarch64-darwin;
+  };
+  platforms = builtins.attrNames sources;
+  mainProgram = "op";
+in
+
+stdenv.mkDerivation {
+  inherit pname version;
   src =
-    if stdenv.isLinux then
-      fetchzip
-        {
-          url = {
-            "i686-linux" = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_linux_386_v${version}.zip";
-            "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_linux_amd64_v${version}.zip";
-            "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_linux_arm64_v${version}.zip";
-          }.${stdenv.hostPlatform.system};
-          sha256 = {
-            "i686-linux" = "sha256-vCxgEBq4YVfljq2zUpvBdZUbIiam4z64P1m9OMWq1f4=";
-            "x86_64-linux" = "sha256-CDwrJ5ksXf9kwHobw4jvRUi1hLQzq4/yRlk+kHPN7UE=";
-            "aarch64-linux" = "sha256-NhCs68on8LzoeOmM5eP8LwmFaVWz6aghqtHzfUlACiA=";
-          }.${stdenv.hostPlatform.system};
-          stripRoot = false;
-        } else
-      fetchurl {
-        url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg";
-        sha256 = "sha256-DC9hdzRjQ9iNjbe6PfRpMXzDeInq4rYSAa2nDHQMTRo=";
-      };
+    if (builtins.elem system platforms) then
+      sources.${system}
+    else
+      throw "Source for ${pname} is not available for ${system}";
 
   buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
 
@@ -32,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -D op $out/bin/op
+    install -D ${mainProgram} $out/bin/${mainProgram}
   '';
 
   dontStrip = stdenv.isDarwin;
@@ -42,7 +50,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/op --version
+    $out/bin/${mainProgram} --version
   '';
 
   meta = with lib; {
@@ -51,6 +59,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
     maintainers = with maintainers; [ joelburget marsam ];
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    inherit mainProgram platforms;
   };
 }
