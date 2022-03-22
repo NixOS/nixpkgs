@@ -201,6 +201,8 @@ in
 
     services.udev.packages = optional (cfg.countryCode != null) [ pkgs.crda ];
 
+    environment.etc."hostapd/hostapd.conf".source = configFile;
+
     systemd.services.hostapd =
       { description = "hostapd wireless AP";
 
@@ -211,7 +213,7 @@ in
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig =
-          { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";
+          { ExecStart = "${pkgs.hostapd}/bin/hostapd /etc/hostapd/hostapd.conf";
             Restart = "always";
           };
       };
