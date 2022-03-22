@@ -3,8 +3,8 @@
 , gtk3, vala, cmake, libgee, libX11, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation {
-  version = "0.2.1";
   pname = "lightdm-enso-os-greeter";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "nick92";

@@ -3,19 +3,20 @@
 , awscli
 , jq
 , unixtools
-, fetchgit
+, fetchFromGitHub
 , installShellFiles
 , bashInteractive
 }:
 
 stdenv.mkDerivation rec {
   pname = "bash-my-aws";
-  version = "20200111";
+  version = "unstable-2020-01-11";
 
-  src = fetchgit {
-    url = "https://github.com/bash-my-aws/bash-my-aws";
+  src = fetchFromGitHub {
+    owner = "bash-my-aws";
+    repo = "bash-my-aws";
     rev = "5a97ce2c22affca1299022a5afa109d7b62242ba";
-    sha256 = "459bda8b244af059d96c7c8b916cf956b01cb2732d1c2888a3ae06a4d660bea6";
+    sha256 = "sha256-RZvaiyRK8FnZbHyLkWz5VrAcsnMtHCiIo64GpNZgvqY=";
   };
 
   dontConfigure = true;
