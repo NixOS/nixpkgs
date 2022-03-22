@@ -535,6 +535,7 @@ let
         createGreDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.dev;
+            ttlarg = if lib.hasPrefix "ip6" v.type then "hoplimit" else "ttl";
           in
           { description = "GRE Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
@@ -551,6 +552,7 @@ let
               ip link add name "${n}" type ${v.type} \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
+                ${optionalString (v.ttl != null) "${ttlarg} ${toString v.ttl}"} \
                 ${optionalString (v.dev != null) "dev \"${v.dev}\""}
               ip link set "${n}" up
             '';

@@ -318,6 +318,8 @@ in
               Remote = gre.remote;
             }) // (optionalAttrs (gre.local != null) {
               Local = gre.local;
+            }) // (optionalAttrs (gre.ttl != null) {
+              TTL = gre.ttl;
             });
         };
         networks = mkIf (gre.dev != null) {
