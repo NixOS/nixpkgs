@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "morty";
@@ -6,10 +6,11 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/asciimoo/morty";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "asciimoo";
+    repo = "morty";
     rev = "v${version}";
-    url = "https://github.com/asciimoo/morty";
-    sha256 = "1wvrdlwbpzizfg7wrcfyf1x6qllp3aw425n88z516wc9jalfqrrm";
+    sha256 = "sha256-NWfsqJKJcRPKR8gWQbgal1JsenDesczPcz/+uzhtefM=";
   };
 
   goDeps = ./deps.nix;
@@ -37,6 +38,6 @@ buildGoPackage rec {
       * No Caching/Etag
       * Supports GET/POST forms and IFrames
       * Optional HMAC URL verifier key to prevent service abuse
-'';
-   };
+    '';
+  };
 }

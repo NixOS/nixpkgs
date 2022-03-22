@@ -13,12 +13,12 @@
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
 in stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2022.02";
+  version = "2022.03";
 
   src = fetchurl {
     url =
       "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-gR81ZN0N3bmvLVqwUanXTrpBnzhPZT0bo4J8VOfaJh8=";
+    sha256 = "sha256-xR92sCeP7wcYukUGxoG9LQyk4k/qkmnxqmjY4Umt05I=";
   };
 
   sourceRoot = ".";
