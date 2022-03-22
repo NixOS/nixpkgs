@@ -22,18 +22,18 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dark" "rimless" "normal" ] tweaks
 lib.checkListOfEnum "${pname}: grub screens" [ "1080p" "2k" "4k" ] grubScreens
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "unstable-2022-02-04";
+  version = "2022-03-22";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = "7ab6a1b7eda81e914405a9931408b1d5c73e6891";
-    sha256 = "09xixd6cz2iyyyg6vskyk0wj2mahfsg21dlfcvi862h8w01hg9lr";
+    sha256 = "maYHA+AICoPiZo62IJ52UFUhOZh+6m2e9z6Kz0zrsSc=";
   };
 
   nativeBuildInputs = [
