@@ -100,6 +100,7 @@ mapAliases ({
   beegfs = throw "beegfs has been removed"; # Added 2019-11-24
   beret = throw "beret has been removed"; # Added 2021-11-16
   bin_replace_string = throw "bin_replace_string has been removed: deleted by upstream"; # Added 2022-01-07
+  bitbucket-cli = throw "bitbucket-cli has been removed: abandoned by upstream"; # Added 2022-03-21
   bitsnbots = throw "bitsnbots has been removed because it was broken and upstream missing"; # Added 2021-08-22
   blastem = throw "blastem has been removed from nixpkgs as it would still require python2"; # Added 2022-01-01
   bluezFull = bluez; # Added 2019-12-03

@@ -2301,8 +2301,6 @@ with pkgs;
 
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
-  bitbucket-cli = callPackage ../tools/misc/bitbucket-cli { };
-
   bitbucket-server-cli = callPackage ../applications/version-management/git-and-tools/bitbucket-server-cli { };
 
   blitz = callPackage ../development/libraries/blitz { };
@@ -15934,7 +15932,7 @@ with pkgs;
 
   travis = callPackage ../development/tools/misc/travis { };
 
-  tree-sitter = callPackage ../development/tools/parsing/tree-sitter {
+  tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 

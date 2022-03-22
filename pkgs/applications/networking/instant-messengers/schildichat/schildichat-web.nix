@@ -1,5 +1,5 @@
 { stdenv, lib
-, fetchgit
+, fetchFromGitHub
 , fetchYarnDeps
 , nodejs
 , yarn
@@ -18,8 +18,9 @@ in stdenv.mkDerivation rec {
   pname = "schildichat-web";
   inherit (pinData) version;
 
-  src = fetchgit {
-    url = "https://github.com/SchildiChat/schildichat-desktop/";
+  src = fetchFromGitHub {
+    owner = "SchildiChat";
+    repo = "schildichat-desktop";
     inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
