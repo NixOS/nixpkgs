@@ -212,6 +212,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qwt = callPackage ../development/libraries/qwt/6.nix { };
 
+  qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
+
   soqt = callPackage ../development/libraries/soqt { };
 
   telepathy = callPackage ../development/libraries/telepathy/qt { };
