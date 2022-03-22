@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libnatpmp";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     "INSTALLPREFIX=$(out)"
     "CC:=$(CC)"
   ];
+
+  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postFixup = ''
     chmod +x $out/lib/*

@@ -55,6 +55,7 @@ class Driver:
         tmp_dir = get_tmp_dir()
 
         with rootlog.nested("start all VLans"):
+            vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
 
         def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
