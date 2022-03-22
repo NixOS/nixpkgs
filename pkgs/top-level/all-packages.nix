@@ -25909,6 +25909,8 @@ with pkgs;
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
+  saladbind = callPackage ../applications/misc/saladbind { };
+
   gradio = callPackage ../applications/audio/gradio { };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
