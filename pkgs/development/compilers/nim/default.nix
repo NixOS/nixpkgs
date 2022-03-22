@@ -78,11 +78,11 @@ let
     pname = "nim-bootstrap";
     version = "g${lib.substring 0 7 revision}";
 
-    src = fetchgit {
-      # A Git checkout is much smaller than a GitHub tarball.
-      url = "https://github.com/nim-lang/csources_v1.git";
+    src = fetchFromGitHub {
+      owner = "nim-lang";
+      repo = "csources_v1";
       rev = revision;
-      sha256 = "1c2k681knrha1zmf4abhb32i2wwd3nwflzylnqryxk753swla043";
+      sha256 = "sha256-gwBFuR7lzO4zttR/6rgdjXMRxVhwKeLqDwpmOwMyU7A=";
     };
 
     enableParallelBuilding = true;

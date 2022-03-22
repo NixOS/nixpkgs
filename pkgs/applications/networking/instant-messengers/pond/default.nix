@@ -1,20 +1,20 @@
 { lib, stdenv, buildGoPackage, trousers, dclxvi, wrapGAppsHook, pkg-config, gtk3, gtkspell3,
-  fetchgit }:
+  fetchFromGitHub }:
 
 let
   gui = true; # Might be implemented with nixpkgs config.
 in
 buildGoPackage rec {
   pname = "pond";
-  version = "20150830-${lib.strings.substring 0 7 rev}";
-  rev = "bce6e0dc61803c23699c749e29a83f81da3c41b2";
+  version = "unstable-2015-08-30";
 
   goPackagePath = "github.com/agl/pond";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/agl/pond";
-    sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
+  src = fetchFromGitHub {
+    owner = "agl";
+    repo = "pond";
+    rev = "bce6e0dc61803c23699c749e29a83f81da3c41b2";
+    sha256 = "sha256-BE7+146E9hz8enrfA+sQhtqgHiSZAtjrW1OOqchbr7Y=";
   };
 
   goDeps = ./deps.nix;
