@@ -47,8 +47,6 @@ self: super: {
     Cabal = self.Cabal_3_6_3_0;
   });
 
-  knob = appendPatch ./patches/knob-ghc9.patch super.knob;
-
   # Jailbreaks & Version Updates
 
   # This `doJailbreak` can be removed once the following PR is released to Hackage:

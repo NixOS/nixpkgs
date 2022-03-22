@@ -2467,6 +2467,32 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
+  knob = appendPatch ./patches/knob-ghc9.patch super.knob;
+
+  # compatibility with random-fu 0.3 https://github.com/mokus0/misfortune/pull/5
+  misfortune = appendPatch ./patches/misfortune-ghc9.patch (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.misfortune);
+
+  # GHC 9 support https://github.com/lambdabot/dice/pull/2
+  dice = appendPatch (pkgs.fetchpatch {
+    name = "dice-ghc9.patch";
+    url = "https://github.com/lambdabot/dice/commit/80d6fd443cb17b21d91b725f994ece6e8274e0a0.patch";
+    excludes = [ ".gitignore" ];
+    sha256 = "sha256-MtS1n7v5D6MRWWzzTyKl3Lqd/NhD1bV+g80wnhZ3P/Y=";
+  }) (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.dice);
+
+  # GHC 9 support https://github.com/lambdabot/lambdabot/pull/204
+  lambdabot-core = appendPatch ./patches/lambdabot-core-ghc9.patch (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+  }) super.lambdabot-core);
+  lambdabot-novelty-plugins = appendPatch ./patches/lambdabot-novelty-plugins-ghc9.patch super.lambdabot-novelty-plugins;
+
   # Ships a custom cabal-doctest Setup.hs in the release tarball, but the actual
   # test suite is commented out, so the required dependency is missing naturally.
   # We need to use a default Setup.hs instead. Current master doesn't exhibit
@@ -2543,7 +2569,7 @@ self: super: {
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
 
-  # 2022-04-16: package qualified import issue: https://github.com/ghcjs/ghcjs-dom/issues/101
+  # 2022-03-16: package qualified import issue: https://github.com/ghcjs/ghcjs-dom/issues/101
   ghcjs-dom = assert super.ghcjs-dom.version == "0.9.5.0"; overrideCabal (old: {
     postPatch = ''
       sed -i 's/import "jsaddle-dom" GHCJS.DOM.Document/import "ghcjs-dom-jsaddle" GHCJS.DOM.Document/' src/GHCJS/DOM/Document.hs
