@@ -197,6 +197,7 @@ buildStdenv.mkDerivation ({
       cargo
       gnused
       llvmPackages.llvm # llvm-objdump
+      llvmPackages.lld
       makeWrapper
       nodejs
       perl
