@@ -3,13 +3,14 @@
 , fetchFromGitHub
 , poetry-core
 , pysigma
+, pysigma-pipeline-sysmon
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-splunk";
-  version = "0.1.2";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
     rev = "v${version}";
-    hash = "sha256-jKvGBUO55DtF6bpgEL82XB5Ba+kmqJsCqUdzftcpSJ0=";
+    hash = "sha256-EP0gcK05hZ5TCOgTePezfEGbW45dGrnnksWyI9Jo9MQ=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pysigma-pipeline-sysmon
     pytestCheckHook
   ];
 
