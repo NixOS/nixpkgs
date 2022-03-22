@@ -17,6 +17,14 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>firefox</literal> browser on
+          <literal>x86_64-linux</literal> is now making use of
+          profile-guided optimization resulting in a much more
+          responsive browsing experience.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>security.acme.defaults</literal> has been added to
           simplify configuring settings for many certificates at once.
           This also opens up the the option to use DNS-01 validation

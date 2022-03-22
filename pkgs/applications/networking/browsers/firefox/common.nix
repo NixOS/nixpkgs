@@ -83,6 +83,7 @@
 , gssSupport ? true, libkrb5
 , jemallocSupport ? true, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , waylandSupport ? true, libxkbcommon, libdrm
@@ -164,6 +165,13 @@ buildStdenv.mkDerivation ({
 
   inherit src unpackPhase meta;
 
+  # Add another configure-build-profiling run before the final configure phase if we build with pgo
+  preConfigurePhases = lib.optionals pgoSupport [
+    "configurePhase"
+    "buildPhase"
+    "profilingPhase"
+  ];
+
   patches = [
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
@@ -199,6 +207,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
+  ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
@@ -214,6 +223,9 @@ buildStdenv.mkDerivation ({
     export MOZ_OBJDIR=$(pwd)/mozobj
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
+    # Don't try to send libnotify notifications during build
+    export MOZ_NOSPAM=1
+
     # Set consistent remoting name to ensure wmclass matches with desktop file
     export MOZ_APP_REMOTINGNAME="${binaryName}"
 
@@ -228,6 +240,25 @@ buildStdenv.mkDerivation ({
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+ '' + lib.optionalString pgoSupport ''
+   if [ -e "$TMPDIR/merged.profdata" ]; then
+     echo "Configuring with profiling data"
+     for i in "''${!configureFlagsArray[@]}"; do
+       if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
+         unset 'configureFlagsArray[i]'
+       fi
+     done
+     configureFlagsArray+=(
+       "--enable-profile-use=cross"
+       "--with-pgo-profile-path="$TMPDIR/merged.profdata""
+       "--with-pgo-jarlog="$TMPDIR/jarlog""
+     )
+   else
+     echo "Configuring to generate profiling data"
+     configureFlagsArray+=(
+       "--enable-profile-generate=cross"
+     )
+   fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -336,8 +367,33 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  jemallocSupport jemalloc
   ++ extraBuildInputs;
 
+  profilingPhase = lib.optionalString pgoSupport ''
+    # Package up Firefox for profiling
+    ./mach package
+
+    # Run profiling
+    (
+      export HOME=$TMPDIR
+      export LLVM_PROFDATA=llvm-profdata
+      export JARLOG_FILE="$TMPDIR/jarlog"
+
+      xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
+        ./mach python ./build/pgo/profileserver.py
+    )
+
+    # Copy profiling data to a place we can easily reference
+    cp ./merged.profdata $TMPDIR/merged.profdata
+
+    # Clean build dir
+    ./mach clobber
+  '';
+
   preBuild = ''
     cd mozobj
+  '';
+
+  postBuild = ''
+    cd ..
   '';
 
   makeFlags = extraMakeFlags;
@@ -346,6 +402,10 @@ buildStdenv.mkDerivation ({
 
   # tests were disabled in configureFlags
   doCheck = false;
+
+  preInstall = ''
+    cd mozobj
+  '';
 
   postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
