@@ -14385,6 +14385,8 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
+  autoadb = callPackage ../misc/autoadb { };
+
   inherit (callPackage ../tools/admin/ansible { })
     ansible
     ansible_2_8
