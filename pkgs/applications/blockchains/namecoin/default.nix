@@ -3,8 +3,8 @@
 
 with lib;
 stdenv.mkDerivation rec {
+  pname = "namecoin" + optionalString (!withGui) "d";
   version = "nc22.0";
-  name = "namecoin" + toString (optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
     owner = "namecoin";

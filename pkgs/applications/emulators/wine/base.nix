@@ -1,5 +1,5 @@
 { stdenv, lib, pkgArches, callPackage, makeSetupHook,
-  name, version, src, mingwGccs, monos, geckos, platforms,
+  pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
   autoconf, hexdump, perl, nixosTests,
   supportFlags,
@@ -13,7 +13,7 @@ with import ./util.nix { inherit lib; };
 
 let
   patches' = patches;
-  prevName = name;
+  prevName = pname;
   prevPlatforms = platforms;
   prevConfigFlags = configureFlags;
   setupHookDarwin = makeSetupHook {
@@ -42,9 +42,9 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     make loader/wine64-preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}=""
   '';
 }) // rec {
-  inherit src;
+  inherit version src;
 
-  name = if supportFlags.waylandSupport then "${prevName}-wayland" else prevName;
+  pname = prevName + lib.optionalString supportFlags.waylandSupport "wayland";
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
