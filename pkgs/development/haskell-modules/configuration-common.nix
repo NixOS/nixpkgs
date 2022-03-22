@@ -859,9 +859,8 @@ self: super: {
     (pkgs.fetchpatch {
       name   = "hledger-properly-escape-quotes-csv.patch";
       url    = "https://github.com/simonmichael/hledger/commit/c9a72e1615e2ddc2824f2e248456e1042eb31e1d.patch";
-      sha256 = "10knvrd5bl9nrmi27i0pm82sfr64jy04xgbjp228qywyijpr3pqv";
-      includes = [ "Hledger/Read/CsvReader.hs" ];
-      stripLen = 1;
+      relative = "hledger-lib";
+      sha256 = "sha256-gjYYo0eq1gWNAAFF3dKt9QDq0VpLnN5/648r/NXEPVE=";
     })
     super.hledger-lib;
 
