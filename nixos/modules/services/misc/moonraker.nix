@@ -79,12 +79,32 @@ in {
           for supported values.
         '';
       };
+
+      allowSystemControl = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to allow Moonraker to perform system-level operations.
+
+          Moonraker exposes APIs to perform system-level operations, such as
+          reboot, shutdown, and management of systemd units. See the
+          <link xlink:href="https://moonraker.readthedocs.io/en/latest/web_api/#machine-commands">documentation</link>
+          for details on what clients are able to do.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
     warnings = optional (cfg.settings ? update_manager)
       ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.'';
+
+    assertions = [
+      {
+        assertion = cfg.allowSystemControl -> config.security.polkit.enable;
+        message = "services.moonraker.allowSystemControl requires polkit to be enabled (security.polkit.enable).";
+      }
+    ];
 
     users.users = optionalAttrs (cfg.user == "moonraker") {
       moonraker = {
@@ -137,5 +157,22 @@ in {
         User = cfg.user;
       };
     };
+
+    security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''
+      // nixos/moonraker: Allow Moonraker to perform system-level operations
+      //
+      // This was enabled via services.moonraker.allowSystemControl.
+      polkit.addRule(function(action, subject) {
+        if ((action.id == "org.freedesktop.systemd1.manage-units" ||
+             action.id == "org.freedesktop.login1.power-off" ||
+             action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
+             action.id == "org.freedesktop.login1.reboot" ||
+             action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+             action.id.startsWith("org.freedesktop.packagekit.")) &&
+             subject.user == "${cfg.user}") {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }
