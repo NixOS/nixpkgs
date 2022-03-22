@@ -60,7 +60,7 @@ in rec {
   gnome41Extensions = mapUuidNames (produceExtensionsList "41");
   gnome42Extensions = mapUuidNames (produceExtensionsList "42");
 
-  gnomeExtensions = lib.trivial.pipe (gnome40Extensions // gnome41Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome41Extensions // gnome42Extensions) [
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix {})
     # Add all manually packaged extensions
