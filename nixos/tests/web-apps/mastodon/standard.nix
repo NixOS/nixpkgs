@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({pkgs, ...}:
+import ../../make-test-python.nix ({pkgs, ...}:
 let
   cert = pkgs: pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
     openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=mastodon.local' -days 36500
@@ -12,7 +12,7 @@ let
 
 in
 {
-  name = "mastodon";
+  name = "mastodon-standard";
   meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin turion ];
 
   nodes = {
