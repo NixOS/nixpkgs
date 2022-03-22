@@ -78,10 +78,10 @@
 /nixos/lib/test-driver  @tfc
 
 # Systemd
-/nixos/modules/system/boot/systemd.nix      @NixOS/systemd @Kloenk
-/nixos/modules/system/boot/systemd    @NixOS/systemd @Kloenk
-/nixos/lib/systemd-*.nix             @NixOS/systemd @Kloenk
-/pkgs/os-specific/linux/systemd      @NixOS/systemd @Kloenk
+/nixos/modules/system/boot/systemd.nix      @NixOS/systemd
+/nixos/modules/system/boot/systemd    @NixOS/systemd
+/nixos/lib/systemd-*.nix             @NixOS/systemd
+/pkgs/os-specific/linux/systemd      @NixOS/systemd
 
 # Updaters
 ## update.nix
