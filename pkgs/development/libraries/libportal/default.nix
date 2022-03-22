@@ -18,7 +18,7 @@ assert variant == null || variant == "gtk3" || variant == "gtk4" || variant == "
 
 stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
-  version = "0.5";
+  version = "0.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = "libportal";
     rev = version;
-    sha256 = "oPPO2f6NNeok0SGh4jELkkOP6VUxXZiwPM/n6CUHm0Q=";
+    sha256 = "sha256-wDDE43UC6FBgPYLS+WWExeheURCH/3fCKu5oJg7GM+A=";
   };
 
   nativeBuildInputs = [
