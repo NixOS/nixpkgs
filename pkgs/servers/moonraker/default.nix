@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater }:
+{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater, nixosTests }:
 
 let
   pythonEnv = python3.withPackages (packages: with packages; [
@@ -39,7 +39,10 @@ in stdenvNoCC.mkDerivation rec {
       --add-flags "$out/lib/moonraker/moonraker.py"
   '';
 
-  passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
+  passthru = {
+    updateScript = unstableGitUpdater { url = meta.homepage; };
+    tests.moonraker = nixosTests.moonraker;
+  };
 
   meta = with lib; {
     description = "API web server for Klipper";
