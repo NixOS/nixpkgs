@@ -128,6 +128,9 @@ in {
         exec ${pkg}/bin/moonraker -c ${cfg.configDir}/moonraker-temp.cfg
       '';
 
+      # Needs `ip` command
+      path = [ pkgs.iproute2 ];
+
       serviceConfig = {
         WorkingDirectory = cfg.stateDir;
         Group = cfg.group;
