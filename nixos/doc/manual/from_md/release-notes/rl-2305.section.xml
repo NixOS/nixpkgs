@@ -146,6 +146,17 @@
       </listitem>
       <listitem>
         <para>
+          In <literal>mastodon</literal> it is now necessary to specify
+          location of file with <literal>PostgreSQL</literal> database
+          password. In
+          <literal>services.mastodon.database.passwordFile</literal>
+          parameter default value
+          <literal>/var/lib/mastodon/secrets/db-password</literal> has
+          been changed to <literal>null</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>nix.readOnlyStore</literal> option has been
           renamed to <literal>boot.readOnlyNixStore</literal> to clarify
           that it configures the NixOS boot process, not the Nix daemon.
@@ -206,6 +217,12 @@
         <para>
           The minimal ISO image now uses the
           <literal>nixos/modules/profiles/minimal.nix</literal> profile.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>mastodon</literal> now supports connection to a
+          remote <literal>PostgreSQL</literal> database.
         </para>
       </listitem>
       <listitem>
