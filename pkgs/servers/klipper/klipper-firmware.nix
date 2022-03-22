@@ -14,7 +14,6 @@
 , stm32flash
 , mcu ? "mcu"
 , firmwareConfig ? ./simulator.cfg
-, flashDevice ? null
 }: stdenv.mkDerivation rec {
   name = "klipper-firmware-${mcu}-${version}";
   version = klipper.version;
@@ -49,7 +48,7 @@
     mkdir -p $out
     cp ./.config $out/config
     cp -r out/* $out
-  '' + lib.optionalString (flashDevice != null) "make FLASH_DEVICE=${toString flashDevice} OUT=$out/ KCONFIG_CONFIG=$out/config flash";
+  '';
 
   dontFixup = true;
 

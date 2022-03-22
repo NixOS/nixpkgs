@@ -76,11 +76,9 @@ in
         type = with types; attrsOf
           (submodule {
             options = {
-              flashing.enable = mkEnableOption ''
-                automatic flashing of firmware to microcontroller
-
-                WARNING: Be careful with this option. Enabling this will automatically flash your microcontroller on e.g. nixos-rebuild.
-                This can potentially brick your microcontroller. Alternatively, use `klipper-flash-$mcu` to flash manually.
+              enable = mkEnableOption ''
+                building of firmware and addition of klipper-flash tools for manual flashing.
+                This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
               '';
               configFile = mkOption {
                 type = path;
@@ -143,15 +141,14 @@ in
     environment.systemPackages =
       with pkgs;
       let
-        firmwares = mapAttrs
-          (mcu: { flashing, configFile }: pkgs.klipper-firmware.override {
-            flashDevice = if flashing.enable then cfg.settings."${mcu}".serial else null;
+        firmwares = filterAttrs (n: v: v!= null) (mapAttrs
+          (mcu: { enable, configFile }: if enable then pkgs.klipper-firmware.override {
             mcu = lib.strings.sanitizeDerivationName mcu;
             firmwareConfig = configFile;
-          })
-          cfg.firmwares;
+          } else null)
+          cfg.firmwares);
         firmwareFlasher = mapAttrsToList
-          (mcu: firmware: pkgs.callPackage pkgs.klipper-flash.override {
+          (mcu: firmware: pkgs.klipper-flash.override {
             mcu = lib.strings.sanitizeDerivationName mcu;
             klipper-firmware = firmware;
             flashDevice = cfg.settings."${mcu}".serial;
