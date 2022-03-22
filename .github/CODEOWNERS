@@ -79,9 +79,9 @@
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
-/nixos/modules/system/boot/systemd    @NixOS/systemd
-/nixos/lib/systemd-*.nix             @NixOS/systemd
-/pkgs/os-specific/linux/systemd      @NixOS/systemd
+/nixos/modules/system/boot/systemd          @NixOS/systemd
+/nixos/lib/systemd-*.nix                    @NixOS/systemd
+/pkgs/os-specific/linux/systemd             @NixOS/systemd
 
 # Updaters
 ## update.nix
