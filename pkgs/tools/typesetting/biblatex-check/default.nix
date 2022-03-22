@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "biblatex-check";
