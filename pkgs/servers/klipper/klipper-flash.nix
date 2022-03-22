@@ -12,30 +12,27 @@
 , firmwareConfig ? ./simulator.cfg
 }:
 let
-  isNotSupported = with builtins; isNull (match ''^.*CONFIG_BOARD_DIRECTORY="(avr|stm32|lpc176x)".*$'' (readFile firmwareConfig));
-  isNotStm = with builtins; isNull (match ''^.*CONFIG_BOARD_DIRECTORY="(stm32)".*$'' (readFile firmwareConfig));
+  supportedArches = [ "avr" "stm32" "lpc176x" ];
+  matchBoard = with builtins; match ''^.*CONFIG_BOARD_DIRECTORY="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
+  boardArch = if matchBoard == null then null else builtins.head matchBoard;
 in
 writeShellApplication {
   name = "klipper-flash-${mcu}";
   runtimeInputs = [
     python2
-    avrdude
-    stm32flash
     pkgsCross.avr.stdenv.cc
     gnumake
-  ];
+  ] ++ lib.optionals (boardArch == "avr") [ avrdude ] ++ lib.optionals (boardArch == "stm32") [ stm32flash ];
   text = ''
-    NOT_SUPPORTED=${lib.boolToString isNotSupported}
-    NOT_STM=${lib.boolToString isNotStm}
-    if $NOT_SUPPORTED; then
+    if ${lib.boolToString (!builtins.elem boardArch supportedArches)}; then
       printf "Flashing Klipper firmware to your board is not supported yet.\n"
       printf "Please use the compiled firmware at ${klipper-firmware} and flash it using the tools provided for your microcontroller."
       exit 1
     fi
-    if $NOT_STM; then
-      make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" flash
-    else
+    if ${lib.boolToString (boardArch == "stm32")}; then
       make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" serialflash
+    else
+      make -C ${klipper.src} FLASH_DEVICE="${toString flashDevice}" OUT="${klipper-firmware}/" KCONFIG_CONFIG="${klipper-firmware}/config" flash
     fi
   '';
 }
