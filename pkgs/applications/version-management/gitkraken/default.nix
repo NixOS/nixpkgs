@@ -11,24 +11,24 @@ with lib;
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
   pname = "gitkraken";
-  version = "8.3.2";
+  version = "8.3.3";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "0r9mmcc2j6p6dnhb4cyckmn2cgsspffh0b4wah98n4ian41nd24g";
+      sha256 = "185msrpa33w40prc88n5m0g12wh8r6szj56iikk4ps6kwr6wamy7";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "0y4xvz2vkkw2dkp6056j2mzwlcm1m5w58fgm639psxzfmfpk73p3";
+      sha256 = "0iam5ni8imajxhcv12zib6m475i6czllmqy512r1wmzw9zbilf43";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      sha256 = "0dccipqjb0q0xlm4nc10fxcd1k5v8vwdavvf580wj6xxdafwd6zk";
+      sha256 = "12af421r4d8s4l5j54xyd3x8pa72nbilass95v0y3b0wgsi35g0z";
     };
   };
 
