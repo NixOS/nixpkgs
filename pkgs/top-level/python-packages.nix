@@ -522,6 +522,8 @@ in {
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
+  ansible-later = callPackage ../development/python-modules/ansible-later { };
+
   ansible-lint = callPackage ../development/python-modules/ansible-lint { };
 
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
