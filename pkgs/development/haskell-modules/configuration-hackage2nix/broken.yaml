@@ -1986,7 +1986,6 @@ broken-packages:
   - haskell-mpi
   - haskell-names
   - haskell-neo4j-client
-  - HaskellNet-SSL
   - HaskellNN
   - Haskelloids
   - haskell-openflow
