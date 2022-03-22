@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.4.0.post2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BMRlEdvJJOUbsvKEoZx2qJqHSbL475dhBthUpnsXkn4=";
+    sha256 = "sha256-ourSUYBAFONdupdsjo/PtwRQpXS7HqLxrHj0Ejr/Wdw=";
   };
 
   postPatch = ''
