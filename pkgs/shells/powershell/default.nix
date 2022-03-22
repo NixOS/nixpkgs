@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ less ] ++ libraries;
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   installPhase =
   let

@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [ jre_headless util-linux zlib ];
 
