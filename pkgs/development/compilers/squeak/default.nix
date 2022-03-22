@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "OpenSmalltalk";
     repo = "opensmalltalk-vm";
-    rev = squeakVmVersion;
+    rev = squeakVmVersionRelease;
     hash = nullableOr args.squeakVmHash or null
       "sha256-rNJn5ya+7ggC21MpwSrl2ByJDjVycONKHADboH7dQLM=";
   };
@@ -188,18 +188,10 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Smalltalk programming language and environment";
-    longDescription = ''
-      Squeak is a full-featured implementation of the Smalltalk programming
-      language and environment based on (and largely compatible with) the
-      original Smalltalk-80 system. Squeak has very powerful 2- and 3-D
-      graphics, sound, video, MIDI, animation and other multimedia
-      capabilities. It also includes a customisable framework for creating
-      dynamic HTTP servers and interactively extensible Web sites.
-    '';
-    homepage = "https://squeakvm.org/";
-    downloadPage = "https://squeakvm.org/unix/index.html";
+    description = "Squeak virtual machine";
+    homepage = "https://opensmalltalk.org/";
     license = with licenses; [ asl20 mit ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = [ "x86_64-linux" ];
   };
 }
