@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchgit, dtc, fetchpatch, pkgsCross }:
+{ lib, stdenv, fetchFromGitHub, dtc, fetchpatch, pkgsCross }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
   version = "1.0.0";
 
-  src = fetchgit {
-    url = "https://github.com/riscv/riscv-isa-sim.git";
+  src = fetchFromGitHub {
+    owner = "riscv";
+    repo = "riscv-isa-sim";
     rev = "v${version}";
     sha256 = "1hcl01nj96s3rkz4mrq747s5lkw81lgdjdimb8b1b9h8qnida7ww";
   };
