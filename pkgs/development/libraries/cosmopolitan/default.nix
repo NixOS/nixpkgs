@@ -1,68 +1,70 @@
-{ lib, gcc9Stdenv, fetchFromGitHub, runCommand, cosmopolitan }:
+{ lib, stdenv, fetchFromGitHub, runCommand, unzip, cosmopolitan,bintools-unwrapped }:
 
-gcc9Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cosmopolitan";
-  version = "0.3";
+  version = "unstable-2022-03-22";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = "cosmopolitan";
-    rev = version;
-    sha256 = "sha256-OVdOObO82W6JN63OWKHaERS7y0uvgxt+WLp6Y0LsmJk=";
+    rev = "5022f9e9207ff2b79ddd6de6d792d3280e12fb3a";
+    sha256 = "sha256-UjL4wR5HhuXiQXg6Orcx2fKiVGRPMJk15P779BP1fRA=";
   };
+
+  patches = [
+    ./ioctl.patch        # required /dev/tty
+  ];
 
   postPatch = ''
     patchShebangs build/
-    rm -r third_party/gcc
   '';
 
   dontConfigure = true;
   dontFixup = true;
   enableParallelBuilding = true;
-
-  preBuild = ''
-    makeFlagsArray=(
-      SHELL=/bin/sh
-      AS=${gcc9Stdenv.cc.targetPrefix}as
-      CC=${gcc9Stdenv.cc.targetPrefix}gcc
-      GCC=${gcc9Stdenv.cc.targetPrefix}gcc
-      CXX=${gcc9Stdenv.cc.targetPrefix}g++
-      LD=${gcc9Stdenv.cc.targetPrefix}ld
-      OBJCOPY=${gcc9Stdenv.cc.targetPrefix}objcopy
-      "MKDIR=mkdir -p"
-      )
-  '';
+  nativeBuildInputs = [ bintools-unwrapped unzip ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,lib/include}
-    install o/cosmopolitan.h $out/lib/include
+    mkdir -p $out/{bin,include,lib}
+    install o/cosmopolitan.h $out/include
     install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} $out/lib
+
     cat > $out/bin/cosmoc <<EOF
-    #!${gcc9Stdenv.shell}
-    exec ${gcc9Stdenv.cc}/bin/${gcc9Stdenv.cc.targetPrefix}gcc \
+    #!${stdenv.shell}
+    exec ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}gcc \
       -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone \
       "\$@" \
-      -Wl,--oformat=binary -Wl,--gc-sections -Wl,-z,max-page-size=0x1000 \
+      -Wl,--gc-sections -Wl,-z,max-page-size=0x1000 \
       -fuse-ld=bfd -Wl,-T,$out/lib/ape.lds \
-      -include $out/lib/{include/cosmopolitan.h,crt.o,ape.o,cosmopolitan.a}
+      -include $out/include/cosmopolitan.h \
+      -I $out/include \
+      $out/lib/{crt.o,ape.o,cosmopolitan.a}
     EOF
     chmod +x $out/bin/cosmoc
+
+    pushd o
+    find -iname "*.com" -type f -exec install -D {} $out/{} \;
+    popd
+    find -iname "*.h" -type f -exec install -m644 -D {} $out/include/{} \;
+    find -iname "*.inc" -type f -exec install -m644 -D {} $out/include/{} \;
     runHook postInstall
   '';
 
-  passthru.tests = lib.optional (gcc9Stdenv.buildPlatform == gcc9Stdenv.hostPlatform) {
+  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform) {
     hello = runCommand "hello-world" { } ''
-      printf 'main() { printf("hello world\\n"); }\n' >hello.c
-      ${gcc9Stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
+      printf '#include "libc/stdio/stdio.h"\nmain() { printf("hello world\\n"); }\n' >hello.c
+      ${stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
         -fuse-ld=bfd -Wl,-T,${cosmopolitan}/lib/ape.lds \
-        -include ${cosmopolitan}/lib/{include/cosmopolitan.h,crt.o,ape.o,cosmopolitan.a}
-      ${gcc9Stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
+        -include ${cosmopolitan}/include/cosmopolitan.h \
+        -I ${cosmopolitan}/include \
+        ${cosmopolitan}/lib/{crt.o,ape.o,cosmopolitan.a}
+      ${stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
       ./hello.com
       printf "test successful" > $out
     '';
     cosmoc = runCommand "cosmoc-hello" { } ''
-      printf 'main() { printf("hello world\\n"); }\n' >hello.c
+      printf '#include "libc/stdio/stdio.h"\nmain() { printf("hello world\\n"); }\n' >hello.c
       ${cosmopolitan}/bin/cosmoc hello.c
       ./a.out
       printf "test successful" > $out
