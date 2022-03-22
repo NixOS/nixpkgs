@@ -36,6 +36,11 @@ noFlake=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
 
+# log the given argument to stderr
+log() {
+    echo "$@" >&2
+}
+
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
@@ -47,7 +52,7 @@ while [ "$#" -gt 0 ]; do
         action="$i"
         ;;
       --install-grub)
-        echo "$0: --install-grub deprecated, use --install-bootloader instead" >&2
+        log "$0: --install-grub deprecated, use --install-bootloader instead"
         export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --install-bootloader)
@@ -91,7 +96,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --profile-name|-p)
         if [ -z "$1" ]; then
-            echo "$0: ‘--profile-name’ requires an argument"
+            log "$0: ‘--profile-name’ requires an argument"
             exit 1
         fi
         if [ "$1" != system ]; then
@@ -132,7 +137,7 @@ while [ "$#" -gt 0 ]; do
         lockFlags+=("$i" "$j" "$k")
         ;;
       *)
-        echo "$0: unknown option \`$i'"
+        log "$0: unknown option \`$i'"
         exit 1
         ;;
     esac
@@ -239,7 +244,7 @@ nixBuild() {
             NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
-            echo "nix-instantiate failed"
+            log "nix-instantiate failed"
             exit 1
         fi
   fi
@@ -290,7 +295,7 @@ nixFlakeBuild() {
             NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
-            echo "nix eval failed"
+            log "nix eval failed"
             exit 1
         fi
     fi
@@ -425,13 +430,13 @@ prebuiltNix() {
     elif [[ "$machine" = aarch64 ]]; then
         echo @nix_aarch64_linux@
     else
-        echo "$0: unsupported platform"
+        log "$0: unsupported platform"
         exit 1
     fi
 }
 
 if [[ -n $buildNix && -z $flake ]]; then
-    echo "building Nix..." >&2
+    log "building Nix..."
     nixDrv=
     if ! nixDrv="$(runCmd nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
         if ! nixDrv="$(runCmd nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then
@@ -440,7 +445,7 @@ if [[ -n $buildNix && -z $flake ]]; then
             fi
             if ! runCmd nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
-                echo "warning: don't know how to get latest Nix" >&2
+                log "warning: don't know how to get latest Nix"
             fi
             # Older version of nix-store -r don't support --add-root.
             [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
@@ -450,7 +455,7 @@ if [[ -n $buildNix && -z $flake ]]; then
                 if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
                   --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
                     remoteNix=
-                    echo "warning: don't know how to get latest Nix" >&2
+                    log "warning: don't know how to get latest Nix"
                 fi
             fi
         fi
@@ -490,7 +495,7 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
-    echo "building the system configuration..." >&2
+    log "building the system configuration..."
     if [[ "$action" = switch || "$action" = boot ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
@@ -547,7 +552,7 @@ fi
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
     if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
-        echo "warning: error(s) occurred while switching to the new configuration" >&2
+        log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi
 fi
