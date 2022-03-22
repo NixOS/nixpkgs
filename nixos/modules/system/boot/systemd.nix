@@ -339,10 +339,11 @@ in
       type = types.listOf types.str;
       example = [ "systemd-backlight@.service" ];
       description = ''
-        A list of units to suppress when generating system systemd configuration directory. This has
+        A list of units to skip when generating system systemd configuration directory. This has
         priority over upstream units, <option>systemd.units</option>, and
         <option>systemd.additionalUpstreamSystemUnits</option>. The main purpose of this is to
-        suppress a upstream systemd unit with any modifications made to it by other NixOS modules.
+        prevent a upstream systemd unit from being added to the initrd with any modifications made to it
+        by other NixOS modules.
       '';
     };
 
