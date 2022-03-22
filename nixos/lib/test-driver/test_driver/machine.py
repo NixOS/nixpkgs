@@ -1,15 +1,18 @@
-from contextlib import _GeneratorContextManager
+from contextlib import _GeneratorContextManager, suppress
 from pathlib import Path
 from queue import Queue
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 import base64
+import bashlex
 import io
 import os
 import queue
 import re
 import shlex
 import shutil
+import select
 import socket
+import string
 import subprocess
 import sys
 import tempfile
@@ -18,72 +21,42 @@ import time
 
 from test_driver.logger import rootlog
 
+DEFAULT_TIMEOUT = 900
 CHAR_TO_KEY = {
-    "A": "shift-a",
-    "N": "shift-n",
-    "-": "0x0C",
+    '"': "shift-0x28",
+    " ": "spc",
     "_": "shift-0x0C",
-    "B": "shift-b",
-    "O": "shift-o",
-    "=": "0x0D",
-    "+": "shift-0x0D",
-    "C": "shift-c",
-    "P": "shift-p",
-    "[": "0x1A",
-    "{": "shift-0x1A",
-    "D": "shift-d",
-    "Q": "shift-q",
-    "]": "0x1B",
-    "}": "shift-0x1B",
-    "E": "shift-e",
-    "R": "shift-r",
+    "-": "0x0C",
+    ",": "0x33",
     ";": "0x27",
     ":": "shift-0x27",
-    "F": "shift-f",
-    "S": "shift-s",
-    "'": "0x28",
-    '"': "shift-0x28",
-    "G": "shift-g",
-    "T": "shift-t",
-    "`": "0x29",
-    "~": "shift-0x29",
-    "H": "shift-h",
-    "U": "shift-u",
-    "\\": "0x2B",
-    "|": "shift-0x2B",
-    "I": "shift-i",
-    "V": "shift-v",
-    ",": "0x33",
-    "<": "shift-0x33",
-    "J": "shift-j",
-    "W": "shift-w",
-    ".": "0x34",
-    ">": "shift-0x34",
-    "K": "shift-k",
-    "X": "shift-x",
-    "/": "0x35",
     "?": "shift-0x35",
-    "L": "shift-l",
-    "Y": "shift-y",
-    " ": "spc",
-    "M": "shift-m",
-    "Z": "shift-z",
+    ".": "0x34",
+    "'": "0x28",
+    "[": "0x1A",
+    "]": "0x1B",
+    "{": "shift-0x1A",
+    "}": "shift-0x1B",
+    "/": "0x35",
+    "\\": "0x2B",
     "\n": "ret",
-    "!": "shift-0x02",
-    "@": "shift-0x03",
-    "#": "shift-0x04",
-    "$": "shift-0x05",
-    "%": "shift-0x06",
-    "^": "shift-0x07",
-    "&": "shift-0x08",
-    "*": "shift-0x09",
-    "(": "shift-0x0A",
-    ")": "shift-0x0B",
+    "`": "0x29",
+    "<": "shift-0x33",
+    "=": "0x0D",
+    ">": "shift-0x34",
+    "|": "shift-0x2B",
+    "~": "shift-0x29",
+    # Top row (shift  + '0'-'9', '-', and '='):
+    **{c: f"shift-0x{i:02x}" for i, c in enumerate("!@#$%^&*()_+", start=2)},
+    # Capital letters:
+    **{c.upper(): f"shift-{c}" for c in string.ascii_lowercase},
 }
 
+assert all(len(c) == 1 for c in CHAR_TO_KEY.keys())
 
-def make_command(args: list) -> str:
-    return " ".join(map(shlex.quote, (map(str, args))))
+
+def q(s: Union[str, Path]) -> str:
+    return shlex.quote(str(s))
 
 
 def _perform_ocr_on_screenshot(
@@ -94,12 +67,12 @@ def _perform_ocr_on_screenshot(
 
     magick_args = (
         "-filter Catrom -density 72 -resample 300 "
-        + "-contrast -normalize -despeckle -type grayscale "
-        + "-sharpen 1 -posterize 3 -negate -gamma 100 "
-        + "-blur 1x65535"
+        "-contrast -normalize -despeckle -type grayscale "
+        "-sharpen 1 -posterize 3 -negate -gamma 100 "
+        "-blur 1x65535"
     )
 
-    tess_args = f"-c debug_file=/dev/null --psm 11"
+    tess_args = "-c debug_file=/dev/null --psm 11"
 
     cmd = f"convert {magick_args} {screenshot_path} tiff:{screenshot_path}.tiff"
     ret = subprocess.run(cmd, shell=True, capture_output=True)
@@ -117,18 +90,17 @@ def _perform_ocr_on_screenshot(
     return model_results
 
 
-def retry(fn: Callable, timeout: int = 900) -> None:
+def retry(fn: Callable, timeout: int = DEFAULT_TIMEOUT) -> Any:
     """Call the given function repeatedly, with 1 second intervals,
-    until it returns True or a timeout is reached.
+    until it returns a truthy value or a timeout is reached.
     """
 
-    for _ in range(timeout):
-        if fn(False):
-            return
+    for n in range(timeout + 1):
+        r = fn(n == timeout)
+        if r:
+            return r
         time.sleep(1)
-
-    if not fn(True):
-        raise Exception(f"action timed out after {timeout} seconds")
+    raise Exception(f"action timed out after {timeout} seconds")
 
 
 class StartCommand:
@@ -144,7 +116,6 @@ class StartCommand:
         self,
         monitor_socket_path: Path,
         shell_socket_path: Path,
-        allow_reboot: bool = False,  # TODO: unused, legacy?
     ) -> str:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
@@ -152,11 +123,8 @@ class StartCommand:
             display_opts += " -nographic"
 
         # qemu options
-        qemu_opts = ""
-        qemu_opts += (
-            ""
-            if allow_reboot
-            else " -no-reboot"
+        qemu_opts = (
+            " -no-reboot"
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
             " -device virtio-rng-pci"
@@ -168,7 +136,7 @@ class StartCommand:
         return (
             f"{self._cmd}"
             f" -monitor unix:{monitor_socket_path}"
-            f" -chardev socket,id=shell,path={shell_socket_path}"
+            f" -chardev socket,id=shell,path={q(shell_socket_path)}"
             f"{qemu_opts}"
             f"{display_opts}"
         )
@@ -312,7 +280,6 @@ class Machine:
 
     start_command: StartCommand
     keep_vm_state: bool
-    allow_reboot: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -337,13 +304,11 @@ class Machine:
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
-        allow_reboot: bool = False,
         callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
-        self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
@@ -420,8 +385,8 @@ class Machine:
 
     def send_monitor_command(self, command: str) -> str:
         self.run_callbacks()
-        with self.nested("sending monitor command: {}".format(command)):
-            message = ("{}\n".format(command)).encode()
+        with self.nested(f"sending monitor command: {command}"):
+            message = f"{command}\n".encode()
             assert self.monitor is not None
             self.monitor.send(message)
             return self.wait_for_monitor_prompt()
@@ -436,7 +401,7 @@ class Machine:
             info = self.get_unit_info(unit, user)
             state = info["ActiveState"]
             if state == "failed":
-                raise Exception('unit "{}" reached state "{}"'.format(unit, state))
+                raise Exception('unit "{unit}" reached state "{state}"')
 
             if state == "inactive":
                 status, jobs = self.systemctl("list-jobs --full 2>&1", user)
@@ -444,22 +409,19 @@ class Machine:
                     info = self.get_unit_info(unit, user)
                     if info["ActiveState"] == state:
                         raise Exception(
-                            (
-                                'unit "{}" is inactive and there ' "are no pending jobs"
-                            ).format(unit)
+                            f'unit "{unit}" is inactive and there are no pending jobs'
                         )
 
             return state == "active"
 
-        with self.nested(
-            "waiting for unit {}{}".format(
-                unit, f" with user {user}" if user is not None else ""
-            )
-        ):
+        msg = f"waiting for unit {unit}"
+        if user is not None:
+            msg += f" with user {user}"
+        with self.nested(msg):
             retry(check_active)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
-        status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
+        status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
             raise Exception(
                 'retrieving systemctl info for unit "{}" {} failed with exit code {}'.format(
@@ -485,23 +447,23 @@ class Machine:
             q = q.replace("'", "\\'")
             return self.execute(
                 (
-                    "su -l {} --shell /bin/sh -c "
-                    "$'XDG_RUNTIME_DIR=/run/user/`id -u` "
-                    "systemctl --user {}'"
-                ).format(user, q)
+                    f"su -l {user} --shell /bin/sh -c "
+                    f"$'XDG_RUNTIME_DIR=/run/user/`id -u` "
+                    f"systemctl --user {q}'"
+                )
             )
-        return self.execute("systemctl {}".format(q))
+        return self.execute(f"systemctl {q}")
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
         with self.nested(
-            "checking if unit ‘{}’ has reached state '{}'".format(unit, require_state)
+            f"checking if unit ‘{unit}’ has reached state '{require_state}'"
         ):
             info = self.get_unit_info(unit)
             state = info["ActiveState"]
             if state != require_state:
                 raise Exception(
-                    "Expected unit ‘{}’ to to be in state ".format(unit)
-                    + "'{}' but it is in state ‘{}’".format(require_state, state)
+                    f"Expected unit ‘{unit}’ to to be in state "
+                    f"'{require_state}' but it is in state ‘{state}’"
                 )
 
     def _next_newline_closed_block_from_shell(self) -> str:
@@ -520,28 +482,38 @@ class Machine:
                 break
         return "".join(output_buffer)
 
+    def _shell_send(self, command: str) -> str:
+        command += "\n"
+        assert self.shell
+        self.shell.send(command.encode())
+        output = self._next_newline_closed_block_from_shell()
+        return output
+
     def execute(
-        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+        self,
+        command: str,
+        check_return: bool = True,
+        timeout: Optional[int] = DEFAULT_TIMEOUT,
     ) -> Tuple[int, str]:
         self.run_callbacks()
         self.connect()
 
-        if timeout is not None:
-            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
+        with suppress(NotImplementedError):
+            # This should succeed, otherwise it will raise an exception:
+            bashlex.parse(command)
 
-        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
-        assert self.shell
-        self.shell.send(out_command.encode())
+        if timeout is not None:
+            command = f"timeout {timeout} sh -c {shlex.quote(command)}"
+
+        command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)"
 
         # Get the output
-        output = base64.b64decode(self._next_newline_closed_block_from_shell())
+        output = base64.b64decode(self._shell_send(command))
 
-        if not check_return:
-            return (-1, output.decode())
-
-        # Get the return code
-        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
-        rc = int(self._next_newline_closed_block_from_shell().strip())
+        rc = -1
+        if check_return:
+            # Get the return code
+            rc = int(self._shell_send("echo ${PIPESTATUS[0]}"))
 
         return (rc, output.decode())
 
@@ -562,13 +534,11 @@ class Machine:
         """Execute each command and check that it succeeds."""
         output = ""
         for command in commands:
-            with self.nested("must succeed: {}".format(command)):
+            with self.nested(f"must succeed: {command}"):
                 (status, out) = self.execute(command, timeout=timeout)
                 if status != 0:
-                    self.log("output: {}".format(out))
-                    raise Exception(
-                        "command `{}` failed (exit code {})".format(command, status)
-                    )
+                    self.log(f"output: {out}")
+                    raise Exception(f"command `{command}` failed (exit code {status})")
                 output += out
         return output
 
@@ -576,16 +546,14 @@ class Machine:
         """Execute each command and check that it fails."""
         output = ""
         for command in commands:
-            with self.nested("must fail: {}".format(command)):
+            with self.nested(f"must fail: {command}"):
                 (status, out) = self.execute(command, timeout=timeout)
                 if status == 0:
-                    raise Exception(
-                        "command `{}` unexpectedly succeeded".format(command)
-                    )
+                    raise Exception(f"command `{command}` unexpectedly succeeded")
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -596,11 +564,11 @@ class Machine:
             status, output = self.execute(command, timeout=timeout)
             return status == 0
 
-        with self.nested("waiting for success: {}".format(command)):
+        with self.nested(f"waiting for success: {command}"):
             retry(check_success, timeout)
             return output
 
-    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+    def wait_until_fails(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """Wait until a command returns failure.
         Throws an exception on timeout.
         """
@@ -611,7 +579,7 @@ class Machine:
             status, output = self.execute(command, timeout=timeout)
             return status != 0
 
-        with self.nested("waiting for failure: {}".format(command)):
+        with self.nested(f"waiting for failure: {command}"):
             retry(check_failure)
             return output
 
@@ -629,13 +597,14 @@ class Machine:
             self.connected = False
 
     def get_tty_text(self, tty: str) -> str:
-        status, output = self.execute(
-            "fold -w$(stty -F /dev/tty{0} size | "
-            "awk '{{print $2}}') /dev/vcs{0}".format(tty)
+        return self.succeed(
+            f"fold -w$(stty -F /dev/tty{tty} size | "
+            f"awk '{{print $2}}') /dev/vcs{tty}"
         )
-        return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str) -> None:
+    def wait_until_tty_matches(
+        self, tty: str, regexp: str, timeout: int = DEFAULT_TIMEOUT
+    ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
@@ -648,47 +617,35 @@ class Machine:
                     f"Last chance to match /{regexp}/ on TTY{tty}, "
                     f"which currently contains: {text}"
                 )
-            return len(matcher.findall(text)) > 0
+            return bool(matcher.search(text))
 
-        with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
-            retry(tty_matches)
+        with self.nested(f"waiting for /{regexp}/ to appear on TTY{tty}"):
+            retry(tty_matches, timeout)
 
     def send_chars(self, chars: List[str]) -> None:
-        with self.nested("sending keys ‘{}‘".format(chars)):
+        with self.nested(f"sending keys {chars!r}"):
             for char in chars:
                 self.send_key(char)
 
-    def wait_for_file(self, filename: str) -> None:
+    def wait_for_file(self, filename: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """Waits until the file exists in machine's file system."""
 
-        def check_file(_: Any) -> bool:
-            status, _ = self.execute("test -e {}".format(filename))
-            return status == 0
+        with self.nested(f"waiting for file ‘{filename}‘"):
+            self.wait_until_succeeds(f"test -e {q(filename)}", timeout)
 
-        with self.nested("waiting for file ‘{}‘".format(filename)):
-            retry(check_file)
+    def wait_for_open_port(self, port: int, timeout: int = DEFAULT_TIMEOUT) -> None:
+        with self.nested(f"waiting for TCP port {port}"):
+            self.wait_until_succeeds(f"nc -z localhost {port}")
 
-    def wait_for_open_port(self, port: int) -> None:
-        def port_is_open(_: Any) -> bool:
-            status, _ = self.execute("nc -z localhost {}".format(port))
-            return status == 0
-
-        with self.nested("waiting for TCP port {}".format(port)):
-            retry(port_is_open)
-
-    def wait_for_closed_port(self, port: int) -> None:
-        def port_is_closed(_: Any) -> bool:
-            status, _ = self.execute("nc -z localhost {}".format(port))
-            return status != 0
-
-        with self.nested("waiting for TCP port {} to be closed"):
-            retry(port_is_closed)
+    def wait_for_closed_port(self, port: int, timeout: int = DEFAULT_TIMEOUT) -> None:
+        with self.nested(f"waiting for TCP port {port} to be closed"):
+            self.wait_until_fails(f"nc -z localhost {port}")
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
-        return self.systemctl("start {}".format(jobname), user)
+        return self.systemctl(f"start {jobname}", user)
 
     def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
-        return self.systemctl("stop {}".format(jobname), user)
+        return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:
         self.wait_for_unit(jobname)
@@ -708,7 +665,7 @@ class Machine:
             toc = time.time()
 
             self.log("connected to guest root shell")
-            self.log("(connecting took {:.2f} seconds)".format(toc - tic))
+            self.log(f"(connecting took {toc - tic:.2f} seconds)")
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
@@ -735,8 +692,8 @@ class Machine:
         with open(source, "rb") as fh:
             content_b64 = base64.b64encode(fh.read()).decode()
             self.succeed(
-                f"mkdir -p $(dirname {target})",
-                f"echo -n {content_b64} | base64 -d > {target}",
+                f"mkdir -p $(dirname {q(target)})",
+                f"echo -n {content_b64} | base64 -d > {q(target)}",
             )
 
     def copy_from_host(self, source: str, target: str) -> None:
@@ -751,13 +708,13 @@ class Machine:
             vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / host_src.name
 
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
+            self.succeed(f"mkdir -p {q(vm_shared_temp)}")
             if host_src.is_dir():
                 shutil.copytree(host_src, host_intermediate)
             else:
                 shutil.copy(host_src, host_intermediate)
-            self.succeed(make_command(["mkdir", "-p", vm_target.parent]))
-            self.succeed(make_command(["cp", "-r", vm_intermediate, vm_target]))
+            self.succeed(f"mkdir -p {q(vm_target.parent)}")
+            self.succeed(f"cp -r {q(vm_intermediate)} {q(vm_target)}")
 
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the VM (specified by an in-VM source path) to a path
@@ -772,8 +729,8 @@ class Machine:
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
             # Copy the file to the shared directory inside VM
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
-            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+            self.succeed(f"mkdir -p {q(vm_shared_temp)}")
+            self.succeed(f"cp -r  {q(vm_src)} {q(vm_intermediate)}")
             abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
             # Copy the file from the shared directory outside VM
@@ -784,7 +741,7 @@ class Machine:
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
-        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
+        self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -798,7 +755,7 @@ class Machine:
     def get_screen_text(self) -> str:
         return self._get_screen_text_variants([2])[0]
 
-    def wait_for_text(self, regex: str) -> None:
+    def wait_for_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         def screen_matches(last: bool) -> bool:
             variants = self.get_screen_text_variants()
             for text in variants:
@@ -806,32 +763,37 @@ class Machine:
                     return True
 
             if last:
-                self.log("Last OCR attempt failed. Text was: {}".format(variants))
+                self.log(f"Last OCR attempt failed. Text was: {variants}")
 
             return False
 
-        with self.nested("waiting for {} to appear on screen".format(regex)):
-            retry(screen_matches)
+        with self.nested(f"waiting for /{regex}/ to appear on screen"):
+            retry(screen_matches, timeout)
 
-    def wait_for_console_text(self, regex: str) -> None:
-        with self.nested("waiting for {} to appear on console".format(regex)):
+    def wait_for_console_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
+        with self.nested(f"waiting for /{regex}/ to appear on console"):
             # Buffer the console output, this is needed
             # to match multiline regexes.
             console = io.StringIO()
-            while True:
+
+            def check_console(last: bool) -> bool:
                 try:
                     console.write(self.last_lines.get())
                 except queue.Empty:
-                    self.sleep(1)
-                    continue
+                    return False
                 console.seek(0)
-                matches = re.search(regex, console.read())
-                if matches is not None:
-                    return
+                console_text = console.read()
+                matches = re.search(regex, console_text)
+
+                if last and matches is None:
+                    self.log(f"Last console attempt failed. Text was: {console_text}")
+                return matches is not None
+
+            retry(check_console, timeout)
 
     def send_key(self, key: str) -> None:
         key = CHAR_TO_KEY.get(key, key)
-        self.send_monitor_command("sendkey {}".format(key))
+        self.send_monitor_command(f"sendkey {key}")
         time.sleep(0.01)
 
     def start(self) -> None:
@@ -859,8 +821,17 @@ class Machine:
             self.monitor_path,
             self.shell_path,
         )
-        self.monitor, _ = monitor_socket.accept()
-        self.shell, _ = shell_socket.accept()
+
+        def accept(sock):  # type: ignore
+            while True:
+                if self.process.poll() is not None:
+                    raise Exception("VM exited")
+                r, w, e = select.select([sock], [], [], 1)
+                for s in r:
+                    return sock.accept()
+
+        self.monitor, _ = accept(monitor_socket)
+        self.shell, _ = accept(shell_socket)
 
         # Store last serial console lines for use
         # of wait_for_console_text
@@ -883,7 +854,7 @@ class Machine:
         self.pid = self.process.pid
         self.booted = True
 
-        self.log("QEMU running (pid {})".format(self.pid))
+        self.log(f"QEMU running (pid {self.pid})")
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
@@ -930,21 +901,21 @@ class Machine:
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str) -> None:
+    def wait_for_window(self, regexp: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
             names = self.get_window_names()
             if last_try:
                 self.log(
-                    "Last chance to match {} on the window list,".format(regexp)
-                    + " which currently contains: "
+                    f"Last chance to match /{regexp}/ on the window list, "
+                    + "which currently contains: "
                     + ", ".join(names)
                 )
             return any(pattern.search(name) for name in names)
 
         with self.nested("waiting for a window to appear"):
-            retry(window_is_visible)
+            retry(window_is_visible, timeout)
 
     def sleep(self, secs: int) -> None:
         # We want to sleep in *guest* time, not *host* time.
@@ -954,9 +925,7 @@ class Machine:
         """Forward a TCP port on the host to a TCP port on the guest.
         Useful during interactive testing.
         """
-        self.send_monitor_command(
-            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
-        )
+        self.send_monitor_command(f"hostfwd_add tcp::{host_port}-:{guest_port}")
 
     def block(self) -> None:
         """Make the machine unreachable by shutting down eth1 (the multicast

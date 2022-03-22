@@ -362,6 +362,7 @@ in
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
+  nixos-test-driver = handleTest ./nixos-test-driver {};
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   noto-fonts = handleTest ./noto-fonts.nix {};
