@@ -301,7 +301,7 @@ with prev;
           sed -i 's,${"\${.*INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
         '';
 
-        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
+        nativeBuildInputs = pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
 
         # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
         NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
