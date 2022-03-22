@@ -4615,7 +4615,7 @@ with pkgs;
     cudatoolkit_11_5
     cudatoolkit_11_6;
 
-  cudatoolkit = cudatoolkit_10;
+  cudatoolkit = cudatoolkit_11;
 
   cudnnPackages = callPackages ../development/libraries/science/math/cudnn { };
   inherit (cudnnPackages)
@@ -4638,7 +4638,7 @@ with pkgs;
     cudnn_8_3_cudatoolkit_10
     cudnn_8_3_cudatoolkit_11;
 
-  cudnn = cudnn_8_3_cudatoolkit_10;
+  cudnn = cudnn_8_3_cudatoolkit_11;
 
   cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
   inherit (cutensorPackages)
