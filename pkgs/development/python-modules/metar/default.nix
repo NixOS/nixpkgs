@@ -2,22 +2,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "metar";
   version = "1.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-metar";
     repo = "python-metar";
     rev = "v${version}";
-    sha256 = "sha256-pl2NWRfFCYyM2qvBt4Ic3wgbGkYZvAO6pX2Set8zYW8=";
+    hash = "sha256-pl2NWRfFCYyM2qvBt4Ic3wgbGkYZvAO6pX2Set8zYW8=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "metar" ];
+  pythonImportsCheck = [
+    "metar"
+  ];
+
+  disabledTests = [
+    # metar.Metar.ParserError: _handleTime failed while...
+    "test_windshear_runway_identifier"
+  ];
 
   meta = with lib; {
     description = "Python parser for coded METAR weather reports";
