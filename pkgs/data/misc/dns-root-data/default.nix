@@ -19,7 +19,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dns-root-data-2019-01-11";
+  pname = "dns-root-data";
+  version = "2019-01-11";
 
   buildCommand = ''
     mkdir $out
