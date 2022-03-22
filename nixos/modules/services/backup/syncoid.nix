@@ -6,7 +6,7 @@ let
   cfg = config.services.syncoid;
   inherit (config.networking) nftables;
 
-  # Extract local dasaset names (so no datasets containing "@")
+  # Extract local dataset names (so no datasets containing "@")
   localDatasetName = d: optionals (d != null) (
     let m = builtins.match "([^/@]+[^@]*)" d; in
     optionals (m != null) m
@@ -14,50 +14,8 @@ let
 
   # Escape as required by: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
   escapeUnitName = name:
-    lib.concatMapStrings (s: if lib.isList s then "-" else s)
+    concatMapStrings (s: if isList s then "-" else s)
       (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
-
-  # Function to build "zfs allow" commands for the filesystems we've delegated
-  # permissions to. It also checks if the target dataset exists before
-  # delegating permissions, if it doesn't exist we delegate it to the parent
-  # dataset (if it exists). This should solve the case of provisoning new
-  # datasets.
-  buildAllowCommand = permissions: dataset: (
-    "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
-      set -eux
-      # Run a ZFS list on the dataset to check if it exists
-      if zfs list ${lib.escapeShellArg dataset} >/dev/null 2>/dev/null; then
-        zfs allow "$USER" ${lib.escapeShellArgs [
-          (concatStringsSep "," permissions)
-          dataset
-        ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
-        else
-          zfs allow "$USER" ${lib.escapeShellArgs [
-            (concatStringsSep "," permissions)
-            # Remove the last part of the path
-            (builtins.dirOf dataset)
-          ]}
-      ''}
-      fi
-    ''}"
-  );
-
-  # Function to build "zfs unallow" commands for the filesystems we've
-  # delegated permissions to. Here we unallow both the target and
-  # the parent dataset because at this stage we have no way of
-  # knowing if the allow command did execute on the parent dataset or
-  # not in the pre-hook. We can't run the same if-then-else in the post hook
-  # since the dataset should have been created at this point.
-  buildUnallowCommand = dataset: (
-    "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
-      set -eux
-      zfs unallow "$USER" ${lib.escapeShellArg dataset}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
-        zfs unallow "$USER" ${lib.escapeShellArg (builtins.dirOf dataset)}
-      ''}
-    ''}"
-  );
 in
 {
 
@@ -290,13 +248,36 @@ in
             environment.LD_LIBRARY_PATH = config.system.nssModules.path;
             serviceConfig = {
               ExecStartPre =
-                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target)) ++
+                map (dataset:
+                  "+/run/booted-system/sw/bin/zfs allow $USER " +
+                    escapeShellArgs [ (concatStringsSep "," c.localSourceAllow) dataset ]
+                  ) (localDatasetName c.source) ++
+                # For a local target, check if the dataset exists before delegating permissions,
+                # and if it doesn't exist, delegate it to the parent dataset.
+                # This should solve the case of provisioning new datasets.
+                map (dataset:
+                  "+" + pkgs.writeShellScript "zfs-allow-target-${dataset}" ''
+                    # Run a ZFS list on the dataset to check if it exists
+                    if zfs list ${escapeShellArg dataset} >/dev/null 2>/dev/null; then
+                      zfs allow "$USER" ${escapeShellArgs [ (concatStringsSep "," c.localTargetAllow) dataset ]}
+                    else
+                      zfs allow "$USER" ${escapeShellArgs [ (concatStringsSep "," c.localTargetAllow) (builtins.dirOf dataset) ]}
+                    fi
+                  '') (localDatasetName c.target) ++
                 optional cfg.nftables.enable
                   "+${pkgs.nftables}/bin/nft add element inet filter nixos-syncoid-uids { $USER }";
-              ExecStopPost =
-                (map buildUnallowCommand (localDatasetName c.source)) ++
-                (map buildUnallowCommand (localDatasetName c.target)) ++
+              ExecStopPost = let
+                  zfsUnallow = dataset: "+/run/booted-system/sw/bin/zfs unallow $USER " + escapeShellArg dataset;
+                in
+                map zfsUnallow (localDatasetName c.source) ++
+                # For a local target, unallow both the dataset and its parent,
+                # because at this stage we have no way of knowing if the allow command
+                # did execute on the parent dataset or not in the ExecStartPre=.
+                # We can't run the same if-then-else in the post hook
+                # since the dataset should have been created at this point.
+                concatMap
+                  (dataset: [ (zfsUnallow dataset) (zfsUnallow (builtins.dirOf dataset)) ])
+                  (localDatasetName c.target) ++
                 optional cfg.nftables.enable
                   "+${pkgs.nftables}/bin/nft delete element inet filter nixos-syncoid-uids { $USER }";
               ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
