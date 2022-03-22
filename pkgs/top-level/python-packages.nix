@@ -2502,6 +2502,8 @@ in {
 
   dulwich = callPackage ../development/python-modules/dulwich { };
 
+  dunamai = callPackage ../development/python-modules/dunamai { };
+
   dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
@@ -10984,6 +10986,8 @@ in {
   zipstream = callPackage ../development/python-modules/zipstream { };
 
   zipstream-new = callPackage ../development/python-modules/zipstream-new { };
+
+  zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 

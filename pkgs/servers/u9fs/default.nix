@@ -11,9 +11,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-      mkdir -p $out/bin $out/share/man4
-      cp u9fs.man $out/share/man4
-      cp u9fs $out/bin
+      install -Dm644 u9fs.man "$out/share/man/man4/u9fs.4"
+      install -Dm755 u9fs -t "$out/bin"
     '';
 
   meta = with lib; {
