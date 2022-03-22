@@ -13,7 +13,6 @@
 , rustc
 , rust-cbindgen
 , yasm
-, llvmPackages_latest
 , nspr
 , m4
 }:
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cargo
-    llvmPackages_latest.llvm # for llvm-objdump
+    rustc.llvmPackages.llvm # for llvm-objdump
     perl
     pkg-config
     python3
