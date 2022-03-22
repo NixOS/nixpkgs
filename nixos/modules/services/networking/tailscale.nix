@@ -9,6 +9,13 @@ in {
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description =
+        "Whether to open ports and allow Tailscale traffic through the firewall.";
+    };
+
     port = mkOption {
       type = types.port;
       default = 41641;
@@ -31,6 +38,13 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ]; # for the CLI
+    networking.firewall = mkIf cfg.openFirewall {
+      trustedInterfaces = if cfg.interfaceName != "userspace-networking" then
+        [ cfg.interfaceName ]
+      else
+        [ ];
+      allowedUDPPorts = if cfg.port != 0 then [ cfg.port ] else [ ];
+    };
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
