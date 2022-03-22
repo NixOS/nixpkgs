@@ -39,6 +39,8 @@ let
     pipewire = recursiveUpdate (if useSessionManager then defaults.pipewire else defaults.minimal) cfg.config.pipewire;
     pipewire-pulse = recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse;
   };
+
+  usedForAudio = cfg.pulse.enable || cfg.alsa.enable || cfg.jack.enable;
 in {
 
   meta = {
@@ -152,8 +154,8 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.pulse.enable -> !config.hardware.pulseaudio.enable;
-        message = "PipeWire based PulseAudio server emulation replaces PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
+        assertion = usedForAudio -> !config.hardware.pulseaudio.enable;
+        message = "Using PipeWire as a sound server conflicts with PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
       }
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
