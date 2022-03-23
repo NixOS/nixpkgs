@@ -224,6 +224,9 @@ buildStdenv.mkDerivation ({
     configureScript="$(realpath ./mach) configure"
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
+    # Set consistent remoting name to ensure wmclass matches with desktop file
+    export MOZ_APP_REMOTINGNAME="${binaryName}"
+
   '' + (lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
