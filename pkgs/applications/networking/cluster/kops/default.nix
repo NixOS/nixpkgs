@@ -43,7 +43,7 @@ let
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [ offline zimbatm diegolelis ];
+          maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
           platforms = platforms.unix;
         };
       } // attrs';
