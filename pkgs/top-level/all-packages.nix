@@ -22752,6 +22752,8 @@ with pkgs;
 
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
+  projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
+
   smemstat = callPackage ../os-specific/linux/smemstat { };
 
   tgt = callPackage ../tools/networking/tgt { };
