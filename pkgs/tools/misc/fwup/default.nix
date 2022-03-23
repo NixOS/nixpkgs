@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     coreutils
     unzip
     zip
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals doCheck [
     mtools
     dosfstools
   ];
