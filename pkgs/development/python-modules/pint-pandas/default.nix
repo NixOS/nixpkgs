@@ -45,5 +45,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/hgrecco/pint-pandas";
     maintainers = with maintainers; [ doronbehar ];
   };
-
 }
