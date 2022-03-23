@@ -33277,6 +33277,8 @@ with pkgs;
 
   cups-brother-hll2350dw = callPackage  ../misc/cups/drivers/hll2350dw { };
 
+  cups-brother-mfcl2750dw = callPackage  ../misc/cups/drivers/mfcl2750dw { };
+
   cups-drv-rastertosag-gdi = callPackage ../misc/cups/drivers/cups-drv-rastertosag-gdi { };
 
   # this driver ships with pre-compiled 32-bit binary libraries
