@@ -16,7 +16,7 @@ buildPythonPackage rec {
     # Django is depended on transitively by hyperkitty and postorius,
     # and mailman_web has overly restrictive version bounds on it, so
     # let's remove it.
-    sed -i '/^  Django/d' setup.cfg
+    sed -i '/^[[:space:]]*django/Id' setup.cfg
 
     # Upstream seems to mostly target installing on top of existing
     # distributions, and uses a path appropriate for that, but we are

@@ -1295,6 +1295,12 @@
     githubId = 127523;
     name = "Herman Fries";
   };
+  BarinovMaxim = {
+    name = "Barinov Maxim";
+    email = "barinov274@gmail.com";
+    github = "barinov274";
+    githubId = 54442153;
+  };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
     github = "barrucadu";
@@ -11254,6 +11260,12 @@
     github = "shawndellysse";
     githubId = 293035;
     name = "Shawn Dellysse";
+  };
+  shawn8901 = {
+    email = "shawn8901@googlemail.com";
+    github = "shawn8901";
+    githubId = 12239057;
+    name = "Shawn8901";
   };
   shazow = {
     email = "andrey.petrov@shazow.net";
