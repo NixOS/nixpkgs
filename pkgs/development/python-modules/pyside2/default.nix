@@ -1,6 +1,7 @@
-{ python, fetchurl, lib, stdenv,
-  cmake, ninja, qt5, shiboken2,
-  enableQtwebengine ? true }:
+{ python, fetchurl, lib, stdenv
+, cmake, ninja, qt5, shiboken2,
+, enableQtwebengine ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "pyside2";
