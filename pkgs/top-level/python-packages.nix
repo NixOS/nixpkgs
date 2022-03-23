@@ -5606,6 +5606,10 @@ in {
     inherit (pkgs) notmuch;
   };
 
+  notmuch2 = callPackage ../development/python-modules/notmuch2 {
+    inherit (pkgs) notmuch;
+  };
+
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   notus-scanner = callPackage ../development/python-modules/notus-scanner { };
