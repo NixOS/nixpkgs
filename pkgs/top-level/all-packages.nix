@@ -14050,6 +14050,12 @@ with pkgs;
 
   openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
 
+  openjdk18-bootstrap = javaPackages.compiler.openjdk18-bootstrap;
+  openjdk18 = javaPackages.compiler.openjdk18;
+  openjdk18_headless = javaPackages.compiler.openjdk18.headless;
+  jdk18 = openjdk18;
+  jdk18_headless = openjdk18_headless;
+
   /* default JDK */
   jdk = jdk17;
 

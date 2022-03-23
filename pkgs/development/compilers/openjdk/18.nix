@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, bash, pkg-config, autoconf, cpio
 , file, which, unzip, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib
 , libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
-, libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk17-bootstrap
+, libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk18-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -10,27 +10,26 @@
 
 let
   version = {
-    feature = "17";
-    interim = ".0.4";
-    build = "8";
+    feature = "18";
+    build = "36";
   };
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${version.feature}${version.interim}+${version.build}";
+    version = "${version.feature}+${version.build}";
 
     src = fetchFromGitHub {
       owner = "openjdk";
       repo = "jdk${version.feature}u";
-      rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "drbljLz82ZyK29lIDLPqCkwqpBdgU/7zCTZ0ceeb1SI=";
+      rev = "jdk-${version.feature}+${version.build}";
+      sha256 = "sha256-yGPC8VA983Ml6Fv/oiEgRrcVe4oe+Q4oCHbzOmFbZq8=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk17-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk18-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -40,8 +39,7 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap-jdk13.patch
-      ./ignore-LegalNoticeFilePlugin-jdk17.patch
-      ./fix-library-path-jdk17.patch
+      ./ignore-LegalNoticeFilePlugin-jdk18.patch
 
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
@@ -61,7 +59,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk17-bootstrap.home}"
+      "--with-boot-jdk=${openjdk18-bootstrap.home}"
       "--with-version-build=${version.build}"
       "--with-version-opt=nixos"
       "--with-version-pre="
@@ -156,7 +154,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk17-bootstrap ];
+    disallowedReferences = [ openjdk18-bootstrap ];
 
     meta = import ./meta.nix lib version.feature;
 

@@ -133,6 +133,12 @@ in {
         inherit openjdk16-bootstrap;
       });
 
+    openjdk18-bootstrap = mkBootstrap adoptopenjdk-17
+      ../development/compilers/openjdk/17.nix
+      (bootstrapArgs // {
+        inherit openjdk17-bootstrap;
+      });
+
     openjdk8 = mkOpenjdk
       ../development/compilers/openjdk/8.nix
       ../development/compilers/openjdk/darwin/8.nix
@@ -177,6 +183,14 @@ in {
       ../development/compilers/openjdk/darwin/17.nix
       {
         inherit openjdk17-bootstrap;
+        openjfx = openjfx17;
+      };
+
+    openjdk18 = mkOpenjdk
+      ../development/compilers/openjdk/18.nix
+      ../development/compilers/openjdk/darwin/18.nix
+      {
+        inherit openjdk18-bootstrap;
         openjfx = openjfx17;
       };
   };
