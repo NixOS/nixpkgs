@@ -302,6 +302,16 @@ in
       '';
     };
 
+    systemd.managerEnvironment = mkOption {
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+      default = {};
+      example = { SYSTEMD_LOG_LEVEL = "debug"; };
+      description = ''
+        Environment variables of PID 1. These variables are
+        <emphasis>not</emphasis> passed to started units.
+      '';
+    };
+
     systemd.enableCgroupAccounting = mkOption {
       default = true;
       type = types.bool;
@@ -470,11 +480,13 @@ in
 
       enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
       enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedSystemUnits) cfg.units;
+
     in ({
       "systemd/system".source = generateUnits "system" enabledUnits enabledUpstreamSystemUnits upstreamSystemWants;
 
       "systemd/system.conf".text = ''
         [Manager]
+        ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         ${optionalString config.systemd.enableCgroupAccounting ''
           DefaultCPUAccounting=yes
           DefaultIOAccounting=yes
@@ -541,6 +553,17 @@ in
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+
+      # Environment of PID 1
+      systemd.managerEnvironment = {
+        # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
+        PATH = lib.makeBinPath config.system.fsPackages;
+        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+        TZDIR = "/etc/zoneinfo";
+        # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
+        SYSTEMD_UNIT_PATH = lib.mkIf (config.boot.extraSystemdUnitPaths != []) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
+      };
+
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
