@@ -80,6 +80,6 @@ index 03d469b..6057a3b 100644
  function getSmartData (argv){
 -    const smartctl = GLib.find_program_in_path('smartctl')
 +    const smartctl = GLib.find_program_in_path('@smartmontools@/bin/smartctl')
-     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`${smartctl} ${argv} -j`)[1] ))
+     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
  }
  
