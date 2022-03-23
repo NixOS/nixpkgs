@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3, python3 }:
+{ lib, stdenv, fetchFromGitHub, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.7";
+  version = "2.7.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rHTAlzxGoFJ2D0/3ymqEYWyleVUQVC0ZWm8SLFMHkpE=";
+  src = fetchFromGitHub {
+    owner = "danmar";
+    repo = "cppcheck";
+    rev = version;
+    sha256 = "0bwk89nkq67nphplb24daxvg75pv9bgh0kcqr2samhpzmjpvzxm5";
   };
 
   buildInputs = [ pcre
