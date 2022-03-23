@@ -30,7 +30,7 @@ assert !enableGPU -> (
 stdenv.mkDerivation rec {
   pname = "katago";
   version = "1.11.0";
-  githash = "ff49d04ad6bcfa056c63492439a41e2f3bce0847";
+  githash = "d8d0cd76cf73df08af3d7061a639488ae9494419";
 
   src = fetchFromGitHub {
     owner = "lightvector";
