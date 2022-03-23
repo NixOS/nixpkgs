@@ -269,8 +269,6 @@ let
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
-      # necessary for amdgpu polaris support
-      DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
       # (experimental) amdgpu support for verde and newer chipsets
       DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
@@ -383,7 +381,7 @@ let
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY  = yes;
-      EXT4_ENCRYPTION   = { optional = true; tristate = if (versionOlder version "4.8") then "m" else "y"; };
+      EXT4_ENCRYPTION   = option yes;
 
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
@@ -461,7 +459,7 @@ let
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
       DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
-      DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
+      DEBUG_SET_MODULE_RONX            = whenOlder "4.11" (option yes);
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;
@@ -560,8 +558,8 @@ let
       PARAVIRT_SPINLOCKS  = option yes;
 
       KVM_ASYNC_PF                      = yes;
-      KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
-      KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
+      KVM_COMPAT                        = whenOlder "4.12" (option yes);
+      KVM_DEVICE_ASSIGNMENT             = whenOlder "4.12" (option yes);
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = yes;
       KVM_GUEST                         = yes;
       KVM_MMIO                          = yes;
@@ -769,7 +767,6 @@ let
       AIC79XX_DEBUG_ENABLE = no;
       AIC7XXX_DEBUG_ENABLE = no;
       AIC94XX_DEBUG = no;
-      B43_PCMCIA = { optional=true; tristate = whenOlder "4.4" "y";};
 
       BLK_DEV_INTEGRITY       = yes;
 
