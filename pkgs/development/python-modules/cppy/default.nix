@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,11 +14,11 @@ buildPythonPackage rec {
     sha256 = "sha256-leiGLk+CbD8qa3tlgzOxYvgMvp+UOqDQp6ay74UK7/w=";
   };
 
-  # Headers-only library, no tests
-  doCheck = false;
-
   # Not supported
   disabled = !isPy3k;
+
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "cppy" ];
 
   meta = {
     description = "C++ headers for C extension development";
