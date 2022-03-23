@@ -60,16 +60,16 @@ let
     };
 
     power-management = {
-      PM_ADVANCED_DEBUG                = yes;
-      X86_INTEL_LPSS                   = yes;
-      X86_INTEL_PSTATE                 = yes;
-      INTEL_IDLE                       = yes;
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
       CPU_FREQ_GOV_SCHEDUTIL           = yes;
+      PM_ADVANCED_DEBUG                = yes;
       PM_WAKELOCKS                     = yes;
-      # Power-capping framework and support for INTEL RAPL
       POWERCAP                         = yes;
+    } // optionalAttrs (stdenv.hostPlatform.isx86) {
+      INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
+      X86_INTEL_LPSS                   = yes;
+      X86_INTEL_PSTATE                 = yes;
     };
 
     external-firmware = {
