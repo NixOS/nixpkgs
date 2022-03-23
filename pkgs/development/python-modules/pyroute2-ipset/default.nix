@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-ipset";
-  version = "0.6.8";
+  version = "0.6.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyroute2.ipset";
     inherit version;
-    hash = "sha256-j2vEQyfuuMH0QRtXw6acX9AMureQwgeS+Ap7m2uP9OY=";
+    hash = "sha256-icEMJno03WKUdIYTZ6BIAo9lm43RwMjxNXcoSkYF81M=";
   };
 
   propagatedBuildInputs = [
