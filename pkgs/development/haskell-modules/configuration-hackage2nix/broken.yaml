@@ -2489,7 +2489,6 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
-  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
@@ -4300,7 +4299,6 @@ broken-packages:
   - satyros
   - savage
   - sax
-  - sbv
   - sc2-proto
   - scale
   - scaleimage
@@ -5621,7 +5619,6 @@ broken-packages:
   - yhccore
   - yhseq
   - yices
-  - yi-core
   - yoda
   - Yogurt
   - yst
