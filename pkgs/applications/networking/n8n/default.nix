@@ -19,7 +19,7 @@ nodePackages.n8n.override {
     maintainers = with maintainers; [ freezeboy k900 ];
     license = {
       fullName = "Sustainable Use License";
-      url = "https://github.com/n8n-io/n8n/blob/fa7b12c3a3e81b86c76b6490b0d6e4f81115ded8/LICENSE.md";
+      url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
       free = false;
       # only free to redistribute "for non-commercial purposes"
       redistributable = false;
