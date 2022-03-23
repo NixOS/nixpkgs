@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
 
-  nativeBuildInputs =
-    [ pkg-config ] ++ lib.optional (enableGL || enableX11) copyDesktopItems
-                   ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional (enableGL || enableX11) copyDesktopItems
+    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optional stdenv.isDarwin xcbuild
@@ -80,26 +80,29 @@ stdenv.mkDerivation rec {
     rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
   '';
 
-  desktopItems = [ (makeDesktopItem {
-                      name = pname;
-                      desktopName = pname;
-                      comment = meta.description;
-                      icon = "mupdf";
-                      exec = "${pname} %f";
-                      terminal = false;
-                      mimeTypes = [ "application/epub+zip"
-                                    "application/oxps"
-                                    "application/pdf"
-                                    "application/vnd.ms-xpsdocument"
-                                    "application/x-cbz"
-                                    "application/x-pdf"
-                                  ];
-                      categories = [ "Graphics" "Viewer" ];
-                      keywords = [ "mupdf" "comic" "document" "ebook" "viewer"
-                                   "cbz" "epub" "fb2" "pdf" "xps"
-                                 ];
-                    })
-                 ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = pname;
+      comment = meta.description;
+      icon = "mupdf";
+      exec = "${pname} %f";
+      terminal = false;
+      mimeTypes = [
+        "application/epub+zip"
+        "application/oxps"
+        "application/pdf"
+        "application/vnd.ms-xpsdocument"
+        "application/x-cbz"
+        "application/x-pdf"
+      ];
+      categories = [ "Graphics" "Viewer" ];
+      keywords = [
+        "mupdf" "comic" "document" "ebook" "viewer"
+        "cbz" "epub" "fb2" "pdf" "xps"
+      ];
+    })
+  ];
 
   postInstall = ''
     mkdir -p "$out/lib/pkgconfig"
