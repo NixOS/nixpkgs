@@ -1,5 +1,5 @@
 { python, fetchurl, lib, stdenv
-, cmake, ninja, qt5, shiboken2,
+, cmake, ninja, qt5, shiboken2
 , enableQtwebengine ? true
 }:
 
