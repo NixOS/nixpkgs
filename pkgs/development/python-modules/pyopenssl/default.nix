@@ -4,13 +4,9 @@
 , fetchPypi
 , openssl
 , cryptography
-, pyasn1
-, idna
 , pytestCheckHook
 , pretend
 , flaky
-, glibcLocales
-, six
 }:
 
 buildPythonPackage rec {
@@ -30,9 +26,9 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography pyasn1 idna six ];
+  propagatedBuildInputs = [ cryptography ];
 
-  checkInputs = [ pytestCheckHook pretend flaky glibcLocales ];
+  checkInputs = [ pytestCheckHook pretend flaky ];
 
   preCheck = ''
     export LANG="en_US.UTF-8"
