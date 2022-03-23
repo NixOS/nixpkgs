@@ -26386,6 +26386,10 @@ with pkgs;
 
   gpsprune = callPackage ../applications/misc/gpsprune { };
 
+  gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
+
+  gpu-screen-recorder-gtk = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix { };
+
   gpxlab = libsForQt5.callPackage ../applications/misc/gpxlab { };
 
   gpxsee = libsForQt5.callPackage ../applications/misc/gpxsee { };
