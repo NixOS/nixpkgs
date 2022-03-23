@@ -5,6 +5,7 @@ let
       ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
+  system = stdenv.hostPlatform.system;
 
 in
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
       url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
       sha256 = "4ec23ff4b457323ae778e871a0f1abcc1848ea105af17850b57f7dcaddcfd96d";
     };
-  }."${stdenv.hostPlatform.system}";
+  }."${system}" or (throw "Unsupported system: ${system}");
 
   unpackPhase = ''
     ar x $src
@@ -30,26 +31,28 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 avahi-compat stdenv.cc.cc glib ];
   dontBuild = true;
 
-  postPatch = ''
-    ${myPatchElf "opt/brother/scanner/brscan5/brsaneconfig5"}
-    ${myPatchElf "opt/brother/scanner/brscan5/brscan_cnetconfig"}
-    ${myPatchElf "opt/brother/scanner/brscan5/brscan_gnetconfig"}
+  postPatch =
+    let
+      patchOffsetBytes =
+        if system == "x86_64-linux" then 84632
+        else if system == "i686-linux" then 77396
+        else throw "Unsupported system: ${system}";
+    in
+    ''
+      ${myPatchElf "opt/brother/scanner/brscan5/brsaneconfig5"}
+      ${myPatchElf "opt/brother/scanner/brscan5/brscan_cnetconfig"}
+      ${myPatchElf "opt/brother/scanner/brscan5/brscan_gnetconfig"}
 
-    for a in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
-      if ! test -L $a; then
-        patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $a
-      fi
-    done
+      for a in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
+        if ! test -L $a; then
+          patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $a
+        fi
+      done
 
-    # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
-    # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
-    if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]]; then
-      printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=84632 conv=notrunc
-    fi
-    if [[ "${stdenv.hostPlatform.system}" == "i686-linux" ]]; then
-      printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=77396 conv=notrunc
-    fi
-  '';
+      # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
+      # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
+      printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
+    '';
 
   installPhase = with lib; ''
     runHook preInstall
