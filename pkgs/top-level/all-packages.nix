@@ -3797,6 +3797,8 @@ with pkgs;
 
   shipyard = callPackage ../tools/virtualization/shipyard { };
 
+  shisho = callPackage ../tools/security/shisho { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   simplenes = callPackage ../applications/emulators/simplenes { };
