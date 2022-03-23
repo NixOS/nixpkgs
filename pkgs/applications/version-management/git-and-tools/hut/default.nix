@@ -39,6 +39,5 @@ buildGoModule {
     description = "A CLI tool for Sourcehut / sr.ht";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
   };
 }
