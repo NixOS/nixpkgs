@@ -34,6 +34,7 @@
   tree-sitter-gomod = lib.importJSON ./tree-sitter-gomod.json;
   tree-sitter-graphql = lib.importJSON ./tree-sitter-graphql.json;
   tree-sitter-haskell = lib.importJSON ./tree-sitter-haskell.json;
+  tree-sitter-hcl = lib.importJSON ./tree-sitter-hcl.json;
   tree-sitter-heex = lib.importJSON ./tree-sitter-heex.json;
   tree-sitter-hjson = lib.importJSON ./tree-sitter-hjson.json;
   tree-sitter-html = lib.importJSON ./tree-sitter-html.json;
