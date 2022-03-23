@@ -11261,6 +11261,12 @@
     githubId = 293035;
     name = "Shawn Dellysse";
   };
+  shawn8901 = {
+    email = "shawn8901@googlemail.com";
+    github = "shawn8901";
+    githubId = 12239057;
+    name = "Shawn8901";
+  };
   shazow = {
     email = "andrey.petrov@shazow.net";
     github = "shazow";
