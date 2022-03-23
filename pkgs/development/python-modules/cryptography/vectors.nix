@@ -13,6 +13,8 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
+  pythonImportsCheck = [ "cryptography_vectors" ];
+
   meta = with lib; {
     description = "Test vectors for the cryptography package";
     homepage = "https://cryptography.io/en/latest/development/test-vectors/";
