@@ -17,20 +17,26 @@
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
-, withGtk2 ? true
+, withGtk2 ? (!stdenv.isDarwin)
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, withWebKit ? false, webkitgtk
-, darwin
+, withWebKit ? stdenv.isDarwin
+, webkitgtk
+, setfile
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QTKit
+, AVFoundation
+, AVKit
+, WebKit
 }:
 
-assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> webkitgtk != null;
+assert withWebKit -> stdenv.isDarwin;
 
 assert withGtk2 -> (!withWebKit);
 
 let
-  inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   inherit (gnome2) GConf;
   inherit (gst_all_1) gst-plugins-base gstreamer;
   gtk = if withGtk2 then gtk2 else gtk3;
@@ -57,6 +63,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     gstreamer
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
     gtk
     libSM
     libXinerama
@@ -68,19 +76,25 @@ stdenv.mkDerivation rec {
     GConf
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional withWebKit webkitgtk
+  ++ lib.optional (withWebKit && !stdenv.isDarwin) webkitgtk
+  ++ lib.optional (withWebKit && stdenv.isDarwin) WebKit
   ++ lib.optionals stdenv.isDarwin [
+    setfile
     Carbon
     Cocoa
     Kernel
     QTKit
-    setfile
+    AVFoundation
+    AVKit
+    WebKit
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
 
   configureFlags = [
     "--disable-precomp-headers"
+    # This is the default option, but be explicit
+    "--disable-monolithic"
     "--enable-mediactrl"
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
@@ -88,10 +102,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.isDarwin [
-    # allow building on 64-bit
-    "--enable-universal-binaries"
-    "--with-cocoa"
-    "--with-macosx-version-min=10.7"
+    "--with-osx_cocoa"
+    "--with-libiconv"
   ]
   ++ lib.optionals withWebKit [
     "--enable-webview"
@@ -139,7 +151,6 @@ stdenv.mkDerivation rec {
     license = licenses.wxWindows;
     maintainers = with maintainers; [ AndersonTorres tfmoraes ];
     platforms = platforms.unix;
-    badPlatforms = platforms.darwin; # ofBorg is failing, don't know if internal
   };
 
   passthru = {
