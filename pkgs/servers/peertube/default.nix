@@ -6,13 +6,13 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
     else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
-  version = "4.1.0";
+  version = "4.1.1";
 
   source = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    sha256 = "sha256-gW/dzWns6wK3zzNjbW19HrV2jqzjdXR5uMMNXL4Xfdw=";
+    sha256 = "sha256-yBRontvkcVU3BNUIB6WfH2a5blU9u3CNyHrou16h42s=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
@@ -27,7 +27,7 @@ let
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${source}/client/yarn.lock";
-    sha256 = "sha256-wniMvtz7i3I4pn9xyzfNi1k7gQuzDl1GmEO8LqPBMKg=";
+    sha256 = "sha256-cBa0lNq9JsYi34EJzl0pPbDXSYL9a8g6MmiL6Ge65ms=";
   };
 
   bcrypt_version = "5.0.1";
@@ -75,10 +75,15 @@ in stdenv.mkDerivation rec {
     cd ~
 
     # Build PeerTube server
-    npm run build:server
+    npm run tsc -- --build ./tsconfig.json
+    npm run resolve-tspaths:server
+    cp -r "./server/static" "./server/assets" "./dist/server"
+    cp -r "./server/lib/emails" "./dist/server/lib"
 
     # Build PeerTube tools
+    cp -r "./server/tools/node_modules" "./dist/server/tools"
     npm run tsc -- --build ./server/tools/tsconfig.json
+    npm run resolve-tspaths:cli
 
     # Build PeerTube client
     npm run build:client

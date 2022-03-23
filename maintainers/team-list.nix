@@ -65,7 +65,6 @@ with lib.maintainers; {
 
   chia = {
     members = [
-      atemu
       lourkeur
     ];
     scope = "Maintain the Chia blockchain and its dependencies";

@@ -8,6 +8,7 @@
 , libXext
 , libast
 , pkg-config
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     libXext
     libast
   ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.eterm;
 
   meta = with lib; {
     homepage = "https://github.com/mej/Eterm"; # http://www.eterm.org is gone

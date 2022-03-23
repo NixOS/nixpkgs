@@ -125,7 +125,7 @@ Reviewing process:
   - Type should be appropriate (string related types differs in their merging capabilities, `optionSet` and `string` types are deprecated).
   - Description, default and example should be provided.
 - Ensure that option changes are backward compatible.
-  - `mkRenamedOptionModule` and `mkAliasOptionModule` functions provide way to make option changes backward compatible.
+  - `mkRenamedOptionModuleWith` provides a way to make option changes backward compatible.
 - Ensure that removed options are declared with `mkRemovedOptionModule`
 - Ensure that changes that are not backward compatible are mentioned in release notes.
 - Ensure that documentations affected by the change is updated.

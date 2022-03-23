@@ -69,4 +69,7 @@ in
   name = "${unwrapped.pname}-${unwrapped.version}";
   # export underlying qtile package
   passthru = { inherit unwrapped; };
+
+  # restore original qtile attrs
+  inherit (unwrapped) pname version meta;
 })

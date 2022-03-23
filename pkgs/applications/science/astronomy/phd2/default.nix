@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "phd2";
-  version = "2.6.10";
+  version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "OpenPHDGuiding";
     repo = "phd2";
     rev = "v${version}";
-    sha256 = "sha256-2ZiPjhlguWXFcC53xG1aqAode7twtoHWszFUMQkK5xU=";
+    sha256 = "sha256-iautgHOVzdLWYGOVu3wHBDt30uCbaP58mDz/l7buB1k=";
   };
 
   nativeBuildInputs = [

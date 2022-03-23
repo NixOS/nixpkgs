@@ -19,6 +19,8 @@ lib.makeScope newScope (self: with self; {
 
   fzf-fish = callPackage ./fzf-fish.nix { };
 
+  hydro = callPackage ./hydro.nix { };
+
   pisces = callPackage ./pisces.nix { };
 
   pure = callPackage ./pure.nix { };

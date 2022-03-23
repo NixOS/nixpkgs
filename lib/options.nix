@@ -231,7 +231,7 @@ rec {
             then true
             else opt.visible or true;
           readOnly = opt.readOnly or false;
-          type = opt.type.description or null;
+          type = opt.type.description or "unspecified";
         }
         // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
         // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }

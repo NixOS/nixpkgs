@@ -114,6 +114,7 @@
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
+, {"epgstation-client": "../../applications/video/epgstation/client"}
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"
@@ -237,6 +238,7 @@
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
+, "prettier_d_slim"
 , "prettier-plugin-toml"
 , "prisma"
 , "@prisma/language-server"

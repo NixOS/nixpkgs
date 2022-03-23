@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "melonDS";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "Arisotura";
     repo = pname;
     rev = version;
-    sha256 = "1v8a060gbpx7rdkk2w4hym361l2wip7yjjn8wny1gfsa273k3zy5";
+    sha256 = "sha256-FSacau7DixU6R4eKNIYVRZiMb/GhijTzHbcGlZ6WG/I=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

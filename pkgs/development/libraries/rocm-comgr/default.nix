@@ -27,15 +27,6 @@ stdenv.mkDerivation rec {
     "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
   ];
 
-  # The comgr build tends to link against the static LLVM libraries
-  # *and* the dynamic library. Linking against both causes errors
-  # about command line options being registered twice. This patch
-  # removes the static library linking.
-  patchPhase = ''
-    sed -e '/^llvm_map_components_to_libnames/,/[[:space:]]*Symbolize)/d' \
-        -i CMakeLists.txt
-  '';
-
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts

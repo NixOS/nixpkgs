@@ -18,6 +18,7 @@
 , python3
 , sassc
 , wrapGAppsHook
+, nixosTests
 }:
 
 stdenv.mkDerivation {
@@ -65,6 +66,8 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/org.gnome.zbrown.KingsCross.desktop \
       --replace "Exec=kgx" "Exec=$out/bin/kgx"
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.kgx;
 
   meta = with lib; {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";

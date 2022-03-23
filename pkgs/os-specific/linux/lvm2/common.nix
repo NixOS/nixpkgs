@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i /DEFAULT_SYS_DIR/d Makefile.in
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
+  '' + lib.optionalString (lib.versionOlder version "2.03.15") ''
     substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
       --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
     # https://github.com/lvmteam/lvm2/issues/36
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "2.03.15") [
     # Musl fixes from Alpine.
     ./fix-stdio-usage.patch
     (fetchpatch {

@@ -72,13 +72,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.12+54";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "59a71503448401d2476cf0872808e0a99c3a4d81";
-    hash  = "sha256-cz4PQymaA9UW91lN+6iniFhbcPRpFNIAeC8ZkwYeg0U=";
+    rev   = "${pname}-${version}";
+    hash  = "sha256-1NCcsq0otVKTTSSmnX2kCvvngF1yzqYWlRVzu+XY65w=";
   };
 
   enableParallelBuilding = true;
@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open RTL synthesis framework and tools";
-    homepage    = "http://www.clifford.at/yosys/";
+    homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];

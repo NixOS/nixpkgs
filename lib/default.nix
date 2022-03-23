@@ -67,7 +67,7 @@ let
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf throwIfNot checkListOfEnum
-      info showWarnings nixpkgsVersion version
+      info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
       toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
@@ -78,9 +78,10 @@ let
       mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
-      recursiveUpdate matchAttrs overrideExisting getOutput getBin
+      recursiveUpdate matchAttrs overrideExisting showAttrPath getOutput getBin
       getLib getDev getMan chooseDevOutputs zipWithNames zip
-      recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets;
+      recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets
+      updateManyAttrsByPath;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
@@ -119,7 +120,8 @@ let
       mkOptionDefault mkDefault mkImageMediaOverride mkForce mkVMOverride
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
-      mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
+      mkRenamedOptionModule mkRenamedOptionModuleWith
+      mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule mkDerivedConfig doRename;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption

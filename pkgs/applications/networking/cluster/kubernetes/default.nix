@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.23.4";
+  version = "1.23.5";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-srJHW/wvrFKKgxVwJB4h0FGeaT7iSJYOTtSeTkcR3FE=";
+    sha256 = "sha256-LhJ3gThcsWnawSOmHSzWOG8tfODIPo4dJTMeLKmvMdM=";
   };
 
   nativeBuildInputs = [ makeWrapper which go rsync installShellFiles ];

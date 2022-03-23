@@ -1021,6 +1021,12 @@ in
             dev = "enp4s0f0";
             type = "tap";
           };
+          gre6Tunnel = {
+            remote = "fd7a:5634::1";
+            local = "fd7a:5634::2";
+            dev = "enp4s0f0";
+            type = "tun6";
+          };
         }
       '';
       description = ''
@@ -1058,10 +1064,15 @@ in
           };
 
           type = mkOption {
-            type = with types; enum [ "tun" "tap" ];
+            type = with types; enum [ "tun" "tap" "tun6" "tap6" ];
             default = "tap";
             example = "tap";
-            apply = v: if v == "tun" then "gre" else "gretap";
+            apply = v: {
+              tun = "gre";
+              tap = "gretap";
+              tun6 = "ip6gre";
+              tap6 = "ip6gretap";
+            }.${v};
             description = ''
               Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
             '';

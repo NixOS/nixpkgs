@@ -347,6 +347,7 @@ justincampbell/vim-eighties
 justinj/vim-pico8-syntax
 justinmk/vim-dirvish
 justinmk/vim-sneak
+jvgrootveld/telescope-zoxide
 jvirtanen/vim-hcl
 jvoorhis/coq.vim
 KabbAmine/vCoolor.vim
@@ -520,6 +521,7 @@ mzlogin/vim-markdown-toc
 mzlogin/vim-smali
 nacro90/numb.nvim
 nanotech/jellybeans.vim
+nanotee/zoxide.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount

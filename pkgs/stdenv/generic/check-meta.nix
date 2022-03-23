@@ -19,16 +19,9 @@ let
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
 
-  onlyLicenses = list:
-    lib.lists.all (license:
-      let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
-      if license == l then true else
-        throw ''‘${showLicense license}’ is not an attribute of lib.licenses''
-    ) list;
-
   areLicenseListsValid =
     if lib.mutuallyExclusive allowlist blocklist then
-      assert onlyLicenses allowlist; assert onlyLicenses blocklist; true
+      true
     else
       throw "allowlistedLicenses and blocklistedLicenses are not mutually exclusive.";
 

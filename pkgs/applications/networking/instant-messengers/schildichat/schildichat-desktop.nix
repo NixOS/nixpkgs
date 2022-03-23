@@ -2,7 +2,7 @@
 , element-desktop # for seshat and keytar
 , schildichat-web
 , stdenv
-, fetchgit
+, fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
   pname = "schildichat-desktop";
   inherit (pinData) version;
 
-  src = fetchgit {
-    url = "https://github.com/SchildiChat/schildichat-desktop/";
+  src = fetchFromGitHub {
+    owner = "SchildiChat";
+    repo = "schildichat-desktop";
     inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;

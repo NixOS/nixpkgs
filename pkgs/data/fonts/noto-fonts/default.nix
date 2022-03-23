@@ -5,12 +5,12 @@
 , fetchurl
 , cairo
 , nixosTests
-, python3
 , pkg-config
 , pngquant
 , which
 , imagemagick
 , zopfli
+, buildPackages
 }:
 
 let
@@ -130,8 +130,8 @@ in
   noto-fonts-emoji = let
     version = "2.034";
     emojiPythonEnv =
-      python3.withPackages (p: with p; [ fonttools nototools ]);
-  in stdenv.mkDerivation {
+      buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
+  in stdenvNoCC.mkDerivation {
     pname = "noto-fonts-emoji";
     inherit version;
 
@@ -142,13 +142,17 @@ in
       sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
 
-    nativeBuildInputs = [
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+      pkg-config
       cairo
+    ];
+
+    nativeBuildInputs = [
       imagemagick
       zopfli
       pngquant
       which
-      pkg-config
       emojiPythonEnv
     ];
 
@@ -158,14 +162,6 @@ in
       # remove check for virtualenv, since we handle
       # python requirements using python.withPackages
       sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
-
-      # Remove check for missing zopfli, it doesn't
-      # work and we guarantee its presence already.
-      sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
-      sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
-
-      sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
-      echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
 
       # Make the build verbose so it won't get culled by Hydra thinking that
       # it somehow got stuck doing nothing.

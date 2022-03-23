@@ -27,6 +27,8 @@ src_hash=$(echo $src_data | jq -r .sha256)
 
 web_yarn_hash=$(prefetch-yarn-deps $src/element-web/yarn.lock)
 desktop_yarn_hash=$(prefetch-yarn-deps $src/element-desktop/yarn.lock)
+js_sdk_yarn_hash=$(prefetch-yarn-deps $src/matrix-js-sdk/yarn.lock)
+react_sdk_yarn_hash=$(prefetch-yarn-deps $src/matrix-react-sdk/yarn.lock)
 
 cat > pin.json << EOF
 {
@@ -34,6 +36,8 @@ cat > pin.json << EOF
   "rev": "$rev",
   "srcHash": "$src_hash",
   "webYarnHash": "$web_yarn_hash",
+  "jsSdkYarnHash": "$js_sdk_yarn_hash",
+  "reactSdkYarnHash": "$react_sdk_yarn_hash",
   "desktopYarnHash": "$desktop_yarn_hash"
 }
 EOF

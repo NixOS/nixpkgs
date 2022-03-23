@@ -100,8 +100,6 @@ in
 , nativeBuildInputs ? [ ]
 }:
 
-assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
-
 let
   urls_ =
     if urls != [] && url == "" then

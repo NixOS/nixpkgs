@@ -5,7 +5,7 @@
 
 buildDunePackage rec {
   pname = "gapi-ocaml";
-  version = "0.4.1";
+  version = "0.4.2";
 
   useDune2 = true;
 
@@ -15,7 +15,7 @@ buildDunePackage rec {
     owner = "astrada";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0riax23grjnq9pczmp1yv02ji0svvs2kbiqskj6f6yjviamnpa31";
+    sha256 = "sha256-imicHOlNjPHHW/lcWRJmURafYZFe/6J3efKPJcel8J8=";
   };
 
   propagatedBuildInputs = [ cryptokit ocamlnet ocurl yojson ];

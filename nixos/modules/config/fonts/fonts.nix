@@ -39,11 +39,6 @@ let
   defaultXFonts =
     [ (if hasHidpi then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
       pkgs.xorg.fontmiscmisc
-    ] ++ optionals (config.nixpkgs.config.allowUnfree or false)
-    [ # these are unfree, and will make usage with xserver fail
-      pkgs.xorg.fontbhlucidatypewriter100dpi
-      pkgs.xorg.fontbhlucidatypewriter75dpi
-      pkgs.xorg.fontbh100dpi
     ];
 
 in

@@ -1,15 +1,14 @@
-{ buildPecl, lib, fetchgit, php, cyrus_sasl, zlib, pkg-config, libmemcached }:
-let
+{ buildPecl, lib, fetchFromGitHub, php, cyrus_sasl, zlib, pkg-config, libmemcached }:
+
+buildPecl rec {
   pname = "memcached";
   version = "3.1.5";
-in
-buildPecl {
-  inherit pname version;
 
-  src = fetchgit {
-    url = "https://github.com/php-memcached-dev/php-memcached";
+  src = fetchFromGitHub {
+    owner = "php-memcached-dev";
+    repo = "php-memcached";
     rev = "v${version}";
-    sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
+    sha256 = "sha256-AA3JakWxjk7HQl+8FEEGqLVNYHrjITZg3G25OaqAqwY=";
   };
 
   internalDeps = [

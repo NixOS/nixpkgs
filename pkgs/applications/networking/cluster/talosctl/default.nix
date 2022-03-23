@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
   # look for GO_LDFLAGS getting set in the Makefile
-  version = "0.14.2";
-  sha256 = "sha256-sQtry94T5cDO+836D/p/8ptQi3WYKDBLr1QZyEXdLQI=";
-  vendorSha256 = "sha256-cd2iNMxWmkSWqqkPLYocUG+fCUXoeUXEuGQxjUWQnXk=";
-  pkgsVersion = "0.9.0-4-gc875fbe";
-  extrasVersion = "0.7.0-2-gb4c9d21";
+  version = "0.14.3";
+  sha256 = "sha256-toEbWUZxnJkUe9jkZRdJrcPXu+CIh62fUKyX38OkXxU=";
+  vendorSha256 = "sha256-Pj1918TIOGfhkRiFEKkURL4xMFgWroiNsNU6yWzT8yk=";
+  pkgsVersion = "v0.9.0-6-gbfcc795";
+  extrasVersion = "v0.7.0-2-gb4c9d21";
 in
 buildGoModule rec {
   pname = "talosctl";
@@ -29,8 +29,8 @@ buildGoModule rec {
       "-X ${versionPkg}.Name=Talos"
       "-X ${versionPkg}.SHA=${src.rev}" # should be the hash, but as we build from tags, this needs to do
       "-X ${versionPkg}.Tag=${src.rev}"
-      "-X ${versionPkg}.PkgsVersion=v${pkgsVersion}" # PKGS
-      "-X ${versionPkg}.ExtrasVersion=v${extrasVersion}" # EXTRAS
+      "-X ${versionPkg}.PkgsVersion=${pkgsVersion}" # PKGS
+      "-X ${versionPkg}.ExtrasVersion=${extrasVersion}" # EXTRAS
       "-X ${imagesPkgs}.Username=talos-systems" # USERNAME
       "-X ${imagesPkgs}.Registry=ghcr.io" # REGISTRY
       "-X ${mgmtHelpersPkg}.ArtifactsPath=_out" # ARTIFACTS

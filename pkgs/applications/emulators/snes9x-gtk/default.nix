@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsHook
-, SDL2, zlib, gtk3, libxml2, libXv, libepoxy, minizip, pulseaudio, portaudio }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsHook, alsa-lib
+, SDL2, zlib, gtkmm3, libXv, libepoxy, minizip, pulseaudio, portaudio }:
 
 stdenv.mkDerivation rec {
   pname = "snes9x-gtk";
-  version = "1.60";
+  version = "1.61";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
     rev = version;
-    sha256 = "12hpn7zcdvp30ldpw2zf115yjqv55n1ldjbids7vx0lvbpr06dm1";
+    fetchSubmodules = true;
+    sha256 = "1kay7aj30x0vn8rkylspdycydrzsc0aidjbs0dd238hr5hid723b";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
-  buildInputs = [ SDL2 zlib gtk3 libxml2 libXv libepoxy minizip pulseaudio portaudio ];
+  buildInputs = [ alsa-lib SDL2 zlib gtkmm3 libXv libepoxy minizip pulseaudio portaudio ];
 
   preConfigure = "cd gtk";
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
     # see https://github.com/snes9xgit/snes9x/blob/master/LICENSE for exact details
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [ qknight xfix ];
     platforms = platforms.linux;
   };
 }

@@ -182,7 +182,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "swift-${versions.swift}";
+  pname = "swift";
+  version = versions.swift;
 
   nativeBuildInputs = [
     autoconf

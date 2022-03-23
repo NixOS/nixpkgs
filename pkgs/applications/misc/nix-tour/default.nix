@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, electron, runtimeShell } :
+{ lib, stdenv, fetchFromGitHub, electron, runtimeShell } :
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";
@@ -6,10 +6,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ electron ];
 
-  src = fetchgit {
-    url = "https://github.com/nixcloud/tour_of_nix";
+  src = fetchFromGitHub {
+    owner = "nixcloud";
+    repo = "tour_of_nix";
     rev = "v${version}";
-    sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
+    sha256 = "sha256-a/P2ZMc9OpM4PxRFklSO6oVCc96AGWkxtGF/EmnfYSU=";
   };
 
   installPhase = ''

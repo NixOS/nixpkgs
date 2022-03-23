@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "rich-rst";
-  version = "1.1.5";
+  version = "1.1.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g1whhw07jgy46a1x85pd23gs356j1cc229wqf5j3x4r11kin6i5";
+    sha256 = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
   };
 
   propagatedBuildInputs = [ docutils rich ];

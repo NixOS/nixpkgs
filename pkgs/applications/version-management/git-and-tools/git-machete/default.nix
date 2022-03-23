@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , installShellFiles
 , git
-, stestr
 , nix-update-script
 , testVersion
 , git-machete
@@ -22,19 +21,15 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ git stestr ];
-
-  postCheck = ''
-    stestr run
-  '';
+  checkInputs = [ git ];
 
   postInstall = ''
     installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
     installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
+    installShellCompletion --fish completion/git-machete.fish
   '';
 
   postInstallCheck = ''
-    git init
     test "$($out/bin/git-machete version)" = "git-machete version ${version}"
   '';
 

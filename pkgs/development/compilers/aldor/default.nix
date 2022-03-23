@@ -1,14 +1,15 @@
-{ fetchgit, lib, stdenv, gmp, which, flex, bison, makeWrapper
+{ fetchFromGitHub, lib, stdenv, gmp, which, flex, bison, makeWrapper
 , autoconf, automake, libtool, jdk, perl }:
 
 stdenv.mkDerivation {
   pname = "aldor";
   version = "1.2.0";
 
-  src = fetchgit {
-    url = "https://github.com/pippijn/aldor";
-    sha256 = "19v07ffq4r1gjnmg7a8ifgjkwan9a3rwbj0qjz8fycwy221844m6";
+  src = fetchFromGitHub {
+    owner = "aldorlang";
+    repo = "aldor";
     rev = "15471e75f3d65b93150f414ebcaf59a03054b68d";
+    sha256 = "sha256-phKCghCeM+/QlxjIxfNQySo+5XMRqfOqlS9kgp07YKc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

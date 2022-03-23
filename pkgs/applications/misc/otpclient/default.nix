@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
-  version = "2.4.8";
+  version = "2.4.9.1";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2exqMYcxg0UxlH+ZANQv2MFii9dZ6nizB4vxGR9cAwk=";
+    sha256 = "sha256-QcdPyuwbGK12Kul+gGTfRGmXfghr0qugpBEcrgATOT4=";
   };
 
   buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar ];

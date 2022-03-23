@@ -119,15 +119,13 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/32959
     ./patches/linbox-1.7-upgrade.patch
 
-    # To emit better tracebacks, IPython 8 parses Python files using the ast
-    # module (via the stack_data package). Since Cython is a superset of Python,
-    # this results in no Cython code being printed in tracebacks. Fixing this
-    # properly is tracked in https://github.com/alexmojaki/stack_data/issues/21,
-    # but for now we just disable the corresponding test. An alternative would
-    # be to revert IPython's IPython/core/ultratb.py, but this would need to be
-    # Sage-specific (since it would worsen tracebacks for pure Python code).
-    # Sage tracks this at https://trac.sagemath.org/ticket/33170
-    ./patches/no-cython-sources-in-tracebacks-on-ipython8.patch
+    # https://trac.sagemath.org/ticket/33170
+    (fetchSageDiff {
+      base = "9.5.rc1";
+      name = "ipython-8-update.patch";
+      rev = "a90a314616d86d6be9c0d5233f0d36c4bfe06231";
+      sha256 = "sha256-pXdtokTo84xNCnV+HyAKEzG562z8FjzJ7hczOja0dRw=";
+    })
 
     # https://trac.sagemath.org/ticket/32968
     (fetchSageDiff {
@@ -155,6 +153,9 @@ stdenv.mkDerivation rec {
       rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
       sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
     })
+
+    # adapted from https://trac.sagemath.org/ticket/23712#comment:22
+    ./patches/tachyon-renamed-focallength.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

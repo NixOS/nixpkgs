@@ -1,6 +1,6 @@
 { lib, fetchzip }:
 
-let version = "1.210"; in
+let version = "1.222"; in
 fetchzip {
   name = "lxgw-wenkai-${version}";
   url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/lxgw-wenkai-v${version}.tar.gz";
@@ -11,7 +11,7 @@ fetchzip {
     cp *.ttf $out/share/fonts/truetype
   '';
 
-  sha256 = "n8vnkoOJuUO4Gh+GUInZ/HJK5t4pD7MrPPaxDyH+0Qw=";
+  sha256 = "sha256-u2NTEYZrotOHktc2R5RWMFqeZ775/IpYJSUBO6PWijM=";
 
   meta = with lib; {
     homepage = "https://lxgw.github.io/";

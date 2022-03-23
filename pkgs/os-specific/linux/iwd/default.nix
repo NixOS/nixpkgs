@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GcqmMqrZSgvSrsY8FJbPynNWTzSi5A6kmyq+xJ+2i3Y=";
   };
 
-  outputs = [ "out" "man" ]
+  outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -a doc $out/share/
-    cp -a README AUTHORS TODO $out/share/doc/
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
   '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/

@@ -46,30 +46,30 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.23.3+k3s1";     # k3s git tag
-  k3sCommit = "6f4217a3405d16a1a51bbb40872d7dcb87207bb9"; # k3s git commit at the above version
-  k3sRepoSha256 = "sha256-0dRusG1vL+1KbmViIUNCZK1b+FEgV6otcVUyFonHmm4=";
-  k3sVendorSha256 = "sha256-8Yp9csyRNSYi9wo8E8mF8cu92wG1t3l18wJ8Y4L7HEA=";
+  k3sVersion = "1.23.4+k3s1";     # k3s git tag
+  k3sCommit = "43b1cb48200d8f6af85c16ed944d68fcc96b6506"; # k3s git commit at the above version
+  k3sRepoSha256 = "1sn7rd5hqfqvwj036blk0skmq6r8igbmiqk1dnpaqnkkddpzdgmc";
+  k3sVendorSha256 = "sha256-1/kQvNqFUWwch1JH+twWzBdjNYseoZyVObB1+s9WPM4=";
 
-  k3sServerVendorSha256 = "sha256-9+2k/ipAOhc8JJU+L2dwaM01Dkw+0xyrF5kt6mL19G0=";
+  k3sServerVendorSha256 = "sha256-2KIFff43jfqWdxX61aWofrjmc5mMkr5aEJRFdGpLyU8=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
-  traefikChartVersion = "10.9.1";
-  traefikChartSha256 = "sha256-XM1DLofU1zEEFeB5bNQ7cgv102gXsToPP7SFh87QuGQ=";
+  traefikChartVersion = "10.14.1";
+  traefikChartSha256 = "09a6cialx7nrh7nwi1gkkh8zcsasxcgb52dyx0r8bjq9ng29simj";
 
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion = "0.9.1";
-  k3sRootSha256 = "0r2cj4l50cxkrvszpzxfk36lvbjf9vcmp6d5lvxg8qsah8lki3x8";
+  k3sRootVersion = "0.11.0";
+  k3sRootSha256 = "016n56vi09xkvjph7wgzb2m86mhd5x65fs4d11pmh20hl249r620";
 
   # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion = "0.9.1-k3s1";
-  k3sCNISha256 = "1327vmfph7b8i14q05c2xdfzk60caflg1zhycx0mrf3d59f4zsz5";
+  k3sCNIVersion = "1.0.1-k3s1";
+  k3sCNISha256 = "11ihlzzdnqf9p21y0a4ckpbxac016nm7746dcykhj26ym9zxyv92";
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
   containerdVersion = "1.5.9-k3s1";
-  containerdSha256 = "sha256-7xlhBA6KuwFlw+jyThygv4Ow9F3xjjIUtS6x8YHwjic=";
+  containerdSha256 = "09wfy20z3c9fnla353pibpsb10xzl0f4xwp8qdjh3fwa1q2626gg";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion = "1.22.0-k3s1";

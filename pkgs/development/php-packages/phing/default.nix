@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "phing";
-  version = "2.17.1";
+  version = "2.17.2";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://www.phing.info/get/phing-${version}.phar";
-    sha256 = "sha256-Sf2fdy9b1wmXEDA3S4CRksH/DhAIirIy6oekWE1TNjE=";
+    sha256 = "sha256-KDqJdHIqgtar6ofNG4ENRlpRg9XYFeL5YS7Rclh1+PQ=";
   };
 
   dontUnpack = true;
@@ -16,10 +16,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phing/phing.phar
     makeWrapper ${php}/bin/php $out/bin/phing \
       --add-flags "$out/libexec/phing/phing.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {

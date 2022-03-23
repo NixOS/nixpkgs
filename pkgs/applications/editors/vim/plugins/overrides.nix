@@ -39,6 +39,7 @@
 , which
 , xkb-switch
 , ycmd
+, zoxide
 , nodejs
 
 # test dependencies
@@ -693,6 +694,17 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-zoxide = super.telescope-zoxide.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+
+    buildInputs = [ zoxide ];
+
+    postPatch = ''
+      substituteInPlace lua/telescope/_extensions/zoxide/config.lua \
+        --replace "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
+    '';
+  });
+
   tup =
     let
       # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim
@@ -820,7 +832,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "12xaxpg4ws09rnp9prrqcac8581ggr36mpy39xyfngjy5xvcalaq";
+          cargoSha256 = "035v8mm8v7aj8qwhvxsp6k0afn05gi2xb1achzsvm0m4a8a9xs65";
         };
       in
       ''
@@ -832,6 +844,16 @@ self: super: {
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
     dependencies = with self; [ vim-maktaba ];
+  });
+
+  # Due to case-sensitivety issues, the hash differs on Darwin systems, see:
+  # https://github.com/NixOS/nixpkgs/issues/157609
+  vim-colorschemes = super.vim-colorschemes.overrideAttrs (old: {
+    src = old.src.overrideAttrs (srcOld: {
+      postFetch = (srcOld.postFetch or "") + lib.optionalString (!stdenv.isDarwin) ''
+        rm $out/colors/darkBlue.vim
+      '';
+    });
   });
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
@@ -1074,6 +1096,15 @@ self: super: {
       maintainers = with maintainers; [ marcweber jagajaga ];
       platforms = platforms.unix;
     };
+  });
+
+  zoxide-vim = super.zoxide-vim.overrideAttrs (old: {
+    buildInputs = [ zoxide ];
+
+    postPatch = ''
+      substituteInPlace autoload/zoxide.vim \
+        --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
+    '';
   });
 
 } // (

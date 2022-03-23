@@ -105,7 +105,7 @@ let
 
       enterprisePolicies =
       {
-        policies = lib.optionalAttrs usesNixExtensions  {
+        policies = {
           DisableAppUpdate = true;
         } //
         lib.optionalAttrs usesNixExtensions {

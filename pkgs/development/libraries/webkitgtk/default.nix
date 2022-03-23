@@ -60,6 +60,7 @@
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
+, systemdSupport ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
@@ -158,9 +159,10 @@ stdenv.mkDerivation rec {
     bubblewrap
     libseccomp
     libmanette
-    systemd
     wayland
     xdg-dbus-proxy
+  ] ++ lib.optionals systemdSupport [
+    systemd
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
   ] ++ lib.optionals withLibsecret [
@@ -193,7 +195,7 @@ stdenv.mkDerivation rec {
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!systemdSupport) [
     "-DUSE_SYSTEMD=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
     "-DENABLE_GLES2=ON"

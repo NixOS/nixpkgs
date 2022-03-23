@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sslyze";
-  version = "5.0.2";
+  version = "5.0.3";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    hash = "sha256-8xtnE5oFxH3wo2Smt65/xGDHxivexN6ggUpyUg42Cjk=";
+    hash = "sha256-d465WJIDsgNAPe8KW5v2KDSgzMH7OPLSiFfFH9n+jiA=";
   };
 
   patchPhase = ''

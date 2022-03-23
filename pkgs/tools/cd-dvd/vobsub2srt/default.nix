@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchgit, cmake, libtiff, pkg-config, tesseract }:
+{ lib, stdenv, fetchFromGitHub, cmake, libtiff, pkg-config, tesseract }:
 
 stdenv.mkDerivation rec {
   pname = "vobsub2srt";
   version = "unstable-2014-08-17";
-  rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/ruediger/VobSub2SRT.git";
-    sha256 = "1rpanrv8bgdh95v2320qbd44xskncvq6y84cbbfc86gw0qxpd9cb";
+  src = fetchFromGitHub {
+    owner = "ruediger";
+    repo = "VobSub2SRT";
+    rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
+    sha256 = "sha256-i6V2Owb8GcTcWowgb/BmdupOSFsYiCF2SbC9hXa26uY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

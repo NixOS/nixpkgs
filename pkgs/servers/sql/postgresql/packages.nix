@@ -61,4 +61,6 @@ self: super: {
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
     repmgr = super.callPackage ./ext/repmgr.nix { };
+
+    rum = super.callPackage ./ext/rum.nix { };
 }

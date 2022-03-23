@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "ydp-grand";
+  pname = "ydp-grand";
   version = "unstable-2016-08-04";
 
   src = fetchurl {

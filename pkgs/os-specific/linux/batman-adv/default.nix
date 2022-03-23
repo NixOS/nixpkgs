@@ -12,11 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags ++ [
+    "KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   hardeningDisable = [ "pic" ];
 
   preBuild = ''
-    makeFlags="KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     sed -i -e "s,INSTALL_MOD_DIR=,INSTALL_MOD_PATH=$out INSTALL_MOD_DIR=," \
       -e /depmod/d Makefile
   '';

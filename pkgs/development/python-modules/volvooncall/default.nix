@@ -5,7 +5,6 @@
 , setuptools
 , geopy
 , docopt
-, pyyaml
 , certifi
 , amqtt
 , websockets
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "volvooncall";
-  version = "0.9.2";
+  version = "0.10.0";
 
   disabled = pythonOlder "3.8";
 
@@ -27,24 +26,30 @@ buildPythonPackage rec {
     owner = "molobrakos";
     repo = "volvooncall";
     rev = "v${version}";
-    hash = "sha256-OTs282z7qzILl/xxM3whaxiQr8FZOfgceO2EY3NJKbA=";
+    hash = "sha256-HLSanXJs1yPSgYo4oX0zJtrV5sKkxV2yLPhc2dVRHY8=";
   };
 
   propagatedBuildInputs = [
-    geopy
-    docopt
-    pyyaml
-    certifi
-    amqtt
-    websockets
     aiohttp
   ];
 
+  passthru.extras-require = {
+    console = [
+      certifi
+      docopt
+      geopy
+    ];
+    mqtt = [
+      amqtt
+      certifi
+    ];
+  };
+
   checkInputs = [
-    pytestCheckHook
     asynctest
     pytest-asyncio
-  ];
+    pytestCheckHook
+  ] ++ passthru.extras-require.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 

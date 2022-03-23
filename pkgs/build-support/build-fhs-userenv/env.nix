@@ -134,6 +134,35 @@ let
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
+    postBuild = ''
+      if [[ -d  $out/share/gsettings-schemas/ ]]; then
+          # Recreate the standard schemas directory if its a symlink to make it writable
+          if [[ -L $out/share/glib-2.0 ]]; then
+              target=$(readlink $out/share/glib-2.0)
+              rm $out/share/glib-2.0
+              mkdir $out/share/glib-2.0
+              ln -fs $target/* $out/share/glib-2.0
+          fi
+
+          if [[ -L $out/share/glib-2.0/schemas ]]; then
+              target=$(readlink $out/share/glib-2.0/schemas)
+              rm $out/share/glib-2.0/schemas
+              mkdir $out/share/glib-2.0/schemas
+              ln -fs $target/* $out/share/glib-2.0/schemas
+          fi
+
+          mkdir -p $out/share/glib-2.0/schemas
+
+          for d in $out/share/gsettings-schemas/*; do
+              # Force symlink, in case there are duplicates
+              ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fs $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
+          done
+
+          # and compile them
+          ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+      fi
+    '';
   };
 
   staticUsrProfileMulti = buildEnv {

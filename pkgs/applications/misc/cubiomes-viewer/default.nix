@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cubiomes-viewer";
-  version = "1.12.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Cubitect";
     repo = pname;
     rev = version;
-    sha256 = "sha256-F0c6gMQKu35iBNRw+wpoxSUOhRUbPRKIXSNDDNZsfPE=";
+    sha256 = "sha256-6XPgSreWcRXN8ymP7zS5a7Cfl9wSLMxjmiugJPp6l+g=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cp cubiomes-viewer $out/bin
 
     mkdir -p $out/share/pixmaps
-    cp icons/map.png $out/share/pixmaps/cubiomes-viewer.png
+    cp rc/icons/map.png $out/share/pixmaps/cubiomes-viewer.png
 
     runHook postInstall
   '';

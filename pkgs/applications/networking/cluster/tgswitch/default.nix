@@ -1,13 +1,13 @@
 { buildGoPackage, lib, fetchFromGitHub }:
 buildGoPackage rec {
   pname = "tgswitch";
-  version = "0.5.382";
+  version = "0.5.389";
 
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "tgswitch";
     rev = version;
-    sha256 = "sha256-DbPf1o1XlXLpuYSrNMRwHRqi/urQhSfzPW5BPIvZC/Y=";
+    sha256 = "sha256-6hErfI7LEJFgOoJR8IF9jTSBwqbQYeGiwdeJShqxVQ0=";
   };
 
   goPackagePath = "github.com/warrensbox/tgswitch";

@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "unstable-2021-12-05";
+  version = "unstable-2022-03-17";
 
   src = fetchgit {
     url = "git://c9x.me/qbe.git";
-    rev = "367c8215d99054892740ad74c690b106c45ebf60";
-    sha256 = "sha256-xhTEiFR1RXMHtxmXlRof3O8monXEjstyWP3GClZmMuU=";
+    rev = "c6b41eb8c8cece8266b2173a83216e1ce77eb2be";
+    sha256 = "sha256-vpNZNED+C9VMzWyyyntQuBgTvbpZpJ/EwOztdOEP7vI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -138,6 +138,7 @@ file-attributes
 fiveam
 flexi-streams
 float-features
+flow
 form-fiddle
 fset
 generic-cl
@@ -157,6 +158,7 @@ iterate
 jonathan
 jsown
 lack
+legit
 let-plus
 lev
 lfarm-client
@@ -183,6 +185,7 @@ moptilities
 more-conditions
 mt19937
 named-readtables
+nbd
 net-telent-date
 nibbles
 optima

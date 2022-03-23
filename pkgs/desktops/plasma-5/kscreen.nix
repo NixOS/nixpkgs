@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kscreen";
+  pname = "kscreen";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kconfig kcmutils kconfigwidgets kdbusaddons kglobalaccel ki18n

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto }:
+{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto, diffutils }:
 
 stdenv.mkDerivation rec {
   pname = "colordiff";
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace 'TMPDIR=colordiff-''${VERSION}' ""
+
+    substituteInPlace colordiff.pl \
+      --replace '= "diff";' '= "${diffutils}/bin/diff";'
   '';
 
   installFlags = [

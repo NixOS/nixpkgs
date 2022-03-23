@@ -1,21 +1,27 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, python3, AppKit, libxcb }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jless";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "PaulJuliusMartinez";
     repo = "jless";
     rev = "v${version}";
-    sha256 = "sha256-IK+EllkctdhIYuzj7eLjadxKoutICPeSXAjLMFiRjmo=";
+    sha256 = "sha256-NB/s29M46mVhTsJWFYnBgJjSjUVbfdmuz69VdpVuR7c=";
   };
 
-  cargoSha256 = "sha256-CAyKWwtMq5UOODVRrpVHrhlep2wqG434dMGeYV2FSZY=";
+  cargoSha256 = "sha256-cPj9cTRhWK/YU8Cae63p4Vm5ohB1IfGL5fu7yyFGSXA=";
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ python3 ];
+
+  buildInputs = [ ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ]
+    ++ lib.optionals stdenv.isLinux [ libxcb ];
 
   meta = with lib; {
     description = "A command-line pager for JSON data";
-    homepage = "https://github.com/PaulJuliusMartinez/jless";
+    homepage = "https://jless.io";
     license = licenses.mit;
     maintainers = with maintainers; [ jfchevrette zowoq ];
   };

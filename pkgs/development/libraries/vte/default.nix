@@ -21,6 +21,8 @@
 , zlib
 , icu
 , systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
@@ -71,6 +74,10 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     pango
+  ];
+
+  mesonFlags = lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
   ];
 
   postPatch = ''
@@ -84,6 +91,9 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+    };
+    tests = {
+      inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
     };
   };
 

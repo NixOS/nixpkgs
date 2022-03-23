@@ -163,6 +163,7 @@ self: super: builtins.intersectAttrs super {
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
+  persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
@@ -699,11 +700,6 @@ self: super: builtins.intersectAttrs super {
   retrie_1_2_0_0 = overrideCabal (drv: {
     testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie_1_2_0_0;
-
-  nix-output-monitor = overrideCabal {
-    # Can't ran the golden-tests with nix, because they call nix
-    testTarget = "unit-tests";
-  } super.nix-output-monitor;
 
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically

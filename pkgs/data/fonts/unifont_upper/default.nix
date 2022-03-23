@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "14.0.01";
+  version = "14.0.02";
 in fetchzip rec {
   name = "unifont_upper-${version}";
 
@@ -9,7 +9,7 @@ in fetchzip rec {
 
   postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/unifont_upper.ttf";
 
-  sha256 = "0sb3m2qg0ri7zmxhjvrq8n0jmxxjx8rrx9rpibh5f5fbfkibq4gm";
+  sha256 = "0p1c2kkg20jqddy828yj6sxfwgv8k5gxwmg0cybalrjb0s09kcs8";
 
   meta = with lib; {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";

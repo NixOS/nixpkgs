@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "9.4.1";
+  version = "9.5.1";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "JoHfXhN5mXJoPwnUf7cKK5FduxqP9bSaGUU8yNfg29Y=";
+    sha256 = "fG93H3ADNOu9/Dz25/7b1iNVns/WselaxDG+WmLCQkI=";
   };
 
   # don't remove runtime deps

@@ -40,7 +40,7 @@ buildPythonApplication rec {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZFKUG8dE1hpWPGitdQlYeBSzWn3LPR7VGWsuq1Le5OQ=";
+    sha256 = "sha256-7S676bpSrlAqpbgDj9nAo0WjeitbbHoYc693MJm35Js=";
     deepClone = true;
   };
 

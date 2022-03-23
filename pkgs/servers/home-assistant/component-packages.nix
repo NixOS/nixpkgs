@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.2.9";
+  version = "2022.3.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -44,7 +44,6 @@
     "apache_kafka" = ps: with ps; [ aiokafka ];
     "apcupsd" = ps: with ps; [ apcaccess ];
     "api" = ps: with ps; [ aiohttp-cors ];
-    "apns" = ps: with ps; [ ]; # missing inputs: apns2
     "apple_tv" = ps: with ps; [ aiohttp-cors ifaddr pyatv zeroconf ];
     "apprise" = ps: with ps; [ apprise ];
     "aprs" = ps: with ps; [ aprslib geopy ];
@@ -166,7 +165,7 @@
     "deconz" = ps: with ps; [ pydeconz ];
     "decora" = ps: with ps; [ bluepy ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
-    "default_config" = ps: with ps; [ pynacl pyturbojpeg aiodiscover aiohttp-cors async-upnp-client emoji hass-nabucasa home-assistant-frontend ifaddr pillow pyserial pyudev scapy sqlalchemy zeroconf ];
+    "default_config" = ps: with ps; [ pynacl pyturbojpeg aiodiscover aiohttp-cors async-upnp-client hass-nabucasa home-assistant-frontend ifaddr pillow pyserial pyudev scapy sqlalchemy zeroconf ];
     "delijn" = ps: with ps; [ pydelijn ];
     "deluge" = ps: with ps; [ deluge-client ];
     "demo" = ps: with ps; [ aiohttp-cors sqlalchemy ];
@@ -188,12 +187,13 @@
     "digitalloggers" = ps: with ps; [ ]; # missing inputs: dlipower
     "directv" = ps: with ps; [ directv ];
     "discogs" = ps: with ps; [ discogs-client ];
-    "discord" = ps: with ps; [ discordpy ];
+    "discord" = ps: with ps; [ nextcord ];
     "discovery" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
     "dlib_face_detect" = ps: with ps; [ face_recognition ];
     "dlib_face_identify" = ps: with ps; [ face_recognition ];
     "dlink" = ps: with ps; [ ]; # missing inputs: pyW215
     "dlna_dmr" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr zeroconf ];
+    "dlna_dms" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr zeroconf ];
     "dnsip" = ps: with ps; [ aiodns ];
     "dominos" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pizzapi
     "doods" = ps: with ps; [ pillow pydoods ];
@@ -224,7 +224,7 @@
     "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ elgato ];
     "eliqonline" = ps: with ps; [ eliqonline ];
-    "elkm1" = ps: with ps; [ elkm1-lib ];
+    "elkm1" = ps: with ps; [ aiohttp-cors elkm1-lib ifaddr ];
     "elmax" = ps: with ps; [ elmax-api ];
     "elv" = ps: with ps; [ pypca ];
     "emby" = ps: with ps; [ pyemby ];
@@ -273,6 +273,7 @@
     "fireservicerota" = ps: with ps; [ pyfireservicerota ];
     "firmata" = ps: with ps; [ pymata-express ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
+    "fivem" = ps: with ps; [ ]; # missing inputs: fivem-api
     "fixer" = ps: with ps; [ fixerio ];
     "fjaraskupan" = ps: with ps; [ fjaraskupan ];
     "fleetgo" = ps: with ps; [ ritassist ];
@@ -324,7 +325,6 @@
     "gitlab_ci" = ps: with ps; [ python-gitlab ];
     "gitter" = ps: with ps; [ ]; # missing inputs: gitterpy
     "glances" = ps: with ps; [ glances-api ];
-    "gntp" = ps: with ps; [ gntp ];
     "goalfeed" = ps: with ps; [ ]; # missing inputs: pysher
     "goalzero" = ps: with ps; [ goalzero ];
     "gogogate2" = ps: with ps; [ ismartgate ];
@@ -446,7 +446,7 @@
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
     "kmtronic" = ps: with ps; [ pykmtronic ];
     "knx" = ps: with ps; [ xknx ];
-    "kodi" = ps: with ps; [ pykodi ];
+    "kodi" = ps: with ps; [ aiohttp-cors pykodi ];
     "konnected" = ps: with ps; [ aiohttp-cors konnected ];
     "kostal_plenticore" = ps: with ps; [ ]; # missing inputs: kostal_plenticore
     "kraken" = ps: with ps; [ krakenex pykrakenapi ];
@@ -532,11 +532,12 @@
     "minio" = ps: with ps; [ minio ];
     "mitemp_bt" = ps: with ps; [ ]; # missing inputs: mitemp_bt
     "mjpeg" = ps: with ps; [ ];
-    "mobile_app" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors emoji hass-nabucasa pillow ];
+    "mobile_app" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa pillow ];
     "mochad" = ps: with ps; [ ]; # missing inputs: pymochad
     "modbus" = ps: with ps; [ pymodbus ];
     "modem_callerid" = ps: with ps; [ aiohttp-cors phone-modem pyserial pyudev ];
     "modern_forms" = ps: with ps; [ aiomodernforms ];
+    "moehlenhoff_alpha2" = ps: with ps; [ ]; # missing inputs: moehlenhoff-alpha2
     "mold_indicator" = ps: with ps; [ ];
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
     "moon" = ps: with ps; [ ];
@@ -680,6 +681,7 @@
     "proxy" = ps: with ps; [ pillow ];
     "ps4" = ps: with ps; [ ]; # missing inputs: pyps4-2ndscreen
     "pulseaudio_loopback" = ps: with ps; [ pulsectl ];
+    "pure_energie" = ps: with ps; [ gridnet ];
     "push" = ps: with ps; [ aiohttp-cors ];
     "pushbullet" = ps: with ps; [ pushbullet ];
     "pushover" = ps: with ps; [ pushover-complete ];
@@ -697,6 +699,7 @@
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
     "rachio" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa rachiopy ];
     "radarr" = ps: with ps; [ ];
+    "radio_browser" = ps: with ps; [ radios ];
     "radiotherm" = ps: with ps; [ radiotherm ];
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
     "raincloud" = ps: with ps; [ ]; # missing inputs: raincloudy
@@ -791,7 +794,7 @@
     "skybeacon" = ps: with ps; [ pygatt ];
     "skybell" = ps: with ps; [ skybellpy ];
     "slack" = ps: with ps; [ slackclient ];
-    "sleepiq" = ps: with ps; [ sleepyq ];
+    "sleepiq" = ps: with ps; [ asyncsleepiq ];
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ pysma ];
     "smappee" = ps: with ps; [ aiohttp-cors pysmappee ];
@@ -814,7 +817,7 @@
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors pymfy ];
     "somfy_mylink" = ps: with ps; [ somfy-mylink-synergy ];
-    "sonarr" = ps: with ps; [ sonarr ];
+    "sonarr" = ps: with ps; [ aiopyarr ];
     "songpal" = ps: with ps; [ python-songpal ];
     "sonos" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr plexapi plexauth plexwebsocket soco spotipy zeroconf ];
     "sony_projector" = ps: with ps; [ pysdcp ];
@@ -924,7 +927,7 @@
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
     "twinkly" = ps: with ps; [ ttls ];
-    "twitch" = ps: with ps; [ python-twitch-client ];
+    "twitch" = ps: with ps; [ twitchapi ];
     "twitter" = ps: with ps; [ twitterapi ];
     "ubus" = ps: with ps; [ openwrt-ubus-rpc ];
     "ue_smart_radio" = ps: with ps; [ ];
@@ -990,6 +993,7 @@
     "wilight" = ps: with ps; [ pywilight ];
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
+    "wiz" = ps: with ps; [ aiohttp-cors ifaddr pywizlight ];
     "wled" = ps: with ps; [ wled ];
     "wolflink" = ps: with ps; [ ]; # missing inputs: wolf_smartset
     "workday" = ps: with ps; [ holidays ];
@@ -998,7 +1002,6 @@
     "worxlandroid" = ps: with ps; [ ];
     "wsdot" = ps: with ps; [ ];
     "x10" = ps: with ps; [ ];
-    "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "xbox" = ps: with ps; [ aiohttp-cors xbox-webapi ];
     "xbox_live" = ps: with ps; [ xboxapi ];
     "xeoma" = ps: with ps; [ pyxeoma ];
@@ -1031,6 +1034,7 @@
     "zoneminder" = ps: with ps; [ zm-py ];
     "zwave" = ps: with ps; [ homeassistant-pyozw pydispatcher ];
     "zwave_js" = ps: with ps; [ aiohttp-cors pyserial pyudev zwave-js-server-python ];
+    "zwave_me" = ps: with ps; [ aiohttp-cors ifaddr url-normalize zeroconf ]; # missing inputs: zwave_me_ws
   };
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
@@ -1143,6 +1147,7 @@
     "directv"
     "discovery"
     "dlna_dmr"
+    "dlna_dms"
     "dnsip"
     "doorbird"
     "dsmr"
@@ -1343,6 +1348,7 @@
     "min_max"
     "minecraft_server"
     "minio"
+    "mjpeg"
     "mobile_app"
     "modbus"
     "modem_callerid"
@@ -1423,6 +1429,7 @@
     "prometheus"
     "prosegur"
     "proximity"
+    "pure_energie"
     "push"
     "pushbullet"
     "pvoutput"
@@ -1431,6 +1438,7 @@
     "qld_bushfire"
     "rachio"
     "radarr"
+    "radio_browser"
     "rainforest_eagle"
     "rainmachine"
     "random"
@@ -1459,6 +1467,7 @@
     "safe_mode"
     "samsungtv"
     "scene"
+    "scrape"
     "screenlogic"
     "script"
     "search"
@@ -1605,6 +1614,7 @@
     "whois"
     "wiffi"
     "wilight"
+    "wiz"
     "wled"
     "workday"
     "worldclock"

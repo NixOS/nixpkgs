@@ -102,9 +102,6 @@ in stdenvNoCC.mkDerivation (args // {
   # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
   dontWrapGApps = args.dontWrapGApps or true;
 
-  DOTNET_NOLOGO = args.DOTNET_NOLOGO or true; # This disables the welcome message.
-  DOTNET_CLI_TELEMETRY_OPTOUT = args.DOTNET_CLI_TELEMETRY_OPTOUT or true;
-
   passthru = {
     fetch-deps = writeScript "fetch-${pname}-deps" ''
       set -euo pipefail

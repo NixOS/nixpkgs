@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = [ llvm clang-unwrapped ];
   strictDeps = true;
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ];
 
   meta = with lib; {
     homepage = "http://libclc.llvm.org/";

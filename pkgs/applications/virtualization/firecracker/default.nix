@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   sourceRoot = ".";
   src = dlbin {
     x86_64-linux = "sha256-yeWVsrvH3yYlS2uH/TkSleHjXvIDnHWcZSvLgV+CGF0=";
-    aarch64-linux = "sha256-75UC+HeVUfUk1HRvTJsOHbHHkgr6me1OtxDF7lahf68=";
+    aarch64-linux = "sha256-9ggRmijwXE9adVFv5XommgvdpeeWnWUFES+Ep2GrBVo=";
   };
 
   dontConfigure = true;

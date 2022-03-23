@@ -5,6 +5,8 @@
 buildDunePackage (args // {
   inherit version;
 
+  useDune2 = false;
+
   minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {

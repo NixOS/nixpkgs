@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cdk-go";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
     rev = "v${version}";
-    sha256 = "1zz9jaz5nlvs52nqlaisivrnz7lz8g48qii0n2s1783a5jpkk9ml";
+    sha256 = "sha256-XzUSiE03ZbP75ewwBJFwZE0aKNlOFprezeD26japLD8=";
   };
 
-  vendorSha256 = "0sn709mbhfymwwfdqc5xpdz2lgimqx3xycfmq24vbfmlh8wqcs7l";
+  vendorSha256 = "sha256-mP49DmOHvS8ewQG7I1J5OEmAOkHEFJfAsEPeiaRBpWc=";
 
   # At least one test is outdated
   doCheck = false;
