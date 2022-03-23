@@ -5,6 +5,7 @@
 , appstream-glib
 , desktop-file-utils
 , fetchurl
+, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -48,6 +49,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "Uu/SltaLL/GCNBwEgdz9cGVMQIvbZ5/Ot225cDwiQo8=";
   };
+
+  patches = [
+    # Fix appstream validation
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/d7151679e0c925d27216256dc32fe67fb298d059.patch";
+      sha256 = "vdNJawkqSBaFGRZvxzvjOryQpBL4jcN7tr1t3ihD7LA=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib
