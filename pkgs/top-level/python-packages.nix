@@ -10987,6 +10987,8 @@ in {
 
   zipstream-new = callPackage ../development/python-modules/zipstream-new { };
 
+  zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
+
   zm-py = callPackage ../development/python-modules/zm-py { };
 
   zodb = callPackage ../development/python-modules/zodb { };

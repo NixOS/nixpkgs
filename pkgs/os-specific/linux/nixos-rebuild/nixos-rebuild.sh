@@ -32,6 +32,7 @@ buildHost=localhost
 targetHost=
 remoteSudo=
 verboseScript=
+noFlake=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
 
@@ -65,14 +66,14 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
-      -s|--use-substitutes)
+      --use-substitutes|-s)
         copyClosureFlags+=("$i")
         ;;
-      --max-jobs|-j|--cores|-I|--builders)
+      -I|--max-jobs|-j|--cores|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--fallback|--repair|--no-build-output|-Q|-j*|-L|--print-build-logs|--refresh|--no-net|--offline|--impure)
+      -j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
         extraBuildFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
@@ -114,6 +115,9 @@ while [ "$#" -gt 0 ]; do
         flake="$1"
         flakeFlags=(--extra-experimental-features 'nix-command flakes')
         shift 1
+        ;;
+      --no-flake)
+        noFlake=1
         ;;
       --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
         lockFlags+=("$i")
@@ -339,7 +343,7 @@ fi
 
 # Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
 # actual flake.
-if [[ -z $flake && -e /etc/nixos/flake.nix ]]; then
+if [[ -z $flake && -e /etc/nixos/flake.nix && -z $noFlake ]]; then
     flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
 fi
 
