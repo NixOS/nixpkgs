@@ -210,7 +210,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   quazip = callPackage ../development/libraries/quazip { };
 
-  qwt = callPackage ../development/libraries/qwt/6.nix { };
+  qwt = callPackage ../development/libraries/qwt/default.nix { };
 
   qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
 
