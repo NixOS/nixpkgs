@@ -21,8 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A full-featured console (xterm et al.) user interface library";
-    homepage = "https://excess.org/urwid";
-    repositories.git = "git://github.com/wardi/urwid.git";
+    homepage = "https://urwid.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ];
   };
