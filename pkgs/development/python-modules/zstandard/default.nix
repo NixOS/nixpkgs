@@ -20,6 +20,8 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis ];
 
+  pythonImportsCheck = [ "zstandard" ];
+
   meta = with lib; {
     description = "zstandard bindings for Python";
     homepage = "https://github.com/indygreg/python-zstandard";
