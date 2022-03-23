@@ -22,7 +22,7 @@ let
   meta = with lib; {
     name = pname;
     version = version;
-    description = "SaladBind is third party integration for Salad";
+    description = "SaladBind is a third party integration for Salad";
     homepage = "https://github.com/litdevs/saladbind";
   };
 
