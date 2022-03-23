@@ -25846,6 +25846,8 @@ with pkgs;
     tuigreet = callPackage ../os-specific/linux/tuigreet { };
   };
 
+  goldberg-emu = callPackage ../applications/emulators/goldberg-emu { };
+
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
   };
