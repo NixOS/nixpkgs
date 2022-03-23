@@ -9,7 +9,6 @@
 , librsvg
 , libxml2
 , desktop-file-utils
-, pysolfc
 , guile
 , libcanberra-gtk3
 , ninja
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     librsvg
     guile
     libcanberra-gtk3
-    pysolfc
   ];
 
   prePatch = ''
