@@ -6164,6 +6164,8 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
+  pint-pandas = callPackage ../development/python-modules/pint-pandas { };
+
   pip = callPackage ../development/python-modules/pip { };
 
   pipdate = callPackage ../development/python-modules/pipdate { };
