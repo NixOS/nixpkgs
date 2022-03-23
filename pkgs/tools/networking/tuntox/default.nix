@@ -9,6 +9,7 @@
 , libsodium
 , libtoxcore
 , libvpx
+, msgpack
 , pkg-config
 , python3
 , python3Packages
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cscope git pkg-config ];
 
-  buildInputs = [ libopus libtoxcore libsodium libevent libvpx python3 ];
+  buildInputs = [ libopus libtoxcore libsodium libevent libvpx msgpack python3 ];
 
   pythonBuildInputs = with python3Packages; [
     jinja2
