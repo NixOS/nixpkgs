@@ -13,7 +13,6 @@
 , vala
 , wrapGAppsHook
 , editorconfig-core-c
-, elementary-icon-theme
 , granite
 , gtk3
 , gtksourceview4
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     editorconfig-core-c
-    elementary-icon-theme
     granite
     gtk3
     gtksourceview4

@@ -62,6 +62,13 @@ checkConfigError() {
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
 
+checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
+checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
+checkConfigOutput '^42$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
+checkConfigOutput '^420$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
+checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix ./define-shorthandOnlyDefinesConfig-true.nix
+checkConfigError 'The option .bare-submodule.deep. in .*/declare-bare-submodule-deep-option.nix. is already declared in .*/declare-bare-submodule-deep-option-duplicate.nix' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix  ./declare-bare-submodule-deep-option-duplicate.nix
+
 # Check integer types.
 # unsigned
 checkConfigOutput '^42$' config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
@@ -303,6 +310,12 @@ checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
 checkConfigOutput "10" config.processedToplevel ./raw.nix
 checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
 checkConfigOutput "bar" config.priorities ./raw.nix
+
+## Option collision
+checkConfigError \
+  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integers. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
+  config.set \
+  ./declare-set.nix ./declare-enable-nested.nix
 
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix

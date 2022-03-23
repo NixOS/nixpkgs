@@ -28,6 +28,11 @@ let
       sha256 = "sha256-hvmGReRWWpJWmR3N4it3uOfSLKb7tgwfTNvYRpo4zB8=";
     };
 
+    patches = [
+      # Fix the type of libc buffer for aarch64-linux
+      ./fix-rhg-type-aarch64.patch
+    ];
+
     format = "other";
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git

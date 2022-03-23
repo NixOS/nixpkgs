@@ -1,14 +1,15 @@
-{ stdenv, lib, fetchgit, python2, util-linux }:
+{ stdenv, lib, fetchFromGitHub, python2, util-linux }:
 
 stdenv.mkDerivation {
   pname = "bud";
-
   version = "0.34.1";
 
-  src = fetchgit {
-    url = "https://github.com/indutny/bud.git";
+  src = fetchFromGitHub {
+    owner = "indutny";
+    repo = "bud";
     rev = "b112852c9667632f692d2ce3dcd9a8312b61155a";
-    sha256 = "08yr6l4lc2m6rng06253fcaznf6sq0v053wfr8bbym42c32z0xdh";
+    sha256 = "sha256-sHXwxWCCVL8Wyo6PAjbA2jj7FXOjCAOezaYKRgk12SM=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [

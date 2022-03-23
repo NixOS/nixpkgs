@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    mainProgram = "moonlight";
   };
 }

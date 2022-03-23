@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-15993";
+  version = "5.0-16101";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "5e595616379a694789fe749e40a27ef069f0090e";
-    sha256 = "1kid8qjn8r7dxh2yc1y6yal6qkfxij0ymi3zryxsnym3rjh1jds9";
+    rev = "8ecfa537a242de74d2e372e30d9d79b14584b2fb";
+    sha256 = "3jLGVzTDzEtHWvIb9DFTbJiA9dE9Pm14vYER998Zln0=";
     fetchSubmodules = true;
   };
 

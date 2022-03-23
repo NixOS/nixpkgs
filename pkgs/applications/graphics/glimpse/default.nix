@@ -195,5 +195,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ashkitten erictapen ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "glimpse";
   };
 }

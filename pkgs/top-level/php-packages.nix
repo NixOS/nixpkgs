@@ -144,6 +144,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phing = callPackage ../development/php-packages/phing { };
 
+    phive = callPackage ../development/php-packages/phive { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };

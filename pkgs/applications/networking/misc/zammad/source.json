@@ -1,7 +1,7 @@
 {
-    "owner": "zammad",
-    "repo": "zammad",
-    "rev": "ad12ad4e01f5e6d1d58da019107b66e562ae463c",
-    "sha256": "i50A0/dBsdvv7L/fZiA1LvJEcO3OghjjgwS/7oFjk2o=",
-    "fetchSubmodules": true
+  "owner": "zammad",
+  "repo": "zammad",
+  "rev": "eefae45c2ad6e6a96b8df631d2f50f290ecbd27d",
+  "sha256": "EjowvM//+UsAfEH9/0jgLkiD7EWH34M1NQ9U2DotBqc=",
+  "fetchSubmodules": true
 }

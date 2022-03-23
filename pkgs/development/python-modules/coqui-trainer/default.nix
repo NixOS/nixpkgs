@@ -4,7 +4,7 @@
 
 , coqpit
 , fsspec
-, pytorch-bin
+, pytorch
 
 , pytestCheckHook
 , soundfile
@@ -14,7 +14,7 @@
 
 let
   pname = "coqui-trainer";
-  version = "0.0.4";
+  version = "0.0.5";
 in
 buildPythonPackage {
   inherit pname version;
@@ -23,21 +23,19 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "Trainer";
-    # https://github.com/coqui-ai/Trainer/issues/4
-    rev = "776eba829231543d3207927fc69b321d121e527c";
-    hash = "sha256-ICveftJjBNsCgegTmd/ewd/Y6XGMg7YOvchx640RFPI=";
+    rev = "v${version}";
+    hash = "sha256-NsgCh+N2qWmRkTOjXqisVCP5aInH2zcNz6lsnIfVLiY=";
   };
 
   propagatedBuildInputs = [
     coqpit
     fsspec
-    pytorch-bin
+    pytorch
     soundfile
     tensorboardx
   ];
 
-  # tests are failing; tests require the clearml library
-  # https://github.com/coqui-ai/Trainer/issues/5
+  # only one test and that requires training data from the internet
   doCheck = false;
 
   checkInputs = [

@@ -49,6 +49,7 @@ let
   # Zachtronics and a few other studios expect STEAM_LD_LIBRARY_PATH to be present
   exportLDPath = ''
     export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
   # bootstrap.tar.xz has 444 permissions, which means that simple deletes fail
@@ -130,7 +131,6 @@ in buildFHSUserEnv rec {
     rtmpdump
 
     # dependencies for mesa drivers, needed inside pressure-vessel
-    mesa.drivers
     mesa.llvmPackages.llvm.lib
     vulkan-loader
     expat
@@ -252,7 +252,7 @@ in buildFHSUserEnv rec {
       fi
     fi
 
-    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    ${exportLDPath}
     ${fixBootstrap}
     exec steam "$@"
   '';
@@ -284,7 +284,8 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+
+      ${exportLDPath}
       ${fixBootstrap}
       exec -- "$run" "$@"
     '';

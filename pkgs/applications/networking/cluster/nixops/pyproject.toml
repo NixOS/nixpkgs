@@ -14,7 +14,10 @@ nixops-gcp = {git = "https://github.com/nix-community/nixops-gce.git"}
 nixops-hercules-ci = {git = "https://github.com/hercules-ci/nixops-hercules-ci.git"}
 nixops-hetzner = {git = "https://github.com/NixOS/nixops-hetzner"}
 nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
-nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
+# FIXME: Once #30 lands this can be replaced
+# https://github.com/nix-community/nixops-libvirtd/pull/30
+# nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
+nixops-virtd = { git = "https://github.com/lovesegfault/nixops-libvirtd.git", branch = "update-libvirt" }
 
 [tool.poetry.dev-dependencies]
 sphinx = "^3.1.2"

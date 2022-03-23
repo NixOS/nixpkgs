@@ -2,6 +2,12 @@ name: Backport
 on:
   pull_request_target:
     types: [closed, labeled]
+
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows write access to
+# the GitHub repository. This means that it should not evaluate user input in a
+# way that allows code injection.
+
 jobs:
   backport:
     name: Backport Pull Request

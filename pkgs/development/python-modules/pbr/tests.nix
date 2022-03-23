@@ -1,8 +1,8 @@
 { buildPythonPackage
+, build
 , git
 , gnupg
 , pbr
-, mock
 , sphinx
 , stestr
 , testresources
@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     pbr
+    build
     git
     gnupg
-    mock
     sphinx
     stestr
     testresources

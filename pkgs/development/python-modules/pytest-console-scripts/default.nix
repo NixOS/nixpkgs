@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-console-scripts";
-  version = "1.3";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w8rb9nz7MKHrHMHp5py23kTDpkhCbxub9j6F2XNX/H8=";
+    hash = "sha256-XGw9qunPn77Q5lUHISiThgAZPcACpc8bGHJIZEugKFc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

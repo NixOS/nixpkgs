@@ -29,6 +29,7 @@ let
         requests = changeVersionHash super.requests.overridePythonAttrs "2.26.0" "sha256-uKpY+M95P/2HgtPYyxnmbvNverpDU+7IWedGeLAbB6c=";
         six = changeVersion super.six.overridePythonAttrs "1.14.0" "02lw67hprv57hyg3cfy02y3ixjk3nzwc0dx3c4ynlvkfwkfdnsr3";
         wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "1wf5ycjx8s066rdvr0fgz4xds9a8zhs91c4jzxvvymm1c8l8cwzf";
+        semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";
         pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
           version = "5.4.1";
           checkPhase = ''

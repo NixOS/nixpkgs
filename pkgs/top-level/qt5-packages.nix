@@ -226,4 +226,5 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
 
+  yuview = callPackage ../applications/video/yuview { };
 })))

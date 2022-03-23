@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, rlwrap, perl, makeDesktopItem }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
       ISABELLE_JDK_HOME=${java}
     EOF
 
-    sed -i -e 's/naproche_server : bool = true/naproche_server : bool = false/' contrib/naproche-*/etc/options
+    rm contrib/naproche-*/x86*/Naproche-SAD
+    ln -s ${naproche}/bin/Naproche-SAD contrib/naproche-*/x86*/
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 

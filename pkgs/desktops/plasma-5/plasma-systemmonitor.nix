@@ -11,6 +11,9 @@
 , kitemviews
 , knewstuff
 , libksysguard
+, kquickcharts
+, ksystemstats
+, qqc2-desktop-style
 , qtbase
 }:
 
@@ -27,5 +30,8 @@ mkDerivation {
     knewstuff
     kiconthemes
     libksysguard
+    kquickcharts
+    ksystemstats
+    qqc2-desktop-style
   ];
 }

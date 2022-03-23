@@ -16,10 +16,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phing/phing.phar
     makeWrapper ${php}/bin/php $out/bin/phing \
       --add-flags "$out/libexec/phing/phing.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {

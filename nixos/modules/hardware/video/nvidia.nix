@@ -244,7 +244,7 @@ in
       modules = optional (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
         BusID "${igpuBusId}"
-        ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
+        ${optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}
       '';
     } ++ singleton {
       name = "nvidia";
@@ -269,9 +269,15 @@ in
       Option "AllowNVIDIAGPUScreens"
     '';
 
-    services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
+    services.xserver.displayManager.setupCommands = let
+      sinkGpuProviderName = if igpuDriver == "amdgpu" then
+        # find the name of the provider if amdgpu
+        "`${pkgs.xorg.xrandr}/bin/xrandr --listproviders | ${pkgs.gnugrep}/bin/grep -i AMD | ${pkgs.gnused}/bin/sed -n 's/^.*name://p'`"
+      else
+        igpuDriver;
+    in optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
-      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource ${igpuDriver} NVIDIA-0
+      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource "${sinkGpuProviderName}" NVIDIA-0
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
     '';
 
@@ -283,10 +289,14 @@ in
     environment.etc."egl/egl_external_platform.d".source =
       "/run/opengl-driver/share/egl/egl_external_platform.d/";
 
-    hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
-    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
-    hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
-    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
+    hardware.opengl.extraPackages = [
+      nvidia_x11.out
+      pkgs.nvidia-vaapi-driver
+    ];
+    hardware.opengl.extraPackages32 = [
+      nvidia_x11.lib32
+      pkgs.pkgsi686Linux.nvidia-vaapi-driver
+    ];
 
     environment.systemPackages = [ nvidia_x11.bin ]
       ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]

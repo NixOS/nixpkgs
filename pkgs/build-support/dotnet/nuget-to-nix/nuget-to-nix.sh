@@ -9,7 +9,7 @@ fi
 
 pkgs=$1
 tmpfile=$(mktemp /tmp/nuget-to-nix.XXXXXX)
-trap 'rm -f "$tmpfile" EXIT
+trap "rm -f ${tmpfile}" EXIT
 
 echo "{ fetchNuGet }: ["
 

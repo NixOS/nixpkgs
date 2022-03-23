@@ -1580,6 +1580,8 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
 
+  ocamlPackages_4_14 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix { });
+
   ocamlPackages_latest = ocamlPackages_4_13;
 
   ocamlPackages = ocamlPackages_4_13;

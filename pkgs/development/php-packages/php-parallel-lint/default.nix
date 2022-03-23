@@ -20,15 +20,19 @@ mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
     composer dump-autoload
     box build
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
     makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
       --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {

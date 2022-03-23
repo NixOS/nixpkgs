@@ -30,5 +30,6 @@ in stdenv.mkDerivation rec {
     description = "Experimental Neural Net speech coding for FreeDV";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mvs ];
+    platforms = platforms.all;
   };
 }

@@ -1,11 +1,11 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python39Packages
+, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
-, zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
+, zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudaSupport ? config.cudaSupport or false, cudatoolkit_11
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -17,30 +17,31 @@
 
 with lib;
 let
-  python = python39Packages.python;
+  python = python310Packages.python;
   optix = fetchzip {
-    url = "https://developer.download.nvidia.com/redist/optix/v7.0/OptiX-7.0.0-include.zip";
-    sha256 = "1b3ccd3197anya2bj3psxdrvrpfgiwva5zfv2xmyrl73nb2dvfr7";
+    # url taken from the archlinux blender PKGBUILD
+    url = "https://developer.download.nvidia.com/redist/optix/v7.3/OptiX-7.3.0-Include.zip";
+    sha256 = "0max1j4822mchj0xpz9lqzh91zkmvsn4py0r174cvqfz8z8ykjk8";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.93.5";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "1fsw8w80h8k5w4zmy659bjlzqyn5i198hi1kbpzfrdn8psxg2bfj";
+    sha256 = "1d0476bzcz86lwdnyjn7hyzkmhfiqh47ls5h09jlbm7v7k9x69hw";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python39Packages.wrapPython llvmPackages.llvm.dev ]
+  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
     ++ optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
-      opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
+      opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib zstd fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -62,10 +63,10 @@ stdenv.mkDerivation rec {
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
-    ++ optional cudaSupport cudatoolkit
+    ++ optional cudaSupport cudatoolkit_11
     ++ optional colladaSupport opencollada
     ++ optional spaceNavSupport libspnav;
-  pythonPath = with python39Packages; [ numpy requests ];
+  pythonPath = with python310Packages; [ numpy requests ];
 
   postPatch = ''
     # allow usage of dynamically linked embree
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/opencollada' \
                   '${opencollada}' \
         --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                  '${python39Packages.numpy}/${python.sitePackages}/numpy'
+                  '${python310Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '');
@@ -106,8 +107,8 @@ stdenv.mkDerivation rec {
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
-      "-DPYTHON_NUMPY_PATH=${python39Packages.numpy}/${python.sitePackages}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python39Packages.numpy}/${python.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${python310Packages.numpy}/${python.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python310Packages.numpy}/${python.sitePackages}/numpy/core/include"
       "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
       "-DWITH_OPENVDB=ON"
       "-DWITH_TBB=ON"

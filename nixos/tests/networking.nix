@@ -498,6 +498,7 @@ let
         networking = {
           useNetworkd = networkd;
           useDHCP = false;
+          firewall.extraCommands = "ip6tables -A nixos-fw -p gre -j nixos-fw-accept";
         };
       };
     in {
@@ -506,7 +507,7 @@ let
         mkMerge [
           (node args)
           {
-            virtualisation.vlans = [ 1 2 ];
+            virtualisation.vlans = [ 1 2 4 ];
             networking = {
               greTunnels = {
                 greTunnel = {
@@ -515,11 +516,23 @@ let
                   dev = "eth2";
                   type = "tap";
                 };
+                gre6Tunnel = {
+                  local = "fd00:1234:5678:4::1";
+                  remote = "fd00:1234:5678:4::2";
+                  dev = "eth3";
+                  type = "tun6";
+                };
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth1" ];
               interfaces.eth1.ipv4.addresses = mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = mkOverride 0 [
                 { address = "192.168.1.1"; prefixLength = 24; }
+              ];
+              interfaces.eth3.ipv6.addresses = [
+                { address = "fd00:1234:5678:4::1"; prefixLength = 64; }
+              ];
+              interfaces.gre6Tunnel.ipv6.addresses = mkOverride 0 [
+                { address = "fc00::1"; prefixLength = 64; }
               ];
             };
           }
@@ -528,7 +541,7 @@ let
         mkMerge [
           (node args)
           {
-            virtualisation.vlans = [ 2 3 ];
+            virtualisation.vlans = [ 2 3 4 ];
             networking = {
               greTunnels = {
                 greTunnel = {
@@ -537,11 +550,23 @@ let
                   dev = "eth1";
                   type = "tap";
                 };
+                gre6Tunnel = {
+                  local = "fd00:1234:5678:4::2";
+                  remote = "fd00:1234:5678:4::1";
+                  dev = "eth3";
+                  type = "tun6";
+                };
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth2" ];
               interfaces.eth2.ipv4.addresses = mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = mkOverride 0 [
                 { address = "192.168.1.2"; prefixLength = 24; }
+              ];
+              interfaces.eth3.ipv6.addresses = [
+                { address = "fd00:1234:5678:4::2"; prefixLength = 64; }
+              ];
+              interfaces.gre6Tunnel.ipv6.addresses = mkOverride 0 [
+                { address = "fc00::2"; prefixLength = 64; }
               ];
             };
           }
@@ -562,6 +587,10 @@ let
               client1.wait_until_succeeds("ping -c 1 192.168.1.2")
 
               client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+
+              client1.wait_until_succeeds("ping -c 1 fc00::2")
+
+              client2.wait_until_succeeds("ping -c 1 fc00::1")
         '';
     };
     vlan = let

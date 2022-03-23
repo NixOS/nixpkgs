@@ -1,6 +1,6 @@
 { type
 , version
-, sha512
+, srcs
 }:
 
 assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
@@ -25,17 +25,7 @@ let
     "dotnet-runtime"
   else
     "dotnet-sdk";
-  platform = {
-    x86_64-linux = "linux-x64";
-    aarch64-linux = "linux-arm64";
-    x86_64-darwin = "osx-x64";
-    aarch64-darwin = "osx-arm64";
-  }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
-  urls = {
-    aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
-    runtime = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
-    sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}.tar.gz";
-  };
+
   descriptions = {
     aspnetcore = "ASP.NET Core Runtime ${version}";
     runtime = ".NET Runtime ${version}";
@@ -58,11 +48,8 @@ in stdenv.mkDerivation rec {
     lttng-ust_2_12
   ]);
 
-  src = fetchurl {
-    url = builtins.getAttr type urls;
-    sha512 = sha512."${stdenv.hostPlatform.system}" or (throw
-      "Missing hash for host system: ${stdenv.hostPlatform.system}");
-  };
+  src = fetchurl (srcs."${stdenv.hostPlatform.system}" or (throw
+    "Missing source (url and hash) for host system: ${stdenv.hostPlatform.system}"));
 
   sourceRoot = ".";
 
@@ -90,7 +77,10 @@ in stdenv.mkDerivation rec {
   '';
 
   setupHook = writeText "dotnet-setup-hook" ''
-    export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
+    if [ ! -w "$HOME" ]; then
+      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
+    fi
+
     export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
     export DOTNET_NOLOGO=1 # Disables the welcome message
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -99,7 +89,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://dotnet.github.io/";
     description = builtins.getAttr type descriptions;
-    platforms = builtins.attrNames sha512;
+    platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ kuznero ];
     license = licenses.mit;
   };

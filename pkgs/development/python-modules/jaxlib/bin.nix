@@ -120,9 +120,15 @@ buildPythonPackage rec {
     done
   '';
 
-  # pip dependencies and optionally cudatoolkit. Note that cudatoolkit is
-  # necessary since jaxlib looks for "ptxas" in $PATH.
-  propagatedBuildInputs = [ absl-py flatbuffers scipy ] ++ lib.optional cudaSupport cudatoolkit_11;
+  propagatedBuildInputs = [ absl-py flatbuffers scipy ];
+
+  # Note that cudatoolkit is snecessary since jaxlib looks for "ptxas" in $PATH.
+  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
+  # more info.
+  postInstall = lib.optional cudaSupport ''
+    mkdir -p $out/bin
+    ln -s ${cudatoolkit_11}/bin/ptxas $out/bin/ptxas
+  '';
 
   pythonImportsCheck = [ "jaxlib" ];
 

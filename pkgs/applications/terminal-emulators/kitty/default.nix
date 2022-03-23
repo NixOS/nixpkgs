@@ -22,6 +22,7 @@
 , zsh
 , fish
 , fetchpatch
+, nixosTests
 }:
 
 with python3Packages;
@@ -175,6 +176,8 @@ buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";

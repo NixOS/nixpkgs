@@ -10,6 +10,8 @@
 , ruby_2_7
 , postgresql
 , imlib2
+, jq
+, moreutils
 , nodejs
 , yarn
 , yarn2nix-moretea
@@ -19,7 +21,7 @@
 
 let
   pname = "zammad";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = applyPatches {
 
@@ -31,6 +33,7 @@ let
       sed -i -e "s|ruby '2.7.4'|ruby '${ruby_2_7.version}'|" Gemfile
       sed -i -e "s|ruby 2.7.4p191|ruby ${ruby_2_7.version}|" Gemfile.lock
       sed -i -e "s|2.7.4|${ruby_2_7.version}|" .ruby-version
+      ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
 
@@ -70,6 +73,7 @@ let
       };
       rszr = attrs: {
         buildInputs = [ imlib2 imlib2.dev ];
+        buildFlags = [ "--without-imlib2-config" ];
       };
       mini_racer = attrs: {
         buildFlags = [

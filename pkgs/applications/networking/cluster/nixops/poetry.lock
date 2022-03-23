@@ -8,14 +8,14 @@ python-versions = "*"
 
 [[package]]
 name = "apache-libcloud"
-version = "3.4.1"
+version = "3.5.0"
 description = "A standard Python library that abstracts away differences among multiple cloud provider APIs. For more information and documentation, please see https://libcloud.apache.org"
 category = "main"
 optional = false
-python-versions = ">=3.5, <4"
+python-versions = ">=3.6, <4"
 
 [package.dependencies]
-requests = ">=2.5.0"
+requests = ">=2.26.0"
 
 [[package]]
 name = "babel"
@@ -38,14 +38,14 @@ python-versions = "*"
 
 [[package]]
 name = "boto3"
-version = "1.21.11"
+version = "1.21.18"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.24.11,<1.25.0"
+botocore = ">=1.24.18,<1.25.0"
 jmespath = ">=0.7.1,<1.0.0"
 s3transfer = ">=0.5.0,<0.6.0"
 
@@ -54,7 +54,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.24.11"
+version = "1.24.18"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -194,7 +194,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 
 [[package]]
 name = "libvirt-python"
-version = "7.10.0"
+version = "8.1.0"
 description = "The libvirt virtualization API python binding"
 category = "main"
 optional = false
@@ -227,7 +227,7 @@ typing-extensions = "^3.7.4"
 type = "git"
 url = "https://github.com/NixOS/nixops.git"
 reference = "master"
-resolved_reference = "d939c9bcae184d10583bf48211739b5b6521fc64"
+resolved_reference = "7220cbdc8a1cf2db5b3ad75b525faf145a5560a3"
 
 [[package]]
 name = "nixops-aws"
@@ -358,14 +358,14 @@ python-versions = "^3.7"
 develop = false
 
 [package.dependencies]
-libvirt-python = "^7.0"
+libvirt-python = "^8.0"
 nixops = {git = "https://github.com/NixOS/nixops.git", branch = "master"}
 
 [package.source]
 type = "git"
-url = "https://github.com/nix-community/nixops-libvirtd.git"
-reference = "master"
-resolved_reference = "1245280d97e0adc4643d02d1cf62ddd582c73e49"
+url = "https://github.com/lovesegfault/nixops-libvirtd.git"
+reference = "update-libvirt"
+resolved_reference = "84d1688ee06afff136738b3eaf51f9cc3c08c350"
 
 [[package]]
 name = "nixopsvbox"
@@ -677,7 +677,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e75c6429aa8989659a345f903e2e67d87514b5864751e33890d90aa2d20ef3e2"
+content-hash = "63b68a38ca6f7b9189d2403c2c6d1ec7af29cc1ccdeab2fbc970b5dbd766c3c6"
 
 [metadata.files]
 alabaster = [
@@ -685,8 +685,8 @@ alabaster = [
     {file = "alabaster-0.7.12.tar.gz", hash = "sha256:a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"},
 ]
 apache-libcloud = [
-    {file = "apache-libcloud-3.4.1.tar.gz", hash = "sha256:88f18da0cf3fac0af723e743fb741d9d1be251881edab7a5a0d1629955b5011b"},
-    {file = "apache_libcloud-3.4.1-py2.py3-none-any.whl", hash = "sha256:af1a5b3cda7bc3220093726ff67dbb70928521e2ec19d0e33a31b1e22fde1850"},
+    {file = "apache-libcloud-3.5.0.tar.gz", hash = "sha256:073f10492976faa383a22b13b82c249827cfe90a083c71620e8316e815a6db3b"},
+    {file = "apache_libcloud-3.5.0-py2.py3-none-any.whl", hash = "sha256:3789f4f2464fe18e317cdd3a03eff363268e096bc47f1f5770ee82d6ffe28c40"},
 ]
 babel = [
     {file = "Babel-2.9.1-py2.py3-none-any.whl", hash = "sha256:ab49e12b91d937cd11f0b67cb259a57ab4ad2b59ac7a3b41d6c06c0ac5b0def9"},
@@ -697,12 +697,12 @@ boto = [
     {file = "boto-2.49.0.tar.gz", hash = "sha256:ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a"},
 ]
 boto3 = [
-    {file = "boto3-1.21.11-py3-none-any.whl", hash = "sha256:bf5f6a8997ed11a66280ace67cc25ec31c28525940da91d309c3976a9955d4cf"},
-    {file = "boto3-1.21.11.tar.gz", hash = "sha256:f2cecf5d176f398a39bfde0008df83c03f2142b2be5eabe32bf104961df68810"},
+    {file = "boto3-1.21.18-py3-none-any.whl", hash = "sha256:d857feb6af9932e1ee3a748060a2cd9fd6043dbbccf66976eda54586597efdc0"},
+    {file = "boto3-1.21.18.tar.gz", hash = "sha256:8d6f3c548f0ee03d742f404c96515e7579fc6968135aaa50dd855a046698ff79"},
 ]
 botocore = [
-    {file = "botocore-1.24.11-py3-none-any.whl", hash = "sha256:b29c2b5906d7f70782634bb8713c77e39f23aafc994bb2f7dccbeb2b36712adc"},
-    {file = "botocore-1.24.11.tar.gz", hash = "sha256:2af93de704f3122878a3233e7cf5de0b02f6c4c9fa993ca853b583f597bb1c38"},
+    {file = "botocore-1.24.18-py3-none-any.whl", hash = "sha256:7ea8ef1ff7c4882ab59b337662f90ddf5ea860e95e7e209dca593a34ea585b1b"},
+    {file = "botocore-1.24.18.tar.gz", hash = "sha256:d2da7ccbc5ddd61fe3cd45fcbd3de380d9e3a15bfa8fbfd2d9259a93dcc60c56"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
@@ -775,6 +775,8 @@ cryptography = [
     {file = "cryptography-3.4.8-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:34dae04a0dce5730d8eb7894eab617d8a70d0c97da76b905de9efb7128ad7085"},
     {file = "cryptography-3.4.8-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1eb7bb0df6f6f583dd8e054689def236255161ebbcf62b226454ab9ec663746b"},
     {file = "cryptography-3.4.8-cp36-abi3-manylinux_2_24_x86_64.whl", hash = "sha256:9965c46c674ba8cc572bc09a03f4c649292ee73e1b683adb1ce81e82e9a6a0fb"},
+    {file = "cryptography-3.4.8-cp36-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:3c4129fc3fdc0fa8e40861b5ac0c673315b3c902bbdc05fc176764815b43dd1d"},
+    {file = "cryptography-3.4.8-cp36-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:695104a9223a7239d155d7627ad912953b540929ef97ae0c34c7b8bf30857e89"},
     {file = "cryptography-3.4.8-cp36-abi3-win32.whl", hash = "sha256:21ca464b3a4b8d8e86ba0ee5045e103a1fcfac3b39319727bc0fc58c09c6aff7"},
     {file = "cryptography-3.4.8-cp36-abi3-win_amd64.whl", hash = "sha256:3520667fda779eb788ea00080124875be18f2d8f0848ec00733c0ec3bb8219fc"},
     {file = "cryptography-3.4.8-pp36-pypy36_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:d2a6e5ef66503da51d2110edf6c403dc6b494cc0082f85db12f54e9c5d4c3ec5"},
@@ -815,7 +817,7 @@ jsonpickle = [
     {file = "jsonpickle-2.1.0.tar.gz", hash = "sha256:84684cfc5338a534173c8dd69809e40f2865d0be1f8a2b7af8465e5b968dcfa9"},
 ]
 libvirt-python = [
-    {file = "libvirt-python-7.10.0.tar.gz", hash = "sha256:267774bbdf99d47515274542880499437dc94ae291771f5663c62020a62da975"},
+    {file = "libvirt-python-8.1.0.tar.gz", hash = "sha256:a21ecfab6d29ac1bdd1bfd4aa3ef58447f9f70919aefecd03774613f65914e43"},
 ]
 markupsafe = [
     {file = "MarkupSafe-2.1.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3028252424c72b2602a323f70fbf50aa80a5d3aa616ea6add4ba21ae9cc9da4c"},

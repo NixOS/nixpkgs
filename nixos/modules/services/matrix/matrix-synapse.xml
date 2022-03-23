@@ -119,7 +119,7 @@ in {
     <link linkend="opt-services.matrix-synapse.settings.listeners">listeners</link> = [
       {
         <link linkend="opt-services.matrix-synapse.settings.listeners._.port">port</link> = 8008;
-        <link linkend="opt-services.matrix-synapse.settings.listeners._.bind_addresses">bind_address</link> = [ "::1" ];
+        <link linkend="opt-services.matrix-synapse.settings.listeners._.bind_addresses">bind_addresses</link> = [ "::1" ];
         <link linkend="opt-services.matrix-synapse.settings.listeners._.type">type</link> = "http";
         <link linkend="opt-services.matrix-synapse.settings.listeners._.tls">tls</link> = false;
         <link linkend="opt-services.matrix-synapse.settings.listeners._.x_forwarded">x_forwarded</link> = true;
@@ -152,10 +152,10 @@ in {
 
   <para>
    If you want to run a server with public registration by anybody, you can
-   then enable <literal><link linkend="opt-services.matrix-synapse.settings.enable_registration">services.matrix-synapse.enable_registration</link> =
+   then enable <literal><link linkend="opt-services.matrix-synapse.settings.enable_registration">services.matrix-synapse.settings.enable_registration</link> =
    true;</literal>. Otherwise, or you can generate a registration secret with
    <command>pwgen -s 64 1</command> and set it with
-   <option><link linkend="opt-services.matrix-synapse.settings.registration_shared_secret">services.matrix-synapse.registration_shared_secret</link></option>.
+   <option><link linkend="opt-services.matrix-synapse.settings.registration_shared_secret">services.matrix-synapse.settings.registration_shared_secret</link></option>.
    To create a new user or admin, run the following after you have set the secret
    and have rebuilt NixOS:
 <screen>

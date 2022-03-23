@@ -4,6 +4,7 @@
 , envoy
 , zip
 , nixosTests
+, pomerium-cli
 }:
 
 let
@@ -11,18 +12,17 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.15.7";
+  version = "0.17.0";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256:0adlk4ylny1z43x1dw3ny0s1932vhb61hpf5wdz4r65y8k9qyfgr";
+    hash = "sha256:1hv76i6k9f0kp527nxlxqhklsvkh2cmfnqlszmlk2hxij31qnf8q";
   };
 
-  vendorSha256 = "sha256:1fszfbra84pcs8v1h2kf7iy603vf9v2ysg6il76aqmqrxmb1p7nv";
+  vendorSha256 = "sha256:1cq4m5a7z64yg3v1c68d15ilw78il6p53vaqzxgn338zjggr3kig";
   subPackages = [
     "cmd/pomerium"
-    "cmd/pomerium-cli"
   ];
 
   ldflags = let
@@ -74,11 +74,11 @@ buildGoModule rec {
 
   installPhase = ''
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
-    install -Dm0755 $GOPATH/bin/pomerium-cli $out/bin/pomerium-cli
   '';
 
   passthru.tests = {
     inherit (nixosTests) pomerium;
+    inherit pomerium-cli;
   };
 
   meta = with lib; {

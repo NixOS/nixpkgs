@@ -214,6 +214,8 @@ in
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/paperless-ng qcluster";
         Restart = "on-failure";
+        # The `mbind` syscall is needed for running the classifier.
+        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
       };
       environment = env;
       wantedBy = [ "multi-user.target" ];

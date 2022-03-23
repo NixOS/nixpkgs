@@ -7,13 +7,13 @@
 
 import ./generic.nix (rec {
   pname = "Pillow";
-  version = "9.0.0";
+  version = "9.0.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gjry0yqryd2678sm47jhdnbghzxn5wk8pgyaqwr4qi7x5ijjvpf";
+    sha256 = "bIvII4p9/a96dfXsWmY/QXP4w2flo5+H5yBJXh7tdfo=";
   };
 
   passthru.tests = {

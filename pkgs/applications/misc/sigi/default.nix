@@ -2,11 +2,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-N+8DdokiYW5mHIQJisdTja8xMVGip37X6c/xBYnQaRU=";
+    sha256 = "sha256-tjhNE20GE1L8kvhdI5Mc90I75q8szOIV40vq2CBt98U=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     installManPage sigi.1
   '';
 
-  cargoSha256 = "sha256-vO9ocTDcGt/T/sLCP+tCHXihV1H2liFDjI7OhhmPd3I=";
+  cargoSha256 = "sha256-0e0r6hfXGJmrc6tgCqq2dQXu2MhkThViZwdG3r3g028=";
 
   passthru.tests.version = testVersion { package = sigi; };
 

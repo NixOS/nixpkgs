@@ -5,10 +5,6 @@
   - pkgs/development/libraries/agda/**/*
   - pkgs/top-level/agda-packages.nix
 
-"6.topic: bsd":
-  - pkgs/os-specific/bsd/**/*
-  - pkgs/stdenv/freebsd/**/*
-
 "6.topic: cinnamon":
   - pkgs/desktops/cinnamon/**/*
 

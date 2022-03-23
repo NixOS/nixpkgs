@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
-, e2fsprogs, findutils, gzip, cdrtools
+, e2fsprogs, findutils, gzip, cdrtools, xorriso
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -49,8 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
 
   preFixup = ''
-    mkdir -p $out/share/glib-2.0/schemas
-    cp $src/data/*.gschema.xml $out/share/glib-2.0/schemas/
+    glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
 
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
@@ -59,14 +58,17 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  checkInputs = with python3.pkgs; [ cpio cdrtools pytestCheckHook ];
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+    cpio
+    cdrtools
+    xorriso
+  ];
 
-  disabledTestPaths = [
-    "tests/test_cli.py"
-    "tests/test_disk.py"
-    "tests/test_checkprops.py"
-    "tests/test_storage.py"
-  ]; # Error logs: https://gist.github.com/superherointj/fee040872beaafaaa19b8bf8f3ff0be5
+  disabledTests = [
+    "testAlterDisk"
+    "test_misc_nonpredicatble_generate"
+  ];
 
   preCheck = ''
     export HOME=.

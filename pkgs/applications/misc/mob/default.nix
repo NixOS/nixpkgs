@@ -1,8 +1,8 @@
 { lib
 , buildGoPackage
 , fetchFromGitHub
-
-, withSpeech ? true
+, stdenv
+, withSpeech ? !stdenv.isDarwin
 , makeWrapper
 , espeak-ng
 }:

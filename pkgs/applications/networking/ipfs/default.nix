@@ -29,15 +29,23 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
+
+  postPatch = ''
+    substituteInPlace 'misc/systemd/ipfs.service' \
+      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+    substituteInPlace 'misc/systemd/ipfs-hardened.service' \
+      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+  '';
+
   postInstall = ''
-    install --mode=444 -D misc/systemd/ipfs.service $out/etc/systemd/system/ipfs.service
-    install --mode=444 -D misc/systemd/ipfs-hardened.service $out/etc/systemd/system/ipfs-hardened.service
-    install --mode=444 -D misc/systemd/ipfs-api.socket $out/etc/systemd/system/ipfs-api.socket
-    install --mode=444 -D misc/systemd/ipfs-gateway.socket $out/etc/systemd/system/ipfs-gateway.socket
-    substituteInPlace $out/etc/systemd/system/ipfs.service \
-      --replace /usr/bin/ipfs $out/bin/ipfs
-    substituteInPlace $out/etc/systemd/system/ipfs-hardened.service \
-      --replace /usr/bin/ipfs $out/bin/ipfs
+    install --mode=444 -D 'misc/systemd/ipfs-api.socket' "$systemd_unit/etc/systemd/system/ipfs-api.socket"
+    install --mode=444 -D 'misc/systemd/ipfs-gateway.socket' "$systemd_unit/etc/systemd/system/ipfs-gateway.socket"
+    install --mode=444 -D 'misc/systemd/ipfs.service' "$systemd_unit/etc/systemd/system/ipfs.service"
+
+    install --mode=444 -D 'misc/systemd/ipfs-api.socket' "$systemd_unit_hardened/etc/systemd/system/ipfs-api.socket"
+    install --mode=444 -D 'misc/systemd/ipfs-gateway.socket' "$systemd_unit_hardened/etc/systemd/system/ipfs-gateway.socket"
+    install --mode=444 -D 'misc/systemd/ipfs-hardened.service' "$systemd_unit_hardened/etc/systemd/system/ipfs.service"
   '';
 
   meta = with lib; {

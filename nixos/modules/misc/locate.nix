@@ -183,7 +183,11 @@ in
 
     pruneNames = mkOption {
       type = listOf str;
-      default = [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
+      default = lib.optionals (!isFindutils) [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
+      defaultText = literalDocBook ''
+        <literal>[ ".bzr" ".cache" ".git" ".hg" ".svn" ]</literal>, if
+        supported by the locate implementation (i.e. mlocate or plocate).
+      '';
       description = ''
         Directory components which should exclude paths containing them from indexing
       '';

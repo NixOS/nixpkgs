@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "f1viewer";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "SoMuchForSubtlety";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cTXueIOD+OXx4WikhdNv3v/F2/f5aDicyPP7FgTU6AM=";
+    sha256 = "sha256-MY8xqpAzK1c4XL7w/LR83DyHFCI5X7wldosDDo7pXNI=";
   };
 
-  vendorSha256 = "sha256-47uLx4t0N1T3zqZ9o/su/onJEUdGXpq+iVSUaRnwW3I=";
+  vendorSha256 = "sha256-8c1+t6Lo11Q2kEDy9IWLw9bsZYtJFksE7Om3ysx7fc4=";
 
   meta = with lib; {
     description =

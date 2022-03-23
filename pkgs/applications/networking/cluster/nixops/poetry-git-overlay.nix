@@ -5,8 +5,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops.git";
-        rev = "d939c9bcae184d10583bf48211739b5b6521fc64";
-        sha256 = "111wfph4c737xxs717pz8bnksp8zw0b6zv1il4zzq3fshv2ckd5c";
+        rev = "7220cbdc8a1cf2db5b3ad75b525faf145a5560a3";
+        sha256 = "199cw25cvjb8gxs56nc8ilq7v4560c6vgi1sh1vqrsqxayq1g4cs";
       };
     }
   );
@@ -74,9 +74,9 @@ self: super: {
   nixops-virtd = super.nixops-virtd.overridePythonAttrs (
     _: {
       src = pkgs.fetchgit {
-        url = "https://github.com/nix-community/nixops-libvirtd.git";
-        rev = "1245280d97e0adc4643d02d1cf62ddd582c73e49";
-        sha256 = "1z3zsx54585rcyabj6hrbwbd1c783rrlfj53np1sa3i7m93vmxzc";
+        url = "https://github.com/lovesegfault/nixops-libvirtd.git";
+        rev = "84d1688ee06afff136738b3eaf51f9cc3c08c350";
+        sha256 = "1f3q9bwmdjr3qac7fh9b9hgw7l43hmiixbsmqm2zrnhb7xcyfmfg";
       };
     }
   );

@@ -1,26 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, packr, makeWrapper, installShellFiles, helm, kustomize }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.2.5";
-  commit = "8f981ccfcf942a9eb00bc466649f8499ba0455f5";
+  version = "2.3.1";
   tag = "v${version}";
+  # Update commit to match the tag above
+  # TODO make updadeScript
+  commit = "b65c1699fa2a2daa031483a3890e6911eac69068";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = tag;
-    sha256 = "sha256-wSvDoRHV4BObRL8lEpHt9oGXNB06LXdIYasRYqmM5QA=";
+    sha256 = "sha256-YijhJz7m5wy8kR9V6IHSNYjiWh7H2ph6il9nMsrePOE=";
   };
 
-  vendorSha256 = "sha256-BVhts+gOM6nhcR1lkFzy7OJnainLXw5YdeseBBRF2xE=";
+  vendorSha256 = "sha256-uA9sOMuVHKRRhSGoLyoKcUYU6NxtprVUITvVC+tot1g=";
 
-  nativeBuildInputs = [ packr makeWrapper installShellFiles ];
-
-  # run packr to embed assets
-  preBuild = ''
-    packr
-  '';
+  # Set target as ./cmd per release-cli
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L222
+  subPackages = [ "cmd" ];
 
   ldflags =
     let package_url = "github.com/argoproj/argo-cd/v2/common"; in
@@ -33,20 +32,7 @@ buildGoModule rec {
       "-X ${package_url}.gitTreeState=clean"
     ];
 
-  # Test is disabled because ksonnet is missing from nixpkgs.
-  # Log: https://gist.github.com/superherointj/79cbdc869dfd44d28a10dc6746ecb3f9
-  doCheck = false;
-  checkInputs = [
-    helm
-    kustomize
-    #ksonnet
-  ];
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/argocd version --client | grep ${tag} > /dev/null
-    $out/bin/argocd-util version --client | grep ${tag} > /dev/null
-  '';
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall
@@ -55,10 +41,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/argocd version --client | grep ${tag} > /dev/null
+  '';
+
   postInstall = ''
-    for appname in argocd-util argocd-server argocd-repo-server argocd-application-controller argocd-dex ; do
-      makeWrapper $out/bin/argocd $out/bin/$appname --set ARGOCD_BINARY_NAME $appname
-    done
     installShellCompletion --cmd argocd \
       --bash <($out/bin/argocd completion bash) \
       --zsh <($out/bin/argocd completion zsh)

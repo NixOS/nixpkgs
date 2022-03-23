@@ -107,7 +107,7 @@ in with self; {
   KOdata = derive2 { name="KOdata"; version="1.20.0"; sha256="11ar6bp6j615hcqa8w0dha1d57r8kxwjr0aikmxl3j058yrv2p6m"; depends=[]; };
   LRcellTypeMarkers = derive2 { name="LRcellTypeMarkers"; version="1.2.0"; sha256="0c7nwyskm5kx2z56vr8wb1c8ll8z3z7ywi52s4d1nmhmj9dyzmb3"; depends=[ExperimentHub]; };
   LiebermanAidenHiC2009 = derive2 { name="LiebermanAidenHiC2009"; version="0.32.0"; sha256="1kgydp7x3kdhh5kzwrh9fjc9zfw1jx4bbkgxc46vh1dwz8kbkbch"; depends=[IRanges KernSmooth]; };
-  ListerEtAlBSseq = derive2 { name="ListerEtAlBSseq"; version="1.26.0"; sha256="0ag820shlpknc2zbqiwafisbg4hr7paqv3g26ghrvyvbkmqmj1w8"; depends=[methylPipe]; };
+  ListerEtAlBSseq = derive2 { name="ListerEtAlBSseq"; version="1.26.0"; sha256="0ag820shlpknc2zbqiwafisbg4hr7paqv3g26ghrvyvbkmqmj1w8"; depends=[]; };
   LungCancerACvsSCCGEO = derive2 { name="LungCancerACvsSCCGEO"; version="1.30.0"; sha256="0sfadyna4njvz1dn0z3vhvyykl864534qr200swj4cmsny52bsdh"; depends=[]; };
   LungCancerLines = derive2 { name="LungCancerLines"; version="0.32.0"; sha256="1clsdv7ryk46i7640sj77xnwqqw32aa9gy9g8hvhg4sliiqmgvjw"; depends=[Rsamtools]; };
   M3DExampleData = derive2 { name="M3DExampleData"; version="1.20.0"; sha256="0qnbd53lhfq78k2v9qpkwpcf75mg9asf6765pqq2f0ivi2a4jrjs"; depends=[]; };

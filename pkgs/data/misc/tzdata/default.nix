@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "BINDIR=$(bin)/bin"
     "ZICDIR=$(bin)/bin"
     "ETCDIR=$(TMPDIR)/etc"
-    "TZDEFAULT=$(TMPDIR)/etc"
+    "TZDEFAULT=tzdefault-to-remove"
     "LIBDIR=$(dev)/lib"
     "MANDIR=$(man)/share/man"
     "AWK=awk"
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       rm $out/share/zoneinfo-posix
+      rm $out/share/zoneinfo/tzdefault-to-remove
       mkdir $out/share/zoneinfo/posix
       ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right

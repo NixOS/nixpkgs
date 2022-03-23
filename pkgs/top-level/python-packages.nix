@@ -135,16 +135,6 @@ in {
     venvShellHook
     wheelUnpackHook;
 
-  # Not all packages are compatible with the latest pytest yet.
-  # We need to override the hook to select an older pytest, however,
-  # it should not override the version of pytest that is used for say
-  # Python 2. This is an ugly hack that is needed now because the hook
-  # propagates the package.
-  pytestCheckHook_6_1 = if isPy3k then
-    self.pytestCheckHook.override { pytest = self.pytest_6_1; }
-  else
-    self.pytestCheckHook;
-
   # helpers
 
   # We use build packages because we are making a setup hook to be used as a
@@ -253,6 +243,8 @@ in {
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
+
+  aioairzone = callPackage ../development/python-modules/aioairzone { };
 
   aioambient = callPackage ../development/python-modules/aioambient { };
 
@@ -465,6 +457,8 @@ in {
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
+
+  allure-behave = callPackage ../development/python-modules/allure-behave { };
 
   allure-python-commons = callPackage ../development/python-modules/allure-python-commons { };
 
@@ -849,6 +843,8 @@ in {
   azure-batch = callPackage ../development/python-modules/azure-batch { };
 
   azure-common = callPackage ../development/python-modules/azure-common { };
+
+  azure-containerregistry = callPackage ../development/python-modules/azure-containerregistry { };
 
   azure-core = callPackage ../development/python-modules/azure-core { };
 
@@ -2218,7 +2214,7 @@ in {
 
   distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
-  django = self.django_2;
+  django = self.django_3;
 
   # Current LTS
   django_2 = callPackage ../development/python-modules/django/2.nix { };
@@ -2436,6 +2432,8 @@ in {
 
   docx2python = callPackage ../development/python-modules/docx2python { };
 
+  docx2txt = callPackage ../development/python-modules/docx2txt { };
+
   dodgy = callPackage ../development/python-modules/dodgy { };
 
   dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
@@ -2503,6 +2501,8 @@ in {
   dugong = callPackage ../development/python-modules/dugong { };
 
   dulwich = callPackage ../development/python-modules/dulwich { };
+
+  dunamai = callPackage ../development/python-modules/dunamai { };
 
   dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
 
@@ -3030,6 +3030,8 @@ in {
   flatbuffers = callPackage ../development/python-modules/flatbuffers {
     inherit (pkgs) flatbuffers;
   };
+
+  flatdict = callPackage ../development/python-modules/flatdict { };
 
   flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
@@ -3601,7 +3603,9 @@ in {
 
   gruut = callPackage ../development/python-modules/gruut { };
 
-  gruut-ipa = callPackage ../development/python-modules/gruut-ipa { };
+  gruut-ipa = callPackage ../development/python-modules/gruut-ipa {
+    inherit (pkgs) espeak;
+  };
 
   gsd = callPackage ../development/python-modules/gsd { };
 
@@ -4466,6 +4470,8 @@ in {
 
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
 
+  keyrings-google-artifactregistry-auth = callPackage ../development/python-modules/keyrings-google-artifactregistry-auth { };
+
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
   keystone-engine = callPackage ../development/python-modules/keystone-engine { };
@@ -5051,6 +5057,8 @@ in {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  meilisearch = callPackage ../development/python-modules/meilisearch { };
+
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
@@ -5153,6 +5161,8 @@ in {
   mizani = callPackage ../development/python-modules/mizani { };
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
+  mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
+  mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
@@ -7647,6 +7657,14 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pysigma = callPackage ../development/python-modules/pysigma { };
+
+  pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
+
+  pysigma-pipeline-crowdstrike = callPackage ../development/python-modules/pysigma-pipeline-crowdstrike { };
+
+  pysigma-pipeline-sysmon = callPackage ../development/python-modules/pysigma-pipeline-sysmon { };
+
   pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
@@ -7775,28 +7793,12 @@ in {
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
-  pytest = self.pytest_6;
-
-  pytest_6 =
-    callPackage ../development/python-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override {
-        doCheck = false;
-      };
+  pytest = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override {
+      doCheck = false;
     };
-
-  pytest_6_1 = self.pytest_6.overridePythonAttrs (oldAttrs: rec {
-    version = "6.1.2";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e";
-    };
-
-    postPatch = ''
-      substituteInPlace setup.cfg \
-        --replace "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
-    '';
-  });
+  };
 
   pytest-aio = callPackage ../development/python-modules/pytest-aio { };
 
@@ -8294,6 +8296,8 @@ in {
   pyeapi = callPackage ../development/python-modules/pyeapi { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
+
+  pyinfra = callPackage ../development/python-modules/pyinfra { };
 
   pytibber = callPackage ../development/python-modules/pytibber { };
 
@@ -10982,6 +10986,8 @@ in {
   zipstream = callPackage ../development/python-modules/zipstream { };
 
   zipstream-new = callPackage ../development/python-modules/zipstream-new { };
+
+  zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 

@@ -20,20 +20,22 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
+
     emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
-    mkdir -p $out/templates
-    mkdir -p $out/share/emacs/site-lisp/cask/bin
-    install -Dm644 *.el *.elc $out/share/emacs/site-lisp/cask
-    install -Dm755 bin/cask $out/share/emacs/site-lisp/cask/bin
-    install -Dm644 templates/* $out/templates/
+    dir=$out/share/emacs/site-lisp/cask
+    install -Dm444 -t $dir     *.el *.elc
+    install -Dm555 -t $dir/bin bin/cask
     touch $out/.no-upgrade
-    ln -s $out/share/emacs/site-lisp/cask/bin/cask $out/bin/cask
+    ln -s $dir/bin/cask $out/bin/cask
+
     runHook postInstall
   '';
 
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://cask.readthedocs.io/en/latest/index.html";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ flexw ];
     platforms = platforms.all;
-    maintainers = [ maintainers.flexw ];
   };
 }

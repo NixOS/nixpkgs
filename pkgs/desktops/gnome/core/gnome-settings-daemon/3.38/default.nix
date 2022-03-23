@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchpatch
 , substituteAll
 , fetchurl
@@ -70,6 +71,14 @@ stdenv.mkDerivation rec {
     })
 
     # Fix build with new meson
+    # plugins/power/meson.build:78:7: ERROR: Function does not take positional arguments.
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/283
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/afa7e4bb9c519e2daf500a6079088669500768c0.patch";
+      sha256 = "8wxJIKPoZyfs1t0zAsb5SVCdt297NUiGmXIBNI6hbCQ=";
+    })
+    # meson.build:86:3: ERROR: The `==` operator of str does not accept objects of type bool (True)
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/249
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/28e28e9e598342c897ae5ca350d0da6f4aea057b.diff";
       sha256 = "U+suR7wYjLWPqmkJpHm6pPOWL7sjL6GhIFX8MHrBRAY=";

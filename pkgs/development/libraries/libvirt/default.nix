@@ -106,6 +106,9 @@ assert enableZfs -> isLinux;
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 stdenv.mkDerivation rec {
   pname = "libvirt";
+  # NOTE: You must also bump:
+  # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
+  # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
   version = "8.1.0";
 
   src =
@@ -126,9 +129,20 @@ stdenv.mkDerivation rec {
         };
 
   patches = [
-    ./do-not-use-sysconfig.patch
-    ./qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
+    ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+    ./0001-qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
   ];
+
+  # remove some broken tests
+  postPatch = ''
+    sed -i '/commandtest/d' tests/meson.build
+    sed -i '/virnetsockettest/d' tests/meson.build
+    # delete only the first occurrence of this
+    sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+  '' + optionalString isDarwin ''
+    sed -i '/qemucapabilitiestest/d' tests/meson.build
+  '';
+
 
   nativeBuildInputs = [
     meson
@@ -227,7 +241,11 @@ stdenv.mkDerivation rec {
       storage = name: feat "storage_${name}";
     in
     [
-      "--localstatedir=${placeholder "out"}/var/"
+      "--sysconfdir=/var/lib"
+      (cfg "install_prefix" (placeholder "out"))
+      (cfg "localstatedir" "/var")
+      (cfg "runstatedir" "/run")
+
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
 
       (feat "apparmor" isLinux)
@@ -288,6 +306,8 @@ stdenv.mkDerivation rec {
       (storage "vstorage" isLinux)
       (storage "zfs" enableZfs)
     ];
+
+  doCheck = true;
 
   postInstall = ''
     substituteInPlace $out/bin/virt-xml-validate \
