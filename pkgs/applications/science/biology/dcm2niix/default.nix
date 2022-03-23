@@ -1,8 +1,15 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
-, libyamlcpp
 , git
+, openjpeg
+, libyamlcpp
+, zlib
+, batchVersion ? false
+, withJpegLs ? true
+, withOpenJpeg ? true
+, withSystemZlib ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +24,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake git ];
-  buildInputs = [ libyamlcpp ];
+  buildInputs = lib.optionals batchVersion [ libyamlcpp ]
+    ++ lib.optionals withOpenJpeg [ openjpeg openjpeg.dev ]
+    ++ lib.optionals withSystemZlib [ zlib ];
+
+  cmakeFlags = lib.optionals batchVersion [
+      "-DBATCH_VERSION=ON"
+      "-DYAML-CPP_DIR=${libyamlcpp}/lib/cmake/yaml-cpp"
+    ] ++ lib.optionals withJpegLs [
+      "-DUSE_JPEGLS=ON"
+    ] ++ lib.optionals withOpenJpeg [
+      "-DUSE_OPENJPEG=ON"
+      "-DOpenJPEG_DIR=${openjpeg}/lib/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}"
+    ] ++ lib.optionals withSystemZlib [
+      "-DZLIB_IMPLEMENTATION=System"
+    ];
 
   meta = with lib; {
     description = "DICOM to NIfTI converter";
