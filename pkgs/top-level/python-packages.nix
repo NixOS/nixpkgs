@@ -1779,6 +1779,8 @@ in {
 
   codecov = callPackage ../development/python-modules/codecov { };
 
+  codepy = callPackage ../development/python-modules/codepy { };
+
   codespell = callPackage ../development/python-modules/codespell { };
 
   cogapp = callPackage ../development/python-modules/cogapp { };
