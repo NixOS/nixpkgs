@@ -5783,6 +5783,8 @@ with pkgs;
 
   gdmap = callPackage ../tools/system/gdmap { };
 
+  gef = callPackage ../development/tools/misc/gef { };
+
   gelasio = callPackage ../data/fonts/gelasio { };
 
   gemget = callPackage ../tools/networking/gemget {};
