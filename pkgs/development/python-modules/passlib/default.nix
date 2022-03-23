@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , nose
 , bcrypt
@@ -18,8 +19,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ bcrypt argon2_cffi ];
   propagatedNativeBuildInputs = [ argon2_cffi ];
 
-  meta = {
+  meta = with lib; {
     description = "A password hashing library for Python";
-    homepage    = "https://code.google.com/p/passlib/";
+    homepage = "https://foss.heptapod.net/python-libs/passlib";
+    license = licenses.bsdOriginal;
   };
 }
