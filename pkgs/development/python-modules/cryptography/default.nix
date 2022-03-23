@@ -49,10 +49,7 @@ buildPythonPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  propagatedBuildInputs = [
-    packaging
-    six
-  ] ++ lib.optionals (!isPyPy) [
+  propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 
