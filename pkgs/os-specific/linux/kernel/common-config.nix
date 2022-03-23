@@ -787,7 +787,9 @@ let
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
       BT_QCA = module; # enables QCA6390 bluetooth
 
-      CLEANCACHE = option yes;
+      # Removed on 5.17 as it was unused
+      # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
+      CLEANCACHE = whenOlder "5.17" (option yes);
       CRASH_DUMP = option no;
 
       DVB_DYNAMIC_MINORS = option yes; # we use udev
