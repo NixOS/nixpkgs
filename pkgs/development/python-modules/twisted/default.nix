@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False
-  patchPhase = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library(\"c\")" "'${stdenv.glibc.out}/lib/libc.so.6'"
   '';
@@ -45,13 +45,13 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s twisted/test
+    ${python.interpreter} -m unittest discover -s src/twisted/test
   '';
   # Tests require network
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://twistedmatrix.com/";
+    homepage = "https://github.com/twisted/twisted";
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''
       Twisted is an event-driven networking engine written in Python
