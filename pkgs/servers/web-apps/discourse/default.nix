@@ -3,20 +3,21 @@
 
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
 , imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, nodePackages, nodejs-16_x
+, oxipng, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
+, fetchYarnDeps, yarn, fixup_yarn_lock, nodePackages, nodejs-14_x
+, nodejs-16_x
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.9.0.beta1";
+  version = "2.9.0.beta3";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-mf2Niyv1H+Zq7RfnV93O1Ul9RdRrtmtAJMBJrb8hp3U=";
+    sha256 = "sha256-+VYHGkISY4PFScUzk6eJ7eN9cPTjNEww/kusKcufMI0=";
   };
 
   runtimeDeps = [
@@ -38,6 +39,7 @@ let
     # Image optimization
     imagemagick
     optipng
+    oxipng
     pngquant
     libjpeg
     jpegoptim
@@ -157,6 +159,11 @@ let
     ];
   };
 
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/app/assets/javascripts/yarn.lock";
+    sha256 = "0xx5gncvb2mwpwwbgi4y320ji143i38vmz946xjcx5z3jxxjkymz";
+  };
+
   assets = stdenv.mkDerivation {
     pname = "discourse-assets";
     inherit version src;
@@ -166,6 +173,8 @@ let
       redis
       nodePackages.uglify-js
       nodePackages.terser
+      yarn
+      nodejs-14_x
     ];
 
     patches = [
@@ -177,6 +186,10 @@ let
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
       ./auto_generated_path.patch
+
+      # Fix the rake command used to recursively execute itself in the
+      # assets precompilation task.
+      ./assets_rake_command.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -184,7 +197,20 @@ let
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
+      # Yarn wants a real home directory to write cache, config, etc to
+      export HOME=$NIX_BUILD_TOP/fake_home
+
+      # Make yarn install packages from our offline cache, not the registry
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+
+      # Fixup "resolved"-entries in yarn.lock to match our offline cache
+      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+
+      yarn install --offline --cwd app/assets/javascripts/discourse
+
+      patchShebangs app/assets/javascripts/node_modules/
 
       redis-server >/dev/null &
 
@@ -211,7 +237,7 @@ let
       export RAILS_ENV=production
 
       bundle exec rake db:migrate >/dev/null
-      rm -r tmp/*
+      chmod -R +w tmp
     '';
 
     buildPhase = ''
@@ -229,6 +255,10 @@ let
 
       runHook postInstall
     '';
+
+    passthru = {
+      inherit yarnOfflineCache;
+    };
   };
 
   discourse = stdenv.mkDerivation {
@@ -309,7 +339,7 @@ let
     };
 
     passthru = {
-      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
+      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
