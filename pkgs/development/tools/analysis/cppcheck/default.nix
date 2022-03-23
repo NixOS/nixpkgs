@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rHTAlzxGoFJ2D0/3ymqEYWyleVUQVC0ZWm8SLFMHkpE=";
   };
 
-  buildInputs = [ pcre ] ++ lib.optionals withZ3 [ z3 ];
+  buildInputs = [ pcre
+    (python3.withPackages (ps: [ps.pygments]))
+  ] ++ lib.optionals withZ3 [ z3 ];
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
   makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
