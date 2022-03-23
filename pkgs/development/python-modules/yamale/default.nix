@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "4.0.3";
+  version = "4.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EkCKUSPRrj3g2AY17tquBDxf+nWfpdnILu5AS/2SsLo=";
+    sha256 = "sha256-1GFvgfy3MDsJGKSEm0yaQoLM7VqIS2wphw16trNTUOc=";
   };
 
   propagatedBuildInputs = [
