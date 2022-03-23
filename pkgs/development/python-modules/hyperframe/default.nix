@@ -11,9 +11,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "hyperframe" ];
+
   meta = with lib; {
     description = "HTTP/2 framing layer for Python";
-    homepage = "http://hyper.rtfd.org/";
+    homepage = "https://github.com/python-hyper/hyperframe/";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
