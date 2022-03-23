@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "http://jim.tcl.tk/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ dbohdan vrthra ];
+    maintainers = with lib.maintainers; [ dbohdan fgaz vrthra ];
   };
 }
