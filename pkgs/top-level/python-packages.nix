@@ -1867,6 +1867,8 @@ in {
 
   contextvars = callPackage ../development/python-modules/contextvars { };
 
+  contexttimer = callPackage ../development/python-modules/contexttimer { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
