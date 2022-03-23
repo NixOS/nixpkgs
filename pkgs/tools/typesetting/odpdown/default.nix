@@ -20,7 +20,6 @@ python2Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/thorstenb/odpdown";
-    repositories.git = "https://github.com/thorstenb/odpdown.git";
     description = "Create nice-looking slides from your favourite text editor";
     longDescription = ''
       Have a tool like pandoc, latex beamer etc, that you can write (or
