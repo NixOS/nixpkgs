@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vmt";
-    repo = pname;
+    repo = "udis86";
     rev = "56ff6c87c11de0ffa725b14339004820556e343d";
     hash = "sha256-bmm1rgzZeStQJXEmcT8vnplsnmgN3LJlYs7COmqsDU8=";
   };
