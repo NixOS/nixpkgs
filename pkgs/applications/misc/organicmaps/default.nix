@@ -20,13 +20,13 @@
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2022.02.19-1-android";
+  version = "2022.03.23-4-android";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = version;
-    sha256 = "sha256-ABjj0AQanev1ekALDwjbFWC5LIc8Km7PGtvn7DpmcWk=";
+    sha256 = "sha256-4VBsHq8z/odD7Nrk9e0sYMEBBLeTAHsWsdgPIN1KVZo=";
     fetchSubmodules = true;
   };
 
