@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.3.4";
+  version = "3.3.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X0tizMD/2hfYKBk+zGqfyU5yYjqM4cQiS/uI6GuVmew=";
+    sha256 = "sha256-tXvA1EddTrOcTupQqZrX58jXiAqB5gMJP+OE3fZxGJI=";
   };
 
   propagatedBuildInputs = [
