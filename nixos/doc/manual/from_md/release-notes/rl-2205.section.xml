@@ -28,7 +28,7 @@
       <listitem>
         <para>
           GNOME has been upgraded to 42. Please take a look at their
-          <link xlink:href="https://help.gnome.org/misc/release-notes/42.0/">Release
+          <link xlink:href="https://release.gnome.org/42/">Release
           Notes</link> for details. Notably, it replaces gedit with
           GNOME Text Editor, GNOME Terminal with GNOME Console (formerly
           King’s Cross), and GNOME Screenshot with a tool built into the
