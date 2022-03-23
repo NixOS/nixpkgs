@@ -131,6 +131,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
+      --replace "pdfminer.six >= 20200101" "pdfminer.six" \
       --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
       --replace "pygmars >= 0.7.0" "pygmars" \
       --replace "license_expression >= 21.6.14" "license_expression"
