@@ -1,5 +1,5 @@
 diff --git a/lib/plugin_gem.rb b/lib/plugin_gem.rb
-index 855d1aca2c..8115623547 100644
+index 49882b2cd9..96672df2ea 100644
 --- a/lib/plugin_gem.rb
 +++ b/lib/plugin_gem.rb
 @@ -4,7 +4,7 @@ module PluginGem
