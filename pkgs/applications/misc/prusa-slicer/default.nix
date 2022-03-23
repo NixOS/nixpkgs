@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "4L/x8cMQee3n20iyWEiXd62NtA6BYM1SHkCn8ZlDNWA=";
+    sha256 = "sha256-4L/x8cMQee3n20iyWEiXd62NtA6BYM1SHkCn8ZlDNWA=";
     rev = "version_${version}";
   };
 
