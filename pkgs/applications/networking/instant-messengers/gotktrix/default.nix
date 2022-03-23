@@ -18,6 +18,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-9feKg/rnkWdJRolHBQ5WT6Rl3xTFe82M8HyxJK3VuN4=";
   };
+
   vendorSha256 = "sha256-eO/2MvWOVCeeCsiU2mSwgSEVlSbCXOp8qHyoG0lmk+Q=";
 
   buildInputs = [
@@ -30,6 +31,7 @@ buildGoModule rec {
 
   # Checking requires a working display
   doCheck = false;
+
   meta = with lib; {
     description = "Matrix client written in Go using GTK4";
     homepage = "https://github.com/diamondburned/gotktrix";
