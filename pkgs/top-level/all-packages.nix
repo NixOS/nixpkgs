@@ -13518,9 +13518,7 @@ with pkgs;
     boost = boost172;
   };
 
-  souffle = callPackage ../development/compilers/souffle {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  souffle = callPackage ../development/compilers/souffle { };
 
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
