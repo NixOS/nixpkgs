@@ -10283,6 +10283,16 @@
     githubId = 16487165;
     name = "Rafael Basso";
   };
+  rbreslow = {
+    name = "Rocky Breslow";
+    email = "1774125+rbreslow@users.noreply.github.com";
+    github = "rbreslow";
+    githubId = 1774125;
+    keys = [{
+      longkeyid = "ed25519/0xA0D32ACCA38B88ED";
+      fingerprint = "B5B7 BCA0 EE6F F31E 263A  69E3 A0D3 2ACC A38B 88ED";
+    }];
+  };
   rbrewer = {
     email = "rwb123@gmail.com";
     github = "rbrewer123";
