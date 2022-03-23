@@ -74,7 +74,6 @@ buildPythonPackage rec {
     passlib
     protobuf
     publicsuffix2
-    pyasn1
     pyopenssl
     pyparsing
     pyperclip
@@ -87,8 +86,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    beautifulsoup4
-    glibcLocales
     hypothesis
     parver
     pytest-asyncio
