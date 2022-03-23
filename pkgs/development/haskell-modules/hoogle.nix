@@ -46,6 +46,13 @@ buildPackages.stdenv.mkDerivation {
   name = "hoogle-with-packages";
   buildInputs = [ghc hoogle];
 
+  # compiling databases takes less time than copying the results
+  # between machines.
+  preferLocalBuild = true;
+  # Plus, you need a complete database for each possible combination
+  # of dependencies, caching them does not make sense.
+  allowSubstitutes = false;
+
   inherit docPackages;
 
   passAsFile = ["buildCommand"];

@@ -1,14 +1,18 @@
 {
-  "name": "Zammad",
-  "version": "1.0.0",
+  "scripts": {
+    "lint:css": "stylelint \"**/*.{css,scss}\"",
+    "lint:css:fix": "stylelint \"**/*.{css,scss}\" --fix"
+  },
   "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-cheerio": "^0.6.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-svgmin": "^1.1.2",
-    "gulp-svgstore": "^5.0.1",
-    "gulp-util": "^3.0.4",
-    "gulp-watch": "^4.2.4",
-    "through2": "^0.6.5"
-  }
+    "postcss": "^8.4.4",
+    "postcss-html": "^1.3.0",
+    "prettier": "2.5.0",
+    "stylelint": "^14.1.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-config-standard-scss": "^3.0.0",
+    "stylelint-prettier": "^2.0.0"
+  },
+  "name": "Zammad",
+  "version": "5.1.0"
 }
