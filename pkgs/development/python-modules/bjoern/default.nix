@@ -1,12 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, libev, python }:
+{ lib, buildPythonPackage, fetchFromGitHub, libev, python }:
 
 buildPythonPackage rec {
   pname = "bjoern";
-  version = "3.1.0";
+  version = "3.2.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01f3b601cf0ab0a9c7cb9c8f944ab7c738baaa6043ca82db20e9bd7a9be5767b";
+  # tests are not published to pypi anymore
+  src = fetchFromGitHub {
+    owner = "jonashaag";
+    repo = pname;
+    rev = version;
+    hash = "sha256-d7u/lEh2Zr5NYWYu4Zr7kgyeOIQuHQLYrZeiZMHbpio=";
+    fetchSubmodules = true; # fetch http-parser and statsd-c-client submodules
   };
 
   buildInputs = [ libev ];

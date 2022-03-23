@@ -28,6 +28,10 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=strict"
+  ];
+
   disabledTests = [
     # https://github.com/aio-libs/async-lru/issues/341
     "test_alru_cache_deco"

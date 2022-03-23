@@ -1,4 +1,4 @@
-From 566208aea81057789218b959f4d0e898eec54fc9 Mon Sep 17 00:00:00 2001
+From 14474d5e116609ce4fac60d779b08fa3eab840c3 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
@@ -11,10 +11,10 @@ Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 36702f2fb0..669257ea2f 100644
+index b20a93ad81..6292fca4fc 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
-@@ -797,6 +797,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+@@ -813,6 +813,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
          if (r < 0)
                  return r;
  
@@ -24,7 +24,7 @@ index 36702f2fb0..669257ea2f 100644
          name = empty_to_null(name);
  
          context_read_etc_hostname(c);
-@@ -860,6 +863,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+@@ -876,6 +879,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
          if (r < 0)
                  return r;
  
@@ -104,5 +104,5 @@ index 66b454269d..0a8fe25d0f 100644
          if (r < 0)
                  return r;
 -- 
-2.33.1
+2.34.0
 

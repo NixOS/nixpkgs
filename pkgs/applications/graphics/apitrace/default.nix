@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     owner = "apitrace";
   };
 
+  patches = [
+    # glibc 2.34 compat
+    # derived from https://github.com/apitrace/apitrace/commit/d28a980802ad48568c87da02d630c8babfe163bb
+    ./glibc-2.34-compat.patch
+  ];
+
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
   buildInputs = [ libX11 procps python2 libdwarf qtbase qtwebkit ];

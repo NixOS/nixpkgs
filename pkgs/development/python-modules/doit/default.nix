@@ -8,6 +8,7 @@
 , cloudpickle
 , pyinotify
 , macfsevents
+, toml
 }:
 
 buildPythonPackage rec {
@@ -21,8 +22,10 @@ buildPythonPackage rec {
     sha256 = "sha256-OIER+Kals7RGIM7rKH0FhZJ8hdDW0/h5DTT7tFwM9sM=";
   };
 
-  propagatedBuildInputs = [ cloudpickle ]
-    ++ lib.optional stdenv.isLinux pyinotify
+  propagatedBuildInputs = [
+    cloudpickle
+    toml
+  ] ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
   # hangs on darwin

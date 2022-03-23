@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU }:
+{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU, catch }:
 
 stdenv.mkDerivation rec {
   pname = "recastai";
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     rev = "c5cbd53024c8a9d8d097a4371215e3342d2fdc87";
     sha256 = "sha256-QP3lMMFR6fiKQTksAkRL6X9yaoVz2xt4QSIP9g6piww=";
   };
+
+  postPatch = ''
+    cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
+  '';
+
+  doCheck = true;
 
   nativeBuildInputs = [ cmake ];
 

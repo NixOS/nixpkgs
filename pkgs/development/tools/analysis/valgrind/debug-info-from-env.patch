@@ -1,0 +1,31 @@
+diff --git a/coregrind/m_debuginfo/readelf.c b/coregrind/m_debuginfo/readelf.c
+index c586e3f33..e3bb1717f 100644
+--- a/coregrind/m_debuginfo/readelf.c
++++ b/coregrind/m_debuginfo/readelf.c
+@@ -1508,13 +1508,25 @@ DiImage* find_debug_file( struct _DebugInfo* di,
+    HChar*   debugpath = NULL; /* where we found it */
+ 
+    if (buildid != NULL) {
++      const HChar *dir = VG_(getenv)("NIX_DEBUG_INFO_DIRS");
+       debugpath = ML_(dinfo_zalloc)("di.fdf.1",
+-                                    VG_(strlen)(buildid) + 33);
++                                    VG_(strlen)(buildid) + 33 +
++                                    (dir ? VG_(strlen)(dir) : 0));
+ 
+       VG_(sprintf)(debugpath, "/usr/lib/debug/.build-id/%c%c/%s.debug",
+                    buildid[0], buildid[1], buildid + 2);
+ 
+       dimg = open_debug_file(debugpath, buildid, 0, rel_ok, NULL);
++
++      while (!dimg && dir) {
++         const HChar *sep = VG_(strchr)(dir, ':');
++         Int size = sep ? sep - dir : VG_(strlen)(dir);
++         VG_(sprintf)(debugpath, "%.*s/.build-id/%c%c/%s.debug",
++                      size, dir, buildid[0], buildid[1], buildid + 2);
++         dimg = open_debug_file(debugpath, buildid, 0, rel_ok, NULL);
++         dir = sep ? sep + 1 : NULL;
++      }
++
+       if (!dimg) {
+          ML_(dinfo_free)(debugpath);
+          debugpath = NULL;

@@ -52,6 +52,8 @@ buildPythonPackage rec {
     "file_does_not_exist"
     # AssertionError: assert '.c { color:...
     "test_style_defs"
+    # uses pytest.approx in a boolean context, which is unsupported since pytest7
+    "test_percent_covered"
   ];
 
   pythonImportsCheck = [

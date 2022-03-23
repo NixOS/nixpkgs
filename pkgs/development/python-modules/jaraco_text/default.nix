@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jaraco.text";
-  version = "3.6.0";
+  version = "3.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "901d3468eaaa04f1d8a8f141f54b8887bfd943ccba311fc1c1de62c66604dfe0";
+    sha256 = "sha256-p/nMG0Sl8wlqIWy9EwtlDHprLJ+ABbAArpfzKSOafAA=";
   };
 
   pythonNamespaces = [

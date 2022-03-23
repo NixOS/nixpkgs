@@ -20,19 +20,17 @@
 , withGtk2 ? true
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withWebKit ? false, webkitgtk
-, darwin
+, setfile
+, AGL
+, Carbon
+, Cocoa
+, Kernel
+, QTKit
 }:
-
-assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> webkitgtk != null;
 
 assert withGtk2 -> (!withWebKit);
 
 let
-  inherit (darwin.stubs) setfile;
-  inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
-  inherit (gnome2) GConf;
-  inherit (gst_all_1) gst-plugins-base gstreamer;
   gtk = if withGtk2 then gtk2 else gtk3;
 in
 stdenv.mkDerivation rec {
@@ -55,8 +53,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gst-plugins-base
-    gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     gtk
     libSM
     libXinerama
@@ -65,7 +63,7 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optionals withGtk2 [
-    GConf
+    gnome2.GConf
   ]
   ++ lib.optional withMesa libGLU
   ++ lib.optional withWebKit webkitgtk

@@ -3,6 +3,7 @@
 , autoreconfHook
 , docbook_xsl
 , docbook_xml_dtd_43
+, glibc
 , gtk-doc
 , lzip
 , libidn2
@@ -38,6 +39,7 @@ in stdenv.mkDerivation rec {
     python3
     libxslt
   ] ++ lib.optionals enableValgrindTests [
+    glibc.debug
     valgrind
   ];
 

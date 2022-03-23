@@ -661,9 +661,9 @@ with pkgs;
         };
         nghttp2 = buildPackages.nghttp2.override {
           fetchurl = stdenv.fetchurlBoot;
-          inherit zlib pkg-config openssl;
-          c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
-          libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
+          inherit pkg-config;
+          enableApp = false; # curl just needs libnghttp2
+          enableTests = false; # avoids bringing `cunit` and `tzdata` into scope
         };
       });
     };
@@ -11190,7 +11190,9 @@ with pkgs;
   };
 
   unbound-full = unbound.override {
+    python = python3;
     withSystemd = true;
+    withPythonModule = true;
     withDoH = true;
     withECS = true;
     withDNSCrypt = true;
@@ -13257,18 +13259,18 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_58 = callPackage ../development/compilers/rust/1_58.nix {
+  rust_1_59 = callPackage ../development/compilers/rust/1_59.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_13 = llvmPackages_13.libllvm;
   };
-  rust = rust_1_58;
+  rust = rust_1_59;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_58 = rust_1_58.packages.stable;
-  rustPackages = rustPackages_1_58;
+  rustPackages_1_59 = rust_1_59.packages.stable;
+  rustPackages = rustPackages_1_59;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -17120,7 +17122,7 @@ with pkgs;
   gmp5 = callPackage ../development/libraries/gmp/5.1.x.nix { };
   gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
   gmp = gmp6;
-  gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
+  gmpxx = gmp.override { cxx = true; };
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
@@ -18916,7 +18918,7 @@ with pkgs;
 
   libusb1 = callPackage ../development/libraries/libusb1 {
     inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
   };
@@ -18948,7 +18950,7 @@ with pkgs;
   libva-minimal = libva.override { minimal = true; };
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
-  libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
+  libva1 = callPackage ../development/libraries/libva/1.nix { };
   libva1-minimal = libva1.override { minimal = true; };
 
   libvarlink = callPackage ../development/libraries/libvarlink { };
@@ -20723,9 +20725,15 @@ with pkgs;
   wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
   wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
 
-  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix { };
+  wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix {
+    inherit (darwin.stubs) derez rez setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel WebKit;
+  };
 
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix { };
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+  };
   wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
   wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
@@ -23350,11 +23358,6 @@ with pkgs;
     withTimesyncd = false;
     withTpm2Tss = false;
     withUserDb = false;
-    glib = null;
-    libgcrypt = null;
-    lvm2 = null;
-    libfido2 = null;
-    p11-kit = null;
   };
 
 
@@ -23482,11 +23485,11 @@ with pkgs;
 
   util-linuxCurses = util-linux;
 
-  util-linuxMinimal = if stdenv.isLinux then appendToName "minimal" (util-linux.override {
+  util-linuxMinimal = if stdenv.isLinux then util-linux.override {
     nlsSupport = false;
     ncurses = null;
     systemd = null;
-  }) else util-linux;
+  } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
@@ -26174,9 +26177,7 @@ with pkgs;
   };
 
   # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (appendToName "with-svn" (git.override {
-    svnSupport = true;
-  }));
+  gitSVN = lowPrio (git.override { svnSupport = true; });
 
   git-doc = lib.addMetaAttrs {
     description = "Additional documentation for Git";
@@ -26186,11 +26187,11 @@ with pkgs;
     '';
   } gitFull.doc;
 
-  gitMinimal = appendToName "minimal" (git.override {
+  gitMinimal = git.override {
     withManual = false;
     pythonSupport = false;
     withpcre2 = false;
-  });
+  };
 
   gitRepo = callPackage ../applications/version-management/git-repo { };
 
@@ -30451,10 +30452,6 @@ with pkgs;
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
 
-  zeroc-ice-36 = callPackage ../development/libraries/zeroc-ice/3.6.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   zeronet = callPackage ../applications/networking/p2p/zeronet { };
 
   zexy = callPackage ../applications/audio/pd-plugins/zexy {
@@ -33389,10 +33386,10 @@ with pkgs;
 
   ghostscript = callPackage ../misc/ghostscript { };
 
-  ghostscriptX = appendToName "with-X" (ghostscript.override {
+  ghostscriptX = ghostscript.override {
     cupsSupport = true;
     x11Support = true;
-  });
+  };
 
   glava = callPackage ../applications/misc/glava {};
 

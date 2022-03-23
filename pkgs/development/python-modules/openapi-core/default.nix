@@ -61,6 +61,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # AttributeError: 'str' object has no attribute '__name__'
     "tests/integration/validation"
+    # requires secrets and additional configuration
+    "tests/integration/contrib/test_django.py"
   ];
 
   disabledTests = [

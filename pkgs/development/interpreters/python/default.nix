@@ -124,19 +124,19 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "10";
+        patch = "11";
         suffix = "";
       };
-      sha256 = "sha256-Co+/tSh+vDoT6brz1U4I+gZ3j/7M9jEa74Ibs6ZYbMg=";
+      sha256 = "sha256-ZnZ6NTCdck83DfnlA8FytO5ET0nWK5i8TspyUSPibEk=";
     };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "2";
+        patch = "3";
         suffix = "";
       };
-      sha256 = "sha256-F946x9qfJRmqnWQ3jGA6c6DprVjf+ogS5FFgwIbeZMc=";
+      sha256 = "sha256-WWxy3pmNw5IFvE9w7w2/ft7HQKMG0JtJqb0Kd4BnMNw=";
     };
   };
 

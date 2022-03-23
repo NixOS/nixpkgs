@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.18.0";
+  version = "0.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PE66ogjfzj6cW3+UD5nZHSt6zg7b+j6Q4ACznE4j0j8=";
+    hash = "sha256-9KN45+Pdz40rJv1NUxuoy8xWtLGt7kz7YcqfjfZ9x4A=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

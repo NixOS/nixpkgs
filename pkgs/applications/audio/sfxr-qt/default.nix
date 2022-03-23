@@ -7,6 +7,7 @@
 , qtquickcontrols2
 , SDL
 , python3
+, catch2
 }:
 
 mkDerivation rec {
@@ -21,6 +22,10 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp 3rdparty/catch2/single_include/catch2/catch.hpp
+  '';
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
@@ -32,6 +37,8 @@ mkDerivation rec {
     qtquickcontrols2
     SDL
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/agateau/sfxr-qt";

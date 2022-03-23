@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ix094cfh6w4bvx6ymp5dpm35y9nkaibcn1y50g6kwdp4f0473y8";
+    sha256 = "sha256-/NnBm5qnTY0BngEj5i5hIb0VCInBZiSiVkIGLhCkffQ=";
   };
 
   checkInputs = [

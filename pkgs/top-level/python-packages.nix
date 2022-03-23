@@ -1224,8 +1224,6 @@ in {
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
-  bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
-
   bitcoin-utils-fork-minimal = callPackage ../development/python-modules/bitcoin-utils-fork-minimal { };
 
   bitcoinrpc = callPackage ../development/python-modules/bitcoinrpc { };
@@ -2217,7 +2215,6 @@ in {
   django = self.django_3;
 
   # Current LTS
-  django_2 = callPackage ../development/python-modules/django/2.nix { };
   django_3 = callPackage ../development/python-modules/django/3.nix { };
 
   # Current latest
@@ -2227,7 +2224,7 @@ in {
 
   django-anymail = callPackage ../development/python-modules/django-anymail { };
 
-  django_appconf = callPackage ../development/python-modules/django_appconf { };
+  django-appconf = callPackage ../development/python-modules/django-appconf { };
 
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
 
@@ -2878,6 +2875,8 @@ in {
   finalfusion = callPackage ../development/python-modules/finalfusion { };
 
   findimports = callPackage ../development/python-modules/findimports { };
+
+  findpython = callPackage ../development/python-modules/findpython { };
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
@@ -3707,6 +3706,8 @@ in {
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
+
+  hatchling = callPackage ../development/python-modules/hatchling { };
 
   haversine = callPackage ../development/python-modules/haversine { };
 
@@ -5501,7 +5502,8 @@ in {
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;
     inherit (pkgs) ncurses;
-    enablePython = true;
+    enableApp = false; # build only libnghttp2 ...
+    enablePython = true; # ... and its Python bindings
   })).python;
 
   nibabel = callPackage ../development/python-modules/nibabel { };
@@ -5575,8 +5577,6 @@ in {
   nose = callPackage ../development/python-modules/nose { };
 
   nose-cov = callPackage ../development/python-modules/nose-cov { };
-
-  nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
 
   nose-cprof = callPackage ../development/python-modules/nose-cprof { };
 
@@ -7004,9 +7004,7 @@ in {
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
-  pygit2 = callPackage ../development/python-modules/pygit2 {
-    libgit2 = pkgs.libgit2_1_3_0;
-  };
+  pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   PyGithub = callPackage ../development/python-modules/pyGithub { };
 
@@ -7920,8 +7918,6 @@ in {
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
-
-  pytest-pythonpath = callPackage ../development/python-modules/pytest-pythonpath { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
@@ -9344,6 +9340,8 @@ in {
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
+  socksio = callPackage ../development/python-modules/socksio { };
+
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 
   soco = callPackage ../development/python-modules/soco { };
@@ -9810,6 +9808,8 @@ in {
 
   tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit { };
 
+  tensorboard = callPackage ../development/python-modules/tensorboard { };
+
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
@@ -9841,8 +9841,6 @@ in {
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow = self.tensorflow-build;
-
-  tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
   tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;
@@ -10115,7 +10113,9 @@ in {
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
-  trio = callPackage ../development/python-modules/trio { };
+  trio = callPackage ../development/python-modules/trio {
+    inherit (pkgs) coreutils;
+  };
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 

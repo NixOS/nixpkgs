@@ -22,7 +22,6 @@
 , setfile
 }:
 
-assert withMesa -> libGLU != null && libGL != null;
 stdenv.mkDerivation rec {
   pname = "wxGTK";
   version = "2.9.5";

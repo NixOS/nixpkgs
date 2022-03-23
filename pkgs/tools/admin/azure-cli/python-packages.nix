@@ -69,7 +69,8 @@ let
         postPatch = ''
           substituteInPlace setup.py \
             --replace "requests[socks]~=2.25.1" "requests[socks]~=2.25" \
-            --replace "cryptography>=3.2,<3.4" "cryptography"
+            --replace "cryptography>=3.2,<3.4" "cryptography" \
+            --replace "msal-extensions>=0.3.1,<0.4" "msal-extensions"
         '';
 
         checkInputs = with self; [ pytest ];
@@ -117,11 +118,11 @@ let
         '';
       };
 
-      azure-batch = overrideAzureMgmtPackage super.azure-batch "11.0.0" "zip"
-        "sha256-zl/bDsli7d/oXNgiBekXfLC720RSZXRuOLO7vx8W3HM=";
+      azure-batch = overrideAzureMgmtPackage super.azure-batch "12.0.0" "zip"
+        "sha256-GpseF4mEp79JWvZ7zOUfDbHkqKlXr7KeM1VKFKlnTes=";
 
-      azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "0.2.0" "zip"
-        "0whx3s8ri9939r3pdvjf8iqcslas1xy6cnccidmp10r5ng0023vr";
+      azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "3.0.0" "zip"
+        "9262f54ed387eb083d8dae66d32a8df35647319b902bd498cdc376f50a12d154";
 
       azure-mgmt-batch = overrideAzureMgmtPackage super.azure-mgmt-batch "16.0.0" "zip"
         "1b3cecd6f16813879c6ac1a1bb01f9a6f2752cd1f9157eb04d5e41e4a89f3c34";
@@ -156,8 +157,8 @@ let
       azure-mgmt-cognitiveservices = overrideAzureMgmtPackage super.azure-mgmt-cognitiveservices "13.0.0" "zip"
         "dc6116e8394d45312c7ad5a9098ce0dd2370bd92d43afd33d8b3bfab724fa498";
 
-      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "23.1.0" "zip"
-        "sha256-Sduw9RAG1VfL0LIpmcuezz6rwr5G2W78xtZRxrM3VLM=";
+      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "25.0.0" "zip"
+        "sha256-Y0WNBtQ9v0yhTVFfTvfcudWHOjzGagGB+/b++3Ie5Kk=";
 
       azure-mgmt-consumption = overrideAzureMgmtPackage super.azure-mgmt-consumption "2.0.0" "zip"
         "12ai4qps73ivawh0yzvgb148ksx02r30pqlvfihx497j62gsi1cs";
@@ -165,8 +166,8 @@ let
       azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "9.1.0" "zip"
         "sha256-N+zUTEnOyn18lDHlkUj+vRXX/sJhZR7XLd1YdV50ULA=";
 
-      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "16.1.0" "zip"
-        "sha256-NlTIrOK4ho0OqcTHjHT1HobiMzDH2KY20TIlN0fm8/Q=";
+      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "17.0.0" "zip"
+        "sha256-oUbWdZryabCCg/gTujchT7p1nS7IDoU5W9MQ4ekJYH8=";
 
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "7.0.0b2" "zip"
         "sha256-hVvYW9gkfTVMwis3IdD0JXYDxdKcyyzIFx3hNk7VMLI=";
@@ -183,11 +184,11 @@ let
       azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "1.0.0" "zip"
         "634e398de9a23e712aa27a4a59f9ea5d5091d1dfcfed5ac977230918872c4430";
 
-      azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "2.1.0" "zip"
-        "2724f48cadb1be7ee96fc26c7bfa178f82cea5d325e785e91d9f26965fa8e46f";
+      azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "2.2.0" "zip"
+        "sha256-nsAeVhs5N8bpwYenmRwJmqF/IAqz/ulSoYIeOU5l0eM=";
 
-      azure-mgmt-iothubprovisioningservices = overrideAzureMgmtPackage super.azure-mgmt-iothubprovisioningservices "1.0.0" "zip"
-        "e5871b03488b5ae6dfc441cdbda40cb39c000635ee57c513053792b3c15826a9";
+      azure-mgmt-iothubprovisioningservices = overrideAzureMgmtPackage super.azure-mgmt-iothubprovisioningservices "1.1.0" "zip"
+        "sha256-04OoJuff93L62G6IozpmHpEaUbHHHD6nKlkMHVoJvJ4=";
 
       azure-mgmt-iotcentral = overrideAzureMgmtPackage super.azure-mgmt-iotcentral "9.0.0" "zip"
         "64df73df449a6f3717f3d0963e5869224ed3e6216c79de571493bea7c1b52cb6";
@@ -198,14 +199,14 @@ let
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
         "1397ksrd61jv7400mgn8sqngp6ahir55fyq9n5k69wk88169qm2r";
 
-      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "5.1.0" "zip"
-        "sha256-MGCICI7hDobEzyTMgqnKYZ21zfwNo/ogfQDsf3fwbo4=";
+      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "6.0.1" "zip"
+        "6ce683587be1638d8d77620b7af118060b8b7dfc4fd23d46a623a66edcb388e1";
 
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "8.0.0" "zip"
         "407c2dacb33513ffbe9ca4be5addb5e9d4bae0cb7efa613c3f7d531ef7bf8de8";
 
-      azure-mgmt-loganalytics = overrideAzureMgmtPackage super.azure-mgmt-loganalytics "12.0.0" "zip"
-        "da128a7e0291be7fa2063848df92a9180cf5c16d42adc09d2bc2efd711536bfb";
+      azure-mgmt-loganalytics = overrideAzureMgmtPackage super.azure-mgmt-loganalytics "13.0.0b2" "zip"
+        "sha256-j8CyWZGF7Z/5szJ+CD96E0EbNsceJ1SScrlPqWVLjnk=";
 
       azure-mgmt-network = overrideAzureMgmtPackage super.azure-mgmt-network "19.3.0" "zip"
         "0b6a1ccdffd76e057ab16a6c319740a0ca68d59fedf7e9c02f2437396e72aa11";
@@ -216,8 +217,8 @@ let
       azure-mgmt-managedservices = overrideAzureMgmtPackage super.azure-mgmt-managedservices "1.0.0" "zip"
         "sha256-/tg5n8Z3Oq2jfB0ElqRvWUENd8lJTQyllnxTHDN2rRk=";
 
-      azure-mgmt-managementgroups = overrideAzureMgmtPackage super.azure-mgmt-managementgroups "0.1.0" "zip"
-        "sha256-/2LZgu3aY0o2Fgyx0Vo2epVypay0GeXnrTcejIO9R8c=";
+      azure-mgmt-managementgroups = overrideAzureMgmtPackage super.azure-mgmt-managementgroups "1.0.0" "zip"
+        "bab9bd532a1c34557f5b0ab9950e431e3f00bb96e8a3ce66df0f6ce2ae19cd73";
 
       azure-mgmt-marketplaceordering = overrideAzureMgmtPackage super.azure-mgmt-marketplaceordering "1.1.0" "zip"
         "68b381f52a4df4435dacad5a97e1c59ac4c981f667dcca8f9d04453417d60ad8";
@@ -231,8 +232,8 @@ let
       azure-mgmt-privatedns = overrideAzureMgmtPackage super.azure-mgmt-privatedns "1.0.0" "zip"
         "b60f16e43f7b291582c5f57bae1b083096d8303e9d9958e2c29227a55cc27c45";
 
-      azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "4.0.0" "zip"
-        "sha256-5XQ3qTPn3qmwYY/nkODa3GP5hXc1NhrItfXoBiucKg0=";
+      azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "6.1.0" "zip"
+        "c26635089276515b0488fcf014aab50a0446f54800c6e0e5583cc493ac8d738f";
 
       azure-mgmt-redhatopenshift = overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.0.0" "zip"
         "94cd41f1ebd82e40620fd3e6d88f666b5c19ac7cf8b4e8edadb9721bd7c80980";
@@ -291,11 +292,11 @@ let
       azure-mgmt-authorization = overrideAzureMgmtPackage super.azure-mgmt-authorization "0.61.0" "zip"
         "0xfvx2dvfj3fbz4ngn860ipi4v6gxqajyjc8x92r8knhmniyxk7m";
 
-      azure-mgmt-storage = overrideAzureMgmtPackage super.azure-mgmt-storage "19.0.0" "zip"
-        "f05963e5a8696d0fd4dcadda4feecb9b382a380d2e461b3647704ac787d79876";
+      azure-mgmt-storage = overrideAzureMgmtPackage super.azure-mgmt-storage "19.1.0" "zip"
+        "sha256-Seoi8A4JZaNVCvNKQcGh06SBaQ9lAMeOhUCIAvVtdBY=";
 
-      azure-mgmt-servicebus = overrideAzureMgmtPackage super.azure-mgmt-servicebus "6.0.0" "zip"
-        "f6c64ed97d22d0c03c4ca5fc7594bd0f3d4147659c10110160009b93f541298e";
+      azure-mgmt-servicebus = overrideAzureMgmtPackage super.azure-mgmt-servicebus "7.1.0" "zip"
+        "d8ae7905fb7d3e24822daa20aa7bc5014f41aa18b48ea2d0161e997fc11a3d36";
 
       azure-mgmt-servicefabric = overrideAzureMgmtPackage super.azure-mgmt-servicefabric "1.0.0" "zip"
         "de35e117912832c1a9e93109a8d24cab94f55703a9087b2eb1c5b0655b3b1913";
@@ -413,12 +414,12 @@ let
       });
 
       azure-keyvault-keys = super.azure-keyvault-keys.overridePythonAttrs(oldAttrs: rec {
-        version = "4.5.0b4";
+        version = "4.5.0b6";
         src = super.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           extension = "zip";
-          sha256 = "sha256-f43ZTMFc0IVIaa69gEZFOLALREcx3RRCFoYDY2FYLrY=";
+          sha256 = "sha256-WFSRJaia0+WnvGxoMYZIvf81ue51VPYXzTp8huUh1fc=";
         };
       });
 
@@ -479,18 +480,6 @@ let
           inherit version;
           sha256 = "sha256-+g/ici7hw/V+rEeIIMOlri9iSvgmTL35AAyYD/f3Xj8=";
         };
-      });
-
-      PyGithub = super.PyGithub.overridePythonAttrs(oldAttrs: rec {
-        version = "1.38";
-
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-HtCPd17FBnvIRStyveLbuVz05S/yvVDMMsackf+tknI=";
-        };
-
-        doCheck = false;
       });
 
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {

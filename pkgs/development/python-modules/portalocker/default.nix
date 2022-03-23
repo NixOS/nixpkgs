@@ -22,6 +22,10 @@ buildPythonPackage rec {
     pytest-mypy
   ];
 
+  disabledTests = [
+    "test_combined" # no longer compatible with setuptools>=58
+  ];
+
   meta = with lib; {
     description = "A library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";

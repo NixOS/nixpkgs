@@ -17,5 +17,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fefe.de/libowfat/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    # Doesn't build with glibc 2.34: https://hydra.nixos.org/build/156248131
+    # Should be fixed with the next release: https://bugs.gentoo.org/806505
+    broken = true;
   };
 }

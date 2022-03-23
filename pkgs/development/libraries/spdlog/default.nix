@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8 }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_8, fetchpatch }:
 
 let
-  generic = { version, sha256 }:
+  generic = { version, sha256, patches ? [] }:
     stdenv.mkDerivation {
       pname = "spdlog";
       inherit version;
@@ -12,6 +12,8 @@ let
         rev    = "v${version}";
         inherit sha256;
       };
+
+      inherit patches;
 
       nativeBuildInputs = [ cmake ];
       # spdlog <1.3 uses a bundled version of fmt
@@ -51,6 +53,13 @@ in
   spdlog_1 = generic {
     version = "1.9.2";
     sha256 = "sha256-GSUdHtvV/97RyDKy8i+ticnSlQCubGGWHg4Oo+YAr8Y=";
+    patches = [
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://github.com/gabime/spdlog/commit/d54b8e89c058f3cab2b32b3e9a2b49fd171d5895.patch";
+        sha256 = "sha256-pb7cREF90GXb5Mbs8xFLQ+eLo6Xum13/xYa8JUgJlbI=";
+      })
+    ];
   };
 
   spdlog_0 = generic {

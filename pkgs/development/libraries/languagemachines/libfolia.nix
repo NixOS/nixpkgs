@@ -8,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "libfolia-${release.version}";
+  pname = "libfolia";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "libfolia-${release.version}.tar.gz"; };

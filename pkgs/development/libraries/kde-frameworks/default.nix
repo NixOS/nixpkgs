@@ -70,8 +70,8 @@ let
         mkDerivation = args:
           let
 
-            inherit (args) name;
-            inherit (srcs.${name}) src version;
+            inherit (args) pname;
+            inherit (srcs.${pname}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
             hasSeparateDev = lib.elem "dev" outputs;
@@ -90,8 +90,7 @@ let
               };
 
           in mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src version;
+            inherit pname meta outputs setupHook src version;
           });
 
       };

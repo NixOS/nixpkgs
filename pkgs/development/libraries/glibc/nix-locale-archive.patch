@@ -1,7 +1,8 @@
-diff -Naur glibc-2.27-orig/locale/loadarchive.c glibc-2.27/locale/loadarchive.c
---- glibc-2.27-orig/locale/loadarchive.c	2018-02-01 11:17:18.000000000 -0500
-+++ glibc-2.27/locale/loadarchive.c	2018-02-17 22:32:25.680169462 -0500
-@@ -123,6 +123,23 @@
+diff --git a/locale/loadarchive.c b/locale/loadarchive.c
+index 512769eaec..171dbb4ad9 100644
+--- a/locale/loadarchive.c
++++ b/locale/loadarchive.c
+@@ -123,6 +123,23 @@ calculate_head_size (const struct locarhead *h)
    return MAX (namehash_end, MAX (string_end, locrectab_end));
  }
  
@@ -25,7 +26,7 @@ diff -Naur glibc-2.27-orig/locale/loadarchive.c glibc-2.27/locale/loadarchive.c
  
  /* Find the locale *NAMEP in the locale archive, and return the
     internalized data structure for its CATEGORY data.  If this locale has
-@@ -202,7 +219,7 @@
+@@ -202,7 +219,7 @@ _nl_load_locale_from_archive (int category, const char **namep)
        archmapped = &headmap;
  
        /* The archive has never been opened.  */
@@ -34,23 +35,25 @@ diff -Naur glibc-2.27-orig/locale/loadarchive.c glibc-2.27/locale/loadarchive.c
        if (fd < 0)
  	/* Cannot open the archive, for whatever reason.  */
  	return NULL;
-@@ -397,8 +414,7 @@
+@@ -397,8 +414,7 @@ _nl_load_locale_from_archive (int category, const char **namep)
  	  if (fd == -1)
  	    {
- 	      struct stat64 st;
+ 	      struct __stat64_t64 st;
 -	      fd = __open_nocancel (archfname,
 -				    O_RDONLY|O_LARGEFILE|O_CLOEXEC);
-+	      fd = open_locale_archive ();
++	      fd = open_locale_archive();
  	      if (fd == -1)
  		/* Cannot open the archive, for whatever reason.  */
  		return NULL;
-diff -Naur glibc-2.27-orig/locale/programs/locale.c glibc-2.27/locale/programs/locale.c
---- glibc-2.27-orig/locale/programs/locale.c	2018-02-01 11:17:18.000000000 -0500
-+++ glibc-2.27/locale/programs/locale.c	2018-02-17 22:36:39.726293213 -0500
-@@ -633,6 +633,24 @@
+diff --git a/locale/programs/locale.c b/locale/programs/locale.c
+index ca0a95be99..e484783402 100644
+--- a/locale/programs/locale.c
++++ b/locale/programs/locale.c
+@@ -633,6 +633,24 @@ nameentcmp (const void *a, const void *b)
+ }
  
  
- static int
++static int
 +open_locale_archive (void)
 +{
 +  int fd = -1;
@@ -68,11 +71,10 @@ diff -Naur glibc-2.27-orig/locale/programs/locale.c glibc-2.27/locale/programs/l
 +}
 +
 +
-+static int
+ static int
  write_archive_locales (void **all_datap, char *linebuf)
  {
-   struct stat64 st;
-@@ -644,7 +662,7 @@
+@@ -645,7 +663,7 @@ write_archive_locales (void **all_datap, char *linebuf)
    int fd, ret = 0;
    uint32_t cnt;
  
@@ -81,10 +83,11 @@ diff -Naur glibc-2.27-orig/locale/programs/locale.c glibc-2.27/locale/programs/l
    if (fd < 0)
      return 0;
  
-diff -Naur glibc-2.27-orig/locale/programs/locarchive.c glibc-2.27/locale/programs/locarchive.c
---- glibc-2.27-orig/locale/programs/locarchive.c	2018-02-01 11:17:18.000000000 -0500
-+++ glibc-2.27/locale/programs/locarchive.c	2018-02-17 22:40:51.245293975 -0500
-@@ -117,6 +117,22 @@
+diff --git a/locale/programs/locarchive.c b/locale/programs/locarchive.c
+index f38e835c52..779a3199fc 100644
+--- a/locale/programs/locarchive.c
++++ b/locale/programs/locarchive.c
+@@ -117,6 +117,22 @@ prepare_address_space (int fd, size_t total, size_t *reserved, int *xflags,
  }
  
  
@@ -107,7 +110,7 @@ diff -Naur glibc-2.27-orig/locale/programs/locarchive.c glibc-2.27/locale/progra
  static void
  create_archive (const char *archivefname, struct locarhandle *ah)
  {
-@@ -578,7 +594,7 @@
+@@ -578,7 +594,7 @@ open_archive (struct locarhandle *ah, bool readonly)
    while (1)
      {
        /* Open the archive.  We must have exclusive write access.  */
