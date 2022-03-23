@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autoadb";
-  version = "20200601";
+  version = "unstable-2020-06-01";
 
   src = fetchFromGitHub {
     owner = "rom1v";
