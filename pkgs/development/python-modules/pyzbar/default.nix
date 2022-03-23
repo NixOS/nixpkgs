@@ -18,11 +18,12 @@ buildPythonPackage rec {
   # find_library doesn't return an absolute path
   # https://github.com/NixOS/nixpkgs/issues/7307
   postPatch = ''
-    substituteInPlace pyzbar/zbar_library.py --replace "find_library('zbar')" "'${zbar.lib}/lib/libzbar.so.0'"
+    substituteInPlace pyzbar/zbar_library.py \
+      --replace "find_library('zbar')" "'${lib.getLib zbar}/lib/libzbar.so.0'"
   '';
 
   disabledTests = [
-    #  find_library has been replaced by a hardcoded path
+    # find_library has been replaced by a hardcoded path
     # the test fails due to find_library not called
     "test_found_non_windows"
     "test_not_found_non_windows"
@@ -31,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyzbar" ];
 
   meta = with lib; {
-    description = "Read one-dimensional barcodes and QR codes from Python 2 and 3 using the zbar library.";
+    description = "Read one-dimensional barcodes and QR codes from Python using the zbar library.";
     homepage = "https://github.com/NaturalHistoryMuseum/pyzbar";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
