@@ -5,7 +5,7 @@
 , setuptools-rust
 , openssl
 , cryptography_vectors
-, darwin
+, Security
 , packaging
 , six
 , isPyPy
@@ -47,7 +47,8 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
   propagatedBuildInputs = [
     packaging
     six

@@ -1917,6 +1917,7 @@ in {
 
   cryptography = callPackage ../development/python-modules/cryptography {
     inherit (pkgs.darwin) libiconv;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
   cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
