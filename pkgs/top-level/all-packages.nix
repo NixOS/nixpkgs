@@ -32209,6 +32209,8 @@ with pkgs;
 
   febio-studio = libsForQt5.callPackage ../applications/science/biology/febio-studio { };
 
+  flywheel-cli = callPackage ../applications/science/biology/flywheel-cli { };
+
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
