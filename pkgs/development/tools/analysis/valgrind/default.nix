@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook, perl
 , gdb, cctools, xnu, bootstrap_cmds
-, setupDebugInfoDirs
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +19,6 @@ stdenv.mkDerivation rec {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=143535";
       sha256 = "036zyk30rixjvpylw3c7n171n4gpn6zcp7h6ya2dz4h5r478l9i6";
     })
-    ./debug-info-from-env.patch
   ];
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -33,10 +31,6 @@ stdenv.mkDerivation rec {
 
   # Perl is also a native build input.
   nativeBuildInputs = [ autoreconfHook perl ];
-
-  # Not propagatedNativeBuildInputs because of
-  # https://github.com/NixOS/nixpkgs/issues/64992.
-  propagatedBuildInputs = [ setupDebugInfoDirs ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
