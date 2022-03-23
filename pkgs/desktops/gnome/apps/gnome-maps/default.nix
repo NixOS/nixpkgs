@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -35,6 +37,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-BUSG03dAc3BqdqmBQXl40VG+O3Ik1yN3W74xbvoked8=";
   };
+
+  patches = [
+    # Do not pin to GWeather 3.0, the used API did not change in 4.0.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/commit/759d3087b70341b2c5f1af575ce44338d926690e.patch";
+      sha256 = "Qp9Hta00TLf2lOb9+g9vnPoK17mP3eHpCG2i1ewaw+w=";
+      revert = true;
+    })
+  ];
 
   doCheck = true;
 
