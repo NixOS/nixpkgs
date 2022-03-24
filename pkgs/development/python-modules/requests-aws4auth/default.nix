@@ -3,11 +3,11 @@
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0883346ce30b5018903a67da88df72f73ff06e1a320845bba9cd85e811ba0ba";
+    sha256 = "sha256-694GYtzNpQI1RgVexMvkRwyuAX7L/OjTaLgLXkqU1hk=";
   };
 
   propagatedBuildInputs = [ requests six ];
