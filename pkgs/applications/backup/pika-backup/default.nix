@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , rustPlatform
 , substituteAll
 , desktop-file-utils
@@ -39,6 +40,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./borg-path.patch;
       borg = "${borgbackup}/bin/borg";
+    })
+    # Fix build with meson 0.61, can be removed on next release.
+    # https://gitlab.gnome.org/World/pika-backup/-/issues/156
+    # https://github.com/mesonbuild/meson/issues/9441
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/pika-backup/-/commit/54be149c88fd69fb9e74b7362fe7182863237869.patch";
+      sha256 = "sha256-Tffxo5hlf/gSkp1GfyL4eHthX49tuTq6B+S53N8oA2M=";
     })
   ];
 
