@@ -27,7 +27,7 @@ in
 
     locate = mkOption {
       type = package;
-      default = pkgs.findutils;
+      default = pkgs.findutils.locate;
       defaultText = literalExpression "pkgs.findutils";
       example = literalExpression "pkgs.mlocate";
       description = ''
