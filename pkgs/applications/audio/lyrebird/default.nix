@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix 'PATH' ':' '${lib.makeBinPath [ sox pulseaudio ]}'"
     "--prefix 'PYTHONPATH' ':' '${placeholder "out"}/share/lyrebird'"
-    "--run 'cd ${placeholder "out"}/share/lyrebird'"
+    "--chdir '${placeholder "out"}/share/lyrebird'"
     ''"''${gappsWrapperArgs[@]}"''
   ];
 

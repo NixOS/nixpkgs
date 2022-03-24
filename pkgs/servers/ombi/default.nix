@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
     makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl icu ]} \
-      --run "cd $out/share/${pname}-${version}"
+      --chdir "$out/share/${pname}-${version}"
   '';
 
   passthru = {

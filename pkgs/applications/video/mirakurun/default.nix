@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation rec {
       mkdir -p $out/bin
 
       makeWrapper ${mirakurun}/bin/mirakurun-epgdump $out/bin/mirakurun-epgdump \
-        --run "cd ${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
+        --chdir "${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
         --prefix PATH : ${lib.makeBinPath runtimeDeps}
 
       # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation rec {
       # unique to PM2 is currently being used.
       makeWrapper ${yarn}/bin/yarn $out/bin/mirakurun-start \
         --add-flags "start" \
-        --run "cd ${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
+        --chdir "${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
         --prefix PATH : ${lib.makeBinPath runtimeDeps}
     '';
 

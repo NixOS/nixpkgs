@@ -34,7 +34,7 @@ in {
       --set TERM xterm
 
     makeWrapper $out/lib/openra${openraSuffix}/launch-game.sh $(mkdirp $out/bin)/openra${openraSuffix} \
-      --run "cd $out/lib/openra${openraSuffix}"
+      --chdir "$out/lib/openra${openraSuffix}"
   '';
 
   packageAttrs = {

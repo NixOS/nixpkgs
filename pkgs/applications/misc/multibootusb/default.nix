@@ -101,7 +101,7 @@ python3Packages.buildPythonApplication rec {
       --prefix "PATH" ":" "${lib.makeBinPath runTimeDeps}"
 
       # Finally, move to directory that contains data
-      --run "cd $out/share/${pname}"
+      --chdir "$out/share/${pname}"
     )
   '';
 

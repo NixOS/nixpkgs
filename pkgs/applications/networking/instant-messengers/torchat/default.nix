@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp -rf * $out/lib/torchat
     makeWrapper ${python2}/bin/python $out/bin/torchat \
         --set PYTHONPATH $out/lib/torchat:$program_PYTHONPATH \
-        --run "cd $out/lib/torchat" \
+        --chdir "$out/lib/torchat" \
         --add-flags "-O $out/lib/torchat/torchat.py"
   '';
 
