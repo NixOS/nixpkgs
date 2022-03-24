@@ -286,7 +286,7 @@ Sample output1:
 "reload" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
   name = "reload";
   src = fetchgit {
-    url = "git://github.com/xolox/vim-reload";
+    url = "https://github.com/xolox/vim-reload";
     rev = "0a601a668727f5b675cb1ddc19f6861f3f7ab9e1";
     sha256 = "0vb832l9yxj919f5hfg6qj6bn9ni57gnjd3bj7zpq7d4iv2s4wdh";
   };
