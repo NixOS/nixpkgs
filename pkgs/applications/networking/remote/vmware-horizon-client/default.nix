@@ -9,7 +9,7 @@
 , configText ? ""
 }:
 let
-  version = "2111";
+  version = "2111.1";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -30,11 +30,11 @@ let
   '';
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
-    name = "vmwareHorizonClientFiles";
+    pname = "vmwareHorizonClientFiles";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/view/viewclients/CART22FH2/VMware-Horizon-Client-Linux-2111-8.4.0-18957622.tar.gz";
-      sha256 = "2f79d2d8d34e6f85a5d21a3350618c4763d60455e7d68647ea40715eaff486f7";
+      url = "https://download3.vmware.com/software/CART23FQ1_LIN_2111_1_TARBALL/VMware-Horizon-Client-Linux-2111.1-8.4.1-19480456.tar.gz";
+      sha256 = "e86da88e262a63a9025ca93ccd662a4907b4c8fa1f51b841c96891222d861242";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -115,7 +115,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "vmware-horizon-client";
+  pname = "vmware-horizon-client";
+  inherit version;
 
   dontUnpack = true;
 
