@@ -10398,6 +10398,12 @@
     githubId = 811827;
     name = "Gabriel Lievano";
   };
+  rgrinberg = {
+    name = "Rudi Grinberg";
+    email = "me@rgrinberg.com";
+    github = "rgrinberg";
+    githubId = 139003;
+  };
   rgrunbla = {
     email = "remy@grunblatt.org";
     github = "rgrunbla";
