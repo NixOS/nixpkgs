@@ -293,7 +293,7 @@ in rec {
 
   mkServiceConfig = path: { name, config, ... }: {
     config = mkMerge
-      [ { # Default path for systemd services.  Should be quite minimal.
+      [ {
           path = mkAfter path;
           environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
@@ -324,6 +324,7 @@ in rec {
       ];
   };
 
+  # Default path for systemd services. Should be quite minimal.
   serviceConfig = mkServiceConfig [
     pkgs.coreutils
     pkgs.findutils
