@@ -282,11 +282,11 @@ rec {
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
       loadModule = args: fallbackFile: fallbackKey: m:
         if isFunction m || isAttrs m then
-          unifyModuleSyntax fallbackFile fallbackKey (applyIfFunction fallbackKey m args)
+          unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgsIfFunction fallbackKey m args)
         else if isList m then
           let defs = [{ file = fallbackFile; value = m; }]; in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
-        else unifyModuleSyntax (toString m) (toString m) (applyIfFunction (toString m) (import m) args);
+        else unifyModuleSyntax (toString m) (toString m) (applyModuleArgsIfFunction (toString m) (import m) args);
 
       /*
       Collects all modules recursively into the form
@@ -383,7 +383,7 @@ rec {
         config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
       };
 
-  applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
+  applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the

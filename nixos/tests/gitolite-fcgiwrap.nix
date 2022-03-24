@@ -20,7 +20,7 @@ import ./make-test-python.nix (
         nodes = {
 
           server =
-            { ... }:
+            { config, ... }:
               {
                 networking.firewall.allowedTCPPorts = [ 80 ];
 
