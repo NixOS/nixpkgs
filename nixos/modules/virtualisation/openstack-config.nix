@@ -11,7 +11,11 @@ in
 {
   imports = [
     ../profiles/qemu-guest.nix
+
+    # Note: While we do use the headless profile, we also explicitly
+    # turn on the serial console on ttyS0 below.
     ../profiles/headless.nix
+
     # The Openstack Metadata service exposes data on an EC2 API also.
     ./ec2-data.nix
     ./amazon-init.nix
@@ -36,6 +40,12 @@ in
     boot.loader.grub.device = if (!cfg.efi) then "/dev/vda" else "nodev";
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
+    boot.loader.timeout = 1;
+    boot.loader.grub.extraConfig = ''
+      serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+      terminal_output console serial
+      terminal_input console serial
+    '';
 
     services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
     boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
@@ -46,6 +56,11 @@ in
       permitRootLogin = "prohibit-password";
       passwordAuthentication = mkDefault false;
     };
+
+    users.users.root.initialPassword = "foobar";
+
+    # Enable the serial console on ttyS0
+    systemd.services."serial-getty@ttyS0".enable = true;
 
     # Force getting the hostname from Openstack metadata.
     networking.hostName = mkDefault "";
