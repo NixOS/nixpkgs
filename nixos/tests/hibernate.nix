@@ -117,6 +117,11 @@ in makeTest {
       resume = create_named_machine("resume")
       resume.start()
       resume.succeed("grep 'not persisted to disk' /run/test/suspended")
+
+      # Ensure we don't restore from hibernation when booting again
+      resume.crash()
+      resume.wait_for_unit("default.target")
+      resume.fail("grep 'not persisted to disk' /run/test/suspended")
     '';
 
 }
