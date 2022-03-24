@@ -21705,10 +21705,6 @@ with pkgs;
 
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
 
-  pulseaudio-hsphfpd = callPackage ../servers/pulseaudio/pali.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
-
   pulseaudio = callPackage ../servers/pulseaudio ({
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   });
