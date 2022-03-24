@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
+  separateDebugInfo = true;
 
   hardeningDisable = [ "format" ];
 
