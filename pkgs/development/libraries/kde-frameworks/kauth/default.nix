@@ -7,7 +7,7 @@
 mkDerivation {
   name = "kauth";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qttools ] ++ lib.optional enablePolkit polkit-qt;
+  buildInputs = lib.optional enablePolkit polkit-qt ++ [ qttools ];
   propagatedBuildInputs = [ kcoreaddons ];
   patches = [
     ./cmake-install-paths.patch
