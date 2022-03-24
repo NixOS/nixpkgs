@@ -3,7 +3,7 @@ GEM
   specs:
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    faraday (1.9.3)
+    faraday (1.10.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -27,7 +27,7 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     multipart-post (2.1.1)
-    octokit (4.21.0)
+    octokit (4.22.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     public_suffix (4.0.6)
@@ -40,8 +40,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  octokit (= 4.21.0)
+  octokit (= 4.22.0)
   sawyer (= 0.8.2)
 
 BUNDLED WITH
-   2.2.24
+   2.3.9
