@@ -514,12 +514,14 @@ let
                   local = "192.168.2.1";
                   remote = "192.168.2.2";
                   dev = "eth2";
+                  ttl = 225;
                   type = "tap";
                 };
                 gre6Tunnel = {
                   local = "fd00:1234:5678:4::1";
                   remote = "fd00:1234:5678:4::2";
                   dev = "eth3";
+                  ttl = 255;
                   type = "tun6";
                 };
               };
@@ -548,12 +550,14 @@ let
                   local = "192.168.2.2";
                   remote = "192.168.2.1";
                   dev = "eth1";
+                  ttl = 225;
                   type = "tap";
                 };
                 gre6Tunnel = {
                   local = "fd00:1234:5678:4::2";
                   remote = "fd00:1234:5678:4::1";
                   dev = "eth3";
+                  ttl = 255;
                   type = "tun6";
                 };
               };
@@ -573,6 +577,7 @@ let
         ];
       testScript = { ... }:
         ''
+          import json
           start_all()
 
           with subtest("Wait for networking to be configured"):
@@ -591,6 +596,13 @@ let
               client1.wait_until_succeeds("ping -c 1 fc00::2")
 
               client2.wait_until_succeeds("ping -c 1 fc00::1")
+
+          with subtest("Test GRE tunnel TTL"):
+              links = json.loads(client1.succeed("ip -details -json link show greTunnel"))
+              assert links[0]['linkinfo']['info_data']['ttl'] == 225, "ttl not set for greTunnel"
+
+              links = json.loads(client2.succeed("ip -details -json link show gre6Tunnel"))
+              assert links[0]['linkinfo']['info_data']['ttl'] == 255, "ttl not set for gre6Tunnel"
         '';
     };
     vlan = let
