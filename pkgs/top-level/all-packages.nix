@@ -29669,6 +29669,8 @@ with pkgs;
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
+  unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
+
   unipicker = callPackage ../applications/misc/unipicker { };
 
   unison = callPackage ../applications/networking/sync/unison {
