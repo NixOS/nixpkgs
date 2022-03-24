@@ -42,6 +42,7 @@ dont-distribute-packages:
  - BiobaseInfernal
  - BiobaseMAF
  - BiobaseTrainingData
+ - BiobaseVienna
  - BirdPP
  - Bitly
  - BlastHTTP
@@ -789,6 +790,7 @@ dont-distribute-packages:
  - biopsl
  - biosff
  - biostockholm
+ - bip32
  - birch-beer
  - bird
  - bisc
@@ -798,6 +800,8 @@ dont-distribute-packages:
  - bitcoin-api
  - bitcoin-api-extra
  - bitcoin-block
+ - bitcoin-compact-filters
+ - bitcoin-scripting
  - bitcoin-tx
  - bitcoin-types
  - bitcoind-regtest
@@ -923,6 +927,7 @@ dont-distribute-packages:
  - chalkboard-viewer
  - charade
  - chart-cli
+ - chart-svg-various
  - chart-unit
  - cheapskate-terminal
  - check-pvp
@@ -1162,10 +1167,16 @@ dont-distribute-packages:
  - dbus-client
  - ddate
  - ddc-build
+ - ddc-core-babel
  - ddc-core-eval
  - ddc-core-flow
+ - ddc-core-llvm
+ - ddc-core-salt
+ - ddc-core-simpl
+ - ddc-core-tetra
  - ddc-driver
  - ddc-interface
+ - ddc-source-tetra
  - ddc-tools
  - ddc-war
  - ddci-core
@@ -1472,6 +1483,7 @@ dont-distribute-packages:
  - formlets-hsp
  - forsyde-deep
  - forth-hll
+ - fortran-vars
  - foscam-directory
  - foscam-sort
  - fpco-api
@@ -1984,9 +1996,12 @@ dont-distribute-packages:
  - haskoin
  - haskoin-bitcoind
  - haskoin-crypto
+ - haskoin-node
  - haskoin-protocol
  - haskoin-script
  - haskoin-store
+ - haskoin-store-data
+ - haskoin-wallet
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
@@ -2182,7 +2197,10 @@ dont-distribute-packages:
  - hsbencher-fusion
  - hsc3-auditor
  - hsc3-data
+ - hsc3-forth
  - hsc3-graphs
+ - hsc3-lisp
+ - hsc3-plot
  - hsc3-server
  - hsc3-sf-hsndfile
  - hsc3-utils
@@ -2252,6 +2270,7 @@ dont-distribute-packages:
  - hws
  - hwsl2-bytevector
  - hwsl2-reducers
+ - hxmppc
  - hxournal
  - hxt-binary
  - hxt-filter
@@ -2432,7 +2451,11 @@ dont-distribute-packages:
  - keera-hails-reactive-yampa
  - keera-hails-reactivelenses
  - keera-posture
+ - keid-geometry
+ - keid-render-basic
  - keid-resource-gltf
+ - keid-sound-openal
+ - keid-ui-dearimgui
  - kevin
  - keyring
  - keysafe
@@ -2516,6 +2539,7 @@ dont-distribute-packages:
  - lenz
  - lenz-mtl
  - lenz-template
+ - levmar-chart
  - lex-applicative
  - lgtk
  - lha
@@ -2579,6 +2603,7 @@ dont-distribute-packages:
  - llvm-tools
  - lmonad-yesod
  - lnd-client
+ - lnurl
  - lnurl-authenticator
  - load-balancing
  - local-search
@@ -2836,6 +2861,8 @@ dont-distribute-packages:
  - net-spider-rpl-cli
  - netlines
  - netstring-enumerator
+ - nettle-frp
+ - nettle-netkit
  - network-anonymous-i2p
  - network-anonymous-tor
  - network-connection
@@ -2845,6 +2872,7 @@ dont-distribute-packages:
  - network-minihttp
  - network-netpacket
  - network-pgi
+ - network-protocol-xmpp
  - network-rpca
  - network-stream
  - network-topic-models
@@ -2904,6 +2932,7 @@ dont-distribute-packages:
  - olwrapper
  - online
  - online-csv
+ - opc-xml-da-client
  - open-adt-tutorial
  - openai-hs
  - openapi3-code-generator
@@ -3389,6 +3418,7 @@ dont-distribute-packages:
  - sc2-lowlevel
  - sc2-support
  - sc2hs
+ - sc3-rdu
  - scalable-server
  - scalp-webhooks
  - scalpel-search
@@ -3421,6 +3451,7 @@ dont-distribute-packages:
  - selenium-server
  - self-extract
  - semantic-source
+ - semi-iso
  - semiring
  - semiring-num
  - sensenet
@@ -3495,6 +3526,7 @@ dont-distribute-packages:
  - si-clock
  - sibe
  - sigma-ij
+ - signals
  - signature
  - signify-hs
  - silvi
@@ -3639,6 +3671,7 @@ dont-distribute-packages:
  - stratux-http
  - stratux-websockets
  - streaming-fft
+ - streaming-process
  - streaming-utils
  - strelka
  - strict-data
@@ -3699,6 +3732,12 @@ dont-distribute-packages:
  - symbiote
  - symmetry-operations-symbols
  - syncthing-hs
+ - syntax
+ - syntax-attoparsec
+ - syntax-example
+ - syntax-example-json
+ - syntax-pretty
+ - syntax-printer
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
@@ -3734,6 +3773,7 @@ dont-distribute-packages:
  - techlab
  - telega
  - telegram-bot
+ - telegram-raw-api
  - tensorflow-core-ops
  - tensorflow-logging
  - tensorflow-ops
@@ -3968,6 +4008,7 @@ dont-distribute-packages:
  - wai-handler-snap
  - wai-hastache
  - wai-log
+ - wai-middleware-brotli
  - wai-middleware-cache
  - wai-middleware-cache-redis
  - wai-middleware-consul
@@ -4051,6 +4092,7 @@ dont-distribute-packages:
  - xml-monad
  - xml-pipe
  - xml-push
+ - xml-query-xml-conduit
  - xml-tydom-conduit
  - xml2x
  - xmltv

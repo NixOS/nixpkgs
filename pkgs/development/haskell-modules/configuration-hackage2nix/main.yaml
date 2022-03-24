@@ -394,6 +394,7 @@ unsupported-platforms:
   bindings-sane:                                [ x86_64-darwin, aarch64-darwin ]
   btrfs:                                        [ x86_64-darwin, aarch64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin, aarch64-darwin ] # uses glibc-specific ptsname_r
+  camfort:                                      [ aarch64-linux ]
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   cut-the-crap:                                 [ x86_64-darwin, aarch64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
@@ -411,19 +412,21 @@ unsupported-platforms:
   gi-dbusmenugtk3:                              [ x86_64-darwin, aarch64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin, aarch64-darwin ]
   gi-ggit:                                      [ x86_64-darwin, aarch64-darwin ]
+  gi-gtkosxapplication:                         [ x86_64-linux, aarch64-linux ]
   gi-ibus:                                      [ x86_64-darwin, aarch64-darwin ]
   gi-javascriptcore:                            [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ x86_64-darwin, aarch64-darwin ]
   gi-vte:                                       [ x86_64-darwin, aarch64-darwin ]
-  gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-webkit2webextension:                       [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ x86_64-darwin, aarch64-darwin ]
   gnome-keyring:                                [ x86_64-darwin, aarch64-darwin ]
+  gtk3-mac-integration:                         [ x86_64-linux, aarch64-linux ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin, aarch64-darwin ]
   haskell-snake:                                [ x86_64-darwin, aarch64-darwin ]
-  hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]
   hidapi:                                       [ x86_64-darwin, aarch64-darwin ]
@@ -436,6 +439,11 @@ unsupported-platforms:
   iwlib:                                        [ x86_64-darwin, aarch64-darwin ]
   Jazzkell:                                     [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ x86_64-darwin, aarch64-darwin ]
+  keid-core:                                    [ aarch64-linux ]
+  keid-geometry:                                [ aarch64-linux ]
+  keid-render-basic:                            [ aarch64-linux ]
+  keid-sound-openal:                            [ aarch64-linux ]
+  keid-ui-dearimgui:                            [ aarch64-linux ]
   kqueue:                                       [ x86_64-linux, aarch64-linux, i686-linux, armv7l-linux ] # BSD / Darwin only API
   Kulitta:                                      [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
   LambdaHack:                                   [ x86_64-darwin, aarch64-darwin ]
@@ -452,6 +460,7 @@ unsupported-platforms:
   linux-namespaces:                             [ x86_64-darwin, aarch64-darwin ]
   lio-fs:                                       [ x86_64-darwin, aarch64-darwin ]
   logging-facade-journald:                      [ x86_64-darwin, aarch64-darwin ]
+  longshot:                                     [ aarch64-linux ]
   midi-alsa:                                    [ x86_64-darwin, aarch64-darwin ]
   mpi-hs:                                       [ aarch64-linux, x86_64-darwin, aarch64-darwin ]
   mpi-hs-binary:                                [ aarch64-linux, x86_64-darwin, aarch64-darwin ]
