@@ -7198,6 +7198,8 @@ with pkgs;
 
   lf = callPackage ../tools/misc/lf {};
 
+  lfimg = callPackage ../tools/misc/lfimg { };
+
   lha = callPackage ../tools/archivers/lha { };
 
   lhasa = callPackage ../tools/compression/lhasa {};
