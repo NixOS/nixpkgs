@@ -19611,6 +19611,8 @@ with pkgs;
 
   optparse-bash = callPackage ../development/libraries/optparse-bash { };
 
+  oras = callPackage ../development/tools/oras { };
+
   orcania = callPackage ../development/libraries/orcania { };
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
