@@ -601,6 +601,7 @@ mapAliases ({
   liblrdf = throw "'liblrdf' has been renamed to/replaced by 'lrdf'"; # Converted to throw 2022-02-22
   libmsgpack = throw "'libmsgpack' has been renamed to/replaced by 'msgpack'"; # Converted to throw 2022-02-22
   libosmpbf = throw "libosmpbf was removed because it is no longer required by osrm-backend";
+  libpng_apng = throw "libpng_apng has been removed, because it is equivalent to libpng"; # Added 2021-03-21
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # Added 2020-04-09
   libqrencode = throw "'libqrencode' has been renamed to/replaced by 'qrencode'"; # Converted to throw 2022-02-22
   librdf = lrdf; # Added 2020-03-22
@@ -1262,6 +1263,7 @@ mapAliases ({
   varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-07-26
   varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-07-26
   varnish65 = throw "varnish65 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-09-15
+  varnish70 = throw "varnish70 was removed from nixpkgs, because it was superseded upstream. Please switch to a different release"; # Added 2022-03-17
   vdirsyncerStable  = vdirsyncer; # Added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
   venus = throw "venus has been removed from nixpkgs, as it's unmaintained"; # Added 2021-02-05
   vimbWrapper = throw "'vimbWrapper' has been renamed to/replaced by 'vimb'"; # Converted to throw 2022-02-22
@@ -1444,7 +1446,7 @@ mapAliases ({
     ksshaskpass ksystemlog kteatime ktimer ktorrent ktouch kturtle kwallet-pam
     kwalletmanager kwave kwayland-integration kwin kwrited marble milou minuet
     okular oxygen oxygen-icons5 picmi plasma-browser-integration plasma-desktop
-    plasma-integration plasma-nano plasma-nm plasma-pa plasma-phone-components
+    plasma-integration plasma-nano plasma-nm plasma-pa plasma-mobile
     plasma-systemmonitor plasma-thunderbolt plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil qqc2-breeze-style
     sddm-kcm skanlite spectacle systemsettings xdg-desktop-portal-kde yakuake

@@ -308,6 +308,7 @@ in
   molly-brown = handleTest ./molly-brown.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
+  moonraker = handleTest ./moonraker.nix {};
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   moosefs = handleTest ./moosefs.nix {};

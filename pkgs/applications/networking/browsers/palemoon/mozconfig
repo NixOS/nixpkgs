@@ -12,7 +12,7 @@ _BUILD_64=@build64@
 _GTK_VERSION=@gtkversion@
 
 # Standard build options for Pale Moon
-ac_add_options --enable-application=browser
+ac_add_options --enable-application=palemoon
 ac_add_options --enable-optimize="-O2 -w"
 ac_add_options --enable-default-toolkit=cairo-gtk$_GTK_VERSION
 ac_add_options --enable-jemalloc
@@ -20,6 +20,8 @@ ac_add_options --enable-strip
 ac_add_options --enable-devtools
 ac_add_options --enable-av1
 
+ac_add_options --disable-eme
+ac_add_options --disable-webrtc
 ac_add_options --disable-gamepad
 ac_add_options --disable-tests
 ac_add_options --disable-debug

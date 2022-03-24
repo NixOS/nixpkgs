@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.72";
+  version = "2.1.73";
   format = "flit";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0hhnBkbgt4bSlqjvYKX2Mhty/T1vBGm91HhKmyvVzmA=";
+    hash = "sha256-OxIm0vFH0JadaKMGrKNNj8mA7ue1kazjpauSK6XNGiU=";
   };
 
   nativeBuildInputs = [

@@ -4,6 +4,7 @@
 , buildJavaBindings ? false, openjdk
 , buildPythonBindings ? true, python3Packages
 , modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
+, bmfSupport ? true, eigen
 , minimalBindings ? false
 , debug ? false
 , optimize ? (!debug)
@@ -19,14 +20,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.30";
+  version = "3.31";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dg8ywqif20g0fs8dnd6364n080nvwx7f444zcfwqwz6iax61qv1";
+    sha256 = "sha256-K6YkkCMxc2lqxHIwyuLiwcp3m49sqbEtOlwZh4L1YJg=";
   };
 
   propagatedBuildInputs = [ boost ];
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     ++ optionals buildJavaBindings [ openjdk ]
     ++ optionals buildPythonBindings [ python3Packages.pybind11 ]
     ++ optionals buildDocumentation [ fig2dev ghostscript doxygen ]
+    ++ optionals bmfSupport [ eigen ]
     ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   outputs = [ "out" ]

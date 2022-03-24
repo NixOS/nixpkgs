@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-ipdb";
-  version = "0.6.8";
+  version = "0.6.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyroute2.ipdb";
     inherit version;
-    hash = "sha256-sjlJ1eBoMQaJzEF/4Qk9ZwZB0s/yvR5wUUDP3UWBA50=";
+    hash = "sha256-sJ9Zzlrh9FWVWL7StyHpPPuXo6TtNLz2/lQBCl53Wrk=";
   };
 
   propagatedBuildInputs = [

@@ -234,6 +234,8 @@ with pkgs;
 
   buf = callPackage ../development/tools/buf { };
 
+  cfn-nag = callPackage ../development/tools/cfn-nag { };
+
   elfcat = callPackage ../tools/misc/elfcat { };
 
   # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
@@ -1925,6 +1927,8 @@ with pkgs;
 
   gopacked = callPackage ../applications/misc/gopacked { };
 
+  gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
+
   gucci = callPackage ../tools/text/gucci { };
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
@@ -2611,7 +2615,9 @@ with pkgs;
 
   clac = callPackage ../tools/misc/clac {};
 
-  clash = callPackage ../tools/networking/clash { };
+  clash = callPackage ../tools/networking/clash {
+    buildGoModule = buildGo118Module;
+  };
 
   clasp = callPackage ../tools/misc/clasp { };
 
@@ -5777,6 +5783,8 @@ with pkgs;
 
   gdmap = callPackage ../tools/system/gdmap { };
 
+  gef = callPackage ../development/tools/misc/gef { };
+
   gelasio = callPackage ../data/fonts/gelasio { };
 
   gemget = callPackage ../tools/networking/gemget {};
@@ -6258,6 +6266,8 @@ with pkgs;
 
   gpp = callPackage ../development/tools/gpp { };
 
+  gnuastro = callPackage ../applications/science/astronomy/gnuastro { };
+
   gpredict = callPackage ../applications/science/astronomy/gpredict {
     hamlib = hamlib_4;
   };
@@ -6655,6 +6665,8 @@ with pkgs;
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
+
+  hut = callPackage ../applications/version-management/git-and-tools/hut { };
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
@@ -10301,7 +10313,9 @@ with pkgs;
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
-  syft = callPackage ../tools/admin/syft { };
+  syft = callPackage ../tools/admin/syft {
+    buildGoModule = buildGo118Module;
+  };
 
   Sylk = callPackage ../applications/networking/Sylk {};
 
@@ -11278,11 +11292,11 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish70;
+    varnish60 varnish71;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish70Packages;
+    varnish60Packages varnish71Packages;
 
-  varnishPackages = varnish70Packages;
+  varnishPackages = varnish71Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
@@ -13517,9 +13531,7 @@ with pkgs;
     boost = boost172;
   };
 
-  souffle = callPackage ../development/compilers/souffle {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  souffle = callPackage ../development/compilers/souffle { };
 
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
@@ -14395,6 +14407,8 @@ with pkgs;
   anybadge = with python3Packages; toPythonApplication anybadge;
 
   augeas = callPackage ../tools/system/augeas { };
+
+  autoadb = callPackage ../misc/autoadb { };
 
   inherit (callPackage ../tools/admin/ansible { })
     ansible
@@ -18699,7 +18713,6 @@ with pkgs;
   libplacebo = callPackage ../development/libraries/libplacebo { };
 
   libpng = callPackage ../development/libraries/libpng { };
-  libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libpostal = callPackage ../development/libraries/libpostal { };
@@ -20725,7 +20738,10 @@ with pkgs;
 
   wxmac = callPackage ../development/libraries/wxwidgets/wxmac30.nix { };
 
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix { };
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
+  };
   wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
   wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
@@ -22744,6 +22760,8 @@ with pkgs;
   powercap = callPackage ../os-specific/linux/powercap { };
 
   powerstat = callPackage ../os-specific/linux/powerstat { };
+
+  projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
 
@@ -25040,9 +25058,8 @@ with pkgs;
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
-  cgit = callPackage ../applications/version-management/git-and-tools/cgit {
-    inherit (python3Packages) python wrapPython pygments markdown;
-  };
+  cgit = callPackage ../applications/version-management/git-and-tools/cgit { };
+  cgit-pink = callPackage ../applications/version-management/git-and-tools/cgit/pink.nix { };
 
   chatty = callPackage ../applications/networking/instant-messengers/chatty { };
 
@@ -25850,6 +25867,8 @@ with pkgs;
     tuigreet = callPackage ../os-specific/linux/tuigreet { };
   };
 
+  goldberg-emu = callPackage ../applications/emulators/goldberg-emu { };
+
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
   };
@@ -25963,12 +25982,6 @@ with pkgs;
   firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {
     callPackage = newScope {
       inherit (rustPackages) cargo rustc;
-      libpng = libpng_apng;
-      gnused = gnused_422;
-      inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
-                                            Kerberos AVFoundation MediaToolbox
-                                            CoreLocation Foundation AddressBook;
-      inherit (darwin) libobjc;
     };
   });
 
@@ -26388,6 +26401,10 @@ with pkgs;
   gpsd = callPackage ../servers/gpsd { };
 
   gpsprune = callPackage ../applications/misc/gpsprune { };
+
+  gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
+
+  gpu-screen-recorder-gtk = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix { };
 
   gpxlab = libsForQt5.callPackage ../applications/misc/gpxlab { };
 
@@ -29449,12 +29466,6 @@ with pkgs;
   thunderbirdPackages = recurseIntoAttrs (callPackage ../applications/networking/mailreaders/thunderbird/packages.nix {
     callPackage = newScope {
       inherit (rustPackages) cargo rustc;
-      libpng = libpng_apng;
-      gnused = gnused_422;
-      inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
-                                            Kerberos AVFoundation MediaToolbox
-                                            CoreLocation Foundation AddressBook;
-      inherit (darwin) libobjc;
     };
   });
 
@@ -33204,6 +33215,8 @@ with pkgs;
 
   clpeak = callPackage ../tools/misc/clpeak { };
 
+  collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
+
   cups = callPackage ../misc/cups { };
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
@@ -33262,6 +33275,8 @@ with pkgs;
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
 
   cups-brother-hll2350dw = callPackage  ../misc/cups/drivers/hll2350dw { };
+
+  cups-brother-mfcl2750dw = callPackage  ../misc/cups/drivers/mfcl2750dw { };
 
   cups-drv-rastertosag-gdi = callPackage ../misc/cups/drivers/cups-drv-rastertosag-gdi { };
 
