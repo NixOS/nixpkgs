@@ -7,7 +7,7 @@ let
   inherit (systemdUtils.lib)
     generateUnits
     pathToUnit
-    initrdServiceToUnit
+    serviceToUnit
     sliceToUnit
     socketToUnit
     targetToUnit
@@ -344,12 +344,12 @@ in {
 
       targets.initrd.aliases = ["default.target"];
       units =
-           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit          n v)) cfg.paths
-        // mapAttrs' (n: v: nameValuePair "${n}.service" (initrdServiceToUnit n v)) cfg.services
-        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit         n v)) cfg.slices
-        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit        n v)) cfg.sockets
-        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit        n v)) cfg.targets
-        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit         n v)) cfg.timers
+           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
+        // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
+        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
+        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
+        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
+        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
