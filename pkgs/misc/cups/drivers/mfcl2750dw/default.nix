@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103566/mfcl2750dwpdrv-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103530/mfcl2750dwpdrv-${version}.i386.deb";
     hash = "sha256-3uDwzLQTF8r1tsGZ7ChGhk4ryQmVsZYdUaj9eFaC0jc=";
   };
 
