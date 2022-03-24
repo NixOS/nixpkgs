@@ -50,9 +50,11 @@ stdenv.mkDerivation rec {
       ln -s ${mkModuleXml "com.mysql" "mysql-connector-java.jar"} $module_path/com/mysql/main/module.xml
     ''}
 
-    wrapProgram $out/bin/standalone.sh --set JAVA_HOME ${jre}
-    wrapProgram $out/bin/add-user-keycloak.sh --set JAVA_HOME ${jre}
-    wrapProgram $out/bin/jboss-cli.sh --set JAVA_HOME ${jre}
+    for script in add-user-keycloak.sh add-user.sh domain.sh elytron-tool.sh jboss-cli.sh jconsole.sh jdr.sh standalone.sh wsconsume.sh wsprovide.sh; do
+      wrapProgram $out/bin/$script --set JAVA_HOME ${jre}
+    done
+    wrapProgram $out/bin/kcadm.sh --prefix PATH : ${jre}/bin
+    wrapProgram $out/bin/kcreg.sh --prefix PATH : ${jre}/bin
   '';
 
   passthru.tests = nixosTests.keycloak;
