@@ -8712,6 +8712,8 @@ in {
 
   rencode = callPackage ../development/python-modules/rencode { };
 
+  reorder-python-imports = callPackage ../development/python-modules/reorder-python-imports { };
+
   reolink = callPackage ../development/python-modules/reolink { };
 
   reparser = callPackage ../development/python-modules/reparser { };
