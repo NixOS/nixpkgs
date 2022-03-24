@@ -5888,6 +5888,8 @@ in {
 
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
+  pandoc-xnos = callPackage ../development/python-modules/pandoc-xnos { };
+
   panel = callPackage ../development/python-modules/panel { };
 
   panflute = callPackage ../development/python-modules/panflute { };
