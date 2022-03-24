@@ -11,6 +11,11 @@
 # distinction.
 { pkgs, haskellLib }:
 
+let
+  inherit (pkgs) fetchpatch lib;
+  inherit (lib) throwIfNot versionOlder;
+in
+
 with haskellLib;
 
 self: super: {
@@ -30,7 +35,7 @@ self: super: {
   bin-package-db = null;
 
   # waiting for release: https://github.com/jwiegley/c2hsc/issues/41
-  c2hsc = appendPatch (pkgs.fetchpatch {
+  c2hsc = appendPatch (fetchpatch {
     url = "https://github.com/jwiegley/c2hsc/commit/490ecab202e0de7fc995eedf744ad3cb408b53cc.patch";
     sha256 = "1c7knpvxr7p8c159jkyk6w29653z5yzgjjqj11130bbb8mk9qhq7";
   }) super.c2hsc;
@@ -100,13 +105,13 @@ self: super: {
 
     patches = drv.patches or [] ++ [
       # Intermediate, inconsequential patch we need to add so the next one applies
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "git-annex-enable-package-imports.patch";
         url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=952664641a38ee4da940c1bb8f1bf6c3e699137f";
         sha256 = "0ablfa5jh98rgpx9wd0kgjdr6j1vyqygfnsisvn45dh7f3svkhx9";
       })
       # Allows compilation with aeson >= 2.0, submitted upstream as well
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "git-annex-aeson-2.0.patch";
         url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=ca596e7c54ed08e2bec3b6b3e669ccf5ded9aff8";
         sha256 = "18m164xwx6axw50bm2c833772rqcyqk3aqzap2pzawbb5d024ss6";
@@ -161,8 +166,8 @@ self: super: {
   hsc3-db = dontHaddock super.hsc3-db;
 
   # Pick patch from master for GHC 9.0 support
-  flat = assert pkgs.lib.versionOlder super.flat.version "0.5"; appendPatches [
-    (pkgs.fetchpatch {
+  flat = assert versionOlder super.flat.version "0.5"; appendPatches [
+    (fetchpatch {
       name = "flat-ghc-9.0.patch";
       url = "https://github.com/Quid2/flat/commit/d32c2c0c0c3c38c41177684ade9febe92d279b06.patch";
       sha256 = "0ay0c53jpjmnnh7ylfpzpxqkhs1vq9jdwm9f84d40r88ki8hls8g";
@@ -421,7 +426,7 @@ self: super: {
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
   # Test suite works with aeson 2.0 only starting with 0.14.1
-  vinyl = assert pkgs.lib.versionOlder super.vinyl.version "0.14.1";
+  vinyl = assert versionOlder super.vinyl.version "0.14.1";
     dontCheck super.vinyl;
 
   # https://github.com/Philonous/xml-picklers/issues/5
@@ -514,12 +519,12 @@ self: super: {
     # Compatibility with tasty-hspec >= 1.1.7 requires a patch and a dependency on hspec
     patches = drv.patches or [] ++ [
       # Intermediate patch so fix applies
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://github.com/haskell-works/tasty-discover/commit/67b022f5945abdfb71ca31fca7910abc7effe043.patch";
         sha256 = "1x539qa2871fiahw9zjxyyqz86v4ib7k7fv9hdvvxcrrfw3zwl66";
       })
       # Actual fix
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "tasty-hspec-1.1.7-compat.patch";
         url = "https://github.com/haskell-works/tasty-discover/commit/98d3c464f33129e38fa9c0fcdfb1847dfb0490b9.patch";
         sha256 = "01a8ni3lyh1wql7aghl41nd2c9m6gcn1i77bh3pygh6r403x771p";
@@ -633,7 +638,7 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # 2022-03-16: ghc 9 support has not been merged: https://github.com/hasura/monad-validate/pull/5
-  monad-validate = appendPatch (pkgs.fetchpatch {
+  monad-validate = appendPatch (fetchpatch {
     url = "https://github.com/hasura/monad-validate/commit/7ba916e23c219a8cd397e2a1801c74682b52fcf0.patch";
     sha256 = "sha256-udJ+/2VvfWA5Bm36nftH0sbPNuMkWj8rCh9cNN2f9Zw=";
   }) (dontCheck super.monad-validate);
@@ -687,14 +692,14 @@ self: super: {
   base32-bytestring = dontCheck super.base32-bytestring;
 
   # 2022-03-24: Strict aeson bound: https://github.com/berberman/nvfetcher/pull/63
-  nvfetcher = pkgs.lib.throwIfNot (super.nvfetcher.version == "0.4.0.0") "nvfetcher: remove jailbreak after update" doJailbreak super.nvfetcher;
+  nvfetcher = throwIfNot (super.nvfetcher.version == "0.4.0.0") "nvfetcher: remove jailbreak after update" doJailbreak super.nvfetcher;
 
   # 2022-03-24: Strict aeson bound:
-  arch-web = pkgs.lib.throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
+  arch-web = throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
 
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
-  djinn = appendPatch (pkgs.fetchpatch {
+  djinn = appendPatch (fetchpatch {
     url = "https://github.com/augustss/djinn/commit/6cb9433a137fb6b5194afe41d616bd8b62b95630.patch";
     sha256 = "0s021y5nzrh74gfp8xpxpxm11ivzfs3jwg6mkrlyry3iy584xqil";
   }) super.djinn;
@@ -724,7 +729,7 @@ self: super: {
     } super.d-bus;
   # Add now required extension on recent compilers.
   # https://github.com/Philonous/d-bus/pull/23
-  in appendPatch (pkgs.fetchpatch {
+  in appendPatch (fetchpatch {
     url = "https://github.com/Philonous/d-bus/commit/e5f37900a3a301c41d98bdaa134754894c705681.patch";
     sha256 = "6rQ7H9t483sJe1x95yLPAZ0BKTaRjgqQvvrQv7HkJRE=";
   }) newer;
@@ -787,7 +792,7 @@ self: super: {
         find . -type f -print0 | xargs -0 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
       '' + (drv.prePatch or "");
       patches = [
-        (pkgs.fetchpatch {
+        (fetchpatch {
           url = "https://github.com/JonasDuregard/sized-functors/pull/10/commits/fe6bf78a1b97ff7429630d0e8974c9bc40945dcf.patch";
           sha256 = "sha256-mMsXOqLqSbGl9Q0txiZiciPtGT7f12lnhlpFsnCwamk=";
         })
@@ -842,7 +847,7 @@ self: super: {
     buildTools = drv.buildTools or [] ++ [ pkgs.buildPackages.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
-        wrapProgram $b --prefix 'PATH' ':' "${pkgs.lib.getBin pkgs.z3}/bin"
+        wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
       done
     '';
   }) super.cryptol;
@@ -902,7 +907,7 @@ self: super: {
   cryptohash-sha256 = overrideCabal (drv: {
     jailbreak = true;
     broken = false;
-    hydraPlatforms = pkgs.lib.platforms.all;
+    hydraPlatforms = lib.platforms.all;
   }) super.cryptohash-sha256;
 
   # The test suite has all kinds of out-dated dependencies, so it feels easier
@@ -1056,7 +1061,7 @@ self: super: {
     generateOptparseApplicativeCompletion "stack"
       (doJailbreak # for Cabal constraint added on hackage
         (appendPatch
-          (pkgs.fetchpatch {
+          (fetchpatch {
             # https://github.com/commercialhaskell/stack/pull/5559
             # When removing, also remove doJailbreak.
             name = "stack-pull-5559.patch";
@@ -1089,7 +1094,7 @@ self: super: {
   brittany = doJailbreak (dontCheck super.brittany);  # Outdated upperbound on ghc-exactprint: https://github.com/lspitzner/brittany/issues/342
 
   # Fix with Cabal 2.2, https://github.com/guillaume-nargeot/hpc-coveralls/pull/73
-  hpc-coveralls = appendPatch (pkgs.fetchpatch {
+  hpc-coveralls = appendPatch (fetchpatch {
     url = "https://github.com/guillaume-nargeot/hpc-coveralls/pull/73/commits/344217f513b7adfb9037f73026f5d928be98d07f.patch";
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   }) super.hpc-coveralls;
@@ -1112,7 +1117,7 @@ self: super: {
   purescript-cst = doJailbreak super.purescript-cst;
 
   purescript =
-    pkgs.lib.pipe
+    lib.pipe
       (super.purescript.override {
         # The latest version of language-javascript is 0.7.1.0,
         # but it seems to have a bug with async support:
@@ -1125,7 +1130,7 @@ self: super: {
         #
         # This patch can likely be removed when purescript-0.14.6 is released.
         (appendPatch
-          (pkgs.fetchpatch {
+          (fetchpatch {
             url = "https://patch-diff.githubusercontent.com/raw/purescript/purescript/pull/4199.patch";
             sha256 = "sha256-OeG30EfCHs7gttLME909WfKxkEZr7Ch3leYiw4lElGg=";
             includes = [
@@ -1186,7 +1191,7 @@ self: super: {
 
   # Fix for base >= 4.11
   scat = overrideCabal (drv: {
-    patches = [(pkgs.fetchpatch {
+    patches = [(fetchpatch {
       url    = "https://github.com/redelmann/scat/pull/6.diff";
       sha256 = "07nj2p0kg05livhgp1hkkdph0j0a6lb216f8x348qjasy0lzbfhl";
     })];
@@ -1238,13 +1243,13 @@ self: super: {
   # Remove for hail > 0.2.0.0
   hail = overrideCabal (drv: {
     patches = [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         # Relax dependency constraints,
         # upstream PR: https://github.com/james-preston/hail/pull/13
         url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/13.patch";
         sha256 = "039p5mqgicbhld2z44cbvsmam3pz0py3ybaifwrjsn1y69ldsmkx";
       })
-      (pkgs.fetchpatch {
+      (fetchpatch {
         # Relax dependency constraints,
         # upstream PR: https://github.com/james-preston/hail/pull/16
         url = "https://patch-diff.githubusercontent.com/raw/james-preston/hail/pull/16.patch";
@@ -1299,12 +1304,12 @@ self: super: {
 
   # 2022-03-12: Pick patches from master for compat with Stackage Nightly
   gitit = appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "gitit-allow-pandoc-2.17.patch";
       url = "https://github.com/jgm/gitit/commit/9eddd1d3bde46bccb23c6d21e15b289f2a9ebe66.patch";
       sha256 = "09ahvwyaqzqaa9gnpbffncs9574d20mfy30zz2ww67cmm8f2a8iv";
     })
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "gitit-fix-build-with-hoauth2-2.3.0.patch";
       url = "https://github.com/jgm/gitit/commit/fd534c0155eef1790500c834e612ab22cf9b67b6.patch";
       sha256 = "0hmlqkavn8hr0b4y4hxs1yyg0r79ylkzhzwy1dzbb3a2q86ydd2f";
@@ -1317,7 +1322,7 @@ self: super: {
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
   # https://github.com/robdockins/edison/pull/16
-  EdisonAPI = appendPatch (pkgs.fetchpatch {
+  EdisonAPI = appendPatch (fetchpatch {
     url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
     postFetch = ''
       ${pkgs.buildPackages.patchutils}/bin/filterdiff --include='a/edison-api/*' --strip=1 "$out" > "$tmpfile"
@@ -1326,7 +1331,7 @@ self: super: {
     sha256 = "0yi5pz039lcm4pl9xnl6krqxyqq5rgb5b6m09w0sfy06x0n4x213";
   }) super.EdisonAPI;
 
-  EdisonCore = appendPatch (pkgs.fetchpatch {
+  EdisonCore = appendPatch (fetchpatch {
     url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
     postFetch = ''
       ${pkgs.buildPackages.patchutils}/bin/filterdiff --include='a/edison-core/*' --strip=1 "$out" > "$tmpfile"
@@ -1364,12 +1369,12 @@ self: super: {
 
   patch = appendPatches [
     # 2022-02-27: https://github.com/reflex-frp/patch/pull/40 for bump bounds
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/reflex-frp/patch/commit/15ea4956e04264b9be2fe4644119a709b196708f.patch";
       sha256 = "sha256-la97DCjeVu82AaQv2my+UhmB/jBmMyxxpRAwhEB1RGc=";
     })
     # 2022-03-13: https://github.com/reflex-frp/patch/pull/41 for ghc 9.0 compat
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/reflex-frp/patch/commit/fee3addcfc982c7b70489a8a64f208ab2360bdb7.patch";
       sha256 = "sha256-/CTiHSs+Z4dyL5EJx949XD0zzSAy5s4hzchmNkb0YOk=";
     })
@@ -1386,7 +1391,7 @@ self: super: {
   # 2022-03-16: Pullrequest for ghc 9 compat https://github.com/reflex-frp/reflex-dom/pull/433
   reflex-dom-core = doDistribute (unmarkBroken (dontCheck
     (appendPatch
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://github.com/reflex-frp/reflex-dom/compare/a0459deafd296656b3e99db01ea7f65b89b0948c...56fa8a484ccfc7d3365d07fea3caa430155dbcac.patch";
         sha256 = "sha256-azMF3uX7S1rKKRAVjY+xP2XbQKHvEY/9nU7cH81KKPA=";
         stripLen = 2;
@@ -1427,12 +1432,12 @@ self: super: {
 
   svgcairo = appendPatches [
     # Remove when https://github.com/gtk2hs/svgcairo/pull/12 goes in.
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/gtk2hs/svgcairo/commit/348c60b99c284557a522baaf47db69322a0a8b67.patch";
       sha256 = "0akhq6klmykvqd5wsbdfnnl309f80ds19zgq06sh1mmggi54dnf3";
     })
     # Remove when https://github.com/gtk2hs/svgcairo/pull/13 goes in.
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/dalpd/svgcairo/commit/d1e0d7ae04c1edca83d5b782e464524cdda6ae85.patch";
       sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
     })
@@ -1443,7 +1448,7 @@ self: super: {
   massiv = dontCheck super.massiv;
 
   # Upstream PR: https://github.com/jkff/splot/pull/9
-  splot = appendPatch (pkgs.fetchpatch {
+  splot = appendPatch (fetchpatch {
     url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
   }) super.splot;
@@ -1466,7 +1471,7 @@ self: super: {
   # Fails with "supports custom headers"
   # Patch for GHC 9.0 support
   Spock-core = dontCheck (appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "Spock-core-GHC-9.0.patch";
       url = "https://github.com/agrafix/Spock/commit/25c75961c4aaaa2e81c9e2afd3d758f2b643f9df.patch";
       sha256 = "03854yvda7dclz60fb1b5q8qx6zq2yjbvlyj994352xsz0lz2qan";
@@ -1519,7 +1524,7 @@ self: super: {
   hcoord = overrideCabal (drv: {
     # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
     patches = [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://github.com/danfran/hcoord/pull/8/commits/762738b9e4284139f5c21f553667a9975bad688e.patch";
         sha256 = "03r4jg9a6xh7w3jz3g4bs7ff35wa4rrmjgcggq51y0jc1sjqvhyz";
       })
@@ -1556,11 +1561,11 @@ self: super: {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
-          pkgs.lib.makeBinPath deps
+          lib.makeBinPath deps
         }"
       '';
     }) (addTestToolDepends deps (
-        appendPatch (pkgs.fetchpatch {
+        appendPatch (fetchpatch {
             url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/2a4229b04aaeec025f1400a39f4e6390af760b54.patch";
             sha256 = "sha256-G3abFWykpvtsh8l3GZhkNUpBo7zRb9Ve4d6mjizysIo=";
             includes = [ "src/Update/Nix/FetchGit/Prefetch.hs" ];
@@ -1574,7 +1579,7 @@ self: super: {
 
   # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
   binary-strict = appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/idontgetoutmuch/binary-low-level/pull/16/commits/c16d06a1f274559be0dea0b1f7497753e1b1a8ae.patch";
       sha256 = "sha256-deSbudy+2je1SWapirWZ1IVWtJ0sJVR5O/fnaAaib2g=";
     })
@@ -1583,7 +1588,7 @@ self: super: {
   # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
-  haskell-language-server = pkgs.lib.pipe super.haskell-language-server [
+  haskell-language-server = lib.pipe super.haskell-language-server [
     dontCheck
     (appendConfigureFlags ["-ftactics"])
     (overrideCabal (old: {
@@ -1596,14 +1601,14 @@ self: super: {
   lsp = assert super.lsp.version == "1.4.0.0"; dontCheck super.lsp;
 
   hls-test-utils = assert super.hls-test-utils.version == "1.2.0.0"; appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/haskell/haskell-language-server/commit/074593987e9086e308b89ecde336de2c64861dc0.patch";
       sha256 = "sha256-uTlIbGQKulP3963UPL2V9cqMoIvPscK+s2W/HtBmMWc=";
       stripLen = 2;
       extraPrefix = "";
       includes = [ "*/Util.hs" ];
     })
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/haskell/haskell-language-server/commit/78305f21783807b04baebca4860c255bfe84d4ab.patch";
       sha256 = "sha256-oe8Q8kBJBkel+pR5imFj43NVpm4afcyLgAUCWhrIoPk=";
       stripLen = 2;
@@ -1673,7 +1678,7 @@ self: super: {
   reflex-dom-pandoc = super.reflex-dom-pandoc.override { clay = dontCheck self.clay_0_13_3; };
 
   # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
-  reflex = appendPatch (pkgs.fetchpatch {
+  reflex = appendPatch (fetchpatch {
     url = "https://github.com/reflex-frp/reflex/compare/823afd9424234cbe0134051f09a6710e54509cec...469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
     sha256 = "sha256-EwW7QBXHGlcJkKiLDmsXCZPwQz24+mg2Vuiu0Vb/T6w=";
   }) (dontCheck super.reflex);
@@ -1714,7 +1719,7 @@ self: super: {
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
   hercules-ci-api-agent = dontCheck super.hercules-ci-api-agent;
 
-  hercules-ci-cli = pkgs.lib.pipe super.hercules-ci-cli [
+  hercules-ci-cli = lib.pipe super.hercules-ci-cli [
     unmarkBroken
     (overrideCabal (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
@@ -1724,14 +1729,14 @@ self: super: {
 
   pipes-aeson = appendPatches [
     # Dependency of the aeson-2 patch
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "pipes-aeson-add-loop.patch";
       url = "https://github.com/k0001/pipes-aeson/commit/d22133b4a678edbb52bcaec5079dc88ccc0de1d3.patch";
       sha256 = "sha256-5o5ys1P1+QB4rjLCYok5AcPRWCtRiecP/TqCFm8ulVY=";
       includes = ["src/Pipes/Aeson.hs" "src/Pipes/Aeson/Internal.hs" "src/Pipes/Aeson/Unchecked.hs"];
     })
     # https://github.com/k0001/pipes-aeson/pull/20
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "pipes-aeson-aeson-2.patch";
       url = "https://github.com/hercules-ci/pipes-aeson/commit/ac735c9cd459c6ef51ba82325d1c55eb67cb7b2c.patch";
       sha256 = "sha256-viWZ6D5t79x50RXiOjP6UeQ809opgNFYZOP+h+1KJh0=";
@@ -1741,7 +1746,7 @@ self: super: {
 
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "moto-postgresql-monadfail.patch";
       url = "https://gitlab.com/k0001/moto/-/commit/09cc1c11d703c25f6e81325be6482dc7ec6cbf58.patch";
       # includes = ["moto/lib/Moto/File.hs"];
@@ -1752,7 +1757,7 @@ self: super: {
 
   moto = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "moto-ghc-9.0.patch";
       url = "https://gitlab.com/k0001/moto/-/commit/5b6f015a1271765005f03762f1f1aaed3a3198ed.patch";
       stripLen = 1;
@@ -1841,7 +1846,7 @@ self: super: {
     '';
     patches = (attrs.patches or []) ++ [
       # fix a compilation error related to protolude 0.3
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://github.com/Profpatsch/yarn2nix/commit/ca78cf06226819b2e78cb6cdbc157d27afb41532.patch";
         sha256 = "1vkczwzhxilnp87apyb18nycn834y5nbw4yr1kpwlwhrhalvzw61";
         includes = [ "*/ResolveLockfile.hs" ];
@@ -1868,7 +1873,7 @@ self: super: {
 
   # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
   amazonka = appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       stripLen = 1;
       url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
       sha256 = "1x9l5xgvrh908di6whpavyp08cys11v3yn6rc21zw87xiyigdbi3";
@@ -1896,7 +1901,7 @@ self: super: {
   # * Disable test suite which doesn't compile
   #   https://github.com/creswick/chatter/issues/38
   chatter = appendPatch
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/creswick/chatter/commit/e8c15a848130d7d27b8eb5e73e8a0db1366b2e62.patch";
       sha256 = "1dzak8d12h54vss5fxnrclygz0fz9ygbqvxd5aifz5n3vrwwpj3g";
     })
@@ -1937,11 +1942,11 @@ self: super: {
   # Too strict verion bounds on cryptonite and github.
   # PRs are merged, will be fixed next release or Hackage revision.
   nix-thunk = appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/obsidiansystems/nix-thunk/commit/49d27a85dd39cd9413c99958c67e596756a502b5.patch";
       sha256 = "1p1n0123yrbdqyfk4kx3gq6bdv65l1bxgbsg51ckcwclg54xp2p5";
     })
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/obsidiansystems/nix-thunk/commit/512867c651977265d5d8f456b538f7a364ec8a8b.patch";
       sha256 = "121yg26y4g28k8xv7y1j6c3pxm17vsjn3vi62kkc8g928c47yd02";
     })
@@ -1968,7 +1973,7 @@ self: super: {
   # Apply patch from master relaxing the version bounds on tasty.
   # Can be removed at next release (current is 0.10.1.0).
   ginger = appendPatch
-    (pkgs.fetchpatch {
+    (fetchpatch {
       url = "https://github.com/tdammers/ginger/commit/bd8cb39c1853d4fb4f663c4c201884575906acea.patch";
       sha256 = "1rdy53k0384g52bnc59j1f0i13hr4lbnbksfsabr4av6zmw9wmzf";
     }) super.ginger;
@@ -2006,7 +2011,7 @@ self: super: {
     version = "1.0";
     sha256 = "0xl848q8z6qx2bi6xil0d35lra7wshwvysyfblki659d7272b1im";
     description = "GHC BigNum library";
-    license = pkgs.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     # ghc-bignum is not buildable if none of the three backends
     # is explicitly enabled. We enable Native for now as it doesn't
     # depend on anything else as oppossed to GMP and FFI.
@@ -2015,7 +2020,7 @@ self: super: {
     # i. e. if GHC 8.10.* and 8.8.* have been removed.
     configureFlags = [ "-f" "Native" ];
     patches = [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
         sha256 = "1qx4r031y72px291vz38bng9sb23r8zb35s03v5hhawlmgzfzcb5";
         stripLen = 2;
@@ -2052,7 +2057,7 @@ self: super: {
   # Presumably to be removed at the next release
   # Test suite doesn't support hspec 2.8
   # https://github.com/yi-editor/yi/issues/1124
-  yi-language = appendPatch (pkgs.fetchpatch {
+  yi-language = appendPatch (fetchpatch {
     url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
     sha256 = "0r4mzngs0x1akqpajzx7ssa9rax977fvj5ra8d3grfbpx6z0nm01";
     includes = [ "yi-language.cabal" ];
@@ -2073,7 +2078,7 @@ self: super: {
   # 2022-03-22: PR for haskell-gi-base compat https://github.com/ghcjs/jsaddle/pull/129
   jsaddle-webkit2gtk =
     appendPatch (
-      pkgs.fetchpatch {
+      fetchpatch {
         name = "haskell-gi-base-0.26-compat-patch";
         url = "https://github.com/ghcjs/jsaddle/commit/c9a9ad39addea469f7e3f5bc6b1c778fefaab5d8.patch";
         sha256 = "sha256-4njoOxtJH2jVqiPmW8f9hGUqpzI3yJ1XP4u85QgmvjU=";
@@ -2095,7 +2100,7 @@ self: super: {
   # Fix build with bytestring >= 0.11 (GHC 9.2)
   # https://github.com/llvm-hs/llvm-hs/pull/389
   llvm-hs-pure = appendPatches [
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "llvm-hs-pure-bytestring-0.11.patch";
       url = "https://github.com/llvm-hs/llvm-hs/commit/fe8fd556e8d2cc028f61d4d7b4b6bf18c456d090.patch";
       sha256 = "0gjgcvy3jx15nhq4jgarn8ff2nk1dc0k7w64knhhr17isw91gikp";
@@ -2107,7 +2112,7 @@ self: super: {
   # * Fix build failure by picking patch from 8.5, we need
   #   this version of sbv for petrinizer
   # * Pin version of crackNum that still exposes its library
-  sbv_7_13 = appendPatch (pkgs.fetchpatch {
+  sbv_7_13 = appendPatch (fetchpatch {
       url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
       sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
     })
@@ -2145,7 +2150,7 @@ self: super: {
     };
   } self.haskell-ci;
 
-  large-hashable = pkgs.lib.pipe super.large-hashable [
+  large-hashable = lib.pipe super.large-hashable [
     # 2022-03-21: use version from git which includes support for GHC 9.0.1
     (assert super.large-hashable.version == "0.1.0.4"; overrideSrc {
       version = "unstable-2021-11-01";
@@ -2169,7 +2174,7 @@ self: super: {
     # 2022-03-21: patch for aeson 2.0
     # https://github.com/factisresearch/large-hashable/pull/22
     (appendPatches [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "large-hashable-aeson-2.0.patch";
         url = "https://github.com/factisresearch/large-hashable/commit/7094ef0ba55b4848cb57bae73d119acfb496a4c9.patch";
         sha256 = "0ckiii0s697h817z65jwlmjzqw2ckpm815wqcnxjigf6v9kxps8j";
@@ -2219,7 +2224,7 @@ self: super: {
   composite-base = assert super.composite-base.version == "0.7.5.0";
     overrideCabal (drv: {
       patches = drv.patches or [] ++ [
-        (pkgs.fetchpatch {
+        (fetchpatch {
           name = "composite-base-template-haskell-2.17.patch";
           url = "https://github.com/ConferOpenSource/composite/commit/4ca7562d46a0cdfae3afacf194134db768450a02.patch";
           sha256 = "143rp8g2bskf2hxszahpg72gvagj4qnw87ikswlbal0p7gfd8zii";
@@ -2260,14 +2265,14 @@ self: super: {
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.
   # Disable aeson for now, future release should support it
-  graphql = assert pkgs.lib.versionOlder self.hspec.version "2.9.0";
+  graphql = assert versionOlder self.hspec.version "2.9.0";
     assert super.graphql.version == "1.0.2.0";
     appendConfigureFlags [
       "-f-json"
     ] (doJailbreak super.graphql);
 
   # https://github.com/ajscholl/basic-cpuid/pull/1
-  basic-cpuid = appendPatch (pkgs.fetchpatch {
+  basic-cpuid = appendPatch (fetchpatch {
     url = "https://github.com/ajscholl/basic-cpuid/commit/2f2bd7a7b53103fb0cf26883f094db9d7659887c.patch";
     sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
   }) super.basic-cpuid;
@@ -2347,7 +2352,7 @@ self: super: {
   heist = assert super.heist.version == "1.1.0.1";
     # aeson 2.0 compat https://github.com/snapframework/heist/pull/132
     # not merged in master yet
-    appendPatch (pkgs.fetchpatch {
+    appendPatch (fetchpatch {
       url = "https://github.com/snapframework/heist/compare/de802b0ed5055bd45cfed733524b4086c7e71660...d76adf749d14d7401963d36a22597584c52fc55f.patch";
       sha256 = "sha256-GEIPGYYJO6S4t710AQe1uk3EvBu4UpablrlMDZLBSTk=";
       includes = [ "src/*" "heist.cabal"];
@@ -2422,13 +2427,13 @@ self: super: {
 
   protolude = appendPatches [
     # Intermediate Patch, so the next one applies
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "integer-gmp-only-symbols.patch";
       url = "https://github.com/protolude/protolude/commit/84d228a3b5a2adfe5c8aec23176a0301012e54eb.patch";
       sha256 = "0mk0gxcg8vp73wlz764y24gqmxdrhanp12dfam9xsb6cm34jkjdc";
     })
     # Compat with GHC 9.0 (not merged yet)
-    (pkgs.fetchpatch {
+    (fetchpatch {
       name = "protolude-ghc-9.0.patch";
       url = "https://github.com/protolude/protolude/pull/131/commits/1ca4b4564b4d868022d5bab5330e2c7d9cae11a0.patch";
       sha256 = "0jrm6715kc8v7v4isi79b3w1i51rs332bkak25ik6zv3i5lgcg68";
@@ -2482,7 +2487,7 @@ self: super: {
   }) super.misfortune);
 
   # GHC 9 support https://github.com/lambdabot/dice/pull/2
-  dice = appendPatch (pkgs.fetchpatch {
+  dice = appendPatch (fetchpatch {
     name = "dice-ghc9.patch";
     url = "https://github.com/lambdabot/dice/commit/80d6fd443cb17b21d91b725f994ece6e8274e0a0.patch";
     excludes = [ ".gitignore" ];
@@ -2523,7 +2528,7 @@ self: super: {
   # https://github.com/aristidb/aws/issues/275
   aws = overrideCabal (drv: {
     patches = drv.patches or [] ++ [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "aws-aeson-2.0-compat.patch";
         url = "https://github.com/aristidb/aws/pull/277/commits/7af7586c5d244d07f77d49e5fdc739e6e8e54816.patch";
         sha256 = "1bsiyk1k671rwlyflka2whq972h72cwscrxkr9n2wzhxp70ap3g3";
@@ -2542,9 +2547,9 @@ self: super: {
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
   # 2022-02-25: Upstream fixes are not released. Remove this override on update.
-  cabal-fmt = assert super.cabal-fmt.version == "0.1.5.1"; pkgs.lib.pipe super.cabal-fmt [
+  cabal-fmt = assert super.cabal-fmt.version == "0.1.5.1"; lib.pipe super.cabal-fmt [
     doJailbreak
-    (appendPatch (pkgs.fetchpatch {
+    (appendPatch (fetchpatch {
       url = "https://github.com/phadej/cabal-fmt/commit/842630f70adb5397245109f77dba07662836e964.patch";
       sha256 = "sha256-s0W/TI3wHA73MFyKKcNBJFHgFAmBDLGbLaIvWbe/Bsg=";
     }))
@@ -2591,13 +2596,13 @@ self: super: {
 
   elm2nix = appendPatches [
       # unreleased, prereq for aeson-2 patch
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "elm2nix-pull-44.patch";
         url = "https://patch-diff.githubusercontent.com/raw/cachix/elm2nix/pull/44.patch";
         sha256 = "sha256-d6Ra3mIVKCA/5pEavsPi2TdN0qcRwU3gc634oWdYZq8=";
       })
       # https://github.com/cachix/elm2nix/issues/46#issuecomment-1056236009
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "elm2nix-aeson-2.patch";
         url = "https://github.com/cachix/elm2nix/commit/1a35f07ad5d63085ffd7e5634355412e1112c4e9.patch";
         sha256 = "sha256-HAwMvOyp2IdPyjwt+aKYogMqg5NZYlu897UqJy59eFc=";
@@ -2607,7 +2612,7 @@ self: super: {
   mustache = overrideCabal (drv: {
     # allow building with unordered-containers 0.2.17
     patches = drv.mustache or [] ++ [
-      (pkgs.fetchpatch {
+      (fetchpatch {
         name = "mustache-unordered-containers-0.2.17-compat.patch";
         url = "https://github.com/JustusAdam/mustache/commit/19b97b58b35ee746fdae1fc34ba97d7967175a62.patch";
         sha256 = "02cxxmm3ymh64lzl1kp47rmfpar9358ksj0g4q963i40lg9y0g55";
