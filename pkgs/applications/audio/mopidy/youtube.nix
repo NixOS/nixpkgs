@@ -7,14 +7,13 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mopidy-youtube";
   version = "3.5";
-
-  disabled = python3.pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "natumbri";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zn645rylr3wj45rg4mqrldibb5b24c85rdpcdc9d0a5q7528nl6";
+    hash = "sha256-hlokysFFgZZYY7flghgRq6wVG824kpcLkXxk6nMhxn4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -28,7 +27,22 @@ python3.pkgs.buildPythonApplication rec {
     mopidy
   ];
 
-  doCheck = false;
+  checkInputs = with python3.pkgs; [
+    vcrpy
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test requires a YouTube API key
+    "test_get_default_config"
+  ];
+
+  disabledTestPaths = [
+    # Disable tests which interact with Youtube
+    "tests/test_api.py"
+    "tests/test_backend.py"
+    "tests/test_youtube.py"
+  ];
 
   pythonImportsCheck = [
     "mopidy_youtube"
