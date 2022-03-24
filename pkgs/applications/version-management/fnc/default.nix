@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ncurses ] ++
-	(lib.optional stdenv.isDarwin libiconv);
+    (lib.optional stdenv.isDarwin libiconv);
 
   makeFlags = [ "PREFIX=$(out)" ];
 
