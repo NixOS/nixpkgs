@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenv, zlib, ncurses }:
+{ lib, fetchurl, stdenv, zlib, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "fnc";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1phqxh0afky7q2qmhgjlsq1awbv4254yd8wpzxlww4p7a57cp0lk";
   };
 
-  buildInputs = [ zlib ncurses ];
+  buildInputs = [ zlib ncurses ] ++
+	(lib.optional stdenv.isDarwin libiconv);
 
   makeFlags = [ "PREFIX=$(out)" ];
 
