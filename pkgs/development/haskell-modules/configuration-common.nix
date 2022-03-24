@@ -686,6 +686,9 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
+  # 2022-03-24: Strict aeson bound: https://github.com/berberman/nvfetcher/pull/63
+  nvfetcher = pkgs.lib.throwIfNot (super.nvfetcher.version == "0.4.0.0") "nvfetcher: remove jailbreak after update" doJailbreak super.nvfetcher;
+
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = appendPatch (pkgs.fetchpatch {
