@@ -691,7 +691,7 @@ runTests {
 
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
-    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+    expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
   testCartesianProductOfEmptySet = {

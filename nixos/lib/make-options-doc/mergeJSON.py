@@ -48,7 +48,9 @@ overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 
 # fix up declaration paths in lazy options, since we don't eval them from a full nixpkgs dir
 for (k, v) in options.items():
-    v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}', v.value['declarations']))
+    # The _module options are not declared in nixos/modules
+    if v.value['loc'][0] != "_module":
+        v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}', v.value['declarations']))
 
 # merge both descriptions
 for (k, v) in overrides.items():
