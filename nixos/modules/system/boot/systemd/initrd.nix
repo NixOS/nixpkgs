@@ -317,9 +317,6 @@ in {
           symlink = "/etc/systemd/system.conf";
         }
 
-        # TODO: Not sure why this needs to be here for the recovery shell to work
-        { object = "${pkgs.glibc}/lib/libnss_files.so"; }
-
         { object = config.environment.etc.os-release.source; symlink = "/etc/initrd-release"; }
         { object = config.environment.etc.os-release.source; symlink = "/etc/os-release"; }
         { object = fstab; symlink = "/etc/fstab"; }
@@ -332,10 +329,10 @@ in {
           object = pkgs.writeText "nixos.conf"
             (lib.concatStringsSep "\n" config.boot.initrd.kernelModules);
         }
-        {
-          object = builtins.toFile "passwd" "root:x:0:0:System Administrator:/root:/bin/bash";
-          symlink = "/etc/passwd";
-        }
+
+        { object = "${pkgs.fakeNss}/etc/passwd"; symlink = "/etc/passwd"; }
+        # so NSS can look up usernames
+        { object = "${pkgs.glibc}/lib/libnss_files.so"; }
         {
           object = builtins.toFile "shadow" "root:${config.boot.initrd.systemd.emergencyHashedPassword}:::::::";
           symlink = "/etc/shadow";
