@@ -32,8 +32,6 @@
 , WebKit
 }:
 
-assert withWebKit -> stdenv.isDarwin;
-
 assert withGtk2 -> (!withWebKit);
 
 let
