@@ -5052,6 +5052,8 @@ self: super: with self; {
     python3 = python;
   }).src;
 
+  kicost-digikey-api-v3 = callPackage ../development/python-modules/kicost-digikey-api-v3 { };
+
   kinparse = callPackage ../development/python-modules/kinparse { };
 
   kiss-headers = callPackage ../development/python-modules/kiss-headers { };

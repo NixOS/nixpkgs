@@ -36215,6 +36215,8 @@ with pkgs;
     with3d = false;
   };
 
+  kicost = callPackage ../applications/science/electronics/kicost { };
+
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
