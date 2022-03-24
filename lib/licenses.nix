@@ -607,6 +607,11 @@ in mkLicense lset) ({
     fullName = "Enlightenment License (e16)";
   };
 
+  mit0 = {
+    spdxId = "MIT-0";
+    fullName = "MIT No Attribution";
+  };
+
   mpl10 = {
     spdxId = "MPL-1.0";
     fullName = "Mozilla Public License 1.0";
