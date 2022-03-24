@@ -8,22 +8,22 @@
 , autoPatchelfHook
 , gsettings-desktop-schemas
 , gtk3
-, wrapGAppsHook
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
-  version = "6.4";
+  version = "6.5";
 
   src = fetchurl {
     url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
-    sha256 = "0i8sg4criimrqmz0g68b8xcwcrb362ssid5jazswpa6hhwj6s5n4";
+    sha256 = "1l7cf5jgidpykaf68mzf92kywl1vxwl3fg43ibgr2rg4cnl1g82b";
   };
 
   nativeBuildInputs = [
     unzip
     autoPatchelfHook
-    wrapGAppsHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     gcc-unwrapped
     gsettings-desktop-schemas
     gtk3
+  ];
+
+  wrapProgramFlags = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
+    "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 
   sourceRoot = ".";
@@ -57,7 +62,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-    wrapGApp "$out/opt/pinegrow/PinegrowLibrary" --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
+    wrapProgram "$out/opt/pinegrow/PinegrowLibrary" ''${wrapProgramFlags[@]}
   '';
 
   meta = with lib; {
