@@ -64,5 +64,14 @@ in rec {
     sha256 = "sha256-rA7mNxcu0DWkykMyfV4JwFmQqg0HOIcwjjD4jCRxNww=";
   };
 
+  alloy6 = let version = "6.0.0"; in generic {
+    major = "6";
+    inherit version;
+    src = fetchurl {
+      sha256 = "rA7mNxcu0DWkykMyfV4JwFmQqg0HOIcwjjD4jCRxNww=";
+      url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/org.alloytools.alloy.dist.jar";
+    };
+  };
+
   alloy = alloy5;
 }
