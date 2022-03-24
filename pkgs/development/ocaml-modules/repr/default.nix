@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "repr";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/${version}/${pname}-fuzz-${version}.tbz";
-    sha256 = "1y9qnbaxcyxz7bzkkq5lwjrv715mvp2vphzcrd8vbvjhp7df3l1f";
+    sha256 = "sha256-u4oPlN8AL8Gdy1mINCcerd7/odVwQUkf89K54+gNB14=";
   };
 
   minimumOCamlVersion = "4.08";
