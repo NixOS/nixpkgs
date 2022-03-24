@@ -27958,6 +27958,8 @@ with pkgs;
 
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
+  pluto = callPackage ../applications/networking/cluster/pluto { };
+
   polybar = callPackage ../applications/misc/polybar { };
 
   polybarFull = callPackage ../applications/misc/polybar {
