@@ -2,13 +2,11 @@
 
 buildDunePackage rec {
   pname = "mirage-random";
-  version = "2.0.0";
-
-  useDune2 = true;
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-random/releases/download/v${version}/mirage-random-v${version}.tbz";
-    sha256 = "0qj41d5smkkkbjwsnz71bhhj94d2cwv53rf3j4rhky0pqbkidnv1";
+    sha256 = "sha256-Sf4/KB1kMMwXI+yr5H/JuOmynYPNXwlk9dAA+gFAZs8=";
   };
 
   propagatedBuildInputs = [ cstruct ];
