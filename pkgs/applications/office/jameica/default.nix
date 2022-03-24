@@ -4,7 +4,6 @@ let
   _version = "2.10.1";
   _build = "482";
   version = "${_version}-${_build}";
-  name = "jameica-${version}";
 
   swtSystem = if stdenv.hostPlatform.system == "i686-linux" then "linux"
   else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
@@ -22,7 +21,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  inherit name version;
+  pname = "jameica";
+  inherit version;
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,${name},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
 
     # copy libraries except SWT
-    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/${name}/
+    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
     # copy platform-specific SWT
-    cp lib/swt/${swtSystem}/swt.jar $out/share/${name}/
+    cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
 
     install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications/
 
     makeWrapper ${jre}/bin/java $out/bin/jameica \
-      --add-flags "-cp $out/share/java/jameica.jar:$out/share/${name}/* ${
+      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
         lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
