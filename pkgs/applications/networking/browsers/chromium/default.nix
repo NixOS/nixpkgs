@@ -157,8 +157,8 @@ let
     else browser;
 
 in stdenv.mkDerivation {
-  name = lib.optionalString ungoogled "ungoogled-"
-    + "chromium${suffix}-${version}";
+  pname = lib.optionalString ungoogled "ungoogled-"
+    + "chromium${suffix}";
   inherit version;
 
   nativeBuildInputs = [

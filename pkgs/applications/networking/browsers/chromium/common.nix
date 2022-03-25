@@ -114,7 +114,7 @@ let
   };
 
   base = rec {
-    name = "${packageName}-unwrapped-${version}";
+    pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 

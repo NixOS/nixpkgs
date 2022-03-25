@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "grass";
+  pname = "grass";
   version = "7.8.6";
 
   src = with lib; fetchFromGitHub {
