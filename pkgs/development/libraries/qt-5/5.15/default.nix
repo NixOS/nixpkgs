@@ -2,8 +2,15 @@
 
 # Updates
 
-Run `./fetch.sh` to update package sources from Git.
-Check for any minor version changes.
+Before a major version update, make a copy of this directory. (We like to
+keep the old version around for a short time after major updates.) Add a
+top-level attribute to `top-level/all-packages.nix`.
+
+1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
+2. From the top of the Nixpkgs tree, run
+   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
 
 */
 
@@ -21,9 +28,50 @@ Check for any minor version changes.
 
 let
 
-  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
-
   qtCompatVersion = srcs.qtbase.version;
+
+  mirror = "https://download.qt.io";
+  srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
+    # override qtwebengine to use the latest released version
+    qtwebengine = rec {
+      src = fetchgit {
+        url = "https://github.com/qt/qtwebengine.git";
+        sha256 = "0c8w7hhjy2y7q8v0g87sj7wbvj2mnyb9dpi78h43q1418dqrjwjj";
+        rev = "v${version}-lts";
+        fetchSubmodules = true;
+        leaveDotGit = true;
+        name = "qtwebengine-${version}.tar.gz";
+        postFetch = ''
+          # remove submodule .git directory
+          rm -rf "$out/src/3rdparty/.git"
+
+          # compress to not exceed the 2GB output limit
+          # try to make a deterministic tarball
+          tar -I 'gzip -n' \
+            --sort=name \
+            --mtime=1970-01-01 \
+            --owner=root --group=root \
+            --numeric-owner --mode=go=rX,u+rw,a-s \
+            --transform='s@^@source/@' \
+            -cf temp  -C "$out" .
+          rm -r "$out"
+          mv temp "$out"
+        '';
+      };
+      version = "5.15.8";
+    };
+    # qtwebkit does not have an official release tarball on the qt mirror and is
+    # mostly maintained by the community.
+    qtwebkit = rec {
+      src = fetchFromGitHub {
+        owner = "qt";
+        repo = "qtwebkit";
+        rev = "v${version}";
+        sha256 = "0x8rng96h19xirn7qkz3lydal6v4vn00bcl0s3brz36dfs0z8wpg";
+      };
+      version = "5.212.0-alpha4";
+    };
+  };
 
   patches = {
     qtbase = lib.optionals stdenv.isDarwin [
@@ -117,7 +165,7 @@ let
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
-        inherit developerBuild decryptSslTraffic;
+        inherit debug developerBuild decryptSslTraffic;
         inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
