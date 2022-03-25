@@ -7,11 +7,6 @@ else
 let z3-with-ocaml = (z3.override {
   ocamlBindings = true;
   inherit ocaml findlib zarith;
-}).overrideAttrs (o: {
-  patches = (o.patches or []) ++ [
-    # Fix build; see: https://github.com/Z3Prover/z3/issues/5776
-    ./ocamlfind.patch
-  ];
 }); in
 
 stdenv.mkDerivation {
