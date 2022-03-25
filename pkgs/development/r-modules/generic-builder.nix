@@ -10,6 +10,8 @@ stdenv.mkDerivation ({
   NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   configurePhase = ''
     runHook preConfigure
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
