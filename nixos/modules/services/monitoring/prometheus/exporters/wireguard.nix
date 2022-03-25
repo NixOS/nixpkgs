@@ -57,9 +57,9 @@ in {
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
           -p ${toString cfg.port} \
           -l ${cfg.listenAddress} \
-          ${optionalString cfg.verbose "-v"} \
-          ${optionalString cfg.singleSubnetPerField "-s"} \
-          ${optionalString cfg.withRemoteIp "-r"} \
+          ${optionalString cfg.verbose "-v true"} \
+          ${optionalString cfg.singleSubnetPerField "-s true"} \
+          ${optionalString cfg.withRemoteIp "-r true"} \
           ${optionalString (cfg.wireguardConfig != null) "-n ${escapeShellArg cfg.wireguardConfig}"}
       '';
       RestrictAddressFamilies = [
