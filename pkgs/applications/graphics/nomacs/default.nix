@@ -66,7 +66,6 @@ mkDerivation rec {
     description = "Qt-based image viewer";
     maintainers = with lib.maintainers; [ mindavi ];
     license = licenses.gpl3Plus;
-    repositories.git = "https://github.com/nomacs/nomacs.git";
     inherit (qtbase.meta) platforms;
   };
 }

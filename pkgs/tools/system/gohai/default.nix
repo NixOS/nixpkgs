@@ -21,7 +21,6 @@ buildGoPackage rec {
     license          = licenses.mit;
     maintainers      = [ maintainers.tazjin ];
     platforms        = platforms.unix;
-    repositories.git = "git://github.com/DataDog/gohai.git";
 
     longDescription = ''
       Gohai is a tool which collects an inventory of system
