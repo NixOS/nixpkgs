@@ -1412,6 +1412,8 @@ let
 
     stdint = callPackage ../development/ocaml-modules/stdint { };
 
+    unionFind = callPackage ../development/ocaml-modules/unionFind { };
+
     unstrctrd = callPackage ../development/ocaml-modules/unstrctrd { };
 
     uucd = callPackage ../development/ocaml-modules/uucd { };
