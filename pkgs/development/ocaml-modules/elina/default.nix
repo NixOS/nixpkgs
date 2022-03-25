@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1nymykskq1yx87y4xl6hl9i4q6kv0qaq25rniqgl1bfn883p1ysc";
   };
 
-  nativeBuildInputs = [ perl ocaml findlib ];
+  nativeBuildInputs = [ perl ocaml findlib camlidl ];
 
-  propagatedBuildInputs = [ apron camlidl gmp mpfr ];
+  propagatedBuildInputs = [ apron gmp mpfr ];
 
   strictDeps = true;
 

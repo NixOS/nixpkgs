@@ -749,14 +749,6 @@ rec {
         nestedTypes.finalType = finalType;
       };
 
-    # Obsolete alternative to configOf.  It takes its option
-    # declarations from the ‘options’ attribute of containing option
-    # declaration.
-    optionSet = mkOptionType {
-      name = "optionSet";
-      description = "option set";
-      deprecationMessage = "Use `types.submodule' instead";
-    };
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 

@@ -16,9 +16,10 @@
 , maven
 , webkitgtk
 , glib-networking
+, javaPackages
 }:
 
-stdenv.mkDerivation rec {
+javaPackages.mavenfod rec {
   pname = "dbeaver";
   version = "22.0.1"; # When updating also update fetchedMavenDeps.sha256
 
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IG5YWwq3WVzQBvAslQ9Z2Ou6ADzf4n9NkQCtH4Jgkac=";
   };
 
+
+  mvnSha256 = "7Sm1hAoi5xc4MLONOD8ySLLkpao0qmlMRRva/8zR210=";
+  mvnParameters = "-P desktop,all-platforms";
+
   fetchedMavenDeps = stdenv.mkDerivation {
     name = "dbeaver-${version}-maven-deps";
     inherit src;
@@ -37,7 +42,7 @@ stdenv.mkDerivation rec {
       maven
     ];
 
-    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms";
+    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}";
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
@@ -87,14 +92,6 @@ stdenv.mkDerivation rec {
       categories = [ "Development" ];
     })
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 -P desktop,all-platforms
-
-    runHook postBuild
-  '';
 
   installPhase =
     let

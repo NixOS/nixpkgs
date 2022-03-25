@@ -16,8 +16,7 @@ let
       };
 
       nodes = {
-        keycloak = { ... }: {
-
+        keycloak = { config, ... }: {
           security.pki.certificateFiles = [
             certs.ca.cert
           ];
@@ -36,6 +35,10 @@ let
               username = "bogus";
               passwordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
             };
+            plugins = with config.services.keycloak.package.plugins; [
+              keycloak-discord
+              keycloak-metrics-spi
+            ];
           };
 
           environment.systemPackages = with pkgs; [
@@ -102,8 +105,21 @@ let
           ### Realm Setup ###
 
           # Get an admin interface access token
+          keycloak.succeed("""
+              curl -sSf -d 'client_id=admin-cli' \
+                   -d 'username=admin' \
+                   -d 'password=${initialAdminPassword}' \
+                   -d 'grant_type=password' \
+                   '${frontendUrl}/realms/master/protocol/openid-connect/token' \
+                   | jq -r '"Authorization: bearer " + .access_token' >admin_auth_header
+          """)
+
+          # Register the metrics SPI
           keycloak.succeed(
-              "curl -sSf -d 'client_id=admin-cli' -d 'username=admin' -d 'password=${initialAdminPassword}' -d 'grant_type=password' '${frontendUrl}/realms/master/protocol/openid-connect/token' | jq -r '\"Authorization: bearer \" + .access_token' >admin_auth_header"
+              "${pkgs.jre}/bin/keytool -import -alias snakeoil -file ${certs.ca.cert} -storepass aaaaaa -keystore cacert.jks -noprompt",
+              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' ${pkgs.keycloak}/bin/kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password '${initialAdminPassword}'",
+              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' ${pkgs.keycloak}/bin/kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'",
+              "curl -sSf '${frontendUrl}/realms/master/metrics' | grep '^keycloak_admin_event_UPDATE'"
           )
 
           # Publish the realm, including a test OIDC client and user

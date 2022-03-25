@@ -859,9 +859,8 @@ self: super: {
     (pkgs.fetchpatch {
       name   = "hledger-properly-escape-quotes-csv.patch";
       url    = "https://github.com/simonmichael/hledger/commit/c9a72e1615e2ddc2824f2e248456e1042eb31e1d.patch";
-      sha256 = "10knvrd5bl9nrmi27i0pm82sfr64jy04xgbjp228qywyijpr3pqv";
-      includes = [ "Hledger/Read/CsvReader.hs" ];
-      stripLen = 1;
+      relative = "hledger-lib";
+      sha256 = "sha256-gjYYo0eq1gWNAAFF3dKt9QDq0VpLnN5/648r/NXEPVE=";
     })
     super.hledger-lib;
 
@@ -1819,10 +1818,8 @@ self: super: {
   # Presumably to be removed at the next release
   yi-language = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
-    sha256 = "0r4mzngs0x1akqpajzx7ssa9rax977fvj5ra8d3grfbpx6z0nm01";
-    includes = [ "yi-language.cabal" ];
-    stripLen = 2;
-    extraPrefix = "";
+    relative = "yi-language";
+    sha256 = "sha256-AVQLvul3ufxGQyoXud05qauclNanf6kunip0oJ/9lWQ=";
   }) super.yi-language;
 
   # https://github.com/ghcjs/jsaddle/issues/123

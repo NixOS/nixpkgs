@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [
+  propagatedBuildInputs = [
     cudf
   ];
 
