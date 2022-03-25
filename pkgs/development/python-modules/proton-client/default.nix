@@ -34,7 +34,7 @@ buildPythonPackage rec {
   # but it is not working as intended.
   #patchPhase = ''
   #  substituteInPlace proton/srp/_ctsrp.py --replace \
-  #    "ctypes.cdll.LoadLibrary('libssl.so.10')" "'${openssl.out}/lib/libssl.so'"
+  #    "ctypes.cdll.LoadLibrary('libssl.so.10')" "'${lib.getLib openssl}/lib/libssl.so'"
   #'';
   # Regarding the issue above, I'm disabling tests for now
   doCheck = false;

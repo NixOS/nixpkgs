@@ -46,7 +46,7 @@ py.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
+      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto.so"
     substituteInPlace requirements/base.txt \
       --replace contextvars ""
   '';

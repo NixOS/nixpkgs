@@ -107,7 +107,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
       patchelf_add_icu_as_needed "$elf"
       patchelf --add-needed "libssl.so" "$elf"
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc openssl.out icu.out ]}:\$ORIGIN" \
+        --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc openssl icu.out ]}:\$ORIGIN" \
         "$elf"
     }
 
