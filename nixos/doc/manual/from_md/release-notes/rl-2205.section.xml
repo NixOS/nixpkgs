@@ -27,7 +27,7 @@
       </listitem>
       <listitem>
         <para>
-          PHP 8.1 is now available
+          PHP 8.1 is now available.
         </para>
       </listitem>
       <listitem>
@@ -332,6 +332,33 @@
   <section xml:id="sec-release-22.05-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          MySQL now listens only on loopback interface by default. This
+          change increases security, but may impact users who have MySQL
+          servers on separate machines or in containers. To get old
+          behaviour, set
+          <literal>services.mysql.settings.mysqld.bind-address = &quot;*&quot;</literal>.
+        </para>
+        <para>
+          MySQL module now also removes <literal>test</literal> database
+          and anonymous users by default on initial database setup. This
+          change doesn’t impact existing databases. To disable this
+          behaviour, refer to
+          <literal>services.mysql.dropInitialTestDatabase</literal> and
+          <literal>services.mysql.dropInitialAnonymousUsers</literal>
+          options.
+        </para>
+        <para>
+          To secure an existing database, run these commands:
+        </para>
+        <programlisting language="SQL">
+  DROP DATABASE test;
+  DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+  DELETE FROM mysql.user WHERE User='';
+  FLUSH PRIVILEGES;
+</programlisting>
+      </listitem>
       <listitem>
         <para>
           <literal>pkgs.ghc</literal> now refers to

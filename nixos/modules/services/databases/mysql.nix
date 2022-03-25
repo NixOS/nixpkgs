@@ -138,6 +138,35 @@ in
         '';
       };
 
+      dropInitialTestDatabase = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          By default, MySQL comes with a database named 'test' that anyone can
+          access. This is intended only for testing, and should be removed
+          before moving into a production environment.
+
+          This option will drop 'test' database on the first run of MySQL server.
+          It won't affect 'test' database on existing servers.
+        '';
+      };
+
+      dropInitialAnonymousUsers = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          By default, a MySQL installation has an anonymous user, allowing anyone
+          to log into MySQL without having to have a user account created for
+          them. This is intended only for testing. You should remove them
+          before moving into a production environment.
+
+          This option will drop anonymous users on the first run of MySQL server.
+          It won't affect users on existing servers.
+        '';
+      };
+
       initialDatabases = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -305,6 +334,7 @@ in
       {
         datadir = cfg.dataDir;
         port = mkDefault 3306;
+        bind-address = mkDefault "localhost";
       }
       (mkIf (cfg.replication.role == "master" || cfg.replication.role == "slave") {
         log-bin = "mysql-bin-${toString cfg.replication.serverId}";
@@ -402,14 +432,31 @@ in
               echo "GRANT ALL PRIVILEGES ON *.* TO '${cfg.user}'@'localhost' WITH GRANT OPTION;"
             ) | ${cfg.package}/bin/mysql -u ${superUser} -N
 
+            # https://github.com/twitter-forks/mysql/blob/865aae5f23e2091e1316ca0e6c6651d57f786c76/scripts/mysql_secure_installation.sh#L178
+            ${optionalString cfg.dropInitialTestDatabase ''
+              echo "Dropping initial database 'test'"
+              ( echo "DROP DATABASE test;"
+                echo "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+                echo "FLUSH PRIVILEGES;"
+              ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+            ''}
+
+            # https://github.com/twitter-forks/mysql/blob/master/scripts/mysql_secure_installation.sh#L157
+            ${optionalString cfg.dropInitialAnonymousUsers ''
+              echo "Removing anonymous users"
+              ( echo "DELETE FROM mysql.user WHERE User=''\'''\';"
+                echo "FLUSH PRIVILEGES;"
+              ) | ${cfg.package}/bin/mysql -u ${superUser} -N
+            ''}
+
             ${concatMapStrings (database: ''
               # Create initial databases
               if ! test -e "${cfg.dataDir}/${database.name}"; then
                   echo "Creating initial database: ${database.name}"
-                  ( echo 'create database `${database.name}`;'
+                  ( echo 'CREATE DATABASE `${database.name}`;'
 
                     ${optionalString (database.schema != null) ''
-                    echo 'use `${database.name}`;'
+                    echo 'USE `${database.name}`;'
 
                     # TODO: this silently falls through if database.schema does not exist,
                     # we should catch this somehow and exit, but can't do it here because we're in a subshell.
@@ -429,7 +476,7 @@ in
               ''
                 # Set up the replication master
 
-                ( echo "use mysql;"
+                ( echo "USE mysql;"
                   echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
                   echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
                   echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
@@ -440,9 +487,9 @@ in
               ''
                 # Set up the replication slave
 
-                ( echo "stop slave;"
-                  echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                  echo "start slave;"
+                ( echo "STOP SLAVE;"
+                  echo "CHANGE MASTER TO master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
+                  echo "START SLAVE;"
                 ) | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
