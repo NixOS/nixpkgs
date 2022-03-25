@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
