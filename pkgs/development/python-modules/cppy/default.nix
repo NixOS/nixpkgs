@@ -2,22 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cppy";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4eda6f1952054a270f32dc11df7c5e24b259a09fddf7bfaa5f33df9fb4a29642";
+    sha256 = "sha256-leiGLk+CbD8qa3tlgzOxYvgMvp+UOqDQp6ay74UK7/w=";
   };
-
-  # Headers-only library, no tests
-  doCheck = false;
 
   # Not supported
   disabled = !isPy3k;
+
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "cppy" ];
 
   meta = {
     description = "C++ headers for C extension development";
