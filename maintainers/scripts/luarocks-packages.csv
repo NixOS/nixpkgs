@@ -81,6 +81,6 @@ rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 readline,,,,,,
 say,https://github.com/Olivine-Labs/say.git,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
-std.normalize,git://github.com/lua-stdlib/normalize.git,,,,,
+std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
