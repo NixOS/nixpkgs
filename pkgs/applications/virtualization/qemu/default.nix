@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
-  outputs = [ "out" "ga" ];
+  outputs = [ "out" "ga" ] ++ lib.optionals stdenv.isLinux [ "plugins" ];
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
   separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
@@ -183,6 +183,8 @@ stdenv.mkDerivation rec {
       --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace "'VERSION'" "'QEMU_VERSION'"
+    substituteInPlace Makefile \
+      --replace '$(SRC_PATH)/VERSION' '$(SRC_PATH)/QEMU_VERSION'
   '';
 
   configureFlags = [
@@ -233,6 +235,12 @@ stdenv.mkDerivation rec {
     mkdir -p $ga/bin
     cp $out/bin/qemu-ga $ga/bin/
     remove-references-to -t $out $ga/bin/qemu-ga
+  '' + lib.optionalString stdenv.isLinux ''
+    # copy qemu-plugins (TCG plugins) to separate output
+    mkdir -p $plugins/libexec/qemu
+    for f in contrib/plugins/*.so; do
+      cp $f $plugins/libexec/qemu/
+    done
   '' + lib.optionalString gtkSupport ''
     # wrap GTK Binaries
     for f in $out/bin/qemu-system-*; do
@@ -240,6 +248,8 @@ stdenv.mkDerivation rec {
     done
   '';
   preBuild = "cd build";
+  # contrib/plugins/Makefile requires support for -soname option
+  postBuild = lib.optionals stdenv.isLinux "make plugins";
 
   # tests can still timeout on slower systems
   inherit doCheck;
