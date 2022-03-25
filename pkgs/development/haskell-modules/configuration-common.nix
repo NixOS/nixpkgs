@@ -1394,8 +1394,7 @@ self: super: {
       (fetchpatch {
         url = "https://github.com/reflex-frp/reflex-dom/compare/a0459deafd296656b3e99db01ea7f65b89b0948c...56fa8a484ccfc7d3365d07fea3caa430155dbcac.patch";
         sha256 = "sha256-azMF3uX7S1rKKRAVjY+xP2XbQKHvEY/9nU7cH81KKPA=";
-        stripLen = 2;
-        extraPrefix = "";
+        relative = "reflex-dom-core";
       })
       super.reflex-dom-core)));
 
@@ -1474,8 +1473,8 @@ self: super: {
     (fetchpatch {
       name = "Spock-core-GHC-9.0.patch";
       url = "https://github.com/agrafix/Spock/commit/25c75961c4aaaa2e81c9e2afd3d758f2b643f9df.patch";
-      sha256 = "03854yvda7dclz60fb1b5q8qx6zq2yjbvlyj994352xsz0lz2qan";
-      stripLen = 1;
+      sha256 = "sha256-JlliIpVYh2CYjJF2I119ab4/1oh6uvxMbRoxlUkKiGw=";
+      relative = "Spock-core";
     })
   ] super.Spock-core);
 
@@ -1604,15 +1603,12 @@ self: super: {
     (fetchpatch {
       url = "https://github.com/haskell/haskell-language-server/commit/074593987e9086e308b89ecde336de2c64861dc0.patch";
       sha256 = "sha256-uTlIbGQKulP3963UPL2V9cqMoIvPscK+s2W/HtBmMWc=";
-      stripLen = 2;
-      extraPrefix = "";
-      includes = [ "*/Util.hs" ];
+      relative = "hls-test-utils";
     })
     (fetchpatch {
       url = "https://github.com/haskell/haskell-language-server/commit/78305f21783807b04baebca4860c255bfe84d4ab.patch";
       sha256 = "sha256-oe8Q8kBJBkel+pR5imFj43NVpm4afcyLgAUCWhrIoPk=";
-      stripLen = 2;
-      extraPrefix = "";
+      relative = "hls-test-utils";
     })
    ] super.hls-test-utils;
 
@@ -1749,9 +1745,8 @@ self: super: {
     (fetchpatch {
       name = "moto-postgresql-monadfail.patch";
       url = "https://gitlab.com/k0001/moto/-/commit/09cc1c11d703c25f6e81325be6482dc7ec6cbf58.patch";
-      # includes = ["moto/lib/Moto/File.hs"];
-      stripLen = 1;
-      sha256 = "sha256-ZKo0csaSM51bDGmzcasIklkRyg54O+8U5w6OwRHt8ms=";
+      relative = "moto-postgresql";
+      sha256 = "sha256-f2JVX9VveShCeV+T41RQgacpUoh1izfyHlE6VlErkZM=";
     })
   ] (unmarkBroken super.moto-postgresql);
 
@@ -1760,8 +1755,8 @@ self: super: {
     (fetchpatch {
       name = "moto-ghc-9.0.patch";
       url = "https://gitlab.com/k0001/moto/-/commit/5b6f015a1271765005f03762f1f1aaed3a3198ed.patch";
-      stripLen = 1;
-      sha256 = "sha256-PqG/Ujvb/IOvX0SAeGZ/vgzNoZC68vIOwmYfhxjiYCg=";
+      relative = "moto";
+      sha256 = "sha256-RMa9tk+2ip3Ks73UFv9Ea9GEnElRtzIjdpld1Fx+dno=";
     })
   ] super.moto;
 
@@ -1874,9 +1869,9 @@ self: super: {
   # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
   amazonka = appendPatches [
     (fetchpatch {
-      stripLen = 1;
+      relative = "amazonka";
       url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
-      sha256 = "1x9l5xgvrh908di6whpavyp08cys11v3yn6rc21zw87xiyigdbi3";
+      sha256 = "sha256-9Ed3qrLGRaNCdvqWMyg8ydAnqDkFqWKLLoObv/5jG54=";
     })
   ] (doJailbreak super.amazonka);
 
@@ -2022,8 +2017,8 @@ self: super: {
     patches = [
       (fetchpatch {
         url = "https://gitlab.haskell.org/ghc/ghc/-/commit/08d1588bf38d83140a86817a7a615db486357d4f.patch";
-        sha256 = "1qx4r031y72px291vz38bng9sb23r8zb35s03v5hhawlmgzfzcb5";
-        stripLen = 2;
+        sha256 = "sha256-Y9WW0KDQ/qY2L9ObPvh1i/6lxXIlprbxzdSBDfiaMtE=";
+        relative = "libraries/ghc-bignum";
       })
     ];
   };
@@ -2080,8 +2075,7 @@ self: super: {
         name = "haskell-gi-base-0.26-compat-patch";
         url = "https://github.com/ghcjs/jsaddle/commit/c9a9ad39addea469f7e3f5bc6b1c778fefaab5d8.patch";
         sha256 = "sha256-4njoOxtJH2jVqiPmW8f9hGUqpzI3yJ1XP4u85QgmvjU=";
-        stripLen = 2;
-        extraPrefix = "";
+        relative = "jsaddle-webkit2gtk";
       }
     )
     super.jsaddle-webkit2gtk;
@@ -2101,8 +2095,8 @@ self: super: {
     (fetchpatch {
       name = "llvm-hs-pure-bytestring-0.11.patch";
       url = "https://github.com/llvm-hs/llvm-hs/commit/fe8fd556e8d2cc028f61d4d7b4b6bf18c456d090.patch";
-      sha256 = "0gjgcvy3jx15nhq4jgarn8ff2nk1dc0k7w64knhhr17isw91gikp";
-      stripLen = 1;
+      sha256 = "sha256-1d4wQg6JEJL3GwmXQpvbW7VOY5DwjUPmIsLEEur0Kps=";
+      relative = "llvm-hs-pure";
       excludes = [ "**/Triple.hs" ]; # doesn't exist in 9.0.0
     })
   ] super.llvm-hs-pure;
@@ -2225,8 +2219,8 @@ self: super: {
         (fetchpatch {
           name = "composite-base-template-haskell-2.17.patch";
           url = "https://github.com/ConferOpenSource/composite/commit/4ca7562d46a0cdfae3afacf194134db768450a02.patch";
-          sha256 = "143rp8g2bskf2hxszahpg72gvagj4qnw87ikswlbal0p7gfd8zii";
-          stripLen = 1;
+          sha256 = "sha256-FG2t1BYfV09VENJDlh1PD88sXAGqaujhpss5DWFcbeE=";
+          relative = "composite-base";
         })
       ];
       jailbreak = true;
