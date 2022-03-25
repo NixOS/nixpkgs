@@ -42,13 +42,13 @@ let mtxclient_0_7 = mtxclient.overrideAttrs (old: rec {
 
 in mkDerivation rec {
   pname = "nheko";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "sha256-roC1OIq0Vmj5rABNtH4IOMHX9aSlOMFC7ZHueuj/PmE=";
+    sha256 = "sha256-h1Yahz7Rt7+r55RFTSVj6E14nWnjCs0CecljceaWgaQ=";
   };
 
   nativeBuildInputs = [
