@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     rm bin/jbang.{cmd,ps1}
-    rmdir tmp
+    rm -rf tmp
     cp -r . $out
     wrapProgram $out/bin/jbang \
       --set JAVA_HOME ${jdk} \
