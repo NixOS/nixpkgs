@@ -6,6 +6,7 @@
 , qttools
 , gstreamer
 , libX11
+, wayland
 , pulseaudio
 , qtbase
 , qtmultimedia
@@ -19,13 +20,13 @@
 mkDerivation rec {
 
   pname = "vokoscreen-ng";
-  version = "3.0.8";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "1302663hyp2xxhaavhfky24a2p9gz23i3rykmrc6c1n23h24snri";
+    sha256 = "sha256-DIZ50JJhLFgPdBKhGCM5JPxz2hiWNGYVqtzY8/omq/s=";
   };
 
   patches = [
@@ -40,6 +41,7 @@ mkDerivation rec {
   buildInputs = [
     gstreamer
     libX11
+    wayland
     pulseaudio
     qtbase
     qtmultimedia

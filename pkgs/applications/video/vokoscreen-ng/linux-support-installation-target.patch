@@ -1,9 +1,8 @@
-Seulement dans b: patch.patch
-Seulement dans b: ..rej
-diff --color -ur a/src/vokoscreenNG.pro b/src/vokoscreenNG.pro
---- a/src/vokoscreenNG.pro	2021-02-03 15:00:57.377401016 +0100
-+++ b/src/vokoscreenNG.pro	2021-02-03 15:09:18.141905863 +0100
-@@ -160,7 +160,32 @@
+diff --git a/src/vokoscreenNG.pro b/src/vokoscreenNG.pro
+index d43ed30..4e45448 100644
+--- a/src/vokoscreenNG.pro
++++ b/src/vokoscreenNG.pro
+@@ -153,6 +153,31 @@ include(version/version.pri)
  # systrayAlternative
  include(systrayAlternative/systrayAlternative.pri)
  
@@ -31,10 +30,8 @@ diff --color -ur a/src/vokoscreenNG.pro b/src/vokoscreenNG.pro
 +
 +  INSTALLS += target icon desktop appdata
 +}
++
  # ciscoOpenh264
  win32:include(ciscoOpenh264/ciscoOpenh264.pri)
  
--unix:include(wayland/wayland.pri)
-\ Pas de fin de ligne à la fin du fichier
-+unix:include(wayland/wayland.pri)
-+
+
