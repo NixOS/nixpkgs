@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rf0HP/vS3oHceqoLmDSZ71xZyWrc/cyd6mDULKiF648=";
+    sha256 = "13zbhnl2rm30xafwrzfwdb4mjp7gk4s9h2xagbf83pnjzczhgzdd";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Abstraction layer for PyQt5/PyQt4/PySide2/PySide";
+    description = "Abstraction layer for PyQt5/PyQt6/PySide2/PySide6";
     homepage = "https://github.com/spyder-ide/qtpy";
     license = licenses.mit;
   };

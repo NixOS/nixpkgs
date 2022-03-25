@@ -18,7 +18,9 @@ convertIconTheme() {
     local -r iconName=$3
     local -r theme=${4:-hicolor}
 
-    local -ra iconSizes=(16 32 48 128 256 512)
+    # Sizes based on archived Apple documentation:
+    # https://developer.apple.com/design/human-interface-guidelines/macos/icons-and-images/app-icon#app-icon-sizes
+    local -ra iconSizes=(16 32 128 256 512)
     local -ra scales=([1]="" [2]="@2")
 
     # Based loosely on the algorithm at:
@@ -30,13 +32,6 @@ convertIconTheme() {
 
         local scaleSuffix=${scales[$scale]}
         local exactSize=${iconSize}x${iconSize}${scaleSuffix}
-
-        if [[ $exactSize = '48x48@2' ]]; then
-            # macOS does not support a 2x scale variant of 48x48 icons
-            # See: https://en.wikipedia.org/wiki/Apple_Icon_Image_format#Icon_types
-            echo "unsupported"
-            return 0
-        fi
 
         local -a validSizes=(
             ${exactSize}
@@ -55,8 +50,10 @@ convertIconTheme() {
                     else
                         echo "threshold $icon"
                     fi
-                    return 0
+                elif [[ -a $icon ]]; then
+                  echo "fallback $icon"
                 fi
+                return 0
             done
         done
         echo "scalable"
@@ -106,6 +103,17 @@ convertIconTheme() {
             scalableIcon=('-')
         fi
 
+        # Tri-state variable, NONE means no icons have been found, an empty
+        # icns file will be generated, not sure that's necessary because macOS
+        # will default to a generic icon if no icon can be found.
+        #
+        # OTHER means an appropriate icon was found.
+        #
+        # Any other value is a path to an icon file that isn't scalable or
+        # within the threshold. This is used as a fallback in case no better
+        # icon can be found and will be scaled as much as
+        # necessary to result in appropriate icon sizes.
+        local foundIcon=NONE
         for iconSize in "${iconSizes[@]}"; do
             for scale in "${!scales[@]}"; do
                 local iconResult=$(findIcon $iconSize $scale)
@@ -117,6 +125,7 @@ convertIconTheme() {
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
                         magick convert -density "$density" -units PixelsPerInch "$icon" "$result"
+                        foundIcon=OTHER
                         ;;
                     threshold)
                         # Synthesize an icon of the exact size if a scalable icon is available
@@ -124,21 +133,38 @@ convertIconTheme() {
                         if ! synthesizeIcon "${scalableIcon[0]}" "$result" "$iconSize" "$scale"; then
                             resizeIcon "$icon" "$result" "$iconSize" "$scale"
                         fi
+                        foundIcon=OTHER
                         ;;
                     scalable)
                         synthesizeIcon "${scalableIcon[0]}" "$result" "$iconSize" "$scale" || true
+                        foundIcon=OTHER
+                        ;;
+                    fallback)
+                        # Use the largest size available to scale to
+                        # appropriate sizes.
+                        if [[ $foundIcon != OTHER ]]; then
+                          foundIcon=$icon
+                        fi
                         ;;
                     *)
                         ;;
                 esac
             done
         done
+        if [[ $foundIcon != NONE && $foundIcon != OTHER ]]; then
+            # Ideally we'd only resize to whatever the closest sizes are,
+            # starting from whatever icon sizes are available.
+            for iconSize in 16 32 128 256 512; do
+              local result=${resultdir}/${iconSize}x${iconSize}.png
+              resizeIcon "$foundIcon" "$result" "$iconSize" 1
+            done
+        fi
         echo "$resultdir"
     }
 
     iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
-    if [[ ! -z "$(ls -1 "$iconsdir/"*)" ]]; then
-        icnsutil compose "$out/${iconName}.icns" "$iconsdir/"*
+    if [[ -n "$(ls -1 "$iconsdir/"*)" ]]; then
+        icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
     else
         echo "Warning: no icons were found. Creating an empty icon for ${iconName}.icns."
         touch "$out/${iconName}.icns"

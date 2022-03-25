@@ -17,7 +17,7 @@ rec {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
       sha512 = "2afaee16f155edcb0bdb46ebe282a733cf041ec6f562aebd06f8b675e46917f6f500fcc532fc54d74f3f4b0b489a88934a2c6c304f849873de4bc2690b9056a0";
     };
-    patches = [
+    extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
       ./no-buildconfig.patch
     ];

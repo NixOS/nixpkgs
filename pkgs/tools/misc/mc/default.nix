@@ -92,6 +92,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
-    repositories.git = "https://github.com/MidnightCommander/mc.git";
   };
 }

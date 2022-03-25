@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     webserver = { pkgs, lib, ... }: {
       services.caddy.enable = true;
-      services.caddy.config = ''
+      services.caddy.extraConfig = ''
         http://localhost {
           encode gzip
 
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       '';
 
       specialisation.etag.configuration = {
-        services.caddy.config = lib.mkForce ''
+        services.caddy.extraConfig = lib.mkForce ''
           http://localhost {
             encode gzip
 
@@ -38,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       specialisation.config-reload.configuration = {
-        services.caddy.config = ''
+        services.caddy.extraConfig = ''
           http://localhost:8080 {
           }
         '';

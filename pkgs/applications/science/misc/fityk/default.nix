@@ -1,12 +1,9 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, boost, lua, zlib, bzip2
 , xylib, readline, gnuplot, swig3 }:
 
-let
-  name    = "fityk";
+stdenv.mkDerivation rec {
+  pname = "fityk";
   version = "1.3.1";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
 
   src = fetchFromGitHub {
     owner = "wojdyr";

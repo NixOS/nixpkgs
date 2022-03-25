@@ -17,12 +17,12 @@
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "22.1.0";
+  version = "22.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    sha256 = "sha256-t5ceyYBbD4Dh3LGjch17+tY21fkJ3mh0MM43OXnWe2E=";
+    sha256 = "1wml02jxni8k15984pskks7d6yin81w4d2ac026cpyiqd0gjpwsp";
   };
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];

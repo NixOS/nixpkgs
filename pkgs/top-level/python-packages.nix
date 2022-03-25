@@ -6164,6 +6164,8 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
+  pint-pandas = callPackage ../development/python-modules/pint-pandas { };
+
   pip = callPackage ../development/python-modules/pip { };
 
   pipdate = callPackage ../development/python-modules/pipdate { };
@@ -6308,6 +6310,8 @@ in {
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
+
+  pyzbar = callPackage ../development/python-modules/pyzbar { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
 
@@ -6461,6 +6465,8 @@ in {
   preggy = callPackage ../development/python-modules/preggy { };
 
   premailer = callPackage ../development/python-modules/premailer { };
+
+  preprocess-cancellation = callPackage ../development/python-modules/preprocess-cancellation { };
 
   preshed = callPackage ../development/python-modules/preshed { };
 
@@ -8373,7 +8379,7 @@ in {
     };
 
   pyudev = callPackage ../development/python-modules/pyudev {
-    inherit (pkgs) systemd;
+    inherit (pkgs) udev;
   };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };

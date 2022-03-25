@@ -1,16 +1,17 @@
-{ config, lib, pkgs, options, ... }:
+{ config, lib, pkgs, options, utils, ... }:
 with lib;
 let
   cfg = config.services.ipfs;
   opt = options.services.ipfs;
 
-  ipfsFlags = toString ([
-    (optionalString cfg.autoMount "--mount")
-    (optionalString cfg.enableGC "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline") "--offline")
-    (optionalString (cfg.defaultMode == "norouting") "--routing=none")
-  ] ++ cfg.extraFlags);
+  ipfsFlags = utils.escapeSystemdExecArgs (
+    optional cfg.autoMount "--mount" ++
+    optional cfg.enableGC "--enable-gc" ++
+    optional (cfg.serviceFdlimit != null) "--manage-fdlimit=false" ++
+    optional (cfg.defaultMode == "offline") "--offline" ++
+    optional (cfg.defaultMode == "norouting") "--routing=none" ++
+    cfg.extraFlags
+  );
 
   profile =
     if cfg.localDiscovery

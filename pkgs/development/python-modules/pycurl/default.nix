@@ -7,7 +7,6 @@
 , openssl
 , bottle
 , pytestCheckHook
-, nose
 , flaky
 }:
 
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   checkInputs = [
     bottle
     pytestCheckHook
-    nose
     flaky
   ];
 
@@ -76,9 +74,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://pycurl.sourceforge.net/";
-    description = "Python wrapper for libcurl";
-    license = licenses.lgpl2Only;
+    homepage = "http://pycurl.io/";
+    description = "Python Interface To The cURL library";
+    license = with licenses; [ lgpl2Only mit ];
     maintainers = with maintainers; [];
   };
 }

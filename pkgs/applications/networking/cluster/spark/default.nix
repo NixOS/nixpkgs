@@ -63,7 +63,6 @@ let
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
         maintainers = with maintainers; [ thoughtpolice offline kamilchm illustris ];
-        repositories.git = "git://git.apache.org/spark.git";
       };
     };
 in
