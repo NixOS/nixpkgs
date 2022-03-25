@@ -2,11 +2,12 @@
 , makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "clfswm";
+  pname = "clfswm";
+  version = "unstable-2016-11-12";
 
   src = fetchgit {
     url = "https://gitlab.common-lisp.net/clfswm/clfswm.git";
-    rev = "refs/heads/master";
+    rev = "3c7721dba6339ebb4f8c8d7ce2341740fa86f837";
     sha256 = "0hynzh3a1zr719cxfb0k4cvh5lskzs616hwn7p942isyvhwzhynd";
   };
 

@@ -35,12 +35,11 @@ assert spiceSupport -> (
 with lib;
 
 stdenv.mkDerivation rec {
-  baseName = "virt-viewer";
+  pname = "virt-viewer";
   version = "11.0";
-  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.xz";
+    url = "https://releases.pagure.org/virt-viewer/virt-viewer-${version}.tar.xz";
     sha256 = "sha256-pD+iMlxMHHelyMmAZaww7wURohrJjlkPIjQIabrZq9A=";
   };
 

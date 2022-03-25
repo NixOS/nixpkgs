@@ -3,8 +3,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lighthouse-${date}";
-  date = "2016-07-20";
+  pname = "lighthouse";
+  version = "unstable-2016-07-20";
 
   src = fetchFromGitHub {
     owner = "emgram769";

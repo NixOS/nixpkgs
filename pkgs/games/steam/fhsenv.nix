@@ -228,9 +228,6 @@ in buildFHSUserEnv rec {
         export TZ="$new_TZ"
       fi
     fi
-
-    # XDG_DATA_DIRS is used by pressure-vessel and vulkan loaders to find the corresponding icd
-    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
