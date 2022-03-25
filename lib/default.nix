@@ -68,7 +68,8 @@ let
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease
-      mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
+      mod compare splitByAndCompare
+      functionArgs setFunctionArgs isFunction toFunction
       toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
@@ -113,7 +114,7 @@ let
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsRegularFile pathIsGitRepo;
     inherit (self.modules) evalModules setDefaultModuleLocation
-      unifyModuleSyntax applyIfFunction mergeModules
+      unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride

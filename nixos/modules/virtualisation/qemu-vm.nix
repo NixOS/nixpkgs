@@ -796,7 +796,7 @@ in
     # allow `system.build.toplevel' to be included.  (If we had a direct
     # reference to ${regInfo} here, then we would get a cyclic
     # dependency.)
-    boot.postBootCommands =
+    boot.postBootCommands = lib.mkIf config.nix.enable
       ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
           ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}

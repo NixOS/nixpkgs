@@ -9,7 +9,7 @@ let
   vkd3d_i686 = pkgsi686Linux.callPackage ./vkd3d.nix { inherit moltenvk; };
 in with src; {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
-    name = "wine-${version}";
+    pname = "wine";
     inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgsi686Linux ];
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d_i686 ];
@@ -19,7 +19,7 @@ in with src; {
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
   wine64 = callPackage ./base.nix {
-    name = "wine64-${version}";
+    pname = "wine64";
     inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgs ];
     vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d ];
@@ -30,7 +30,7 @@ in with src; {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
   wineWow = callPackage ./base.nix {
-    name = "wine-wow-${version}";
+    pname = "wine-wow";
     inherit src version supportFlags patches moltenvk;
     stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];

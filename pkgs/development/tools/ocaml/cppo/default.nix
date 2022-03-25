@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
-    mkdir $out/bin
+    mkdir -p $out/bin
   '';
 
 }

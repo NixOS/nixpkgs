@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, lv2, pkg-config, libGLU, libGL, cairo, pango, libjack2 }:
 
 let
-  name = "sisco.lv2-${version}";
   version = "0.7.0";
 
   robtkVersion = "80a2585253a861c81f0bfb7e4579c75f5c73af89";
@@ -22,7 +21,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  inherit name;
+  pname = "sisco.lv2";
+  inherit version;
 
   srcs = [ src robtkSrc ];
   sourceRoot = src.name;

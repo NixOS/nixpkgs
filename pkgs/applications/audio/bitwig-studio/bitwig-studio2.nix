@@ -2,7 +2,7 @@
   pulseaudio }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
-  name = "bitwig-studio-${version}";
+  pname = "bitwig-studio";
   version = "2.5";
 
   src = fetchurl {

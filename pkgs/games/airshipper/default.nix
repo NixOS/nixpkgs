@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , openssl
+, libGL
 , vulkan-loader
 , wayland
 , wayland-protocols
@@ -49,14 +50,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   postInstall = ''
-    mkdir -p "$out/share/applications" && mkdir -p "$out/share/icons"
-    cp "client/assets/net.veloren.airshipper.desktop" "$out/share/applications"
-    cp "client/assets/logo.ico" "$out/share/icons/net.veloren.airshipper.ico"
+    install -Dm444 -t "$out/share/applications" "client/assets/net.veloren.airshipper.desktop"
+    install -Dm444    "client/assets/logo.ico"  "$out/share/icons/net.veloren.airshipper.ico"
   '';
 
   postFixup =
     let
       libPath = lib.makeLibraryPath [
+        libGL
         vulkan-loader
         wayland
         wayland-protocols

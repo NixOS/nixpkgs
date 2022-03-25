@@ -78,6 +78,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
-    repositories.git = "git://git.gnupg.org/libgcrypt.git";
   };
 }

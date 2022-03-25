@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-splunk";
-  version = "0.2.0";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
     rev = "v${version}";
-    hash = "sha256-EP0gcK05hZ5TCOgTePezfEGbW45dGrnnksWyI9Jo9MQ=";
+    hash = "sha256-NAhAWK1eSSGQAlMGgMHrW/RTpT9LJMqwkhE9/8xWGT8=";
   };
 
   nativeBuildInputs = [

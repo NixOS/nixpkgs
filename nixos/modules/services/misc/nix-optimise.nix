@@ -37,8 +37,14 @@ in
   ###### implementation
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.automatic -> config.nix.enable;
+        message = ''nix.optimise.automatic requires nix.enable'';
+      }
+    ];
 
-    systemd.services.nix-optimise =
+    systemd.services.nix-optimise = lib.mkIf config.nix.enable
       { description = "Nix Store Optimiser";
         # No point this if the nix daemon (and thus the nix store) is outside
         unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";

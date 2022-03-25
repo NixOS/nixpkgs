@@ -25,6 +25,7 @@ buildPythonPackage rec {
       buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getDev dep}/"
         "${lib.getDev dep}/include"
+        "${lib.getDev dep}/include/SDL2"
       ]) buildInputs);
       buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getLib dep}/"

@@ -49,8 +49,9 @@ let
       desktopName = "Obsidian";
       comment = "Knowledge base";
       icon = "obsidian";
-      exec = "obsidian";
+      exec = "obsidian %u";
       categories = [ "Office" ];
+      mimeTypes = [ "x-scheme-handler/obsidian" ];
     };
 
     inherit pname version src;

@@ -4241,7 +4241,12 @@
     githubId = 119691;
     name = "Michael Gough";
   };
-
+  freax13 = {
+    email = "erbse.13@gmx.de";
+    github = "freax13";
+    githubId = 14952658;
+    name = "Tom Dohrmann";
+  };
   fredeb = {
     email = "im@fredeb.dev";
     github = "fredeeb";
