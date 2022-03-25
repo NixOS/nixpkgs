@@ -260,6 +260,25 @@ def update(rev):
 
 
 @cli.command()
+@click.argument('rev', default='latest')
+def update_mail_receiver(rev):
+    """Update discourse-mail-receiver.
+
+    REV: the git rev to update to ('vX.Y.Z') or 'latest'; defaults to
+    'latest'.
+
+    """
+    repo = DiscourseRepo(repo="mail-receiver")
+
+    if rev == 'latest':
+        version = repo.versions[0]
+    else:
+        version = DiscourseVersion(rev)
+
+    _call_nix_update('discourse-mail-receiver', version.version)
+
+
+@cli.command()
 def update_plugins():
     """Update plugins to their latest revision."""
     plugins = [
