@@ -33,13 +33,11 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  # Zoom versions are released at different times for each platform and linux
-  # is stuck on 5.9.6 until https://github.com/NixOS/nixpkgs/pull/166085 is
-  # resolved
+  # Zoom versions are released at different times for each platform
   version = {
     aarch64-darwin = "5.10.4.6592";
     x86_64-darwin = "5.10.4.6592";
-    x86_64-linux = "5.9.6.2225";
+    x86_64-linux = "5.10.4.2845";
    }.${system} or throwSystem;
 
   srcs = {
@@ -53,7 +51,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "0rynpw2fjn9j75f34rk0rgqn9wzyzgzmwh1a3xcx7hqingv45k53";
+      sha256 = "9gspydrGaEjzAM0nK1u0XNm07HTupJ2wnPxCFWy+Nts=";
     };
   };
 
