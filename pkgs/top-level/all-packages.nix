@@ -5330,7 +5330,8 @@ with pkgs;
   };
 
   exempi = callPackage ../development/libraries/exempi {
-    stdenv = if stdenv.isi686 then gcc6Stdenv else stdenv;
+    stdenv = if stdenv.isi686 then gcc6Stdenv else gcc9Stdenv;
+    boost  = boost15x;
   };
 
   execline = skawarePackages.execline;
