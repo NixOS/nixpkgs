@@ -38,6 +38,15 @@ buildPythonPackage rec {
     "georss_client"
   ];
 
+  disabledTests = [
+    # XML parsing issues
+    "test_feed_manager"
+    "test_update_bom"
+    "test_update_ok"
+    "test_complex"
+    "test_simple"
+  ];
+
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-client";
