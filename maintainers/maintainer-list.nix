@@ -10997,6 +10997,12 @@
     githubId = 3958212;
     name = "Tom Sorlie";
   };
+  sioodmy = {
+    name = "Antoni Sokołowski";
+    email = "81568712+sioodmy@users.noreply.github.com";
+    github = "sioodmy";
+    githubId = 81568712;
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
