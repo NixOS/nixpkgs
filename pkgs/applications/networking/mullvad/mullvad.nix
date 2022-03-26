@@ -11,6 +11,7 @@
 , libmnl
 , libwg
 , openvpn-mullvad
+, shadowsocks-rust
 }:
 let
   # result of running address_cache as of 02 Mar 2022
@@ -71,14 +72,17 @@ rustPlatform.buildRustPackage rec {
     # Put distributed assets in-place -- specifically, the
     # bootstrap-address-cache is necessary; otherwise, the user will have to run
     # the `address_cache` binary and move the contents into place at
-    # `/var/cache/mullvad-vpn/api-ip-address.txt` manually. `ca.crt` is
-    # necessary for OpenVPN tunnels to work.
-    # XXX: Use of OpenVPN requires their fork of OpenVPN, which can be found at
-    # https://github.com/mullvad/openvpn/tree/mullvad-patches/
+    # `/var/cache/mullvad-vpn/api-ip-address.txt` manually.
     ''
-      mkdir -p $out/share
-      ln -s ${bootstrap-address-cache} $out/share/api-ip-address.txt
-      cp dist-assets/ca.crt $out/share
+      mkdir -p $out/share/mullvad
+      ln -s ${bootstrap-address-cache} $out/share/mullvad/api-ip-address.txt
+    '' +
+    # Files necessary for OpenVPN tunnels to work.
+    ''
+      cp dist-assets/ca.crt $out/share/mullvad
+      ln -s ${openvpn-mullvad}/bin/openvpn $out/share/mullvad
+      ln -s ${shadowsocks-rust}/bin/sslocal $out/share/mullvad
+      ln -s $out/lib/libtalpid_openvpn_plugin.so $out/share/mullvad
     '' +
     # Set the directory where Mullvad will look for its resources by default to
     # `$out/share`, so that we can avoid putting the files in `$out/bin` --
@@ -89,7 +93,10 @@ rustPlatform.buildRustPackage rec {
         --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
     '';
 
-  passthru = { inherit openvpn-mullvad; };
+  passthru = {
+    inherit libwg;
+    inherit openvpn-mullvad;
+  };
 
   meta = with lib; {
     description = "Mullvad VPN command-line client tools";
