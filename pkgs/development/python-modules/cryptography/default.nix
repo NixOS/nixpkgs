@@ -87,6 +87,6 @@ buildPythonPackage rec {
     changelog = "https://cryptography.io/en/latest/changelog/#v"
       + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
-    maintainers = with maintainers; [ primeos SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
