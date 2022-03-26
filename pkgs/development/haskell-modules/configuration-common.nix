@@ -2597,4 +2597,8 @@ self: super: {
   # Fixes test suite with modern-uri 0.3.4.3, waiting for Stackage LTS to follow suit
   mmark = doDistribute self.mmark_0_0_7_5;
 
+  # Test suite doesn't support hspec 2.8
+  # https://github.com/zellige/hs-geojson/issues/29
+  geojson = dontCheck super.geojson;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
