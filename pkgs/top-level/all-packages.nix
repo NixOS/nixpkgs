@@ -14952,6 +14952,8 @@ with pkgs;
 
   dfeet = callPackage ../development/tools/misc/d-feet { };
 
+  d-spy = callPackage ../development/tools/misc/d-spy { };
+
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
 
   dfu-util = callPackage ../development/tools/misc/dfu-util { };
