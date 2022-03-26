@@ -32733,6 +32733,7 @@ with pkgs;
     java = openjdk17;
     z3 = z3_4_4_0;
   };
+  isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
 
   iprover = callPackage ../applications/science/logic/iprover { };
 
