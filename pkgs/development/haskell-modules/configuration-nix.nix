@@ -482,19 +482,21 @@ self: super: builtins.intersectAttrs super {
   # The tests expect additional solvers on the path, replace the
   # available ones also with hard coded paths, and remove the missing
   # ones from the test.
+  # TODO(@sternenseemann): package cvc5 and re-enable tests
   sbv = overrideCabal (drv: {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
+      sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
       sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
-    '' + (if pkgs.stdenv.isAarch64 then ''
-      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-    ''
-    else ''
-      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
-      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-    '');
+
+      # Solvers we don't provide are removed from tests
+      sed -i -e 's|, cvc5||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
+    '';
   }) super.sbv;
 
   # The test-suite requires a running PostgreSQL server.
