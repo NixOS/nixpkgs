@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
   '';
 
+  disallowedReferences = [ stdenv.cc ];
+
   meta = with lib; {
     description = "A monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
