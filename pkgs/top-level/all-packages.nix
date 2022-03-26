@@ -5330,7 +5330,8 @@ with pkgs;
   };
 
   exempi = callPackage ../development/libraries/exempi {
-    stdenv = if stdenv.isi686 then gcc6Stdenv else stdenv;
+    stdenv = if stdenv.isi686 then gcc6Stdenv else gcc9Stdenv;
+    boost  = boost15x;
   };
 
   execline = skawarePackages.execline;
@@ -12141,6 +12142,7 @@ with pkgs;
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isDarwin) then 11
+        else if (stdenv.targetPlatform.isx86_64 && stdenv.isLinux) then 11
         else if stdenv.targetPlatform.isAarch64 then 9
         else 10;
       numS = toString num;
