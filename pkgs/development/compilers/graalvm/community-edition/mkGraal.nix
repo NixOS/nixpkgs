@@ -86,7 +86,8 @@ let
       zlib
     ];
 
-    nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
+    nativeBuildInputs = [ unzip perl makeWrapper ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     unpackPhase = ''
       unpack_jar() {

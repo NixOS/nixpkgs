@@ -17,7 +17,7 @@ buildDotnetModule rec {
     sha256 = "00lagmwsbxap5mgnw4gndpavmv3xsgincdaq1zvw7fkc3vn3pxqc";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
   projectFile = "inklecate/inklecate.csproj";

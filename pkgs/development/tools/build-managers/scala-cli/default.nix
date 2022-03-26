@@ -16,7 +16,8 @@ in
 stdenv.mkDerivation {
   pname = "scala-cli";
   inherit version;
-  nativeBuildInputs = [ autoPatchelfHook installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ coreutils zlib stdenv.cc.cc ];
   src =
     let
@@ -42,9 +43,9 @@ stdenv.mkDerivation {
   # We need to call autopatchelf before generating completions
   dontAutoPatchelf = true;
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     autoPatchelf $out
-
+  '' + ''
     # hack to ensure the completion function looks right
     # as $0 is used to generate the compdef directive
     PATH="$out/bin:$PATH"
