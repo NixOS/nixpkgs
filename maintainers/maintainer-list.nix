@@ -7264,6 +7264,17 @@
     githubId = 1267527;
     name = "Daniel Firth";
   };
+  lockejan = {
+    email = "git@smittie.de";
+    matrix = "@jan:smittie.de";
+    github = "lockejan";
+    githubId = 25434434;
+    name = "Jan Schmitt";
+    keys = [{
+      longkeyid = "dsa2048/0xA2BC3C6F14351991";
+      fingerprint = "1763 9903 2D7C 5B82 5D5A  0EAD A2BC 3C6F 1435 1991";
+    }];
+  };
   lodi = {
     email = "anthony.lodi@gmail.com";
     github = "lodi";
