@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
-  version = "45";
+  version = "unstable-2022-02-05";
 
   passthru = {
     extensionUuid = "freon@UshakovVasilii_Github.yahoo.com";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "UshakovVasilii";
     repo = "gnome-shell-extension-freon";
-    rev = "EGO-${version}";
-    sha256 = "sha256-tPb7SzHSwvz7VV+kZTmcw1eAdtL1J7FJ3BOtg4Us8jc=";
+    rev = "010c363d9bff8ed28000cbf8df2226dad65078fb";
+    hash = "sha256-Fb8y+HoWq+205gqwAD2DVYym1eThGZqDML5HlyhS+4M=";
   };
 
   nativeBuildInputs = [ glib ];

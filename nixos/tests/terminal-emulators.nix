@@ -112,7 +112,7 @@ let tests = {
 in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}", colourTest ? true, pinkValue ? "#FF0087", kill ? false }: makeTest
 {
   name = "terminal-emulator-${name}";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ jjjollyjim ];
   };
 
