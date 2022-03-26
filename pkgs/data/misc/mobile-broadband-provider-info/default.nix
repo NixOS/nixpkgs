@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mobile-broadband-provider-info";
-  version = "20210805";
+  version = "20220315";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-a/ihVY6lVBr7xve0QV50zJ9aqYKbE07Ks+8ch0ElaLw=";
+    sha256 = "sha256-H82sctF52xQnl4Nm9wG+HDx1Nf1aZYvFzIKCR8b2RcY=";
   };
 
   nativeBuildInputs = [

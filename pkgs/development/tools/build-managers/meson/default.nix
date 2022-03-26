@@ -5,6 +5,7 @@
 , pkg-config
 , python3
 , substituteAll
+, withDarwinFrameworksGtkDocPatch ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -57,6 +58,10 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+  ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
+    # Fix building gtkdoc for GLib
+    # https://github.com/mesonbuild/meson/pull/10186
+    ./fix-gtkdoc-when-using-multiple-apple-frameworks.patch
   ];
 
   setupHook = ./setup-hook.sh;

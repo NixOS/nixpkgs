@@ -13,13 +13,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
-  version = "41.0";
+  version = "42.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "N/GswCvL5ooxuG4HwSmoOb0yduZW3Inrf8CpJ0bv8nI=";
+    sha256 = "LNQwY/+nJi3xXdjTeao+o5mdQmYfB1Y/SALaoRSfffQ=";
   };
 
   nativeBuildInputs = [
