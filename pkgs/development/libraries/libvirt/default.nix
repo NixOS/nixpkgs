@@ -140,7 +140,9 @@ stdenv.mkDerivation rec {
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
   '' + optionalString isDarwin ''
-    sed -i '/qemucapabilitiestest/d' tests/meson.build
+    sed -i tests/meson.build \
+      -e '/qemucapabilitiestest/d' \
+      -e '/vircryptotest/d'
   '';
 
 
