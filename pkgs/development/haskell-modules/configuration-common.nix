@@ -2592,20 +2592,6 @@ self: super: {
       })
      ] super.elm2nix;
 
-  mustache = overrideCabal (drv: {
-    # allow building with unordered-containers 0.2.17
-    patches = drv.mustache or [] ++ [
-      (fetchpatch {
-        name = "mustache-unordered-containers-0.2.17-compat.patch";
-        url = "https://github.com/JustusAdam/mustache/commit/19b97b58b35ee746fdae1fc34ba97d7967175a62.patch";
-        sha256 = "02cxxmm3ymh64lzl1kp47rmfpar9358ksj0g4q963i40lg9y0g55";
-      })
-    ];
-    # hackage revisions forbid unordered-containers 0.2.17
-    editedCabalFile = null;
-    revision = null;
-  }) super.mustache;
-
   # Fixes test suite with modern-uri 0.3.4.3, waiting for Stackage LTS to follow suit
   mmark = doDistribute self.mmark_0_0_7_5;
 
