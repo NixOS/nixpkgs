@@ -9,13 +9,15 @@
 buildPythonPackage rec {
   pname = "georss-generic-client";
   version = "0.7";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-generic-client";
     rev = "v${version}";
-    sha256 = "sha256-58NpACrJK29NUnx3RrsLFPPo+6A/JlIlkrv8N9juMu0=";
+    hash = "sha256-58NpACrJK29NUnx3RrsLFPPo+6A/JlIlkrv8N9juMu0=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +28,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "georss_generic_client" ];
+  pythonImportsCheck = [
+    "georss_generic_client"
+  ];
+
+  disabledTests = [
+    # XML parsing issues
+    "test_feed_manager"
+    "est_update_ok"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing generic GeoRSS feeds";
