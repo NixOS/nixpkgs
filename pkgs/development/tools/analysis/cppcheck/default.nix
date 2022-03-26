@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+
   postInstall = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
     mkdir -p $man/share/man/man1
