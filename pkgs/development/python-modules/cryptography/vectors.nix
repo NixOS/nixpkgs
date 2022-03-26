@@ -20,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://cryptography.io/en/latest/development/test-vectors/";
     # Source: https://github.com/pyca/cryptography/tree/master/vectors;
     license = with licenses; [ asl20 bsd3 ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

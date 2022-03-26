@@ -1,16 +1,17 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
 , setuptools-rust
 , openssl
 , cryptography_vectors
-, darwin
+, Security
 , packaging
 , six
 , isPyPy
 , cffi
-, pytest
+, pytestCheckHook
 , pytest-subtests
 , pretend
 , libiconv
@@ -47,11 +48,9 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
-  propagatedBuildInputs = [
-    packaging
-    six
-  ] ++ lib.optionals (!isPyPy) [
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 
@@ -60,24 +59,20 @@ buildPythonPackage rec {
     hypothesis
     iso8601
     pretend
-    pytest
+    pytestCheckHook
     pytest-subtests
     pytz
   ];
 
-  pytestFlags = lib.concatStringsSep " " ([
+  pytestFlagsArray = [
     "--disable-pytest-warnings"
-  ] ++
-    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-      # aarch64-darwin forbids W+X memory, but this tests depends on it:
-      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-      "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
-    ]
-  );
+  ];
 
-  checkPhase = ''
-    py.test ${pytestFlags} tests
-  '';
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # aarch64-darwin forbids W+X memory, but this tests depends on it:
+    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
+  ];
 
   meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
@@ -92,6 +87,6 @@ buildPythonPackage rec {
     changelog = "https://cryptography.io/en/latest/changelog/#v"
       + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
