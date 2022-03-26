@@ -23089,7 +23089,9 @@ with pkgs;
 
   gotest = callPackage ../development/tools/gotest { };
 
-  gotools = callPackage ../development/tools/gotools { };
+  gotools = callPackage ../development/tools/gotools {
+    buildGoModule = buildGo118Module;
+  };
 
   gotop = callPackage ../tools/system/gotop { };
 
