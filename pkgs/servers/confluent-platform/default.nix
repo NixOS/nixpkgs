@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "7.0.1";
 
   src = fetchurl {
-    url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}.tar.gz";
+    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}.tar.gz";
     sha256 = "Q0/A/3M2tn530/+o1RpcgNsPKFQq6YJQnhgysRlpVfU=";
   };
 
