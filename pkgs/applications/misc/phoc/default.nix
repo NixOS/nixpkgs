@@ -33,6 +33,12 @@ let
         url = "https://github.com/swaywm/wlroots/commit/66593071bc90a1cccaeedc636eb6f33c973f5362.patch";
         sha256 = "sha256-yKf/twdUzrII5IakH7AH6LGyPDo9Nl/gIB0pTThSTfY=";
       })
+      # xdg-activation: Allow to submit tokens
+      (fetchpatch {
+        name = "allow-to-submit-tokens.patch";
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/4c59f7d46a949548caa55805b00922f846d58525.patch";
+        sha256 = "sha256-1kUIt6lV3HXN2BBBER8sjYVLTvgqELdSeFullJjNGo8=";
+      })
       # xwayland: Allow to retrieve startup-id via _NET_STARTUP_INFO
       (fetchpatch {
         name = "allow-to-retrieve-startup-id-via-net-startup-info.patch";
@@ -43,7 +49,7 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -51,7 +57,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kfMM/YjgAktpOKHNcxxl1FPVbgATPDNRhEJ/sVT1LYs=";
+    sha256 = "sha256-65u59S6ntvkoQUO5BvkHZVcbj6cHIU4CgHWjzFo6s94=";
   };
 
   nativeBuildInputs = [
