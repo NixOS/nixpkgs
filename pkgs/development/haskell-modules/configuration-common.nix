@@ -2478,8 +2478,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  knob = appendPatch ./patches/knob-ghc9.patch super.knob;
-
   # compatibility with random-fu 0.3 https://github.com/mokus0/misfortune/pull/5
   misfortune = appendPatch ./patches/misfortune-ghc9.patch (overrideCabal (drv: {
     revision = null;
