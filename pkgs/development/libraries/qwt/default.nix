@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.qwt;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
-    branch = "6";
   };
 }
