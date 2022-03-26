@@ -6,13 +6,13 @@
 
 let
   pname = "cryptomator";
-  version = "1.6.5";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-6Z1GwrOsjjG546ZS+v/q4WL4tHgYPvMga8x4DY+unJs=";
+    sha256 = "sha256-hOILOdVYBnS9XuEXaIJcf2bPF72Lcr7IBX4CFCIsC8k=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -24,7 +24,7 @@ let
     buildInputs = [ jre ];
 
     buildPhase = ''
-      while mvn -Plinux package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
+      while mvn -Plinux package -Dmaven.test.skip=true -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
         echo "timeout, restart maven to continue downloading"
       done
     '';
@@ -37,14 +37,16 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-4yHN5hYLjatni8seLOHyuEVnxOdNVia6rY3oPewR+20=";
+    outputHash = "sha256-XFqXjNjPN2vwA3jay7TS79S4FHksjjrODdD/p4oTvpg=";
+
+    doCheck = false;
   };
 
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
   buildPhase = ''
-    mvn -Plinux package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+    mvn -Plinux package --offline -Dmaven.test.skip=true -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
 
   installPhase = ''
