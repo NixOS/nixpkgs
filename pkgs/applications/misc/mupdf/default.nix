@@ -2,6 +2,8 @@
 , lib
 , fetchurl
 , fetchpatch
+, copyDesktopItems
+, makeDesktopItem
 , desktopToDarwinBundle
 , pkg-config
 , freetype
@@ -56,8 +58,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
 
-  nativeBuildInputs =
-    [ pkg-config ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional (enableGL || enableX11) copyDesktopItems
+    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optional stdenv.isDarwin xcbuild
@@ -77,6 +80,30 @@ stdenv.mkDerivation rec {
     rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = pname;
+      comment = meta.description;
+      icon = "mupdf";
+      exec = "${pname} %f";
+      terminal = false;
+      mimeTypes = [
+        "application/epub+zip"
+        "application/oxps"
+        "application/pdf"
+        "application/vnd.ms-xpsdocument"
+        "application/x-cbz"
+        "application/x-pdf"
+      ];
+      categories = [ "Graphics" "Viewer" ];
+      keywords = [
+        "mupdf" "comic" "document" "ebook" "viewer"
+        "cbz" "epub" "fb2" "pdf" "xps"
+      ];
+    })
+  ];
+
   postInstall = ''
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
@@ -92,20 +119,14 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + lib.optionalString enableX11 ''
+  '' + lib.optionalString (enableX11 || enableGL) ''
+    mkdir -p $bin/share/icons/hicolor/48x48/apps
+    cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
+  '' + (if enableGL then ''
+    ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
+  '' else lib.optionalString (enableX11) ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
-    mkdir -p $bin/share/applications
-    cat > $bin/share/applications/mupdf.desktop <<EOF
-    [Desktop Entry]
-    Type=Application
-    Version=1.0
-    Name=mupdf
-    Comment=PDF viewer
-    Exec=$bin/bin/mupdf-x11 %f
-    Terminal=false
-    MimeType=application/pdf;application/x-pdf;application/x-cbz;application/oxps;application/vnd.ms-xpsdocument;application/epub+zip
-    EOF
-  '';
+  '');
 
   enableParallelBuilding = true;
 

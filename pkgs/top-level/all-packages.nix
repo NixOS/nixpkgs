@@ -3797,6 +3797,8 @@ with pkgs;
 
   shipyard = callPackage ../tools/virtualization/shipyard { };
 
+  shisho = callPackage ../tools/security/shisho { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   simplenes = callPackage ../applications/emulators/simplenes { };
@@ -6101,11 +6103,15 @@ with pkgs;
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
+  gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
+
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
   gnome-secrets = callPackage ../applications/misc/gnome-secrets { };
+
+  gnome-solanum = callPackage ../applications/misc/gnome-solanum { };
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
@@ -7031,6 +7037,8 @@ with pkgs;
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
+  justify = callPackage ../tools/text/justify { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
@@ -7371,6 +7379,10 @@ with pkgs;
   };
 
   mdbook-mermaid = callPackage ../tools/text/mdbook-mermaid {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-pdf = callPackage ../tools/text/mdbook-pdf {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -7726,6 +7738,8 @@ with pkgs;
   libreswan = callPackage ../tools/networking/libreswan { };
 
   librest = callPackage ../development/libraries/librest { };
+
+  librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
 
   inherit (callPackages ../development/libraries/libwebsockets { })
     libwebsockets_3_1
@@ -13421,6 +13435,7 @@ with pkgs;
   cargo-generate = callPackage ../development/tools/rust/cargo-generate {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-bootimage = callPackage ../development/tools/rust/bootimage { };
 
   cargo-whatfeatures = callPackage ../development/tools/rust/cargo-whatfeatures {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -13610,6 +13625,7 @@ with pkgs;
   inherit (callPackage ../development/compilers/vala { })
     vala_0_48
     vala_0_54
+    vala_0_56
     vala;
 
   vyper = with python3Packages; toPythonApplication vyper;
@@ -18146,6 +18162,7 @@ with pkgs;
   libgnome-keyring3 = gnome.libgnome-keyring;
 
   libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
+  libgnome-games-support_2_0 = callPackage ../development/libraries/libgnome-games-support/2.0.nix { };
 
   libgnomekbd = callPackage ../development/libraries/libgnomekbd { };
 
@@ -20622,7 +20639,10 @@ with pkgs;
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
-  vte = callPackage ../development/libraries/vte { };
+  vte = callPackage ../development/libraries/vte {
+    # Needs GCC ≥10 but aarch64 defaults to GCC 9.
+    stdenv = clangStdenv;
+  };
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
@@ -20949,6 +20969,8 @@ with pkgs;
   };
 
   jdom = callPackage ../development/libraries/java/jdom { };
+
+  jffi = callPackage ../development/libraries/java/jffi { };
 
   jflex = callPackage ../development/libraries/java/jflex { };
 
@@ -27411,7 +27433,6 @@ with pkgs;
   luppp = callPackage ../applications/audio/luppp { };
 
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
-    inherit (gnome) gnome-desktop;
     wine = wineWowPackages.staging;
   };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix {
@@ -29676,6 +29697,8 @@ with pkgs;
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
+
+  unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
 
   unipicker = callPackage ../applications/misc/unipicker { };
 
@@ -33502,7 +33525,7 @@ with pkgs;
 
   keynav = callPackage ../tools/X11/keynav { };
 
-  kgx = callPackage ../applications/terminal-emulators/kgx { };
+  gnome-console = callPackage ../applications/terminal-emulators/gnome-console { };
 
   kmon = callPackage ../tools/system/kmon { };
 

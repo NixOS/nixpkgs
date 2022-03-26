@@ -10,6 +10,7 @@
 , pango
 , fribidi
 , vala
+, gi-docgen
 , libxml2
 , perl
 , gettext
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "5.2.0";
+  version = "5.4.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ybNPoCZU9WziL6CIJ9idtLqBYxsubX0x6mXRPHKUMOk=";
+    sha256 = "ADvCF+ZwqOyKo67OmUtw5wt9a4B0k4rdohcYVV2E5jc=";
   };
 
   patches = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     perl
     gobject-introspection
     vala
+    gi-docgen
   ];
 
   buildInputs = [
@@ -68,6 +70,10 @@ stdenv.mkDerivation rec {
     dbus
   ];
 
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
   doCheck = stdenv.isLinux;
 
   checkPhase = ''
@@ -79,6 +85,11 @@ stdenv.mkDerivation rec {
       meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

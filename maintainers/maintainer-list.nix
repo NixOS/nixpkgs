@@ -2824,6 +2824,12 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  dbeckwith = {
+    email = "djbsnx@gmail.com";
+    github = "dbeckwith";
+    githubId = 1279939;
+    name = "Daniel Beckwith";
+  };
   dbirks = {
     email = "david@birks.dev";
     github = "dbirks";
