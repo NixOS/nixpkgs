@@ -23,8 +23,9 @@ in rec {
           inherit (unit) text;
         }
         ''
-          mkdir -p $out
-          echo -n "$text" > $out/${shellEscape name}
+          name=${shellEscape name}
+          mkdir -p "$out/$(dirname "$name")"
+          echo -n "$text" > "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
@@ -32,8 +33,9 @@ in rec {
           allowSubstitutes = false;
         }
         ''
-          mkdir -p $out
-          ln -s /dev/null $out/${shellEscape name}
+          name=${shellEscape name}
+          mkdir -p "$out/$(dirname "$name")"
+          ln -s /dev/null "$out/$name"
         '';
 
   boolValues = [true false "yes" "no"];
