@@ -9,6 +9,8 @@ let
     RAILS_ENV = "production";
     NODE_ENV = "production";
 
+    LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+
     # mastodon-web concurrency.
     WEB_CONCURRENCY = toString cfg.webProcesses;
     MAX_THREADS = toString cfg.webThreads;
