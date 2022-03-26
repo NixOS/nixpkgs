@@ -420,7 +420,7 @@ let
         ${lib.optionalString (config.boot.initrd.secrets == {})
             "exit 0"}
 
-        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+        export PATH=${pkgs.coreutils}/bin:${pkgs.libarchive}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
         function cleanup {
           if [ -n "$tmp" -a -d "$tmp" ]; then
@@ -440,7 +440,7 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
+        (cd "$tmp" && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
