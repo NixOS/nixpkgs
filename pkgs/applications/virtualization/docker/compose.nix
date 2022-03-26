@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     rev = "v${version}";
-    sha256 = "sha256-PFR7EcRkqn/d6gYlMNN36nRIslYEN0JFSbFU9niGc+Y=";
+    sha256 = "sha256-ZFnrfGM2LUZZC8IPPCh3GS95jz7NGraOlr3wQaw5K0k=";
   };
 
-  vendorSha256 = "sha256-L6PNKK1ID7ZVX/4sG72wn9ZjWlx0lsNuiBc/EtCN03E=";
+  vendorSha256 = "sha256-Y2rE5/XLmQLqBA8xiCd9v30gTaO9qbiBFa4jKucKU6M=";
 
   ldflags = [ "-X github.com/docker/compose/v2/internal.Version=${version}" "-s" "-w" ];
 
