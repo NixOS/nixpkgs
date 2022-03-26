@@ -93,7 +93,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1f656rcc6z3jp1n7hh4bczj3inahg1asayxc93vzk3im28a8gr2f";
+      sha256 = "066gs2lkkiz9z9n6rjg33wmgi04qmn6xpnx86j0x3d56r1110id4";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -102,21 +102,6 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-
-    patches = drv.patches or [] ++ [
-      # Intermediate, inconsequential patch we need to add so the next one applies
-      (fetchpatch {
-        name = "git-annex-enable-package-imports.patch";
-        url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=952664641a38ee4da940c1bb8f1bf6c3e699137f";
-        sha256 = "0ablfa5jh98rgpx9wd0kgjdr6j1vyqygfnsisvn45dh7f3svkhx9";
-      })
-      # Allows compilation with aeson >= 2.0, submitted upstream as well
-      (fetchpatch {
-        name = "git-annex-aeson-2.0.patch";
-        url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=ca596e7c54ed08e2bec3b6b3e669ccf5ded9aff8";
-        sha256 = "18m164xwx6axw50bm2c833772rqcyqk3aqzap2pzawbb5d024ss6";
-      })
-    ];
 
     # Git annex provides a restricted login shell. Setting
     # passthru.shellPath here allows a user's login shell to be set to
