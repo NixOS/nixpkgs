@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
   doCheck = !stdenv.isDarwin;
+  # There are some non-thread safe tests that can fail
+  enableParallelChecking = false;
   checkInputs = [ perl ];
 
   meta = with lib; {
