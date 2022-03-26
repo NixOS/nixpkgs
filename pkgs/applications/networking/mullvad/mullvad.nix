@@ -10,6 +10,7 @@
 , libnftnl
 , libmnl
 , libwg
+, openvpn-mullvad
 }:
 let
   # result of running address_cache as of 02 Mar 2022
@@ -87,6 +88,8 @@ rustPlatform.buildRustPackage rec {
       wrapProgram $out/bin/mullvad-daemon \
         --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
     '';
+
+  passthru = { inherit openvpn-mullvad; };
 
   meta = with lib; {
     description = "Mullvad VPN command-line client tools";
