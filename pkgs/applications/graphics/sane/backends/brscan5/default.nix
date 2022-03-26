@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
       ${myPatchElf "opt/brother/scanner/brscan5/brscan_cnetconfig"}
       ${myPatchElf "opt/brother/scanner/brscan5/brscan_gnetconfig"}
 
-      for a in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
-        if ! test -L $a; then
-          patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $a
+      for file in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
+        if ! test -L $file; then
+          patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $file
         fi
       done
 
