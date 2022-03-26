@@ -1633,6 +1633,13 @@
       </listitem>
       <listitem>
         <para>
+          A module for declarative configuration of openconnect VPN
+          profiles was added under
+          <literal>networking.openconnect</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>element-desktop</literal> package now has an
           <literal>useKeytar</literal> option (defaults to
           <literal>true</literal>), which allows disabling
