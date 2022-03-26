@@ -5,6 +5,7 @@ let
     CFBundleDevelopmentRegion = "English";
     CFBundleExecutable = "$name";
     CFBundleIconFile = "$icon";
+    CFBundleIconFiles = [ "$icon" ];
     CFBundleIdentifier = "org.nixos.$name";
     CFBundleInfoDictionaryVersion = "6.0";
     CFBundleName = "$name";
@@ -25,11 +26,8 @@ in writeScriptBin "write-darwin-bundle" ''
 ${pListText}
 EOF
 
-  if [[ $squircle != 0 && $squircle != "false" ]]; then
-    sed  "
-      s|CFBundleIconFile|CFBundleIconFiles|;
-      s|<string>$icon</string>|<array><string>$icon</string></array>|
-    " -i "$plist"
+  if [[ $squircle == 0 || $squircle == "false" ]]; then
+    sed  '/CFBundleIconFiles/,\|</array>|d' -i "$plist"
   fi
 
     cat > "$prefix/Applications/$name.app/Contents/MacOS/$name" <<EOF

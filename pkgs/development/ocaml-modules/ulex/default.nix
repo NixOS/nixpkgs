@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  propagatedBuildInputs = [ camlp4 ];
 
   strictDeps = true;
 

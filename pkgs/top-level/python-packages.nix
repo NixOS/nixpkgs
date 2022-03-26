@@ -4667,6 +4667,13 @@ in {
 
   libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
 
+  libpwquality = pipe pkgs.libpwquality [
+    toPythonModule
+    (p: p.overrideAttrs (super: { meta = super.meta // { outputsToInstall = [ "py" ]; }; }))
+    (p: p.override { enablePython = true; inherit python; })
+    (p: p.py)
+  ];
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
@@ -5607,6 +5614,10 @@ in {
   notify2 = callPackage ../development/python-modules/notify2 { };
 
   notmuch = callPackage ../development/python-modules/notmuch {
+    inherit (pkgs) notmuch;
+  };
+
+  notmuch2 = callPackage ../development/python-modules/notmuch2 {
     inherit (pkgs) notmuch;
   };
 

@@ -11,7 +11,7 @@
 , evolution-data-server
 , feedbackd
 , glibmm
-, gnome
+, gnome-desktop
 , gspell
 , gtk3
 , json-glib
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     feedbackd
     glibmm
-    gnome.gnome-desktop
+    gnome-desktop
     gspell
     gtk3
     json-glib

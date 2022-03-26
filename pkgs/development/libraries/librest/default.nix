@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       attrPath = "librest";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

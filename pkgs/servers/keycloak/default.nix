@@ -1,5 +1,6 @@
 { stdenv, lib, fetchzip, makeWrapper, jre, writeText, nixosTests
 , postgresql_jdbc ? null, mysql_jdbc ? null
+, callPackage
 }:
 
 let
@@ -57,7 +58,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/kcreg.sh --prefix PATH : ${jre}/bin
   '';
 
-  passthru.tests = nixosTests.keycloak;
+  passthru = {
+    tests = nixosTests.keycloak;
+    plugins = callPackage ./all-plugins.nix {};
+  };
 
   meta = with lib; {
     homepage    = "https://www.keycloak.org/";

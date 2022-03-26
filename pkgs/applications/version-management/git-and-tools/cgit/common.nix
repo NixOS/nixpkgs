@@ -1,5 +1,5 @@
 { pname, version, src, gitSrc, buildInputs ? []
-, homepage, repo, description, maintainers
+, homepage, description, maintainers
 }:
 
 { lib, stdenv, openssl, zlib, asciidoc, libxml2, libxslt
@@ -70,7 +70,6 @@ stdenv.mkDerivation {
 
   meta = {
     inherit homepage description;
-    repositories.git = repo;
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = maintainers ++ (with lib.maintainers; [ qyliss ]);

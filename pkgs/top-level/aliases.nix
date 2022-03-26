@@ -38,9 +38,14 @@ in
 # A script to convert old aliases to throws and remove old
 # throws can be found in './maintainers/scripts/remove-old-aliases.py'.
 
+# Add 'preserve, reason: reason why' after the date if the alias should not be removed.
+# Try to keep them to a minimum.
+# valid examples of what to preserve:
+#   distro aliases such as:
+#     debian-package-name -> nixos-package-name
+
 mapAliases ({
-  # forceSystem should not be used directly in Nixpkgs.
-  # Added 2018-07-16
+  # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
 
@@ -549,6 +554,7 @@ mapAliases ({
   keybase-go = throw "'keybase-go' has been renamed to/replaced by 'keybase'"; # Converted to throw 2022-02-22
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived"; # Added 2019-12-10
   keysmith = libsForQt5.plasmaMobileGear.keysmith; # Added 2021-07-14
+  kgx = gnome-console; # Added 2022-02-19
   kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # Added 2021-06-09
   kicad-with-packages3d = kicad; # Added 2019-11-25
   kindlegen = throw "kindlegen has been removed from nixpkgs, as it's abandoned and no longer available for download"; # Added 2021-03-09

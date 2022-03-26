@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://springlobby.info/";
-    repositories.git = "git://github.com/springlobby/springlobby.git";
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
     maintainers = with maintainers; [ qknight domenkozar ];

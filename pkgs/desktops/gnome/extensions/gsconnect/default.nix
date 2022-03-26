@@ -19,15 +19,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "48";
+  version = "53";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchFromGitHub {
-    owner = "andyholmes";
+    owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    sha256 = "sha256-cKEFTF8DnQIQAXVW9NvE34mUqueQP/OtxTzMUy1dT5U=";
+    sha256 = "sha256-u14OVv3iyQbLEmqLgMdEUD2iC4nsYVCOr4ua66T3TBk=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "KDE Connect implementation for Gnome Shell";
-    homepage = "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";
+    homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

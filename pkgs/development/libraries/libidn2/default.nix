@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
       detailed information.
     '';
 
-    repositories.git = "https://gitlab.com/jas/libidn2";
     license = with lib.licenses; [ lgpl3Plus gpl2Plus gpl3Plus ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];

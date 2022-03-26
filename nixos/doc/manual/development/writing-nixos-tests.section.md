@@ -158,6 +158,12 @@ The following methods are available on machine objects:
     e.g., `send_chars("foobar\n")` will type the string `foobar`
     followed by the Enter key.
 
+`send_console`
+
+:   Send keys to the kernel console. This allows interaction with the systemd
+    emergency mode, for example. Takes a string that is sent, e.g.,
+    `send_console("\n\nsystemctl default\n")`.
+
 `execute`
 
 :   Execute a shell command, returning a list `(status, stdout)`.
@@ -271,6 +277,13 @@ The following methods are available on machine objects:
     only be used during test development, not in production tests.
     Killing the interactive session with `Ctrl-d` or `Ctrl-c` also ends
     the guest session.
+
+`console_interact`
+
+:   Allows you to directly interact with QEMU's stdin. This should
+    only be used during test development, not in production tests.
+    Output from QEMU is only read line-wise. `Ctrl-c` kills QEMU and
+    `Ctrl-d` closes console and returns to the test runner.
 
 To test user units declared by `systemd.user.services` the optional
 `user` argument can be used:

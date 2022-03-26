@@ -20,7 +20,6 @@ callPackage (import ./common.nix rec {
   buildInputs = [ luajit ];
 
   homepage = "https://git.zx2c4.com/cgit/about/";
-  repo = "git://git.zx2c4.com/cgit";
   description = "Web frontend for git repositories";
   maintainers = with lib.maintainers; [ bjornfor ];
 }) {}

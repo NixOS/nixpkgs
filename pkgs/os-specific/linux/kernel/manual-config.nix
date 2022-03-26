@@ -301,7 +301,6 @@ let
             + ")");
         license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
-        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = lib.teams.linux-kernel.members ++ [
           maintainers.thoughtpolice
         ];
