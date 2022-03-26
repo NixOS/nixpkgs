@@ -157,7 +157,6 @@ let
         dhall-lsp-server
         dhall-json
         dhall-nix
-        dhall-text
         diagrams-builder
         elm2nix
         fffuu
