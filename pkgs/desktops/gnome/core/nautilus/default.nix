@@ -19,7 +19,6 @@
 , libnotify
 , libexif
 , libseccomp
-, exempi
 , librsvg
 , tracker
 , tracker-miners
@@ -68,7 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    exempi
     gexiv2
     glib-networking
     gnome-desktop
