@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gmp, libffi }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gmp
+, libffi
+}:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
@@ -11,14 +17,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libffi gmp ];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
-
-  patches = [
-    # glibc 2.34 compat
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/polyml/raw/4d8868ca5a1ce3268f212599a321f8011c950496/f/polyml-pthread-stack-min.patch";
-      sha256 = "1h5ihg2sxld9ymrl3f2mpnbn2242ka1fsa0h4gl9h90kndvg6kby";
-    })
-  ];
 
   configureFlags = [
     "--enable-shared"
