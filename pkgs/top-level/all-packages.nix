@@ -341,6 +341,8 @@ with pkgs;
 
   deadnix = callPackage ../development/tools/deadnix { };
 
+  dsq = callPackage ../tools/misc/dsq { buildGoModule = buildGo118Module; };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
