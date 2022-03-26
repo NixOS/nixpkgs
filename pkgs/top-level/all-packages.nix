@@ -10527,6 +10527,8 @@ with pkgs;
 
   top-git = callPackage ../applications/version-management/git-and-tools/topgit { };
 
+  todo = callPackage ../tools/misc/todo { };
+
   tor = callPackage ../tools/security/tor { };
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
