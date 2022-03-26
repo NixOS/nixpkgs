@@ -71,8 +71,8 @@ let
       echo "exec $out/lib/unigine/superposition/Superposition" >> $out/bin/superposition
       chmod +x $out/bin/superposition
        wrapProgram $out/lib/unigine/superposition/Superposition \
-      --set QT_XKB_CONFIG_ROOT ${xkeyboard_config} \
-      --run "cd $out/lib/unigine/superposition/"
+        --set QT_XKB_CONFIG_ROOT ${xkeyboard_config} \
+        --run "cd $out/lib/unigine/superposition/"
     '';
 
     dontUnpack = true;
@@ -131,8 +131,8 @@ buildFHSUserEnv {
     # install Superposition.desktop and icon
     cp ${superposition}/lib/unigine/superposition/Superposition.png $out/share/icons/
     for RES in 16 24 32 48 64 128 256; do
-        mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
-        cp ${superposition}/lib/unigine/superposition/icons/superposition_icon_$RES.png $out/share/icons/hicolor/"$RES"x"$RES"/apps/Superposition.png
+      mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
+      cp ${superposition}/lib/unigine/superposition/icons/superposition_icon_$RES.png $out/share/icons/hicolor/"$RES"x"$RES"/apps/Superposition.png
     done
   '';
 
