@@ -7036,6 +7036,8 @@ with pkgs;
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
+  justify = callPackage ../tools/text/justify { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
