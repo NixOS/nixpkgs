@@ -1301,6 +1301,8 @@ with pkgs;
 
   kanata-with-cmd = callPackage ../tools/system/kanata { withCmd = true; };
 
+  ksmbd-tools = callPackage ../os-specific/linux/ksmbd-tools { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
