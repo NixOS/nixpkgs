@@ -15,22 +15,17 @@
 , libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
-let
-  v_maj = "4.8";
-  v_min = "7";
-  vers = "${v_maj}.${v_min}";
-in
-
 # TODO:
 #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
 #    false build-time dependencies
 
 stdenv.mkDerivation rec {
-  name = "qt-${vers}";
+  pname = "qt" + lib.optionalString ( docs && demos && examples && developerBuild ) "-full";
+  version = "4.8.7";
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
-      + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
+      + "${lib.versions.majorMinor version}/${version}/qt-everywhere-opensource-src-${version}.tar.gz";
     sha256 = "183fca7n7439nlhxyg1z7aky0izgbyll3iwakw4gwivy16aj5272";
   };
 
@@ -40,8 +35,6 @@ stdenv.mkDerivation rec {
 
   setOutputFlags = false;
 
-  # The version property must be kept because it will be included into the QtSDK package name
-  version = vers;
 
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
@@ -131,13 +124,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     configureFlags+="
-      -docdir $out/share/doc/${name}
+      -docdir $out/share/doc/qt-${version}
       -plugindir $out/lib/qt4/plugins
       -importdir $out/lib/qt4/imports
-      -examplesdir $TMPDIR/share/doc/${name}/examples
-      -demosdir $TMPDIR/share/doc/${name}/demos
-      -datadir $out/share/${name}
-      -translationdir $out/share/${name}/translations
+      -examplesdir $TMPDIR/share/doc/qt-${version}/examples
+      -demosdir $TMPDIR/share/doc/qt-${version}/demos
+      -datadir $out/share/qt-${version}
+      -translationdir $out/share/qt-${version}/translations
       --jobs=$NIX_BUILD_CORES
     "
     unset LD # Makefile uses gcc for linking; setting LD interferes

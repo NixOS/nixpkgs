@@ -18,20 +18,20 @@
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.5.0";
+  version = "0.6.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
     rev = "v${version}";
-    sha256 = "192wfrlyylrpzq70yki421mi1smk8q2cyki2a1d03q7h6apib3j4";
+    sha256 = "0b1yfddf38dicmjgnw9mk5g0iisa5yq6l9cj6kfskhyrznasvz3g";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit patches src;
     name = "${pname}-${version}";
-    hash = "sha256-2XhXCKyXVlFgbcOoMy/A5ajiIVxBii56YeI29mO720U=";
+    hash = "sha256-1dRFC59GY7M99LvQWy2eXPesmLX5k46rN8l4suLYkQY=";
   };
 
   format = "pyproject";

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false }:
+{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "earlyoom";
-  version = "1.6.2";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "earlyoom";
     rev = "v${version}";
-    sha256 = "16iyn51xlrsbshc7p5xl2338yyfzknaqc538sa7mamgccqwgyvvq";
+    sha256 = "sha256-8YcT1TTlAet7F1U9Ginda4IApNqkudegOXqm8rnRGfc=";
   };
 
   nativeBuildInputs = lib.optionals withManpage [ pandoc installShellFiles ];
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString withManpage ''
     installManPage earlyoom.1
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) earlyoom;
+  };
 
   meta = with lib; {
     description = "Early OOM Daemon for Linux";

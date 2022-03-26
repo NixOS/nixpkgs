@@ -27,6 +27,7 @@ in rustPlatform.buildRustPackage rec {
   };
 
   buildPhase = ''
+    runHook preBuild
     cd ..
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
@@ -36,16 +37,18 @@ in rustPlatform.buildRustPackage rec {
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     node_modules/.bin/neon build --release
+    runHook postBuild
   '';
 
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
     shopt -s extglob
     rm -rf native/!(index.node)
-    rm -rf node_modules
-    rm -rf $HOME
+    rm -rf node_modules $HOME
     cp -r . $out
+    runHook postInstall
   '';
 
   cargoSha256 = pinData.cargoHash;

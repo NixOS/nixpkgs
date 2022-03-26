@@ -30,6 +30,8 @@ in {
 
     environment.systemPackages = [ pkgs.flatpak ];
 
+    security.polkit.enable = true;
+
     services.dbus.packages = [ pkgs.flatpak ];
 
     systemd.packages = [ pkgs.flatpak ];

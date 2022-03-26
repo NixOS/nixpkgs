@@ -124,20 +124,17 @@ let
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
-    in buildPackages.stdenv.mkDerivation {
-      name = "cabal2nix-${name}";
+    in buildPackages.runCommand "cabal2nix-${name}" {
       nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
       preferLocalBuild = true;
       allowSubstitutes = false;
-      phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-      installPhase = ''
-        export HOME="$TMP"
-        mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
-      '';
-  };
+    } ''
+      export HOME="$TMP"
+      mkdir -p "$out"
+      cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
+    '';
 
   all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
     tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
@@ -387,6 +384,18 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # for the "shellFor" environment (ensuring that any test/benchmark
         # dependencies for "foo" will be available within the nix-shell).
       , genericBuilderArgsModifier ? (args: args)
+
+        # Extra dependencies, in the form of cabal2nix build attributes.
+        #
+        # An example use case is when you have Haskell scripts that use
+        # libraries that don't occur in your packages' dependencies.
+        #
+        # Example:
+        #
+        #   extraDependencies = p: {
+        #     libraryHaskellDepends = [ p.releaser ];
+        #   };
+      , extraDependencies ? p: {}
       , ...
       } @ args:
       let
@@ -477,7 +486,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # See the Note in `zipperCombinedPkgs` for what gets filtered out from
         # each of these dependency lists.
         packageInputs =
-          pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) cabalDepsForSelected;
+          pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) (cabalDepsForSelected ++ [ (extraDependencies self) ]);
 
         # A attribute set to pass to `haskellPackages.mkDerivation`.
         #
@@ -517,7 +526,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # pkgWithCombinedDepsDevDrv :: Derivation
         pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" ];
+        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" "extraDependencies" ];
 
       in pkgWithCombinedDepsDevDrv.overrideAttrs (old: mkDerivationArgs // {
         nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];

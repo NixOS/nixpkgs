@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     comment = "VoIP and Instant Messaging client";
     desktopName = "Jitsi";
     genericName = "Instant Messaging";
-    categories = "Chat";
+    categories = [ "Chat" ];
   };
 
   libPath = lib.makeLibraryPath ([

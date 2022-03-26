@@ -6,6 +6,7 @@
 , genericUpdater
 , writers
 , jq
+, yq
 }:
 
 let
@@ -13,7 +14,7 @@ let
     inherit pname version;
     attrPath = lib.toLower pname;
     rev-prefix = "v";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${homepage}";
+    versionLister = "${common-updater-scripts}/bin/list-git-tags --url=${homepage}";
   };
   updateScript = builtins.elemAt updater 0;
   updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
@@ -40,6 +41,11 @@ in writers.writeBash "update-epgstation" ''
     } | del(.devDependencies, .main, .scripts)' \
     "$SRC/package.json" \
     > package.json
+  ${jq}/bin/jq '. + {
+      dependencies: (.dependencies + .devDependencies),
+    } | del(.devDependencies, .main, .scripts)' \
+    "$SRC/client/package.json" \
+    > client/package.json
 
   # Regenerate node packages to update the pre-overriden epgstation derivation.
   # This must come *after* package.json has been regenerated.
@@ -49,18 +55,11 @@ in writers.writeBash "update-epgstation" ''
 
   # Generate default streaming settings for the nixos module.
   pushd ../../../../nixos/modules/services/video/epgstation
-  ${jq}/bin/jq '
-    { liveHLS
-    , liveMP4
-    , liveWebM
-    , mpegTsStreaming
-    , mpegTsViewer
-    , recordedDownloader
-    , recordedStreaming
-    , recordedHLS
-    , recordedViewer
-    }' \
-    "$SRC/config/config.sample.json" \
+  ${yq}/bin/yq -j '{ urlscheme , stream }' \
+    "$SRC/config/config.yml.template" \
     > streaming.json
+
+  # Fix generated output for EditorConfig compliance
+  printf '\n' >> streaming.json  # rule: insert_final_newline
   popd
 ''

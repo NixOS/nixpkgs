@@ -3,7 +3,7 @@
 , isPy3k
 , fetchPypi
 , substituteAll
-, ffmpeg
+, ffmpeg_4
 , python
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      ffmpeg = "${ffmpeg}/bin/ffmpeg";
+      ffmpeg = "${ffmpeg_4}/bin/ffmpeg";
     })
   ];
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
     ${python.interpreter} << EOF
     from imageio_ffmpeg import get_ffmpeg_version
-    assert get_ffmpeg_version() == '${ffmpeg.version}'
+    assert get_ffmpeg_version() == '${ffmpeg_4.version}'
     EOF
 
     runHook postCheck

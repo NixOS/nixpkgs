@@ -9,7 +9,7 @@ let
     #  - Alternatively, blocked on a NixOps 2 release
     #    https://github.com/NixOS/nixops/issues/1242
     # stable = testsLegacyNetwork { nixopsPkg = pkgs.nixops; };
-    unstable = testsForPackage { nixopsPkg = pkgs.nixopsUnstable; };
+    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable; };
 
     # inherit testsForPackage;
   };
@@ -23,7 +23,7 @@ let
       deployer = { config, lib, nodes, pkgs, ... }: {
         imports = [ ../../modules/installer/cd-dvd/channel.nix ];
         environment.systemPackages = [ nixopsPkg ];
-        nix.binaryCaches = lib.mkForce [ ];
+        nix.settings.substituters = lib.mkForce [ ];
         users.users.person.isNormalUser = true;
         virtualisation.writableStore = true;
         virtualisation.additionalPaths = [

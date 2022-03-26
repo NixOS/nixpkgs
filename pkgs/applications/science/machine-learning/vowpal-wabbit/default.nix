@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vowpal-wabbit";
-  version = "8.11.0";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "VowpalWabbit";
     repo = "vowpal_wabbit";
     rev = version;
-    sha256 = "sha256-F3la4n1ULMN2nktr+PVWFPl3V2RfCowR0ozL+dnbhgA=";
+    sha256 = "sha256-ZUurY2bmTKKIW4GR4oiIpLxb6DSRUNJI/EyNSOu9D9c=";
   };
 
   nativeBuildInputs = [ cmake ];

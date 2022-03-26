@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       Escape from a hostile computer system! Harvest data to create an armada of battle-processes to aid your escape! Take command directly and play the game as an RTS, or use the game's built-in editor and compiler to write your own unit AI in a simplified version of C.
     '';
     homepage = "https://linleyh.itch.io/liberation-circuit";
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
   };

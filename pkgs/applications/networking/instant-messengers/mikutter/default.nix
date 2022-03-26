@@ -49,9 +49,9 @@ let
       desktopName = "mikutter";
       exec = "mikutter";
       icon = "mikutter";
-      categories = "Network;";
+      categories = [ "Network" ];
       comment = description;
-      extraDesktopEntries.Keywords = "Mastodon;";
+      keywords = [ "Mastodon" ];
     };
 
   mkInfoPlist = { version }:

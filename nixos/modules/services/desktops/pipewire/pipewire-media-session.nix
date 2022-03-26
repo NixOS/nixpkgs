@@ -38,9 +38,8 @@ in {
     services.pipewire.media-session = {
       enable = mkOption {
         type = types.bool;
-        default = config.services.pipewire.enable;
-        defaultText = literalExpression "config.services.pipewire.enable";
-        description = "Example pipewire session manager";
+        default = false;
+        description = "Whether to enable the deprecated example Pipewire session manager";
       };
 
       package = mkOption {
@@ -110,6 +109,11 @@ in {
     environment.etc."pipewire/media-session.d/v4l2-monitor.conf" = {
       source = json.generate "v4l2-monitor.conf" configs.v4l2-monitor;
     };
+
+    environment.etc."pipewire/media-session.d/with-audio" =
+      mkIf config.services.pipewire.audio.enable {
+        text = "";
+      };
 
     environment.etc."pipewire/media-session.d/with-alsa" =
       mkIf config.services.pipewire.alsa.enable {

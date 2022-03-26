@@ -19,10 +19,10 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "495.46";
-      sha256_64bit = "2Dt30X2gxUZnqlsT1uqVpcUTBCV7Hs8vjUo7WuMcYvU=";
-      settingsSha256 = "vbcZYn+UBBGwjfrJ6SyXt3+JLBeNcXK4h8mjj7qxZPk=";
-      persistencedSha256 = "ieYqkVxe26cLw1LUgBsFSSowAyfZkTcItIzQCestCXI=";
+      version = "510.60.02";
+      sha256_64bit = "sha256-qADfwFSQeP2Mbo5ngO+47uh4cuYFXH9fOGpHaM4H4AM=";
+      settingsSha256 = "sha256-Voa1JZ2qqJ1t+bfwKh/mssEi/hjzLTPwef2XG/gAC+0=";
+      persistencedSha256 = "sha256-THgK2GpRcttqSN2WxcuJu5My++Q+Y34jG8hm7daxhAQ=";
     }
     else legacy_390;
 
@@ -77,6 +77,7 @@ rec {
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
+    broken = with kernel; kernelAtLeast "5.5";
     patches = [ ./vm_operations_struct-fault.patch ];
   };
 }

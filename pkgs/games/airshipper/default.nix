@@ -1,7 +1,9 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
+, fetchpatch
 , openssl
+, libGL
 , vulkan-loader
 , wayland
 , wayland-protocols
@@ -16,16 +18,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "airshipper";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
     rev = "v${version}";
-    sha256 = "sha256-m3H2FE1DoV/uk9PGgf9PCagwmWWSQO/gCi7zpS02/WY=";
+    sha256 = "sha256-nOE9ZNHxLEAnMkuBSpxmeq3DxkRIlcoase6AxU+eFug=";
   };
 
-  cargoSha256 = "sha256-ddy4TjT/ia+sLBnpwcXBVUzAS07ar+Jjc04KS5/arlU=";
+  patches = [
+    # this *should* be merged in time for the release following 0.7.0
+    (fetchpatch {
+      url = "https://github.com/veloren/Airshipper/commit/97fc986ab4cbf59f2c764f647710f19db86031b4.patch";
+      hash = "sha256-Sg5et+yP6Z44wV/t9zqKLpg1C0cq6rV+3WrzAH4Za3U=";
+    })
+  ];
+
+  cargoSha256 = "sha256-s3seKVEhXyOVlt3a8cubzRWoB4SVQpdCmq12y0FpDUw=";
 
   buildInputs = [
     openssl
@@ -40,14 +50,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   postInstall = ''
-    mkdir -p "$out/share/applications" && mkdir -p "$out/share/icons"
-    cp "client/assets/net.veloren.airshipper.desktop" "$out/share/applications"
-    cp "client/assets/logo.ico" "$out/share/icons/net.veloren.airshipper.ico"
+    install -Dm444 -t "$out/share/applications" "client/assets/net.veloren.airshipper.desktop"
+    install -Dm444    "client/assets/logo.ico"  "$out/share/icons/net.veloren.airshipper.ico"
   '';
 
   postFixup =
     let
       libPath = lib.makeLibraryPath [
+        libGL
         vulkan-loader
         wayland
         wayland-protocols
@@ -57,7 +67,8 @@ rustPlatform.buildRustPackage rec {
         libXi
         libXcursor
       ];
-    in ''
+    in
+    ''
       patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
     '';
 

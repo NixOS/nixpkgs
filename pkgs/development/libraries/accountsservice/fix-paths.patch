@@ -1,8 +1,8 @@
 diff --git a/src/daemon.c b/src/daemon.c
-index c52bda3..75d214e 100644
+index c8b6320..2b74949 100644
 --- a/src/daemon.c
 +++ b/src/daemon.c
-@@ -1106,7 +1106,7 @@ daemon_create_user_authorized_cb (Daemon                *daemon,
+@@ -1102,7 +1102,7 @@ daemon_create_user_authorized_cb (Daemon                *daemon,
  
          sys_log (context, "create user '%s'", cd->user_name);
  
@@ -11,9 +11,9 @@ index c52bda3..75d214e 100644
          argv[1] = "-m";
          argv[2] = "-c";
          argv[3] = cd->real_name;
-@@ -1318,7 +1318,7 @@ daemon_delete_user_authorized_cb (Daemon                *daemon,
- 
-         user_set_saved (user, FALSE);
+@@ -1335,7 +1335,7 @@ daemon_delete_user_authorized_cb (Daemon                *daemon,
+         }
+         free (resolved_homedir);
  
 -        argv[0] = "/usr/sbin/userdel";
 +        argv[0] = "@shadow@/bin/userdel";
@@ -21,19 +21,19 @@ index c52bda3..75d214e 100644
                  argv[1] = "-f";
                  argv[2] = "-r";
 diff --git a/src/user.c b/src/user.c
-index 9f57af5..e65289d 100644
+index 189b2c5..5358c02 100644
 --- a/src/user.c
 +++ b/src/user.c
-@@ -844,7 +844,7 @@ user_change_real_name_authorized_cb (Daemon                *daemon,
-                          accounts_user_get_uid (ACCOUNTS_USER (user)),
-                          name);
+@@ -1145,7 +1145,7 @@ user_change_real_name_authorized_cb (Daemon                *daemon,
+                         new_gecos = g_strdup (name);
+                 }
  
 -                argv[0] = "/usr/sbin/usermod";
 +                argv[0] = "@shadow@/bin/usermod";
                  argv[1] = "-c";
-                 argv[2] = name;
+                 argv[2] = new_gecos;
                  argv[3] = "--";
-@@ -913,7 +913,7 @@ user_change_user_name_authorized_cb (Daemon                *daemon,
+@@ -1218,7 +1218,7 @@ user_change_user_name_authorized_cb (Daemon                *daemon,
                           accounts_user_get_uid (ACCOUNTS_USER (user)),
                           name);
  
@@ -42,7 +42,7 @@ index 9f57af5..e65289d 100644
                  argv[1] = "-l";
                  argv[2] = name;
                  argv[3] = "--";
-@@ -1321,7 +1321,7 @@ user_change_home_dir_authorized_cb (Daemon                *daemon,
+@@ -1627,7 +1627,7 @@ user_change_home_dir_authorized_cb (Daemon                *daemon,
                           accounts_user_get_uid (ACCOUNTS_USER (user)),
                           home_dir);
  
@@ -51,7 +51,7 @@ index 9f57af5..e65289d 100644
                  argv[1] = "-m";
                  argv[2] = "-d";
                  argv[3] = home_dir;
-@@ -1378,7 +1378,7 @@ user_change_shell_authorized_cb (Daemon                *daemon,
+@@ -1683,7 +1683,7 @@ user_change_shell_authorized_cb (Daemon                *daemon,
                           accounts_user_get_uid (ACCOUNTS_USER (user)),
                           shell);
  
@@ -60,7 +60,7 @@ index 9f57af5..e65289d 100644
                  argv[1] = "-s";
                  argv[2] = shell;
                  argv[3] = "--";
-@@ -1520,7 +1520,7 @@ user_change_icon_file_authorized_cb (Daemon                *daemon,
+@@ -1824,7 +1824,7 @@ user_change_icon_file_authorized_cb (Daemon                *daemon,
                          return;
                  }
  
@@ -69,7 +69,7 @@ index 9f57af5..e65289d 100644
                  argv[1] = filename;
                  argv[2] = NULL;
  
-@@ -1601,7 +1601,7 @@ user_change_locked_authorized_cb (Daemon                *daemon,
+@@ -1904,7 +1904,7 @@ user_change_locked_authorized_cb (Daemon                *daemon,
                           locked ? "locking" : "unlocking",
                           accounts_user_get_user_name (ACCOUNTS_USER (user)),
                           accounts_user_get_uid (ACCOUNTS_USER (user)));
@@ -78,7 +78,7 @@ index 9f57af5..e65289d 100644
                  argv[1] = locked ? "-L" : "-U";
                  argv[2] = "--";
                  argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
-@@ -1726,7 +1726,7 @@ user_change_account_type_authorized_cb (Daemon                *daemon,
+@@ -2026,7 +2026,7 @@ user_change_account_type_authorized_cb (Daemon                *daemon,
  
                  g_free (groups);
  
@@ -87,7 +87,7 @@ index 9f57af5..e65289d 100644
                  argv[1] = "-G";
                  argv[2] = str->str;
                  argv[3] = "--";
-@@ -1794,7 +1794,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+@@ -2093,7 +2093,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
                  if (mode == PASSWORD_MODE_SET_AT_LOGIN ||
                      mode == PASSWORD_MODE_NONE) {
  
@@ -96,7 +96,7 @@ index 9f57af5..e65289d 100644
                          argv[1] = "-d";
                          argv[2] = "--";
                          argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
-@@ -1806,7 +1806,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+@@ -2105,7 +2105,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
                          }
  
                          if (mode == PASSWORD_MODE_SET_AT_LOGIN) {
@@ -105,7 +105,7 @@ index 9f57af5..e65289d 100644
                                  argv[1] = "-d";
                                  argv[2] = "0";
                                  argv[3] = "--";
-@@ -1827,7 +1827,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+@@ -2126,7 +2126,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
                          accounts_user_set_locked (ACCOUNTS_USER (user), FALSE);
                  }
                  else if (accounts_user_get_locked (ACCOUNTS_USER (user))) {
@@ -114,7 +114,7 @@ index 9f57af5..e65289d 100644
                          argv[1] = "-U";
                          argv[2] = "--";
                          argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
-@@ -1905,7 +1905,7 @@ user_change_password_authorized_cb (Daemon                *daemon,
+@@ -2203,7 +2203,7 @@ user_change_password_authorized_cb (Daemon                *daemon,
  
          g_object_freeze_notify (G_OBJECT (user));
  

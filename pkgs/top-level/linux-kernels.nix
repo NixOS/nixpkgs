@@ -92,14 +92,7 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-      kernelPatches =
-        [ kernelPatches.bridge_stp_helper
-          kernelPatches.request_key_helper_updated
-          kernelPatches.cpu-cgroup-v2."4.4"
-          kernelPatches.modinst_arg_list_too_long
-        ];
-    };
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
 
     linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
       kernelPatches =
@@ -173,6 +166,13 @@ in {
       ];
     };
 
+    linux_5_17 = callPackage ../os-specific/linux/kernel/linux-5.17.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -186,7 +186,7 @@ in {
        else testing;
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_5_15;
+      kernel = linux_5_16;
       kernelPatches = kernel.kernelPatches;
    };
 
@@ -284,9 +284,13 @@ in {
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
+    dddvb = callPackage ../os-specific/linux/dddvb { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
+
+    dpdk = pkgs.dpdk.override { inherit kernel; };
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
@@ -327,7 +331,7 @@ in {
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
+    nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
 
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
@@ -436,7 +440,9 @@ in {
     veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
     vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-    vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
+    vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+
+    virtio_vmmci  = callPackage ../os-specific/linux/virtio_vmmci { };
 
     virtualbox = callPackage ../os-specific/linux/virtualbox {
       virtualbox = pkgs.virtualboxHardened;
@@ -455,6 +461,8 @@ in {
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
     xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
+
+    xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
@@ -476,7 +484,7 @@ in {
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_4_4 = recurseIntoAttrs (packagesFor kernels.linux_4_4);
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream"; # Added 2022-02-11
     linux_4_9 = recurseIntoAttrs (packagesFor kernels.linux_4_9);
     linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
@@ -484,6 +492,7 @@ in {
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_5_16 = recurseIntoAttrs (packagesFor kernels.linux_5_16);
+    linux_5_17 = recurseIntoAttrs (packagesFor kernels.linux_5_17);
   };
 
   rtPackages = {
@@ -526,9 +535,9 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_5_10;
+    linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_16;
+    linux_latest = packages.linux_5_17;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;

@@ -6,6 +6,7 @@
 , ocaml
 , lwt_react
 , opaline
+, ocamlbuild
 , ppx_deriving
 , findlib
 , js_of_ocaml-ocamlbuild
@@ -28,13 +29,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VNxzpVpXEGlixyjadbW0GjL83jcKV5TWd46UReNYO6w=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     ocaml
     which
     findlib
+    opaline
+    ocamlbuild
+  ];
+  buildInputs = [
     js_of_ocaml-ocamlbuild
     js_of_ocaml-ppx_deriving_json
-    opaline
     ocamlnet
   ];
 
@@ -47,6 +51,8 @@ stdenv.mkDerivation rec {
     ocsigen_server
     ppx_deriving
   ];
+
+  strictDeps = true;
 
   installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 

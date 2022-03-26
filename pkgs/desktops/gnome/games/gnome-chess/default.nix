@@ -14,16 +14,17 @@
 , gnome
 , glib
 , gtk4
+, libadwaita
 , librsvg
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "41.1";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "62GYhlljlrQDOj8oo8LjAEtU6+Gzi0DWQiwXufLMF9A=";
+    sha256 = "Eq9Uk6YiBaxrt0VA8KhYQT2okolmo0boVDMLQdc7w5M=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +43,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk4
+    libadwaita
     librsvg
-    gnome.adwaita-icon-theme
   ];
 
   postPatch = ''

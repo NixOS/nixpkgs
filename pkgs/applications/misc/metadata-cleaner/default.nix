@@ -9,7 +9,7 @@
 , itstool
 , libadwaita
 , librsvg
-, meson_0_60
+, meson
 , ninja
 , pkg-config
 , poppler_gi
@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
-  version = "2.1.3";
+  version = "2.1.5";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
     rev = "v${version}";
-    hash = "sha256-9sLjgqqQBXcudlBRmqAwWcWMUXoIUyAK272zaNKbJNY=";
+    hash = "sha256-G7Azeh8+OQILoYEmlIeacoDzN0NRt5NTGavYM9CH8WA=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gtk4
     itstool
-    meson_0_60
+    meson
     ninja
     pkg-config
     wrapGAppsHook

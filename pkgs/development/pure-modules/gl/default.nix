@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, freeglut, libGLU, libGL, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
-  baseName = "gl";
+  pname = "pure-gl";
   version = "0.9";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-gl-${version}.tar.gz";
     sha256 = "edd594222f89ae372067eda6679a37488986b9739b5b79b4a25ac48255d31bba";
   };
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "0.8.0";
+  version = "0.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "lyz-code";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Gkq80YMeiPy7xxLauA/nloW4znMV2tfE+e24HyZgUaQ=";
+    sha256 = "sha256-YCC4xK1fB5Gyv32JhbSuejtzLNMRnH7iyUpzccVijS0=";
   };
 
   propagatedBuildInputs = [

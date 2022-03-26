@@ -22,8 +22,8 @@ stdenvNoCC.mkDerivation rec {
     exec = "gprojector";
     desktopName = "G.Projector";
     comment = meta.description;
-    categories = "Science;";
-    extraEntries = "StartupWMClass = gov-nasa-giss-projector-GProjector";
+    categories = [ "Science" ];
+    startupWMClass = "gov-nasa-giss-projector-GProjector";
   }) ];
 
   buildInputs = [ jre ];

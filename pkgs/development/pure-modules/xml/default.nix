@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
-  baseName = "xml";
+  pname = "pure-xml";
   version = "0.7";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-xml-${version}.tar.gz";
     sha256 = "e862dec060917a285bc3befc90f4eb70b6cc33136fb524ad3aa173714a35b0f7";
   };
 

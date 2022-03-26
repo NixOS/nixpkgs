@@ -44,24 +44,24 @@ let
 
   optionString = concatStringsSep " " (mapAttrsToList streamToOption cfg.streams
     # global options
-    ++ [ "--stream.bind_to_address ${cfg.listenAddress}" ]
-    ++ [ "--stream.port ${toString cfg.port}" ]
-    ++ optionalNull cfg.sampleFormat "--stream.sampleformat ${cfg.sampleFormat}"
-    ++ optionalNull cfg.codec "--stream.codec ${cfg.codec}"
-    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${toString cfg.streamBuffer}"
-    ++ optionalNull cfg.buffer "--stream.buffer ${toString cfg.buffer}"
+    ++ [ "--stream.bind_to_address=${cfg.listenAddress}" ]
+    ++ [ "--stream.port=${toString cfg.port}" ]
+    ++ optionalNull cfg.sampleFormat "--stream.sampleformat=${cfg.sampleFormat}"
+    ++ optionalNull cfg.codec "--stream.codec=${cfg.codec}"
+    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer=${toString cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "--stream.buffer=${toString cfg.buffer}"
     ++ optional cfg.sendToMuted "--stream.send_to_muted"
     # tcp json rpc
-    ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
+    ++ [ "--tcp.enabled=${toString cfg.tcp.enable}" ]
     ++ optionals cfg.tcp.enable [
-      "--tcp.bind_to_address ${cfg.tcp.listenAddress}"
-      "--tcp.port ${toString cfg.tcp.port}" ]
+      "--tcp.bind_to_address=${cfg.tcp.listenAddress}"
+      "--tcp.port=${toString cfg.tcp.port}" ]
      # http json rpc
-    ++ [ "--http.enabled ${toString cfg.http.enable}" ]
+    ++ [ "--http.enabled=${toString cfg.http.enable}" ]
     ++ optionals cfg.http.enable [
-      "--http.bind_to_address ${cfg.http.listenAddress}"
-      "--http.port ${toString cfg.http.port}"
-    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
+      "--http.bind_to_address=${cfg.http.listenAddress}"
+      "--http.port=${toString cfg.http.port}"
+    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\"");
 
 in {
   imports = [

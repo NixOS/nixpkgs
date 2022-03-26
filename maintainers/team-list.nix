@@ -50,6 +50,7 @@ with lib.maintainers; {
       DianaOlympos
       gleber
       happysalada
+      minijackson
       yurrriq
     ];
     scope = "Maintain BEAM-related packages and modules.";
@@ -64,7 +65,6 @@ with lib.maintainers; {
 
   chia = {
     members = [
-      atemu
       lourkeur
     ];
     scope = "Maintain the Chia blockchain and its dependencies";
@@ -214,7 +214,6 @@ with lib.maintainers; {
       mguentner
       ekleog
       ralith
-      mjlbach
       dandellion
       sumnerevans
     ];
@@ -223,7 +222,7 @@ with lib.maintainers; {
 
   openstack = {
     members = [
-      angustrau
+      emilytrau
       SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";
@@ -276,6 +275,13 @@ with lib.maintainers; {
       collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
+  };
+
+  sphinx = {
+    members = [
+      SuperSandro2000
+    ];
+    scope = "Maintain Sphinx related packages.";
   };
 
   serokell = {

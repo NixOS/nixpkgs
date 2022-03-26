@@ -17,8 +17,8 @@ let
         then value
         else { executable = value; profile = null; extraArgs = []; };
         args = lib.escapeShellArgs (
-          (optional (opts.profile != null) "--profile=${toString opts.profile}")
-          ++ opts.extraArgs
+          opts.extraArgs
+          ++ (optional (opts.profile != null) "--profile=${toString opts.profile}")
           );
       in
       ''

@@ -3,7 +3,7 @@
     inherit (pkgs.darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   });
-  mysqlPackage = {
+  mysqlPackages = {
     inherit (pkgs) mysql57 mysql80;
   };
   mkTestName = pkg: "mariadb_${builtins.replaceStrings ["."] [""] (lib.versions.majorMinor pkg.version)}";

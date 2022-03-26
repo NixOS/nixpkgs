@@ -23,14 +23,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.4.1";
+  version = "3.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     rev = "v${version}";
-    hash = "sha256-ibk5WfNPa02D7UcP+4xg8Pi9P45yUPEm56l76IwNuRE=";
+    hash = "sha256-ADjHPRG3QzSWR7FvcTIJdcBYmzZK+SWipdY1giNtaME=";
   };
 
   propagatedBuildInputs = [

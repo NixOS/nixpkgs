@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index 8eae0442..ec0649da 100644
+index 95ecb728..cb30f3af 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -196,6 +196,7 @@ if with_32bit_libraries or with_bitbridge
+@@ -201,6 +201,7 @@ if with_32bit_libraries or with_bitbridge
        'boost_filesystem',
        static : with_static_boost,
        dirs : [
@@ -10,7 +10,7 @@ index 8eae0442..ec0649da 100644
          # Used by Arch based distros
          '/usr/local/lib32',
          '/usr/lib32',
-@@ -219,7 +220,7 @@ if is_64bit_system
+@@ -224,7 +225,7 @@ if is_64bit_system
    xcb_64bit_dep = dependency('xcb')
  endif
  if with_32bit_libraries or with_bitbridge
@@ -20,7 +20,7 @@ index 8eae0442..ec0649da 100644
  
  # These are all headers-only libraries, and thus won't require separate 32-bit
 diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
-index 6e32b4c9..f6eb09eb 100644
+index 1a457f03..20ca1e63 100644
 --- a/src/plugin/utils.cpp
 +++ b/src/plugin/utils.cpp
 @@ -107,7 +107,7 @@ std::string PluginInfo::wine_version() const {

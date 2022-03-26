@@ -3,6 +3,7 @@
 , dnspython
 , fetchFromGitHub
 , ifaddr
+, netifaces
 , pyroute2
 , pytest-asyncio
 , pytestCheckHook
@@ -11,18 +12,21 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.5";
+  version = "1.4.8";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QfeAEFB5WikuriBTcfFIgnJw5H4vEcGIVX47fyDb1Dk=";
+    sha256 = "sha256-ts3PnL1ePWJHHaLuC0eQKqBOt+HeEeAayeVBAIhnUWs=";
   };
 
   propagatedBuildInputs = [
     dnspython
+    netifaces
     pyroute2
     ifaddr
   ];
@@ -43,7 +47,9 @@ buildPythonPackage rec {
     "test_async_discover_hosts"
   ];
 
-  pythonImportsCheck = ["aiodiscover"];
+  pythonImportsCheck = [
+    "aiodiscover"
+  ];
 
   meta = with lib; {
     description = "Python module to discover hosts via ARP and PTR lookup";

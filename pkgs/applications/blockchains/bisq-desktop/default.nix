@@ -35,11 +35,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.8.0";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "1q6x6w8mp5ax852hlvi2p61xgckb2lpr2ml21a9mfs9421b6m8h2";
+    sha256 = "09bpkmn22kal3cxg8sil02wy2f2gplsbdkp4viagn0jppma02jid";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       icon = "bisq";
       desktopName = "Bisq ${version}";
       genericName = "Decentralized bitcoin exchange";
-      categories = "Network;P2P;";
+      categories = [ "Network" "P2P" ];
     })
   ];
 

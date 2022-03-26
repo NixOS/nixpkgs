@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     description = "BLAS-compatible library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [ maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -12,7 +12,7 @@
 , zlib
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
+, enableSharedLibraries ? false
 
 , version
 , src
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ];
 
-  postPatch = ''
+  postPatch = lib.optional enableSharedLibraries ''
     substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
     patch -p1 < ./outputs.patch
   '';

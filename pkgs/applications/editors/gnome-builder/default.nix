@@ -5,6 +5,7 @@
 , appstream-glib
 , desktop-file-utils
 , fetchurl
+, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -17,8 +18,9 @@
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libhandy
 , libpeas
-, libportal
+, libportal-gtk3
 , libxml2
 , meson
 , ninja
@@ -39,14 +41,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "41.3";
+  version = "42.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "4iUPyOnp8gAsRS5ZUNgmhXNNPESAs1Fnq1CKyHAlCeE=";
+    sha256 = "Uu/SltaLL/GCNBwEgdz9cGVMQIvbZ5/Ot225cDwiQo8=";
   };
+
+  patches = [
+    # Fix appstream validation
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/d7151679e0c925d27216256dc32fe67fb298d059.patch";
+      sha256 = "vdNJawkqSBaFGRZvxzvjOryQpBL4jcN7tr1t3ihD7LA=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -69,7 +79,7 @@ stdenv.mkDerivation rec {
     glade
     libgit2-glib
     libpeas
-    libportal
+    libportal-gtk3
     vte
     gspell
     gtk3
@@ -77,6 +87,7 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libdazzle
+    libhandy
     libxml2
     ostree
     pcre
@@ -93,10 +104,6 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  prePatch = ''
-    patchShebangs build-aux/meson/post_install.py
-  '';
-
   mesonFlags = [
     "-Ddocs=true"
 
@@ -111,6 +118,10 @@ stdenv.mkDerivation rec {
   # Some tests fail due to being unable to find the Vte typelib, and I don't
   # understand why. Somebody should look into fixing this.
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs build-aux/meson/post_install.py
+  '';
 
   checkPhase = ''
     export NO_AT_BRIDGE=1

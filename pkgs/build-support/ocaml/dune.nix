@@ -2,7 +2,7 @@
 
 { pname, version, nativeBuildInputs ? [], enableParallelBuilding ? true, ... }@args:
 
-let Dune = if args.useDune2 or false then dune_2 else dune_1; in
+let Dune = if args.useDune2 or true then dune_2 else dune_1; in
 
 if (args ? minimumOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion) ||
    (args ? minimalOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimalOCamlVersion)

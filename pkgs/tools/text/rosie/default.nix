@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchgit
 , libbsd
 , readline
@@ -8,6 +8,7 @@
 stdenv.mkDerivation rec {
   pname = "rosie";
   version = "unstable-2020-01-11";
+
   src = fetchgit {
     url = "https://gitlab.com/rosie-pattern-language/rosie";
     rev = "670e9027563609ba2ea31e14e2621a1302742795";

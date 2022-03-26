@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg
+{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -93,11 +93,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mplayer";
-  version = "1.4";
+  version = "unstable-2022-02-03";
 
-  src = fetchurl {
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
-    sha256 = "0j5mflr0wnklxsvnpmxvk704hscyn2785hvvihj2i3a7b3anwnc2";
+  src = fetchsvn {
+    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
+    rev = "38331";
+    sha256 = "1vpic8i6zvg0zsy50vhm45ysqag561bpn9jycfbvvwl9ji7l55zi";
   };
 
   prePatch = ''
@@ -105,8 +106,6 @@ stdenv.mkDerivation rec {
 
     rm -rf ffmpeg
   '';
-
-  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
@@ -163,7 +162,6 @@ stdenv.mkDerivation rec {
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
     (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
     "--disable-xanim"
-    "--disable-ivtv"
     "--disable-xvid --disable-xvid-lavc"
     "--disable-ossaudio"
     "--disable-ffmpeg_a"

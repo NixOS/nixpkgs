@@ -31,7 +31,7 @@ storePaths=$(perl $pathsFromGraph closure-*)
 
 # Paths in cpio archives *must* be relative, otherwise the kernel
 # won't unpack 'em.
-(cd root && cp -prd --parents $storePaths .)
+(cd root && cp -prP --parents $storePaths .)
 
 
 # Put the closure in a gzipped cpio archive.

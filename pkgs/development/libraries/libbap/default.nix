@@ -17,8 +17,8 @@ stdenv.mkDerivation {
       --replace "-linkpkg" "-thread -linkpkg"
   '';
 
-  nativeBuildInputs = [ autoreconfHook which ];
-  buildInputs = [ ocaml bap findlib ctypes ];
+  nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
+  buildInputs = [ bap ctypes ];
 
   preInstall = ''
     mkdir -p $out/lib

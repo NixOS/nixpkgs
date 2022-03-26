@@ -15,7 +15,7 @@ then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-bap-${version}";
+  pname = "ocaml${ocaml.version}-bap";
   version = "2.2.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
@@ -32,14 +32,13 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}-llvm-plugins/"
   '';
 
-  nativeBuildInputs = [ which makeWrapper ];
+  nativeBuildInputs = [ which makeWrapper ocaml findlib ocamlbuild ocaml_oasis ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  linenoise
+  buildInputs = [ linenoise
                   ounit
                   ppx_bitstring
                   z3
@@ -49,6 +48,7 @@ stdenv.mkDerivation rec {
                             piqi-ocaml uuidm frontc yojson ];
 
   installPhase = ''
+    runHook preInstall
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR;
     export PATH=$PATH:$out/bin
     export CAML_LD_LIBRARY_PATH=''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${utop}/bin/utop $out/bin/baptop --prefix OCAMLPATH : $OCAMLPATH --prefix PATH : $PATH --add-flags "-ppx ppx-bap -short-paths -require \"bap.top\""
     wrapProgram $out/bin/bapbuild --prefix OCAMLPATH : $OCAMLPATH --prefix PATH : $PATH
     ln -s $sigs $out/share/bap/sigs.zip
+    runHook postInstall
   '';
 
   disableIda = "--disable-ida";

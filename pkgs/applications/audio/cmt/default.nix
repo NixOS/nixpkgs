@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cmt";
+  pname = "cmt";
   version = "1.17";
 
   src = fetchurl {
-    url = "http://www.ladspa.org/download/${name}_${version}.tgz";
+    url = "http://www.ladspa.org/download/cmt_${version}.tgz";
     sha256 = "07xd0xmwpa0j12813jpf87fr9hwzihii5l35mp8ady7xxfmxfmpb";
   };
 

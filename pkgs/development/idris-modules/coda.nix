@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "coda";
+  pname = "coda";
   version = "2018-01-25";
 
   ipkgName = "Coda";

@@ -7,6 +7,7 @@
 , jinja2
 , python-dotenv
 , werkzeug
+, setuptools
 , pytestCheckHook
 }:
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
+
+    # required for CLI subcommand autodiscovery
+    # see: https://github.com/pallets/flask/blob/fdac8a5404e3e3a316568107a293f134707c75bb/src/flask/cli.py#L498
+    setuptools
   ];
 
   checkInputs = [
@@ -33,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://flask.pocoo.org/";
+    homepage = "https://flask.palletsprojects.com/";
     description = "The Python micro framework for building web applications";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is

@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName}
 
@@ -99,8 +100,8 @@ stdenv.mkDerivation rec {
     icon = pname;
     inherit desktopName;
     genericName = meta.description;
-    categories = "Network;InstantMessaging;";
-    mimeType = "x-scheme-handler/discord";
+    categories = [ "Network" "InstantMessaging" ];
+    mimeTypes = [ "x-scheme-handler/discord" ];
   };
 
   passthru.updateScript = writeScript "discord-update-script" ''

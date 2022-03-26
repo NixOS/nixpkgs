@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "3.34.1";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-zs457BxoyI1JNwXgpSi4PQONo4TonUg4OTzMdfYqLUw=";
+    sha256 = "sha256-kKJcl2f+dJ21DxGN38kuxxOZdj0uzVrU8R/17qBJ5gs=";
   };
 
   nativeBuildInputs = [ pkg-config which ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };

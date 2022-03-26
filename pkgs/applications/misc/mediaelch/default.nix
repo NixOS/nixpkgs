@@ -1,7 +1,10 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+
 , qmake
+, qttools
+
 , curl
 , ffmpeg
 , libmediainfo
@@ -10,28 +13,37 @@
 , qtdeclarative
 , qtmultimedia
 , qtsvg
-, qttools
+, quazip
 }:
 
 mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.12";
+  version = "2.8.16";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "1gx4m9cf81d0b2nk2rlqm4misz67f5bpkjqx7d1l76rw2pwc6azf";
+    sha256 = "sha256-83bHfIRVAC+3RkCYmV+TBjjQxaFMHfVyxt5Jq44dzeI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ curl libmediainfo libzen ffmpeg qtbase qtdeclarative qtmultimedia qtsvg ];
+  buildInputs = [ curl ffmpeg libmediainfo libzen qtbase qtdeclarative qtmultimedia qtsvg ];
 
-  prePatch = ''
+  qmakeFlags = [
+    "USE_EXTERN_QUAZIP=${quazip}/include/quazip5"
+  ];
+
+  postPatch = ''
     substituteInPlace MediaElch.pro --replace "/usr" "$out"
   '';
+
+  qtWrapperArgs = [
+    # libmediainfo.so.0 is loaded dynamically
+    "--prefix LD_LIBRARY_PATH : ${libmediainfo}/lib"
+  ];
 
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";

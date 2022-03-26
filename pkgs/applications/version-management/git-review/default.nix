@@ -4,8 +4,7 @@
 , pbr
 , requests
 , setuptools
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 buildPythonApplication rec {
@@ -42,10 +41,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "git_review" ];
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-  };
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Tool to submit code to Gerrit";

@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
       backends for each supported hardware vendor.
     '';
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -56,7 +56,7 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = [ perl ] ++ optional (lib.versionAtLeast version "4.14") libelf;
 
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
@@ -301,7 +301,6 @@ let
             + ")");
         license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
-        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = lib.teams.linux-kernel.members ++ [
           maintainers.thoughtpolice
         ];

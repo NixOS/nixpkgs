@@ -2,31 +2,31 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.8";
+  version = "0.9.20";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-8XS30fRxHPady/snr3gfo8Ryiw9O7EeDezcYYZjod1w=";
+    sha256 = "sha256-ujoKnf6f9rrPIxvWlzVnC6q+2BxzhpXgb66clgAuC+8=";
   };
-  vendorSha256 = "sha256-8r7v3526kY+rFHkl1+KEwNbFrSnXPlpZD6kiK4ea+Zg=";
+  vendorSha256 = "sha256-TfO3+pGxR9dPzigkx89a/Ak+tKiBa6Z0a6U4kIdRsSQ=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
-  # Install completions post-install
+  subPackages = [ "cmd/infracost" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ terraform ];
-  # Short only runs the unit-tests tagged short
-  checkFlags = [ "-v" "-short" ];
+  # -short only runs the unit-tests tagged short
+  checkFlags = [ "-short" ];
   checkPhase = ''
     runHook preCheck
 
-    # Remove tests that require networking
-    rm cmd/infracost/{breakdown_test,diff_test}.go
-    # ldflags are required for some of the version testing
-    go test ./... $checkFlags ''${ldflags:+-ldflags="$ldflags"}
+    # remove tests that require networking
+    rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
+    # checkFlags aren't correctly passed through via buildGoModule
+    go test $checkFlags ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES ./...
 
     runHook postCheck
   '';

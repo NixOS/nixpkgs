@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
   };
 }

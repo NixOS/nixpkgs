@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.5.1";
+  version = "0.5.7";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Richardk2n";
     repo = "pylsp-mypy";
     rev = version;
-    sha256 = "1d119csj1k5m9j0f7wdvpvnd02h548css6ybxqah92nk2v0rjscr";
+    sha256 = "0am16z9kmj57r5pi32jhzlbdngzmvzzaiqjm7cba1izh7w5m6dvc";
   };
 
   disabledTests = [

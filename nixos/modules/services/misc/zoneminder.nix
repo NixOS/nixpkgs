@@ -254,7 +254,7 @@ in {
                 location /cgi-bin {
                   gzip off;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME ${pkg}/libexec/zoneminder/${zms};
                   fastcgi_param HTTP_PROXY "";
                   fastcgi_intercept_errors on;
@@ -270,7 +270,7 @@ in {
                   try_files $uri =404;
                   fastcgi_index index.php;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 

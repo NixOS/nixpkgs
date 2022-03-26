@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   useDune2 = true;
 
+  minimalOCamlVersion = "4.02";
+
   src = fetchFromGitHub {
     owner = "mirage";
     repo = pname;

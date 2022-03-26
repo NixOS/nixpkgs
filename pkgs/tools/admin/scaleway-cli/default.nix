@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "yYzcziEKPSiMvw9LWd60MkHmYFAvN7Qza6Z117NOOv0=";
   };
 
-  vendorSha256 = "0V9sHi/E095txnfF8YFW5O7o0e1H3sdn3tw5LqB92tI=";
+  vendorSha256 = "7cGVeja1YE96PEV1IRklyh6MeMDFAP+2TpYvvFkBYnQ=";
 
   # some tests require network access to scaleway's API, failing when sandboxed
   doCheck = false;

@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "3.5.0";
+  version = "3.6.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c22877758cef97e81dbb665c83d31f7427bbc804a01503fa2845a35403c54ad";
+    sha256 = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
   };
 
   propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];

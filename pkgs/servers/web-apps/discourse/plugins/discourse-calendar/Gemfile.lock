@@ -1,13 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.0.0)
+    activesupport (7.0.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     concurrent-ruby (1.1.9)
-    i18n (1.8.11)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     minitest (5.15.0)
     rrule (0.4.2)

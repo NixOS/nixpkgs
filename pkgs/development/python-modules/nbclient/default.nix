@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.5.9";
-  disabled = pythonOlder "3.6";
+  version = "0.5.10";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-meRt2vrNC4YSk78kb+2FQKGErfo6p9ZB+JAx7AcHAeA=";
+    sha256 = "b5fdea88d6fa52ca38de6c2361401cfe7aaa7cd24c74effc5e489cec04d79088";
   };
 
   inherit doCheck;

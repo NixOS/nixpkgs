@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "jsonlines";
-  version = "1.2.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "wbolster";
     repo = pname;
     rev = version;
-    sha256 = "1f8zsqy8p9a41gqg2a5x7sppc5qhhq7gw58id2aigb270yxzs7jw";
+    sha256 = "1242bvk208vjaw8zl1d7ydb0i05v8fwdgi92d3bi1vaji9s2hv65";
   };
 
   propagatedBuildInputs = [ six ];

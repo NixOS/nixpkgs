@@ -40,6 +40,24 @@ Used with Git. Expects `url` to a Git repo, `rev`, and `sha256`. `rev` in this c
 
 Additionally the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
 
+If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) and [git clone --filter](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt) for more infomation:
+
+```nix
+{ stdenv, fetchgit }:
+
+stdenv.mkDerivation {
+  name = "hello";
+  src = fetchgit {
+    url = "https://...";
+    sparseCheckout = ''
+      path/to/be/included
+      another/path
+    '';
+    sha256 = "0000000000000000000000000000000000000000000000000000";
+  };
+}
+```
+
 ## `fetchfossil` {#fetchfossil}
 
 Used with Fossil. Expects `url` to a Fossil archive, `rev`, and `sha256`.
@@ -53,6 +71,10 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `sha256`.
 Used with Mercurial. Expects `url`, `rev`, and `sha256`.
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
+
+## `fetchFromGitea` {#fetchfromgitea}
+
+`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `sha256` is currently preferred.
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 

@@ -46,11 +46,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.29.1-80";
+  version = "4.30.3-87";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
-    sha256 = "sha256-TL5zq7fu7tLoWadmVDMXrE8oiVhHbggpmwWrIGRuAnI=";
+    hash = "sha256-RX9KI+4HGDUJ3y3An1zTMJTz28Of2Awn7COeX6EQc38=";
   };
 
   unpackPhase = ''

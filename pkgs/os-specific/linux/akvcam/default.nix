@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "source/src";
 
-  makeFlags = [
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

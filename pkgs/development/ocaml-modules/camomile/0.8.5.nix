@@ -14,7 +14,9 @@ stdenv.mkDerivation {
     sha256 = "167279lia6qx62mdcyc5rjsi4gf4yi52wn9mhgd9y1v3754z7fwb";
   })];
 
-  buildInputs = [ocaml findlib camlp4];
+  nativeBuildInputs = [ocaml findlib camlp4 ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

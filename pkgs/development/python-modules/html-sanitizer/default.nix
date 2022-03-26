@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
     rev = version;
-    sha256 = "0nnv34924r0yn01rwlk749j5ijy7yxyj302s1i57yjrkqr3zlvas";
+    sha256 = "sha256-1JSdi1PFM+N+UuEPfgWkOZw8S2PZ4ntadU0wnVJNnjw=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +26,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "html_sanitizer/tests.py" ];
+  pytestFlagsArray = [
+    "html_sanitizer/tests.py"
+  ];
 
-  pythonImportsCheck = [ "html_sanitizer" ];
+  disabledTests = [
+    "test_billion_laughs"
+  ];
+
+  pythonImportsCheck = [
+    "html_sanitizer"
+  ];
 
   meta = with lib; {
     description = "Allowlist-based and very opinionated HTML sanitizer";

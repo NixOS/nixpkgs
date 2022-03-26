@@ -1,5 +1,7 @@
 { lib
 , buildPythonPackage
+, cython
+, devtools
 , email_validator
 , fetchFromGitHub
 , pytest-mock
@@ -7,7 +9,6 @@
 , python-dotenv
 , pythonOlder
 , typing-extensions
-, ujson
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,15 @@ buildPythonPackage rec {
     sha256 = "sha256-C4WP8tiMRFmkDkQRrvP3yOSM2zN8pHJmX9cdANIckpM=";
   };
 
+  nativeBuildInputs = [
+    cython
+  ];
+
   propagatedBuildInputs = [
+    devtools
     email_validator
     python-dotenv
     typing-extensions
-    ujson
   ];
 
   checkInputs = [

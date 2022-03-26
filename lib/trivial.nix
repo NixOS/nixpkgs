@@ -61,11 +61,11 @@ rec {
   pipe = val: functions:
     let reverseApply = x: f: f x;
     in builtins.foldl' reverseApply val functions;
-  /* note please don’t add a function like `compose = flip pipe`.
-     This would confuse users, because the order of the functions
-     in the list is not clear. With pipe, it’s obvious that it
-     goes first-to-last. With `compose`, not so much.
-  */
+
+  # note please don’t add a function like `compose = flip pipe`.
+  # This would confuse users, because the order of the functions
+  # in the list is not clear. With pipe, it’s obvious that it
+  # goes first-to-last. With `compose`, not so much.
 
   ## Named versions corresponding to some builtin operators.
 
@@ -165,6 +165,30 @@ rec {
 
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
+
+  /* The latest release that is supported, at the time of release branch-off,
+     if applicable.
+
+     Ideally, out-of-tree modules should be able to evaluate cleanly with all
+     supported Nixpkgs versions (master, release and old release until EOL).
+     So if possible, deprecation warnings should take effect only when all
+     out-of-tree expressions/libs/modules can upgrade to the new way without
+     losing support for supported Nixpkgs versions.
+
+     This release number allows deprecation warnings to be implemented such that
+     they take effect as soon as the oldest release reaches end of life. */
+  oldestSupportedRelease =
+    # Update on master only. Do not backport.
+    2111;
+
+  /* Whether a feature is supported in all supported releases (at the time of
+     release branch-off, if applicable). See `oldestSupportedRelease`. */
+  isInOldestRelease =
+    /* Release number of feature introduction as an integer, e.g. 2111 for 21.11.
+       Set it to the upcoming release, matching the nixpkgs/.version file.
+    */
+    release:
+      release <= lib.trivial.oldestSupportedRelease;
 
   /* Returns the current nixpkgs release code name.
 
@@ -323,7 +347,14 @@ rec {
 
     Type: bool -> string -> a -> a
   */
-  warnIf = cond: msg: if cond then warn msg else id;
+  warnIf = cond: msg: if cond then warn msg else x: x;
+
+  /*
+    Like warnIf, but negated (warn if the first argument is `false`).
+
+    Type: bool -> string -> a -> a
+  */
+  warnIfNot = cond: msg: if cond then x: x else warn msg;
 
   /*
     Like the `assert b; e` expression, but with a custom error message and
@@ -346,6 +377,13 @@ rec {
 
   */
   throwIfNot = cond: msg: if cond then x: x else throw msg;
+
+  /*
+    Like throwIfNot, but negated (throw if the first argument is `true`).
+
+    Type: bool -> string -> a -> a
+  */
+  throwIf = cond: msg: if cond then throw msg else x: x;
 
   /* Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
 
@@ -402,6 +440,25 @@ rec {
   */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
+
+  /*
+    Turns any non-callable values into constant functions.
+    Returns callable values as is.
+
+    Example:
+
+      nix-repl> lib.toFunction 1 2
+      1
+
+      nix-repl> lib.toFunction (x: x + 1) 2
+      3
+  */
+  toFunction =
+    # Any value
+    v:
+    if isFunction v
+    then v
+    else k: v;
 
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:

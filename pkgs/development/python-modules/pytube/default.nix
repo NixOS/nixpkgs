@@ -7,19 +7,28 @@
 
 buildPythonPackage rec {
   pname = "pytube";
-  version = "11.0.2";
+  version = "12.0.0";
 
   disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytube";
     repo = "pytube";
     rev = "v${version}";
-    hash = "sha256-3HrkhlwV8OLqbzC6QgddLB1fQxWbwCQ6STCgUXlr5So=";
+    hash = "sha256-1zoLd4J7aCR5omMpCZhlttWDu7mYyKCypH3JEB4VGXg=";
   };
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    "tests/test_extract.py"
+    "tests/test_query.py"
+    "tests/test_streams.py"
+    "tests/test_main.py"
   ];
 
   pythonImportsCheck = [ "pytube" ];

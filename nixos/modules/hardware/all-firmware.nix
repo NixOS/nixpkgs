@@ -57,7 +57,6 @@ in {
         rtl8723bs-firmware
         rtl8761b-firmware
         rtw88-firmware
-        rtw89-firmware
         zd1211fw
         alsa-firmware
         sof-firmware
@@ -65,6 +64,8 @@ in {
       ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
+      ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "5.16") [
+        rtw89-firmware
       ];
       hardware.wirelessRegulatoryDatabase = true;
     })
@@ -82,6 +83,7 @@ in {
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
         b43FirmwareCutter
+        xow_dongle-firmware
       ] ++ optional pkgs.stdenv.hostPlatform.isx86 facetimehd-firmware;
     })
     (mkIf cfg.wirelessRegulatoryDatabase {

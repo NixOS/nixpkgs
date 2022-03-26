@@ -13,7 +13,6 @@
 , libhandy
 , granite
 , gettext
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -28,12 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "02dfsrfmr297cxpyd5m3746ihcgjyfnb3d42ng9m4ljdvh0dxgim";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     gettext
     meson
@@ -45,7 +38,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -72,6 +64,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Extensible System Settings app for Pantheon";

@@ -2,27 +2,25 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.36.0";
+  version = "0.42.4";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JNW4sozNtLey7uAj1xECR/ui+/1L02moZKuGzWXIh5k=";
+    sha256 = "sha256-cHjtANCHEuEthfmPmV5MDw4LYY6XI+aux9Gijld7KGc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
-      commit="$(git rev-parse HEAD)"
-      source_date_epoch=$(git log --date=format:'%Y-%m-%dT%H:%M:%SZ' -1 --pretty=%ad)
-      substituteInPlace "$out/internal/version/build.go" \
-        --replace 'gitCommit = valueNotProvided' "gitCommit = \"$commit\"" \
-        --replace 'buildDate = valueNotProvided' "buildDate = \"$source_date_epoch\""
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-urDDb+53KSvUOjVRY/geENIQM1vvBUDddlNpQw3LcLg=";
+  vendorSha256 = "sha256-+dul6aMsuObmWU8mu+ZnEcWhHo5ClenEDIhKbg3zjB0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,8 +30,14 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/anchore/syft/internal/version.version=${version}"
+    "-X github.com/anchore/syft/internal/version.gitDescription=v${version}"
     "-X github.com/anchore/syft/internal/version.gitTreeState=clean"
   ];
+
+  preBuild = ''
+    ldflags+=" -X github.com/anchore/syft/internal/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/anchore/syft/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   # tests require a running docker instance
   doCheck = false;

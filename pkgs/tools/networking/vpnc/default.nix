@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
+{ lib, stdenv, fetchsvn
+, makeWrapper, pkg-config
+, gawk, gnutls, libgcrypt, nettools, openresolv, perl
+, opensslSupport ? false, openssl # Distributing this is a GPL violation.
+}:
 
 stdenv.mkDerivation {
   pname = "vpnc";
@@ -20,22 +24,22 @@ stdenv.mkDerivation {
   # `ifconfig' as found in net-tools (not GNU Inetutils).
   propagatedBuildInputs = [ nettools ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [libgcrypt perl openssl ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!opensslSupport) pkg-config;
+  buildInputs = [ libgcrypt perl ]
+    ++ (if opensslSupport then [ openssl ] else [ gnutls ]);
 
   makeFlags = [
     "PREFIX=$(out)"
     "ETCDIR=$(out)/etc/vpnc"
     "SCRIPT_PATH=$(out)/etc/vpnc/vpnc-script"
-  ];
+  ] ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
 
   postPatch = ''
     patchShebangs makeman.pl
   '';
 
   preConfigure = ''
-    sed -i 's|^#OPENSSL|OPENSSL|g' Makefile
-
     substituteInPlace "vpnc-script" \
       --replace "which" "type -P" \
       --replace "awk" "${gawk}/bin/awk" \
@@ -56,11 +60,10 @@ stdenv.mkDerivation {
     cp README nortel.txt ChangeLog $out/share/doc/vpnc/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.unix-ag.uni-kl.de/~massar/vpnc/";
     description = "Virtual private network (VPN) client for Cisco's VPN concentrators";
-    license = lib.licenses.gpl2Plus;
-
-    platforms = lib.platforms.linux;
+    license = if opensslSupport then licenses.unfree else licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

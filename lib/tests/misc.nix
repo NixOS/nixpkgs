@@ -761,4 +761,156 @@ runTests {
       { a = 3; b = 30; c = 300; }
     ];
   };
+
+  # The example from the showAttrPath documentation
+  testShowAttrPathExample = {
+    expr = showAttrPath [ "foo" "10" "bar" ];
+    expected = "foo.\"10\".bar";
+  };
+
+  testShowAttrPathEmpty = {
+    expr = showAttrPath [];
+    expected = "<root attribute path>";
+  };
+
+  testShowAttrPathVarious = {
+    expr = showAttrPath [
+      "."
+      "foo"
+      "2"
+      "a2-b"
+      "_bc'de"
+    ];
+    expected = ''".".foo."2".a2-b._bc'de'';
+  };
+
+  testGroupBy = {
+    expr = groupBy (n: toString (mod n 5)) (range 0 16);
+    expected = {
+      "0" = [ 0 5 10 15 ];
+      "1" = [ 1 6 11 16 ];
+      "2" = [ 2 7 12 ];
+      "3" = [ 3 8 13 ];
+      "4" = [ 4 9 14 ];
+    };
+  };
+
+  testGroupBy' = {
+    expr = groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ];
+    expected = { false = 3; true = 12; };
+  };
+
+  # The example from the updateManyAttrsByPath documentation
+  testUpdateManyAttrsByPathExample = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ "a" "b" ];
+        update = old: { d = old.c; };
+      }
+      {
+        path = [ "a" "b" "c" ];
+        update = old: old + 1;
+      }
+      {
+        path = [ "x" "y" ];
+        update = old: "xy";
+      }
+    ] { a.b.c = 0; };
+    expected = { a = { b = { d = 1; }; }; x = { y = "xy"; }; };
+  };
+
+  # If there are no updates, the value is passed through
+  testUpdateManyAttrsByPathNone = {
+    expr = updateManyAttrsByPath [] "something";
+    expected = "something";
+  };
+
+  # A single update to the root path is just like applying the function directly
+  testUpdateManyAttrsByPathSingleIncrement = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ ];
+        update = old: old + 1;
+      }
+    ] 0;
+    expected = 1;
+  };
+
+  # Multiple updates can be applied are done in order
+  testUpdateManyAttrsByPathMultipleIncrements = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ ];
+        update = old: old + "a";
+      }
+      {
+        path = [ ];
+        update = old: old + "b";
+      }
+      {
+        path = [ ];
+        update = old: old + "c";
+      }
+    ] "";
+    expected = "abc";
+  };
+
+  # If an update doesn't use the value, all previous updates are not evaluated
+  testUpdateManyAttrsByPathLazy = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ ];
+        update = old: old + throw "nope";
+      }
+      {
+        path = [ ];
+        update = old: "untainted";
+      }
+    ] (throw "start");
+    expected = "untainted";
+  };
+
+  # Deeply nested attributes can be updated without affecting others
+  testUpdateManyAttrsByPathDeep = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ "a" "b" "c" ];
+        update = old: old + 1;
+      }
+    ] {
+      a.b.c = 0;
+
+      a.b.z = 0;
+      a.y.z = 0;
+      x.y.z = 0;
+    };
+    expected = {
+      a.b.c = 1;
+
+      a.b.z = 0;
+      a.y.z = 0;
+      x.y.z = 0;
+    };
+  };
+
+  # Nested attributes are updated first
+  testUpdateManyAttrsByPathNestedBeforehand = {
+    expr = updateManyAttrsByPath [
+      {
+        path = [ "a" ];
+        update = old: old // { x = old.b; };
+      }
+      {
+        path = [ "a" "b" ];
+        update = old: old + 1;
+      }
+    ] {
+      a.b = 0;
+    };
+    expected = {
+      a.b = 1;
+      a.x = 1;
+    };
+  };
+
 }

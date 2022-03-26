@@ -2,32 +2,29 @@
 , buildPythonPackage
 , fetchFromGitHub
 , six
-, pathlib
 , pytest
 , mock
 , parameterized
-, isPy27
-, isPy35
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.10.0";
+  version = "1.14.0";
+  format = "setuptools";
 
-  # No tests available in PyPI tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "v${version}";
-    sha256 = "0nrqxgl24c6lknxhmmf7vkhvdy54dhnr9qcm1r1gwxzdsymq2l54";
+    sha256 = "sha256-ypzo0cYvP8LV74cQMzHIFDk3LH0bbEB4UxPxRuqe2fc=";
   };
-
-  # Package is not compatible with Python 3.5
-  disabled = isPy35;
 
   propagatedBuildInputs = [
     six
-  ] ++ lib.optionals isPy27 [ pathlib ];
+  ];
 
   checkInputs = [
     pytest

@@ -127,7 +127,15 @@ let
     # ../../applications/video/epgstation
     epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
       meta = drv.meta // {
-        broken = true; # not really broken, see the comment above
+        platforms = pkgs.lib.platforms.none;
+      };
+    });
+
+    # NOTE: this is a stub package to fetch npm dependencies for
+    # ../../applications/video/epgstation/client
+    epgstation-client = super."epgstation-client-../../applications/video/epgstation/client".override (drv: {
+      meta = drv.meta // {
+        platforms = pkgs.lib.platforms.none;
       };
     });
 
@@ -200,7 +208,7 @@ let
     };
 
     manta = super.manta.override {
-      nativeBuildInputs = with pkgs; [ nodejs-12_x installShellFiles ];
+      nativeBuildInputs = with pkgs; [ nodejs-14_x installShellFiles ];
       postInstall = ''
         # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
         completion_cmds=$(find ./bin -type f -printf "%f\n")
@@ -224,6 +232,15 @@ let
         wrapProgram "$out/bin/node-gyp" \
           --set npm_config_nodedir ${nodejs}
       '';
+    };
+
+    near-cli = super.near-cli.override {
+      nativeBuildInputs = with pkgs; [
+        libusb1
+        nodePackages.prebuild-install
+        nodePackages.node-gyp-build
+        pkg-config
+      ];
     };
 
     node-inspector = super.node-inspector.override {
@@ -260,6 +277,14 @@ let
           (fetchpatch {
             url = "https://github.com/svanderburg/node2nix/commit/e4c951971df6c9f9584c7252971c13b55c369916.patch";
             sha256 = "0w8fcyr12g2340rn06isv40jkmz2khmak81c95zpkjgipzx7hp7w";
+          })
+          # handle package alias in dependencies
+          # https://github.com/svanderburg/node2nix/pull/240
+          #
+          # TODO: remove after node2nix 1.10.0
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/644e90c0304038a446ed53efc97e9eb1e2831e71.patch";
+            sha256 = "sha256-sQgVf80H1ouUjzHq+2d9RO4a+o++kh+l+FOTNXfPBH0=";
           })
         ];
       };
@@ -305,6 +330,13 @@ let
       '';
     };
 
+    parcel = super.parcel.override {
+      buildInputs = [ self.node-gyp-build ];
+      preRebuild = ''
+        sed -i -e "s|#!/usr/bin/env node|#! ${pkgs.nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+      '';
+    };
+
     postcss-cli = super.postcss-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -327,7 +359,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-xLmVyO/L6C4ZdHzHqiJVq3ZfDWSym29x75JcwJx746ps61UcNEg4ozSwN9ud7UjXLntdXe1xDLNOUO1lc7LN5g==";
+        sha512 = "sha512-8SdsLPhKR3mOfoo2o73h9mNn3v5kA/RqGA26Sv6qDS78Eh2uepPqt5e8/nwj5EOblYm5HEGuitaXQrOCLb6uTw==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
@@ -373,18 +405,24 @@ let
       meta.broken = since "10";
     };
 
-    tailwindcss = super.tailwindcss.override {
+    tailwindcss = super.tailwindcss.overrideAttrs (oldAttrs: {
+      plugins = [ ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
+        nodePath=""
+        for p in "$out" "${self.postcss}" $plugins; do
+          nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
+        done
         wrapProgram "$out/bin/tailwind" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : "$nodePath"
         wrapProgram "$out/bin/tailwindcss" \
-          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+          --prefix NODE_PATH : "$nodePath"
+        unset nodePath
       '';
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
       };
-    };
+    });
 
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -392,6 +430,18 @@ let
         makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
           --add-flags "$out/lib/node_modules/tedicross/main.js"
       '';
+    };
+
+    thelounge-plugin-closepms = super.thelounge-plugin-closepms.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
+    thelounge-theme-flat-blue = super.thelounge-theme-flat-blue.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
+    thelounge-theme-flat-dark = super.thelounge-theme-flat-dark.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
     };
 
     tsun = super.tsun.overrideAttrs (oldAttrs: {
@@ -413,6 +463,10 @@ let
     teck-programmer = super.teck-programmer.override {
       nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
+    };
+
+    uppy-companion = super."@uppy/companion".override {
+      name = "uppy-companion";
     };
 
     vega-cli = super.vega-cli.override {

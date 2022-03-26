@@ -20,7 +20,8 @@ in buildPythonPackage rec {
   # avoid strict pinning of numpy
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "numpy ==" "numpy >="
+      --replace "numpy ==" "numpy >=" \
+      --replace "mpi4py ==" "mpi4py >="
   '';
 
   HDF5_DIR = "${hdf5}";

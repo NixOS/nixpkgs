@@ -37,7 +37,7 @@ let
       icon = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Graphics;2DGraphics;3DGraphics;";
+      categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
 
     postPatch = ''

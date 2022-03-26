@@ -26,6 +26,8 @@ with self; with super; {
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
+  coverage = callPackage ../development/python2-modules/coverage { };
+
   cryptography = callPackage ../development/python2-modules/cryptography { };
 
   cryptography_vectors = callPackage ../development/python2-modules/cryptography-vectors { };
@@ -43,6 +45,8 @@ with self; with super; {
   futures = callPackage ../development/python2-modules/futures { };
 
   google-apputils = callPackage ../development/python2-modules/google-apputils { };
+
+  gtkme = callPackage ../development/python2-modules/gtkme { };
 
   httpretty = callPackage ../development/python2-modules/httpretty { };
 
@@ -108,11 +112,9 @@ with self; with super; {
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
-  pyGtkGlade = self.pygtk.override {
-    inherit (pkgs.gnome2) libglade;
-  };
-
   pyjwt = callPackage ../development/python2-modules/pyjwt { };
+
+  pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
   pyroma = callPackage ../development/python2-modules/pyroma { };
 

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "python-keycloak";
-  version = "0.26.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
     rev = version;
-    sha256 = "sha256-YWDj/dLN72XMxDXpSPQvkxHF5xJ15xWJjw3vtfmxlwo=";
+    sha256 = "sha256-XCOfzzUs0K5/peprgpEXY2pX6wYOF7hg9ec1XPEYHCI=";
   };
 
   propagatedBuildInputs = [

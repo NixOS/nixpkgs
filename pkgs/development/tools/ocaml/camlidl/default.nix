@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0483cs66zsxsavcllpw1qqvyhxb39ddil3h72clcd69g7fyxazl5";
   };
 
-  buildInputs = [ ocaml ];
+  nativeBuildInputs = [ ocaml ];
+
+  # build fails otherwise
+  enableParallelBuilding = false;
 
   preBuild = ''
     mv config/Makefile.unix config/Makefile

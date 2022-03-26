@@ -39,7 +39,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'libusb1>=1.7,<2.0' 'libusb1>=1.7' \
-      --replace "'python_requires': '>=3.6,<3.10'," "'python_requires': '>=3.6,<4',"
+      --replace "'python_requires': '>=3.6,<3.10'," "'python_requires': '>=3.6,<4'," \
+      --replace 'typing-extensions>=3.7,<4.0' 'typing-extensions>=3.7'
   '';
 
   # tests require to clone quite a few firmwares

@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "7.0.4";
+  version = "8.0.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-424WNG9Yj+Zfo1UTh7emknZ7xTtpFPz7Ph+FpE149FM=";
+    sha256 = "sha256-Efazsi8BjBrk7lBKSn2APKHxCc7mzxNrC92BL0VsnCM=";
   };
 
   propagatedBuildInputs = [
@@ -74,7 +74,6 @@ buildPythonPackage rec {
     passlib
     protobuf
     publicsuffix2
-    pyasn1
     pyopenssl
     pyparsing
     pyperclip
@@ -87,8 +86,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    beautifulsoup4
-    glibcLocales
     hypothesis
     parver
     pytest-asyncio
@@ -97,8 +94,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ];
-
-  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     # remove dependency constraints

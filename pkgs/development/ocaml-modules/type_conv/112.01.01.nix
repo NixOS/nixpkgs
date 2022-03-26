@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildOcaml}:
+{ lib, fetchFromGitHub, buildOcaml, camlp4}:
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";
@@ -12,6 +12,10 @@ buildOcaml rec {
     rev = version;
     sha256 = "sha256-HzH0hnceCQ2kDRATjl+tfKk3XSBDsGnPzVUGYpDQUmU=";
   };
+
+  strictDeps = true;
+
+  buildInputs = [ camlp4 ];
 
   meta = {
     homepage = "https://github.com/janestreet/type_conv/";

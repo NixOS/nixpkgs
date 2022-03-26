@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config, cairo }:
+{ stdenv, lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config, cairo
+, ApplicationServices }:
 
 buildDunePackage rec {
   pname = "cairo2";
@@ -13,7 +14,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo dune-configurator ];
+  buildInputs = [ cairo dune-configurator ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   doCheck = !(stdenv.isDarwin
   # https://github.com/Chris00/ocaml-cairo/issues/19

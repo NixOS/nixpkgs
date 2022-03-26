@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, avahi }:
 
 stdenv.mkDerivation rec {
-  baseName = "avahi";
+  pname = "pure-avahi";
   version = "0.3";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-avahi-${version}.tar.gz";
     sha256 = "5fac8a6e3a54e45648ceb207ee0061b22eac8c4e668b8d53f13eb338b09c9160";
   };
 

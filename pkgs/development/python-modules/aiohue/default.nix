@@ -3,15 +3,19 @@
 , fetchPypi
 , aiohttp
 , asyncio-throttle
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "3.0.11";
+  version = "4.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-McC5DX3Cti9eGpPniywNY2DvbAqHSFwhek85TJN/zn0=";
+    hash = "sha256-PslmDeG/o9WAOc0FhidUNaISrlXa3rba3UEuvPVN/+A=";
   };
 
   propagatedBuildInputs = [

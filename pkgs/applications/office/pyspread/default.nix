@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
       comment = meta.description;
-      categories = "Office;Development;Spreadsheet;";
+      categories = [ "Office" "Development" "Spreadsheet" ];
     })
   ];
 

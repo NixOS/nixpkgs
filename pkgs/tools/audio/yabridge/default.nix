@@ -1,6 +1,7 @@
 { lib
 , multiStdenv
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , pkgsi686Linux
 , libnotify
@@ -34,28 +35,28 @@ let
   tomlplusplus = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "47216c8a73d77e7431ec536fb3e251aed06cc420";
-    sha256 = "sha256-cwAzWu5j3ch/56a6JmEoKCsxVNTk6tiZswNdNT6qzX0=";
+    rev = "8e669aa6990e0ed219c169d491472d749f54c393";
+    sha256 = "sha256-l8ckbCqjz3GUfwStcl3H2C+un5dZfT2uLtayvdu93D4=";
   };
 
   # Derived from vst3.wrap
   vst3 = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "vst3sdk";
-    rev = "v3.7.3_build_20-patched";
+    rev = "v3.7.4_build_25-patched";
     fetchSubmodules = true;
-    sha256 = "sha256-m2y7No7BNbIjLNgdAqIAEr6UuAZZ/wwM2+iPWKK17gQ=";
+    sha256 = "sha256-oHRJZItw+he5M+beVZkUrhJir6rgFZ80ORzA73mJT2A=";
   };
 in multiStdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.7.0";
+  version = "3.8.0";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dz7kScNrVUsjokJntzUCJzDIboqi3vQI+RpXl0UFmUQ=";
+    sha256 = "sha256-XacJjHxsp60/l36pFPGonUyOsyFF2lmqplAaisHXZDY=";
   };
 
   # Unpack subproject sources
@@ -77,6 +78,14 @@ in multiStdenv.mkDerivation rec {
       libxcb32 = pkgsi686Linux.xorg.libxcb;
       inherit libnotify wine;
     })
+    # Remove with next yabridge update
+   (fetchpatch {
+      name = "fix-for-wine-7.1.patch";
+      url = "https://github.com/robbert-vdh/yabridge/commit/de470d345ab206b08f6d4a147b6af1d285a4211f.patch";
+      sha256 = "sha256-xJx1zvxD+DIjbkm7Ovoy4RaAvjx936/j/7AYUPh/kOo=";
+      includes = [ "src/wine-host/xdnd-proxy.cpp" ];
+    })
+
   ];
 
   postPatch = ''
@@ -105,11 +114,7 @@ in multiStdenv.mkDerivation rec {
     "-Dwith-bitbridge=true"
 
     # Requires CMake and is unnecessary
-    "-Dtomlplusplus:GENERATE_CMAKE_CONFIG=disabled"
-
-    # tomlplusplus examples and tests don't build with winegcc
-    "-Dtomlplusplus:BUILD_EXAMPLES=disabled"
-    "-Dtomlplusplus:BUILD_TESTS=disabled"
+    "-Dtomlplusplus:generate_cmake_config=false"
   ];
 
   installPhase = ''

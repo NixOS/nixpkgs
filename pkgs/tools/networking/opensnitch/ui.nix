@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-amtDSDJOyNSxmJICEqN5lKhGyfF5C6I0EWViB1EXW7A=";
+    sha256 = "sha256-vtD82v0VlaJtCICXduD3IxJ0xjlBuzGKLWLoCiwPX2I=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +26,8 @@ python3Packages.buildPythonApplication rec {
     unidecode
     unicode-slugify
     pyinotify
+    notify2
+    pyasn
   ];
 
   preBuild = ''
@@ -47,6 +49,9 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+
+  # All tests are sandbox-incompatible and disabled for now
+  doCheck = false;
 
   meta = with lib; {
     description = "An application firewall";

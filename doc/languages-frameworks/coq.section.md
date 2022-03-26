@@ -29,7 +29,8 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
 * `namePrefix` (optional, defaults to `[ "coq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
-* `extraBuildInputs` (optional), by default `buildInputs` just contains `coq`, this allows to add more build inputs,
+* `extraNativeBuildInputs` (optional), by default `nativeBuildInputs` just contains `coq`, this allows to add more native build inputs, `nativeBuildInputs` are executables and `buildInputs` are libraries and dependencies,
+* `extraBuildInputs` (optional), this allows to add more build inputs,
 * `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `coq.ocamlPackages` attribute can be used in `extraBuildInputs` to depend on the same package set Coq was built against.
 * `useDune2ifVersion` (optional, default to `(x: false)` uses Dune2 to build the package if the provided predicate evaluates to true on the version, e.g. `useDune2if = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
 * `useDune2` (optional, defaults to `false`) uses Dune2 to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.

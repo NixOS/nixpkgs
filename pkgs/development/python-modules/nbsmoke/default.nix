@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "nbsmoke";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2400d7878e97714e822ab200a71fc71ede487e671f42b4b411745dba95f9cb32";
+    sha256 = "8b55333e2face27bc7ff80c266c468ca5633947cb0697727348020dd445b0874";
   };
 
   propagatedBuildInputs = [

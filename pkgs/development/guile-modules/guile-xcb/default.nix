@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , guile
 , pkg-config
 , texinfo
@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
   pname = "guile-xcb";
   version = "1.3";
 
-  src = fetchurl {
-    url = "http://www.markwitmer.com/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-iYR6AYSTgUsURAEJTWcdHlc0f8LzEftAIsfonBteuxE=";
+  src = fetchFromGitHub {
+    owner = "mwitmer";
+    repo = pname;
+    rev = version;
+    hash = "sha256-8iaYil2wiqnu9p7Gj93GE5akta1A0zqyApRwHct5RSs=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www.markwitmer.com/guile-xcb/guile-xcb.html";
+    homepage = "https://github.com/mwitmer/guile-xcb";
     description = "XCB bindings for Guile";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];

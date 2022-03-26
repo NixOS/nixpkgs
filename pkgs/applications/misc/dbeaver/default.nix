@@ -16,18 +16,23 @@
 , maven
 , webkitgtk
 , glib-networking
+, javaPackages
 }:
 
-stdenv.mkDerivation rec {
+javaPackages.mavenfod rec {
   pname = "dbeaver";
-  version = "21.3.2"; # When updating also update fetchedMavenDeps.sha256
+  version = "22.0.1"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "SifnnzuETFKtnEwLjJtB7CV2QZaToex3MjKGuiShlwo=";
+    sha256 = "sha256-IG5YWwq3WVzQBvAslQ9Z2Ou6ADzf4n9NkQCtH4Jgkac=";
   };
+
+
+  mvnSha256 = "7Sm1hAoi5xc4MLONOD8ySLLkpao0qmlMRRva/8zR210=";
+  mvnParameters = "-P desktop,all-platforms";
 
   fetchedMavenDeps = stdenv.mkDerivation {
     name = "dbeaver-${version}-maven-deps";
@@ -37,7 +42,7 @@ stdenv.mkDerivation rec {
       maven
     ];
 
-    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms";
+    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}";
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
@@ -52,7 +57,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "grSFtkohTlLtK8qE4A4wVppC6UHcyaXRQlGnrOmQDC4=";
+    outputHash = "sha256-WAB15d4UvUOkBXT7K/hvAZWOE3V1Lpl/tr+AFNBM4FI=";
   };
 
   nativeBuildInputs = [
@@ -84,17 +89,9 @@ stdenv.mkDerivation rec {
       desktopName = "dbeaver";
       comment = "SQL Integrated Development Environment";
       genericName = "SQL Integrated Development Environment";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 -P desktop,all-platforms
-
-    runHook postBuild
-  '';
 
   installPhase =
     let

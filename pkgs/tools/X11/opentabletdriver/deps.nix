@@ -71,7 +71,7 @@
   (fetchNuGet { pname = "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl"; version = "4.3.2"; sha256 = "0q0n5q1r1wnqmr5i5idsrd9ywl33k0js4pngkwq9p368mbxp8x1w"; })
   (fetchNuGet { pname = "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl"; version = "4.3.0"; sha256 = "1p4dgxax6p7rlgj4q73k73rslcnz4wdcv8q2flg1s8ygwcm58ld5"; })
   (fetchNuGet { pname = "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl"; version = "4.3.2"; sha256 = "1x0g58pbpjrmj2x2qw17rdwwnrcl0wvim2hdwz48lixvwvp22n9c"; })
-  (fetchNuGet { pname = "SharpZipLib"; version = "1.3.1"; sha256 = "09zypjfils38143da507s5fi4hzvdlz32wfav219hksnpl35y8x0"; })
+  (fetchNuGet { pname = "SharpZipLib"; version = "1.3.3"; sha256 = "1gij11wfj1mqm10631cjpnhzw882bnzx699jzwhdqakxm1610q8x"; })
   (fetchNuGet { pname = "StreamJsonRpc"; version = "2.6.121"; sha256 = "0xzvpk17w2skndzdg47j7gkrrvw6521db4mv8lc3v8hm97vs9m76"; })
   (fetchNuGet { pname = "System.AppContext"; version = "4.3.0"; sha256 = "1649qvy3dar900z3g817h17nl8jp4ka5vcfmsr05kh0fshn7j3ya"; })
   (fetchNuGet { pname = "System.Buffers"; version = "4.3.0"; sha256 = "0fgns20ispwrfqll4q1zc1waqcmylb3zc50ys9x8zlwxh9pmd9jy"; })

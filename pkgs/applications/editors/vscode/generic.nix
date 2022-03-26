@@ -37,19 +37,16 @@ let
       genericName = "Text Editor";
       exec = "${executableName} %F";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "text/plain;inode/directory;";
-      extraEntries = ''
-        StartupWMClass=${shortName}
-        Actions=new-empty-window;
-        Keywords=vscode;
-
-        [Desktop Action new-empty-window]
-        Name=New Empty Window
-        Exec=${executableName} --new-window %F
-        Icon=code
-      '';
+      startupNotify = true;
+      startupWMClass = shortName;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "text/plain" "inode/directory" ];
+      keywords = [ "vscode" ];
+      actions.new-empty-window = {
+        name = "New Empty Window";
+        exec = "${executableName} --new-window %F";
+        icon = "code";
+      };
     };
 
     urlHandlerDesktopItem = makeDesktopItem {
@@ -59,13 +56,11 @@ let
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
       icon = "code";
-      startupNotify = "true";
-      categories = "Utility;TextEditor;Development;IDE;";
-      mimeType = "x-scheme-handler/vscode;";
-      extraEntries = ''
-        NoDisplay=true
-        Keywords=vscode;
-      '';
+      startupNotify = true;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "x-scheme-handler/vscode" ];
+      keywords = [ "vscode" ];
+      noDisplay = true;
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
@@ -108,6 +103,7 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
       )
     '';
 
@@ -124,7 +120,7 @@ let
       rm -rf "$packed"
 
       # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
+      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
 
     inherit meta;
@@ -160,12 +156,9 @@ let
       krb5
     ]) ++ additionalPkgs pkgs;
 
-    # restore desktop item icons
+    # symlink shared assets, including icons and desktop entries
     extraInstallCommands = ''
-      mkdir -p "$out/share/applications"
-      for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s "$item" "$out/share/applications/"
-      done
+      ln -s "${unwrapped}/share" "$out/"
     '';
 
     runScript = "${unwrapped}/bin/${executableName}";

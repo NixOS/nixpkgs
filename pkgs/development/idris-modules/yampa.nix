@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "yampa";
+  pname = "yampa";
   version = "2016-07-05";
 
   ipkgName = "idris-yampa";

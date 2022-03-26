@@ -28,10 +28,6 @@ super: lib.trivial.pipe super [
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
 
-  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
-  }))
-
   (patchExtension "ddterm@amezin.github.com" (old: {
     # Requires gjs, zenity & vte via the typelib
     nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];

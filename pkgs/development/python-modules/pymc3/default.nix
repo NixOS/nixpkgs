@@ -2,10 +2,11 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, Theano
+, theano-pymc
 , pandas
 , patsy
 , joblib
+, cachetools
 , tqdm
 , six
 , h5py
@@ -16,6 +17,8 @@
 , parameterized
 , fastprogress
 , typing-extensions
+, dill
+, semver
 }:
 
 buildPythonPackage rec {
@@ -34,7 +37,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    Theano
     pandas
     patsy
     joblib
@@ -45,12 +47,10 @@ buildPythonPackage rec {
     packaging
     fastprogress
     typing-extensions
-  ];
-
-  checkInputs = [
-    pytest
-    nose
-    parameterized
+    dill
+    theano-pymc
+    cachetools
+    semver
   ];
 
   # The test suite is computationally intensive and test failures are not
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc3";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ilya-kolpakov ];
+    maintainers = with lib.maintainers; [ nidabdella ];
   };
 }

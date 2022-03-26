@@ -45,7 +45,8 @@ let
     "riscv64" = "riscv64";
     "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system");
+    "mips64el" = "mips64le";
+  }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -54,11 +55,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.6";
+  version = "1.17.7";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-TcG78/9h8MH/Kxk1Xm2IFRpwEmJopHx2FHdobvlHSMg=";
+    sha256 = "sha256-wQjNM7c7GRGgK2l3Qd896kPgGlxOCOQJ6LOg43RdK00=";
   };
 
   # perl is used for testing go vet
@@ -168,6 +169,7 @@ stdenv.mkDerivation rec {
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
     ./go-1.9-skip-flaky-20072.patch
+    ./skip-chown-tests-1.16.patch
     ./skip-external-network-tests-1.16.patch
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch

@@ -1,19 +1,25 @@
 { lib
 , absl-py
+, blas
 , buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, lapack
 , numpy
 , opt-einsum
 , pytestCheckHook
+, pytest-xdist
 , pythonOlder
 , scipy
 , typing-extensions
 }:
 
+let
+  usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
+in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.2.27";
+  version = "0.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "${pname}-v${version}";
-    sha256 = "0r1rs1zn0nzf8wpy6g5wrn2yrgi12gg2i7l285ka5d8wczjnbq47";
+    rev = "jax-v${version}";
+    sha256 = "sha256-RZqSJP2vtt8U6nmftV2VzfkMGkkk3100QqsjI7PpQbc=";
   };
 
   patches = [
@@ -45,6 +51,7 @@ buildPythonPackage rec {
   checkInputs = [
     jaxlib
     pytestCheckHook
+    pytest-xdist
   ];
 
   # NOTE: Don't run the tests in the expiremental directory as they require flax
@@ -52,8 +59,19 @@ buildPythonPackage rec {
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
   pytestFlagsArray = [
+    "-n auto"
     "-W ignore::DeprecationWarning"
     "tests/"
+  ];
+
+  # See
+  #  * https://github.com/google/jax/issues/9705
+  #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+  #  * https://github.com/NixOS/nixpkgs/issues/161960
+  disabledTests = lib.optionals usingMKL [
+    "test_custom_linear_solve_cholesky"
+    "test_custom_root_with_aux"
+    "testEigvalsGrad_shape"
   ];
 
   pythonImportsCheck = [

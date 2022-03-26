@@ -24,7 +24,7 @@ in rebar3Relx rec {
 
     set -euo pipefail
 
-    latest=$(list-git-tags https://github.com/${owner}/${repo}.git | sort -V | tail -1)
+    latest=$(list-git-tags --url=https://github.com/${owner}/${repo}.git | sort -V | tail -1)
     if [ "$latest" != "${version}" ]; then
       nixpkgs="$(git rev-parse --show-toplevel)"
       nix_path="$nixpkgs/pkgs/development/beam-modules/elvis-erlang"

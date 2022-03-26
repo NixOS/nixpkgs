@@ -338,9 +338,6 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = config.environment.etc."modprobe.d/nixos-initrd.conf".source;
-          symlink = "/etc/modprobe.d/nixos-initrd.conf";
-        }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
               preferLocalBuild = true;
@@ -349,6 +346,9 @@ let
               ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
+        }
+        { object = config.environment.etc."modprobe.d/nixos.conf".source;
+          symlink = "/etc/modprobe.d/nixos.conf";
         }
         { object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
@@ -578,7 +578,7 @@ in
         else "gzip"
       );
       defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
-      type = types.unspecified; # We don't have a function type...
+      type = types.either types.str (types.functionTo types.str);
       description = ''
         The compressor to use on the initrd image. May be any of:
 

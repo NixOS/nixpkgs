@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "primesieve";
-  version = "7.7";
+  version = "7.8";
 
   nativeBuildInputs = [ cmake ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "kimwalisch";
     repo = "primesieve";
     rev = "v${version}";
-    sha256 = "sha256-1Gfo00yaf7zHzCLfu/abWqeM0qBuLu+f+lowFFnWFxY=";
+    sha256 = "sha256-M35CP/xEyC7mEh84kaGsgfsDI9fnanHraNPgTvpqimI=";
   };
 
   meta = with lib; {

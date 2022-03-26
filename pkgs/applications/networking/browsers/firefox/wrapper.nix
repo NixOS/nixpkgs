@@ -12,6 +12,7 @@
 , libva
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
+, pciutils
 }:
 
 ## configurability of the wrapper itself
@@ -20,13 +21,14 @@ browser:
 
 let
   wrapper =
-    { applicationName ? browser.applicationName or (lib.getName browser)
+    { applicationName ? browser.binaryName or (lib.getName browser)
     , pname ? applicationName
     , version ? lib.getVersion browser
     , desktopName ? # applicationName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
+    , wmClass ? null
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , forceWayland ? false
@@ -37,10 +39,12 @@ let
     # For more information about anti tracking (german website)
     # visit https://wiki.kairaven.de/open/app/firefox
     , extraPrefs ? ""
+    , extraPrefsFiles ? []
     # For more information about policies visit
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
-    , libName ? "firefox" # Important for tor package or the like
+    , extraPoliciesFiles ? []
+    , libName ? browser.libName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -63,8 +67,8 @@ let
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups ]
-            ++ lib.optional (pipewireSupport && lib.versionAtLeast version "83") pipewire
+      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+            ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
@@ -102,7 +106,7 @@ let
 
       enterprisePolicies =
       {
-        policies = lib.optionalAttrs usesNixExtensions  {
+        policies = {
           DisableAppUpdate = true;
         } //
         lib.optionalAttrs usesNixExtensions {
@@ -150,35 +154,17 @@ let
       #                           #
       #############################
 
-      # TODO: remove this after the next release (21.03)
-      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
-        "enableAdobeFlash"
-        "enableAdobeReader"
-        "enableBluejeans"
-        "enableDjvu"
-        "enableFriBIDPlugin"
-        "enableGoogleTalkPlugin"
-        "enableMPlayer"
-        "enableVLC"
-        "icedtea"
-        "jre"
-      ];
-      pluginsError =
-        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: applicationName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
-
-    in if configPlugins != [] then throw pluginsError else
-      (stdenv.mkDerivation {
+    in stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = applicationName;
         exec = "${applicationName}${nameSuffix} %U";
         inherit icon;
-        comment = "";
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
-        categories = "Network;WebBrowser;";
-        mimeType = lib.concatStringsSep ";" [
+        categories = [ "Network" "WebBrowser" ];
+        mimeTypes = [
           "text/html"
           "text/xml"
           "application/xhtml+xml"
@@ -187,20 +173,17 @@ let
           "x-scheme-handler/https"
           "x-scheme-handler/ftp"
         ];
+        startupWMClass = wmClass;
       };
 
-      nativeBuildInputs = [ makeWrapper lndir replace ];
+      nativeBuildInputs = [ makeWrapper lndir replace jq ];
       buildInputs = [ browser.gtk3 ];
 
 
-      buildCommand = lib.optionalString stdenv.isDarwin ''
-        mkdir -p $out/Applications
-        cp -R --no-preserve=mode,ownership ${browser}/Applications/${applicationName}.app $out/Applications
-        rm -f $out${browser.execdir or "/bin"}/${applicationName}
-      '' + ''
-        if [ ! -x "${browser}${browser.execdir or "/bin"}/${applicationName}" ]
+      buildCommand = ''
+        if [ ! -x "${browser}/bin/${applicationName}" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${applicationName}'"
+            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
             exit 1
         fi
 
@@ -217,8 +200,8 @@ let
 
         find . -type f \( -not -name "${applicationName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
 
-        find . -type f -name "${applicationName}" -print0 | while read -d $'\0' f; do
-          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+        find . -type f \( -name "${applicationName}" -o -name "${applicationName}-bin" \) -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership --remove-destination "${browser}/$f" "$out/$f"
           chmod a+rwx "$out/$f"
         done
 
@@ -237,12 +220,12 @@ let
 
         # create the wrapper
 
-        executablePrefix="$out${browser.execdir or "/bin"}"
+        executablePrefix="$out/bin"
         executablePath="$executablePrefix/${applicationName}"
 
         if [ ! -x "$executablePath" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${applicationName}'"
+            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
             exit 1
         fi
 
@@ -257,18 +240,18 @@ let
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
         fi
 
-        if [ ! -x "${browser}${browser.execdir or "/bin"}/${applicationName}" ]
+        if [ ! -x "${browser}/bin/${applicationName}" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${applicationName}'"
+            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
             exit 1
         fi
 
         makeWrapper "$oldExe" \
-          "$out${browser.execdir or "/bin"}/${applicationName}${nameSuffix}" \
+          "$out/bin/${applicationName}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --prefix PATH ':' "${xdg-utils}/bin" \
-            --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
+            --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${applicationName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
@@ -292,7 +275,7 @@ let
             mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
             icon=$( find "${browser}/lib/" -name "default''${res}.png" )
               if [ -e "$icon" ]; then ln -s "$icon" \
-                "$out/share/icons/hicolor/''${res}x''${res}/apps/${applicationName}.png"
+                "$out/share/icons/hicolor/''${res}x''${res}/apps/${icon}.png"
               fi
             done
         fi
@@ -325,6 +308,12 @@ let
         rm -f "$POL_PATH"
         cat ${policiesJson} >> "$POL_PATH"
 
+        extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
+        for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
+          jq -s '.[0] + .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
+          mv .tmp.json "$POL_PATH"
+        done
+
         # preparing for autoconfig
         mkdir -p "$out/lib/${libName}/defaults/pref"
 
@@ -332,6 +321,11 @@ let
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
         cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+
+        extraPrefsFiles=(${builtins.toString extraPrefsFiles})
+        for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
+          cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
+        done
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 
@@ -356,5 +350,5 @@ let
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    });
+    };
 in lib.makeOverridable wrapper

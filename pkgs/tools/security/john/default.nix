@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
                           (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
+                                                CompressRawLzma # For 7z2john.pl
                                                 perlldap ]); # For sha-dump.pl
                           # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 

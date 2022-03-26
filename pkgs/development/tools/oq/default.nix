@@ -8,13 +8,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "oq";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Blacksmoke16";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-La2oi+r9sCmnacgjQe+LcTQ7EXKorSoTTD4LhNtQsYk=";
+    sha256 = "sha256-iGKyP3NrAnR3ISOBq+YR/vwarlnIY4u4ZwdqSBnBC7U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

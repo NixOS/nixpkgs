@@ -77,7 +77,8 @@ stdenv.mkDerivation rec {
     (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
   '';
 
-  enableParallelBuilding = true;
+  # protobuf generation is not thread safe
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [
     cmake

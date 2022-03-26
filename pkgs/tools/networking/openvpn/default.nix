@@ -32,7 +32,7 @@ let
         inherit version;
 
         src = fetchurl {
-          url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.xz";
+          url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.gz";
           inherit sha256;
         };
 
@@ -78,12 +78,12 @@ let
 in
 {
   openvpn_24 = generic {
-    version = "2.4.11";
-    sha256 = "06s4m0xvixjhd3azrzbsf4j86kah4xwr2jp6cmcpc7db33rfyyg5";
+    version = "2.4.12";
+    sha256 = "1vjx82nlkxrgzfiwvmmlnz8ids5m2fiqz7scy1smh3j9jnf2v5b6";
   };
 
   openvpn = generic {
-    version = "2.5.5";
-    sha256 = "sha256-EZvWn6AhCDj2zaonNpbcc476IA9FTb4R6237dd+2ADs=";
+    version = "2.5.6";
+    sha256 = "0gdd88rcan9vfiwkzsqn6fxxdim7kb1bsxrcra59c5xksprpwfik";
   };
 }

@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ craigem lheckemann ];
+    maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

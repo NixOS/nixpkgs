@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '>= 2.4.0', '< 2.8.0'
 gem 'bundler', '>= 1.12.0'
 
-gem 'rails', '5.2.6'
+gem 'rails', '5.2.6.2'
 gem 'sprockets', '~> 3.7.2' if RUBY_VERSION < '2.5'
 gem 'globalid', '~> 0.4.2' if Gem.ruby_version < Gem::Version.new('2.6.0')
 gem 'rouge', '~> 3.26.0'

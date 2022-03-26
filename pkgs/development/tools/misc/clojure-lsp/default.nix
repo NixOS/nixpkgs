@@ -2,27 +2,19 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2022.01.22-01.31.09";
+  version = "2022.02.23-12.12.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-xQSOJRKKjX3AfQsYe4UNhFlLgWPkoY8NOPXCO1oc3BI=";
+    sha256 = "sha256-PfO1G66Z3zQ+Hyjb6J0bomsT8juQURwF2mPKJY5auMw=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "sha256-le0+ZmGyhM/UfGUV05FHyx5PlARxL/T2aC8UhiPYjxw";
+    sha256 = "sha256-f8bEALl9j0aDkKZtThLTseqibeYIUeOx4ulelPWQkoo=";
   };
-
-  # https://github.com/clojure-lsp/clojure-lsp/blob/2022.01.22-01.31.09/cli/graalvm/native-unix-compile.sh#L18-L27
-  # Needs to be inject on `nativeImageBuildArgs` inside shell environment,
-  # otherwise we can't expand to the value set in `mktemp -d` call
-  preBuild = ''
-    export DTLV_LIB_EXTRACT_DIR="$(mktemp -d)"
-    nativeImageBuildArgs+=("-H:CLibraryPath=$DTLV_LIB_EXTRACT_DIR")
-  '';
 
   extraNativeImageBuildArgs = [
     "--no-fallback"
@@ -68,8 +60,5 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo babariviere ];
-    # Depends on datalevin that is x86_64 only
-    # https://github.com/juji-io/datalevin/blob/bb7d9328f4739cddea5d272b5cd6d6dcb5345da6/native/src/java/datalevin/ni/Lib.java#L86-L102
-    broken = !stdenv.isx86_64;
   };
 }

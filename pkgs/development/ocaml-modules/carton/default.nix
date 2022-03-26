@@ -48,13 +48,15 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
+  nativeBuildInputs = [
+    findlib
+  ];
   checkInputs = [
     base64
     alcotest
     alcotest-lwt
     crowbar
     lwt
-    findlib
     mirage-flow
   ];
 

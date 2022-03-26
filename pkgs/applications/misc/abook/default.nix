@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Text-based addressbook program designed to use with mutt mail client";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.edwtjo ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }

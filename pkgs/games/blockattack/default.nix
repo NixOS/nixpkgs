@@ -15,14 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blockattack";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
     owner = "blockattack";
     repo = "blockattack-game";
     rev = "v${version}";
-    hash = "sha256-ySLm3AdoJRiMRdla45OJh8ZIFYNh+HzjG2VnFqoWuZA=";
+    hash = "sha256-2oKesdr2eNZhDlGrFRiH5/8APFkGJfxPCNvzFoIumdQ=";
   };
 
   nativeBuildInputs = [

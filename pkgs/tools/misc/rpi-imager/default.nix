@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "rpi-imager";
-  version = "1.6.2";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ITn31ENEf2bysgJgV3u+NNPXk1pfIkUyJWIvS2DOrzY=";
+    sha256 = "sha256-Yt+RWox+0VOw8SH7Ry/o4NHOg3IGcebVeE9OWGP17do=";
   };
 
   nativeBuildInputs = [ cmake util-linux ];

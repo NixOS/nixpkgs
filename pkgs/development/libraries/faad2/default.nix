@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
   };

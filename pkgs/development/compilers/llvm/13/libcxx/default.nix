@@ -25,12 +25,6 @@ stdenv.mkDerivation rec {
     ../../libcxx-0001-musl-hacks.patch
   ];
 
-  # Prevent errors like "error: 'foo' is unavailable: introduced in macOS yy.zz"
-  postPatch = ''
-    substituteInPlace include/__config \
-      --replace "#    define _LIBCPP_USE_AVAILABILITY_APPLE" ""
-  '';
-
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';

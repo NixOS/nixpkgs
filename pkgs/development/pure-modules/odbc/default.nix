@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, libiodbc }:
 
 stdenv.mkDerivation rec {
-  baseName = "odbc";
+  pname = "pure-odbc";
   version = "0.10";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-odbc-${version}.tar.gz";
     sha256 = "1907e9ebca11cc68762cf7046084b31e9e2bf056df85c40ccbcbe9f02221ff8d";
   };
 

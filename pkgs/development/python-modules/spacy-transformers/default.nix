@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i 's/transformers>=3.4.0,<4.12.0/transformers/' setup.cfg
+    sed -i 's/transformers>=3.4.0,<4.13.0/transformers/' setup.cfg
   '';
 
   propagatedBuildInputs = [

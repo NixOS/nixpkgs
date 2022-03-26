@@ -18,7 +18,6 @@
 , eclib
 , ntl
 , ecm
-, pynac
 , pythonEnv
 }:
 
@@ -36,7 +35,6 @@ let
     blas lapack
     singular
     three
-    pynac
     giac
     gap
     pari
@@ -125,6 +123,10 @@ stdenv.mkDerivation rec {
     # the scripts in src/bin will find the actual sage source files using environment variables set in `sage-env`
     cp -r src/bin "$out/bin"
     cp -r build/bin "$out/build/bin"
+
+    # sage assumes the existence of sage-src-env-config.in means it's being executed in-tree. in this case, it
+    # adds SAGE_SRC/bin to PATH, breaking our wrappers
+    rm "$out/bin"/*.in "$out/build/bin"/*.in
 
     cp -f '${sage-env}/sage-env' "$out/bin/sage-env"
     substituteInPlace "$out/bin/sage-env" \

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.95.0";
-  name = "jamin-${version}";
+  pname = "jamin";
 
   src = fetchurl {
     url = "mirror://sourceforge/jamin/jamin-${version}.tar.gz";

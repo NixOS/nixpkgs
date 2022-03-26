@@ -46,14 +46,13 @@ stdenv.mkDerivation rec {
     libX11
     libssh2
     openssl
-    perl
     slang
     zip
   ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--enable-vfs-smb" ];
+  configureFlags = [ "--enable-vfs-smb" "PERL=${perl}/bin/perl" ];
 
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
@@ -93,7 +92,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
-    repositories.git = "https://github.com/MidnightCommander/mc.git";
-    updateWalker = true;
   };
 }

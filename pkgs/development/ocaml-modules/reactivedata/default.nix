@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YLkacIbjxZQ/ThgSxjTqviBYih6eW2GX5H7iybQDv1A=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opaline ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild opaline ];
   propagatedBuildInputs = [ react ];
+
+  strictDeps = true;
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 

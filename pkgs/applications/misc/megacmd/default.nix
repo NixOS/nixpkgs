@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , autoconf
-, automake115x
+, automake
 , c-ares
 , cryptopp
 , curl
@@ -25,22 +25,17 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-Q1SZSDTPGgBA/W/ZVYfTQsiP41RE1LJ+esQ3PK9EjIc=";
+    sha256 = "Y/FkbN9mTuBpcKCSQg0M+3/IPzJ58X4iZhX2kMVDv7A=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake115x
-    libtool
-    pkg-config
-  ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
   buildInputs = [
     c-ares
@@ -82,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
-    homepage = "https://mega.nz/cmd";
+    homepage = "https://mega.io/cmd";
     license = with licenses; [ bsd2 gpl3Only ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ lunik1 ];

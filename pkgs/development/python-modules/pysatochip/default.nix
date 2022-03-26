@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pysatochip";
-  version = "0.14.1";
+  version = "0.14.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eba800c82ea45e2524c0773a71c36e525d7c18148e6066e336950cef484555f5";
+    sha256 = "sha256-+Z3D6ITZouhLbEotvJ9MDfg6QOhjGVKrLi1QL1kOdkE=";
   };
 
   postPatch = ''

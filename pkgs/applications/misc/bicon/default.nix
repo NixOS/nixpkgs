@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "A bidirectional console";
     homepage =  "https://github.com/behdad/bicon";
     license = [ licenses.lgpl21 licenses.psfl licenses.bsd0 ];
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

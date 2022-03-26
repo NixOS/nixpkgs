@@ -37,13 +37,13 @@ ${asdfReshimFile}
   '';
 in stdenv.mkDerivation rec {
   pname = "asdf-vm";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
     rev = "v${version}";
-    sha256 = "07lh5k1krzm7fbkv0jlwbzz5ycn2jg7s12dnqwmy82qqic0sl6fl";
+    sha256 = "sha256-uvf3WVflUdh+M90zMDVFVAXi7TZytc8oZ/DexJqpNV4=";
   };
 
   nativeBuildInputs = [

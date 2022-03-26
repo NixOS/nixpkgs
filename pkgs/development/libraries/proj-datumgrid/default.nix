@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "proj-datumgrid";
+  pname = "proj-datumgrid";
   version = "world-1.0";
 
   src = fetchFromGitHub {

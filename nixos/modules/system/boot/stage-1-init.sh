@@ -282,6 +282,9 @@ checkFS() {
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
+    # Skip fsck for apfs as the fsck utility does not support repairing the filesystem (no -a option)
+    if [ "$fsType" = apfs ]; then return 0; fi
+
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
 

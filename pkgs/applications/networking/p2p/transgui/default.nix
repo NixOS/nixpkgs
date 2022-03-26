@@ -49,13 +49,9 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Transmission Remote GUI";
     genericName = "BitTorrent Client";
-    categories = lib.concatStringsSep ";" [
-      "Application" "Network" "FileTransfer" "P2P" "GTK"
-    ];
-    startupNotify = "true";
-    mimeType = lib.concatStringsSep ";" [
-      "application/x-bittorrent" "x-scheme-handler/magnet"
-    ];
+    categories = [ "Application" "Network" "FileTransfer" "P2P" "GTK" ];
+    startupNotify = true;
+    mimeTypes = [ "application/x-bittorrent" "x-scheme-handler/magnet" ];
   };
 
   postInstall = ''

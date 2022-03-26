@@ -33,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.3.3";
+  version = "21.3.7";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -47,7 +47,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "08c118j440xpfbjjxmwzm6dfnv4y35q540mmzkchhpbwx89lczxd";
+    sha256 = "0ggw3s514z6szasbiy4dv5mdi689121yy2xly2g21gv1mavrvyml";
   };
 
   # TODO:
@@ -55,10 +55,7 @@ self = stdenv.mkDerivation {
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
     # fixes pkgsMusl.mesa build
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl.patch";
-      sha256 = "sha256-Jyl7ILLhn8hBJG7afnEjE8H56Wz/1bxkvlqfrXK5U7I=";
-    })
+    ./musl.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
       sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
@@ -250,12 +247,14 @@ self = stdenv.mkDerivation {
     inherit (libglvnd) driverLink;
     inherit llvmPackages;
 
-    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
-      name = "mesa-dev-does-not-depend-on-llvm";
-      buildCommand = ''
-        echo ${self.dev} >>$out
-      '';
-      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    tests = lib.optionalAttrs stdenv.isLinux {
+      devDoesNotDependOnLLVM = stdenv.mkDerivation {
+        name = "mesa-dev-does-not-depend-on-llvm";
+        buildCommand = ''
+          echo ${self.dev} >>$out
+        '';
+        disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+      };
     };
   };
 

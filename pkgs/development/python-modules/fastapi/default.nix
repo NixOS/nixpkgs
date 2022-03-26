@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.71.0";
+  version = "0.75.0";
   format = "flit";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-J4j7lQm22pbwfMkQGF1s2xyFU4MCwXrAqDmRJmLmKGg=";
+    sha256 = "sha256-LCdScvQUdwOM8Don/5n/49bKrivT+bkhqWcBNku4fso=";
   };
 
   propagatedBuildInputs = [

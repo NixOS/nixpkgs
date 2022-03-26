@@ -13,7 +13,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = "13rc1afds5xg30faqz35haha4kxg73b5nvjirbrkc6kna0vhb54z";
+  vendorSha256 = "1863ad97y82fx0an1ysalkxnqjz3zfz228wag9a92wdssl1vwzws";
 
   doCheck = false;
 

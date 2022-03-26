@@ -26,7 +26,7 @@ buildGoModule rec {
       --zsh <($out/bin/gmailctl completion zsh)
   '';
 
-  vendorSha256 = "sha256-zEWEcv6G/9tmM6/+lhMFkyew3r/pvQRjvh74BENTYI4=";
+  vendorSha256 = "sha256-nAczO439tRiQU9f9LbJVENJiURVRnBAInwUp699RxOY=";
 
   doCheck = false;
 

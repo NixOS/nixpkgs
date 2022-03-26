@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -24,6 +26,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/hitori/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "99cQPLBjP7ATcwExqYw646IWK5+5SZ/H8ZUS1YG/ZWk=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:3:0: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/hitori/-/commit/d25728e122f1d7b985029a5ba96810c3e57c27f7.patch";
+      sha256 = "LwBpFFr+vLacLTpto7PwvO1p2lku6epyEv9YZvUvW+g=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
-, bash, fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
+{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, autoreconfHook
+, bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
 , libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
 , libdrm, udev
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.3.5";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "03fahljrijq4ij8a4v8d7806mpf22ppkgr61n5s974g3xfdvpl13";
+    sha256 = "sha256-agWTGf8x6bxZ7S5bU2scHt8IdLLe/hZdaEMfHIK9d8U=";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -22,10 +22,24 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
-  buildInputs = [ fuse glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
+  buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
       ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
+  patches = [
+    # glibc 2.35 and GCC 11 & 12 reporting possible array bounds overflow
+    # Will be fixed in the release after 12.0.0
+    (fetchpatch {
+      url = "https://github.com/vmware/open-vm-tools/commit/de6d129476724668b8903e2a87654f50ba21b1b2.patch";
+      sha256 = "1cqhm868g40kcp8qzzwq10zd4bah9ypaw1qawnli5d240mlkpfhh";
+    })
+  ];
+
+  prePatch = ''
+    cd ..
+  '';
+
   postPatch = ''
+     cd open-vm-tools
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
      sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
@@ -43,6 +57,7 @@ stdenv.mkDerivation rec {
     "--without-kernel-modules"
     "--without-xmlsecurity"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
+    "--with-fuse=fuse3"
   ] ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;

@@ -1,4 +1,4 @@
-# Used by pkgs/misc/vim-plugins/update.py and pkgs/applications/editors/kakoune/plugins/update.py
+# Used by pkgs/applications/editors/vim/plugins/update.py and pkgs/applications/editors/kakoune/plugins/update.py
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -73,9 +73,13 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
     return deco_retry
 
+@dataclass
+class FetchConfig:
+    proc: int
+    github_token: str
 
-def make_request(url: str) -> urllib.request.Request:
-    token = os.getenv("GITHUB_API_TOKEN")
+
+def make_request(url: str, token=None) -> urllib.request.Request:
     headers = {}
     if token is not None:
         headers["Authorization"] = f"token {token}"
@@ -90,6 +94,7 @@ class Repo:
         self.branch = branch
         self.alias = alias
         self.redirect: Dict[str, str] = {}
+        self.token = "dummy_token"
 
     @property
     def name(self):
@@ -132,10 +137,11 @@ class Repo:
 
 class RepoGitHub(Repo):
     def __init__(
-            self, owner: str, repo: str, branch: str, alias: Optional[str]
+        self, owner: str, repo: str, branch: str, alias: Optional[str]
     ) -> None:
         self.owner = owner
         self.repo = repo
+        self.token = None
         '''Url to the repo'''
         super().__init__(self.url(""), branch, alias)
         log.debug("Instantiating github repo %s/%s", self.owner, self.repo)
@@ -150,7 +156,7 @@ class RepoGitHub(Repo):
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def has_submodules(self) -> bool:
         try:
-            req = make_request(self.url(f"blob/{self.branch}/.gitmodules"))
+            req = make_request(self.url(f"blob/{self.branch}/.gitmodules"), self.token)
             urllib.request.urlopen(req, timeout=10).close()
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -162,7 +168,7 @@ class RepoGitHub(Repo):
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
         commit_url = self.url(f"commits/{self.branch}.atom")
-        commit_req = make_request(commit_url)
+        commit_req = make_request(commit_url, self.token)
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
@@ -291,15 +297,41 @@ class Editor:
         """To fill the cache"""
         return get_current_plugins(self)
 
-    def load_plugin_spec(self, plugin_file) -> List[PluginDesc]:
-        return load_plugin_spec(plugin_file)
+    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
+        plugins = []
+        with open(plugin_file) as f:
+            for line in f:
+                if line.startswith("#"):
+                    continue
+                plugin = parse_plugin_line(config, line)
+                plugins.append(plugin)
+        return plugins
 
     def generate_nix(self, plugins, outfile: str):
         '''Returns nothing for now, writes directly to outfile'''
         raise NotImplementedError()
 
-    def get_update(self, input_file: str, outfile: str, proc: int):
-        return get_update(input_file, outfile, proc, editor=self)
+    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+        cache: Cache = Cache(self.get_current_plugins(), self.cache_file)
+        _prefetch = functools.partial(prefetch, cache=cache)
+
+        def update() -> dict:
+            plugin_names = self.load_plugin_spec(config, input_file)
+
+            try:
+                pool = Pool(processes=config.proc)
+                results = pool.map(_prefetch, plugin_names)
+            finally:
+                cache.store()
+
+            plugins, redirects = check_results(results)
+
+            self.generate_nix(plugins, outfile)
+
+            return redirects
+
+        return update
+
 
     @property
     def attr_path(self):
@@ -345,7 +377,15 @@ class Editor:
             dest="proc",
             type=int,
             default=30,
-            help="Number of concurrent processes to spawn. Export GITHUB_API_TOKEN allows higher values.",
+            help="Number of concurrent processes to spawn. Setting --github-token allows higher values.",
+        )
+        parser.add_argument(
+            "--github-token",
+            "-t",
+            type=str,
+            default=os.getenv("GITHUB_API_TOKEN"),
+            help="""Allows to set --proc to higher values.
+            Uses GITHUB_API_TOKEN environment variables as the default value.""",
         )
         parser.add_argument(
             "--no-commit", "-n", action="store_true", default=False,
@@ -414,8 +454,8 @@ def prefetch_plugin(
     )
 
 
-def fetch_plugin_from_pluginline(plugin_line: str) -> Plugin:
-    plugin, _ = prefetch_plugin(parse_plugin_line(plugin_line))
+def fetch_plugin_from_pluginline(config: FetchConfig, plugin_line: str) -> Plugin:
+    plugin, _ = prefetch_plugin(parse_plugin_line(config, plugin_line))
     return plugin
 
 
@@ -465,7 +505,7 @@ def make_repo(uri, branch, alias) -> Repo:
         repo = Repo(uri.strip(), branch, alias)
     return repo
 
-def parse_plugin_line(line: str) -> PluginDesc:
+def parse_plugin_line(config: FetchConfig, line: str) -> PluginDesc:
     branch = "HEAD"
     alias = None
     uri = line
@@ -476,19 +516,9 @@ def parse_plugin_line(line: str) -> PluginDesc:
         uri, branch = uri.split("@")
 
     repo = make_repo(uri.strip(), branch.strip(), alias)
+    repo.token = config.github_token
 
     return PluginDesc(repo, branch.strip(), alias)
-
-
-def load_plugin_spec(plugin_file: str) -> List[PluginDesc]:
-    plugins = []
-    with open(plugin_file) as f:
-        for line in f:
-            if line.startswith("#"):
-                continue
-            plugin = parse_plugin_line(line)
-            plugins.append(plugin)
-    return plugins
 
 
 def get_cache_path(cache_file_name: str) -> Optional[Path]:
@@ -556,6 +586,7 @@ def prefetch(
 
 
 def rewrite_input(
+    config: FetchConfig,
     input_file: Path,
     deprecated: Path,
     redirects: Dict[str, str] = None,
@@ -573,8 +604,8 @@ def rewrite_input(
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
         for old, new in redirects.items():
-            old_plugin = fetch_plugin_from_pluginline(old)
-            new_plugin = fetch_plugin_from_pluginline(new)
+            old_plugin = fetch_plugin_from_pluginline(config, old)
+            new_plugin = fetch_plugin_from_pluginline(config, new)
             if old_plugin.normalized_name != new_plugin.normalized_name:
                 deprecations[old_plugin.normalized_name] = {
                     "new": new_plugin.normalized_name,
@@ -600,40 +631,21 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
         print("no changes in working tree to commit")
 
 
-def get_update(input_file: str, outfile: str, proc: int, editor: Editor):
-    cache: Cache = Cache(editor.get_current_plugins(), editor.cache_file)
-    _prefetch = functools.partial(prefetch, cache=cache)
-
-    def update() -> dict:
-        plugin_names = editor.load_plugin_spec(input_file)
-
-        try:
-            pool = Pool(processes=proc)
-            results = pool.map(_prefetch, plugin_names)
-        finally:
-            cache.store()
-
-        plugins, redirects = check_results(results)
-
-        editor.generate_nix(plugins, outfile)
-
-        return redirects
-
-    return update
-
 
 def update_plugins(editor: Editor, args):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
     log.setLevel(LOG_LEVELS[args.debug])
     log.info("Start updating plugins")
-    update = editor.get_update(args.input_file, args.outfile, args.proc)
+    fetch_config = FetchConfig(args.proc, args.github_token)
+    update = editor.get_update(args.input_file, args.outfile, fetch_config)
 
     redirects = update()
-    editor.rewrite_input(args.input_file, editor.deprecated, redirects)
+    editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
+    nixpkgs_repo = None
     if autocommit:
         nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
         commit(nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
@@ -648,9 +660,9 @@ def update_plugins(editor: Editor, args):
             )
 
     for plugin_line in args.add_plugins:
-        editor.rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
+        editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, append=(plugin_line + "\n",))
         update()
-        plugin = fetch_plugin_from_pluginline(plugin_line)
+        plugin = fetch_plugin_from_pluginline(fetch_config, plugin_line)
         if autocommit:
             commit(
                 nixpkgs_repo,

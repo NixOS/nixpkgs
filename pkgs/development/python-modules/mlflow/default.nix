@@ -6,6 +6,7 @@
 , six
 , flask
 , numpy
+, scipy
 , pandas
 , python-dateutil
 , protobuf
@@ -26,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.22.0";
+  version = "1.23.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f680390715e436ae38cf7056ec91030fc9eb67cc631226f28ff9504fbe395add";
+    sha256 = "03rfyhli7vbb1pz0zw75mdwj9pz3awxi3dadxn5glpwn953w6r5y";
   };
 
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     six
     flask
     numpy
+    scipy
     pandas
     python-dateutil
     protobuf
@@ -64,14 +66,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  patches = [
-    # Relex alembic version, https://github.com/mlflow/mlflow/pull/5245
-    (fetchpatch {
-      name = "relax-alembic-version.patch";
-      url = "https://github.com/mlflow/mlflow/commit/945eb4b67f315c0b2c4018b1df006fde910f115f.patch";
-      sha256 = "sha256-jETVEPzlNe0PvFZVOi1SwgJELfx/KCeq6REL3vl+YT0=";
-    })
-  ];
+  pythonImportsCheck = [ "mlflow" ];
 
   meta = with lib; {
     homepage = "https://github.com/mlflow/mlflow";

@@ -13,13 +13,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2021.1225.0";
+  version = "2022.205.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-kN5pR37b0giKGJVnJo/Mce+MWFwZiY+mZAHG/fUt0O4=";
+    sha256 = "sha256-CzXgj3990qWOwIjhbU8vO29nDO/7HrGDtsc67VIenPI=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -63,7 +63,7 @@ buildDotnetModule rec {
     icon = "osu!";
     comment = meta.description;
     type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   })];
 
   meta = with lib; {

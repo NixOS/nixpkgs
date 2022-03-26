@@ -137,6 +137,6 @@ in stdenv.mkDerivation rec {
     description = "Nix-based continuous build system";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -6,7 +6,7 @@ let param =
     version = "0.6.2";
     url = "https://github.com/Chris00/ocaml-rope/releases/download/${version}/rope-${version}.tbz";
     sha256 = "15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
-    buildInputs = [ dune_2 ];
+    nativeBuildInputs = [ dune_2 ];
     extra = {
       buildPhase = "dune build -p rope";
       installPhase = ''
@@ -17,19 +17,23 @@ let param =
     version = "0.5";
     url = "https://forge.ocamlcore.org/frs/download.php/1156/rope-0.5.tar.gz";
     sha256 = "05fr2f5ch2rqhyaj06rv5218sbg99p1m9pq5sklk04hpslxig21f";
-    buildInputs = [ ocamlbuild ];
+    nativeBuildInputs = [ ocamlbuild ];
     extra = { createFindlibDestdir = true; };
   };
 in
 
 stdenv.mkDerivation ({
-  name = "ocaml${ocaml.version}-rope-${param.version}";
+  pname = "ocaml${ocaml.version}-rope";
+  inherit (param) version;
 
   src = fetchurl {
     inherit (param) url sha256;
   };
 
-  buildInputs = [ ocaml findlib benchmark ] ++ param.buildInputs;
+  nativeBuildInputs = [ ocaml findlib ] ++ param.nativeBuildInputs;
+  buildInputs = [ benchmark ] ;
+
+  strictDeps = true;
 
   meta = {
     homepage = "http://rope.forge.ocamlcore.org/";

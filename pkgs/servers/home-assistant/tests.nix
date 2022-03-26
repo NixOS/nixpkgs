@@ -11,8 +11,10 @@ let
     config = [ pydispatcher ];
     generic = [ ha-av ];
     google_translate = [ mutagen ];
+    lovelace = [ PyChromecast ];
     nest = [ ha-av ];
-    onboarding = [ pymetno rpi-bad-power ];
+    onboarding = [ pymetno radios rpi-bad-power ];
+    version = [ aioaseko ];
     voicerss = [ mutagen ];
     yandextts = [ mutagen ];
     zha = [ pydeconz ];
@@ -24,6 +26,13 @@ let
       # tado/test_{climate,water_heater}.py: Tries to connect to my.tado.com
       "tests/components/tado/test_climate.py"
       "tests/components/tado/test_water_heater.py"
+    ];
+  };
+
+  extraDisabledTests = {
+    roku = [
+      # homeassistant.components.roku.media_player:media_player.py:428 Media type music is not supported with format None (mime: audio/x-matroska)
+      "test_services_play_media_audio"
     ];
   };
 
@@ -44,23 +53,22 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
       ++ home-assistant.getPackages component home-assistant.python.pkgs
       ++ extraCheckInputs.${component} or [ ];
 
+    disabledTests = old.disabledTests ++ extraDisabledTests.${component} or [];
     disabledTestPaths = old.disabledTestPaths ++ extraDisabledTestPaths.${component} or [ ];
 
     pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 
-    preCheck = old.preCheck + lib.optionalString (component != "network") ''
+    preCheck = old.preCheck + lib.optionalString (builtins.elem component [ "emulated_hue" "songpal" "system_log" ]) ''
       patch -p1 < ${./patches/tests-mock-source-ip.patch}
     '';
 
     meta = old.meta // {
       broken = lib.elem component [
         "airtouch4"
-        "glances"
-        "ridwell"
-        "venstar"
-        "yamaha_musiccast"
+        "dnsip"
+        "zwave"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

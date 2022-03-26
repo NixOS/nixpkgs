@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "3.1.3";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "lektor";
     repo = "lektor";
     rev = version;
-    sha256 = "16qw68rz5q77w84lwyhjpfd3bm4mfrhcjrnxwwnz3vmi610h68hx";
+    sha256 = "04gn3jybqf9wc6l9mi0djpki60adnk7gppmv987ik676k5x8f1kk";
   };
 
   propagatedBuildInputs = [

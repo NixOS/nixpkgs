@@ -16,7 +16,7 @@ let
     comment = "A silly speed painting game";
     desktopName = "90 Second Portraits";
     genericName = "90secondportraits";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
 in

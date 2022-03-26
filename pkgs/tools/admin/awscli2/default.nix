@@ -25,15 +25,7 @@ let
           rev = "7083e5c204e139dc41f646e0ad85286b5e7c0c23";
           sha256 = "sha256-aiCc/CXoTem0a9wI/AMBRK3g2BXJi7LpnUY/BxBEKVM=";
         };
-        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
-      });
-
-      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.10";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1nr990i4b04rnlw1ghd0xmgvvvhih698mb6lb6jylr76cs7zcnpi";
-        };
+        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [ py.pkgs.awscrt ];
       });
     };
   };
@@ -41,13 +33,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.4.9"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.4.19"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-ihmbw+gS7zZz/nebrmpEr9MR+dVabc70DBPPSrm3eeE=";
+    sha256 = "sha256-ZOSZBZT4d5jv5lg8KkGoOJqAvStUsGZbiXp3dpsrOpo=";
   };
 
   propagatedBuildInputs = [

@@ -5,7 +5,6 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,17 +26,8 @@ buildPythonPackage rec {
     owner = "coreGreenberet";
     repo = "homematicip-rest-api";
     rev = version;
-    sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
+    sha256 = "sha256-j2ansly05auevlcDY5TFz6PZR/pNIGIbtkJuU8L5b0o=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Drop loop kwarg from async_timeout.timeout
-      # https://github.com/coreGreenberet/homematicip-rest-api/pull/424
-      url = "https://github.com/coreGreenberet/homematicip-rest-api/commit/90efb335667e3d462b7f9ef113d2e0b8bb4e96b4.patch";
-      sha256 = "0f2bbs0666mf6sc7p4n8fwh29yjilkq36qf5pn0waf6iqdzxqwih";
-    })
-  ];
 
   propagatedBuildInputs = [
     aenum

@@ -28,8 +28,10 @@ let src =
     }."${version}";
   };
   ocamlPackages =
-  if lib.versionAtLeast version "0.17.0"
+  if lib.versionAtLeast version "0.19.0"
   then ocaml-ng.ocamlPackages
+  else if lib.versionAtLeast version "0.17.0"
+  then ocaml-ng.ocamlPackages_4_12
   else if lib.versionAtLeast version "0.14.3"
   then ocaml-ng.ocamlPackages_4_10
   else ocaml-ng.ocamlPackages_4_07
@@ -48,6 +50,12 @@ buildDunePackage {
 
   useDune2 = true;
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    menhir
+  ];
+
   buildInputs =
     if lib.versionAtLeast version "0.20.0"
     then [
@@ -57,7 +65,6 @@ buildDunePackage {
       either
       fix
       fpath
-      menhir
       menhirLib
       menhirSdk
       ocaml-version
@@ -78,7 +85,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       ocp-indent
@@ -96,7 +102,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       dune-build-info
@@ -115,7 +120,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       dune-build-info
@@ -135,7 +139,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
       (ppxlib.override { version = "0.18.0"; })
@@ -154,7 +157,6 @@ buildDunePackage {
       uuseg
       uutf
       fix
-      menhir
       menhirLib
       menhirSdk
     ] else [

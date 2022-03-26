@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oclgrind";
-  version = "19.10";
+  version = "21.10";
 
   src = fetchFromGitHub {
     owner = "jrprice";
     repo = "oclgrind";
     rev = "v${version}";
-    sha256 = "12v5z5x3ls26p3y3yc4mqmh12cazc0nlrwvmfbn6cyg4af9dp0zn";
+    sha256 = "sha256-DGCF7X2rPV1w9guxg2bMylRirXQgez24sG7Unlct3ow=";
   };
 
   nativeBuildInputs = [ cmake ];

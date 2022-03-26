@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e77d6203854944520105e38f2563a813a4a3708e8563aa598928a3b5ee1081a";
+    sha256 = "5412ec774c6db4fccecb8c4ba07ec5d37d6dcf5762593cb3d6ecbbeb562ebbe5";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for

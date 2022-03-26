@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/k9lQS3oPOYxhaaXuaDwPnai7byDkge4yBu7/9g4RUE=";
+    sha256 = "sha256-sB7C0IKadgpQ2h6HuH4D6ku/GXnFfFS+fGCW/RBSc10=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -22,7 +22,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-7SVEyyJRE7oYIhuENraZy0aieIAoFFWtq4mrSXxURlQ=";
+  vendorSha256 = "sha256-R7tF724y5WNIByE+9nRoNSZDZzfLtPfK/9tSBkARaN0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

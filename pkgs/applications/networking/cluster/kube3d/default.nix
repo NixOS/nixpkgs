@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-yOrxEY2UpupVmbDSAhgruTUOhNVAGCpSJsvzDEFFccw=";
+    sha256 = "sha256-ZuUjk1wb7iRZX+OpjLJHp1T0WYNjCHU6DpYF4V/heVc=";
   };
 
   vendorSha256 = null;

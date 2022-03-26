@@ -30,10 +30,10 @@
         </term>
         <listitem>
           <para>
-            A filesystem path, defined as anything that when coerced to
-            a string starts with a slash. Even if derivations can be
-            considered as path, the more specific
-            <literal>types.package</literal> should be preferred.
+            A filesystem path is anything that starts with a slash when
+            coerced to a string. Even if derivations can be considered
+            as paths, the more specific <literal>types.package</literal>
+            should be preferred.
           </para>
         </listitem>
       </varlistentry>
@@ -43,7 +43,9 @@
         </term>
         <listitem>
           <para>
-            A derivation or a store path.
+            A top-level store path. This can be an attribute set
+            pointing to a store path, like a derivation or a flake
+            input.
           </para>
         </listitem>
       </varlistentry>
@@ -90,6 +92,39 @@
   fun.fun = x: x + 2;
 }
 </programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.raw</literal>
+        </term>
+        <listitem>
+          <para>
+            A type which doesn’t do any checking, merging or nested
+            evaluation. It accepts a single arbitrary value that is not
+            recursed into, making it useful for values coming from
+            outside the module system, such as package sets or arbitrary
+            data. Options of this type are still evaluated according to
+            priorities and conditionals, so <literal>mkForce</literal>,
+            <literal>mkIf</literal> and co. still work on the option
+            value itself, but not for any value nested within it. This
+            type should only be used when checking, merging and nested
+            evaluation are not desirable.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.optionType</literal>
+        </term>
+        <listitem>
+          <para>
+            The type of an option’s type. Its merging operation ensures
+            that nested options have the correct file location
+            annotated, and that if possible, multiple option definitions
+            are correctly merged together. The main use case is as the
+            type of the <literal>_module.freeformType</literal> option.
+          </para>
         </listitem>
       </varlistentry>
       <varlistentry>
@@ -493,6 +528,22 @@
             Ensures that type <emphasis><literal>t</literal></emphasis>
             cannot be merged. It is used to ensure option definitions
             are declared only once.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.unique</literal>
+          <literal>{ message = m }</literal>
+          <emphasis><literal>t</literal></emphasis>
+        </term>
+        <listitem>
+          <para>
+            Ensures that type <emphasis><literal>t</literal></emphasis>
+            cannot be merged. Prints the message
+            <emphasis><literal>m</literal></emphasis>, after the line
+            <literal>The option &lt;option path&gt; is defined multiple times.</literal>
+            and before a list of definition locations.
           </para>
         </listitem>
       </varlistentry>

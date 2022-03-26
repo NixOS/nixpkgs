@@ -90,6 +90,16 @@ in stdenv.mkDerivation rec {
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
   '';
 
+  preFixup = ''
+    for lib in $out/lib/libvtk*.so; do
+      ln -s $lib $out/lib/"$(basename "$lib" | sed -e 's/-[[:digit:]]*.[[:digit:]]*//g')"
+    done
+
+    mv $out/include/vtk-${majorVersion}/* $out/include
+    rmdir $out/include/vtk-${majorVersion}
+    ln -s $out/include $out/include/vtk-${majorVersion}
+  '';
+
   meta = with lib; {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";

@@ -1,6 +1,7 @@
 { stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableMinimal ? false
+, enableAppletSymlinks ? true
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
 # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
@@ -66,6 +67,8 @@ stdenv.mkDerivation rec {
     ./busybox-in-store.patch
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
+  separateDebugInfo = true;
+
   postPatch = "patchShebangs .";
 
   configurePhase = ''
@@ -91,6 +94,11 @@ stdenv.mkDerivation rec {
 
     ${lib.optionalString enableStatic ''
       CONFIG_STATIC y
+    ''}
+
+    ${lib.optionalString (!enableAppletSymlinks) ''
+      CONFIG_INSTALL_APPLET_DONT y
+      CONFIG_INSTALL_APPLET_SYMLINKS n
     ''}
 
     # Use the external mount.cifs program.
@@ -119,6 +127,8 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
+
+  makeFlags = [ "SKIP_STRIP=y" ];
 
   postInstall = ''
     sed -e '

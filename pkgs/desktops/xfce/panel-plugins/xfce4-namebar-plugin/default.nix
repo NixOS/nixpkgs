@@ -1,5 +1,7 @@
 { lib, stdenv, pkg-config, fetchFromGitHub, python3, vala
-, gtk3, libwnck, libxfce4util, xfce4-panel, wafHook, xfce }:
+, gtk3, libwnck, libxfce4util, xfce4-panel, wafHook, xfce
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-namebar-plugin";
@@ -20,10 +22,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/preferences.vala --replace 'var dir_strings = Environment.get_system_data_dirs()' "string[] dir_strings = { \"$out/share\" }"
   '';
 
-  passthru.updateScript = xfce.updateScript {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
     attrPath = "xfce.${pname}";
-    versionLister = xfce.gitLister src.meta.homepage;
     rev-prefix = "v";
   };
 

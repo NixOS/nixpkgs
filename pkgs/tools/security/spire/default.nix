@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "spire";
-  version = "1.1.2";
+  version = "1.2.1";
 
   outputs = [ "out" "agent" "server" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "spiffe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MX2kbdLj72S2WBceUW/3ps34Bcsf/VArK8RN4r13wQY=";
+    sha256 = "sha256-LK73RGSTwGhCXOglsqK8RAAldovRzliE78vi2ilTSrw=";
   };
 
-  vendorSha256 = "sha256-ZRcXMNKhNY3W5fV9q/V7xsnODoG6KWHrzpWte9hx/Ms=";
+  vendorSha256 = "sha256-am8ZTUX8Vph1Eg013NObMiSVeupS2hlHdpZ/1mO27dY=";
 
   subPackages = [ "cmd/spire-agent" "cmd/spire-server" ];
 
@@ -29,8 +29,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The SPIFFE Runtime Environment";
-    homepage = "github.com/spiffe/spire";
+    homepage = "https://github.com/spiffe/spire";
+    changelog = "https://github.com/spiffe/spire/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ jonringer fkautz ];
   };
 }

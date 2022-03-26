@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "htslib";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-7SIbj1L0gS+BDuvgzFbNg1WlydIcYtFCrAWtDaFHk18=";
+    sha256 = "sha256-Gp9JkRUDoi9WgXzILqm4f7fnRntf+YnKWqYcEufVMtk=";
   };
 
   # perl is only used during the check phase.

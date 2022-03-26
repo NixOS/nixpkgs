@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "1.2.2";
+  version = "1.3.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6463d5c49142d14029196a6a781b57bc98ba5b3d93244f4ed637f534d08129c1";
+    sha256 = "sha256-NrhNpWyzqwn1bNnuqmcyKcUED0A4v7VJE4ZlTHFafJY=";
   };
 
   # Project has no tests

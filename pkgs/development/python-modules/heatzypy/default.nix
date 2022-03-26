@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , requests
@@ -8,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "1.4.2";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,10 +18,11 @@ buildPythonPackage rec {
     owner = "Cyr-ius";
     repo = pname;
     rev = version;
-    sha256 = "nENuH2u9RtWq86TW/sDFFeYS8GTWGj7qfcFS8AHFRGk=";
+    sha256 = "sha256-i5tGV9nJrLRqZwJZ3y5c65MHykz34bnr3yz+OdaQEoM=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
     requests
   ];
 

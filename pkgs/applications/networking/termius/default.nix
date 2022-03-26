@@ -8,23 +8,26 @@
 , lib
 , udev
 , wrapGAppsHook
+, libxshmfence
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "7.17.1";
+  version = "7.34.1";
 
   src = fetchurl {
     # find the latest version with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.version'
     # and the url with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_81.snap";
-    sha256 = "sha256-jNwWQTjUy8nJ8gHlbP9WgDlARWOhTQAA7KAcQNXKhNg=";
+    # and the sha512 with
+    # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_101.snap";
+    sha512 = "7fdd82535fd288277b01fedde4739dc97782236fbf25372efa56114bba676c21277ed96b32a1d46ac86af19925b14935818af50985d43a1307639530db044af4";
   };
 
   desktopItem = makeDesktopItem {
-    categories = "Network;";
+    categories = [ "Network" ];
     comment = "The SSH client that works on Desktop and Mobile";
     desktopName = "Termius";
     exec = "termius-app";
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
-  buildInputs = atomEnv.packages;
+  buildInputs = atomEnv.packages ++ [ libxshmfence ];
 
   unpackPhase = ''
     runHook preUnpack

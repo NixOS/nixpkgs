@@ -63,6 +63,10 @@ buildDotnetModule rec {
     # Rename the binary
     mv "$out/bin/Pinta" "$out/bin/pinta"
 
+    # Copy runtime icons
+    mkdir -p $out/share/icons/hicolor/16x16/
+    cp -r Pinta.Resources/icons/hicolor/16x16/* $out/share/icons/hicolor/16x16/
+
     # Install
     dotnet build installer/linux/install.proj \
       -target:Install \

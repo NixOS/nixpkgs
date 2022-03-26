@@ -321,13 +321,13 @@ let
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2.dev ];
-    Cairo = with pkgs; [ libtiff libjpeg cairo.dev x11 fontconfig.lib ];
+    Cairo = with pkgs; [ libtiff libjpeg cairo.dev xlibsWrapper fontconfig.lib ];
     Cardinal = [ pkgs.which ];
-    chebpol = [ pkgs.fftw ];
+    chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
-    devEMF = with pkgs; [ xorg.libXft.dev x11 ];
+    devEMF = with pkgs; [ xorg.libXft.dev xlibsWrapper ];
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
@@ -346,7 +346,7 @@ let
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
-    imager = [ pkgs.x11 ];
+    imager = [ pkgs.xlibsWrapper ];
     iBMQ = [ pkgs.gsl ];
     igraph = with pkgs; [ gmp libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
@@ -493,6 +493,7 @@ let
     HilbertVisGUI = with pkgs; [ pkg-config which ];
     textshaping = [ pkgs.pkg-config ];
     ragg = [ pkgs.pkg-config ];
+    qqconf = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -644,11 +645,12 @@ let
     PING = [ pkgs.gsl ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
-    HilbertVisGUI = [ pkgs.gnome2.gtkmm.dev ];
+    HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
+    qqconf = [ pkgs.fftw.dev ];
   };
 
   packagesRequiringX = [
@@ -1096,12 +1098,6 @@ let
       ];
     });
 
-    nloptr = old.nloptr.overrideDerivation (attrs: {
-      # Drop bundled nlopt source code. Probably unnecessary, but I want to be
-      # sure we're using the system library, not this one.
-      preConfigure = "rm -r src/nlopt_src";
-    });
-
     V8 = old.V8.overrideDerivation (attrs: {
       postPatch = ''
         substituteInPlace configure \
@@ -1114,7 +1110,7 @@ let
         patchShebangs configure
       '';
 
-      R_MAKEVARS_SITE = lib.optionalString (pkgs.system == "aarch64-linux")
+      R_MAKEVARS_SITE = lib.optionalString (pkgs.stdenv.system == "aarch64-linux")
         (pkgs.writeText "Makevars" ''
           CXX14PICFLAGS = -fPIC
         '');
@@ -1302,6 +1298,10 @@ let
 
     geomorph = old.geomorph.overrideDerivation (attrs: {
       RGL_USE_NULL = "true";
+    });
+
+    RNifti = old.RNifti.overrideDerivation (attrs: {
+      patches = [ ./patches/RNifti.patch ];
     });
   };
 in

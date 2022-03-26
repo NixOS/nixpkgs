@@ -2,33 +2,61 @@
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MvLQMGPyJYqYUljLqsr+qJeeYnxdH9aNGkWpDRvOeh8=";
+    sha256 = "sha256-tCjFx9Ug8rO8cSxQb2vBG/MHSUJCx17lDeGnSGjZLcI=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      # '0000-00-00T00:00:00Z'
+      date -u -d "@$(git log -1 --pretty=%ct)" "+'%Y-%m-%dT%H:%M:%SZ'" > $out/SOURCE_DATE_EPOCH
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
-  vendorSha256 = "sha256-pRL0et+UOi/tzuQz/Q7UmSA+pVhLJYR8lG8NAbPN9PU=";
+  vendorSha256 = "sha256-CmtsReP0JacgNyRqCrYZRONwR5eluymrQgsj/ukhYNQ=";
 
-  ldflags = [ "-s" "-w" ];
-
-  # Install completions post-install
+  # install completions post-install
   nativeBuildInputs = [ installShellFiles ];
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/sigstore/fulcio/cmd/app.gitVersion=v${version}"
+    "-X github.com/sigstore/fulcio/cmd/app.gitTreeState=clean"
+  ];
+
+  # ldflags based on metadata from git and source
+  preBuild = ''
+    ldflags+=" -X github.com/sigstore/fulcio/cmd/app.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/sigstore/fulcio/cmd/app.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
+
+  preCheck = ''
+    # remove test that requires networking
+    rm pkg/config/config_test.go
+  '';
+
   postInstall = ''
-    mv $out/bin/fulcio $out/bin/fulcio-server
-    installShellCompletion --cmd fulcio-server \
-      --bash <($out/bin/fulcio-server completion bash) \
-      --fish <($out/bin/fulcio-server completion fish) \
-      --zsh <($out/bin/fulcio-server completion zsh)
+    installShellCompletion --cmd fulcio \
+      --bash <($out/bin/fulcio completion bash) \
+      --fish <($out/bin/fulcio completion fish) \
+      --zsh <($out/bin/fulcio completion zsh)
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/fulcio-server --help
+
+    $out/bin/fulcio --help
+    $out/bin/fulcio version | grep "v${version}"
+
     runHook postInstallCheck
   '';
 

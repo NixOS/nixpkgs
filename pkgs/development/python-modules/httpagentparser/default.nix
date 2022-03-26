@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "httpagentparser";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "73Y9MZk912GCWs7myLNL4yuVzxZ10cc8PNNfnlKDGyY=";
+    sha256 = "a190dfdc5e63b2f1c87729424b19cbc49263d6a1fb585a16ac1c9d9ce127a4bf";
   };
 
   # PyPi version does not include test directory
