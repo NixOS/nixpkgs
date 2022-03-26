@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , atk
 , cairo
 , desktop-file-utils
@@ -31,6 +33,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "lMpDQOxlGljP66APR49aPbTZnfrGakbQ2ZcFvmiPMFo=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:2:5: ERROR: Function does not take positional arguments.
+    # Patch taken from https://gitlab.gnome.org/GNOME/almanah/-/merge_requests/13
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/8c42a67695621d1e30cec933a04e633e6030bbaf.patch";
+      sha256 = "qyqFgYSu4emFDG/Mjwz1bZb3v3/4gwQSKmGCoPPNYCQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
