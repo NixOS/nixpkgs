@@ -96,9 +96,6 @@ self: super: {
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
 
-  # The package needs the latest Cabal version.
-  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_6_3_0; });
-
   # cabal-fmt requires Cabal3
   cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
 

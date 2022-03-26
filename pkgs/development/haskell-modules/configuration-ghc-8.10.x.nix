@@ -46,9 +46,6 @@ self: super: {
     Cabal = self.Cabal_3_6_3_0;
   });
 
-  # cabal-install-parsers is written for Cabal 3.6
-  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_3_0; };
-
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
 

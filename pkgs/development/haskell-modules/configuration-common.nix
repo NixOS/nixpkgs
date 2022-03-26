@@ -1285,7 +1285,9 @@ self: super: {
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
-  cabal-install-parsers = dontCheck super.cabal-install-parsers;
+  cabal-install-parsers = dontCheck (super.cabal-install-parsers.override {
+    Cabal = self.Cabal_3_6_3_0;
+  });
 
   # 2022-03-12: Pick patches from master for compat with Stackage Nightly
   gitit = appendPatches [
