@@ -8379,6 +8379,8 @@ with pkgs;
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
+  pandoc-include = python3Packages.callPackage ../tools/misc/pandoc-include { };
+
   pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
 
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
