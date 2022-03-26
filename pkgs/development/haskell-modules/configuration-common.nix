@@ -2623,4 +2623,7 @@ self: super: {
     revision = null;
   }) super.mustache;
 
+  # Fixes test suite with modern-uri 0.3.4.3, waiting for Stackage LTS to follow suit
+  mmark = doDistribute self.mmark_0_0_7_5;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
