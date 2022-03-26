@@ -15,7 +15,7 @@
 , grilo
 , grilo-plugins
 , pkg-config
-, gtk3
+, gtk4
 , pango
 , glib
 , desktop-file-utils
@@ -23,21 +23,20 @@
 , itstool
 , gnome
 , gst_all_1
-, libdazzle
 , libsoup
-, libhandy
+, libadwaita
 , gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "41.0";
+  version = "42.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1llz2aqa3n3ivwl7i09pgylsbgrfzb872vcj1k7pvivxm1kkbcb9";
+    sha256 = "nWgZj5hSveD4NFhLlqgSiX0xDLcXKLak8Ji8spsZxdA=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     pango
     glib
     libmediaart
@@ -66,9 +65,8 @@ python3.pkgs.buildPythonApplication rec {
     grilo
     grilo-plugins
     libnotify
-    libdazzle
     libsoup
-    libhandy
+    libadwaita
     gsettings-desktop-schemas
     tracker
   ] ++ (with gst_all_1; [
@@ -84,13 +82,6 @@ python3.pkgs.buildPythonApplication rec {
     dbus-python
     pygobject3
   ];
-
-  postPatch = ''
-    for f in meson_post_conf.py meson_post_install.py; do
-      chmod +x $f
-      patchShebangs $f
-    done
-  '';
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
   dontWrapGApps = true;

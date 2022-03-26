@@ -141,7 +141,7 @@ in
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
           # GDM is needed for gnome-login.session
-          XDG_DATA_DIRS = "${gdm}/share:${cfg.sessionData.desktops}/share";
+          XDG_DATA_DIRS = "${gdm}/share:${cfg.sessionData.desktops}/share:${pkgs.gnome.gnome-control-center}/share";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports

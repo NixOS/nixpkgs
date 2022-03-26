@@ -27,6 +27,16 @@
       </listitem>
       <listitem>
         <para>
+          GNOME has been upgraded to 42. Please take a look at their
+          <link xlink:href="https://release.gnome.org/42/">Release
+          Notes</link> for details. Notably, it replaces gedit with
+          GNOME Text Editor, GNOME Terminal with GNOME Console (formerly
+          King’s Cross), and GNOME Screenshot with a tool built into the
+          Shell.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 8.1 is now available
         </para>
       </listitem>
@@ -668,6 +678,16 @@
           The <literal>gnome-passwordsafe</literal> package updated to
           <link xlink:href="https://gitlab.gnome.org/World/secrets/-/tags/6.0">version
           6.x</link> and renamed to <literal>gnome-secrets</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.gnome.experimental-features.realtime-scheduling</literal>
+          option has been removed, as GNOME Shell now
+          <link xlink:href="https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2060">uses
+          rtkit</link>. Use
+          <literal>security.rtkit.enable = true;</literal> instead. As
+          before, you will need to have it enabled using GSettings.
         </para>
       </listitem>
       <listitem>

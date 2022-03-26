@@ -5,6 +5,7 @@
 , pkg-config
 , python3
 , substituteAll
+, withDarwinFrameworksGtkDocPatch ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -61,6 +62,10 @@ python3.pkgs.buildPythonApplication rec {
     # Meson tries to update ld.so.cache which breaks when the target architecture
     # differs from the build host's.
     ./do-not-update-ldconfig-cache.patch
+  ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
+    # Fix building gtkdoc for GLib
+    # https://github.com/mesonbuild/meson/pull/10186
+    ./fix-gtkdoc-when-using-multiple-apple-frameworks.patch
   ];
 
   setupHook = ./setup-hook.sh;
