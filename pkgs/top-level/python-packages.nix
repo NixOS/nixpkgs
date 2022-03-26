@@ -546,6 +546,8 @@ in {
 
   anybadge = callPackage ../development/python-modules/anybadge { };
 
+  anyconfig = callPackage ../development/python-modules/anyconfig { };
+
   anyio = callPackage ../development/python-modules/anyio { };
 
   anytree = callPackage ../development/python-modules/anytree {
@@ -5467,6 +5469,8 @@ in {
   nessclient = callPackage ../development/python-modules/nessclient { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
+
+  nested-lookup = callPackage ../development/python-modules/nested-lookup { };
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
 

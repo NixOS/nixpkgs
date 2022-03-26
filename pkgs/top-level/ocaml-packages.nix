@@ -886,8 +886,6 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
-
     ocaml_expat =
     if lib.versionAtLeast ocaml.version "4.02"
     then callPackage ../development/ocaml-modules/expat { }

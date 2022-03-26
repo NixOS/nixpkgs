@@ -11,11 +11,6 @@ let
     patches = [
       # Patch added by the mamba team
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/20530f80e2e15012078d058803b6e2c75ed54224/libsolv/add_strict_repo_prio_rule.patch";
-        sha256 = "19c47i5cpyy88nxskf7k6q6r43i55w61jvnz7fc2r84hpjkcrv7r";
-      })
-      # Patch added by the mamba team
-      (fetchpatch {
         url = "https://raw.githubusercontent.com/mamba-org/boa-forge/20530f80e2e15012078d058803b6e2c75ed54224/libsolv/conda_variant_priorization.patch";
         sha256 = "1iic0yx7h8s662hi2jqx68w5kpyrab4fr017vxd4wyxb6wyk35dd";
       })
