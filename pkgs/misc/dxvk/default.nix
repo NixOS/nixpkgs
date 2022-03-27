@@ -21,8 +21,8 @@ let
     darwin = { inherit (default) rev hash version; };
     default = {
       rev = "v${self.version}";
-      hash = "sha256-/zH6vER/6s/d+Tt181UJOa97sqdkJyKGw6E36+1owzQ=";
-      version = "1.10";
+      hash = "sha256-+6PkrkamSvhCaGj2tq+RXri/yQ7vs0cAqgdRAFtU8UA=";
+      version = "1.10.1";
     };
   };
 
