@@ -3,6 +3,7 @@
 , lib
 
 # pythonPackages
+, anyconfig
 , appdirs
 , colorama
 , environs
