@@ -326,6 +326,7 @@ self: super: {
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
+
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
   matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
     brick = self.brick_0_64_2;
@@ -333,6 +334,10 @@ self: super: {
     # https://github.com/matterhorn-chat/matterhorn/issues/759
     aeson = self.aeson_1_5_6_0;
   }));
+  mattermost-api = super.mattermost-api.override {
+    aeson = self.aeson_1_5_6_0;
+  };
+
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
