@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
+    # Add support for the GNOME’s default terminal emulator.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
+    ./gnome-console-support.patch
+
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
     # 1. Tools for desktop environment ($bin)
