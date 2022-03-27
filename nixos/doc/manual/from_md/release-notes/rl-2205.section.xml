@@ -1604,6 +1604,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.autorandr</literal> now allows for adding
+          hooks and profiles declaratively.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>pomerium-cli</literal> command has been moved out
           of the <literal>pomerium</literal> package into the
           <literal>pomerium-cli</literal> package, following upstream’s
