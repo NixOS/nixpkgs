@@ -14052,6 +14052,11 @@ with pkgs;
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
   python3 = python39;
+
+  # pythonPackages further below, but assigned here because they need to be in sync
+  python2Packages = dontRecurseIntoAttrs python27Packages;
+  python3Packages = dontRecurseIntoAttrs python39Packages;
+
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy38;
@@ -14092,10 +14097,6 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
-
-  # pythonPackages further below, but assigned here because they need to be in sync
-  python2Packages = python2.pkgs;
-  python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
