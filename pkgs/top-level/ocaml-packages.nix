@@ -358,8 +358,6 @@ let
 
     emile = callPackage ../development/ocaml-modules/emile { };
 
-    enumerate = callPackage ../development/ocaml-modules/enumerate { };
-
     eqaf = callPackage ../development/ocaml-modules/eqaf { };
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
