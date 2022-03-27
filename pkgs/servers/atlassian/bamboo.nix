@@ -1,15 +1,14 @@
-{ stdenvNoCC, lib, fetchurl, mysql_jdbc ? null
+{ stdenvNoCC, lib, fetchurl, mysql_jdbc
 , withMysql ? true
 }:
 
-assert withMysql -> (mysql_jdbc != null);
 
 stdenvNoCC.mkDerivation rec {
   pname = "atlassian-bamboo";
   version = "8.1.3";
 
   src = fetchurl {
-    url = "https://product-downloads.atlassian.com/software/bamboo/downloads/${pname}-${version}.tar.gz";
+    url = "https://product-downloads.atlassian.com/software/bamboo/downloads/atlassian-bamboo-${version}.tar.gz";
     sha256 = "sha256-M406audmwCS4SRPj8oYxZ+tBpt9bGoOsA3+9WwdZ1fw=";
   };
 
