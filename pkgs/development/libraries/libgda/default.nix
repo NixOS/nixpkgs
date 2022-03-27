@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     pkg-config
     intltool
     itstool
-    libxml2
     gobject-introspection
     vala
     autoreconfHook
@@ -60,6 +59,10 @@ stdenv.mkDerivation rec {
     libmysqlclient
   ] ++ lib.optionals postgresSupport [
     postgresql
+  ];
+
+  propagatedBuildInputs = [
+    libxml2
   ];
 
   configureFlags = [
