@@ -91,76 +91,61 @@ let
   stateDir = "/var/lib/unifi-video";
 
 in
-  {
+{
 
-    options.services.unifi-video = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether or not to enable the unifi-video service.
-        '';
-      };
+  options.services.unifi-video = {
 
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.jre8;
-        defaultText = literalExpression "pkgs.jre8";
-        description = ''
-          The JRE package to use. Check the release notes to ensure it is supported.
-        '';
-      };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not to enable the unifi-video service.
+      '';
+    };
 
-      unifiVideoPackage = mkOption {
-        type = types.package;
-        default = pkgs.unifi-video;
-        defaultText = literalExpression "pkgs.unifi-video";
-        description = ''
-          The unifi-video package to use.
-        '';
-      };
+    jrePackage = mkOption {
+      type = types.package;
+      default = pkgs.jre8;
+      defaultText = literalExpression "pkgs.jre8";
+      description = ''
+        The JRE package to use. Check the release notes to ensure it is supported.
+      '';
+    };
 
-      mongodbPackage = mkOption {
-        type = types.package;
-        default = pkgs.mongodb-4_0;
-        defaultText = literalExpression "pkgs.mongodb";
-        description = ''
-          The mongodb package to use.
-        '';
-      };
+    unifiVideoPackage = mkOption {
+      type = types.package;
+      default = pkgs.unifi-video;
+      defaultText = literalExpression "pkgs.unifi-video";
+      description = ''
+        The unifi-video package to use.
+      '';
+    };
 
-      logDir = mkOption {
-        type = types.str;
-        default = "${stateDir}/logs";
-        description = ''
-          Where to store the logs.
-        '';
-      };
+    mongodbPackage = mkOption {
+      type = types.package;
+      default = pkgs.mongodb-4_0;
+      defaultText = literalExpression "pkgs.mongodb";
+      description = ''
+        The mongodb package to use.
+      '';
+    };
 
-      dataDir = mkOption {
-        type = types.str;
-        default = "${stateDir}/data";
-        description = ''
-          Where to store the database and other data.
-        '';
-      };
+    logDir = mkOption {
+      type = types.str;
+      default = "${stateDir}/logs";
+      description = ''
+        Where to store the logs.
+      '';
+    };
 
+    dataDir = mkOption {
+      type = types.str;
+      default = "${stateDir}/data";
+      description = ''
+        Where to store the database and other data.
+      '';
+    };
 
-      maximumJavaHeapSize = mkOption {
-        type = types.nullOr types.int;
-        default = 1024;
-        example = 4096;
-        description = ''
-          Set the maximimum heap size for the JVM in MB.
-        '';
-      };
-
-      pidFile = mkOption {
-        type = types.path;
-        default = "${cfg.dataDir}/unifi-video.pid";
-        defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
-        description = "Location of unifi-video pid file.";
-      };
     openFirewall = mkOption {
       type = types.bool;
       default = true;
@@ -169,18 +154,33 @@ in
       '';
     };
 
-};
+    maximumJavaHeapSize = mkOption {
+      type = types.nullOr types.int;
+      default = 1024;
+      example = 4096;
+      description = ''
+        Set the maximimum heap size for the JVM in MB.
+      '';
+    };
 
-config = mkIf cfg.enable {
-  users = {
-    users.unifi-video = {
+    pidFile = mkOption {
+      type = types.path;
+      default = "${cfg.dataDir}/unifi-video.pid";
+      defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
+      description = "Location of unifi-video pid file.";
+    };
+
+  };
+
+  config = mkIf cfg.enable {
+
+    users.users.unifi-video = {
       description = "UniFi Video controller daemon user";
       home = stateDir;
       group = "unifi-video";
       isSystemUser = true;
     };
-    groups.unifi-video = {};
-  };
+    users.groups.unifi-video = {};
 
     networking.firewall = mkIf cfg.openFirewall {
       # https://help.ui.com/hc/en-us/articles/217875218-UniFi-Video-Ports-Used
@@ -237,7 +237,6 @@ config = mkIf cfg.enable {
       "L+ '${stateDir}/conf/server.xml' 0700 unifi-video unifi-video - ${pkgs.unifi-video}/lib/unifi-video/conf/server.xml"
       "L+ '${stateDir}/conf/tomcat-users.xml' 0700 unifi-video unifi-video - ${pkgs.unifi-video}/lib/unifi-video/conf/tomcat-users.xml"
       "L+ '${stateDir}/conf/web.xml' 0700 unifi-video unifi-video - ${pkgs.unifi-video}/lib/unifi-video/conf/web.xml"
-
     ];
 
     systemd.services.unifi-video = {
@@ -258,7 +257,6 @@ config = mkIf cfg.enable {
         WorkingDirectory = "${stateDir}";
       };
     };
-
   };
 
   imports = [
