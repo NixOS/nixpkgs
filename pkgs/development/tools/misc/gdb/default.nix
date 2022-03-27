@@ -50,6 +50,14 @@ stdenv.mkDerivation rec {
       url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=e97436b1b789dcdb6ffb502263f4c86f8bc22996";
       sha256 = "1mpgw6s9qgnwhwyg3hagc6vhqhvia0l1s8nr22bcahwqxi3wvzcw";
     })
+
+    # glibc-2.35 compat
+    (fetchpatch {
+      name = "glibc-2.35-compat.patch";
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=a532eb7277ff64fb073e209d418b0a97f686c0e3";
+      sha256 = "sha256-XEMv2itTh5PitcJzd6EQ3t4F9oOKGHBcUhdvp0DoYK0=";
+      excludes = [ "opcodes/ChangeLog" ];
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
