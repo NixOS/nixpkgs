@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "desktop-notifier";
   version = "3.3.5";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -27,8 +28,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
   ];
-
-  format = "pyproject";
 
   # no tests available, do the imports check instead
   doCheck = false;
