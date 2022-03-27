@@ -597,6 +597,7 @@ nvim-telescope/telescope-fzy-native.nvim
 nvim-telescope/telescope-github.nvim
 nvim-telescope/telescope-project.nvim
 nvim-telescope/telescope-symbols.nvim
+nvim-telescope/telescope-ui-select.nvim
 nvim-telescope/telescope-z.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter

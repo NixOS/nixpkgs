@@ -581,12 +581,12 @@ final: prev:
 
   ci_dark = buildVimPluginFrom2Nix {
     pname = "ci_dark";
-    version = "2022-03-13";
+    version = "2022-03-27";
     src = fetchFromGitHub {
       owner = "yunlingz";
       repo = "ci_dark";
-      rev = "d32e5be4eb144789743aef0fa412176b91410bcc";
-      sha256 = "13gxf8jc7fd7fxy2zlqi7jc98p0lijs00bsknxnf9cglp1xi81i6";
+      rev = "3acf3a52921708c4c7c6c8ca8590e63bf86d0eff";
+      sha256 = "1x2242mzv3vflaq6k7xdp5xc52hsykw9693szmnvfb72i0mhrf4c";
     };
     meta.homepage = "https://github.com/yunlingz/ci_dark/";
   };
@@ -6686,6 +6686,18 @@ final: prev:
       sha256 = "0jxnalhfgmnllwb38a9dgzrnrhdnxgcbi2p7m4jk5p87260a9gvk";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-symbols.nvim/";
+  };
+
+  telescope-ui-select-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-ui-select.nvim";
+    version = "2022-03-20";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-ui-select.nvim";
+      rev = "186a124a01d7f19e6fcf608d4e1cc61d61ebe939";
+      sha256 = "1lx11d4m0gcbvbb3bvxaciihnlsj1gi30ja1p0i9w7dm748d57zb";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-ui-select.nvim/";
   };
 
   telescope-ultisnips-nvim = buildVimPluginFrom2Nix {
