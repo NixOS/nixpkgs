@@ -4084,6 +4084,8 @@ in {
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
+  invocations = callPackage ../development/python-modules/invocations { };
+
   invoke = callPackage ../development/python-modules/invoke { };
 
   iodata = callPackage ../development/python-modules/iodata { };
