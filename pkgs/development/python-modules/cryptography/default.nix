@@ -1,11 +1,11 @@
 { lib
 , stdenv
+, callPackage
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
 , setuptools-rust
 , openssl
-, cryptography_vectors
 , Security
 , packaging
 , six
@@ -20,6 +20,9 @@
 , hypothesis
 }:
 
+let
+  cryptography-vectors = callPackage ./vectors.nix { };
+in
 buildPythonPackage rec {
   pname = "cryptography";
   version = "36.0.2"; # Also update the hash in vectors.nix
@@ -55,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    cryptography_vectors
+    cryptography-vectors
     hypothesis
     iso8601
     pretend

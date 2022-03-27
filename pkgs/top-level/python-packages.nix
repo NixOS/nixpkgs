@@ -1924,8 +1924,6 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
-
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
