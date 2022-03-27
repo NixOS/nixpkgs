@@ -10964,6 +10964,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-surround/";
   };
 
+  vim-svelte = buildVimPluginFrom2Nix {
+    pname = "vim-svelte";
+    version = "2022-02-17";
+    src = fetchFromGitHub {
+      owner = "evanleck";
+      repo = "vim-svelte";
+      rev = "1080030d6a1bc6582389c133a07552ba0a442410";
+      sha256 = "0kwx0rkb6879v5c3jyavzh1hklxl2q1qwnm28x1p32kdcwqkccjp";
+    };
+    meta.homepage = "https://github.com/evanleck/vim-svelte/";
+  };
+
   vim-swap = buildVimPluginFrom2Nix {
     pname = "vim-swap";
     version = "2021-08-08";
