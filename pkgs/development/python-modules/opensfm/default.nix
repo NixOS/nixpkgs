@@ -44,19 +44,15 @@ let
 in
 buildPythonPackage rec {
   pname = "OpenSfM";
-  version = "0.5.2";
+  version = "unstable-2022-03-10";
 
   src = fetchFromGitHub {
     owner = "mapillary";
     repo = pname;
-    rev = "79aa4bdd8bd08dc0cd9e3086d170cedb29ac9760";
-    sha256 = "sha256-dHBrkYwLA1OUxUSoe7DysyeEm9Yy70tIJvAsXivdjrM=";
+    rev = "536b6e1414c8a93f0815dbae85d03749daaa5432";
+    sha256 = "Nfl20dFF2PKOkIvHbRxu1naU+qhz4whLXJvX5c5Wnwo=";
   };
   patches = [
-    (fetchpatch {
-      url = "https://github.com/mapillary/OpenSfM/pull/872/commits/a76671db11038f3f4dfe5b8f17582fb447ad7dd5.patch";
-      sha256 = "sha256-4nizQiZIjucdydOLrETvs1xdV3qiYqAQ7x1HECKvlHs=";
-    })
     ./0002-cmake-find-system-distributed-gtest.patch
     ./0003-cmake-use-system-pybind11.patch
     ./0004-pybind_utils.h-conflicts-with-nixpkgs-pybind.patch
@@ -121,6 +117,7 @@ buildPythonPackage rec {
   meta = {
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.bsd2;
+    changelog = "https://github.com/mapillary/OpenSfM/blob/${src.rev}/CHANGELOG.md";
     description = "Open source Structure-from-Motion pipeline from Mapillary";
     homepage = "https://opensfm.org/";
   };

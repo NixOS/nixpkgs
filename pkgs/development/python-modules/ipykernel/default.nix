@@ -4,7 +4,6 @@
 , fetchPypi
 , pythonOlder
 , argcomplete
-, debugpy
 , ipython
 , jupyter-client
 , tornado
@@ -20,8 +19,13 @@ buildPythonPackage rec {
     sha256 = "sha256-+VBwot/TFH+KsZ8Y7kZzMxCBN1hZN0XgfsGPsItAnx0=";
   };
 
+  # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'debugpy>=1.0.0,<2.0'," ""
+  '';
+
   propagatedBuildInputs = [
-    debugpy
     ipython
     jupyter-client
     tornado

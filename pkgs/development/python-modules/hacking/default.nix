@@ -20,6 +20,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "flake8<3.9.0,>=3.8.0" "flake8"
+    substituteInPlace hacking/checks/python23.py \
+      --replace 'H236: class Foo(object):\n    __metaclass__ = \' 'Okay: class Foo(object):\n    __metaclass__ = \'
+    substituteInPlace hacking/checks/except_checks.py \
+      --replace 'H201: except:' 'Okay: except:'
   '';
 
   nativeBuildInputs = [ pbr ];
@@ -35,9 +39,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    stestr run -e <(echo "
-      hacking.tests.test_doctest.HackingTestCase.test_flake8
-    ")
+    stestr run
   '';
 
   pythonImportsCheck = [ "hacking" ];

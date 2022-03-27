@@ -2673,6 +2673,18 @@ final: prev:
     meta.homepage = "https://github.com/phaazon/hop.nvim/";
   };
 
+  hotpot-nvim = buildVimPluginFrom2Nix {
+    pname = "hotpot.nvim";
+    version = "2022-03-23";
+    src = fetchFromGitHub {
+      owner = "rktjmp";
+      repo = "hotpot.nvim";
+      rev = "72704e1914648774a4fb42f57ca411d689e08ae6";
+      sha256 = "1dh6i2asqrhxc1irnhr46drn8ksj7xq81m6ankvy1gj8bkc74dmp";
+    };
+    meta.homepage = "https://github.com/rktjmp/hotpot.nvim/";
+  };
+
   i3config-vim = buildVimPluginFrom2Nix {
     pname = "i3config.vim";
     version = "2021-06-23";
