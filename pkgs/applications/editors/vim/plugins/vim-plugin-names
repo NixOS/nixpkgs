@@ -261,6 +261,7 @@ hsitz/VimOrganizer
 https://git.sr.ht/~whynothugo/lsp_lines.nvim
 hura/vim-asymptote
 iamcco/coc-spell-checker
+iamcco/coc-tailwindcss
 iamcco/markdown-preview.nvim
 ianks/vim-tsx
 idanarye/vim-merginal

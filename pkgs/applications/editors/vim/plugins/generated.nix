@@ -963,6 +963,18 @@ final: prev:
     meta.homepage = "https://github.com/iamcco/coc-spell-checker/";
   };
 
+  coc-tailwindcss = buildVimPluginFrom2Nix {
+    pname = "coc-tailwindcss";
+    version = "2020-08-19";
+    src = fetchFromGitHub {
+      owner = "iamcco";
+      repo = "coc-tailwindcss";
+      rev = "5f41aa1feb36e39b95ccd83be6a37ee8c475f9fb";
+      sha256 = "189abl36aj862m5nz8jjdgdfc4s6xbag030hi9m13yd6fbg99f85";
+    };
+    meta.homepage = "https://github.com/iamcco/coc-tailwindcss/";
+  };
+
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc.nvim";
     version = "2022-03-26";
