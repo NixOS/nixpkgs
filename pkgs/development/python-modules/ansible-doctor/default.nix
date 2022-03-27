@@ -9,6 +9,7 @@
 , environs
 , jinja2
 , jsonschema
+, nested-lookup
 , pathspec
 , poetry-core
 , python-json-logger
