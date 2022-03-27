@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uJv8khevp7g2p4zT6bkrut67kvMu+fuL1VHDDit0viw=";
   };
 
-  nativeBuildInputs = [cmake pkg-config];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     fftwFloat
