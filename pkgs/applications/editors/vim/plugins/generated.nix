@@ -5835,12 +5835,12 @@ final: prev:
     pname = "salt-vim";
     version = "2017-07-01";
     src = fetchFromGitHub {
-      owner = "saltstack";
+      owner = "vmware-archive";
       repo = "salt-vim";
       rev = "6ca9e3500cc39dd417b411435d58a1b720b331cc";
       sha256 = "0r79bpl98xcsmkw6dg83cf1ghn89rzsr011zirk3v1wfxclri2c4";
     };
-    meta.homepage = "https://github.com/saltstack/salt-vim/";
+    meta.homepage = "https://github.com/vmware-archive/salt-vim/";
   };
 
   SchemaStore-nvim = buildVimPluginFrom2Nix {

@@ -727,7 +727,6 @@ sainnhe/everforest
 sainnhe/gruvbox-material
 sainnhe/sonokai
 sakhnik/nvim-gdb
-saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
 sblumentritt/bitbake.vim
@@ -958,6 +957,7 @@ vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
+vmware-archive/salt-vim
 vn-ki/coc-clap
 voldikss/vim-floaterm
 vuki656/package-info.nvim
