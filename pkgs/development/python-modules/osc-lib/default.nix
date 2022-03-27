@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
   };
 
-  # fake version to make pbr happy...
+  # fake version to make pbr.packaging happy and not reject it...
   PBR_VERSION = "2.5.0";
 
   nativeBuildInputs = [
