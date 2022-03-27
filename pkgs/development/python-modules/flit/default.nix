@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , docutils
 , requests
-, pytest
+, pytestCheckHook
 , testpath
 , responses
 , flit-core
@@ -40,13 +40,12 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  checkInputs = [ pytest testpath responses ];
+  checkInputs = [ pytestCheckHook testpath responses ];
 
-  # Disable test that needs some ini file.
-  # Disable test that wants hg
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest -k "not test_invalid_classifier and not test_build_sdist"
-  '';
+  disabledTests = [
+    # needs some ini file.
+    "test_invalid_classifier"
+  ];
 
   meta = with lib; {
     description = "A simple packaging tool for simple packages";
