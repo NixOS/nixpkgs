@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     virtualisation.emptyDiskImages = [ 4096 ];
     networking.hostId = "deadbeef";
     boot.supportedFilesystems = [ "bcachefs" ];
-    environment.systemPackages = with pkgs; [ parted ];
+    environment.systemPackages = with pkgs; [ parted keyutils ];
   };
 
   testScript = ''
@@ -18,13 +18,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "mkdir /tmp/mnt",
         "udevadm settle",
         "parted --script /dev/vdb mklabel msdos",
-        "parted --script /dev/vdb -- mkpart primary 1024M -1s",
+        "parted --script /dev/vdb -- mkpart primary 1024M 50% mkpart primary 50% -1s",
         "udevadm settle",
-        # Due to #32279, we cannot use encryption for this test yet
-        # "echo password | bcachefs format --encrypted /dev/vdb1",
-        # "echo password | bcachefs unlock /dev/vdb1",
-        "bcachefs format /dev/vdb1",
-        "mount -t bcachefs /dev/vdb1 /tmp/mnt",
+        "keyctl link @u @s",
+        "echo password | bcachefs format --encrypted --metadata_replicas 2 --label vtest /dev/vdb1 /dev/vdb2",
+        "echo password | bcachefs unlock /dev/vdb1",
+        "mount -t bcachefs /dev/vdb1:/dev/vdb2 /tmp/mnt",
         "udevadm settle",
         "bcachefs fs usage /tmp/mnt",
         "umount /tmp/mnt",
