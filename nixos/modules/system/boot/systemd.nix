@@ -293,6 +293,14 @@ in
       '';
     };
 
+    systemd.kbrequestUnit = mkOption {
+      type = types.str;
+      example = "rescue.target";
+      description = ''
+        Target that should be started when Alt+ArrowUp is pressed on the console.
+      '';
+    };
+
     globalEnvironment = mkOption {
       type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
