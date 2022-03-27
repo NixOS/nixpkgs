@@ -8698,6 +8698,8 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  releases = callPackage ../development/python-modules/releases { };
+
   remarshal = callPackage ../development/python-modules/remarshal { };
 
   renault-api = callPackage ../development/python-modules/renault-api { };
