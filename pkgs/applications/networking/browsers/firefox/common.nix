@@ -141,12 +141,10 @@ let
     bootBintools = null;
   };
 
-  buildStdenv = if ltoSupport
-    # LTO requires LLVM bintools including ld.lld and llvm-ar.
-    then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
-      inherit (llvmPackages) bintools;
-    })
-    else stdenv;
+  # LTO requires LLVM bintools including ld.lld and llvm-ar.
+  buildStdenv = overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
+    inherit (llvmPackages) bintools;
+  });
 
   # Compile the wasm32 sysroot to build the RLBox Sandbox
   # https://hacks.mozilla.org/2021/12/webassembly-and-back-again-fine-grained-sandboxing-in-firefox-95/
@@ -289,7 +287,6 @@ buildStdenv.mkDerivation ({
     "--with-system-webp"
     "--with-system-zlib"
   ]
-  ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
      "--enable-lto=cross" # Cross-Language LTO
