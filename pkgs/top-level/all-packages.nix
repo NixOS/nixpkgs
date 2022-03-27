@@ -195,6 +195,8 @@ with pkgs;
 
   ankisyncd = callPackage ../servers/ankisyncd { };
 
+  ani-cli = callPackage ../applications/video/ani-cli { };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
