@@ -16748,9 +16748,6 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
-  ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
-  };
   ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia VideoToolbox;
   };
@@ -16759,7 +16756,6 @@ with pkgs;
   };
 
   # Aliases
-  ffmpeg_3 = ffmpeg_3_4;
   # Please make sure this is updated to the latest version on the next major
   # update to ffmpeg
   # Packages which use ffmpeg as a library, should pin to the relevant major
@@ -16783,8 +16779,6 @@ with pkgs;
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
-
-  ffmpeg-sixel = callPackage ../development/libraries/ffmpeg-sixel { };
 
   ffmpeg-normalize = python3Packages.callPackage ../applications/video/ffmpeg-normalize { };
 
