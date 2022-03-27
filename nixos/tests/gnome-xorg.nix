@@ -24,6 +24,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
       services.xserver.displayManager.defaultSession = "gnome-xorg";
+      programs.gnome-terminal.enable = true;
 
       systemd.user.services = {
         "org.gnome.Shell@x11" = {
