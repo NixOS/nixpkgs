@@ -1,0 +1,55 @@
+{
+  "name": "observatory-cli",
+  "description": "Command line client for Mozilla HTTP observatory service",
+  "version": "0.7.1",
+  "author": "Gregg Lind <glind@mozilla.com>",
+  "bin": {
+    "observatory": "./index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/mozilla/observatory-cli/issues"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "clim": "^1.1.1",
+    "commander": "^2.9.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1",
+    "sprintf-js": "^1.0.3",
+    "timeout-as-promise": "^1.0.0"
+  },
+  "devDependencies": {
+    "depcheck": "^0.6.4",
+    "eslint": "^3.5.0",
+    "eslint-plugin-node": "^2.1.2",
+    "eslint-plugin-promise": "^3.0.0",
+    "fixpack": "^2.3.1",
+    "npm-run-all": "^3.1.0",
+    "nsp": "^2.6.1"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "homepage": "https://github.com/mozilla/observatory-cli#readme",
+  "keywords": [
+    "https",
+    "mozilla",
+    "security"
+  ],
+  "license": "MPL-2.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla/observatory-cli.git"
+  },
+  "scripts": {
+    "lint": "npm-run-all lint:*",
+    "lint:depcheck": "depcheck --ignores=nsp,eslint-*",
+    "lint:eslint": "eslint .",
+    "lint:fixpack": "fixpack",
+    "lint:nsp": "nsp check -o summary",
+    "prepublish": "npm shrinkwrap",
+    "pretest": "npm run lint",
+    "test": "echo OK"
+  }
+}

@@ -24172,6 +24172,8 @@ with pkgs;
 
   numix-sx-gtk-theme = callPackage ../data/themes/numix-sx { };
 
+  observatory-cli = callPackage ../tools/security/observatory-cli { };
+
   office-code-pro = callPackage ../data/fonts/office-code-pro { };
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
