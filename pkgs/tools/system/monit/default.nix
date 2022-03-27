@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "5.32.0";
 
   src = fetchurl {
-    url = "${meta.homepage}dist/monit-${version}.tar.gz";
+    url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
     sha256 = "sha256-EHcFLUxOhIrEfRT5s3dU1GQZrsvoyaB+H4ackU+vMhY=";
   };
 
