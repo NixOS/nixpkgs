@@ -8944,6 +8944,8 @@ in {
 
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
+  s3-credentials = callPackage ../development/python-modules/s3-credentials { };
+
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
