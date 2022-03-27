@@ -3736,6 +3736,8 @@ in {
     inherit python;
   });
 
+  hepunits = callPackage ../development/python-modules/hepunits { };
+
   herepy = callPackage ../development/python-modules/herepy { };
 
   hetzner = callPackage ../development/python-modules/hetzner { };
