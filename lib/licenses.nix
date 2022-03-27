@@ -389,6 +389,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  generaluser = {
+    fullName = "GeneralUser GS License v2.0";
+    url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
+  };
+
   gpl1Only = {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";

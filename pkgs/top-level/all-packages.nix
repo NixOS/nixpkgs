@@ -24329,6 +24329,8 @@ with pkgs;
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
 
+  soundfont-generaluser = callPackage ../data/soundfonts/generaluser { };
+
   soundfont-ydp-grand = callPackage ../data/soundfonts/ydp-grand { };
 
   spdx-license-list-data = callPackage ../data/misc/spdx-license-list-data { };
