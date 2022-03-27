@@ -2982,8 +2982,6 @@ with pkgs;
 
   dpic = callPackage ../tools/graphics/dpic { };
 
-  dragon-drop = throw "'dragon-drop' has been renamed to/replaced by 'xdragon'"; # Converted to throw 2022-03-27;
-
   dstp = callPackage ../development/tools/dstp { };
 
   dsvpn = callPackage ../applications/networking/dsvpn { };
@@ -34066,7 +34064,7 @@ with pkgs;
 
   sift = callPackage ../tools/text/sift { };
 
-  xdragon = lowPrio (callPackage ../applications/misc/xdragon { });
+  xdragon = lowPrio (callPackage ../tools/X11/xdragon { });
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 

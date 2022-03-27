@@ -273,6 +273,7 @@ mapAliases ({
   dolphinEmuMaster = dolphin-emu-beta; # Added 2021-11-10
   dotnet-netcore = dotnet-runtime; # Added 2021-10-07
   double_conversion = throw "'double_conversion' has been renamed to/replaced by 'double-conversion'"; # Converted to throw 2022-02-22
+  dragon-drop = throw "'dragon-drop' has been removed in favor of 'xdragon'"; # Added 2022-04-10;
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # Added 2020-08-14
   dvb_apps = throw "dvb_apps has been removed"; # Added 2020-11-03
   dwarf_fortress = throw "'dwarf_fortress' has been renamed to/replaced by 'dwarf-fortress'"; # Converted to throw 2022-02-22
