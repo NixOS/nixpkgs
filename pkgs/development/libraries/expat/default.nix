@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-# for passthru.tests
+  # for passthru.tests
 , python3
 , perlPackages
 , haskellPackages
@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3lV5S3qbwhSFL9wHW+quzYVO/hNhWX5iaO6HlGlRKJs=";
+    sha256 = "sha256-mHViEIUwBZHx5kwY/T2joO7KSnT4hLmrrCdYrRvQen0=";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
