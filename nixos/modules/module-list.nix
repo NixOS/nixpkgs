@@ -1184,6 +1184,7 @@
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/boot/initrd-systemd-udev.nix
+  ./system/boot/initrd-systemd-luks.nix
   ./system/etc/etc-activation.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
