@@ -5991,6 +5991,8 @@ in {
 
   path-and-address = callPackage ../development/python-modules/path-and-address { };
 
+  pathable = callPackage ../development/python-modules/pathable { };
+
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
   pathlib = callPackage ../development/python-modules/pathlib { };
