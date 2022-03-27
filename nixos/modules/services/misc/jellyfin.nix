@@ -31,6 +31,18 @@ in
         description = "Group under which jellyfin runs.";
       };
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/jellyfin";
+        description = "This is the directory that will hold all Jellyfin data, and is also used as a default base directory.";
+      };
+      
+      cacheDir = mkOption {
+        type = types.str;
+        default = "/var/cache/jellyfin";
+        description = "This is the directory containing the server cache.";
+      };
+      
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -52,9 +64,9 @@ in
       serviceConfig = rec {
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "jellyfin";
-        CacheDirectory = "jellyfin";
-        ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
+        StateDirectory = cfg.dataDir;
+        CacheDirectory = cfg.cacheDir;
+        ExecStart = "${cfg.package}/bin/jellyfin --datadir '${StateDirectory}' --cachedir '${CacheDirectory}'";
         Restart = "on-failure";
 
         # Security options:
