@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "7.34.1";
+  version = "7.36.1";
 
   src = fetchurl {
     # find the latest version with
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_101.snap";
-    sha512 = "7fdd82535fd288277b01fedde4739dc97782236fbf25372efa56114bba676c21277ed96b32a1d46ac86af19925b14935818af50985d43a1307639530db044af4";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_107.snap";
+    sha512 = "ef8514bdd0e6761a9bc7bf6b0b72d95c661905798c1507af932bd38a1e0c96713f71140b0d91454c3da5f3b97a0c8143b32918294eea2e46a7dca8faabda57e6";
   };
 
   desktopItem = makeDesktopItem {
@@ -55,15 +55,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     cd squashfs-root
     mkdir -p $out/opt/termius
-    cp -r \
-        icudtl.dat \
-        libffmpeg.so \
-        locales \
-        resources \
-        resources.pak \
-        termius-app \
-        v8_context_snapshot.bin \
-        $out/opt/termius
+    cp -r ./ $out/opt/termius
 
     mkdir -p "$out/share/applications" "$out/share/pixmaps/termius-app.png"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"

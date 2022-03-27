@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "https://erratique.ch/software/${pname}/releases/${pname}${version}.tbz";
+    url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
     sha256 = "sha256-h3KlYT0ecCmM4U3zMkGjaF8h5O9r20zwP+mF+x7KBWg=";
   };
 

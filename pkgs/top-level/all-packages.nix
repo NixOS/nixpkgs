@@ -4100,8 +4100,6 @@ with pkgs;
 
   btar = callPackage ../tools/backup/btar { };
 
-  bud = callPackage ../tools/networking/bud { };
-
   bump2version = python3Packages.callPackage ../applications/version-management/git-and-tools/bump2version { };
 
   bumpver = callPackage ../applications/version-management/bumpver { };
@@ -7531,6 +7529,8 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
+  node2nix = nodePackages.node2nix;
+
   np2kai = callPackage ../applications/emulators/np2kai { };
 
   openipmi = callPackage ../tools/system/openipmi { };
@@ -8382,6 +8382,8 @@ with pkgs;
   pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
+
+  pandoc-include = python3Packages.callPackage ../tools/misc/pandoc-include { };
 
   pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
 
@@ -14138,9 +14140,10 @@ with pkgs;
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
-    python = python3;
-  };
+  poetry = with python3Packages; toPythonApplication (callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
+    inherit python;
+  });
+
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
@@ -15080,6 +15083,8 @@ with pkgs;
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
+
+  license_finder = callPackage ../development/tools/license_finder { };
 
   Literate = callPackage ../development/tools/literate-programming/Literate { };
 
@@ -21469,6 +21474,8 @@ with pkgs;
   inspircdMinimal = inspircd.override { extraModules = []; };
 
   imgproxy = callPackage ../servers/imgproxy { };
+
+  irccat = callPackage ../servers/irc/irccat { };
 
   ircdog = callPackage ../applications/networking/irc/ircdog { };
 
