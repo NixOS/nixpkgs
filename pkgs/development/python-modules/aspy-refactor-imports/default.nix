@@ -8,8 +8,8 @@
 buildPythonPackage rec {
   pname = "aspy-refactor-imports";
   version = "3.0.1";
-
   disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "aspy.refactor_imports";
