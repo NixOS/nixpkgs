@@ -16,7 +16,7 @@ let
     -pidfile ${cfg.pidFile} \
     -procname unifi-video \
     -Djava.security.egd=file:/dev/./urandom \
-    -Xmx${cfg.maximumJavaHeapSize}M \
+    -Xmx${toString cfg.maximumJavaHeapSize}M \
     -Xss512K \
     -XX:+UseG1GC \
     -XX:+UseStringDeduplication \
