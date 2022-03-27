@@ -33310,6 +33310,8 @@ with pkgs;
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
+  eiciel = callPackage ../tools/filesystems/eiciel { };
+
   emu2 = callPackage ../applications/emulators/emu2 { };
 
   apt = callPackage ../tools/package-management/apt { };
