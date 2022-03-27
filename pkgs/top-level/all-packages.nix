@@ -11200,6 +11200,8 @@ with pkgs;
 
   xfstests = callPackage ../tools/misc/xfstests { };
 
+  xprintidle = callPackage ../tools/X11/xprintidle {};
+
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
 
   xscast = callPackage ../applications/video/xscast { };
