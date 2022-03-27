@@ -26,7 +26,7 @@ buildPythonPackage rec {
     incremental
     jinja2
     toml
-    setuptools # ModuleNotFoundError: No module named 'pkg_resources' otherwise
+    setuptools
   ];
 
   # zope.interface collision
