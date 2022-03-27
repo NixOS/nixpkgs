@@ -5,12 +5,11 @@ stdenv.mkDerivation rec {
   version = "0.10";
 
   src = fetchurl {
-    url = "https://fnc.bsdbox.org/tarball/${version}/${pname}-${version}.tar.gz";
+    url = "https://fnc.bsdbox.org/tarball/${version}/fnc-${version}.tar.gz";
     sha256 = "1phqxh0afky7q2qmhgjlsq1awbv4254yd8wpzxlww4p7a57cp0lk";
   };
 
-  buildInputs = [ zlib ncurses ] ++
-    (lib.optional stdenv.isDarwin libiconv);
+  buildInputs = [ libiconv ncurses zlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
