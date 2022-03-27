@@ -118,6 +118,7 @@ mapAliases ({
   bird2 = bird; # Added 2022-02-21
   bird6 = throw "bird6 was dropped. Use bird instead, which has support for both ipv4/ipv6"; # Added 2022-02-21
   btrfsProgs = throw "'btrfsProgs' has been renamed to/replaced by 'btrfs-progs'"; # Converted to throw 2022-02-22
+  bud = throw "bud has been removed: abandoned by upstream"; # Added 2022-03-14
 
   # bitwarden_rs renamed to vaultwarden with release 1.21.0 (2021-04-30)
   bitwarden_rs = vaultwarden;
