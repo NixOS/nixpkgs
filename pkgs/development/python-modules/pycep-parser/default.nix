@@ -41,7 +41,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.3.3-alpha.4"' 'version = "${version}"' \
       --replace 'regex = "^2022.3.2"' 'regex = "*"'
   '';
 
