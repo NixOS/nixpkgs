@@ -4079,12 +4079,12 @@ final: prev:
 
   neorg = buildVimPluginFrom2Nix {
     pname = "neorg";
-    version = "2022-03-27";
+    version = "2022-03-26";
     src = fetchFromGitHub {
       owner = "nvim-neorg";
       repo = "neorg";
-      rev = "168c17fa9373fe5e4927fe59acf448e2c531132a";
-      sha256 = "1ad6wx8wi7mc28vbkl1zz72z7yy6x6mk9rfnkxdhwpwddmqpg6v0";
+      rev = "8f8c1ae889ffe666423a89271933272ebffec3ef";
+      sha256 = "10fgkrr9wn6jj35qa42c353k4rnys9a2wrckjk0kwrx6kvx7m6l6";
     };
     meta.homepage = "https://github.com/nvim-neorg/neorg/";
   };
@@ -4275,8 +4275,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "EdenEast";
       repo = "nightfox.nvim";
-      rev = "f9b0f96f61a4aa136f9fd6a04e60829f50eda9b0";
-      sha256 = "0p28x0xsahr9z1a4zgnjlxrdb7wv8p82gh0gc9rbfprym230k9lg";
+      rev = "2b19e2ad758f078b607408b15bdaf39f3beafac6";
+      sha256 = "0xn78z74wldjq7p5xzlbv4562b6i5nha3lj0bc2hv6w9n3m7q494";
     };
     meta.homepage = "https://github.com/EdenEast/nightfox.nvim/";
   };
@@ -4935,8 +4935,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "97691940d1c9cdaef2ca73c4fae50987fdcadc6c";
-      sha256 = "13cz5hjp7w1fmjw35n41gw3yyizs9y3jnbz228j6n8zz3awdin9g";
+      rev = "b995eebe84df88092a41cbfd591bfc1565f70d8e";
+      sha256 = "1738mssq22n1njrpi004apgfv00fxn7yx00r3175qn57bjw9bks9";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
@@ -11724,12 +11724,12 @@ final: prev:
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2022-03-27";
+    version = "2022-03-24";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "c2cb0ced676fd41ce7f6e33a3f09122cb738436b";
-      sha256 = "00vzqcw2gygq6rgwjy4dl2m1p6pdkwqpj3j1gbzjg4g6av4q8py1";
+      rev = "4eccec4e9fc46a52ba832ac2f8ab749ea33d6790";
+      sha256 = "07mydwxqhk9l0ciqpczd51x4s58asmqa3f0bznw7cdvp9qa6a6sn";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
   };
