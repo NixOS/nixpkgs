@@ -25734,6 +25734,8 @@ with pkgs;
 
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
+  fnc = callPackage ../applications/version-management/fnc { };
+
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
   foliate = callPackage ../applications/office/foliate { };
