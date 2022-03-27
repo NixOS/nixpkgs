@@ -11366,6 +11366,8 @@ with pkgs;
     });
   };
 
+  wget-parser = callPackage ../tools/networking/wget-parser { };
+
   wgpu-utils = callPackage ../tools/graphics/wgpu-utils { };
 
   wg-bond = callPackage ../applications/networking/wg-bond { };

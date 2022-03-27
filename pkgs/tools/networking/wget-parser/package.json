@@ -1,0 +1,58 @@
+{
+  "name": "wget-parser",
+  "version": "2.0.0",
+  "description": "Parses the wget spider output into an object",
+  "author": "muji",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmpfs/wget-parser"
+  },
+  "bugs": {
+    "url": "https://github.com/tmpfs/wget-parser/issues"
+  },
+  "keywords": [
+    "wget",
+    "parser",
+    "spider",
+    "links",
+    "url"
+  ],
+  "dependencies": {
+    "through3": "~1.1.5"
+  },
+  "devDependencies": {
+    "stream-lines": "~1.1.6",
+    "chai": "~3.5.0",
+    "coveralls": "~2.11.6",
+    "istanbul": "~0.4.2",
+    "mocha": "~2.4.5"
+  },
+  "scripts": {
+    "lint": "jshint . && jscs .",
+    "readme": "mdp --force -v",
+    "clean": "rm -rf coverage",
+    "test": "NODE_ENV=test mocha ${SPEC:-test/spec}",
+    "cover": "NODE_ENV=test istanbul cover _mocha -- ${SPEC:-test/spec}",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  },
+  "mdp": {
+    "title": "Spider parser",
+    "pedantic": true,
+    "include": "doc/readme",
+    "require": "lib",
+    "links": "links.md",
+    "toc": "Table of Contents",
+    "base": "https://github.com/tmpfs/wget-parser",
+    "partial": [
+      {
+        "inc": [
+          "introduction.md",
+          "usage.md",
+          "output.md",
+          "developer.md"
+        ]
+      }
+    ]
+  }
+}
