@@ -5,8 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.68.1";
 
   src = fetchurl {
-    url =
-      "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
+    url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
     sha256 = "122wignzrhsw00mfnh7mxcxvjyp9rk73yxzfyvmg7f5kmb0hng35";
   };
 
