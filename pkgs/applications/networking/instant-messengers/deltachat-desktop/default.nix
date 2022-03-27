@@ -81,6 +81,9 @@ in nodejs-14_x.pkgs.deltachat-desktop.override rec {
 
     npm prune --production
 
+    install -D $out/lib/node_modules/deltachat-desktop/build/icon.png \
+      $out/share/icons/hicolor/scalable/apps/deltachat.png
+
     awk '!/^#/ && NF' build/packageignore_list \
       | xargs -I {} sh -c "rm -rf {}" || true
 
@@ -90,10 +93,6 @@ in nodejs-14_x.pkgs.deltachat-desktop.override rec {
       ln -sf ${roboto}/share/fonts/truetype/$(basename $font) \
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
-
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s $out/lib/node_modules/deltachat-desktop/build/icon.png \
-      $out/share/icons/hicolor/scalable/apps/deltachat.png
 
     makeWrapper ${electronExec} $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
