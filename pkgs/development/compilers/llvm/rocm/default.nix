@@ -47,7 +47,7 @@ in rec {
 
   compiler-rt = callPackage ./compiler-rt {
     inherit version llvm;
-    src = "${src}";
+    inherit src;
     stdenv = overrideCC stdenv clangNoCompilerRt;
   };
 
