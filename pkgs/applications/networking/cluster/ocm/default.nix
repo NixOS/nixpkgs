@@ -15,7 +15,7 @@ buildGoModule rec {
 
   # Tests expect the binary to be located in the root directory.
   preCheck = ''
-    cp $GOPATH/bin/ocm ocm
+    ln -s $GOPATH/bin/ocm ocm
   '';
 
   passthru.tests.version = testVersion {
@@ -28,6 +28,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/openshift-online/ocm-cli";
     maintainers = with maintainers; [ stehessel ];
-    platforms = platforms.unix;
   };
 }
