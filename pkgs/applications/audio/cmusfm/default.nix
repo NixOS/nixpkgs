@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional libnotifySupport "--enable-libnotify"
     ++ lib.optional debug "--enable-debug";
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
   buildInputs = [ curl gdk-pixbuf ]
     ++ lib.optional libnotifySupport libnotify;
 
