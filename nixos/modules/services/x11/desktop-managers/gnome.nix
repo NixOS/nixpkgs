@@ -386,7 +386,6 @@ in
       services.gnome.rygel.enable = mkDefault true;
       services.gvfs.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.telepathy.enable = mkDefault true;
 
       systemd.packages = with pkgs.gnome; [
         gnome-session
