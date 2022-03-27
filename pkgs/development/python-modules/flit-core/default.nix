@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "flit-core";
-  version = "3.6.0";
+  inherit (flit) version;
   format = "pyproject";
 
   outputs = [
