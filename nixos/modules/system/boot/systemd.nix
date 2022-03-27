@@ -285,6 +285,15 @@ in
       '';
     };
 
+    systemd.kbrequestUnit = mkOption {
+      default = "rescue.target";
+      type = types.str;
+      example = "rescue.target";
+      description = ''
+        Target that should be started when Alt-Up is pressed.
+      '';
+    };
+
     systemd.globalEnvironment = mkOption {
       type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
