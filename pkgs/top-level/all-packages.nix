@@ -2045,7 +2045,9 @@ with pkgs;
 
   go-audit = callPackage ../tools/system/go-audit { };
 
-  gopass = callPackage ../tools/security/gopass { };
+  gopass = callPackage ../tools/security/gopass {
+    buildGoModule = buildGo118Module;
+  };
 
   gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
