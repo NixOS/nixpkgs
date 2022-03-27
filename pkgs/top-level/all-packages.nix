@@ -7527,6 +7527,8 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
+  node2nix = nodePackages.node2nix;
+
   np2kai = callPackage ../applications/emulators/np2kai { };
 
   openipmi = callPackage ../tools/system/openipmi { };
