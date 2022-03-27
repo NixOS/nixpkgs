@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d80264cbaadff356b3dda71b8c62b3aa803e5b3eb6d526a24932cd6660a2576";
+    sha256 = "sha256-d4CEQ1m/8LlsBBR9r/8l5uWF4FWFvVQjabvDd9ad4SE=";
   };
 
   propagatedBuildInputs = [
