@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pycep-parser";
-  version = "0.3.2";
+  version = "0.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "gruebel";
     repo = "pycep";
     rev = version;
-    hash = "sha256-ud26xJQWdu7wtv75/K16HSSw0MvaSr3H1hDZBPjSzYE=";
+    hash = "sha256-7WnAP2NU923fBN1wy44OAiLA1UxKkM8jc/rLHwutAas=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.3.2-alpha.4"' 'version = "${version}"' \
       --replace 'regex = "^2022.3.2"' 'regex = "*"'
   '';
 
