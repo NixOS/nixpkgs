@@ -6,6 +6,9 @@
   # builds fine on windows, but libarchive has trouble linking windows
   # things it depends on for some reason.
   xarSupport ? stdenv.hostPlatform.isUnix,
+
+  # for passthru.tests
+  cmake, nix, samba
 }:
 
 assert xarSupport -> libxml2 != null;
@@ -48,6 +51,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit cmake nix samba;
+  };
 
   meta = {
     description = "Multi-format archive and compression library";
