@@ -6,6 +6,7 @@ mkCoqDerivation {
   owner = "QuickChick";
   inherit version;
   defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
+      { cases = [ "8.14" pred.true  ]; out = "1.5.1"; }
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
       { cases = [ "8.11" pred.true  ]; out = "1.3.2"; }
@@ -16,6 +17,7 @@ mkCoqDerivation {
       { cases = [ "8.6"  pred.true  ];  out = "20171102"; }
       { cases = [ "8.5"  pred.true  ];  out = "20170512"; }
     ] null;
+  release."1.5.1".sha256    = "0i674wvipabc1zvs1giqm4zjl1slcgb0dmr4fvvx70bb92krmy9r";
   release."1.5.0".sha256    = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dcw7hyfkw";
   release."1.4.0".sha256    = "068p48pm5yxjc3yv8qwzp25bp9kddvxj81l31mjkyx3sdrsw3kyc";
   release."1.3.2".sha256    = "0lciwaqv288dh2f13xk2x0lrn6zyrkqy6g4yy927wwzag2gklfrs";
