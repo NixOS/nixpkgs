@@ -145,13 +145,6 @@ in
         '';
       };
 
-      openPorts = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether or not to open the required ports on the firewall.
-        '';
-      };
 
       maximumJavaHeapSize = mkOption {
         type = types.nullOr types.int;
@@ -168,6 +161,13 @@ in
         defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
         description = "Location of unifi-video pid file.";
       };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether or not to open the required ports on the firewall.
+      '';
+    };
 
 };
 
@@ -182,7 +182,7 @@ config = mkIf cfg.enable {
     groups.unifi-video = {};
   };
 
-  networking.firewall = mkIf cfg.openPorts {
+    networking.firewall = mkIf cfg.openFirewall {
       # https://help.ui.com/hc/en-us/articles/217875218-UniFi-Video-Ports-Used
       allowedTCPPorts = [
         7080 # HTTP portal
@@ -261,7 +261,9 @@ config = mkIf cfg.enable {
 
   };
 
-  meta = {
-    maintainers = with lib.maintainers; [ rsynnest ];
-  };
+  imports = [
+    (mkRenamedOptionModule [ "services" "unifi-video" "openPorts" ] [ "services" "unifi-video" "openFirewall" ])
+  ];
+
+  meta.maintainers = with lib.maintainers; [ rsynnest ];
 }
