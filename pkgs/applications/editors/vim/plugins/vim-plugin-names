@@ -91,6 +91,7 @@ ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
+coc-extensions/coc-svelte
 cocopon/iceberg.vim
 codota/tabnine-vim
 cohama/lexima.vim
