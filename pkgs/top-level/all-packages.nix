@@ -6110,6 +6110,8 @@ with pkgs;
 
   gnome-secrets = callPackage ../applications/misc/gnome-secrets { };
 
+  gnome-solanum = callPackage ../applications/misc/gnome-solanum { };
+
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos { };
@@ -7033,6 +7035,8 @@ with pkgs;
   jupyter = callPackage ../applications/editors/jupyter { };
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
+
+  justify = callPackage ../tools/text/justify { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
@@ -20966,6 +20970,8 @@ with pkgs;
 
   jdom = callPackage ../development/libraries/java/jdom { };
 
+  jffi = callPackage ../development/libraries/java/jffi { };
+
   jflex = callPackage ../development/libraries/java/jflex { };
 
   lombok = callPackage ../development/libraries/java/lombok { };
@@ -26230,6 +26236,8 @@ with pkgs;
 
   git-review = python3Packages.callPackage ../applications/version-management/git-review { };
 
+  git-team = callPackage ../applications/version-management/git-and-tools/git-team { };
+
   github-cli = gh;
 
   gitolite = callPackage ../applications/version-management/gitolite { };
@@ -29699,6 +29707,8 @@ with pkgs;
 
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
 
+  unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
+
   unipicker = callPackage ../applications/misc/unipicker { };
 
   unison = callPackage ../applications/networking/sync/unison {
@@ -32730,6 +32740,7 @@ with pkgs;
     java = openjdk17;
     z3 = z3_4_4_0;
   };
+  isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
 
   iprover = callPackage ../applications/science/logic/iprover { };
 
@@ -33542,11 +33553,11 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
-    kops_1_20
     kops_1_21
     kops_1_22
+    kops_1_23
     ;
-  kops = kops_1_22;
+  kops = kops_1_23;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
