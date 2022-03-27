@@ -8904,6 +8904,8 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
+  patatt = callPackage ../development/tools/patatt { };
+
   pcapfix = callPackage ../tools/networking/pcapfix { };
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
