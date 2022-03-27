@@ -2982,9 +2982,7 @@ with pkgs;
 
   dpic = callPackage ../tools/graphics/dpic { };
 
-  dragon-drop = callPackage ../tools/X11/dragon-drop {
-    gtk = gtk3;
-  };
+  dragon-drop = throw "'dragon-drop' has been renamed to/replaced by 'xdragon'"; # Converted to throw 2022-03-27;
 
   dstp = callPackage ../development/tools/dstp { };
 
