@@ -664,6 +664,8 @@ in {
 
   aspell-python = callPackage ../development/python-modules/aspell-python { };
 
+  aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
+
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
   assertpy = callPackage ../development/python-modules/assertpy { };
