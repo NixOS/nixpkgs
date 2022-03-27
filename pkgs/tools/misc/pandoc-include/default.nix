@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ natsort panflute ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "pandoc_include.main" ];
 
   meta = with lib; {
     description = "Pandoc filter to allow file and header includes.";
