@@ -10172,6 +10172,8 @@ with pkgs;
 
   srtrelay = callPackage ../applications/video/srtrelay { };
 
+  srsran = callPackage ../applications/radio/srsran {  };
+
   sourcehut = callPackage ../applications/version-management/sourcehut { };
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
