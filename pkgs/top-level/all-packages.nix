@@ -27939,6 +27939,8 @@ with pkgs;
 
   ocenaudio = callPackage ../applications/audio/ocenaudio { };
 
+  ocm = callPackage ../applications/networking/cluster/ocm { };
+
   odo = callPackage ../applications/networking/cluster/odo { };
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
