@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.3.6";
+  version = "2022.3.7";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -693,7 +693,7 @@
     "qbittorrent" = ps: with ps; [ ]; # missing inputs: python-qbittorrent
     "qld_bushfire" = ps: with ps; [ georss-qld-bushfire-alert-client ];
     "qnap" = ps: with ps; [ ]; # missing inputs: qnapstats
-    "qrcode" = ps: with ps; [ pillow ]; # missing inputs: pyzbar
+    "qrcode" = ps: with ps; [ pillow pyzbar ];
     "quantum_gateway" = ps: with ps; [ quantum-gateway ];
     "qvr_pro" = ps: with ps; [ pyqvrpro ];
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch

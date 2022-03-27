@@ -2,10 +2,11 @@
 
 # Updating
 
-To update the list of packages from MELPA,
+To update the list of packages from ELPA,
 
 1. Run `./update-elpa`.
 2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
 3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
 

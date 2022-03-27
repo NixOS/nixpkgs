@@ -39,7 +39,7 @@ jobs:
           title: ${{ steps.setup.outputs.title }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: comment on failure
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         if: ${{ failure() }}
         with:
           issue-number: 153416
