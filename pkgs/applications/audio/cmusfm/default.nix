@@ -4,16 +4,19 @@
 stdenv.mkDerivation rec {
   pname = "cmusfm";
   version = "0.4.1";
+
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = pname;
     rev = "v${version}";
     sha256 = "1px2is80jdxchg8cpn5cizg6jvcbzyxl0qzs3bn0k3d10qjvdww5";
   };
+
   configureFlags = lib.optional libnotifySupport "--enable-libnotify"
     ++ lib.optional debug "--enable-debug";
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ curl gdk-pixbuf ] ++ lib.optional libnotifySupport libnotify;
+  buildInputs = [ curl gdk-pixbuf ]
+    ++ lib.optional libnotifySupport libnotify;
 
   meta = with lib; {
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";
