@@ -41,7 +41,7 @@ index 9697fbe0b4..279fe59ac6 100755
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2021 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2022 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  # Contributed by Ulrich Drepper <drepper@gnu.org>, 1999.
 diff --git a/elf/Makefile b/elf/Makefile
@@ -73,7 +73,7 @@ index ba736464ac..57442bc3f2 100644
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1996-2021 Free Software Foundation, Inc.
+ # Copyright (C) 1996-2022 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/elf/sotruss.sh b/elf/sotruss.sh
@@ -83,7 +83,7 @@ index 003cf4d825..fd4da80244 100755
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 2011-2021 Free Software Foundation, Inc.
+ # Copyright (C) 2011-2022 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/malloc/Makefile b/malloc/Makefile
@@ -109,7 +109,7 @@ index 0645f09911..c1cd4e23b7 100755
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2021 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2022 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  # Contributed by Ulrich Drepper <drepper@gnu.org>, 1999.
 diff --git a/timezone/Makefile b/timezone/Makefile

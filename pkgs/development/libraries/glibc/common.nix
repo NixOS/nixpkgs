@@ -43,9 +43,9 @@
 } @ args:
 
 let
-  version = "2.34";
-  patchSuffix = "-115";
-  sha256 = "sha256-RNJqH+ILiFOkj0cOrQHkJ56GmsFJsZXdpORKGV2YGrI=";
+  version = "2.35";
+  patchSuffix = "-30";
+  sha256 = "sha256-USNzL2tnzNMZMF79OZlx1YWSEivMKmUYob0lEN0M9S4=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -62,14 +62,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.34/master && git describe
-          glibc-2.34-115-gd5d1c95aaf
-          $ git show --minimal --reverse glibc-2.34.. | gzip -9n --rsyncable - > 2.34-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.35/master && git describe
+          glibc-2.35-30-g9be62976af
+          $ git show --minimal --reverse glibc-2.35.. | gzip -9n --rsyncable - > 2.35-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.34-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.34-master.patch.gz
+          $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
        */
-      ./2.34-master.patch.gz
+      ./2.35-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -113,12 +113,6 @@ stdenv.mkDerivation ({
       (fetchurl {
         url = "https://git.savannah.gnu.org/cgit/guix.git/plain/gnu/packages/patches/glibc-reinstate-prlimit64-fallback.patch?id=eab07e78b691ae7866267fc04d31c7c3ad6b0eeb";
         sha256 = "091bk3kyrx1gc380gryrxjzgcmh1ajcj8s2rjhp2d2yzd5mpd5ps";
-      })
-
-      /* Provide utf-8 locales by default, so we can use it in stdenv without depending on our large locale-archive. */
-      (fetchurl {
-        url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
-        sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
       })
 
       ./fix-x64-abi.patch
