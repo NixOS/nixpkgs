@@ -24762,6 +24762,8 @@ with pkgs;
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
+  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
+
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
   ario = callPackage ../applications/audio/ario { };
