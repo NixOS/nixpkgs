@@ -30,6 +30,7 @@ let
     , icon ? applicationName
     , wmClass ? null
     , extraNativeMessagingHosts ? []
+    , managedStorage ? []
     , pkcs11Modules ? []
     , forceWayland ? false
     , useGlvnd ? true
@@ -281,6 +282,12 @@ let
         fi
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
+
+        # https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#managed_storage_manifests
+        mkdir -p $out/lib/mozilla/managed-storage
+        for ext in ${toString managedStorage}; do
+            ln -sLt $out/lib/mozilla/managed-storage $ext/lib/mozilla/managed-storage/*
+        done
 
         mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString nativeMessagingHosts}; do
