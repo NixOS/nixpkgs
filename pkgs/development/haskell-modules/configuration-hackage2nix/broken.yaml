@@ -187,6 +187,7 @@ broken-packages:
   - arbor-monad-logger
   - arbor-monad-metric
   - arbor-postgres
+  - arch-hs
   - archiver
   - archlinux
   - archnews
@@ -214,6 +215,7 @@ broken-packages:
   - asap
   - ascii85-conduit
   - ascii-flatten
+  - ascii-numbers
   - ascii-string
   - ascii-vector-avc
   - asil
@@ -450,6 +452,7 @@ broken-packages:
   - botpp
   - bottom
   - boundingboxes
+  - bower-json
   - bowntz
   - bpath
   - braid
@@ -564,6 +567,7 @@ broken-packages:
   - call-alloy
   - cal-layout
   - call-haskell-from-anything
+  - camfort
   - canon
   - canonical-filepath
   - canonical-json
@@ -1066,6 +1070,7 @@ broken-packages:
   - dhall-check
   - dhall-csv
   - dhall-fly
+  - dhall-text
   - dhall-to-cabal
   - dhrun
   - dia-base
@@ -1256,6 +1261,7 @@ broken-packages:
   - ekg-statsd
   - elevator
   - elision
+  - elm-export-persistent
   - elminator
   - elm-street
   - elm-websocket
@@ -1691,6 +1697,7 @@ broken-packages:
   - gingersnap
   - ginsu
   - giphy-api
+  - gi-rsvg
   - gist
   - GiST
   - git
@@ -1827,6 +1834,7 @@ broken-packages:
   - h2048
   - h2c
   - haar
+  - HABQT
   - hack2-handler-warp
   - hackage2hwn
   - hackage-api
@@ -2531,6 +2539,7 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
+  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
@@ -2582,6 +2591,7 @@ broken-packages:
   - impossible
   - imprint
   - indentation-core
+  - index-core
   - indexed-containers
   - indexed-do-notation
   - indextype
@@ -2830,6 +2840,7 @@ broken-packages:
   - lambdatex
   - lambda-toolbox
   - lame
+  - lame-tester
   - language-asn
   - language-c-comments
   - language-c-inline
@@ -2901,6 +2912,7 @@ broken-packages:
   - lens-text-encoding
   - lens-th-rewrite
   - lens-time
+  - lens-tutorial
   - lens-typelevel
   - lens-xml
   - less-arbitrary
@@ -2968,6 +2980,7 @@ broken-packages:
   - linux-perf
   - linx-gateway
   - lipsum-gen
+  - liquid
   - liquidhaskell-cabal
   - Liquorice
   - list-fusion-probe
@@ -3210,6 +3223,7 @@ broken-packages:
   - mltool
   - ml-w
   - mm2
+  - mmark-ext
   - mmsyn2
   - mmsyn3
   - mmtf
@@ -3292,6 +3306,7 @@ broken-packages:
   - morpheus-graphql-core
   - morphisms-functors
   - morphisms-objects
+  - morte
   - mosaico-lib
   - motor
   - mount
@@ -3344,6 +3359,7 @@ broken-packages:
   - mustache2hs
   - mustache-haskell
   - mutable-lens
+  - mvc
   - mxnet
   - mxnet-nnvm
   - myanimelist-export
@@ -3407,6 +3423,7 @@ broken-packages:
   - netclock
   - netcore
   - netease-fm
+  - net-mqtt
   - netrium
   - NetSNMP
   - netspec
@@ -3590,6 +3607,7 @@ broken-packages:
   - options-time
   - optparse-applicative-simple
   - optparse-helper
+  - orbits
   - orc
   - orchestrate
   - OrchestrateDB
@@ -4048,6 +4066,7 @@ broken-packages:
   - pure-io
   - pure-priority-queue
   - purescript-ast
+  - purescript-cst
   - pure-zlib
   - pushbullet
   - pushbullet-types
@@ -4212,6 +4231,7 @@ broken-packages:
   - regex-posix-unittest
   - regexpr-symbolic
   - regexqq
+  - regex-rure
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc
@@ -4365,6 +4385,7 @@ broken-packages:
   - satyros
   - savage
   - sax
+  - sbvPlugin
   - sc2-proto
   - scale
   - scaleimage
@@ -4391,6 +4412,7 @@ broken-packages:
   - scotty-tls
   - scotty-view
   - scrapbook-core
+  - scrape-changes
   - ScratchFs
   - script-monad
   - scrobble
@@ -4480,6 +4502,7 @@ broken-packages:
   - servant-wasm
   - servant-yaml
   - servant-zeppelin
+  - server-generic
   - serversession-backend-persistent
   - serversession-backend-redis
   - serversession-frontend-yesod
@@ -4872,6 +4895,7 @@ broken-packages:
   - supplemented
   - surjective
   - sv2v
+  - sv-core
   - svfactor
   - svg-builder-fork
   - svgutils
@@ -5015,6 +5039,7 @@ broken-packages:
   - text-and-plots
   - text-ascii
   - text-containers
+  - text-format
   - text-format-heavy
   - text-icu-normalized
   - text-lens
@@ -5329,6 +5354,7 @@ broken-packages:
   - urxml
   - useragents
   - users-persistent
+  - utc
   - utf
   - utf8-conversions
   - utf8-prelude
@@ -5480,6 +5506,7 @@ broken-packages:
   - web3-ipfs
   - webapi
   - webapp
+  - webauthn
   - WebBits
   - webby
   - webcloud
@@ -5529,6 +5556,7 @@ broken-packages:
   - wiring
   - witty
   - wkt
+  - wkt-geom
   - WL500gPLib
   - wl-pprint-extras
   - WMSigner
@@ -5645,6 +5673,7 @@ broken-packages:
   - yandex-translate
   - yaop
   - yapb
+  - yarn2nix
   - yarr
   - yasi
   - yate
@@ -5708,6 +5737,7 @@ broken-packages:
   - yhccore
   - yhseq
   - yices
+  - yi-core
   - yoda
   - Yogurt
   - yst

@@ -608,6 +608,7 @@ dont-distribute-packages:
  - animate-frames
  - animate-preview
  - animate-sdl2
+ - annah
  - anonymous-sums-tests
  - antagonist
  - anticiv
@@ -661,6 +662,7 @@ dont-distribute-packages:
  - arraylist
  - ascii-cows
  - ascii-table
+ - ascii_1_1_2_0
  - asic
  - asif
  - assert4hs-hspec
@@ -699,13 +701,13 @@ dont-distribute-packages:
  - aviation-cessna172-weight-balance
  - aviation-navigation
  - aviation-weight-balance
- - avro-piper
  - awesomium
  - awesomium-glut
  - aws-configuration-tools
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
  - aws-easy
+ - aws-ec2-knownhosts
  - aws-elastic-transcoder
  - aws-kinesis
  - aws-kinesis-client
@@ -871,7 +873,9 @@ dont-distribute-packages:
  - cabal2arch
  - cabalmdvrpm
  - cabalrpmdeps
+ - cabocha
  - cake
+ - cake3
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
@@ -1217,6 +1221,7 @@ dont-distribute-packages:
  - dia-functions
  - diagrams-haddock
  - diagrams-html5
+ - diagrams-input
  - diagrams-pandoc
  - diagrams-reflex
  - diagrams-wx
@@ -1279,6 +1284,8 @@ dont-distribute-packages:
  - dom-parser
  - dormouse-client
  - doublezip
+ - dovetail
+ - dovetail-aeson
  - dow
  - download-media-content
  - dph-examples
@@ -1295,6 +1302,7 @@ dont-distribute-packages:
  - dtd
  - dtw
  - dumb-cas
+ - duplo
  - dvda
  - dynamic-cabal
  - dynamic-plot
@@ -1535,6 +1543,7 @@ dont-distribute-packages:
  - gbu
  - gdax
  - gdiff-ig
+ - gedcom
  - geek
  - geek-server
  - gelatin-freetype2
@@ -1943,6 +1952,7 @@ dont-distribute-packages:
  - hashes
  - hashflare
  - hask-home
+ - haskades
  - haskdeep
  - haskeem
  - haskell-aliyun
@@ -2084,6 +2094,7 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
+ - hevm
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2110,6 +2121,7 @@ dont-distribute-packages:
  - hinvaders
  - hinze-streams
  - hipbot
+ - hipe
  - hipsql-client
  - hipsql-server
  - hirt
@@ -2262,8 +2274,8 @@ dont-distribute-packages:
  - hw-all
  - hw-aws-sqs-conduit
  - hw-json
+ - hw-json-demo
  - hw-json-lens
- - hw-kafka-avro
  - hw-uri
  - hworker-ses
  - hwormhole
@@ -2384,6 +2396,7 @@ dont-distribute-packages:
  - ixset-typed-hashable-instance
  - iyql
  - j2hs
+ - jacinda
  - jail
  - java-bridge-extras
  - java-character
@@ -2397,6 +2410,7 @@ dont-distribute-packages:
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
  - jmonkey
+ - jobqueue
  - join
  - jordan-openapi
  - jsaddle-hello
@@ -2431,6 +2445,7 @@ dont-distribute-packages:
  - kansas-lava-papilio
  - kansas-lava-shake
  - karakuri
+ - karps
  - katip-elasticsearch
  - katip-raven
  - katip-rollbar
@@ -2473,6 +2488,7 @@ dont-distribute-packages:
  - koji-install
  - koji-tool
  - korfu
+ - krapsh
  - ks-test
  - kubernetes-client
  - kure-your-boilerplate
@@ -2512,8 +2528,8 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - large-records
  - lat
+ - latest-npm-version
  - latex-formulae-hakyll
  - latex-formulae-pandoc
  - latex-svg-hakyll
@@ -2621,9 +2637,11 @@ dont-distribute-packages:
  - lojysamban
  - lol-apps
  - lol-benches
+ - lol-calculus
  - lol-cpp
  - lol-repa
  - lol-tests
+ - lol-typing
  - loli
  - loop-effin
  - lorentz
@@ -2718,6 +2736,7 @@ dont-distribute-packages:
  - micro-gateway
  - microformats2-parser
  - microformats2-types
+ - micrologger
  - midimory
  - mighttpd
  - migrant-hdbc
@@ -2737,6 +2756,7 @@ dont-distribute-packages:
  - mixed-strategies
  - mkbndl
  - mlist
+ - mmark-cli
  - mmsyn4
  - mmsyn6ukr
  - mmsyn6ukr-array
@@ -2832,6 +2852,7 @@ dont-distribute-packages:
  - musicxml2
  - mutable-iter
  - mute-unmute
+ - mvc-updates
  - mvclient
  - mwc-random-accelerate
  - mxnet-dataiter
@@ -2855,6 +2876,8 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
+ - net-mqtt-lens
+ - net-mqtt-rpc
  - net-spider-cli
  - net-spider-pangraph
  - net-spider-rpl
@@ -2883,6 +2906,7 @@ dont-distribute-packages:
  - newsynth
  - ngrams-loader
  - ngx-export-tools-extra
+ - nicovideo-translator
  - nikepub
  - nirum
  - nix-thunk
@@ -3040,6 +3064,7 @@ dont-distribute-packages:
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
  - phooey
+ - pia-forward
  - pianola
  - pier
  - ping
@@ -3146,6 +3171,7 @@ dont-distribute-packages:
  - protobuf-native
  - protocol-buffers-descriptor-fork
  - proton
+ - psc-ide
  - psql
  - ptera
  - ptera-core
@@ -3157,7 +3183,10 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
+ - purenix
+ - purescript
  - purescript-iso
+ - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3342,6 +3371,7 @@ dont-distribute-packages:
  - rfc-redis
  - rfc-servant
  - rhythm-game-tutorial
+ - rib
  - ribosome
  - ribosome-root
  - ribosome-test
@@ -3390,6 +3420,7 @@ dont-distribute-packages:
  - safe-coloured-text-gen
  - safe-coloured-text-layout
  - safe-coloured-text-layout-gen
+ - safe-coupling
  - safe-plugins
  - safer-file-handles
  - safer-file-handles-bytestring
@@ -3498,6 +3529,8 @@ dont-distribute-packages:
  - servant-swagger-tags
  - servant-to-elm
  - servant-typescript
+ - servant-util
+ - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -3614,6 +3647,7 @@ dont-distribute-packages:
  - soundgen
  - source-code-server
  - spade
+ - spago
  - sparkle
  - sparrow
  - sparsebit
@@ -3700,6 +3734,8 @@ dont-distribute-packages:
  - supercollider-ht
  - supercollider-midi
  - superconstraints
+ - sv
+ - sv-cassava
  - sv-svfactor
  - svg2q
  - svgone
@@ -3741,6 +3777,7 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
+ - systemstats
  - t3-client
  - ta
  - tag-stream
@@ -3782,6 +3819,7 @@ dont-distribute-packages:
  - test-sandbox-compose
  - test-simple
  - testbench
+ - text-all
  - text-generic-pretty
  - text-json-qq
  - text-locale-encoding
@@ -3871,6 +3909,7 @@ dont-distribute-packages:
  - trurl
  - tsession-happstack
  - tsweb
+ - ttn-client
  - tuntap-simple
  - tup-functor
  - tuple-ops
@@ -3946,6 +3985,7 @@ dont-distribute-packages:
  - urbit-airlock
  - urbit-api
  - ureader
+ - urembed
  - uri-enumerator
  - uri-enumerator-file
  - urlpath
@@ -4145,6 +4185,23 @@ dont-distribute-packages:
  - yesod-routes-typescript
  - yesod-session-redis
  - yesod-worker
+ - yi
+ - yi-contrib
+ - yi-dynamic-configuration
+ - yi-frontend-pango
+ - yi-frontend-vty
+ - yi-fuzzy-open
+ - yi-ireader
+ - yi-keymap-cua
+ - yi-keymap-emacs
+ - yi-keymap-vim
+ - yi-misc-modes
+ - yi-mode-haskell
+ - yi-mode-javascript
+ - yi-monokai
+ - yi-snippet
+ - yi-solarized
+ - yi-spolsky
  - yjftp
  - yjftp-libs
  - yoko
@@ -4154,6 +4211,7 @@ dont-distribute-packages:
  - yuuko
  - z85
  - zasni-gerna
+ - zephyr
  - zephyr-copilot
  - zeromq3-conduit
  - zeromq3-haskell
