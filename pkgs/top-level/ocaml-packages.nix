@@ -1142,18 +1142,6 @@ let
       inherit (pkgs.python3Packages) pytorch;
     };
 
-    type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
-    type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
-    type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
-    type_conv =
-      if lib.versionOlder "4.02" ocaml.version
-      then type_conv_112_01_01
-      else if lib.versionOlder "4.00" ocaml.version
-      then type_conv_109_60_01
-      else if lib.versionOlder "3.12" ocaml.version
-      then type_conv_108_08_00
-      else null;
-
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
     ocaml_extlib = ocaml_extlib-1-7-8;
