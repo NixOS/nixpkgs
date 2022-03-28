@@ -42,7 +42,8 @@ buildPythonPackage rec {
     pushd unpacked/tensorboard-${version}
 
     substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth (<2,>=1.6.3)" "google-auth (<3,>=1.6.3)"
+      --replace "google-auth (<2,>=1.6.3)" "google-auth (<3,>=1.6.3)" \
+      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<0.6,>=0.4.1)"
 
     popd
     wheel pack ./unpacked/tensorboard-${version}
