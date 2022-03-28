@@ -121,6 +121,7 @@ mapAliases ({
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
+  pytest-pep257 = throw "pytest-pep257 was removed because it is abandoned and is not compatible with pydocstyle"; # added 2022-03-28
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytest-pep257 = throw "pytest-pep257 was removed, as the pep257 package was migrated into pycodestyle"; # added 2022-04-12
   pytest-pythonpath = throw "pytest-pythonpath is obsolete as of pytest 7.0.0 and has been removed"; # added 2022-03-09
