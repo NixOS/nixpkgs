@@ -27,6 +27,11 @@ buildPythonPackage rec {
       url = "https://github.com/python-metar/python-metar/commit/a4f9a4764b99bb0313876366d30728169db2770b.patch";
       sha256 = "sha256-sURHUb4gCKVMqEWFklTsxF0kr0SxC02Yr0287rZIvC0=";
     })
+    (fetchpatch {
+      # Fix failing test: https://github.com/python-metar/python-metar/issues/165
+      url = "https://github.com/python-metar/python-metar/commit/a4f9a4764b99bb0313876366d30728169db2770b.patch";
+      hash = "sha256-sURHUb4gCKVMqEWFklTsxF0kr0SxC02Yr0287rZIvC0=";
+    })
   ];
 
   checkInputs = [ pytestCheckHook ];
