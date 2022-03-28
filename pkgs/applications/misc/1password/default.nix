@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
+{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+
   buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
 
   unpackPhase = lib.optionalString stdenv.isDarwin ''
@@ -41,11 +43,13 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D ${mainProgram} $out/bin/${mainProgram}
+    runHook postInstall
   '';
 
-  dontStrip = stdenv.isDarwin;
+  postInstall = "installShellCompletion --cmd ${mainProgram}" + lib.concatMapStrings
+    (s: " --${s} <($out/bin/${mainProgram} completion ${s})") [ "bash" "fish" "zsh" ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  dontStrip = stdenv.isDarwin;
 
   doInstallCheck = true;
 
