@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/PowerDNS/pdns/commit/05c9dd77b28.diff";
       sha256 = "1m9szbi02h9kcabgw3kb8k9qrb54d34z0qzizrlfiw3hxs6c2zql";
     })
+    (fetchurl {
+      # Fixes incomplete validation of incoming IXFR transfers
+      name = "CVE-2022-27227.patch";
+      url = "https://downloads.powerdns.com/patches/2022-01/pdns-4.4.2-xfr.patch";
+      hash = "sha256-WFycHFmDX6MvbOS9WDv+wx0rog7xkSGe/sxSVMWREOA=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];
