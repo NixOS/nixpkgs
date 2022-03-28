@@ -179,6 +179,8 @@ in runBuildTests {
       "الجبر" = "أكثر من مجرد أرقام";
     };
     expected = ''
+      # Generated with Nix
+
       1 = 2
       foo = bar
       \u00fctf\ 8 = d\u00fbh

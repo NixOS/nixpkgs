@@ -1,6 +1,6 @@
 { lib, pkgs }:
 {
-  javaProperties = {}: {
+  javaProperties = { comment ? "Generated with Nix" }: {
     type = lib.types.attrsOf lib.types.str;
 
     generate = name: value:
@@ -76,10 +76,15 @@
 
           inputEncoding = "UTF-8";
 
+          inherit comment;
+
         } ''
-        jq -r --arg hash '#' "$jqCode" "$valuePath" \
-          | iconv --from-code "$inputEncoding" --to-code JAVA \
-          > "$out"
+        (
+          echo "$comment" | while read -r ln; do echo "# $ln"; done
+          echo
+          jq -r --arg hash '#' "$jqCode" "$valuePath" \
+            | iconv --from-code "$inputEncoding" --to-code JAVA \
+        ) > "$out"
       '';
   };
 }
