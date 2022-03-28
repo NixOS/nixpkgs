@@ -14055,7 +14055,7 @@ with pkgs;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python39Packages;
+  python3Packages = recurseIntoAttrs python39Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;
