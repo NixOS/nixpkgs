@@ -1318,6 +1318,35 @@
       </listitem>
       <listitem>
         <para>
+          A new option group
+          <literal>systemd.network.wait-online</literal> was added, with
+          options to configure
+          <literal>systemd-networkd-wait-online.service</literal>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>anyInterface</literal> allows specifying that the
+              network should be considered online when <emphasis>at
+              least one</emphasis> interface is online (useful on
+              laptops)
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>timeout</literal> defines how long to wait for
+              the network to come online
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>extraArgs</literal> for everything else
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>influxdb2</literal> package was split into
           <literal>influxdb2-server</literal> and
           <literal>influxdb2-cli</literal>, matching the split that took
