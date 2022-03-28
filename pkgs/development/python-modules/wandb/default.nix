@@ -114,6 +114,10 @@ buildPythonPackage rec {
     "tests/test_tables.py"
   ];
 
+  # Disable test that fails on darwin due to issue with python3Packages.psutil:
+  # https://github.com/giampaolo/psutil/issues/1219
+  disabledTests = lib.optional stdenv.isDarwin "test_tpu_system_stats";
+
   checkInputs = [
     azure-core
     bokeh
