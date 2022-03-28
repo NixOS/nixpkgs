@@ -5,14 +5,22 @@
   # Dynamic libraries
 , alsa-lib
 , atk
+, at-spi2-atk
+, at-spi2-core
 , cairo
+, cups
 , dbus
+, expat
+, libdrm
 , libGL
 , fontconfig
 , freetype
 , gtk3
 , gdk-pixbuf
 , glib
+, mesa
+, nspr
+, nss
 , pango
 , wayland
 , xorg
@@ -49,23 +57,34 @@ let
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
     alsa-lib
     atk
+    at-spi2-atk
+    at-spi2-core
     cairo
+    cups
     dbus
+    expat
+    libdrm
     libGL
     fontconfig
     freetype
     gtk3
     gdk-pixbuf
     glib
+    mesa
+    nspr
+    nss
     pango
     stdenv.cc.cc
     wayland
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
+    xorg.libXdamage
     xorg.libXext
     libxkbcommon
+    xorg.libXrandr
     xorg.libXrender
+    xorg.libxshmfence
     zlib
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
