@@ -23226,9 +23226,7 @@ with pkgs;
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
-  pdns = callPackage ../servers/dns/pdns {
-    boost = boost172;
-  };
+  pdns = callPackage ../servers/dns/pdns { };
 
   powerdns-admin = callPackage ../applications/networking/powerdns-admin { };
 
