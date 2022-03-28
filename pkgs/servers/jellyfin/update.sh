@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq common-updater-scripts dotnetCorePackages.sdk_5_0 nuget-to-nix gnused nix coreutils findutils
+#!nix-shell -i bash -p curl jq common-updater-scripts dotnetCorePackages.sdk_6_0 nuget-to-nix gnused nix coreutils findutils
 
 set -euo pipefail
 
