@@ -11,14 +11,14 @@ in
 
 buildPythonPackage rec {
   pname = "etebase-server";
-  version = "0.7.0";
+  version = "0.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
     rev = "v${version}";
-    sha256 = "1r2a7ki9w2h3l6rwqa3fzxjlqfj2lbgfrm8lynjhvcdv02s5abbi";
+    sha256 = "sha256-rPs34uzb5veiOw74SACLrDm4Io0CYH9EL9IuV38CkPY=";
   };
 
   patches = [ ./secret.patch ];
@@ -30,6 +30,7 @@ buildPythonPackage rec {
     django-cors-headers
     djangorestframework
     drf-nested-routers
+    fastapi
     msgpack
     psycopg2
     pycparser
