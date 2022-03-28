@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , pkg-config
 , mono
@@ -12,6 +13,7 @@
 , libxslt
 , docbook_xsl
 , python3
+, itstool
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +49,7 @@ stdenv.mkDerivation rec {
     libxslt
     docbook_xsl
     python3
+    itstool
   ];
 
   preFixup = ''
