@@ -4,6 +4,14 @@
 , cmake
 }:
 
+let
+  tests = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-test";
+    rev = "e407c1592df0f8e91664835324dea85146f20189";
+    sha256 = "sha256-9WSEkMJOewPqJjB6f7J6Ir0L+U712hkaN+GszjnGw7c=";
+  };
+in
 buildPythonPackage rec {
   pname = "editorconfig";
   version = "0.12.3";
@@ -12,9 +20,15 @@ buildPythonPackage rec {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
     rev = "v${version}";
-    sha256 = "sha256-KwfGWc2mYhUP6SN4vhIO0eX0dasBRC2LSeLEOA/NqG8=";
-    fetchSubmodules = true;
+    sha256 = "sha256-ZwoTMgk18+BpPNtXKQUMXGcl2Lp+1RQVyPHgk6gHWh8=";
+    # workaround until https://github.com/editorconfig/editorconfig-core-py/pull/40 is merged
+    # fetchSubmodules = true;
   };
+
+  postUnpack = ''
+    cp -r ${tests}/* source/tests
+    chmod +w -R source/tests
+  '';
 
   nativeBuildInputs = [
     cmake
