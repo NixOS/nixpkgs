@@ -69,4 +69,6 @@ with pkgs;
   dhall = callPackage ./dhall { };
 
   makeWrapper = callPackage ./make-wrapper {};
+
+  pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 }
