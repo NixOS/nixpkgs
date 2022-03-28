@@ -6,6 +6,8 @@
 
 buildGoModule rec {
   pname = "gmailctl";
+  # on an unstable version because of https://github.com/mbrt/gmailctl/issues/232
+  # and https://github.com/mbrt/gmailctl/commit/484bb689866987580e0576165180ef06375a543f
   version = "unstable-2022-03-24";
 
   src = fetchFromGitHub {

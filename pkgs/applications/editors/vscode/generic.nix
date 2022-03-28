@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
-, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
+, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
@@ -64,7 +64,7 @@ let
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-      ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
+      ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
 
     runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
@@ -72,6 +72,7 @@ let
 
     dontBuild = true;
     dontConfigure = true;
+    noDumpEnvVars = true;
 
     installPhase = ''
       runHook preInstall

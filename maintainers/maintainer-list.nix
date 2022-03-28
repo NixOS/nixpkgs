@@ -10438,6 +10438,12 @@
     githubId = 811827;
     name = "Gabriel Lievano";
   };
+  rgrinberg = {
+    name = "Rudi Grinberg";
+    email = "me@rgrinberg.com";
+    github = "rgrinberg";
+    githubId = 139003;
+  };
   rgrunbla = {
     email = "remy@grunblatt.org";
     github = "rgrunbla";
@@ -12787,6 +12793,12 @@
     github = "typetetris";
     githubId = 1983821;
     name = "Eric Wolf";
+  };
+  uakci = {
+    name = "uakci";
+    email = "uakci@uakci.pl";
+    github = "uakci";
+    githubId = 6961268;
   };
   udono = {
     email = "udono@virtual-things.biz";

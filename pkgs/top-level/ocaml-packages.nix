@@ -330,6 +330,8 @@ let
 
     duration =  callPackage ../development/ocaml-modules/duration { };
 
+    dyn =  callPackage ../development/ocaml-modules/dyn { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earlybird = callPackage ../development/ocaml-modules/earlybird { };
@@ -1022,6 +1024,8 @@ let
 
     opus = callPackage ../development/ocaml-modules/opus { };
 
+    ordering = callPackage ../development/ocaml-modules/ordering { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otoml = callPackage ../development/ocaml-modules/otoml { };
@@ -1308,6 +1312,8 @@ let
     stdcompat = callPackage ../development/ocaml-modules/stdcompat { };
 
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
+
+    stdune = callPackage ../development/ocaml-modules/stdune { };
 
     stog = callPackage ../applications/misc/stog { };
 
