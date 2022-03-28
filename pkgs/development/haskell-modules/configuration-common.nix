@@ -1821,27 +1821,18 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  # Dependency to regex-tdfa-text can be removed for later regex-tdfa versions.
-  # Fix protolude compilation error by applying patch from pull-request.
-  # Override can be removed for the next release > 0.8.0.
-  yarn2nix = overrideCabal (attrs: {
-    jailbreak = true;
-    # remove dependency on regex-tdfa-text
-    # which has been merged into regex-tdfa
-    postPatch = ''
-      sed -i '/regex-tdfa-text/d' yarn2nix.cabal
-    '';
-    patches = (attrs.patches or []) ++ [
-      # fix a compilation error related to protolude 0.3
-      (fetchpatch {
-        url = "https://github.com/Profpatsch/yarn2nix/commit/ca78cf06226819b2e78cb6cdbc157d27afb41532.patch";
-        sha256 = "1vkczwzhxilnp87apyb18nycn834y5nbw4yr1kpwlwhrhalvzw61";
-        includes = [ "*/ResolveLockfile.hs" ];
+  yarn2nix = assert super.yarn2nix.version == "0.8.0";
+    lib.pipe (super.yarn2nix.override {
+      regex-tdfa-text = null; # dependency dropped in 0.10.1
+    }) [
+      (overrideCabal {
+        version = "0.10.1";
+        sha256 = "17f96563v9hp56ycd276fxri7z6nljd7yaiyzpgaa3px6rf48a0m";
+        editedCabalFile = null;
+        revision = null;
       })
+      (addBuildDepends [ self.aeson-better-errors ]) # 0.8.0 didn't depend on this
     ];
-  }) (super.yarn2nix.override {
-    regex-tdfa-text = null;
-  });
 
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
