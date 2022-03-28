@@ -2605,4 +2605,10 @@ self: super: {
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
 
+  # Doesn't support aeson >= 2.0
+  # https://github.com/channable/vaultenv/issues/118
+  vaultenv = super.vaultenv.overrideScope (self: super: {
+    aeson = self.aeson_1_5_6_0;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
