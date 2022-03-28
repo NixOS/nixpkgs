@@ -102,6 +102,9 @@ in
     systemd.services.geoipupdate-create-db-dir = {
       serviceConfig.Type = "oneshot";
       script = ''
+        set -o errexit -o pipefail -o nounset -o errtrace
+        shopt -s inherit_errexit
+
         mkdir -p ${cfg.settings.DatabaseDirectory}
         chmod 0755 ${cfg.settings.DatabaseDirectory}
       '';
@@ -135,6 +138,9 @@ in
             geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
 
             script = ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
+
               chown geoip "${cfg.settings.DatabaseDirectory}"
 
               cp ${geoipupdateConf} /run/geoipupdate/GeoIP.conf
