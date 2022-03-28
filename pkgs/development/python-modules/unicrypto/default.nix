@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "unicrypto";
-  version = "0.0.2";
+  version = "0.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ripcH3XJW5i8+Sc6N5OzMrIfHzbjFbHmEiwRP24rRRo=";
+    hash = "sha256-aSQPJgSTNGhh5jlpfi/aJF8UZWx98grm2eaxuzassp4=";
   };
 
   propagatedBuildInputs = [
