@@ -508,6 +508,8 @@ let
 
     gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
+    gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
+
     gg = callPackage ../development/ocaml-modules/gg { };
 
     git = callPackage ../development/ocaml-modules/git {
@@ -997,6 +999,8 @@ let
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
     odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
+
+    ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
 
