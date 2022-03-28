@@ -61,6 +61,16 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "screen-autorotate@kosmospredanie.yandex.ru" (old: {
+    # Requires gjs
+    # https://github.com/NixOS/nixpkgs/issues/164865
+    postPatch = ''
+      for file in *.js; do
+        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+      done
+    '';
+  }))
+
   (patchExtension "shell-volume-mixer@derhofbauer.at" (old: {
     patches = [
       (substituteAll {

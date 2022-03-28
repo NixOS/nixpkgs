@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "1jic5kynfan5zirv9pm3pfjps12zf68cpnhl7i1vls2m79zdkfa3";
+    sha256 = "sha256-CmGie+M3AboOk8X+LkRhIxTRQZgDlklouzmz8kiIZuI=";
   };
 
   checkInputs = with python3.pkgs;

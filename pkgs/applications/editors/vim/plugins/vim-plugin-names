@@ -693,6 +693,7 @@ rhysd/vim-operator-surround
 RishabhRD/nvim-lsputils
 RishabhRD/popfix
 rktjmp/fwatch.nvim
+rktjmp/hotpot.nvim
 rktjmp/lush.nvim
 rmagatti/auto-session
 rmagatti/goto-preview
