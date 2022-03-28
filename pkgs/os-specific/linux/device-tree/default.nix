@@ -13,7 +13,7 @@ with lib; {
         | xargs -0 cp -v --no-preserve=mode --target-directory $out --parents
 
       for dtb in $(find $out -type f -name '*.dtb'); do
-        dtbCompat="$( fdtget -t s $dtb / compatible )"
+        dtbCompat="$( fdtget -t s $dtb / compatible || (echo INCOMPATIBLE; echo Error was caused by $dtb >&2) )"
 
         ${flip (concatMapStringsSep "\n") overlays (o: ''
         overlayCompat="$( fdtget -t s ${o.dtboFile} / compatible )"
