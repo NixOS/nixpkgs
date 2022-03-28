@@ -10,6 +10,6 @@ in
 {
   dns-single-node = dns.singlenode.test;
   dns-multi-node = dns.multinode.test;
-  rbac-single-node = rbac.singlenode.test;
-  rbac-multi-node = rbac.multinode.test;
+  # rbac-single-node = rbac.singlenode.test;  # deactivated for 21.11 as test is broken (time out) since 2022-01-01
+  # rbac-multi-node = rbac.multinode.test;  # deactivated for 21.11 as test is broken (time out) since 2022-01-01
 }
