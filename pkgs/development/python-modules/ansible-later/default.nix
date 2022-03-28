@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.6";
+  version = "2.0.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-later";
     rev = "v${version}";
-    sha256 = "sha256-vg9ryzl9ZeOGuFLL1yeJ3vGNPdo3ONmCQozY6DK6miY=";
+    sha256 = "sha256-oPlm9uxyN3hyf4gFv37YWEn/HOkg0QQ1Ya3tjLd53rQ=";
   };
 
   postInstall = ''
