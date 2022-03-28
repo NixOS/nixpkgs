@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
-
+    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor version}/CHANGES";
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
 
