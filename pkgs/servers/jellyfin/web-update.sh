@@ -19,12 +19,11 @@ store_src="$(nix-build . -A jellyfin-web.src --no-out-link)"
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-# TODO: use package-lock.json on the next major release
-# https://github.com/jellyfin/jellyfin-web/commit/6efef9680d55a93f4333ef8bfb65a8a650c99a49
 node2nix \
   --nodejs-14 \
   --development \
   --node-env ../../development/node-packages/node-env.nix \
   --output ./node-deps.nix \
   --input "$store_src/package.json" \
+  --lock "$store_src/package-lock.json" \
   --composition ./node-composition.nix
