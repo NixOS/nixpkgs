@@ -4,6 +4,8 @@
 , rustPlatform
 , installShellFiles
 , libiconv
+, libgit2
+, pkg-config
 , nixosTests
 , Security
 , Foundation
@@ -20,9 +22,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-mqUE4JzNBhvtDpT2LM23eHX8q93wtPqA+/zr/PxEDiE=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security Foundation ];
+  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation ];
 
   postInstall = ''
     for shell in bash fish zsh; do
