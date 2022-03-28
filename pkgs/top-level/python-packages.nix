@@ -4092,6 +4092,8 @@ in {
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
+  invocations = callPackage ../development/python-modules/invocations { };
+
   invoke = callPackage ../development/python-modules/invoke { };
 
   iodata = callPackage ../development/python-modules/iodata { };
@@ -8707,6 +8709,8 @@ in {
   related = callPackage ../development/python-modules/related { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
+
+  releases = callPackage ../development/python-modules/releases { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
 
