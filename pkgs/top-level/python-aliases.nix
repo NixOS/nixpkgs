@@ -37,7 +37,6 @@ mapAliases ({
   asyncio-nats-client = nats-py; # added 2022-02-08
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bt_proximity = bt-proximity; # added 2021-07-02
-  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
@@ -120,7 +119,6 @@ mapAliases ({
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
   tensorflow-estimator_2 = tensorflow-estimator; # added 2021-11-25
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
-  topydo = throw "topydo was moved to pkgs.topydo"; # added 2017-09-22
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   websocket_client = websocket-client; # added 2021-06-15
