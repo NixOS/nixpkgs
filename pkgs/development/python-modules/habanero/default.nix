@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "1.0.0";
+  version = "1.2.0";
 
   # Install from Pypi is failing because of a missing file (Changelog.rst)
   src = fetchFromGitHub {
     owner = "sckott";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lhbd5c4sypcd65nh4cgxddsqrxwg89nn1qiii6m5l4fzsvblggv";
+    sha256 = "sha256-jxaO8nCR5jhXCPjhjVLKaGeQp9JF3ECQ1+j3TOJKawg=";
   };
 
   propagatedBuildInputs = [ requests tqdm ];
