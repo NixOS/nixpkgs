@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.9.2";
+  version = "2.10.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "944a9e5dbdd413ab6c7951ea46b0ab40713235a9c4c5ca81cfe45c6f14fa677b";
+    sha256 = "sha256-3bGXeFOu+CgEs11yoOWXskT6MmxATDUL0AxbAdv+5xo=";
   };
 
   propagatedBuildInputs = [
