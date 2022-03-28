@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake scdoc ];
 
-  # fix call of /usr/bin/kill in the systemd service
-  # this is used for reloading the service
   postInstall = ''
     substituteInPlace ${placeholder "out"}/lib/systemd/user/ydotool.service \
       --replace /usr/bin/kill "${util-linux}/bin/kill"
