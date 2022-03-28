@@ -92,8 +92,6 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
-
     linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
       kernelPatches =
         [ kernelPatches.bridge_stp_helper
@@ -231,7 +229,10 @@ in {
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
 
-  }));
+  })) // lib.optionalAttrs (config.allowAliases or true) {
+    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
+  };
+
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
     specific kernel, we have a function that builds those packages
@@ -484,7 +485,6 @@ in {
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream"; # Added 2022-02-11
     linux_4_9 = recurseIntoAttrs (packagesFor kernels.linux_4_9);
     linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
@@ -493,6 +493,8 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_5_16 = recurseIntoAttrs (packagesFor kernels.linux_5_16);
     linux_5_17 = recurseIntoAttrs (packagesFor kernels.linux_5_17);
+  } // lib.optionalAttrs (config.allowAliases or true) {
+    linux_4_9 = throw "linux 4.4 was removed because it reached its end of life upstream";
   };
 
   rtPackages = {

@@ -644,7 +644,7 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linuxPackages_4_14 = linuxKernel.packages.linux_4_14;
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
-  linuxPackages_4_4 = linuxKernel.packages.linux_4_4;
+  linuxPackages_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
   linuxPackages_4_9 = linuxKernel.packages.linux_4_9;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
   linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
@@ -662,7 +662,7 @@ mapAliases ({
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
   linux_4_14 = linuxKernel.kernels.linux_4_14;
   linux_4_19 = linuxKernel.kernels.linux_4_19;
-  linux_4_4 = linuxKernel.kernels.linux_4_4;
+  linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
   linux_4_9 = linuxKernel.kernels.linux_4_9;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
