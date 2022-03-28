@@ -127,7 +127,7 @@
         <para>
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
-          OSPF, IS-IS, VVRP and others). Available as
+          OSPF, IS-IS, VRRP and others). Available as
           <link linkend="opt-services.frr.babel.enable">services.frr</link>
         </para>
       </listitem>
