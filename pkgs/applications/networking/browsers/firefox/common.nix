@@ -99,10 +99,18 @@
 , googleAPISupport ? geolocationSupport
 , webrtcSupport ? !privacySupport
 
+# digital rights managemewnt
+
+# This flag controls whether Firefox will show the nagbar, that allows
+# users at runtime the choice to enable Widevine CDM support when a site
+# requests it.
+# Controlling the nagbar and widevine CDM at runtime is possible by setting
+# `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
+, drmSupport ? true
+
 ## other
 
 , crashreporterSupport ? false
-, drmSupport ? false
 , safeBrowsingSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
@@ -305,7 +313,7 @@ buildStdenv.mkDerivation ({
   ++ flag gssSupport "negotiateauth"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
-  ++ lib.optional drmSupport "--enable-eme=widevine"
+  ++ lib.optional (!drmSupport) "--disable-eme"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-optimize" ])
