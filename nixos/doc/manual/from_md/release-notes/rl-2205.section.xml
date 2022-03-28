@@ -703,6 +703,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.telepathy</literal> will no longer be
+          enabled by default for GNOME desktops, one should enable it in
+          their configs if using Empathy or Polari.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you previously used
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option

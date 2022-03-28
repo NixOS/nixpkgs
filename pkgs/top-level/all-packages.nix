@@ -195,6 +195,8 @@ with pkgs;
 
   ankisyncd = callPackage ../servers/ankisyncd { };
 
+  ani-cli = callPackage ../applications/video/ani-cli { };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
@@ -340,6 +342,8 @@ with pkgs;
   deadcode = callPackage ../development/tools/deadcode { };
 
   deadnix = callPackage ../development/tools/deadnix { };
+
+  dsq = callPackage ../tools/misc/dsq { buildGoModule = buildGo118Module; };
 
   each = callPackage ../tools/text/each { };
 
@@ -916,6 +920,8 @@ with pkgs;
 
   abduco = callPackage ../tools/misc/abduco { };
 
+  ablog = callPackage ../applications/misc/ablog { };
+
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
@@ -1103,6 +1109,8 @@ with pkgs;
 
   midimonster = callPackage ../tools/audio/midimonster { };
 
+  nominatim = callPackage ../servers/nominatim { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
@@ -1110,6 +1118,8 @@ with pkgs;
   quich = callPackage ../tools/misc/quich { } ;
 
   redfang = callPackage ../tools/networking/redfang { };
+
+  sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
@@ -8105,6 +8115,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
+  melt = callPackage ../tools/security/melt { };
+
   metabigor = callPackage ../tools/security/metabigor { };
 
   metasploit = callPackage ../tools/security/metasploit { };
@@ -9703,6 +9715,8 @@ with pkgs;
   s3rs = callPackage ../tools/networking/s3rs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  s3-credentials = with python3Packages; toPythonApplication s3-credentials;
 
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
@@ -14050,6 +14064,11 @@ with pkgs;
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
   python3 = python39;
+
+  # pythonPackages further below, but assigned here because they need to be in sync
+  python2Packages = dontRecurseIntoAttrs python27Packages;
+  python3Packages = dontRecurseIntoAttrs python39Packages;
+
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy38;
@@ -14090,10 +14109,6 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
-
-  # pythonPackages further below, but assigned here because they need to be in sync
-  python2Packages = python2.pkgs;
-  python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
@@ -19934,8 +19949,6 @@ with pkgs;
 
   qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray {};
 
-  qwt = callPackage ../development/libraries/qwt {};
-
   qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix {
     inherit (darwin.apple_sdk.frameworks) AGL;
   };
@@ -20125,6 +20138,10 @@ with pkgs;
   SDL2_net = callPackage ../development/libraries/SDL2_net { };
 
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
+
+  SDL2_sound = callPackage ../development/libraries/SDL2_sound {
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
+  };
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
@@ -24044,7 +24061,9 @@ with pkgs;
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
-  logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules {};
+  logiops = callPackage ../misc/drivers/logiops { };
+
+  logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules { };
 
   # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
   # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
@@ -24128,7 +24147,7 @@ with pkgs;
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
-  mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
+  mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
   mro-unicode = callPackage ../data/fonts/mro-unicode { };
 
@@ -24746,6 +24765,8 @@ with pkgs;
   argo = callPackage ../applications/networking/cluster/argo { };
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
+
+  argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
@@ -25733,6 +25754,8 @@ with pkgs;
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
   fmsynth = callPackage ../applications/audio/fmsynth { };
+
+  fnc = callPackage ../applications/version-management/fnc { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
@@ -33354,6 +33377,8 @@ with pkgs;
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
+  eiciel = callPackage ../tools/filesystems/eiciel { };
+
   emu2 = callPackage ../applications/emulators/emu2 { };
 
   apt = callPackage ../tools/package-management/apt { };
@@ -33462,6 +33487,8 @@ with pkgs;
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
+
+  gummy = callPackage ../tools/misc/gummy { };
 
   gxemul = callPackage ../applications/emulators/gxemul { };
 
@@ -34914,6 +34941,8 @@ with pkgs;
   stayrtr = callPackage ../servers/stayrtr {};
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
+
+  kaf = callPackage ../development/tools/kaf { };
 
   kcli = callPackage ../development/tools/kcli { };
 

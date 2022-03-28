@@ -1,16 +1,18 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-
-# pythonPackages
+{ lib
 , anyconfig
 , appdirs
+, buildPythonPackage
 , colorama
+, fetchFromGitHub
 , flake8
 , jsonschema
 , nested-lookup
+, pathspec
 , poetry-core
+, pytest-mock
 , python-json-logger
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , toolz
 , unidiff
@@ -22,23 +24,14 @@ buildPythonPackage rec {
   version = "2.0.6";
   format = "pyproject";
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "thegeeklab";
-    repo = "ansible-later";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vg9ryzl9ZeOGuFLL1yeJ3vGNPdo3ONmCQozY6DK6miY=";
+    hash = "sha256-vg9ryzl9ZeOGuFLL1yeJ3vGNPdo3ONmCQozY6DK6miY=";
   };
-
-  postInstall = ''
-    rm $out/lib/python*/site-packages/LICENSE
-  '';
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
-      --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
-      --replace 'jsonschema = "4.4.0"' 'jsonschema = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -51,6 +44,7 @@ buildPythonPackage rec {
     flake8
     jsonschema
     nested-lookup
+    pathspec
     python-json-logger
     pyyaml
     toolz
@@ -58,12 +52,30 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  # no tests
-  doCheck = false;
-  pythonImportsCheck = [ "ansiblelater" ];
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
+      --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
+      --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
+      --replace 'jsonschema = "4.4.0"' 'jsonschema = "*"'
+  '';
+
+  postInstall = ''
+    rm $out/lib/python*/site-packages/LICENSE
+  '';
+
+  pythonImportsCheck = [
+    "ansiblelater"
+  ];
 
   meta = with lib; {
-    description = "Another best practice scanner for Ansible roles and playbooks";
+    description = "Best practice scanner for Ansible roles and playbooks";
     homepage = "https://github.com/thegeeklab/ansible-later";
     license = licenses.mit;
     maintainers = with maintainers; [ tboerger ];

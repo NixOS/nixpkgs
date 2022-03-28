@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, scdoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, scdoc, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
@@ -11,13 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-maXXGCqB8dkGO8956hsKSwM4HQdYn6z1jBFENQ9sKcA=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    scdoc
-  ];
+  nativeBuildInputs = [ cmake scdoc ];
+
+  postInstall = ''
+    substituteInPlace ${placeholder "out"}/lib/systemd/user/ydotool.service \
+      --replace /usr/bin/kill "${util-linux}/bin/kill"
+  '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ReimuNotMoe/ydotool";
     description = "Generic Linux command-line automation tool";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ willibutz kraem ];

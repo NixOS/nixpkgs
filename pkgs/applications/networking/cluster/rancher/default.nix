@@ -1,14 +1,14 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "rancher-cli";
-  version = "2.6.0";
+  pname = "rancher";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner  = "rancher";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-RfhcTo10nkHmKGwmS8WdjBioZhDIGSQ9vPPOv3Wg0Y4=";
+    sha256 = "sha256-5ceyScsCidJpHGfwhsq7/hDd3CClx29cD5Cdc1PSxTU=";
   };
 
   ldflags = [
@@ -24,8 +24,6 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/cli $out/bin/rancher
   '';
-
-  doCheck = true;
 
   doInstallCheck = true;
   installCheckPhase = ''
