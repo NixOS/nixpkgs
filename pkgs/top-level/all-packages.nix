@@ -29412,8 +29412,10 @@ with pkgs;
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {
-    inherit (haskellPackages) ghcWithPackages taffybar;
+  # Use GHC 9.0 when this asserts starts to fire
+  taffybar = assert haskellPackages.taffybar.version == "3.3.0";
+  callPackage ../applications/window-managers/taffybar {
+    inherit (haskell.packages.ghc8107) ghcWithPackages taffybar;
   };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};

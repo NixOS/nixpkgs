@@ -116,4 +116,6 @@ self: super: {
   mysql-simple = addBuildDepends [
     self.blaze-textual
   ] super.mysql-simple;
+
+  taffybar = markUnbroken (doDistribute super.taffybar);
 }
