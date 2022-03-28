@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "unstable-2012-04-11";
 
   src = fetchgit {
-    url = "git://github.com/fernandotcl/pa-applet.git";
+    url = "https://github.com/fernandotcl/pa-applet.git";
     rev = "005f192df9ba6d2e6491f9aac650be42906b135a";
     sha256 = "1242sdri67wnm1cd0hr40mxarkh7qs7mb9n2m0g9dbz0f4axj6wa";
   };
