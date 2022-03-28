@@ -413,8 +413,6 @@ let
       inherit (pkgs) ffmpeg;
     };
 
-    fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
-
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
