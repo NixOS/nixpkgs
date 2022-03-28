@@ -1,7 +1,7 @@
 { version
 , javaVersion
 , platforms
-, hashes ? import ./hashes.nix
+, config
 , useMusl ? false
 }:
 
@@ -33,16 +33,19 @@
 , cairo
 , glib
 , gtk3
+, writeScript
+, jq
+, runtimeShell
+, callPackage
 }:
 
 assert useMusl -> stdenv.isLinux;
 
 let
-  platform = {
-    aarch64-linux = "linux-aarch64";
-    x86_64-linux = "linux-amd64";
-    x86_64-darwin = "darwin-amd64";
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  name = "graalvm${javaVersion}-ce";
+  sourcesFilename = "${name}-sources.json";
+  sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -56,21 +59,20 @@ let
     (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
   ]);
 
-  javaVersionPlatform = "${javaVersion}-${platform}";
+  javaVersionPlatform = "${javaVersion}-${platform.arch}";
 
   graalvmXXX-ce = stdenv.mkDerivation rec {
-    inherit version;
-    name = "graalvm${javaVersion}-ce";
-    srcs =
-      let
-        # Some platforms doesn't have all GraalVM features
-        # e.g.: GraalPython on aarch64-linux
-        # When the platform doesn't have a feature, sha256 is null on hashes.nix
-        # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
-        maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
+    inherit version name;
+    srcs = map fetchurl (builtins.attrValues sources.${platform.arch});
+    /*let
+      # Some platforms doesn't have all GraalVM features
+      # e.g.: GraalPython on aarch64-linux
+      # When the platform doesn't have a feature, sha256 is null on hashes.nix
+      # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
+      maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
       in
       (lib.remove null
-        (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
+      (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));*/
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -86,7 +88,7 @@ let
       zlib
     ];
 
-    nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
+    nativeBuildInputs = [ unzip perl makeWrapper ] ++ lib.optional stdenv.isLinux [ autoPatchelfHook ];
 
     unpackPhase = ''
       unpack_jar() {
@@ -149,7 +151,7 @@ let
             else
               "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
           }
-            ln -s $f ${basepath}/${platform}/$(basename $f)
+            ln -s $f ${basepath}/${platform.arch}/$(basename $f)
           done
         '';
         copyClibrariesToLib = ''
@@ -185,6 +187,7 @@ let
         '';
         "11-darwin-amd64" = "";
         "17-darwin-amd64" = "";
+        "17-darwin-aarch64" = "";
       }.${javaVersionPlatform} + ''
         # ensure that $lib/lib exists to avoid breaking builds
         mkdir -p $lib/lib
@@ -281,7 +284,7 @@ let
       }
 
       ${
-        lib.optionalString (platform != "linux-aarch64") ''
+        lib.optionalString (platform.arch != "linux-aarch64" && platform.arch != "darwin-aarch64") ''
           echo "Testing GraalPython"
           $out/bin/graalpython -c 'print(1 + 1)'
           echo '1 + 1' | $out/bin/graalpython
@@ -289,10 +292,14 @@ let
       }
 
       echo "Testing TruffleRuby"
+      ${
+        lib.optionalString (platform != "darwin-aarch64") ''
       # Hide warnings about wrong locale
       export LANG=C
       export LC_ALL=C
       $out/bin/ruby -e 'puts(1 + 1)'
+      ''
+      }
       ${# FIXME: irb is broken in all platforms
         # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
         # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
@@ -311,7 +318,11 @@ let
 
     passthru = {
       home = graalvmXXX-ce;
-      updateScript = ./update.sh;
+      updateScript = import ./update.nix {
+        inherit lib writeScript jq runtimeShell sourcesFilename config;
+        graalVersion = version;
+        javaVersion = "java${javaVersion}";
+      };
     };
 
     meta = with lib; {
