@@ -101,7 +101,7 @@ let
         chmod -R g-w $out
 
         addAutoPatchelfSearchPath --no-recurse $out/opt/Breitbandmessung
-        autoPatchelfFile $out/opt/Breitbandmessung/breitbandmessung
+        autoPatchelf $out/opt/Breitbandmessung/breitbandmessung
 
         makeWrapper $out/opt/Breitbandmessung/breitbandmessung $out/bin/breitbandmessung \
           --prefix PATH : ${binPath}

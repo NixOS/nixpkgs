@@ -110,7 +110,8 @@ def osabi_are_compatible(wanted: str, got: str) -> bool:
 
 
 def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
-    return path.rglob(pattern) if recursive else path.glob(pattern)
+    yield path
+    yield from path.rglob(pattern) if recursive else path.glob(pattern)
 
 
 cached_paths: Set[Path] = set()
