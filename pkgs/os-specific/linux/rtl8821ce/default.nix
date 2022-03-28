@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, kernel
+, bc
+}:
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
@@ -10,6 +16,12 @@ stdenv.mkDerivation rec {
     rev = "ca204c60724d23ab10244f920d4e50759ed1affb";
     sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
   };
+
+  # Fixes the build on kernel >= 5.17. Can be removed once https://github.com/tomaspinho/rtl8821ce/pull/267 is merged
+  patches = [(fetchpatch {
+    url = "https://github.com/tomaspinho/rtl8821ce/commit/7b9e55df64b10fed785f22df9f36ed4a30b59d0e.patch";
+    sha256 = "sha256-mpAWOG1aXsklGuDbrRB9Vd36mgeCdctKQaWuuoqEEp0=";
+  })];
 
   hardeningDisable = [ "pic" ];
 
@@ -35,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64 || kernel.kernelAtLeast "5.17";
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ hhm ivar ];
   };
 }
