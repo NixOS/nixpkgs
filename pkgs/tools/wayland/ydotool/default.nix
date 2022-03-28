@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ReimuNotMoe/ydotool";
     description = "Generic Linux command-line automation tool";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ willibutz kraem ];
