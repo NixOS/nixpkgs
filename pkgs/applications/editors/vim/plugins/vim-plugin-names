@@ -91,6 +91,7 @@ ckarnell/antonys-macro-repeater
 clojure-vim/vim-jack-in
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
+coc-extensions/coc-svelte
 cocopon/iceberg.vim
 codota/tabnine-vim
 cohama/lexima.vim
@@ -158,6 +159,7 @@ ervandew/supertab
 esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim
 euclio/vim-markdown-composer
+evanleck/vim-svelte
 f-person/git-blame.nvim
 f3fora/cmp-spell
 famiu/bufdelete.nvim
@@ -261,6 +263,7 @@ hsitz/VimOrganizer
 https://git.sr.ht/~whynothugo/lsp_lines.nvim
 hura/vim-asymptote
 iamcco/coc-spell-checker
+iamcco/coc-tailwindcss
 iamcco/markdown-preview.nvim
 ianks/vim-tsx
 idanarye/vim-merginal

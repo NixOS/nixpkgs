@@ -963,6 +963,30 @@ final: prev:
     meta.homepage = "https://github.com/iamcco/coc-spell-checker/";
   };
 
+  coc-svelte = buildVimPluginFrom2Nix {
+    pname = "coc-svelte";
+    version = "2022-03-14";
+    src = fetchFromGitHub {
+      owner = "coc-extensions";
+      repo = "coc-svelte";
+      rev = "7dda98527c0831e287ae8cd1c85cfc958c949d4a";
+      sha256 = "0ci35dph7zz53hiw65xp79g6i8h5yk1zlcbinljfcdn5635wsjbn";
+    };
+    meta.homepage = "https://github.com/coc-extensions/coc-svelte/";
+  };
+
+  coc-tailwindcss = buildVimPluginFrom2Nix {
+    pname = "coc-tailwindcss";
+    version = "2020-08-19";
+    src = fetchFromGitHub {
+      owner = "iamcco";
+      repo = "coc-tailwindcss";
+      rev = "5f41aa1feb36e39b95ccd83be6a37ee8c475f9fb";
+      sha256 = "189abl36aj862m5nz8jjdgdfc4s6xbag030hi9m13yd6fbg99f85";
+    };
+    meta.homepage = "https://github.com/iamcco/coc-tailwindcss/";
+  };
+
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc.nvim";
     version = "2022-03-26";
@@ -4079,12 +4103,12 @@ final: prev:
 
   neorg = buildVimPluginFrom2Nix {
     pname = "neorg";
-    version = "2022-03-27";
+    version = "2022-03-26";
     src = fetchFromGitHub {
       owner = "nvim-neorg";
       repo = "neorg";
-      rev = "168c17fa9373fe5e4927fe59acf448e2c531132a";
-      sha256 = "1ad6wx8wi7mc28vbkl1zz72z7yy6x6mk9rfnkxdhwpwddmqpg6v0";
+      rev = "8f8c1ae889ffe666423a89271933272ebffec3ef";
+      sha256 = "10fgkrr9wn6jj35qa42c353k4rnys9a2wrckjk0kwrx6kvx7m6l6";
     };
     meta.homepage = "https://github.com/nvim-neorg/neorg/";
   };
@@ -4275,8 +4299,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "EdenEast";
       repo = "nightfox.nvim";
-      rev = "f9b0f96f61a4aa136f9fd6a04e60829f50eda9b0";
-      sha256 = "0p28x0xsahr9z1a4zgnjlxrdb7wv8p82gh0gc9rbfprym230k9lg";
+      rev = "2b19e2ad758f078b607408b15bdaf39f3beafac6";
+      sha256 = "0xn78z74wldjq7p5xzlbv4562b6i5nha3lj0bc2hv6w9n3m7q494";
     };
     meta.homepage = "https://github.com/EdenEast/nightfox.nvim/";
   };
@@ -4935,8 +4959,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "97691940d1c9cdaef2ca73c4fae50987fdcadc6c";
-      sha256 = "13cz5hjp7w1fmjw35n41gw3yyizs9y3jnbz228j6n8zz3awdin9g";
+      rev = "b995eebe84df88092a41cbfd591bfc1565f70d8e";
+      sha256 = "1738mssq22n1njrpi004apgfv00fxn7yx00r3175qn57bjw9bks9";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
@@ -10940,6 +10964,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-surround/";
   };
 
+  vim-svelte = buildVimPluginFrom2Nix {
+    pname = "vim-svelte";
+    version = "2022-02-17";
+    src = fetchFromGitHub {
+      owner = "evanleck";
+      repo = "vim-svelte";
+      rev = "1080030d6a1bc6582389c133a07552ba0a442410";
+      sha256 = "0kwx0rkb6879v5c3jyavzh1hklxl2q1qwnm28x1p32kdcwqkccjp";
+    };
+    meta.homepage = "https://github.com/evanleck/vim-svelte/";
+  };
+
   vim-swap = buildVimPluginFrom2Nix {
     pname = "vim-swap";
     version = "2021-08-08";
@@ -11724,12 +11760,12 @@ final: prev:
 
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
-    version = "2022-03-27";
+    version = "2022-03-24";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "c2cb0ced676fd41ce7f6e33a3f09122cb738436b";
-      sha256 = "00vzqcw2gygq6rgwjy4dl2m1p6pdkwqpj3j1gbzjg4g6av4q8py1";
+      rev = "4eccec4e9fc46a52ba832ac2f8ab749ea33d6790";
+      sha256 = "07mydwxqhk9l0ciqpczd51x4s58asmqa3f0bznw7cdvp9qa6a6sn";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
   };
