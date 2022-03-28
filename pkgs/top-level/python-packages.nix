@@ -10352,6 +10352,8 @@ in {
     unicorn-emu = pkgs.unicorn;
   };
 
+  unicrypto = callPackage ../development/python-modules/unicrypto { };
+
   unidecode = callPackage ../development/python-modules/unidecode { };
 
   unidic-lite = callPackage ../development/python-modules/unidic-lite { };
