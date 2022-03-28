@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , snowballstemmer
 , pytestCheckHook
@@ -9,15 +9,15 @@
 buildPythonPackage rec {
   pname = "pydocstyle";
   version = "6.1.1";
-  disabled = !isPy3k;
-
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "sha256-j0WMD2qKDdMaKG2FxrrM/O7zX4waJ1afaRPRv70djkE=";
+    hash = "sha256-j0WMD2qKDdMaKG2FxrrM/O7zX4waJ1afaRPRv70djkE=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "src/tests/test_integration.py" # runs pip install
+  ];
+
+  pythonImportsCheck = [
+    "pydocstyle"
   ];
 
   meta = with lib; {
