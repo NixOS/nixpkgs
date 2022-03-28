@@ -174,6 +174,10 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = optional
+      (options.services.unifi-video.openFirewall.highestPrio >= (mkOptionDefault null).priority)
+      "The current services.unifi-video.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
+
     users.users.unifi-video = {
       description = "UniFi Video controller daemon user";
       home = stateDir;
