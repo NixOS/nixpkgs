@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Pull upstream fix for ncurses-6.3
     (fetchpatch {
       name = "ncurses-6.3.patch";
       url = "https://github.com/jubalh/nudoku/commit/93899a0fd72e04b9f257e5f54af53466106b5959.patch";
       sha256 = "1h3za0dnx8fk3vshql5mhcici8aw8j0vr7ra81p3r1rii4c479lm";
+      reason = "${pname}: upstream fix for ncurses-6.3";
+      throwBool = lib.versionAtLeast version "2.1.1";
     })
   ];
 
@@ -38,4 +39,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ];
   };
 }
-
