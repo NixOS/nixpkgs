@@ -241,6 +241,13 @@ with self;
     doCheck = false; # we don't have quickcheck_deprecated
   };
 
+  core_unix = janePackage {
+    pname = "core_unix";
+    hash = "0irfmpx6iksxk2r8mdizjn75h71qh4p2f1s9x2ggckzqj9y904ck";
+    meta.description = "Unix-specific portions of Core";
+    propagatedBuildInputs = [ core ];
+  };
+
   csvfields = janePackage {
     pname = "csvfields";
     hash = "09jmz6y6nwd96dcx6g8ydicxssi72v1ks276phbc9n19wwg9hkaz";
