@@ -11,10 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
   };
 
-  nativeBuildInputs = [ ocaml ocamlbuild findlib topkg ];
-  buildInputs = [ topkg ];
+  nativeBuildInputs = [ ocaml ];
 
-  inherit (topkg) buildPhase installPhase;
+  makeFlags = [ "PREFIX=$(out)" ];
+  installTargets = "install install-doc";
+  installFlags = [
+    "LIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/${pname}"
+    "DOCDIR=$(out)/share/doc/${pname}"
+  ];
+  postInstall = ''
+    mv $out/lib/ocaml/${ocaml.version}/site-lib/${pname}/{opam,${pname}.opam}
+  '';
 
   meta = with lib; {
     homepage = "https://erratique.ch/software/cmdliner";
