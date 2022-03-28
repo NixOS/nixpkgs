@@ -11579,7 +11579,9 @@ with pkgs;
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   # To expose more packages for Yi, override the extraPackages arg.
-  yi = callPackage ../applications/editors/yi/wrapper.nix { };
+  yi = callPackage ../applications/editors/yi/wrapper.nix {
+    haskellPackages = haskell.packages.ghc8107;
+  };
 
   yj = callPackage ../development/tools/yj { };
 

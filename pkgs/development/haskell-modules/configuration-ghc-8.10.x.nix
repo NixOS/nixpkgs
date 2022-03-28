@@ -111,6 +111,9 @@ self: super: {
     ghc-prim = self.hashable;
   };
 
+  # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
+  yi-core = doDistribute (markUnbroken super.yi-core);
+
   # Temporarily disabled blaze-textual for GHC >= 9.0 causing hackage2nix ignoring it
   # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
   mysql-simple = addBuildDepends [
