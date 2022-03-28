@@ -499,6 +499,10 @@ in
       programs.seahorse.enable = notExcluded pkgs.gnome.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.gnome.sushi;
 
+      # VTE shell integration for gnome-console
+      programs.bash.vteIntegration = mkDefault true;
+      programs.zsh.vteIntegration = mkDefault true;
+
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
       environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
