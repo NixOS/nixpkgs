@@ -9,6 +9,7 @@
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "paramiko"
+  ];
+
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
   ];
 
   __darwinAllowLocalNetworking = true;
