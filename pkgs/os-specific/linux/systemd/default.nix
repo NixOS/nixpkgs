@@ -209,6 +209,8 @@ stdenv.mkDerivation {
       (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
       (musl-patches + "/0026-Handle-missing-gshadow.patch")
       (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+      (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
+      (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
     ]
   );
