@@ -12794,6 +12794,12 @@
     githubId = 1983821;
     name = "Eric Wolf";
   };
+  uakci = {
+    name = "uakci";
+    email = "uakci@uakci.pl";
+    github = "uakci";
+    githubId = 6961268;
+  };
   udono = {
     email = "udono@virtual-things.biz";
     github = "udono";
