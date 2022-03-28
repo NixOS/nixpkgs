@@ -10,7 +10,7 @@ let
   nixui = (import ./nixui.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
-  })."nixui-git://github.com/matejc/nixui.git#0.2.1";
+  })."nixui-git+https://github.com/matejc/nixui.git#0.2.1";
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"
