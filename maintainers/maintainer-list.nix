@@ -929,6 +929,12 @@
     githubId = 1296771;
     name = "Anders Riutta";
   };
+  arjan-s = {
+    email = "github@anymore.nl";
+    github = "arjan-s";
+    githubId = 10400299;
+    name = "Arjan Schrijver";
+  };
   arkivm = {
     email = "vikram186@gmail.com";
     github = "arkivm";
