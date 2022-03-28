@@ -42,7 +42,8 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-blue.gnomeFilePath}'
+       picture-uri-dark='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
 
        [org.gnome.desktop.screensaver]
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
