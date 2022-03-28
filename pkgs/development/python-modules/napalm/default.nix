@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "napalm";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "napalm-automation";
     repo = "napalm";
     rev = version;
-    sha256 = "15h1h1a3avv48i14x96b8v7zkhmwg7dnzxycxr18f9530j237rq6";
+    sha256 = "sha256-pbOuwcr/qDbTfiU4JjUXZqc69DZAIXKNuiZYesMOW4U=";
   };
 
   buildInputs = [ setuptools ];
