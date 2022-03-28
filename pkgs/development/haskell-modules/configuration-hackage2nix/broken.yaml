@@ -5673,7 +5673,6 @@ broken-packages:
   - yandex-translate
   - yaop
   - yapb
-  - yarn2nix
   - yarr
   - yasi
   - yate
