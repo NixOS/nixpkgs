@@ -3,21 +3,34 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
+, click
+, desktop-notifier
+, dropbox
+, fasteners
+, keyring
+, keyrings-alt
+, packaging
+, pathspec
+, Pyro5
+, requests
+, setuptools
+, sdnotify
+, survey
+, watchdog
 , importlib-metadata
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.5.3";
+  version = "1.6.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "sha256-Uo3vcYez2qSq162SSKjoCkwygwR5awzDceIq8/h3dao=";
+    hash = "sha256-YbIm0wrP4aasLOKN8JFUDfbD1iBVwjiF4t0lJs0KSto=";
   };
 
   format = "pyproject";
@@ -43,13 +56,23 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/lib/${python.libPrefix}/site-packages"
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # We don't want to benchmark
