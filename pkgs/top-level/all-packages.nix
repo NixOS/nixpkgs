@@ -1119,6 +1119,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
+
   sdlookup = callPackage ../tools/security/sdlookup { };
 
   sx-go = callPackage ../tools/security/sx-go { };
@@ -33491,6 +33493,8 @@ with pkgs;
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
+
+  gummy = callPackage ../tools/misc/gummy { };
 
   gxemul = callPackage ../applications/emulators/gxemul { };
 
