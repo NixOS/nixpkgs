@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1avvs1wpck0rahx80xnnaw94hdrfbhi1jdvgg1zpac26mzab4kdd";
   };
 
+  patches = [
+    # Patch for CVE-2022-27227
+    (fetchurl {
+      url = "https://downloads.powerdns.com/patches/2022-01/rec-4.5.7-ixfr.diff";
+      sha256 = "12d43ld6fh4j2iaidjjvrl1x71zscm4frr2sa2dx4749dwia41a1";
+     })
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost openssl systemd
