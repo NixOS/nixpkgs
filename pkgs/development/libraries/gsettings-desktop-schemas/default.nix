@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     cat - > $out/share/glib-2.0/schemas/remove-backgrounds.gschema.override <<- EOF
       [org.gnome.desktop.background]
       picture-uri='''
+      picture-uri-dark='''
 
       [org.gnome.desktop.screensaver]
       picture-uri='''
