@@ -139,13 +139,13 @@ let
         sha512 = "hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==";
       };
     };
-    "@fontsource/open-sans-4.5.6" = {
+    "@fontsource/open-sans-4.5.8" = {
       name = "_at_fontsource_slash_open-sans";
       packageName = "@fontsource/open-sans";
-      version = "4.5.6";
+      version = "4.5.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-4.5.6.tgz";
-        sha512 = "bQuNS0H1VL1VLC6FwmReHlpJaICVe/seODU3Q9cpTQbJ5OtRD4TwWMrAjfTxqcFNollA6O0AlE4BnRSWMQLfvw==";
+        url = "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-4.5.8.tgz";
+        sha512 = "3b94XDdRLqL7OlE7OjWg/4pgG825Juw8PLVEDm6h5pio0gMU89ICxfatGxHsBxMGfqad+wnvdmUweZWlELDFpQ==";
       };
     };
     "@icetee/ftp-0.3.15" = {
@@ -481,13 +481,13 @@ let
         sha512 = "BzcaRsnFuznzOItW1WpQrDHM7plAa7GIDMZ6b5pnMbkqEtM/6WCOhvZar39oeMQP79gwvFUWjjptE7/KGcNqFg==";
       };
     };
-    "@types/node-17.0.21" = {
+    "@types/node-17.0.23" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "17.0.21";
+      version = "17.0.23";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-17.0.21.tgz";
-        sha512 = "DBZCJbhII3r90XbQxI8Y9IjjiiOGlZ0Hr32omXIZvwwZ7p4DMMXGrKXVyPfuoBOri9XNtL0UK69jYIBIsRX3QQ==";
+        url = "https://registry.npmjs.org/@types/node/-/node-17.0.23.tgz";
+        sha512 = "UxDxWn7dl97rKVeVS61vErvw086aCYhDLyvRQZ5Rk65rZKepaFdm53GeqXaKBuOhED4e9uWq34IC3TdSdJJ2Gw==";
       };
     };
     "@types/node-fetch-2.6.1" = {
@@ -967,13 +967,13 @@ let
         sha512 = "uUbetCWczQHbsKyX1C99XpQHBM8SWfovvaZhPIj23/1uV7SQf0WeRZbiLpw0JZm+LHTChfNgrLfDJOVoU2kU+A==";
       };
     };
-    "aws-sdk-2.1096.0" = {
+    "aws-sdk-2.1101.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.1096.0";
+      version = "2.1101.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1096.0.tgz";
-        sha512 = "q+hotU57U8bGpz1pf5CkO4z630ay0xGJ9HedahKPZ0Xk3/X0GH+QFYPBWJ5IMTtO30bjfPH0zTaL2vJmMXLBrQ==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1101.0.tgz";
+        sha512 = "7lyVb7GXGl8yyu954Qxf6vU6MrcgFlmKyTLBVXJyo3Phn1OB+qOExA55WtSC6gQiQ7e5TeWOn1RUHLg30ywTBA==";
       };
     };
     "aws-sign2-0.7.0" = {
@@ -1768,13 +1768,13 @@ let
         sha512 = "hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==";
       };
     };
-    "convict-6.2.1" = {
+    "convict-6.2.2" = {
       name = "convict";
       packageName = "convict";
-      version = "6.2.1";
+      version = "6.2.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/convict/-/convict-6.2.1.tgz";
-        sha512 = "Mn4AJiYkR3TAZH1Xm/RU7gFS/0kM5TBSAQDry8y40Aez0ASY+3boUhv+3QE5XbOXiXM2JjdhkKve3IsBvWCibQ==";
+        url = "https://registry.npmjs.org/convict/-/convict-6.2.2.tgz";
+        sha512 = "3MsROJiEFN3BAzeFit1t87t7EUFzd44MNd13MLSikV2dsnDl7znwKgtYPPONtnDzxiDW0nBAsxVhSRNrjUrTTg==";
       };
     };
     "cookie-0.4.1" = {
@@ -4252,13 +4252,13 @@ let
         sha1 = "5529a4d67654134edcc5266656835b0f851afcee";
       };
     };
-    "micromatch-4.0.4" = {
+    "micromatch-4.0.5" = {
       name = "micromatch";
       packageName = "micromatch";
-      version = "4.0.4";
+      version = "4.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/micromatch/-/micromatch-4.0.4.tgz";
-        sha512 = "pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==";
+        url = "https://registry.npmjs.org/micromatch/-/micromatch-4.0.5.tgz";
+        sha512 = "DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==";
       };
     };
     "millisecond-0.1.2" = {
@@ -4324,13 +4324,13 @@ let
         sha512 = "J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==";
       };
     };
-    "minimist-1.2.5" = {
+    "minimist-1.2.6" = {
       name = "minimist";
       packageName = "minimist";
-      version = "1.2.5";
+      version = "1.2.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz";
-        sha512 = "FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==";
+        url = "https://registry.npmjs.org/minimist/-/minimist-1.2.6.tgz";
+        sha512 = "Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==";
       };
     };
     "minipass-2.9.0" = {
@@ -4351,13 +4351,13 @@ let
         sha512 = "6ZYMOEnmVsdCeTJVE0W9ZD+pVnE8h9Hma/iOwwRDsdQoePpoX56/8B6z3P9VNwppJuBKNRuFDRNRqRWexT9G9Q==";
       };
     };
-    "mkdirp-0.5.5" = {
+    "mkdirp-0.5.6" = {
       name = "mkdirp";
       packageName = "mkdirp";
-      version = "0.5.5";
+      version = "0.5.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.5.tgz";
-        sha512 = "NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==";
+        url = "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.6.tgz";
+        sha512 = "FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==";
       };
     };
     "mkdirp-1.0.4" = {
@@ -4504,49 +4504,49 @@ let
         sha512 = "z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==";
       };
     };
-    "n8n-core-0.110.0" = {
+    "n8n-core-0.111.0" = {
       name = "n8n-core";
       packageName = "n8n-core";
-      version = "0.110.0";
+      version = "0.111.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-core/-/n8n-core-0.110.0.tgz";
-        sha512 = "E+BrrAxO1TZbu19NDO66rubih6DNSoUdceM6S9pjtAEQukya9J2BAqnPsrZJ7Trs97W2q8G4wSKP4G6lzKobhQ==";
+        url = "https://registry.npmjs.org/n8n-core/-/n8n-core-0.111.0.tgz";
+        sha512 = "fZLLJ60yIuuX+geKGQrO6jk+kxn1UaCJMoWEi2FVE+InTmi+/r51Bv6LGoapoW0Oz+Em+CDq0wE7Yzg3xNx7fw==";
       };
     };
-    "n8n-design-system-0.15.0" = {
+    "n8n-design-system-0.16.0" = {
       name = "n8n-design-system";
       packageName = "n8n-design-system";
-      version = "0.15.0";
+      version = "0.16.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-design-system/-/n8n-design-system-0.15.0.tgz";
-        sha512 = "ZHlJJdaZ8ug9OV/SbqdF4FSEqTAoGBO+jqPECcUiYmHbL3BHcY8ZgWcnzmTnIPYTRGtIdc8snv3ti1USgASE5Q==";
+        url = "https://registry.npmjs.org/n8n-design-system/-/n8n-design-system-0.16.0.tgz";
+        sha512 = "X7Qa+DoXRyJL4gqh7x59udnPIBYAUgDvhchL33dpI/Rgq9gaFajT9eAuOFQnXKMUaL0FZ5hu3rRGcAmwwEA/bA==";
       };
     };
-    "n8n-editor-ui-0.136.0" = {
+    "n8n-editor-ui-0.137.0" = {
       name = "n8n-editor-ui";
       packageName = "n8n-editor-ui";
-      version = "0.136.0";
+      version = "0.137.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-editor-ui/-/n8n-editor-ui-0.136.0.tgz";
-        sha512 = "582dHNfp4upne8IhcaYznSPq26wsruAK5ZmOSfjcQMJqVBOm26IKFXCwn7ZL3KxNznmlHLHTfbAsrjE+ZTKPTA==";
+        url = "https://registry.npmjs.org/n8n-editor-ui/-/n8n-editor-ui-0.137.0.tgz";
+        sha512 = "/wYAIh/3RtVaFxY+vtVEACfo6xsVOi3cEPWd+GSFCK/AMxXs517CNGbwNz54geqaGNUH+rhhUz87C0pG+TgiUg==";
       };
     };
-    "n8n-nodes-base-0.167.0" = {
+    "n8n-nodes-base-0.168.0" = {
       name = "n8n-nodes-base";
       packageName = "n8n-nodes-base";
-      version = "0.167.0";
+      version = "0.168.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-nodes-base/-/n8n-nodes-base-0.167.0.tgz";
-        sha512 = "9+pCjtPDptMO3nBqfizwsQ7+C+QUYPbW4YGT/X0+CaF+2wMkGEbKGADH6V0eWHHWKtzcyoLXqldSnilboXXxmw==";
+        url = "https://registry.npmjs.org/n8n-nodes-base/-/n8n-nodes-base-0.168.0.tgz";
+        sha512 = "TyIL5Gwn+qvfi+1nNkQTPfrJYMqjx2P2OCiDWAMfzahauJyJpfJMYpIEKF3UxoKXCfWpBYPmHVoov6GadEOR1w==";
       };
     };
-    "n8n-workflow-0.92.0" = {
+    "n8n-workflow-0.93.0" = {
       name = "n8n-workflow";
       packageName = "n8n-workflow";
-      version = "0.92.0";
+      version = "0.93.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-workflow/-/n8n-workflow-0.92.0.tgz";
-        sha512 = "d16p4co9I6v+AxVOxXyeWAgUY/7PwwlgJFaKH8XTA/fRARah3/DzLdb9Kmq5I1fqtr1VoZ+a1uTQCJi11bnRzA==";
+        url = "https://registry.npmjs.org/n8n-workflow/-/n8n-workflow-0.93.0.tgz";
+        sha512 = "IqZrnTKdIZD7aeL9/FiwoI7w1WBgeBmqZVXRF+OGtIHooK/lDkHpy17hoXXqAyeATiVf2licgl8F/zMvSsnuJA==";
       };
     };
     "named-placeholders-1.1.2" = {
@@ -4693,13 +4693,13 @@ let
         sha512 = "AtiTVUFHLiiDnMQ43zi0YgkzHOEWUkhDgPlBXrsDzJiJvB29Alo4OKxHQ0ugF3gRqRQIneCLtZU3yiUo7pItZw==";
       };
     };
-    "nodemailer-6.7.2" = {
+    "nodemailer-6.7.3" = {
       name = "nodemailer";
       packageName = "nodemailer";
-      version = "6.7.2";
+      version = "6.7.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nodemailer/-/nodemailer-6.7.2.tgz";
-        sha512 = "Dz7zVwlef4k5R71fdmxwR8Q39fiboGbu3xgswkzGwczUfjp873rVxt1O46+Fh0j1ORnAC6L9+heI8uUpO6DT7Q==";
+        url = "https://registry.npmjs.org/nodemailer/-/nodemailer-6.7.3.tgz";
+        sha512 = "KUdDsspqx89sD4UUyUKzdlUOper3hRkDVkrKh/89G+d9WKsU5ox51NWS4tB1XR5dPUdR4SP0E3molyEfOvSa3g==";
       };
     };
     "nopt-4.0.3" = {
@@ -6430,22 +6430,22 @@ let
         sha512 = "+idbmIXoYET47hH+d7dfm2epdOMUDjqcB4648sTZ+t2JwoyBFL/insLfB/racrDmsKB3diwsDA696pZMieAC5g==";
       };
     };
-    "ssh2-1.7.0" = {
+    "ssh2-1.8.0" = {
       name = "ssh2";
       packageName = "ssh2";
-      version = "1.7.0";
+      version = "1.8.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ssh2/-/ssh2-1.7.0.tgz";
-        sha512 = "u1gdFfqKV1PTGR2szS5FImhFii40o+8FOUpg1M//iimNaS4BkTyUVfVdoydXS93M1SquOU02Z4KFhYDBNqQO+g==";
+        url = "https://registry.npmjs.org/ssh2/-/ssh2-1.8.0.tgz";
+        sha512 = "NVIRkIwJvWl+mcRozp+EBzHMVCcbDKBea64ToPdZEk43yAVGwmfqYZRPFRnnvGjsKC34wYCmiupTcKgCVNVNNg==";
       };
     };
-    "ssh2-sftp-client-7.2.2" = {
+    "ssh2-sftp-client-7.2.3" = {
       name = "ssh2-sftp-client";
       packageName = "ssh2-sftp-client";
-      version = "7.2.2";
+      version = "7.2.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ssh2-sftp-client/-/ssh2-sftp-client-7.2.2.tgz";
-        sha512 = "qZYivU1zezyRomCf+TtsCYVAsc0TDQWzxJMMUN8NknEPonm2TYGxJAzrW8acUh2ILYgA0ZPOJElLV/qp9nRVYQ==";
+        url = "https://registry.npmjs.org/ssh2-sftp-client/-/ssh2-sftp-client-7.2.3.tgz";
+        sha512 = "Bmq4Uewu3e0XOwu5bnPbiS5KRQYv+dff5H6+85V4GZrPrt0Fkt1nUH+uXanyAkoNxUpzjnAPEEoLdOaBO9c3xw==";
       };
     };
     "sshpk-1.17.0" = {
@@ -7579,10 +7579,10 @@ in
   n8n = nodeEnv.buildNodePackage {
     name = "n8n";
     packageName = "n8n";
-    version = "0.169.0";
+    version = "0.170.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/n8n/-/n8n-0.169.0.tgz";
-      sha512 = "mqZJUnulA/xNelNxebJeYioQeLtzNSFD8vzEsoxzoVbeaRkXQeC6CVBCldSGUMMSPcw2QchnzAKp9YauRE5cAA==";
+      url = "https://registry.npmjs.org/n8n/-/n8n-0.170.0.tgz";
+      sha512 = "aY4A9+P7K6iinxFyDZl9Jdin283csAbiMStjfxLX5IfO75/aNbjXhSmpjclV9PCUuuTonvoMiVMTvpbCaeImqg==";
     };
     dependencies = [
       (sources."@azure/abort-controller-1.0.5" // {
@@ -7642,7 +7642,7 @@ in
           sources."kuler-2.0.0"
         ];
       })
-      sources."@fontsource/open-sans-4.5.6"
+      sources."@fontsource/open-sans-4.5.8"
       sources."@icetee/ftp-0.3.15"
       sources."@kafkajs/confluent-schema-registry-1.0.6"
       sources."@kwsites/file-exists-1.1.1"
@@ -7694,7 +7694,7 @@ in
       sources."@types/lodash-4.14.180"
       sources."@types/lossless-json-1.0.1"
       sources."@types/mime-1.3.2"
-      sources."@types/node-17.0.21"
+      sources."@types/node-17.0.23"
       (sources."@types/node-fetch-2.6.1" // {
         dependencies = [
           sources."form-data-3.0.1"
@@ -7763,7 +7763,7 @@ in
         ];
       })
       sources."avsc-5.7.3"
-      (sources."aws-sdk-2.1096.0" // {
+      (sources."aws-sdk-2.1101.0" // {
         dependencies = [
           sources."buffer-4.9.2"
           sources."events-1.1.1"
@@ -7934,7 +7934,7 @@ in
       })
       sources."content-disposition-0.5.4"
       sources."content-type-1.0.4"
-      sources."convict-6.2.1"
+      sources."convict-6.2.2"
       sources."cookie-0.4.1"
       sources."cookie-parser-1.4.6"
       sources."cookie-signature-1.0.6"
@@ -8277,7 +8277,7 @@ in
       sources."merge-descriptors-1.0.1"
       sources."merge2-1.4.1"
       sources."methods-1.1.2"
-      sources."micromatch-4.0.4"
+      sources."micromatch-4.0.5"
       sources."millisecond-0.1.2"
       sources."mime-1.6.0"
       sources."mime-db-1.52.0"
@@ -8285,7 +8285,7 @@ in
       sources."mimic-fn-2.1.0"
       sources."minimalistic-assert-1.0.1"
       sources."minimatch-3.1.2"
-      sources."minimist-1.2.5"
+      sources."minimist-1.2.6"
       (sources."minipass-2.9.0" // {
         dependencies = [
           sources."yallist-3.1.1"
@@ -8327,19 +8327,19 @@ in
         ];
       })
       sources."mz-2.7.0"
-      (sources."n8n-core-0.110.0" // {
+      (sources."n8n-core-0.111.0" // {
         dependencies = [
           sources."qs-6.10.3"
         ];
       })
-      sources."n8n-design-system-0.15.0"
-      sources."n8n-editor-ui-0.136.0"
-      (sources."n8n-nodes-base-0.167.0" // {
+      sources."n8n-design-system-0.16.0"
+      sources."n8n-editor-ui-0.137.0"
+      (sources."n8n-nodes-base-0.168.0" // {
         dependencies = [
           sources."iconv-lite-0.6.3"
         ];
       })
-      sources."n8n-workflow-0.92.0"
+      sources."n8n-workflow-0.93.0"
       (sources."named-placeholders-1.1.2" // {
         dependencies = [
           sources."lru-cache-4.1.5"
@@ -8371,14 +8371,14 @@ in
       sources."node-fetch-2.6.7"
       (sources."node-pre-gyp-0.11.0" // {
         dependencies = [
-          sources."mkdirp-0.5.5"
+          sources."mkdirp-0.5.6"
           sources."rimraf-2.7.1"
           sources."semver-5.7.1"
         ];
       })
       sources."node-ssh-12.0.4"
       sources."nodeify-1.0.1"
-      sources."nodemailer-6.7.2"
+      sources."nodemailer-6.7.3"
       sources."nopt-4.0.3"
       sources."normalize-path-3.0.0"
       sources."npm-bundled-1.1.2"
@@ -8643,8 +8643,8 @@ in
       sources."sqlstring-2.3.3"
       sources."sse-channel-3.1.1"
       sources."ssf-0.11.2"
-      sources."ssh2-1.7.0"
-      sources."ssh2-sftp-client-7.2.2"
+      sources."ssh2-1.8.0"
+      sources."ssh2-sftp-client-7.2.3"
       sources."sshpk-1.17.0"
       sources."stack-trace-0.0.10"
       sources."standard-as-callback-2.1.0"
@@ -8662,7 +8662,7 @@ in
       sources."supports-color-7.2.0"
       (sources."tar-4.4.19" // {
         dependencies = [
-          sources."mkdirp-0.5.5"
+          sources."mkdirp-0.5.6"
           sources."yallist-3.1.1"
         ];
       })
