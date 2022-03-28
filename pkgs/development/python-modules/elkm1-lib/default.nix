@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gwww";
     repo = "elkm1";
     rev = version;
-    hash = "sha256-+rFW7qFpay/ebUz9EEB8nn0kuqVtVmG5ZHOWG2bMPts=";
+    hash = "sha256-Jr9f+essHB1FkzD6zM0G6jgE9C9lfDJuFIPrKRhVt+g=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "elkm1_lib" ];
+  pythonImportsCheck = [
+    "elkm1_lib"
+  ];
 
   meta = with lib; {
     description = "Python module for interacting with ElkM1 alarm/automation panel";
