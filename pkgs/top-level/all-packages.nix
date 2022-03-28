@@ -10229,6 +10229,8 @@ with pkgs;
 
   sslmate = callPackage ../development/tools/sslmate { };
 
+  sslmate-agent = callPackage ../development/tools/sslmate-agent { };
+
   sshoogr = callPackage ../tools/networking/sshoogr { };
 
   ssmtp = callPackage ../tools/networking/ssmtp { };
