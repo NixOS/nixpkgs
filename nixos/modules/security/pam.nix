@@ -783,13 +783,27 @@ in
         '';
     };
 
-    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+    security.pam.enableOTPW = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        DEPRECATED, please use <literal>security.pam.services.*.otpwAuth</literal>
+        instead, as this option is very coarse-grained.
+        I.e. <literal>security.pam.services.login.otpwAuth = true</literal>
+
+        Whether to enable the OTPW (one-time password) PAM module.
+      '';
+    };
 
     security.pam.p11 = {
       enable = mkOption {
         default = false;
         type = types.bool;
         description = ''
+          DEPRECATED, please use <literal>security.pam.services.*.p11Auth</literal>
+          instead, as this option is very coarse-grained.
+          I.e. <literal>security.pam.services.login.p11Auth = true</literal>
+
           Enables P11 PAM (<literal>pam_p11</literal>) module.
 
           If set, users can log in with SSH keys and PKCS#11 tokens.
@@ -823,6 +837,10 @@ in
         default = false;
         type = types.bool;
         description = ''
+          DEPRECATED, please use <literal>security.pam.services.*.u2fAuth</literal>
+          instead, as this option is very coarse-grained.
+          I.e. <literal>security.pam.services.login.u2fAuth = true</literal>
+
           Enables U2F PAM (<literal>pam-u2f</literal>) module.
 
           If set, users listed in
@@ -931,6 +949,10 @@ in
         default = false;
         type = types.bool;
         description = ''
+          DEPRECATED, please use <literal>security.pam.services.*.yubicoAuth</literal>
+          instead, as this option is very coarse-grained.
+          I.e. <literal>security.pam.services.login.yubicoAuth = true</literal>
+
           Enables Yubico PAM (<literal>yubico-pam</literal>) module.
 
           If set, users listed in
@@ -1017,16 +1039,46 @@ in
 
   config = {
 
-    environment.systemPackages =
+    warnings = flatten [
+      (optional config.security.pam.p11.enable ''
+        DEPRECATED, please use `security.pam.services.<name>.p11Auth`
+        instead, as this option is very coarse-grained.
+        I.e. `security.pam.services.login.p11Auth = true`
+      '')
+      (optional config.security.pam.u2f.enable ''
+        DEPRECATED, please use `security.pam.services.<name>.u2fAuth`
+        instead, as this option is very coarse-grained.
+        I.e. `security.pam.services.login.u2fAuth = true`
+      '')
+      (optional config.security.pam.yubico.enable ''
+        DEPRECATED, please use `security.pam.services.<name>.yubicoAuth`
+        instead, as this option is very coarse-grained.
+        I.e. `security.pam.services.login.yubicoAuth = true`
+      '')
+      (optional config.security.pam.enableOTPW ''
+        DEPRECATED, please use `security.pam.services.<name>.otpwAuth`
+        instead, as this option is very coarse-grained.
+        I.e. `security.pam.services.login.otpwAuth = true`
+      '')
+      (optional config.security.pam.oath.enable ''
+        DEPRECATED, please use `security.pam.services.<name>.oathAuth`
+        instead, as this option is very coarse-grained.
+        I.e. `security.pam.services.login.oathAuth = true`
+      '')
+    ];
+
+    environment.systemPackages = let
+      anyAuth = attr: any (attrByPath [attr] false) (attrValues config.security.pam.services);
+    in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
-      ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
-      ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
-      ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+      ++ optionals (config.security.pam.enableOTPW || anyAuth "otpwAuth") [ pkgs.otpw ]
+      ++ optionals (config.security.pam.oath.enable || anyAuth "oathAuth") [ pkgs.oathToolkit ]
+      ++ optionals (config.security.pam.p11.enable || anyAuth "p11Auth") [ pkgs.pam_p11 ]
+      ++ optionals (config.security.pam.u2f.enable || anyAuth "u2fAuth") [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
