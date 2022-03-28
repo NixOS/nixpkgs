@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyskyqhub";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "RogerSelwyn";
     repo = "skyq_hub";
     rev = version;
-    sha256 = "sha256-Qc7mb51KKGLNWjeiJKAsFO/RNLefv0sRHWwXodMBi/k=";
+    sha256 = "sha256-BMdNduWq8B3BlqwjANJ4wcwF8bs09apXEdBBmfTZ3mM=";
   };
 
   propagatedBuildInputs = [
