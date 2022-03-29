@@ -204,7 +204,7 @@ in
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
       binutils-unwrapped = super.binutils-unwrapped.override {
-        gold = false;
+        enableGold = false;
       };
       inherit (prevStage)
         ccWrapperStdenv
