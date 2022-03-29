@@ -3,12 +3,13 @@
 , fetchPypi
 , asgiref
 , click
+, importlib-metadata
 , itsdangerous
 , jinja2
 , python-dotenv
 , werkzeug
-, setuptools
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -27,11 +28,7 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-
-    # required for CLI subcommand autodiscovery
-    # see: https://github.com/pallets/flask/blob/fdac8a5404e3e3a316568107a293f134707c75bb/src/flask/cli.py#L498
-    setuptools
-  ];
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook
@@ -48,5 +45,6 @@ buildPythonPackage rec {
       Python web application frameworks.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
