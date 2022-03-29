@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UjL4wR5HhuXiQXg6Orcx2fKiVGRPMJk15P779BP1fRA=";
   };
 
-  patches = [
-    ./ioctl.patch        # required /dev/tty
-  ];
-
   postPatch = ''
     patchShebangs build/
   '';
@@ -23,6 +19,9 @@ stdenv.mkDerivation rec {
   dontFixup = true;
   enableParallelBuilding = true;
   nativeBuildInputs = [ bintools-unwrapped unzip ];
+
+  # slashes are significant because upstream uses o/$(MODE)/foo.o
+  buildFlags = "o/cosmopolitan.h o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.o o//ape/ape.lds";
 
   installPhase = ''
     runHook preInstall
