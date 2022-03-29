@@ -188,6 +188,8 @@ with pkgs;
 
   aocd = with python3Packages; toPythonApplication aocd;
 
+  aesfix = callPackage ../tools/security/aesfix { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
