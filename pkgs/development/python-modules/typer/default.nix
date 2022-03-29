@@ -8,9 +8,6 @@
 , pytest-xdist
 , pytest-sugar
 , coverage
-, mypy
-, black
-, isort
 , pythonOlder
 }:
 
@@ -34,10 +31,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-sugar
     shellingham
-    coverage
-    mypy
-    black
-    isort
+    coverage # execs coverage in tests
   ];
 
   preCheck = ''
