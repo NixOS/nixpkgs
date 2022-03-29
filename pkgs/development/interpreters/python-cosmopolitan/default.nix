@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     badPlatforms = platforms.darwin;
     license = licenses.isc;
-    maintainers = with maintainers; [ lourkeur tomberek ];
+    maintainers = teams.cosmopolitan.members;
     mainProgram = "python.com";
   };
 }

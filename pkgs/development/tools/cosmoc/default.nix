@@ -35,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://justine.lol/cosmopolitan/";
     description = "compiler for Cosmopolitan C programs";
     license = licenses.mit;
-    maintainers = with maintainers; [ lourkeur tomberek ];
+    maintainers = teams.cosmopolitan.members;
   };
 }
