@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "sha256-THTlhOfXAPaqTt1qBkht+D67bw6M175QLvXoUMgjks4=";
   };
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.03";
 
   nativeBuildInputs = [ cppo ];
 

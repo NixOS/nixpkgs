@@ -83,8 +83,6 @@ let
     bls12-381-unix = callPackage ../development/ocaml-modules/bls12-381/unix.nix { };
     bls12-381-legacy = callPackage ../development/ocaml-modules/bls12-381/legacy.nix { };
 
-    bolt = callPackage ../development/ocaml-modules/bolt { };
-
     bos = callPackage ../development/ocaml-modules/bos { };
 
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
