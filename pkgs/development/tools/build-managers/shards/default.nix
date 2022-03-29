@@ -36,12 +36,6 @@ let
 
 in
 rec {
-
-  shards_0_15 = generic {
-    version = "0.15.0";
-    hash = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";
-  };
-
   shards_0_17 = generic {
     version = "0.17.0";
     hash = "sha256-f9MptrKalW7gi0J2h0fokkzdjKBVa2TmoPX8BYffqzY=";

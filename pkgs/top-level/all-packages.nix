@@ -15821,7 +15821,6 @@ with pkgs;
   shallot = callPackage ../tools/misc/shallot { };
 
   inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_15
     shards_0_17
     shards;
 
