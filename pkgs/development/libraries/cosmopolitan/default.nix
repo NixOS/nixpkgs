@@ -25,21 +25,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,include,lib}
+    mkdir -p $out/{include,lib}
     install o/cosmopolitan.h $out/include
     install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} $out/lib
-
-    cat > $out/bin/cosmoc <<EOF
-    #!${stdenv.shell}
-    exec ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}gcc \
-      -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone \
-      "\$@" \
-      -Wl,--gc-sections -Wl,-z,max-page-size=0x1000 \
-      -fuse-ld=bfd -Wl,-T,$out/lib/ape.lds \
-      -include $out/include/cosmopolitan.h \
-      $out/lib/{crt.o,ape.o,cosmopolitan.a}
-    EOF
-    chmod +x $out/bin/cosmoc
 
     pushd o
     find -iname "*.com" -type f -exec install -D {} $out/{} \;
@@ -61,12 +49,6 @@ stdenv.mkDerivation rec {
         ${cosmopolitan}/lib/{crt.o,ape.o,cosmopolitan.a}
       ${stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
       ./hello.com
-      printf "test successful" > $out
-    '';
-    cosmoc = runCommand "cosmoc-hello" { } ''
-      printf 'main() { printf("hello world\\n"); }\n' >hello.c
-      ${cosmopolitan}/bin/cosmoc hello.c
-      ./a.out
       printf "test successful" > $out
     '';
   };
