@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitLab, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
-, mimiSupport ? false, gawk ? null }:
-
-assert mimiSupport -> gawk != null;
+, mimiSupport ? false, gawk }:
 
 let
   # A much better xdg-open
