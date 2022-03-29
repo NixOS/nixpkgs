@@ -436,7 +436,7 @@ Types are mainly characterized by their `check` and `merge` functions.
 
 :   The function to type check the value. Takes a value as parameter and
     return a boolean. It is possible to extend a type check with the
-    `addCheck` function ([Example: Adding a type check](#ex-extending-type-check-1)),
+    `addCheckDesc` function ([Example: Adding a type check](#ex-extending-type-check-1)),
     or to fully override the check function
     ([Example: Overriding a type check](#ex-extending-type-check-2)).
 
@@ -447,7 +447,7 @@ Types are mainly characterized by their `check` and `merge` functions.
     ```nix
     byte = mkOption {
       description = "An integer between 0 and 255.";
-      type = types.addCheck types.int (x: x >= 0 && x <= 255);
+      type = types.addCheckDesc "between 0 and 255" types.int (x: x >= 0 && x <= 255);
     };
     ```
     :::

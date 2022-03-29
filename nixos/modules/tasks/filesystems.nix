@@ -5,11 +5,8 @@ with utils;
 
 let
 
-  addCheckDesc = desc: elemType: check: types.addCheck elemType check
-    // { description = "${elemType.description} (with check: ${desc})"; };
-
   isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
-  nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
+  nonEmptyStr = types.addCheckDesc "non-empty" types.str isNonEmpty;
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
@@ -24,7 +21,7 @@ let
 
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
-  nonEmptyWithoutTrailingSlash = addCheckDesc "non-empty without trailing slash" types.str
+  nonEmptyWithoutTrailingSlash = types.addCheckDesc "non-empty without trailing slash" types.str
     (s: isNonEmpty s && (builtins.match ".+/" s) == null);
 
   coreFileSystemOpts = { name, config, ... }: {

@@ -752,6 +752,11 @@ rec {
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
+    # Augment the given type with an additional type check function and a
+    # description of what the check validates.
+    addCheckDesc = desc: elemType: check: types.addCheck elemType check
+      // { description = "${elemType.description} (with check: ${desc})"; };
+
   };
 };
 
