@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "21.8.12.29";
+  version = "22.3.2.2";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo   = "ClickHouse";
     rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "1qqacb7v7mhr9k162yll8mcbh0cxa347f5hypz0a8l54v1dz5fyl";
+    sha256 = "0rhzgm0gvwpx4h5xyr7y393y7s9slcr4a7grw9316f5m70frxg2v";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     substituteInPlace utils/check-style/check-duplicate-includes.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-ungrouped-includes.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/generate-ya-make/generate-ya-make.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/list-licenses/list-licenses.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
