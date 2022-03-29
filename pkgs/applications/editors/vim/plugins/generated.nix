@@ -7146,6 +7146,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/unite.vim/";
   };
 
+  urlview-nvim = buildVimPluginFrom2Nix {
+    pname = "urlview.nvim";
+    version = "2022-03-29";
+    src = fetchFromGitHub {
+      owner = "axieax";
+      repo = "urlview.nvim";
+      rev = "4ca1b22d914ff3187acd5a9486421769928c9d8f";
+      sha256 = "1vy977y7favs76mpk6v3x18ph40y0d20kmm6bssvnlql1nh3ihbd";
+    };
+    meta.homepage = "https://github.com/axieax/urlview.nvim/";
+  };
+
   utl-vim = buildVimPluginFrom2Nix {
     pname = "utl.vim";
     version = "2010-10-18";

@@ -43,6 +43,7 @@ arthurxavierx/vim-unicoder
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
+axieax/urlview.nvim
 ayu-theme/ayu-vim
 b0o/SchemaStore.nvim
 b3nj5m1n/kommentary
