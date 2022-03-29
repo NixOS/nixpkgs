@@ -1,10 +1,8 @@
 { lib
-, black
 , buildPythonPackage
 , dataclasses
 , fetchFromGitHub
 , hypothesis
-, isort
 , pytestCheckHook
 , python
 , pythonOlder
@@ -63,8 +61,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    black
-    isort
     pytestCheckHook
   ];
 
