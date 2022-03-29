@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , click
 , pytestCheckHook
@@ -24,6 +25,16 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1pgm0zsylbmz1r96q4n3rfi0h3pn4jss2yfs83z0yxa90nmsxhv3";
   };
+
+  patches = [
+    (fetchpatch {
+      # use get_terminal_size from shutil; click 8.1.0 compat
+      # https://github.com/tiangolo/typer/pull/375
+      name = "typer-click-8.1-compat.patch";
+      url = "https://github.com/tiangolo/typer/commit/b6efa2f8f40291fd80cf146b617e0ba305f6af3c.patch";
+      hash = "sha256-m0EWpBUt5njoPsn043b30WdAQELYNn2ycHXBxZCYXZE=";
+    })
+  ];
 
   propagatedBuildInputs = [
     click
