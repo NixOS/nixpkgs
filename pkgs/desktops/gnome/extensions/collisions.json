@@ -136,7 +136,16 @@
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
     ]
   },
-  "42": {}
+  "42": {
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ]
+  }
 }
