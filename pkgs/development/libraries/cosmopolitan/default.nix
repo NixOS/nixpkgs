@@ -22,10 +22,6 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontFixup = true;
 
-  postPatch = ''
-    patchShebangs build/
-  '';
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{include,lib}
