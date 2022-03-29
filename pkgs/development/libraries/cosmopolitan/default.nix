@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cosmopolitan, bintools-unwrapped }:
+{ lib, stdenv, fetchFromGitHub, unzip, bintools-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
@@ -11,17 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UjL4wR5HhuXiQXg6Orcx2fKiVGRPMJk15P779BP1fRA=";
   };
 
-  postPatch = ''
-    patchShebangs build/
-  '';
-
-  dontConfigure = true;
-  dontFixup = true;
-  enableParallelBuilding = true;
   nativeBuildInputs = [ bintools-unwrapped unzip ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
   buildFlags = "o/cosmopolitan.h o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.o o//ape/ape.lds";
+  checkTarget = "o//test";
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  dontConfigure = true;
+  dontFixup = true;
+
+  postPatch = ''
+    patchShebangs build/
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -30,9 +33,6 @@ stdenv.mkDerivation rec {
     install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} $out/lib
     runHook postInstall
   '';
-
-  checkTarget = "o//test";
-  doCheck = true;
 
   meta = with lib; {
     homepage = "https://justine.lol/cosmopolitan/";
