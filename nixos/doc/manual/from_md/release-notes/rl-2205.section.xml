@@ -479,6 +479,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>git</literal> no longer hardcodes the path to
+          openssh’ ssh binary to reduce the amount of rebuilds. If you
+          are using git with ssh remotes and do not have a ssh binary in
+          your enviroment consider adding <literal>openssh</literal> to
+          it or switching to <literal>gitFull</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.k3s.enable</literal> no longer implies
           <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>,
           and will default to the <quote>systemd</quote> cgroup driver
