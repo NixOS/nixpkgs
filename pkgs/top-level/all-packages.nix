@@ -2850,6 +2850,8 @@ with pkgs;
 
   damon = callPackage ../tools/admin/damon { };
 
+  dancing-script = callPackage ../data/fonts/dancing-script { };
+
   dante = callPackage ../servers/dante { };
 
   dapr-cli = callPackage ../development/tools/dapr/cli {};
