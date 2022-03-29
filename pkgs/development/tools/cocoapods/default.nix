@@ -21,5 +21,6 @@ bundlerApp {
       peterromfeldhk
       lilyball
     ];
+    mainProgram = "pod";
   };
 }

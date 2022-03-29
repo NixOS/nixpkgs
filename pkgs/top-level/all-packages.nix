@@ -4556,9 +4556,9 @@ with pkgs;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
-  cocoapods = callPackage ../development/mobile/cocoapods { };
+  cocoapods = callPackage ../development/tools/cocoapods { };
 
-  cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
+  cocoapods-beta = lowPrio (callPackage ../development/tools/cocoapods { beta = true; });
 
   cocom = callPackage ../tools/networking/cocom {
     inherit (darwin.apple_sdk.frameworks) Security;
