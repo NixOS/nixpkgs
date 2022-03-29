@@ -457,6 +457,7 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/usbmuxd.nix
+  ./services/hardware/usbrelayd.nix
   ./services/hardware/thermald.nix
   ./services/hardware/undervolt.nix
   ./services/hardware/vdr.nix
