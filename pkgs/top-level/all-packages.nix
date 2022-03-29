@@ -5074,6 +5074,8 @@ with pkgs;
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
+  epub-thumbnailer = callPackage ../tools/graphics/epub-thumbnailer { };
+
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
   };
@@ -7215,6 +7217,8 @@ with pkgs;
   less = callPackage ../tools/misc/less { };
 
   lf = callPackage ../tools/misc/lf {};
+
+  lfimg = callPackage ../tools/misc/lfimg { };
 
   lha = callPackage ../tools/archivers/lha { };
 
