@@ -1,9 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, isPy27
-, mock
+, flaky
 , traitlets
 , jupyter_core
 , jupyter-client
@@ -11,26 +9,43 @@
 , ipykernel
 , pyqt5
 , qtpy
+, pythonOlder
+, pytest-qt
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.2.2";
+  version = "5.3.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f9db97b27782184efd0a0f2d57ea3bd852d053747a2e442a9011329c082976d";
+    sha256 = "sha256-jjUg/cdeRqvEzGz/7KFvomUnVBCbiug5+ijifR66ViU=";
   };
 
-  checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter-client pygments ipykernel pyqt5 qtpy];
+  propagatedBuildInputs = [
+    traitlets
+    jupyter_core
+    jupyter-client
+    pygments
+    ipykernel
+    pyqt5
+    qtpy
+  ];
 
-  # : cannot connect to X server
+  checkInputs = [
+    flaky
+    pytest-qt
+    pytestCheckHook
+  ];
+
+  # qtconsole/tests/test_00_console_widget.py Fatal Python error: Aborted
   doCheck = false;
 
   meta = {
     description = "Jupyter Qt console";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/qtconsole";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fridh ];
