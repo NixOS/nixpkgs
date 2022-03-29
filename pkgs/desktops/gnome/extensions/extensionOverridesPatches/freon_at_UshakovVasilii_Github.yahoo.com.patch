@@ -1,7 +1,7 @@
-diff --git a/freon@UshakovVasilii_Github.yahoo.com/hddtempUtil.js b/freon@UshakovVasilii_Github.yahoo.com/hddtempUtil.js
+diff --git a/hddtempUtil.js b/hddtempUtil.js
 index e5d1d6d..856654b 100644
---- a/freon@UshakovVasilii_Github.yahoo.com/hddtempUtil.js
-+++ b/freon@UshakovVasilii_Github.yahoo.com/hddtempUtil.js
+--- a/hddtempUtil.js
++++ b/hddtempUtil.js
 @@ -7,7 +7,7 @@ var HddtempUtil = class extends CommandLineUtil.CommandLineUtil {
  
      constructor() {
@@ -31,10 +31,10 @@ index e5d1d6d..856654b 100644
              if(output.length)
                  pid = Number(output.trim());
          }
-diff --git a/freon@UshakovVasilii_Github.yahoo.com/liquidctlUtil.js b/freon@UshakovVasilii_Github.yahoo.com/liquidctlUtil.js
+diff --git a/liquidctlUtil.js b/liquidctlUtil.js
 index 766bf62..7cd4e94 100644
---- a/freon@UshakovVasilii_Github.yahoo.com/liquidctlUtil.js
-+++ b/freon@UshakovVasilii_Github.yahoo.com/liquidctlUtil.js
+--- a/liquidctlUtil.js
++++ b/liquidctlUtil.js
 @@ -8,7 +8,7 @@ const commandLineUtil = Me.imports.commandLineUtil;
  var LiquidctlUtil = class extends commandLineUtil.CommandLineUtil {
      constructor() {
@@ -44,10 +44,10 @@ index 766bf62..7cd4e94 100644
          this._argv = path ? [path, 'status', '--json'] : null;
      }
  
-diff --git a/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js b/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js
+diff --git a/nvmecliUtil.js b/nvmecliUtil.js
 index ae2ea93..2349b9e 100644
---- a/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js
-+++ b/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js
+--- a/nvmecliUtil.js
++++ b/nvmecliUtil.js
 @@ -3,7 +3,7 @@ const GLib = imports.gi.GLib;
  const Me = imports.misc.extensionUtils.getCurrentExtension();
  
@@ -57,10 +57,10 @@ index ae2ea93..2349b9e 100644
      return JSON.parse(GLib.spawn_command_line_sync(`${nvme} ${argv} -o json`)[1].toString())
  }
  
-diff --git a/freon@UshakovVasilii_Github.yahoo.com/sensorsUtil.js b/freon@UshakovVasilii_Github.yahoo.com/sensorsUtil.js
+diff --git a/sensorsUtil.js b/sensorsUtil.js
 index 62fa580..c017748 100644
---- a/freon@UshakovVasilii_Github.yahoo.com/sensorsUtil.js
-+++ b/freon@UshakovVasilii_Github.yahoo.com/sensorsUtil.js
+--- a/sensorsUtil.js
++++ b/sensorsUtil.js
 @@ -7,7 +7,7 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
  
      constructor() {
@@ -70,16 +70,16 @@ index 62fa580..c017748 100644
          // -A: Do not show adapter -j: JSON output
          this._argv = path ? [path, '-A', '-j'] : null;
      }
-diff --git a/freon@UshakovVasilii_Github.yahoo.com/smartctlUtil.js b/freon@UshakovVasilii_Github.yahoo.com/smartctlUtil.js
+diff --git a/smartctlUtil.js b/smartctlUtil.js
 index 03d469b..6057a3b 100644
---- a/freon@UshakovVasilii_Github.yahoo.com/smartctlUtil.js
-+++ b/freon@UshakovVasilii_Github.yahoo.com/smartctlUtil.js
+--- a/smartctlUtil.js
++++ b/smartctlUtil.js
 @@ -3,7 +3,7 @@ const GLib = imports.gi.GLib;
  const Me = imports.misc.extensionUtils.getCurrentExtension();
  const ByteArray = imports.byteArray;
  function getSmartData (argv){
 -    const smartctl = GLib.find_program_in_path('smartctl')
 +    const smartctl = GLib.find_program_in_path('@smartmontools@/bin/smartctl')
-     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
+     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`${smartctl} ${argv} -j`)[1] ))
  }
  
