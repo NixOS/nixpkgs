@@ -6,7 +6,7 @@
 , buildPythonPackage
 , cachetools
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.15.0";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,12 +25,11 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = version;
-    hash = "sha256-yNmnCoHIBlpQCLd+YcsKCKd1wWh8WZNpILWmChZGWH4=";
+    hash = "sha256-MeugjIZorwO8d0Yb7bthI6f4NNo6GX9JrRbxrVSdWv0=";
   };
 
   nativeBuildInputs = [
-    # Requires poetry not poetry-core
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -50,12 +49,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
       --replace " --cov" ""
   '';
 
   disabledTests = [
-    # https://github.com/ctalkington/python-rokuecp/issues/249
+    # Network related tests are having troube in the sandbox
     "test_resolve_hostname"
+    "test_get_dns_state"
     # Assertion issue
     "test_guess_stream_format"
   ];
