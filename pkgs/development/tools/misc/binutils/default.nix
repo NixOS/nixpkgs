@@ -110,7 +110,7 @@ stdenv.mkDerivation {
 
   inherit noSysDirs;
 
-  preConfigure = ''
+  preConfigure = (lib.optionalString targetPlatform.isDarwin ''
     for i in */configure.ac; do
       pushd "$(dirname "$i")"
       echo "Running autoreconf in $PWD"
@@ -119,7 +119,7 @@ stdenv.mkDerivation {
       autoconf
       popd
     done
-
+  '') + ''
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then
         echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
