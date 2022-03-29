@@ -4,6 +4,7 @@
 , glib
 , flex
 , bison
+, buildPackages
 , meson
 , ninja
 , gtk-doc
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals (stdenv.hostPlatform==stdenv.buildPlatform) [ "devdoc" ] ++ [ "man" ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     pkg-config
     flex
     bison
-    gtk-doc
+    buildPackages.gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3
@@ -86,7 +87,13 @@ stdenv.mkDerivation rec {
     "--datadir=${placeholder "dev"}/share"
     "-Ddoctool=disabled"
     "-Dcairo=disabled"
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${if stdenv.hostPlatform == stdenv.buildPlatform then "true" else "false"}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # build_introspection_data is broken for cross-compiles due to use
+    # of run_command(); it fails with "ERROR: An exe_wrapper is needed
+    # but was not found. Please define one in cross file and check the
+    # command and/or add it to PATH."
+    "-Dbuild_introspection_data=false"
   ];
 
   doCheck = !stdenv.isAarch64;
