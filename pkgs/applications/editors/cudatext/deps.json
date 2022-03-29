@@ -26,13 +26,13 @@
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2022.03.23",
-    "sha256": "sha256-QXq75VoAnYqAhe3Fvsz1szZyBz4dHEpYJZqTSCR80v8="
+    "rev": "2022.03.28",
+    "sha256": "sha256-jh3lqisiPNMxCapP6O5oJdUL3PLQ3JyomtgWix+bML0="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2022.03.23",
-    "sha256": "sha256-m1rkWvRC1i1nLPIhiG6g8LGU96vTuGGqLFrSzw9A9x0="
+    "rev": "2022.03.28",
+    "sha256": "sha256-TpAaL7/bhnrQgAq1mUTdEWXecSmznWy/iAw+TMMrQGo="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
