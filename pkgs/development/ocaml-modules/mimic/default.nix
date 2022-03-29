@@ -1,14 +1,13 @@
 { lib, buildDunePackage, fetchurl
-, fmt, mirage-flow, result, rresult, cstruct, logs, ke, lwt
-, alcotest, alcotest-lwt, bigstringaf, bigarray-compat
+, fmt, mirage-flow, cstruct, logs, ke, lwt
+, alcotest, alcotest-lwt, bigstringaf
 }:
 
 buildDunePackage rec {
   pname = "mimic";
   version = "0.0.4";
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
@@ -19,8 +18,6 @@ buildDunePackage rec {
     fmt
     lwt
     mirage-flow
-    result
-    rresult
     logs
   ];
 
@@ -29,7 +26,6 @@ buildDunePackage rec {
     alcotest
     alcotest-lwt
     bigstringaf
-    bigarray-compat
     cstruct
     ke
   ];
