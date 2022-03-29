@@ -1,4 +1,8 @@
 { lib, callPackage, Foundation }:
+/*
+Add new graal versions and products here and then see update.nix on how to
+generate the sources.
+*/
 
 let
   mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
@@ -67,7 +71,7 @@ in
         ];
       };
     };
-    version = "22.2.0-dev-20220326_0133";
+    version = "22.2.0-dev-20220330_2302";
     javaVersion = "17";
     platforms = builtins.attrNames config;
   };

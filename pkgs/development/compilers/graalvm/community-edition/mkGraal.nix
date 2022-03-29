@@ -36,14 +36,15 @@
 , writeScript
 , jq
 , runtimeShell
-, callPackage
+, gawk
 }:
 
 assert useMusl -> stdenv.isLinux;
 
 let
   platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  name = if lib.hasInfix "dev" version
+  name =
+    if lib.hasInfix "dev" version
     then "graalvm${javaVersion}-ce-dev"
     else "graalvm${javaVersion}-ce";
   sourcesFilename = "${name}-sources.json";
@@ -61,20 +62,10 @@ let
     (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
   ]);
 
-  javaVersionPlatform = "${javaVersion}-${platform.arch}";
-
   graalvmXXX-ce = stdenv.mkDerivation rec {
     inherit version name;
+
     srcs = map fetchurl (builtins.attrValues sources.${platform.arch});
-    /*let
-      # Some platforms doesn't have all GraalVM features
-      # e.g.: GraalPython on aarch64-linux
-      # When the platform doesn't have a feature, sha256 is null on hashes.nix
-      # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
-      maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
-      in
-      (lib.remove null
-      (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));*/
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -166,25 +157,25 @@ let
           done
         '';
       in
-        ''
-          # ensure that $lib/lib exists to avoid breaking builds
-          mkdir -p $lib/lib
-          # jni.h expects jni_md.h to be in the header search path.
-          ln -s $out/include/linux/*_md.h $out/include/
+      ''
+        # ensure that $lib/lib exists to avoid breaking builds
+        mkdir -p $lib/lib
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -s $out/include/linux/*_md.h $out/include/
 
-          # copy-paste openjdk's preFixup
-          # Set JAVA_HOME automatically.
-          mkdir -p $out/nix-support
-          cat > $out/nix-support/setup-hook << EOF
-            if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-          EOF
-          ${
-          lib.optionalString (stdenv.isLinux) ''
-            ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-            ${copyClibrariesToLib}
-          ''
-          }
-        '';
+        # copy-paste openjdk's preFixup
+        # Set JAVA_HOME automatically.
+        mkdir -p $out/nix-support
+        cat > $out/nix-support/setup-hook << EOF
+          if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+        EOF
+        ${
+        lib.optionalString (stdenv.isLinux) ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+          ${copyClibrariesToLib}
+        ''
+        }
+      '';
 
     dontStrip = true;
 
@@ -303,7 +294,7 @@ let
     passthru = {
       home = graalvmXXX-ce;
       updateScript = import ./update.nix {
-        inherit lib writeScript jq runtimeShell sourcesFilename config;
+        inherit lib writeScript jq runtimeShell sourcesFilename name config gawk;
         graalVersion = version;
         javaVersion = "java${javaVersion}";
       };
