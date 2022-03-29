@@ -27,11 +27,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-rS+vJX0y9v1TiPsRfABroHiTuENQKEOxNsyKwagRuHM=";
   };
 
-  postPatch = ''
-    sed "s|get_option('tests')|false|g" -i meson.build
-    patchShebangs .
-  '';
-
   buildInputs = [
     gtk-sharp-2_0
     mono
@@ -51,6 +46,14 @@ stdenv.mkDerivation rec {
     python3
     itstool
   ];
+
+  mesonFlags = [
+    "-Dtests=false" # requires NUnit
+  ];
+
+  postPatch = ''
+    patchShebangs .
+  '';
 
   preFixup = ''
     MPATH="${gtk-sharp-2_0}/lib/mono/gtk-sharp-2.0:${glib.out}/lib:${gtk2-x11}/lib:${gtk-sharp-2_0}/lib"
