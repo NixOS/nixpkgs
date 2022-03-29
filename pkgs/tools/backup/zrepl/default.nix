@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, nixosTests
 , openssh
 }:
 buildGoModule rec {
@@ -32,11 +33,15 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) zrepl;
+  };
+
   meta = with lib; {
     homepage = "https://zrepl.github.io/";
     description = "A one-stop, integrated solution for ZFS replication";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ cole-h danderson ];
+    maintainers = with maintainers; [ cole-h danderson mdlayher ];
   };
 }
