@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
 , aiohttp
 , azure-common
 , azure-core
@@ -10,12 +13,14 @@
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
   version = "4.5.0";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-x1AhiARXZXcky3A+DJXoCrvkqsonlkgdrdr6es/VY3s=";
+    hash = "sha256-x1AhiARXZXcky3A+DJXoCrvkqsonlkgdrdr6es/VY3s=";
   };
 
   propagatedBuildInputs = [
@@ -25,11 +30,17 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  checkInputs = [
+    aiohttp
+    pytestCheckHook
+  ];
+
+  pythonNamespaces = [
+    "azure.keyvault"
+  ];
 
   # requires relative paths to utilities in the mono-repo
   doCheck = false;
-  checkInputs = [ aiohttp pytestCheckHook ];
 
   pythonImportsCheck = [
     "azure"
