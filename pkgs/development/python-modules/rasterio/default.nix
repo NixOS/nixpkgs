@@ -1,23 +1,24 @@
 { buildPythonPackage, lib, fetchFromGitHub, isPy3k
 , cython, setuptools
 , numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytest-cov, packaging, hypothesis, boto3, mock
+, pytest, pythonOlder, packaging, hypothesis, boto3
 , certifi, shapely
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.2.6";
+  version = "1.2.10";
+  disabled = pythonOlder "3.6";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "rasterio";
     rev = version;
-    sha256 = "sha256-rf2qdUhbS4Z2+mvlN1RzZvlgTgjqiBoQzry4z5QLSUc=";
+    sha256 = "sha256-xVGwQfQvxsqYihUYXENJAz9Qp9xBkhsGc/RheRTJxgo=";
   };
 
-  checkInputs = [ boto3 pytest pytest-cov packaging hypothesis shapely ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ boto3 pytest packaging hypothesis shapely ];
   nativeBuildInputs = [ cython gdal ];
   propagatedBuildInputs = [ certifi gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
 
