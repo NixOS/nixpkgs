@@ -208,13 +208,15 @@ in {
       unbound = {};
     };
 
-    networking = mkIf cfg.resolveLocalQueries {
-      resolvconf = {
-        useLocalResolver = mkDefault true;
-      };
-
-      networkmanager.dns = "unbound";
-    };
+    networking = mkIf cfg.resolveLocalQueries (mkMerge [
+      (mkIf config.networking.resolvconf.enable {
+        resolvconf.useLocalResolver = mkDefault true;
+        networkmanager.dns = "unbound";
+      })
+      (mkIf (!config.networking.resolvconf.enable) {
+        nameservers = [ "127.0.0.1" ] ++ optional config.networking.enableIPv6 "::1";
+      })
+    ]);
 
     environment.etc."unbound/unbound.conf".source = confFile;
 
