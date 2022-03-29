@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals systemdSupport [ systemd ];
 
-  mesonFlags = [ "-Dauto_features=auto" "-Dlibseat-builtin=enabled" ];
+  mesonFlags = [
+    "-Dlibseat-logind=${if systemdSupport then "systemd" else "disabled"}"
+    "-Dlibseat-builtin=enabled"
+    "-Dserver=enabled"
+  ];
 
   meta = with lib; {
     description = "A universal seat management library";
