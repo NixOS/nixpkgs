@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.3.7";
+  version = "2022.3.8";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
