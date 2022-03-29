@@ -1,0 +1,12 @@
+{
+  "darwin-aarch64": {
+    "graalvm-ce|java17|22.2.0-dev-20220326_0133": {
+      "sha256": "72bab733783684dba422d9e04eb4fbd9103adb21db6937cf204c0c46e6ce5b7d",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220326_0133/graalvm-ce-java17-darwin-aarch64-dev.tar.gz"
+    },
+    "native-image-installable-svm|java17|22.2.0-dev-20220326_0133": {
+      "sha256": "397fd17fef67456f66820cbdae9493d16785499b91002d20fdef6e5aaf067ba7",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220326_0133/native-image-installable-svm-java17-darwin-aarch64-dev.jar"
+    }
+  }
+}

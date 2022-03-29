@@ -43,7 +43,9 @@ assert useMusl -> stdenv.isLinux;
 
 let
   platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  name = "graalvm${javaVersion}-ce";
+  name = if lib.hasInfix "dev" version
+    then "graalvm${javaVersion}-ce-dev"
+    else "graalvm${javaVersion}-ce";
   sourcesFilename = "${name}-sources.json";
   sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
 
@@ -164,43 +166,25 @@ let
           done
         '';
       in
-      {
-        "11-linux-amd64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+        ''
+          # ensure that $lib/lib exists to avoid breaking builds
+          mkdir -p $lib/lib
+          # jni.h expects jni_md.h to be in the header search path.
+          ln -s $out/include/linux/*_md.h $out/include/
 
-          ${copyClibrariesToLib}
+          # copy-paste openjdk's preFixup
+          # Set JAVA_HOME automatically.
+          mkdir -p $out/nix-support
+          cat > $out/nix-support/setup-hook << EOF
+            if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+          EOF
+          ${
+          lib.optionalString (stdenv.isLinux) ''
+            ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+            ${copyClibrariesToLib}
+          ''
+          }
         '';
-        "17-linux-amd64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "11-linux-aarch64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "17-linux-aarch64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "11-darwin-amd64" = "";
-        "17-darwin-amd64" = "";
-        "17-darwin-aarch64" = "";
-      }.${javaVersionPlatform} + ''
-        # ensure that $lib/lib exists to avoid breaking builds
-        mkdir -p $lib/lib
-        # jni.h expects jni_md.h to be in the header search path.
-        ln -s $out/include/linux/*_md.h $out/include/
-
-        # copy-paste openjdk's preFixup
-        # Set JAVA_HOME automatically.
-        mkdir -p $out/nix-support
-        cat <<EOF > $out/nix-support/setup-hook
-          if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-        EOF
-      '';
 
     dontStrip = true;
 
@@ -284,7 +268,7 @@ let
       }
 
       ${
-        lib.optionalString (platform.arch != "linux-aarch64" && platform.arch != "darwin-aarch64") ''
+        lib.optionalString (builtins.any (a: a == "python-installable-svm") platform.products) ''
           echo "Testing GraalPython"
           $out/bin/graalpython -c 'print(1 + 1)'
           echo '1 + 1' | $out/bin/graalpython
@@ -293,7 +277,7 @@ let
 
       echo "Testing TruffleRuby"
       ${
-        lib.optionalString (platform != "darwin-aarch64") ''
+        lib.optionalString (builtins.any (a: a == "ruby-installable-svm") platform.products) ''
       # Hide warnings about wrong locale
       export LANG=C
       export LC_ALL=C

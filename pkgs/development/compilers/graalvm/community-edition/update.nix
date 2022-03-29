@@ -10,6 +10,7 @@
 }:
 
 let
+  productJavaVersionGraalVersionSep = "|";
   # getArchString :: String -> String
   getArchString = nixArchString:
     {
@@ -21,40 +22,58 @@ let
 
   # getProductSuffix :: String -> String
     getProductSuffix = productName:
-      let suffixes = {
+      {
         "graalvm-ce" = ".tar.gz";
         "native-image-installable-svm" = ".jar";
         "ruby-installable-svm" = ".jar";
         "wasm-installable-svm" = ".jar";
         "python-installable-svm" = ".jar";
-      };
-      in
-      suffixes.${productName};
+      }.${productName};
 
   # getProductSuffix :: String -> String
     getProductBaseUrl = productName:
-      let baseUrls = {
+      {
         "graalvm-ce" = "https://github.com/graalvm/graalvm-ce-builds/releases/download";
         "native-image-installable-svm" = "https://github.com/graalvm/graalvm-ce-builds/releases/download";
         "ruby-installable-svm" = "https://github.com/oracle/truffleruby/releases/download";
         "wasm-installable-svm" = "https://github.com/graalvm/graalvm-ce-builds/releases/download";
         "python-installable-svm" = "https://github.com/graalvm/graalpython/releases/download";
-      };
+      }.${productName};
+
+  # getDevUrl :: String
+    getDevUrl = { arch, graalVersion, product, javaVersion }:
+      let
+        baseUrl = https://github.com/graalvm/graalvm-ce-dev-builds/releases/download;
       in
-      baseUrls.${productName};
+        "${baseUrl}/${graalVersion}/${product}-${javaVersion}-${arch}-dev${getProductSuffix product}";
 
-  # generateUrl :: AttrSet -> String
-    generateUrl = { arch, graalVersion, product, javaVersion }:
-
-    let baseUrl = getProductBaseUrl product;
-    in
-    "${baseUrl}/vm-${graalVersion}/${product}-${javaVersion}-${arch}-${graalVersion}${getProductSuffix product}";
-
-  # downloadSha256 :: AttrSet -> String
-    downloadSha256 = args@{ arch, graalVersion, product, javaVersion }:
-      let url = generateUrl args + ".sha256";
+  # getReleaseUrl :: AttrSet -> String
+    getReleaseUrl = { arch, graalVersion, product, javaVersion }:
+      let baseUrl = getProductBaseUrl product;
       in
-        builtins.readFile (builtins.fetchurl url);
+      "${baseUrl}/vm-${graalVersion}/${product}-${javaVersion}-${arch}-${graalVersion}${getProductSuffix product}";
+
+  # getUrl :: AttrSet -> String
+    getUrl = args@{ arch, graalVersion, product, javaVersion }:
+      if lib.hasInfix "dev" graalVersion
+        then getDevUrl args
+        else getReleaseUrl args;
+
+  # computeSha256 :: String -> String
+    computeSha256 = url:
+      builtins.hashFile "sha256" (builtins.fetchurl url);
+
+  # downloadSha256 :: String -> String
+    downloadSha256 = url:
+      let sha256Url = url + ".sha256";
+      in
+        builtins.readFile (builtins.fetchurl sha256Url);
+
+  # getSha256 :: String -> String -> String
+    getSha256 = graalVersion: url:
+      if lib.hasInfix "dev" graalVersion
+        then computeSha256 url
+        else downloadSha256 url;
 
   # cartesianZipListsWith :: (a -> b -> c) -> [a] -> [b] -> [c]
     cartesianZipListsWith = f: fst: snd:
@@ -73,7 +92,7 @@ let
   # genProductJavaVersionGraalVersionAttrSet :: String -> AttrSet
     genProductJavaVersionGraalVersionAttrSet = product_javaVersion_graalVersion:
        let attrNames  = [ "product" "javaVersion" "graalVersion" ];
-           attrValues = lib.splitString "_" product_javaVersion_graalVersion;
+           attrValues = lib.splitString productJavaVersionGraalVersionSep product_javaVersion_graalVersion;
         in zipListsToAttrs attrNames attrValues;
 
   # genUrlAndSha256 :: String -> String -> AttrSet
@@ -82,8 +101,8 @@ let
         productJavaVersionGraalVersion =
           (genProductJavaVersionGraalVersionAttrSet product_javaVersion_graalVersion)
             // { inherit arch; };
-        url = generateUrl productJavaVersionGraalVersion;
-        sha256 = downloadSha256 productJavaVersionGraalVersion;
+        url = getUrl productJavaVersionGraalVersion;
+        sha256 = getSha256 productJavaVersionGraalVersion.graalVersion url;
       in
       {
         ${arch} = {
@@ -99,7 +118,8 @@ let
         arch = archProducts.arch;
         products = archProducts.products;
         productJavaGraalVersionList =
-          cartesianZipListsWith (a: b: a + "_" + b) products [ javaGraalVersion ];
+          cartesianZipListsWith (a: b: a + productJavaVersionGraalVersionSep + b)
+            products [ javaGraalVersion ];
       in
         cartesianZipListsWith (genUrlAndSha256) [ arch ] productJavaGraalVersionList;
 
@@ -107,7 +127,7 @@ let
   # genSources :: String -> String -> AttrSet -> Path String
     genSources = graalVersion: javaVersion: config:
       let
-        javaGraalVersion = javaVersion + "_" + graalVersion; # java17_20.2.0.2
+        javaGraalVersion = javaVersion + productJavaVersionGraalVersionSep + graalVersion;
         archProducts = builtins.attrValues config;
         sourcesList = builtins.concatMap (genArchProductVersionList javaGraalVersion) archProducts;
         sourcesAttr = builtins.foldl' (lib.recursiveUpdate) {} sourcesList;

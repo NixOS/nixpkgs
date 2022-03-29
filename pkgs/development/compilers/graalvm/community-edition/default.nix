@@ -56,4 +56,19 @@ in
     javaVersion = "17";
     platforms = builtins.attrNames config;
   };
+
+  graalvm17-ce-dev = mkGraal rec {
+    config = {
+      aarch64-darwin = {
+        arch = "darwin-aarch64";
+        products = [
+          "graalvm-ce"
+          "native-image-installable-svm"
+        ];
+      };
+    };
+    version = "22.2.0-dev-20220326_0133";
+    javaVersion = "17";
+    platforms = builtins.attrNames config;
+  };
 }
