@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  checkTarget = "o//test";
+  doCheck = true;
+
   passthru.tests = lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform) {
     hello = runCommand "hello-world" { } ''
       printf 'main() { printf("hello world\\n"); }\n' >hello.c
