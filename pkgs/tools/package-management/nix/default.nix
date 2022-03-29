@@ -59,7 +59,7 @@ common =
 
       buildInputs =
         [ curl libsodium openssl sqlite xz bzip2
-          brotli boost editline
+          brotli boost editline nlohmann_json
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optionals is24 [ libarchive gtest lowdown ]
@@ -273,4 +273,18 @@ in rec {
 
   });
 
+  nix_2_7 = lib.lowPrio (callPackage common rec {
+    pname = "nix";
+    version = "2.7.0";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = version;
+      sha256 = "sha256-m8tqCS6uHveDon5GSro5yZor9H+sHeh+v/veF1IGw24=";
+    };
+
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
+  });
 }
