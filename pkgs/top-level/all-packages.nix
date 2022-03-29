@@ -33578,6 +33578,8 @@ with pkgs;
 
   libjack2 = jack2.override { prefix = "lib"; };
 
+  jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
+
   j2cli = with python3Packages; toPythonApplication j2cli;
 
   jquake = callPackage ../applications/misc/jquake { };
