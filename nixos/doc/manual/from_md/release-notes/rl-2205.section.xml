@@ -1424,6 +1424,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.unifi-video.openPorts</literal> option
+          default value of <literal>true</literal> is now deprecated and
+          will be changed to <literal>false</literal> in 22.11.
+          Configurations using this default will print a warning when
+          rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>security.acme</literal> certificates will now
           correctly check for CA revokation before reaching their
           minimum age.
