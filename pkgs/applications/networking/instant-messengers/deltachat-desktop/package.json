@@ -25,7 +25,7 @@
     "react-dom": "^17.0.2",
     "react-qr-reader": "^2.2.1",
     "react-qr-svg": "^2.1.0",
-    "react-string-replace": "^0.4.4",
+    "react-string-replace": "^1.0.0",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "react-window-infinite-loader": "^1.0.7",

@@ -83,8 +83,6 @@ let
     bls12-381-unix = callPackage ../development/ocaml-modules/bls12-381/unix.nix { };
     bls12-381-legacy = callPackage ../development/ocaml-modules/bls12-381/legacy.nix { };
 
-    bolt = callPackage ../development/ocaml-modules/bolt { };
-
     bos = callPackage ../development/ocaml-modules/bos { };
 
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -330,6 +328,8 @@ let
 
     duration =  callPackage ../development/ocaml-modules/duration { };
 
+    dyn =  callPackage ../development/ocaml-modules/dyn { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earlybird = callPackage ../development/ocaml-modules/earlybird { };
@@ -410,8 +410,6 @@ let
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
       inherit (pkgs) ffmpeg;
     };
-
-    fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
@@ -1022,6 +1020,8 @@ let
 
     opus = callPackage ../development/ocaml-modules/opus { };
 
+    ordering = callPackage ../development/ocaml-modules/ordering { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otoml = callPackage ../development/ocaml-modules/otoml { };
@@ -1308,6 +1308,8 @@ let
     stdcompat = callPackage ../development/ocaml-modules/stdcompat { };
 
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
+
+    stdune = callPackage ../development/ocaml-modules/stdune { };
 
     stog = callPackage ../applications/misc/stog { };
 

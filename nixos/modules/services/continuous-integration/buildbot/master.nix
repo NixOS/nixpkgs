@@ -64,7 +64,7 @@ in {
         description = "Factory Steps";
         default = [];
         example = [
-          "steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')"
+          "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
         ];
       };
@@ -74,7 +74,7 @@ in {
         description = "List of Change Sources.";
         default = [];
         example = [
-          "changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+          "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
         ];
       };
 

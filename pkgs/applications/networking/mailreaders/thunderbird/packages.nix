@@ -8,7 +8,7 @@ let
 in
 
 rec {
-  thunderbird = common rec {
+  thunderbird = (common rec {
     pname = "thunderbird";
     version = "91.7.0";
     application = "comm/mail";
@@ -35,5 +35,7 @@ rec {
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
     };
+  }).override {
+    pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
   };
 }

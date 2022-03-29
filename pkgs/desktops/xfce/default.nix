@@ -169,8 +169,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4_power_manager = xfce4-power-manager;
   xfce4_appfinder = xfce4-appfinder;
   xfce4_dev_tools = xfce4-dev-tools;
-  xfce4mixer = xfce4-mixer;
-  xfce4mixer_pulse = xfce4-mixer-pulse;
   xfce4notifyd = xfce4-notifyd;
   xfce4taskmanager = xfce4-taskmanager;
   xfce4terminal = xfce4-terminal;
@@ -204,8 +202,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4_windowck_plugin = xfce4-windowck-plugin;
   xfce4_pulseaudio_plugin = xfce4-pulseaudio-plugin;
 
-  xfce4-mixer = throw "deprecated 2019-08-18: obsoleted by xfce4-pulseaudio-plugin"; # added 2019-08-18
-  gtk-xfce-engine = throw "deprecated 2019-09-17: Xfce 4.14 deprecated gtk-xfce-engine"; # added 2019-09-17
   xfce4-dict-plugin = throw "deprecated 2020-04-19: xfce4-dict-plugin is now part of xfce4-dict."; # added 2020-04-19
 
   # added 2019-11-04
@@ -217,7 +213,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xinitrc = xfce4-session.xinitrc;
   libglade = throw "libglade has been removed";
   inherit (pkgs.gnome) gtksourceview;
-  xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {
     thunarPlugins = [];
   };

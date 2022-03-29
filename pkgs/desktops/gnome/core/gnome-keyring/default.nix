@@ -5,7 +5,7 @@
 , dbus
 , libgcrypt
 , pam
-, python2
+, python3
 , glib
 , libxslt
 , gettext
@@ -51,8 +51,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  # In 3.20.1, tests do not support Python 3
-  checkInputs = [ dbus python2 ];
+  checkInputs = [ dbus python3 ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories

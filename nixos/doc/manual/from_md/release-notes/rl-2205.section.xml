@@ -17,6 +17,14 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>firefox</literal> browser on
+          <literal>x86_64-linux</literal> is now making use of
+          profile-guided optimization resulting in a much more
+          responsive browsing experience.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>security.acme.defaults</literal> has been added to
           simplify configuring settings for many certificates at once.
           This also opens up the the option to use DNS-01 validation
@@ -135,7 +143,7 @@
         <para>
           <link xlink:href="https://frrouting.org/">FRRouting</link>, a
           popular suite of Internet routing protocol daemons (BGP, BFD,
-          OSPF, IS-IS, VVRP and others). Available as
+          OSPF, IS-IS, VRRP and others). Available as
           <link linkend="opt-services.frr.babel.enable">services.frr</link>
         </para>
       </listitem>
@@ -696,6 +704,13 @@
           rtkit</link>. Use
           <literal>security.rtkit.enable = true;</literal> instead. As
           before, you will need to have it enabled using GSettings.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.telepathy</literal> will no longer be
+          enabled by default for GNOME desktops, one should enable it in
+          their configs if using Empathy or Polari.
         </para>
       </listitem>
       <listitem>

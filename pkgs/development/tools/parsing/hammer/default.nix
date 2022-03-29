@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "e7aa734";
 
   src = fetchgit {
-    url = "git://github.com/UpstandingHackers/hammer";
+    url = "https://github.com/UpstandingHackers/hammer";
     sha256 = "01l0wbhz7dymxlndacin2vi8sqwjlw81ds2i9xyi200w51nsdm38";
     rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
   };

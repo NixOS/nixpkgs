@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "unstable-2014-05-19";
 
   src = fetchgit {
-    url = "git://github.com/MeanEYE/Disk-Indicator.git";
+    url = "https://github.com/MeanEYE/Disk-Indicator.git";
     rev = "51ef4afd8141b8d0659cbc7dc62189c56ae9c2da";
     sha256 = "10jx6mx9qarn21p2l2jayxkn1gmqhvck1wymgsr4jmbwxl8ra5kd";
   };

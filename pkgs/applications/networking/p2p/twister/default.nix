@@ -7,7 +7,7 @@ let
   twisterHTML = srcOnly {
     name = "twister-html";
     src = fetchgit {
-      url = "git://github.com/miguelfreitas/twister-html.git";
+      url = "https://github.com/miguelfreitas/twister-html.git";
       rev = "01e7f7ca9b7e42ed90f91bc42da2c909ca5c0b9b";
       sha256 = "0scjbin6s1kmi0bqq0dx0qyjw4n5xgmj567n0156i39f9h0dabqy";
     };

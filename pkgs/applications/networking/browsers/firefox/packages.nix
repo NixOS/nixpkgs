@@ -78,5 +78,6 @@ rec {
   }).override {
     crashreporterSupport = false;
     enableOfficialBranding = false;
+    pgoSupport = false; # Profiling gets stuck and doesn't terminate.
   };
 }
