@@ -21308,8 +21308,6 @@ with pkgs;
 
   dex2jar = callPackage ../development/tools/java/dex2jar { };
 
-  doh-proxy = callPackage ../servers/dns/doh-proxy { };
-
   doh-proxy-rust = callPackage ../servers/dns/doh-proxy-rust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
