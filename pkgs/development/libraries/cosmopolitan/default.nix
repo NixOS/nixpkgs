@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{include,lib}
     install o/cosmopolitan.h $out/include
     install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} $out/lib
-
-    pushd o
-    find -iname "*.com" -type f -exec install -D {} $out/{} \;
-    popd
-    find -iname "*.h" -type f -exec install -m644 -D {} $out/include/{} \;
-    find -iname "*.inc" -type f -exec install -m644 -D {} $out/include/{} \;
     runHook postInstall
   '';
 
