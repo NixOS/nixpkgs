@@ -13227,6 +13227,12 @@
     githubId = 34962284;
     name = "wchresta";
   };
+  wdavidw = {
+    name = "David Worms";
+    email = "david@adaltas.com";
+    github = "wdavidw";
+    githubId = 46896;
+  };
   wedens = {
     email = "kirill.wedens@gmail.com";
     name = "wedens";
