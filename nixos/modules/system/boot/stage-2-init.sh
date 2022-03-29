@@ -1,9 +1,15 @@
 #! @shell@
 
 systemConfig=@systemConfig@
+verbose="@verbose@"
 
 export HOME=/root PATH="@path@"
 
+info() {
+    if [[ -n "$verbose" ]]; then
+        echo -e "$@"
+    fi
+}
 
 # Process the kernel command line.
 for o in $(</proc/cmdline); do
@@ -21,9 +27,9 @@ done
 
 
 # Print a greeting.
-echo
-echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
-echo
+info ""
+info "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
+info ""
 
 
 # Normally, stage 1 mounts the root filesystem read/writable.
@@ -103,7 +109,7 @@ ln -s /run/lock /var/lock
 
 # Clear the resume device.
 if test -n "$resumeDevice"; then
-    mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
+    mkswap "$resumeDevice" || info 'Failed to clear saved image.'
 fi
 
 
@@ -129,7 +135,7 @@ fi
 
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
-echo "running activation script..."
+info "running activation script..."
 $systemConfig/activate
 
 
@@ -168,7 +174,7 @@ exec {logOutFd}>&- {logErrFd}>&-
 
 
 # Start systemd.
-echo "starting systemd..."
+info "starting systemd..."
 
 PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive @systemdUnitPathEnvVar@ \
