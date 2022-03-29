@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, lark, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, lark, libcst, parso, pytestCheckHook, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
@@ -10,16 +10,29 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "lark-parser" "lark"
+    substituteInPlace setup.py \
+      --replace "lark-parser" "lark"
+
+    substituteInPlace tox.ini \
+      --replace "--cov=hypothesmith" "" \
+      --replace "--cov-branch" "" \
+      --replace "--cov-report=term-missing:skip-covered" "" \
+      --replace "--cov-fail-under=100" ""
   '';
 
   propagatedBuildInputs = [ hypothesis lark libcst ];
 
-  checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
+  checkInputs = [ parso pytestCheckHook pytest-xdist ];
 
   pytestFlagsArray = [
     "-v"
     "--numprocesses $NIX_BUILD_CORES"
+  ];
+
+  disabledTestPaths = [
+    # require black
+    "tests/test_cst.py"
+    "tests/test_syntactic.py"
   ];
 
   pythonImportsCheck = [ "hypothesmith" ];
