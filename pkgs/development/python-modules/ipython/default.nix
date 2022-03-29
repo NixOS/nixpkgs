@@ -10,7 +10,6 @@
 # Runtime dependencies
 , appnope
 , backcall
-, black
 , decorator
 , jedi
 , matplotlib-inline
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     backcall
-    black
     decorator
     jedi
     matplotlib-inline
@@ -83,7 +81,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };
