@@ -1956,10 +1956,10 @@ in {
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
-    cudatoolkit = pkgs.cudatoolkit_11;
-    cudnn = pkgs.cudnn_8_1_cudatoolkit_11;
-    nccl = pkgs.nccl_cudatoolkit_11;
-    cutensor = pkgs.cutensor_cudatoolkit_11;
+    cudatoolkit = pkgs.cudatoolkit_11_4;
+    cudnn = pkgs.cudnn_8_3_cudatoolkit_11_4;
+    nccl = pkgs.nccl_cudatoolkit_11_4;
+    cutensor = pkgs.cutensor_cudatoolkit_11_4;
   };
 
   curio = callPackage ../development/python-modules/curio { };
