@@ -16520,6 +16520,8 @@ with pkgs;
 
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
 
+  python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
+
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };

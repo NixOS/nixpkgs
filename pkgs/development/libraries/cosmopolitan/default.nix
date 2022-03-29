@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bintools-unwrapped unzip ];
 
+  outputs = [ "out" "dist" ];
+
   # slashes are significant because upstream uses o/$(MODE)/foo.o
   buildFlags = "o/cosmopolitan.h o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.o o//ape/ape.lds";
   checkTarget = "o//test";
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{include,lib}
     install o/cosmopolitan.h $out/include
     install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} $out/lib
+
+    cp -RT . "$dist"
     runHook postInstall
   '';
 
