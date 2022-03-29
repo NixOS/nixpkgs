@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
       -Wl,--gc-sections -Wl,-z,max-page-size=0x1000 \
       -fuse-ld=bfd -Wl,-T,$out/lib/ape.lds \
       -include $out/include/cosmopolitan.h \
-      -I $out/include \
       $out/lib/{crt.o,ape.o,cosmopolitan.a}
     EOF
     chmod +x $out/bin/cosmoc
@@ -53,18 +52,17 @@ stdenv.mkDerivation rec {
 
   passthru.tests = lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform) {
     hello = runCommand "hello-world" { } ''
-      printf '#include "libc/stdio/stdio.h"\nmain() { printf("hello world\\n"); }\n' >hello.c
+      printf 'main() { printf("hello world\\n"); }\n' >hello.c
       ${stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
         -fuse-ld=bfd -Wl,-T,${cosmopolitan}/lib/ape.lds \
         -include ${cosmopolitan}/include/cosmopolitan.h \
-        -I ${cosmopolitan}/include \
         ${cosmopolitan}/lib/{crt.o,ape.o,cosmopolitan.a}
       ${stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
       ./hello.com
       printf "test successful" > $out
     '';
     cosmoc = runCommand "cosmoc-hello" { } ''
-      printf '#include "libc/stdio/stdio.h"\nmain() { printf("hello world\\n"); }\n' >hello.c
+      printf 'main() { printf("hello world\\n"); }\n' >hello.c
       ${cosmopolitan}/bin/cosmoc hello.c
       ./a.out
       printf "test successful" > $out
