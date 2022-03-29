@@ -18200,6 +18200,10 @@ let
       sha256 = "0278anidj7bgassj32g20cbki2kkqakkr3axyq4k90nj4snw7p6x";
     };
     propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/pls
+    '';
     meta = {
       homepage = "https://github.com/FractalBoy/perl-language-server";
       description = "Perl Language Server";
