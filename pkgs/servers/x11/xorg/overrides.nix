@@ -442,6 +442,17 @@ self: super:
 
   xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
     NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
+    nativeBuildInputs = with self; attrs.nativeBuildInputs ++ [ autoreconfHook utilmacros ];
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/commit/e0511968d04b42abf11bc0ffb387f143582bc144.patch";
+        sha256 = "sha256-79nqKuJRgMYXDEMB8IWxdmbxtI/m+Oca1wSLYeGMuEk=";
+      })
+    ];
+  });
+
+  xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
+    nativeBuildInputs = with self; attrs.nativeBuildInputs ++ [ autoreconfHook utilmacros ];
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
@@ -620,7 +631,7 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+      commonBuildInputs = attrs.buildInputs ++ [ libxcvt xtrans ];
       commonPropagatedBuildInputs = [
         zlib libGL libGLU dbus
         xorgproto
@@ -653,28 +664,10 @@ self: super:
       then {
         outputs = [ "out" "dev" ];
         patches = [
-          # https://lists.x.org/archives/xorg-announce/2021-December/003122.html
-          (fpgit "ebce7e2d80e7c80e1dda60f2f0bc886f1106ba60"
-            "sNi16FqN4rS4s8j5+PUVeOQBasccCkB5KvywP7xl28M=" "CVE-2021-4008")
-          (fpgit "b5196750099ae6ae582e1f46bd0a6dad29550e02"
-            "5hgzQXBBaJfhSTa9hs8K2N1fQ6+Vp8TTkertmQhkw8Y=" "CVE-2021-4009")
-          (fpgit "6c4c53010772e3cb4cb8acd54950c8eec9c00d21"
-            "1gGG9RpjLMi7Emwh13/z5CN1+ISLsPL3hJXP5gQcNkE=" "CVE-2021-4010")
-          (fpgit "e56f61c79fc3cee26d83cda0f84ae56d5979f768"
-            "e1KgSXGwwI3GgcYeWaF3KHPmkE4tf9VTqvfTYqRpysY=" "CVE-2021-4011")
-
           # The build process tries to create the specified logdir when building.
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
-
-          # Fix e.g. xorg.xf86videovmware with libdrm 2.4.108
-          # TODO: remove with xorgserver >= 1.21
-          (fetchpatch {
-            name = "stdbool.patch";
-            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
-            sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
-          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
