@@ -1,49 +1,58 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , setuptools-scm
-, ansible-base
+, ansible-compat
+, ansible-core
 , enrich
 , flaky
 , pyyaml
 , rich
 , ruamel-yaml
-, tenacity
 , wcmatch
 , yamllint
+, pythonOlder
 , pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.3.2";
-  disabled = isPy27;
+  version = "6.0.2";
   format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-m6iG20xE5ZNgvI1mjwvq5hk8Ch/LuedhJwAMo6ztfCg=";
+    sha256 = "sha256-tTm8ItE+beDMLiV1jh0osrwBVhpBSuN87aNwi1oqee0=";
   };
+
+  postPatch = ''
+    # it is fine if lint tools are missing
+    substituteInPlace conftest.py \
+      --replace "sys.exit(1)" ""
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    ansible-base
+    ansible-compat
+    ansible-core
     enrich
-    flaky
     pyyaml
     rich
     ruamel-yaml
-    tenacity
     wcmatch
     yamllint
   ];
 
+  # tests can't be easily run without installing things from ansible-galaxy
+  doCheck = false;
+
   checkInputs = [
+    flaky
     pytest-xdist
     pytestCheckHook
   ];
@@ -55,7 +64,7 @@ buildPythonPackage rec {
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible-base ]}
+    export PATH=$PATH:${lib.makeBinPath [ ansible-core ]}
 
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
@@ -82,7 +91,7 @@ buildPythonPackage rec {
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-base ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
     homepage = "https://github.com/ansible-community/ansible-lint";

@@ -520,6 +520,8 @@ in {
 
   ansible-base = callPackage ../development/python-modules/ansible/base.nix { };
 
+  ansible-compat = callPackage ../development/python-modules/ansible-compat { };
+
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
   ansible-doctor = callPackage ../development/python-modules/ansible-doctor { };
