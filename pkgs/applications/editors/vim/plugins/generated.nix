@@ -5531,6 +5531,19 @@ final: prev:
     meta.homepage = "https://github.com/vim-python/python-syntax/";
   };
 
+  pywal-nvim = buildVimPluginFrom2Nix {
+    pname = "pywal.nvim";
+    version = "2022-02-20";
+    src = fetchFromGitHub {
+      owner = "AlphaTechnolog";
+      repo = "pywal.nvim";
+      rev = "bd58195939d31dd0f15a720fba2956e91598cefe";
+      sha256 = "10fs5assp96rvlcxckd8cwnkfwfckjmf0j8cqq91vb2wx8knxc8g";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/AlphaTechnolog/pywal.nvim/";
+  };
+
   QFEnter = buildVimPluginFrom2Nix {
     pname = "QFEnter";
     version = "2020-10-09";

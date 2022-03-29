@@ -13,6 +13,7 @@ akinsho/bufferline.nvim
 akinsho/toggleterm.nvim
 aklt/plantuml-syntax
 allendang/nvim-expand-expr
+AlphaTechnolog/pywal.nvim
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alvarosevilla95/luatab.nvim
