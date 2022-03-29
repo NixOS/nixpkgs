@@ -41,5 +41,6 @@ with python3.pkgs; buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ edanaher ];
     platforms = platforms.unix;
+    mainProgram = "nvr";
   };
 }
