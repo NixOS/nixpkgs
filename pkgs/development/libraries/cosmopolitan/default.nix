@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, runCommand, unzip, cosmopolitan,bintools-unwrapped }:
+{ lib, stdenv, fetchFromGitHub, unzip, cosmopolitan, bintools-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
@@ -39,19 +39,6 @@ stdenv.mkDerivation rec {
 
   checkTarget = "o//test";
   doCheck = true;
-
-  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform) {
-    hello = runCommand "hello-world" { } ''
-      printf 'main() { printf("hello world\\n"); }\n' >hello.c
-      ${stdenv.cc}/bin/gcc -g -O -static -nostdlib -nostdinc -fno-pie -no-pie -mno-red-zone -o hello.com.dbg hello.c \
-        -fuse-ld=bfd -Wl,-T,${cosmopolitan}/lib/ape.lds \
-        -include ${cosmopolitan}/include/cosmopolitan.h \
-        ${cosmopolitan}/lib/{crt.o,ape.o,cosmopolitan.a}
-      ${stdenv.cc.bintools.bintools_bin}/bin/objcopy -S -O binary hello.com.dbg hello.com
-      ./hello.com
-      printf "test successful" > $out
-    '';
-  };
 
   meta = with lib; {
     homepage = "https://justine.lol/cosmopolitan/";
