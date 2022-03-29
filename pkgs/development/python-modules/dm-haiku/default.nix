@@ -7,6 +7,7 @@
 , jaxlib
 , jmp
 , lib
+, pytest-xdist
 , pytestCheckHook
 , tabulate
 , tensorflow
@@ -33,9 +34,11 @@ buildPythonPackage rec {
     cloudpickle
     dm-tree
     jaxlib
+    pytest-xdist
     pytestCheckHook
     tensorflow
   ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   pythonImportsCheck = [
     "haiku"
