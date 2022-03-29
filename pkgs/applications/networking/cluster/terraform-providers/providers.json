@@ -1141,6 +1141,15 @@
     "vendorSha256": null,
     "version": "1.31.0"
   },
+  "utils": {
+    "owner": "cloudposse",
+    "provider-source-address": "registry.terraform.io/cloudposse/utils",
+    "repo": "terraform-provider-utils",
+    "rev": "0.17.17",
+    "sha256": "sha256-QJtdCEw8bnVku4fqAX5MBU9tkPv5jwjra9lGPfUPGQw=",
+    "vendorSha256": "sha256-5EelFIfHVLRiRJig6EeJG6KGJuQ05LX3M5CNxUxQAas=",
+    "version": "0.17.17"
+  },
   "vault": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vault",
