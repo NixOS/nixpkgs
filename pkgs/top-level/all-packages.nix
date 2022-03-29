@@ -30843,7 +30843,9 @@ with pkgs;
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
 
-  polkadot = callPackage ../applications/blockchains/polkadot { };
+  polkadot = callPackage ../applications/blockchains/polkadot {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   particl-core = callPackage ../applications/blockchains/particl-core { miniupnpc = miniupnpc_2; };
 
