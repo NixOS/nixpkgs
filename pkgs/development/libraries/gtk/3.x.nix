@@ -2,6 +2,9 @@
 , stdenv
 , substituteAll
 , fetchurl
+, buildPackages
+, pkgsBuildBuild
+, pkgsBuildTarget
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -39,7 +42,7 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
+, withGtkDoc ? stdenv.isLinux && stdenv.buildPlatform == stdenv.hostPlatform
 , cups
 , AppKit
 , Cocoa
@@ -88,6 +91,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
+    buildPackages.gdk-pixbuf
+    buildPackages.glib       # for glib-compile-schemas
     makeWrapper
     meson
     ninja
@@ -100,10 +105,13 @@ stdenv.mkDerivation rec {
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals waylandSupport [
+    buildPackages.wayland  # for wayland-scanner
   ];
 
   buildInputs = [
     libxkbcommon
+    pkg-config
     (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
@@ -151,6 +159,8 @@ stdenv.mkDerivation rec {
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-Dintrospection=false"
   ];
 
   doCheck = false; # needs X11
@@ -161,7 +171,14 @@ stdenv.mkDerivation rec {
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
   NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace build-aux/meson/post-install.py \
+      --replace "'pkg-config'" "'${pkgsBuildBuild.pkg-config}/bin/pkg-config'"
+    substituteInPlace build-aux/meson/post-install.py \
+      --replace "gtk_bindir = sys.argv[3]" "gtk_bindir = '${buildPackages.gtk3}/bin'"
+    substituteInPlace build-aux/meson/post-install.py \
+      --replace "gtk_query_immodules = os.path.join(gtk_bindir" "gtk_query_immodules = os.path.join('${buildPackages.gtk3.dev}/bin'"
+    '' + ''
     # See https://github.com/NixOS/nixpkgs/issues/132259
     substituteInPlace meson.build \
       --replace "x11_enabled = false" ""
@@ -179,6 +196,14 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+  '';
+
+  # build-aux/meson/post-install.py uses pkg-config to search for
+  # programs to be run at build-time, so we need to replace
+  # PKG_CONFIG_PATH (which points to hostPlatform-package .pc's) with
+  # buildPlatform .pc's
+  preInstall = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+   export PKG_CONFIG_PATH="${pkgsBuildTarget.glib.dev}/lib/pkgconfig"
   '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
