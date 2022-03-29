@@ -260,6 +260,8 @@ Adding this information helps users who have needs related to build transparency
 
 The presence of a particular `sourceType` in a package's `meta.sourceProvenance` list indicates that the package contains some components falling into that category, though the *absence* of that `sourceType` does not *guarantee* the absence of that category of `sourceType` in the package's contents. A package with no `meta.sourceProvenance` set implies it has no *known* `sourceType`s other than `fromSource`.
 
+The meaning of the `meta.sourceProvenance` attribute does not depend on the value of the `meta.license` attribute.
+
 ### `lib.sourceTypes.fromSource` {#lib.sourceTypes.fromSource}
 
 Package elements which are produced by a nixpkgs derivation which builds them from source code.
