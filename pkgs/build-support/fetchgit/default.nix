@@ -59,7 +59,7 @@ else if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
 stdenvNoCC.mkDerivation {
-  inherit name;
+  name = lib.strings.sanitizeDerivationName name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
 
