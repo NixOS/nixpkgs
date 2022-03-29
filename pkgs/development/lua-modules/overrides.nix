@@ -281,7 +281,7 @@ with prev;
   });
 
 
-  # as advised in https://github.com/luarocks/luarocks/issues/1402
+  # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
   # we shouldn't use luarocks machinery to build complex cmake components
   libluv = pkgs.stdenv.mkDerivation {
 
