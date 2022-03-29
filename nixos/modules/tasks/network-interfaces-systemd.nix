@@ -174,6 +174,9 @@ in
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bridge = name;
+            # define an empty route attribute to exclude any defaultGateway config
+            # for the ensalved interfaces to the bridge
+            routes = mkOverride 0 [];
           } ])));
       })))
       (mkMerge (flip mapAttrsToList cfg.bonds (name: bond: {
