@@ -19,11 +19,11 @@ let
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2022.3.24";
+  version = "2022.3.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gAGY1DDnJPiZ5tsxnMZA1f1toqzbwwHOsaH5Z+mQQos=";
+    sha256 = "sha256-TnquYtrXZ5zoG1TMNFG+GfssRp4mkzWzaxQTL+XO7LM=";
   };
 
   LC_ALL = "en_US.UTF-8";
