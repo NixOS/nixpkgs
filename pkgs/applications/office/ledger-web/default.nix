@@ -18,6 +18,6 @@ bundlerApp {
     homepage = "https://github.com/peterkeen/ledger-web";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg manveru nicknovitski ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
