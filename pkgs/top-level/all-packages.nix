@@ -8500,6 +8500,8 @@ with pkgs;
 
   ntfy = callPackage ../tools/misc/ntfy {};
 
+  ntfy-sh = callPackage ../tools/misc/ntfy-sh {};
+
   ntirpc = callPackage ../development/libraries/ntirpc { };
 
   ntopng = callPackage ../tools/networking/ntopng { };
