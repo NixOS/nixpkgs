@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://invisible-island.net/cdk/";
     license = licenses.bsdOriginal ;
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
