@@ -4296,6 +4296,8 @@ in {
 
   json5 = callPackage ../development/python-modules/json5 { };
 
+  jsonconversion = callPackage ../development/python-modules/jsonconversion { };
+
   jsondate = callPackage ../development/python-modules/jsondate { };
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
