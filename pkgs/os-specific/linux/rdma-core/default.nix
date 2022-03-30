@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
   ];
 
+  patches = [
+    # this has been fixed in master. As soon as it gets into a release, this
+    # patch won't apply anymore and can be removed.
+    ./pkg-config-template.patch
+  ];
+
   postPatch = ''
     substituteInPlace srp_daemon/srp_daemon.sh.in \
       --replace /bin/rm rm
