@@ -21526,6 +21526,8 @@ with pkgs;
 
   keycloak = callPackage ../servers/keycloak { };
 
+  kanidm = callPackage ../servers/kanidm { };
+
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver { };
 
