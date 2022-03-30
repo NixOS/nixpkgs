@@ -20,6 +20,6 @@ stdenv.mkDerivation {
     description = "Analog distortion emulation lv2 plugins";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
