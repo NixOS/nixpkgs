@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "A library of exchange-correlation functionals with arbitrary-order derivatives";
     homepage = "https://github.com/rcsb/mmtf-cpp";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };
 }
