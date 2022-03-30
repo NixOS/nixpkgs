@@ -54,10 +54,10 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.94";
-      sha256_64bit = "lYWqKTMOutm98izjyiusICbIWpoy8D18WfcUp3mFAOs=";
-      settingsSha256 = "blJNKuFu/Th/ceexkKhTH/eYk8miUlTT+ESrcIyJNn0=";
-      persistencedSha256 = "xnccQ/EgafwnReBlk5Y7iClAj4hwXyFq9gUmwqyEuwE=";
+      version = "470.103.01";
+      sha256_64bit = "VsIwn4nCE0Y7DEY2D3siddc3HTxyevP+3IjElu3Ih6U=";
+      settingsSha256 = "Roc2OFSNEnIGLVwP0D9f8vFTf5v3KkL99S0mZBWN7s0=";
+      persistencedSha256 = "AVI0j2bpfMCMBTKuQp+BoCewaXIW3Xt4NnV1fjAHOr0=";
   };
 
   # Last one supporting x86
