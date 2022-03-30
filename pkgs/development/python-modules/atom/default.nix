@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4055fbdeeb692d3d52c6e3c628d7513fc71f147920cac7d0da05b6dbb5ec8c8d";
+    sha256 = "sha256-LnLyNaljNocqAKr85VhIxZqU3KIPAPWnQpazcdoNrXE=";
   };
 
   buildInputs = [ cppy ];
