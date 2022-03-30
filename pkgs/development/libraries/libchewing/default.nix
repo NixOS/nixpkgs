@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://chewing.im/";
     license = licenses.lgpl21Only;
     maintainers = [ maintainers.ericsagnes ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
