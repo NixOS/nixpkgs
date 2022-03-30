@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "KVM2 driver for docker-machine";
     license = licenses.asl20;
     maintainers = with maintainers; [ tadfisher atkinschang ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
