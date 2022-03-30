@@ -1293,8 +1293,6 @@ let
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
 
-    sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
-
     srt = callPackage ../development/ocaml-modules/srt {
       inherit (pkgs) srt;
     };
