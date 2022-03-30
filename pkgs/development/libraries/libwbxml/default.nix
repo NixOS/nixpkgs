@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libwbxml/libwbxml";
     description = "The WBXML Library (aka libwbxml) contains a library and its associated tools to Parse, Encode and Handle WBXML documents";
     maintainers = with maintainers; [ mh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl21Plus;
   };
 }
