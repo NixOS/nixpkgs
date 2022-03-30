@@ -23,7 +23,7 @@
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
-, nspr, nss, systemd
+, nspr, nss
 , util-linux, alsa-lib
 , bison, gperf, libkrb5
 , glib, gtk3, dbus-glib
@@ -47,6 +47,8 @@
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
 , libgcrypt ? null # gnomeSupport || cupsSupport
+, systemdSupport ? stdenv.isLinux
+, systemd
 }:
 
 buildFun:
@@ -139,7 +141,7 @@ let
       libusb1 re2
       ffmpeg libxslt libxml2
       nasm
-      nspr nss systemd
+      nspr nss
       util-linux alsa-lib
       bison gperf libkrb5
       glib gtk3 dbus-glib
@@ -151,7 +153,8 @@ let
       libdrm wayland mesa.drivers libxkbcommon
       curl
       libepoxy
-    ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
+    ] ++ optional systemdSupport systemd
+      ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
@@ -204,9 +207,10 @@ let
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
+    '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
-
+    '' + ''
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         gpu/config/gpu_info_collector_linux.cc
 
@@ -287,24 +291,8 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // optionalAttrs ungoogled {
-      chrome_pgo_phase = 0;
-      enable_hangout_services_extension = false;
-      enable_js_type_check = false;
-      enable_mdns = false;
-      enable_one_click_signin = false;
-      enable_reading_list = false;
-      enable_remoting = false;
-      enable_reporting = false;
-      enable_service_discovery = false;
-      exclude_unwind_tables = true;
-      google_api_key = "";
-      google_default_client_id = "";
-      google_default_client_secret = "";
-      safe_browsing_mode = 0;
-      use_official_google_api_keys = false;
-      use_unofficial_version_number = false;
-    } // (extraAttrs.gnFlags or {}));
+    } // optionalAttrs ungoogled (importTOML ./ungoogled-flags.toml)
+    // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
       runHook preConfigure
