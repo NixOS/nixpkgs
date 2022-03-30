@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/libmatheval/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
 
