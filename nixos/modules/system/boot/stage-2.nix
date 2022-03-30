@@ -19,11 +19,6 @@ let
       pkgs.coreutils
       pkgs.util-linux
     ] ++ lib.optional useHostResolvConf pkgs.openresolv);
-    fsPackagesPath = lib.makeBinPath config.system.fsPackages;
-    systemdUnitPathEnvVar = lib.optionalString (config.boot.extraSystemdUnitPaths != [])
-      ("SYSTEMD_UNIT_PATH="
-      + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
-      + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}
@@ -48,12 +43,10 @@ in
       };
 
       systemdExecutable = mkOption {
-        default = "systemd";
+        default = "/run/current-system/systemd/lib/systemd/systemd";
         type = types.str;
         description = ''
-          The program to execute to start systemd. Typically
-          <literal>systemd</literal>, which will find systemd in the
-          PATH.
+          The program to execute to start systemd.
         '';
       };
 
