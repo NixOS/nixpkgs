@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Motif-based sequence analysis tools";
     license = licenses.unfree;
     maintainers = with maintainers; [ gschwartz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
