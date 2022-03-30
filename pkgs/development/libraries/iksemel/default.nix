@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/timothytylee/iksemel-1.4";
     license = licenses.gpl2;
     maintainers = with maintainers; [ disassembler ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
