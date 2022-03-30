@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "ACPI backlight control";
     license = licenses.gpl3;
     maintainers = with maintainers; [ smakarov ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
