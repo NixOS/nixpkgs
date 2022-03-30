@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "http://mini-httpd.nongnu.org/";
     description = "minimalistic high-performance web server";
     license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.peti ];
   };
 }
