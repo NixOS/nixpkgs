@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, lark, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, lark, libcst, black, parso, pytestCheckHook, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
@@ -15,9 +15,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hypothesis lark libcst ];
 
-  checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
+  checkInputs = [ black parso pytestCheckHook pytest-xdist ];
 
-  pytestFlagsArray = [ "-v" ];  # tests are fairly slow, prevents timeout due to no stdout printing
+  preCheck = ''
+    rm tox.ini # no coverage testing
+  '';
+
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" "--forked" ]; # makes the tests much faster. requires pytest-xdist
   pythonImportsCheck = [ "hypothesmith" ];
 
   meta = with lib; {
