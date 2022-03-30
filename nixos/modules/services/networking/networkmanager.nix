@@ -237,7 +237,7 @@ in {
       };
 
       dhcp = mkOption {
-        type = types.enum [ "dhclient" "dhcpcd" "internal" ];
+        type = types.enum [ "dhcpcd" "internal" ];
         default = "internal";
         description = ''
           Which program (or internal library) should be used for DHCP.
@@ -497,7 +497,6 @@ in {
       "d /etc/ipsec.d 0700 root root -"
       "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
-      "d /var/lib/dhclient 0755 root root -"
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
 
