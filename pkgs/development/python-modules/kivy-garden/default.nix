@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "kivy-garden";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wkcpr2zc1q5jb0bi7v2dgc0vs5h1y7j42mviyh764j2i0kz8mn2";
+    sha256 = "sha256-K4N3N46HUB1dJx8z2U8ORMCJiEVyxk+JydYJsfhqJ0g=";
   };
 
   propagatedBuildInputs = [ requests ];
