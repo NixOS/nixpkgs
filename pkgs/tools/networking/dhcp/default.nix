@@ -1,6 +1,10 @@
 { stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
+
+# client and relay are end of life, remove after 4.4.3
+, withClient ? false
+, withRelay ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +67,10 @@ stdenv.mkDerivation rec {
         --replace /sbin/ip ${iproute2}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
         "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${coreutils}/bin:${gnused}/bin"
+    '' + lib.optionalString (!withClient) ''
+      rm $out/sbin/{dhclient,dhclient-script,.dhclient-script-wrapped}
+    '' + lib.optionalString (!withRelay) ''
+      rm $out/sbin/dhcrelay
     '';
 
   preConfigure =
@@ -89,5 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.isc.org/dhcp/";
     license = licenses.mpl20;
     platforms = platforms.unix;
+    knownVulnerabilities = lib.optional (withClient || withRelay) "The client and relay component of the dhcp package have reached their end of life";
   };
 }
