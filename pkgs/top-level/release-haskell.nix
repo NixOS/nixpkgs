@@ -52,7 +52,7 @@ let
     ghc884
     ghc8107
     ghc902
-    ghc921
+    ghc922
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -157,7 +157,6 @@ let
         dhall-lsp-server
         dhall-json
         dhall-nix
-        dhall-text
         diagrams-builder
         elm2nix
         fffuu
@@ -285,18 +284,29 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages.integer-simple.ghc8107 =
+      pkgsStatic.haskell.packages =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
             "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
-          ]
-          {
-            inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
-              hello
-              lens
-              random
+          ] {
+            integer-simple.ghc8107 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
+                hello
+                lens
+                random
+                QuickCheck
               ;
+            };
+
+            native-bignum.ghc902 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc902)
+                hello
+                lens
+                random
+                QuickCheck
+              ;
+            };
           };
     })
     (versionedCompilerJobs {
@@ -307,7 +317,7 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = released;
-      Cabal_3_6_2_0 = released;
+      Cabal_3_6_3_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -324,6 +334,13 @@ let
         compilerNames.ghc8107
         compilerNames.ghc902
       ];
+      ghc-bignum = [
+        compilerNames.ghc884
+        compilerNames.ghc8107
+      ];
+      ghc-lib = released;
+      ghc-lib-parser = released;
+      ghc-lib-parser-ex = released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
@@ -355,7 +372,6 @@ let
           jobs.haskellPackages.cabal-plan
           jobs.haskellPackages.distribution-nixpkgs
           jobs.haskellPackages.hackage-db
-          jobs.haskellPackages.policeman
           jobs.haskellPackages.xmonad
           jobs.haskellPackages.xmonad-contrib
           # haskell packages maintained by @peti
@@ -391,11 +407,11 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc921
+          jobs.pkgsMusl.haskell.compiler.ghc922
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc921
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc922
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -413,6 +429,9 @@ let
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.hello
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.lens
           jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.random
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.hello
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.lens
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.random
         ];
       };
     }

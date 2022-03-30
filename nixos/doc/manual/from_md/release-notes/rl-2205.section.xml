@@ -88,6 +88,14 @@
           and their users.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The default GHC version has been updated from 8.10.7 to 9.0.2.
+          <literal>pkgs.haskellPackages</literal> and
+          <literal>pkgs.ghc</literal> will now use this version by
+          default.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
