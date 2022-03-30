@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "A software that lets you send anything you want directly to a pastebin from the command line";
     maintainers = with maintainers; [ raboof ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
