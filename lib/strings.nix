@@ -756,7 +756,14 @@ rec {
        sanitizeDerivationName pkgs.hello
        => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
   */
-  sanitizeDerivationName = string: lib.pipe string [
+  sanitizeDerivationName =
+  let okRegex = match "^[[:alnum:]+_?=-][[:alnum:]+._?=-]*$";
+  in
+  string:
+  # First detect the common case of already valid strings, to speed those up
+  if stringLength string <= 207 && okRegex string != null
+  then unsafeDiscardStringContext string
+  else lib.pipe string [
     # Get rid of string context. This is safe under the assumption that the
     # resulting string is only used as a derivation name
     unsafeDiscardStringContext
