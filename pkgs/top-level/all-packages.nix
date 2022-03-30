@@ -190,6 +190,8 @@ with pkgs;
 
   aesfix = callPackage ../tools/security/aesfix { };
 
+  aeskeyfind = callPackage ../tools/security/aeskeyfind { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
