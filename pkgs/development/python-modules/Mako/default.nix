@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.1.6";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e9e345a41924a954251b95b4b28e14a301145b544901332e658907a7464b6b2";
+    sha256 = "sha256-mnx+kiuH2zaGIQz0nV12cDOkHUAQsoTnR2gskr3dizk=";
   };
 
   propagatedBuildInputs = [ markupsafe ];
