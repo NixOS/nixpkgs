@@ -42,7 +42,7 @@ in {
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
+                olcDbDirectory = "/var/lib/openldap/current";
                 olcSuffix = "dc=example";
                 olcRootDN = {
                   # cn=root,dc=example
@@ -59,25 +59,6 @@ in {
       };
     };
   }) { inherit pkgs system; };
-
-  # Old-style configuration
-  oldOptions = import ./make-test-python.nix ({ pkgs, ... }: {
-    inherit testScript;
-    name = "openldap";
-
-    machine = { pkgs, ... }: {
-      services.openldap = {
-        enable = true;
-        logLevel = "stats acl";
-        defaultSchemas = true;
-        database = "mdb";
-        suffix = "dc=example";
-        rootdn = "cn=root,dc=example";
-        rootpw = "notapassword";
-        declarativeContents."dc=example" = dbContents;
-      };
-    };
-  }) { inherit system pkgs; };
 
   # Manually managed configDir, for example if dynamic config is essential
   manualConfigDir = import ./make-test-python.nix ({ pkgs, ... }: {
@@ -97,7 +78,7 @@ in {
         cn: config
         objectClass: olcGlobal
         olcLogLevel: stats
-        olcPidFile: /run/slapd/slapd.pid
+        olcPidFile: /run/openldap/slapd.pid
 
         dn: cn=schema,cn=config
         cn: schema
