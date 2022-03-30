@@ -41,6 +41,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/pali/hsphfpd-prototype";
     license = licenses.artistic1;
     maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
