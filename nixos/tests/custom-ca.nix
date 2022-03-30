@@ -3,7 +3,13 @@
 # (via Midori). The test checks that certificates issued by a custom trusted
 # CA are accepted but those from an unknown CA are rejected.
 
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
 
 let
   makeCert = { caName, domain }: pkgs.runCommand "example-cert"
@@ -70,8 +76,8 @@ let
 
 in
 
-{
-  name = "custom-ca";
+mapAttrs (browser: testParams: makeTest {
+  name = "custom-ca-${browser}";
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
   enableOCR = true;
@@ -110,10 +116,7 @@ in
 
       environment.systemPackages = with pkgs; [
         xdotool
-        firefox
-        chromium
-        qutebrowser
-        midori
+        pkgs."${browser}"
       ];
     };
 
@@ -151,29 +154,26 @@ in
     with subtest("Unknown CA is untrusted in curl"):
         machine.fail("curl -fv https://bad.example.com")
 
-    browsers = {
-      "firefox": "Security Risk",
-      "chromium": "not private",
-      "qutebrowser -T": "Certificate error",
-      "midori": "Security"
-    }
-
     machine.wait_for_x()
-    for command, error in browsers.items():
-        browser = command.split()[0]
-        with subtest("Good certificate is trusted in " + browser):
-            execute_as(
-                "alice", f"{command} https://good.example.com >&2 &"
-            )
-            wait_for_window_as("alice", browser)
-            machine.wait_for_text("It works!")
-            machine.screenshot("good" + browser)
-            execute_as("alice", "xdotool key ctrl+w")  # close tab
 
-        with subtest("Unknown CA is untrusted in " + browser):
-            execute_as("alice", f"{command} https://bad.example.com >&2 &")
-            machine.wait_for_text(error)
-            machine.screenshot("bad" + browser)
-            machine.succeed("pkill -f " + browser)
+    command = "${browser} ${testParams.args or ""}"
+    with subtest("Good certificate is trusted in ${browser}"):
+        execute_as(
+            "alice", f"{command} https://good.example.com >&2 &"
+        )
+        wait_for_window_as("alice", "${browser}")
+        machine.wait_for_text("It works!")
+        machine.screenshot("good${browser}")
+        execute_as("alice", "xdotool key ctrl+w")  # close tab
+
+    with subtest("Unknown CA is untrusted in ${browser}"):
+        execute_as("alice", f"{command} https://bad.example.com >&2 &")
+        machine.wait_for_text("${testParams.error}")
+        machine.screenshot("bad${browser}")
   '';
-})
+}) {
+  firefox = { error = "Security Risk"; };
+  chromium = { error = "not private"; };
+  qutebrowser = { args = "-T"; error = "Certificate error"; };
+  midori = { error = "Security"; };
+}
