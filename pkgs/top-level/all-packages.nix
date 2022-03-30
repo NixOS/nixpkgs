@@ -35080,4 +35080,6 @@ with pkgs;
   honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
 
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
+
+  this-is-a-kludge = (import ../stdenv/linux/make-bootstrap-tools-cross.nix { }).mips64el-linux-gnuabi64.build;
 }
