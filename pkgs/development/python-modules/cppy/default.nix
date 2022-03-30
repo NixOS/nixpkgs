@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "cppy";
-  version = "1.2.0";
+  version = "1.2.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-leiGLk+CbD8qa3tlgzOxYvgMvp+UOqDQp6ay74UK7/w=";
+    sha256 = "sha256-g7Q78XsQhawVxd69tCFU8Ti5KCNLIURzWJgfadDW/hs=";
   };
 
   nativeBuildInputs = [
