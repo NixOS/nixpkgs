@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dov/paps";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ etu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
