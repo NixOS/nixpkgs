@@ -95,6 +95,6 @@ in stdenv.mkDerivation {
     '';
 
     maintainers = with maintainers; [ kkallio ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

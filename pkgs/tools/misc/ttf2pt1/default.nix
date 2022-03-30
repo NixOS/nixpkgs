@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "True Type to Postscript Type 3 converter, fpdf";
     homepage = "http://ttf2pt1.sourceforge.net/index.html";
     license = "ttf2pt1";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
