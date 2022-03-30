@@ -25,7 +25,9 @@ mkDerivation rec {
     sha256 = "sha256-sfAYMTnBjT4LkgksyzDGGy97NLX5ljjhNDFioQnTzLs=";
   };
 
-  preConfigure = ''rm build'';
+  preConfigure = ''
+    rm build
+  '';
 
   buildInputs = [
     rtaudio
