@@ -4090,6 +4090,8 @@ in {
 
   iocapture = callPackage ../development/python-modules/iocapture { };
 
+  ionhash = callPackage ../development/python-modules/ionhash { };
+
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iowait = callPackage ../development/python-modules/iowait { };
