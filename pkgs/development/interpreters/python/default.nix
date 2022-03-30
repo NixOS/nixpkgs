@@ -123,10 +123,19 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "6";
+        patch = "11";
         suffix = "";
       };
-      sha256 = "12hhw2685i68pwfx5hdkqngzhbji4ccyjmqb5rzvkigg6fpj0y9r";
+      sha256 = "sha256-ZnZ6NTCdck83DfnlA8FytO5ET0nWK5i8TspyUSPibEk=";
+    };
+    python310 = {
+      sourceVersion = {
+        major = "3";
+        minor = "10";
+        patch = "3";
+        suffix = "";
+      };
+      sha256 = "sha256-WWxy3pmNw5IFvE9w7w2/ft7HQKMG0JtJqb0Kd4BnMNw=";
     };
   };
 
@@ -177,18 +186,11 @@ in {
     inherit passthruFun;
   } // sources.python39);
 
-  python310 = callPackage ./cpython {
+  python310 = callPackage ./cpython ({
     self = python310;
-    sourceVersion = {
-      major = "3";
-      minor = "10";
-      patch = "0";
-      suffix = "";
-    };
-    sha256 = "00mhn6kj4qkvkkv6hh2klnnjr0yk0c9hspp7njc7n6m1lvkzi6as";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python310);
 
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (callPackage ./cpython ({
