@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://zhaofengli.github.io/colmena/${passthru.apiVersion}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
