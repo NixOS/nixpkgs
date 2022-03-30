@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/AyatanaIndicators/ayatana-ido/blob/${version}/ChangeLog";
     license = [ licenses.lgpl3Plus licenses.lgpl21Plus ];
     maintainers = [ maintainers.nickhu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
