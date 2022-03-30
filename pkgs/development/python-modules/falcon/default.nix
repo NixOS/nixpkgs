@@ -28,13 +28,13 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "3.0.1";
+  version = "3.1.0";
   format = "pyproject";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xB2E2zJYgahw6LcSnV7P2XL6QyPPd7cRmh0qIZZu5oE=";
+    sha256 = "sha256-8nYL0YwWOTpvteVfNx9nkh7bcv6+aTqCs8XoIZXQh7c=";
   };
 
   checkInputs = [
