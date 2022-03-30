@@ -28,13 +28,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.1.0";
+  version = "8.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QsI+kLLequYxJmiF3hZWpRehZz1+HbV+jrOku2zVzhs=";
+    sha256 = "sha256-cOXrEyysWUo0tfeZvSUliQCZBfBRBHKK6mpAPsJRncE=";
   };
 
   buildInputs = [
