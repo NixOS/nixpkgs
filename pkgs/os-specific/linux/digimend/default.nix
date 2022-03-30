@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
 
-assert lib.versionAtLeast kernel.version "3.5";
-
 stdenv.mkDerivation rec {
   pname = "digimend";
   version = "unstable-2019-06-18";
