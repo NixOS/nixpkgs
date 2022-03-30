@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "X window manager for non-desktop embedded systems";
     homepage = "https://www.yoctoproject.org/software-item/matchbox/";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
