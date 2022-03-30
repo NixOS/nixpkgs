@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "CLI email sending tool";
     license = licenses.bsd3;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
   };
