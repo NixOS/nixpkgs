@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Ncurses based hex editor with a vim-like interface";
     homepage = "http://bviplus.sourceforge.net";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }
