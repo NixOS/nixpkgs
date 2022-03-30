@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://ken.tossell.net/libuvc/";
     description = "Cross-platform library for USB video devices";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ prusnak ];
   };
