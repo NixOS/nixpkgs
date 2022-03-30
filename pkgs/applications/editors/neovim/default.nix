@@ -5,7 +5,8 @@
 , tree-sitter
 , glibcLocales ? null, procps ? null
 
-# now defaults to false because some tests can be flaky (clipboard etc)
+# now defaults to false because some tests can be flaky (clipboard etc), see
+# also: https://github.com/neovim/neovim/issues/16233
 , doCheck ? false
 , nodejs ? null, fish ? null, python3 ? null
 }:
