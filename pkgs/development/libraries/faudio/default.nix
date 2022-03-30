@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "XAudio reimplementation focusing to develop a fully accurate DirectX audio library";
     homepage = "https://github.com/FNA-XNA/FAudio";
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.marius851000 ];
   };
 }
