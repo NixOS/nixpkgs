@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       rev = version;
       sha256 = "sha256-Jrj8WlKrkPpmME50oVcZLQZs0bqbODAYibLJGPF7ock=";
   };
-  nativeBuildInputs = [cmake ninja];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [
       libX11
       libXrandr
