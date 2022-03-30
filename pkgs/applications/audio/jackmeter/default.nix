@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.aelius.com/njh/jackmeter/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
