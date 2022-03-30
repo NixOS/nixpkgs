@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
       more scalable.
     '';
 
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
