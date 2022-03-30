@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
       provides the reference implementation for communicating with the FUSE
       kernel module.
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/libfuse/libfuse";
     changelog = "https://github.com/libfuse/libfuse/releases/tag/fuse-${version}";
     platforms = platforms.linux;
     license = with licenses; [ gpl2Only lgpl21Only ];
