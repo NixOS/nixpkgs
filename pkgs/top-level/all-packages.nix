@@ -14661,12 +14661,8 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  inherit (callPackage ../tools/admin/ansible { })
-    ansible
-    ansible_2_8
-    ansible_2_9
-    ansible_2_10
-    ansible_2_11;
+  ansible = ansible_2_12;
+  ansible_2_12 = python3Packages.toPythonApplication python3Packages.ansible-core;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
