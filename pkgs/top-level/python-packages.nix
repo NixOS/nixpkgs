@@ -7122,6 +7122,8 @@ in {
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
+  pylnk3 = callPackage ../development/python-modules/pylnk3 { };
+
   pylru = callPackage ../development/python-modules/pylru { };
 
   pyls-black = callPackage ../development/python-modules/pyls-black { };
