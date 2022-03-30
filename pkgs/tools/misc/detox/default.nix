@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       (or CP-1252) characters in them.
     '';
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ];
   };
 }
