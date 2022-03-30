@@ -21,13 +21,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
-  version = "8.2.2";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
     rev = version;
-    sha256 = "sha256-thtBVGgKRYHOAFuxDvuFxcIHoyYAI58AiNCx4vuVXGs=";
+    sha256 = "sha256-XZSOzpsGQN8Yh/OxCMTMk0vgsl5CoXxV5opWWqlmU0U=";
   };
 
   postInstall =
