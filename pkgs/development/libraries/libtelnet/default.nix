@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/seanmiddleditch/libtelnet";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.tomberek ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
