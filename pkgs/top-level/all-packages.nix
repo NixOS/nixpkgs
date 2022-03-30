@@ -24863,6 +24863,8 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
+  join-desktop = callPackage ../applications/misc/join-desktop { };
+
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
   };
