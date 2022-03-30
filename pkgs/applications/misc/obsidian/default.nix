@@ -12,7 +12,7 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "0.13.31";
+  version = "0.14.2";
   meta = with lib; {
     description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
@@ -21,22 +21,11 @@ let
     maintainers = with maintainers; [ conradmearns zaninime opeik ];
   };
 
+  filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}${extension}";
-    inherit sha256;
+    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
+    sha256 = if stdenv.isDarwin then "128kgqkf54ljkglwqa6i0qnfqhhmsv7hwbaqnml95n5dzyxrbm4s" else "00gip6pvkbywywlx71j87sxyh8yhkd36i1ydncbpnhsplr6smsq3";
   };
-
-  sha256 = rec {
-    x86_64-linux = "v3Zm5y8V1KyWDQeJxhryBojz56OTT7gfT+pLGDUD4zs=";
-    x86_64-darwin = "m/81uuDhMJJ1tHTUPww+xNdwsaYCOmeNtbjdwMAwhBU=";
-    aarch64-darwin = x86_64-darwin;
-  }.${system};
-
-  extension = rec {
-    x86_64-linux = ".tar.gz";
-    x86_64-darwin = "-universal.dmg";
-    aarch64-darwin = x86_64-darwin;
-  }.${system};
 
   linux = stdenv.mkDerivation rec {
     icon = fetchurl {

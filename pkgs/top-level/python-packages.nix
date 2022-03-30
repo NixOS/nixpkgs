@@ -520,6 +520,8 @@ in {
 
   ansible-base = callPackage ../development/python-modules/ansible/base.nix { };
 
+  ansible-compat = callPackage ../development/python-modules/ansible-compat { };
+
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
   ansible-doctor = callPackage ../development/python-modules/ansible-doctor { };
@@ -5626,6 +5628,8 @@ in {
   notify-py = callPackage ../development/python-modules/notify-py { };
 
   notify2 = callPackage ../development/python-modules/notify2 { };
+
+  notifymuch = callPackage ../development/python-modules/notifymuch {};
 
   notmuch = callPackage ../development/python-modules/notmuch {
     inherit (pkgs) notmuch;

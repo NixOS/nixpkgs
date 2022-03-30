@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , substituteAll
+, fetchpatch
 , accountsservice
 , adwaita-icon-theme
 , colord
@@ -77,6 +78,13 @@ stdenv.mkDerivation rec {
       gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
+    })
+
+    # Fix Online Accounts configuration on X11
+    # https://gitlab.gnome.org/GNOME/gnome-control-center/-/merge_requests/1272
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/7fe322b9cedae313cd9af6f403eab9bfc6027674.patch";
+      sha256 = "cv1abqv0Kbfkfu7mZzEaZKXPE85yVBcQbjNHW+8ODFE=";
     })
   ];
 

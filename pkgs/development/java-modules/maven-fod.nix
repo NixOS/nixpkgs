@@ -49,7 +49,7 @@ stdenv.mkDerivation (rec {
     runHook preBuild
 
     mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
-    mvn package --offline "-Dmaven.repo.local=$mvnDeps/.m2" -P desktop,all-platforms
+    mvn package --offline "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
 
     runHook postBuild
   '';
