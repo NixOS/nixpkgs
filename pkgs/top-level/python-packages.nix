@@ -470,6 +470,8 @@ in {
 
   altair = callPackage ../development/python-modules/altair { };
 
+  amazon-ion = callPackage ../development/python-modules/amazon-ion { };
+
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
   ambee = callPackage ../development/python-modules/ambee { };
