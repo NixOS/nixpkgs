@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # GanttProject itself is GPL3+. All bundled libraries are declared
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.vidbina ];
   };
 }
