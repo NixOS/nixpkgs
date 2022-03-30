@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "GeoAlchemy2";
-  version = "0.10.2";
+  version = "0.11.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3db833746e11bc802b754751ec94eaab81009a9ad8fe647d461fe76d1a47a3fd";
+    sha256 = "sha256-+SoPrdtbdDhNu/PHAAQzNYzo4HoYD+HWwoQ+qgQ3/wg=";
   };
 
   nativeBuildInputs = [
