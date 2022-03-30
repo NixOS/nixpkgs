@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/icon-slicer/";
     license = licenses.mit;
     maintainers = with maintainers; [ zaninime ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
