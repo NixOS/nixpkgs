@@ -337,6 +337,7 @@ in
   ndppd = handleTest ./ndppd.nix {};
   nebula = handleTest ./nebula.nix {};
   neo4j = handleTest ./neo4j.nix {};
+  netbox = handleTest ./netbox.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };

@@ -1,0 +1,19 @@
+diff --git a/netbox/netbox/configuration.testing.py b/netbox/netbox/configuration.testing.py
+index 59529b80c..acb14c475 100644
+--- a/netbox/netbox/configuration.testing.py
++++ b/netbox/netbox/configuration.testing.py
+@@ -6,12 +6,8 @@
+ ALLOWED_HOSTS = ['*']
+ 
+ DATABASE = {
+-    'NAME': 'netbox',
+-    'USER': 'netbox',
+-    'PASSWORD': 'netbox',
+-    'HOST': 'localhost',
+-    'PORT': '',
+-    'CONN_MAX_AGE': 300,
++    'ENGINE': 'sqlite3',
++    'NAME': ':memory:',
+ }
+ 
+ PLUGINS = [
