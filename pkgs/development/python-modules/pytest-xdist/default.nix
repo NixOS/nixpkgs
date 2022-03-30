@@ -9,6 +9,7 @@
 , pytest
 , pytest-forked
 , psutil
+, pexpect
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   buildInputs = [
     pytest
   ];
-  checkInputs = [ pytestCheckHook filelock ];
+  checkInputs = [ pytestCheckHook filelock pexpect ];
   propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
   # access file system
