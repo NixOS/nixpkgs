@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.etpan.org/libetpan.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
