@@ -2017,9 +2017,13 @@ self: super: {
 
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.
-  graphql = assert pkgs.lib.versionOlder self.parser-combinators.version "1.3.0";
-    assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
-    doJailbreak super.graphql;
+  graphql =
+    let
+      acceptable =
+           pkgs.lib.versionOlder self.parser-combinators.version "1.3.0"
+        && pkgs.lib.versionOlder self.hspec.version "2.8.2";
+    in
+      if acceptable then doJailbreak super.graphql else markBroken super.graphql;
 
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (pkgs.fetchpatch {
