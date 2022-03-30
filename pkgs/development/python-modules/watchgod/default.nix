@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "watchgod";
-  version = "0.7";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0aagm0n5fkpzdsfgl0r21gkz5qaicgq3f4rqz2fdvsgbn1i0s528";
+    sha256 = "sha256-wS0V8999EedAcE5FOYJ3918dePRq1Zyp11Bb/YuNMIY=";
   };
 
   # no tests in release
