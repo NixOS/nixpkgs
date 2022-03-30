@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "A version of the classic game Mastermind";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
