@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ZerBea/hcxdumptool";
     description = "Small tool to capture packets from wlan devices";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ danielfullmer ];
   };
 }
