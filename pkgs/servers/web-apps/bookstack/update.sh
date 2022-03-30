@@ -7,7 +7,7 @@ if ! command -v composer2nix &> /dev/null; then
   exit 1
 fi
 
-CURRENT_VERSION=$(nix eval --raw '(with import ../../../.. {}; bookstack.version)')
+CURRENT_VERSION=$(nix eval -f ../../../.. --raw bookstack.version)
 TARGET_VERSION_REMOTE=$(curl https://api.github.com/repos/bookstackapp/bookstack/releases/latest | jq -r ".tag_name")
 TARGET_VERSION=${TARGET_VERSION_REMOTE:1}
 BOOKSTACK=https://github.com/bookstackapp/bookstack/raw/$TARGET_VERSION_REMOTE
@@ -39,6 +39,9 @@ sed -e "s/stdenv\.lib/lib/g" \
 # fix composition.nix
 sed -e '7s/stdenv writeTextFile/stdenv lib writeTextFile/' \
     -i composition.nix
+
+# fix missing quotation marks in URLs in php-packages.nix
+sed -r "s/(https:\/\/.*);/\"\1\";/g" -i php-packages.nix
 
 # fix missing newline
 echo "" >> composition.nix
