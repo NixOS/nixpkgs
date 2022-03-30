@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/fastjar/";
 
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }
