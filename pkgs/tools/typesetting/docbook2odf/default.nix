@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://open.comsultia.com/docbook2odf/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }
