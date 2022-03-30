@@ -31,13 +31,13 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.2.3";
+  version = "3.2.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JdAz/Ae4+/yb3Te3cLilhtxBTb1gMShEmvMldqOJFnM=";
+    sha256 = "sha256-PkxvKY1UBEWC2soRQrCC7jiDG7PXu5MdLuYB6Ljc5k8=";
   };
 
   propagatedBuildInputs = [
