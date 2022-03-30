@@ -1,8 +1,7 @@
-{
-    withFFMPG ? true,
-    stdenv, cmake, ninja, lib, fetchFromGitHub,
-    libX11, libXrandr, libXinerama, libXcursor, libXi, libXext, libGLU, ffmpeg,
-    Cocoa
+{ withFFMPG ? true
+, stdenv, cmake, ninja, lib, fetchFromGitHub
+, libX11, libXrandr, libXinerama, libXcursor, libXi, libXext, libGLU, ffmpeg
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
