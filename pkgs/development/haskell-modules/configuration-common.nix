@@ -2240,11 +2240,11 @@ self: super: {
   # Release 1.0.0.0 added version bounds (was unrestricted before),
   # but with too strict lower bounds for our lts-18.
   # Disable aeson for now, future release should support it
-  graphql = assert versionOlder self.hspec.version "2.9.0";
+  graphql =
     assert super.graphql.version == "1.0.2.0";
     appendConfigureFlags [
       "-f-json"
-    ] (doJailbreak super.graphql);
+    ] (lib.warnIf (lib.versionAtLeast self.hspec.version "2.9.0") "@NixOS/haskell: Remove jailbreak for graphql" doJailbreak super.graphql);
 
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (fetchpatch {
