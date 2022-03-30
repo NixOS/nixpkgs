@@ -13,6 +13,7 @@
 , gdk-pixbuf
 , pango
 , gettext
+, itstool
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
     glib
     gettext
+    itstool
   ];
 
   buildInputs = [
