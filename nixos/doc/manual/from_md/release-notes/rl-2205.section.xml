@@ -434,6 +434,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.klogd</literal> was removed. Logging of
+          kernel messages is handled by systemd since Linux 3.5.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
         </para>
