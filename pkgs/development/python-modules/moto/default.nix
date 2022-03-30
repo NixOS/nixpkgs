@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "3.0.5";
+  version = "3.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hfLs4K0DBaoTo5E5zmSKs6/hwEyzKsHbjV5ekRfU0Q4=";
+    sha256 = "sha256-+kgVlfVhHZ/r2vCg0Skwe1433mh2w30DXO7+Rs59isA=";
   };
 
   propagatedBuildInputs = [
