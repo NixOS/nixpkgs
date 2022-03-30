@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://notabug.org/cwebber/guile-gcrypt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
