@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/containers/aardvark-dns";
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
