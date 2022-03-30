@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
     homepage = "https://github.com/smasty/g203-led";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
