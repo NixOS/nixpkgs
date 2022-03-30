@@ -171,6 +171,17 @@ convertIconTheme() {
     fi
 }
 
+processExecFieldCodes() {
+  local -r file=$1
+  local -r execRaw=$(getDesktopParam "${file}" "Exec")
+  local -r execNoK="${execRaw/\%k/${file}}"
+  local -r exec="${execNoK// %[fFuUic]}"
+  if [[ "$exec" != "$execRaw" ]]; then
+    echo 1>&2 "desktopToDarwinBundle: Application bundles do not understand desktop entry field codes. Changed '$execRaw' to '$exec'."
+  fi
+  echo "$exec"
+}
+
 # For a given .desktop file, generate a darwin '.app' bundle for it.
 convertDesktopFile() {
     local -r file=$1
@@ -180,11 +191,7 @@ convertDesktopFile() {
     if [[ "$macOSExec" ]]; then
       local -r exec="$macOSExec"
     else
-      local -r execRaw=$(getDesktopParam "${file}" "Exec")
-      local -r exec="${execRaw// %[fFuUick]}"
-      if [[ "$exec" != "$execRaw" ]]; then
-        echo "desktopToDarwinBundle: Application bundles do not understand desktop entry field codes. Changed '$execRaw' to '$exec'."
-      fi
+      local -r exec=$(processExecFieldCodes "${file}")
     fi
     local -r iconName=$(getDesktopParam "${file}" "^Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
