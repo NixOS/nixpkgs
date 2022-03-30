@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mccdaq/uldaq";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.simonkampe ];
   };
 }
