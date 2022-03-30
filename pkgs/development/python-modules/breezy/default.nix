@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4LJo6xoooq8EUoDDfQIa4y1/8XX0ybmfM6rX2wsp2Fw=";
+    sha256 = "sha256-GHpuRSCN0F2BdQc2cgyDcQz0gJT1R+xAgcVxJZVZpNU=";
   };
 
   propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
