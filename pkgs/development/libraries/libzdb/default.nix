@@ -18,7 +18,7 @@ stdenv.mkDerivation rec
     homepage = "http://www.tildeslash.com/libzdb/";
     description = "A small, easy to use Open Source Database Connection Pool Library";
     license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }
