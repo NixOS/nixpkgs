@@ -1,7 +1,7 @@
-{ lib, buildGoModule, fetchFromGitHub, ... }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "ntfysh";
+  pname = "ntfy-sh";
   version = "1.18.1";
 
   src = fetchFromGitHub {
@@ -23,7 +23,6 @@ buildGoModule rec {
     description = "Send push notifications to your phone or desktop via PUT/POST";
     homepage = "https://ntfy.sh";
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ arjan-s ];
   };
 }

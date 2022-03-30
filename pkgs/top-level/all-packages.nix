@@ -8490,7 +8490,7 @@ with pkgs;
 
   ntfy = callPackage ../tools/misc/ntfy {};
 
-  ntfysh = callPackage ../tools/misc/ntfysh {};
+  ntfy-sh = callPackage ../tools/misc/ntfy-sh {};
 
   ntirpc = callPackage ../development/libraries/ntirpc { };
 
