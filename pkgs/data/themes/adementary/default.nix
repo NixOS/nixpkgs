@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/hrdwrrsk/adementary-theme";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }
