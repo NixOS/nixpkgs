@@ -2745,6 +2745,8 @@ with pkgs;
 
   wdomirror = callPackage ../tools/wayland/wdomirror { };
 
+  wdt = callPackage ../applications/networking/sync/wdt { };
+
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
@@ -5075,6 +5077,8 @@ with pkgs;
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
   epubcheck = callPackage ../tools/text/epubcheck { };
+
+  evil-winrm = callPackage ../tools/security/evil-winrm { };
 
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
@@ -8495,6 +8499,8 @@ with pkgs;
   ntfsprogs = pkgs.ntfs3g;
 
   ntfy = callPackage ../tools/misc/ntfy {};
+
+  ntfy-sh = callPackage ../tools/misc/ntfy-sh {};
 
   ntirpc = callPackage ../development/libraries/ntirpc { };
 
@@ -14174,10 +14180,9 @@ with pkgs;
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = with python3Packages; toPythonApplication (callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
-    inherit python;
-  });
-
+  poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
+    python = python3;
+  };
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
@@ -15830,8 +15835,7 @@ with pkgs;
   shallot = callPackage ../tools/misc/shallot { };
 
   inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_15
-    shards_0_16
+    shards_0_17
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {
@@ -16545,7 +16549,11 @@ with pkgs;
 
   cog = callPackage ../development/web/cog { };
 
+  cosmoc = callPackage ../development/tools/cosmoc { };
+
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
+
+  python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
 
   ctl = callPackage ../development/libraries/ctl { };
 
@@ -19292,6 +19300,10 @@ with pkgs;
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
   microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+
+  microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
+  microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
+  microsoft-edge-dev = callPackage (import ../applications/networking/browsers/microsoft-edge).dev { };
 
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 

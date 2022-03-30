@@ -1261,6 +1261,13 @@
           example.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.cosmopolitan</literal> no longer provides the
+          <literal>cosmoc</literal> command. It has been moved to
+          <literal>pkgs.cosmoc</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">

@@ -19,6 +19,7 @@
 , protobuf
 , sqlite
 , taglib
+, libgpod
 , libpulseaudio
 , libselinux
 , libsepol
@@ -63,6 +64,7 @@ mkDerivation rec {
     qtbase
     qtx11extras
   ] ++ lib.optionals stdenv.isLinux [
+    libgpod
     libpulseaudio
     libselinux
     libsepol
