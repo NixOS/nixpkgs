@@ -33,7 +33,7 @@ yes
     homepage = "https://www.ossec.net";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 
