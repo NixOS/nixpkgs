@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/lf-lang/lingua-franca";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ revol-xut ];
   };
 }
