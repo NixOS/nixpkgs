@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.4.0";
+  version = "0.4.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pgm0zsylbmz1r96q4n3rfi0h3pn4jss2yfs83z0yxa90nmsxhv3";
+    sha256 = "sha256-Vkau8Nk2ssdhoQOT8DhO5rXH/guz5c1xCxcTTKHZnP8=";
   };
 
   patches = [
