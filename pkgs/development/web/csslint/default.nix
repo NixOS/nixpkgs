@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nodejs.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
