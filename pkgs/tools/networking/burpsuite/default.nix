@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
+{ lib, stdenv, fetchurl, jdk11, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "burpsuite";
-  version = "2021.12";
+  version = "2022.2.4";
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
       "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
     ];
-    sha256 = "sha256-BLX/SgHctXciOZoA6Eh4zuDJoxNSZgvoj2Teg1fV80g=";
+    sha256 = "f0027e5736af812c384d34a7978480bb4191b77fe873600d9aff8d9763b0166b";
   };
 
   dontUnpack = true;
@@ -19,16 +19,12 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    echo '#!${runtimeShell}
-    eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
-    mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
-    ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
-    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
-    chmod +x $out/bin/burpsuite
+    makeWrapper ${jdk11}/bin/java $out/bin/burpsuite --add-flags '-jar ${src}'
 
     runHook postInstall
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
   preferLocalBuild = true;
 
   meta = with lib; {
