@@ -122,7 +122,7 @@ in {
 
           Make sure that websockets are forwarded properly. You might want to set up caching
           of some requests. Take a look at mastodon's provided nginx configuration at
-          <code>https://github.com/tootsuite/mastodon/blob/master/dist/nginx.conf</code>.
+          <code>https://github.com/mastodon/mastodon/blob/master/dist/nginx.conf</code>.
         '';
         type = lib.types.bool;
         default = false;
