@@ -23,25 +23,15 @@ assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (rec {
   name = "zlib-${version}";
-  version = "1.2.11";
+  version = "1.2.12";
 
   src = fetchurl {
     urls =
       [ "https://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
-    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
+    sha256 = "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9";
   };
-
-  patches = [
-    # https://nvd.nist.gov/vuln/detail/CVE-2018-25032
-    # https://github.com/madler/zlib/commit/5c44459c3b28a9bd3283aaceab7c615f8020c531
-    ./CVE-2018-25032-1.patch
-    # https://github.com/madler/zlib/commit/4346a16853e19b45787ce933666026903fb8f3f8
-    ./CVE-2018-25032-2.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
-    ./disable-cygwin-widechar.patch
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
