@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~sircmpwn/gmni";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bsima jb55 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
