@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Command line utlities for programming PCsensor and Scythe foot switches.";
     homepage    = "https://github.com/rgerganov/footswitch";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ baloo ];
   };
 }
