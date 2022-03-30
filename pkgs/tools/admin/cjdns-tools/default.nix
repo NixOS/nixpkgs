@@ -41,6 +41,6 @@ stdenv.mkDerivation {
     description = "Tools for cjdns managment";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
