@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     description = "A tiling layout generator for river";
     homepage = "https://gitlab.com/snakedye/kile";
     license = licenses.mit;
-    platforms = platforms.linux; # It's meant for river, a wayland compositor
+    platforms = platforms.unix; # It's meant for river, a wayland compositor
     maintainers = with maintainers; [ fortuneteller2k ];
     mainProgram = "kile";
   };
