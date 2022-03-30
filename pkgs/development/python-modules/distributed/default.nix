@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2022.2.1";
+  version = "2022.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+2KnWvjvM7vhqoCmjAGjOpPBzVozLdAXq0SVW/fs9ls=";
+    hash = "sha256-49gFNyDNWKOiVOiGKQD+weCUDp40sERIIULYNs0e2JI=";
   };
 
   propagatedBuildInputs = [
