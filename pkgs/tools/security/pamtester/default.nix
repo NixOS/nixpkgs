@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Utility program to test the PAM facility";
     homepage = "http://pamtester.sourceforge.net/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
 }
