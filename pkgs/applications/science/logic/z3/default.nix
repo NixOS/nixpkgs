@@ -93,28 +93,4 @@ in
     version = "4.7.1";
     sha256 = "1s850r6qifwl83zzgvrb5l0jigvmymzpv18ph71hg2bcpk7kjw3d";
   };
-  z3_4_6 = common {
-    version = "4.6.0";
-    sha256 = "1cgwlmjdbf4rsv2rriqi2sdpz9qxihxrcpm6a4s37ijy437xg78l";
-    patches = [
-      # This patch is necessary for newer versions of gcc: https://github.com/Z3Prover/z3/pull/1612
-      (fetchpatch {
-        url = "https://github.com/Z3Prover/z3/commit/2d5dd802386d78117d5ed9ddcbf8bc22ab3cb461.patch";
-        sha256 = "BZDaI9qwh0W4m0U9jZS3FdIZ8fQlqgHq3gixxD/4hDI=";
-        name = "4.6.0.patch";
-      })
-    ];
-  };
-  z3_4_5 = common {
-    version = "4.5.0";
-    sha256 = "0ssp190ksak93hiz61z90x6hy9hcw1ywp8b2dzmbhn6fbd4bnxzp";
-    patches = [
-      # This patch is necessary for newer versions of clang: https://github.com/Z3Prover/z3/issues/1016
-      (fetchpatch {
-        url = "https://github.com/Z3Prover/z3/commit/f03f471f025adaed6f82d73b7e19fc8693bbec4f.patch";
-        sha256 = "+cQoACB5f/ubgrC1ITWYueP1aksh+81aYaGuKUDwA2s=";
-        name = "4.5.0.patch";
-      })
-    ];
-  };
 }
