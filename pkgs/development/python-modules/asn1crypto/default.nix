@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "asn1crypto";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c";
+    sha256 = "sha256-E644UCvmMhFav4oky+X02lLjtSMZkK/zESPIBTBsy5w=";
   };
 
   # No tests included
