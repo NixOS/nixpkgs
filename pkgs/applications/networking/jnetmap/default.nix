@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.rakudave.ch/jnetmap/";
     license = licenses.gpl3Plus;
     # Upstream supports macOS and Windows too.
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }
