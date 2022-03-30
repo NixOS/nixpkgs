@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-optimized" "--enable-static" ];
 
   meta = {
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
   };
 }
