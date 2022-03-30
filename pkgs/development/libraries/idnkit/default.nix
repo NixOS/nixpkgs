@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
       fullName = "Open Source Code License version 1.1";
       url = "https://jprs.co.jp/idn/idnkit2-OSCL.txt";
     };
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
