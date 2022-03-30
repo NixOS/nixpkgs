@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
+, flit-core
 , click
 , pytestCheckHook
 , shellingham
@@ -17,23 +18,18 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.4.0";
+  version = "0.4.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pgm0zsylbmz1r96q4n3rfi0h3pn4jss2yfs83z0yxa90nmsxhv3";
+    sha256 = "sha256-Vkau8Nk2ssdhoQOT8DhO5rXH/guz5c1xCxcTTKHZnP8=";
   };
 
-  patches = [
-    (fetchpatch {
-      # use get_terminal_size from shutil; click 8.1.0 compat
-      # https://github.com/tiangolo/typer/pull/375
-      name = "typer-click-8.1-compat.patch";
-      url = "https://github.com/tiangolo/typer/commit/b6efa2f8f40291fd80cf146b617e0ba305f6af3c.patch";
-      hash = "sha256-m0EWpBUt5njoPsn043b30WdAQELYNn2ycHXBxZCYXZE=";
-    })
+  nativeBuildInputs = [
+    flit-core
   ];
 
   propagatedBuildInputs = [
