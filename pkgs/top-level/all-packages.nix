@@ -5949,10 +5949,6 @@ with pkgs;
 
   git-delete-merged-branches = callPackage ../applications/version-management/git-and-tools/git-delete-merged-branches { };
 
-  git-dit = callPackage ../applications/version-management/git-and-tools/git-dit {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
-
   git-extras = callPackage ../applications/version-management/git-and-tools/git-extras { };
 
   git-fame = callPackage ../applications/version-management/git-and-tools/git-fame {};
