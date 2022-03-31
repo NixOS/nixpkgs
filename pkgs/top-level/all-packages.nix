@@ -32812,8 +32812,6 @@ with pkgs;
 
   ott = callPackage ../applications/science/logic/ott { };
 
-  otter = callPackage ../applications/science/logic/otter {};
-
   picosat = callPackage ../applications/science/logic/picosat {};
 
   libpoly = callPackage ../applications/science/logic/poly {};
