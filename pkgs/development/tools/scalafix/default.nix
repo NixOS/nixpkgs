@@ -30,6 +30,7 @@ stdenv.mkDerivation {
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
   '';
 
+  doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
