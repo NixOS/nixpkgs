@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, anyio
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-wS0V8999EedAcE5FOYJ3918dePRq1Zyp11Bb/YuNMIY=";
   };
+
+  propagatedBuildInputs = [
+    anyio
+  ];
 
   # no tests in release
   doCheck = false;
