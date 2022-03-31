@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
-  version = "0.3.1";
+  version = "0.3.2";
 
   disabled = pythonOlder "3.6";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6oqhM5sEu0id0qYrhdVyx0xXUvwxBgZSPvrlAnmtY5A=";
+    sha256 = "sha256-SWrHNHZjynpWcwwrWzRPpbNWz8EhVujMoY8uIJQeT6U=";
   };
 
   postPatch = ''
