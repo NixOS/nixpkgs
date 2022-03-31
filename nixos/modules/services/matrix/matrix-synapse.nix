@@ -141,7 +141,7 @@ in {
       enable = mkEnableOption "matrix.org synapse";
 
       configFile = mkOption {
-        type = types.str;
+        type = types.path;
         readOnly = true;
         description = ''
           Path to the configuration file on the target system. Useful to configure e.g. workers
