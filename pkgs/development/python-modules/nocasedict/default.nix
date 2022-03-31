@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
@@ -11,8 +14,12 @@ buildPythonPackage rec {
     sha256 = "sha256-giC5e6BrCOst7e13TEBsd+DKDVNSrnEkn2+dHyoXvXs=";
   };
 
+  propagatedBuildInputs = [
+    six
+  ];
+
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
