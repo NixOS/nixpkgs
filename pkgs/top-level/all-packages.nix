@@ -14059,11 +14059,6 @@ with pkgs;
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
   polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
 
-  pure = callPackage ../development/interpreters/pure {
-    /*llvm = llvm_35;*/
-  };
-  purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
-
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
