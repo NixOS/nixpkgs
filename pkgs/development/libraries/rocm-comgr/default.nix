@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-EIBH7TXelo6mr+/vJ+iT+VLUVoQqWmNsgeN3Nwwr+tM=";
+    hash = "sha256-zlCM3Zue7MEhL1c0gUPwRNgdjzyyF9BEP3UxE8RYkKk=";
   };
 
   sourceRoot = "source/lib/comgr";
