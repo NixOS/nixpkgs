@@ -116,17 +116,23 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
         )
       '' + optionalString doSetup ''
         gitlab.succeed(
-            "curl -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createProject} http://gitlab/api/v4/projects"
+            """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createProject} http://gitlab/api/v4/projects)" = "201" ]"""
         )
         gitlab.succeed(
-            "curl -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${putFile} http://gitlab/api/v4/projects/2/repository/files/some-file.txt"
+            """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${putFile} http://gitlab/api/v4/projects/2/repository/files/some-file.txt)" = "201" ]"""
         )
       '' + ''
         gitlab.succeed(
-            "curl -H @/tmp/headers http://gitlab/api/v4/projects/2/repository/archive.tar.gz > /tmp/archive.tar.gz"
+            """[ "$(curl -o /dev/null -w '%{http_code}' -H @/tmp/headers http://gitlab/api/v4/projects/2/repository/archive.tar.gz)" = "200" ]"""
         )
         gitlab.succeed(
-            "curl -H @/tmp/headers http://gitlab/api/v4/projects/2/repository/archive.tar.bz2 > /tmp/archive.tar.bz2"
+            """curl -H @/tmp/headers http://gitlab/api/v4/projects/2/repository/archive.tar.gz > /tmp/archive.tar.gz"""
+        )
+        gitlab.succeed(
+            """[ "$(curl -o /dev/null -w '%{http_code}' -H @/tmp/headers http://gitlab/api/v4/projects/2/repository/archive.tar.bz2)" = "200" ]"""
+        )
+        gitlab.succeed(
+            """curl -o /dev/null -w '%{http_code}' -H @/tmp/headers http://gitlab/api/v4/projects/2/repository/archive.tar.bz2 > /tmp/archive.tar.bz2"""
         )
         gitlab.succeed("test -s /tmp/archive.tar.gz")
         gitlab.succeed("test -s /tmp/archive.tar.bz2")
