@@ -44,6 +44,8 @@ let
     { splashImage = f cfg.splashImage;
       splashMode = f cfg.splashMode;
       backgroundColor = f cfg.backgroundColor;
+      entryOptions = f cfg.entryOptions;
+      subEntryOptions = f cfg.subEntryOptions;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
@@ -441,6 +443,30 @@ in
         default = null;
         description = ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
+      entryOptions = mkOption {
+        default = "--class nixos --unrestricted";
+        type = types.nullOr types.str;
+        description = ''
+          Options applied to the primary NixOS menu entry.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
+      subEntryOptions = mkOption {
+        default = "--class nixos";
+        type = types.nullOr types.str;
+        description = ''
+          Options applied to the secondary NixOS submenu entry.
 
           <note><para>
           This options has no effect for GRUB 1.
