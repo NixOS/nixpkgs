@@ -11970,8 +11970,6 @@ with pkgs;
     jdk = jdk8;
   };
 
-  aldor = callPackage ../development/compilers/aldor { };
-
   algol68g = callPackage ../development/compilers/algol68g { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
