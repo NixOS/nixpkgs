@@ -38,7 +38,7 @@ in
 
     environment.etc."wireplumber/main.lua.d/80-nixos.lua" = lib.mkIf (!pwUsedForAudio) {
      text = ''
-        # Pipewire is not used for audio, so prevent it from grabbing audio devices
+        -- Pipewire is not used for audio, so prevent it from grabbing audio devices
         alsa_monitor.enable = function() end
       '';
     };
