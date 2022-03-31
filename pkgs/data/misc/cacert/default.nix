@@ -20,7 +20,7 @@ let
   blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.74";
+  srcVersion = "3.77";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
@@ -35,7 +35,7 @@ let
 
     src = if nssOverride != null then nssOverride.src else fetchurl {
       url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      sha256 = "0mnhdkm4galhpvfz4rv0918jwmjlwkvcvb1f5va8f3zlz48qi4l8";
+      sha256 = "1pfy33b51914sivqyaxdwfd930hzb77gm07z4f57hnyk5xddypl2";
     };
 
     dontBuild = true;
