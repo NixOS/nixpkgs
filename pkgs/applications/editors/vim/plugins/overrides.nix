@@ -175,7 +175,6 @@ self: super: {
   cpsm = super.cpsm.overrideAttrs (old: {
     buildInputs = [
       python3
-      stdenv
       cmake
       boost
       icu

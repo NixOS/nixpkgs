@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    stdenv gcc glibc
+    gcc glibc
     libtool gnumake
     file which zsh m4 gtk2 zlib gmp
     gnome2.libgnomecanvas pango sqlite
