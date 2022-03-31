@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha256 }:
 stdenv.mkDerivation {
-  pname = "minecraft-server";
+  pname = "minecraft-fabric-server";
   inherit version;
 
   src = fetchurl { inherit url sha256; };
@@ -9,11 +9,11 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/minecraft
-    cp -v $src $out/lib/minecraft/server.jar
+    cp -v $src $out/lib/minecraft/fabric-server.jar
 
     cat > $out/bin/minecraft-server << EOF
     #!/bin/sh
-    exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
+    exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/fabric-server.jar nogui
     EOF
 
     chmod +x $out/bin/minecraft-server
@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Minecraft Server";
-    homepage = "https://minecraft.net";
+    description = "Minecraft 1.18.2 server with Fabric modloader";
+    homepage = "https://fabricmc.net";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru ];

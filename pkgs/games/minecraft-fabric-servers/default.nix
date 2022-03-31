@@ -10,7 +10,7 @@ let
 
   packages = lib.mapAttrs'
     (version: value: {
-      name = "vanilla-${escapeVersion version}";
+      name = "fabric-${escapeVersion version}";
       value = callPackage ./derivation.nix {
         inherit (value) version url sha256;
         jre_headless = getJavaVersion (if value.javaVersion == null then 8 else value.javaVersion); # versions <= 1.6 will default to 8
@@ -20,6 +20,6 @@ let
 in
 lib.recurseIntoAttrs (
   packages // {
-    vanilla = builtins.getAttr "vanilla-${escapeVersion latestVersion}" packages;
+    fabric = builtins.getAttr "fabric-${escapeVersion latestVersion}" packages;
   }
 )
