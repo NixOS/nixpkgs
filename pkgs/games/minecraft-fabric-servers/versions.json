@@ -1,0 +1,104 @@
+{
+  "1.18": {
+    "url": "https://launcher.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar",
+    "sha1": "c8f83c5655308435b3dcf03c06d9fe8740a77469",
+    "version": "1.18.2",
+    "javaVersion": 17
+  },
+  "1.17": {
+    "url": "https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar",
+    "sha1": "a16d67e5807f57fc4e550299cf20226194497dc2",
+    "version": "1.17.1",
+    "javaVersion": 16
+  },
+  "1.16": {
+    "url": "https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar",
+    "sha1": "1b557e7b033b583cd9f66746b7a9ab1ec1673ced",
+    "version": "1.16.5",
+    "javaVersion": 8
+  },
+  "1.15": {
+    "url": "https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar",
+    "sha1": "bb2b6b1aefcd70dfd1892149ac3a215f6c636b07",
+    "version": "1.15.2",
+    "javaVersion": 8
+  },
+  "1.14": {
+    "url": "https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar",
+    "sha1": "3dc3d84a581f14691199cf6831b71ed1296a9fdf",
+    "version": "1.14.4",
+    "javaVersion": 8
+  },
+  "1.13": {
+    "url": "https://launcher.mojang.com/v1/objects/3737db93722a9e39eeada7c27e7aca28b144ffa7/server.jar",
+    "sha1": "3737db93722a9e39eeada7c27e7aca28b144ffa7",
+    "version": "1.13.2",
+    "javaVersion": 8
+  },
+  "1.12": {
+    "url": "https://launcher.mojang.com/v1/objects/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar",
+    "sha1": "886945bfb2b978778c3a0288fd7fab09d315b25f",
+    "version": "1.12.2",
+    "javaVersion": 8
+  },
+  "1.11": {
+    "url": "https://launcher.mojang.com/v1/objects/f00c294a1576e03fddcac777c3cf4c7d404c4ba4/server.jar",
+    "sha1": "f00c294a1576e03fddcac777c3cf4c7d404c4ba4",
+    "version": "1.11.2",
+    "javaVersion": 8
+  },
+  "1.10": {
+    "url": "https://launcher.mojang.com/v1/objects/3d501b23df53c548254f5e3f66492d178a48db63/server.jar",
+    "sha1": "3d501b23df53c548254f5e3f66492d178a48db63",
+    "version": "1.10.2",
+    "javaVersion": 8
+  },
+  "1.9": {
+    "url": "https://launcher.mojang.com/v1/objects/edbb7b1758af33d365bf835eb9d13de005b1e274/server.jar",
+    "sha1": "edbb7b1758af33d365bf835eb9d13de005b1e274",
+    "version": "1.9.4",
+    "javaVersion": 8
+  },
+  "1.8": {
+    "url": "https://launcher.mojang.com/v1/objects/b58b2ceb36e01bcd8dbf49c8fb66c55a9f0676cd/server.jar",
+    "sha1": "b58b2ceb36e01bcd8dbf49c8fb66c55a9f0676cd",
+    "version": "1.8.9",
+    "javaVersion": 8
+  },
+  "1.7": {
+    "url": "https://launcher.mojang.com/v1/objects/4cec86a928ec171fdc0c6b40de2de102f21601b5/server.jar",
+    "sha1": "4cec86a928ec171fdc0c6b40de2de102f21601b5",
+    "version": "1.7.9",
+    "javaVersion": 8
+  },
+  "1.6": {
+    "url": "https://launcher.mojang.com/v1/objects/050f93c1f3fe9e2052398f7bd6aca10c63d64a87/server.jar",
+    "sha1": "050f93c1f3fe9e2052398f7bd6aca10c63d64a87",
+    "version": "1.6.4",
+    "javaVersion": null
+  },
+  "1.5": {
+    "url": "https://launcher.mojang.com/v1/objects/f9ae3f651319151ce99a0bfad6b34fa16eb6775f/server.jar",
+    "sha1": "f9ae3f651319151ce99a0bfad6b34fa16eb6775f",
+    "version": "1.5.2",
+    "javaVersion": null
+  },
+  "1.4": {
+    "url": "https://launcher.mojang.com/v1/objects/2f0ec8efddd2f2c674c77be9ddb370b727dec676/server.jar",
+    "sha1": "2f0ec8efddd2f2c674c77be9ddb370b727dec676",
+    "version": "1.4.7",
+    "javaVersion": null
+  },
+  "1.3": {
+    "url": "https://launcher.mojang.com/v1/objects/3de2ae6c488135596e073a9589842800c9f53bfe/server.jar",
+    "sha1": "3de2ae6c488135596e073a9589842800c9f53bfe",
+    "version": "1.3.2",
+    "javaVersion": null
+  },
+  "1.2": {
+    "url": "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar",
+    "sha1": "d8321edc9470e56b8ad5c67bbd16beba25843336",
+    "version": "1.2.5",
+    "javaVersion": null
+  }
+}
