@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv }:
 
 buildGoModule rec {
   pname = "glab";
@@ -23,6 +23,12 @@ buildGoModule rec {
   '';
 
   subPackages = [ "cmd/glab" ];
+
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}
+    $out/bin/glab completion --shell bash > $out/share/bash-completion/completions/glab
+    $out/bin/glab completion --shell zsh > $out/share/zsh/site-functions/_glab
+  '';
 
   meta = with lib; {
     description = "An open-source GitLab command line tool";
