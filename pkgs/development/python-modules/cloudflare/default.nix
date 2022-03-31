@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "2.8.15";
+  version = "2.9.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f47bd324f80e91487dea2c79be934b1dc612bcfa63e784dcf74c6a2f52a41cc";
+    sha256 = "sha256-S82MJyulhM6L8cO4akwv+3tdY5qhkNHZr3gROMmSFmU=";
   };
 
   propagatedBuildInputs = [
