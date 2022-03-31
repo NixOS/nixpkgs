@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, hypothesis
+, hypothesmith
+, python
+}:
 
 buildPythonPackage rec {
   pname = "mccabe";
@@ -9,7 +16,12 @@ buildPythonPackage rec {
     sha256 = "sha256-NI4CQMM7YLvfTlIxku+RnyjLLD19XHeU90AJKQ8jYyU=";
   };
 
-  buildInputs = [ pytest pytest-runner ];
+  buildInputs = [
+    pytest
+  ];
+
+  # https://github.com/PyCQA/mccabe/issues/93
+  doCheck = false;
 
   meta = with lib; {
     description = "McCabe checker, plugin for flake8";
