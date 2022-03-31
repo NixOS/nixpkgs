@@ -32,19 +32,20 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "sha256-nwERwdNQYY1Fd7llwZHrJBzWDJNdsySRQ3ZvXZjB7YY=";
+    sha256 = "sha256-KCzYZp0Ch1Y2KuBeuhMqJ1ew289co14NMXHw+nCO8Wo=";
   };
 
   buildInputs = [
     qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
-  ] # ++ (with python3Packages; [pyside2 pyside2-tools shiboken2])
-  # TODO: figure out how to make cmake recognise pyside2
+  ] ++ (with python3Packages; [
+    pyside2 pyside2-tools shiboken2
+  ])
   ++ lib.optional waylandSupport wayland;
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
