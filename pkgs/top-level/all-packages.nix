@@ -13470,6 +13470,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ograc = callPackage ../development/tools/rust/ograc { };
+
   rhack = callPackage ../development/tools/rust/rhack { };
   inherit (rustPackages) rls;
   roogle = callPackage ../development/tools/rust/roogle { };
