@@ -33145,8 +33145,6 @@ with pkgs;
 
   sq = callPackage ../development/tools/sq { };
 
-  openspace = callPackage ../applications/science/astronomy/openspace { };
-
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
