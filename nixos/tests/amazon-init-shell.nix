@@ -18,7 +18,7 @@ makeTest {
   meta = with maintainers; {
     maintainers = [ urbas ];
   };
-  machine = { ... }:
+  nodes.machine = { ... }:
   {
     imports = [ ../modules/profiles/headless.nix ../modules/virtualisation/amazon-init.nix ];
     services.openssh.enable = true;

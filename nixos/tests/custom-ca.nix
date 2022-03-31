@@ -76,7 +76,7 @@ in
 
   enableOCR = true;
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     { imports = [ ./common/user-account.nix ./common/x11.nix ];
 
       # chromium-based browsers refuse to run as root

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, ... }:
   name = "mailcatcher";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.mailcatcher.enable = true;

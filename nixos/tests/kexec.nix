@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     maintainers = [ eelco ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
     { virtualisation.vlans = [ ]; };
 
   testScript =

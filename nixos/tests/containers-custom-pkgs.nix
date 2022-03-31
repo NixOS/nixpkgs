@@ -12,7 +12,7 @@ in {
     maintainers = with lib.maintainers; [ adisbladis earvstedt ];
   };
 
-  machine = { config, ... }: {
+  nodes.machine = { config, ... }: {
     assertions = let
       helloName = (builtins.head config.containers.test.config.system.extraDependencies).name;
     in [ {

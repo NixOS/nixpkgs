@@ -44,7 +44,7 @@ in {
     maintainers = [ mkg20001 ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     virtualisation = {
       # disk full otherwise
       diskSize = 2048;

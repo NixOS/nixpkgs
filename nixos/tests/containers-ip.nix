@@ -17,7 +17,7 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }: {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation = {
