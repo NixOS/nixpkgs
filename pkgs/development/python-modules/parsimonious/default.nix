@@ -1,24 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, six
+, regex
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "0.9.0";
   pname = "parsimonious";
+  version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-sq0a5jovZb149eCorFEKmPNgekPx2yqNRmNqXZ5KMME=";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    regex
+  ];
 
-  # performance tests tend to fail sometimes
-  NOSE_EXCLUDE = "test_benchmarks";
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "parsimonious"
+    "parsimonious.grammar"
+    "parsimonious.nodes"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/erikrose/parsimonious";
