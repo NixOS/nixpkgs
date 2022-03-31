@@ -32,6 +32,20 @@ type of this option should represent the format. The most common formats
 have a predefined type and string generator already declared under
 `pkgs.formats`:
 
+`pkgs.formats.javaProperties` { *`comment`* ? `"Generated with Nix"` }
+
+:   A function taking an attribute set with values
+
+    `comment`
+
+    :   A string to put at the start of the
+        file in a comment. It can have multiple
+        lines.
+
+    It returns the `type`: `attrsOf str` and a function
+    `generate` to build a Java `.properties` file, taking
+    care of the correct escaping, etc.
+
 `pkgs.formats.json` { }
 
 :   A function taking an empty attribute set (for future extensibility)
