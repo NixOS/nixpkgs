@@ -2241,7 +2241,7 @@ self: super: {
   # but with too strict lower bounds for our lts-18.
   # Disable aeson for now, future release should support it
   graphql =
-    assert super.graphql.version == "1.0.2.0";
+    assert super.graphql.version == "1.0.3.0";
     appendConfigureFlags [
       "-f-json"
     ] (lib.warnIf (lib.versionAtLeast self.hspec.version "2.9.0") "@NixOS/haskell: Remove jailbreak for graphql" doJailbreak super.graphql);
