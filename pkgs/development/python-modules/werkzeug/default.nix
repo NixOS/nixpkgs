@@ -5,6 +5,7 @@
 , fetchPypi
 , watchdog
 , dataclasses
+, ephemeral-port-reserve
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess
     pytestCheckHook
@@ -38,6 +40,11 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"
+  ];
+
+  disabledTestPaths = [
+    # ConnectionRefusedError: [Errno 111] Connection refused
+    "tests/test_serving.py"
   ];
 
   pytestFlagsArray = [
