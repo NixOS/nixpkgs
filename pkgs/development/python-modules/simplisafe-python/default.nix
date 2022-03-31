@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2022.03.1";
+  version = "2022.03.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VrCVZeE4CDPt6RfckTUC9UJnoxHVeoNAxD67OefSa2o=";
+    sha256 = "sha256-WWpGRgmjOBCdsxESEpfZEigK7mfutromx6EEr/C/cO0=";
   };
 
   nativeBuildInputs = [
