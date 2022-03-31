@@ -38,9 +38,9 @@ in stdenv.mkDerivation rec {
     "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config automake autoconf ];
   buildInputs = [
-    autoconf automake libtool python2
+    libtool python2
     boostPython db openssl geoip miniupnpc libiconv
   ];
 
