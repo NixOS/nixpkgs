@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ coreutils ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;

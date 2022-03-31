@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1 }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     tar xfvz data.tar.gz
   '';
 
-  nativeBuildInputs = [ makeWrapper patchelf coreutils udevRules ];
+  nativeBuildInputs = [ makeWrapper patchelf udevRules ];
   buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 

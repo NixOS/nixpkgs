@@ -24,7 +24,6 @@
 # build time
 , autoconf
 , cargo
-, gnused
 , makeWrapper
 , nodejs
 , perl
@@ -208,7 +207,6 @@ buildStdenv.mkDerivation ({
   nativeBuildInputs = [
     autoconf
     cargo
-    gnused
     llvmPackages.llvm # llvm-objdump
     makeWrapper
     nodejs

@@ -42,7 +42,6 @@ builder rec {
 
   nativeBuildInputs = [
     makeWrapper
-    gawk
     pkg-config
   ];
   buildInputs = [

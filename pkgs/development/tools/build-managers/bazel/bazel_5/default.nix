@@ -525,7 +525,6 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
-    coreutils
     installShellFiles
     makeWrapper
     python3

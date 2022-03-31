@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchzip
-, autoconf, automake, autoreconfHook, bash, clang, dos2unix, file, gzip, perl
+, autoconf, automake, autoreconfHook, clang, dos2unix, file, perl
 , pkg-config
 , alsa-lib, coreutils, freetype, glib, glibc, gnugrep, libpulseaudio, libtool
 , libuuid, openssl, pango, xorg
@@ -75,11 +75,9 @@ in stdenv.mkDerivation {
     autoconf
     automake
     autoreconfHook
-    bash
     clang
     dos2unix
     file
-    gzip
     perl
     pkg-config
   ];

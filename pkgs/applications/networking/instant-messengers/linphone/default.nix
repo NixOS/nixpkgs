@@ -13,7 +13,6 @@
 , ffmpeg
 , gdk-pixbuf
 , glib
-, gnused
 , graphviz
 , gtk2
 , intltool
@@ -120,7 +119,6 @@ mkDerivation rec {
   nativeBuildInputs = [
     bcunit
     cmake
-    gnused
     graphviz
     intltool
     makeWrapper
