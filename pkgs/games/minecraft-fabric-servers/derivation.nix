@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1 }:
+{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha256 }:
 stdenv.mkDerivation {
   pname = "minecraft-server";
   inherit version;
 
-  src = fetchurl { inherit url sha1; };
+  src = fetchurl { inherit url sha256; };
 
   preferLocalBuild = true;
 
@@ -23,7 +23,6 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = { inherit (nixosTests) minecraft-server; };
-    updateScript = ./update.py;
   };
 
   meta = with lib; {
