@@ -5,6 +5,7 @@
 , php
 , lib, stdenv
 , installShellFiles
+, which
 }:
 
 # Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
@@ -14,7 +15,7 @@
 let makeArcWrapper = toolset: ''
   cat << WRAPPER > $out/bin/${toolset}
   #!$shell -e
-  export PATH='${php}/bin/'\''${PATH:+':'}\$PATH
+  export PATH='${php}/bin:${which}/bin'\''${PATH:+':'}\$PATH
   exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
   WRAPPER
   chmod +x $out/bin/${toolset}
