@@ -111,6 +111,7 @@ mapAliases ({
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
+  ROPGadget = ropgadget; # added 2021-07-06
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
@@ -118,9 +119,9 @@ mapAliases ({
   scikitlearn = scikit-learn; # added 2021-07-21
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03
-  ROPGadget = ropgadget; # added 2021-07-06
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
+  SPARQLWrapper = sparqlwrapper;
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
