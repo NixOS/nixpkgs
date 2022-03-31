@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
-  version = "0.4.3";
+  version = "0.4.4";
 
   # PyPI tarball is missing some test files
   src = fetchFromGitHub {
     owner = "jdepoix";
     repo = "youtube-transcript-api";
     rev = "v${version}";
-    sha256 = "1krak5j2faj6951cl13h7hg9i3kyp6nslcbi608k8hxlbd80hc5h";
+    sha256 = "sha256-RNPWTgAOwS+tXGLQYyIyka36xS1E1499OAP84aT6m3A=";
   };
 
   propagatedBuildInputs = [ requests ];
