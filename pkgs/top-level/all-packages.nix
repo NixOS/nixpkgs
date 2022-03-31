@@ -30088,6 +30088,8 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  warpd = callPackage ../applications/accessibility/warpd { };
+
   watson = callPackage ../applications/office/watson { };
 
   wapiti = callPackage ../tools/security/wapiti { };
