@@ -7,6 +7,7 @@
 , nbconvert
 , jupyter
 , chainer
+, parameterized
 , pytorch
 , mxnet
 , tensorflow
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/NnBm5qnTY0BngEj5i5hIb0VCInBZiSiVkIGLhCkffQ=";
+    hash = "sha256-n4R4lcRimuOncisCTs2zJWPlqZ+W2yPkvkWAnx4R91s=";
   };
 
   checkInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     jupyter
     # For backend tests
     chainer
+    parameterized
     pytorch
     mxnet
     tensorflow

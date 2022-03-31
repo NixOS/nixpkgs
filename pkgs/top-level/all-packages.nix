@@ -19524,7 +19524,7 @@ with pkgs;
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
-  nvidia-vaapi-driver = callPackage ../development/libraries/nvidia-vaapi-driver { };
+  nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
   nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
 
