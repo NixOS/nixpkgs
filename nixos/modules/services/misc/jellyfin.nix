@@ -64,9 +64,7 @@ in
       serviceConfig = rec {
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = cfg.dataDir;
-        CacheDirectory = cfg.cacheDir;
-        ExecStart = "${cfg.package}/bin/jellyfin --datadir '${StateDirectory}' --cachedir '${CacheDirectory}'";
+        ExecStart = "${cfg.package}/bin/jellyfin --datadir '${cfg.dataDir}' --cachedir '${cfg.cacheDir}'";
         Restart = "on-failure";
 
         # Security options:
