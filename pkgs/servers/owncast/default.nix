@@ -39,10 +39,12 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
   '';
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
-    runHook preCheck
+    runHook preInstallCheck
     $out/bin/owncast --help
-    runHook postCheck
+    runHook postInstallCheck
   '';
 
   passthru.tests.owncast = nixosTests.testOwncast;
