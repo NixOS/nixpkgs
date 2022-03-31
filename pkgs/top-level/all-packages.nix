@@ -11972,8 +11972,6 @@ with pkgs;
 
   algol68g = callPackage ../development/compilers/algol68g { };
 
-  aliceml = callPackage ../development/compilers/aliceml { };
-
   armips = callPackage ../development/compilers/armips { };
 
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
