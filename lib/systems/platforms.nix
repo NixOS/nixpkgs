@@ -392,7 +392,10 @@ rec {
 
   apple-m1 = {
     gcc = {
-      arch = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc";
+      # Extracted from `/usr/bin/clang -E - -mcpu=apple-m1 -###`
+      arch = "armv8.5a+fp-armv8+neon+crc+crypto+dotprod+fp16fml+ras+lse+rdm+rcpc+zcm+zcz+fullfp16+sm4+sha3+sha2+aes";
+      # Newest AppleSilicon CPU llvm11 knows about
+      # FIXME: Set to apple-m1 once llvm12 is default
       cpu = "apple-a13";
     };
   };
