@@ -24384,8 +24384,6 @@ with pkgs;
 
   poppler_data = callPackage ../data/misc/poppler-data { };
 
-  qmc2 = libsForQt514.callPackage ../applications/emulators/qmc2 { };
-
   quattrocento = callPackage ../data/fonts/quattrocento {};
 
   quattrocento-sans = callPackage ../data/fonts/quattrocento-sans {};
