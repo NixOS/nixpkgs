@@ -6,7 +6,7 @@ in
 import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
   name = "gitlab";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin ];
+    maintainers = [ globin yayayayaka ];
   };
 
   nodes = {
