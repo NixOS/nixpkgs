@@ -8360,9 +8360,17 @@ in {
 
   pytools = callPackage ../development/python-modules/pytools { };
 
-  pytorch = callPackage ../development/python-modules/pytorch {
-    cudaSupport = pkgs.config.cudaSupport or false;
-  };
+  pytorch =
+    let
+      cudnn = pkgs.cudnn_8_3_cudatoolkit_11;
+      cudatoolkit = cudnn.cudatoolkit;
+      magma = pkgs.magma.override { inherit cudatoolkit; };
+    in
+    callPackage ../development/python-modules/pytorch
+      {
+        cudaSupport = pkgs.config.cudaSupport or false;
+        inherit cudnn cudatoolkit magma;
+      };
 
   pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix { };
 
