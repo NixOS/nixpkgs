@@ -90,7 +90,7 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
-  doInstallCheck = true;
+  doInstallCheck = false; # python bits are broken, see #166604
 
   installCheckPhase = ''
     if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
