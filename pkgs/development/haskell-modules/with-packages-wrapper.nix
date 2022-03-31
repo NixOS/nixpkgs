@@ -51,7 +51,7 @@ let
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
-                  else "$out/lib/${ghcCommand}-${ghc.version}";
+                  else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
