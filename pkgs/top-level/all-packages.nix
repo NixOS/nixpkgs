@@ -1677,8 +1677,6 @@ with pkgs;
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
-  bonfire = callPackage ../tools/misc/bonfire { };
-
   botamusique = callPackage ../tools/audio/botamusique { };
 
   boulder = callPackage ../tools/admin/boulder { };
