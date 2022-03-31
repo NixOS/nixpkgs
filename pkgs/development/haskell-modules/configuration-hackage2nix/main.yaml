@@ -319,6 +319,7 @@ package-maintainers:
     - shakespeare
   roberth:
     - arion-compose
+    - cabal-pkg-config-version-hook
     - hercules-ci-agent
     - hercules-ci-api
     - hercules-ci-api-agent
