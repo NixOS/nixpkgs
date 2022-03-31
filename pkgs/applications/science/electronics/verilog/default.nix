@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
 
   installCheckInputs = [ perl ];
 
+  doInstallCheck = doCheck;
+
   installCheckPhase = ''
     # copy tests to allow writing results
     export TESTDIR=$(mktemp -d)
