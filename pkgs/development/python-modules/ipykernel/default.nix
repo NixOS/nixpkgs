@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.10.0";
+  version = "6.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0cfZLa6l2bVaM+Uj1NF8Ca044N8XpODtL6XJfwfyALo=";
+    sha256 = "sha256-ZxJgRTHJYQDzJkQMEcsCPaJoGfLzS6nRyg+xY0AYNOg=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
