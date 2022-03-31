@@ -299,63 +299,6 @@ in
               '';
             };
           };
-
-          kafka = {
-            hosts = lib.mkOption {
-              default = [];
-              type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
-              description = ''
-                A list of Apache Kafka hosts to publish parsed reports
-                to.
-              '';
-            };
-
-            user = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = ''
-                Username to use when connecting to Kafka, if
-                required.
-              '';
-            };
-
-            password = lib.mkOption {
-              type = with lib.types; nullOr path;
-              default = null;
-              description = ''
-                The path to a file containing the password to use when
-                connecting to Kafka, if required.
-              '';
-            };
-
-            ssl = lib.mkOption {
-              type = with lib.types; nullOr bool;
-              default = null;
-              description = ''
-                Whether to use an encrypted SSL/TLS connection.
-              '';
-            };
-
-            aggregate_topic = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              example = "aggregate";
-              description = ''
-                The Kafka topic to publish aggregate reports on.
-              '';
-            };
-
-            forensic_topic = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              example = "forensic";
-              description = ''
-                The Kafka topic to publish forensic reports on.
-              '';
-            };
-          };
-
         };
 
       };
@@ -483,7 +426,6 @@ in
                 ${mkSecretReplacement cfg.settings.smtp.password}
                 ${mkSecretReplacement cfg.settings.imap.password}
                 ${mkSecretReplacement cfg.settings.elasticsearch.password}
-                ${mkSecretReplacement cfg.settings.kafka.password}
               '' + lib.optionalString cfg.provision.localMail.enable ''
                 openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
                 replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
