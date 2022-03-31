@@ -10,6 +10,7 @@ stdenv.mkDerivation {
     patchShebangs $out
     runHook postInstall
   '';
+  doInstallCheck = true;
   installCheckPhase = ''
     install -m 0600 ${./test/input_file} long_test
     $out/bin/replace-secret "replace this" ${./test/passwd} long_test
