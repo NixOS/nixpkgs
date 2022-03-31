@@ -280,34 +280,47 @@ with prev;
     '';
   });
 
+
+  # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
+  # we shouldn't use luarocks machinery to build complex cmake components
+  libluv = pkgs.stdenv.mkDerivation {
+
+    inherit (prev.luv) pname version meta src;
+
+      cmakeFlags = [
+        "-DBUILD_SHARED_LIBS=ON"
+        "-DBUILD_MODULE=OFF"
+        "-DWITH_SHARED_LIBUV=ON"
+      ];
+
+      buildInputs = [ pkgs.libuv ];
+
+      nativeBuildInputs = [ pkgs.pkg-config pkgs.fixDarwinDylibNames pkgs.cmake ];
+      # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+      NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+        (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+  };
+
   luv = prev.lib.overrideLuarocks prev.luv (drv: {
+
+    buildInputs = [ pkgs.pkg-config pkgs.libuv ];
+
+    doInstallCheck = true;
+
     # Use system libuv instead of building local and statically linking
-    # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
-    # is not possible with luarocks and the current luv rockspec
-    # While at it, remove bundled libuv source entirely to be sure.
-    # We may wish to drop bundled lua submodules too...
-    preBuild = ''
-     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
-     rm -rf deps/libuv
+    extraVariables = {
+      "WITH_SHARED_LIBUV" = "ON";
+    };
+
+    # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
+    installCheckPhase = ''
+      unset LUA_PATH
+      rm tests/test-{dns,thread}.lua
+      lua tests/run.lua
     '';
 
-    buildInputs = [ pkgs.libuv ];
+    passthru.libluv = final.libluv;
 
-    passthru = {
-      libluv = final.luv.overrideAttrs (oa: {
-        preBuild = final.luv.preBuild + ''
-          sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
-          sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
-          sed -i 's,${"\${.*INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
-        '';
-
-        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
-
-        # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
-          (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
-      });
-    };
   });
 
   lyaml = prev.lib.overrideLuarocks prev.lyaml (oa: {

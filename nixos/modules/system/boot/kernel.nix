@@ -241,7 +241,7 @@ in
             "xhci_pci"
             "usbhid"
             "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
-            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft"
+            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
 
           ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
             # Misc. x86 keyboard stuff.

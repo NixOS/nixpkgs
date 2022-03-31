@@ -13,7 +13,7 @@ in import ./make-test-python.nix ({pkgs, ...}: {
     maintainers = [ bbigras ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.openldap = {
       enable = true;
       settings = {

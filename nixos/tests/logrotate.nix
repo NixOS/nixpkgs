@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
   };
 
   # default machine
-  machine = { ... }: {
+  nodes.machine = { ... }: {
   };
 
   testScript =
