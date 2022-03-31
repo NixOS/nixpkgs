@@ -99,7 +99,8 @@ buildPythonPackage rec {
       --replace "cachetools>=4.1,<5" "cachetools>=4.1" \
       --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2" \
       --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
-      --replace "WTForms>=2.3.1,<2.4" "WTForms"
+      --replace "WTForms>=2.3.1,<2.4" "WTForms" \
+      --replace "Flask-Talisman>=0.8,<1" "Flask-Talisman>=0.8,<2" # https://github.com/spiral-project/ihatemoney/pull/1006
   '';
 
   checkInputs = [
