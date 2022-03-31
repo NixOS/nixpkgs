@@ -39,6 +39,7 @@
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
 , withLibsecret ? true
+, enableNautilus ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -102,15 +103,18 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-  ]);
+  ]) ++ lib.optionals enableNautilus [
+    gnome.nautilus
+  ];
 
   mesonFlags = [
-    "-Dnautilus=false"
     "-Dps=enabled"
   ] ++ lib.optionals (!withLibsecret) [
     "-Dkeyring=disabled"
   ] ++ lib.optionals (!supportMultimedia) [
     "-Dmultimedia=disabled"
+  ] ++ lib.optionals (!enableNautilus) [
+    "-Dnautilus=false"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
