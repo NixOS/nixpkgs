@@ -5,12 +5,14 @@
 , pythonOlder
 , installShellFiles
 , astroid
+, dill
 , isort
 , GitPython
 , mccabe
 , platformdirs
 , toml
 , pytest-benchmark
+, pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 }:
@@ -34,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     astroid
+    dill
     isort
     mccabe
     platformdirs
@@ -49,6 +52,7 @@ buildPythonPackage rec {
   checkInputs = [
     GitPython
     pytest-benchmark
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
   ];
@@ -62,7 +66,7 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-n auto"
+    "-n $NIX_BUILD_CORES"
   ];
 
   disabledTestPaths = [
