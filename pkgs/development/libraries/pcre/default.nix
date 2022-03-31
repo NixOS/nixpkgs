@@ -42,7 +42,9 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcre-config "$dev"
   '' + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
-  '';
+  '' + (if stdenv.hostPlatform.isMips64 then ''
+    echo this is just to force a rebuild
+  '' else "");
 
   meta = {
     homepage = "http://www.pcre.org/";
