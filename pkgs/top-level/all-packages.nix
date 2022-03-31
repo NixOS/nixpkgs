@@ -17611,8 +17611,6 @@ with pkgs;
 
   ilbc = callPackage ../development/libraries/ilbc { };
 
-  ilixi = callPackage ../development/libraries/ilixi { };
-
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
   imgui = callPackage ../development/libraries/imgui { };
