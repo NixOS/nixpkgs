@@ -26,7 +26,8 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Minecraft 1.18.2 server with Fabric modloader";
+    description = "Minecraft server with Fabric modloader. Set
+      services.minecraft-server.package = pkgs.minecraftFabricServers.fabric-1-(14|15|16|17|18);";
     homepage = "https://fabricmc.net";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;

@@ -31425,6 +31425,7 @@ with pkgs;
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
   minecraftFabricServers = import ../games/minecraft-fabric-servers { inherit callPackage lib javaPackages; };
+  minecraft-fabric-server = minecraftServers.fabric; # default to latest version
 
   moon-buggy = callPackage ../games/moon-buggy { };
 
