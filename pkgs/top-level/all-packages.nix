@@ -179,6 +179,17 @@ with pkgs;
       }
     '');
 
+  # libtool.m4 invokes "/usr/bin/file", and is vendored into many ./configure scripts
+  fixPathToUsrBinFileInConfigureScript = makeSetupHook {}
+    (writeScript "fix-path-to-user-bin-file.sh" ''
+      postUnpackHooks+=(_fixPathToUserBinFile)
+      _fixPathToUserBinFile() {
+        if [ -e $sourceRoot/configure ]; then
+          substituteInPlace $sourceRoot/configure --replace /usr/bin/file ${buildPackages.file}/bin/file
+        fi
+      }
+    '');
+
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
   quickemu = callPackage ../development/quickemu { };

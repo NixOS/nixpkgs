@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , gmp, mpfr
+, fixPathToUsrBinFileInConfigureScript
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n846hqfqvmsmim7qdlms0qr86f1hck19p12nq3g3z2x74n3sl0p";
   };
 
-  buildInputs = [ gmp mpfr ];
+  buildInputs = [ gmp mpfr ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ fixPathToUsrBinFileInConfigureScript ];
 
   doCheck = true; # not cross;
 

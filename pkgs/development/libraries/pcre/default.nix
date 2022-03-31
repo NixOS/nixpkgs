@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , pcre, windows ? null
+, autoreconfHook
 , variant ? null
 }:
 
@@ -19,6 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
+
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ autoreconfHook ];
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
   configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [

@@ -6,6 +6,7 @@
 }:
 
 { lib, stdenv, fetchurl, gmp
+, autoreconfHook
 }:
 
 stdenv.mkDerivation {
@@ -16,6 +17,8 @@ stdenv.mkDerivation {
   };
 
   inherit patches;
+
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ autoreconfHook ];
 
   buildInputs = [ gmp ];
 

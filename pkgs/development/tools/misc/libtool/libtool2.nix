@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, autoconf, automake, m4, perl, help2man
+, buildPackages
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -35,6 +36,25 @@ stdenv.mkDerivation rec {
     autoconf
     popd
   '';
+
+  # When detecting the `LD` (linker) command and flags for cross
+  # compiling, libtool.m4 expects to be able to use "/usr/bin/file" to
+  # detect host details like ABI and linker flags.  Unfortunately this
+  # detection code hardwires the path to /usr/bin/file, which is
+  # inaccessible for sandboxed builds.  This causes the `LD` flag to
+  # be detected incorrectly when cross-compiling to the following
+  # hostPlatforms: {x86_64, powerpc, s390, sparc, mips64*}-linux,
+  # x86_64-kfreebsd, *-solaris, *-irix, and *-hpux.
+  #
+  # This substitution is performed only for cross-compilation in order
+  # to avoid a mass-rebuild.  A separate PR will be submitted to
+  # staging, not to be merged until after nixpkgs-22.05 branch-off,
+  # which deletes this conditional and this comment.
+  #
+  preBuild = if stdenv.buildPlatform == stdenv.targetPlatform
+             then null
+             else ''substituteInPlace m4/libtool.m4 \
+                    --replace "/usr/bin/file" "${buildPackages.file}/bin/file"'';
 
   nativeBuildInputs = [ perl help2man m4 ] ++ [ autoconf automake ];
   propagatedBuildInputs = [ m4 ];
