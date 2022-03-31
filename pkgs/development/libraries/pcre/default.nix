@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, buildPackages
 , pcre, windows ? null
 , variant ? null
 }:
@@ -19,6 +20,16 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
+
+  # The configure script that ships with pcre expects to be able to
+  # use "file", and has the path hardwired to "/usr/bin/file".  When
+  # cross-compiling this will cause it to mis-detect the ability to
+  # create shared libraries.  This substitution is performed only for
+  # cross-compilation in order to avoid a mass-rebuild.
+  preConfigure = if stdenv.hostPlatform == stdenv.buildPlatform
+                  then null
+                  else ''substituteInPlace configure \
+                         --replace "/usr/bin/file" "${buildPackages.file}/bin/file"'';
 
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
   configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
