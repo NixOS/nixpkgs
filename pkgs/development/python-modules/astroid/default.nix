@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
@@ -45,6 +46,9 @@ buildPythonPackage rec {
   disabledTests = [
     # assert (1, 1) == (1, 16)
     "test_end_lineno_string"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    # AssertionError: Lists differ: ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'Protocol', 'object'] != ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'object']
+    "test_mro_typing_extensions"
   ];
 
   passthru.tests = {
