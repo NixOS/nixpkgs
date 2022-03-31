@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , diskcache
+, more-itertools
 , pytestCheckHook
 }:
 
@@ -19,6 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     diskcache
+    more-itertools
     pytestCheckHook
   ];
 
