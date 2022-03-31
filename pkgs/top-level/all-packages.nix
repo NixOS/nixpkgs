@@ -21974,8 +21974,6 @@ with pkgs;
 
   oidentd = callPackage ../servers/identd/oidentd { };
 
-  openfire = callPackage ../servers/xmpp/openfire { };
-
   softether = callPackage ../servers/softether { };
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
