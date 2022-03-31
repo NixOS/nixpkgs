@@ -4136,8 +4136,6 @@ with pkgs;
 
   byzanz = callPackage ../applications/video/byzanz {};
 
-  ori = callPackage ../tools/backup/ori { };
-
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
   anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
