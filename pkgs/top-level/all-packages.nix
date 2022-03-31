@@ -17376,8 +17376,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  gdata-sharp = callPackage ../development/libraries/gdata-sharp { };
-
   gdk-pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gdk-pixbuf-xlib = callPackage ../development/libraries/gdk-pixbuf/xlib.nix { };
