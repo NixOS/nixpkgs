@@ -17302,8 +17302,6 @@ with pkgs;
 
   gtkimageview = callPackage ../development/libraries/gtkimageview { };
 
-  gtkmathview = callPackage ../development/libraries/gtkmathview { };
-
   glib = callPackage ../development/libraries/glib (let
     glib-untested = glib.override { doCheck = false; };
   in {
