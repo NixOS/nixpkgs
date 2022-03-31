@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
     substituteInPlace meson.build --replace '>= 1.0.0-alpha.1' '>= 1.0.0'
   '';
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/kooha --help
   '';
