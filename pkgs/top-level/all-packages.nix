@@ -33454,8 +33454,6 @@ with pkgs;
 
   glee = callPackage ../tools/graphics/glee { };
 
-  fakenes = callPackage ../applications/emulators/fakenes { };
-
   faust = res.faust2;
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
