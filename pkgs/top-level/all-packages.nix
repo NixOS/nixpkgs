@@ -25981,8 +25981,6 @@ with pkgs;
 
   gjay = callPackage ../applications/audio/gjay { };
 
-  photivo = callPackage ../applications/graphics/photivo { };
-
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
   gradio = callPackage ../applications/audio/gradio { };
