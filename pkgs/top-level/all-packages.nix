@@ -595,8 +595,6 @@ with pkgs;
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
 
-  mht2htm = callPackage ../tools/misc/mht2htm { };
-
   fetchpatch = callPackage ../build-support/fetchpatch { }
     // {
       tests = pkgs.tests.fetchpatch;
