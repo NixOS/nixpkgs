@@ -6299,6 +6299,13 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  K1aymore = {
+    name = "Carl Klay";
+    email = "klaymorer@protonmail.com";
+    matrix = "@klaymore:klaymore.me";
+    github = "K1aymore";
+    githubId = 75699983;
+  };
   k4leg = {
     name = "k4leg";
     email = "python.bogdan@gmail.com";

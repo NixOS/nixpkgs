@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://fabricmc.net";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru ];
+    maintainers = with maintainers; [ K1aymore ];
   };
 }
