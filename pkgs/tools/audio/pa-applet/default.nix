@@ -10,9 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1242sdri67wnm1cd0hr40mxarkh7qs7mb9n2m0g9dbz0f4axj6wa";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
   buildInputs = [
-    gtk3 libpulseaudio glibc automake autoconf libnotify libX11 xf86inputevdev
+    gtk3 libpulseaudio glibc libnotify libX11 xf86inputevdev
   ];
 
   preConfigure = ''

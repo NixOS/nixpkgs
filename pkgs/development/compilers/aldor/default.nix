@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-phKCghCeM+/QlxjIxfNQySo+5XMRqfOqlS9kgp07YKc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gmp which flex bison autoconf automake libtool jdk perl ];
+  nativeBuildInputs = [ makeWrapper autoconf automake ];
+  buildInputs = [ gmp which flex bison libtool jdk perl ];
 
   preConfigure = ''
     cd aldor ;
