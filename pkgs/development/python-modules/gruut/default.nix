@@ -36,14 +36,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gruut";
-  version = "2.2.3";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-B5fPUW4YaMzDDXxncfrWwxGdUizuaxnPImNMf1ZZJ/I=";
+    sha256 = "sha256-hIRn7DSyJsISwvc+Cp8LEz6XGKtm0JGRpT5Fa7pHmYw=";
   };
 
   postPatch = ''
