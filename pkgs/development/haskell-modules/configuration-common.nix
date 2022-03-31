@@ -1821,19 +1821,6 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  yarn2nix = assert super.yarn2nix.version == "0.8.0";
-    lib.pipe (super.yarn2nix.override {
-      regex-tdfa-text = null; # dependency dropped in 0.10.1
-    }) [
-      (overrideCabal {
-        version = "0.10.1";
-        sha256 = "17f96563v9hp56ycd276fxri7z6nljd7yaiyzpgaa3px6rf48a0m";
-        editedCabalFile = null;
-        revision = null;
-      })
-      (addBuildDepends [ self.aeson-better-errors ]) # 0.8.0 didn't depend on this
-    ];
-
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
   # automatically. Instead we need to use the `cabal man`
