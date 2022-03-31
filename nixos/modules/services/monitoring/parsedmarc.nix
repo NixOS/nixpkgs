@@ -404,21 +404,14 @@ in
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
         datasources =
           let
-            pkgVer = lib.getVersion config.services.elasticsearch.package;
-            esVersion =
-              if lib.versionOlder pkgVer "7" then
-                "60"
-              else if lib.versionOlder pkgVer "8" then
-                "70"
-              else
-                throw "When provisioning parsedmarc grafana datasources: unknown Elasticsearch version.";
+            esVersion = lib.getVersion config.services.elasticsearch.package;
           in
             lib.mkIf cfg.provision.grafana.datasource [
               {
                 name = "dmarc-ag";
                 type = "elasticsearch";
                 access = "proxy";
-                url = "localhost:9200";
+                url = "http://localhost:9200";
                 jsonData = {
                   timeField = "date_range";
                   inherit esVersion;
@@ -428,7 +421,7 @@ in
                 name = "dmarc-fo";
                 type = "elasticsearch";
                 access = "proxy";
-                url = "localhost:9200";
+                url = "http://localhost:9200";
                 jsonData = {
                   timeField = "date_range";
                   inherit esVersion;
