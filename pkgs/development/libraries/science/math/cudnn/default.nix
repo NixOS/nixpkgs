@@ -81,7 +81,6 @@ rec {
   cudnn_8_1_cudatoolkit_11_2 = cudnn_8_1_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_2; };
 
   cudnn_8_1_cudatoolkit_10 = cudnn_8_1_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_10; };
-  cudnn_8_1_cudatoolkit_11 = cudnn_8_1_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11; };
 
   # cuDNN 8.3 is necessary for the latest jaxlib, esp. jaxlib-bin. See
   # https://github.com/google/jax/discussions/9455 for more info.
