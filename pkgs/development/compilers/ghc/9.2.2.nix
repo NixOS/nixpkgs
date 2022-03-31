@@ -34,7 +34,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
 
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
@@ -106,9 +106,13 @@ let
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
-  '' + lib.optionalString enableRelocatedStaticLibs ''
-    GhcLibHcOpts += -fPIC
-    GhcRtsHcOpts += -fPIC
+  '' +
+  # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
+  # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
+  # This solution was described in https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+  lib.optionalString enableRelocatedStaticLibs ''
+    GhcLibHcOpts += -fPIC -fexternal-dynamic-refs
+    GhcRtsHcOpts += -fPIC -fexternal-dynamic-refs
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
   '';
@@ -167,12 +171,12 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.2.1";
+  version = "9.2.2";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "f444012f97a136d9940f77cdff03fda48f9475e2ed0fec966c4d35c4df55f746";
+    sha256 = "902463a4cc6ee479af9358b9f8b2ee3237b03e934a1ea65b6d1fcf3e0d749ea6";
   };
 
   enableParallelBuilding = true;
@@ -221,6 +225,9 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+
+    # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
+    export XATTR=${lib.getBin xattr}/bin/xattr
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
@@ -282,10 +289,6 @@ stdenv.mkDerivation (rec {
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
-  ] ++ lib.optionals stdenv.isDarwin [
-    # TODO(@sternenseemann): backport addition of XATTR env var like
-    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
-    xattr
   ];
 
   # For building runtime libs
@@ -327,6 +330,10 @@ stdenv.mkDerivation (rec {
 
     inherit llvmPackages;
     inherit enableShared;
+
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";

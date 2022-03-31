@@ -452,6 +452,10 @@ let
       '';
     });
 
+    typescript = super.typescript.overrideAttrs (oldAttrs: {
+      meta = oldAttrs.meta // { mainProgram = "tsc"; };
+    });
+
     typescript-language-server = super.typescript-language-server.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''

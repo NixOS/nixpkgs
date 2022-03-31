@@ -5531,6 +5531,19 @@ final: prev:
     meta.homepage = "https://github.com/vim-python/python-syntax/";
   };
 
+  pywal-nvim = buildVimPluginFrom2Nix {
+    pname = "pywal.nvim";
+    version = "2022-02-20";
+    src = fetchFromGitHub {
+      owner = "AlphaTechnolog";
+      repo = "pywal.nvim";
+      rev = "bd58195939d31dd0f15a720fba2956e91598cefe";
+      sha256 = "10fs5assp96rvlcxckd8cwnkfwfckjmf0j8cqq91vb2wx8knxc8g";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/AlphaTechnolog/pywal.nvim/";
+  };
+
   QFEnter = buildVimPluginFrom2Nix {
     pname = "QFEnter";
     version = "2020-10-09";
@@ -7131,6 +7144,18 @@ final: prev:
       sha256 = "0hk5xhn9zfas074hgv0y6lbc1jyj5kqjg4zdix8am3s97aqr96ms";
     };
     meta.homepage = "https://github.com/Shougo/unite.vim/";
+  };
+
+  urlview-nvim = buildVimPluginFrom2Nix {
+    pname = "urlview.nvim";
+    version = "2022-03-29";
+    src = fetchFromGitHub {
+      owner = "axieax";
+      repo = "urlview.nvim";
+      rev = "4ca1b22d914ff3187acd5a9486421769928c9d8f";
+      sha256 = "1vy977y7favs76mpk6v3x18ph40y0d20kmm6bssvnlql1nh3ihbd";
+    };
+    meta.homepage = "https://github.com/axieax/urlview.nvim/";
   };
 
   utl-vim = buildVimPluginFrom2Nix {

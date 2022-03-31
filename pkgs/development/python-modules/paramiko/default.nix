@@ -38,6 +38,8 @@ buildPythonPackage rec {
 
   # with python 3.9.6+, the deprecation warnings will fail the test suite
   # see: https://github.com/pyinvoke/invoke/issues/829
+  # pytest-relaxed does not work with pytest 6
+  # see: https://github.com/bitprophet/pytest-relaxed/issues/12
   doCheck = false;
 
   disabledTestPaths = [

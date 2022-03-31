@@ -199,6 +199,8 @@ with pkgs;
 
   aocd = with python3Packages; toPythonApplication aocd;
 
+  aesfix = callPackage ../tools/security/aesfix { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -2743,6 +2745,8 @@ with pkgs;
 
   wdomirror = callPackage ../tools/wayland/wdomirror { };
 
+  wdt = callPackage ../applications/networking/sync/wdt { };
+
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
@@ -2879,8 +2883,6 @@ with pkgs;
   dconf = callPackage ../development/libraries/dconf { };
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
-
-  ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
 
@@ -4895,8 +4897,6 @@ with pkgs;
 
   dirvish  = callPackage ../tools/backup/dirvish { };
 
-  disper = callPackage ../tools/misc/disper { };
-
   dleyna-connector-dbus = callPackage ../development/libraries/dleyna-connector-dbus { };
 
   dleyna-core = callPackage ../development/libraries/dleyna-core { };
@@ -5073,6 +5073,8 @@ with pkgs;
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
   epubcheck = callPackage ../tools/text/epubcheck { };
+
+  evil-winrm = callPackage ../tools/security/evil-winrm { };
 
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
@@ -8260,6 +8262,8 @@ with pkgs;
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
+  netbox = callPackage ../servers/web-apps/netbox { };
+
   netcat = libressl.nc;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
@@ -8493,6 +8497,8 @@ with pkgs;
   ntfsprogs = pkgs.ntfs3g;
 
   ntfy = callPackage ../tools/misc/ntfy {};
+
+  ntfy-sh = callPackage ../tools/misc/ntfy-sh {};
 
   ntirpc = callPackage ../development/libraries/ntirpc { };
 
@@ -8842,7 +8848,11 @@ with pkgs;
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
-  pakcs = callPackage ../development/compilers/pakcs { };
+  pakcs = callPackage ../development/compilers/pakcs {
+    # Doesn't compile with GHC 9.0 due to whitespace syntax changes
+    # see also https://github.com/NixOS/nixpkgs/issues/166108
+    haskellPackages = haskell.packages.ghc8107;
+  };
 
   pal = callPackage ../tools/misc/pal { };
 
@@ -11595,7 +11605,9 @@ with pkgs;
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   # To expose more packages for Yi, override the extraPackages arg.
-  yi = callPackage ../applications/editors/yi/wrapper.nix { };
+  yi = callPackage ../applications/editors/yi/wrapper.nix {
+    haskellPackages = haskell.packages.ghc8107;
+  };
 
   yj = callPackage ../development/tools/yj { };
 
@@ -12634,7 +12646,11 @@ with pkgs;
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8107;
+  haskellPackages = dontRecurseIntoAttrs
+    # Prefer native-bignum to avoid linking issues with gmp
+    (if stdenv.hostPlatform.isStatic
+       then haskell.packages.native-bignum.ghc902
+       else haskell.packages.ghc902);
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -12644,11 +12660,16 @@ with pkgs;
   # the withPackages wrapper available. In the final cross-compiled package set
   # however, targetPackages won't be populated, so we need to fall back to the
   # plain, cross-compiled compiler (which is only theoretical at the moment).
-  ghc = targetPackages.haskellPackages.ghc or haskell.compiler.ghc8107;
+  ghc = targetPackages.haskellPackages.ghc or
+    # Prefer native-bignum to avoid linking issues with gmp
+    (if stdenv.targetPlatform.isStatic
+       then haskell.compiler.native-bignum.ghc902
+       else haskell.compiler.ghc902);
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
   stack = haskell.lib.compose.justStaticExecutables haskellPackages.stack;
+
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
 
   krank = haskell.lib.compose.justStaticExecutables haskellPackages.krank;
@@ -13832,8 +13853,6 @@ with pkgs;
 
   dhall-nixpkgs = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nixpkgs;
 
-  dhall-text = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-text;
-
   dhallPackages = recurseIntoAttrs (callPackage ./dhall-packages.nix { });
 
   duktape = callPackage ../development/interpreters/duktape { };
@@ -13896,7 +13915,7 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc921.jacinda;
+  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc922.jacinda;
 
   janet = callPackage ../development/interpreters/janet {};
 
@@ -14161,10 +14180,9 @@ with pkgs;
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = with python3Packages; toPythonApplication (callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
-    inherit python;
-  });
-
+  poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
+    python = python3;
+  };
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
     inherit pkgs lib;
   };
@@ -15817,12 +15835,11 @@ with pkgs;
   shallot = callPackage ../tools/misc/shallot { };
 
   inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_15
-    shards_0_16
+    shards_0_17
     shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {
-    ShellCheck = haskellPackages.ShellCheck_0_8_0;
+    inherit (haskellPackages) ShellCheck;
   };
 
   shellharden = callPackage ../development/tools/shellharden {};
@@ -16532,7 +16549,11 @@ with pkgs;
 
   cog = callPackage ../development/web/cog { };
 
+  cosmoc = callPackage ../development/tools/cosmoc { };
+
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
+
+  python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
 
   ctl = callPackage ../development/libraries/ctl { };
 
@@ -19279,6 +19300,10 @@ with pkgs;
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
   microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+
+  microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
+  microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
+  microsoft-edge-dev = callPackage (import ../applications/networking/browsers/microsoft-edge).dev { };
 
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
@@ -29421,8 +29446,10 @@ with pkgs;
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {
-    inherit (haskellPackages) ghcWithPackages taffybar;
+  # Use GHC 9.0 when this asserts starts to fire
+  taffybar = assert haskellPackages.taffybar.version == "3.3.0";
+  callPackage ../applications/window-managers/taffybar {
+    inherit (haskell.packages.ghc8107) ghcWithPackages taffybar;
   };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
@@ -31685,7 +31712,9 @@ with pkgs;
 
   rrootage = callPackage ../games/rrootage { };
 
-  space-cadet-pinball = callPackage ../games/space-cadet-pinball { };
+  space-cadet-pinball = callPackage ../games/space-cadet-pinball {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   starsector = callPackage ../games/starsector {
     openjdk = openjdk8;
@@ -33985,10 +34014,6 @@ with pkgs;
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
-
-  pgadmin3 = callPackage ../tools/admin/pgadmin/3.nix {
-    openssl = openssl_1_0_2;
-  };
 
   pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
 

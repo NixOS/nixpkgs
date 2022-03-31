@@ -6,6 +6,7 @@
 , jaxlib
 , lib
 , numpy
+, pytest-xdist
 , pytestCheckHook
 }:
 
@@ -32,8 +33,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     dm-haiku
+    pytest-xdist
     pytestCheckHook
   ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   pythonImportsCheck = [
     "optax"

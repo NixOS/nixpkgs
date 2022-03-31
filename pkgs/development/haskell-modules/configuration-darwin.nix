@@ -30,6 +30,8 @@ self: super: ({
 
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
+  streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
+
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
@@ -287,4 +289,7 @@ self: super: ({
 
   # https://github.com/fpco/inline-c/issues/127
   inline-c-cpp = dontCheck super.inline-c-cpp;
+
+  # https://github.com/haskell-crypto/cryptonite/issues/360
+  cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
 })

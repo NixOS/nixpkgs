@@ -22,5 +22,6 @@ buildGoModule rec {
     description = "A command-line tool for Stripe";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ RaghavSood ];
+    mainProgram = "stripe";
   };
 }

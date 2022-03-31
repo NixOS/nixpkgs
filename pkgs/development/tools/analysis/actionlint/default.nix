@@ -1,4 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, ronn, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, python3Packages
+, ronn
+, shellcheck
+}:
 
 buildGoModule rec {
   pname = "actionlint";
@@ -15,11 +23,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-CxNER8aQftMG14M+x6bPwcXgUZRkUDYZtFg1cPxxg+I=";
 
-  nativeBuildInputs = [ ronn installShellFiles ];
+  nativeBuildInputs = [ makeWrapper ronn installShellFiles ];
 
   postInstall = ''
     ronn --roff man/actionlint.1.ronn
     installManPage man/actionlint.1
+    wrapProgram "$out/bin/actionlint" \
+      --prefix PATH : ${lib.makeBinPath [ python3Packages.pyflakes shellcheck ]}
   '';
 
   ldflags = [ "-s" "-w" "-X github.com/rhysd/actionlint.version=${version}" ];

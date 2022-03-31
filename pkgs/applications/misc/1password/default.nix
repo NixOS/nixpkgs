@@ -42,12 +42,17 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D ${mainProgram} $out/bin/${mainProgram}
     runHook postInstall
   '';
 
-  postInstall = "installShellCompletion --cmd ${mainProgram}" + lib.concatMapStrings
-    (s: " --${s} <($out/bin/${mainProgram} completion ${s})") [ "bash" "fish" "zsh" ];
+  postInstall = ''
+    installShellCompletion --cmd ${mainProgram} \
+      --bash <($out/bin/${mainProgram} completion bash) \
+      --fish <($out/bin/${mainProgram} completion fish) \
+      --zsh <($out/bin/${mainProgram} completion zsh)
+  '';
 
   dontStrip = stdenv.isDarwin;
 
