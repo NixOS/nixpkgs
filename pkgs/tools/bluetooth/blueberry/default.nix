@@ -3,18 +3,15 @@
 , fetchFromGitHub
 , bluez-tools
 , cinnamon
+, gnome
 , gobject-introspection
 , intltool
 , pavucontrol
 , python3Packages
 , util-linux
 , wrapGAppsHook
-, callPackage
 }:
 
-let
-  gnome-bluetooth = callPackage ./gnome-bluetooth.nix {};
-in
 stdenv.mkDerivation rec {
   pname = "blueberry";
   version = "1.4.7";
@@ -35,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bluez-tools
     cinnamon.xapps
-    gnome-bluetooth
+    gnome.gnome-bluetooth_1_0
     python3Packages.python
     util-linux
   ];
