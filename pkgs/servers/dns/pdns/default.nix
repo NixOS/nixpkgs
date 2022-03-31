@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin || stdenv.is32bit;
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 disassembler nickcao ];
   };
