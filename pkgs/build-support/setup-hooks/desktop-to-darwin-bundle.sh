@@ -163,7 +163,7 @@ convertIconTheme() {
     }
 
     iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
-    if [[ -n "$(ls -1 "$iconsdir/"*)" ]]; then
+    if [[ -n "$(ls -A1 "$iconsdir")" ]]; then
         icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
     else
         echo "Warning: no icons were found. Creating an empty icon for ${iconName}.icns."
