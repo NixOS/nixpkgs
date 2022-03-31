@@ -22,15 +22,23 @@
 
 buildPythonPackage rec {
   pname = "elegy";
-  version = "0.8.5";
+  version = "0.8.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poets-ai";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2qBHiNmdO53rD9/tudnf1z4+6a5ZHH/y2wB4v3/Tqdg=";
+    hash = "sha256-FZmLriYhsX+zyQKCtCjbOy6MH+AvjzHRNUyaDSXGlLI=";
   };
+
+  # The cloudpickle constraint is too strict. wandb is marked as an optional
+  # dependency but `buildPythonPackage` doesn't seem to respect that setting.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cloudpickle = "^1.5.0"' 'cloudpickle = "*"' \
+      --replace 'wandb = { version = "^0.12.10", optional = true }' ""
+  '';
 
   nativeBuildInputs = [
     poetry

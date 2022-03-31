@@ -70,6 +70,14 @@ with lib.maintainers; {
     scope = "Maintain the Chia blockchain and its dependencies";
   };
 
+  cosmopolitan = {
+    members = [
+      lourkeur
+      tomberek
+    ];
+    scope = "Maintain the Cosmopolitan LibC and related programs.";
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
@@ -117,6 +125,7 @@ with lib.maintainers; {
 
   gnome = {
     members = [
+      bobby285271
       hedning
       jtojnar
       dasj19

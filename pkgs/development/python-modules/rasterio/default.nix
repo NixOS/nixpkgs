@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build time
 , cython
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   pname = "rasterio";
   version = "1.2.10"; # not x.y[ab]z, those are alpha/beta versions
   format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {

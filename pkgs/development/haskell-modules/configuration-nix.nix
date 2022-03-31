@@ -213,18 +213,11 @@ self: super: builtins.intersectAttrs super {
   }) super.tz;
 
   # Nix-specific workaround
-  xmonad = appendPatch ./patches/xmonad-nix.patch (dontCheck super.xmonad);
-  xmonad_0_17_0 = doDistribute (appendPatch ./patches/xmonad_0_17_0-nix.patch (super.xmonad_0_17_0));
+  xmonad = appendPatch ./patches/xmonad_0_17_0-nix.patch (dontCheck super.xmonad);
 
-  # Need matching xmonad version
-  xmonad-contrib_0_17_0 = doDistribute (super.xmonad-contrib_0_17_0.override {
-    xmonad = self.xmonad_0_17_0;
-  });
-
-  xmonad-extras_0_17_0 = doDistribute (super.xmonad-extras_0_17_0.override {
-    xmonad = self.xmonad_0_17_0;
-    xmonad-contrib = self.xmonad-contrib_0_17_0;
-  });
+  # https://hydra.nixos.org/build/128665302/nixlog/3
+  # Disable tests because they require a running dbus session
+  xmonad-dbus = dontCheck super.xmonad-dbus;
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
@@ -489,19 +482,21 @@ self: super: builtins.intersectAttrs super {
   # The tests expect additional solvers on the path, replace the
   # available ones also with hard coded paths, and remove the missing
   # ones from the test.
+  # TODO(@sternenseemann): package cvc5 and re-enable tests
   sbv = overrideCabal (drv: {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
+      sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
       sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
-    '' + (if pkgs.stdenv.isAarch64 then ''
-      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-    ''
-    else ''
-      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
-      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-    '');
+
+      # Solvers we don't provide are removed from tests
+      sed -i -e 's|, cvc5||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
+    '';
   }) super.sbv;
 
   # The test-suite requires a running PostgreSQL server.
@@ -568,6 +563,7 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
+  pantry_0_5_2_1 = dontCheck super.pantry_0_5_2_1;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -823,6 +819,11 @@ self: super: builtins.intersectAttrs super {
   # time
   random = dontCheck super.random;
 
+  # mockery's tests depend on hspec-discover which dependso on mockery for its tests
+  mockery = dontCheck super.mockery;
+  # same for logging-facade
+  logging-facade = dontCheck super.logging-facade;
+
   # Since this package is primarily used by nixpkgs maintainers and is probably
   # not used to link against by anyone, we can make it’s closure smaller and
   # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).
@@ -977,8 +978,6 @@ self: super: builtins.intersectAttrs super {
 {
   inherit (super)
     hls-brittany-plugin
-    hls-call-hierarchy-plugin
-    hls-class-plugin
     hls-eval-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
@@ -986,14 +985,17 @@ self: super: builtins.intersectAttrs super {
     hls-ormolu-plugin
     hls-pragmas-plugin
     hls-rename-plugin
-    hls-selection-range-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
 
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-class-plugin = dontCheck super.hls-class-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
 }

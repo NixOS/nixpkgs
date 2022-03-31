@@ -5,6 +5,14 @@
 , importlib-metadata
 , locale
 , pytestCheckHook
+
+# large-rebuild downstream dependencies
+, flask
+, black
+
+# applications
+, magic-wormhole
+, mitmproxy
 }:
 
 buildPythonPackage rec {
@@ -28,6 +36,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  passthru.tests = {
+    inherit black flask magic-wormhole mitmproxy;
+  };
 
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";

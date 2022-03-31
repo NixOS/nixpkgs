@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-URL=https://github.com/tootsuite/mastodon.git
+URL=https://github.com/mastodon/mastodon.git
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -40,7 +40,7 @@ if [[ -z "$VERSION" || -n "$POSITIONAL" ]]; then
     echo "URL may be any path acceptable to 'git clone' and VERSION the"
     echo "semantic version number.  If VERSION is not a revision acceptable to"
     echo "'git checkout', you must provide one in REVISION.  If URL is not"
-    echo "provided, it defaults to https://github.com/tootsuite/mastodon.git."
+    echo "provided, it defaults to https://github.com/mastodon/mastodon.git."
     echo "PATCHES, if provided, should be one or more Nix expressions"
     echo "separated by spaces."
     exit 1
