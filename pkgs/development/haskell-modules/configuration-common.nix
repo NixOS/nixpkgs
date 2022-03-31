@@ -2584,9 +2584,6 @@ self: super: {
       })
      ] super.elm2nix;
 
-  # Fixes test suite with modern-uri 0.3.4.3, waiting for Stackage LTS to follow suit
-  mmark = doDistribute self.mmark_0_0_7_5;
-
   # https://github.com/Synthetica9/nix-linter/issues/65
   nix-linter = super.nix-linter.overrideScope (self: super: {
     aeson = self.aeson_1_5_6_0;
