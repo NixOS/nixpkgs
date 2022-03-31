@@ -1786,6 +1786,13 @@
           generating host-global NNCP configuration.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Added a module which allows configuration of zathura
+          <literal>programs.zathura</literal>, it follows the same
+          options as the home manager module.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
