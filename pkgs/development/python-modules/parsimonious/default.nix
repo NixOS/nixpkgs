@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.1";
+  version = "0.9.0";
   pname = "parsimonious";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3add338892d580e0cb3b1a39e4a1b427ff9f687858fdd61097053742391a9f6b";
+    sha256 = "sha256-sq0a5jovZb149eCorFEKmPNgekPx2yqNRmNqXZ5KMME=";
   };
 
   checkInputs = [ nose ];
