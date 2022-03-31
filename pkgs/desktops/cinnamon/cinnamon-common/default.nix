@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     libXdamage
     muffin
     networkmanager
-    pkg-config
     polkit
     libxml2
     libgnomekbd
@@ -120,6 +119,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     gtk-doc
+    pkg-config
   ];
 
   # use locales from cinnamon-translations (not using --localedir because datadir is used)

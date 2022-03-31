@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
     url = "https://www.gnokii.org/download/gnokii/${pname}-${version}.tar.gz";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl intltool gettext libusb-compat-0_1
-    glib gtk2 pkg-config bluez readline
+    glib gtk2 bluez readline
     libXpm pcsclite libical
   ];
 

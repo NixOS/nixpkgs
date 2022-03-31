@@ -48,7 +48,8 @@ rec {
   }).overrideDerivation
     (old: {
       propagatedBuildInputs = [ zlib ];
-      buildInputs = old.buildInputs ++ [ pkg-config ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkg-config ];
+      buildInputs = old.buildInputs;
 
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used...";

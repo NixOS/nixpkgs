@@ -9,8 +9,9 @@ stdenv.mkDerivation {
     sha256 = "8ce1a3dfbb6d1538885e993616bdfe71be44711d48f7f6798ff6bc0a39b3deca";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost pkg-config scons util-linux fuse libevent openssl zlib
+    boost scons util-linux fuse libevent openssl zlib
   ];
 
   buildPhase = ''

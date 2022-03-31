@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ktqWPtMqub/xJjRu37lUnocdfDzsdT9KxQmODVPDg0E=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libGLU libGL libX11 xorgproto tcl freeglut freetype
     sfml libXi
     libXmu libXext libXt libSM libICE
-    libpng pkg-config gettext intltool
+    libpng gettext intltool
   ];
 
   configureFlags = [ "--with-tcl=${tcl}/lib" ];

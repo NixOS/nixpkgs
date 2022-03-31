@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     rsync
-    cmake lua pkg-config
+    cmake lua
     asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
   ];
 

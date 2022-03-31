@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     mp4v2
     libid3tag
-    pkg-config
     qtbase
     qttools
     qtx11extras

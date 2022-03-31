@@ -13,8 +13,8 @@ stdenv.mkDerivation {
     sha256 = "nsm3HgTU9csU91XveQYxzQtFwGA+Ecg2/Hz9niaM0Ho=";
   };
 
-  buildInputs = [ meson ninja pkg-config gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 ];
-  nativeBuildInputs = [ glib gobject-introspection ];
+  buildInputs = [ meson ninja gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [ glib gobject-introspection pkg-config ];
 
   mesonFlags = [
     "-Denable_gtk_doc=true"

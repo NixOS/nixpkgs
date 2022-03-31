@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libX11
     xorgproto
@@ -40,7 +41,6 @@ stdenv.mkDerivation rec {
     gnuchess
     texinfo
     libXpm
-    pkg-config
     librsvg
     cairo
     pango

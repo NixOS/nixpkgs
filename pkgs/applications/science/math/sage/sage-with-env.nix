@@ -31,7 +31,6 @@ let
   buildInputs = [
     pythonEnv # for patchShebangs
     makeWrapper
-    pkg-config
     blas lapack
     singular
     three
@@ -92,6 +91,7 @@ stdenv.mkDerivation rec {
   pname = "sage-with-env";
   src = sage-env.lib.src;
 
+  nativeBuildInputs = [ pkg-config ];
   inherit buildInputs;
 
   configurePhase = "#do nothing";

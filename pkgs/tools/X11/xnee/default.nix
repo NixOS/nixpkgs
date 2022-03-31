@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
        done
     '';
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ libX11 xorgproto libXext libXtst gtk2
-      libXi pkg-config
+      libXi
       texinfo
     ];
 

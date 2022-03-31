@@ -46,7 +46,8 @@ let
     sha256 = "sha256:069z6ijmql62mcdyxnzc9mf0dxa6z1107cd0ab4i1adk8kr3d75k";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 pkg-config gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ cups zlib jbigkit glib gtk3 gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
 
 in
 

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python2 pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ zlib python2 ];
 
   # Can be removed in the next release
   # https://github.com/wdas/ptex/pull/42

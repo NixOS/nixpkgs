@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XHJa4erDxSFiy0u8S9ODQlMNDb1wrz+d1PzWeq5BZLY=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ curl breakpad pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ curl breakpad ];
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DSENTRY_BREAKPAD_SYSTEM=On"

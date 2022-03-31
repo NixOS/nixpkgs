@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ numactl pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ numactl ];
 
   makeFlags = [
     # Disable blanket -Werror to avoid build failures

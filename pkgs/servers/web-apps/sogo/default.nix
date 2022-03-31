@@ -12,8 +12,8 @@ gnustep.stdenv.mkDerivation rec {
     sha256 = "1kyfn3qw299qsyivbrm487h68va99rrb3gmhpgjpwqd2xdg9aypk";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oathToolkit ];
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oathToolkit ];
 
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
