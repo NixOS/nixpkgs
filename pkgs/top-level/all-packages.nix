@@ -2884,8 +2884,6 @@ with pkgs;
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
 
-  ddar = callPackage ../tools/backup/ddar { };
-
   ddate = callPackage ../tools/misc/ddate { };
 
   ddosify = callPackage ../development/tools/ddosify { };
@@ -4898,8 +4896,6 @@ with pkgs;
   dismap = callPackage ../tools/security/dismap { };
 
   dirvish  = callPackage ../tools/backup/dirvish { };
-
-  disper = callPackage ../tools/misc/disper { };
 
   dleyna-connector-dbus = callPackage ../development/libraries/dleyna-connector-dbus { };
 
@@ -8265,6 +8261,8 @@ with pkgs;
   netboot = callPackage ../tools/networking/netboot {};
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
+
+  netbox = callPackage ../servers/web-apps/netbox { };
 
   netcat = libressl.nc;
 
@@ -34020,10 +34018,6 @@ with pkgs;
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
-
-  pgadmin3 = callPackage ../tools/admin/pgadmin/3.nix {
-    openssl = openssl_1_0_2;
-  };
 
   pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
 

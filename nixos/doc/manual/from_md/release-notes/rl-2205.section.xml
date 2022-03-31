@@ -231,6 +231,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
+          infrastructure resource modeling (IRM) tool. Available as
+          <link xlink:href="options.html#opt-services.netbox.enable">services.netbox</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://tetrd.app">tetrd</link>, share your
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
@@ -1018,8 +1025,8 @@
       <listitem>
         <para>
           <literal>pkgs.pgadmin</literal> now refers to
-          <literal>pkgs.pgadmin4</literal>. If you still need pgadmin3,
-          use <literal>pkgs.pgadmin3</literal>.
+          <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
+          has been removed.
         </para>
       </listitem>
       <listitem>
