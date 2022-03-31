@@ -32353,8 +32353,6 @@ with pkgs;
 
   mosdepth = callPackage ../applications/science/biology/mosdepth { };
 
-  ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
-
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
 
   niftyseg = callPackage ../applications/science/biology/niftyseg { };
