@@ -93,6 +93,14 @@
           and their users.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The default GHC version has been updated from 8.10.7 to 9.0.2.
+          <literal>pkgs.haskellPackages</literal> and
+          <literal>pkgs.ghc</literal> will now use this version by
+          default.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -224,6 +232,13 @@
           a tool that exposes information from the Proxmox VE API for
           use by Prometheus. Available as
           <link xlink:href="options.html#opt-services.prometheus.exporters.pve">services.prometheus.exporters.pve</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
+          infrastructure resource modeling (IRM) tool. Available as
+          <link xlink:href="options.html#opt-services.netbox.enable">services.netbox</link>.
         </para>
       </listitem>
       <listitem>
@@ -1021,8 +1036,8 @@
       <listitem>
         <para>
           <literal>pkgs.pgadmin</literal> now refers to
-          <literal>pkgs.pgadmin4</literal>. If you still need pgadmin3,
-          use <literal>pkgs.pgadmin3</literal>.
+          <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
+          has been removed.
         </para>
       </listitem>
       <listitem>
@@ -1262,6 +1277,13 @@
         <para>
           See the <literal>vscode</literal> package for a more detailed
           example.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.cosmopolitan</literal> no longer provides the
+          <literal>cosmoc</literal> command. It has been moved to
+          <literal>pkgs.cosmoc</literal>.
         </para>
       </listitem>
     </itemizedlist>

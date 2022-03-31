@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-libpcap=yes" ];
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool ];
 
   propagatedBuildInputs = [ libpcap ];
 

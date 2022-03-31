@@ -347,6 +347,10 @@ stdenv.mkDerivation (rec {
     inherit llvmPackages;
     inherit enableShared;
 
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
+
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
   };

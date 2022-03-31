@@ -24,6 +24,7 @@
 , protobuf
 , pycocotools
 , pydub
+, pytest-xdist
 , pytestCheckHook
 , requests
 , scikitimage
@@ -88,12 +89,14 @@ buildPythonPackage rec {
     pillow
     pycocotools
     pydub
+    pytest-xdist
     pytestCheckHook
     scikitimage
     scipy
     tensorflow
     tifffile
   ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   disabledTestPaths = [
     # Sandbox violations: network access, filesystem write attempts outside of build dir, ...

@@ -43,15 +43,18 @@ self: super: {
 
   # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_2_0;
+    Cabal = self.Cabal_3_6_3_0;
   });
 
-  # cabal-install-parsers is written for Cabal 3.6
-  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_2_0; };
+  # Pick right versions for GHC-specific packages
+  ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
+
+  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
-  system-fileio = doJailbreak super.system-fileio;
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
@@ -64,9 +67,6 @@ self: super: {
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
   shower = doJailbreak super.shower;
-
-  # The shipped Setup.hs file is broken.
-  csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
   # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
@@ -84,4 +84,41 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
+
+  haskell-language-server = appendConfigureFlags [
+      "-f-fourmolu"
+      "-f-stylishhaskell"
+      "-f-brittany"
+      "-f-hlint"
+    ]
+  (super.haskell-language-server.override {
+    # Not buildable on 8.10
+    hls-fourmolu-plugin = null;
+    # https://github.com/haskell/haskell-language-server/issues/2728
+    hls-hlint-plugin = null;
+  });
+
+  # ormolu 0.3 requires Cabal == 3.4
+  ormolu = super.ormolu_0_2_0_0;
+
+  # weeder 2.3.0 no longer supports GHC 8.10
+  weeder = doDistribute (doJailbreak self.weeder_2_2_0);
+
+  # OneTuple needs hashable instead of ghc-prim for GHC < 9
+  OneTuple = super.OneTuple.override {
+    ghc-prim = self.hashable;
+  };
+
+  # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
+  yi-core = doDistribute (markUnbroken super.yi-core);
+
+  # Temporarily disabled blaze-textual for GHC >= 9.0 causing hackage2nix ignoring it
+  # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
+  mysql-simple = addBuildDepends [
+    self.blaze-textual
+  ] super.mysql-simple;
+
+  taffybar = markUnbroken (doDistribute super.taffybar);
 }

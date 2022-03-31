@@ -118,6 +118,7 @@
   ./misc/version.nix
   ./misc/wordlist.nix
   ./misc/nixops-autoluks.nix
+  ./programs/_1password.nix
   ./programs/_1password-gui.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
@@ -1047,6 +1048,7 @@
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/miniflux.nix
   ./services/web-apps/moodle.nix
+  ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/node-red.nix

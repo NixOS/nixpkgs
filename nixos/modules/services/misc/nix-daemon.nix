@@ -409,14 +409,14 @@ in
               to = mkOption {
                 type = referenceAttrs;
                 example = { type = "github"; owner = "my-org"; repo = "my-nixpkgs"; };
-                description = "The flake reference <option>from></option> is rewritten to.";
+                description = "The flake reference <option>from</option> is rewritten to.";
               };
               flake = mkOption {
                 type = types.nullOr types.attrs;
                 default = null;
                 example = literalExpression "nixpkgs";
                 description = ''
-                  The flake input <option>from></option> is rewritten to.
+                  The flake input <option>from</option> is rewritten to.
                 '';
               };
               exact = mkOption {

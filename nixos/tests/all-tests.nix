@@ -341,6 +341,7 @@ in
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
   specialisation = handleTest ./specialisation.nix {};
+  netbox = handleTest ./web-apps/netbox.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
@@ -590,5 +591,6 @@ in
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
+  zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
 }

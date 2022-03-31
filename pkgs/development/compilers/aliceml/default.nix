@@ -16,9 +16,10 @@ stdenv.mkDerivation {
     sha256 = "0mgc6llbq166jmlq3alvagqsg3730670zvbwwkdgsqklw70v9355";
   };
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
     stdenv gcc glibc
-    libtool gnumake autoconf automake
+    libtool gnumake
     file which zsh m4 gtk2 zlib gmp
     gnome2.libgnomecanvas pango sqlite
     libxml2 pkg-config perl smlnj

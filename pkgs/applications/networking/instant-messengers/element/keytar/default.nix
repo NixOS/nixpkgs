@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage
+{ lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage, removeReferencesTo
 , fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit, fetchYarnDeps }:
 
 let
@@ -51,6 +51,9 @@ in stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r ./!(build) $out
     install -D -t $out/build/Release build/Release/keytar.node
+    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $out/build/Release/keytar.node
     runHook postInstall
   '';
+
+  disallowedReferences = [ stdenv.cc.cc ];
 }

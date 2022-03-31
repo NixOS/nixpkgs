@@ -33,7 +33,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
 
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
@@ -105,9 +105,13 @@ let
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
-  '' + lib.optionalString enableRelocatedStaticLibs ''
-    GhcLibHcOpts += -fPIC
-    GhcRtsHcOpts += -fPIC
+  '' +
+  # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
+  # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
+  # This solution was described in https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+  lib.optionalString enableRelocatedStaticLibs ''
+    GhcLibHcOpts += -fPIC -fexternal-dynamic-refs
+    GhcRtsHcOpts += -fPIC -fexternal-dynamic-refs
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
   '';
@@ -326,6 +330,10 @@ stdenv.mkDerivation (rec {
 
     inherit llvmPackages;
     inherit enableShared;
+
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
