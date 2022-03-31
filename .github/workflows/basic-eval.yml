@@ -1,3 +1,6 @@
+# act -j basic-eval --artifact-server-path artifacts
+#
+# we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
 name: Basic evaluation checks
 
 on:
@@ -10,16 +13,47 @@ on:
      - master
      - release-**
 jobs:
-  tests:
+  # create a artifact with nix dependencies so we can run the eval
+  # in parallel without having to download them 4 times
+  create-nix-dependency-artifact:
     runs-on: ubuntu-latest
-    # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
     steps:
-    - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v16
-    - uses: cachix/cachix-action@v10
-      with:
-        # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
-        name: nixpkgs-ci
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-    # explicit list of supportedSystems is needed until aarch64-darwin becomes part of the trunk jobset
-    - run: nix-build pkgs/top-level/release.nix -A tarball.nixpkgs-basic-release-checks --arg supportedSystems '[ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin"  ]'
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v16
+      - uses: cachix/cachix-action@v10
+        with:
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+          name: nixpkgs-ci
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+      - run: nix copy --quiet --to file:///tmp/nix-deps -f ./pkgs/top-level/release.nix  tarball.nixpkgs-basic-release-checks.buildInputs
+      - uses: actions/upload-artifact@v3
+        with:
+          name: nix-deps
+          path: /tmp/nix-deps
+          retention-days: 1
+
+
+  basic-eval:
+    runs-on: ubuntu-latest
+    needs: create-nix-dependency-artifact
+    strategy:
+      max-parallel: 4
+      matrix:
+        supportedSystem:
+          - aarch64-darwin
+          - aarch64-linux
+          - x86_64-darwin
+          - x86_64-linux
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: nix-deps
+          path: /tmp/nix-deps
+      - uses: cachix/install-nix-action@v16
+        with:
+          extra_nix_config: |
+            substituters = file://${{steps.download.outputs.download-path}} https://cache.nixos.org/
+      - name: eval - ${{ matrix.supportedSystem }}
+        run: nix-build pkgs/top-level/release.nix -A tarball.nixpkgs-basic-release-checks --arg supportedSystems '[ "${{ matrix.supportedSystem }}" ]'
