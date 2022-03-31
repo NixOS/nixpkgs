@@ -5156,7 +5156,9 @@ with pkgs;
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
-  trivy = callPackage ../tools/admin/trivy { };
+  trivy = callPackage ../tools/admin/trivy {
+    buildGoModule = buildGo118Module;
+  };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
