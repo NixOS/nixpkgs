@@ -15,18 +15,17 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace src/oil --replace \
       "LIBDIR=/usr/local/lib/oil" "LIBDIR=${placeholder "out"}/lib"
 
-    substituteInPlace Makefile --replace \
-      "LIBDIR ?= /usr/local/lib/oil" "LIBDIR ?= ${placeholder "out"}/lib" \
-
-    substituteInPlace Makefile --replace \
-      "BINDIR ?= /usr/local/bin" "BINDIR ?= ${placeholder "out"}/bin"
-
     substituteInPlace src/json-to-line.jq --replace \
       "/usr/bin/env -S jq" "${jq}/bin/jq"
 
     substituteInPlace src/format-columns.awk --replace \
       "/usr/bin/env -S awk" "${gawk}/bin/awk"
   '';
+
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "LIBDIR=${placeholder "out"}/lib"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
