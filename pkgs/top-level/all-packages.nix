@@ -10974,6 +10974,8 @@ with pkgs;
     openssl = null;
   };
 
+  openconnect-sso = callPackage ../tools/networking/openconnect-sso { };
+
   globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
 
   ding-libs = callPackage ../tools/misc/ding-libs { };
