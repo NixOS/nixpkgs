@@ -15,6 +15,7 @@ let
       mkdir -p "$out"
       cp -r ${monorepoSrc}/cmake "$out"
       cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/clang-tools-extra "$out"
     '';
 
     sourceRoot = "${src.name}/${pname}";
