@@ -9,13 +9,6 @@ let
     inherit Foundation;
   };
 
-  commonProducts = [
-    "graalvm-ce"
-    "native-image-installable-svm"
-    "ruby-installable-svm"
-    "wasm-installable-svm"
-  ];
-
   /*
     Looks a bit ugly but makes version update in the update script using sed
     much easier
@@ -25,34 +18,44 @@ let
   graalvm11-ce-dev-version = "22.2.0-dev-20220331_1955";
   graalvm17-ce-dev-version = "22.2.0-dev-20220331_1955";
 
+  commonProducts = [
+    "graalvm-ce"
+    "native-image-installable-svm"
+    "ruby-installable-svm"
+    "wasm-installable-svm"
+  ];
+
+  baseConfig = {
+    x86_64-darwin = {
+      arch = "darwin-amd64";
+      products = commonProducts ++ [ "python-installable-svm" ];
+      version = graalvm17-ce-release-version;
+    };
+    x86_64-linux = {
+      arch = "linux-amd64";
+      products = commonProducts ++ [ "python-installable-svm" ];
+      version = graalvm17-ce-release-version;
+    };
+    aarch64-darwin = {
+      arch = "darwin-aarch64";
+      products = [
+        "graalvm-ce"
+        "native-image-installable-svm"
+      ];
+      version = graalvm17-ce-dev-version;
+    };
+  };
+
 in
 {
   inherit mkGraal;
 
   graalvm11-ce = mkGraal rec {
-    config = {
-      x86_64-darwin = {
-        arch = "darwin-amd64";
-        products = commonProducts ++ [ "python-installable-svm" ];
-        version = graalvm11-ce-release-version;
-      };
-      x86_64-linux = {
-        arch = "linux-amd64";
-        products = commonProducts ++ [ "python-installable-svm" ];
-        version = graalvm11-ce-release-version;
-      };
+    config = baseConfig // {
       aarch64-linux = {
         arch = "linux-aarch64";
         products = commonProducts;
         version = graalvm11-ce-release-version;
-      };
-      aarch64-darwin = {
-        arch = "darwin-aarch64";
-        products = [
-          "graalvm-ce"
-          "native-image-installable-svm"
-        ];
-        version = graalvm11-ce-dev-version;
       };
     };
     javaVersion = "11";
@@ -65,26 +68,7 @@ in
   # directory"/tmp/SVM-4194439592488143713"): error=0, Failed to exec spawn
   # helper: pid: 19865, exit value: 1"
   graalvm17-ce = mkGraal rec {
-    config = {
-      x86_64-darwin = {
-        arch = "darwin-amd64";
-        products = commonProducts ++ [ "python-installable-svm" ];
-        version = graalvm17-ce-release-version;
-      };
-      x86_64-linux = {
-        arch = "linux-amd64";
-        products = commonProducts ++ [ "python-installable-svm" ];
-        version = graalvm17-ce-release-version;
-      };
-      aarch64-darwin = {
-        arch = "darwin-aarch64";
-        products = [
-          "graalvm-ce"
-          "native-image-installable-svm"
-        ];
-        version = graalvm17-ce-dev-version;
-      };
-    };
+    config = baseConfig;
     javaVersion = "17";
     platforms = builtins.attrNames config;
   };
