@@ -4647,7 +4647,6 @@ with pkgs;
     cudnn_8_1_cudatoolkit_11_1
     cudnn_8_1_cudatoolkit_11_2
     cudnn_8_1_cudatoolkit_10
-    cudnn_8_1_cudatoolkit_11
     cudnn_8_3_cudatoolkit_10_2
     cudnn_8_3_cudatoolkit_11_0
     cudnn_8_3_cudatoolkit_11_1
