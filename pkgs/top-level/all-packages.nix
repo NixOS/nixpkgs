@@ -13729,6 +13729,8 @@ in
 
   replacement = callPackage ../development/tools/misc/replacement { };
 
+  replay-io = callPackage ../development/tools/replay-io { };
+
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
   };

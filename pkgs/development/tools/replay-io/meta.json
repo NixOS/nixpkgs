@@ -1,0 +1,13 @@
+{
+  "date": "20220401",
+  "build-id": "linux-gecko-20220401-e5f3493bfcff-29dd94a55ca4",
+  "revision": "29dd94a55ca4",
+  "replay": {
+     "url": "https://static.replay.io/downloads/linux-gecko-20220401-e5f3493bfcff-29dd94a55ca4.tar.bz2",
+     "sha256": "1pfk2xc8dbv08k7ns0dk8vn6qc5kasdxacf7ddpp6hdvy8i4sa0y"
+  },
+  "recordreplay-lib": {
+     "url": "https://static.replay.io/downloads/linux-recordreplay-29dd94a55ca4.tgz",
+     "sha256": "0c65qz7706hdv21395xyczvyjxgl1pa2glrv6v7cdk704h4c0c9n"
+  }
+}
