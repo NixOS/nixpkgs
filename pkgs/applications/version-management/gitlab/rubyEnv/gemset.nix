@@ -1088,10 +1088,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "148pfr6g8dwikdq3994gsid2a3n6p5h4z1a1dzh1898shr5f9znc";
+      sha256 = "04f5rb8fg4cvzm32v413z3h53wc0fgxg927q8rqd546hdrlx4j35";
       type = "gem";
     };
-    version = "4.0.0";
+    version = "4.0.2";
   };
   diff-lcs = {
     groups = ["default" "development" "test"];
