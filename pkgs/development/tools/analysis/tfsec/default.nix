@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "tfsec";
-  version = "1.15.2";
+  version = "1.15.4";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nXrWKKHb64HGHttppBveLp45qKLnGvkElqxn8f/cWok=";
+    sha256 = "sha256-IYmS3Q2WWkOYISx0jI8yggArk0fhl3WQWrsc+Zfg8gU=";
   };
 
   ldflags = [
