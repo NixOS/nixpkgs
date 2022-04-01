@@ -7,7 +7,8 @@ let
       poetry2nix.defaultPoetryOverrides
       (import ./poetry-git-overlay.nix { inherit pkgs; })
       (self: super: {
-        dmarc-metrics-exporter = super.dmarc-metrics-exporter.overridePythonAttrs ({ meta ? {}, ... }: {
+        dmarc-metrics-exporter = super.dmarc-metrics-exporter.overridePythonAttrs ({ nativeBuildInputs ? [ ], meta ? {}, ... }: {
+          nativeBuildInputs = nativeBuildInputs ++ [ self.poetry ];
           meta = with lib; meta // {
             license = licenses.mit;
             homepage = "https://github.com/jgosmann/dmarc-metrics-exporter/";
@@ -44,6 +45,9 @@ let
           '';
         });
         dataclasses = null;
+        bite-parser = super.bite-parser.overridePythonAttrs (old: {
+          nativeBuildInputs = old.nativeBuildInputs ++ [ self.poetry ];
+        });
       })
     ];
   }) python;
