@@ -127,10 +127,16 @@ let
     name = "initrd-emergency-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
+    # Make recovery easier
+    postBuild = ''
+      ln -s ${cfg.package.util-linux}/bin/mount $out/bin/
+      ln -s ${cfg.package.util-linux}/bin/umount $out/bin/
+    '';
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
-    contents = cfg.objects;
+    contents = map (path: { object = path; symlink = ""; }) (subtractLists cfg.suppressedStorePaths cfg.storePaths)
+      ++ mapAttrsToList (_: v: { object = v.source; symlink = v.target; }) (filterAttrs (_: v: v.enable) cfg.contents);
   };
 
 in {
@@ -142,31 +148,69 @@ in {
       not yet supported by the intrd generated with this option.
     '';
 
-    package = (lib.mkPackageOption pkgs "systemd" {
+    package = (mkPackageOption pkgs "systemd" {
       default = "systemdMinimal";
     }) // {
       visible = false;
     };
 
-    objects = mkOption {
-      description = "List of objects to include in the initrd, and their symlinks";
+    contents = mkOption {
+      description = "Set of files that have to be linked into the initrd";
       example = literalExpression ''
-        [ { object = "''${systemd}/lib/systemd/systemd"; symlink = "/init"; } ]
+        {
+          "/etc/hostname".text = "mymachine";
+        }
       '';
       visible = false;
-      type = types.listOf (types.submodule {
+      default = {};
+      type = types.attrsOf (types.submodule ({ config, options, name, ... }: {
         options = {
-          object = mkOption {
+          enable = mkEnableOption "copying of this file to initrd and symlinking it" // { default = true; };
+
+          target = mkOption {
             type = types.path;
-            description = "The object to include in initrd.";
+            description = ''
+              Path of the symlink.
+            '';
+            default = name;
           };
-          symlink = mkOption {
-            type = types.nullOr types.path;
-            description = "A symlink to create in initrd pointing to the object.";
+
+          text = mkOption {
             default = null;
+            type = types.nullOr types.lines;
+            description = "Text of the file.";
+          };
+
+          source = mkOption {
+            type = types.path;
+            description = "Path of the source file.";
           };
         };
-      });
+
+        config = {
+          source = mkIf (config.text != null) (
+            let name' = "initrd-" + baseNameOf name;
+            in mkDerivedConfig options.text (pkgs.writeText name')
+          );
+        };
+      }));
+    };
+
+    storePaths = mkOption {
+      description = ''
+        Store paths to copy into the initrd as well.
+      '';
+      type = types.listOf types.singleLineStr;
+      default = [];
+    };
+
+    suppressedStorePaths = mkOption {
+      description = ''
+        Store paths specified in the storePaths option that
+        should not be copied.
+      '';
+      type = types.listOf types.singleLineStr;
+      default = [];
     };
 
     emergencyAccess = mkOption {
@@ -300,48 +344,42 @@ in {
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package] ++ config.system.fsPackages;
 
-      objects = [
-        { object = "${cfg.package}/lib/systemd/systemd"; symlink = "/init"; }
-        { object = stage1Units; symlink = "/etc/systemd/system"; }
+      contents = {
+        "/init".source = "${cfg.package}/lib/systemd/systemd";
+        "/etc/systemd/system".source = stage1Units;
 
+        "/etc/systemd/system.conf".text = ''
+          [Manager]
+          DefaultEnvironment=PATH=/bin:/sbin
+        '';
+
+        "/etc/initrd-release".source = config.environment.etc.os-release.source;
+        "/etc/os-release".source = config.environment.etc.os-release.source;
+        "/etc/fstab".source = fstab;
+
+        "/lib/modules".source = "${modulesClosure}/lib/modules";
+
+        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+
+        "/etc/passwd".source = "${pkgs.fakeNss}/etc/passwd";
+        "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then "!" else cfg.emergencyAccess}:::::::";
+
+        "/bin".source = "${initrdBinEnv}/bin";
+        "/sbin".source = "${initrdBinEnv}/sbin";
+
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+      };
+
+      storePaths = [
         # TODO: Limit this to the bare necessities
-        { object = "${cfg.package}/lib"; }
+        "${cfg.package}/lib"
 
-        { object = "${cfg.package.util-linux}/bin/mount"; }
-        { object = "${cfg.package.util-linux}/bin/umount"; }
-        { object = "${cfg.package.util-linux}/bin/sulogin"; }
+        "${cfg.package.util-linux}/bin/mount"
+        "${cfg.package.util-linux}/bin/umount"
+        "${cfg.package.util-linux}/bin/sulogin"
 
-        {
-          object = builtins.toFile "system.conf" ''
-            [Manager]
-            DefaultEnvironment=PATH=/bin:/sbin
-          '';
-          symlink = "/etc/systemd/system.conf";
-        }
-
-        { object = config.environment.etc.os-release.source; symlink = "/etc/initrd-release"; }
-        { object = config.environment.etc.os-release.source; symlink = "/etc/os-release"; }
-        { object = fstab; symlink = "/etc/fstab"; }
-        {
-          object = "${modulesClosure}/lib/modules";
-          symlink = "/lib/modules";
-        }
-        {
-          symlink = "/etc/modules-load.d/nixos.conf";
-          object = pkgs.writeText "nixos.conf"
-            (lib.concatStringsSep "\n" config.boot.initrd.kernelModules);
-        }
-
-        { object = "${pkgs.fakeNss}/etc/passwd"; symlink = "/etc/passwd"; }
         # so NSS can look up usernames
-        { object = "${pkgs.glibc}/lib/libnss_files.so"; }
-        {
-          object = builtins.toFile "shadow" "root:${if isBool cfg.emergencyAccess then "!" else cfg.emergencyAccess}:::::::";
-          symlink = "/etc/shadow";
-        }
-        { object = "${initrdBinEnv}/bin"; symlink = "/bin"; }
-        { object = "${initrdBinEnv}/sbin"; symlink = "/sbin"; }
-        { object = builtins.toFile "sysctl.conf" "kernel.modprobe = /sbin/modprobe"; symlink = "/etc/sysctl.d/nixos.conf"; }
+        "${pkgs.glibc}/lib/libnss_files.so"
       ];
 
       targets.initrd.aliases = ["default.target"];
