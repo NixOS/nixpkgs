@@ -87,7 +87,7 @@ mkChromiumDerivation (base: rec {
       then "https://github.com/Eloston/ungoogled-chromium"
       else "https://www.chromium.org/";
     maintainers = with maintainers; if ungoogled
-      then [ squalus primeos ]
+      then [ squalus primeos michaeladler ]
       else [ primeos thefloweringash ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
