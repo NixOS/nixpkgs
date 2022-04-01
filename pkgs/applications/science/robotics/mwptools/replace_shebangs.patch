@@ -1,0 +1,10 @@
+diff --git a/meson/post_install.sh b/meson/post_install.sh
+index f5ea3891..36d22ae3 100755
+--- a/meson/post_install.sh
++++ b/meson/post_install.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@BASH@
+ 
+ INSTDIR=${MESON_INSTALL_PREFIX}
+ if [ -n "$DESTDIR" ] ; then

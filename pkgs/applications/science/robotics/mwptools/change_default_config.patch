@@ -1,0 +1,13 @@
+diff --git a/src/mwp/org.mwptools.planner.gschema.xml b/src/mwp/org.mwptools.planner.gschema.xml
+index 3854256c..ea5761ba 100644
+--- a/src/mwp/org.mwptools.planner.gschema.xml
++++ b/src/mwp/org.mwptools.planner.gschema.xml
+@@ -354,7 +354,7 @@
+         <choice value='speechd'/>
+         <choice value='flite'/>
+       </choices>
+-      <default>"espeak"</default>
++      <default>"@SPEECH_API@"</default>
+       <summary>API for speech synthesis</summary>
+       <description>espeak, speechd, flite. Only change this if you know you have the required development files at build time</description>
+     </key>

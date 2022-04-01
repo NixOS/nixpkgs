@@ -1,0 +1,13 @@
+diff --git a/src/mwp/meson.build b/src/mwp/meson.build
+index d5874c89..f4ebcde6 100644
+--- a/src/mwp/meson.build
++++ b/src/mwp/meson.build
+@@ -38,7 +38,7 @@ mwpdeps = [deps,
+           ]
+ 
+ # for BSD etc.
+-ldirs = ['/usr/lib', '/usr/local/lib']
++ldirs = [@LIB_PATHS@]
+ 
+ mwp_v_args = ['--vapidir', vapi_dir, '--pkg', 'mwpfuncs']
+ mwp_c_args = []

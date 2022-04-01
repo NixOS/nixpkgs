@@ -1,0 +1,65 @@
+diff --git a/src/mwp/speech_wrapper.c b/src/mwp/speech_wrapper.c
+index 611fc917..7ab0f151 100644
+--- a/src/mwp/speech_wrapper.c
++++ b/src/mwp/speech_wrapper.c
+@@ -47,14 +47,14 @@ static int ep_init(char *voice)
+ {
+     int res = API_NONE;
+     gchar * modname = NULL;
+-    modname = g_module_build_path(NULL, "espeak");
++    modname = g_module_build_path("@ESPEAK_LIB@", "espeak");
+ 
+     if(modname)
+         handle = g_module_open(modname, G_MODULE_BIND_LAZY);
+     if(handle == NULL)
+     {
+         g_free(modname);
+-        modname = g_module_build_path(NULL, "espeak-ng");
++        modname = g_module_build_path("@ESPEAK_NG_LIB@", "espeak-ng");
+         if(modname)
+             handle = g_module_open(modname, G_MODULE_BIND_LAZY);
+     }
+@@ -111,7 +111,7 @@ static int sd_init(char *voice)
+ {
+     int ret=API_NONE;
+     gchar * modname;
+-    modname = g_module_build_path(NULL, "speechd");
++    modname = g_module_build_path("@SPEECHD_LIB@", "speechd");
+     if(modname)
+     {
+         handle = g_module_open(modname, G_MODULE_BIND_LAZY);
+@@ -207,7 +207,7 @@ static int fl_init(char *vname)
+     }
+ 
+     gchar * modname;
+-    modname = g_module_build_path(NULL, "flite");
++    modname = g_module_build_path("@FLITE_LIB@", "flite");
+     if(modname)
+     {
+         handle = g_module_open(modname, 0);
+@@ -228,14 +228,14 @@ static int fl_init(char *vname)
+                 g_module_symbol(handle, "feat_string", (gpointer *)&fl_fstr);
+                 g_module_symbol(handle, "flite_text_to_speech", (gpointer *)&fl_tts);
+                 GModule *handle2;
+-                modname = g_module_build_path(NULL, "flite_usenglish");
++                modname = g_module_build_path("@FLITE_LIB@", "flite_usenglish");
+                 handle2 = g_module_open(modname, 0);
+                 if(handle2 == NULL)
+                     goto out;
+                 g_module_symbol(handle2, "usenglish_init", (gpointer *)&fl_eng);
+ 
+                 GModule *handle3;
+-                modname = g_module_build_path(NULL, "flite_cmulex");
++                modname = g_module_build_path("@FLITE_LIB@", "flite_cmulex");
+                 handle3 = g_module_open(modname, 0);
+                 if(handle3 == NULL)
+                     goto out;
+@@ -252,7 +252,7 @@ static int fl_init(char *vname)
+                     goto out;
+ 
+                 GModule *handle1;
+-                modname = g_module_build_path(NULL, "flite_cmu_us_slt");
++                modname = g_module_build_path("@FLITE_LIB@", "flite_cmu_us_slt");
+                 handle1 = g_module_open(modname, 0);
+                 if(handle1 == NULL)
+                     goto out;

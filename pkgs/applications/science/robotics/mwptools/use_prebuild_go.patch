@@ -1,0 +1,21 @@
+diff --git a/meson.build b/meson.build
+index 2f219df9..b97e3ae9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -12,7 +12,6 @@ configure_file(
+ subdir('meson')
+ subdir('src/common')
+ subdir('src/mwp')
+-subdir('src/mwp-plot-elevations')
+ subdir('src/fc-cli')
+ subdir('src/qproxy')
+ subdir('src/samples/')
+@@ -46,8 +45,3 @@ executable('flashdl', fdlsrcs, fccommon, dependencies: [ fdldeps ],
+ 
+ subdir('src/bbox-replay')
+ 
+-if gobuild != ''
+-   if gotrim != ''
+-     mpe = custom_target('mwp-plot-elevations', output: 'mwp-plot-elevations', command : [gobuild, '@OUTPUT@', mpe_dir, gotrim], build_by_default: true, input: mpe_deps)
+-   endif
+-endif
