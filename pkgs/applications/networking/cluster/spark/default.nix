@@ -14,7 +14,7 @@
 with lib;
 
 let
-  spark = { pname, version, sha256 }:
+  spark = { pname, version, sha256, extraMeta ? {} }:
     stdenv.mkDerivation rec {
       inherit pname version;
       src = fetchzip {
@@ -63,7 +63,7 @@ let
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
         maintainers = with maintainers; [ thoughtpolice offline kamilchm illustris ];
-      };
+      } // extraMeta;
     };
 in
 {
@@ -81,5 +81,6 @@ in
     pname = "spark";
     version = "2.4.8";
     sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
+    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
   };
 }
