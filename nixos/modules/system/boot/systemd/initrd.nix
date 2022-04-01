@@ -169,15 +169,17 @@ in {
       });
     };
 
-    emergencyHashedPassword = mkOption {
-      type = types.str;
+    emergencyAccess = mkOption {
+      type = with types; oneOf [ bool singleLineStr ];
       visible = false;
       description = ''
-        Hashed password for the super user account in stage 1 emergency mode
+        Set to true for unauthenticated emergency access, and false for
+        no emergency access.
 
-        Blank for no password, ! for super user disabled.
+        Can also be set to a hashed super user password to allow
+        authenticated access to the emergency mode.
       '';
-      default = "!";
+      default = false;
     };
 
     initrdBin = mkOption {
@@ -334,7 +336,7 @@ in {
         # so NSS can look up usernames
         { object = "${pkgs.glibc}/lib/libnss_files.so"; }
         {
-          object = builtins.toFile "shadow" "root:${config.boot.initrd.systemd.emergencyHashedPassword}:::::::";
+          object = builtins.toFile "shadow" "root:${if isBool cfg.emergencyAccess then "!" else cfg.emergencyAccess}:::::::";
           symlink = "/etc/shadow";
         }
         { object = "${initrdBinEnv}/bin"; symlink = "/bin"; }
@@ -357,6 +359,9 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
+      services.emergency = mkIf (isBool cfg.emergencyAccess && cfg.emergencyAccess) {
+        environment.SYSTEMD_SULOGIN_FORCE = "1";
+      };
       # The unit in /run/systemd/generator shadows the unit in
       # /etc/systemd/system, but will still apply drop-ins from
       # /etc/systemd/system/foo.service.d/

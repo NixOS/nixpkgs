@@ -2,7 +2,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "systemd-initrd-simple";
 
   machine = { pkgs, ... }: {
-    boot.initrd.systemd.enable = true;
+    boot.initrd.systemd = {
+      enable = true;
+      emergencyAccess = true;
+    };
     fileSystems = lib.mkVMOverride {
       "/".autoResize = true;
     };
