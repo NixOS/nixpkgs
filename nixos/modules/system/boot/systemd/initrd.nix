@@ -231,7 +231,7 @@ in {
     targets = mkOption {
       default = {};
       visible = false;
-      type = systemdUtils.types.targets;
+      type = systemdUtils.types.initrdTargets;
       description = "Definition of systemd target units.";
     };
 
@@ -244,28 +244,28 @@ in {
 
     sockets = mkOption {
       default = {};
-      type = systemdUtils.types.sockets;
+      type = systemdUtils.types.initrdSockets;
       visible = false;
       description = "Definition of systemd socket units.";
     };
 
     timers = mkOption {
       default = {};
-      type = systemdUtils.types.timers;
+      type = systemdUtils.types.initrdTimers;
       visible = false;
       description = "Definition of systemd timer units.";
     };
 
     paths = mkOption {
       default = {};
-      type = systemdUtils.types.paths;
+      type = systemdUtils.types.initrdPaths;
       visible = false;
       description = "Definition of systemd path units.";
     };
 
     mounts = mkOption {
       default = [];
-      type = systemdUtils.types.mounts;
+      type = systemdUtils.types.initrdMounts;
       visible = false;
       description = ''
         Definition of systemd mount units.
