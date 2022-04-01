@@ -12714,6 +12714,8 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
+  glsl-language-server = callPackage ../development/tools/glsl-language-server { };
+
   go_1_16 = callPackage ../development/compilers/go/1.16.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
