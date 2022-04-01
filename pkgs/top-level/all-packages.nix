@@ -21656,6 +21656,9 @@ with pkgs;
 
   morty = callPackage ../servers/web-apps/morty { };
 
+  inherit (callPackage ../applications/networking/mullvad { })
+    mullvad;
+
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
   mycorrhiza = callPackage ../servers/mycorrhiza {
