@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "apfsprogs";
-  version = "unstable-2021-10-26";
+  version = "unstable-2022-02-23";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "05ecfa367a8142e289dc76333294271b5edfe395";
-    sha256 = "sha256-McGQG8f12DTp/It8KjMHGyfE5tgmgLd7MZlZIn/xC+E=";
+    rev = "5bce5c7f42843dfbbed90767640e748062e23dd2";
+    sha256 = "sha256-0N+aC5paP6ZoXUD7A9lLnF2onbOJU+dqZ8oKs+dCUcg=";
   };
 
   buildPhase = ''
