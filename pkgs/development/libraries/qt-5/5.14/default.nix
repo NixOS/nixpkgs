@@ -127,7 +127,6 @@ let
     ];
     qttools = [ ./qttools.patch ];
     qtwayland = [
-      ./qtwayland-libdrm-build.patch
       # NixOS-specific, ensure that app_id is correctly determined for
       # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
       # context).  Beware: shared among different Qt5 versions.
