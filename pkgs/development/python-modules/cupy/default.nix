@@ -5,6 +5,10 @@
 , addOpenGLRunpath
 }:
 
+assert cudnn.cudatoolkit == cudatoolkit;
+assert cutensor.cudatoolkit == cudatoolkit;
+assert nccl.cudatoolkit == cudatoolkit;
+
 buildPythonPackage rec {
   pname = "cupy";
   version = "10.2.0";
