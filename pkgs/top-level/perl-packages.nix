@@ -25392,7 +25392,7 @@ let
     };
   };
 
-} // lib.optionalAttrs (config.allowAliases or true) {
+} // lib.optionalAttrs config.allowAliases {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
   constant = null; # part of Perl 5.22

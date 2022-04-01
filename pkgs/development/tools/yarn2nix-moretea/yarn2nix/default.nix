@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
-, allowAliases ? pkgs.config.allowAliases or true
+, allowAliases ? pkgs.config.allowAliases
 }:
 
 let
