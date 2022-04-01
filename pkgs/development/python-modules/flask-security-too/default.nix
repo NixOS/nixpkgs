@@ -1,29 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, flask
-, blinker
-, setuptools
-, itsdangerous
-, flask_principal
-, passlib
-, email_validator
-, flask_wtf
-, flask_login
-, pytestCheckHook
+
+# extras: babel
+, Babel
+, flask-babel
+
+# extras: common
+, bcrypt
+, bleach
 , flask_mail
-, sqlalchemy
+
+# extras: fsqla
 , flask_sqlalchemy
+, sqlalchemy
+, sqlalchemy-utils
+
+# extras: mfa
+, cryptography
+, phonenumbers
+, pyqrcode
+
+# propagates
+, blinker
+, email_validator
+, flask
+, flask_login
+, flask_principal
+, flask_wtf
+, itsdangerous
+, passlib
+
+# tests
 , flask-mongoengine
+, mongoengine
+, mongomock
 , peewee
 , pony
+, pytestCheckHook
 , zxcvbn
-, mongoengine
-, cryptography
-, pyqrcode
-, phonenumbers
-, bleach
-, mongomock
 }:
 
 buildPythonPackage rec {
@@ -37,33 +52,51 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    blinker
+    email_validator
     flask
     flask_login
     flask_principal
     flask_wtf
-    email_validator
     itsdangerous
     passlib
-    blinker
-    setuptools
   ];
 
+  passthru.extras-require = {
+    babel = [
+      Babel
+      flask-babel
+    ];
+    common = [
+      bcrypt
+      bleach
+      flask_mail
+    ];
+    fsqla = [
+      flask_sqlalchemy
+      sqlalchemy
+      sqlalchemy-utils
+    ];
+    mfa = [
+      cryptography
+      phonenumbers
+      pyqrcode
+    ];
+  };
+
   checkInputs = [
-    pytestCheckHook
-    flask_mail
-    sqlalchemy
-    flask_sqlalchemy
     flask-mongoengine
+    mongoengine
+    mongomock
     peewee
     pony
+    pytestCheckHook
     zxcvbn
-    mongoengine
-    cryptography
-    pyqrcode
-    phonenumbers
-    bleach
-    mongomock
-  ];
+  ]
+  ++ passthru.extras-require.babel
+  ++ passthru.extras-require.common
+  ++ passthru.extras-require.fsqla
+  ++ passthru.extras-require.mfa;
 
   pythonImportsCheck = [ "flask_security" ];
 
