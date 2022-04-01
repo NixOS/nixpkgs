@@ -186,6 +186,8 @@ in {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+  pylnk3 = callPackage ../development/python-modules/pylnk3 { };
+
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
   adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
