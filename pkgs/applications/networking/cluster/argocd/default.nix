@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.3.2";
+  version = "2.3.3";
   tag = "v${version}";
   # Update commit to match the tag above
   # TODO make updadeScript
@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "argoproj";
     repo = "argo-cd";
     rev = tag;
-    sha256 = "sha256-n+C4l4U3cDU+fgCnGWOYLdyjknw7n/xPEtC1i8AaU4o=";
+    sha256 = "sha256-ChgWqhkzVKhbyEA+g2flWK/WMxur7UHWXJUcLzp9RTE=";
   };
 
-  vendorSha256 = "sha256-Km+1o6yuuxJs+DNTQ/XVTUFurD5gM5ohwDc7MwJuu5s=";
+  vendorSha256 = "sha256-XrIIMnn65Y10KnVTsmw6vLE53Zra1lWNFgklmaj3gF8=";
 
   # Set target as ./cmd per release-cli
   # https://github.com/argoproj/argo-cd/blob/master/Makefile#L222
