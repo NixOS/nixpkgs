@@ -8549,7 +8549,7 @@
   };
   msfjarvis = {
     github = "msfjarvis";
-    githubId = 3348378;
+    githubId = 13348378;
     name = "Harsh Shandilya";
     email = "nixos@msfjarvis.dev";
     keys = [{
