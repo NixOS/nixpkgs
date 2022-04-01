@@ -32,5 +32,6 @@ in stdenv.mkDerivation {
     license     = lib.licenses.gpl3Only;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
+    mainProgram = "minecraft-server";
   };
 }

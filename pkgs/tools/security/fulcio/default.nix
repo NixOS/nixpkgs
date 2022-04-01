@@ -68,5 +68,6 @@ buildGoModule rec {
     description = "A Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse jk ];
+    mainProgram = "fulcio-server";
   };
 }

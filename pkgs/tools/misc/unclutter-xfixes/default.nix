@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ maintainers.globin ];
+    mainProgram = "unclutter";
   };
 }

@@ -34,5 +34,6 @@ buildGoModule rec {
     homepage = "https://www.getambassador.io/docs/telepresence/2.1/quick-start/";
     license = licenses.asl20;
     maintainers = with maintainers; [ mausch ];
+    mainProgram = "telepresence";
   };
 }

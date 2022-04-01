@@ -27,6 +27,7 @@ stdenv.mkDerivation {
     homepage = "http://codefromabove.com/2014/05/catclock/";
     license = with licenses; mit;
     maintainers = with maintainers; [ ramkromberg ];
+    mainProgram = "xclock";
     platforms = with platforms; linux ++ darwin;
   };
 }
