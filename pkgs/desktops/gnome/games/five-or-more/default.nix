@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "five-or-more";
-  version = "3.32.2";
+  version = "3.32.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/five-or-more/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19pf8wzbf3ciqf2k4bj9sddvyhckfd62x86pnqr6s8h4vn9jc6ii";
+    sha256 = "LRDXLu/esyS0R9YyrwwySW4l/BWjwB230vAMm1HQnvQ=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     gtk3
     librsvg
     libgnome-games-support
-    gnome.adwaita-icon-theme
   ];
 
   postPatch = ''
