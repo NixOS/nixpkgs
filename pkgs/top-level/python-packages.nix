@@ -8365,11 +8365,12 @@ in {
       cudnn = pkgs.cudnn_8_3_cudatoolkit_11;
       cudatoolkit = cudnn.cudatoolkit;
       magma = pkgs.magma.override { inherit cudatoolkit; };
+      nccl = pkgs.nccl.override { inherit cudatoolkit; };
     in
     callPackage ../development/python-modules/pytorch
       {
         cudaSupport = pkgs.config.cudaSupport or false;
-        inherit cudnn cudatoolkit magma;
+        inherit cudnn cudatoolkit magma nccl;
       };
 
   pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix { };
