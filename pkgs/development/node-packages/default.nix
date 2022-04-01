@@ -343,6 +343,7 @@ let
         wrapProgram "$out/bin/postcss" \
           --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
           --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
+        ln -s '${self.postcss}/lib/node_modules/postcss' "$out/lib/node_modules/postcss"
       '';
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
