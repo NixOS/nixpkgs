@@ -90,7 +90,7 @@ in {
         example = "45min";
         description = ''
           Add a randomized delay before each automatic upgrade.
-          The delay will be chozen between zero and this value.
+          The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
           <manvolnum>7</manvolnum></citerefentry>

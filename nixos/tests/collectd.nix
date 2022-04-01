@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "collectd";
   meta = { };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
 
     {

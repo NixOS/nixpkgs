@@ -697,6 +697,15 @@
     "vendorSha256": "0kkkrdbapyvfzmnbh5kmhlcz5l8g8gf0mfwbya66iy1bb6f6w4mz",
     "version": "1.3.0"
   },
+  "namecheap": {
+    "owner": "namecheap",
+    "provider-source-address": "registry.terraform.io/namecheap/namecheap",
+    "repo": "terraform-provider-namecheap",
+    "rev": "v2.1.0",
+    "sha256": "sha256-cms8YUL+SjTeYyIOQibksi8ZHEBYq2JlgTEpOO1uMZE=",
+    "vendorSha256": null,
+    "version": "2.1.0"
+  },
   "ncloud": {
     "owner": "NaverCloudPlatform",
     "provider-source-address": "registry.terraform.io/NaverCloudPlatform/ncloud",

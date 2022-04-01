@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "boot-stage1";
 
-  machine = { config, pkgs, lib, ... }: {
+  nodes.machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
       compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;

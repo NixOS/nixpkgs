@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ ... }:
 {
   name = "pam-u2f";
 
-  machine =
+  nodes.machine =
     { ... }:
     {
       security.pam.u2f = {

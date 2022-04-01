@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     name = "pict-rs";
     meta.maintainers = with lib.maintainers; [ happysalada ];
 
-    machine = { ... }: {
+    nodes.machine = { ... }: {
       environment.systemPackages = with pkgs; [ curl jq ];
       services.pict-rs.enable = true;
     };

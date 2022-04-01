@@ -2,6 +2,7 @@
 , stdenv
 , bash-completion
 , fetchurl
+, fetchpatch
 , gdbm ? null
 , glib
 , gsettings-desktop-schemas
@@ -42,6 +43,15 @@ stdenv.mkDerivation rec {
     url = "https://releases.pagure.org/virt-viewer/virt-viewer-${version}.tar.xz";
     sha256 = "sha256-pD+iMlxMHHelyMmAZaww7wURohrJjlkPIjQIabrZq9A=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/117
+    (fetchpatch {
+      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/ed19e51407bee53988878a6ebed4e7279d00b1a1.patch";
+      sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib

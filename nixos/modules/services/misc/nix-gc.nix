@@ -39,7 +39,7 @@ in
         type = types.str;
         example = "45min";
         description = ''
-          Add a randomized delay before each automatic upgrade.
+          Add a randomized delay before each garbage collection.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>

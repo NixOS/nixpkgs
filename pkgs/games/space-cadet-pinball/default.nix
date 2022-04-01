@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchzip
-, cmake, SDL2, SDL2_mixer
+, cmake, SDL2, SDL2_mixer, Cocoa
 , unrar-wrapper, makeWrapper
 , fetchpatch
 }:
@@ -33,20 +33,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     SDL2
     SDL2_mixer
-    cmake
     makeWrapper
+    Cocoa
   ];
 
-  postInstall = ''
+  preBuild = ''
     mkdir -p $out/lib/SpaceCadetPinball
+    mkdir -p $out/bin
+  '';
+
+  installPhase = ''
     install ${assets}/*.{DAT,DOC,MID,BMP,INF} ${assets}/Sounds/*.WAV $out/lib/SpaceCadetPinball
 
     # Assets are loaded from the directory of the program is stored in
     # https://github.com/k4zmu2a/SpaceCadetPinball/blob/de13d4e326b2dfa8e6dfb59815c0a8b9657f942d/SpaceCadetPinball/winmain.cpp#L119
-    mv $out/bin/SpaceCadetPinball $out/lib/SpaceCadetPinball
+    cp ../bin/SpaceCadetPinball $out/bin
+    cp $out/bin/SpaceCadetPinball $out/lib/SpaceCadetPinball
     makeWrapper $out/lib/SpaceCadetPinball/SpaceCadetPinball $out/bin/SpaceCadetPinball
   '';
 
@@ -57,5 +63,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ unfree mit ];
     maintainers = [ maintainers.hqurve ];
     platforms = platforms.all;
+    mainProgram = "SpaceCadetPinball";
   };
 }

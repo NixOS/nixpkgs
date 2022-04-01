@@ -51,7 +51,7 @@ in {
     maintainers = [ mkg20001 ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     virtualisation = {
       cores = 2;
 

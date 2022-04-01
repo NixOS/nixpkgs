@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
       --replace "sudo " ""
   '';
 
-  buildInputs = [ perl autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ perl libtool ];
 
   makeFlags = [ "prefix=$(out)" "tgz" ];
 

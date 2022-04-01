@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = teams.jitsi.members;
   };
 
-    machine = { config, pkgs, ... }: {
+    nodes.machine = { config, pkgs, ... }: {
       virtualisation.memorySize = 5120;
 
       services.jitsi-meet = {
