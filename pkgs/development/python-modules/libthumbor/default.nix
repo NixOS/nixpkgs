@@ -4,6 +4,7 @@
 , django
 , six
 , pycrypto
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    django 
+    django
   ];
 
   propagatedBuildInputs = [
