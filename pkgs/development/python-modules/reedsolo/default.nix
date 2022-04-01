@@ -8,9 +8,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "reedsolomon";
-    # https://github.com/tomerfiliba/reedsolomon/issues/28
-    rev = "73926cdf81b39009bd6e46c8d49f3bbc0eaad4e4";
-    sha256 = "03wrr0c32dsl7h9k794b8fwnyzklvmxgriy49mjvvd3val829cc1";
+    rev = "v${version}";
+    hash = "sha256-GUMdL5HclXxqMYasq9kUE7fCqOkjr1D20wjd/E+xPBk=";
   };
 
   nativeBuildInputs = [ cython ];
