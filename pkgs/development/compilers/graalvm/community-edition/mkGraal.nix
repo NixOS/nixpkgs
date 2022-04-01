@@ -1,5 +1,4 @@
-{ version
-, javaVersion
+{ javaVersion
 , platforms
 , config
 , useMusl ? false
@@ -33,20 +32,17 @@
 , cairo
 , glib
 , gtk3
-, writeScript
+, writeShellScript
 , jq
-, runtimeShell
-, gawk
+, gnused
 }:
 
 assert useMusl -> stdenv.isLinux;
 
 let
   platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  name =
-    if lib.hasInfix "dev" version
-    then "graalvm${javaVersion}-ce-dev"
-    else "graalvm${javaVersion}-ce";
+  version = platform.version;
+  name = "graalvm${javaVersion}-ce";
   sourcesFilename = "${name}-sources.json";
   sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
 
@@ -63,7 +59,8 @@ let
   ]);
 
   graalvmXXX-ce = stdenv.mkDerivation rec {
-    inherit version name;
+    inherit version;
+    pname = name;
 
     srcs = map fetchurl (builtins.attrValues sources.${platform.arch});
 
@@ -81,7 +78,8 @@ let
       zlib
     ];
 
-    nativeBuildInputs = [ unzip perl makeWrapper ] ++ lib.optional stdenv.isLinux [ autoPatchelfHook ];
+    nativeBuildInputs = [ unzip perl makeWrapper ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     unpackPhase = ''
       unpack_jar() {
@@ -294,7 +292,7 @@ let
     passthru = {
       home = graalvmXXX-ce;
       updateScript = import ./update.nix {
-        inherit lib writeScript jq runtimeShell sourcesFilename name config gawk;
+        inherit lib writeShellScript jq sourcesFilename name config gnused;
         graalVersion = version;
         javaVersion = "java${javaVersion}";
       };

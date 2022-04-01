@@ -12864,7 +12864,6 @@ with pkgs;
     });
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
-  graalvm17-ce-dev = graalvmCEPackages.graalvm17-ce-dev;
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })

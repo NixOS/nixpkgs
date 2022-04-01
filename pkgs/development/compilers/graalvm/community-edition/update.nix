@@ -4,10 +4,9 @@
 , sourcesFilename
 , name
 , lib
-, writeScript
+, writeShellScript
 , jq
-, runtimeShell
-, gawk
+, gnused
 }:
 
 /*
@@ -32,7 +31,7 @@
 */
 
 let
-  productJavaVersionGraalVersionSep = "|";
+  separator = "|";
 
   # isDev :: String -> Boolean
   isDev = version:
@@ -131,7 +130,7 @@ let
   genProductJavaVersionGraalVersionAttrSet = product_javaVersion_graalVersion:
     let
       attrNames = [ "product" "javaVersion" "graalVersion" ];
-      attrValues = lib.splitString productJavaVersionGraalVersionSep product_javaVersion_graalVersion;
+      attrValues = lib.splitString separator product_javaVersion_graalVersion;
     in
     zipListsToAttrs attrNames attrValues;
 
@@ -153,23 +152,23 @@ let
     };
 
   # genArchProductVersionPairs :: String -> AttrSet -> [AttrSet]
-  genArchProductVersionList = javaGraalVersion: archProducts:
+  genArchProductVersionList = javaVersion: archProducts:
     let
       arch = archProducts.arch;
       products = archProducts.products;
+      javaGraalVersion = javaVersion + separator + (getLatestVersion archProducts.version);
       productJavaGraalVersionList =
-        cartesianZipListsWith (a: b: a + productJavaVersionGraalVersionSep + b)
+        cartesianZipListsWith (a: b: a + separator + b)
           products [ javaGraalVersion ];
     in
     cartesianZipListsWith (genUrlAndSha256) [ arch ] productJavaGraalVersionList;
 
 
-  # genSources :: String -> String -> AttrSet -> Path String
-  genSources = graalVersion: javaVersion: config:
+  # genSources :: String -> AttrSet -> Path String
+  genSources = javaVersion: config:
     let
-      javaGraalVersion = javaVersion + productJavaVersionGraalVersionSep + graalVersion;
       archProducts = builtins.attrValues config;
-      sourcesList = builtins.concatMap (genArchProductVersionList javaGraalVersion) archProducts;
+      sourcesList = builtins.concatMap (genArchProductVersionList javaVersion) archProducts;
       sourcesAttr = builtins.foldl' (lib.recursiveUpdate) { } sourcesList;
     in
     builtins.toFile "sources.json" (builtins.toJSON sourcesAttr);
@@ -183,32 +182,38 @@ let
     }.${builtins.toString (builtins.compareVersions newVersion currentVersion)};
 
   newVersion = getLatestVersion graalVersion;
-  sourcesJson = genSources newVersion javaVersion config;
+  sourcesJson = genSources javaVersion config;
   sourcesJsonPath = lib.strings.escapeShellArg ././${sourcesFilename};
-  defaultNixPath = lib.strings.escapeShellArg ././default.nix;
+
+  # versionKeyInDefaultNix String -> String
+  versionKeyInDefaultNix = graalVersion:
+    if isDev graalVersion
+    then "${name}-dev-version"
+    else "${name}-release-version";
 
   /*
     updateScriptText :: String -> String -> String
-    Writes the json file, finds the line number of the current derivation
-    name, which wants to update with awk and replace the first version match
-    after that line.
+    Writes the json file and updates the version in default.nix using sed
+    because update-source-version does not work srcs.
   */
   updateScriptText = newVersion: currentVersion:
+
     if isNew newVersion currentVersion
     then
+      let
+        versionKey = versionKeyInDefaultNix currentVersion;
+      in
       ''
         echo "New version found. Updating ${currentVersion} -> ${newVersion}".
-        export PATH="${lib.makeBinPath [ jq gawk ]}:$PATH"
+        export PATH="${lib.makeBinPath [ jq gnused ]}:$PATH"
         jq . ${sourcesJson} > ${sourcesJsonPath}
-        drvName=$(awk '/${name}/{ print NR; exit }' ${defaultNixPath})
-        awk -v drvName="$drvName" -i inplace \
-        'NR>drvName {sub(/${graalVersion}/, "${newVersion}")} 1' ${defaultNixPath}
+        sed -i 's|${versionKey} = "${currentVersion}";|${versionKey} = "${newVersion}";|' \
+          ${lib.strings.escapeShellArg ././default.nix}
       ''
     else ''echo "No new version found. Skip updating."'';
 
 in
-writeScript "update-graal.sh" ''
-  #!${runtimeShell}
+writeShellScript "update-graal.sh" ''
   set -o errexit
   set -o nounset
   set -o pipefail

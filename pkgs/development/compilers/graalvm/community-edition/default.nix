@@ -1,7 +1,7 @@
-{ lib, callPackage, Foundation }:
+{ callPackage, Foundation }:
 /*
-Add new graal versions and products here and then see update.nix on how to
-generate the sources.
+  Add new graal versions and products here and then see update.nix on how to
+  generate the sources.
 */
 
 let
@@ -16,6 +16,15 @@ let
     "wasm-installable-svm"
   ];
 
+  /*
+    Looks a bit ugly but makes version update in the update script using sed
+    much easier
+  */
+  graalvm11-ce-release-version = "22.0.0.2";
+  graalvm17-ce-release-version = "22.0.0.2";
+  graalvm11-ce-dev-version = "22.2.0-dev-20220331_1955";
+  graalvm17-ce-dev-version = "22.2.0-dev-20220331_1955";
+
 in
 {
   inherit mkGraal;
@@ -25,17 +34,27 @@ in
       x86_64-darwin = {
         arch = "darwin-amd64";
         products = commonProducts ++ [ "python-installable-svm" ];
+        version = graalvm11-ce-release-version;
       };
       x86_64-linux = {
         arch = "linux-amd64";
         products = commonProducts ++ [ "python-installable-svm" ];
+        version = graalvm11-ce-release-version;
       };
       aarch64-linux = {
         arch = "linux-aarch64";
         products = commonProducts;
+        version = graalvm11-ce-release-version;
+      };
+      aarch64-darwin = {
+        arch = "darwin-aarch64";
+        products = [
+          "graalvm-ce"
+          "native-image-installable-svm"
+        ];
+        version = graalvm11-ce-dev-version;
       };
     };
-    version = "22.0.0.2";
     javaVersion = "11";
     platforms = builtins.attrNames config;
   };
@@ -50,28 +69,22 @@ in
       x86_64-darwin = {
         arch = "darwin-amd64";
         products = commonProducts ++ [ "python-installable-svm" ];
+        version = graalvm17-ce-release-version;
       };
       x86_64-linux = {
         arch = "linux-amd64";
         products = commonProducts ++ [ "python-installable-svm" ];
+        version = graalvm17-ce-release-version;
       };
-    };
-    version = "22.0.0.2";
-    javaVersion = "17";
-    platforms = builtins.attrNames config;
-  };
-
-  graalvm17-ce-dev = mkGraal rec {
-    config = {
       aarch64-darwin = {
         arch = "darwin-aarch64";
         products = [
           "graalvm-ce"
           "native-image-installable-svm"
         ];
+        version = graalvm17-ce-dev-version;
       };
     };
-    version = "22.2.0-dev-20220330_2302";
     javaVersion = "17";
     platforms = builtins.attrNames config;
   };
