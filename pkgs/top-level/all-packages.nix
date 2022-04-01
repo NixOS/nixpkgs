@@ -34169,6 +34169,8 @@ with pkgs;
 
   hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
 
+  hp-uld = callPackage ../misc/cups/drivers/hp-uld { };
+
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
   mfcj470dwlpr = pkgsi686Linux.callPackage ../misc/cups/drivers/mfcj470dwlpr { };
 
