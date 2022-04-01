@@ -6,35 +6,46 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.149";
+  version = "2.0.150";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-m6tJjC5BXxFC+bSOHbKXXGZQlJIM0+fIA+JYWBntgk8=";
+    hash = "sha256-1D/ixtZI7/H05MD6zRtZCF8yhW1FhvRpdPWieAPwxHs=";
   };
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  vendorSha256 = "sha256-vplHaaT7x0ZSpvityJF5aGKDARvGPBT9DMltOpUkOMo=";
+  modRoot = "cmd";
+  vendorSha256 = "sha256-Nznf793OMQ7ZCWb5voVcLyMiBa1Z8Dswp7Tdn1AzlJA=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/clihandler/cmd.BuildNumber=v${version}"
+    "-X github.com/armosec/kubescape/core/cautils.BuildNumber=v${version}"
   ];
 
+  postBuild = ''
+    # kubescape/cmd should be called kubescape
+    mv $GOPATH/bin/{cmd,kubescape}
+  '';
+
   postInstall = ''
-    # Running kubescape to generate completions outputs error warnings
-    # but does not crash and completes successfully
-    # https://github.com/armosec/kubescape/issues/200
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
       --zsh <($out/bin/kubescape completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/kubescape --help
+    $out/bin/kubescape --version | grep "v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

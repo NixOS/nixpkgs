@@ -30,6 +30,7 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+    (mkOverride "voluptuous" "0.12.2" "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=")
 
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
