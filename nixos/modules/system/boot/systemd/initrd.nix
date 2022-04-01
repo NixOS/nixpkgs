@@ -353,8 +353,6 @@ in {
           DefaultEnvironment=PATH=/bin:/sbin
         '';
 
-        "/etc/initrd-release".source = config.environment.etc.os-release.source;
-        "/etc/os-release".source = config.environment.etc.os-release.source;
         "/etc/fstab".source = fstab;
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
