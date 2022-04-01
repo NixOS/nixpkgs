@@ -302,6 +302,7 @@ in
       environment.systemPackages = with pkgs.pantheon; [
         contractor
         file-roller-contract
+        gnome-bluetooth-contract
       ];
 
       environment.pathsToLink = [
