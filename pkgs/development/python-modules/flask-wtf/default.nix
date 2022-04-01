@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-WTF";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "872fbb17b5888bfc734edbdcf45bc08fb365ca39f69d25dc752465a455517b28";
+    sha256 = "sha256-NP5cb+4PabUOMPgaO36haqFJKncf6a0JdNFkYQwJpsk=";
   };
 
   propagatedBuildInputs = [ flask wtforms nose ];
