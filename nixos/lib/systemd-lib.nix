@@ -291,49 +291,51 @@ in rec {
     };
   };
 
-  mkServiceConfig = path: { name, config, ... }: {
+  serviceConfig = { name, config, ... }: {
     config = mkMerge
       [ {
-          path = mkAfter path;
           environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
-        (mkIf (config.preStart != "")
+        (mkIf (config ? preStart && config.preStart != "")
           { serviceConfig.ExecStartPre =
               [ (makeJobScript "${name}-pre-start" config.preStart) ];
           })
-        (mkIf (config.script != "")
+        (mkIf (config ? script && config.script != "")
           { serviceConfig.ExecStart =
               makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
           })
-        (mkIf (config.postStart != "")
+        (mkIf (config ? postStart && config.postStart != "")
           { serviceConfig.ExecStartPost =
               [ (makeJobScript "${name}-post-start" config.postStart) ];
           })
-        (mkIf (config.reload != "")
+        (mkIf (config ? reload && config.reload != "")
           { serviceConfig.ExecReload =
               makeJobScript "${name}-reload" config.reload;
           })
-        (mkIf (config.preStop != "")
+        (mkIf (config ? preStop && config.preStop != "")
           { serviceConfig.ExecStop =
               makeJobScript "${name}-pre-stop" config.preStop;
           })
-        (mkIf (config.postStop != "")
+        (mkIf (config ? postStart && config.postStop != "")
           { serviceConfig.ExecStopPost =
               makeJobScript "${name}-post-stop" config.postStop;
           })
       ];
   };
 
-  # Default path for systemd services. Should be quite minimal.
-  serviceConfig = mkServiceConfig [
-    pkgs.coreutils
-    pkgs.findutils
-    pkgs.gnugrep
-    pkgs.gnused
-    systemd
-  ];
+  stage2ServiceConfig = {
+    imports = [ serviceConfig ];
+    # Default path for systemd services. Should be quite minimal.
+    config.path = mkAfter [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      systemd
+    ];
+  };
 
-  initrdServiceConfig = mkServiceConfig [];
+  stage1ServiceConfig = serviceConfig;
 
   mountConfig = { config, ... }: {
     config = {

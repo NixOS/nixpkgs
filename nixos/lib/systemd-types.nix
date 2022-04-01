@@ -11,8 +11,8 @@ rec {
       config = { unit = mkDefault (systemdUtils.lib.makeUnit name config); };
     }));
 
-  services = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ]);
-  initrdServices = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig initrdServiceConfig ]);
+  services = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig stage2ServiceConfig ]);
+  initrdServices = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig stage1ServiceConfig ]);
 
   targets = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig ]);
 
