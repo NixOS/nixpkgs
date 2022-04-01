@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , python3
 , wrapQtAppsHook
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -43,6 +44,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "maestral_qt" ];
+
+  passthru.tests.maestral = nixosTests.maestral;
 
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
