@@ -168,4 +168,23 @@ in runBuildTests {
       level4 = "deep"
     '';
   };
+
+  # See also java-properties/default.nix for more complete tests
+  testJavaProperties = {
+    drv = evalFormat formats.javaProperties {} {
+      foo = "bar";
+      "1" = "2";
+      "ütf 8" = "dûh";
+      # NB: Some editors (vscode) show this _whole_ line in right-to-left order
+      "الجبر" = "أكثر من مجرد أرقام";
+    };
+    expected = ''
+      # Generated with Nix
+
+      1 = 2
+      foo = bar
+      \u00fctf\ 8 = d\u00fbh
+      \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
+    '';
+  };
 }
