@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "srp";
-  version = "1.0.18";
+  version = "1.0.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1582317ccd383dc39d54f223424c588254d73d1cfb2c5c24d945e018ec9516bb";
+    sha256 = "sha256-SOZT6MP1kJCbpAcwbrLoRgosfR+GxWvOWc9Cr1T/XSo=";
   };
 
   propagatedBuildInputs = [ six ];
