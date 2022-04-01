@@ -1666,9 +1666,20 @@
       </listitem>
       <listitem>
         <para>
-          <literal>services.logrotate.enable</literal> now defaults to
-          true if any rotate path has been defined, and some paths have
-          been added by default.
+          <link linkend="opt-services.logrotate.enable">services.logrotate.enable</link>
+          now defaults to true if any rotate path has been defined, and
+          some paths have been added by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The logrotate module also has been updated to freeform syntax:
+          <link linkend="opt-services.logrotate.paths">services.logrotate.paths</link>
+          and
+          <link linkend="opt-services.logrotate.extraConfig">services.logrotate.extraConfig</link>
+          will work, but issue deprecation warnings and
+          <link linkend="opt-services.logrotate.settings">services.logrotate.settings</link>
+          should now be used instead.
         </para>
       </listitem>
       <listitem>
