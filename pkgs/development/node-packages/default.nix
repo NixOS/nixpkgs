@@ -349,7 +349,10 @@ let
           inherit (self) postcss-cli;
         };
       };
-      meta.mainProgram = "postcss";
+      meta = {
+        mainProgram = "postcss";
+        maintainers = with lib.maintainers; [ Luflosi ];
+      };
     };
 
     prisma = super.prisma.override rec {
