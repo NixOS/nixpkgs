@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     genericName = "Reference Management";
     categories = [ "Office" "Database" ];
     startupNotify = true;
-    mimeTypes = [ "text/plain" ];
+    mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
   };
 
   installPhase = ''
