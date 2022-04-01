@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Skyscanner";
     repo = pname;
     rev = version;
-    hash = "sha256-Rw0sZ2k+tXo04mvlL83hUgdHIND5NIsVH/CzrfmbKlE=";
+    hash = "sha256-g249Nq4u4pPQLbW9Kw5vLwVKCaZoots5LD6yk1NPv6s=";
   };
 
   propagatedBuildInputs = [
