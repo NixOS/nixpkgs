@@ -92,7 +92,12 @@ in {
 
     extraConfig = mkOption {
       description = ''
-        Docker extra registry configuration via environment variables.
+        Docker extra registry configuration.
+      '';
+      example = literalExpression ''
+        {
+          log.level = "debug";
+        }
       '';
       default = {};
       type = types.attrs;
