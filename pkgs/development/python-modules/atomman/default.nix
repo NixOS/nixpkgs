@@ -1,4 +1,5 @@
 { lib
+, ase
 , buildPythonPackage
 , cython
 , datamodeldict
@@ -7,17 +8,19 @@
 , numericalunits
 , numpy
 , pandas
+, phonopy
 , potentials
+, pymatgen
 , pytest
 , pythonOlder
+, requests
 , scipy
 , toolz
 , xmltodict
-, python
 }:
 
 buildPythonPackage rec {
-  version = "1.4.3";
+  version = "1.4.4";
   pname = "atomman";
   format = "setuptools";
 
@@ -27,7 +30,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "atomman";
     rev = "v${version}";
-    sha256 = "sha256-is47O59Pjrh9tPC1Y2+DVVcHbxmcjUOFOVGnNHuURoM=";
+    hash = "sha256-iLAB0KMtrTCyGpx+81QfHDPVDhq8OA6CDL/ipVRpyo0=";
   };
 
   propagatedBuildInputs = [
@@ -38,19 +41,24 @@ buildPythonPackage rec {
     numpy
     pandas
     potentials
+    requests
     scipy
     toolz
     xmltodict
   ];
 
   checkInputs = [
+    ase
+    phonopy
+    pymatgen
     pytest
   ];
 
   checkPhase = ''
     # pytestCheckHook doesn't work
-    py.test tests -k "not test_rootdir and not test_version \
-      and not test_atomic_mass and not imageflags"
+    pytest tests -k "not test_rootdir and not test_version \
+      and not test_atomic_mass and not imageflags" \
+      --ignore tests/plot/test_interpolate.py
   '';
 
   pythonImportsCheck = [
