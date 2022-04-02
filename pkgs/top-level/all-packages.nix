@@ -24357,6 +24357,8 @@ with pkgs;
 
   rime-data = callPackage ../data/misc/rime-data { };
 
+  roapi-http = callPackage ../servers/roapi/http.nix { };
+
   rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
 
   route159 = callPackage ../data/fonts/route159 { };
