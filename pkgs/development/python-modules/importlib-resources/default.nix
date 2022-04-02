@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "importlib-resources";
   version = "5.6.0";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
