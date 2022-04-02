@@ -1067,6 +1067,8 @@ with pkgs;
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
+  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
