@@ -22402,11 +22402,6 @@ with pkgs;
     withExperimental = true;
   };
 
-  pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt {
-    # pulseaudio-modules-bt is most likely to be used with pulseaudioFull
-    pulseaudio = pulseaudioFull;
-  };
-
   bluez = bluez5;
 
   inherit (python3Packages) bedup;
