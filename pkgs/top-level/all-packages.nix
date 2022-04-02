@@ -335,6 +335,8 @@ with pkgs;
 
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
+  cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
