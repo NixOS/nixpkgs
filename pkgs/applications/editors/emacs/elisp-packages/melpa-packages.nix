@@ -547,6 +547,13 @@ let
               '';
           });
         });
+
+        mozc = super.mozc.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace src/unix/emacs/mozc.el \
+              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+          '';
+        });
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
