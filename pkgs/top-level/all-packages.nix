@@ -31625,6 +31625,12 @@ with pkgs;
 
   rrootage = callPackage ../games/rrootage { };
 
+  s25rttr = callPackage ../games/s25rttr {
+    SDL2 = SDL2.override {
+      withStatic = true;
+    };
+  };
+
   space-cadet-pinball = callPackage ../games/space-cadet-pinball {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
