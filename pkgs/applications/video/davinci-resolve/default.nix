@@ -16,6 +16,7 @@
 , xkeyboard_config
 , glib
 , libarchive
+, python
 }:
 
 let
