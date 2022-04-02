@@ -22,6 +22,7 @@
 , service-identity
 , sybil
 , testfixtures
+, tldextract
 , twisted
 , w3lib
 , zope_interface
@@ -29,13 +30,13 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.5.1";
+  version = "2.6.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    sha256 = "13af6032476ab4256158220e530411290b3b934dd602bb6dacacbf6d16141f49";
+    sha256 = "56fd55a59d0f329ce752892358abee5a6b50b4fc55a40420ea317dc617553827";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     pyopenssl
     queuelib
     service-identity
+    tldextract
     twisted
     w3lib
     zope_interface
@@ -66,22 +68,6 @@ buildPythonPackage rec {
     pytestCheckHook
     sybil
     testfixtures
-  ];
-
-  patches = [
-    # Require setuptools, https://github.com/scrapy/scrapy/pull/5122
-    (fetchpatch {
-      name = "add-setuptools.patch";
-      url = "https://github.com/scrapy/scrapy/commit/4f500342c8ad4674b191e1fab0d1b2ac944d7d3e.patch";
-      sha256 = "14030sfv1cf7dy4yww02b49mg39cfcg4bv7ys1iwycfqag3xcjda";
-    })
-    # Make Twisted[http2] installation optional, https://github.com/scrapy/scrapy/pull/5113
-    (fetchpatch {
-      name = "remove-h2.patch";
-      url = "https://github.com/scrapy/scrapy/commit/c5b1ee810167266fcd259f263dbfc0fe0204761a.patch";
-      sha256 = "0sa39yx9my4nqww8a12bk9zagx7b56vwy7xpxm4xgjapjl6mcc0k";
-      excludes = [ "tox.ini" ];
-    })
   ];
 
   LC_ALL = "en_US.UTF-8";

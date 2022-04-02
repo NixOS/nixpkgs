@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , numpy
 , wheel
 , werkzeug
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
   version = "2.6.0";
   format = "wheel";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     pname = "tensorboard";
@@ -41,7 +42,8 @@ buildPythonPackage rec {
     pushd unpacked/tensorboard-${version}
 
     substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth (<2,>=1.6.3)" "google-auth (<3,>=1.6.3)"
+      --replace "google-auth (<2,>=1.6.3)" "google-auth (<3,>=1.6.3)" \
+      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<0.6,>=0.4.1)"
 
     popd
     wheel pack ./unpacked/tensorboard-${version}

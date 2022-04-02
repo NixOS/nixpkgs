@@ -22,9 +22,12 @@
 , jq
 , xorg
 , libGL
-, steam-run-native
+, steam-run
 # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
+, glib
+, wrapGAppsHook
+, hicolor-icon-theme
 }:
 
 let
@@ -76,16 +79,19 @@ in stdenv.mkDerivation {
     ./0001-fix-locale.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
   preBuild = ''
     makeFlagsArray+=(PYTHON="python -m py_compile")
   '';
 
   buildInputs = [
+    glib
     xorg.libX11
     libGL
     python
+    gsettings-desktop-schemas
+    hicolor-icon-theme
   ];
 
   postPatch = ''
@@ -107,7 +113,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cat > $out/bin/playonlinux <<EOF
     #!${stdenv.shell} -e
-    exec ${steam-run-native}/bin/steam-run $out/share/playonlinux/playonlinux-wrapper "\$@"
+    exec ${steam-run}/bin/steam-run $out/share/playonlinux/playonlinux-wrapper "\$@"
     EOF
     chmod a+x $out/bin/playonlinux
 
@@ -122,6 +128,15 @@ in stdenv.mkDerivation {
     for f in $out/share/playonlinux/bin/*; do
       bzip2 $f
     done
+  '';
+
+  dontWrapGApps = true;
+  postFixup = ''
+    makeWrapper $out/share/playonlinux/playonlinux{,-wrapped} \
+      --prefix PATH : ${binpath} \
+      ''${gappsWrapperArgs[@]}
+    makeWrapper ${steam-run}/bin/steam-run $out/bin/playonlinux \
+      --add-flags $out/share/playonlinux/playonlinux-wrapped
   '';
 
   meta = with lib; {

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "jdatetime";
-  version = "3.8.1";
+  version = "4.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db57ee517356b1bfc1603ef412f5da61eae92241ba0bcaf0851028cae424780c";
+    sha256 = "sha256-SmeoLuV+NbX2+ff75qDtpj9Wzh3Yr0CbTComozQEV9s=";
   };
 
   propagatedBuildInputs = [

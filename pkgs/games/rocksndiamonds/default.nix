@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Rocks'n'Diamonds";
     genericName = "Tile-based puzzle";
-    categories = "Game;LogicGame;";
+    categories = [ "Game" "LogicGame" ];
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net ];

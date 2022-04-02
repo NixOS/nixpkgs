@@ -2,14 +2,14 @@
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
   nixosTests }:
 buildGoModule rec {
-  name = "buildkite-agent-${version}";
-  version = "3.33.3";
+  pname = "buildkite-agent";
+  version = "3.34.1";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "sha256-RCKHVFYYcWraUwsGuD/anmWpNwc7cHc9jm0LwR9WRzA=";
+    sha256 = "sha256-OxZcMPJx83hBQOe4Pc8ERhO9QOc4euVVs+OMbPjA4U0=";
   };
 
   vendorSha256 = "sha256-n3XRxpEKjHf7L7fcGscWTVKBtot9waZbLoS9cG0kHfI=";

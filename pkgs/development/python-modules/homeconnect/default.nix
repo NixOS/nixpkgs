@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "homeconnect";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n4h4mi23zw3v6fbkz17fa6kkl5v9bfmj0p57jvfzcfww511y9mn";
+    sha256 = "sha256-/h0dEVmP0R9tVt56mvu72Ksrvnuox1FA7BgrZMOhV6Q=";
   };
 
   propagatedBuildInputs = [

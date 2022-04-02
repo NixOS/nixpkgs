@@ -1,5 +1,5 @@
 diff --git a/kaldi_active_grammar/utils.py b/kaldi_active_grammar/utils.py
-index 0b70c7f..21e1d62 100644
+index 823f997..3850336 100644
 --- a/kaldi_active_grammar/utils.py
 +++ b/kaldi_active_grammar/utils.py
 @@ -79,7 +79,7 @@ elif sys.platform.startswith('linux'): platform = 'linux'
@@ -8,10 +8,10 @@ index 0b70c7f..21e1d62 100644
  
 -exec_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'exec', platform)
 +exec_dir = '/'
- library_extension = dict(windows='.dll', linux='.so', macos='.dylib')[platform]
- subprocess_seperator = '^&' if platform == 'windows' else ';'
  
-@@ -89,13 +89,13 @@ class ExternalProcess(object):
+ import ush
+ 
+@@ -87,13 +87,13 @@ class ExternalProcess(object):
  
      shell = ush.Shell(raise_on_error=True)
  

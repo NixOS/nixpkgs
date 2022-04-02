@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "mongomock";
-  version = "3.23.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pdh4pj5n6dsaqy98q40wig5y6imfs1p043cgkaaw8f2hxy5x56r";
+    sha256 = "sha256-sYMsN0jUdETBiGc3PlzqdUwub2RKDPv9Zn8Xj2i97Pw=";
   };
 
   nativeBuildInputs = [

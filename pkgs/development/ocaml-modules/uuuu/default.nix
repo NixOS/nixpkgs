@@ -24,9 +24,11 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = [ menhir findlib ];
 
   buildInputs = [ angstrom ];
+
+  strictDeps = !doCheck;
 
   checkInputs = [ re ];
   doCheck = true;

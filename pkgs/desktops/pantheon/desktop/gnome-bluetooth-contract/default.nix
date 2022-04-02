@@ -1,13 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , substituteAll
 , gnome-bluetooth
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth-contract";
-  version = "unstable-2021-02-23";
+  version = "unstable-2021-02-22";
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -36,11 +37,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/elementary/gnome-bluetooth-contract.git";
+    };
+  };
+
   meta = with lib; {
     description = "Contractor extension for GNOME Bluetooth";
     homepage = "https://github.com/elementary/gnome-bluetooth-contract";
     license = licenses.gpl3Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    # sendto device selection is removed in gnome-bluetooth 42
+    # https://github.com/elementary/gnome-bluetooth-contract/issues/1
+    broken = true;
   };
 }

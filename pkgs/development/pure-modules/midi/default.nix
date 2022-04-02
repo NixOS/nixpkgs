@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, pure, portmidi }:
 
 stdenv.mkDerivation rec {
-  baseName = "midi";
+  pname = "pure-midi";
   version = "0.6";
-  name = "pure-${baseName}-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
+    url = "https://bitbucket.org/purelang/pure-lang/downloads/pure-midi-${version}.tar.gz";
     sha256 = "817ae9fa5f443a8c478a6770f36091e3cf99f3515c74e00d09ca958dead1e7eb";
   };
 

@@ -5,6 +5,14 @@
 , importlib-metadata
 , locale
 , pytestCheckHook
+
+# large-rebuild downstream dependencies
+, flask
+, black
+
+# applications
+, magic-wormhole
+, mitmproxy
 }:
 
 buildPythonPackage rec {
@@ -29,6 +37,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  passthru.tests = {
+    inherit black flask magic-wormhole mitmproxy;
+  };
+
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";
     description = "Create beautiful command line interfaces in Python";
@@ -37,5 +49,6 @@ buildPythonPackage rec {
       composable way, with as little code as necessary.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

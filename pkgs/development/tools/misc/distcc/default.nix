@@ -6,10 +6,10 @@
 }:
 
 let
-  name    = "distcc";
+  pname = "distcc";
   version = "2021-03-11";
   distcc = stdenv.mkDerivation {
-    name = "${name}-${version}";
+    inherit pname version;
     src = fetchFromGitHub {
       owner = "distcc";
       repo = "distcc";

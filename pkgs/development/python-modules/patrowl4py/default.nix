@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "patrowl4py";
-  version = "1.1.7";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "Patrowl";
     repo = "Patrowl4py";
     rev = version;
-    sha256 = "19r9ym31bcaxcrv35gnfx5k8mn5lyascqzdr312rzc7ikbhcj73s";
+    sha256 = "sha256-ZGvntLbXIWmL0WoT+kQoNT6gDPgsSKwHQQjYlarvnKo=";
   };
 
   propagatedBuildInputs = [

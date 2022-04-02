@@ -22,6 +22,7 @@
 , qtx11extras
 , quazip
 , readline
+, wrapGAppsHook
 , wrapQtAppsHook
 , yubikey-personalization
 , zlib
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  nativeBuildInputs = [ asciidoctor cmake wrapQtAppsHook qttools pkg-config ];
+  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
 
   buildInputs = [
     curl

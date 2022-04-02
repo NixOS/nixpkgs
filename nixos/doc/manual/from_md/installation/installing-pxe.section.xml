@@ -7,11 +7,11 @@
   <para>
     These instructions assume that you have an existing PXE or iPXE
     infrastructure and simply want to add the NixOS installer as another
-    option. To build the necessary files from a recent version of
+    option. To build the necessary files from your current version of
     nixpkgs, you can run:
   </para>
   <programlisting>
-nix-build -A netboot.x86_64-linux nixos/release.nix
+nix-build -A netboot.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
 </programlisting>
   <para>
     This will create a <literal>result</literal> directory containing: *

@@ -1,7 +1,7 @@
 { lib, stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkg-config
 , file, findutils
 , gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
-, withGnome ? true, libnma }:
+, withGnome ? true, libnma, glib }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ networkmanager ppp ]
+  buildInputs = [ networkmanager ppp glib ]
     ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkg-config file findutils ];

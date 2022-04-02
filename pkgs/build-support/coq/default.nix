@@ -16,6 +16,7 @@ in
   displayVersion ? {},
   release ? {},
   extraBuildInputs ? [],
+  extraNativeBuildInputs ? [],
   namePrefix ? [ "coq" ],
   enableParallelBuilding ? true,
   extraInstallFlags ? [],
@@ -34,7 +35,7 @@ let
   args-to-remove = foldl (flip remove) ([
     "version" "fetcher" "repo" "owner" "domain" "releaseRev"
     "displayVersion" "defaultVersion" "useMelquiondRemake"
-    "release" "extraBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
+    "release" "extraBuildInputs" "extraNativeBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
     "meta" "useDune2ifVersion" "useDune2" "opam-name"
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
@@ -67,9 +68,11 @@ stdenv.mkDerivation (removeAttrs ({
 
   inherit (fetched) version src;
 
-  buildInputs = [ coq ]
-    ++ optionals mlPlugin coq.ocamlBuildInputs
+  nativeBuildInputs = [ coq ]
     ++ optionals useDune2 [coq.ocaml coq.ocamlPackages.dune_2]
+    ++ optionals mlPlugin coq.ocamlNativeBuildInputs
+    ++ extraNativeBuildInputs;
+  buildInputs = optionals mlPlugin coq.ocamlBuildInputs
     ++ extraBuildInputs;
   inherit enableParallelBuilding;
 

@@ -27,7 +27,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-topkg-${version}";
+  pname = "ocaml${ocaml.version}-topkg";
   inherit (param) version;
 
   src = fetchurl {
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = param.propagatedBuildInputs or [];
+
+  strictDeps = true;
 
   buildPhase = "${run} build";
   createFindlibDestdir = true;

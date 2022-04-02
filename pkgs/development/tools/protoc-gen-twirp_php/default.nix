@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-TaHfyYoWsA/g5xZFxIMNwE1w6Dd9Cq5bp1gpQudYLs0=";
   };
 
-  vendorSha256 = "sha256-z3Yp+Yy03g2DAvWUZXaOxQWONjnYUl69eTpYIDPhsqc=";
+  vendorSha256 = "sha256-qQFlBviRISEnPBt0q5391RqUrPTI/QDxg3MNfwWE8MI=";
 
   subPackages = [ "protoc-gen-twirp_php" ];
 

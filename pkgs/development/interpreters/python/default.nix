@@ -120,23 +120,23 @@ with pkgs;
   };
 
   sources = {
-    python38 = {
-      sourceVersion = {
-        major = "3";
-        minor = "8";
-        patch = "12";
-        suffix = "";
-      };
-      sha256 = "1si8hw2xpagh4iji89zdx69p3dv5mjqwwbx2x2sl6lrp41jaglxi";
-    };
     python39 = {
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "9";
+        patch = "10";
         suffix = "";
       };
-      sha256 = "sha256-BoKMBKVzwHOk5RxCkqJ8G+SuJmIcPtx8+TGEGM47bSc=";
+      sha256 = "sha256-Co+/tSh+vDoT6brz1U4I+gZ3j/7M9jEa74Ibs6ZYbMg=";
+    };
+    python310 = {
+      sourceVersion = {
+        major = "3";
+        minor = "10";
+        patch = "2";
+        suffix = "";
+      };
+      sha256 = "sha256-F946x9qfJRmqnWQ3jGA6c6DprVjf+ogS5FFgwIbeZMc=";
     };
   };
 
@@ -160,19 +160,26 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "12";
+      patch = "13";
       suffix = "";
     };
-    sha256 = "041jqjl5wf7gsw84zd3jgvg91skq20l2fy5zbhz237w38zxzfyzp";
+    sha256 = "sha256-mfEGJ134iZw+jLnXwBzmhsIC7ydZUzAUJxlGk95b74Q=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python38 = callPackage ./cpython ({
+  python38 = callPackage ./cpython {
     self = python38;
+    sourceVersion = {
+      major = "3";
+      minor = "8";
+      patch = "13";
+      suffix = "";
+    };
+    sha256 = "sha256-bzCQdwEgQKo5/o8MYduMD6HEUTZ2MpnTdcnldW8Jz1c=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python38);
+  };
 
   python39 = callPackage ./cpython ({
     self = python39;
@@ -180,18 +187,11 @@ in {
     inherit passthruFun;
   } // sources.python39);
 
-  python310 = callPackage ./cpython {
+  python310 = callPackage ./cpython ({
     self = python310;
-    sourceVersion = {
-      major = "3";
-      minor = "10";
-      patch = "1";
-      suffix = "";
-    };
-    sha256 = "0xz1wrd6xi20sbli30vm6jclc4rlnnd03irybknf2p8sdrdjdwd7";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python310);
 
   python311 = callPackage ./cpython {
     self = python311;
@@ -199,9 +199,9 @@ in {
       major = "3";
       minor = "11";
       patch = "0";
-      suffix = "a2";
+      suffix = "a6";
     };
-    sha256 = "sha256-aKjE1s4lSKe2F9aZ+9s0iTe9rODPltsaoIOEnfXa0T8=";
+    sha256 = "sha256-HFOi/3WHljPjDKwp0qpregEONVuV8L+axpG+zPX50So=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -280,9 +280,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "6";
+      patch = "8";
     };
-    sha256 = "sha256-ghJ/Q/rmznXUfWxFOfjB6jcunC2/pA+ui1g1HVInk6Q="; # linux64
+    sha256 = "0h493q0lhpz035afi4g09f4mz5a72vqx4sa7qcry5z4zagxq8bhz"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
   };

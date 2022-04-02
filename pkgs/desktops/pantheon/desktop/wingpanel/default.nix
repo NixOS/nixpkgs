@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
     gala
     granite
@@ -64,8 +63,11 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # this theme is required
+      # this GTK theme is required
       --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+
+      # the icon theme is required
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
 

@@ -53,8 +53,7 @@ let
     comment = "A game in which you build and maintain factories.";
     exec = "factorio";
     icon = "factorio";
-    type = "Application";
-    categories = "Game";
+    categories = [ "Game" ];
   };
 
   branch = if experimental then "experimental" else "stable";

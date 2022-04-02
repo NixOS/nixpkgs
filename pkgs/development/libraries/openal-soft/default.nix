@@ -23,9 +23,12 @@ stdenv.mkDerivation rec {
       --replace "@OUT@" $out
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional alsaSupport alsa-lib
+  buildInputs = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.cc.libc
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 

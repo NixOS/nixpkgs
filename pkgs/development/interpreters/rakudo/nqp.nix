@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2021.12";
+  version = "2022.02";
 
   src = fetchurl {
     url = "https://github.com/raku/nqp/releases/download/${version}/nqp-${version}.tar.gz";
-    sha256 = "sha256-Dh1TT9HuYaTIByMJuvvARmDprnLYhhjaoOjxUCLw2RM=";
+    sha256 = "sha256-JdPJl0XNhPQEmpvZzya7XcgXklq6r+ccm9tohBzbGLE=";
   };
 
   buildInputs = [ perl ];

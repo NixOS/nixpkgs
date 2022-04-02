@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gurobi";
-  version = "9.1.2";
+  version = "9.5.0";
 
   src = fetchurl {
     url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
-    sha256 = "7f60bd675f79476bb2b32cd632aa1d470f8246f2b033b7652d8de86f6e7e429b";
+    sha256 = "sha256-u1QuWl0WhfbjZOrwXqbFVySF/8N6IkUWnPPLQCiLwp4=";
   };
 
   sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";

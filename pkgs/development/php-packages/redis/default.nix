@@ -3,8 +3,8 @@
 buildPecl {
   pname = "redis";
 
-  version = "5.3.5";
-  sha256 = "sha256-1V+lzGmRmJF7or3IJ9pjKtd/AJuiZC0nUEVql22+WYk=";
+  version = "5.3.7";
+  sha256 = "sha256-uVgWbM2k9AvRfGmY+eIjkCGuZERnzYrVwV3vQgqtZbA=";
 
   internalDeps = with php.extensions; [
     session

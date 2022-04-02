@@ -28,10 +28,16 @@ let
       testScript = ''
         start_all()
         ${backend}.wait_for_unit("${backend}-nginx.service")
-        result = ${backend}.wait_until_succeeds(
-            "cntr attach -t ${backend} nginx sh -- -c 'curl localhost | grep Hello'"
+        ${backend}.wait_for_open_port(8181)
+        # For some reason, the cntr command hangs when run without the &.
+        # As such, we have to do some messy things to ensure we check the exitcode and output in a race-condition-safe manner
+        ${backend}.execute(
+            "(cntr attach -t ${backend} nginx sh -- -c 'curl localhost | grep Hello' > /tmp/result; echo $? > /tmp/exitcode; touch /tmp/done) &"
         )
-        assert "Hello" in result
+
+        ${backend}.wait_for_file("/tmp/done")
+        assert "0" == ${backend}.succeed("cat /tmp/exitcode").strip(), "non-zero exit code"
+        assert "Hello" in ${backend}.succeed("cat /tmp/result"), "no greeting in output"
       '';
     };
 
@@ -54,7 +60,13 @@ let
     testScript = ''
       machine.start()
       machine.wait_for_unit("container@test.service")
-      machine.succeed("cntr attach test sh -- -c 'ping -c5 172.16.0.1'")
+      # I haven't observed the same hanging behaviour in this version as in the OCI version which necessetates this messy invocation, but it's probably better to be safe than sorry and use it here as well
+      machine.execute(
+          "(cntr attach test sh -- -c 'ping -c5 172.16.0.1'; echo $? > /tmp/exitcode; touch /tmp/done) &"
+      )
+
+      machine.wait_for_file("/tmp/done")
+      assert "0" == machine.succeed("cat /tmp/exitcode").strip(), "non-zero exit code"
     '';
   };
 in {

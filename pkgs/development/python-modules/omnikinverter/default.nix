@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "omnikinverter";
-  version = "0.6.2";
+  version = "0.7.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-omnikinverter";
     rev = "v${version}";
-    sha256 = "sha256-NnwjiaFUi2vzORu8sndtfdVpZEAIMCvT+9VEr2ZOx3k=";
+    sha256 = "sha256-IiU7nhwH0Mc6s+g9WtJugpORuL0qGNJFKDY5hvxIZAU=";
   };
 
   nativeBuildInputs = [

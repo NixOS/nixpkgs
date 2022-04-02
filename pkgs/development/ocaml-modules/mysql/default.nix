@@ -22,11 +22,13 @@ stdenv.mkDerivation rec {
      "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
 
   createFindlibDestdir = true;
 
   propagatedBuildInputs = [ libmysqlclient ];
+
+  strictDeps = true;
 
   patches = [
     (fetchpatch {

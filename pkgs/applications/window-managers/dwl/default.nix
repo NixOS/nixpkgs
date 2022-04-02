@@ -1,19 +1,18 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
-, pkg-config
 , libinput
 , libxcb
 , libxkbcommon
 , pixman
+, pkg-config
 , wayland
 , wayland-protocols
 , wlroots
-, enable-xwayland ? true, xwayland, libX11
-, patches ? [ ]
-, conf ? null
 , writeText
-, fetchpatch
+, enable-xwayland ? true, xwayland, libX11
+, conf ? null
+, patches ? [ ]
 }:
 
 let
@@ -22,16 +21,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "dwl";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lfUAymLA4+E9kULZIueA+9gyVZYgaVS0oTX0LJjsSEs=";
+    hash = "sha256-T2GqDehBNO8eublqZUmA5WADjnwElzT+bp9Dp1bqSgg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     libinput
     libxcb
@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
                  else writeText "config.def.h" conf;
   in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
+  NIX_CFLAGS_COMPILE = [
+    # https://github.com/djpohly/dwl/issues/186
+    "-Wno-error=unused-result"
+  ];
+
   dontConfigure = true;
 
   installPhase = ''
@@ -85,8 +90,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    inherit (wayland.meta) platforms;
   };
 }
 # TODO: custom patches from upstream website
-# TODO: investigate the modifications in the upstream unstable version

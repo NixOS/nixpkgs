@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, pydantic
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "zwave-js-server-python";
-  version = "0.33.0";
+  version = "0.35.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,12 +19,15 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0hAksizQSIOg+hbSq/OZqFqlBBdpa0bSf+puWfD9TSg=";
+    sha256 = "sha256-Bte4pAi+atdkMvxYlzdN/UOrHB2WKfl44U9m/vKFMoA=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    pydantic
   ];
+
+  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
 
   checkInputs = [
     pytest-aiohttp

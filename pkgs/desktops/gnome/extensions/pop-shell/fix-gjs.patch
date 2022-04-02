@@ -1,20 +1,3 @@
-diff --git a/src/color_dialog/src/main.ts b/src/color_dialog/src/main.ts
-index 9522499..9911530 100644
---- a/src/color_dialog/src/main.ts
-+++ b/src/color_dialog/src/main.ts
-@@ -1,4 +1,4 @@
--#!/usr/bin/gjs
-+#!/usr/bin/env gjs
- 
- imports.gi.versions.Gtk = '3.0';
- 
-@@ -84,4 +84,4 @@ function launch_color_dialog() {
- 
- Gtk.init(null);
- 
--launch_color_dialog()
-\ No newline at end of file
-+launch_color_dialog()
 diff --git a/src/extension.ts b/src/extension.ts
 index 7417c46..00d5829 100644
 --- a/src/extension.ts
@@ -28,23 +11,6 @@ index 7417c46..00d5829 100644
  
          if (ipc) {
              const generator = (stdout: any, res: any) => {
-diff --git a/src/floating_exceptions/src/main.ts b/src/floating_exceptions/src/main.ts
-index f298ec7..87a6bc4 100644
---- a/src/floating_exceptions/src/main.ts
-+++ b/src/floating_exceptions/src/main.ts
-@@ -1,4 +1,4 @@
--#!/usr/bin/gjs
-+#!/usr/bin/env gjs
- 
- imports.gi.versions.Gtk = '3.0'
- 
-@@ -329,4 +329,4 @@ function main() {
-     Gtk.main()
- }
- 
--main()
-\ No newline at end of file
-+main()
 diff --git a/src/panel_settings.ts b/src/panel_settings.ts
 index 83ff56c..1bc1e98 100644
 --- a/src/panel_settings.ts

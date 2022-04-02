@@ -34,12 +34,16 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ]
-  ++ lib.optionals enablePrivSep [
-    "--enable-privsep"
-    # dhcpcd disables privsep if it can't find the default user,
-    # so we explicitly specify a user.
-    "--privsepuser=dhcpcd"
-  ];
+  ++ (
+    if ! enablePrivSep
+    then [ "--disable-privsep" ]
+    else [
+      "--enable-privsep"
+      # dhcpcd disables privsep if it can't find the default user,
+      # so we explicitly specify a user.
+      "--privsepuser=dhcpcd"
+    ]
+  );
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -50,7 +54,10 @@ stdenv.mkDerivation rec {
   # Check that the udev plugin got built.
   postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
-  passthru.tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  passthru = {
+    inherit enablePrivSep;
+    tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  };
 
   meta = with lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";

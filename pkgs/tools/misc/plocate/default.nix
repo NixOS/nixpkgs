@@ -11,17 +11,16 @@
 }:
 let
   dbfile = lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-SgvCy03H5aKolbkI1dg/0G5VwT3TdSGenn2h9H4gfTY=";
+    sha256 = "sha256-r8/LivQhJkMTE8ejznr+eGplXFrQl4xwCgXOwbR4wlw=";
   };
-
-  patches = [ ./dbfile.patch ];
 
   postPatch = ''
     sed -i meson.build \

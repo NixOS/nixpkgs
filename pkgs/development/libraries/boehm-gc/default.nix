@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl
 , autoreconfHook
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
-, nix
-, nix_2_3
-, nixUnstable
+, nixVersions
 }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +19,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
-  '';
-
   # boehm-gc whitelists GCC threading models
   patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
@@ -39,16 +33,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru = {
-    tests = {
-      # Assuming this package is picked up by these packages as expected.
-      inherit
-        nix
-        nixUnstable
-        nix_2_3
-        ;
-    };
-  };
+  passthru.tests = nixVersions;
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";

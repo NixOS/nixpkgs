@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2021-12-24";
+  version = "unstable-2022-03-11";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "247cd753e283e70a9949e76d0ba669d99c0eb144";
-    sha256 = "sha256-65wxhE/XqNK6ly+fxZFLjtImvpJlgU54RStUve40CJA=";
+    rev = "e3beafbdb4f2ac3f889f81aec0cad5ec473c8612";
+    sha256 = "sha256-xZSZUJ2TNaUzfwEFpnzr5EPlOvILLyiQ/3K1iiup7kU=";
   };
 
   sourceRoot = "source/klippy";
@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/lib/klipper
     cp -r ./* $out/lib/klipper
+
+    # Moonraker expects `config_examples` and `docs` to be available
+    # under `klipper_path`
+    cp -r $src/docs $out/lib/docs
+    cp -r $src/config $out/lib/config
 
     chmod 755 $out/lib/klipper/klippy.py
     runHook postInstall

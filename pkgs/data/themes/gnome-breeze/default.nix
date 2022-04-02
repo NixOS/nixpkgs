@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "gnome-breeze-20160526";
-  src = fetchgit {
-    url = "https://github.com/dirruk1/gnome-breeze";
-    sha256 = "0hkk0gqlnrs1m4rb5r84f5y96qfamrbiwm09z89yc32124x1a1lm";
+  pname = "gnome-breeze";
+  version = "unstable-2016-05-26";
+
+  src = fetchFromGitHub {
+    owner = "dirruk1";
+    repo = "gnome-breeze";
     rev = "49a5cd67a270e13a4c04a4b904f126ef728e9221";
+    sha256 = "sha256-lQYVOhFBDOYT+glUHleuymGTfHEE5bIyqUFnS/EDc0I=";
   };
+
   installPhase = ''
     mkdir -p $out/share/themes
     cp -r Breeze* $out/share/themes
@@ -14,12 +18,12 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "A GTK theme built to match KDE's breeze theme";
     homepage = "https://github.com/dirruk1/gnome-breeze";
-    license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ bennofs ];
-    platforms = lib.platforms.all;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ bennofs ];
+    platforms = platforms.all;
     hydraPlatforms = [];
   };
 }

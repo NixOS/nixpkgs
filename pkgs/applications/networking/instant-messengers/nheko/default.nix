@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, asciidoc
 , cmark
 , lmdb
 , lmdbxx
@@ -32,19 +33,20 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "sha256-KnWZ1DSTg8vtNSlpG5LGUG8YDHt25s9pMLpLuj0WLnM=";
+    sha256 = "sha256-h1Yahz7Rt7+r55RFTSVj6E14nWnjCs0CecljceaWgaQ=";
   };
 
   nativeBuildInputs = [
     lmdbxx
     cmake
     pkg-config
+    asciidoc
   ];
 
   buildInputs = [

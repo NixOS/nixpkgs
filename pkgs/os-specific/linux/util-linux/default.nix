@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
-  version = "2.37.2";
+  version = "2.37.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-agdkwarn+2B++KbdLA9sR9Xl/SeqCIIKuq2ewU4o6dk=";
+    sha256 = "sha256-Y05pFq2RM2bDU2tkaOeER2lUm5mnsr+AMU3nirVlW4M=";
   };
 
   patches = [

@@ -140,6 +140,12 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     deployer = callPackage ../development/php-packages/deployer { };
 
+    grumphp = callPackage ../development/php-packages/grumphp { };
+
+    phing = callPackage ../development/php-packages/phing { };
+
+    phive = callPackage ../development/php-packages/phive { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
@@ -174,6 +180,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
 
     couchbase = callPackage ../development/php-packages/couchbase { };
+
+    ds = callPackage ../development/php-packages/ds { };
 
     event = callPackage ../development/php-packages/event { };
 
@@ -543,11 +551,6 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "sockets";
           doCheck = false;
-          patches = lib.optional (php.version == "8.1.2")
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/07aaa34cd418c44f7bc653fafbf49f07fc71b2bf.patch";
-              sha256 = "sha256-EwVb09/zV2vJ8PuyLpKFCovxe6yKct0UBvishZaordM=";
-            });
         }
         { name = "sodium"; buildInputs = [ libsodium ]; }
         { name = "sqlite3"; buildInputs = [ sqlite ]; }

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
 , aiodns
 , aiohttp
 , flask
@@ -51,7 +51,18 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/" ];
   # disable tests which touch network
-  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
+  disabledTests = [
+    "aiohttp"
+    "multipart_send"
+    "response"
+    "request"
+    "timeout"
+  # disable 8 tests failing on some darwin machines with errors:
+  # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
+  # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
+  ] ++ lib.optional stdenv.isDarwin [
+    "location_polling_fail"
+  ];
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"

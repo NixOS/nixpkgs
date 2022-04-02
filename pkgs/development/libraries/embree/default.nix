@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "embree";
-  version = "3.13.2";
+  version = "3.13.3";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
     rev = "v${version}";
-    sha256 = "sha256-bnd7p8Yu0YGkhUrg3yy32rk7kmHGB4YxMx1qWzIx5vw=";
+    sha256 = "sha256-g6BsXMNUvx17hgAq0PewtBLgtWqpp03M0k6vWNapDKs=";
   };
 
   postPatch = ''

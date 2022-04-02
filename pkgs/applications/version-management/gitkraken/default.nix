@@ -3,7 +3,7 @@
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems
+, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon
 }:
 
 with lib;
@@ -11,22 +11,25 @@ with lib;
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
   pname = "gitkraken";
-  version = "8.2.1";
+  version = "8.3.3";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-FjG7htwMRLZmwH6OjjyHkGUTaVNzuMTn6BjXUnCgwAA=";
+      sha256 = "185msrpa33w40prc88n5m0g12wh8r6szj56iikk4ps6kwr6wamy7";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "sha256-cBZ53lekhPl5yjxclg2PeMCL0NKwshkKhP/lFbEinCs=";
+      sha256 = "0iam5ni8imajxhcv12zib6m475i6czllmqy512r1wmzw9zbilf43";
     };
 
-    aarch64-darwin = srcs.x86_64-darwin;
+    aarch64-darwin = fetchzip {
+      url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
+      sha256 = "12af421r4d8s4l5j54xyd3x8pa72nbilass95v0y3b0wgsi35g0z";
+    };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
@@ -85,6 +88,8 @@ let
       krb5
       libdrm
       mesa
+      libxshmfence
+      libxkbcommon
     ];
 
     desktopItems = [ (makeDesktopItem {
@@ -93,7 +98,7 @@ let
       icon = pname;
       desktopName = "GitKraken";
       genericName = "Git Client";
-      categories = "Development;";
+      categories = [ "Development" ];
       comment = "Graphical Git client from Axosoft";
     }) ];
 

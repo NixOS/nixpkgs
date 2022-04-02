@@ -24,7 +24,14 @@ with lib; mkCoqDerivation {
       { cases = [ (isGe "8.7")   "1.7.0"  ]; out = "1.0.1"; }
     ] null;
 
-  propagatedBuildInputs = [ mathcomp.ssreflect mathcomp.field mathcomp-bigenough ];
+  propagatedBuildInputs = [
+    mathcomp.ssreflect
+    mathcomp.algebra
+    mathcomp.field
+    mathcomp.fingroup
+    mathcomp.solvable
+    mathcomp-bigenough
+  ];
 
   meta = {
     description = "Mathematical Components Library on real closed fields";

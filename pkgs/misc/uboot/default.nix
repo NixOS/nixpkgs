@@ -111,7 +111,7 @@ let
       homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
 in {
@@ -135,6 +135,12 @@ in {
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
@@ -395,12 +401,28 @@ in {
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = [
+      # Remove when updating to 2022.01
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=273129&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/273129/mbox/";
+        sha256 = "sha256-/Gu7RNvBNYCGqdFRzQ11qPDDxgGVpwKYYw1CpumIGfU=";
+      })
+    ];
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = [
+      # Remove when updating to 2022.01
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=273129&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/273129/mbox/";
+        sha256 = "sha256-/Gu7RNvBNYCGqdFRzQ11qPDDxgGVpwKYYw1CpumIGfU=";
+      })
+    ];
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {

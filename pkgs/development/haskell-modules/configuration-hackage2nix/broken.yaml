@@ -201,6 +201,7 @@ broken-packages:
   - arrow-list
   - arrowp
   - arrowp-qq
+  - arrow-utils
   - ArrowVHDL
   - artery
   - artifact
@@ -413,6 +414,7 @@ broken-packages:
   - bkr
   - blakesum
   - blas
+  - blatex
   - blaze-html-contrib
   - blaze-html-hexpat
   - blaze-html-truncate
@@ -829,8 +831,8 @@ broken-packages:
   - ContextAlgebra
   - context-free-grammar
   - context-stack
-  - contiguous
   - contiguous-checked
+  - contiguous-fft
   - continue
   - Contract
   - control-iso
@@ -985,7 +987,6 @@ broken-packages:
   - data-validation
   - data-variant
   - DataVersion
-  - dates
   - datetime
   - datetime-sb
   - dawdle
@@ -1004,6 +1005,7 @@ broken-packages:
   - dclabel
   - dclabel-eci11
   - dcpu16
+  - ddate
   - ddc-base
   - ddc-code
   - dead-code-detection
@@ -1087,6 +1089,7 @@ broken-packages:
   - DigitalOcean
   - digitalocean-kzs
   - digits
+  - dijkstra-simple
   - DimensionalHash
   - dimensional-tf
   - diophantine
@@ -1118,6 +1121,7 @@ broken-packages:
   - dmcc
   - dmenu
   - dnscache
+  - dns-patterns
   - dnsrbl
   - dnssd
   - dobutok
@@ -1132,6 +1136,7 @@ broken-packages:
   - doctest-discover-configurator
   - doctest-parallel
   - doctest-prop
+  - docusign-base
   - docusign-example
   - docvim
   - doi
@@ -1981,7 +1986,6 @@ broken-packages:
   - haskell-mpi
   - haskell-names
   - haskell-neo4j-client
-  - HaskellNet-SSL
   - HaskellNN
   - Haskelloids
   - haskell-openflow
@@ -2032,6 +2036,7 @@ broken-packages:
   - hasql-dynamic-statements
   - hasql-generic
   - hasql-simple
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -2246,6 +2251,7 @@ broken-packages:
   - hobbes
   - hocilib
   - hocker
+  - hocon
   - hodatime
   - HODE
   - hoe
@@ -2375,6 +2381,7 @@ broken-packages:
   - hsns
   - hsnsq
   - hsntp
+  - hs-opentelemetry-instrumentation-persistent
   - hsoptions
   - hsoz
   - hsparql
@@ -2598,6 +2605,7 @@ broken-packages:
   - introduction
   - intro-prelude
   - invert
+  - invertible
   - invertible-syntax
   - io-capture
   - io-choice
@@ -2723,6 +2731,7 @@ broken-packages:
   - katydid
   - kawaii
   - kawhi
+  - kazura-queue
   - kdesrc-build-extra
   - kd-tree
   - keccak
@@ -2741,6 +2750,7 @@ broken-packages:
   - kmp-dfa
   - koellner-phonetic
   - koji-install
+  - koneko
   - Konf
   - kontra-config
   - kparams
@@ -2995,6 +3005,7 @@ broken-packages:
   - lye
   - lz4-frame-conduit
   - lzip
+  - lzlib
   - lzma-streams
   - lzo
   - maam
@@ -3306,6 +3317,7 @@ broken-packages:
   - nanomsg
   - nanomsg-haskell
   - nanoparsec
+  - nanopass
   - NanoProlog
   - nanovg-simple
   - nanq
@@ -3429,7 +3441,6 @@ broken-packages:
   - numbered-semigroups
   - NumberSieves
   - NumberTheory
-  - numerals
   - numerals-base
   - numeric-qq
   - numeric-ranges
@@ -3691,7 +3702,6 @@ broken-packages:
   - persistent-discover
   - persistent-documentation
   - persistent-equivalence
-  - persistent-migration
   - persistent-mongoDB
   - persistent-mysql-haskell
   - persistent-odbc
@@ -3890,6 +3900,7 @@ broken-packages:
   - PrimitiveArray-Pretty
   - primitive-atomic
   - primitive-checked
+  - primitive-containers
   - primitive-convenience
   - primitive-foreign
   - primitive-indexed
@@ -3903,6 +3914,7 @@ broken-packages:
   - prints
   - PriorityChansConverger
   - priority-queue
+  - pro-abstract
   - probable
   - process-conduit
   - processing
@@ -4195,6 +4207,7 @@ broken-packages:
   - riemann
   - riff
   - ring-buffer
+  - ring-buffers
   - riscv-isa
   - Ritt-Wu
   - rivers
@@ -4806,6 +4819,7 @@ broken-packages:
   - SybWidget
   - syb-with-class-instances-text
   - sydtest-aeson
+  - sydtest-hedgehog
   - sydtest-hedis
   - sydtest-hspec
   - sydtest-mongo
@@ -5030,6 +5044,7 @@ broken-packages:
   - tkyprof
   - tmp-proc-example
   - todo
+  - todos
   - tofromxml
   - to-haskell
   - toilet
@@ -5182,7 +5197,6 @@ broken-packages:
   - unfix-binders
   - unfoldable
   - unicode-prelude
-  - unicode-show
   - unicode-symbols
   - unicode-tricks
   - uniform-fileio
@@ -5235,6 +5249,7 @@ broken-packages:
   - urxml
   - users-mysql-haskell
   - users-persistent
+  - utc
   - utf
   - utf8-prelude
   - utf8-validator
@@ -5286,6 +5301,7 @@ broken-packages:
   - vector-space-points
   - vector-static
   - Vec-Transform
+  - velma
   - Verba
   - verbalexpressions
   - verdict
@@ -5376,8 +5392,10 @@ broken-packages:
   - wavefront-obj
   - weak-bag
   - weather-api
+  - web3-polkadot
   - webapi
   - webapp
+  - webauthn
   - WebBits
   - webby
   - webcloud
@@ -5418,6 +5436,7 @@ broken-packages:
   - windowslive
   - winerror
   - Wired
+  - wireguard-hs
   - wires
   - wiring
   - witty
@@ -5541,6 +5560,7 @@ broken-packages:
   - yeshql-postgresql-simple
   - yesod-angular
   - yesod-angular-ui
+  - yesod-articles
   - yesod-auth-account
   - yesod-auth-account-fork
   - yesod-auth-bcrypt

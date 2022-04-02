@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "i3-balance-workspace";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b5d72b756f79878a058484825bb343b100433e00a01f80c9c6d1ccc9f4af57a";
+    sha256 = "sha256-zJdn/Q6r60FQgfehtQfeDkmN0Rz3ZaqgNhiWvjyQFy0=";
   };
 
   propagatedBuildInputs = [ i3ipc ];

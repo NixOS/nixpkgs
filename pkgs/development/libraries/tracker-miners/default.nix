@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, substituteAll
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RDafU+Lt70FDdAbb7s1Hepf4qa/dkTSDLqRdG6KqLEc=";
+    sha256 = "izh967d0BhwGrfsmeg4ODz0heZNxvwHQVklaubjdlBc=";
   };
 
   nativeBuildInputs = [
@@ -113,13 +113,6 @@ stdenv.mkDerivation rec {
     "-Dminer_rss=false"
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
-  ];
-
   postInstall = ''
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
@@ -127,7 +120,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

@@ -49,9 +49,10 @@ in
 
 stdenv.mkDerivation rec {
   inherit (param) version src;
-  name = "ocaml${ocaml.version}-labltk-${version}";
+  pname = "ocaml${ocaml.version}-labltk";
 
-  buildInputs = [ ocaml findlib tcl tk makeWrapper ];
+  nativeBuildInputs = [ ocaml findlib makeWrapper ];
+  buildInputs = [ tcl tk ];
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;

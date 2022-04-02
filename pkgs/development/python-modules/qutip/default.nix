@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "04g7ixq1yrrid4lliqbcamnzyw5r0fjbl8ipklps234hvsjfwmxb";
+    sha256 = "sha256-11K7Tl7PE98nM2vGsa+OKIJYu0Wmv8dT700PDt9RRVk=";
   };
 
   # QuTiP says it needs specific (old) Numpy versions. We overwrite them here

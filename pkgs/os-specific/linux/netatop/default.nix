@@ -12,6 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0qjw8glfdmngfvbn1w63q128vxdz2jlabw13y140ga9i5ibl6vvk";
   };
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ kmod zlib ];
 
   hardeningDisable = [ "pic" ];
@@ -35,6 +36,8 @@ stdenv.mkDerivation {
 
     kmod=${kmod} substituteAllInPlace netatop.service
   '';
+
+  makeFlags = kernel.makeFlags;
 
   preInstall = ''
     mkdir -p $out/lib/systemd/system $out/bin $out/sbin $out/share/man/man{4,8}

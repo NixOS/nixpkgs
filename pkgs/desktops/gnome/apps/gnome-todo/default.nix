@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
-  version = "unstable-2022-01-01";
+  version = "unstable-2022-03-11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-todo";
-    rev = "4a6be8c38510d909a9f94ec34c4da1f31ac9f1ab";
-    sha256 = "5UGo9vMb8scPWK91gftYOjqkJs9tGMiH1lqyEqedF2A=";
+    rev = "07791399742366b4e3a6897430054d91df4594b4";
+    sha256 = "821KgxkkW4T6bdGuttAz9ao/WStM1QEfn4hY/b0d0jI=";
   };
 
   patches = [

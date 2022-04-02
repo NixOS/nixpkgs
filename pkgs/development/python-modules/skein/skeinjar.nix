@@ -4,9 +4,9 @@ let
   skeinRepo = callPackage ./skeinrepo.nix { inherit src version; };
 in
 stdenv.mkDerivation rec {
-  name = "skein-${version}.jar";
+  pname = "skein.jar";
 
-  inherit src;
+  inherit version src;
 
   nativeBuildInputs = [ maven ];
 

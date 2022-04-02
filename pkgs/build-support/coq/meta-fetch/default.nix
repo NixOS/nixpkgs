@@ -59,10 +59,9 @@ switch arg [
         (optionalAttrs has-owner { owner = head splitted; }));
     }; }
   { case = isAttrs;
-    out = let
-    { version = arg.version or "dev";
-      src = (arg.fetcher or fetcher) (location // (arg.location or {}));
-    }; }
+    out = {
+      version = arg.version or "dev";
+      src = (arg.fetcher or fetcher) (location // (arg.location or {})); }; }
   { case = isPath;
     out = {
       version = "dev" ;

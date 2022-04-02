@@ -10,6 +10,7 @@
 , qtsvg
 , qtlocation
 , qtdeclarative
+, qqc2-desktop-style
 
 , kirigami2
 , kdbusaddons
@@ -38,14 +39,14 @@
 
 mkDerivation rec {
   pname = "kalendar";
-  version = "0.4.0";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "pim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j383I40lChsI/VOgceaHYGhE61p3SpvInUrkUV5HnHY=";
+    sha256 = "sha256-kjtLVU+8wbIa7R6J1XOjuvS3AnJNngxNBCx24Dy1QzM=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ mkDerivation rec {
     qtsvg
     qtlocation
     qtdeclarative
+    qqc2-desktop-style
 
     kirigami2
     kdbusaddons

@@ -38,6 +38,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.wait_for_unit("doh-proxy-rust.service")
     machine.wait_for_open_port(53)
     machine.wait_for_open_port(3000)
-    machine.succeed(f"curl --fail '{url}?dns={query}' | grep -F {bin_ip}")
+    machine.succeed(f"curl --fail -H 'Accept: application/dns-message' '{url}?dns={query}' | grep -F {bin_ip}")
   '';
 })

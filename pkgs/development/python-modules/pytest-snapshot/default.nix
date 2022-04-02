@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joseph-roitman";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xnfsB4wmsvqq5FfhLasSpxZh7+vhQsND6+Lxu0OuCvs=";
+    sha256 = "sha256-ymB9h3Mc6GSMRsxIh6uuf111qLvIkNAnFsxR6O2SF7s=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

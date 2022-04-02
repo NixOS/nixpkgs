@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tdlib";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "tdlib";
     repo = "td";
     # https://github.com/tdlib/td/issues/1790
-    rev = "b3ab664a18f8611f4dfcd3054717504271eeaa7a";
-    sha256 = "OBgzFBi+lIBbKnHDm5D/F3Xi4s1x4geb+1OoBP3F+qY=";
+    rev = "92c2a9c4e521df720abeaa9872e1c2b797d5c93f";
+    sha256 = "ZoKsgdkS78mptfbxkkV4pgcgJEaWwKZWK2cvmxgJN4E=";
   };
 
   buildInputs = [ gperf openssl readline zlib ];

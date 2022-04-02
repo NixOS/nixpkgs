@@ -1,0 +1,77 @@
+From 4ca09b7cd1d42eb6b1587fed74cd4d684e31bfbe Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sun, 27 Feb 2022 17:35:22 -0500
+Subject: [PATCH] 9p: darwin: meson: Allow VirtFS on Darwin
+
+To allow VirtFS on darwin, we need to check that pthread_fchdir_np is
+available, which has only been available since macOS 10.12.
+
+Additionally, virtfs_proxy_helper is disabled on Darwin. This patch
+series does not currently provide an implementation of the proxy-helper,
+but this functionality could be implemented later on.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+[Michael Roitzsch: - Rebase for NixOS]
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+[Will Cohen: - Rebase to master]
+Signed-off-by: Will Cohen <wwcohen@gmail.com>
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+[Will Cohen: - Add check for pthread_fchdir_np to virtfs
+             - Add comments to patch commit
+             - Note that virtfs_proxy_helper does not work
+               on macOS
+             - Fully adjust meson virtfs error note to specify
+               macOS
+             - Rebase to master]
+Signed-off-by: Will Cohen <wwcohen@gmail.com>
+Message-Id: <20220227223522.91937-12-wwcohen@gmail.com>
+Signed-off-by: Christian Schoenebeck <qemu_oss@crudebyte.com>
+Acked-by: Christian Schoenebeck <qemu_oss@crudebyte.com>
+---
+ fsdev/meson.build |  1 +
+ meson.build       | 17 +++++++++++------
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/fsdev/meson.build b/fsdev/meson.build
+index adf57cc43e..b632b66348 100644
+--- a/fsdev/meson.build
++++ b/fsdev/meson.build
+@@ -7,6 +7,7 @@ fsdev_ss.add(when: ['CONFIG_FSDEV_9P'], if_true: files(
+   'qemu-fsdev.c',
+ ), if_false: files('qemu-fsdev-dummy.c'))
+ softmmu_ss.add_all(when: 'CONFIG_LINUX', if_true: fsdev_ss)
++softmmu_ss.add_all(when: 'CONFIG_DARWIN', if_true: fsdev_ss)
+ 
+ if have_virtfs_proxy_helper
+   executable('virtfs-proxy-helper',
+diff --git a/meson.build b/meson.build
+index 2265fa409a..6d73c02903 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1383,12 +1383,17 @@ endif
+ have_host_block_device = (targetos != 'darwin' or
+     cc.has_header('IOKit/storage/IOMedia.h'))
+ 
+-have_virtfs = (targetos == 'linux' and
+-    have_system and
+-    libattr.found() and
+-    libcap_ng.found())
+-
+-have_virtfs_proxy_helper = have_virtfs and have_tools
++have_virtfs = get_option('virtfs') \
++    .require(targetos == 'linux' or targetos == 'darwin',
++             error_message: 'virtio-9p (virtfs) requires Linux or macOS') \
++    .require(targetos == 'linux' or cc.has_function('pthread_fchdir_np'),
++             error_message: 'virtio-9p (virtfs) on macOS requires the presence of pthread_fchdir_np') \
++    .require(targetos == 'darwin' or (libattr.found() and libcap_ng.found()),
++             error_message: 'virtio-9p (virtfs) on Linux requires libcap-ng-devel and libattr-devel') \
++    .disable_auto_if(not have_tools and not have_system) \
++    .allowed()
++
++have_virtfs_proxy_helper = targetos != 'darwin' and have_virtfs and have_tools
+ 
+ if get_option('virtfs').enabled()
+   if not have_virtfs
+-- 
+2.35.1
+

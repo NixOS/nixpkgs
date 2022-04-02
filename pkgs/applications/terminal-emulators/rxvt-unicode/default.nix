@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchpatch, makeDesktopItem
 , libX11, libXt, libXft, libXrender
 , ncurses, fontconfig, freetype
 , pkg-config, gdk-pixbuf, perl
@@ -6,6 +6,8 @@
 , perlSupport      ? true
 , gdkPixbufSupport ? true
 , unicode3Support  ? true
+, emojiSupport     ? false
+, nixosTests
 }:
 
 let
@@ -20,8 +22,15 @@ let
     comment = description;
     desktopName = "URxvt";
     genericName = pname;
-    categories = "System;TerminalEmulator;";
+    categories = [ "System" "TerminalEmulator" ];
   };
+
+  fetchPatchFromAUR = { package, name, rev, sha256 }:
+    fetchpatch rec {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=${package}&id=${rev}";
+      extraPrefix = "";
+      inherit name sha256;
+    };
 in
 
 with lib;
@@ -44,18 +53,33 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "terminfo" ];
 
-  patches = [
+  patches = (if emojiSupport then [
+    # the required patches to libXft are in nixpkgs by default, see
+    # ../../../servers/x11/xorg/overrides.nix
+    (fetchPatchFromAUR {
+      name = "enable-wide-glyphs.patch";
+      package = "rxvt-unicode-truecolor-wide-glyphs";
+      rev = "69701a09c2c206233952b84bc966407f6774f1dc";
+      sha256 = "0jfcj0ahky4dxdfrhqvh1v83mblhf5nak56dk1vq3bhyifdg7ffq";
+    })
+    (fetchPatchFromAUR {
+      name = "improve-font-rendering.patch";
+      package = "rxvt-unicode-truecolor-wide-glyphs";
+      rev = "69701a09c2c206233952b84bc966407f6774f1dc";
+      sha256 = "1jj5ai2182nq912279adihi4zph1w4dvbdqa1pwacy4na6y0fz9y";
+    })
+  ] else [
     ./patches/9.06-font-width.patch
+  ]) ++ [
     ./patches/256-color-resources.patch
-  ] ++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
-
+  ]++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"
     "--enable-256-color"
     (enableFeature perlSupport "perl")
     (enableFeature unicode3Support "unicode3")
-  ];
+  ] ++ optional emojiSupport "--enable-wide-glyphs";
 
   LDFLAGS = [ "-lfontconfig" "-lXrender" "-lpthread" ];
   CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
@@ -78,6 +102,8 @@ stdenv.mkDerivation {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
     cp -r ${desktopItem}/share/applications/ $out/share/
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
   meta = {
     inherit description;

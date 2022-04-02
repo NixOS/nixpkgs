@@ -18,6 +18,7 @@ let
   disabledTests = [
     "test_capabilities.py"
     "test_cwd.py"
+    "test_delete.py"
     "test_detach.py"
     "test_exec.py"
     "test_hooks.py"
@@ -37,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-j2+ga+jnKnjnFGmrOOym99keLALg7wR7Jk+jjesiMc4=";
+    sha256 = "sha256-ITUj905ZSdCH0mcw8tubyVKqI6p/oNcC4OW7/NbkR5o=";
     fetchSubmodules = true;
   };
 

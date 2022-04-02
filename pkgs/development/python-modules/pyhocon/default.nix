@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pyhocon";
-  version = "0.3.58";
+  version = "0.3.59";
 
   src = fetchFromGitHub {
     owner = "chimpler";
     repo = "pyhocon";
     rev = version;
-    sha256 = "sha256-ddspVDKy9++cISWH6R95r+gJrzNGqMTybI04OgVtIUU=";
+    sha256 = "1yr24plg3d4girg27ajjkf9mndig706fs8b2kmnmhi4l2xi866yh";
   };
 
   propagatedBuildInputs = [

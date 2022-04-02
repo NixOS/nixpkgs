@@ -15,6 +15,9 @@
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
+# Write out info about included extraComponents and extraPackages
+, writeText
+
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -25,21 +28,34 @@
 
 let
   defaultOverrides = [
-    # aiounify 29 breaks integration tests
+    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
+    (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+
+    # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
-      aiounifi = super.aiounifi.overridePythonAttrs (oldAttrs: rec {
-        version = "28";
-        src = fetchFromGitHub {
-          owner = "Kane610";
-          repo = "aiounifi";
-          rev = "v${version}";
-          sha256 = "1r86pk80sa1la2s7c6v9svh5cpkci6jcw1xziz0h09jdvv5j5iff";
+      pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
+        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        doCheck = false;
+        patches = [];
+      });
+      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      snitun = super.snitun.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
       });
     })
-
-    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -54,36 +70,6 @@ let
       });
     })
 
-    # Pinned due to API changes in iaqualink>=2.0, remove after
-    # https://github.com/home-assistant/core/pull/48137 was merged
-    (self: super: {
-      iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.90";
-        src = fetchFromGitHub {
-          owner = "flz";
-          repo = "iaqualink-py";
-          rev = "v${version}";
-          sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
-        };
-        checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
-      });
-    })
-
-    # Pinned due to API changes in influxdb-client>1.21.0
-    (self: super: {
-      influxdb-client = super.influxdb-client.overridePythonAttrs (oldAttrs: rec {
-        version = "1.21.0";
-        src = fetchFromGitHub {
-          owner = "influxdata";
-          repo = "influxdb-client-python";
-          rev = "v${version}";
-          sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
-        };
-      });
-    })
-
-    (mkOverride "jinja2" "3.0.3" "1mvwr02s86zck5wsmd9wjxxb9iaqr17hdi5xza9vkwv8rmrv46v1")
-
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
@@ -97,24 +83,21 @@ let
       });
     })
 
-    # Pinned due to API changes in eebrightbox>=0.0.5
+    # Pinned due to API changes in 0.1.0
+    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
+
+    # Pinned due to API changes >0.3.5.3
     (self: super: {
-      eebrightbox = super.eebrightbox.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
+      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.5.3";
         src = fetchFromGitHub {
-          owner = "krygal";
-          repo = "eebrightbox";
+          owner = "MatsNl";
+          repo = "pyatag";
           rev = version;
-          sha256 = "0d8mmpwgrd7gymw5263r1v2wjv6dx6w6pq13d62fkfm4h2hya4a4";
+          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
     })
-
-    # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
-
-    # Requirements for recorder not found: ['sqlalchemy==1.4.27'].
-    (mkOverride "sqlalchemy" "1.4.27" "031jbd0svrvwr3n52iibp9mkwsj9wicnck45yd26da5kmsfkas6p")
 
     # Pinned due to API changes in 0.4.0
     (self: super: {
@@ -148,12 +131,12 @@ let
     })
   ];
 
-  mkOverride = attrname: version: sha256:
+  mkOverride = attrName: version: hash:
     self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
-          inherit version sha256;
+          inherit version hash;
         };
       });
     };
@@ -176,15 +159,20 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
+  # Create info about included packages and components
+  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
+  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
+
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.12.10";
+  hassVersion = "2022.3.8";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
+  format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.8";
+  disabled = python.pythonOlder "3.9";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -194,7 +182,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256:0nyddcjy4diq5bakpb76frax44i0jraj2vvpfxrj50h9l5pdwsaf";
+    hash = "sha256-FGsMFt/EEokaast81iiwKHqSsB1E4Si5ejTw+MV1MnQ=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -203,7 +191,6 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
     })
-    ./patches/tests-ignore-OSErrors-in-hass-fixture.patch
   ];
 
   postPatch = let
@@ -223,9 +210,9 @@ in python.pkgs.buildPythonApplication rec {
   in ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's@${package}[<>=]+.*@${package}",@g' \''
+        ''-e 's@${package}[<>=]+.*@${package}@g' \''
       ) relaxedConstraints)}
-    setup.py
+    setup.cfg
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -256,8 +243,8 @@ in python.pkgs.buildPythonApplication rec {
     yarl
     # Not in setup.py, but used in homeassistant/util/package.py
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
+    # Not in setup.py, but uncounditionally imported via tests/conftest.py
+    paho-mqtt
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -280,6 +267,9 @@ in python.pkgs.buildPythonApplication rec {
     respx
     stdlib-list
     tqdm
+    # required by tests/pylint
+    astroid
+    pylint
     # required by tests/auth/mfa_modules
     pyotp
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
@@ -326,6 +316,11 @@ in python.pkgs.buildPythonApplication rec {
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
+  '';
+
+  postInstall = ''
+    cp -v ${extraComponentsFile} $out/extra_components
+    cp -v ${extraPackagesFile} $out/extra_packages
   '';
 
   passthru = {

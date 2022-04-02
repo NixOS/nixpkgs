@@ -19,12 +19,12 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "8.8p1";
+    version = "8.9p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "1s8z6f7mi1pwsl79cqai8cr350m5lf2ifcxff57wx6mvm478k425";
+      sha256 = "1ry5prcax0134v6srkgznpl9ch5snkgq7yvjqvd8c5mbnxa7cjgx";
     };
 
     extraPatches = [
@@ -33,9 +33,9 @@ in
       # HPN Patch from FreeBSD ports
       (fetchpatch {
         name = "ssh-hpn.patch";
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/a981593e/security/openssh-portable/files/extra-patch-hpn";
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/ae66cffc19f357cbd51d5841c9b110a9ffd63e32/security/openssh-portable/files/extra-patch-hpn";
         stripLen = 1;
-        sha256 = "sha256-+JvpPxktZAjhxLLK1lF4ijG9VlSWkqbRwotaLe6en64=";
+        sha256 = "sha256-p3CmMqTgrqFZUo4ZuqaPLczAhjmPufkCvptVW5dI+MI=";
       })
     ];
 

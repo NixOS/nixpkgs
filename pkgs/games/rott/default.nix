@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       name = "rott";
       exec = "launch-rott";
       desktopName = "Rise of the Triad: ${if buildShareware then "The HUNT Begins" else "Dark War"}";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

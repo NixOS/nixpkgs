@@ -3,31 +3,15 @@
 let
   defaultOverrides = [
     (self: super: {
-      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.2";
-        pname = "Flask";
+      wtforms = super.wtforms.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.1";
+        pname = "WTForms";
 
         src = super.fetchPypi {
           inherit pname version;
-          sha256 = "sha256-Tvoa4tfJhlr0iYbeiuuFBL8yx/PW/ck1PTSyH0sScGA=";
+          sha256 = "sha256-hhoTs65SHWcA2sOydxlwvTVKY7pwQ+zDqCtSiFlqGXI=";
         };
 
-        checkInputs = [ self.pytest ];
-        propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
-
-        doCheck = false;
-      });
-    })
-
-    (self: super: {
-      flask_login = super.flask_login.overridePythonAttrs (oldAttrs: rec {
-        pname = "Flask";
-        version = "0.5.0";
-
-        src = fetchPypi {
-          inherit pname version;
-          sha256 = "6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b";
-        };
         doCheck = false;
       });
     })
@@ -45,7 +29,7 @@ let
 
   py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (defaultOverrides);
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
 
 in
@@ -53,11 +37,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nwpH3V6hkPC8G3df+0hTZqvIbvT1Z796uOI/iKnXS1w=";
+    sha256 = "sha256-UNGl5Dl/E3+uQ4HIxzHYliHF4lqD3GYdeoL+DtqUwCo=";
   };
 
   # Relax some dependencies
@@ -72,7 +56,7 @@ buildPythonApplication rec {
       --replace 'validators ==' 'validators >=' \
       --replace 'tinydb ==' 'tinydb >=' \
       --replace 'Flask_WTF == 0.14.3' 'Flask_WTF' \
-      --replace 'Werkzeug ==' 'Werkzeug >='
+      --replace 'Flask ==' 'Flask >='
   '';
 
   propagatedBuildInputs = [
@@ -87,11 +71,11 @@ buildPythonApplication rec {
     html2text
     python-dotenv
     python-frontmatter
+    readability-lxml
     requests
     setuptools
     tinydb
     validators
-    werkzeug
     wtforms
   ];
 

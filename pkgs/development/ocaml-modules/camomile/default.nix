@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, cppo }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, cppo }:
 
 buildDunePackage rec {
   pname = "camomile";
@@ -13,12 +13,18 @@ buildDunePackage rec {
     sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
   };
 
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure
     ocaml configure.ml --share $out/share/camomile
     runHook postConfigure
+  '';
+
+  postInstall = ''
+    echo "version = \"${version}\"" >> $out/lib/ocaml/${ocaml.version}/site-lib/camomile/META
   '';
 
   meta = {

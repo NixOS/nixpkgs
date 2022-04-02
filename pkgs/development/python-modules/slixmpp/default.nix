@@ -4,30 +4,24 @@
 , aiohttp
 , fetchPypi
 , gnupg
-, isPy3k
 , pyasn1
 , pyasn1-modules
 , pytestCheckHook
 , substituteAll
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.7.1";
+  version = "1.8.1";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mvg23FdHJZeIZRcm8GLWmm9DDTBt29jmsUHB/smVSec=";
+    hash = "sha256-QgTIC+4JtAD9nnS+fJKZwF0aJEIrFmPHkYg8cPgXmcA=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./hardcode-gnupg-path.patch;
-      inherit gnupg;
-    })
-  ];
 
   propagatedBuildInputs = [
     aiodns
@@ -36,15 +30,28 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # Exclude live tests
-  disabledTestPaths = [ "tests/live_test.py" ];
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gnupg-path.patch;
+      inherit gnupg;
+    })
+  ];
 
-  pythonImportsCheck = [ "slixmpp" ];
+  disabledTestPaths = [
+    # Exclude live tests
+    "tests/live_test.py"
+  ];
+
+  pythonImportsCheck = [
+    "slixmpp"
+  ];
 
   meta = with lib; {
-    description = "Elegant Python library for XMPP";
+    description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

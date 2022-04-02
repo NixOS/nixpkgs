@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ core core_kernel sqlite ];
+  propagatedBuildInputs = [ core core_kernel sqlite ];
 
   meta = {
     description =

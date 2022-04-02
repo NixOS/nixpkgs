@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-classy-tags";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2ef8b82b4f7d77d4fd152b25c45128d926e7a5840d862f2ecd3e5faf6acbe343";
+    sha256 = "sha256-0iK0VQKsmeVQpWZmeDnvrvlUucc2amST8UOGKqvqyHg=";
   };
 
   propagatedBuildInputs = [ django six ];

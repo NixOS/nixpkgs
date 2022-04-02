@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.1.18";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-W67+Hy7Wk3dJspNYbGzk9C7TDniQIj92Ycyyu333C+8=";
+    sha256 = "sha256-QURm/ehJovqr/ZRE7ILKLnvxQsAdcjdSTPlzCt60IBw=";
   };
 
   propagatedBuildInputs = [

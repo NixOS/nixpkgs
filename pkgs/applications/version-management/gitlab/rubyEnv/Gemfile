@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.4.4'
+gem 'rails', '~> 6.1.4.6'
 
 gem 'bootsnap', '~> 1.9.1', require: false
 
@@ -10,6 +10,8 @@ gem 'bootsnap', '~> 1.9.1', require: false
 gem 'responders', '~> 3.0'
 
 gem 'sprockets', '~> 3.7.0'
+
+gem 'view_component', '~> 2.50.0'
 
 # Default values for AR models
 gem 'default_value_for', '~> 3.4.0'
@@ -72,7 +74,7 @@ gem 'u2f', '~> 0.2.1'
 
 # GitLab Pages
 gem 'validates_hostname', '~> 1.0.11'
-gem 'rubyzip', '~> 2.0.0', require: 'zip'
+gem 'rubyzip', '~> 2.3.2', require: 'zip'
 # GitLab Pages letsencrypt support
 gem 'acme-client', '~> 2.0', '>= 2.0.9'
 
@@ -153,7 +155,7 @@ gem 'html-pipeline', '~> 2.13.2'
 gem 'deckar01-task_list', '2.3.1'
 gem 'gitlab-markup', '~> 1.8.0'
 gem 'github-markup', '~> 1.7.0', require: 'github/markup'
-gem 'commonmarker', '~> 0.23.2'
+gem 'commonmarker', '~> 0.23.4'
 gem 'kramdown', '~> 2.3.1'
 gem 'RedCloth', '~> 4.3.2'
 gem 'rdoc', '~> 6.3.2'
@@ -183,7 +185,7 @@ gem 'rack', '~> 2.2.3'
 gem 'rack-timeout', '~> 0.5.1', require: 'rack/timeout/base'
 
 group :puma do
-  gem 'puma', '~> 5.5.2', require: false
+  gem 'puma', '~> 5.6.2', require: false
   gem 'puma_worker_killer', '~> 0.3.1', require: false
   gem 'sd_notify', '~> 0.1.0', require: false
 end
@@ -195,7 +197,7 @@ gem 'state_machines-activerecord', '~> 0.8.0'
 gem 'acts-as-taggable-on', '~> 9.0'
 
 # Background jobs
-gem 'sidekiq', '~> 6.3'
+gem 'sidekiq', '~> 6.4'
 gem 'sidekiq-cron', '~> 1.2'
 gem 'redis-namespace', '~> 1.8.1'
 gem 'gitlab-sidekiq-fetcher', '0.8.0', require: 'sidekiq-reliable-fetch'
@@ -290,18 +292,21 @@ gem 'autoprefixer-rails', '10.2.5.1'
 gem 'terser', '1.0.2'
 
 gem 'addressable', '~> 2.8'
-gem 'tanuki_emoji', '~> 0.5'
+gem 'tanuki_emoji', '~> 0.6'
 gem 'gon', '~> 6.4.0'
 gem 'request_store', '~> 1.5'
 gem 'base32', '~> 0.3.0'
 
-gem 'gitlab-license', '~> 2.0'
+gem 'gitlab-license', '~> 2.1.0'
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.3.0'
 
 # Sentry integration
 gem 'sentry-raven', '~> 3.1'
+gem 'sentry-ruby', '~> 5.1.1'
+gem 'sentry-rails', '~> 5.1.1'
+gem 'sentry-sidekiq', '~> 5.1.1'
 
 # PostgreSQL query parsing
 #
@@ -310,7 +315,7 @@ gem 'pg_query', '~> 2.1'
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.21.3'
+gem 'gitlab-labkit', '~> 0.22.0'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -374,7 +379,7 @@ group :development, :test do
   gem 'spring', '~> 2.1.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 6.6.0', require: false
+  gem 'gitlab-styles', '~> 7.0.0', require: false
 
   gem 'haml_lint', '~> 0.36.0', require: false
   gem 'bundler-audit', '~> 0.7.0.1', require: false
@@ -393,14 +398,16 @@ group :development, :test do
   gem 'parallel', '~> 1.19', require: false
 
   gem 'test_file_finder', '~> 0.1.3'
+
+  gem 'sigdump', '~> 0.2.4', require: 'sigdump/setup'
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 2.6.1', require: false
+  gem 'gitlab-dangerfiles', '~> 2.11.0', require: false
 end
 
 group :development, :test, :coverage do
-  gem 'simplecov', '~> 0.18.5', require: false
+  gem 'simplecov', '~> 0.21', require: false
   gem 'simplecov-lcov', '~> 0.8.0', require: false
   gem 'simplecov-cobertura', '~> 1.3.1', require: false
   gem 'undercover', '~> 0.4.4', require: false
@@ -418,6 +425,7 @@ group :test do
   gem 'fuubar', '~> 2.2.0'
   gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.6'
+  gem 'rspec-benchmark', '~> 0.6.0'
   gem 'rspec-parameterized', require: false
 
   gem 'capybara', '~> 3.35.3'
@@ -466,21 +474,14 @@ gem 'sys-filesystem', '~> 1.4.3'
 # NTP client
 gem 'net-ntp'
 
-# SSH host key support
-gem 'net-ssh', '~> 6.0'
-gem 'sshkey', '~> 2.0'
-
-# Required for ED25519 SSH host key support
-group :ed25519 do
-  gem 'ed25519', '~> 1.2'
-  gem 'bcrypt_pbkdf', '~> 1.1'
-end
+# SSH keys support
+gem 'ssh_data', '~> 1.2'
 
 # Spamcheck GRPC protocol definitions
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.6.0.pre.rc1'
+gem 'gitaly', '~> 14.9.0.pre.rc4'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
@@ -496,7 +497,7 @@ gem 'flipper', '~> 0.21.0'
 gem 'flipper-active_record', '~> 0.21.0'
 gem 'flipper-active_support_cache_store', '~> 0.21.0'
 gem 'unleash', '~> 3.2.2'
-gem 'gitlab-experiment', '~> 0.6.5'
+gem 'gitlab-experiment', '~> 0.7.0'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -541,4 +542,4 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'parslet', '~> 1.8'
 
-gem 'ipynbdiff', '0.3.8'
+gem 'ipynbdiff', '0.4.4'

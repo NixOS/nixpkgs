@@ -1,12 +1,21 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption mkIf mkOption types
+    recursiveUpdate;
+
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
-  configFile = ini.generate "main.conf" cfg.settings;
-in {
+  defaults = {
+    # without UseDefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
+    # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
+    General.UseDefaultInterface = with config.networking.networkmanager; (enable && (wifi.backend == "iwd"));
+  };
+  configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
+
+in
+{
   options.networking.wireless.iwd = {
     enable = mkEnableOption "iwd";
 
@@ -38,10 +47,10 @@ in {
       '';
     }];
 
-    environment.etc."iwd/main.conf".source = configFile;
+    environment.etc."iwd/${configFile.name}".source = configFile;
 
     # for iwctl
-    environment.systemPackages =  [ pkgs.iwd ];
+    environment.systemPackages = [ pkgs.iwd ];
 
     services.dbus.packages = [ pkgs.iwd ];
 

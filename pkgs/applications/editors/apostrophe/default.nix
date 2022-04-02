@@ -13,14 +13,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
-  version = "2.5";
+  version = "2.6.1";
 
   src = fetchFromGitLab {
     owner  = "World";
     repo   = pname;
     domain = "gitlab.gnome.org";
     rev    = "v${version}";
-    sha256 = "06yfiflmj3ip7ppcz41nb3xpgb5ggw5h74w0v87yaqqkq7qh31lp";
+    sha256 = "awaXXSUiEIzOAj9Zw8K961HuIKsLFi3QKETUTTIaTjk=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config desktop-file-utils

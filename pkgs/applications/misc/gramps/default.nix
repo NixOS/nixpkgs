@@ -55,6 +55,10 @@ in buildPythonApplication rec {
     runHook postInstall
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/149812
+  # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-hooks-gobject-introspection
+  strictDeps = false;
+
   meta = with lib; {
     description = "Genealogy software";
     homepage = "https://gramps-project.org";

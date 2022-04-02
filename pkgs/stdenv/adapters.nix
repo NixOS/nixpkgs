@@ -270,4 +270,25 @@ rec {
         allowSubstitutes = false;
       });
     });
+
+
+  /* Modify a stdenv so that it builds binaries with the specified list of
+     compilerFlags appended and passed to the compiler.
+
+     This example would recompile every derivation on the system with
+     -funroll-loops and -O3 passed to each gcc invocation.
+
+     Example:
+       nixpkgs.overlays = [
+         (self: super: {
+           stdenv = super.withCFlags [ "-funroll-loops" "-O3" ] super.stdenv;
+         })
+       ];
+  */
+  withCFlags = compilerFlags: stdenv:
+    stdenv.override (old: {
+      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+      });
+    });
 }

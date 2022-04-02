@@ -1,4 +1,5 @@
-{ bokeh
+{ azure-core
+, bokeh
 , buildPythonPackage
 , click
 , configparser
@@ -11,6 +12,7 @@
 , jsonschema
 , lib
 , matplotlib
+, nbformat
 , pandas
 , pathtools
 , promise
@@ -26,6 +28,7 @@
 , requests
 , scikit-learn
 , sentry-sdk
+, setproctitle
 , setuptools
 , shortuuid
 , stdenv
@@ -35,13 +38,13 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.9";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "client";
     rev = "v${version}";
-    sha256 = "0704iv5dlsjs0gj6l4nx9hk9kzq46wlgd67ifw7i3qk6v4ljfs6y";
+    sha256 = "0av4vv4llan40678bw0vlah0gn6hjg5pdqwq0c5cv15lqrdb8g32";
   };
 
   # The wandb requirements.txt does not distinguish python2/3 dependencies. We
@@ -68,16 +71,13 @@ buildPythonPackage rec {
     pyyaml
     requests
     sentry-sdk
+    setproctitle
     setuptools
     shortuuid
     yaspin
   ];
 
   disabledTestPaths = [
-    # Tests that require docker access, not possible in the nix build environment.
-    "tests/launch/test_launch.py"
-    "tests/launch/test_launch_cli.py"
-
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
     "tests/test_cli.py"
     "tests/test_data_types.py"
@@ -92,7 +92,6 @@ buildPythonPackage rec {
     "tests/test_metric_internal.py"
     "tests/test_mode_disabled.py"
     "tests/test_mp_full.py"
-    "tests/test_notebooks.py"
     "tests/test_public_api.py"
     "tests/test_redir.py"
     "tests/test_runtime.py"
@@ -102,22 +101,27 @@ buildPythonPackage rec {
     "tests/test_telemetry_full.py"
     "tests/wandb_agent_test.py"
     "tests/wandb_artifacts_test.py"
-    "tests/wandb_history_test.py"
     "tests/wandb_integration_test.py"
     "tests/wandb_run_test.py"
     "tests/wandb_settings_test.py"
     "tests/wandb_sweep_test.py"
+    "tests/wandb_verify_test.py"
 
     # Fails and borks the pytest runner as well.
     "tests/wandb_test.py"
+
+    # Tries to access /homeless-shelter
+    "tests/test_tables.py"
   ];
 
   checkInputs = [
+    azure-core
     bokeh
     flask
     jsonref
     jsonschema
     matplotlib
+    nbformat
     pandas
     pydantic
     pytest-mock

@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "A module grouping multiple translation APIs";
     homepage = "https://github.com/Animenosekai/translate";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

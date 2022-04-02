@@ -15,6 +15,16 @@ let
         doCheck = false;
       });
 
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+        doCheck = false;
+      });
+
     };
   };
 in
@@ -22,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.762";
+  version = "2.0.988";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-7YINKTvEAAOGoGkc4t2YwuMBF4rvOxRD2XhJxJBWvis=";
+    hash = "sha256-0/SL20N5d/oqWdyvVMZ+pzpPbehrYepaPi8P8SS8DSA=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -43,6 +53,7 @@ buildPythonApplication rec {
     bc-python-hcl2
     boto3
     cachetools
+    charset-normalizer
     cloudsplaining
     colorama
     configargparse
@@ -61,6 +72,7 @@ buildPythonApplication rec {
     packaging
     policyuniverse
     prettytable
+    pycep-parser
     pyyaml
     semantic-version
     tabulate
@@ -96,9 +108,12 @@ buildPythonApplication rec {
     "TestSarifReport"
     # Will probably be fixed in one of the next releases
     "test_valid_cyclonedx_bom"
+    "test_record_relative_path_with"
+    "test_record_relative_path_with_relative_dir"
     # Requires prettytable release which is only available in staging
     "test_skipped_check_exists"
-    "test_record_relative_path_with_relative_dir"
+    # AssertionError: 0 not greater than 0
+    "test_skip_mapping_default"
   ];
 
   disabledTestPaths = [

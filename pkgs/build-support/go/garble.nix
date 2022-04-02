@@ -2,25 +2,25 @@
 , buildGoModule
 , fetchFromGitHub
 , lib
+, git
 }:
 buildGoModule rec {
   pname = "garble";
-  version = "20200107";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = pname;
-    rev = "835f4aadf321521acf06aac4d5068473dc4b2ac1";
-    sha256 = "sha256-NodsVHRll2YZoxrhmniJvelQOStG82u3kJyc0t8OXD8=";
+    rev = "v${version}";
+    sha256 = "sha256-F8O/33o//yGnum9sZo1dzcvf3ifRalva6SDC36iPbDA==";
   };
 
-  vendorSha256 = "sha256-x2fk2QmZDK2yjyfYdK7x+sQjvt7tuggmm8ieVjsNKek=";
+  vendorSha256 = "sha256-iNH/iBEOTkIhVlDGfI66ZYyVjyH6WrLbUSMyONPjUc4=";
 
-  preBuild = ''
-    # https://github.com/burrowers/garble/issues/184
-    substituteInPlace testdata/scripts/tiny.txt \
-      --replace "{6,8}" "{4,8}"
-  '' + lib.optionalString (!stdenv.isx86_64) ''
+  # Used for some of the tests.
+  checkInputs = [git];
+
+  preBuild = lib.optionalString (!stdenv.isx86_64) ''
     # The test assumex amd64 assembly
     rm testdata/scripts/asm.txt
   '';

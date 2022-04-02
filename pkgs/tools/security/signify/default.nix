@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbsd ];
 
-  preInstall = ''
-    export PREFIX=$out
+  postPatch = ''
+    substituteInPlace Makefile --replace "shell pkg-config" "shell $PKG_CONFIG"
   '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "OpenBSD signing tool";

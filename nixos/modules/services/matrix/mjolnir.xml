@@ -98,7 +98,7 @@
   </para>
   <para>
    To use the Antispam Module, add <package>matrix-synapse-plugins.matrix-synapse-mjolnir-antispam</package>
-   to the Synapse plugin list and enable the <literal>mjolnir.AntiSpam</literal> module.
+   to the Synapse plugin list and enable the <literal>mjolnir.Module</literal> module.
   </para>
 <programlisting>
 {
@@ -108,7 +108,7 @@
     ];
     extraConfig = ''
       modules:
-        - module: mjolnir.AntiSpam
+        - module: mjolnir.Module
           config:
             # Prevent servers/users in the ban lists from inviting users on this
             # server to rooms. Default true.

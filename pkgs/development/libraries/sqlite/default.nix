@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite";
+  pname = "sqlite${optionalString interactive "-interactive"}";
   version = "3.37.2";
 
   # nixpkgs-update: no auto update

@@ -12,9 +12,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv ];
 
   meta = with lib; {
-    homepage = "https://www.nic.ad.jp/ja/idn/idnkit";
+    homepage = "https://jprs.co.jp/idn/index-e.html";
     description = "Provides functionalities about i18n domain name processing";
-    license = "idnkit-2 license";
+    license = {
+      fullName = "Open Source Code License version 1.1";
+      url = "https://jprs.co.jp/idn/idnkit2-OSCL.txt";
+    };
     platforms = platforms.linux;
   };
 }

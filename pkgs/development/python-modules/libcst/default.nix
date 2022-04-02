@@ -1,11 +1,9 @@
 { lib
-, black
 , buildPythonPackage
 , dataclasses
 , fetchFromGitHub
 , hypothesis
-, isort
-, pytest
+, pytestCheckHook
 , python
 , pythonOlder
 , pyyaml
@@ -50,9 +48,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    black
-    isort
-    pytest
+    pytestCheckHook
   ];
 
   preCheck = ''

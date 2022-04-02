@@ -2,20 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "unstable-2021-07-07";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "b0b2c80eb63f9b858b71afa772135f434aea192a";
-    sha256 = "sha256-io+CbZovGjEJjwtmARFH23Djt933ONoHMDoea+i6xFo=";
+    rev = "v${version}";
+    sha256 = "sha256-vMcmUWdnO9JmImxz4vO3/UONlsrCGc8VH/o38YwCIzg=";
   };
+
+  NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel libdrm ];
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "5.15" || stdenv.isAarch64;
+    broken = kernel.kernelOlder "4.19" || stdenv.isAarch64;
   };
 }

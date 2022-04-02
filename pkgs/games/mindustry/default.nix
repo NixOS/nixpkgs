@@ -66,7 +66,6 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    type = "Application";
     name = "Mindustry";
     desktopName = "Mindustry";
     exec = "mindustry";

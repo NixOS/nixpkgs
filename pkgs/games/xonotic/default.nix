@@ -50,9 +50,9 @@ let
     exec = "xonotic";
     comment = meta.description;
     desktopName = "Xonotic";
-    categories = "Game;Shooter;";
+    categories = [ "Game" "Shooter" ];
     icon = "xonotic";
-    startupNotify = "false";
+    startupNotify = false;
   };
 
   xonotic-unwrapped = stdenv.mkDerivation rec {

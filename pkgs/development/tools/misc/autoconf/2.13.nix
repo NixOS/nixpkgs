@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, perl, xz }:
+{ lib, stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
   pname = "autoconf";
@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "07krzl4czczdsgzrrw9fiqx35xcf32naf751khg821g5pqv12qgh";
   };
 
-  nativebuildInputs = [ xz ];
   buildInputs = [ m4 perl ];
 
   doCheck = true;

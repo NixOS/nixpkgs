@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.7.3";
+  version = "5.8.0";
   # upstream only supports 3.10+
   disabled = pythonOlder "3.10";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "neogeny";
     repo = "TatSu";
     rev = "v${version}";
-    sha256 = "1d6rnlybj971b5j5glvq288hd4r204nkmssqb0k8rm6cqcwhz292";
+    sha256 = "sha256-spTIHiyspjrIV8DKR7YNpNTNO9SlcLOROuABhmu3ckA=";
   };
 
   nativeBuildInputs = [ pytest-runner ];

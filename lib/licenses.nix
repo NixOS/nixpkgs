@@ -389,6 +389,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  generaluser = {
+    fullName = "GeneralUser GS License v2.0";
+    url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
+  };
+
   gpl1Only = {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
@@ -463,6 +468,11 @@ in mkLicense lset) ({
   imagemagick = {
     fullName = "ImageMagick License";
     spdxId = "imagemagick";
+  };
+
+  imlib2 = {
+    spdxId = "Imlib2";
+    fullName = "Imlib2 License";
   };
 
   inria-compcert = {
@@ -590,6 +600,21 @@ in mkLicense lset) ({
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
+  };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
+
+  mitAdvertising = {
+    spdxId = "MIT-advertising";
+    fullName = "Enlightenment License (e16)";
+  };
+
+  mit0 = {
+    spdxId = "MIT-0";
+    fullName = "MIT No Attribution";
   };
 
   mpl10 = {

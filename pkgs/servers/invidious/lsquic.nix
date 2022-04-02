@@ -1,24 +1,30 @@
 { lib, boringssl, stdenv, fetchgit, fetchFromGitHub, cmake, zlib, perl, libevent }:
 let
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+
   # lsquic requires a specific boringssl version (noted in its README)
-  boringssl' = boringssl.overrideAttrs (old: rec {
-    version = "251b5169fd44345f455438312ec4e18ae07fd58c";
+  boringssl' = boringssl.overrideAttrs (old: {
+    version = versions.boringssl.rev;
     src = fetchgit {
       url = "https://boringssl.googlesource.com/boringssl";
-      rev = version;
-      sha256 = "sha256-EU6T9yQCdOLx98Io8o01rEsgxDFF/Xoy42LgPopD2/A=";
+      inherit (versions.boringssl) rev sha256;
     };
+
+    patches = [
+      # Use /etc/ssl/certs/ca-certificates.crt instead of /etc/ssl/cert.pem
+      ./use-etc-ssl-certs.patch
+    ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "lsquic";
-  version = "2.18.1";
+  version = versions.lsquic.version;
 
   src = fetchFromGitHub {
     owner = "litespeedtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hG8cUvhbCNeMOsKkaJlgGpzUrIx47E/WhmPIdI5F3qM=";
+    inherit (versions.lsquic) sha256;
     fetchSubmodules = true;
   };
 
@@ -48,6 +54,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.boringssl = boringssl';
 
   meta = with lib; {
     description = "A library for QUIC and HTTP/3 (version for Invidious)";

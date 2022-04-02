@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.6.2";
+  version = "0.6.12";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "sha256-a2NNpQvbhMY66nbk4RAXFb/o1qR5OXPm93ujzS2cxp4=";
+    sha256 = "sha256-M8DnSpQhW4i83cu9wp0ZKyP7137IQVjyBl0cgVvQmPI=";
   };
 
-  vendorSha256 = "sha256-0wyefhY/KR79K9DDI4/8EaA/DFI1rf6wxsBIAZo+rUI=";
+  vendorSha256 = "sha256-GvTWj0uEsCyC4/RL6woym8UwA3OCFx8NWkNQApnVMM8=";
 
   ldflags = [
     "-s" "-w"
@@ -37,6 +37,6 @@ buildGoModule rec {
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ matdsoupe ];
+    maintainers = with maintainers; [ zoedsoupe ];
   };
 }

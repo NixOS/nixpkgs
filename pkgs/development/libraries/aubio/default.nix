@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib fftw libjack2 libsamplerate libsndfile ];
 
   strictDeps = true;
+  dontAddWafCrossFlags = true;
+  wafFlags = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-tests";
 
   meta = with lib; {
     description = "Library for audio labelling";

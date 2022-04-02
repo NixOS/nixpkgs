@@ -16,8 +16,8 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkg-config cpio ];
-    buildInputs = [ elfutils gettext python3 python3.pkgs.setuptools ];
+    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
+    buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
   };
 
@@ -40,7 +40,6 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   nativeBuildInputs = [ makeWrapper ];
   meta = {
     homepage = "https://sourceware.org/systemtap/";
-    repositories.git = url;
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

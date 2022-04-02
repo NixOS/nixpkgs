@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "11rjdaxmsp9n3r9xhmgd7ksy8bh5fazwsxdj0xvl4hsy6bcn4n97";
+    sha256 = "sha256-bE55VV0SrG8nxCLdpODRalnuAkn+olRdMLUjduavj6M=";
   };
 
   sourceRoot = "source/gdal";
@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = lib.concatStringsSep " " [
+    "-fpermissive"
+    # poppler uses std::optional
+    "-std=c++17"
+  ];
 
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf

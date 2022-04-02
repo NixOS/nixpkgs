@@ -39,9 +39,11 @@ in {
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
-          Only relevant if you have multiple network interfaces and want
-          to make Airsonic available on only one of them. The default value
-          will bind Airsonic to all available network interfaces.
+          The default value is appropriate for first launch, when the
+          default credentials are easy to guess. It is also appropriate
+          if you intend to use the virtualhost option in the service
+          module. In other cases, you may want to change this to a
+          specific IP or 0.0.0.0 to listen on all interfaces.
         '';
       };
 

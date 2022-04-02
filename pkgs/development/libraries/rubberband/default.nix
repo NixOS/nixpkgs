@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ];
+  makeFlags = [ "AR:=$(AR)" ];
 
   meta = with lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";

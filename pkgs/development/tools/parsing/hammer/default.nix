@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchgit, glib, pkg-config, scons }:
+{ lib, stdenv, fetchFromGitHub, glib, pkg-config, scons }:
 
 stdenv.mkDerivation {
   pname = "hammer";
   version = "e7aa734";
 
-  src = fetchgit {
-    url = "git://github.com/UpstandingHackers/hammer";
-    sha256 = "01l0wbhz7dymxlndacin2vi8sqwjlw81ds2i9xyi200w51nsdm38";
+  src = fetchFromGitHub {
+    owner = "UpstandingHackers";
+    repo = "hammer";
     rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
+    sha256 = "sha256-aNSmbSgcABF9T1HoFhCnkmON4hY2MtUs7dW38+HigAY=";
   };
 
   nativeBuildInputs = [ pkg-config scons ];

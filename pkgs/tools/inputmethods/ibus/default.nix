@@ -1,6 +1,7 @@
 { lib, stdenv
 , substituteAll
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
 , autoreconfHook
 , gettext
@@ -9,12 +10,14 @@
 , vala
 , wrapGAppsHook
 , dbus
+, systemd
 , dconf ? null
 , glib
 , gdk-pixbuf
 , gobject-introspection
 , gtk2
 , gtk3
+, gtk4
 , gtk-doc
 , runCommand
 , isocodes
@@ -60,16 +63,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.24";
+  version = "1.5.26";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-1qx06MlEUjSS067FdQG1Bdi4ZAh3hPcNjUX5PIiC3Sk=";
+    sha256 = "7Vuj4Gyd+dLUoCkR4SPkfGPwVQPRo2pHk0pRAsmtjxc=";
   };
 
   patches = [
+    # Fixes systemd unit installation path https://github.com/ibus/ibus/pull/2388
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/33b4b3932bfea476a841f8df99e20049b83f4b0e.patch";
+      sha256 = "kh8SBR+cqsov/B0A2YXLJVq1F171qoSRUKbBPHjPRHI=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;
@@ -94,6 +103,7 @@ stdenv.mkDerivation rec {
     (enableFeature enablePython2Library "python-library")
     (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
+    "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-emoji-annotation}/share/unicode/cldr/common/annotations"
@@ -123,12 +133,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
+    systemd
     dconf
     gdk-pixbuf
     gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
     gtk2
     gtk3
+    gtk4
     isocodes
     json-glib
     libnotify

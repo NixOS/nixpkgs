@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jsbronder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3K9VpX6JWCgz+Lx+5ZKqXG53B/uJCtI0x4pHy2pJdZg=";
+    sha256 = "sha256-Eb/9JtgPT2yOlfnn5Ox8M0kcQhSlRCuX8+Rq6amki8Q=";
   };
 
   checkInputs = [

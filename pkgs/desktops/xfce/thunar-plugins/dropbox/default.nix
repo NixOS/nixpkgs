@@ -6,6 +6,7 @@
 , cmake
 , ninja
 , xfce
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +31,9 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  passthru.updateScript = xfce.updateScript {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
     attrPath = "xfce.thunar-dropbox-plugin";
-    versionLister = xfce.gitLister src.meta.homepage;
   };
 
   meta = with lib; {

@@ -7,23 +7,29 @@
 
 buildPythonPackage rec {
   pname = "tls-parser";
-  version = "1.2.2";
+  version = "2.0.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = "tls_parser";
     rev = version;
-    sha256 = "12qj3vg02r5a51w6gbgb1gcxicqc10lbbsdi57jkkfvbqiindbd0";
+    hash = "sha256-A1lYRe1sHDoOFdF20DP+xRMcPBWzokIXFphIpaBmwBc=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "tls_parser" ];
+  pythonImportsCheck = [
+    "tls_parser"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/nabla-c0d3/tls_parser";
     description = "Small library to parse TLS records";
+    homepage = "https://github.com/nabla-c0d3/tls_parser";
     platforms = with platforms; linux ++ darwin;
     license = licenses.mit;
     maintainers = with maintainers; [ veehaitch ];

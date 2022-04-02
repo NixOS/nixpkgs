@@ -1,0 +1,34 @@
+--- a/src/hydra-eval-jobs/hydra-eval-jobs.cc
++++ b/src/hydra-eval-jobs/hydra-eval-jobs.cc
+@@ -64,11 +64,11 @@
+ 
+ static std::string queryMetaStrings(EvalState & state, DrvInfo & drv, const string & name, const string & subAttribute)
+ {
+-    Strings res;
++    std::list<std::string_view> res;
+     std::function<void(Value & v)> rec;
+ 
+     rec = [&](Value & v) {
+-        state.forceValue(v);
++        state.forceValue(v, noPos);
+         if (v.type() == nString)
+             res.push_back(v.string.s);
+         else if (v.isList())
+@@ -112,7 +112,7 @@
+         callFlake(state, lockedFlake, *vFlake);
+ 
+         auto vOutputs = vFlake->attrs->get(state.symbols.create("outputs"))->value;
+-        state.forceValue(*vOutputs);
++        state.forceValue(*vOutputs, noPos);
+ 
+         auto aHydraJobs = vOutputs->attrs->get(state.symbols.create("hydraJobs"));
+         if (!aHydraJobs)
+@@ -191,7 +191,7 @@
+                     state.forceList(*a->value, *a->pos);
+                     for (unsigned int n = 0; n < a->value->listSize(); ++n) {
+                         auto v = a->value->listElems()[n];
+-                        state.forceValue(*v);
++                        state.forceValue(*v, noPos);
+                         if (v->type() == nString)
+                             job["namedConstituents"].push_back(state.forceStringNoCtx(*v));
+                     }

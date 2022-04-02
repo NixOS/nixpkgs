@@ -11,7 +11,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-nm";
+  pname = "plasma-nm";
   nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
   buildInputs = [
     kdeclarative ki18n kio kwindowsystem plasma-framework kcompletion

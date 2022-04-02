@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unison";
-  version = "2.51.5";
+  version = "2.52.0";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "sha256-pi5uYwPpIy0lERmgATWQCO3EA3Pg5pnn7gxv49FaPug=";
+    sha256 = "sha256-YCuXkHqY+JHsguvst2UkI/6YlFt3iTvchO8PQuS15nI=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -60,12 +60,9 @@ stdenv.mkDerivation rec {
     genericName = "File synchronization tool";
     exec = "unison";
     icon = "unison";
-    categories = "Utility;FileTools;GTK;";
-    extraDesktopEntries = {
-      StartupWMClass = "Unison";
-      StartupNotify = "true";
-      X-MultipleArgs = "false";
-    };
+    categories = [ "Utility" "FileTools" "GTK" ];
+    startupNotify = true;
+    startupWMClass = "Unison";
   });
 
   meta = with lib; {

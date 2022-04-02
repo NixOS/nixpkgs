@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromSourcehut, pkg-config, openssl, mime-types, scdoc }:
+{ stdenv, lib, fetchFromSourcehut, pkg-config, openssl, mailcap, scdoc }:
 
 stdenv.mkDerivation rec {
   pname = "gmnisrv";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
       --replace "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"
   '';
 
-  MIMEDB = "${mime-types}/etc/mime.types";
+  MIMEDB = "${mailcap}/etc/mime.types";
   nativeBuildInputs = [ pkg-config scdoc ];
-  buildInputs = [ openssl mime-types ];
+  buildInputs = [ openssl mailcap ];
 
   meta = with lib; {
     description = "A simple Gemini protocol server";

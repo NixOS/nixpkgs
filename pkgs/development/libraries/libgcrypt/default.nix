@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, gettext, libgpg-error, enableCapabilities ? false, libcap, buildPackages }:
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, libgpg-error
+, enableCapabilities ? false, libcap
+, buildPackages
+# for passthru.tests
+, gnupg
+, libotr
+, rsyslog
+}:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -56,6 +67,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    inherit gnupg libotr rsyslog;
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libgcrypt/";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
@@ -63,6 +78,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
-    repositories.git = "git://git.gnupg.org/libgcrypt.git";
   };
 }

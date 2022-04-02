@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup( name         = "waitress-django"
-     , version      = "0.0.0"
+     , version      = "1.0.0"
      , description  = "A waitress WSGI server serving django"
      , author       = "Bas van Dijk"
      , author_email = "v.dijk.bas@gmail.com"

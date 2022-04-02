@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.6.0";
+  version = "2.6.7";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-8Vfk6B85anlUf09cc08hOGujbcVCMqgEJ1PTxX6llrk=";
+    sha256 = "sha256-m9vtopRjxT9Re8pDdzfFUpg3zYAFE8zqFemgaNAbsvM=";
     fetchSubmodules = true;
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Lua Language Server coded by Lua ";
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ mjlbach ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "lua-language-server";
   };

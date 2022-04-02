@@ -71,6 +71,11 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
         sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
       })
+      (fetchpatch {
+        name = "qtwebkit-darwin-handle.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
+        sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
     ] ++ lib.optionals stdenv.isDarwin [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "4.5.2";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-enGzu1EOo87/S5oH1eEqPy0AtsBhCcroG3DYemeNgR0=";
+    hash = "sha256-EIBH7TXelo6mr+/vJ+iT+VLUVoQqWmNsgeN3Nwwr+tM=";
   };
 
   sourceRoot = "source/lib/comgr";
@@ -26,15 +26,6 @@ stdenv.mkDerivation rec {
     "-DLLD_INCLUDE_DIRS=${lld.src}/include"
     "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
   ];
-
-  # The comgr build tends to link against the static LLVM libraries
-  # *and* the dynamic library. Linking against both causes errors
-  # about command line options being registered twice. This patch
-  # removes the static library linking.
-  patchPhase = ''
-    sed -e '/^llvm_map_components_to_libnames/,/[[:space:]]*Symbolize)/d' \
-        -i CMakeLists.txt
-  '';
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

@@ -3,10 +3,12 @@
   runCommand,
   autoreconfHook,
   autoconf, automake, libtool,
-  enablePython ? false, python ? null,
+  # Enabling python support while cross compiling would be possible, but
+  # the configure script tries executing python to gather info instead of
+  # relying on python3-config exclusively
+  enablePython ? stdenv.hostPlatform == stdenv.buildPlatform, python3, swig,
+  linuxHeaders ? stdenv.cc.libc.linuxHeaders
 }:
-
-assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "audit";
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optional enablePython python;
+  buildInputs = lib.optionals enablePython [ python3 swig ];
 
   configureFlags = [
     # z/OS plugin is not useful on Linux,
@@ -69,8 +71,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  prePatch = ''
+  postPatch = ''
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
+    substituteInPlace bindings/swig/src/auditswig.i \
+      --replace "/usr/include/linux/audit.h" \
+                "${linuxHeaders}/include/linux/audit.h"
   ''
   # According to https://stackoverflow.com/questions/13089166
   # --whole-archive linker flag is required to be sure that linker

@@ -47,9 +47,32 @@ import ../make-test-python.nix (
 
       services.matrix-synapse = {
         enable = true;
-        database_type = "sqlite3";
-        tls_certificate_path = "${cert}";
-        tls_private_key_path = "${key}";
+        settings = {
+          listeners = [ {
+            port = 8448;
+            bind_addresses = [
+              "127.0.0.1"
+              "::1"
+            ];
+            type = "http";
+            tls = true;
+            x_forwarded = false;
+            resources = [ {
+              names = [
+                "client"
+              ];
+              compress = true;
+            } {
+              names = [
+                "federation"
+              ];
+              compress = false;
+            } ];
+          } ];
+          database.name = "sqlite3";
+          tls_certificate_path = "${cert}";
+          tls_private_key_path = "${key}";
+        };
       };
     };
 

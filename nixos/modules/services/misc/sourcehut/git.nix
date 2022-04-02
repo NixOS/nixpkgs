@@ -207,7 +207,7 @@ in
                 fastcgi_param PATH_INFO $uri;
                 fastcgi_param GIT_PROJECT_ROOT $document_root;
                 fastcgi_read_timeout 500s;
-                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi_params;
                 gzip off;
             }
       '';

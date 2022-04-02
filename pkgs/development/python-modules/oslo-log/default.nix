@@ -10,7 +10,7 @@
 , pbr
 , pyinotify
 , python-dateutil
-, stestr
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -36,12 +36,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     oslotest
-    stestr
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    stestr run
-  '';
+  disabledTests = [
+    # not compatible with sandbox
+    "test_logging_handle_error"
+  ];
 
   pythonImportsCheck = [ "oslo_log" ];
 

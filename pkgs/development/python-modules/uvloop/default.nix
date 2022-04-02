@@ -53,6 +53,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Flaky test: https://github.com/MagicStack/uvloop/issues/412
     "--deselect" "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
+    # Broken: https://github.com/NixOS/nixpkgs/issues/160904
+    "--deselect" "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
   ];
 
   disabledTestPaths = [

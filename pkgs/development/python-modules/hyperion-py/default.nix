@@ -36,6 +36,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # pytest-asyncio 0.17.0 compat
+    "--asyncio-mode=auto"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --timeout=9 --cov=hyperion" ""

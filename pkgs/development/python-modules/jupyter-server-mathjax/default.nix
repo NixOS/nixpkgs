@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server-mathjax";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit version;
     pname = "jupyter_server_mathjax";
-    sha256 = "564e8d1272019c6771208f577b5f9f2b3afb02b9e2bff3b34c042cef8ed84451";
+    sha256 = "sha256-ZNlsjm3+btunN5ArLcOi3AWPF1FndsJfTTDKJGF+57M=";
   };
 
   nativeBuildInputs = [

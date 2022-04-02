@@ -224,7 +224,7 @@ There are a few naming guidelines:
 
 - Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 
@@ -540,10 +540,11 @@ If you do need to do create this sort of patch file, one way to do so is with gi
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
 
+- `relative`: Similar to using `git-diff`'s `--relative` flag, only keep changes inside the specified directory, making paths relative to it.
 - `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
 - `extraPrefix`: Prefix pathnames by this string.
-- `excludes`: Exclude files matching this pattern.
-- `includes`: Include only files matching this pattern.
+- `excludes`: Exclude files matching these patterns (applies after the above arguments).
+- `includes`: Include only files matching these patterns (applies after the above arguments).
 - `revert`: Revert the patch.
 
 Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.

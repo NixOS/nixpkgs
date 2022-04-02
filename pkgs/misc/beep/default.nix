@@ -5,16 +5,16 @@
 
 stdenv.mkDerivation rec {
   pname = "beep";
-  version = "1.4.9";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "spkr-beep";
     repo = "beep";
     rev = "v${version}";
-    sha256 = "JLaoiINHpIFWSqsRl8wJ/NeBu7SCcPuT/BzY8szEu0o=";
+    sha256 = "sha256-gDgGI9F+wW2cN89IwP93PkMv6vixJA2JckF78nxZ+TU=";
   };
 
-  makeFlags = [ "DESTDIR=\${out}" "prefix="];
+  makeFlags = [ "prefix=${placeholder "out"}"];
 
   meta = with lib; {
     description = "The advanced PC speaker beeper";

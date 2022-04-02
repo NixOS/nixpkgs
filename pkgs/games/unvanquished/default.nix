@@ -135,25 +135,17 @@ in stdenv.mkDerivation rec {
       desktopName = "Unvanquished";
       comment = "FPS/RTS Game - Aliens vs. Humans";
       icon = "unvanquished";
-      terminal = false;
       exec = "unvanquished";
-      categories = "Game;ActionGame;StrategyGame;";
-      # May or may not work
+      categories = [ "Game" "ActionGame" "StrategyGame" ];
       prefersNonDefaultGPU = true;
-      fileValidation = false; # it doesn't like PrefersNonDefaultGPU
-      # yes, PrefersNonDefaultGPU is standard:
-      # https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
     })
     (makeDesktopItem {
       name = "net.unvanquished.UnvanquishedProtocolHandler.desktop";
       desktopName = "Unvanquished (protocol handler)";
       noDisplay = true;
-      terminal = false;
       exec = "unvanquished -connect %u";
-      mimeType = "x-scheme-handler/unv";
-      # May or may not work
+      mimeTypes = [ "x-scheme-handler/unv" ];
       prefersNonDefaultGPU = true;
-      fileValidation = false; # it doesn't like PrefersNonDefaultGPU
     })
   ];
 

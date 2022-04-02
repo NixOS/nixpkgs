@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchgit, qt4, qmake4Hook, trousers }:
+{ lib, stdenv, fetchFromGitHub, qt4, qmake4Hook, trousers }:
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
   pname = "tpmmanager";
 
-  src = fetchgit {
-    url = "https://github.com/Sirrix-AG/TPMManager";
-    rev = "9f989206635a6d2c1342576c90fa73eb239519cd";
-    sha256 = "24a606f88fed67ed0d0e61dc220295e9e1ab8db3ef3d028fa34b04ff30652d8e";
+  src = fetchFromGitHub {
+    owner = "Rohde-Schwarz";
+    repo = "TPMManager";
+    rev = "v${version}";
+    sha256 = "sha256-JKYG+I/tZ+0NDmHcIgKV6eGrjbPvPQKPo0sE/zBlLY4=";
   };
 
   nativeBuildInputs = [ qmake4Hook ];

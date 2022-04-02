@@ -1,6 +1,8 @@
 { lib
+, bazel_4
 , buildBazelPackage
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 , cmake
 , gn
@@ -8,6 +10,7 @@
 , jdk
 , ninja
 , python3
+, linuxHeaders
 , nixosTests
 }:
 
@@ -17,23 +20,24 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.19.1";
-    commit = "a2a1e3eed4214a38608ec223859fcfa8fb679b14";
+    version = "1.21.1";
+    rev = "af50070ee60866874b0a9383daf9364e884ded22";
   };
 in
 buildBazelPackage rec {
   pname = "envoy";
-  version = srcVer.version;
+  inherit (srcVer) version;
+  bazel = bazel_4;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    rev = srcVer.commit;
-    hash = "sha256:1v1hv4blrppnhllsxd9d3k2wl6nhd59r4ydljy389na3bb41jwf9";
+    inherit (srcVer) rev ;
+    hash = "sha256:11mm72zmb479ss585jzqzhklyyqmdadnvr91ghzvjxc0j2a1hrr4";
 
     extraPostFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
-      echo ${srcVer.commit} > $out/SOURCE_VERSION
+      echo ${srcVer.rev} > $out/SOURCE_VERSION
       sed -i 's/GO_VERSION = ".*"/GO_VERSION = "host"/g' $out/bazel/dependency_imports.bzl
     '';
   };
@@ -48,6 +52,14 @@ buildBazelPackage rec {
       --replace '"''$$WEE8_BUILD_ARGS"' '"''$$WEE8_BUILD_ARGS use_gold=false"'
   '';
 
+  patches = [
+    # make linux/tcp.h relative. drop when upgrading to >1.21
+    (fetchpatch {
+      url = "https://github.com/envoyproxy/envoy/commit/68448aae7a78a3123097b6ea96016b270457e7b8.patch";
+      sha256 = "123kv3x37p8fgfp29jhw5xg5js5q5ipibs8hsm7gzfd5bcllnpfh";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     python3
@@ -57,8 +69,12 @@ buildBazelPackage rec {
     ninja
   ];
 
+  buildInputs = [
+    linuxHeaders
+  ];
+
   fetchAttrs = {
-    sha256 = "sha256:0vnl0gq6nhvyzz39jg1bvvna0xyhxalg71bp1jbxib7ql026004r";
+    sha256 = "0f7mls2zrpjjvbz6pgkzrvr55bv05xn2l76j9i1r0cf367qqfkz8";
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -84,7 +100,7 @@ buildBazelPackage rec {
     dontUseGnConfigure = true;
     dontUseNinjaInstall = true;
     preConfigure = ''
-      sed -i 's,#!/usr/bin/env bash,#!${stdenv.shell},' $bazelOut/external/rules_foreign_cc/tools/build_defs/framework.bzl
+      sed -i 's,#!/usr/bin/env bash,#!${stdenv.shell},' $bazelOut/external/rules_foreign_cc/foreign_cc/private/framework/toolchains/linux_commands.bzl
 
       # Add paths to Nix store back.
       sed -i \

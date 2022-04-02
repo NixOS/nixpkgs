@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cliff
 , oslo-i18n
 , oslo-utils
@@ -13,12 +13,17 @@
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "2.4.2";
+  version = "unstable-2022-03-09";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d6b530e3e50646840a6a5ef134e00f285cc4a04232c163f28585226ed40cc968";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "osc-lib";
+    rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
+    sha256 = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
   };
+
+  # fake version to make pbr.packaging happy and not reject it...
+  PBR_VERSION = "2.5.0";
 
   nativeBuildInputs = [
     pbr

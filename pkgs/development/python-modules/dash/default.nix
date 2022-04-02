@@ -10,17 +10,21 @@
 , pytest-mock
 , mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.0.0";
+  version = "2.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0RvA5qkwQJGyy81D5kW+IR6LbaD/KBwMy6kYxTETubg=";
+    sha256 = "sha256-iH56c2PO1G/NlLmYC+6sdAMZ+kXvUkpkqxfnl9EmDsQ=";
   };
 
   propagatedBuildInputs = [

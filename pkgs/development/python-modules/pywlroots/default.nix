@@ -18,17 +18,12 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.3";
+  version = "0.15.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sCHeiD6KugHZLtxcVcLggdHC1gqCxStuHy1065TbGiY=";
+    sha256 = "sha256-L+59uf3/wqWnmWpqm8RAyIEarbj2Sdwf1Pbweh/z9C8=";
   };
-
-  # The XWayland detection uses some hard-coded FHS paths. Since we
-  # know wlroots was built with xwayland support, replace its
-  # detection with `return True`.
-  patches = [ ./xwayland.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];

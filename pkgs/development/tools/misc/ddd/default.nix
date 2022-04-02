@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Graphical front-end for command-line debuggers";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ angustrau ];
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

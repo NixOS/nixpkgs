@@ -32,19 +32,16 @@ let
     genericName = "Text Editor";
     exec = "azuredatastudio --no-sandbox --unity-launch %F";
     icon = "azuredatastudio";
-    startupNotify = "true";
-    categories = "Utility;TextEditor;Development;IDE;";
-    mimeType = "text/plain;inode/directory;application/x-azuredatastudio-workspace;";
-    extraEntries = ''
-      StartupWMClass=azuredatastudio
-      Actions=new-empty-window;
-      Keywords=azuredatastudio;
-
-      [Desktop Action new-empty-window]
-      Name=New Empty Window
-      Exec=azuredatastudio --no-sandbox --new-window %F
-      Icon=azuredatastudio
-    '';
+    startupNotify = true;
+    startupWMClass = "azuredatastudio";
+    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    mimeTypes = [ "text/plain" "inode/directory" "application/x-azuredatastudio-workspace" ];
+    keywords = [ "azuredatastudio" ];
+    actions.new-empty-window = {
+      name = "New Empty Window";
+      exec = "azuredatastudio --no-sandbox --new-window %F";
+      icon = "azuredatastudio";
+    };
   };
 
   urlHandlerDesktopItem = makeDesktopItem {
@@ -54,13 +51,12 @@ let
     genericName = "Text Editor";
     exec = "azuredatastudio --no-sandbox --open-url %U";
     icon = "azuredatastudio";
-    startupNotify = "true";
-    categories = "Utility;TextEditor;Development;IDE;";
-    mimeType = "x-scheme-handler/azuredatastudio;";
-    extraEntries = ''
-      NoDisplay=true
-      Keywords=azuredatastudio;
-    '';
+    startupNotify = true;
+    startupWMClass = "azuredatastudio";
+    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    mimeTypes = [ "x-scheme-handler/azuredatastudio" ];
+    keywords = [ "azuredatastudio" ];
+    noDisplay = true;
   };
 in
 stdenv.mkDerivation rec {

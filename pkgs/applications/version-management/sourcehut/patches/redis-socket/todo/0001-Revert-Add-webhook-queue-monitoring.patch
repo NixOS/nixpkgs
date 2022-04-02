@@ -1,0 +1,50 @@
+From 42a27ea60d8454552d54e1f51f1b976d1067fc32 Mon Sep 17 00:00:00 2001
+From: Julien Moutinho <julm+srht@sourcephile.fr>
+Date: Sat, 12 Feb 2022 00:30:29 +0100
+Subject: [PATCH todo.sr.ht] Revert "Add webhook queue monitoring"
+
+This reverts commit 320a5e8f7cd16ca43928c36f0320593f84d986fa.
+
+Which has broken Unix socket support for Redis.
+See https://lists.sr.ht/~sircmpwn/sr.ht-dev/%3C20211208082636.65665-1-me%40ignaskiela.eu%3E#%3C20211216033723.wefibfulfjhqnhem@sourcephile.fr%3E
+---
+ todosrht/flask.py    | 3 ---
+ todosrht/webhooks.py | 6 +-----
+ 2 files changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/todosrht/flask.py b/todosrht/flask.py
+index 5e8ac66..9d0fd27 100644
+--- a/todosrht/flask.py
++++ b/todosrht/flask.py
+@@ -43,9 +43,6 @@ class TodoApp(SrhtFlask):
+         self.add_template_filter(urls.tracker_url)
+         self.add_template_filter(urls.user_url)
+ 
+-        from todosrht.webhooks import webhook_metrics_collector
+-        self.metrics_registry.register(webhook_metrics_collector)
+-
+         @self.context_processor
+         def inject():
+             return {
+diff --git a/todosrht/webhooks.py b/todosrht/webhooks.py
+index eb8e08a..950047f 100644
+--- a/todosrht/webhooks.py
++++ b/todosrht/webhooks.py
+@@ -7,13 +7,9 @@ if not hasattr(db, "session"):
+     db.init()
+ from srht.webhook import Event
+ from srht.webhook.celery import CeleryWebhook, make_worker
+-from srht.metrics import RedisQueueCollector
+ import sqlalchemy as sa
+ 
+-
+-webhooks_broker = cfg("todo.sr.ht", "webhooks")
+-worker = make_worker(broker=webhooks_broker)
+-webhook_metrics_collector = RedisQueueCollector(webhooks_broker, "srht_webhooks", "Webhook queue length")
++worker = make_worker(broker=cfg("todo.sr.ht", "webhooks"))
+ 
+ import todosrht.tracker_import
+ 
+-- 
+2.34.1
+

@@ -2033,14 +2033,14 @@ luv = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "luv";
-  version = "1.42.0-0";
+  version = "1.43.0-0";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/luv-1.42.0-0.rockspec";
-    sha256 = "0pr2gjjnm60w0csb0dacrjalan7ifsfw4lki4ykxx1f4m5snam09";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luv-1.43.0-0.rockspec";
+    sha256 = "0z5a7yp20xbb3f9w73skm9fj89gxxqv72nrxjq3kycsc6c2v3m8f";
   }).outPath;
   src = fetchurl {
-    url    = "https://github.com/luvit/luv/releases/download/1.42.0-0/luv-1.42.0-0.tar.gz";
-    sha256 = "0dkzjkkm0h516ag6sfz5iji761y9slrcfw325f39zkda1sfql8mm";
+    url    = "https://github.com/luvit/luv/releases/download/1.43.0-0/luv-1.43.0-0.tar.gz";
+    sha256 = "1qlx1r79sfn8r20yx19bhdr0v58ykpwgwzy5vma9p2ngrlynyyjn";
   };
 
   disabled = with lua; (luaOlder "5.1");

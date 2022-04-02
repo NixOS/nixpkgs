@@ -263,6 +263,19 @@ start_all()
       </varlistentry>
       <varlistentry>
         <term>
+          <literal>send_console</literal>
+        </term>
+        <listitem>
+          <para>
+            Send keys to the kernel console. This allows interaction
+            with the systemd emergency mode, for example. Takes a string
+            that is sent, e.g.,
+            <literal>send_console(&quot;\n\nsystemctl default\n&quot;)</literal>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <literal>execute</literal>
         </term>
         <listitem>
@@ -499,6 +512,21 @@ machine.systemctl(&quot;list-jobs --no-pager&quot;, &quot;any-user&quot;) # spaw
             production tests. Killing the interactive session with
             <literal>Ctrl-d</literal> or <literal>Ctrl-c</literal> also
             ends the guest session.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>console_interact</literal>
+        </term>
+        <listitem>
+          <para>
+            Allows you to directly interact with QEMU’s stdin. This
+            should only be used during test development, not in
+            production tests. Output from QEMU is only read line-wise.
+            <literal>Ctrl-c</literal> kills QEMU and
+            <literal>Ctrl-d</literal> closes console and returns to the
+            test runner.
           </para>
         </listitem>
       </varlistentry>

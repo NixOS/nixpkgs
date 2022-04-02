@@ -6,7 +6,7 @@ let
     exec = "@out@/bin/syzygy";
     comment = "A puzzle game";
     desktopName = "System Syzygy";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 in
 rustPlatform.buildRustPackage rec {

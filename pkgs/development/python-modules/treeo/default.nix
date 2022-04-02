@@ -8,26 +8,31 @@
 
 buildPythonPackage rec {
   pname = "treeo";
-  version = "0.0.9";
+  version = "0.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cgarciae";
     repo = pname;
     rev = version;
-    sha256 = "0jfqj5150braj4ybnifc6b8mp0w2j93li6bm20lcd7a19qs0lkk2";
+    sha256 = "176r1kgsdlylvdrxmhnzni81p8m9cfnsn4wwn6fnmsgam2qbp76j";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'typing-extensions = "^3.10.0"' 'typing-extensions = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  # These deps are not needed for the wheel, but required during the import.
+  # jax is not declared in the dependencies, but is necessary.
   propagatedBuildInputs = [
     jax
-    jaxlib
   ];
 
+  checkInputs = [ jaxlib ];
   pythonImportsCheck = [
     "treeo"
   ];

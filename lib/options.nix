@@ -79,8 +79,6 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
-    # Deprecated, used by types.optionSet.
-    options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 
@@ -231,7 +229,7 @@ rec {
             then true
             else opt.visible or true;
           readOnly = opt.readOnly or false;
-          type = opt.type.description or null;
+          type = opt.type.description or "unspecified";
         }
         // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
         // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }

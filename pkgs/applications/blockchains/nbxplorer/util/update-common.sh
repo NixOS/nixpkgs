@@ -26,7 +26,7 @@ getRepo() {
 }
 
 getLatestVersionTag() {
-  "$nixpkgs"/pkgs/common-updater/scripts/list-git-tags https://github.com/$(getRepo) 2>/dev/null \
+  "$nixpkgs"/pkgs/common-updater/scripts/list-git-tags --url=https://github.com/$(getRepo) 2>/dev/null \
     | sort -V | tail -1 | sed 's|^v||'
 }
 

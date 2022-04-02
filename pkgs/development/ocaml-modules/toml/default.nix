@@ -15,7 +15,7 @@ buildDunePackage rec {
     sha256 = "08ywzqckllvwawl1wpgg7qzvx6jhq7d6vysa0d5hj7qdwq213ggm";
   };
 
-  buildInputs = [ menhir ];
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ iso8601 ];
 
   meta = {
