@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ib21ngn7zr58xxq4sjigrpaxb0wx35x3k9l4qvwflzrmvnman20";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   patches = [ ./ignore-complex-float128.patch ];
 
   preBuild = ''
