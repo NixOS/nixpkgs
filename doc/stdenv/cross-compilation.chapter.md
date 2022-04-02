@@ -92,7 +92,7 @@ Putting this all together, that means we have dependencies in the form "host →
 | target                     | target                       |
 
 
-Some examples will make this table clearer. Suppose there's some package that is being built with a `(build, host, target)` platform triple of `(foo, bar, baz)`. If it has a build-time library dependency, that would be a "host → build" dependency with a triple of `(foo, foo, *)` (the target platform is irrelevant). If it needs a compiler to be built, that would be a "build → host" dependency with a triple of `(foo, foo, *)` (the target platform is irrelevant). That compiler, would be built with another compiler, also "build → host" dependency, with a triple of `(foo, foo, foo)`.
+Some examples will make this table clearer. Suppose there's some package that is being built with a `(build, host, target)` platform triple of `(foo, bar, baz)`. If it has a build-time library dependency, that would be a "host → *" dependency with a triple of `(foo, foo, *)` (the target platform is irrelevant). If it needs a compiler to be built, that would be a "build → host" dependency with a triple of `(foo, foo, *)` (the target platform is irrelevant). That compiler, would be built with another compiler, also "build → host" dependency, with a triple of `(foo, foo, foo)`.
 
 ### Cross packaging cookbook {#ssec-cross-cookbook}
 
