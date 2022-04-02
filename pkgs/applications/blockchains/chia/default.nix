@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.3.1";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-nH6rCzIQu5oWsdEHa+UkvbWeUGjrtpEKVEcLmSoor5k=";
+    hash = "sha256-8jVnoc7LuLdT9QdjZkIbBal49p2iSJeGtMQpNY6LBgs=";
   };
 
   postPatch = ''
@@ -43,6 +43,7 @@ let chia = python3Packages.buildPythonApplication rec {
     clvm
     clvm-rs
     clvm-tools
+    clvm-tools-rs
     colorama
     colorlog
     concurrent-log-handler
