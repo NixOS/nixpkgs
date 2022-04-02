@@ -183,7 +183,7 @@ let
 
   newVersion = getLatestVersion graalVersion;
   sourcesJson = genSources javaVersion config;
-  sourcesJsonPath = lib.strings.escapeShellArg ././${sourcesFilename};
+  sourcesJsonPath = lib.strings.escapeShellArg ./${sourcesFilename};
 
   # versionKeyInDefaultNix String -> String
   versionKeyInDefaultNix = graalVersion:
@@ -208,7 +208,7 @@ let
         export PATH="${lib.makeBinPath [ jq gnused ]}:$PATH"
         jq . ${sourcesJson} > ${sourcesJsonPath}
         sed -i 's|${versionKey} = "${currentVersion}";|${versionKey} = "${newVersion}";|' \
-          ${lib.strings.escapeShellArg ././default.nix}
+          ${lib.strings.escapeShellArg ./default.nix}
       ''
     else ''echo "No new version found. Skip updating."'';
 

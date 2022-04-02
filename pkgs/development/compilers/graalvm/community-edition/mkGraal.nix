@@ -44,7 +44,7 @@ let
   version = platform.version;
   name = "graalvm${javaVersion}-ce";
   sourcesFilename = "${name}-sources.json";
-  sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
+  sources = builtins.fromJSON (builtins.readFile (./${sourcesFilename}));
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -132,48 +132,40 @@ let
 
     outputs = [ "out" "lib" ];
 
-    installPhase =
-      let
-        copyClibrariesToOut = basepath: ''
-          # provide libraries needed for static compilation
-          ${
-            if useMusl then
-              "for f in ${musl.stdenv.cc.cc}/lib/* ${musl}/lib/* ${zlib.static}/lib/*; do"
-            else
-              "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
-          }
-            ln -s $f ${basepath}/${platform.arch}/$(basename $f)
-          done
-        '';
-        copyClibrariesToLib = ''
-          # add those libraries to $lib output too, so we can use them with
-          # `native-image -H:CLibraryPath=''${lib.getLib graalvm11-ce}/lib ...` and reduce
-          # closure size by not depending on GraalVM $out (that is much bigger)
-          mkdir -p $lib/lib
-          for f in ${glibc}/lib/*; do
-            ln -s $f $lib/lib/$(basename $f)
-          done
-        '';
-      in
-      ''
-        # ensure that $lib/lib exists to avoid breaking builds
-        mkdir -p $lib/lib
-        # jni.h expects jni_md.h to be in the header search path.
-        ln -s $out/include/linux/*_md.h $out/include/
+    installPhase = ''
+      # ensure that $lib/lib exists to avoid breaking builds
+      mkdir -p $lib/lib
+      # jni.h expects jni_md.h to be in the header search path.
+      ln -s $out/include/linux/*_md.h $out/include/
 
-        # copy-paste openjdk's preFixup
-        # Set JAVA_HOME automatically.
-        mkdir -p $out/nix-support
-        cat > $out/nix-support/setup-hook << EOF
-          if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-        EOF
+      # copy-paste openjdk's preFixup
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat > $out/nix-support/setup-hook << EOF
+        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+      EOF
+      ${
+      lib.optionalString (stdenv.isLinux) ''
+        # provide libraries needed for static compilation
         ${
-        lib.optionalString (stdenv.isLinux) ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-          ${copyClibrariesToLib}
-        ''
+          if useMusl then
+            "for f in ${musl.stdenv.cc.cc}/lib/* ${musl}/lib/* ${zlib.static}/lib/*; do"
+          else
+            "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
         }
-      '';
+          ln -s $f $out/lib/svm/clibraries/${platform.arch}/$(basename $f)
+        done
+
+        # add those libraries to $lib output too, so we can use them with
+        # `native-image -H:CLibraryPath=''${lib.getLib graalvmXX-ce}/lib ...` and reduce
+        # closure size by not depending on GraalVM $out (that is much bigger)
+        mkdir -p $lib/lib
+        for f in ${glibc}/lib/*; do
+          ln -s $f $lib/lib/$(basename $f)
+        done
+      ''
+      }
+    '';
 
     dontStrip = true;
 
