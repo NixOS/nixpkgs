@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
 , azure-keyvault-certificates
 , azure-keyvault-keys
