@@ -1,4 +1,5 @@
 { javaVersion
+, defaultVersion
 , platforms
 , config
 , useMusl ? false
@@ -41,7 +42,7 @@ assert useMusl -> stdenv.isLinux;
 
 let
   platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  version = platform.version;
+  version = platform.version or defaultVersion;
   name = "graalvm${javaVersion}-ce";
   sourcesFilename = "${name}-sources.json";
   sources = builtins.fromJSON (builtins.readFile (./${sourcesFilename}));
@@ -284,7 +285,7 @@ let
     passthru = {
       home = graalvmXXX-ce;
       updateScript = import ./update.nix {
-        inherit lib writeShellScript jq sourcesFilename name config gnused;
+        inherit lib writeShellScript jq sourcesFilename name config gnused defaultVersion;
         graalVersion = version;
         javaVersion = "java${javaVersion}";
       };

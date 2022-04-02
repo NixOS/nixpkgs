@@ -1,12 +1,12 @@
 {
   "darwin-aarch64": {
-    "graalvm-ce|java11|22.2.0-dev-20220331_1955": {
-      "sha256": "a1229931575bd90256f5453ce9c880cf2286db117d4cbfec92c033813b017035",
-      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220331_1955/graalvm-ce-java11-darwin-aarch64-dev.tar.gz"
+    "graalvm-ce|java11|22.2.0-dev-20220401_1942": {
+      "sha256": "c83dee740ae148486598759e44a717b09d8124e4ea50f9da1e7d49d016572b89",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220401_1942/graalvm-ce-java11-darwin-aarch64-dev.tar.gz"
     },
-    "native-image-installable-svm|java11|22.2.0-dev-20220331_1955": {
-      "sha256": "813f9cc417415801e3d7d6468bb06e45487c76fe35b56202b66b6c9fa3ce3456",
-      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220331_1955/native-image-installable-svm-java11-darwin-aarch64-dev.jar"
+    "native-image-installable-svm|java11|22.2.0-dev-20220401_1942": {
+      "sha256": "661311ae26bfd6c46360b9e65aabe9361dc5cd05878a404343adf16925ae78fa",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220401_1942/native-image-installable-svm-java11-darwin-aarch64-dev.jar"
     }
   },
   "darwin-amd64": {

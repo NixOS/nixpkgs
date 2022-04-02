@@ -1,5 +1,6 @@
 { javaVersion
 , graalVersion
+, defaultVersion
 , config
 , sourcesFilename
 , name
@@ -151,12 +152,12 @@ let
       };
     };
 
-  # genArchProductVersionPairs :: String -> AttrSet -> [AttrSet]
-  genArchProductVersionList = javaVersion: archProducts:
+  # genArchProductVersionPairs :: String -> -> String -> AttrSet -> [AttrSet]
+  genArchProductVersionList = javaVersion: graalVersion: archProducts:
     let
       arch = archProducts.arch;
       products = archProducts.products;
-      javaGraalVersion = javaVersion + separator + (getLatestVersion archProducts.version);
+      javaGraalVersion = javaVersion + separator + (getLatestVersion (archProducts.version or graalVersion));
       productJavaGraalVersionList =
         cartesianZipListsWith (a: b: a + separator + b)
           products [ javaGraalVersion ];
@@ -164,11 +165,11 @@ let
     cartesianZipListsWith (genUrlAndSha256) [ arch ] productJavaGraalVersionList;
 
 
-  # genSources :: String -> AttrSet -> Path String
-  genSources = javaVersion: config:
+  # genSources :: String -> String -> AttrSet -> Path String
+  genSources = javaVersion: defaultVersion: config:
     let
       archProducts = builtins.attrValues config;
-      sourcesList = builtins.concatMap (genArchProductVersionList javaVersion) archProducts;
+      sourcesList = builtins.concatMap (genArchProductVersionList javaVersion defaultVersion) archProducts;
       sourcesAttr = builtins.foldl' (lib.recursiveUpdate) { } sourcesList;
     in
     builtins.toFile "sources.json" (builtins.toJSON sourcesAttr);
@@ -182,7 +183,7 @@ let
     }.${builtins.toString (builtins.compareVersions newVersion currentVersion)};
 
   newVersion = getLatestVersion graalVersion;
-  sourcesJson = genSources javaVersion config;
+  sourcesJson = genSources javaVersion defaultVersion config;
   sourcesJsonPath = lib.strings.escapeShellArg ./${sourcesFilename};
 
   # versionKeyInDefaultNix String -> String
