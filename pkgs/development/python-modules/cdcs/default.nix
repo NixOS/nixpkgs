@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.6";
+  version = "0.1.8";
   pname = "cdcs";
   format = "setuptools";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "pycdcs";
     rev = "v${version}";
-    sha256 = "sha256-w9CBNOK9oXTIUa+SsnepRN0wAz7WPZGfUNDSbtVn1L8=";
+    sha256 = "sha256-s+COE7hus1J5I8PTdagl7KEK5QFoidjQ3ee46kOWmkE=";
   };
 
   propagatedBuildInputs = [
