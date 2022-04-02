@@ -18,7 +18,7 @@ let
         maintainers = [ adisbladis ];
       };
 
-      machine = { pkgs, lib, ... }:
+      nodes.machine = { pkgs, lib, ... }:
         let
           usersharePath = "/var/lib/samba/usershares";
         in {

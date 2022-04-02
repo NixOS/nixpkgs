@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ turion ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [

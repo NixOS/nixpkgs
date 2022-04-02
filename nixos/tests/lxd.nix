@@ -51,7 +51,7 @@ in {
     maintainers = [ patryk27 ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     virtualisation = {
       # Since we're testing `limits.cpu`, we've gotta have a known number of
       # cores to lean on

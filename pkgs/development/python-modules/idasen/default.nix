@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "idasen";
     rev = "v${version}";
-    sha256 = "sha256-s8CnYMUVl2VbGbVxICSaKH5DxTA+NP/zPX1z7vfMqi4=";
+    hash = "sha256-s8CnYMUVl2VbGbVxICSaKH5DxTA+NP/zPX1z7vfMqi4=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,14 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [ "idasen" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'voluptuous = "^0.12"' 'voluptuous = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "idasen"
+  ];
 
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";

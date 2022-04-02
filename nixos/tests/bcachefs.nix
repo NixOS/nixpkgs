@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "bcachefs";
   meta.maintainers = with pkgs.lib.maintainers; [ chiiruno ];
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.emptyDiskImages = [ 4096 ];
     networking.hostId = "deadbeef";
     boot.supportedFilesystems = [ "bcachefs" ];

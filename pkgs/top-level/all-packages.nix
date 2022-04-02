@@ -1070,6 +1070,8 @@ with pkgs;
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
+  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
@@ -5159,7 +5161,9 @@ with pkgs;
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
-  trivy = callPackage ../tools/admin/trivy { };
+  trivy = callPackage ../tools/admin/trivy {
+    buildGoModule = buildGo118Module;
+  };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
@@ -12871,7 +12875,9 @@ with pkgs;
     });
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
-  buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
+  buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image {
+    graalvm = graalvm11-ce;
+  };
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
@@ -15352,7 +15358,7 @@ with pkgs;
   img = callPackage ../development/tools/img { };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_13;
+    llvmPackages = llvmPackages_14;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
@@ -21657,6 +21663,9 @@ with pkgs;
   moodle-utils = callPackage ../servers/web-apps/moodle/moodle-utils.nix { };
 
   morty = callPackage ../servers/web-apps/morty { };
+
+  inherit (callPackage ../applications/networking/mullvad { })
+    mullvad;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 

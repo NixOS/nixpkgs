@@ -15,7 +15,7 @@ let
       inherit name;
       meta = with pkgs.lib.maintainers; { maintainers = [ chkno ]; };
 
-      machine = { pkgs, ... }: {
+      nodes.machine = { pkgs, ... }: {
         environment.systemPackages = [ pkgs."${packageSet}"."${variant}" ];
         virtualisation.diskSize = 800;
       };

@@ -54,9 +54,9 @@ in
 mkDerivation rec {
   inherit pname version src;
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     bash
-    cmake
     pkg-config
     qtbase
     qwt

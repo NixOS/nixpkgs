@@ -8,7 +8,7 @@ in {
     maintainers = [ eelco ];
   };
 
-  machine =
+  nodes.machine =
     { lib, ... }:
     with lib;
     { swapDevices = mkOverride 0

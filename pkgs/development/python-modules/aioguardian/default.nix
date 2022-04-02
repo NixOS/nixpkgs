@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2021.11.0";
+  version = "2022.03.1";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jQIRACm0d0a5mQqlwxSTgLZfJFvGLWuJTb/MacppmS4=";
+    sha256 = "sha256-UiRTyUAoTcohRkTBF5Jvd/uY2zAbHV5z4HC8Oc0QNTs=";
   };
 
   format = "pyproject";

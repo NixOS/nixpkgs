@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1yrzjhcwrxrxq5jj695wvpgb0pz047m88yq5n5ymkcw5qr78fy1v";
   };
 
-  buildInputs = [ stdenv curses ];
+  buildInputs = [ curses ];
 
   installPhase = ''
     make install PREFIX=$out

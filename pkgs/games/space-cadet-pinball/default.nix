@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     SDL2
     SDL2_mixer
-    cmake
     makeWrapper
     Cocoa
   ];

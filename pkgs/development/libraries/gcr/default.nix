@@ -16,7 +16,7 @@
 , openssh
 , systemd
 , gobject-introspection
-, makeWrapper
+, wrapGAppsHook
 , libxslt
 , vala
 , gnome
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     libxslt
-    makeWrapper
+    wrapGAppsHook
     vala
     shared-mime-info
   ];
@@ -94,11 +94,6 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/bin/gcr-viewer" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   passthru = {

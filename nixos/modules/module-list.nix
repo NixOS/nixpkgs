@@ -977,6 +977,7 @@
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
   ./services/security/sshguard.nix
+  ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
   ./services/security/tor.nix
   ./services/security/torify.nix

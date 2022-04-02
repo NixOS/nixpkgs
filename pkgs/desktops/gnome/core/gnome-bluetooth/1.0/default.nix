@@ -1,5 +1,5 @@
-{ lib
-, stdenv
+{ stdenv
+, lib
 , fetchurl
 , fetchpatch
 , gnome
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1a9ynlwwkb3wpg293ym517vmrkk63y809mmcv9a21k5yr199x53c";
+    sha256 = "bJSeUsi+zCBU2qzWBJAfZs5c9wml+pHEu3ysyTm1Pqk=";
   };
 
   patches = [
@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome.${pname}";
+      attrPath = "gnome.gnome-bluetooth_1_0";
+      freeze = true;
     };
   };
 
