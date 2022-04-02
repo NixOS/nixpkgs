@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ fpletz vrthra ];
     platforms = platforms.all;
+    mainProgram = "gpg";
   };
 }

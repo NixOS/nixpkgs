@@ -1741,6 +1741,48 @@ in
         }));
     };
 
+    systemd.network.wait-online = {
+      anyInterface = mkOption {
+        description = ''
+          Whether to consider the network online when any interface is online, as opposed to all of them.
+          This is useful on portable machines with a wired and a wireless interface, for example.
+        '';
+        type = types.bool;
+        default = false;
+      };
+
+      ignoredInterfaces = mkOption {
+        description = ''
+          Network interfaces to be ignored when deciding if the system is online.
+        '';
+        type = with types; listOf str;
+        default = [];
+        example = [ "wg0" ];
+      };
+
+      timeout = mkOption {
+        description = ''
+          Time to wait for the network to come online, in seconds. Set to 0 to disable.
+        '';
+        type = types.ints.unsigned;
+        default = 120;
+        example = 0;
+      };
+
+      extraArgs = mkOption {
+        description = ''
+          Extra command-line arguments to pass to systemd-networkd-wait-online.
+          These also affect per-interface <literal>systemd-network-wait-online@</literal> services.
+
+          See <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html">
+          <citerefentry><refentrytitle>systemd-networkd-wait-online.service</refentrytitle><manvolnum>8</manvolnum>
+          </citerefentry></link> for all available options.
+        '';
+        type = with types; listOf str;
+        default = [];
+      };
+    };
+
   };
 
   config = mkMerge [
@@ -1749,6 +1791,11 @@ in
     {
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
       environment.etc = unitFiles;
+
+      systemd.network.wait-online.extraArgs =
+        [ "--timeout=${toString cfg.wait-online.timeout}" ]
+        ++ optional cfg.wait-online.anyInterface "--any"
+        ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
     }
 
     (mkIf config.systemd.network.enable {
@@ -1777,6 +1824,10 @@ in
 
       systemd.services.systemd-networkd-wait-online = {
         wantedBy = [ "network-online.target" ];
+        serviceConfig.ExecStart = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}"
+        ];
       };
 
       systemd.services."systemd-network-wait-online@" = {
@@ -1787,7 +1838,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
         };
       };
 

@@ -3750,6 +3750,8 @@ in {
     inherit python;
   });
 
+  hepunits = callPackage ../development/python-modules/hepunits { };
+
   herepy = callPackage ../development/python-modules/herepy { };
 
   hetzner = callPackage ../development/python-modules/hetzner { };
@@ -5989,6 +5991,8 @@ in {
   partd = callPackage ../development/python-modules/partd { };
 
   parts = callPackage ../development/python-modules/parts { };
+
+  particle = callPackage ../development/python-modules/particle { };
 
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };

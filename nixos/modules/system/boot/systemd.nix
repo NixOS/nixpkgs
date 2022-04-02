@@ -612,22 +612,18 @@ in
 
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
 
-    services.logrotate.paths = {
+    services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {
         frequency = "monthly";
-        keep = 1;
-        extraConfig = ''
-          create 0660 root ${config.users.groups.utmp.name}
-          minsize 1M
-        '';
+        rotate = 1;
+        create = "0660 root ${config.users.groups.utmp.name}";
+        minsize = "1M";
       };
       "/var/log/wtmp" = mapAttrs (_: mkDefault) {
         frequency = "monthly";
-        keep = 1;
-        extraConfig = ''
-          create 0664 root ${config.users.groups.utmp.name}
-          minsize 1M
-        '';
+        rotate = 1;
+        create = "0664 root ${config.users.groups.utmp.name}";
+        minsize = "1M";
       };
     };
   };

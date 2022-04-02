@@ -33,6 +33,10 @@ buildPythonApplication rec {
     inherit sha256;
   };
 
+  patches = [
+    ./remove-update-check.patch
+  ];
+
   # remove need for git history
   prePatch = ''
     substituteInPlace setup.py \

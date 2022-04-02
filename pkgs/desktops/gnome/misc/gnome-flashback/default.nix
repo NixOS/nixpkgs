@@ -1,9 +1,10 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , autoreconfHook
 , fetchurl
 , gettext
 , glib
-, gnome-bluetooth
+, gnome-bluetooth_1_0
 , gnome-desktop
 , gnome-panel
 , gnome-session
@@ -94,7 +95,7 @@ let
 
     buildInputs = [
       glib
-      gnome-bluetooth
+      gnome-bluetooth_1_0
       gnome-desktop
       gsettings-desktop-schemas
       gtk3

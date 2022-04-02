@@ -11,7 +11,7 @@ assert withQt  -> qt5  != null;
 with lib;
 
 let
-  version = "3.6.2";
+  version = "3.6.3";
   variant = if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "sha256-XZAaVXKu+VPwStwlPtKgaZ1MYnedMkkCHh6FQaAkww4=";
+    sha256 = "sha256-tgNkpMAGihCBGrP9B1ymwesOddRGACcbiKIO2Tou9jE=";
   };
 
   cmakeFlags = [

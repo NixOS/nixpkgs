@@ -8,6 +8,7 @@
 , autoPatchelfHook
 , gsettings-desktop-schemas
 , gtk3
+, wrapGAppsHook
 , makeWrapper
 }:
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     unzip
     autoPatchelfHook
     makeWrapper
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -34,7 +36,8 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  wrapProgramFlags = [
+  dontWrapGApps = true;
+  makeWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
     # we can't unzip it in $out/lib, because nw.js will start with
     # an empty screen. Therefore it will be unzipped in a non-typical
     # folder and symlinked.
-    unzip $src -d $out/opt/pinegrow
+    unzip -q $src -d $out/opt/pinegrow
     substituteInPlace $out/opt/pinegrow/Pinegrow.desktop \
       --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/Pinegrow"'
     mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/Pinegrow.desktop
@@ -60,9 +63,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # GSETTINGS_SCHEMAS_PATH is not set in installPhase
   preFixup = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-    wrapProgram "$out/opt/pinegrow/PinegrowLibrary" ''${wrapProgramFlags[@]}
+    wrapProgram $out/bin/Pinegrow \
+      ''${makeWrapperArgs[@]} \
+      ''${gappsWrapperArgs[@]}
   '';
 
   meta = with lib; {

@@ -90,8 +90,8 @@ let
 
 in rec {
   vala_0_48 = generic {
-    version = "0.48.23";
-    sha256 = "sha256-3jzIWNmV4HR0IZ4lo+Hw7ZmAcNLiBtOjE9Q3ml93oGo=";
+    version = "0.48.24";
+    sha256 = "NknvhFc7aGX8NHBkDuYDcgCZ65FbOfqtGbdJjeGn3yQ=";
   };
 
   vala_0_54 = generic {

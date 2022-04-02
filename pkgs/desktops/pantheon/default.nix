@@ -108,7 +108,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gala = callPackage ./desktop/gala { };
 
   gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
-    inherit (gnome) gnome-bluetooth;
+    inherit (gnome) gnome-bluetooth_1_0;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
