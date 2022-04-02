@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, importlib-resources
 , pydsdl
 , pyyaml
 }:
@@ -18,6 +19,7 @@
   };
 
   propagatedBuildInputs = [
+    importlib-resources
     pydsdl
     pyyaml
   ];
