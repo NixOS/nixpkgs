@@ -2293,7 +2293,7 @@ in {
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
-  django_modelcluster = callPackage ../development/python-modules/django_modelcluster { };
+  django-modelcluster = callPackage ../development/python-modules/django_modelcluster { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
