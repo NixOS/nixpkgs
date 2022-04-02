@@ -45,7 +45,7 @@ let
   version = platform.version or defaultVersion;
   name = "graalvm${javaVersion}-ce";
   sourcesFilename = "${name}-sources.json";
-  sources = builtins.fromJSON (builtins.readFile (./${sourcesFilename}));
+  sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);

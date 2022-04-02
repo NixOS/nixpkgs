@@ -184,7 +184,7 @@ let
 
   newVersion = getLatestVersion graalVersion;
   sourcesJson = genSources javaVersion defaultVersion config;
-  sourcesJsonPath = lib.strings.escapeShellArg ./${sourcesFilename};
+  sourcesJsonPath = lib.strings.escapeShellArg ./. + "/${sourcesFilename}";
 
   # versionKeyInDefaultNix String -> String
   versionKeyInDefaultNix = graalVersion:
