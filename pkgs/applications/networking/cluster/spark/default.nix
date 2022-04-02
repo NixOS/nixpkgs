@@ -56,11 +56,11 @@ let
 in {
   spark3 = spark rec {
     pname = "spark";
-    version = "3.1.2";
+    version = "3.1.3";
 
     src = fetchzip {
       url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-      sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
+      sha256 = "sha256-RIQyN5YjxFLfNIrETR3Vv99zsHxt77rhOXHIThCI2Y8=";
     };
   };
   spark2 = spark rec {
