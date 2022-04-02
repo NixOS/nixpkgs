@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
 
   preConfigure = ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
-    export OPENSSL_LIB_DIR="${openssl.out}/lib"
+    export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
   postInstall = ''

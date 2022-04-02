@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     curl
-    openssl.out
+    openssl
   ];
 
   nativeBuildInputs = [

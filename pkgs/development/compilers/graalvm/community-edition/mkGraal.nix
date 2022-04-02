@@ -1,7 +1,7 @@
-{ version
-, javaVersion
+{ javaVersion
+, defaultVersion
 , platforms
-, hashes ? import ./hashes.nix
+, config
 , useMusl ? false
 }:
 
@@ -33,16 +33,19 @@
 , cairo
 , glib
 , gtk3
+, writeShellScript
+, jq
+, gnused
 }:
 
 assert useMusl -> stdenv.isLinux;
 
 let
-  platform = {
-    aarch64-linux = "linux-aarch64";
-    x86_64-linux = "linux-amd64";
-    x86_64-darwin = "darwin-amd64";
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  version = platform.version or defaultVersion;
+  name = "graalvm${javaVersion}-ce";
+  sourcesFilename = "${name}-sources.json";
+  sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -56,21 +59,11 @@ let
     (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
   ]);
 
-  javaVersionPlatform = "${javaVersion}-${platform}";
-
   graalvmXXX-ce = stdenv.mkDerivation rec {
     inherit version;
-    name = "graalvm${javaVersion}-ce";
-    srcs =
-      let
-        # Some platforms doesn't have all GraalVM features
-        # e.g.: GraalPython on aarch64-linux
-        # When the platform doesn't have a feature, sha256 is null on hashes.nix
-        # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
-        maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
-      in
-      (lib.remove null
-        (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
+    pname = name;
+
+    srcs = map fetchurl (builtins.attrValues sources.${platform.arch});
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -86,7 +79,8 @@ let
       zlib
     ];
 
-    nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
+    nativeBuildInputs = [ unzip perl makeWrapper ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     unpackPhase = ''
       unpack_jar() {
@@ -139,65 +133,40 @@ let
 
     outputs = [ "out" "lib" ];
 
-    installPhase =
-      let
-        copyClibrariesToOut = basepath: ''
-          # provide libraries needed for static compilation
-          ${
-            if useMusl then
-              "for f in ${musl.stdenv.cc.cc}/lib/* ${musl}/lib/* ${zlib.static}/lib/*; do"
-            else
-              "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
-          }
-            ln -s $f ${basepath}/${platform}/$(basename $f)
-          done
-        '';
-        copyClibrariesToLib = ''
-          # add those libraries to $lib output too, so we can use them with
-          # `native-image -H:CLibraryPath=''${lib.getLib graalvm11-ce}/lib ...` and reduce
-          # closure size by not depending on GraalVM $out (that is much bigger)
-          mkdir -p $lib/lib
-          for f in ${glibc}/lib/*; do
-            ln -s $f $lib/lib/$(basename $f)
-          done
-        '';
-      in
-      {
-        "11-linux-amd64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+    installPhase = ''
+      # ensure that $lib/lib exists to avoid breaking builds
+      mkdir -p $lib/lib
+      # jni.h expects jni_md.h to be in the header search path.
+      ln -s $out/include/linux/*_md.h $out/include/
 
-          ${copyClibrariesToLib}
-        '';
-        "17-linux-amd64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+      # copy-paste openjdk's preFixup
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat > $out/nix-support/setup-hook << EOF
+        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+      EOF
+      ${
+      lib.optionalString (stdenv.isLinux) ''
+        # provide libraries needed for static compilation
+        ${
+          if useMusl then
+            "for f in ${musl.stdenv.cc.cc}/lib/* ${musl}/lib/* ${zlib.static}/lib/*; do"
+          else
+            "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
+        }
+          ln -s $f $out/lib/svm/clibraries/${platform.arch}/$(basename $f)
+        done
 
-          ${copyClibrariesToLib}
-        '';
-        "11-linux-aarch64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "17-linux-aarch64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "11-darwin-amd64" = "";
-        "17-darwin-amd64" = "";
-      }.${javaVersionPlatform} + ''
-        # ensure that $lib/lib exists to avoid breaking builds
+        # add those libraries to $lib output too, so we can use them with
+        # `native-image -H:CLibraryPath=''${lib.getLib graalvmXX-ce}/lib ...` and reduce
+        # closure size by not depending on GraalVM $out (that is much bigger)
         mkdir -p $lib/lib
-        # jni.h expects jni_md.h to be in the header search path.
-        ln -s $out/include/linux/*_md.h $out/include/
-
-        # copy-paste openjdk's preFixup
-        # Set JAVA_HOME automatically.
-        mkdir -p $out/nix-support
-        cat <<EOF > $out/nix-support/setup-hook
-          if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-        EOF
-      '';
+        for f in ${glibc}/lib/*; do
+          ln -s $f $lib/lib/$(basename $f)
+        done
+      ''
+      }
+    '';
 
     dontStrip = true;
 
@@ -281,7 +250,7 @@ let
       }
 
       ${
-        lib.optionalString (platform != "linux-aarch64") ''
+        lib.optionalString (builtins.any (a: a == "python-installable-svm") platform.products) ''
           echo "Testing GraalPython"
           $out/bin/graalpython -c 'print(1 + 1)'
           echo '1 + 1' | $out/bin/graalpython
@@ -289,10 +258,14 @@ let
       }
 
       echo "Testing TruffleRuby"
+      ${
+        lib.optionalString (builtins.any (a: a == "ruby-installable-svm") platform.products) ''
       # Hide warnings about wrong locale
       export LANG=C
       export LC_ALL=C
       $out/bin/ruby -e 'puts(1 + 1)'
+      ''
+      }
       ${# FIXME: irb is broken in all platforms
         # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
         # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
@@ -311,7 +284,11 @@ let
 
     passthru = {
       home = graalvmXXX-ce;
-      updateScript = ./update.sh;
+      updateScript = import ./update.nix {
+        inherit lib writeShellScript jq sourcesFilename name config gnused defaultVersion;
+        graalVersion = version;
+        javaVersion = "java${javaVersion}";
+      };
     };
 
     meta = with lib; {
