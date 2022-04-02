@@ -90,6 +90,11 @@ buildPythonApplication rec {
       url = "https://github.com/kovidgoyal/kitty/commit/d8ed42ae8e014d9abf9550a65ae203468f8bfa43.patch";
       sha256 = "sha256-Azgzqf5atW999FVn9rSGKMyZLsI692dYXhJPx07GBO0=";
     })
+    (fetchpatch {
+      name = "fix-build-with-non-framework-python-on-darwin.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/57cffc71b78244e6a9d49f4c9af24d1a88dbf537.patch";
+      sha256 = "sha256-1IGONSVCVo5SmLKw90eqxaI5Mwc764O1ur+aMsc7h94=";
+    })
   ];
 
   # Causes build failure due to warning
