@@ -12206,39 +12206,47 @@ with pkgs;
   fastStdenv = overrideCC gccStdenv (wrapNonDeterministicGcc gccStdenv buildPackages.gcc10);
 
   wrapCCMulti = cc:
-    if stdenv.targetPlatform.system == "x86_64-linux" then let
-      # Binutils with glibc multi
-      bintools = cc.bintools.override {
-        libc = glibc_multi;
-      };
-    in lowPrio (wrapCCWith {
-      cc = cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith {
-          cc = cc.cc;
-          inherit bintools;
-          libc = glibc_multi;
-        });
-        profiledCompiler = false;
-        enableMultilib = true;
-      };
-      libc = glibc_multi;
-      inherit bintools;
-      extraBuildCommands = ''
-        echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
-      '';
-  }) else throw "Multilib ${cc.name} not supported for ‘${stdenv.targetPlatform.system}’";
+    if stdenv.targetPlatform.system != "x86_64-linux" then
+      throw "Multilib ${cc.name} not supported for ‘${stdenv.targetPlatform.system}’"
+    else
+      let
+        gccForLibs = callPackage ../development/compilers/llvm/multi-gcc-libs.nix {
+          gcc32 = pkgsi686Linux.gcc;
+          gcc64 = pkgs.gcc;
+        };
+        libc =
+          /**/ if cc.isGNU   or false then glibc_multi_gcc
+          else if cc.isClang or false then glibc_multi_clang
+          else throw "unknown C compiler, cannot make multilib wrapper";
+        bintoolsMulti = cc.bintools.override {
+          inherit libc;
+        };
+      in
+        lowPrio (wrapCCWith {
+          inherit libc gccForLibs;
 
-  wrapClangMulti = clang:
-    if stdenv.targetPlatform.system == "x86_64-linux" then
-      callPackage ../development/compilers/llvm/multi.nix {
-        inherit clang;
-        gcc32 = pkgsi686Linux.gcc;
-        gcc64 = pkgs.gcc;
-      }
-    else throw "Multilib ${clang.cc.name} not supported for '${stdenv.targetPlatform.system}'";
+          bintools = bintoolsMulti;
+          cc =
+            if cc.isGNU or false
+            then
+              cc.cc.override (ccOld: {
+                stdenv = overrideCC ccOld.stdenv
+                  (ccOld.stdenv.cc.override {
+                    bintools = bintoolsMulti;
+                    inherit libc;
+                  });
+                profiledCompiler = false;
+                enableMultilib = true;
+              })
+            else cc.cc;
+          extraBuildCommands = ''
+            echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+          '';
+        });
+
 
   gcc_multi = wrapCCMulti gcc;
-  clang_multi = wrapClangMulti clang;
+  clang_multi = wrapCCMulti clang;
 
   gccMultiStdenv = overrideCC stdenv buildPackages.gcc_multi;
   clangMultiStdenv = overrideCC stdenv buildPackages.clang_multi;
@@ -17100,8 +17108,14 @@ with pkgs;
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
-  glibc_multi = callPackage ../development/libraries/glibc/multi.nix {
+  glibc_multi_gcc = callPackage ../development/libraries/glibc/multi.nix {
     glibc32 = pkgsi686Linux.glibc;
+    variant = "gcc";
+  };
+
+  glibc_multi_clang = callPackage ../development/libraries/glibc/multi.nix {
+    glibc32 = pkgsi686Linux.glibc;
+    variant = "clang";
   };
 
   glm = callPackage ../development/libraries/glm { };

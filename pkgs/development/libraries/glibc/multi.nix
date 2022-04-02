@@ -1,4 +1,5 @@
-{ runCommand, glibc, glibc32
+{ lib, runCommand, glibc, glibc32
+, variant # clang or gcc
 }:
 
 let
@@ -7,11 +8,20 @@ let
 in
 runCommand "${nameVersion.name}-multi-${nameVersion.version}"
   { outputs = [ "bin" "dev" "out"]; } # TODO: no static version here (yet)
-  ''
+  (''
     mkdir -p "$out/lib"
-    ln -s '${glibc64.out}'/lib/* "$out/lib"
-    ln -s '${glibc32.out}/lib' "$out/lib/32"
-    ln -s lib "$out/lib64"
+
+  '' + {
+    "gcc" = ''
+      ln -s '${glibc64.out}'/lib/* "$out/lib"
+      ln -s '${glibc32.out}/lib' "$out/lib/32"
+      ln -s lib "$out/lib64"
+    '';
+    "clang" = ''
+      ln -s '${glibc64.out}/lib' "$out/lib/x86_64-unknown-linux-gnu"
+      ln -s '${glibc32.out}/lib' "$out/lib/i686-unknown-linux-gnu"
+    '';
+  }.${variant} + ''
 
     # fixing ldd RLTDLIST
     mkdir -p "$bin/bin"
@@ -25,4 +35,4 @@ runCommand "${nameVersion.name}-multi-${nameVersion.version}"
     cp -rs '${glibc32.dev}'/include "$dev/"
     chmod +w -R "$dev"
     cp -rsf '${glibc64.dev}'/include "$dev/"
-  ''
+  '')
