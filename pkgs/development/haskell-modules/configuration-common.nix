@@ -23,6 +23,12 @@ self: super: {
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
+  leveldb-haskell = appendPatch (fetchpatch {
+    url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
+    sha256 = "14gllipl28lqry73c5dnclsskzk1bsrrgazibl4lkl8z98j2csjb";
+  }) super.leveldb-haskell;
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
