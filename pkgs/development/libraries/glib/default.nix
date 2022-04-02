@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    (meson.override {
+    (buildPackages.meson.override {
       withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
     })
     ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2

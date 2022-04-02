@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  OPENSSL_LIB_DIR = "${openssl.out}/lib";
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_DIR="${lib.getDev openssl}";
 
   buildInputs = lib.optionals stdenv.isLinux [

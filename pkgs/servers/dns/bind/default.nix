@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/nsupdate $dnsutils
 
     for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
-      sed -i "$f" -e 's|-L${openssl.dev}|-L${openssl.out}|g'
+      sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
   '';
 
