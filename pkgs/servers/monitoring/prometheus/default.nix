@@ -95,8 +95,6 @@ buildGoModule rec {
 
   vendorSha256 = "0qyv8vybx5wg8k8hwvrpp4hz9wv6g4kf9sq5v5qc2bxx6apc0s9r";
 
-  excludedPackages = [ "documentation/prometheus-mixin" ];
-
   nativeBuildInputs = [ nodejs-14_x ];
 
   postPatch = ''
