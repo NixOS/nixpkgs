@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # patch cl-plus-ssl to ensure that it finds libssl and libcrypto
-    sed 's|libssl.so|${openssl.out}/lib/libssl.so|' -i ext/cl-plus-ssl/src/reload.lisp
-    sed 's|libcrypto.so|${openssl.out}/lib/libcrypto.so|' -i ext/cl-plus-ssl/src/reload.lisp
+    sed 's|libssl.so|${lib.getLib openssl}/lib/libssl.so|' -i ext/cl-plus-ssl/src/reload.lisp
+    sed 's|libcrypto.so|${lib.getLib openssl}/lib/libcrypto.so|' -i ext/cl-plus-ssl/src/reload.lisp
     # patch dexador to avoid error due to dexador being loaded multiple times
     sed -i 's/defpackage/uiop:define-package/g' ext/dexador/src/dexador.lisp
   '';

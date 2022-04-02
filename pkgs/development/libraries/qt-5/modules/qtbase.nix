@@ -261,7 +261,7 @@ stdenv.mkDerivation {
     "-I" "${harfbuzz.dev}/include"
     "-system-pcre"
     "-openssl-linked"
-    "-L" "${openssl.out}/lib"
+    "-L" "${lib.getLib openssl}/lib"
     "-I" "${openssl.dev}/include"
     "-system-sqlite"
     ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''

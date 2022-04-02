@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-openssl-libdir=${openssl.out}/lib"
+    "--with-openssl-libdir=${lib.getLib openssl}/lib"
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"

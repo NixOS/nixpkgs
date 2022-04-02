@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature usePAM "pam")
   ] ++ (if useSSL then [
     "--with-ssl-incl-dir=${openssl.dev}/include"
-    "--with-ssl-lib-dir=${openssl.out}/lib"
+    "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
   ] else [
     "--without-ssl"
   ]) ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
