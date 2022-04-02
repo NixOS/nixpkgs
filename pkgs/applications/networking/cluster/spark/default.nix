@@ -5,7 +5,7 @@
 with lib;
 
 let
-  spark = { pname, version, src }:
+  spark = { pname, version, src, extraMeta ? {} }:
     stdenv.mkDerivation rec {
       inherit pname version src;
       nativeBuildInputs = [ makeWrapper ];
@@ -51,7 +51,7 @@ let
         platforms        = lib.platforms.all;
         maintainers      = with maintainers; [ thoughtpolice offline kamilchm illustris ];
         repositories.git = "git://git.apache.org/spark.git";
-      };
+      } // extraMeta;
     };
 in {
   spark3 = spark rec {
@@ -71,5 +71,7 @@ in {
       url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
       sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
     };
+
+    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
   };
 }
