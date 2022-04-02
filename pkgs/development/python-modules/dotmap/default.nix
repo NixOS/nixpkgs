@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "dotmap";
-  version = "1.3.26";
+  version = "1.3.27";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc87300f3a61d70f2bd18103ea2747dea846a2381a8321f43ce65cbd7afdfe3d";
+    sha256 = "sha256-gHCQIN8CIeF8TgHWeQu8GCRxK1aQFJJ/d7jZurxxMik=";
   };
 
   checkInputs = [
