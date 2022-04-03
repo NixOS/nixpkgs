@@ -14,13 +14,13 @@ buildPythonPackage rec {
   version = "0.7.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oqbo/aQ5L1nQO8BvXH6/8PBPiWcv2m/LUjwow8+J90w=";
+    hash = "sha256-oqbo/aQ5L1nQO8BvXH6/8PBPiWcv2m/LUjwow8+J90w=";
   };
 
   propagatedBuildInputs = [
