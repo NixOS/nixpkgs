@@ -22095,7 +22095,7 @@ with pkgs;
   pypolicyd-spf = python3.pkgs.callPackage ../servers/mail/pypolicyd-spf { };
 
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
-    boost = boost155;
+    boost = boost169;
     inherit (python2Packages) buildPythonPackage qpid-python;
   };
 
