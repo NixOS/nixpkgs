@@ -64,5 +64,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    # Compiles, but doesn't launch, see: https://gitlab.gnome.org/GNOME/ocrfeeder/-/issues/83
+    broken = true;
   };
 }
