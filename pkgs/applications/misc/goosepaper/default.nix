@@ -52,13 +52,13 @@ let
 
 in buildPythonApplication rec {
   pname = "goosepaper";
-  version = "0.5.0";
+  version = "unstable-2022-02-07";
 
   src = fetchFromGitHub {
     owner = "j6k4m8";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-RKz84yZKFy5HOYYWcPkAFdOI+/zK2Jy9BvYetTuG4cA=";
+    rev = "b135ca43b757cb5b231586787be552ec7519d28a";
+    sha256 = "sha256-6qp5lscy45obnR00TMBdSKsl5ITRxuphF6bdg5ebUKA=";
   };
 
   postPatch = ''
