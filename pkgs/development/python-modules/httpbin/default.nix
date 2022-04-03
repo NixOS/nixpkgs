@@ -2,6 +2,7 @@
 , brotlipy
 , buildPythonPackage
 , decorator
+, fetchpatch
 , fetchPypi
 , flask
 , flask-limiter
@@ -21,6 +22,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-y7N3kMkVdfTxV1f0KtQdn3KesifV7b6J5OwXVIbbjfo=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Replaces BaseResponse class with Response class for Werkezug 2.1.0 compatibility
+      # https://github.com/postmanlabs/httpbin/pull/674
+      url = "https://github.com/postmanlabs/httpbin/commit/5cc81ce87a3c447a127e4a1a707faf9f3b1c9b6b.patch";
+      sha256 = "sha256-SbEWjiqayMFYrbgAPZtSsXqSyCDUz3z127XgcKOcrkE=";
+    })
+  ];
 
   propagatedBuildInputs = [
     brotlipy
