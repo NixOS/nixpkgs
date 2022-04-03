@@ -5,9 +5,10 @@
 import base64
 import json
 import re
+import shlex
 import subprocess
 from codecs import iterdecode
-from os.path import dirname, splitext
+from os.path import abspath, dirname, splitext
 from lxml import etree
 from lxml.etree import HTMLParser
 from urllib.request import urlopen
@@ -78,7 +79,14 @@ argv = ['nix-instantiate', '--eval', '--json', '-A', 'crosvm.meta.position']
 position = json.loads(subprocess.check_output(argv).decode('utf-8'))
 filename = re.match(r'[^:]*', position)[0]
 
-# Finally, write the output.
+# Write the output.
 with open(dirname(filename) + '/upstream-info.json', 'w') as out:
     json.dump(data, out, indent=2)
     out.write('\n')
+
+# Generate a Cargo.lock
+run = ['.',
+       dirname(abspath(__file__)) + '/generate-cargo.sh',
+       dirname(filename) + '/Cargo.lock']
+expr = '(import ./. {}).crosvm.overrideAttrs (_: { dontCargoSetupPostUnpack = true; })'
+subprocess.run(['nix-shell', '-E', expr, '--run', shlex.join(run)])
