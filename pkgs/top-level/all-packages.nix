@@ -10219,8 +10219,6 @@ with pkgs;
 
   sshoogr = callPackage ../tools/networking/sshoogr { };
 
-  ssmtp = callPackage ../tools/networking/ssmtp { };
-
   ssocr = callPackage ../applications/misc/ssocr { };
 
   ssss = callPackage ../tools/security/ssss { };
