@@ -2542,6 +2542,8 @@ in {
 
   ebaysdk = callPackage ../development/python-modules/ebaysdk { };
 
+  ebooklib = callPackage ../development/python-modules/ebooklib { };
+
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
 
   eccodes = toPythonModule (pkgs.eccodes.override {
