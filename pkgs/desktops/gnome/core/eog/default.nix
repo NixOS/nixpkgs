@@ -38,6 +38,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+zW/tRZ6QhIfWae5t6wNdbvQUXua/W2Rgx6E01c13fg=";
   };
 
+  patches = [
+    # Fix path to libeog.so in the gir file.
+    # We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
