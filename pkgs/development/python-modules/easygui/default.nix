@@ -9,10 +9,6 @@ buildPythonPackage rec {
     sha256 = "sha256-1lP/ee4fQvY7WgkPL5jOAjNdhq2JY7POJmGAXK/pmgQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace README.md README.txt
-  '';
-
   propagatedBuildInputs = [
     tkinter
   ];
