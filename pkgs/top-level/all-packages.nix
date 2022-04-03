@@ -25985,6 +25985,8 @@ with pkgs;
     python = python3;
   };
 
+  goosepaper = python3Packages.callPackage ../applications/misc/goosepaper { };
+
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
   gophernotes = callPackage ../applications/editors/gophernotes { };
