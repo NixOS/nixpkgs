@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "portaloffreedom";
     repo = pname;
-    rev = "v" + version;
+    rev = "v${version}";
     sha256 = "sha256-BeubRDx82MQX1gB7GnGJlQ2FyYX1S83C3gqPZgIjgoM=";
   };
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     wrapQtAppsHook
   ];
+
   buildInputs = [
     pipewire
     qtbase
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Pipewire control GUI program in Qt (Kirigami2)";
     homepage = "https://github.com/portaloffreedom/pipecontrol";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ tilcreator ];
   };
 }
