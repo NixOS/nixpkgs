@@ -102,7 +102,6 @@ in
     ];
 
     systemd.tmpfiles.rules = [
-      "d  /etc/nixos                         0755 root root - -"
       "d  /nix/var                           0755 root root - -"
       "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
       "d  /run/lock                          0755 root root - -"
