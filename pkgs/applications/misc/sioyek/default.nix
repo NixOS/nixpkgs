@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/ahrm/sioyek/releases";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    maintainers = [ mainterners.podocarp ];
   };
 }
