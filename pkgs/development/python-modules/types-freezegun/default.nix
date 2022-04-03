@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-freezegun";
-  version = "1.1.7";
+  version = "1.1.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6dEyfpjGyqj2XeABje0nQ0fo40GY1ZqppcJK2SZdXl4=";
+    hash = "sha256-9LsIxUqkaBbHehtceipU9Tk8POWOfUAC5n+QgbQR6SE=";
   };
 
   # Module doesn't have tests
