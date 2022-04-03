@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bytecodealliance/wasmtime";
     license = licenses.asl20;
     maintainers = [ maintainers.matthewbauer ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
