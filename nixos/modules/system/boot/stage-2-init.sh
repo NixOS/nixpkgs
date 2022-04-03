@@ -118,4 +118,4 @@ exec {logOutFd}>&- {logErrFd}>&-
 
 # Start systemd in a clean environment.
 echo "starting systemd..."
-exec env - @systemdExecutable@ "$@"
+exec @systemdExecutable@ "$@"
