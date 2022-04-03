@@ -268,6 +268,7 @@ broken-packages:
   - avatar-generator
   - aviation-units
   - avl-static
+  - avro-piper
   - avr-shake
   - avwx
   - awesome-prelude
@@ -452,7 +453,6 @@ broken-packages:
   - botpp
   - bottom
   - boundingboxes
-  - bower-json
   - bowntz
   - bpath
   - braid
@@ -1445,6 +1445,7 @@ broken-packages:
   - fingertree-tf
   - finitary
   - finite
+  - FiniteCategories
   - finite-fields
   - firefly-example
   - first-and-last
@@ -1786,6 +1787,7 @@ broken-packages:
   - graphmod-plugin
   - graphql-api
   - graphql-parser
+  - graphql-spice
   - graphql-w-persistent
   - graph-rewriting
   - graph-serialize
@@ -2539,7 +2541,6 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
-  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
@@ -2917,7 +2918,6 @@ broken-packages:
   - lens-xml
   - less-arbitrary
   - Level0
-  - leveldb-haskell
   - level-monad
   - levenshtein
   - levmar
@@ -4162,6 +4162,8 @@ broken-packages:
   - react-haskell
   - reaction-logic
   - reactive-bacon
+  - reactive-banana-automation
+  - reactive-banana-bunch
   - reactive-banana-gi-gtk
   - reactive-banana-sdl2
   - reactive-banana-threepenny
@@ -4815,6 +4817,7 @@ broken-packages:
   - stm-stats
   - stochastic
   - Stomp
+  - stooq-api
   - storable
   - storable-static-array
   - stp
@@ -5012,6 +5015,7 @@ broken-packages:
   - tensorflow
   - tensorflow-opgen
   - tensor-safe
+  - termbox-banana
   - termbox-bindings
   - termination-combinators
   - termplot
