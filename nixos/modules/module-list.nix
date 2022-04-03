@@ -205,7 +205,6 @@
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
-  ./programs/ssmtp.nix
   ./programs/sysdig.nix
   ./programs/systemtap.nix
   ./programs/starship.nix
