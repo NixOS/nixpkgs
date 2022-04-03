@@ -3,9 +3,23 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
+, click
+, desktop-notifier
+, dropbox
+, fasteners
+, keyring
+, keyrings-alt
+, packaging
+, pathspec
+, Pyro5
+, requests
+, setuptools
+, sdnotify
+, survey
+, watchdog
 , importlib-metadata
 , pytestCheckHook
+, nixosTests
 }:
 
 buildPythonPackage rec {
@@ -65,6 +79,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "maestral" ];
+
+  passthru.tests.maestral = nixosTests.maestral;
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
