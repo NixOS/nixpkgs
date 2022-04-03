@@ -660,9 +660,9 @@ dont-distribute-packages:
  - arithmetic-circuits
  - array-forth
  - arraylist
+ - ascii
  - ascii-cows
  - ascii-table
- - ascii_1_1_2_0
  - asic
  - asif
  - assert4hs-hspec
@@ -795,7 +795,6 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
- - bisc
  - biscuit-servant
  - bit-array
  - bitcoin-address
@@ -1849,7 +1848,6 @@ dont-distribute-packages:
  - graphql-utils
  - graphtype
  - greencard-lib
- - grid-proto
  - gridbounds
  - gridland
  - groot
@@ -2110,7 +2108,6 @@ dont-distribute-packages:
  - hie-core
  - hierarchical-env
  - hierarchical-spectral-clustering
- - higher-leveldb
  - highjson-swagger
  - highjson-th
  - himpy
@@ -3129,7 +3126,6 @@ dont-distribute-packages:
  - potoki-conduit
  - potoki-hasql
  - potoki-zlib
- - powerqueue-levelmem
  - powerqueue-sqs
  - pqueue-mtl
  - practice-room
@@ -3272,10 +3268,13 @@ dont-distribute-packages:
  - rdioh
  - react-flux-servant
  - reactive
+ - reactive-balsa
  - reactive-banana-sdl
  - reactive-banana-wx
  - reactive-fieldtrip
  - reactive-glut
+ - reactive-jack
+ - reactive-midyim
  - reactor
  - readline-in-other-words
  - readpyc
@@ -3317,6 +3316,7 @@ dont-distribute-packages:
  - regions-monadstf
  - regions-mtl
  - registry-hedgehog
+ - registry-hedgehog-aeson
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3638,7 +3638,6 @@ dont-distribute-packages:
  - sock2stream
  - socket-io
  - sockets
- - socketson
  - solga
  - solga-swagger
  - solr
@@ -3903,7 +3902,6 @@ dont-distribute-packages:
  - triangulation
  - tries
  - trimpolya
- - tripLL
  - tropical-geometry
  - truelevel
  - trurl
