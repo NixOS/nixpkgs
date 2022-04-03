@@ -4,7 +4,7 @@
 , defusedxml
 , fetchFromGitHub
 , hypothesis
-, isPy3k
+, pythonOlder
 , jbig2dec
 , lxml
 , mupdf
@@ -26,7 +26,9 @@
 buildPythonPackage rec {
   pname = "pikepdf";
   version = "5.1.1";
-  disabled = ! isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
