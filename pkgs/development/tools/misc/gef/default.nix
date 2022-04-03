@@ -4,6 +4,7 @@
 , makeWrapper
 , gdb
 , python3
+, bintools-unwrapped
 , file
 , ps
 , git
@@ -39,7 +40,12 @@ in stdenv.mkDerivation rec {
     makeWrapper ${gdb}/bin/gdb $out/bin/gef \
       --add-flags "-q -x $out/share/gef/gef.py" \
       --set NIX_PYTHONPATH ${pythonPath} \
-      --prefix PATH : ${lib.makeBinPath [ python3 file ps ]}
+      --prefix PATH : ${lib.makeBinPath [
+        python3
+        bintools-unwrapped # for readelf
+        file
+        ps
+      ]}
   '';
 
   checkInputs = [
