@@ -7,6 +7,7 @@
 , haskellPackages
 , luaPackages
 , ocamlPackages
+, replaceUsrBinFile
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
 

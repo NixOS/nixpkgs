@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, libiconv, vanilla ? false }:
+{ lib, stdenv, fetchurl, libiconv, vanilla ? false
+, replaceUsrBinFile
+}:
 
 with lib;
 
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
   postPatch = if vanilla then null else ''
     rm -f check/check-requires-private check/check-gtk check/missing
   '';
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 

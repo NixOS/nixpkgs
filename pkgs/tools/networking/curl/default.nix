@@ -24,6 +24,7 @@
 , wolfsslSupport ? false, wolfssl ? null
 , zlibSupport ? true, zlib ? null
 , zstdSupport ? false, zstd ? null
+, replaceUsrBinFile
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl replaceUsrBinFile ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

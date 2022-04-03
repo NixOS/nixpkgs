@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , gmp, mpfr
+, replaceUsrBinFile
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
     sha256 = "0n846hqfqvmsmim7qdlms0qr86f1hck19p12nq3g3z2x74n3sl0p";
   };
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   buildInputs = [ gmp mpfr ];
 

@@ -2,6 +2,7 @@
 , cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
 , buildPackages
 , withStatic ? stdenv.hostPlatform.isStatic
+, replaceUsrBinFile
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -29,7 +30,7 @@ let self = stdenv.mkDerivation rec {
   passthru.static = self.out;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 replaceUsrBinFile ];
 
   configureFlags = [
     "--with-pic"

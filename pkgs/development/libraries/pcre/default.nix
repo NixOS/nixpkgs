@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , pcre, windows ? null
 , variant ? null
+, replaceUsrBinFile
 }:
 
 with lib;
@@ -17,6 +18,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
     sha256 = "sha256-Ta5v3NK7C7bDe1+Xwzwr6VTadDmFNpzdrDVG4yGL/7g=";
   };
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 

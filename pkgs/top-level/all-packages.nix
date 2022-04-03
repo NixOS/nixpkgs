@@ -181,6 +181,26 @@ with pkgs;
       }
     '');
 
+  # libtool.m4 prior to version 2.4.7 invokes "/usr/bin/file", and is vendored into many ./configure scripts
+  replaceUsrBinFile =
+    makeSetupHook {}
+      (writeScript "fix-path-to-user-bin-file.sh" ''
+        postUnpackHooks+=(_fixPathToUserBinFile)
+        _fixPathToUserBinFile() {
+          if [ ! -f $sourceRoot/configure ] || \
+               ! ( grep -q 'Which release of libtool.m4 was used' $sourceRoot/configure ) || \
+               ! ( egrep -q "^macro_version='([01].|2.[0-3]|2.4.[0-6])" $sourceRoot/configure ) || \
+               ! ( grep -q /usr/bin/file $sourceRoot/configure )
+          then
+            echo "This package does not have a ./configure script which vendors a libtool.m4<=2.4.6."
+            echo "Therefore, it does not need the replaceUsrBinFile workaround.  Please remove replaceUsrBinFile"
+            echo "from the nativeBuildInputs."
+            exit -1
+          fi
+          substituteInPlace $sourceRoot/configure --replace /usr/bin/file ${buildPackages.file}/bin/file
+        }
+        '');
+
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
   quickemu = callPackage ../development/quickemu { };
@@ -5489,6 +5509,7 @@ with pkgs;
 
   file = callPackage ../tools/misc/file {
     inherit (windows) libgnurx;
+    fetchurl = stdenv.fetchurlBoot;
   };
 
   filegive = callPackage ../tools/networking/filegive { };

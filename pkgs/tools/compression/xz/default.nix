@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
+, replaceUsrBinFile
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
     sha256 = "1ps2i8i212n0f4xpq6clp7h13q7m1y8slqvxha9i8d0bj0qgj5si";
   };
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

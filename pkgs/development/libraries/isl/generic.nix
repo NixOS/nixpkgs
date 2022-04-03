@@ -6,6 +6,7 @@
 }:
 
 { lib, stdenv, fetchurl, gmp
+, replaceUsrBinFile
 }:
 
 stdenv.mkDerivation {
@@ -17,6 +18,8 @@ stdenv.mkDerivation {
   };
 
   inherit patches;
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   buildInputs = [ gmp ];
 

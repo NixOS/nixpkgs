@@ -3,6 +3,7 @@
 
 , doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
 , dejagnu
+, replaceUsrBinFile
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
   patches = [];
 
   outputs = [ "out" "dev" "man" "info" ];
+
+  nativeBuildInputs = [ replaceUsrBinFile ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
