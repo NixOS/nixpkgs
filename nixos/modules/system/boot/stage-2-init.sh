@@ -89,6 +89,11 @@ else
 fi
 
 
+# Required by the activation script
+install -m 0755 -d /etc /etc/nixos
+install -m 01777 -d /tmp
+
+
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
 echo "running activation script..."

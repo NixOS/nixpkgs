@@ -42,7 +42,7 @@ let
         nodes = { };
         testScript =
           ''
-            nodes.machine = create_machine(${machineConfig})
+            machine = create_machine(${machineConfig})
             machine.start()
             machine.wait_for_unit("multi-user.target")
             machine.succeed("nix store verify --no-trust -r --option experimental-features nix-command /run/current-system")
@@ -83,7 +83,7 @@ let
         name = "boot-netboot-" + name;
         nodes = { };
         testScript = ''
-            nodes.machine = create_machine(${machineConfig})
+            machine = create_machine(${machineConfig})
             machine.start()
             machine.wait_for_unit("multi-user.target")
             machine.shutdown()
@@ -138,7 +138,7 @@ in {
         if os.system("qemu-img create -f qcow2 -F raw -b ${sdImage} ${mutableImage}") != 0:
             raise RuntimeError("Could not create mutable linked image")
 
-        nodes.machine = create_machine(${machineConfig})
+        machine = create_machine(${machineConfig})
         machine.start()
         machine.wait_for_unit("multi-user.target")
         machine.succeed("nix store verify -r --no-trust --option experimental-features nix-command /run/current-system")
