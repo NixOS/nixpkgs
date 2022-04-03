@@ -78,8 +78,19 @@ git rebase --onto=$common $commits
 git push origin $(git branch --show-current) --force-with-lease
 ```
 
-Then change the base branch in the GitHub PR with the "Edit" button in the top
-right corner, i.e. `master` → `staging`.
+Then change the base branch in the GitHub PR using the *Edit* button in the upper
+right corner, and switch from `master` to `staging`. After the PR has been
+retargeted it might be necessary to do a final rebase onto the target branch, to
+resolve any outstanding merge conflicts.
+
+```console
+# Rebase onto target branch
+git rebase upstream/staging
+# Review and fixup possible conflicts
+git status
+# Force push your changes
+git push origin $(git branch --show-current) --force-with-lease
+```
 
 ## Backporting changes
 
