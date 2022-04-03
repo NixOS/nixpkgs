@@ -866,6 +866,14 @@
           package.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The vim/kakoune plugin updater now reads from a CSV file:
+          check
+          <literal>pkgs/applications/editors/vim/plugins/vim-plugin-names</literal>
+          out to see the new format
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
