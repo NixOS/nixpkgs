@@ -6965,7 +6965,7 @@ with pkgs;
 
   jing = res.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   jira-cli = callPackage ../development/tools/jira_cli { };
@@ -21044,7 +21044,10 @@ with pkgs;
 
   saxonb = saxonb_8_8;
 
-  inherit (callPackages ../development/libraries/java/saxon { })
+  inherit (callPackages ../development/libraries/java/saxon {
+    jre = jre_headless;
+    jre8 = jre8_headless;
+  })
     saxon
     saxonb_8_8
     saxonb_9_1
