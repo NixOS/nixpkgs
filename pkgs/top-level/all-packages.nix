@@ -33029,6 +33029,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
 
+  caffeWithCuda = caffe.override { cudaSupport = true; };
+
   caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
     inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
