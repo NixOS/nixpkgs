@@ -554,6 +554,7 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gitweb.nix
+  ./services/misc/godns.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
