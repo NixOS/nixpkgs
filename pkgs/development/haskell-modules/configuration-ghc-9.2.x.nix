@@ -2,6 +2,10 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -236,4 +240,9 @@ self: super: {
     hls-retrie-plugin = null;
     hls-splice-plugin = null;
   }));
+
+  # https://github.com/fpco/inline-c/pull/131
+  inline-c-cpp =
+    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
+    super.inline-c-cpp;
 }
