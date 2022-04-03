@@ -335,6 +335,8 @@ with pkgs;
 
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
+  cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -1066,6 +1068,8 @@ with pkgs;
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
+
+  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
@@ -15011,6 +15015,8 @@ with pkgs;
   devtodo = callPackage ../development/tools/devtodo { };
 
   dfeet = callPackage ../development/tools/misc/d-feet { };
+
+  d-spy = callPackage ../development/tools/misc/d-spy { };
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
 

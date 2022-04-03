@@ -14,7 +14,7 @@
 with lib;
 
 let
-  spark = { pname, version, sha256 }:
+  spark = { pname, version, sha256, extraMeta ? {} }:
     stdenv.mkDerivation rec {
       inherit pname version;
       src = fetchzip {
@@ -63,7 +63,7 @@ let
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
         maintainers = with maintainers; [ thoughtpolice offline kamilchm illustris ];
-      };
+      } // extraMeta;
     };
 in
 {
@@ -74,12 +74,13 @@ in
   };
   spark_3_1 = spark rec {
     pname = "spark";
-    version = "3.1.2";
-    sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
+    version = "3.1.3";
+    sha256 = "sha256-RIQyN5YjxFLfNIrETR3Vv99zsHxt77rhOXHIThCI2Y8=";
   };
   spark_2_4 = spark rec {
     pname = "spark";
     version = "2.4.8";
     sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
+    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
   };
 }

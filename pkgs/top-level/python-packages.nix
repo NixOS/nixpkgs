@@ -10900,6 +10900,8 @@ in {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  yabadaba = callPackage ../development/python-modules/yabadaba { };
+
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };

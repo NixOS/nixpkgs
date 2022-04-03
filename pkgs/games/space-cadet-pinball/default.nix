@@ -38,21 +38,24 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_mixer
     makeWrapper
-    Cocoa
-  ];
+  ] ++ lib.optional stdenv.isDarwin Cocoa;
 
-  preBuild = ''
-    mkdir -p $out/lib/SpaceCadetPinball
+  # Darwin needs a custom installphase since it is excluded from the cmake install
+  # https://github.com/k4zmu2a/SpaceCadetPinball/blob/0f88e43ba261bc21fa5c3ef9d44969a2a079d0de/CMakeLists.txt#L221
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
     mkdir -p $out/bin
+    install ../bin/SpaceCadetPinball $out/bin
+    runHook postInstall
   '';
 
-  installPhase = ''
+  postInstall = ''
+    mkdir -p $out/lib/SpaceCadetPinball
     install ${assets}/*.{DAT,DOC,MID,BMP,INF} ${assets}/Sounds/*.WAV $out/lib/SpaceCadetPinball
 
     # Assets are loaded from the directory of the program is stored in
     # https://github.com/k4zmu2a/SpaceCadetPinball/blob/de13d4e326b2dfa8e6dfb59815c0a8b9657f942d/SpaceCadetPinball/winmain.cpp#L119
-    cp ../bin/SpaceCadetPinball $out/bin
-    cp $out/bin/SpaceCadetPinball $out/lib/SpaceCadetPinball
+    mv $out/bin/SpaceCadetPinball $out/lib/SpaceCadetPinball
     makeWrapper $out/lib/SpaceCadetPinball/SpaceCadetPinball $out/bin/SpaceCadetPinball
   '';
 

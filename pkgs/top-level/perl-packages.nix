@@ -4722,7 +4722,7 @@ let
       sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = with lib; {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with licenses; [ artistic1 gpl1Plus ];
@@ -4737,7 +4737,7 @@ let
       sha256 = "1p22znbajq91lbk2k3yg12ig7hy5b4vy8igxwqkmbm4nhgxp4ki3";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
   };
 
   CryptOpenSSLGuess = buildPerlPackage {
@@ -4762,7 +4762,7 @@ let
       sha256 = "1x6ffps8q7mnawmcfq740llzy7i10g3319vap0wiw4d33fm6z1zh";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
@@ -4775,7 +4775,7 @@ let
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
@@ -4787,7 +4787,7 @@ let
       sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
       description = "Perl extension to OpenSSL's X509 API";
@@ -4856,7 +4856,7 @@ let
       sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
     };
 
-    makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
+    makeMakerFlags = "--libpath=${lib.getLib pkgs.openssl}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
     propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
   };
@@ -6891,6 +6891,20 @@ let
       description = "Perl extension for SHA-3";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  DigestSRI = buildPerlPackage {
+    pname = "Digest-SRI";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAUKEX/Digest-SRI-0.02.tar.gz";
+      sha256 = "sha256-VITN/m68OYwkZfeBx3w++1OKOULNSyDWiBjG//kHT8c=";
+    };
+    meta = {
+      homepage = "https://github.com/haukex/Digest-SRI";
+      description = "Calculate and verify Subresource Integrity hashes (SRI)";
+      license = lib.licenses.gpl3Plus;
     };
   };
 
@@ -16752,7 +16766,7 @@ let
     doCheck = false; # Test performs network access.
     preConfigure = ''
       mkdir openssl
-      ln -s ${pkgs.openssl.out}/lib openssl
+      ln -s ${lib.getLib pkgs.openssl}/lib openssl
       ln -s ${pkgs.openssl.bin}/bin openssl
       ln -s ${pkgs.openssl.dev}/include openssl
       export OPENSSL_PREFIX=$(realpath openssl)

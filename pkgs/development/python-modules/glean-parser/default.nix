@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "5.1.1";
+  version = "5.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-zUiF0buHBe0BaaeIRJcRoT/g+NhWv6XTuhCZ6WPrris=";
+    hash = "sha256-PjOMNUnrz0kDfYEXv5Ni/9RIHn4Yylle6NJOK1Rb3SY=";
   };
 
   nativeBuildInputs = [

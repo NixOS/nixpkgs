@@ -53,7 +53,7 @@ perlPackages.buildPerlPackage {
   preConfigure = ''
     substituteInPlace core/server/Makefile.PL \
       --replace "my \$openssl_inc_dir = ''';" "my \$openssl_inc_dir = '${openssl.dev}/include';" \
-      --replace "my \$openssl_lib_dir = ''';" "my \$openssl_lib_dir = '${openssl.out}/lib';" \
+      --replace "my \$openssl_lib_dir = ''';" "my \$openssl_lib_dir = '${lib.getLib openssl}/lib';" \
       --replace "my \$openssl_binary  = ''';" "my \$openssl_binary  = '${openssl.bin}/bin/openssl';"
     substituteInPlace tools/vergen --replace "#!/usr/bin/perl" "#!${perl}/bin/perl"
     cp ${./vergen_revision_state} .vergen_revision_state

@@ -32,7 +32,7 @@
 , withDNSTAP ? false
 , withTFO ? false
 , withRedis ? false
-# Avoid .lib depending on openssl.out
+# Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 , libnghttp2
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
 
   preFixup = lib.optionalString withSlimLib
     # Build libunbound again, but only against nettle instead of openssl.
-    # This avoids gnutls.out -> unbound.lib -> openssl.out.
+    # This avoids gnutls.out -> unbound.lib -> lib.getLib openssl.
     ''
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase

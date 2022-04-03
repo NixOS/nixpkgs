@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , appstream-glib
 , desktop-file-utils
+, itstool
 , meson
 , ninja
 , pkg-config
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
+    itstool
     meson
     ninja
     pkg-config

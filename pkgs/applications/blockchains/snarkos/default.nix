@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
-  OPENSSL_LIB_DIR = "${openssl.out}/lib";
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_DIR="${lib.getDev openssl}";
 
   LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";

@@ -92,7 +92,7 @@ let
           --replace "${expat.dev}/lib" "${expat.out}/lib" \
           --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
           --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
-          --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+          --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
       done
     '';
 
