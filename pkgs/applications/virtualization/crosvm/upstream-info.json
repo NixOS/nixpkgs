@@ -1,11 +1,11 @@
 {
-  "version": "99.14468.0.0-rc1",
+  "version": "100.14526.0.0-rc1",
   "src": {
     "url": "https://chromium.googlesource.com/chromiumos/platform/crosvm",
-    "rev": "410ea3a1980bfe96968a7dfb7a7d203d43b186b2",
-    "date": "2022-01-11T00:01:17-08:00",
-    "path": "/nix/store/y2rpzh1any8c4nwnwkvir7241kbcj8fn-crosvm-410ea3a",
-    "sha256": "1bgwndh2f60ka1f8c8yqnqqkra510ai9miyfvvm0b3dnsdpy77kd",
+    "rev": "bdf5e4d4379030cfa2d0510328b8acce73162217",
+    "date": "2022-02-14T19:13:41+00:00",
+    "path": "/nix/store/xw31chiwnpzgcp07nf448g2npcwiwkkm-crosvm-bdf5e4d",
+    "sha256": "0mrnjyyqmz24z1yvdq2mysmhmz0577k8kf9y4v51g7860crqp9ji",
     "fetchLFS": false,
     "fetchSubmodules": true,
     "deepClone": false,
