@@ -464,6 +464,44 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.ssmtp</literal> has been dropped due to the
+          program being unmaintained. <literal>pkgs.msmtp</literal> can
+          be used instead as a substitute <literal>sendmail</literal>
+          implementation. The corresponding options
+          <literal>services.ssmtp.*</literal> have been removed as well.
+          <literal>programs.msmtp.*</literal> can be used instead for an
+          equivalent setup. For example:
+        </para>
+        <programlisting language="bash">
+{
+  # Original ssmtp configuration:
+  services.ssmtp = {
+    enable = true;
+    useTLS = true;
+    useSTARTTLS = true;
+    hostName = &quot;smtp.example:587&quot;;
+    authUser = &quot;someone&quot;;
+    authPassFile = &quot;/secrets/password.txt&quot;;
+  };
+
+  # Equivalent msmtp configuration:
+  programs.msmtp = {
+    enable = true;
+    accounts.default = {
+      tls = true;
+      tls_starttls = true;
+      auth = true;
+      host = &quot;smtp.example&quot;;
+      port = 587;
+      user = &quot;someone&quot;;
+      passwordeval = &quot;cat /secrets/password.txt&quot;;
+    };
+  };
+}
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
         </para>
