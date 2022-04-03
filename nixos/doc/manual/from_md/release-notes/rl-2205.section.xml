@@ -1456,6 +1456,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.minetestclient_4</literal> and
+          <literal>pkgs.minetestserver_4</literal> have been removed, as
+          the last 4.x release was in 2018.
+          <literal>pkgs.minetestclient</literal> (equivalent to
+          <literal>pkgs.minetest</literal> ) and
+          <literal>pkgs.minetestserver</literal> can be used instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
           favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
           <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
