@@ -17,7 +17,7 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null
+, cudaSupport ? false, cudaPackages ? {}
 , mklSupport ? false, mkl ? null
 , tensorboardSupport ? true
 # XLA without CUDA is broken
@@ -30,6 +30,10 @@
 # Darwin deps
 , Foundation, Security, cctools, llvmPackages_11
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
+in
 
 assert cudaSupport -> cudatoolkit != null
                    && cudnn != null;
@@ -514,6 +518,7 @@ in buildPythonPackage {
   # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
   passthru = {
+    inherit cudaPackages;
     deps = bazel-build.deps;
     libtensorflow = bazel-build.out;
   };

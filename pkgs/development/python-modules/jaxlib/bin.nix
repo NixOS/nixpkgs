@@ -18,7 +18,6 @@
 , autoPatchelfHook
 , buildPythonPackage
 , config
-, cudatoolkit_11
 , cudnn
 , fetchurl
 , flatbuffers
@@ -29,11 +28,16 @@
 , stdenv
   # Options:
 , cudaSupport ? config.cudaSupport or false
+, cudaPackages ? {}
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
 # There are no jaxlib wheels targeting cudnn <8.0.5, and although there are
 # wheels for cudatoolkit <11.1, we don't support them.
-assert cudaSupport -> lib.versionAtLeast cudatoolkit_11.version "11.1";
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
 assert cudaSupport -> lib.versionAtLeast cudnn.version "8.0.5";
 
 let
@@ -116,7 +120,7 @@ buildPythonPackage rec {
       rpath=$(patchelf --print-rpath $file)
       # For some reason `makeLibraryPath` on `cudatoolkit_11` maps to
       # <cudatoolkit_11.lib>/lib which is different from <cudatoolkit_11>/lib.
-      patchelf --set-rpath "$rpath:${cudatoolkit_11}/lib:${lib.makeLibraryPath [ cudatoolkit_11.lib cudnn ]}" $file
+      patchelf --set-rpath "$rpath:${cudatoolkit}/lib:${lib.makeLibraryPath [ cudatoolkit.lib cudnn ]}" $file
     done
   '';
 
@@ -127,7 +131,7 @@ buildPythonPackage rec {
   # more info.
   postInstall = lib.optional cudaSupport ''
     mkdir -p $out/bin
-    ln -s ${cudatoolkit_11}/bin/ptxas $out/bin/ptxas
+    ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
   '';
 
   pythonImportsCheck = [ "jaxlib" ];

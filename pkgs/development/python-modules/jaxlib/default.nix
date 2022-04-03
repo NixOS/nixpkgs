@@ -18,11 +18,6 @@
 , wheel
 , which
 
-  # Build-time and runtime CUDA dependencies:
-, cudatoolkit ? null
-, cudnn ? null
-, nccl ? null
-
   # Python dependencies:
 , absl-py
 , flatbuffers
@@ -42,12 +37,15 @@
   # CUDA flags:
 , cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , cudaSupport ? false
+, cudaPackages ? {}
 
   # MKL:
 , mklSupport ? true
 }:
 
 let
+
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
 
   pname = "jaxlib";
   version = "0.3.0";

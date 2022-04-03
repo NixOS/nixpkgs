@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudatoolkit, libpthreadstubs, lapack, blas }:
+{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
+
+let
+  inherit (cudaPackages) cudatoolkit;
+in
 
 assert let majorIs = lib.versions.major cudatoolkit.version;
        in majorIs == "9" || majorIs == "10" || majorIs == "11";

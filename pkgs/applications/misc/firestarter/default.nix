@@ -8,11 +8,13 @@
 , glibc
 , git
 , pkg-config
-, cudatoolkit
+, cudaPackages ? {}
 , withCuda ? false
 }:
 
 let
+  inherit (cudaPackages) cudatoolkit;
+
   hwloc = stdenv.mkDerivation rec {
     pname = "hwloc";
     version = "2.2.0";

@@ -1,8 +1,7 @@
 { stdenv
 , boost
 , cmake
-, cudatoolkit
-, cudnn
+, cudaPackages
 , eigen
 , fetchFromGitHub
 , gperftools
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!enableGPU) [
     eigen
   ] ++ lib.optionals (enableGPU && enableCuda) [
-    cudnn
+    cudaPackages.cudnn
     mesa.drivers
   ] ++ lib.optionals (enableGPU && !enableCuda) [
     opencl-headers
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cd cpp/
   '' + lib.optionalString enableCuda ''
-    export CUDA_PATH="${cudatoolkit}"
+    export CUDA_PATH="${cudaPackages.cudatoolkit}"
     export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
   '';
 
