@@ -9,7 +9,6 @@
 , pytest-forked
 , pytest-randomly
 , pytest-timeout
-, pytest-xdist
 , pytestCheckHook
 , six
 }:
@@ -36,7 +35,6 @@ buildPythonPackage rec {
     pytest-forked
     pytest-randomly
     pytest-timeout
-    pytest-xdist
     six
     pytestCheckHook
   ];
