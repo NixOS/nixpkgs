@@ -135,9 +135,14 @@ runCommand
           ''}
         }
 
+        siteAutoloads="$out/share/emacs/site-lisp/nix-generated-autoload.el"
+        touch $siteAutoloads
+
         # Iterate over the array of inputs (avoiding nix's own interpolation)
         for pkg in "''${requires[@]}"; do
           linkEmacsPackage $pkg
+          find $pkg -name "*-autoloads.el" \
+              -exec echo \(load \"{}\" \'noerror \'nomessage\) \; >> $siteAutoloads
         done
 
         siteStart="$out/share/emacs/site-lisp/site-start.el"
@@ -174,12 +179,12 @@ runCommand
           > "$subdirs"
 
         # Byte-compiling improves start-up time only slightly, but costs nothing.
-        $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
+        $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs" "$siteAutoloads"
 
         ${optionalString nativeComp ''
           $emacs/bin/emacs --batch \
             --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
-            -f batch-native-compile "$siteStart" "$subdirs"
+            -f batch-native-compile "$siteStart" "$subdirs" "$siteAutoloads"
         ''}
       '';
 
