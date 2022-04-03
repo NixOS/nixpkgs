@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: c1efca37c6e967103978915618efa41515134ea1
-  ref: refs/tags/6.1.35
+  revision: b3ad212ba393cc87bb9e621dbad9d04362f1151c
+  ref: refs/tags/6.1.36
   specs:
-    metasploit-framework (6.1.35)
+    metasploit-framework (6.1.36)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -128,13 +128,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.570.0)
+    aws-partitions (1.573.0)
     aws-sdk-core (3.130.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.304.0)
+    aws-sdk-ec2 (1.305.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.68.0)
@@ -205,8 +205,9 @@ GEM
     filesize (0.2.0)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
-    gyoku (1.3.1)
+    gyoku (1.4.0)
       builder (>= 2.1.2)
+      rexml (~> 3.0)
     hashery (2.1.2)
     hrr_rb_ssh (0.4.2)
     hrr_rb_ssh-ed25519 (0.4.2)
@@ -229,7 +230,7 @@ GEM
     logging (2.3.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
-    loofah (2.15.0)
+    loofah (2.16.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     metasm (1.0.5)
@@ -298,9 +299,9 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.3.4)
+    pg (1.3.5)
     public_suffix (4.0.6)
-    puma (5.6.2)
+    puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -321,7 +322,7 @@ GEM
       thor (~> 1.0)
     rake (13.0.6)
     rb-readline (0.5.5)
-    recog (2.3.22)
+    recog (2.3.23)
       nokogiri
     redcarpet (3.5.1)
     reline (0.2.5)
@@ -379,12 +380,12 @@ GEM
     ruby-macho (3.0.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    ruby_smb (3.0.5)
+    ruby_smb (3.0.6)
       bindata
       openssl-ccm
       openssl-cmac
       rubyntlm
-      windows_error (>= 0.1.3)
+      windows_error (>= 0.1.4)
     rubyntlm (0.6.3)
     rubyzip (2.3.2)
     sawyer (0.8.2)
@@ -422,7 +423,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     win32api (0.1.0)
-    windows_error (0.1.3)
+    windows_error (0.1.4)
     winrm (2.3.6)
       builder (>= 2.1.2)
       erubi (~> 1.8)
