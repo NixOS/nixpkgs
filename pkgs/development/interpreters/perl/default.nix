@@ -1,6 +1,7 @@
 { config, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, pkgs, buildPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
+, zlib
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -114,6 +115,16 @@ let
         myhostname="nixpkgs"
         cf_by="nixpkgs"
         cf_time="$(date -d "@$SOURCE_DATE_EPOCH")"
+        EOF
+
+        # Compress::Raw::Zlib should use our zlib package instead of the one
+        # included with the distribution
+        cat > ./cpan/Compress-Raw-Zlib/config.in <<EOF
+        BUILD_ZLIB   = False
+        INCLUDE      = ${zlib.dev}/include
+        LIB          = ${zlib.out}/lib
+        OLD_ZLIB     = False
+        GZIP_OS_CODE = AUTO_DETECT
         EOF
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
