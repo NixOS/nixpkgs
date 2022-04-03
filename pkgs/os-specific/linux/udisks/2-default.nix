@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, libtool, pkg-config, gettext, gnused
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkg-config, gnused, autoreconfHook
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
-, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -41,8 +42,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+  # pkg-config had to be in both to find gtk-doc and gobject-introspection
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
-    autoconf automake pkg-config libtool gettext which gobject-introspection
+    autoreconfHook which gobject-introspection pkg-config
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
@@ -74,6 +78,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests.vm = nixosTests.udisks2;
 
   meta = with lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
