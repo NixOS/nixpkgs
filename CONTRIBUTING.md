@@ -21,6 +21,8 @@ Below is a short excerpt of some points in there:
   (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
 
   (Motivation for change. Additional information.)
+
+  (breaks things: <A brief description of what breakage is introduced.>)
   ```
 
   For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
