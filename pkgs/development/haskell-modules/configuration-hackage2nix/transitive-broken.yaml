@@ -3646,7 +3646,6 @@ dont-distribute-packages:
  - soundgen
  - source-code-server
  - spade
- - spago
  - sparkle
  - sparrow
  - sparsebit

@@ -453,7 +453,6 @@ broken-packages:
   - botpp
   - bottom
   - boundingboxes
-  - bower-json
   - bowntz
   - bpath
   - braid
@@ -2542,7 +2541,6 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
-  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
