@@ -319,6 +319,7 @@ package-maintainers:
     - shakespeare
   roberth:
     - arion-compose
+    - cabal-pkg-config-version-hook
     - hercules-ci-agent
     - hercules-ci-api
     - hercules-ci-api-agent
@@ -403,6 +404,7 @@ unsupported-platforms:
   dx9d3d:                                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
   dx9d3dx:                                      [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
   Euterpea:                                     [ x86_64-darwin, aarch64-darwin ]
+  essence-of-live-coding-PortMidi:              [ x86_64-darwin, aarch64-darwin ]
   follow-file:                                  [ x86_64-darwin, aarch64-darwin ]
   freenect:                                     [ x86_64-darwin, aarch64-darwin ]
   FTGL:                                         [ x86_64-darwin, aarch64-darwin ]
@@ -421,6 +423,7 @@ unsupported-platforms:
   gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ x86_64-darwin, aarch64-darwin ]
   gnome-keyring:                                [ x86_64-darwin, aarch64-darwin ]
+  grid-proto:                                   [ x86_64-darwin, aarch64-darwin ]
   gtk3-mac-integration:                         [ x86_64-linux, aarch64-linux ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin, aarch64-darwin ]
@@ -428,6 +431,7 @@ unsupported-platforms:
   hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
+  HDRUtils:                                     [ x86_64-darwin, aarch64-darwin ]
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]
   hidapi:                                       [ x86_64-darwin, aarch64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin, aarch64-darwin ]
@@ -461,6 +465,7 @@ unsupported-platforms:
   lio-fs:                                       [ x86_64-darwin, aarch64-darwin ]
   logging-facade-journald:                      [ x86_64-darwin, aarch64-darwin ]
   longshot:                                     [ aarch64-linux ]
+  lxc:                                          [ x86_64-darwin, aarch64-darwin ]
   midi-alsa:                                    [ x86_64-darwin, aarch64-darwin ]
   mpi-hs:                                       [ aarch64-linux, x86_64-darwin, aarch64-darwin ]
   mpi-hs-binary:                                [ aarch64-linux, x86_64-darwin, aarch64-darwin ]

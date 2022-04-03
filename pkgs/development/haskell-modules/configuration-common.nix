@@ -23,6 +23,12 @@ self: super: {
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
+  leveldb-haskell = appendPatch (fetchpatch {
+    url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
+    sha256 = "14gllipl28lqry73c5dnclsskzk1bsrrgazibl4lkl8z98j2csjb";
+  }) super.leveldb-haskell;
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
@@ -1821,19 +1827,6 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  yarn2nix = assert super.yarn2nix.version == "0.8.0";
-    lib.pipe (super.yarn2nix.override {
-      regex-tdfa-text = null; # dependency dropped in 0.10.1
-    }) [
-      (overrideCabal {
-        version = "0.10.1";
-        sha256 = "17f96563v9hp56ycd276fxri7z6nljd7yaiyzpgaa3px6rf48a0m";
-        editedCabalFile = null;
-        revision = null;
-      })
-      (addBuildDepends [ self.aeson-better-errors ]) # 0.8.0 didn't depend on this
-    ];
-
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
   # automatically. Instead we need to use the `cabal man`
@@ -2241,7 +2234,7 @@ self: super: {
   # but with too strict lower bounds for our lts-18.
   # Disable aeson for now, future release should support it
   graphql =
-    assert super.graphql.version == "1.0.2.0";
+    assert super.graphql.version == "1.0.3.0";
     appendConfigureFlags [
       "-f-json"
     ] (lib.warnIf (lib.versionAtLeast self.hspec.version "2.9.0") "@NixOS/haskell: Remove jailbreak for graphql" doJailbreak super.graphql);
@@ -2583,9 +2576,6 @@ self: super: {
         sha256 = "sha256-HAwMvOyp2IdPyjwt+aKYogMqg5NZYlu897UqJy59eFc=";
       })
      ] super.elm2nix;
-
-  # Fixes test suite with modern-uri 0.3.4.3, waiting for Stackage LTS to follow suit
-  mmark = doDistribute self.mmark_0_0_7_5;
 
   # https://github.com/Synthetica9/nix-linter/issues/65
   nix-linter = super.nix-linter.overrideScope (self: super: {

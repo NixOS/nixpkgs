@@ -94,7 +94,7 @@ in rec {
 
   };
 
-  commonUnitOptions = sharedOptions // {
+  commonUnitOptions = { options = (sharedOptions // {
 
     description = mkOption {
       default = "";
@@ -191,27 +191,6 @@ in rec {
       '';
     };
 
-    restartTriggers = mkOption {
-      default = [];
-      type = types.listOf types.unspecified;
-      description = ''
-        An arbitrary list of items such as derivations.  If any item
-        in the list changes between reconfigurations, the service will
-        be restarted.
-      '';
-    };
-
-    reloadTriggers = mkOption {
-      default = [];
-      type = types.listOf unitOption;
-      description = ''
-        An arbitrary list of items such as derivations.  If any item
-        in the list changes between reconfigurations, the service will
-        be reloaded.  If anything but a reload trigger changes in the
-        unit file, the unit will be restarted instead.
-      '';
-    };
-
     onFailure = mkOption {
       default = [];
       type = types.listOf unitNameType;
@@ -239,10 +218,39 @@ in rec {
        '';
     };
 
+  }); };
+
+  stage2CommonUnitOptions = {
+    imports = [
+      commonUnitOptions
+    ];
+
+    options = {
+      restartTriggers = mkOption {
+        default = [];
+        type = types.listOf types.unspecified;
+        description = ''
+          An arbitrary list of items such as derivations.  If any item
+          in the list changes between reconfigurations, the service will
+          be restarted.
+        '';
+      };
+
+      reloadTriggers = mkOption {
+        default = [];
+        type = types.listOf unitOption;
+        description = ''
+          An arbitrary list of items such as derivations.  If any item
+          in the list changes between reconfigurations, the service will
+          be reloaded.  If anything but a reload trigger changes in the
+          unit file, the unit will be restarted instead.
+        '';
+      };
+    };
   };
+  stage1CommonUnitOptions = commonUnitOptions;
 
-
-  serviceOptions = commonUnitOptions // {
+  serviceOptions = { options = {
 
     environment = mkOption {
       default = {};
@@ -276,121 +284,164 @@ in rec {
       '';
     };
 
-    script = mkOption {
-      type = types.lines;
-      default = "";
-      description = "Shell commands executed as the service's main process.";
+  }; };
+
+  stage2ServiceOptions = { name, config, ... }: {
+    imports = [
+      stage2CommonUnitOptions
+      serviceOptions
+    ];
+
+    options = {
+      script = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands executed as the service's main process.";
+      };
+
+      scriptArgs = mkOption {
+        type = types.str;
+        default = "";
+        description = "Arguments passed to the main process script.";
+      };
+
+      preStart = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed before the service's main process
+          is started.
+        '';
+      };
+
+      postStart = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed after the service's main process
+          is started.
+        '';
+      };
+
+      reload = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed when the service's main process
+          is reloaded.
+        '';
+      };
+
+      preStop = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed to stop the service.
+        '';
+      };
+
+      postStop = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed after the service's main process
+          has exited.
+        '';
+      };
+
+      restartIfChanged = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the service should be restarted during a NixOS
+          configuration switch if its definition has changed.
+        '';
+      };
+
+      reloadIfChanged = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the service should be reloaded during a NixOS
+          configuration switch if its definition has changed.  If
+          enabled, the value of <option>restartIfChanged</option> is
+          ignored.
+
+          This option should not be used anymore in favor of
+          <option>reloadTriggers</option> which allows more granular
+          control of when a service is reloaded and when a service
+          is restarted.
+        '';
+      };
+
+      stopIfChanged = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If set, a changed unit is restarted by calling
+          <command>systemctl stop</command> in the old configuration,
+          then <command>systemctl start</command> in the new one.
+          Otherwise, it is restarted in a single step using
+          <command>systemctl restart</command> in the new configuration.
+          The latter is less correct because it runs the
+          <literal>ExecStop</literal> commands from the new
+          configuration.
+        '';
+      };
+
+      startAt = mkOption {
+        type = with types; either str (listOf str);
+        default = [];
+        example = "Sun 14:00:00";
+        description = ''
+          Automatically start this unit at the given date/time, which
+          must be in the format described in
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.  This is equivalent
+          to adding a corresponding timer unit with
+          <option>OnCalendar</option> set to the value given here.
+        '';
+        apply = v: if isList v then v else [ v ];
+      };
     };
 
-    scriptArgs = mkOption {
-      type = types.str;
-      default = "";
-      description = "Arguments passed to the main process script.";
-    };
+    config = mkMerge
+      [ (mkIf (config.preStart != "")
+          { serviceConfig.ExecStartPre =
+              [ (makeJobScript "${name}-pre-start" config.preStart) ];
+          })
+        (mkIf (config.script != "")
+          { serviceConfig.ExecStart =
+              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
+          })
+        (mkIf (config.postStart != "")
+          { serviceConfig.ExecStartPost =
+              [ (makeJobScript "${name}-post-start" config.postStart) ];
+          })
+        (mkIf (config.reload != "")
+          { serviceConfig.ExecReload =
+              makeJobScript "${name}-reload" config.reload;
+          })
+        (mkIf (config.preStop != "")
+          { serviceConfig.ExecStop =
+              makeJobScript "${name}-pre-stop" config.preStop;
+          })
+        (mkIf (config.postStop != "")
+          { serviceConfig.ExecStopPost =
+              makeJobScript "${name}-post-stop" config.postStop;
+          })
+      ];
+  };
 
-    preStart = mkOption {
-      type = types.lines;
-      default = "";
-      description = ''
-        Shell commands executed before the service's main process
-        is started.
-      '';
-    };
-
-    postStart = mkOption {
-      type = types.lines;
-      default = "";
-      description = ''
-        Shell commands executed after the service's main process
-        is started.
-      '';
-    };
-
-    reload = mkOption {
-      type = types.lines;
-      default = "";
-      description = ''
-        Shell commands executed when the service's main process
-        is reloaded.
-      '';
-    };
-
-    preStop = mkOption {
-      type = types.lines;
-      default = "";
-      description = ''
-        Shell commands executed to stop the service.
-      '';
-    };
-
-    postStop = mkOption {
-      type = types.lines;
-      default = "";
-      description = ''
-        Shell commands executed after the service's main process
-        has exited.
-      '';
-    };
-
-    restartIfChanged = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether the service should be restarted during a NixOS
-        configuration switch if its definition has changed.
-      '';
-    };
-
-    reloadIfChanged = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether the service should be reloaded during a NixOS
-        configuration switch if its definition has changed.  If
-        enabled, the value of <option>restartIfChanged</option> is
-        ignored.
-
-        This option should not be used anymore in favor of
-        <option>reloadTriggers</option> which allows more granular
-        control of when a service is reloaded and when a service
-        is restarted.
-      '';
-    };
-
-    stopIfChanged = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        If set, a changed unit is restarted by calling
-        <command>systemctl stop</command> in the old configuration,
-        then <command>systemctl start</command> in the new one.
-        Otherwise, it is restarted in a single step using
-        <command>systemctl restart</command> in the new configuration.
-        The latter is less correct because it runs the
-        <literal>ExecStop</literal> commands from the new
-        configuration.
-      '';
-    };
-
-    startAt = mkOption {
-      type = with types; either str (listOf str);
-      default = [];
-      example = "Sun 14:00:00";
-      description = ''
-        Automatically start this unit at the given date/time, which
-        must be in the format described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.  This is equivalent
-        to adding a corresponding timer unit with
-        <option>OnCalendar</option> set to the value given here.
-      '';
-      apply = v: if isList v then v else [ v ];
-    };
-
+  stage1ServiceOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      serviceOptions
+    ];
   };
 
 
-  socketOptions = commonUnitOptions // {
+  socketOptions = { options = {
 
     listenStreams = mkOption {
       default = [];
@@ -424,10 +475,24 @@ in rec {
       '';
     };
 
+  }; };
+
+  stage2SocketOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      socketOptions
+    ];
+  };
+
+  stage1SocketOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      socketOptions
+    ];
   };
 
 
-  timerOptions = commonUnitOptions // {
+  timerOptions = { options = {
 
     timerConfig = mkOption {
       default = {};
@@ -443,10 +508,24 @@ in rec {
       '';
     };
 
+  }; };
+
+  stage2TimerOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      timerOptions
+    ];
+  };
+
+  stage1TimerOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      timerOptions
+    ];
   };
 
 
-  pathOptions = commonUnitOptions // {
+  pathOptions = { options = {
 
     pathConfig = mkOption {
       default = {};
@@ -460,10 +539,24 @@ in rec {
       '';
     };
 
+  }; };
+
+  stage2PathOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      pathOptions
+    ];
+  };
+
+  stage1PathOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      pathOptions
+    ];
   };
 
 
-  mountOptions = commonUnitOptions // {
+  mountOptions = { options = {
 
     what = mkOption {
       example = "/dev/sda1";
@@ -505,9 +598,23 @@ in rec {
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
+  }; };
+
+  stage2MountOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      mountOptions
+    ];
   };
 
-  automountOptions = commonUnitOptions // {
+  stage1MountOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      mountOptions
+    ];
+  };
+
+  automountOptions = { options = {
 
     where = mkOption {
       example = "/mnt";
@@ -529,11 +636,23 @@ in rec {
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
+  }; };
+
+  stage2AutomountOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      automountOptions
+    ];
   };
 
-  targetOptions = commonUnitOptions;
+  stage1AutomountOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      automountOptions
+    ];
+  };
 
-  sliceOptions = commonUnitOptions // {
+  sliceOptions = { options = {
 
     sliceConfig = mkOption {
       default = {};
@@ -547,6 +666,20 @@ in rec {
       '';
     };
 
+  }; };
+
+  stage2SliceOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      sliceOptions
+    ];
+  };
+
+  stage1SliceOptions = {
+    imports = [
+      stage1CommonUnitOptions
+      sliceOptions
+    ];
   };
 
 }
