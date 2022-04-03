@@ -5,7 +5,7 @@
 with lib;
 
 let
-  spark = { pname, version, src }:
+  spark = { pname, version, src, extraMeta ? {} }:
     stdenv.mkDerivation rec {
       inherit pname version src;
       nativeBuildInputs = [ makeWrapper ];
@@ -51,16 +51,16 @@ let
         platforms        = lib.platforms.all;
         maintainers      = with maintainers; [ thoughtpolice offline kamilchm illustris ];
         repositories.git = "git://git.apache.org/spark.git";
-      };
+      } // extraMeta;
     };
 in {
   spark3 = spark rec {
     pname = "spark";
-    version = "3.1.2";
+    version = "3.1.3";
 
     src = fetchzip {
       url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-      sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
+      sha256 = "sha256-RIQyN5YjxFLfNIrETR3Vv99zsHxt77rhOXHIThCI2Y8=";
     };
   };
   spark2 = spark rec {
@@ -71,5 +71,7 @@ in {
       url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
       sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
     };
+
+    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
   };
 }
