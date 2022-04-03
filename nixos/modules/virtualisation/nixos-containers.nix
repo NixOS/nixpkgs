@@ -720,7 +720,7 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql_10;
+                    services.postgresql.package = pkgs.postgresql_14;
 
                     system.stateVersion = "21.05";
                   };
