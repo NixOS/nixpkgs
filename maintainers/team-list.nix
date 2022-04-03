@@ -108,15 +108,6 @@ with lib.maintainers; {
     shortName = "Chia Blockchain";
   };
 
-  cleanup = {
-    members = [
-      ajs124
-    ];
-    scope = "Cleaning of the nixpkgs source tree.";
-    shortName = "Cleanup";
-    enableFeatureFreezePing = true;
-  };
-
   coq = {
     members = [
       cohencyril
