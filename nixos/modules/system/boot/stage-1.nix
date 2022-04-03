@@ -703,8 +703,12 @@ in
       }
     ];
 
-    system.build =
-      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };
+    system.build = mkMerge [
+      { inherit bootStage1 initialRamdiskSecretAppender extraUtils; }
+
+      # generated in nixos/modules/system/boot/systemd/initrd.nix
+      (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })
+    ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "TMPFS")

@@ -451,6 +451,9 @@ with pkgs;
   dockerTools = callPackage ../build-support/docker {
     writePython3 = buildPackages.writers.writePython3;
   };
+
+  fakeNss = callPackage ../build-support/fake-nss { };
+
   tarsum = callPackage ../build-support/docker/tarsum.nix { };
 
   snapTools = callPackage ../build-support/snap { };
@@ -746,6 +749,9 @@ with pkgs;
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
 
   makeInitrd = callPackage ../build-support/kernel/make-initrd.nix; # Args intentionally left out
+
+  makeInitrdNG = callPackage ../build-support/kernel/make-initrd-ng.nix;
+  makeInitrdNGTool = callPackage ../build-support/kernel/make-initrd-ng-tool.nix {};
 
   makeWrapper = makeSetupHook
     { deps = [ dieHook ];
