@@ -86,17 +86,17 @@ Only nine dependency types matter in practice:
 
 #### Possible dependency types {#possible-dependency-types}
 
-| Dependency type     | Dependency’s host platform | Dependency’s target platform |
-|---------------------|----------------------------|------------------------------|
-| build→ *       | build                      | (none)                       |
-| build→ build   | build                      | build                        |
-| build→ host    | build                      | host                         |
-| build→ target  | build                      | target                       |
-| host→ *        | host                       | (none)                       |
-| host→ host     | host                       | host                         |
-| host→ target   | host                       | target                       |
-| target→ *      | target                     | (none)                       |
-| target→ target | target                     | target                       |
+| Dependency type | Dependency’s host platform | Dependency’s target platform |
+|-----------------|----------------------------|------------------------------|
+| build → *       | build                      | (none)                       |
+| build → build   | build                      | build                        |
+| build → host    | build                      | host                         |
+| build → target  | build                      | target                       |
+| host → *        | host                       | (none)                       |
+| host → host     | host                       | host                         |
+| host → target   | host                       | target                       |
+| target → *      | target                     | (none)                       |
+| target → target | target                     | target                       |
 
 Let's use `g++` as an example to make this table clearer.  `g++` is a C++ compiler written in C.  Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`.  This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
 
