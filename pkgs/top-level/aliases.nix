@@ -193,7 +193,6 @@ mapAliases ({
   cryptol = throw "cryptol was removed due to prolonged broken build"; # Added 2020-08-21
 
   # CUDA Toolkit
-
   cudatoolkit_6 = throw "cudatoolkit_6 has been removed in favor of newer versions"; # Added 2021-02-14
   cudatoolkit_65 = throw "cudatoolkit_65 has been removed in favor of newer versions"; # Added 2021-02-14
   cudatoolkit_7 = throw "cudatoolkit_7 has been removed in favor of newer versions"; # Added 2021-02-14
@@ -203,14 +202,55 @@ mapAliases ({
   cudatoolkit_9_0 = throw "cudatoolkit_9_0 has been removed in favor of newer versions"; # Added 2021-04-18
   cudatoolkit_9_1 = throw "cudatoolkit_9_1 has been removed in favor of newer versions"; # Added 2021-04-18
   cudatoolkit_9_2 = throw "cudatoolkit_9_2 has been removed in favor of newer versions"; # Added 2021-04-18
+  cudatoolkit_10 = throw "cudatoolkit_10 has been renamed to cudaPackages_10.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_10_0 = throw "cudatoolkit_10_0 has been renamed to cudaPackages_10_0.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_10_1 = throw "cudatoolkit_10_1 has been renamed to cudaPackages_10_1.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_10_2 = throw "cudatoolkit_10_2 has been renamed to cudaPackages_10_2.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_0 = throw "cudatoolkit_11_0 has been renamed to cudaPackages_11_0.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_1 = throw "cudatoolkit_11_1 has been renamed to cudaPackages_11_1.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_2 = throw "cudatoolkit_11_2 has been renamed to cudaPackages_11_2.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_3 = throw "cudatoolkit_11_3 has been renamed to cudaPackages_11_3.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_4 = throw "cudatoolkit_11_4 has been renamed to cudaPackages_11_4.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_5 = throw "cudatoolkit_11_5 has been renamed to cudaPackages_11_5.cudatoolkit"; # Added 2022-04-04
+  cudatoolkit_11_6 = throw "cudatoolkit_11_6 has been renamed to cudaPackages_11_6.cudatoolkit"; # Added 2022-04-04
+
+  cudnn = throw "cudnn is now part of cudaPackages*"; # Added 2022-04-04
   cudnn6_cudatoolkit_8 = throw "cudnn6_cudatoolkit_8 has been removed in favor of newer versions"; # Added 2021-02-14
   cudnn_cudatoolkit_7 = throw "cudnn_cudatoolkit_7 has been removed in favor of newer versions"; # Added 2021-02-14
+  cudnn_7_4_cudatoolkit_10_0 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
   cudnn_cudatoolkit_7_5 = throw "cudnn_cudatoolkit_7_5 has been removed in favor of newer versions"; # Added 2021-02-14
+  cudnn_7_6_cudatoolkit_10_0 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_7_6_cudatoolkit_10_1 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
   cudnn_cudatoolkit_8 = throw "cudnn_cudatoolkit_8 has been removed in favor of newer versions"; # Added 2021-02-14
+  cudnn_8_1_cudatoolkit_10_2 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_1_cudatoolkit_11_0 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_1_cudatoolkit_11_1 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_1_cudatoolkit_11_2 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_1_cudatoolkit_10 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_10_2 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11_0 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11_1 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11_2 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11_3 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11_4 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11_5 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_10 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
+  cudnn_8_3_cudatoolkit_11 = throw "cudnn* is now part of cudaPackages*"; # Added 2022-04-04
   cudnn_cudatoolkit_9 = throw "cudnn_cudatoolkit_9 has been removed in favor of newer versions"; # Added 2021-04-18
   cudnn_cudatoolkit_9_0 = throw "cudnn_cudatoolkit_9_0 has been removed in favor of newer versions"; # Added 2021-04-18
   cudnn_cudatoolkit_9_1 = throw "cudnn_cudatoolkit_9_1 has been removed in favor of newer versions"; # Added 2021-04-18
   cudnn_cudatoolkit_9_2 = throw "cudnn_cudatoolkit_9_2 has been removed in favor of newer versions"; # Added 2021-04-18
+
+  cutensor = throw "cutensor is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_10 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_10_1 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_10_2 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_11 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_11_0 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_11_1 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_11_2 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_11_3 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
+  cutensor_cudatoolkit_11_4 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
 
   cloud-print-connector = throw "Google Cloudprint is officially discontinued since Jan 2021, more info https://support.google.com/chrome/a/answer/9633006";
   cquery = throw "cquery has been removed because it is abandoned by upstream. Consider switching to clangd or ccls instead"; # Added 2020-06-15
@@ -779,6 +819,10 @@ mapAliases ({
   mysqlWorkbench = throw "'mysqlWorkbench' has been renamed to/replaced by 'mysql-workbench'"; # Converted to throw 2022-02-22
 
   ### N ###
+
+  nccl = throw "nccl has been renamed to cudaPackages.nccl"; # Added 2022-04-04
+  nccl_cudatoolkit_10 = throw "nccl_cudatoolkit_10 has been renamed to cudaPackages_10.nccl"; # Added 2022-04-04
+  nccl_cudatoolkit_11 = throw "nccl_cudatoolkit_11 has been renamed to cudaPackages_11.nccl"; # Added 2022-04-04
 
   net_snmp = net-snmp; # Added 2019-12-21
   nagiosPluginsOfficial = monitoring-plugins;
