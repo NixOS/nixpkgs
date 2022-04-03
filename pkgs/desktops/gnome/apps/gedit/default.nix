@@ -5,6 +5,7 @@
 , python3
 , pkg-config
 , gtk3
+, gtk-mac-integration
 , glib
 , adwaita-icon-theme
 , libpeas
@@ -59,6 +60,8 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     libsoup
+  ] ++ lib.optionals stdenv.isDarwin [
+    gtk-mac-integration
   ];
 
   postPatch = ''
