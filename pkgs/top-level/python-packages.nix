@@ -2477,6 +2477,8 @@ in {
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
+  doreah = callPackage ../development/python-modules/doreah { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dpath = callPackage ../development/python-modules/dpath { };
@@ -4610,6 +4612,8 @@ in {
 
   lektor = callPackage ../development/python-modules/lektor { };
 
+  lesscpy = callPackage ../development/python-modules/lesscpy { };
+
   leveldb = callPackage ../development/python-modules/leveldb { };
 
   levenshtein = callPackage ../development/python-modules/levenshtein { };
@@ -4888,6 +4892,10 @@ in {
   lsassy = callPackage ../development/python-modules/lsassy { };
 
   luddite = callPackage ../development/python-modules/luddite { };
+
+  lru-dict = callPackage ../development/python-modules/lru-dict { };
+
+  lsi = callPackage ../development/python-modules/lsi { };
 
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
@@ -5553,6 +5561,8 @@ in {
   niluclient = callPackage ../development/python-modules/niluclient { };
 
   nimfa = callPackage ../development/python-modules/nimfa { };
+
+  nimrodel = callPackage ../development/python-modules/nimrodel { };
 
   nine = callPackage ../development/python-modules/nine { };
 
