@@ -33204,6 +33204,8 @@ with pkgs;
 
   spyre = callPackage ../tools/security/spyre { };
 
+  sq = callPackage ../development/tools/sq { };
+
   openspace = callPackage ../applications/science/astronomy/openspace { };
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
