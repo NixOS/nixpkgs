@@ -3566,7 +3566,8 @@ let
       EOF
     '';
 
-    doCheck = !stdenv.isDarwin;
+    # Temporarily disabled?  https://github.com/pmqs/Compress-Raw-Zlib/issues/7
+    doCheck = false && !stdenv.isDarwin;
 
     meta = {
       license = with lib.licenses; [ artistic1 gpl1Plus ];
