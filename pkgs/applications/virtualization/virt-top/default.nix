@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     getopt
+    ocamlPackages.ocaml
+    ocamlPackages.findlib
   ];
-
   buildInputs = with ocamlPackages; [
+    ocamlPackages.ocaml
     calendar
     curses
-    findlib
     gettext-stub
-    ocaml
     ocaml_libvirt
   ] ++ [ libxml2 ];
 
