@@ -21,7 +21,7 @@
 , gtk-doc
 , runCommand
 , isocodes
-, cldr-emoji-annotation
+, cldr-annotations
 , unicode-character-database
 , unicode-emoji
 , python3
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-    "--with-emoji-annotation-dir=${cldr-emoji-annotation}/share/unicode/cldr/common/annotations"
+    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 

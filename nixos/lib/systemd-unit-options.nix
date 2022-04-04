@@ -94,131 +94,133 @@ in rec {
 
   };
 
-  commonUnitOptions = { options = (sharedOptions // {
+  commonUnitOptions = {
+    options = sharedOptions // {
 
-    description = mkOption {
-      default = "";
-      type = types.singleLineStr;
-      description = "Description of this unit used in systemd messages and progress indicators.";
+      description = mkOption {
+        default = "";
+        type = types.singleLineStr;
+        description = "Description of this unit used in systemd messages and progress indicators.";
+      };
+
+      documentation = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        description = "A list of URIs referencing documentation for this unit or its configuration.";
+      };
+
+      requires = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          Start the specified units when this unit is started, and stop
+          this unit when the specified units are stopped or fail.
+        '';
+      };
+
+      wants = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          Start the specified units when this unit is started.
+        '';
+      };
+
+      after = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          If the specified units are started at the same time as
+          this unit, delay this unit until they have started.
+        '';
+      };
+
+      before = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          If the specified units are started at the same time as
+          this unit, delay them until this unit has started.
+        '';
+      };
+
+      bindsTo = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          Like ‘requires’, but in addition, if the specified units
+          unexpectedly disappear, this unit will be stopped as well.
+        '';
+      };
+
+      partOf = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          If the specified units are stopped or restarted, then this
+          unit is stopped or restarted as well.
+        '';
+      };
+
+      conflicts = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          If the specified units are started, then this unit is stopped
+          and vice versa.
+        '';
+      };
+
+      requisite = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          Similar to requires. However if the units listed are not started,
+          they will not be started and the transaction will fail.
+        '';
+      };
+
+      unitConfig = mkOption {
+        default = {};
+        example = { RequiresMountsFor = "/data"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Unit]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.unit</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
+      onFailure = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          A list of one or more units that are activated when
+          this unit enters the "failed" state.
+        '';
+      };
+
+      startLimitBurst = mkOption {
+         type = types.int;
+         description = ''
+           Configure unit start rate limiting. Units which are started
+           more than startLimitBurst times within an interval time
+           interval are not permitted to start any more.
+         '';
+      };
+
+      startLimitIntervalSec = mkOption {
+         type = types.int;
+         description = ''
+           Configure unit start rate limiting. Units which are started
+           more than startLimitBurst times within an interval time
+           interval are not permitted to start any more.
+         '';
+      };
+
     };
-
-    documentation = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = "A list of URIs referencing documentation for this unit or its configuration.";
-    };
-
-    requires = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        Start the specified units when this unit is started, and stop
-        this unit when the specified units are stopped or fail.
-      '';
-    };
-
-    wants = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        Start the specified units when this unit is started.
-      '';
-    };
-
-    after = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        If the specified units are started at the same time as
-        this unit, delay this unit until they have started.
-      '';
-    };
-
-    before = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        If the specified units are started at the same time as
-        this unit, delay them until this unit has started.
-      '';
-    };
-
-    bindsTo = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        Like ‘requires’, but in addition, if the specified units
-        unexpectedly disappear, this unit will be stopped as well.
-      '';
-    };
-
-    partOf = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        If the specified units are stopped or restarted, then this
-        unit is stopped or restarted as well.
-      '';
-    };
-
-    conflicts = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        If the specified units are started, then this unit is stopped
-        and vice versa.
-      '';
-    };
-
-    requisite = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        Similar to requires. However if the units listed are not started,
-        they will not be started and the transaction will fail.
-      '';
-    };
-
-    unitConfig = mkOption {
-      default = {};
-      example = { RequiresMountsFor = "/data"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Unit]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.unit</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
-
-    onFailure = mkOption {
-      default = [];
-      type = types.listOf unitNameType;
-      description = ''
-        A list of one or more units that are activated when
-        this unit enters the "failed" state.
-      '';
-    };
-
-    startLimitBurst = mkOption {
-       type = types.int;
-       description = ''
-         Configure unit start rate limiting. Units which are started
-         more than startLimitBurst times within an interval time
-         interval are not permitted to start any more.
-       '';
-    };
-
-    startLimitIntervalSec = mkOption {
-       type = types.int;
-       description = ''
-         Configure unit start rate limiting. Units which are started
-         more than startLimitBurst times within an interval time
-         interval are not permitted to start any more.
-       '';
-    };
-
-  }); };
+  };
 
   stage2CommonUnitOptions = {
     imports = [
@@ -250,49 +252,41 @@ in rec {
   };
   stage1CommonUnitOptions = commonUnitOptions;
 
-  serviceOptions = { options = {
-
-    environment = mkOption {
-      default = {};
-      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
-      example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
-      description = "Environment variables passed to the service's processes.";
-    };
-
-    path = mkOption {
-      default = [];
-      type = with types; listOf (oneOf [ package str ]);
-      description = ''
-        Packages added to the service's <envar>PATH</envar>
-        environment variable.  Both the <filename>bin</filename>
-        and <filename>sbin</filename> subdirectories of each
-        package are added.
-      '';
-    };
-
-    serviceConfig = mkOption {
-      default = {};
-      example =
-        { RestartSec = 5;
-        };
-      type = types.addCheck (types.attrsOf unitOption) checkService;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Service]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.service</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
-
-  }; };
-
-  stage2ServiceOptions = { name, config, ... }: {
-    imports = [
-      stage2CommonUnitOptions
-      serviceOptions
-    ];
-
+  serviceOptions = { name, config, ... }: {
     options = {
+
+      environment = mkOption {
+        default = {};
+        type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+        example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
+        description = "Environment variables passed to the service's processes.";
+      };
+
+      path = mkOption {
+        default = [];
+        type = with types; listOf (oneOf [ package str ]);
+        description = ''
+          Packages added to the service's <envar>PATH</envar>
+          environment variable.  Both the <filename>bin</filename>
+          and <filename>sbin</filename> subdirectories of each
+          package are added.
+        '';
+      };
+
+      serviceConfig = mkOption {
+        default = {};
+        example =
+          { RestartSec = 5;
+          };
+        type = types.addCheck (types.attrsOf unitOption) checkService;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Service]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.service</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
       script = mkOption {
         type = types.lines;
         default = "";
@@ -349,6 +343,51 @@ in rec {
         '';
       };
 
+      jobScripts = mkOption {
+        type = with types; coercedTo path singleton (listOf path);
+        internal = true;
+        description = "A list of all job script derivations of this unit.";
+        default = [];
+      };
+
+    };
+
+    config = mkMerge [
+      (mkIf (config.preStart != "") rec {
+        jobScripts = makeJobScript "${name}-pre-start" config.preStart;
+        serviceConfig.ExecStartPre = [ jobScripts ];
+      })
+      (mkIf (config.script != "") rec {
+        jobScripts = makeJobScript "${name}-start" config.script;
+        serviceConfig.ExecStart = jobScripts + " " + config.scriptArgs;
+      })
+      (mkIf (config.postStart != "") rec {
+        jobScripts = (makeJobScript "${name}-post-start" config.postStart);
+        serviceConfig.ExecStartPost = [ jobScripts ];
+      })
+      (mkIf (config.reload != "") rec {
+        jobScripts = makeJobScript "${name}-reload" config.reload;
+        serviceConfig.ExecReload = jobScripts;
+      })
+      (mkIf (config.preStop != "") rec {
+        jobScripts = makeJobScript "${name}-pre-stop" config.preStop;
+        serviceConfig.ExecStop = jobScripts;
+      })
+      (mkIf (config.postStop != "") rec {
+        jobScripts = makeJobScript "${name}-post-stop" config.postStop;
+        serviceConfig.ExecStopPost = jobScripts;
+      })
+    ];
+
+  };
+
+  stage2ServiceOptions = {
+    imports = [
+      stage2CommonUnitOptions
+      serviceOptions
+    ];
+
+    options = {
       restartIfChanged = mkOption {
         type = types.bool;
         default = true;
@@ -404,33 +443,6 @@ in rec {
         apply = v: if isList v then v else [ v ];
       };
     };
-
-    config = mkMerge
-      [ (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre =
-              [ (makeJobScript "${name}-pre-start" config.preStart) ];
-          })
-        (mkIf (config.script != "")
-          { serviceConfig.ExecStart =
-              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
-          })
-        (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost =
-              [ (makeJobScript "${name}-post-start" config.postStart) ];
-          })
-        (mkIf (config.reload != "")
-          { serviceConfig.ExecReload =
-              makeJobScript "${name}-reload" config.reload;
-          })
-        (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop =
-              makeJobScript "${name}-pre-stop" config.preStop;
-          })
-        (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost =
-              makeJobScript "${name}-post-stop" config.postStop;
-          })
-      ];
   };
 
   stage1ServiceOptions = {
@@ -441,41 +453,43 @@ in rec {
   };
 
 
-  socketOptions = { options = {
+  socketOptions = {
+    options = {
 
-    listenStreams = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      example = [ "0.0.0.0:993" "/run/my-socket" ];
-      description = ''
-        For each item in this list, a <literal>ListenStream</literal>
-        option in the <literal>[Socket]</literal> section will be created.
-      '';
+      listenStreams = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        example = [ "0.0.0.0:993" "/run/my-socket" ];
+        description = ''
+          For each item in this list, a <literal>ListenStream</literal>
+          option in the <literal>[Socket]</literal> section will be created.
+        '';
+      };
+
+      listenDatagrams = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        example = [ "0.0.0.0:993" "/run/my-socket" ];
+        description = ''
+          For each item in this list, a <literal>ListenDatagram</literal>
+          option in the <literal>[Socket]</literal> section will be created.
+        '';
+      };
+
+      socketConfig = mkOption {
+        default = {};
+        example = { ListenStream = "/run/my-socket"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Socket]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.socket</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
     };
 
-    listenDatagrams = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      example = [ "0.0.0.0:993" "/run/my-socket" ];
-      description = ''
-        For each item in this list, a <literal>ListenDatagram</literal>
-        option in the <literal>[Socket]</literal> section will be created.
-      '';
-    };
-
-    socketConfig = mkOption {
-      default = {};
-      example = { ListenStream = "/run/my-socket"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Socket]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.socket</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
-
-  }; };
+  };
 
   stage2SocketOptions = {
     imports = [
@@ -492,23 +506,25 @@ in rec {
   };
 
 
-  timerOptions = { options = {
+  timerOptions = {
+    options = {
 
-    timerConfig = mkOption {
-      default = {};
-      example = { OnCalendar = "Sun 14:00:00"; Unit = "foo.service"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Timer]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> and
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> for details.
-      '';
+      timerConfig = mkOption {
+        default = {};
+        example = { OnCalendar = "Sun 14:00:00"; Unit = "foo.service"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Timer]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.timer</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> and
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry> for details.
+        '';
+      };
+
     };
-
-  }; };
+  };
 
   stage2TimerOptions = {
     imports = [
@@ -525,21 +541,23 @@ in rec {
   };
 
 
-  pathOptions = { options = {
+  pathOptions = {
+    options = {
 
-    pathConfig = mkOption {
-      default = {};
-      example = { PathChanged = "/some/path"; Unit = "changedpath.service"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Path]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.path</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+      pathConfig = mkOption {
+        default = {};
+        example = { PathChanged = "/some/path"; Unit = "changedpath.service"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Path]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.path</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
     };
-
-  }; };
+  };
 
   stage2PathOptions = {
     imports = [
@@ -556,49 +574,52 @@ in rec {
   };
 
 
-  mountOptions = { options = {
+  mountOptions = {
+    options = {
 
-    what = mkOption {
-      example = "/dev/sda1";
-      type = types.str;
-      description = "Absolute path of device node, file or other resource. (Mandatory)";
-    };
+      what = mkOption {
+        example = "/dev/sda1";
+        type = types.str;
+        description = "Absolute path of device node, file or other resource. (Mandatory)";
+      };
 
-    where = mkOption {
-      example = "/mnt";
-      type = types.str;
-      description = ''
-        Absolute path of a directory of the mount point.
-        Will be created if it doesn't exist. (Mandatory)
-      '';
-    };
+      where = mkOption {
+        example = "/mnt";
+        type = types.str;
+        description = ''
+          Absolute path of a directory of the mount point.
+          Will be created if it doesn't exist. (Mandatory)
+        '';
+      };
 
-    type = mkOption {
-      default = "";
-      example = "ext4";
-      type = types.str;
-      description = "File system type.";
-    };
+      type = mkOption {
+        default = "";
+        example = "ext4";
+        type = types.str;
+        description = "File system type.";
+      };
 
-    options = mkOption {
-      default = "";
-      example = "noatime";
-      type = types.commas;
-      description = "Options used to mount the file system.";
-    };
+      options = mkOption {
+        default = "";
+        example = "noatime";
+        type = types.commas;
+        description = "Options used to mount the file system.";
+      };
 
-    mountConfig = mkOption {
-      default = {};
-      example = { DirectoryMode = "0775"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Mount]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.mount</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+      mountConfig = mkOption {
+        default = {};
+        example = { DirectoryMode = "0775"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Mount]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.mount</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
     };
-  }; };
+  };
 
   stage2MountOptions = {
     imports = [
@@ -614,29 +635,32 @@ in rec {
     ];
   };
 
-  automountOptions = { options = {
+  automountOptions = {
+    options = {
 
-    where = mkOption {
-      example = "/mnt";
-      type = types.str;
-      description = ''
-        Absolute path of a directory of the mount point.
-        Will be created if it doesn't exist. (Mandatory)
-      '';
-    };
+      where = mkOption {
+        example = "/mnt";
+        type = types.str;
+        description = ''
+          Absolute path of a directory of the mount point.
+          Will be created if it doesn't exist. (Mandatory)
+        '';
+      };
 
-    automountConfig = mkOption {
-      default = {};
-      example = { DirectoryMode = "0775"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Automount]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.automount</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+      automountConfig = mkOption {
+        default = {};
+        example = { DirectoryMode = "0775"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Automount]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.automount</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
     };
-  }; };
+  };
 
   stage2AutomountOptions = {
     imports = [
@@ -652,21 +676,23 @@ in rec {
     ];
   };
 
-  sliceOptions = { options = {
+  sliceOptions = {
+    options = {
 
-    sliceConfig = mkOption {
-      default = {};
-      example = { MemoryMax = "2G"; };
-      type = types.attrsOf unitOption;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Slice]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.slice</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
+      sliceConfig = mkOption {
+        default = {};
+        example = { MemoryMax = "2G"; };
+        type = types.attrsOf unitOption;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[Slice]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.slice</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
     };
-
-  }; };
+  };
 
   stage2SliceOptions = {
     imports = [

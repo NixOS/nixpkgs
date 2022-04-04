@@ -9,8 +9,15 @@
 , llvmlite
 , setuptools
 , libcxx
-}:
+, substituteAll
 
+# CUDA-only dependencies:
+, addOpenGLRunpath ? null
+, cudatoolkit ? null
+
+# CUDA flags:
+, cudaSupport ? false
+}:
 buildPythonPackage rec {
   version = "0.55.1";
   pname = "numba";
@@ -32,7 +39,24 @@ buildPythonPackage rec {
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  propagatedBuildInputs = [ numpy llvmlite setuptools ];
+  propagatedBuildInputs = [ numpy llvmlite setuptools ] ++ lib.optionals cudaSupport [ cudatoolkit cudatoolkit.lib ];
+
+  nativeBuildInputs = lib.optional cudaSupport [ addOpenGLRunpath ];
+
+  patches = lib.optionals cudaSupport [
+    (substituteAll {
+      src = ./cuda_path.patch;
+      cuda_toolkit_path = cudatoolkit;
+      cuda_toolkit_lib_path = cudatoolkit.lib;
+    })
+  ];
+
+  postFixup = lib.optionalString cudaSupport ''
+    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      addOpenGLRunpath "$lib"
+      patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:$(patchelf --print-rpath "$lib")" "$lib"
+    done
+  '';
 
   # Copy test script into $out and run the test suite.
   checkPhase = ''
