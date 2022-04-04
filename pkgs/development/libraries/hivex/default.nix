@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hivex-syms.patch ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
-    autoreconfHook libxml2
+    libxml2
   ]
   ++ (with perlPackages; [ perl IOStringy ])
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
