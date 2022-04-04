@@ -250,7 +250,7 @@ in rec {
   };
   stage1CommonUnitOptions = commonUnitOptions;
 
-  serviceOptions = { options = {
+  serviceOptions = { name, config, ... }: { options = {
 
     environment = mkOption {
       default = {};
@@ -284,71 +284,107 @@ in rec {
       '';
     };
 
-  }; };
+    script = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Shell commands executed as the service's main process.";
+    };
 
-  stage2ServiceOptions = { name, config, ... }: {
+    scriptArgs = mkOption {
+      type = types.str;
+      default = "";
+      description = "Arguments passed to the main process script.";
+    };
+
+    preStart = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed before the service's main process
+        is started.
+      '';
+    };
+
+    postStart = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed after the service's main process
+        is started.
+      '';
+    };
+
+    reload = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed when the service's main process
+        is reloaded.
+      '';
+    };
+
+    preStop = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed to stop the service.
+      '';
+    };
+
+    postStop = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed after the service's main process
+        has exited.
+      '';
+    };
+
+    jobScripts = mkOption {
+      type = with types; coercedTo path singleton (listOf path);
+      internal = true;
+      description = "A list of all job script derivations of this unit.";
+      default = [];
+    };
+
+  };
+
+  config = mkMerge [
+    (mkIf (config.preStart != "") rec {
+      jobScripts = makeJobScript "${name}-pre-start" config.preStart;
+      serviceConfig.ExecStartPre = [ jobScripts ];
+    })
+    (mkIf (config.script != "") rec {
+      jobScripts = makeJobScript "${name}-start" config.script;
+      serviceConfig.ExecStart = jobScripts + " " + config.scriptArgs;
+    })
+    (mkIf (config.postStart != "") rec {
+      jobScripts = (makeJobScript "${name}-post-start" config.postStart);
+      serviceConfig.ExecStartPost = [ jobScripts ];
+    })
+    (mkIf (config.reload != "") rec {
+      jobScripts = makeJobScript "${name}-reload" config.reload;
+      serviceConfig.ExecReload = jobScripts;
+    })
+    (mkIf (config.preStop != "") rec {
+      jobScripts = makeJobScript "${name}-pre-stop" config.preStop;
+      serviceConfig.ExecStop = jobScripts;
+    })
+    (mkIf (config.postStop != "") rec {
+      jobScripts = makeJobScript "${name}-post-stop" config.postStop;
+      serviceConfig.ExecStopPost = jobScripts;
+    })
+  ];
+
+  };
+
+  stage2ServiceOptions = {
     imports = [
       stage2CommonUnitOptions
       serviceOptions
     ];
 
     options = {
-      script = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands executed as the service's main process.";
-      };
-
-      scriptArgs = mkOption {
-        type = types.str;
-        default = "";
-        description = "Arguments passed to the main process script.";
-      };
-
-      preStart = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Shell commands executed before the service's main process
-          is started.
-        '';
-      };
-
-      postStart = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Shell commands executed after the service's main process
-          is started.
-        '';
-      };
-
-      reload = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Shell commands executed when the service's main process
-          is reloaded.
-        '';
-      };
-
-      preStop = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Shell commands executed to stop the service.
-        '';
-      };
-
-      postStop = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Shell commands executed after the service's main process
-          has exited.
-        '';
-      };
-
       restartIfChanged = mkOption {
         type = types.bool;
         default = true;
@@ -404,33 +440,6 @@ in rec {
         apply = v: if isList v then v else [ v ];
       };
     };
-
-    config = mkMerge
-      [ (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre =
-              [ (makeJobScript "${name}-pre-start" config.preStart) ];
-          })
-        (mkIf (config.script != "")
-          { serviceConfig.ExecStart =
-              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
-          })
-        (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost =
-              [ (makeJobScript "${name}-post-start" config.postStart) ];
-          })
-        (mkIf (config.reload != "")
-          { serviceConfig.ExecReload =
-              makeJobScript "${name}-reload" config.reload;
-          })
-        (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop =
-              makeJobScript "${name}-pre-stop" config.preStop;
-          })
-        (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost =
-              makeJobScript "${name}-post-stop" config.postStop;
-          })
-      ];
   };
 
   stage1ServiceOptions = {
