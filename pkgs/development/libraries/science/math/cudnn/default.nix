@@ -81,31 +81,27 @@ rec {
   cudnn_8_1_cudatoolkit_11_2 = cudnn_8_1_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_2; };
 
   cudnn_8_1_cudatoolkit_10 = cudnn_8_1_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_10; };
-  cudnn_8_1_cudatoolkit_11 = cudnn_8_1_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11; };
 
   # cuDNN 8.3 is necessary for the latest jaxlib, esp. jaxlib-bin. See
   # https://github.com/google/jax/discussions/9455 for more info.
-  cudnn_8_3_cudatoolkit_10_2 =
-    generic
-      rec {
-        version = "8.3.2";
-        cudatoolkit = cudatoolkit_10_2;
-        # See https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-832/support-matrix/index.html#cudnn-cuda-hardware-versions.
-        minCudaVersion = "10.2.00000";
-        maxCudaVersion = "11.5.99999";
-        mkSrc = cudatoolkit:
-          let v = if lib.versions.majorMinor cudatoolkit.version == "10.2" then "10.2" else "11.5"; in
-          fetchurl {
-            # Starting at version 8.3.1 there's a new directory layout including
-            # a subdirectory `local_installers`.
-            url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/local_installers/${v}/cudnn-linux-x86_64-8.3.2.44_cuda${v}-archive.tar.xz";
-            hash = {
-              "10.2" = "sha256-1vVu+cqM+PketzIQumw9ykm6REbBZhv6/lXB7EC2aaw=";
-              "11.5" = "sha256-VQCVPAjF5dHd3P2iNPnvvdzb5DpTsm3AqCxyP6FwxFc=";
-            }."${v}";
-          };
-      }
-  ;
+  cudnn_8_3_cudatoolkit_10_2 = generic rec {
+    version = "8.3.2";
+    cudatoolkit = cudatoolkit_10_2;
+    # See https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-832/support-matrix/index.html#cudnn-cuda-hardware-versions.
+    minCudaVersion = "10.2.00000";
+    maxCudaVersion = "11.5.99999";
+    mkSrc = cudatoolkit:
+      let v = if lib.versions.majorMinor cudatoolkit.version == "10.2" then "10.2" else "11.5"; in
+      fetchurl {
+        # Starting at version 8.3.1 there's a new directory layout including
+        # a subdirectory `local_installers`.
+        url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/local_installers/${v}/cudnn-linux-x86_64-8.3.2.44_cuda${v}-archive.tar.xz";
+        hash = {
+          "10.2" = "sha256-1vVu+cqM+PketzIQumw9ykm6REbBZhv6/lXB7EC2aaw=";
+          "11.5" = "sha256-VQCVPAjF5dHd3P2iNPnvvdzb5DpTsm3AqCxyP6FwxFc=";
+        }."${v}";
+      };
+  };
   cudnn_8_3_cudatoolkit_11_0 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_0; };
   cudnn_8_3_cudatoolkit_11_1 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_1; };
   cudnn_8_3_cudatoolkit_11_2 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_2; };

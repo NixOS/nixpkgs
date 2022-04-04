@@ -850,7 +850,6 @@
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/onedrive.nix
-  ./services/networking/openfire.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
@@ -1181,6 +1180,7 @@
   ./system/boot/systemd/nspawn.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
+  ./system/boot/systemd/initrd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc-activation.nix

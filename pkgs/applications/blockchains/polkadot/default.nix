@@ -4,6 +4,7 @@
 , llvmPackages
 , protobuf
 , rustPlatform
+, stdenv
 , writeShellScriptBin
 , Security
 }:
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-Gc5WbayQUlsl7Fk8NyLPh2Zg2yrLl3WJqKorNZMLi94=";
 
-  buildInputs = [ Security ];
+  buildInputs = lib.optional stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ clang ];
 
