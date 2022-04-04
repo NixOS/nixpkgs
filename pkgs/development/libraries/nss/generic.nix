@@ -1,3 +1,4 @@
+{ version, sha256 }:
 { lib
 , stdenv
 , fetchurl
@@ -22,14 +23,7 @@ let
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
 
-  # NOTE: Whenever you updated this version check if the `cacert` package also
-  #       needs an update. You can run the regular updater script for cacerts.
-  #       It will rebuild itself using the version of this package (NSS) and if
-  #       an update is required do the required changes to the expression.
-  #       Example: nix-shell ./maintainers/scripts/update.nix --argstr package cacert
-  version = "3.76";
   underscoreVersion = lib.replaceStrings [ "." ] [ "_" ] version;
-
 in
 stdenv.mkDerivation rec {
   pname = "nss";
@@ -37,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "0c0nmajcvnm8gqz2v6wrlq04yzy3y7hcs806wjnx4r6kml8073hv";
+    inherit sha256;
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -68,9 +62,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    ./85_security_load.patch
     ./ckpem.patch
     ./fix-cross-compilation.patch
+    (if (lib.versionOlder version "3.77") then
+      ./85_security_load.patch
+    else
+      ./85_security_load_3.77+.patch
+    )
   ];
 
   patchFlags = [ "-p0" ];
@@ -192,7 +190,7 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
     changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ hexa ajs124 ];
     license = licenses.mpl20;
     platforms = platforms.all;
   };
