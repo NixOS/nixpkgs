@@ -25,6 +25,7 @@
 , wayland
 , xorg
 , libxkbcommon
+, udev
 , zlib
   # Runtime
 , coreutils
@@ -85,11 +86,12 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libxshmfence
-    zlib
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
     xorg.libXfixes
     xorg.libXtst
+    udev
+    zlib
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
