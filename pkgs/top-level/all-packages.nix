@@ -8802,6 +8802,8 @@ with pkgs;
 
   paperless-ng = callPackage ../applications/office/paperless-ng { };
 
+  paperless-ngx = callPackage ../applications/office/paperless-ngx { };
+
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   papertrail = callPackage ../tools/text/papertrail { };
