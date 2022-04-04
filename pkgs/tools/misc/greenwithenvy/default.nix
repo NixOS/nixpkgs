@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, testVersion
+, greenwithenvy
 , wrapGAppsHook
 , makeWrapper
 , pkg-config
@@ -31,14 +33,14 @@ let
    gtk3
  ]);
 in stdenv.mkDerivation rec {
-  pname = "gwe";
-  version = "0.15.4";
+  pname = "greenwithenvy";
+  version = "0.15.5";
 
   src = fetchFromGitLab {
     owner = "leinardi";
-    repo = pname;
+    repo = "gwe";
     rev = version;
-    sha256 = "sha256-7TVy9k61YA8tDXR2PC7TzwxKykWjnw8hQzgTQQIC0Zg=";
+    sha256 = "sha256-bey/G+muDZsMMU3lVdNS6E/BnAJr29zLPE0MMT4sh1c=";
   };
 
   prePatch = ''
@@ -68,20 +70,26 @@ in stdenv.mkDerivation rec {
     libnotify
   ];
 
-  postInstall = ''
+  # Avoid double wrapping
+  dontWrapGApps = true;
+
+  preFixup = ''
     mv $out/bin/gwe $out/lib/gwe-bin
 
     makeWrapper ${pythonEnv}/bin/python $out/bin/gwe \
       --add-flags "$out/lib/gwe-bin" \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib" \
       --prefix PATH : "${builtins.concatStringsSep ":" [ (lib.makeBinPath [ nvidia_x11 nvidia_x11.settings ]) "/run/wrappers/bin" ]}" \
-      --unset "SHELL" \
       ''${gappsWrapperArgs[@]}
   '';
+
+  passthru.tests.version = testVersion { package = greenwithenvy; };
 
   meta = with lib; {
     description = "System utility designed to provide information, control the fans and overclock your NVIDIA card";
     homepage = "https://gitlab.com/leinardi/gwe";
+    changelog = "https://gitlab.com/leinardi/gwe/-/releases/${version}";
+    mainProgram = "gwe";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
     maintainers = [ maintainers.ivar ];

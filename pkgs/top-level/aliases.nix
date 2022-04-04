@@ -462,6 +462,7 @@ mapAliases ({
   gupnp_igd = throw "'gupnp_igd' has been renamed to/replaced by 'gupnp-igd'"; # Converted to throw 2022-02-22
   gupnptools = throw "'gupnptools' has been renamed to/replaced by 'gupnp-tools'"; # Converted to throw 2022-02-22
   gutenberg = throw "'gutenberg' has been renamed to/replaced by 'zola'"; # Converted to throw 2022-02-22
+  gwe = greenwithenvy; # Added 2022-04-06
   gwtdragdrop = throw "gwtdragdrop was removed: abandoned by upstream"; # Added 2022-02-06
   gwtwidgets = throw "gwtwidgets was removed: unmaintained"; # Added 2022-02-06
 
