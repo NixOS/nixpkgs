@@ -23695,6 +23695,8 @@ with pkgs;
 
   chonburi-font = callPackage ../data/fonts/chonburi { };
 
+  cldr-annotations = callPackage ../data/misc/cldr-annotations { };
+
   cldr-emoji-annotation = callPackage ../data/misc/cldr-emoji-annotation { };
 
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
