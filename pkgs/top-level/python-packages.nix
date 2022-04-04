@@ -5438,8 +5438,6 @@ in {
 
   napari-svg = callPackage ../development/python-modules/napari-svg { };
 
-  nassl = callPackage ../development/python-modules/nassl { };
-
   nats-py = callPackage ../development/python-modules/nats-py { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
@@ -9659,8 +9657,6 @@ in {
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
-
-  sslyze = callPackage ../development/python-modules/sslyze { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
