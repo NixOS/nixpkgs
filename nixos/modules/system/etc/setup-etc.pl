@@ -1,3 +1,5 @@
+#! @perl@/bin/perl
+
 use strict;
 use File::Find;
 use File::Copy;
