@@ -5,18 +5,19 @@
 , beautifulsoup4
 , pyuseragents
 , inquirer
+, safeio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "translatepy";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
     rev = "v${version}";
-    sha256 = "rnt4nmDgQXSgzwNCcsZwbQn2bv83DFhL86kebeiSosc=";
+    sha256 = "cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +25,7 @@ buildPythonPackage rec {
     beautifulsoup4
     pyuseragents
     inquirer
+    safeio
   ];
 
   checkInputs = [ pytestCheckHook ];
