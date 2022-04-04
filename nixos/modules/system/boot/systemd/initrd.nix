@@ -96,6 +96,7 @@ let
 
   enabledUpstreamUnits = filter (n: ! elem n cfg.suppressedUnits) upstreamUnits;
   enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedUnits) cfg.units;
+  jobScripts = concatLists (mapAttrsToList (_: unit: unit.jobScripts or []) (filterAttrs (_: v: v.enable) cfg.services));
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -378,7 +379,7 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so"
-      ];
+      ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
       units =
