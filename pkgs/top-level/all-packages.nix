@@ -1119,6 +1119,7 @@ with pkgs;
 
   davinci-resolve = davinci-resolvePackages.stable;
   davinci-resolve-beta = davinci-resolvePackages.beta;
+  davinci-resolve-studio = davinci-resolvePackages.studio;
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
