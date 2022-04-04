@@ -5,28 +5,30 @@ systemConfig=@systemConfig@
 export HOME=/root PATH="@path@"
 
 
-# Process the kernel command line.
-for o in $(</proc/cmdline); do
-    case $o in
-        boot.debugtrace)
-            # Show each command.
-            set -x
-            ;;
-    esac
-done
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Process the kernel command line.
+    for o in $(</proc/cmdline); do
+        case $o in
+            boot.debugtrace)
+                # Show each command.
+                set -x
+                ;;
+        esac
+    done
 
 
-# Print a greeting.
-echo
-echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
-echo
+    # Print a greeting.
+    echo
+    echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
+    echo
 
 
-# Normally, stage 1 mounts the root filesystem read/writable.
-# However, in some environments, stage 2 is executed directly, and the
-# root is read-only.  So make it writable here.
-if [ -z "$container" ]; then
-    mount -n -o remount,rw none /
+    # Normally, stage 1 mounts the root filesystem read/writable.
+    # However, in some environments, stage 2 is executed directly, and the
+    # root is read-only.  So make it writable here.
+    if [ -z "$container" ]; then
+        mount -n -o remount,rw none /
+    fi
 fi
 
 
@@ -39,6 +41,12 @@ if [ ! -e /proc/1 ]; then
         local options="$3"
         local fsType="$4"
 
+        # We must not overwrite this mount because it's bind-mounted
+        # from stage 1's /run
+        if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] && [ "${mountPoint}" = /run ]; then
+            return
+        fi
+
         install -m 0755 -d "$mountPoint"
         mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
     }
@@ -46,7 +54,11 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
-echo "booting system configuration $systemConfig" > /dev/kmsg
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
+    echo "booting system configuration ${systemConfig}"
+else
+    echo "booting system configuration $systemConfig" > /dev/kmsg
+fi
 
 
 # Make /nix/store a read-only bind mount to enforce immutability of
@@ -68,24 +80,26 @@ if [ -n "@readOnlyStore@" ]; then
 fi
 
 
-# Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
-if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
-    resolvconf -m 1000 -a host </etc/resolv.conf
-fi
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
+    if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
+        resolvconf -m 1000 -a host </etc/resolv.conf
+    fi
 
 
-# Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
-# Only at this point are all the necessary prerequisites ready for these commands.
-exec {logOutFd}>&1 {logErrFd}>&2
-if test -w /dev/kmsg; then
-    exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
-        if test -n "$line"; then
-            echo "<7>stage-2-init: $line" > /dev/kmsg
-        fi
-    done) 2>&1
-else
-    mkdir -p /run/log
-    exec > >(tee -i /run/log/stage-2-init.log) 2>&1
+    # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
+    # Only at this point are all the necessary prerequisites ready for these commands.
+    exec {logOutFd}>&1 {logErrFd}>&2
+    if test -w /dev/kmsg; then
+        exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
+            if test -n "$line"; then
+                echo "<7>stage-2-init: $line" > /dev/kmsg
+            fi
+        done) 2>&1
+    else
+        mkdir -p /run/log
+        exec > >(tee -i /run/log/stage-2-init.log) 2>&1
+    fi
 fi
 
 
@@ -116,11 +130,15 @@ ln -sfn "$systemConfig" /run/booted-system
 : >> /etc/machine-id
 
 
-# Reset the logging file descriptors.
-exec 1>&$logOutFd 2>&$logErrFd
-exec {logOutFd}>&- {logErrFd}>&-
+# No need to restore the stdout/stderr streams we never redirected and
+# especially no need to start systemd
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Reset the logging file descriptors.
+    exec 1>&$logOutFd 2>&$logErrFd
+    exec {logOutFd}>&- {logErrFd}>&-
 
 
-# Start systemd in a clean environment.
-echo "starting systemd..."
-exec @systemdExecutable@ "$@"
+    # Start systemd in a clean environment.
+    echo "starting systemd..."
+    exec @systemdExecutable@ "$@"
+fi

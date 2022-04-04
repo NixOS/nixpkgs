@@ -445,6 +445,67 @@ in {
       '')];
       services."systemd-makefs@".unitConfig.IgnoreOnIsolate = true;
       services."systemd-growfs@".unitConfig.IgnoreOnIsolate = true;
+
+      services.initrd-nixos-activation = {
+        after = [ "initrd-fs.target" ];
+        requiredBy = [ "initrd.target" ];
+        unitConfig.AssertPathExists = "/etc/initrd-release";
+        serviceConfig.Type = "oneshot";
+        description = "NixOS Activation";
+
+        script = /* bash */ ''
+          set -uo pipefail
+          export PATH="/bin:${cfg.package.util-linux}/bin"
+
+          # Figure out what closure to boot
+          closure=
+          for o in $(< /proc/cmdline); do
+              case $o in
+                  init=*)
+                      IFS== read -r -a initParam <<< "$o"
+                      closure="$(dirname "''${initParam[1]}")"
+                      ;;
+              esac
+          done
+
+          # Sanity check
+          if [ -z "''${closure:-}" ]; then
+            echo 'No init= parameter on the kernel command line' >&2
+            exit 1
+          fi
+
+          # If we are not booting a NixOS closure (e.g. init=/bin/sh),
+          # we don't know what root to prepare so we don't do anything
+          if ! [ -x "/sysroot$closure/prepare-root" ]; then
+            echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
+            echo "$closure does not look like a NixOS installation - not activating"
+            exit 0
+          fi
+          echo 'NEW_INIT=' > /etc/switch-root.conf
+
+
+          # We need to propagate /run for things like /run/booted-system
+          # and /run/current-system.
+          mkdir -p /sysroot/run
+          mount --bind /run /sysroot/run
+
+          # Initialize the system
+          export IN_NIXOS_SYSTEMD_STAGE1=true
+          exec chroot /sysroot $closure/prepare-root
+        '';
+      };
+
+      # This will either call systemctl with the new init as the last parameter (which
+      # is the case when not booting a NixOS system) or with an empty string, causing
+      # systemd to bypass its verification code that checks whether the next file is a systemd
+      # and using its compiled-in value
+      services.initrd-switch-root.serviceConfig = {
+        EnvironmentFile = "-/etc/switch-root.conf";
+        ExecStart = [
+          ""
+          ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
+        ];
+      };
     };
   };
 }
