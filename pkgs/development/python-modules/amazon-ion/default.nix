@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     pname = "amazon.ion";
     inherit version;
-    sha256 = "sha256-vtztUHSnGoPYozhwvigxEdieVtbKNfV4B5yZ4MHaWGw=";
+    sha256 = "sha256-Moq1e7LmI0L7DHg6UNYvseEDbqdL23aCwL38wDm3yCA=";
   };
 
   postPatch = ''
