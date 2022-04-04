@@ -83,6 +83,11 @@ let majorVersion = "9";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
       ++ optional langAda ../gnat-cflags.patch
+      ++ optional langAda (fetchpatch {
+        name = "gnat-glibc-234.diff";
+        url = "https://github.com/gcc-mirror/gcc/commit/331763de7d4850702a0f67298f36017c73cdb103.diff";
+        sha256 = "eS4B7vJasnv2N+5v5yB8/iDpKPX8CJDAy2xabWWj+aU=";
+      })
       ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
