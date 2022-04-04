@@ -10100,6 +10100,8 @@ with pkgs;
 
   spiped = callPackage ../tools/networking/spiped { };
 
+  spring4shell-detect = callPackage ../tools/security/spring4shell-detect  { };
+
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
   sqls = callPackage ../applications/misc/sqls { };
