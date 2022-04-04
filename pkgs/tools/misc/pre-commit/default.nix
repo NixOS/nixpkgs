@@ -3,7 +3,7 @@
 with python3Packages;
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.17.0";
+  version = "2.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "c1a8040ff15ad3d648c70cc3e55b93e4d2d5b687320955505587fd79bbaed06a";
+    sha256 = "sha256-XURe4fqHONUGiBxdhPg8Yrtb5rKDjjIgdDNkfo5evhA=";
   };
 
   patches = [
