@@ -4095,6 +4095,8 @@ with pkgs;
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
+  nixel = callPackage ../tools/nix/nixel { };
+
   nix-output-monitor = callPackage ../tools/nix/nix-output-monitor { };
 
   nix-template = callPackage ../tools/package-management/nix-template {
