@@ -49,13 +49,17 @@ def run():
                     subprocess.check_output(
                         ["swapon", "/dev/mapper/" + part["luksMapperName"]], stderr=subprocess.STDOUT)
                 except subprocess.CalledProcessError as e:
-                    return ("swapon failed to activate swap", "/dev/mapper/" + part["luksMapperName"], e.output.decode("utf-8"))
+                    if e.output != None:
+                        libcalamares.utils.error(e.output.decode("utf8"))
+                    return (_("swapon failed to activate swap " + "/dev/mapper/" + part["luksMapperName"]), _(e.output.decode("utf8")))
             else:
                 try:
                     subprocess.check_output(
                         ["swapon", part["device"]], stderr=subprocess.STDOUT)
                 except subprocess.CalledProcessError as e:
-                    return ("swapon failed to activate swap", part["device"], e.output.decode("utf-8"))
+                    if e.output != None:
+                        libcalamares.utils.error(e.output.decode("utf8"))
+                    return (_("swapon failed to activate swap " + part["device"]), _(e.output.decode("utf8")))
             break
 
     subprocess.check_output(
@@ -64,32 +68,39 @@ def run():
         subprocess.check_output(
             ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        return ("nixos-generate-config failed", e.output.decode("utf-8"))
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("nixos-generate-config failed"), _(e.output.decode("utf8")))
 
     config = os.path.join(root_mount_point, "etc/nixos/configuration.nix")
 
     if not os.path.exists(config):
-        return ("nixos-generate-config failed",
-                "nixos-generate-config did not create configuration.nix")
+        return (_("nixos-generate-config failed"),
+                _("nixos-generate-config did not create configuration.nix"))
 
     bootloader = gs.value("bootLoader")
     fw_type = gs.value("firmwareType")
 
-    # If we have a BIOS system set the grub device
-    # If no device is specified, disable grub
-    if (fw_type != "efi"):
-        if (bootloader != None):
-            subprocess.check_output(["sed", "-i", "s,  # boot.loader.grub.device = .*,  boot.loader.grub.device = \"" +
-                                    bootloader['installPath'] + "\";,g", config], stderr=subprocess.STDOUT)
-        else:
-            subprocess.check_output(
-                ["sed", "-i", "s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
+    try:
+        # If we have a BIOS system set the grub device
+        # If no device is specified, disable grub
+        if (fw_type != "efi"):
+            if (bootloader != None):
+                subprocess.check_output(["sed", "-i", "s,  # boot.loader.grub.device = .*,  boot.loader.grub.device = \"" +
+                                        bootloader['installPath'] + "\";,g", config], stderr=subprocess.STDOUT)
+            else:
+                subprocess.check_output(
+                    ["sed", "-i", "s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
 
-    # Remove services and networking options, we'll install them later
-    subprocess.check_output(
-        ["sed", "-i", "/  services.*/d", config], stderr=subprocess.STDOUT)
-    subprocess.check_output(
-        ["sed", "-i", "/  networking.*/d", config], stderr=subprocess.STDOUT)
+        # Remove services and networking options, we'll install them later
+        subprocess.check_output(
+            ["sed", "-i", "/  services.*/d", config], stderr=subprocess.STDOUT)
+        subprocess.check_output(
+            ["sed", "-i", "/  networking.*/d", config], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("sed failed"), _(e.output.decode("utf8")))
 
     libcalamares.job.setprogress(0.3)
 
@@ -97,7 +108,9 @@ def run():
         subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
                                  "--root", root_mount_point], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        return ("nixos-install failed", e.output.decode("utf8"))
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("nixos-install failed"), _(e.output.decode("utf8")))
 
     libcalamares.job.setprogress(0.9)
     # Fix issues in modules that use chroot
@@ -105,6 +118,8 @@ def run():
         subprocess.check_output(
             ["chroot", root_mount_point, "/nix/var/nix/profiles/system/activate"], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        return ("chroot failed", e.output.decode("utf8"))
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("chroot failed"), _(e.output.decode("utf8")))
 
     return None

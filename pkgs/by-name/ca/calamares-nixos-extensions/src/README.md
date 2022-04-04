@@ -15,6 +15,7 @@
   - [keyboard](https://github.com/calamares/calamares/tree/calamares/src/modules/keyboard)
   - [users](https://github.com/calamares/calamares/tree/calamares/src/modules/users)
   - [partition](https://github.com/calamares/calamares/tree/calamares/src/modules/partition)
+  - [packagechooser](https://github.com/calamares/calamares/tree/calamares/src/modules/packagechooser)
 
 ## Branding
 

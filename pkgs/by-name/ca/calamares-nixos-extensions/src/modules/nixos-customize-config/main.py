@@ -86,6 +86,18 @@ cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
 
 """
 
+cfgnetworkenlightenment = """  networking.hostName = "@@hostname@@"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Enable networking
+  services.connman.enable = true;
+  
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+"""
+
 cfgtime = """  # Set your time zone.
   time.timeZone = "@@timezone@@";
 
@@ -113,9 +125,6 @@ cfglocaleextra = """  i18n.extraLocaleSettings = {
   #   keyMap = "us";
   # };
 
-  # Fix localectl: https://github.com/NixOS/nixpkgs/issues/19629
-  services.xserver.exportConfiguration = true;
-
 """
 
 cfggnome = """  # Enable the X11 windowing system.
@@ -125,11 +134,82 @@ cfggnome = """  # Enable the X11 windowing system.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  # Override GNOME defaults
-  services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
-  [org.gnome.desktop.interface]
-  gtk-theme='Adwaita-dark'
-  '';
+"""
+
+cfgplasma = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the KDE Plasma Desktop Environment.
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
+
+"""
+
+cfgxfce = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the XFCE Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+
+"""
+
+cfgpantheon = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the Pantheon Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  # services.xserver.displayManager.lightdm.greeters.pantheon.enable = true;
+  # services.pantheon.apps.enable = true;
+  services.xserver.desktopManager.pantheon.enable = true;
+
+"""
+
+cfgcinnamon = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the Cinnamon Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.cinnamon.enable = true;
+
+"""
+
+cfgmate = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the MATE Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.mate.enable = true;
+
+"""
+
+cfgenlightenment = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the Enlightenment Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.enlightenment.enable = true;
+
+  # Enable acpid
+  services.acpid.enable = true;
+
+"""
+
+cfglxqt = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the LXQT Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.lxqt.enable = true;
+
+"""
+
+cfglumina = """  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the Lumina Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.lumina.enable = true;
 
 """
 
@@ -179,7 +259,9 @@ cfgautologin = """  # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "@@username@@";
 
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+"""
+
+cfgautologingdm = """  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
@@ -190,7 +272,7 @@ cfgpkgs = """  # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
-    firefox
+    firefox@@pkgs@@
   ];
 
 """
@@ -267,6 +349,7 @@ def run():
     else:
         cfg += cfgbootnone
 
+    # Check partitions
     for part in gs.value("partitions"):
         if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
             cfg += cfgbootcrypt
@@ -284,7 +367,11 @@ def run():
             catenate(variables, "swapuuid", part["luksUuid"])
             break
 
-    cfg += cfgnetwork
+    if gs.value("packagechooser_packagechooser") == "enlightenment":
+        cfg += cfgnetworkenlightenment
+    else:
+        cfg += cfgnetwork
+
     if (gs.value("hostname") is None):
         catenate(variables, "hostname", "nixos")
     else:
@@ -305,7 +392,25 @@ def run():
             for conf in localeconf:
                 catenate(variables, conf, localeconf.get(conf))
 
-    cfg += cfggnome
+    # Choose desktop environment
+    if gs.value("packagechooser_packagechooser") == "gnome":
+        cfg += cfggnome
+    elif gs.value("packagechooser_packagechooser") == "plasma":
+        cfg += cfgplasma
+    elif gs.value("packagechooser_packagechooser") == "xfce":
+        cfg += cfgxfce
+    elif gs.value("packagechooser_packagechooser") == "pantheon":
+        cfg += cfgpantheon
+    elif gs.value("packagechooser_packagechooser") == "cinnamon":
+        cfg += cfgcinnamon
+    elif gs.value("packagechooser_packagechooser") == "mate":
+        cfg += cfgmate
+    elif gs.value("packagechooser_packagechooser") == "enlightenment":
+        cfg += cfgenlightenment
+    elif gs.value("packagechooser_packagechooser") == "lxqt":
+        cfg += cfglxqt
+    elif gs.value("packagechooser_packagechooser") == "lumina":
+        cfg += cfglumina
 
     if (gs.value("keyboardLayout") is not None and gs.value("keyboardVariant") is not None):
         cfg += cfgkeymap
@@ -333,8 +438,16 @@ def run():
             ["\"" + s + "\"" for s in groups]))
         if (gs.value("autoLoginUser") is not None):
             cfg += cfgautologin
+            if (gs.value("packagechooser_packagechooser") == "gnome"):
+                cfg += cfgautologingdm
 
     cfg += cfgpkgs
+    if gs.value("packagechooser_packagechooser") == "plasma":
+        catenate(variables, "pkgs", "\n    kate")
+    elif (gs.value("packagechooser_packagechooser") == "mate") | (gs.value("packagechooser_packagechooser") == "lxqt") | (gs.value("packagechooser_packagechooser") == "lumina"):
+        catenate(variables, "pkgs", "\n    networkmanagerapplet")
+    else:
+        catenate(variables, "pkgs", "")
 
     cfg += cfgtail
     version = ".".join(subprocess.getoutput(
@@ -368,28 +481,34 @@ def run():
 
     libcalamares.job.setprogress(0.1)
 
-    # Generate hardware.nix with mounted swap device
-    subprocess.check_output(
-        ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+    try:
+        # Generate hardware.nix with mounted swap device
+        subprocess.check_output(
+            ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("nixos-generate-config failed"), _(e.output.decode("utf8")))
+
+    libcalamares.job.setprogress(0.3)
 
     # Install customizations
     try:
-        subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
+        subprocess.check_output(["nixos-install", "--no-root-passwd",
                                  "--root", root_mount_point], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        return ("nixos-install failed", e.output.decode("utf-8"))
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("nixos-install failed"), _(e.output.decode("utf8")))
+
+    libcalamares.job.setprogress(0.9)
 
     try:
         subprocess.check_output(["nixos-enter", "--root", root_mount_point,
                                  "--", "nix-collect-garbage", "-d"], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
-        return ("nix-collect-garbage failed", e.output.decode("utf-8"))
-
-    libcalamares.job.setprogress(0.4)
-    try:
-        subprocess.check_output(["nixos-enter", "--root", root_mount_point,
-                                 "--", "nixos-rebuild", "boot"], stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
-        return ("nixos-rebuild failed", e.output.decode("utf-8"))
+        if e.output != None:
+            libcalamares.utils.error(e.output.decode("utf8"))
+        return (_("nix-collect-garbage failed"), _(e.output.decode("utf8")))
 
     return None
