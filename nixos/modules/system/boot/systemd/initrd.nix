@@ -108,7 +108,7 @@ let
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
-  fstab = pkgs.writeText "fstab" (lib.concatMapStringsSep "\n"
+  fstab = pkgs.writeText "initrd-fstab" (lib.concatMapStringsSep "\n"
     ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
         opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
       in "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
@@ -128,11 +128,7 @@ let
     name = "initrd-emergency-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    # Make recovery easier
-    postBuild = ''
-      ln -s ${cfg.package.util-linux}/bin/mount $out/bin/
-      ln -s ${cfg.package.util-linux}/bin/umount $out/bin/
-    '';
+    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
@@ -203,6 +199,19 @@ in {
       '';
       type = types.listOf types.singleLineStr;
       default = [];
+    };
+
+    extraBin = mkOption {
+      description = ''
+        Tools to add to /bin
+      '';
+      example = literalExpression ''
+        {
+          umount = ''${pkgs.util-linux}/bin/umount;
+        }
+      '';
+      type = types.attrsOf types.path;
+      default = {};
     };
 
     suppressedStorePaths = mkOption {
@@ -342,8 +351,15 @@ in {
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     system.build = { inherit initialRamdisk; };
+
+    boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
+
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package] ++ config.system.fsPackages;
+      extraBin = {
+        mount = "${cfg.package.util-linux}/bin/mount";
+        umount = "${cfg.package.util-linux}/bin/umount";
+      };
 
       contents = {
         "/init".source = "${cfg.package}/lib/systemd/systemd";
