@@ -4650,7 +4650,6 @@ with pkgs;
     cudnn_8_1_cudatoolkit_11_1
     cudnn_8_1_cudatoolkit_11_2
     cudnn_8_1_cudatoolkit_10
-    cudnn_8_1_cudatoolkit_11
     cudnn_8_3_cudatoolkit_10_2
     cudnn_8_3_cudatoolkit_11_0
     cudnn_8_3_cudatoolkit_11_1
@@ -4661,8 +4660,8 @@ with pkgs;
     cudnn_8_3_cudatoolkit_10
     cudnn_8_3_cudatoolkit_11;
 
-  # TODO(samuela): This is old and should be upgraded to 8.3 at some point.
-  cudnn = cudnn_7_6_cudatoolkit_10_1;
+  # Make sure to keep this in sync with the `cudatoolkit` version!
+  cudnn = cudnn_8_3_cudatoolkit_10;
 
   cutensorPackages = callPackages ../development/libraries/science/math/cutensor { };
   inherit (cutensorPackages)
@@ -32949,10 +32948,15 @@ with pkgs;
   ### SCIENCE / MATH
 
   caffe = callPackage ../applications/science/math/caffe ({
+    cudaSupport = config.cudaSupport or false;
+    cudatoolkit = cudatoolkit_10_1;
+    cudnn = cudnn_7_6_cudatoolkit_10_1;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
     blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
+
+  caffeWithCuda = caffe.override { cudaSupport = true; };
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
     inherit (python3Packages) python future six numpy pydot;
