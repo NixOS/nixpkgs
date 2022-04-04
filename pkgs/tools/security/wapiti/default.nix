@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.0.9";
+  version = "3.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-olqPM8EQ8LxQQM7kqcjbT9RMdBeYdhfn6Qp6BUu8K5Q=";
+    sha256 = "1xyvyan5gz7fz8wa2fbgvma59pr79arqra2gvx861szn2njkf272";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     browser-cookie3
     cryptography
     dnspython
+    httpcore
     httpx
     httpx-ntlm
     httpx-socks
@@ -54,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     # Ignore pinned versions
     substituteInPlace setup.py \
       --replace "httpx-socks[asyncio] == 0.6.0" "httpx-socks[asyncio]"
-    sed -i -e "s/==[0-9.]*//" setup.py
+    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" setup.py
     substituteInPlace setup.cfg \
       --replace " --cov --cov-report=xml" ""
   '';
@@ -107,6 +108,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_true_positive_request_count"
     "test_unregistered_cname"
     "test_url_detection"
+    "test_verify_dns"
     "test_warning"
     "test_whole"
     "test_xss_inside_tag_input"
@@ -118,8 +120,13 @@ python3.pkgs.buildPythonApplication rec {
     # Requires a PHP installation
     "test_timesql"
     "test_cookies"
+    "test_redirect"
     # TypeError: Expected bytes or bytes-like object got: <class 'str'>
     "test_persister_upload"
+  ];
+  disabledTestPaths = [
+    # requires sslyze
+    "tests/attack/test_mod_ssl.py"
   ];
 
   pythonImportsCheck = [
