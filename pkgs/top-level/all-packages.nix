@@ -32934,6 +32934,8 @@ with pkgs;
 
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
+  symfpu = callPackage ../applications/science/logic/symfpu {};
+
   mcy = callPackage ../applications/science/logic/mcy {};
 
   lingeling = callPackage ../applications/science/logic/lingeling {};
