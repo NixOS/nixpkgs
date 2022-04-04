@@ -48,7 +48,7 @@ sub isStatic {
 
         foreach my $name (@names) {
             next if $name eq "." || $name eq "..";
-            unless (isStatic("$path/$name")) {
+            if (not (isStatic("$path/$name"))) {
                 return 0;
             }
         }
@@ -71,7 +71,7 @@ sub cleanup {
         my $target = readlink $_;
         if (substr($target, 0, length $static) eq $static) {
             my $x = $static . substr($File::Find::name, length "/etc/");
-            unless (-l $x) {
+            if (not (-l $x)) {
                 print STDERR "removing obsolete symlink ‘$File::Find::name’...\n";
                 unlink "$_";
             }
@@ -122,8 +122,15 @@ sub link {
             my $uid = read_file("$_.uid"); chomp $uid;
             my $gid = read_file("$_.gid"); chomp $gid;
             copy "$static/$fn", "$target.tmp" or warn;
-            $uid = getpwnam $uid unless $uid =~ /^\+/;
-            $gid = getgrnam $gid unless $gid =~ /^\+/;
+
+            # uid could either be an uid or an username, this gets the uid
+            if ($uid !~ /^\+/) {
+                $uid = getpwnam $uid;
+            }
+            if ($gid !~ /^\+/) {
+                $gid = getgrnam $gid;
+            }
+
             chown int($uid), int($gid), "$target.tmp" or warn;
             chmod oct($mode), "$target.tmp" or warn;
             unless (rename "$target.tmp", $target) {
