@@ -1,15 +1,15 @@
-{ fetchFromGitHub, lib, rustPlatform, makeWrapper }:
+{ fetchzip, lib, rustPlatform, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
   version = "22.03";
 
-  src = fetchFromGitHub {
-    owner = "helix-editor";
-    repo = pname;
-    rev = version;
-    fetchSubmodules = true;
-    sha256 = "anUYKgr61QQmdraSYpvFY/2sG5hkN3a2MwplNZMEyfI=";
+  # This release tarball includes source code for the tree-sitter grammars,
+  # which is not ordinarily part of the repository.
+  src = fetchzip {
+    url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
+    sha256 = "DP/hh6JfnyHdW2bg0cvhwlWvruNDvL9bmXM46iAUQzA=";
+    stripRoot = false;
   };
 
   cargoSha256 = "zJQ+KvO+6iUIb0eJ+LnMbitxaqTxfqgu7XXj3j0GiX4=";
@@ -23,11 +23,6 @@ rustPlatform.buildRustPackage rec {
   postFixup = ''
     wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
   '';
-
-  # This tries to fetch the tree-sitter grammars over the Internet:
-  # https://github.com/helix-editor/helix/blob/f8c83f98859fd618980141eb95e7927dcdf074d7/helix-loader/src/grammar.rs#L140-L185
-  # TODO: Download the grammars through Nix so that they can be enabled.
-  HELIX_DISABLE_AUTO_GRAMMAR_BUILD = true;
 
   meta = with lib; {
     description = "A post-modern modal text editor";
