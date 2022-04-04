@@ -446,7 +446,7 @@ in
 
      addressbook.defaulturl = mkOption {
         type = types.str;
-        default = "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt";
+        default = "http://shx5vqsw7usdaunyzr2qmes2fq37oumybpudrd4jjj4e4vk4uusa.b32.i2p/hosts.txt";
         description = ''
           AddressBook subscription URL for initial setup
         '';
@@ -454,7 +454,8 @@ in
      addressbook.subscriptions = mkOption {
         type = with types; listOf str;
         default = [
-          "http://inr.i2p/export/alive-hosts.txt"
+          "http://reg.i2p/hosts.txt"
+          "http://identiguy.i2p/hosts.txt"
           "http://i2p-projekt.i2p/hosts.txt"
           "http://stats.i2p/cgi-bin/newhosts.txt"
         ];
