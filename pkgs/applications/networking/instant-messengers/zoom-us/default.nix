@@ -2,6 +2,8 @@
 , lib
 , fetchurl
 , makeWrapper
+, xar
+, cpio
   # Dynamic libraries
 , alsa-lib
 , atk
@@ -28,8 +30,24 @@
 }:
 
 let
-  version = "5.9.6.2225";
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+
+  version = {
+    aarch64-darwin = "5.10.1.5839";
+    x86_64-darwin = "5.10.1.5839";
+    x86_64-linux = "5.9.6.2225";
+   }.${system} or throwSystem;
+
   srcs = {
+    aarch64-darwin = fetchurl {
+       url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
+       sha256 = "0jg5f9hvb67hhfnifpx5fzz65fcijldy1znlia6pqflxwci3m5rq";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://zoom.us/client/${version}/Zoom.pkg";
+      sha256 = "1p83691bid8kz5mw09x6l9zvjglfszi5vbhfmbbpiqhiqcxlfz83";
+    };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
       sha256 = "0rynpw2fjn9j75f34rk0rgqn9wzyzgzmwh1a3xcx7hqingv45k53";
@@ -71,21 +89,42 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  dontUnpack = true;
+  unpackPhase = lib.optionalString stdenv.isDarwin ''
+    xar -xf $src
+    zcat < zoomus.pkg/Payload | cpio -i
+  '';
 
   nativeBuildInputs = [
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    xar
+    cpio
   ];
 
-  installPhase = ''
+  installPhase = {
+  aarch64-darwin = ''
+    runHook preInstall
+    mkdir -p $out/Applications/zoom.us.app
+    cp -R . $out/Applications/zoom.us.app
+    runHook postInstall
+  '';
+  x86_64-darwin = ''
+    runHook preInstall
+    mkdir -p $out/Applications/zoom.us.app
+    cp -R . $out/Applications/zoom.us.app
+    runHook postInstall
+  '';
+  x86_64-linux = ''
     runHook preInstall
     mkdir $out
     tar -C $out -xf $src
     mv $out/usr/* $out/
     runHook postInstall
   '';
+  }.${stdenv.hostPlatform.system};
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
