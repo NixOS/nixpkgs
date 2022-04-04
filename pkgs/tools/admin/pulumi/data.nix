@@ -6,7 +6,7 @@
     x86_64-linux = [
       {
         url = "https://get.pulumi.com/releases/sdk/pulumi-v3.28.0-linux-x64.tar.gz";
-        sha256 = "1ngwbv5dhi7xw2dvwlxm8l62h44b5inn3ybhcndsqklwgylsgf88";
+        sha256 = "0983axi1hxika5a1jl84hfndx8qgfl9pchfakkqcb9w9hwzz5zdq";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v4.5.0-linux-amd64.tar.gz";
@@ -164,7 +164,7 @@
     x86_64-darwin = [
       {
         url = "https://get.pulumi.com/releases/sdk/pulumi-v3.28.0-darwin-x64.tar.gz";
-        sha256 = "0nwpar4vz7af3ylpyg8lf2mmp86qggxihg2nh2acwc0fhdad4jr5";
+        sha256 = "0nixfzgl94kqzzvwr572rzqcayldcyj03ilbqhns7x3wl31fn583";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v4.5.0-darwin-amd64.tar.gz";
@@ -322,7 +322,7 @@
     aarch64-linux = [
       {
         url = "https://get.pulumi.com/releases/sdk/pulumi-v3.28.0-linux-arm64.tar.gz";
-        sha256 = "0nbzl4mhms9v6dr0db5pgnv187a5mipwhnp86a21a5q964dz998v";
+        sha256 = "1zrz7vgl36wj4h3h298x4vh2dl0a909niw22dxfvzvsvxcd88y9v";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v4.5.0-linux-arm64.tar.gz";
