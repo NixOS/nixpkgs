@@ -426,7 +426,6 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     nixos-grub = nixosTests.grub;
     nixos-install-simple = nixosTests.installer.simple;
-    nixos-install-grub1 = nixosTests.installer.grub1;
     nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
     nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
   };
