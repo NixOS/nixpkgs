@@ -1,10 +1,12 @@
 #! @perl@/bin/perl
 
 use strict;
-use File::Find;
-use File::Copy;
-use File::Path;
+use warnings;
+
 use File::Basename;
+use File::Copy;
+use File::Find;
+use File::Path;
 use File::Slurp;
 
 my $etc = $ARGV[0] or die;
