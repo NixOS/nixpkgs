@@ -2057,18 +2057,6 @@ self: super: {
     '' + (drv.postPatch or "");
   }) (doJailbreak super.jsaddle);
 
-  # 2022-03-22: PR for haskell-gi-base compat https://github.com/ghcjs/jsaddle/pull/129
-  jsaddle-webkit2gtk =
-    appendPatch (
-      fetchpatch {
-        name = "haskell-gi-base-0.26-compat-patch";
-        url = "https://github.com/ghcjs/jsaddle/commit/c9a9ad39addea469f7e3f5bc6b1c778fefaab5d8.patch";
-        sha256 = "sha256-4njoOxtJH2jVqiPmW8f9hGUqpzI3yJ1XP4u85QgmvjU=";
-        relative = "jsaddle-webkit2gtk";
-      }
-    )
-    super.jsaddle-webkit2gtk;
-
   # 2022-03-22: Jailbreak for base bound: https://github.com/reflex-frp/reflex-dom/pull/433
   reflex-dom = assert super.reflex-dom.version == "0.6.1.1"; doJailbreak super.reflex-dom;
 
