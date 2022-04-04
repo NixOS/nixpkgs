@@ -97,7 +97,7 @@ in
         Restart = "always";
       };
 
-      environment = {
+      environment = mkIf (cfg.toolkit == "cuda") {
         LD_LIBRARY_PATH = "${config.boot.kernelPackages.nvidia_x11}/lib";
       };
 
