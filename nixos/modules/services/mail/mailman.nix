@@ -192,7 +192,6 @@ in {
         log_dir = "/var/log/mailman";
         lock_dir = "$var_dir/lock";
         etc_dir = "/etc";
-        ext_dir = "$etc_dir/mailman.d";
         pid_file = "/run/mailman/master.pid";
       };
 
