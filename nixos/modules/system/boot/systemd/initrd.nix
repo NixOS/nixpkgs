@@ -150,7 +150,7 @@ in {
     '';
 
     package = (mkPackageOption pkgs "systemd" {
-      default = "systemdMinimal";
+      default = "systemdStage1";
     }) // {
       visible = false;
     };
