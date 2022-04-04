@@ -2,7 +2,7 @@
 # Image file formats
 , libjpeg, libtiff, giflib, libpng, libwebp
 # imlib2 can load images from ID3 tags.
-, libid3tag
+, libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
 , x11Support ? true, xlibsWrapper ? null
 }:
@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjpeg libtiff giflib libpng libwebp
-    bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper;
+    bzip2 freetype libid3tag libheif
+  ] ++ optional x11Support xlibsWrapper
+  # Compilation error on Darwin with librsvg. For more information see:
+  # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
+  ++ optional (!stdenv.isDarwin) librsvg;
 
   nativeBuildInputs = [ pkg-config ];
 
