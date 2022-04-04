@@ -1,6 +1,30 @@
 { lib, pkgs }:
 {
   javaProperties = { comment ? "Generated with Nix" }: {
+
+    # Design note:
+    # A nested representation of inevitably leads to bad UX:
+    # 1. keys like "a.b" must be disallowed, or
+    #    the addition of options in a freeformType module
+    #    become breaking changes
+    # 2. adding a value for "a" after "a"."b" was already
+    #    defined leads to a somewhat hard to understand
+    #    Nix error, because that's not something you can
+    #    do with attrset syntax. Workaround: "a"."", but
+    #    that's too little too late. Another workaround:
+    #    mkMerge [ { a = ...; } { a.b = ...; } ].
+    #
+    # Choosing a non-nested representation does mean that
+    # we sacrifice the ability to override at the (conceptual)
+    # hierarchical levels, _if_ an application exhibits those.
+    #
+    # Some apps just use periods instead of spaces in an odd
+    # mix of attempted categorization and natural language,
+    # with no meaningful hierarchy.
+    #
+    # We _can_ choose to support hierarchical config files
+    # via nested attrsets, but the module author should
+    # make sure that problem (2) does not occur.
     type = lib.types.attrsOf lib.types.str;
 
     generate = name: value:
