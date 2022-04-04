@@ -24376,6 +24376,8 @@ with pkgs;
 
   layan-kde = callPackage ../data/themes/layan-kde { };
 
+  lao = callPackage ../data/fonts/lao {};
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
