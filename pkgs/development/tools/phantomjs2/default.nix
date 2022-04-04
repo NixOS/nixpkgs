@@ -25,11 +25,10 @@ in stdenv.mkDerivation rec {
     sha256 = "1zsbpk1sgh9a16f1a5nx3qvk77ibjn812wqkxqck8n6fia85m5iq";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake makeWrapper ];
   buildInputs = [
     bison flex fontconfig freetype gperf icu openssl
     libjpeg libpng perl python2 ruby sqlite qtwebkit qtbase
-    makeWrapper
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AGL ApplicationServices AppKit Cocoa OpenGL
     darwin.libobjc fakeClang cups
