@@ -1115,7 +1115,10 @@ with pkgs;
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
-  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
+  davinci-resolvePackages = callPackage ../applications/video/davinci-resolve { };
+
+  davinci-resolve = davinci-resolvePackages.stable;
+  davinci-resolve-beta = davinci-resolvePackages.beta;
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
