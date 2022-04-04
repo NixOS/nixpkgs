@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "scheme";
     repo = "scsh";
-    rev = "f99b8c5293628cfeaeb792019072e3a96841104f";
-    sha256 = "sha256-vcVtqoUhozdJq1beUN8/rcI2qOJYUN+0CPSiDWGCIjI=";
+    rev = "4acf6e4ed7b65b46186ef0c9c2a1e10bef8dc052";
+    sha256 = "sha256-92NtMK5nVd6+WtHj/Rk6iQEkGsNEZySTVZkkbqKrLYY=";
     fetchSubmodules = true;
   };
 

@@ -150,7 +150,7 @@ in {
     '';
 
     package = (mkPackageOption pkgs "systemd" {
-      default = "systemdMinimal";
+      default = "systemdStage1";
     }) // {
       visible = false;
     };
@@ -367,12 +367,28 @@ in {
         "/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
       };
 
       storePaths = [
-        # TODO: Limit this to the bare necessities
-        "${cfg.package}/lib"
+        # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-fsck"
+        "${cfg.package}/lib/systemd/systemd-growfs"
+        "${cfg.package}/lib/systemd/systemd-hibernate-resume"
+        "${cfg.package}/lib/systemd/systemd-journald"
+        "${cfg.package}/lib/systemd/systemd-makefs"
+        "${cfg.package}/lib/systemd/systemd-modules-load"
+        "${cfg.package}/lib/systemd/systemd-remount-fs"
+        "${cfg.package}/lib/systemd/systemd-sulogin-shell"
+        "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-udevd"
+        "${cfg.package}/lib/systemd/systemd-vconsole-setup"
 
+        # additional systemd directories
+        "${cfg.package}/lib/systemd/system-generators"
+        "${cfg.package}/lib/udev"
+
+        # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"

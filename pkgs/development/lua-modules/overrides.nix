@@ -296,9 +296,6 @@ with prev;
       buildInputs = [ pkgs.libuv ];
 
       nativeBuildInputs = [ pkgs.pkg-config pkgs.fixDarwinDylibNames pkgs.cmake ];
-      # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-      NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
-        (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
   };
 
   luv = prev.lib.overrideLuarocks prev.luv (drv: {

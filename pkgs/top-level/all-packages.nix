@@ -23370,6 +23370,17 @@ with pkgs;
     withTpm2Tss = false;
     withUserDb = false;
   };
+  systemdStage1 = systemdMinimal.override {
+    pname = "systemd-stage-1";
+    withCryptsetup = true;
+    withFido2 = true;
+    withTpm2Tss = true;
+    inherit lvm2 libfido2 p11-kit;
+  };
+  systemdStage1Network = systemdStage1.override {
+    pname = "systemd-stage-1-network";
+    withNetworkd = true;
+  };
 
 
   udev = systemd; # TODO: change to systemdMinimal
