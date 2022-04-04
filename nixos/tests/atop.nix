@@ -182,10 +182,6 @@ in
   atopgpu = makeTest {
     name = "atop-atopgpu";
     nodes.machine = {
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
-        "cudatoolkit"
-      ];
-
       programs.atop = {
         enable = true;
         atopgpu.enable = true;
@@ -205,10 +201,6 @@ in
   everything = makeTest {
     name = "atop-everthing";
     nodes.machine = {
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
-        "cudatoolkit"
-      ];
-
       programs.atop = {
         enable = true;
         settings = {
