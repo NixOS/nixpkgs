@@ -18,8 +18,11 @@ let
       }) [ def ]);
     in formatSet.generate "test-format-file" config;
 
-  runBuildTest = name: { drv, expected }: pkgs.runCommand name {} ''
-    if diff -u '${builtins.toFile "expected" expected}' '${drv}'; then
+  runBuildTest = name: { drv, expected }: pkgs.runCommand name {
+    passAsFile = ["expected"];
+    inherit expected drv;
+  } ''
+    if diff -u "$expectedPath" "$drv"; then
       touch "$out"
     else
       echo
