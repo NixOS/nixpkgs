@@ -399,6 +399,7 @@ in
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
   paperless-ng = handleTest ./paperless-ng.nix {};
+  paperless-ngx = handleTest ./paperless-ngx.nix {};
   parsedmarc = handleTest ./parsedmarc {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};

@@ -53,7 +53,6 @@ let
     PrivateNetwork = true;
     PrivateTmp = true;
     PrivateUsers = true;
-    ProcSubset = "pid";
     ProtectClock = true;
     # Breaks if the home dir of the user is in /home
     # Also does not add much value in combination with the TemporaryFileSystem.
