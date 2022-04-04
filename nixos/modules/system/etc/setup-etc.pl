@@ -38,7 +38,7 @@ sub isStatic {
 
     if (-l $path) {
         my $target = readlink $path;
-        return substr($target, 0, length "/etc/static/") eq "/etc/static/";
+        return substr($target, 0, length $static) eq $static;
     }
 
     if (-d $path) {
@@ -70,7 +70,7 @@ sub cleanup {
     if (-l $_) {
         my $target = readlink $_;
         if (substr($target, 0, length $static) eq $static) {
-            my $x = "/etc/static/" . substr($File::Find::name, length "/etc/");
+            my $x = $static . substr($File::Find::name, length "/etc/");
             unless (-l $x) {
                 print STDERR "removing obsolete symlink ‘$File::Find::name’...\n";
                 unlink "$_";
