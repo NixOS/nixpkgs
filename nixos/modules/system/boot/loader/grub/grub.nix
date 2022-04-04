@@ -12,8 +12,7 @@ let
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
-  realGrub = if cfg.version == 1 then grubPkgs.grub
-    else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
+  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
     else if cfg.trustedBoot.enable
          then if cfg.trustedBoot.isHPLaptop
               then grubPkgs.trustedGrub-for-HP
@@ -28,8 +27,7 @@ let
     else realGrub;
 
   grubEfi =
-    # EFI version of Grub v2
-    if cfg.efiSupport && (cfg.version == 2)
+    if cfg.efiSupport
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
@@ -52,24 +50,24 @@ let
       fullName = lib.getName realGrub;
       fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
-      grubTargetEfi = optionalString (cfg.efiSupport && (cfg.version == 2)) (f (grubEfi.grubTarget or ""));
+      grubTargetEfi = optionalString cfg.efiSupport (f (grubEfi.grubTarget or ""));
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
-      users = if cfg.users == {} || cfg.version != 1 then cfg.users else throw "GRUB version 1 does not support user accounts.";
       theme = f cfg.theme;
       inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
+        extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraGrubInstallArgs
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
-        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios
+        users;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
-        ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
+        ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = if cfg.font == null then ""
         else (if lib.last (lib.splitString "." cfg.font) == "pf2"
@@ -105,17 +103,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether to enable the GNU GRUB boot loader.
-        '';
-      };
-
-      version = mkOption {
-        default = 2;
-        example = 1;
-        type = types.int;
-        description = lib.mdDoc ''
-          The version of GRUB to use: `1` for GRUB
-          Legacy (versions 0.9x), or `2` (the
-          default) for GRUB 2.
         '';
       };
 
@@ -724,14 +711,7 @@ in
 
   config = mkMerge [
 
-    { boot.loader.grub.splashImage = mkDefault (
-        if cfg.version == 1 then pkgs.fetchurl {
-          url = "http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz";
-          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
-        }
-        # GRUB 1.97 doesn't support gzipped XPMs.
-        else defaultSplash);
-    }
+    { boot.loader.grub.splashImage = mkDefault defaultSplash; }
 
     (mkIf (cfg.splashImage == defaultSplash) {
       boot.loader.grub.backgroundColor = mkDefault "#2F302F";
@@ -789,10 +769,6 @@ in
 
       assertions = [
         {
-          assertion = !cfg.zfsSupport || cfg.version == 2;
-          message = "Only GRUB version 2 provides ZFS support";
-        }
-        {
           assertion = cfg.mirroredBoots != [ ];
           message = "You must set the option ‘boot.loader.grub.devices’ or "
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
@@ -800,10 +776,6 @@ in
         {
           assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
-        }
-        {
-          assertion = !cfg.trustedBoot.enable || cfg.version == 2;
-          message = "Trusted GRUB is only available for GRUB 2";
         }
         {
           assertion = !cfg.efiSupport || !cfg.trustedBoot.enable;
@@ -873,6 +845,7 @@ in
 
         See the boot.initrd.secrets option documentation for more information.
       '')
+      (mkRemovedOptionModule [ "boot" "loader" "grub" "version" ] "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade")
     ];
 
 }
