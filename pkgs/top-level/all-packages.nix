@@ -30080,6 +30080,8 @@ with pkgs;
 
   wlc = callPackage  ../tools/misc/wlc { };
 
+  wlclock = callPackage ../applications/misc/wlclock { };
+
   wllvm = callPackage  ../development/tools/wllvm { };
 
   wmname = callPackage ../applications/misc/wmname { };
