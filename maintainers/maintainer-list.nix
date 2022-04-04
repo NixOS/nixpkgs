@@ -7242,7 +7242,7 @@
     name = "Anthony Lodi";
   };
   loicreynier = {
-    email = "loic@loireynier.fr";
+    email = "loic@loicreynier.fr";
     github = "loicreynier";
     githubId = 88983487;
     name = "Loïc Reynier";
