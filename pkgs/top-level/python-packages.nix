@@ -9013,6 +9013,8 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
+  safeio = callPackage ../development/python-modules/safeio { };
+
   safety = callPackage ../development/python-modules/safety { };
 
   sagemaker = callPackage ../development/python-modules/sagemaker { };
