@@ -12,7 +12,7 @@ use File::Slurp;
 my $etc = $ARGV[0] or die;
 my $static = "/etc/static";
 
-sub atomicSymlink {
+sub atomic_symlink {
     my ($source, $target) = @_;
     my $tmp = "$target.tmp";
     unlink $tmp;
@@ -28,12 +28,12 @@ sub atomicSymlink {
 
 # Atomically update /etc/static to point at the etc files of the
 # current configuration.
-atomicSymlink $etc, $static or die;
+atomic_symlink $etc, $static or die;
 
 # Returns 1 if the argument points to the files in /etc/static.  That
 # means either argument is a symlink to a file in /etc/static or a
 # directory with all children being static.
-sub isStatic {
+sub is_static {
     my $path = shift;
 
     if (-l $path) {
@@ -48,7 +48,7 @@ sub isStatic {
 
         foreach my $name (@names) {
             next if $name eq "." || $name eq "..";
-            if (not (isStatic("$path/$name"))) {
+            if (not (is_static("$path/$name"))) {
                 return 0;
             }
         }
@@ -77,13 +77,14 @@ sub cleanup {
             }
         }
     }
+    return;
 }
 
 find(\&cleanup, "/etc");
 
 
 # Use /etc/.clean to keep track of copied files.
-my @oldCopied = read_file("/etc/.clean", chomp => 1, err_mode => 'quiet');
+my @old_copied = read_file("/etc/.clean", chomp => 1, err_mode => 'quiet');
 open CLEAN, ">>/etc/.clean";
 
 
@@ -107,7 +108,7 @@ sub link {
 
     # Rename doesn't work if target is directory.
     if (-l $_ && -d $target) {
-        if (isStatic $target) {
+        if (is_static $target) {
             rmtree $target or warn;
         } else {
             warn "$target directory contains user files. Symlinking may fail.";
@@ -117,7 +118,7 @@ sub link {
     if (-e "$_.mode") {
         my $mode = read_file("$_.mode"); chomp $mode;
         if ($mode eq "direct-symlink") {
-            atomicSymlink readlink("$static/$fn"), $target or warn "could not create symlink $target";
+            atomic_symlink readlink("$static/$fn"), $target or warn "could not create symlink $target";
         } else {
             my $uid = read_file("$_.uid"); chomp $uid;
             my $gid = read_file("$_.gid"); chomp $gid;
@@ -141,7 +142,7 @@ sub link {
         push @copied, $fn;
         print CLEAN "$fn\n";
     } elsif (-l "$_") {
-        atomicSymlink "$static/$fn", $target or warn "could not create symlink $target";
+        atomic_symlink "$static/$fn", $target or warn "could not create symlink $target";
     }
 }
 
@@ -150,7 +151,7 @@ find(\&link, $etc);
 
 # Delete files that were copied in a previous version but not in the
 # current.
-foreach my $fn (@oldCopied) {
+foreach my $fn (@old_copied) {
     if (!defined $created{$fn}) {
         $fn = "/etc/$fn";
         print STDERR "removing obsolete file ‘$fn’...\n";
