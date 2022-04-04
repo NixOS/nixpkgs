@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchurl,
   extra-cmake-modules, kdoctools,
   kactivities, kconfig, kcrash, kdbusaddons, kguiaddons, kiconthemes, ki18n,
   kinit, kio, kitemmodels, kjobwidgets, knewstuff, knotifications, konsole,
@@ -14,6 +14,13 @@ mkDerivation {
     description = "Advanced text editor";
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
+  };
+
+  version = "21.12.2";
+  src = fetchurl {
+    url = "mirror://kde/stable/release-service/21.12.2/src/kate-21.12.2.tar.xz";
+    sha256 = "0r59rfyrbs50w9brl4rrq1wdfmrr3sz7plw2pqlc5xpzngrdlhs1";
+    name = "kate-21.12.2.tar.xz";
   };
 
   # InitialPreference values are too high and end up making kate &
