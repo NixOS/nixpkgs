@@ -1,0 +1,46 @@
+diff --git builder/builtins.go builder/builtins.go
+index 479b541d..4e697d1e 100644
+--- builder/builtins.go
++++ builder/builtins.go
+@@ -164,7 +164,7 @@ var aeabiBuiltins = []string{
+ var CompilerRT = Library{
+ 	name: "compiler-rt",
+ 	cflags: func(target, headerPath string) []string {
+-		return []string{"-Werror", "-Wall", "-std=c11", "-nostdlibinc"}
++		return []string{"-Werror", "-Wall", "-std=c11", "-isystem", "@libclang_inc@"}
+ 	},
+ 	sourceDir: func() string {
+ 		llvmDir := filepath.Join(goenv.Get("TINYGOROOT"), "llvm-project/compiler-rt/lib/builtins")
+diff --git builder/picolibc.go builder/picolibc.go
+index f1b061ae..dd1aa3fe 100644
+--- builder/picolibc.go
++++ builder/picolibc.go
+@@ -27,7 +27,7 @@ var Picolibc = Library{
+ 			"-D_COMPILING_NEWLIB",
+ 			"-DHAVE_ALIAS_ATTRIBUTE",
+ 			"-DTINY_STDIO",
+-			"-nostdlibinc",
++			"-isystem", "@libclang_inc@",
+ 			"-isystem", picolibcDir + "/include",
+ 			"-I" + picolibcDir + "/tinystdio",
+ 			"-I" + headerPath,
+diff --git compileopts/config.go compileopts/config.go
+index b30e653e..22a95d71 100644
+--- compileopts/config.go
++++ compileopts/config.go
+@@ -288,6 +288,7 @@ func (c *Config) CFlags() []string {
+ 		path, _ := c.LibcPath("picolibc")
+ 		cflags = append(cflags,
+ 			"--sysroot="+path,
++			"-isystem", "@libclang_inc@",
+ 			"-isystem", filepath.Join(path, "include"), // necessary for Xtensa
+ 			"-isystem", filepath.Join(picolibcDir, "include"),
+ 			"-isystem", filepath.Join(picolibcDir, "tinystdio"),
+@@ -297,7 +298,6 @@ func (c *Config) CFlags() []string {
+ 		path, _ := c.LibcPath("musl")
+ 		arch := MuslArchitecture(c.Triple())
+ 		cflags = append(cflags,
+-			"-nostdlibinc",
+ 			"-isystem", filepath.Join(path, "include"),
+ 			"-isystem", filepath.Join(root, "lib", "musl", "arch", arch),
+ 			"-isystem", filepath.Join(root, "lib", "musl", "include"),
