@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "1.28.0",
+  "version": "1.28.1",
   "dependencies": {
     "@blueprintjs/core": "^3.22.3",
     "@deltachat/message_parser_wasm": "^0.3.0",
