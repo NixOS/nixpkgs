@@ -41,14 +41,15 @@ in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
   version = "0.19.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ODu8OgGpzlMjRX7ebMu4DXKj6jUyohCq4Hb8aV5eWIU=";
+    hash = "sha256-ODu8OgGpzlMjRX7ebMu4DXKj6jUyohCq4Hb8aV5eWIU=";
   };
 
   propagatedBuildInputs = [
@@ -59,10 +60,6 @@ buildPythonPackage rec {
     requests_ntlm
     websocket-client
   ] ++ lib.optionals withVisualization visualizationPackages;
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
-  '';
 
   # Most tests require credentials to run on IBMQ
   checkInputs = [
@@ -75,7 +72,10 @@ buildPythonPackage rec {
     websockets
   ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
-  pythonImportsCheck = [ "qiskit.providers.ibmq" ];
+  pythonImportsCheck = [
+    "qiskit.providers.ibmq"
+  ];
+
   # These disabled tests require internet connection, aren't skipped elsewhere
   disabledTests = [
     "test_old_api_url"
