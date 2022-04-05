@@ -352,6 +352,9 @@ let
       meta.mainProgram = "postcss";
     };
 
+    # To update prisma, please first update prisma-engines to the latest
+    # version. Then change the correct hash to this package. The PR should hold
+    # two commits: one for the engines and the other one for the node package.
     prisma = super.prisma.override rec {
       nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -359,7 +362,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-8SdsLPhKR3mOfoo2o73h9mNn3v5kA/RqGA26Sv6qDS78Eh2uepPqt5e8/nwj5EOblYm5HEGuitaXQrOCLb6uTw==";
+        sha512 = "sha512-ltCMZAx1i0i9xuPM692Srj8McC665h6E5RqJom999sjtVSccHSD8Z+HSdBN2183h9PJKvC5dapkn78dd0NWMBg==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
