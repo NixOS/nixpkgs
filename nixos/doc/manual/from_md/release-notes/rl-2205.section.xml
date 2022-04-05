@@ -1456,6 +1456,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>asterisk</literal> and
+          <literal>asterisk-stable</literal> packages were switched from
+          <literal>asterisk_18</literal> to the newly-packaged
+          <literal>asterisk_19</literal>. Asterisk 13 and 17 have been
+          removed as they have reached their end of life.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.unifi.openPorts</literal> option default
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
