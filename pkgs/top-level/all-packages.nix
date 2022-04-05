@@ -10216,6 +10216,8 @@ with pkgs;
 
   svgbob = callPackage ../tools/graphics/svgbob { };
 
+  svgcleaner = callPackage ../tools/graphics/svgcleaner { };
+
   ssb = callPackage ../tools/security/ssb { };
 
   ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
