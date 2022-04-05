@@ -5438,8 +5438,6 @@ in {
 
   napari-svg = callPackage ../development/python-modules/napari-svg { };
 
-  nassl = callPackage ../development/python-modules/nassl { };
-
   nats-py = callPackage ../development/python-modules/nats-py { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
@@ -5676,7 +5674,14 @@ in {
 
   num2words = callPackage ../development/python-modules/num2words { };
 
-  numba = callPackage ../development/python-modules/numba { };
+  numba = callPackage ../development/python-modules/numba {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudatoolkit = tensorflow_compat_cudatoolkit;
+  };
+
+  numbaWithCuda = self.numba.override {
+    cudaSupport = true;
+  };
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
@@ -7227,6 +7232,8 @@ in {
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
+
+  pylnk3 = callPackage ../development/python-modules/pylnk3 { };
 
   pylru = callPackage ../development/python-modules/pylru { };
 
@@ -9657,8 +9664,6 @@ in {
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
-
-  sslyze = callPackage ../development/python-modules/sslyze { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 

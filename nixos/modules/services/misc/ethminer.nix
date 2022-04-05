@@ -22,7 +22,7 @@ in
       };
 
       recheckInterval = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 2000;
         description = "Interval in milliseconds between farm rechecks.";
       };
@@ -70,7 +70,7 @@ in
       };
 
       maxPower = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 113;
         description = "Miner max watt usage.";
       };
@@ -85,7 +85,7 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.ethminer = {
-      path = [ pkgs.cudatoolkit ];
+      path = optional (cfg.toolkit == "cuda") [ pkgs.cudatoolkit ];
       description = "ethminer ethereum mining service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -97,7 +97,7 @@ in
         Restart = "always";
       };
 
-      environment = {
+      environment = mkIf (cfg.toolkit == "cuda") {
         LD_LIBRARY_PATH = "${config.boot.kernelPackages.nvidia_x11}/lib";
       };
 

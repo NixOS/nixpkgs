@@ -32,6 +32,24 @@ let
       feature = "run <literal>checkPhase</literal> by default";
     };
 
+    allowAliases = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to expose old attribute names for compatibility.
+
+        The recommended setting is to enable this, as it
+        improves backward compatibity, easing updates.
+
+        The only reason to disable aliases is for continuous
+        integration purposes. For instance, Nixpkgs should
+        not depend on aliases in its internal code. Projects
+        that aren't Nixpkgs should be cautious of instantly
+        removing all usages of aliases, as migrating too soon
+        can break compatibility with the stable Nixpkgs releases.
+      '';
+    };
+
   };
 
 in {

@@ -1,29 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, jsonconversion, six, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jsonconversion
+, six
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.8.0";
+  version = "0.9.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "amazon.ion";
     inherit version;
-    sha256 = "sha256-vtztUHSnGoPYozhwvigxEdieVtbKNfV4B5yZ4MHaWGw=";
+    hash = "sha256-Moq1e7LmI0L7DHg6UNYvseEDbqdL23aCwL38wDm3yCA=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [ jsonconversion six ];
+  propagatedBuildInputs = [
+    jsonconversion
+    six
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "amazon.ion" ];
+  pythonImportsCheck = [
+    "amazon.ion"
+  ];
 
   meta = with lib; {
-    description = "A Python implementation of Amazon Ion";
+    description = "Python implementation of Amazon Ion";
     homepage = "https://github.com/amzn/ion-python";
     license = licenses.asl20;
-    maintainers = [ maintainers.terlar ];
+    maintainers = with maintainers; [ terlar ];
   };
 }

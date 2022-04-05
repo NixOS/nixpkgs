@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "RogerCrocker";
     repo = "BadaBib";
     rev = "v${version}";
-    sha256 = "sha256-gfZc3R8hrYy4Nco+XwG29lzZd537ByEgd3RL8h7f6DQ=";
+    sha256 = "sha256-fuGGKBScdo9rI3tLSBWIcWEME8nSuct0IUyfmI7PzCc=";
   };
 
   nativeBuildInputs = [
