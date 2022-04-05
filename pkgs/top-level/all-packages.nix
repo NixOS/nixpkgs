@@ -1543,8 +1543,6 @@ with pkgs;
 
   aws-nuke = callPackage ../tools/admin/aws-nuke { };
 
-  aws-okta = callPackage ../tools/security/aws-okta { };
-
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
@@ -1724,8 +1722,6 @@ with pkgs;
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
-
-  container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
@@ -10429,8 +10425,6 @@ with pkgs;
 
   teamviewer = libsForQt515.callPackage ../applications/networking/remote/teamviewer { };
 
-  teleconsole = callPackage ../tools/misc/teleconsole { };
-
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
   teleport = callPackage ../servers/teleport {};
@@ -15365,8 +15359,6 @@ with pkgs;
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
-
-  kube-aws = callPackage ../development/tools/kube-aws { };
 
   kube-hunter = callPackage ../tools/security/kube-hunter { };
 
@@ -21401,8 +21393,6 @@ with pkgs;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
-  heapster = callPackage ../servers/monitoring/heapster { };
-
   hbase = callPackage ../servers/hbase {};
 
   headphones = callPackage ../servers/headphones {};
@@ -22005,7 +21995,6 @@ with pkgs;
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
   prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
-  prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-mikrotik-exporter = callPackage ../servers/monitoring/prometheus/mikrotik-exporter.nix { };
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
@@ -24390,8 +24379,6 @@ with pkgs;
   roboto-slab = callPackage ../data/fonts/roboto-slab { };
 
   hasklig = callPackage ../data/fonts/hasklig {};
-
-  interfacer = callPackage ../development/tools/interfacer { };
 
   maligned = callPackage ../development/tools/maligned { };
 
@@ -27157,8 +27144,6 @@ with pkgs;
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
-
-  kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
