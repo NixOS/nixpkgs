@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "mmctl";
-  version = "6.4.2";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mmctl";
     rev = "v${version}";
-    sha256 = "sha256-FlqkY4LvAW9Cibs+3UkMDWA+uc62wMh13BllWuxjVZU=";
+    sha256 = "sha256-hDS8KRW2Kn92GRQb2+ecWYhbQGhKNKnFDtcKTBTqZJk=";
   };
 
   vendorSha256 = null;
