@@ -757,7 +757,7 @@ rec {
        => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
   */
   sanitizeDerivationName =
-  let okRegex = match "^[[:alnum:]+_?=-][[:alnum:]+._?=-]*$";
+  let okRegex = match "[[:alnum:]+_?=-][[:alnum:]+._?=-]*";
   in
   string:
   # First detect the common case of already valid strings, to speed those up
