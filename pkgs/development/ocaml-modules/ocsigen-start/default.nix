@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocsigen-start";
-  version = "4.3.0";
+  version = "4.5.0";
 
   nativeBuildInputs = [ ocaml findlib eliom ];
   propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ocamlnet ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = "ocsigen-start";
     rev = version;
-    sha256 = "0lkl59dwzyqq2lyr46fyjr27ms0fp9h59xfsn37faaavdd7v0h98";
+    sha256 = "sha256:1n94r8rbkzxbgcz5w135n6f2cwpc91bdvf7yslcdq4cn713rncmq";
   };
 
   preInstall = ''

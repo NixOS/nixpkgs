@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = [
-    makeWrapper
     perl
     (buildEnv {
       name = "rt-perl-deps";

@@ -242,9 +242,8 @@
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
-/nixos/tests/docker-tools-overlay.nix        @roberth
-/nixos/tests/docker-tools.nix                @roberth
-/doc/builders/images/dockertools.xml         @roberth
+/nixos/tests/docker-tools*                   @roberth
+/doc/builders/images/dockertools.section.md  @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood
