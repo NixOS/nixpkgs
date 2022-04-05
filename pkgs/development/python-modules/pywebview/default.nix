@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.5";
+  version = "3.6.1";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
     rev = version;
-    sha256 = "sha256-+At/ToEylSPcLh/u2NHVTXQpMnw+2/afsevg5YAX/4c=";
+    sha256 = "sha256-9o9ghqvU9Hnmf2aj/BqX7WBgS9ilRSnicR+qd25OfjI=";
   };
 
   nativeBuildInputs = [

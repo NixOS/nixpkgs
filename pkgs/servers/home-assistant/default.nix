@@ -59,6 +59,18 @@ let
     })
 
     (self: super: {
+      hatasmota = super.hatasmota.overridePythonAttrs (oldAttrs: {
+        version = "0.3.1";
+        src = fetchFromGitHub {
+          owner = "emontnemery";
+          repo = "hatasmota";
+          rev = "0.3.1";
+          sha256 = "sha256-/am6cRhAdiqMq0u7Ed4qhIA+Em2O0gIt7HfP19+2XHw=";
+        };
+      });
+    })
+
+    (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.18";
         src = fetchFromGitHub {

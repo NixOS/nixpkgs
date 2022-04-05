@@ -1,19 +1,19 @@
-{ stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
+{ stdenv, bazel_4, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch, patchelfUnstable
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
-, numpy, tensorflow-tensorboard, absl-py
+, numpy, tensorboard, absl-py
 , setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
-, dill, flatbuffers-python, tblib, typing-extensions
+, dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
-, jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp
+, jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp, nsync
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
-# Upsteam by default includes cuda support since tensorflow 1.15. We could do
+# Upstream by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.7.1";
+  version = "2.8.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -94,8 +94,8 @@ let
       setuptools
       six
       tblib
+      tensorboard
       tensorflow-estimator
-      tensorflow-tensorboard
       termcolor
       typing-extensions
       wheel
@@ -179,19 +179,14 @@ let
     stdenv = llvmPackages_11.stdenv;
   })) {
     name = "${pname}-${version}";
-    bazel = bazel_3;
+    bazel = bazel_4;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1qwzbqq899swrwrwmm6z7mq9sc55gyh0r4ca0mcnchbvn7w0qbkh";
+      hash = "sha256-w78ehpsnXElIyYftgZEq3b/+TSrRN1gyWVUVlSZpGFM=";
     };
-
-    patches = [
-      # Patch the sources to compile with protobuf >= 3.16.
-      ./system-protobuf.patch
-    ];
 
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
@@ -207,20 +202,20 @@ let
       git
 
       # libs taken from system through the TF_SYS_LIBS mechanism
-      grpc
-      sqlite
       boringssl
-      jsoncpp
       curl
+      double-conversion
+      flatbuffers-core
+      giflib
+      grpc
+      icu
+      jsoncpp
+      libjpeg_turbo
+      libpng
+      lmdb-core
       pybind11
       snappy
-      flatbuffers-core
-      icu
-      double-conversion
-      libpng
-      libjpeg_turbo
-      giflib
-      lmdb-core
+      sqlite
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
@@ -229,6 +224,8 @@ let
     ] ++ lib.optionals stdenv.isDarwin [
       Foundation
       Security
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      nsync
     ];
 
     # arbitrarily set to the current latest bazel version, overly careful
@@ -237,7 +234,7 @@ let
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
     # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
-    TF_SYSTEM_LIBS = lib.concatStringsSep "," [
+    TF_SYSTEM_LIBS = lib.concatStringsSep "," ([
       "absl_py"
       "astor_archive"
       "astunparse_archive"
@@ -253,7 +250,6 @@ let
       "cython"
       "dill_archive"
       "double_conversion"
-      "enum34_archive"
       "flatbuffers"
       "functools32_archive"
       "gast_archive"
@@ -264,7 +260,6 @@ let
       "libjpeg_turbo"
       "lmdb"
       "nasm"
-      # "nsync" # not packaged in nixpkgs
       "opt_einsum_archive"
       "org_sqlite"
       "pasta"
@@ -277,7 +272,9 @@ let
       "typing_extensions_archive"
       "wrapt"
       "zlib"
-    ];
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      "nsync" # fails to build on darwin
+    ]);
 
     INCLUDEDIR = "${includes_joined}/include";
 
@@ -361,12 +358,12 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-+szc2mRoImwijzbj3nw6HmZp3DeRjjPRU5yC+5AEbkg="
+        "sha256-dQEyfueuQPcGvbhuh8Al45np3nRLDw2PCfC2lEqAH50="
       else
         if stdenv.isDarwin then
-          "sha256-+bwIzp6t7gRJPcI8B5oyuf9z0AjCAyggUR7x+vv5kFs="
+          "sha256-yfnZVtKWqNQGvlfq2owXhem0LmzDYriVfYgf1ZRlaDo="
         else
-          "sha256-5yOYmeGpJq4Chi55H7iblxyRXVktgnePtpYTPvBs538=";
+          "sha256:12i1ix2xwq77f3h8qr4h57g0aazrdsjjqa536cpwx3n1mvl5p6qi";
     };
 
     buildAttrs = {
@@ -428,18 +425,20 @@ in buildPythonPackage {
 
   # Adjust dependency requirements:
   # - Relax gast version requirement that doesn't match what we have packaged
+  # - Relax tf-estimator, that would require a nightly version
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
   # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
       -e "s/'gast[^']*',/'gast',/" \
+      -e "s/'tf-estimator-nightly[^']*',/'tensorflow-estimator',/" \
       -e "/'libclang[^']*',/d" \
       -e "/'keras[^']*',/d" \
       -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
   '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorflow-tensorboard, which causes environment collisions.
+  # and the propagated input tensorboard, which causes environment collisions.
   # Another possibility would be to have tensorboard only in the buildInputs
   # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
   postInstall = ''
@@ -452,7 +451,6 @@ in buildPythonPackage {
   propagatedBuildInputs = [
     absl-py
     astunparse
-    dill
     flatbuffers-python
     gast
     google-pasta
@@ -463,13 +461,12 @@ in buildPythonPackage {
     opt-einsum
     protobuf-python
     six
-    tblib
     tensorflow-estimator
     termcolor
     typing-extensions
     wrapt
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard
+    tensorboard
   ];
 
   # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
@@ -486,7 +483,13 @@ in buildPythonPackage {
   # Actual tests are slow and impure.
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
-  checkInputs = [ keras ];
+  # TEST_PACKAGES in tensorflow/tools/pip_package/setup.py
+  checkInputs = [
+    dill
+    keras
+    portpicker
+    tblib
+  ];
   checkPhase = ''
     ${python.interpreter} <<EOF
     # A simple "Hello world"

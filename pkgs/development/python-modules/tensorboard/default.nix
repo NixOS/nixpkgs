@@ -22,17 +22,16 @@
 # buildBazelPackage.
 
 buildPythonPackage rec {
-  pname = "tensorflow-tensorboard";
-  version = "2.6.0";
+  pname = "tensorboard";
+  version = "2.8.0";
   format = "wheel";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {
-    pname = "tensorboard";
-    inherit version format;
+    inherit pname version format;
     dist = "py3";
     python = "py3";
-    sha256 = "sha256-99rEzftS0UyeP3RYXOKq+OYgNiCoZOUfr4SYiwn3u9s=";
+    hash = "sha256-ZaM45EJOkHnyYEkjvb4wF5KtzirOG+aNprPd8AUXDe8=";
   };
 
   postPatch = ''

@@ -84,7 +84,21 @@ let
     qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
+    qtwayland = [
+      # NixOS-specific, ensure that app_id is correctly determined for
+      # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
+      # context).  Beware: shared among different Qt5 versions.
+      ../modules/qtwayland-app_id.patch
+    ];
     qtwebengine = [
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-SIGSTKSZ.patch";
+        sha256 = "sha256-CJxN6sTvWdPVEwSkr0zpPrjyhUIi6tYSWb8ZyO0sY2o=";
+        excludes = [
+          "src/3rdparty/chromium/third_party/abseil-cpp/absl/debugging/failure_signal_handler.cc"
+        ];
+      })
       ./qtwebengine-no-build-skip.patch
       # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
       # https://bugreports.qt.io/browse/QTBUG-77037

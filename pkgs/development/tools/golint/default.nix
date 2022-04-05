@@ -5,8 +5,6 @@ buildGoModule rec {
   version = "20201208-${lib.strings.substring 0 7 rev}";
   rev = "83fdc39ff7b56453e3793356bcff3070b9b96445";
 
-  excludedPackages = "testdata";
-
   # we must allow references to the original `go` package, as golint uses
   # compiler go/build package to load the packages it's linting.
   allowGoReference = true;

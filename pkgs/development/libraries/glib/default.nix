@@ -54,6 +54,14 @@ stdenv.mkDerivation rec {
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+
+    # Fix Inkscape compilation with clang++
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2625
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/97d39b745ff1f621424f68a41ce0a7c5bb554c87.patch";
+      sha256 = "wftuyf3ExFfrISngCQpEUpIGfHCCLXeYv/PEb/TE6a8=";
+      revert = true;
+    })
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch

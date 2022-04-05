@@ -96,6 +96,12 @@ let
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
+
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/4cef673b2dd01ce85ce7a841cf352104bbe79668/f/qtwebengine-everywhere-5.15.2-SIGSTKSZ.patch";
+        sha256 = "sha256-2D0/FL4PBL4p6ccd6JoDAGqNtLs2aeE1OdM+PJItock=";
+      })
     ] ++ lib.optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
       (fetchpatch {
@@ -120,7 +126,13 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
-    qtwayland = [ ./qtwayland-libdrm-build.patch ];
+    qtwayland = [
+      ./qtwayland-libdrm-build.patch
+      # NixOS-specific, ensure that app_id is correctly determined for
+      # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
+      # context).  Beware: shared among different Qt5 versions.
+      ../modules/qtwayland-app_id.patch
+    ];
   };
 
   addPackages = self: with self;

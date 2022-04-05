@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "detect-secrets";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dG2YaWXAMINxBGKNMlVfGTR9QHdnepiZmN+G88X4Wak=";
+    hash = "sha256-4VcV06iaL3NAj7qF8RyfWV1zgrt928AQfjGeuO2Pbjk=";
     leaveDotGit = true;
   };
 

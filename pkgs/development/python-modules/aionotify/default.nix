@@ -18,6 +18,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
+  preCheck = ''
+    substituteInPlace tests/test_usage.py \
+      --replace "asyncio.wait_for(task, timeout, loop=self.loop)" "asyncio.wait_for(task, timeout)"
+  '';
+
   checkInputs = [
     asynctest
   ];

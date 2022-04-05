@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  installCheckInputs = [
+  checkInputs = [
     python3
     python3.pkgs.dbus-python
     python3.pkgs.pygobject3
@@ -64,18 +64,36 @@ stdenv.mkDerivation rec {
     gjs
   ];
 
-  # needs to run after install because typelibs point to absolute paths
-  doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib
+  doCheck = true;
+
 
   postPatch = ''
     patchShebangs .
   '';
 
-  installCheckPhase = ''
-    export NO_AT_BRIDGE=1
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overwitten during installation.
+    mkdir -p $out/lib $out/lib
+    ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
+    ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      make check
+      meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    # This is test-only so it won’t be overwritten during installation.
+    rm "$out/lib/libmock-service.so"
   '';
 
   postFixup = ''

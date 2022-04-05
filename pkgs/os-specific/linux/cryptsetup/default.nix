@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "cryptsetup";
   version = "2.4.3";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "bin" "out" "dev" "man" ];
   separateDebugInfo = true;
 
   src = fetchurl {
@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--disable-external-tokens"
+    # We have to override this even though we're removing token
+    # support, because the path still gets included in the binary even
+    # though it isn't used.
+    "--with-luks2-external-tokens-path=/"
   ];
 
   nativeBuildInputs = [ pkg-config ];

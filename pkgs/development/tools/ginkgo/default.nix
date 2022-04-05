@@ -14,7 +14,7 @@ buildGoModule rec {
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
-  excludedPackages = "\\(integration\\|types\\)";
+  excludedPackages = [ "integration" "types" ];
 
   meta = with lib; {
     homepage = "https://onsi.github.io/ginkgo/";

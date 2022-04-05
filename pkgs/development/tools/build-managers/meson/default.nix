@@ -10,11 +10,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.60.3";
+  version = "0.61.2";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-h8pfqTWKAYZFKTkr1k4CcVjrlK/KfHdmsYZu8n7MuY4=";
+    hash = "sha256-AjOn+NlZB5MY9gUrCTnCf2il3oa6YB8lye5oaftfWIk=";
   };
 
   patches = [
@@ -58,10 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
-
-    # Meson tries to update ld.so.cache which breaks when the target architecture
-    # differs from the build host's.
-    ./do-not-update-ldconfig-cache.patch
   ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
     # Fix building gtkdoc for GLib
     # https://github.com/mesonbuild/meson/pull/10186

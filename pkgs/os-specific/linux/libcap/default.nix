@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, perl, runtimeShell
+{ stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -7,18 +7,17 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.49";
+  version = "2.63";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6YvE2TZFCC7Hh3MLD9GnErOIgkZcUFd33hfDOIMe4YE=";
+    sha256 = "sha256-DGN7j0T8fYYneH6c9X8VrAbB3cy1PkH+7FSWvjRm938=";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl ];
 
   buildInputs = lib.optional usePam pam;
 
@@ -31,7 +30,9 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ] ++ lib.optional isStatic "SHARED=no";
 
-  prePatch = ''
+  postPatch = ''
+    patchShebangs ./progs/mkcapshdoc.sh
+
     # use full path to bash
     substituteInPlace progs/capsh.c --replace "/bin/bash" "${runtimeShell}"
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.14.8";
+  version = "3.14.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BJSM+7+VdW6SxN4/AXsX8NhQPdIFoYrVRVwR9OsJ3QE=";
+    sha256 = "sha256-8rwWKsOOYUrk2k1piCurb1LkB9zzmSITq52qWdyx4yk=";
   };
 
   buildInputs = [

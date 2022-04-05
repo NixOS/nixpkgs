@@ -35,8 +35,6 @@
 assert withGtk2 -> (!withWebKit);
 
 let
-  inherit (gnome2) GConf;
-  inherit (gst_all_1) gst-plugins-base gstreamer;
   gtk = if withGtk2 then gtk2 else gtk3;
 in
 stdenv.mkDerivation rec {
@@ -59,8 +57,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gst-plugins-base
-    gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
   ]
   ++ lib.optionals (!stdenv.isDarwin) [
     gtk
@@ -71,7 +69,7 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optionals withGtk2 [
-    GConf
+    gnome2.GConf
   ]
   ++ lib.optional withMesa libGLU
   ++ lib.optional (withWebKit && !stdenv.isDarwin) webkitgtk

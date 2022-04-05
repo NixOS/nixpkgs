@@ -10,12 +10,14 @@
 , pydocstyle
 , pyflakes
 , vulture
+, isort
+, pylint
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pylama";
-  version = "8.3.6";
+  version = "8.3.7";
 
   format = "setuptools";
 
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "pylama";
     rev = version;
-    hash = "sha256-KU/G+2Fm4G/dUuNhhk8xM0Y8+7YOUUgREONM8CQGugw=";
+    hash = "sha256-//mrvZb4bT4aATURqa4g1DUagYe9SoP3o3OrwmiEJnI=";
   };
 
   patches = [
@@ -45,14 +47,22 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    # avoid infinite recursion pylint -> isort -> pylama
+    (pylint.override {
+      isort = isort.overridePythonAttrs (old: {
+        doCheck = false;
+      });
+    })
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$TEMP
+  '';
+
   disabledTests = [
-    "test_pylint" # infinite recursion
     "test_quotes" # FIXME package pylama-quotes
     "test_radon" # FIXME package radon
-    "test_sort"
   ];
 
   pythonImportsCheck = [

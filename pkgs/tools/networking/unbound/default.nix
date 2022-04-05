@@ -8,6 +8,8 @@
 , libsodium
 , protobufc
 , hiredis
+, python ? null
+, swig
 , dns-root-data
 , pkg-config
 , makeWrapper
@@ -35,6 +37,7 @@
 # Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+, withPythonModule ? false
 , libnghttp2
 }:
 
@@ -49,11 +52,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
     ++ lib.optionals withSystemd [ pkg-config systemd ]
-    ++ lib.optionals withDoH [ libnghttp2 ];
+    ++ lib.optionals withDoH [ libnghttp2 ]
+    ++ lib.optionals withPythonModule [ python ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -69,6 +74,8 @@ stdenv.mkDerivation rec {
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
+  ] ++ lib.optionals withPythonModule [
+    "--with-pythonmodule"
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
   ] ++ lib.optionals withECS [
@@ -100,12 +107,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postPatch = lib.optionalString withPythonModule ''
+    substituteInPlace Makefile.in \
+      --replace "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}"
+  '';
+
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
   postInstall = ''
     make unbound-event-install
     wrapProgram $out/bin/unbound-control-setup \
       --prefix PATH : ${lib.makeBinPath [ openssl ]}
+  '' + lib.optionalString withPythonModule ''
+    wrapProgram $out/bin/unbound \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}" \
+      --argv0 $out/bin/unbound
   '';
 
   preFixup = lib.optionalString withSlimLib

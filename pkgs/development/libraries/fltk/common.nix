@@ -36,7 +36,6 @@
 , withDocs ? true
 , doxygen
 , graphviz
-, texlive
 
 , withExamples ? true
 , withShared ? true
@@ -44,11 +43,6 @@
 
 let
   onOff = value: if value then "ON" else "OFF";
-  tex = texlive.combine {
-    inherit (texlive)
-      scheme-medium varwidth multirow hanging adjustbox collectbox stackengine
-      sectsty tocloft newunicodechar etoc;
-  };
 in
 stdenv.mkDerivation rec {
   pname = "fltk";
@@ -81,7 +75,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withDocs [
     doxygen
     graphviz
-    tex
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -149,9 +142,9 @@ stdenv.mkDerivation rec {
 
     # Docs
     "-DOPTION_BUILD_HTML_DOCUMENTATION=${onOff withDocs}"
-    "-DOPTION_BUILD_PDF_DOCUMENTATION=${onOff withDocs}"
+    "-DOPTION_BUILD_PDF_DOCUMENTATION=OFF"
     "-DOPTION_INSTALL_HTML_DOCUMENTATION=${onOff withDocs}"
-    "-DOPTION_INSTALL_PDF_DOCUMENTATION=${onOff withDocs}"
+    "-DOPTION_INSTALL_PDF_DOCUMENTATION=OFF"
     "-DOPTION_INCLUDE_DRIVER_DOCUMENTATION=${onOff withDocs}"
   ];
 

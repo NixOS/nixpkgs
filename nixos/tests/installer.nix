@@ -312,6 +312,7 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            kmod.dev
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom

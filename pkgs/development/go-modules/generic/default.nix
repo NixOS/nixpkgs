@@ -153,13 +153,13 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      export GOPROXY=off
       export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString (go-modules != "") ''
+    '' + lib.optionalString (vendorSha256 != null) ''
       ${if proxyVendor then ''
         export GOPROXY=file://${go-modules}
       '' else ''
-        export GOPROXY=off
         rm -rf vendor
         cp -r --reflink=auto ${go-modules} vendor
       ''}
@@ -171,13 +171,20 @@ let
     buildPhase = args.buildPhase or ''
       runHook preBuild
 
+      exclude='\(/_\|examples\|Godeps\|testdata'
+      if [[ -n "$excludedPackages" ]]; then
+        IFS=' ' read -r -a excludedArr <<<$excludedPackages
+        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
+        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
+        exclude+='\|'"$excludedAlternates"
+      fi
+      exclude+='\)'
+
       buildGoDir() {
         local d; local cmd;
         cmd="$1"
         d="$2"
         . $TMPDIR/buildFlagsArray
-        echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
-        [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
         if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," tags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
@@ -214,6 +221,7 @@ let
           export NIX_BUILD_CORES=1
       fi
       for pkg in $(getGoDirs ""); do
+        grep -q "$exclude" <<<$pkg && continue
         echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done

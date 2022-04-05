@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.10.2";
+  version = "1.11.0";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JNc8p9/X5sczmUT4lVS0AQcZiZM3kk/KFEfY8bXbUNY=";
+    sha256 = "sha256-7KIkx8LI7kByoHQ+SJioSpvfgpe15ZEKJjLkxBgv+yo=";
   };
 
   nativeBuildInputs = [

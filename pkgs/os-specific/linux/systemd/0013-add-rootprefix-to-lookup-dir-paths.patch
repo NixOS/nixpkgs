@@ -1,4 +1,4 @@
-From eb93778af78a127e8e20d6ed7fd9f91fd22dc7c9 Mon Sep 17 00:00:00 2001
+From b30d2273d3ce1480b0c4c27c25211f84e04172e9 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Thu, 9 May 2019 11:15:22 +0200
 Subject: [PATCH 13/19] add rootprefix to lookup dir paths
@@ -12,7 +12,7 @@ files that I might have missed.
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/src/basic/def.h b/src/basic/def.h
-index 2e60abb4f1..732ec51d36 100644
+index eccee3d3fa..e94a2c8bd0 100644
 --- a/src/basic/def.h
 +++ b/src/basic/def.h
 @@ -39,13 +39,15 @@
@@ -34,5 +34,5 @@ index 2e60abb4f1..732ec51d36 100644
  #define CONF_PATHS(n)                           \
          CONF_PATHS_USR(n)                       \
 -- 
-2.33.1
+2.34.0
 

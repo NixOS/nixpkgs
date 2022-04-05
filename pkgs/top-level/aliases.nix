@@ -1410,6 +1410,9 @@ mapAliases ({
     targetLlvmLibraries = targetPackages.llvmPackages_git.libraries;
   });
 
+  # Added 2022-01-28
+  zeroc-ice-36 = throw "Unmaintained, doesn't build w/glibc-2.34";
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */

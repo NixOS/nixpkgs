@@ -10,7 +10,7 @@
 
 let
   pname = "setuptools";
-  version = "57.2.0";
+  version = "60.8.2";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -20,12 +20,13 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-zFmndVoATNxfvDsacY+gj5bzIbbd/8ldbsJj4qOawTA=";
+      sha256 = "1mqpmbn58rx3g24dm6wnllx0xs97ampn2yga3qypqgwnh1nk477i";
       name = "${pname}-${version}-source";
     };
 
     patches = [
       ./tag-date.patch
+      ./setuptools-distutils-C++.patch
     ];
 
     buildPhase = ''
