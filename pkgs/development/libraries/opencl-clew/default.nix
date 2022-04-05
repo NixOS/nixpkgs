@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     changelog = "https://github.com/martijnberger/clew/releases/tag/${version}";
     description = "The OpenCL Extension Wrangler Library";
     homepage = "https://github.com/martijnberger/clew";
-    paltforms = lib.platforms.linux; # upstream mentions windows and darwin support too
+    platforms = lib.platforms.linux; # upstream mentions windows and darwin support too
   };
 }
