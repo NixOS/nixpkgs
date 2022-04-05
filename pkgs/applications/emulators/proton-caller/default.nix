@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "proton-caller";
-  version = "2.3.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "caverym";
     repo = pname;
     rev = version;
-    sha256 = "sha256-k+cH86atuVoLCQ+I1zu08f4T+y0u8vnjo3VA+Otg+a4=";
+    sha256 = "sha256-eyHFKAGx8du4osoGDsMFzVE/TC/ZMPsx6mrWUPDCLJ4=";
   };
 
-  cargoSha256 = "sha256-rkgg96IdIhVXZ5y/ECUxNPyPV9Nv5XGAtlxAkILry2s=";
+  cargoSha256 = "sha256-/4+r5rvRUqQL8EVIg/22ZytXyE4+SV4UEcXiEw4795U=";
 
   meta = with lib; {
     description = "Run Windows programs with Proton";
