@@ -27118,8 +27118,6 @@ with pkgs;
 
   kubedb-cli = callPackage ../applications/networking/cluster/kubedb-cli { };
 
-  kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
-
   kube-score = callPackage ../applications/networking/cluster/kube-score { };
 
   kubectl-evict-pod = callPackage ../applications/networking/cluster/kubectl-evict-pod { };
