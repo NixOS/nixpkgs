@@ -1231,7 +1231,6 @@ mapAliases ({
   sudolikeaboss = throw "sudolikeaboss is no longer maintained by upstream"; # Added 2022-04-16
   sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";
   surf-webkit2 = throw "'surf-webkit2' has been renamed to/replaced by 'surf'"; # Converted to throw 2022-02-22
-  svgcleaner = throw "svgcleaner has been removed"; # Added 2021-11-17
   swec = throw "swec has been removed; broken and abandoned upstream"; # Added 2021-10-14
   swfdec = throw "swfdec has been removed as broken and unmaintained"; # Added 2020-08-23
   swtpm-tpm2 = swtpm; # Added 2021-02-26
