@@ -5575,6 +5575,12 @@
     githubId = 609279;
     name = "Isaac Shapira";
   };
+  fricklerhandwerk = {
+    email = "valentin@fricklerhandwerk.de";
+    github = "fricklerhandwerk";
+    githubId = 6599296;
+    name = "Valentin Gagarin";
+  };
   fridh = {
     email = "fridh@fridh.nl";
     github = "FRidh";
