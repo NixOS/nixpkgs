@@ -1598,6 +1598,37 @@ let
         };
       };
 
+      nwolverson.ide-purescript = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ide-purescript";
+          publisher = "nwolverson";
+          version = "0.25.12";
+          sha256 = "sha256-tgZ0PnWrSDBNKBB5bKH/Fmq6UVNSRYZ8HJdzFDgxILk=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/nwolverson.ide-purescript/changelog";
+          description = "PureScript IntelliSense, tooltip, errors, code actions with language-server-purescript/purs IDE server";
+          homepage = "https://github.com/nwolverson/vscode-ide-purescript";
+          license = licenses.mit;
+          maintainers = with maintainers; [ nwolverson ];
+        };
+      };
+
+      nwolverson.language-purescript = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "language-purescript";
+          publisher = "nwolverson";
+          version = "0.2.8";
+          sha256 = "sha256-2uOwCHvnlQQM8s8n7dtvIaMgpW8ROeoUraM02rncH9o=";
+        };
+        meta = with lib; {
+          description = "Syntax Highlighting for the PureScript programming language";
+          homepage = "https://github.com/nwolverson/vscode-language-purescript#readme";
+          license = licenses.mit;
+          maintainers = with maintainers; [ nwolverson ];
+        };
+      };
+  
       octref.vetur = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vetur";
