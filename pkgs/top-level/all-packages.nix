@@ -27153,8 +27153,6 @@ with pkgs;
 
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
 
-  kubeless = callPackage ../applications/networking/cluster/kubeless { };
-
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
