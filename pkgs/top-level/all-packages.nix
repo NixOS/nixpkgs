@@ -2484,8 +2484,6 @@ with pkgs;
 
   bustle = haskellPackages.bustle;
 
-  buttersink = callPackage ../tools/filesystems/buttersink { };
-
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   bwbasic = callPackage ../development/interpreters/bwbasic { };
