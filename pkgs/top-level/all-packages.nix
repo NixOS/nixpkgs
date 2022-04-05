@@ -21397,8 +21397,6 @@ with pkgs;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
-  heapster = callPackage ../servers/monitoring/heapster { };
-
   hbase = callPackage ../servers/hbase {};
 
   headphones = callPackage ../servers/headphones {};
