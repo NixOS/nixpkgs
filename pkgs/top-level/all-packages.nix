@@ -1723,8 +1723,6 @@ with pkgs;
 
   codeql = callPackage ../development/tools/analysis/codeql { };
 
-  container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
-
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
   ccextractor = callPackage ../applications/video/ccextractor { };
