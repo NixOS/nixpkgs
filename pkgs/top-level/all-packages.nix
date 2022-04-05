@@ -23377,7 +23377,7 @@ with pkgs;
     withCryptsetup = true;
     withFido2 = true;
     withTpm2Tss = true;
-    inherit lvm2 libfido2 p11-kit;
+    inherit libfido2 p11-kit;
   };
   systemdStage1Network = systemdStage1.override {
     pname = "systemd-stage-1-network";
