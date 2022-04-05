@@ -15,6 +15,7 @@
 , cudatoolkit_11_3
 , cudatoolkit_11_4
 , cudatoolkit_11_5
+, cudatoolkit_11_6
 , fetchurl
 , lib
 }:
@@ -89,7 +90,7 @@ rec {
     cudatoolkit = cudatoolkit_10_2;
     # See https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-832/support-matrix/index.html#cudnn-cuda-hardware-versions.
     minCudaVersion = "10.2.00000";
-    maxCudaVersion = "11.5.99999";
+    maxCudaVersion = "11.6.00001";
     mkSrc = cudatoolkit:
       let v = if lib.versions.majorMinor cudatoolkit.version == "10.2" then "10.2" else "11.5"; in
       fetchurl {
@@ -108,6 +109,7 @@ rec {
   cudnn_8_3_cudatoolkit_11_3 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_3; };
   cudnn_8_3_cudatoolkit_11_4 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_4; };
   cudnn_8_3_cudatoolkit_11_5 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_5; };
+  cudnn_8_3_cudatoolkit_11_6 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11_6; };
 
   cudnn_8_3_cudatoolkit_10 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_10; };
   cudnn_8_3_cudatoolkit_11 = cudnn_8_3_cudatoolkit_10_2.override { cudatoolkit = cudatoolkit_11; };
