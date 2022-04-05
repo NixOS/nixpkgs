@@ -1,5 +1,6 @@
 { lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , itstool
@@ -36,6 +37,13 @@ python3Packages.buildPythonApplication rec {
     # and saves them to the generated binary. This would make the build-time
     # dependencies part of the closure so we remove it.
     ./prevent-closure-contamination.patch
+
+    # Fix build with meson 0.61
+    # https://gitlab.gnome.org/GNOME/pitivi/-/merge_requests/414
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pitivi/-/commit/ddf2369d1fc6fddd63f676cc905a8b8e96291a4c.patch";
+      sha256 = "MC4naGnqhrYlFBFHZaSzbOzrqaNK5/Xv5jBmCu0fLQE=";
+    })
   ];
 
   nativeBuildInputs = [
