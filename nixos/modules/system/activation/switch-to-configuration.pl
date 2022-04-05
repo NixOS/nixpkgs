@@ -1,5 +1,17 @@
 #! @perl@/bin/perl
 
+# Issue #166838 uncovered a situation in which a configuration not suitable
+# for the target architecture caused a cryptic error message instead of
+# a clean failure. Due to this mismatch, the perl interpreter in the shebang
+# line wasn't able to be executed, causing this script to be misinterpreted
+# as a shell script.
+#
+# Let's detect this situation to give a more meaningful error
+# message. The following two lines are carefully written to be both valid Perl
+# and Bash.
+printf "Perl script erroneously interpreted as shell script,\ndoes target platform match nixpkgs.crossSystem platform?\n" && exit 1
+    if 0;
+
 use strict;
 use warnings;
 use Config::IniFiles;
