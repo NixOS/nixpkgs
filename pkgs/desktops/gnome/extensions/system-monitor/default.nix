@@ -11,10 +11,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-JuRRlvqlqneqUdgezKGl2yg7wFYGCCo51q9CBwrxTBY=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     glib
-    glib-networking
-    libgtop
+    gnome.gnome-shell
   ];
 
   patches = [
@@ -26,18 +25,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    glib-compile-schemas --targetdir="system-monitor@paradoxxx.zero.gmail.com/schemas" "system-monitor@paradoxxx.zero.gmail.com/schemas"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions
-    cp -r "system-monitor@paradoxxx.zero.gmail.com" $out/share/gnome-shell/extensions
-    runHook postInstall
-  '';
+  makeFlags = [
+    "VERSION=${version}"
+    "INSTALLBASE=$(out)/share/gnome-shell/extensions"
+    "SUDO="
+  ];
 
   passthru = {
     extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";
