@@ -5384,6 +5384,8 @@ with pkgs;
 
   cron = callPackage ../tools/system/cron { };
 
+  ctlptl = callPackage ../development/tools/ctlptl { };
+
   snooze = callPackage ../tools/system/snooze { };
 
   cudaPackages_10_0 = callPackage ./cuda-packages.nix { cudaVersion = "10.0"; };
