@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pack";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nlSJwo2YjbOOKofZwXdWB3fxRUNTeSUcT6jN987SB3o=";
+    sha256 = "sha256-zwvZ99SLeYQDSzrEy2eYPMyFh9B6LWZT3tY92EOrXnU=";
   };
 
   vendorSha256 = "sha256-4uMd0KaV5xrxuJ9yqpxbD3YTNaBHsH2d/IRtYRyN5+0=";
