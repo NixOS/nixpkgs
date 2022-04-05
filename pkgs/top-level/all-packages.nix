@@ -24750,6 +24750,8 @@ with pkgs;
 
   inherit (atomPackages) atom atom-beta;
 
+  asap = callPackage ../tools/audio/asap { };
+
   aseprite = callPackage ../applications/editors/aseprite { };
   aseprite-unfree = aseprite.override { unfree = true; };
 
