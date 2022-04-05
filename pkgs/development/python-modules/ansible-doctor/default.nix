@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.2.1";
+  version = "1.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "v${version}";
-    sha256 = "sha256-2Jaf7asU4c7kw9v9dUYDL4/M2Y/2qhMM3m0jqYiobUI=";
+    sha256 = "sha256-w2uI57xhg1cWIJMlgppTC03z+CG3KnVjGOSL9hd+xzg=";
   };
 
   postInstall = ''
