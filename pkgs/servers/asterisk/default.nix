@@ -100,17 +100,16 @@ let
   }) (lib.importJSON ./versions.json);
 
 in {
-  # Supported releases (as of 2020-10-26).
+  # Supported releases (as of 2022-04-05).
   # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
   # Exact version can be found at https://www.asterisk.org/downloads/asterisk/all-asterisk-versions/
   #
   # Series  Type       Rel. Date   Sec. Fixes  EOL
-  # 13.x    LTS        2014-10-24  2020-10-24  2021-10-24
   # 16.x    LTS        2018-10-09  2022-10-09  2023-10-09
-  # 17.x    Standard   2019-10-28  2020-10-28  2021-10-28
   # 18.x    LTS        2020-10-20  2024-10-20  2025-10-20
+  # 19.x    Standard   2021-11-02  2022-11-02  2023-11-02
   asterisk-lts = versions.asterisk_18;
-  asterisk-stable = versions.asterisk_18;
-  asterisk = versions.asterisk_18;
+  asterisk-stable = versions.asterisk_19;
+  asterisk = versions.asterisk_19;
 
 } // versions
