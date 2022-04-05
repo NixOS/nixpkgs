@@ -33190,6 +33190,8 @@ with pkgs;
     swt = swt_jdk8;
   };
 
+  argononed = callPackage ../misc/drivers/argononed { };
+
   attract-mode = callPackage ../applications/emulators/attract-mode { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
