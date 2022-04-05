@@ -15362,8 +15362,6 @@ with pkgs;
 
   krew = callPackage ../development/tools/krew { };
 
-  kube-aws = callPackage ../development/tools/kube-aws { };
-
   kube-hunter = callPackage ../tools/security/kube-hunter { };
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
