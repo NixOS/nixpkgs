@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "teletype";
-  version = "1.3.2";
+  version = "1.3.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9q46a4ui2kgSUL/vImR02r4T9huwLFwd70AqGBNJNzs=";
+    sha256 = "sha256-uBppM4w9GlMgYqKFGw1Rcjvq+mnU04K3E74jCgK9YYo=";
   };
 
   # no tests
