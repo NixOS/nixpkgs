@@ -6384,6 +6384,10 @@ in {
 
   plexwebsocket = callPackage ../development/python-modules/plexwebsocket { };
 
+  plfit = toPythonModule (pkgs.plfit.override {
+    inherit (self) python;
+  });
+
   plone-testing = callPackage ../development/python-modules/plone-testing { };
 
   plotly = callPackage ../development/python-modules/plotly { };
