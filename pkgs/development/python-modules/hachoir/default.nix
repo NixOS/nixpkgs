@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "hachoir";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "vstinner";
     repo = pname;
     rev = version;
-    sha256 = "06544qmmimvaznwcjs8wwfih1frdd7anwcw5z07cf69l8p146p0y";
+    sha256 = "sha256-iTYW1jrbrpwPABpID6E/D558056kHCu8jdb8XqKvHK4=";
   };
 
   propagatedBuildInputs = [
