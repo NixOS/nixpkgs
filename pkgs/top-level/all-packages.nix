@@ -24379,8 +24379,6 @@ with pkgs;
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
-  interfacer = callPackage ../development/tools/interfacer { };
-
   maligned = callPackage ../development/tools/maligned { };
 
   inter = callPackage ../data/fonts/inter { };
