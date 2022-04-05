@@ -2329,7 +2329,7 @@ let
   # then apply extension specific modifcations to packages.
 
   # overlays will be applied left to right, overrides should come after aliases.
-  overlays = lib.optionals (config.allowAliases or true) [ aliases ];
+  overlays = lib.optionals config.allowAliases [ aliases ];
 
   toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in

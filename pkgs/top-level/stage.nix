@@ -152,7 +152,7 @@ let
       res self super;
     in res;
 
-  aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib self super);
+  aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the

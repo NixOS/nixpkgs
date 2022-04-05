@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "7.0.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OXyp2cQmt311CPAcJQeWKGRHFYNL6E+f2TmUuT80/z4=";
+    sha256 = "sha256-NhsEXYEYoRZ/HlMS+MP/N+ZxB13DDZr5B8MY5dbONP0=";
   };
 
-  cargoSha256 = "sha256-TwegOBf7dILL7DKohIVfa8IRTU4F9u24tDrrONIGF0U=";
+  cargoSha256 = "sha256-Y/DgAMWhTgHuhdbYxpsg7UxLF7hXNQEY1aoaUbKdDEM=";
 
   nativeBuildInputs = [ installShellFiles perl ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];

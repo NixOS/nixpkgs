@@ -13468,6 +13468,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ograc = callPackage ../development/tools/rust/ograc { };
+
   rhack = callPackage ../development/tools/rust/rhack { };
   inherit (rustPackages) rls;
   roogle = callPackage ../development/tools/rust/roogle { };
@@ -30077,6 +30079,8 @@ with pkgs;
   write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
 
   wlc = callPackage  ../tools/misc/wlc { };
+
+  wlclock = callPackage ../applications/misc/wlclock { };
 
   wllvm = callPackage  ../development/tools/wllvm { };
 

@@ -476,7 +476,7 @@ in {
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
 
-  } // lib.optionalAttrs (config.allowAliases or false) {
+  } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
   });
 

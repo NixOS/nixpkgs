@@ -278,7 +278,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-}) // lib.optionalAttrs (config.allowAliases or true) {
+}) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
   gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
