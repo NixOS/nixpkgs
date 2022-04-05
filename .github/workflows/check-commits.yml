@@ -1,0 +1,33 @@
+name: "Checking commits"
+
+permissions: read-all
+
+on:
+  # avoids approving first time contributors
+  pull_request_target:
+    branches-ignore:
+      - 'release-**'
+
+jobs:
+  check-fixup-commits:
+    runs-on: ubuntu-latest
+    if: "github.repository_owner == 'NixOS'"
+    steps:
+    - name: Get list of commit messages from PR
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh api \
+          repos/NixOS/nixpkgs/pulls/${{github.event.number}}/commits --paginate \
+          | jq '.[] | .commit.message' > $HOME/commit_messages
+    - name: print list of commit messages
+      run: |
+        cat "$HOME/commit_messages"
+    - name: check if commit messages contain fixup!
+      run: |
+        # --null-data to treat the whole file as one line, so one match means it exists with 1
+        cat "$HOME/commit_messages" \
+          | grep --ignore-case --invert-match --null-data "fixup!"
+    - if: ${{ failure() }}
+      run: |
+        echo "::warning :: Remember to either fixup the fixup! commits or do a squash merge."
