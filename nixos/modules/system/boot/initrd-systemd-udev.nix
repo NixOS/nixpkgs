@@ -40,8 +40,8 @@ let
         substituteInPlace $i \
           --replace \"/sbin/modprobe \"${pkgs.kmod}/bin/modprobe \
           --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
-          --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
-          --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
+          --replace \"/sbin/blkid \"${systemd.util-linux}/sbin/blkid \
+          --replace \"/bin/mount \"${systemd.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
           --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
       done
@@ -133,7 +133,7 @@ in
 
   config = {
     boot.initrd.systemd = {
-      udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.util-linux udev ];
+      udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep systemd.util-linux udev ];
 
       contents = {
         "/etc/udev/rules.d".source = udevRules;
@@ -142,8 +142,8 @@ in
       storePaths = [
         "${pkgs.kmod}/bin/modprobe"
         "${pkgs.mdadm}/sbin/mdadm"
-        "${pkgs.util-linux}/sbin/blkid"
-        "${pkgs.util-linux}/bin/mount"
+        "${systemd.util-linux}/sbin/blkid"
+        "${systemd.util-linux}/bin/mount"
         "${pkgs.coreutils}/bin/readlink"
         "${pkgs.coreutils}/bin/basename"
       ];
