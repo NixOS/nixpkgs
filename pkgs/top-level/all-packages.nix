@@ -202,6 +202,8 @@ with pkgs;
 
   aesfix = callPackage ../tools/security/aesfix { };
 
+  aeskeyfind = callPackage ../tools/security/aeskeyfind { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -23376,7 +23378,6 @@ with pkgs;
     withCryptsetup = true;
     withFido2 = true;
     withTpm2Tss = true;
-    inherit libfido2 p11-kit;
   };
   systemdStage1Network = systemdStage1.override {
     pname = "systemd-stage-1-network";
