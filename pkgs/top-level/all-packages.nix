@@ -10431,8 +10431,6 @@ with pkgs;
 
   teamviewer = libsForQt515.callPackage ../applications/networking/remote/teamviewer { };
 
-  teleconsole = callPackage ../tools/misc/teleconsole { };
-
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
   teleport = callPackage ../servers/teleport {};
