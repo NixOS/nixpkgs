@@ -129,9 +129,11 @@ let
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
 
-  checkDependencyList = name: deps: lib.flip lib.imap1 deps (index: dep:
+  checkDependencyList = checkDependencyList' [];
+  checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
     if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "path" then dep
-    else throw "Dependency is not of a valid type: element ${toString index} of ${name} for ${attrs.name or attrs.pname}");
+    else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
+    else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
