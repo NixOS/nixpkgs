@@ -26406,7 +26406,10 @@ with pkgs;
 
   gpsprune = callPackage ../applications/misc/gpsprune { };
 
-  gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
+  gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder {
+    # rm me as soon as this package gains the support for cuda 11
+    cudatoolkit = cudatoolkit_10;
+  };
 
   gpu-screen-recorder-gtk = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix { };
 
