@@ -15,14 +15,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.23.0";
+  version = "1.23.1";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-pWpvcg0JSNPz5KJaX+Rt8vG3+GXDWNdOLOR9u0kmJgg=";
+    sha256 = "sha256-KKAd+68KaBLE4qgtFkLqMJVqlznyW8d8myO5H06mjw8=";
   };
 
   propagatedBuildInputs = [
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     "response"
     "request"
     "timeout"
+    "test_sync_transport_short_read_download_stream"
+    "test_aio_transport_short_read_download_stream"
   # disable 8 tests failing on some darwin machines with errors:
   # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
   # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
