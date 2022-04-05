@@ -7,15 +7,17 @@ let
 in
 
 {
-  options = {
-    services.xserver.windowManager.qtile.enable = mkEnableOption "qtile";
+  options.services.xserver.windowManager.qtile = {
+    enable = mkEnableOption "qtile";
+
+    package = mkPackageOption pkgs "qtile" { };
   };
 
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = [{
       name = "qtile";
       start = ''
-        ${pkgs.qtile}/bin/qtile start &
+        ${cfg.package}/bin/qtile start &
         waitPID=$!
       '';
     }];
@@ -24,7 +26,7 @@ in
       # pkgs.qtile is currently a buildenv of qtile and its dependencies.
       # For userland commands, we want the underlying package so that
       # packages such as python don't bleed into userland and overwrite intended behavior.
-      (pkgs.qtile.unwrapped or pkgs.qtile)
+      (cfg.package.unwrapped or cfg.package)
     ];
   };
 }
