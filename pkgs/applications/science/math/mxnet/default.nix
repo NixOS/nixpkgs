@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
     rm "$out"/lib/*.a
   '';
 
+  # used to mark cudaSupport in python310Packages.mxnet as broken;
+  # other attributes exposed for consistency
+  passthru = {
+    inherit cudaSupport cudnnSupport cudatoolkit cudnn;
+  };
+
   meta = with lib; {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";
