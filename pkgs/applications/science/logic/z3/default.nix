@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , python
 , fixDarwinDylibNames
 , javaBindings ? false
