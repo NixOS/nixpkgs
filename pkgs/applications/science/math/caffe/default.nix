@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       Center (BVLC) and by community contributors.
     '';
     homepage = "http://caffe.berkeleyvision.org/";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

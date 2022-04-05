@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "dotmap";
-  version = "1.3.27";
+  version = "1.3.28";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gHCQIN8CIeF8TgHWeQu8GCRxK1aQFJJ/d7jZurxxMik=";
+    hash = "sha256-riqDYqtjstyx681zz80aZ6hBizNw4V3NOusInHGlXoI=";
   };
 
   checkInputs = [
