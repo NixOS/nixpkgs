@@ -669,6 +669,12 @@
     githubId = 858965;
     name = "Andrew Morsillo";
   };
+  anandsuresh = {
+    email = "anandsuresh@gmail.com";
+    github = "anandsuresh";
+    githubId = 1027513;
+    name = "Anand Suresh";
+  };
   andehen = {
     email = "git@andehen.net";
     github = "andehen";

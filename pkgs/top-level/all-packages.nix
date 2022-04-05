@@ -30844,6 +30844,8 @@ with pkgs;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
+  raiden = callPackage ../applications/blockchains/raiden { };
+
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin { boost = boost165; };
