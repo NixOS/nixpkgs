@@ -19,6 +19,8 @@
 , libxml2
 , libuuid
 , lang ? "en"
+, majorVersion ? "11"
+, minorVersion ? null
 , libGL
 , libGLU
 }:
@@ -26,9 +28,7 @@
 let
   l10n =
     import ./l10ns.nix {
-      lib = lib;
-      inherit requireFile lang;
-      majorVersion = "11";
+      inherit lib majorVersion minorVersion requireFile lang;
     };
 in
 stdenv.mkDerivation rec {

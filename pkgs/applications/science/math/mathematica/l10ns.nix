@@ -1,7 +1,8 @@
 { lib
 , requireFile
 , lang
-, majorVersion ? null
+, majorVersion
+, minorVersion ? null
 }:
 
 let allVersions = with lib; flip map
@@ -91,16 +92,16 @@ let allVersions = with lib; flip map
       inherit sha256;
     };
   });
-minVersion =
-  with lib;
-  if majorVersion == null
-  then elemAt (builtins.splitVersion (elemAt allVersions 0).version) 0
-  else majorVersion;
-maxVersion = toString (1 + builtins.fromJSON minVersion);
 in
-with lib;
-findFirst (l: (l.lang == lang
-               && l.version >= minVersion
-               && l.version < maxVersion))
-          (throw "Version ${minVersion} in language ${lang} not supported")
-          allVersions
+  lib.findFirst (l: (
+    l.lang == lang && (if builtins.isNull minorVersion then
+      (builtins.elemAt (lib.splitVersion l.version) 0) == majorVersion
+    else
+      l.version == "${majorVersion}.${minorVersion}"
+    )
+  )) (throw "Version ${if builtins.isNull minorVersion then
+    majorVersion
+  else
+    "${majorVersion}.${minorVersion}"
+  } in language ${lang} not supported")
+    allVersions

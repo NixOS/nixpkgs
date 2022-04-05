@@ -35,11 +35,13 @@
 , xorg
 , zlib
 , lang ? "en"
+, majorVersion ? "13"
+, minorVersion ? null
 }:
 
 let
   l10n = import ./l10ns.nix {
-    inherit lib requireFile lang;
+    inherit lib requireFile lang majorVersion minorVersion;
   };
 in stdenv.mkDerivation {
   inherit (l10n) version name src;
