@@ -20,6 +20,11 @@ in
       '';
     }];
 
-    environment.systemPackages = [ pkgs.qtile ];
+    environment.systemPackages = [
+      # pkgs.qtile is currently a buildenv of qtile and its dependencies.
+      # For userland commands, we want the underlying package so that
+      # packages such as python don't bleed into userland and overwrite intended behavior.
+      (pkgs.qtile.unwrapped or pkgs.qtile)
+    ];
   };
 }
