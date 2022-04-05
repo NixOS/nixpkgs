@@ -22940,6 +22940,9 @@ with pkgs;
     enableDmeventd = true;
     enableCmdlib = true;
   };
+  lvm2_vdo = lvm2_dmeventd.override {
+    enableVDO = true;
+  };
 
   maddy = callPackage ../servers/maddy { };
 
@@ -23526,6 +23529,8 @@ with pkgs;
   vendir = callPackage ../development/tools/vendir { };
 
   vndr = callPackage ../development/tools/vndr { };
+
+  vdo = callPackage ../os-specific/linux/vdo { };
 
   windows = callPackages ../os-specific/windows {};
 

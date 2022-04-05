@@ -317,6 +317,8 @@ in {
 
     ena = callPackage ../os-specific/linux/ena {};
 
+    kvdo = callPackage ../os-specific/linux/kvdo {};
+
     liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
