@@ -16,8 +16,8 @@
 , makeWrapper
 , moreutils
 , nix
+, nixosTests
 , pigz
-, pkgs
 , rsync
 , runCommand
 , runtimeShell
@@ -26,6 +26,7 @@
 , storeDir ? builtins.storeDir
 , substituteAll
 , symlinkJoin
+, tarsum
 , util-linux
 , vmTools
 , writeReferencesToFile
@@ -81,6 +82,15 @@ rec {
     inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
   };
 
+  tests = {
+    inherit (nixosTests)
+      docker-tools
+      docker-tools-overlay
+      # requires remote builder
+      # docker-tools-cross
+      ;
+  };
+
   pullImage =
     let
       fixName = name: builtins.replaceStrings [ "/" ":" ] [ "-" "-" ] name;
@@ -113,7 +123,7 @@ rec {
         outputHashAlgo = "sha256";
         outputHash = sha256;
 
-        nativeBuildInputs = lib.singleton skopeo;
+        nativeBuildInputs = [ skopeo ];
         SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
         sourceURL = "docker://${imageName}@${imageDigest}";
@@ -132,7 +142,7 @@ rec {
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions etc.
-  tarsum = pkgs.tarsum;
+  inherit tarsum; # pkgs.dockerTools.tarsum
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
   mergeDrvs =
@@ -754,7 +764,7 @@ rec {
   # "#!/usr/bin/env executable" shebang.
   usrBinEnv = runCommand "usr-bin-env" { } ''
     mkdir -p $out/usr/bin
-    ln -s ${pkgs.coreutils}/bin/env $out/usr/bin
+    ln -s ${coreutils}/bin/env $out/usr/bin
   '';
 
   # This provides /bin/sh, pointing to bashInteractive.
