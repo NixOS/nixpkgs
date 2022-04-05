@@ -1,5 +1,6 @@
 { config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
+, clew
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , darwin
 }:
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
     ] ++ lib.optionals (!stdenv.isDarwin) [
       "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
+      "-DCLEW_INCLUDE_DIR=${clew}/include"
+      "-DCLEW_LIBRARY=${clew}"
     ] ++ lib.optionals cudaSupport [
       "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
