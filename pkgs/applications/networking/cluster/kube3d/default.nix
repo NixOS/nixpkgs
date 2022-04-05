@@ -13,6 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  postPatch = ''
+    substituteInPlace version/version_test.go \
+      --replace "TestGetK3sVersion" "SkipGetK3sVersion"
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
 
   excludedPackages = [ "tools" "docgen" ];
@@ -20,8 +25,6 @@ buildGoModule rec {
   ldflags =
     let t = "github.com/rancher/k3d/v5/version"; in
     [ "-s" "-w" "-X ${t}.Version=v${version}" "-X ${t}.K3sVersion=v${k3sVersion}" ];
-
-  doCheck = false;
 
   postInstall = ''
     installShellCompletion --cmd k3d \
