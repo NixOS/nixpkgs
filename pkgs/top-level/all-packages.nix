@@ -1543,8 +1543,6 @@ with pkgs;
 
   aws-nuke = callPackage ../tools/admin/aws-nuke { };
 
-  aws-okta = callPackage ../tools/security/aws-okta { };
-
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
