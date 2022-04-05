@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       "-DCLEW_INCLUDE_DIR=${clew}/include"
       "-DCLEW_LIBRARY=${clew}"
     ] ++ lib.optionals cudaSupport [
-      "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30"
+      "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_80"
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ];
 
