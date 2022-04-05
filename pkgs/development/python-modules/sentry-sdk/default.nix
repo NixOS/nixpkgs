@@ -126,6 +126,8 @@ buildPythonPackage rec {
     "tests/integrations/chalice/"
     # broken since rq-1.10.1: https://github.com/getsentry/sentry-python/issues/1274
     "tests/integrations/rq/"
+    # broken since pytest 7.0.1; AssertionError: previous item was not torn down properly
+    "tests/utils/test_contextvars.py"
   ];
 
   pythonImportsCheck = [

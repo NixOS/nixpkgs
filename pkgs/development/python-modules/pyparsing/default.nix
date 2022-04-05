@@ -11,13 +11,13 @@
 let
   pyparsing = buildPythonPackage rec {
     pname = "pyparsing";
-    version = "3.0.6";
+    version = "3.0.7";
 
     src = fetchFromGitHub {
       owner = "pyparsing";
       repo = pname;
       rev = "pyparsing_${version}";
-      sha256 = "0n89ky7rx5yg09ssji8liahnyxip08hz7syc2k4pmlgs4978181a";
+      sha256 = "sha256-RyvTTbFshAZgyZPgzqcq31E504RlnMZuf16jJYGqDDI=";
     };
 
     # circular dependencies if enabled by default

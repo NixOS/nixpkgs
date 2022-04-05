@@ -5,7 +5,7 @@ buildGoPackage rec {
   version = "1.8.2";
 
   goPackagePath = "github.com/go-delve/delve";
-  excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
+  excludedPackages = [ "_fixtures" "scripts" "service/test" ];
 
   src = fetchFromGitHub {
     owner = "go-delve";

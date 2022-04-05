@@ -7,6 +7,7 @@
 , motor
 , msgpack
 , poetry-core
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -44,10 +45,15 @@ buildPythonPackage rec {
     immutables
     motor
     msgpack
+    pytest-xdist
     pytestCheckHook
     pyyaml
     tomlkit
     ujson
+  ];
+
+  pytestFlagsArray = [
+    "--numprocesses $NIX_BUILD_CORES"
   ];
 
   postPatch = ''
@@ -75,6 +81,8 @@ buildPythonPackage rec {
   disabledTests = [
     # orjson is not available as it requires Rust nightly features to compile its requirements
     "test_orjson"
+    # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
+    "test_tomlkit"
   ];
 
   pythonImportsCheck = [

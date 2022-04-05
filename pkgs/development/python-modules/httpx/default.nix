@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.21.3";
+  version = "0.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "01069b0kj6vnb26xazlz06rj4yncy5nkq76pajvzx0pmpjkniiz9";
+    sha256 = "sha256-hQmQodGpVG23IZSsWV7rB1iB6QAudDao/8YshIgpmas=";
   };
 
   propagatedBuildInputs = [

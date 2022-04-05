@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "2.25.2";
+  version = "2.25.3";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ooWIHvyMtrht4WcGPiacY8dfjPSb5uitHnTRTKvf2AA=";
+    sha256 = "sha256-4OuEol+YorvOeK5bj33Po8V9KD0trcgTMXCTQ+J7q94=";
   };
 
   patches = [

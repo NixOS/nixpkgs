@@ -92,6 +92,9 @@ let
     preCheck = ''
       export LC_ALL="en_US.UTF-8"
       export PATH="$out/bin:$PATH"
+
+      # remove testfile which is missing configuration file from sdist
+      rm buildbot/test/integration/test_graphql.py
     '';
 
     disabled = !isPy3k;

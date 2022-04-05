@@ -7,12 +7,7 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, # N.B. the defult is intentionally not from an `isStatic`. See
-  # https://gcc.gnu.org/install/configure.html - this is about target
-  # platform libraries not host platform ones unlike normal. But since
-  # we can't rebuild those without also rebuilding the compiler itself,
-  # we opt to always build everything unlike our usual policy.
-  enableShared ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
@@ -63,6 +58,9 @@ let majorVersion = "7";
         ./riscv-pthread-reentrant.patch
         # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
         ./riscv-no-relax.patch
+        # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
+        # the patch from gcc 8 seems to work perfectly fine.
+        ./gcc8-asan-glibc-2.34.patch
 
         ./0001-Fix-build-for-glibc-2.31.patch
       ]
@@ -277,7 +275,7 @@ stdenv.mkDerivation ({
   };
 
   enableParallelBuilding = true;
-  inherit enableMultilib;
+  inherit enableShared enableMultilib;
 
   inherit (stdenv) is64bit;
 

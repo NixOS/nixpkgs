@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , rustPlatform
 , desktop-file-utils
 , meson
@@ -26,6 +27,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0cga6cz6jfbipzp008rjznkz7844licdc34lk133fcyqil0cg0ap";
   };
+
+  patches = [
+    # Fix build with meson 0.61, can be removed on next update
+    # https://gitlab.gnome.org/World/Solanum/-/merge_requests/49
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/Solanum/-/commit/e5c5d88f95b0fe4145c9ed346b8ca98a613d7cfe.patch";
+      sha256 = "j84P9KzMr0o38u4OD4ZPst+yqw1LCRoa1awT3nelFDI=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;

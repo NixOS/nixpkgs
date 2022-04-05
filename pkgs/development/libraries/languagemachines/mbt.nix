@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "mbt-${release.version}";
+  pname = "mbt";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "mbt-${release.version}.tar.gz"; };

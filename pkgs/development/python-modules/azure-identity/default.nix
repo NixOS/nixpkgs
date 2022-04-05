@@ -24,6 +24,11 @@ buildPythonPackage rec {
     sha256 = "sha256-Ag/w5HFXhS5KrIo62waEGCcUfyepTL50qQRCXY5i2Tw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "msal-extensions~=0.3.0" "msal-extensions"
+  '';
+
   propagatedBuildInputs = [
     azure-common
     azure-core

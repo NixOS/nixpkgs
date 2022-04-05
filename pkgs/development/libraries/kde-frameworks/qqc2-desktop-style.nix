@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "qqc2-desktop-style";
+  pname = "qqc2-desktop-style";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtx11extras qtquickcontrols2 kconfig kiconthemes kirigami2 ];
 }

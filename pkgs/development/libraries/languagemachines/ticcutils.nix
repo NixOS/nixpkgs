@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ticcutils-${release.version}";
+  pname = "ticcutils";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "ticcutils-${release.version}.tar.gz"; };

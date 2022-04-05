@@ -29,6 +29,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Works around the following error by dropping the call to that function
+  #     def print_version_info(write=write):
+  # >       write("                Python " + sys.executable + " " + str(sys.version_info) + "\n")
+  # E       TypeError: 'module' object is not callable
+  preCheck = ''
+    sed -i '/print_version_info(write)/d' tests.py
+  '';
+
   pytestFlagsArray = [
     "tests.py"
   ];

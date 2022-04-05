@@ -15,7 +15,7 @@ buildGoModule rec {
 
   propagatedBuildInputs = [ ffmpeg ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preInstall = ''
     mkdir -p $out

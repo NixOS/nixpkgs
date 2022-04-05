@@ -281,6 +281,8 @@ let
           "PrivateKeyFile"
           "ListenPort"
           "FirewallMark"
+          "RouteTable"
+          "RouteMetric"
         ])
         (assertInt "FirewallMark")
         (assertRange "FirewallMark" 1 4294967295)
@@ -296,6 +298,8 @@ let
           "AllowedIPs"
           "Endpoint"
           "PersistentKeepalive"
+          "RouteTable"
+          "RouteMetric"
         ])
         (assertInt "PersistentKeepalive")
         (assertRange "PersistentKeepalive" 0 65535)

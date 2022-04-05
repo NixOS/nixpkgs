@@ -70,6 +70,11 @@
       </listitem>
       <listitem>
         <para>
+          Systemd has been upgraded to the version 250.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
           defaults to 1.22.4, which will enable
           <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
@@ -442,6 +447,12 @@
           since the former have been deprecated and are no longer
           functional in kubernetes&gt;=1.23. Ensure that you are not
           relying on the insecure behaviour before upgrading.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>openssh</literal> has been update to 8.9p1, changing
+          the FIDO security key middleware interface.
         </para>
       </listitem>
       <listitem>
@@ -1512,9 +1523,11 @@
         <para>
           <link linkend="opt-programs.ssh.knownHosts">programs.ssh.knownHosts</link>
           has gained an <literal>extraHostNames</literal> option to
-          replace <literal>hostNames</literal>.
-          <literal>hostNames</literal> is deprecated, but still
-          available for now.
+          augment <literal>hostNames</literal>. It is now possible to
+          use the attribute name of a <literal>knownHosts</literal>
+          entry as the primary host name and specify secondary host
+          names using <literal>extraHostNames</literal> without having
+          to duplicate the primary host name.
         </para>
       </listitem>
       <listitem>

@@ -24,7 +24,7 @@ buildGoPackage rec {
     ++ lib.optional stdenv.hostPlatform.isx86_64 dclxvi
     ++ lib.optionals gui [ wrapGAppsHook ];
   tags = lib.optionals (!gui) [ "nogui" ];
-  excludedPackages = "\\(appengine\\|bn256cgo\\)";
+  excludedPackages = [ "appengine" "bn256cgo" ];
   postPatch = lib.optionalString stdenv.hostPlatform.isx86_64 ''
     grep -r 'bn256' | awk -F: '{print $1}' | xargs sed -i \
       -e "s,golang.org/x/crypto/bn256,github.com/agl/pond/bn256cgo,g" \

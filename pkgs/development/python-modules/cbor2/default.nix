@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.4.2";
+  version = "5.4.2.post1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4oPnC1WgSf82TMXmSP3lh+TZsOh+SyZkxp5jkTXms7g=";
+    sha256 = "sha256-nPIdWWBLlSnXh3yOA0Ki66rhoH/o/1aD3HX+wVhHx5c=";
   };
 
   nativeBuildInputs = [

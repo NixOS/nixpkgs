@@ -708,6 +708,14 @@ in
 
     systemd.packages = [ nixPackage ];
 
+    # Will only work once https://github.com/NixOS/nix/pull/6285 is merged
+    # systemd.tmpfiles.packages = [ nixPackage ];
+
+    # Can be dropped for Nix > https://github.com/NixOS/nix/pull/6285
+    systemd.tmpfiles.rules = [
+      "d /nix/var/nix/daemon-socket 0755 root root - -"
+    ];
+
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =

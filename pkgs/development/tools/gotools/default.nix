@@ -38,9 +38,7 @@ buildGoModule rec {
     export GOTOOLDIR=$out/bin
   '';
 
-  excludedPackages = "\\("
-    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
-    + "\\)";
+  excludedPackages = [ "vet" "cover" ];
 
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''

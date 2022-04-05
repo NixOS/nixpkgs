@@ -12,7 +12,7 @@
 let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  pname = "gmp";
+  pname = "gmp${lib.optionalString cxx "-with-cxx"}";
   version = "6.2.1";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv

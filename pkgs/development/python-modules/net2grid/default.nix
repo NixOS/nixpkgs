@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "net2grid";
-  version = "3.0.0";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-net2grid";
     rev = "v${version}";
-    hash = "sha256-nT9qMv4Zr7SjNwHRN3HRR11yl+Oue8VVCfJr2n1D02Q=";
+    hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
   };
 
   nativeBuildInputs = [

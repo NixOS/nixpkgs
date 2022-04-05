@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "util-linux";
+  pname = "util-linux" + lib.optionalString ( !nlsSupport && ncurses == null && systemd == null ) "-minimal";
   version = "2.37.4";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
     sha256 = "sha256-Y05pFq2RM2bDU2tkaOeER2lUm5mnsr+AMU3nirVlW4M=";
   };
 

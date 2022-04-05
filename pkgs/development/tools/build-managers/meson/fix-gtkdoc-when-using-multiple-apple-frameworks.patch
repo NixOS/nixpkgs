@@ -1,4 +1,4 @@
-From 0a008a6c7ecee19f35c8b7ab17b1470d0d1a8a15 Mon Sep 17 00:00:00 2001
+From b8ba462ae72e0818898357464263ec84722f6d4c Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Sat, 26 Mar 2022 02:26:27 +0100
 Subject: [PATCH] gnome: Fix gtkdoc when using multiple Apple frameworks
@@ -11,13 +11,16 @@ Picked from https://github.com/mesonbuild/meson/pull/10186
 Also pick https://github.com/mesonbuild/meson/commit/68e684d51f1e469e0d9f4b499ffda15146cad98a when resolving conflict.
 
 diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
-index 7113f28d2..d3269b53f 100644
+index 214f97ac3..0521b2605 100644
 --- a/mesonbuild/modules/gnome.py
 +++ b/mesonbuild/modules/gnome.py
-@@ -384,13 +384,14 @@ class GnomeModule(ExtensionModule):
-     def _get_link_args(self, state, lib, depends, include_rpath=False,
-                        use_gir_args=False):
-         link_command = []
+@@ -593,15 +593,16 @@ class GnomeModule(ExtensionModule):
+                        lib: T.Union[build.SharedLibrary, build.StaticLibrary],
+                        depends: T.List[build.BuildTarget],
+                        include_rpath: bool = False,
+-                       use_gir_args: bool = False) -> T.List[str]:
++                       use_gir_args: bool = False) -> T.Tuple[T.List[str], T.List[T.Union[build.BuildTarget, 'build.GeneratedTypes', 'FileOrString']]]:
+         link_command: T.List[str] = []
 +        new_depends = list(depends)
          # Construct link args
          if isinstance(lib, build.SharedLibrary):
@@ -30,42 +33,36 @@ index 7113f28d2..d3269b53f 100644
              # Needed for the following binutils bug:
              # https://github.com/mesonbuild/meson/issues/1911
              # However, g-ir-scanner does not understand -Wl,-rpath
-@@ -404,18 +405,24 @@ class GnomeModule(ExtensionModule):
+@@ -615,19 +616,19 @@ class GnomeModule(ExtensionModule):
              link_command.append('--extra-library=' + lib.name)
          else:
              link_command.append('-l' + lib.name)
 -        return link_command
--
--    def _get_dependencies_flags(self, deps, state, depends, include_rpath=False,
--                                use_gir_args=False, separate_nodedup=False):
--        cflags = OrderedSet()
--        internal_ldflags = OrderedSet()
--        external_ldflags = OrderedSet()
 +        return link_command, new_depends
-+
+ 
+-    def _get_dependencies_flags(
 +    def _get_dependencies_flags_raw(
-+            self, deps,
-+            state,
-+            depends,
-+            include_rpath: bool = False,
-+            use_gir_args: bool = False,
-+            ) -> T.Tuple[OrderedSet[str], OrderedSet[T.Union[str, T.Tuple[str, str]]], OrderedSet[T.Union[str, T.Tuple[str, str]]], OrderedSet[str],
-+                         T.List]:
-+        cflags: OrderedSet[str] = OrderedSet()
+             self, deps: T.Sequence[T.Union['Dependency', build.SharedLibrary, build.StaticLibrary]],
+-            state: 'ModuleState', depends: T.List[build.BuildTarget], include_rpath: bool = False,
+-            use_gir_args: bool = False, separate_nodedup: bool = False
+-            ) -> T.Tuple[OrderedSet[str], OrderedSet[str], OrderedSet[str], T.Optional[T.List[str]], OrderedSet[str]]:
++            state: 'ModuleState', depends: T.List[build.BuildTarget], include_rpath: bool,
++            use_gir_args: bool
++            ) -> T.Tuple[OrderedSet[str], OrderedSet[T.Union[str, T.Tuple[str, str]]], OrderedSet[T.Union[str, T.Tuple[str, str]]], T.Optional[T.List[str]], OrderedSet[str],
++                         T.List[T.Union[build.BuildTarget, 'build.GeneratedTypes', 'FileOrString']]]:
+         cflags: OrderedSet[str] = OrderedSet()
+-        internal_ldflags: OrderedSet[str] = OrderedSet()
+-        external_ldflags: OrderedSet[str] = OrderedSet()
          # External linker flags that can't be de-duped reliably because they
 -        # require two args in order, such as -framework AVFoundation
--        external_ldflags_nodedup = []
--        gi_includes = OrderedSet()
+-        external_ldflags_nodedup: T.List[str] = []
 +        # require two args in order, such as -framework AVFoundation will be stored as a tuple.
 +        internal_ldflags: OrderedSet[T.Union[str, T.Tuple[str, str]]] = OrderedSet()
 +        external_ldflags: OrderedSet[T.Union[str, T.Tuple[str, str]]] = OrderedSet()
-+        gi_includes: OrderedSet[str] = OrderedSet()
+         gi_includes: OrderedSet[str] = OrderedSet()
          deps = mesonlib.listify(deps)
-+        depends = list(depends)
  
-         for dep in deps:
-             if isinstance(dep, Dependency):
-@@ -427,21 +434,20 @@ class GnomeModule(ExtensionModule):
+@@ -642,21 +643,20 @@ class GnomeModule(ExtensionModule):
                  cflags.update(state.get_include_args(dep.include_directories))
                  for lib in dep.libraries:
                      if isinstance(lib, build.SharedLibrary):
@@ -95,21 +92,21 @@ index 7113f28d2..d3269b53f 100644
                  for source in dep.sources:
                      if isinstance(source, GirTarget):
                          gi_includes.update([os.path.join(state.environment.get_build_dir(),
-@@ -469,7 +475,7 @@ class GnomeModule(ExtensionModule):
+@@ -684,7 +684,7 @@ class GnomeModule(ExtensionModule):
                      # If it's a framework arg, slurp the framework name too
                      # to preserve the order of arguments
-                     if lib == '-framework':
--                        external_ldflags_nodedup += [lib, next(ldflags)]
-+                        external_ldflags.update([(lib, next(ldflags))])
+                     if flag == '-framework':
+-                        external_ldflags_nodedup += [flag, next(ldflags)]
++                        external_ldflags.update([(flag, next(ldflags))])
                      else:
-                         external_ldflags.update([lib])
+                         external_ldflags.update([flag])
              elif isinstance(dep, (build.StaticLibrary, build.SharedLibrary)):
-@@ -480,21 +486,43 @@ class GnomeModule(ExtensionModule):
+@@ -695,21 +695,41 @@ class GnomeModule(ExtensionModule):
                  continue
  
          if use_gir_args and self._gir_has_option('--extra-library'):
--            def fix_ldflags(ldflags):
--                fixed_ldflags = OrderedSet()
+-            def fix_ldflags(ldflags: T.Iterable[str]) -> OrderedSet[str]:
+-                fixed_ldflags: OrderedSet[str] = OrderedSet()
 +            def fix_ldflags(ldflags: T.Iterable[T.Union[str, T.Tuple[str, str]]]) -> OrderedSet[T.Union[str, T.Tuple[str, str]]]:
 +                fixed_ldflags: OrderedSet[T.Union[str, T.Tuple[str, str]]] = OrderedSet()
                  for ldflag in ldflags:
@@ -122,19 +119,17 @@ index 7113f28d2..d3269b53f 100644
              external_ldflags = fix_ldflags(external_ldflags)
 -        if not separate_nodedup:
 -            external_ldflags.update(external_ldflags_nodedup)
--            return cflags, internal_ldflags, external_ldflags, gi_includes
+-            return cflags, internal_ldflags, external_ldflags, None, gi_includes
 -        else:
 -            return cflags, internal_ldflags, external_ldflags, external_ldflags_nodedup, gi_includes
 +        return cflags, internal_ldflags, external_ldflags, gi_includes, depends
 +
 +    def _get_dependencies_flags(
-+            self, deps,
-+            state,
-+            depends,
-+            include_rpath: bool = False,
-+            use_gir_args: bool = False,
++            self, deps: T.Sequence[T.Union['Dependency', build.SharedLibrary, build.StaticLibrary]],
++            state: 'ModuleState', depends: T.List[build.BuildTarget], include_rpath: bool = False,
++            use_gir_args: bool = False
 +            ) -> T.Tuple[OrderedSet[str], T.List[str], T.List[str], OrderedSet[str],
-+                         T.List]:
++                         T.List[T.Union[build.BuildTarget, 'build.GeneratedTypes', 'FileOrString']]]:
 +
 +        cflags, internal_ldflags_raw, external_ldflags_raw, gi_includes, depends = self._get_dependencies_flags_raw(deps, state, depends, include_rpath, use_gir_args)
 +        internal_ldflags: T.List[str] = []
@@ -153,24 +148,15 @@ index 7113f28d2..d3269b53f 100644
 +                external_ldflags.extend(ldflag)
  
 +        return cflags, internal_ldflags, external_ldflags, gi_includes, depends
-     def _unwrap_gir_target(self, girtarget, state):
+     def _unwrap_gir_target(self, girtarget: T.Union[build.Executable, build.StaticLibrary, build.SharedLibrary], state: 'ModuleState'
+                            ) -> T.Union[build.Executable, build.StaticLibrary, build.SharedLibrary]:
          if not isinstance(girtarget, (build.Executable, build.SharedLibrary,
-                                       build.StaticLibrary)):
-@@ -875,7 +903,7 @@ class GnomeModule(ExtensionModule):
+@@ -1056,7 +1076,7 @@ class GnomeModule(ExtensionModule):
          # ldflags will be misinterpreted by gir scanner (showing
          # spurious dependencies) but building GStreamer fails if they
          # are not used here.
--        dep_cflags, dep_internal_ldflags, dep_external_ldflags, gi_includes = \
+-        dep_cflags, dep_internal_ldflags, dep_external_ldflags, _, gi_includes = \
 +        dep_cflags, dep_internal_ldflags, dep_external_ldflags, gi_includes, depends = \
              self._get_dependencies_flags(deps, state, depends, use_gir_args=True)
          scan_cflags = []
          scan_cflags += list(self._get_scanner_cflags(cflags))
-@@ -1170,7 +1198,7 @@ class GnomeModule(ExtensionModule):
-         deps = extract_as_list(kwargs, 'dependencies')
-         cflags = []
-         cflags.extend(mesonlib.stringlistify(kwargs.pop('c_args', [])))
--        deps_cflags, internal_ldflags, external_ldflags, gi_includes = \
-+        deps_cflags, internal_ldflags, external_ldflags, gi_includes, depends = \
-             self._get_dependencies_flags(deps, state, depends, include_rpath=True)
-         inc_dirs = mesonlib.extract_as_list(kwargs, 'include_directories')
-         for incd in inc_dirs:

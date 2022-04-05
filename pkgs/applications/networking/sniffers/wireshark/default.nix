@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3, libcap, glib
-, libssh, nghttp2, zlib, cmake, makeWrapper
+, libssh, nghttp2, zlib, cmake, makeWrapper, wrapGAppsHook
 , withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 , asciidoctor
@@ -34,7 +34,8 @@ in stdenv.mkDerivation {
   # Avoid referencing -dev paths because of debug assertions.
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config ] ++ optional withQt qt5.wrapQtAppsHook;
+  nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config ]
+    ++ optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
 
   buildInputs = [
     gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
@@ -84,6 +85,12 @@ in stdenv.mkDerivation {
   '');
 
   dontFixCmake = true;
+
+  # Prevent double-wrapping, inject wrapper args manually instead.
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   shellHook = ''
     # to be able to run the resulting binary

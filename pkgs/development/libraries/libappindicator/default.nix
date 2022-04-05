@@ -13,8 +13,8 @@ with lib;
 
 
 stdenv.mkDerivation rec {
-  name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
-          in "libappindicator-${postfix}-${version}";
+  pname = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
+          in "libappindicator-${postfix}";
   version = "12.10.1+20.10.20200706.1";
 
   outputs = [ "out" "dev" ];

@@ -1,30 +1,59 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools-scm, pytestCheckHook, pytest-freezegun, freezegun, backports_unittest-mock
-, six, pytz, jaraco_functools, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+
+# build time
+, setuptools-scm
+
+# runtime
+, pytz
+, jaraco_functools
+
+# tests
+, freezegun
+, pytest-freezegun
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.0.0";
+  version = "5.0.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa21dd1956e29559ecb2f2f2e14fcdb950085222fbbf86e6c946b5e1a8c36b26";
+    sha256 = "sha256-y6Dxl6ZIg78+c2V++8AyTVvxcXnndpsThbTXXSbNkSc=";
   };
 
-  disabled = pythonOlder "3.2";
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [ six pytz jaraco_functools ];
+  propagatedBuildInputs = [
+    jaraco_functools
+    pytz
+  ];
 
   checkInputs = [
-    pytest-freezegun pytestCheckHook freezegun backports_unittest-mock
+    freezegun
+    pytest-freezegun
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "tempora"
+    "tempora.schedule"
+    "tempora.timing"
+    "tempora.utc"
   ];
 
   meta = with lib; {
     description = "Objects and routines pertaining to date and time";
     homepage = "https://github.com/jaraco/tempora";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

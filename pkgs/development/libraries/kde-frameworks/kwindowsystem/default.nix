@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kwindowsystem";
+  pname = "kwindowsystem";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ libpthreadstubs libXdmcp qttools qtx11extras ];
   propagatedBuildInputs = [ qtbase ];

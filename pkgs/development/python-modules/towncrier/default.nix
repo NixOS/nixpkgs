@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "21.3.0";
+  version = "21.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6eed0bc924d72c98c000cb8a64de3bd566e5cb0d11032b73fcccf8a8f956ddfe";
+    sha256 = "sha256-nLb0XBbhoe7J0OdlEWXnvmDNCrgdE6XJbKl6SYrof0g=";
   };
 
   propagatedBuildInputs = [
@@ -31,12 +31,18 @@ buildPythonPackage rec {
 
   # zope.interface collision
   doCheck = !isPy27;
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
   checkInputs = [
     git
     mock
     twisted
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "towncrier" ];
 
   meta = with lib; {

@@ -18,6 +18,11 @@ buildPythonPackage rec {
     sha256 = "17mq1bm78xfl0x1g50ng502m5ldq6421rzz35hlqafsj0cq8dkp6";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_extra.py \
+      --replace "assert_exc.traceback[-1].path.strpath" "str(assert_exc.traceback[-1].path)"
+  '';
+
   propagatedBuildInputs = [
     six
   ];

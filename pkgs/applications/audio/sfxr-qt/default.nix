@@ -8,6 +8,7 @@
 , qtquickcontrols2
 , SDL
 , python3
+, catch2
 , callPackage
 , nixosTests
 }:
@@ -23,6 +24,10 @@ mkDerivation rec {
     sha256 = "sha256-Ce5NJe1f+C4pPmtenHYvtkxste+nPuxJoB+N7K2nyRo=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp 3rdparty/catch2/single_include/catch2/catch.hpp
+  '';
 
   # Remove on next release
   patches = [(fetchpatch {
@@ -42,6 +47,8 @@ mkDerivation rec {
     qtquickcontrols2
     SDL
   ];
+
+  doCheck = true;
 
   passthru.tests = {
     export-square-wave = callPackage ./test-export-square-wave {};

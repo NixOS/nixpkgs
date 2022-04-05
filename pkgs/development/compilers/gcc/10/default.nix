@@ -8,12 +8,7 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, # N.B. the defult is intentionally not from an `isStatic`. See
-  # https://gcc.gnu.org/install/configure.html - this is about target
-  # platform libraries not host platform ones unlike normal. But since
-  # we can't rebuild those without also rebuilding the compiler itself,
-  # we opt to always build everything unlike our usual policy.
-  enableShared ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
@@ -61,8 +56,8 @@ let majorVersion = "10";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches =
-         optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+    patches = [ ./gcc10-asan-glibc-2.34.patch ]
+      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
       /* ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
@@ -266,7 +261,7 @@ stdenv.mkDerivation ({
   };
 
   enableParallelBuilding = true;
-  inherit enableMultilib;
+  inherit enableMultilib enableShared;
 
   inherit (stdenv) is64bit;
 

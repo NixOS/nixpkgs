@@ -21,6 +21,19 @@ stdenv.mkDerivation rec {
       --subst-var-by APP_VERSION_YEAR ${lib.versions.major version} \
       --subst-var-by APP_VERSION_NUMBER ${lib.versions.minor version} \
       --subst-var-by GIT_DESCRIBE v${version}
+
+    # Tests don't compile because of vendored `catch2` being incompatible with glibc-2.34.
+    # Also, no need to since we don't even run them.
+    substituteInPlace lib/CMakeLists.txt \
+      --replace "add_subdirectory(Catch2)" ""
+    substituteInPlace lib/vecmath/CMakeLists.txt \
+      --replace "add_subdirectory(test)" "" \
+      --replace "add_subdirectory(lib)" ""
+    substituteInPlace lib/kdl/CMakeLists.txt \
+      --replace "add_subdirectory(test)" ""
+    substituteInPlace common/CMakeLists.txt \
+      --replace "add_subdirectory(test)" "" \
+      --replace "add_subdirectory(benchmark)" ""
   '';
 
   nativeBuildInputs = [ cmake git pandoc wrapQtAppsHook copyDesktopItems ];

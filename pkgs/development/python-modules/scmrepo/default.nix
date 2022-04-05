@@ -37,6 +37,11 @@ buildPythonPackage rec {
     pygtrie
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1"
+  '';
+
   # Requires a running Docker instance
   doCheck = false;
 

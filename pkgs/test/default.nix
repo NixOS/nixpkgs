@@ -59,6 +59,7 @@ with pkgs;
 
   trivial-builders = recurseIntoAttrs {
     writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
+    writeTextFile = callPackage ../build-support/trivial-builders/test/write-text-file.nix {};
     references = callPackage ../build-support/trivial-builders/test/references.nix {};
     overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
     concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.3.1";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "v${version}";
-    sha256 = "sha256-qqwb3t8/xicDGfO6l843qRwh0yUfthnOIhgNeKIbEO4=";
+    sha256 = "sha256-VagX7ATVu6AT4POWoG9btizxFeBh9MLXiLpavtfXnyM=";
   };
 
   nativeBuildInputs = [

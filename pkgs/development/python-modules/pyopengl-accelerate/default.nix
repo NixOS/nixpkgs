@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "pyopengl-accelerate";
   version = "3.1.5";
+  disabled = pythonAtLeast "3.10"; # fails to compile
 
   src = fetchPypi {
     pname = "PyOpenGL-accelerate";

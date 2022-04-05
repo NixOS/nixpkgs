@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , setuptools-scm
 , typing-extensions
 , toml
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "4.11.0";
+  version = "4.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,10 +19,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-nl5VO7uhhDy0oAgjAUuQdha+Ru5QPSuboAHSFKjaIY8=";
+    hash = "sha256-s2/6kl/jE5svb/EdaSX/1Pp7xHhwFl46wmCse0+R5qw=";
   };
 
   nativeBuildInputs = [
+    setuptools # otherwise cross build fails
     setuptools-scm
   ];
 

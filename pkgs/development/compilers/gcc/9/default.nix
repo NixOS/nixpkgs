@@ -9,12 +9,7 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, # N.B. the defult is intentionally not from an `isStatic`. See
-  # https://gcc.gnu.org/install/configure.html - this is about target
-  # platform libraries not host platform ones unlike normal. But since
-  # we can't rebuild those without also rebuilding the compiler itself,
-  # we opt to always build everything unlike our usual policy.
-  enableShared ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
@@ -78,7 +73,7 @@ let majorVersion = "9";
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
       #
       # This patch can most likely be removed by a post 9.3.0-release.
-      [ ./avoid-cycling-subreg-reloads.patch ]
+      [ ./avoid-cycling-subreg-reloads.patch ./gcc9-asan-glibc-2.34.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional targetPlatform.isNetBSD ../libstdc++-netbsd-ctypes.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
@@ -88,6 +83,11 @@ let majorVersion = "9";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
       ++ optional langAda ../gnat-cflags.patch
+      ++ optional langAda (fetchpatch {
+        name = "gnat-glibc-234.diff";
+        url = "https://github.com/gcc-mirror/gcc/commit/331763de7d4850702a0f67298f36017c73cdb103.diff";
+        sha256 = "eS4B7vJasnv2N+5v5yB8/iDpKPX8CJDAy2xabWWj+aU=";
+      })
       ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
@@ -285,7 +285,7 @@ stdenv.mkDerivation ({
   };
 
   enableParallelBuilding = true;
-  inherit enableMultilib;
+  inherit enableShared enableMultilib;
 
   inherit (stdenv) is64bit;
 

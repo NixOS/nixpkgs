@@ -649,6 +649,11 @@ runTests {
     expected = "foo";
   };
 
+  testSanitizeDerivationNameUnicode = testSanitizeDerivationName {
+    name = "fö";
+    expected = "f-";
+  };
+
   testSanitizeDerivationNameAscii = testSanitizeDerivationName {
     name = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     expected = "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";

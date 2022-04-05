@@ -19,11 +19,10 @@ let
 
   common = { perl, buildPerl, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
-
-    name = "perl-${version}";
+    pname = "perl";
 
     src = fetchurl {
-      url = "mirror://cpan/src/5.0/${name}.tar.gz";
+      url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
       inherit sha256;
     };
 
