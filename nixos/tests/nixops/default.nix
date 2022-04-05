@@ -97,7 +97,7 @@ let
     derivations and all build dependency outputs, all the way down.
   */
   allDrvOutputs = pkg:
-    let name = lib.strings.sanitizeDerivationName "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
+    let name = "allDrvOutputs-${pkg.pname or pkg.name or "unknown"}";
     in
     pkgs.runCommand name { refs = pkgs.writeReferencesToFile pkg.drvPath; } ''
       touch $out
