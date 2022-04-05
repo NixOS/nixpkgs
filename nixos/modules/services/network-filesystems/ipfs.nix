@@ -267,11 +267,15 @@ in
       '' + ''
         ipfs --offline config show \
           | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${
-              escapeShellArg (builtins.toJSON ({
-                Addresses.API = cfg.apiAddress;
-                Addresses.Gateway = cfg.gatewayAddress;
-                Addresses.Swarm = cfg.swarmAddress;
-              } // cfg.extraConfig))
+              escapeShellArg (builtins.toJSON (
+                recursiveUpdate
+                  {
+                    Addresses.API = cfg.apiAddress;
+                    Addresses.Gateway = cfg.gatewayAddress;
+                    Addresses.Swarm = cfg.swarmAddress;
+                  }
+                  cfg.extraConfig
+              ))
             } \
           | ipfs --offline config replace -
       '';
