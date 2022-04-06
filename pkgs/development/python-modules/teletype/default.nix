@@ -1,18 +1,27 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "teletype";
-  version = "1.3.2";
+  version = "1.3.4";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9q46a4ui2kgSUL/vImR02r4T9huwLFwd70AqGBNJNzs=";
+    hash = "sha256-uBppM4w9GlMgYqKFGw1Rcjvq+mnU04K3E74jCgK9YYo=";
   };
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "teletype" ];
+
+  pythonImportsCheck = [
+    "teletype"
+  ];
 
   meta = with lib; {
     description = "A high-level cross platform tty library";

@@ -31003,7 +31003,9 @@ with pkgs;
 
   btanks = callPackage ../games/btanks { };
 
-  bugdom = callPackage ../games/bugdom { };
+  bugdom = callPackage ../games/bugdom {
+    inherit (darwin.apple_sdk.frameworks) IOKit Foundation;
+  };
 
   bzflag = callPackage ../games/bzflag {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
@@ -33189,6 +33191,8 @@ with pkgs;
     jre = jre8;
     swt = swt_jdk8;
   };
+
+  argononed = callPackage ../misc/drivers/argononed { };
 
   attract-mode = callPackage ../applications/emulators/attract-mode { };
 

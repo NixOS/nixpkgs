@@ -8258,6 +8258,17 @@
     githubId = 1776903;
     name = "Andrew Abbott";
   };
+  misterio77 = {
+    email = "eu@misterio.me";
+    github = "misterio77";
+    githubId = 5727578;
+    matrix = "@misterio:matrix.org";
+    name = "Gabriel Fontes";
+    keys = [{
+      longkeyid = "rsa3072/0x245CAB70B4C225E9";
+      fingerprint = "7088 C742 1873 E0DB 97FF  17C2 245C AB70 B4C2 25E9";
+    }];
+  };
   mitchmindtree = {
     email = "mail@mitchellnordine.com";
     github = "mitchmindtree";

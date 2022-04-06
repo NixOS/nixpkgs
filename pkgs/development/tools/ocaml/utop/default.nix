@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "utop";
-  version = "2.9.0";
+  version = "2.9.1";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "sha256:17jd61bc6pva5wqmnc9xq70ysyjplrzf1p25sq1s7wgrfq2vlyyd";
+    sha256 = "sha256-6TQxLYN/qjTABZuK6rp+daCSNWyJIXzB8q2QpZeBwaY=";
   };
 
   nativeBuildInputs = [ makeWrapper cppo ];
