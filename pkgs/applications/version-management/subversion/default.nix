@@ -22,10 +22,10 @@ let
 
   common = { version, sha256, extraPatches ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
-    pname = "subversion";
+    pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
 
     src = fetchurl {
-      url = "mirror://apache/subversion/${pname}-${version}.tar.bz2";
+      url = "mirror://apache/subversion/subversion-${version}.tar.bz2";
       inherit sha256;
     };
 

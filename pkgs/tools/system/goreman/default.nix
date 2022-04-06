@@ -20,8 +20,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-87aHBRWm5Odv6LeshZty5N31sC+vdSwGlTYhk3BZkPo=";
 
-  doCheck = false;
-
   meta = with lib; {
     description = "foreman clone written in go language";
     homepage = "https://github.com/mattn/goreman";

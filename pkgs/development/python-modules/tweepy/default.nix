@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.6.0";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-7ogsocRTMTO5yegyY7BADu9NrHK7zMMbihBu8oF4UlQ=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-RaM2JN2WOHyZY+AxzgQLvhXg6UnevDbSFSR4jFLsYrc=";
   };
 
   propagatedBuildInputs = [
