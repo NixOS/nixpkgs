@@ -73,7 +73,8 @@ with pkgs;
   ### Helper functions.
   inherit lib config overlays;
 
-  inherit (lib) lowPrio hiPrio appendToName makeOverridable;
+  # do not import 'appendToName' to get consistent package-names with the same set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
+  inherit (lib) lowPrio hiPrio makeOverridable;
 
   inherit (lib) recurseIntoAttrs;
 
