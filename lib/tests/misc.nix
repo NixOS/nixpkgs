@@ -235,6 +235,7 @@ runTests {
           list = isStorePath [];
           int = isStorePath 42;
         };
+        storeDir = isStorePath builtins.storeDir;
       };
     expected = {
       storePath = true;
@@ -248,6 +249,7 @@ runTests {
         list = false;
         int = false;
       };
+      storeDir = false;
     };
   };
 
