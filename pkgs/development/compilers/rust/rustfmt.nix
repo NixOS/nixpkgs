@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
   CFG_RELEASE = rustPlatform.rust.rustc.version;
   CFG_RELEASE_CHANNEL = "stable";
 
+  # FIXME: seems fixed upstream, remove after the next update
+  patches = [ ./rustfmt-fix-self-tests.patch ];
+
   meta = with lib; {
     description = "A tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";

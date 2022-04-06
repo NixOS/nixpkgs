@@ -1,0 +1,13 @@
+--- a/src/tools/rustfmt/src/ignore_path.rs
++++ b/src/tools/rustfmt/src/ignore_path.rs
+@@ -37,9 +37,9 @@
+     #[nightly_only_test]
+     #[test]
+     fn test_ignore_path_set() {
+-        use std::path::{Path, PathBuf};
+         use crate::config::{Config, FileName};
+         use crate::ignore_path::IgnorePathSet;
++        use std::path::{Path, PathBuf};
+ 
+         let config =
+             Config::from_toml(r#"ignore = ["foo.rs", "bar_dir/*"]"#, Path::new("")).unwrap();
