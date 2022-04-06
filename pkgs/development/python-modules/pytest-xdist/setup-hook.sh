@@ -5,6 +5,14 @@ pytestXdistHook() {
     )
 }
 
+# the flags should be added before pytestCheckHook runs so
+# until we have dependency mechanism in generic builder, we need to use this ugly hack.
+
 if [ -z "${dontUsePytestXdist-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
-    preDistPhases+=" pytestXdistHook"
+    if [[ " ${preDistPhases:-} " =~ " pytestCheckPhase " ]]; then
+        preDistPhases+=" "
+        preDistPhases="${preDistPhases/ pytestCheckPhase / pytestXdistHook pytestCheckPhase }"
+    else
+        preDistPhases+=" pytestXdistHook"
+    fi
 fi
