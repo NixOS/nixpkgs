@@ -3,6 +3,7 @@
 , runtimeShell
 , writeScript
 , generation
+, gnupg
 }:
 let
   inherit (lib) makeBinPath;
@@ -17,7 +18,7 @@ writeScript "update-cassandra_${generation}" ''
     exit 1
   }
   cd pkgs/servers/nosql/cassandra
-  PATH="${makeBinPath [git]}:$PATH"
+  PATH="${makeBinPath [git gnupg]}:$PATH"
 
   tmp="$(mktemp -d)"
   cleanup() {
@@ -32,7 +33,19 @@ writeScript "update-cassandra_${generation}" ''
     | tac >$tmp/versions
 
   version="$(grep -E '^${regex}' <$tmp/versions | head -n 1)"
-  hash="$(nix-prefetch-url "mirror://apache/cassandra/$version/apache-cassandra-$version-bin.tar.gz")"
+  path="cassandra/$version/apache-cassandra-$version-bin.tar.gz"
+  curl "https://downloads.apache.org/$path" >$tmp/src.tar.gz
+  curl "https://downloads.apache.org/$path.asc" >$tmp/src.tar.gz.asc
+
+  # See https://downloads.apache.org/cassandra/KEYS
+  # Make sure that any new key corresponds to someone on the project
+  for key in A4C465FEA0C552561A392A61E91335D77E3E87CB; do
+    gpg --trustdb-name "$tmp/trust.db" --batch --recv-keys "$key"
+    echo "$key:5:" | gpg --trustdb-name "$tmp/trust.db" --batch --import-ownertrust
+  done
+  gpg --trustdb-name "$tmp/trust.db" --batch --verify --trust-model direct $tmp/src.tar.gz.asc $tmp/src.tar.gz
+
+  hash="$(nix-prefetch-url "file://$tmp/src.tar.gz")"
   cat >${filename} <<EOF
   {
     "version": "$version",
