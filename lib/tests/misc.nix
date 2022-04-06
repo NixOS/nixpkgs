@@ -189,7 +189,10 @@ runTests {
     expected = [ "A" "B" ];
   };
 
-  testSplitStringsDerivation = {
+  testSplitStringsDerivation =
+  if builtins.storeDir != "/nix/store"
+  then { expr = null; expected = null; }
+  else {
     expr = take 3  (strings.splitString "/" (derivation {
       name = "name";
       builder = "builder";
@@ -219,7 +222,9 @@ runTests {
             "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
+        # This should work, but let's keep it lean.
+        # storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
+        storePathDerivation = isStorePath (derivation { system = "x86_64-linux"; name = "bogus"; builder = "/nope"; });
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
