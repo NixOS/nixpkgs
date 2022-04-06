@@ -12,8 +12,6 @@
 , python
 }:
 
-with lib;
-
 self:
 
 let
@@ -40,12 +38,12 @@ let
       }
       else ff;
 
-  buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
+  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
+  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
   }));
@@ -60,15 +58,14 @@ let
 
   # Get list of required Python modules given a list of derivations.
   requiredPythonModules = drvs: let
-    modules = filter hasPythonModule drvs;
-  in unique ([python] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
+    modules = lib.filter hasPythonModule drvs;
+  in lib.unique ([python] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPythonModules" modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
   makePythonPath = drvs: lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
-  removePythonPrefix = name:
-    removePrefix namePrefix name;
+  removePythonPrefix = lib.removePrefix namePrefix;
 
   # Convert derivation to a Python module.
   toPythonModule = drv:
@@ -1889,7 +1886,7 @@ in {
   coveralls = callPackage ../development/python-modules/coveralls { };
 
   cppe = callPackage ../development/python-modules/cppe {
-    cppe = pkgs.cppe;
+    inherit (pkgs) cppe;
   };
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
@@ -3636,7 +3633,7 @@ in {
 
   gst-python = callPackage ../development/python-modules/gst-python {
     inherit (pkgs) meson;
-    gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
+    inherit (pkgs.gst_all_1) gst-plugins-base;
   };
 
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
@@ -4656,7 +4653,7 @@ in {
   });
 
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
-    clblas = pkgs.clblas.override { boost = self.boost; };
+    clblas = pkgs.clblas.override { inherit (self) boost; };
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
@@ -4670,7 +4667,7 @@ in {
     inherit (pkgs) lzfse;
   };
 
-  libmodulemd = pipe pkgs.libmodulemd [
+  libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
     (p:
       p.overrideAttrs (super: {
@@ -4695,7 +4692,7 @@ in {
 
   libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
 
-  libpwquality = pipe pkgs.libpwquality [
+  libpwquality = lib.pipe pkgs.libpwquality [
     toPythonModule
     (p: p.overrideAttrs (super: { meta = super.meta // { outputsToInstall = [ "py" ]; }; }))
     (p: p.override { enablePython = true; inherit python; })
@@ -4707,7 +4704,7 @@ in {
     inherit (self) python libxml2;
   });
 
-  librepo = pipe pkgs.librepo [
+  librepo = lib.pipe pkgs.librepo [
     toPythonModule
     (p: p.overrideAttrs (super: { meta = super.meta // { outputsToInstall = [ "py" ]; }; }))
     (p: p.override { inherit python; })
@@ -4718,13 +4715,13 @@ in {
 
   librouteros = callPackage ../development/python-modules/librouteros { };
 
-  libsass = (callPackage ../development/python-modules/libsass {
+  libsass = callPackage ../development/python-modules/libsass {
     inherit (pkgs) libsass;
-  });
+  };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
-  libselinux = pipe pkgs.libselinux [
+  libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
     (p:
       p.overrideAttrs (super: {
@@ -5254,10 +5251,10 @@ in {
 
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
 
-  monosat = (pkgs.monosat.python {
+  monosat = pkgs.monosat.python {
     inherit buildPythonPackage;
     inherit (self) cython;
-  });
+  };
 
   monotonic = callPackage ../development/python-modules/monotonic { };
 
@@ -5787,7 +5784,7 @@ in {
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
-      openbabel = (callPackage ../development/libraries/openbabel { python = self.python; });
+      openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
@@ -6869,7 +6866,7 @@ in {
   pyctr = callPackage ../development/python-modules/pyctr { };
 
   pycuda = callPackage ../development/python-modules/pycuda {
-    cudatoolkit = pkgs.cudatoolkit;
+    inherit (pkgs) cudatoolkit;
     inherit (pkgs.stdenv) mkDerivation;
   };
 
@@ -9410,12 +9407,12 @@ in {
   snuggs = callPackage ../development/python-modules/snuggs { };
 
   soapysdr = toPythonModule (pkgs.soapysdr.override {
-    python = self.python;
+    inherit (self) python;
     usePython = true;
   });
 
   soapysdr-with-plugins = toPythonModule (pkgs.soapysdr-with-plugins.override {
-    python = self.python;
+    inherit (self) python;
     usePython = true;
   });
 
@@ -10040,9 +10037,9 @@ in {
 
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
-  tkinter = let
+  tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
-  in callPackage ../development/python-modules/tkinter { py = py; };
+  };
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
 

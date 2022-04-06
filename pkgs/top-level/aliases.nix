@@ -87,6 +87,7 @@ mapAliases ({
   aucdtect = throw "aucdtect: Upstream no longer provides download urls"; # Added 2020-12-26
   avldrums-lv2 = x42-avldrums; # Added 2020-03-29
   avxsynth = throw "avxsynth was removed because it was broken"; # Added 2021-05-18
+  aws-okta = throw "aws-okta is on indefinite hiatus. See https://github.com/segmentio/aws-okta/issues/278"; # Added 2022-04-05;
   azureus = throw "azureus is now known as vuze and the version in nixpkgs was really outdated"; # Added 2021-08-02
 
   ### B ###
@@ -102,6 +103,8 @@ mapAliases ({
   bcat = throw "bcat has been removed because upstream is dead"; # Added 2021-08-22
   beret = throw "beret has been removed"; # Added 2021-11-16
   bin_replace_string = throw "bin_replace_string has been removed: deleted by upstream"; # Added 2022-01-07
+  bird2 = bird; # Added 2022-02-21
+  bird6 = throw "bird6 was dropped. Use bird instead, which has support for both ipv4/ipv6"; # Added 2022-02-21
   bitbucket-cli = throw "bitbucket-cli has been removed: abandoned by upstream"; # Added 2022-03-21
   bitsnbots = throw "bitsnbots has been removed because it was broken and upstream missing"; # Added 2021-08-22
   blastem = throw "blastem has been removed from nixpkgs as it would still require python2"; # Added 2022-01-01
@@ -112,10 +115,9 @@ mapAliases ({
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # Added 2021-01-24
   bridge_utils = throw "'bridge_utils' has been renamed to/replaced by 'bridge-utils'"; # Converted to throw 2022-02-22
   bro = zeek; # Added 2019-09-29
-  bird2 = bird; # Added 2022-02-21
-  bird6 = throw "bird6 was dropped. Use bird instead, which has support for both ipv4/ipv6"; # Added 2022-02-21
   btrfsProgs = throw "'btrfsProgs' has been renamed to/replaced by 'btrfs-progs'"; # Converted to throw 2022-02-22
   bud = throw "bud has been removed: abandoned by upstream"; # Added 2022-03-14
+  buttersink = throw "buttersink has been removed: abandoned by upstream"; # Added 2022-04-05
 
   # bitwarden_rs renamed to vaultwarden with release 1.21.0 (2021-04-30)
   bitwarden_rs = vaultwarden;
@@ -179,6 +181,7 @@ mapAliases ({
   compton-git = throw "'compton-git' has been renamed to/replaced by 'compton'"; # Converted to throw 2022-02-22
   concurrencykit = libck; # Added 2021-03
   conntrack_tools = throw "'conntrack_tools' has been renamed to/replaced by 'conntrack-tools'"; # Converted to throw 2022-02-22
+  container-linux-config-transpiler = throw "container-linux-config-transpiler is deprecated and archived by upstream"; # Added 2022-04-05
   cool-old-term = throw "'cool-old-term' has been renamed to/replaced by 'cool-retro-term'"; # Converted to throw 2022-02-22
   corsmisc = throw "corsmisc has been removed (upstream is gone)"; # Added 2022-01-24
   couchdb = throw "couchdb was removed from nixpkgs, use couchdb3 instead"; # Added 2021-03-03
@@ -474,6 +477,7 @@ mapAliases ({
 
   hal-flash = throw "hal-flash has been removed as Adobe Flash Player is now deprecated"; # Added 2021-02-07
   hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # Added 2022-01-15
+  heapster = throw "Heapster is now retired. See https://github.com/kubernetes-retired/heapster/blob/master/docs/deprecation.md"; # Added 2022-04-05
   heimdalFull = throw "'heimdalFull' has been renamed to/replaced by 'heimdal'"; # Converted to throw 2022-02-22
   heme = throw "heme has been removed: upstream is gone"; # added 2022-02-06
   hepmc = hepmc2; # Added 2019-08-05
@@ -504,6 +508,7 @@ mapAliases ({
   intecture-agent = throw "intecture-agent has been removed, because it was no longer maintained upstream"; # added 2021-12-15
   intecture-auth = throw "intecture-auth has been removed, because it was no longer maintained upstream"; # added 2021-12-15
   intecture-cli = throw "intecture-cli has been removed, because it was no longer maintained upstream"; # added 2021-12-15
+  interfacer = throw "interfacer is deprecated and archived by upstream"; # Added 2022-04-05
   inter-ui = inter; # Added 2021-03-27
   iops = throw "iops was removed: upstream is gone"; # Added 2022-02-06
   iproute = iproute2; # moved from top-level 2021-03-14
@@ -562,6 +567,8 @@ mapAliases ({
   kramdown-rfc2629 = rubyPackages.kramdown-rfc2629; # Added 2021-03-23
   krename-qt5 = throw "'krename-qt5' has been renamed to/replaced by 'krename'"; # Converted to throw 2022-02-22
   krita-beta = krita; # moved from top-level 2021-12-23
+  kube-aws = throw "kube-aws is deprecated and archived by upstream"; # Added 2022-04-05
+  kubeless = throw "kubeless is deprecated and archived by upstream"; # Added 2022-04-05
   kvm = throw "'kvm' has been renamed to/replaced by 'qemu_kvm'"; # Converted to throw 2022-02-22
 
   ### L ###
@@ -971,6 +978,7 @@ mapAliases ({
   proglodyte-wasm = throw "proglodyte-wasm has been removed from nixpkgs, because it is unmaintained since 5 years with zero github stars"; # Added 2021-06-30
   proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead"; # Added 2021-04-12
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer"; # Added 2021-03-16
+  prometheus-mesos-exporter = throw "prometheus-mesos-exporter is deprecated and archived by upstream"; # Added 2022-04-05
   proxytunnel = throw "proxytunnel has been removed from nixpkgs, because it has not been update upstream since it was added to nixpkgs in 2008 and has therefore bitrotted."; # added 2021-12-15
   pulseaudioLight = throw "'pulseaudioLight' has been renamed to/replaced by 'pulseaudio'"; # Converted to throw 2022-02-22
   pulseeffects = throw "Use pulseeffects-legacy if you use PulseAudio and easyeffects if you use PipeWire"; # Added 2021-02-13
@@ -1157,6 +1165,7 @@ mapAliases ({
   tahoelafs = throw "'tahoelafs' has been renamed to/replaced by 'tahoe-lafs'"; # Converted to throw 2022-02-22
   tangogps = foxtrotgps; # Added 2020-01-26
   tdm = throw "tdm has been removed because nobody can figure out how to fix OpenAL integration. Use precompiled binary and `steam-run` instead";
+  teleconsole = throw "teleconsole is archived by upstream"; # Added 2022-04-05
   telepathy-qt = throw "telepathy-qt no longer supports Qt 4. Please use libsForQt5.telepathy instead"; # Added 2020-07-02
   telepathy_farstream = throw "'telepathy_farstream' has been renamed to/replaced by 'telepathy-farstream'"; # Converted to throw 2022-02-22
   telepathy_gabble = throw "'telepathy_gabble' has been renamed to/replaced by 'telepathy-gabble'"; # Converted to throw 2022-02-22

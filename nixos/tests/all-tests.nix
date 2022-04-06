@@ -274,6 +274,7 @@ in
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
+  lvm2 = handleTest ./lvm2 {};
   lxd = handleTest ./lxd.nix {};
   lxd-image = handleTest ./lxd-image.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};

@@ -8,21 +8,24 @@
 , stdenv
 }:
 
+# Updating this package will force an update for nodePackages.prisma. The
+# version of prisma-engines and nodePackages.prisma must be the same for them to
+# function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-z7ebwidY+p350XaGeyohoSHWc2DhfzpRxsRDLON1BuA=";
+    sha256 = "sha256-lIHE63XIPutvTS2cid0+tuo+JMSKMGuSUcnFv1mCRrM=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "sha256-PQdLoNJL9szPzPtFRznWS0lngTvtWK+Ko2rp4JWH9dQ=";
+  cargoSha256 = "sha256-SkI+GLHknC+CGhGo7KiZahBxMp/JCIukTe2C0mMTdjY=";
 
   nativeBuildInputs = [ pkg-config ];
 

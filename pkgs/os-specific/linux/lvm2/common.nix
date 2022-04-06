@@ -11,6 +11,7 @@
 , enableDmeventd ? false
 , udevSupport ? !stdenv.hostPlatform.isStatic, udev ? null
 , onlyLib ? stdenv.hostPlatform.isStatic
+, enableVDO ? false, vdo ? null
 , nixosTests
 }:
 
@@ -18,7 +19,7 @@
 assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
-  pname = "lvm2" + lib.optionalString enableDmeventd "-with-dmeventd";
+  pname = "lvm2" + lib.optionalString enableDmeventd "-with-dmeventd" + lib.optionalString enableVDO "-with-vdo";
   inherit version;
 
   src = fetchurl {
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     udev
   ] ++ lib.optionals (!onlyLib) [
     libuuid
+  ] ++ lib.optionals enableVDO [
+    vdo
   ];
 
   configureFlags = [
@@ -58,6 +61,8 @@ stdenv.mkDerivation rec {
     "--enable-udev_sync"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static_link"
+  ] ++  lib.optionals enableVDO [
+    "--enable-vdo"
   ];
 
   preConfigure = ''
