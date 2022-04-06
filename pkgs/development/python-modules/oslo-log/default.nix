@@ -11,16 +11,20 @@
 , pyinotify
 , python-dateutil
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
   version = "4.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    sha256 = "sha256-ycLEyW098LLuuTG0djvbCpBbqvKbiVgW2Vd41p+hJwc=";
+    hash = "sha256-ycLEyW098LLuuTG0djvbCpBbqvKbiVgW2Vd41p+hJwc=";
   };
 
   propagatedBuildInputs = [
@@ -44,7 +48,9 @@ buildPythonPackage rec {
     "test_logging_handle_error"
   ];
 
-  pythonImportsCheck = [ "oslo_log" ];
+  pythonImportsCheck = [
+    "oslo_log"
+  ];
 
   meta = with lib; {
     description = "oslo.log library";
