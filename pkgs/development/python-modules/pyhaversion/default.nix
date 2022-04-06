@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "22.02.0";
+  version = "22.04.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-7cBUsTEZ9yVlWsUdKs4YWm647baN09AQJI+7CTORhLc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-ItemkSm85Sq3utEG28mvfS7gq95veeYwhHG6BpOUJJY=";
   };
 
   propagatedBuildInputs = [
