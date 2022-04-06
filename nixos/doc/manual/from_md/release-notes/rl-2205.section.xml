@@ -1523,9 +1523,11 @@
         <para>
           <link linkend="opt-programs.ssh.knownHosts">programs.ssh.knownHosts</link>
           has gained an <literal>extraHostNames</literal> option to
-          replace <literal>hostNames</literal>.
-          <literal>hostNames</literal> is deprecated, but still
-          available for now.
+          augment <literal>hostNames</literal>. It is now possible to
+          use the attribute name of a <literal>knownHosts</literal>
+          entry as the primary host name and specify secondary host
+          names using <literal>extraHostNames</literal> without having
+          to duplicate the primary host name.
         </para>
       </listitem>
       <listitem>

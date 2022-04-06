@@ -1546,8 +1546,6 @@ with pkgs;
 
   aws-nuke = callPackage ../tools/admin/aws-nuke { };
 
-  aws-okta = callPackage ../tools/security/aws-okta { };
-
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
@@ -1727,8 +1725,6 @@ with pkgs;
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
-
-  container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
@@ -2486,8 +2482,6 @@ with pkgs;
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
-
-  buttersink = callPackage ../tools/filesystems/buttersink { };
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
@@ -10435,8 +10429,6 @@ with pkgs;
 
   teamviewer = libsForQt515.callPackage ../applications/networking/remote/teamviewer { };
 
-  teleconsole = callPackage ../tools/misc/teleconsole { };
-
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
   teleport = callPackage ../servers/teleport {};
@@ -15375,8 +15367,6 @@ with pkgs;
 
   krew = callPackage ../development/tools/krew { };
 
-  kube-aws = callPackage ../development/tools/kube-aws { };
-
   kube-hunter = callPackage ../tools/security/kube-hunter { };
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
@@ -15532,6 +15522,8 @@ with pkgs;
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
   };
+
+  nix-bisect = callPackage ../development/tools/misc/nix-bisect { };
 
   nix-build-uncached = callPackage ../development/tools/misc/nix-build-uncached { };
 
@@ -21414,8 +21406,6 @@ with pkgs;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
-  heapster = callPackage ../servers/monitoring/heapster { };
-
   hbase = callPackage ../servers/hbase {};
 
   headphones = callPackage ../servers/headphones {};
@@ -22010,7 +22000,6 @@ with pkgs;
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
   prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
-  prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-mikrotik-exporter = callPackage ../servers/monitoring/prometheus/mikrotik-exporter.nix { };
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
@@ -22940,6 +22929,9 @@ with pkgs;
     enableDmeventd = true;
     enableCmdlib = true;
   };
+  lvm2_vdo = lvm2_dmeventd.override {
+    enableVDO = true;
+  };
 
   maddy = callPackage ../servers/maddy { };
 
@@ -23520,6 +23512,8 @@ with pkgs;
   vendir = callPackage ../development/tools/vendir { };
 
   vndr = callPackage ../development/tools/vndr { };
+
+  vdo = callPackage ../os-specific/linux/vdo { };
 
   windows = callPackages ../os-specific/windows {};
 
@@ -24379,8 +24373,6 @@ with pkgs;
   roboto-slab = callPackage ../data/fonts/roboto-slab { };
 
   hasklig = callPackage ../data/fonts/hasklig {};
-
-  interfacer = callPackage ../development/tools/interfacer { };
 
   maligned = callPackage ../development/tools/maligned { };
 
@@ -27144,8 +27136,6 @@ with pkgs;
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
-
-  kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
@@ -31008,6 +30998,10 @@ with pkgs;
 
   btanks = callPackage ../games/btanks { };
 
+  bugdom = callPackage ../games/bugdom {
+    inherit (darwin.apple_sdk.frameworks) IOKit Foundation;
+  };
+
   bzflag = callPackage ../games/bzflag {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
@@ -33192,6 +33186,8 @@ with pkgs;
     jre = jre8;
     swt = swt_jdk8;
   };
+
+  argononed = callPackage ../misc/drivers/argononed { };
 
   attract-mode = callPackage ../applications/emulators/attract-mode { };
 

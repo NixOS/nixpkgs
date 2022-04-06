@@ -11,13 +11,6 @@ let
     };
   });
 
-  changeVersionHash = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
-    inherit version;
-    src = oldAttrs.src.override {
-      inherit version hash;
-    };
-  });
-
   localPython = python3.override
     {
       self = localPython;
@@ -26,7 +19,15 @@ let
         botocore = changeVersion super.botocore.overridePythonAttrs "1.23.54" "sha256-S7m6FszO5fWiYCBJvD4ttoZTRrJVBmfzATvfM7CgHOs=";
         colorama = changeVersion super.colorama.overridePythonAttrs "0.4.3" "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         future = changeVersion super.future.overridePythonAttrs "0.16.0" "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
-        requests = changeVersionHash super.requests.overridePythonAttrs "2.26.0" "sha256-uKpY+M95P/2HgtPYyxnmbvNverpDU+7IWedGeLAbB6c=";
+        requests = super.requests.overridePythonAttrs (oldAttrs: rec {
+          version = "2.26.0";
+          checkInputs = oldAttrs.checkInputs ++ [ super.trustme ];
+          src = oldAttrs.src.override {
+            inherit version;
+            hash = "sha256-uKpY+M95P/2HgtPYyxnmbvNverpDU+7IWedGeLAbB6c=";
+          };
+        }
+        );
         six = changeVersion super.six.overridePythonAttrs "1.14.0" "02lw67hprv57hyg3cfy02y3ixjk3nzwc0dx3c4ynlvkfwkfdnsr3";
         wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "1wf5ycjx8s066rdvr0fgz4xds9a8zhs91c4jzxvvymm1c8l8cwzf";
         semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";

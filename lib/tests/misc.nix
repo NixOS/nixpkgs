@@ -649,6 +649,11 @@ runTests {
     expected = "foo";
   };
 
+  testSanitizeDerivationNameUnicode = testSanitizeDerivationName {
+    name = "fö";
+    expected = "f-";
+  };
+
   testSanitizeDerivationNameAscii = testSanitizeDerivationName {
     name = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     expected = "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";
@@ -691,7 +696,7 @@ runTests {
 
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
-    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+    expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
   testCartesianProductOfEmptySet = {
