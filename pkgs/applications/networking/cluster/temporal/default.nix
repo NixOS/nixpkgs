@@ -113,6 +113,6 @@ buildGoModule rec {
     homepage = "https://temporal.io";
     changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [ superherointj titanous ];
   };
 }
