@@ -1,25 +1,39 @@
-{ buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
-, graphviz, networkx, six, opt-einsum, tqdm, pyro-api }:
+{ lib
+, buildPythonPackage
+, contextlib2
+, fetchPypi
+, graphviv
+, matplotlib
+, networkx
+, numpy
+, opt-einsum
+, pyro-api
+, pythonOlder
+, pytorch
+, tqdm
+}:
 
 buildPythonPackage rec {
-  version = "1.8.1";
   pname = "pyro-ppl";
+  version = "1.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-18BJ6y50haYStN2ZwkwwnMhgx8vGsZczhwNPVDbRyNY=";
+    hash = "sha256-18BJ6y50haYStN2ZwkwwnMhgx8vGsZczhwNPVDbRyNY=";
   };
 
   propagatedBuildInputs = [
+    contextlib2
+    graphviv
+    matplotlib
+    networkx
+    numpy
+    opt-einsum
     pyro-api
     pytorch
-    contextlib2
-    # TODO(tom): graphviz pulls in a lot of dependencies - make
-    # optional when some time to figure out how.
-    graphviz
-    networkx
-    six
-    opt-einsum
     tqdm
   ];
 
@@ -33,10 +47,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "A Python library for probabilistic modeling and inference";
     homepage = "http://pyro.ai";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh georgewhewell ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ teh georgewhewell ];
   };
 }
