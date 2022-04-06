@@ -5107,6 +5107,8 @@ in {
     python3Packages = self;
   });
 
+  mergedb = callPackage ../development/python-modules/mergedb { };
+
   mergedeep = callPackage ../development/python-modules/mergedeep { };
 
   merkletools = callPackage ../development/python-modules/merkletools { };

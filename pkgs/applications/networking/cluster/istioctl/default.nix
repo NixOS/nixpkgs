@@ -12,8 +12,6 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-AOcWkcw+2DcgBxvxRO/sdb339a7hmI7Oy5I4kW4oE+k=";
 
-  doCheck = false;
-
   nativeBuildInputs = [ installShellFiles ];
 
   # Bundle release metadata

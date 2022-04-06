@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "anyconfig";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MJHXZ1dAaG+t6FdVU38qfGzO+oZZxbtWF04C3tdLltU=";
+    sha256 = "sha256-A/8uF2KvOI+7vtHBq3+fHsAGqR2n2zpouWPabneV0qw=";
   };
 
   postPatch = ''

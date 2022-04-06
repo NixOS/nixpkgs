@@ -11065,6 +11065,8 @@ with pkgs;
 
   wf-recorder = callPackage ../applications/video/wf-recorder { };
 
+  whatweb = callPackage ../tools/security/whatweb { };
+
   whipper = callPackage ../applications/audio/whipper { };
 
   whitebophir = callPackage ../servers/web-apps/whitebophir { };
@@ -12710,12 +12712,9 @@ with pkgs;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
-  go_1_18 = callPackage ../development/compilers/go/1.18.nix ({
+  go_1_18 = callPackage ../development/compilers/go/1.18.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
+  };
 
   go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
@@ -29274,11 +29273,11 @@ with pkgs;
   inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
     subversion_1_10 subversion;
 
-  subversionClient = appendToName "client" (subversion.override {
+  subversionClient = subversion.override {
     bdbSupport = false;
     perlBindings = true;
     pythonBindings = true;
-  });
+  };
 
   sublime-music = callPackage ../applications/audio/sublime-music { };
 
@@ -32806,7 +32805,11 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  z3 = callPackage ../applications/science/logic/z3 { python = python2; };
+
+  inherit (callPackages ../applications/science/logic/z3 { python = python2; })
+    z3_4_8
+    z3_4_7;
+  z3 = z3_4_8;
   z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
     python = python2;
     stdenv = gcc49Stdenv;

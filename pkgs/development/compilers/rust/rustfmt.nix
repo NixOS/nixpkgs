@@ -18,8 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   # As of rustc 1.45.0, these env vars are required to build rustfmt (due to
   # https://github.com/rust-lang/rust/pull/72001)
-  CFG_RELEASE = "${rustPlatform.rust.rustc.version}-nightly";
-  CFG_RELEASE_CHANNEL = "nightly";
+  CFG_RELEASE = rustPlatform.rust.rustc.version;
+  CFG_RELEASE_CHANNEL = "stable";
 
   meta = with lib; {
     description = "A tool for formatting Rust code according to style guidelines";
