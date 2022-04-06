@@ -204,6 +204,23 @@ in
           '';
         };
 
+        restrictedNameservers = mkOption {
+          type = with types; attrsOf (listOf str);
+          default = {};
+          description = ''
+            A list of search domains and the DNS to query for each one.
+            See <link xlink:href="https://tailscale.com/kb/1054/dns">Split DNS</link>.
+          '';
+          example = lib.literalExpression ''
+            {
+              "foo.bar.com" = [
+                "1.1.1.1"
+                "8.8.8.8"
+              ];
+            }
+            '';
+        };
+
         domains = mkOption {
           type = types.listOf types.str;
           default = [ ];
@@ -371,6 +388,7 @@ in
 
       dns_config = {
         nameservers = mkDefault cfg.dns.nameservers;
+        restricted_nameservers = mkDefault cfg.dns.restrictedNameservers;
         domains = mkDefault cfg.dns.domains;
         magic_dns = mkDefault cfg.dns.magicDns;
         base_domain = mkDefault cfg.dns.baseDomain;
