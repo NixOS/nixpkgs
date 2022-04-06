@@ -83,8 +83,7 @@ let
   wxmac' = wxmac.overrideAttrs (oldAttrs: rec {
     src = wxWidgets_src;
   });
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -198,5 +197,9 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ lheckemann veprbl ];
     platforms = platforms.unix;
+    # darwin-aarch due to qtbase broken for it.
+    # darwin-x86_64 due to
+    # https://logs.nix.ci/?attempt_id=5cbc4581-09b4-4148-82fe-0326411a56b3&key=nixos%2Fnixpkgs.152273.
+    broken = stdenv.isDarwin;
   };
 }
