@@ -59,18 +59,6 @@ let
     })
 
     (self: super: {
-      hatasmota = super.hatasmota.overridePythonAttrs (oldAttrs: {
-        version = "0.3.1";
-        src = fetchFromGitHub {
-          owner = "emontnemery";
-          repo = "hatasmota";
-          rev = "0.3.1";
-          sha256 = "sha256-/am6cRhAdiqMq0u7Ed4qhIA+Em2O0gIt7HfP19+2XHw=";
-        };
-      });
-    })
-
-    (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.18";
         src = fetchFromGitHub {
@@ -177,7 +165,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.3.8";
+  hassVersion = "2022.4.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -195,7 +183,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-FGsMFt/EEokaast81iiwKHqSsB1E4Si5ejTw+MV1MnQ=";
+    hash = "sha256-b/YwcbcQuRIue4fr4+yF2EEXLvmnI7e3xfyz52flwJw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -215,8 +203,8 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "jinja2"
       "pip"
-      "PyJWT"
       "requests"
       "yarl"
     ];
@@ -319,6 +307,8 @@ in python.pkgs.buildPythonApplication rec {
     "test_merge"
     # Tests are flaky
     "test_config_platform_valid"
+    # Test requires pylint>=2.13.0
+    "test_invalid_discovery_info"
   ];
 
   preCheck = ''
