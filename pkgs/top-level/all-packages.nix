@@ -429,6 +429,8 @@ with pkgs;
 
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
 
+  inncrementalBuildTools = callPackage ../build-support/build-incremental.nix {};
+
   caroline = callPackage ../development/libraries/caroline { };
 
   cartridges = callPackage ../applications/misc/cartridges { };
