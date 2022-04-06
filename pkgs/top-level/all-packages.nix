@@ -28555,6 +28555,8 @@ with pkgs;
     electron = electron_9;
   };
 
+  pomodoro = callPackage ../applications/misc/pomodoro { };
+
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
   ponymix = callPackage ../applications/audio/ponymix { };
