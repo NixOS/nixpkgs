@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "0.10.4";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-guJlIm9HPTgKw5cg/s7rFST/crAXfPxGYGeZxEJ+hcw=";
+    sha256 = "sha256-ORGDOWLrnImca+qPtJZmyC8hGxJNCEC+tq2V4jpGIbY=";
   };
 
   propagatedBuildInputs = [ dulwich mercurial ];
