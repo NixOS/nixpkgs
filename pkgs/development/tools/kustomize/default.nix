@@ -1,16 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kustomize";
   version = "4.5.4";
-  # rev is the commit of the tag, mainly for kustomize version command output
-  rev = "cf3a452ddd6f83945d39d582243b8592ec627ae3";
 
   ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
     [
       "-s"
       "-X ${t}.version=${version}"
-      "-X ${t}.gitCommit=${rev}"
+      "-X ${t}.gitCommit=${src.rev}"
     ];
 
   src = fetchFromGitHub {
@@ -20,12 +18,19 @@ buildGoModule rec {
     sha256 = "sha256-7Ode+ONgWJRNSbIpvIjhuT+oVvZgJfByFqS/iSUhcXw=";
   };
 
-  doCheck = true;
-
   # avoid finding test and development commands
-  sourceRoot = "source/kustomize";
+  modRoot = "kustomize";
 
   vendorSha256 = "sha256-beIbeY/+k2NgotGw5zQFkYuqMKlwctoxuToZfiFlCm4=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd kustomize \
+      --bash <($out/bin/kustomize completion bash) \
+      --fish <($out/bin/kustomize completion fish) \
+      --zsh <($out/bin/kustomize completion zsh)
+  '';
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
