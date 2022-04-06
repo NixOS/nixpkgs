@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-5Ohks3yfqAAe+CiLEucibezmibl6TtktDXMHAhecXzA=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-r1PoOxFPA4zYFEpw+BakzDAJ13IMfcZpTJWkRt/q4go=";
   };
 
   nativeBuildInputs = [
