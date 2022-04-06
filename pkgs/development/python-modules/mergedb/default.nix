@@ -6,6 +6,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , setuptools-scm
 }:
 
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     pyyaml
     colorama
     jinja2
+    setuptools
   ];
 
   checkInputs = [
