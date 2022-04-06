@@ -29545,6 +29545,8 @@ with pkgs;
 
   toot = callPackage ../applications/misc/toot { };
 
+  toipe = callPackage ../applications/misc/toipe { };
+
   tootle = callPackage ../applications/misc/tootle { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
