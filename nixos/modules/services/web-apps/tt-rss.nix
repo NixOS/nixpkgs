@@ -24,6 +24,14 @@ let
       else
         null
       ;
+    emailPassword =
+      if (cfg.email.password != null) then
+        "'${(escape ["'" "\\"] cfg.email.password)}'"
+      else if (cfg.email.passwordFile != null) then
+        "file_get_contents('${cfg.email.passwordFile}')"
+      else
+        null
+      ;
   in pkgs.writeText "config.php" ''
     <?php
       putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
@@ -87,7 +95,7 @@ let
 
       putenv('TTRSS_SMTP_SERVER=${cfg.email.server}');
       putenv('TTRSS_SMTP_LOGIN=${cfg.email.login}');
-      putenv('TTRSS_SMTP_PASSWORD=${escape ["'" "\\"] cfg.email.password}');
+      putenv('TTRSS_SMTP_PASSWORD=' ${optionalString (emailPassword != null) ". ${emailPassword}"});
       putenv('TTRSS_SMTP_SECURE=${cfg.email.security}');
 
       putenv('TTRSS_SMTP_FROM_NAME=${escape ["'" "\\"] cfg.email.fromName}');
@@ -334,8 +342,16 @@ let
         };
 
         password = mkOption {
-          type = types.str;
-          default = "";
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            SMTP authentication password used when sending outgoing mail.
+          '';
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
           description = ''
             SMTP authentication password used when sending outgoing mail.
           '';
