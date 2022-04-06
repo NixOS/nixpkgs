@@ -14,9 +14,6 @@ buildGoModule rec {
   vendorSha256 = "sha256-0jixQcgSXQJAd899EWOUKde5OXZcSZwQfH7LRdQlm7c=";
   proxyVendor = true;
 
-  # tests are failing for no obvious reasons
-  doCheck = false;
-
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
