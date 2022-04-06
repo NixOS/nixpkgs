@@ -13,10 +13,84 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-caRBgkuHQ38r6OsKQCJ2pxAe8s6mc4g/QCIsCEXvY3M=";
 
-  # Errors:
-  #  > === RUN   TestNamespaceHandlerGlobalNamespaceDisabledSuite
-  # gocql: unable to dial control conn 127.0.0.1:9042: dial tcp 127.0.0.1:9042: connect: connection refused
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace common/namespace/handler_GlobalNamespaceDisabled_test.go \
+      --replace "TestNamespaceHandlerGlobalNamespaceDisabledSuite" \
+                "SkipNamespaceHandlerGlobalNamespaceDisabledSuite"
+
+    substituteInPlace common/namespace/handler_GlobalNamespaceEnabled_MasterCluster_test.go \
+      --replace "TestNamespaceHandlerGlobalNamespaceEnabledMasterClusterSuite" \
+                "SkipNamespaceHandlerGlobalNamespaceEnabledMasterClusterSuite"
+
+    substituteInPlace common/namespace/handler_GlobalNamespaceEnabled_NotMasterCluster_test.go \
+      --replace "TestNamespaceHandlerGlobalNamespaceEnabledNotMasterClusterSuite" \
+                "SkipNamespaceHandlerGlobalNamespaceEnabledNotMasterClusterSuite"
+
+    substituteInPlace common/namespace/handler_test.go \
+      --replace "TestNamespaceHandlerCommonSuite" \
+                "SkipNamespaceHandlerCommonSuite"
+
+    substituteInPlace common/namespace/replicationTaskExecutor_test.go \
+      --replace "TestNamespaceReplicationTaskExecutorSuite" \
+                "SkipNamespaceReplicationTaskExecutorSuite"
+
+    rm common/persistence/persistence-tests/cassandra_test.go
+    rm common/persistence/persistence-tests/mysql_test.go
+    rm common/persistence/persistence-tests/postgres_test.go
+    rm common/persistence/sql/sqlplugin/tests/mysql_test.go
+    rm common/persistence/sql/sqlplugin/tests/postgresql_test.go
+    rm common/persistence/tests/cassandra_test.go
+    rm common/persistence/tests/mysql_test.go
+    rm common/persistence/tests/postgresql_test.go
+    rm common/persistence/visibility/persistence-tests/cassandra_test.go
+    rm common/persistence/visibility/persistence-tests/postgrsql_test.go
+    rm common/persistence/visibility/persistence-tests/mysql_test.go
+    rm tools/sql/clitest/mysql_cli_test.go
+    rm tools/sql/clitest/postgresql_cli_test.go
+
+    substituteInPlace host/client_integration_test.go \
+      --replace "TestClientIntegrationSuite" "SkipClientIntegrationSuite"
+
+    substituteInPlace host/integration_test.go \
+      --replace "TestIntegrationSuite" "SkipIntegrationSuite"
+
+    substituteInPlace host/sizelimit_test.go \
+      --replace "TestSizeLimitIntegrationSuite" "SkipSizeLimitIntegrationSuite"
+
+    substituteInPlace host/ndc/ndc_integration_test.go \
+      --replace "TestNDCIntegrationTestSuite" "SkipNDCIntegrationTestSuite"
+
+    substituteInPlace host/xdc/integration_failover_test.go \
+      --replace "TestIntegrationClustersTestSuite" "SkipIntegrationClustersTestSuite"
+
+    substituteInPlace tests/integration/cassandra_test.go \
+      --replace "TestCassandraSizeLimitSuite" "SkipCassandraSizeLimitSuite"
+
+    substituteInPlace tests/integration/mysql_test.go \
+      --replace "TestMySQLSizeLimitSuite" "SkipMySQLSizeLimitSuite"
+
+    substituteInPlace tests/integration/postgresql_test.go \
+      --replace "TestPostgreSQLSizeLimitSuite" "SkipPostgreSQLSizeLimitSuite"
+
+    substituteInPlace tools/cassandra/cqlclient_test.go \
+      --replace "TestCQLClientTestSuite" "SkipCQLClientTestSuite"
+
+    substituteInPlace tools/cassandra/setupTask_test.go \
+      --replace "TestSetupSchemaTestSuite" "SkipSetupSchemaTestSuite"
+
+    substituteInPlace tools/cassandra/updateTask_test.go \
+      --replace "TestUpdateSchemaTestSuite" "SkipUpdateSchemaTestSuite"
+
+    substituteInPlace tools/cassandra/version_test.go \
+      --replace "TestVersionTestSuite" "SkipVersionTestSuite"
+
+    substituteInPlace tools/common/schema/version_test.go \
+      --replace "TestSetupSchemaTestSuite" "SkipSetupSchemaTestSuite" \
+      --replace "TestVersionTestSuite" "SkipVersionTestSuite"
+
+    substituteInPlace service/matching/taskQueueManager_test.go \
+      --replace "TestAddTaskStandby" "SkipAddTaskStandby"
+  '';
 
   installPhase = ''
     runHook preInstall
