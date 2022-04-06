@@ -4656,6 +4656,12 @@
     githubId = 4656860;
     name = "Gaute Ravndal";
   };
+  graysonhead = {
+    email = "grayson@graysonhead.net";
+    github = "graysonhead";
+    githubId = 6179496;
+    name = "Grayson Head";
+  };
   grburst = {
     email = "GRBurst@protonmail.com";
     github = "GRBurst";
