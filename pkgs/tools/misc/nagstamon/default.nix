@@ -1,27 +1,47 @@
-{ lib, fetchurl, pythonPackages }:
+{ lib, fetchFromGitHub, python39Packages, wrapQtAppsHook }:
 
-pythonPackages.buildPythonApplication rec {
+let
   pname = "nagstamon";
-  version = "3.2.1";
+  version = "v3.8.0";
+in python39Packages.buildPythonApplication rec {
+  inherit pname;
+  inherit version;
 
-  src = fetchurl {
-    url = "https://nagstamon.ifw-dresden.de/files/stable/Nagstamon-${version}.tar.gz";
-    sha256 = "1048x55g3nlyyggn6a36xmj24w4hv08llg58f4hzc0fwg074cd58";
+  src = fetchFromGitHub {
+    owner = "HenriWahl";
+    repo = "Nagstamon";
+    rev = "${version}";
+    sha256 = "0a8aqw44z58pabsgxlvndnmzzvc50wrb4g12yp6zgajn40b2l8pw";
   };
 
-  # Test assumes darwin
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [ configparser pyqt5 psutil requests
-     beautifulsoup4 keyring requests-kerberos kerberos lxml ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
+  postFixup = ''
+    wrapQtApp $out/bin/nagstamon.py
+  '';
+
+  propagatedBuildInputs = with python39Packages; [
+    beautifulsoup4
+    configparser
+    dateutil
+    kerberos
+    keyring
+    lxml
+    psutil
+    pyqt5_with_qtmultimedia
+    requests
+    requests-kerberos
+    setuptools
+    xlib
+  ];
 
   meta = with lib; {
     description = "A status monitor for the desktop";
     homepage = "https://nagstamon.ifw-dresden.de/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
-    # fails to install with:
-    # TypeError: cannot unpack non-iterable bool object
-    broken = true;
+    maintainers = with maintainers; [ foosinn ];
+    inherit version;
   };
 }
+
