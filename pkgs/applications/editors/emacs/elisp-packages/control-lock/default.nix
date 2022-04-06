@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "control-lock";
 
   src = fetchurl {
-    url = "http://emacswiki.org/emacs/download/control-lock.el";
-    sha256 = "1vjpiagiy581qy2ljkbp0w12gvdqzx2lg0778z93262jf55ycai4";
+    url = "https://github.com/emacsmirror/emacswiki.org/blob/185fdc34fb1e02b43759ad933d3ee5646b0e78f8/control-lock.el";
+    sha256 = "1b5xcgq2r565pr1c14dwrmn1fl05p56infapa5pqvajv2kpfla7h";
   };
 
   dontUnpack = true;
