@@ -220,7 +220,7 @@ in rec {
         this unit enters the "failed" state.
       '';
     };
-    
+
     onSuccess = mkOption {
       default = [];
       type = types.listOf types.str;
