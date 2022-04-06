@@ -21393,7 +21393,7 @@ with pkgs;
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
-  hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskellPackages.graphql-engine;
+  hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskell.packages.ghc8107.graphql-engine;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 

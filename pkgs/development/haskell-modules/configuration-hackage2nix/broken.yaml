@@ -1392,6 +1392,7 @@ broken-packages:
   - fast-nats
   - fastpbkdf2
   - FastPush
+  - fast-tags
   - FastxPipe
   - fathead-util
   - fb
@@ -3959,6 +3960,7 @@ broken-packages:
   - powerdns
   - powermate
   - powerpc
+  - powerqueue-levelmem
   - pprecord
   - PPrinter
   - pqc
@@ -4705,6 +4707,7 @@ broken-packages:
   - socketio
   - sockets-and-pipes
   - socket-sctp
+  - socketson
   - socket-unix
   - sodium
   - soegtk
@@ -5205,6 +5208,7 @@ broken-packages:
   - trial-tomland
   - trigger
   - trim
+  - tripLL
   - trivia
   - tropical
   - true-name
