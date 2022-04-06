@@ -36,5 +36,13 @@ pkgs.runCommand "nixpkgs-lib-tests" {
     echo "Running lib/tests/sources.sh"
     TEST_LIB=$PWD/lib bash lib/tests/sources.sh
 
+    echo "Running lib/tests/misc.nix"
+    nix-instantiate --show-trace --eval --strict lib/tests/misc.nix >misc-out
+    if ! cmp <(echo "[ ]") misc-out; then
+      echo "lib/tests/misc.nix failed:"
+      cat misc-out
+      exit 1
+    fi
+
     touch $out
 ''
