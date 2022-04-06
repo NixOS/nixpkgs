@@ -126,12 +126,6 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
-    qtwayland = [
-      # NixOS-specific, ensure that app_id is correctly determined for
-      # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
-      # context).  Beware: shared among different Qt5 versions.
-      ../modules/qtwayland-app_id.patch
-    ];
   };
 
   addPackages = self: with self;
