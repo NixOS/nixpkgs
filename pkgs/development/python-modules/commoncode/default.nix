@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "30.0.0";
+  version = "30.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
+    sha256 = "sha256-Q1HRNzStkXZv3lorz7gFdmeJQJHF3zkXuu07Nt0xJBs=";
   };
 
   postPatch = ''
