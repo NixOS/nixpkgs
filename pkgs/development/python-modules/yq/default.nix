@@ -6,6 +6,7 @@
 , pyyaml
 , xmltodict
 , jq
+, setuptools-scm
 , pytestCheckHook
 }:
 
@@ -29,6 +30,10 @@ buildPythonPackage rec {
     substituteInPlace test/test.py \
       --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
   '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     pyyaml
