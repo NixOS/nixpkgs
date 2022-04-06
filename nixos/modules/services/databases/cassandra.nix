@@ -18,6 +18,9 @@ let
 
   cfg = config.services.cassandra;
 
+  atLeast3 = versionAtLeast cfg.package.version "3";
+  atLeast3_11 = versionAtLeast cfg.package.version "3.11";
+
   defaultUser = "cassandra";
 
   cassandraConfig = flip recursiveUpdate cfg.extraConfig (
@@ -38,7 +41,7 @@ let
           parameters = [{ seeds = concatStringsSep "," cfg.seedAddresses; }];
         }
       ];
-    } // optionalAttrs (versionAtLeast cfg.package.version "3") {
+    } // optionalAttrs atLeast3 {
       hints_directory = "${cfg.homeDir}/hints";
     }
   );
@@ -434,7 +437,7 @@ in
     jmxRolesFile = mkOption {
       type = types.nullOr types.path;
       default =
-        if versionAtLeast cfg.package.version "3.11"
+        if atLeast3_11
         then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile
         else null;
       defaultText = literalDocBook ''generated configuration file if version is at least 3.11, otherwise <literal>null</literal>'';
