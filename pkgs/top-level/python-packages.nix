@@ -6767,7 +6767,9 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybluez = callPackage ../development/python-modules/pybluez { };
+  pybluez = callPackage ../development/python-modules/pybluez {
+    inherit (pkgs) bluez;
+  };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
