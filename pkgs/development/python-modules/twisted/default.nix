@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , python
 , zope_interface
 , incremental
@@ -25,15 +24,6 @@ buildPythonPackage rec {
     extension = "tar.gz";
     sha256 = "01lh225d7lfnmfx4f4kxwl3963gjc9yg8jfkn1w769v34ia55mic";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/twisted/twisted/security/advisories/GHSA-92x2-jw7w-xvvx
-      name = "CVE-2022-21712.patch";
-      url = "https://github.com/twisted/twisted/commit/af8fe78542a6f2bf2235ccee8158d9c88d31e8e2.patch";
-      sha256 = "sha256-4destHY7smyXEvk4Z022wItHvTmaTFibrp9ztd4ZaX4=";
-    })
-  ];
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];
 
