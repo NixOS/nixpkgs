@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "4.6.1";
+  version = "4.7.0";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    sha256 = "0dlnxjci9mpwhgfv19fy1z7xrdp8m95skrj5dr60all3pr7n22f6";
+    sha256 = "sha256-ycLEyW098LLuuTG0djvbCpBbqvKbiVgW2Vd41p+hJwc=";
   };
 
   propagatedBuildInputs = [
