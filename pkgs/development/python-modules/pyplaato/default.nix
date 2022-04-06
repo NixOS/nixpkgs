@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyplaato";
-  version = "0.0.15";
+  version = "0.0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nykbkv2fg1x5min07cbi44x6am48f5gw3mnyj7x2kpmj6sqfpqp";
+    sha256 = "sha256-0hbdwgkQhcjD9YbpG+bczAAi9u1QfrJdMn1g14EBPac=";
   };
 
   propagatedBuildInputs = [ aiohttp python-dateutil ];

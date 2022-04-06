@@ -20,7 +20,7 @@ Below is a short excerpt of some points in there:
   ```
   (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
 
-  (Motivation for change. Additional information.)
+  (Motivation for change. Link to release notes. Additional information.)
   ```
 
   For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
@@ -29,6 +29,7 @@ Below is a short excerpt of some points in there:
 
   * nginx: init at 2.0.1
   * firefox: 54.0.1 -> 55.0
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
   * nixos/hydra: add bazBaz option
 
     Dual baz behavior is needed to do foo.
