@@ -928,6 +928,7 @@ dont-distribute-packages:
  - cfopu
  - chainweb-mining-client
  - chalkboard-viewer
+ - chapelure
  - charade
  - chart-cli
  - chart-svg-various
@@ -1354,7 +1355,6 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
- - espial
  - estimators
  - estreps
  - eternity
@@ -1433,6 +1433,7 @@ dont-distribute-packages:
  - feed-translator
  - feed2lj
  - feed2twitter
+ - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
