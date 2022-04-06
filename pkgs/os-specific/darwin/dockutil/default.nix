@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xar, cpio, pbzx }:
+{ lib, stdenv, fetchurl, xar, cpio, gzip }:
 
 stdenv.mkDerivation rec {
   pname = "dockutil";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ xar cpio ];
+  nativeBuildInputs = [ xar cpio gzip ];
 
   unpackPhase = ''
     xar -x -f $src
