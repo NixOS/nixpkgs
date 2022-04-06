@@ -16,6 +16,7 @@
 , version
 , sha256
 , extraMeta ? { }
+, callPackage
 , ...
 }:
 
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
           test;
       };
 
-    updateScript = ./update.sh;
+    updateScript = callPackage ./update-script.nix { inherit generation; };
   };
 
   meta = with lib; {
