@@ -18,7 +18,6 @@
 , gjs
 , libintl
 , dbus
-, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -59,16 +58,14 @@ stdenv.mkDerivation rec {
     python3
     python3.pkgs.dbus-python
     python3.pkgs.pygobject3
-    xvfb-run
     dbus
     gjs
   ];
 
-  doCheck = true;
-
+  doCheck = stdenv.isLinux;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs ./tool/test-*.sh
   '';
 
   preCheck = ''
