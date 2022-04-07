@@ -10454,6 +10454,10 @@ with pkgs;
 
   sozu = callPackage ../servers/sozu { };
 
+  sparrow = callPackage ../applications/blockchains/sparrow {
+    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
+  };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
