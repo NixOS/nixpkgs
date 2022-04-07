@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, curl, hdf5, netcdf
+{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes
 , # build, install and link to a CDI library [default=no]
   enable_cdi_lib ? false
 , # build a completely statically linked CDO binary
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
  # Configure phase
  configureFlags = [
-   "--with-netcdf=${netcdf}" "--with-hdf5=${hdf5}"]
+   "--with-netcdf=${netcdf}" "--with-hdf5=${hdf5}" "--with-eccodes=${eccodes}" ]
    ++ lib.optional (enable_cdi_lib) "--enable-cdi-lib"
    ++ lib.optional (enable_all_static) "--enable-all-static"
    ++ lib.optional (enable_cxx) "--enable-cxx";
