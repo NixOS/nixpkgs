@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.20.3";
+  version = "0.20.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q5KkhVqyHDoIeKjvvYoHRbZPY7LUXGDwgp4CSuyvQ1g=";
+    sha256 = "sha256-eLvxmG9PUX+2RB3M6oG442Wmh6c5GI/aKP/Z8Z5Ixq8=";
   };
 
   propagatedBuildInputs = [
