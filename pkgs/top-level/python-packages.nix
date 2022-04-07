@@ -4335,6 +4335,8 @@ in {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
+  json-home-client = callPackage ../development/python-modules/json-home-client { };
+
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
 
   json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
@@ -8821,6 +8823,8 @@ in {
 
   restview = callPackage ../development/python-modules/restview { };
 
+  result = callPackage ../development/python-modules/result { };
+
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   retry = callPackage ../development/python-modules/retry { };
@@ -10459,6 +10463,8 @@ in {
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
+  uri-template = callPackage ../development/python-modules/uri-template { };
+
   uritools = callPackage ../development/python-modules/uritools { };
 
   url-normalize = callPackage ../development/python-modules/url-normalize { };
@@ -10748,6 +10754,8 @@ in {
   whoosh = callPackage ../development/python-modules/whoosh { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
+
+  widlparser = callPackage ../development/python-modules/widlparser { };
 
   wiffi = callPackage ../development/python-modules/wiffi { };
 
