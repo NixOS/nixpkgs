@@ -121,10 +121,10 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/33170
     (fetchSageDiff {
-      base = "9.5.rc1";
-      name = "ipython-8-update.patch";
-      rev = "a90a314616d86d6be9c0d5233f0d36c4bfe06231";
-      sha256 = "sha256-pXdtokTo84xNCnV+HyAKEzG562z8FjzJ7hczOja0dRw=";
+      base = "9.6.beta5";
+      name = "ipython-8.1-update.patch";
+      rev = "4d2b53f1541375861310af3a7f7109c1c2ed475d";
+      sha256 = "sha256-ELda/VBzsQH7NdFas69fQ35QPUoJCeLx/gxT1j7qGR8=";
     })
 
     # https://trac.sagemath.org/ticket/32968
@@ -156,6 +156,22 @@ stdenv.mkDerivation rec {
 
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
+
+    # https://trac.sagemath.org/ticket/33336
+    (fetchSageDiff {
+      base = "9.6.beta2";
+      name = "scipy-1.8-update.patch";
+      rev = "9c8235e44ffb509efa8a3ca6cdb55154e2b5066d";
+      sha256 = "sha256-bfc4ljNOxVnhlmxIuNbjbKl4vJXYq2tlF3Z8bbC8PWw=";
+    })
+
+    # https://trac.sagemath.org/ticket/33495
+    (fetchSageDiff {
+      base = "9.6.beta5";
+      name = "networkx-2.7-update.patch";
+      rev = "8452003846a7303100847d8d0ed642fc642c11d6";
+      sha256 = "sha256-A/XMouPlc2sjFp30L+56fBGJXydS2EtzfPOV98FCDqI=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
