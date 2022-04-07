@@ -2,10 +2,20 @@
 rec {
   /* Prepare a derivation for local builds.
     *
-    * This function adds an additional outout for a derivation,
+    * This function adds an additional output for a derivation,
     * containing the build output.
     * The build output can be used later to allow incremental builds
     * by passing the `buildOut` output to the `mkIncrementalBuild` function.
+    *
+    * To build a project incrementaly follow these steps:
+    * - run prepareIncrementalBuild on the desired derivation
+    *   e.G `buildOutput = (pkgs.buildIncremental.prepareIncrementalBuild pkgs.virtualbox).buildOut;`
+    * - change something you want in the sources of the package( e.G using source override)
+    *   changedVBox = pkgs.virtuabox.overrideAttrs (old: {
+    *      src = path/to/vbox/sources;
+    *   }
+    * - use `mkIncrementalBuild changedVBox buildOutput`
+    * - enjoy shorter build times
   */
   prepareIncrementalBuild = drv: drv.overrideAttrs (old: {
     outputs = (old.outputs or [ "out" ]) ++ [ "buildOut" ];
