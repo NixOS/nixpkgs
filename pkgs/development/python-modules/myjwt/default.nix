@@ -10,6 +10,7 @@
 , pyperclip
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
 , questionary
 , requests
 , requests-mock
@@ -18,6 +19,9 @@
 buildPythonPackage rec {
   pname = "myjwt";
   version = "1.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mBouamama";
@@ -48,7 +52,9 @@ buildPythonPackage rec {
     sed -i -e "s/==[0-9.]*//" requirements.txt
   '';
 
-  pythonImportsCheck = [ "myjwt" ];
+  pythonImportsCheck = [
+    "myjwt"
+  ];
 
   meta = with lib; {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
