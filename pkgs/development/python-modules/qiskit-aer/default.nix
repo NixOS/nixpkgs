@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.10.3";
+  version = "0.10.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
-    rev = version;
-    sha256 = "sha256-COvJCj18qRNQJUXKrtlYJQGLjna44IgtNZeNVJJaIHg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-mf+Pgw/daFkt1bvqSeYzlO/Sd2F2MtwZcLr+h1u+eb0=";
   };
 
   postPatch = ''
