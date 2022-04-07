@@ -67,17 +67,18 @@ sub is_static {
 # in the current one.  For efficiency, don't look under /etc/nixos
 # (where all the NixOS sources live).
 sub cleanup {
-    if ($File::Find::name eq "/etc/nixos") {
+    my $filename = $_;
+    if ($File::Find::name eq "/etc/nixos" || $File::Find::name eq "/etc/static") {
         $File::Find::prune = 1;
         return;
     }
-    if (-l $_) {
-        my $target = readlink($_);
+    if (-l $filename) {
+        my $target = readlink($filename);
         if (substr($target, 0, length($static)) eq $static) {
             my $x = $static . substr($File::Find::name, length("/etc/"));
             if (not (-l $x)) {
                 print(STDERR "removing obsolete symlink ‘$File::Find::name’...\n");
-                unlink("$_");
+                unlink("$filename");
             }
         }
     }
