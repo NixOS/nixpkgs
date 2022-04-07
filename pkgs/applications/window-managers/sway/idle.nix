@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=${if systemdSupport then "enabled" else "disabled"}" ];
 
+  postPatch = "substituteInPlace main.c --replace '%lu' '%zu'";
+
   meta = with lib; {
     description = "Idle management daemon for Wayland";
     longDescription = ''

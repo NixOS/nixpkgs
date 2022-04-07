@@ -90,5 +90,5 @@ rec {
   # latest cudnn, nccl, cutensor, etc! It sometimes happens that CUDA versions
   # are released prior to compatibility with the rest of the ecosystem. And
   # don't forget to request a review from @NixOS/cuda-maintainers!
-  cudatoolkit_11 = cudatoolkit_11_5;
+  cudatoolkit_11 = cudatoolkit_11_5; # update me to 11_6 when cudnn>=8.3.3
 }
