@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "myjwt";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
-    rev = version;
-    sha256 = "sha256-kZkqFeaQPd56BVaYmCWAbVu1xwbPAIlQC3u5/x3dh7A=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-A9tsQ6L+y3doL5pJbau3yKnmQtX2IPXWyW/YCLhS7nc=";
   };
 
   propagatedBuildInputs = [
