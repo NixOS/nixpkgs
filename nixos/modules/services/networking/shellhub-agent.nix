@@ -12,14 +12,7 @@ in
 
     services.shellhub-agent = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the ShellHub Agent daemon, which allows
-          secure remote logins.
-        '';
-      };
+      enable = mkEnableOption "ShellHub Agent daemon";
 
       package = mkOption {
         type = types.package;
