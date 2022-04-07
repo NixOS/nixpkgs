@@ -998,4 +998,7 @@ self: super: builtins.intersectAttrs super {
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
+
+  # Wants to execute cabal-install to (re-)build itself
+  hint = dontCheck super.hint;
 }
