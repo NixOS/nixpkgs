@@ -10753,6 +10753,8 @@ in {
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
+  widlparser = callPackage ../development/python-modules/widlparser { };
+
   wiffi = callPackage ../development/python-modules/wiffi { };
 
   willow = callPackage ../development/python-modules/willow { };
