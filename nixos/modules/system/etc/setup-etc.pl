@@ -99,7 +99,8 @@ open(my $clean, ">>", "/etc/.clean") or die("Couldn't open /etc/.clean");
 my %created;
 my @copied;
 
-sub link {
+sub make_symlinks {
+    my $path_to_file = $_;
     my $fn = substr($File::Find::name, length($etc) + 1) or next;
 
     # nixos-enter sets up /etc/resolv.conf as a bind mount, so skip it.
@@ -112,7 +113,7 @@ sub link {
     $created{$fn} = 1;
 
     # Rename doesn't work if target is directory.
-    if (-l $_ && -d $target) {
+    if (-l $path_to_file && -d $target) {
         if (is_static($target)) {
             rmtree($target) or warn("Failed to remove $target");
         } else {
@@ -120,13 +121,13 @@ sub link {
         }
     }
 
-    if (-e "$_.mode") {
-        chomp(my $mode = read_file("$_.mode"));
+    if (-e "$path_to_file.mode") {
+        chomp(my $mode = read_file("$path_to_file.mode"));
         if ($mode eq "direct-symlink") {
             atomic_symlink(readlink("$static/$fn"), $target) or warn("could not create symlink $target");
         } else {
-            my $uid = read_file("$_.uid", { chomp => 1 });
-            my $gid = read_file("$_.gid", { chomp => 1 });
+            my $uid = read_file("$path_to_file.uid", { chomp => 1 });
+            my $gid = read_file("$path_to_file.gid", { chomp => 1 });
             copy("$static/$fn", "$target.tmp") or warn;
 
             # uid could either be an uid or an username, this gets the uid
@@ -146,14 +147,14 @@ sub link {
         }
         push(@copied, $fn);
         print($clean "$fn\n");
-    } elsif (-l "$_") {
+    } elsif (-l "$path_to_file") {
         atomic_symlink("$static/$fn", $target) or warn("could not create symlink $target");
     }
 
     return;
 }
 
-find(\&link, $etc);
+find(\&make_symlinks, $etc);
 
 
 # Delete files that were copied in a previous version but not in the
