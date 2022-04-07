@@ -3205,6 +3205,10 @@ in {
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
+  gattlib = callPackage ../development/python-modules/gattlib {
+    inherit (pkgs) bluez glib pkg-config;
+  };
+
   gbinder-python = callPackage ../development/python-modules/gbinder-python { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
@@ -3700,8 +3704,6 @@ in {
   hacking = callPackage ../development/python-modules/hacking { };
 
   hdate = callPackage ../development/python-modules/hdate { };
-
-  ha-av = callPackage ../development/python-modules/ha-av { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
@@ -4333,6 +4335,8 @@ in {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
+  json-home-client = callPackage ../development/python-modules/json-home-client { };
+
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
 
   json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
@@ -4882,6 +4886,8 @@ in {
   loo-py = callPackage ../development/python-modules/loo-py { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
+
+  lru-dict = callPackage ../development/python-modules/lru-dict { };
 
   lsassy = callPackage ../development/python-modules/lsassy { };
 
@@ -6761,7 +6767,9 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybluez = callPackage ../development/python-modules/pybluez { };
+  pybluez = callPackage ../development/python-modules/pybluez {
+    inherit (pkgs) bluez;
+  };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
@@ -8377,24 +8385,6 @@ in {
 
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
-
-    # TODO: next time pytorch is updated (to 1.11.0, currently in staging as of
-    # 2022-03-31), make the following changes:
-
-    # -> cudatoolk_11
-    cudatoolkit = pkgs.cudatoolkit_10;
-
-    # -> cudnn_8_3_cudatoolkit_11
-    cudnn = pkgs.cudnn_8_1_cudatoolkit_10;
-
-    # -> cutensor_cudatoolkit_11 (cutensor is a new dependency in v1.11.0)
-    # cutensor = pkgs.cutensor_cudatoolkit_11;
-
-    # -> setting a custom magma should be unnecessary with v1.11.0
-    magma = pkgs.magma.override { cudatoolkit = pkgs.cudatoolkit_10; };
-
-    # -> nccl_cudatoolkit_11
-    nccl = pkgs.nccl.override { cudatoolkit = pkgs.cudatoolkit_10; };
   };
 
   pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix { };
@@ -8832,6 +8822,8 @@ in {
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
 
   restview = callPackage ../development/python-modules/restview { };
+
+  result = callPackage ../development/python-modules/result { };
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
@@ -10471,6 +10463,8 @@ in {
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
+  uri-template = callPackage ../development/python-modules/uri-template { };
+
   uritools = callPackage ../development/python-modules/uritools { };
 
   url-normalize = callPackage ../development/python-modules/url-normalize { };
@@ -10760,6 +10754,8 @@ in {
   whoosh = callPackage ../development/python-modules/whoosh { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
+
+  widlparser = callPackage ../development/python-modules/widlparser { };
 
   wiffi = callPackage ../development/python-modules/wiffi { };
 

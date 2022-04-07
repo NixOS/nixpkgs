@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lfj6KyB9QYvUy4Ybo8f30omAg4K/jT5MEERJPm0aJ7U=";
   };
 
+  makeFlags = [ "FLOW_RELEASE=1" ];
+
   installPhase = ''
     install -Dm755 bin/flow $out/bin/flow
     install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
