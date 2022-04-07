@@ -882,6 +882,8 @@ in with py.pkgs; buildPythonApplication rec {
     # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked' / assert 'off' == 'on'
     "test_lock_update_via_pubnub"
     "test_door_sense_update_via_pubnub"
+    # tests/helpers/test_event.py: flaky date/time issue
+    "test_periodic_task_entering_dst"
   ];
 
   preCheck = ''

@@ -1,19 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, ipywidgets
-, cdcs
 , bibtexparser
-, habanero
-, pandas
-, requests
-, numpy
-, matplotlib
-, unidecode
+, buildPythonPackage
+, cdcs
 , datamodeldict
-, xmltodict
+, fetchPypi
+, habanero
+, ipywidgets
+, lxml
+, matplotlib
+, numpy
+, pandas
 , pytestCheckHook
 , pythonOlder
+, requests
+, scipy
+, unidecode
+, xmltodict
 }:
 
 buildPythonPackage rec {
@@ -29,16 +31,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    ipywidgets
-    cdcs
     bibtexparser
+    cdcs
+    datamodeldict
     habanero
+    ipywidgets
+    lxml
+    matplotlib
+    numpy
     pandas
     requests
-    numpy
-    matplotlib
+    scipy
     unidecode
-    datamodeldict
     xmltodict
   ];
 

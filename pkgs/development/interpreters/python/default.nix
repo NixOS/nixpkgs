@@ -119,23 +119,23 @@ with pkgs;
   };
 
   sources = {
-    python38 = {
-      sourceVersion = {
-        major = "3";
-        minor = "8";
-        patch = "12";
-        suffix = "";
-      };
-      sha256 = "1si8hw2xpagh4iji89zdx69p3dv5mjqwwbx2x2sl6lrp41jaglxi";
-    };
     python39 = {
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "6";
+        patch = "11";
         suffix = "";
       };
-      sha256 = "12hhw2685i68pwfx5hdkqngzhbji4ccyjmqb5rzvkigg6fpj0y9r";
+      sha256 = "sha256-ZnZ6NTCdck83DfnlA8FytO5ET0nWK5i8TspyUSPibEk=";
+    };
+    python310 = {
+      sourceVersion = {
+        major = "3";
+        minor = "10";
+        patch = "3";
+        suffix = "";
+      };
+      sha256 = "sha256-WWxy3pmNw5IFvE9w7w2/ft7HQKMG0JtJqb0Kd4BnMNw=";
     };
   };
 
@@ -159,19 +159,26 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "12";
+      patch = "13";
       suffix = "";
     };
-    sha256 = "041jqjl5wf7gsw84zd3jgvg91skq20l2fy5zbhz237w38zxzfyzp";
+    sha256 = "sha256-mfEGJ134iZw+jLnXwBzmhsIC7ydZUzAUJxlGk95b74Q=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python38 = callPackage ./cpython ({
+  python38 = callPackage ./cpython {
     self = python38;
+    sourceVersion = {
+      major = "3";
+      minor = "8";
+      patch = "13";
+      suffix = "";
+    };
+    sha256 = "sha256-bzCQdwEgQKo5/o8MYduMD6HEUTZ2MpnTdcnldW8Jz1c=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python38);
+  };
 
   python39 = callPackage ./cpython ({
     self = python39;
@@ -179,18 +186,11 @@ in {
     inherit passthruFun;
   } // sources.python39);
 
-  python310 = callPackage ./cpython {
+  python310 = callPackage ./cpython ({
     self = python310;
-    sourceVersion = {
-      major = "3";
-      minor = "10";
-      patch = "0";
-      suffix = "";
-    };
-    sha256 = "00mhn6kj4qkvkkv6hh2klnnjr0yk0c9hspp7njc7n6m1lvkzi6as";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python310);
 
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (callPackage ./cpython ({

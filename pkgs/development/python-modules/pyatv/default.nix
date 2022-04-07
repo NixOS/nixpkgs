@@ -20,22 +20,17 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.6";
-
+  version = "0.9.7";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0navm7a0k1679kj7nbkbyl7s2q0wq0xmcnizmnvp0arkd5xqmqv1";
+    sha256 = "1ikv9m1348sjv31gch5w0sj97jlr4yjxbqfyds7alxxcm5hrhai4";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -55,6 +50,18 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+    # Remove all version pinning
+    sed -i -e "s/==[0-9.]*//" requirements/requirements.txt
+  '';
+
+  disabledTestPaths = [
+    # Test doesn't work in the sandbox
+    "tests/protocols/companion/test_companion_auth.py"
   ];
 
   __darwinAllowLocalNetworking = true;
