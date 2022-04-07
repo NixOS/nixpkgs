@@ -7465,6 +7465,16 @@ in {
 
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
+  pyparsing_2 = self.pyparsing.overridePythonAttrs (old: rec {
+    version = "2.4.7";
+    src = pkgs.fetchFromGitHub {
+      owner = "pyparsing";
+      repo = "pyparsing";
+      rev = "pyparsing_${version}";
+      sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
+    };
+  });
+
   pyparted = callPackage ../development/python-modules/pyparted { };
 
   pypass = callPackage ../development/python-modules/pypass { };
