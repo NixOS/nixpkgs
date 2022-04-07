@@ -3205,6 +3205,10 @@ in {
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
+  gattlib = callPackage ../development/python-modules/gattlib {
+    inherit (pkgs) bluez glib pkg-config;
+  };
+
   gbinder-python = callPackage ../development/python-modules/gbinder-python { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
@@ -3700,8 +3704,6 @@ in {
   hacking = callPackage ../development/python-modules/hacking { };
 
   hdate = callPackage ../development/python-modules/hdate { };
-
-  ha-av = callPackage ../development/python-modules/ha-av { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
@@ -4882,6 +4884,8 @@ in {
   loo-py = callPackage ../development/python-modules/loo-py { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
+
+  lru-dict = callPackage ../development/python-modules/lru-dict { };
 
   lsassy = callPackage ../development/python-modules/lsassy { };
 
@@ -6761,7 +6765,9 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybluez = callPackage ../development/python-modules/pybluez { };
+  pybluez = callPackage ../development/python-modules/pybluez {
+    inherit (pkgs) bluez;
+  };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
