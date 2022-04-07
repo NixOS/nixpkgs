@@ -101,7 +101,15 @@ my @copied;
 
 sub make_symlinks {
     my $path_to_file = $_;
-    my $fn = substr($File::Find::name, length($etc) + 1) or next;
+
+    # This is needed to avoid a warning if we take the substr of the first
+    # directory, i.e., the /nix/store/.../etc itself
+    if (length($File::Find::name) == length($etc)) {
+        return;
+    }
+
+    # Strip away /nix/store/<hash>-etc/etc/ from filename
+    my $fn = substr($File::Find::name, length($etc) + 1) or return;
 
     # nixos-enter sets up /etc/resolv.conf as a bind mount, so skip it.
     if ($fn eq "resolv.conf" and $ENV{'IN_NIXOS_ENTER'}) {
