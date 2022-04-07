@@ -23,7 +23,7 @@
   || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? false
-, enableZ3 ? (stdenv.hostPlatform == stdenv.buildPlatform) # enable Z3 only if not cross-compiling
+, enableZ3 ? false # TODO: if enabled, this flag is not safe to use when cross-compiling
 }:
 
 let
