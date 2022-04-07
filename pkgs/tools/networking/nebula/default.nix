@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "5Yv2t5vdUNCcCo2KAm1xCkRVrt6gIasKHLqH7VVPDuU=";
 
-  doCheck = false;
-
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
   ldflags = [ "-X main.Build=${version}" ];
