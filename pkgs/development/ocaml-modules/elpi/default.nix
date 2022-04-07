@@ -7,6 +7,7 @@
 with lib;
 let fetched = import ../../../build-support/coq/meta-fetch/default.nix
   {inherit lib stdenv fetchzip; } ({
+    release."1.15.0".sha256 = "1ngdc41sgyzyz3i3lkzjhnj66gza5h912virkh077dyv17ysb6ar";
     release."1.14.1".sha256 = "sha256-BZPVL8ymjrE9kVGyf6bpc+GA2spS5JBpkUtZi04nPis=";
     release."1.13.7".sha256 = "10fnwz30bsvj7ii1vg4l1li5pd7n0qqmwj18snkdr5j9gk0apc1r";
     release."1.13.5".sha256 = "02a6r23mximrdvs6kgv6rp0r2dgk7zynbs99nn7lphw2c4189kka";
@@ -22,11 +23,13 @@ buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
-  minimumOCamlVersion = "4.04";
+  minimumOCamlVersion =
+    if lib.versionAtLeast version "1.15" then "4.07" else "4.04";
 
   buildInputs = [ perl ncurses ];
 
-  propagatedBuildInputs = [ camlp5 re ]
+  propagatedBuildInputs = [ re ]
+  ++ (if lib.versionAtLeast version "1.15" then [ menhir ] else [ camlp5 ])
   ++ (if lib.versionAtLeast version "1.13"
      then [ ppxlib ppx_deriving ]
      else [ ppxlib_0_15 ppx_deriving_0_15 ]
