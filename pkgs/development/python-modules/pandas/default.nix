@@ -71,10 +71,16 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64; # upstream doesn't test this architecture
 
+  # don't max out build cores, it breaks tests
+  dontUsePytestXdist = true;
+
   pytestFlagsArray = [
+    # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
+    "--skip-db"
     "--skip-slow"
     "--skip-network"
-    "--numprocesses" "0"
+    "-m" "'not single_cpu'"
+    "--numprocesses" "4"
   ];
 
   disabledTests = [
