@@ -121,10 +121,10 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/33170
     (fetchSageDiff {
-      base = "9.5.rc1";
-      name = "ipython-8-update.patch";
-      rev = "a90a314616d86d6be9c0d5233f0d36c4bfe06231";
-      sha256 = "sha256-pXdtokTo84xNCnV+HyAKEzG562z8FjzJ7hczOja0dRw=";
+      base = "9.6.beta5";
+      name = "ipython-8.1-update.patch";
+      rev = "4d2b53f1541375861310af3a7f7109c1c2ed475d";
+      sha256 = "sha256-ELda/VBzsQH7NdFas69fQ35QPUoJCeLx/gxT1j7qGR8=";
     })
 
     # https://trac.sagemath.org/ticket/32968
