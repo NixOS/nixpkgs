@@ -8382,24 +8382,6 @@ in {
 
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
-
-    # TODO: next time pytorch is updated (to 1.11.0, currently in staging as of
-    # 2022-03-31), make the following changes:
-
-    # -> cudatoolk_11
-    cudatoolkit = pkgs.cudatoolkit_10;
-
-    # -> cudnn_8_3_cudatoolkit_11
-    cudnn = pkgs.cudnn_8_1_cudatoolkit_10;
-
-    # -> cutensor_cudatoolkit_11 (cutensor is a new dependency in v1.11.0)
-    # cutensor = pkgs.cutensor_cudatoolkit_11;
-
-    # -> setting a custom magma should be unnecessary with v1.11.0
-    magma = pkgs.magma.override { cudatoolkit = pkgs.cudatoolkit_10; };
-
-    # -> nccl_cudatoolkit_11
-    nccl = pkgs.nccl.override { cudatoolkit = pkgs.cudatoolkit_10; };
   };
 
   pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix { };
