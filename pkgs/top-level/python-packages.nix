@@ -2751,6 +2751,8 @@ in {
 
   exdown = callPackage ../development/python-modules/exdown { };
 
+  exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
+
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   execnet = callPackage ../development/python-modules/execnet { };
