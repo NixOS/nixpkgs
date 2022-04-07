@@ -8823,6 +8823,8 @@ in {
 
   restview = callPackage ../development/python-modules/restview { };
 
+  result = callPackage ../development/python-modules/result { };
+
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   retry = callPackage ../development/python-modules/retry { };
