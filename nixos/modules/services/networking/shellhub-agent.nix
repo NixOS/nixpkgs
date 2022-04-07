@@ -23,6 +23,15 @@ in
         '';
       };
 
+      preferredHostname = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Set the device preferred hostname. This provides a hint to
+          the server to use this as hostname if it is available.
+        '';
+      };
+
       keepAliveInterval = mkOption {
         type = types.int;
         default = 30;
@@ -81,6 +90,7 @@ in
       environment.SHELLHUB_SERVER_ADDRESS = cfg.server;
       environment.SHELLHUB_PRIVATE_KEY = cfg.privateKey;
       environment.SHELLHUB_TENANT_ID = cfg.tenantId;
+      environment.SHELLHUB_PREFERRED_HOSTNAME = cfg.preferredHostname;
       environment.SHELLHUB_KEEPALIVE_INTERVAL = toString cfg.keepAliveInterval;
 
       serviceConfig = {
