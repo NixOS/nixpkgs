@@ -642,41 +642,14 @@ in
         };
 
         scriptArgs = "%i";
-        path = [ pkgs.gawk cfgZfs.package ];
+        path = [ cfgZfs.package ];
 
-        # ZFS has no way of enumerating just devices in a pool in a way
-        # that 'zpool online -e' supports. Thus, we've implemented a
-        # bit of a strange approach of highlighting just devices.
-        # See: https://github.com/openzfs/zfs/issues/12505
-        script = let
-          # This UUID has been chosen at random and is to provide a
-          # collision-proof, predictable token to search for
-          magicIdentifier = "NIXOS-ZFS-ZPOOL-DEVICE-IDENTIFIER-37108bec-aff6-4b58-9e5e-53c7c9766f05";
-          zpoolScripts = pkgs.writeShellScriptBin "device-highlighter" ''
-            echo "${magicIdentifier}"
-          '';
-        in ''
+        script =  ''
           pool=$1
 
           echo "Expanding all devices for $pool."
 
-          # Put our device-highlighter script it to the PATH
-          export ZPOOL_SCRIPTS_PATH=${zpoolScripts}/bin
-
-          # Enable running our precisely specified zpool script as root
-          export ZPOOL_SCRIPTS_AS_ROOT=1
-
-          devices() (
-            zpool status -c device-highlighter "$pool" \
-             | awk '($2 == "ONLINE" && $6 == "${magicIdentifier}") { print $1; }'
-          )
-
-          for device in $(devices); do
-            echo "Attempting to expand $device of $pool..."
-            if ! zpool online -e "$pool" "$device"; then
-              echo "Failed to expand '$device' of '$pool'."
-            fi
-          done
+          ${pkgs.zpool-auto-expand-partitions}/bin/zpool_part_disks --automatically-grow "$pool"
         '';
       };
 
@@ -700,8 +673,6 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
           };
-
-          path = [ pkgs.gawk cfgZfs.package ];
 
           script = ''
             for pool in ${poolListProvider}; do
