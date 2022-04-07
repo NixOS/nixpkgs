@@ -68,9 +68,9 @@ in
         "time-sync.target"
       ];
 
-      environment.SERVER_ADDRESS = cfg.server;
-      environment.PRIVATE_KEY = cfg.privateKey;
-      environment.TENANT_ID = cfg.tenantId;
+      environment.SHELLHUB_SERVER_ADDRESS = cfg.server;
+      environment.SHELLHUB_PRIVATE_KEY = cfg.privateKey;
+      environment.SHELLHUB_TENANT_ID = cfg.tenantId;
 
       serviceConfig = {
         # The service starts sessions for different users.
