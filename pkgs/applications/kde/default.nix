@@ -39,7 +39,8 @@ let
   mkDerivation = args:
     let
       inherit (args) pname;
-      inherit (srcs.${pname}) src version;
+      src = args.src or srcs.${pname}.src;
+      version = args.version or srcs.${pname}.version;
       mkDerivation =
         libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
     in
