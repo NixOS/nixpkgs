@@ -6679,6 +6679,8 @@ in {
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
+  py3rijndael = callPackage ../development/python-modules/py3rijndael { };
+
   py3status = callPackage ../development/python-modules/py3status { };
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
