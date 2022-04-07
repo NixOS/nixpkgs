@@ -9,7 +9,7 @@ rec {
     *
     * To build a project incrementaly follow these steps:
     * - run prepareIncrementalBuild on the desired derivation
-    *   e.G `buildOutput = (pkgs.buildIncremental.prepareIncrementalBuild pkgs.virtualbox).buildOut;`
+    *   e.G `incrementalBuildArtifacts = (pkgs.buildIncremental.prepareIncrementalBuild pkgs.virtualbox).incrementalBuildArtifacts;`
     * - change something you want in the sources of the package( e.G using source override)
     *   changedVBox = pkgs.virtuabox.overrideAttrs (old: {
     *      src = path/to/vbox/sources;
@@ -18,12 +18,12 @@ rec {
     * - enjoy shorter build times
   */
   prepareIncrementalBuild = drv: drv.overrideAttrs (old: {
-    outputs = (old.outputs or [ "out" ]) ++ [ "buildOut" ];
+    outputs = (old.outputs or [ "out" ]) ++ [ "incrementalBuildArtifacts" ];
     installPhase = pkgs.lib.optionalString (!(builtins.hasAttr "outputs" old)) ''
       mkdir -p $out
     '' + (old.installPhase or "") + ''
-      mkdir -p $buildOut
-      cp -r ./* $buildOut/
+      mkdir -p $incrementalBuildArtifacts
+      cp -r ./* $incrementalBuildArtifacts/
     '';
   });
 
@@ -32,8 +32,8 @@ rec {
     *
     * Usage:
     * let
-    *   buildOutput = (prepareIncrementalBuild drv).buildOut
-    * in mkIncrementalBuild drv buildOutput
+    *   incrementalBuildArtifacts = (prepareIncrementalBuild drv).incrementalBuildArtifacts
+    * in mkIncrementalBuild drv incrementalBuildArtifacts
   */
   mkIncrementalBuild = drv: previousBuildArtifacts: drv.overrideAttrs (old: {
     prePatch = ''
