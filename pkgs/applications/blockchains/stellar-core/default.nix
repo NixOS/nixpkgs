@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoconf, libtool, automake, pkg-config, git
-, bison, flex, postgresql, ripgrep }:
+, bison, flex, postgresql, ripgrep, libunwind }:
 
 stdenv.mkDerivation rec {
   pname = "stellar-core";
@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ automake autoconf git libtool pkg-config ripgrep ];
+  nativeBuildInputs = [ automake autoconf git libtool pkg-config ripgrep libunwind ];
 
   propagatedBuildInputs = [ bison flex postgresql ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
