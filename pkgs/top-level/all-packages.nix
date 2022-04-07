@@ -15557,6 +15557,8 @@ with pkgs;
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
+  paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c {};
+
   panopticon = callPackage ../development/tools/analysis/panopticon {};
 
   parinfer-rust = callPackage ../development/tools/parinfer-rust {};
@@ -27858,6 +27860,8 @@ with pkgs;
     withSidebar = true;
   };
   mutt-wizard = callPackage ../tools/misc/mutt-wizard { };
+
+  mwptools = callPackage ../applications/science/robotics/mwptools { };
 
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
