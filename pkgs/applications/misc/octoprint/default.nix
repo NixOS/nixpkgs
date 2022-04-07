@@ -44,6 +44,9 @@ let
                 hash = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
               };
               doCheck = false;
+              postPatch = ''
+                substituteInPlace setup.py --replace "tomli>=0.2.6,<2.0.0" "tomli"
+                '';
             });
           }
         )
@@ -174,6 +177,8 @@ let
               };
               disabledTestPaths = [
                 "t/unit/backends/test_mongodb.py"
+                # needs cassandra
+                "t/unit/backends/test_cassandra.py"
               ];
             });
           }
@@ -235,6 +240,7 @@ let
               #pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
               disabledTestPaths = oldAttrs.disabledTestPaths ++ [
                 "tests/asgi/test_asgi_servers.py"
+                "tests/test_wsgi_servers.py"
               ];
             });
           }
@@ -249,6 +255,8 @@ let
                 "test_cookies.py"
                 # requires network
                 "test_worker.py"
+                # fails on aarch64
+                "test_server_events.py"
               ];
             });
           }
