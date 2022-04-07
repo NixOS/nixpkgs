@@ -47,7 +47,9 @@ sub is_static {
         closedir(DIR);
 
         foreach my $name (@names) {
-            next if $name eq "." || $name eq "..";
+            if ($name eq "." || $name eq "..") {
+                next;
+            }
             if (not (is_static("$path/$name"))) {
                 return 0;
             }
