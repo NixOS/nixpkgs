@@ -1071,6 +1071,8 @@ with pkgs;
 
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
+  bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
