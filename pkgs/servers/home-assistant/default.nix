@@ -59,6 +59,19 @@ let
     })
 
     (self: super: {
+      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.3";
+        src = fetchFromGitHub {
+          owner = "Noltari";
+          repo = "aioairzone";
+          rev = version;
+          hash = "sha256-vy6NqtlWv2El259rC+Nm0gs/rsY+s8xe7Z+wXvT1Ing=";
+        };
+      });
+    })
+
+
+    (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.18";
         src = fetchFromGitHub {
