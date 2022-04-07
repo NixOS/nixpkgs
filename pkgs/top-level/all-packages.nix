@@ -5818,6 +5818,8 @@ with pkgs;
 
   getopt = callPackage ../tools/misc/getopt { };
 
+  getoptions = callPackage ../tools/misc/getoptions { };
+
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
 
   gftp = callPackage ../applications/networking/ftp/gftp {
