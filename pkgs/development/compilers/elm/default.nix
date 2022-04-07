@@ -80,6 +80,9 @@ let
       # We need attoparsec < 0.14 to build elm for now
       attoparsec = self.attoparsec_0_13_2_5;
 
+      # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
+      aeson = self.aeson_1_5_6_0;
+
       # Needed for elm-format
       indents = self.callPackage ./packages/indents.nix {};
       bimap = self.callPackage ./packages/bimap.nix {};
