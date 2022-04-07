@@ -15,12 +15,12 @@ my $static = "/etc/static";
 sub atomic_symlink {
     my ($source, $target) = @_;
     my $tmp = "$target.tmp";
-    unlink $tmp;
-    symlink $source, $tmp or return 0;
-    if (rename $tmp, $target) {
+    unlink($tmp);
+    symlink($source, $tmp) or return 0;
+    if (rename($tmp, $target)) {
         return 1;
     } else {
-        unlink $tmp;
+        unlink($tmp);
         return 0;
     }
 }
@@ -28,7 +28,7 @@ sub atomic_symlink {
 
 # Atomically update /etc/static to point at the etc files of the
 # current configuration.
-atomic_symlink $etc, $static or die;
+atomic_symlink($etc, $static) or die;
 
 # Returns 1 if the argument points to the files in /etc/static.  That
 # means either argument is a symlink to a file in /etc/static or a
@@ -37,14 +37,14 @@ sub is_static {
     my $path = shift;
 
     if (-l $path) {
-        my $target = readlink $path;
-        return substr($target, 0, length $static) eq $static;
+        my $target = readlink($path);
+        return substr($target, 0, length($static)) eq $static;
     }
 
     if (-d $path) {
-        opendir DIR, "$path" or return 0;
-        my @names = readdir DIR or die;
-        closedir DIR;
+        opendir(DIR, "$path") or return 0;
+        my @names = readdir(DIR) or die;
+        closedir(DIR);
 
         foreach my $name (@names) {
             next if $name eq "." || $name eq "..";
@@ -67,12 +67,12 @@ sub cleanup {
         return;
     }
     if (-l $_) {
-        my $target = readlink $_;
-        if (substr($target, 0, length $static) eq $static) {
-            my $x = $static . substr($File::Find::name, length "/etc/");
+        my $target = readlink($_);
+        if (substr($target, 0, length($static)) eq $static) {
+            my $x = $static . substr($File::Find::name, length("/etc/"));
             if (not (-l $x)) {
-                print STDERR "removing obsolete symlink ‘$File::Find::name’...\n";
-                unlink "$_";
+                print(STDERR "removing obsolete symlink ‘$File::Find::name’...\n");
+                unlink("$_");
             }
         }
     }
@@ -94,7 +94,7 @@ my %created;
 my @copied;
 
 sub link {
-    my $fn = substr $File::Find::name, length($etc) + 1 or next;
+    my $fn = substr($File::Find::name, length($etc) + 1) or next;
 
     # nixos-enter sets up /etc/resolv.conf as a bind mount, so skip it.
     if ($fn eq "resolv.conf" and $ENV{'IN_NIXOS_ENTER'}) {
@@ -102,46 +102,46 @@ sub link {
     }
 
     my $target = "/etc/$fn";
-    File::Path::make_path(dirname $target);
+    File::Path::make_path(dirname($target));
     $created{$fn} = 1;
 
     # Rename doesn't work if target is directory.
     if (-l $_ && -d $target) {
-        if (is_static $target) {
-            rmtree $target or warn;
+        if (is_static($target)) {
+            rmtree($target) or warn;
         } else {
-            warn "$target directory contains user files. Symlinking may fail.";
+            warn("$target directory contains user files. Symlinking may fail.");
         }
     }
 
     if (-e "$_.mode") {
         chomp(my $mode = read_file("$_.mode"));
         if ($mode eq "direct-symlink") {
-            atomic_symlink readlink("$static/$fn"), $target or warn "could not create symlink $target";
+            atomic_symlink(readlink("$static/$fn"), $target) or warn("could not create symlink $target");
         } else {
             my $uid = read_file("$_.uid", { chomp => 1 });
             my $gid = read_file("$_.gid", { chomp => 1 });
-            copy "$static/$fn", "$target.tmp" or warn;
+            copy("$static/$fn", "$target.tmp") or warn;
 
             # uid could either be an uid or an username, this gets the uid
             if ($uid !~ /^\+/) {
-                $uid = getpwnam $uid;
+                $uid = getpwnam($uid);
             }
             if ($gid !~ /^\+/) {
-                $gid = getgrnam $gid;
+                $gid = getgrnam($gid);
             }
 
-            chown int($uid), int($gid), "$target.tmp" or warn;
-            chmod oct($mode), "$target.tmp" or warn;
-            unless (rename "$target.tmp", $target) {
-                warn "could not create target $target";
-                unlink "$target.tmp";
+            chown(int($uid), int($gid), "$target.tmp") or warn;
+            chmod(oct($mode), "$target.tmp") or warn;
+            unless (rename("$target.tmp", $target)) {
+                warn("could not create target $target");
+                unlink("$target.tmp");
             }
         }
-        push @copied, $fn;
-        print $clean "$fn\n";
+        push(@copied, $fn);
+        print($clean "$fn\n");
     } elsif (-l "$_") {
-        atomic_symlink "$static/$fn", $target or warn "could not create symlink $target";
+        atomic_symlink("$static/$fn", $target) or warn("could not create symlink $target");
     }
 
     return;
@@ -155,15 +155,15 @@ find(\&link, $etc);
 foreach my $fn (@old_copied) {
     if (!defined $created{$fn}) {
         $fn = "/etc/$fn";
-        print STDERR "removing obsolete file ‘$fn’...\n";
-        unlink "$fn";
+        print(STDERR "removing obsolete file ‘$fn’...\n");
+        unlink("$fn");
     }
 }
 
 
 # Rewrite /etc/.clean.
 close($clean) or die("Couldn't close /etc/.clean");
-write_file("/etc/.clean", map { "$_\n" } sort @copied);
+write_file("/etc/.clean", map({ "$_\n" } sort @copied));
 
 # Create /etc/NIXOS tag if not exists.
 # When /etc is not on a persistent filesystem, it will be wiped after reboot,
