@@ -1,0 +1,20 @@
+From 12ba5c8820d95c562b15e10cc39e1ba8037f0086 Mon Sep 17 00:00:00 2001
+From: Scriptkiddi <fritz@otlinghaus.it>
+Date: Thu, 3 Mar 2022 08:38:49 +0100
+Subject: [PATCH] Change numpy version
+
+---
+ requirements.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index d1ed32c45..835ae56ed 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,2 +1 @@
+-numpy>=1.22.0;python_version>"3.7"
+-numpy>=1.21.0;python_version<="3.7"
++numpy>=1.21.0;python_version<="3.9"
+-- 
+2.33.1
+

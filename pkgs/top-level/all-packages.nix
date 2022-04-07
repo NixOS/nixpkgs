@@ -18732,6 +18732,8 @@ with pkgs;
 
   libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 
+  libroadrunner = callPackage ../development/libraries/libroadrunner { };
+
   libroxml = callPackage ../development/libraries/libroxml { };
 
   librsvg = callPackage ../development/libraries/librsvg {
