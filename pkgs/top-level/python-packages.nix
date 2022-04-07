@@ -4335,6 +4335,8 @@ in {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
+  json-home-client = callPackage ../development/python-modules/json-home-client { };
+
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
 
   json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
