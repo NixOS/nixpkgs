@@ -1,6 +1,8 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
+, aiohttp
 , requests
 , websocket-client
+, websockets
 }:
 
 buildPythonPackage rec {
@@ -14,8 +16,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    websocket-client
+    aiohttp
     requests
+    websocket-client
+    websockets
   ];
 
   # no tests
