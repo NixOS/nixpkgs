@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.6";
+  version = "3.3.7";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-mYcnucIRudLLySShKSDzsQfuoM2/0guKpeLSGuAWEkQ=";
+    sha256 = "sha256-aWwt6FRq/ofQmZAeavDa8inrJfrPxb8iyo1XYdQsrKc=";
   };
 
   # Fix freezing on Wayland (https://github.com/glfw/glfw/pull/1711)
