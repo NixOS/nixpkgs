@@ -1,25 +1,28 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "memtest86+";
-  version = "5.01-coreboot-002";
+  # FIXME: wait for stable release
+  version = "6.00-beta2";
 
-  src = fetchgit {
-    url = "https://review.coreboot.org/memtest86plus.git";
-    rev = "v002";
-    sha256 = "0cwx20yja24bfknqh1rjb5rl2c0kwnppzsisg1dibbak0l8mxchk";
+  src = fetchFromGitHub {
+    owner = "memtest86plus";
+    repo = "memtest86plus";
+    rev = "v${version}";
+    sha256 = "sha256-U3++iJa0Zj3g2SZTJ0jom7raAu+LGqiOKZEputs/YfM=";
   };
 
-  NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
-
-  hardeningDisable = [ "all" ];
-
-  buildFlags = [ "memtest.bin" ];
-
-  doCheck = false; # fails
+  buildPhase = let
+    bits = if stdenv.is32bit then "32"
+           else if stdenv.is64bit then "64"
+           else throw "unsupported system!";
+  in ''
+    cd build${bits}
+    make memtest.bin memtest.efi
+  '';
 
   installPhase = ''
-    install -Dm0444 -t $out/ memtest.bin
+    install -Dm0444 -t $out/ memtest.bin memtest.efi
   '';
 
   meta = {
