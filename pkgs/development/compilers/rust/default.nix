@@ -77,7 +77,6 @@ in
         pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
       });
       rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
-      rustfmt-nightly = self.callPackage ./rustfmt.nix { inherit Security; asNightly = true; };
       cargo = self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;

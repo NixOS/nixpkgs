@@ -1,9 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt-nightly
+{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt
 , runtimeShell
 , bash
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  # bindgen hardcodes rustfmt outputs that use nightly features
+  rustfmt-nightly = rustfmt.override { asNightly = true; };
+in rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
   version = "0.59.2";
 
@@ -27,7 +29,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
   checkInputs = [ clang ];
 
-  # bindgen hardcodes rustfmt outputs that use nightly features
   RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
 
   preCheck = ''
