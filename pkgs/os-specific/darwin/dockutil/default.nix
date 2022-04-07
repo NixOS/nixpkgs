@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, xar, cpio, gzip }:
-
+{ lib, stdenv, fetchurl, libarchive, p7zip }:
 stdenv.mkDerivation rec {
   pname = "dockutil";
   version = "3.0.2";
@@ -11,19 +10,20 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ xar cpio gzip ];
+  nativeBuildInputs = [ libarchive p7zip ];
 
   unpackPhase = ''
-    xar -x -f $src
+    7z x $src
+    bsdtar -xf Payload~
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/usr/local/bin
-    mv ./Payload ./Payload.gz
-    gzip -cd ./Payload.gz | cpio -idm
-    cp ./usr/local/bin/dockutil $out/usr/local/bin
+    install -Dm755 usr/local/bin/dockutil -t $out/usr/local/bin
     ln -rs $out/usr/local/bin/dockutil $out/bin/dockutil
+    runHook postInstall
   '';
 
   meta = with lib; {
