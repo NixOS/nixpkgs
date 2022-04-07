@@ -85,6 +85,15 @@ let
       bimap = self.callPackage ./packages/bimap.nix {};
       avh4-lib = doJailbreak (self.callPackage ./packages/avh4-lib.nix {});
       elm-format-lib = doJailbreak (self.callPackage ./packages/elm-format-lib.nix {});
+      # We need tasty-hspec < 1.1.7 and hspec-golden < 0.2 to build elm-format-lib
+      tasty-hspec = self.tasty-hspec_1_1_6;
+      hspec-golden = self.hspec-golden_0_1_0_3;
+
+      # We need hspec hspec_core, hspec_discover < 2.8 for tasty-hspec == 1.1.6
+      hspec = self.hspec_2_7_10;
+      hspec-core = self.hspec-core_2_7_10;
+      hspec-discover = self.hspec-discover_2_7_10;
+
       elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
       elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
     };
