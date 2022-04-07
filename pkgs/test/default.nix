@@ -113,6 +113,8 @@ with pkgs;
 
   install-shell-files = callPackage ./install-shell-files {};
 
+  incremental-build = callPackage ./incrementalBuild {};
+
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};

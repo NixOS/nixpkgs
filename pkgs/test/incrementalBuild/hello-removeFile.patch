@@ -1,0 +1,62 @@
+diff --git a/Makefile.in b/Makefile.in
+index 77b000c..0805eda 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -227,7 +227,7 @@ am_lib_libhello_a_OBJECTS = lib/c-ctype.$(OBJEXT) \
+ 	lib/quotearg.$(OBJEXT) lib/strnlen1.$(OBJEXT) \
+ 	lib/unistd.$(OBJEXT) lib/wctype-h.$(OBJEXT) \
+ 	lib/xmalloc.$(OBJEXT) lib/xalloc-die.$(OBJEXT) \
+-	lib/xstrndup.$(OBJEXT) src/additionalFile.$(OBJEXT)
++	lib/xstrndup.$(OBJEXT)
+ lib_libhello_a_OBJECTS = $(am_lib_libhello_a_OBJECTS)
+ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(infodir)" \
+ 	"$(DESTDIR)$(man1dir)"
+@@ -1380,7 +1380,7 @@ lib_libhello_a_SOURCES = lib/c-ctype.h lib/c-ctype.c lib/c-strcase.h \
+ 	lib/gettext.h lib/localcharset.h lib/localcharset.c \
+ 	lib/progname.h lib/progname.c lib/quotearg.c lib/strnlen1.h \
+ 	lib/strnlen1.c lib/unistd.c lib/wctype-h.c lib/xmalloc.c \
+-	lib/xalloc-die.c lib/xstrndup.h lib/xstrndup.c src/additionalFile.c
++	lib/xalloc-die.c lib/xstrndup.h lib/xstrndup.c
+ lib_libhello_a_LIBADD = $(gl_LIBOBJS)
+ lib_libhello_a_DEPENDENCIES = $(gl_LIBOBJS)
+ EXTRA_lib_libhello_a_SOURCES = lib/stripslash.c lib/error.c \
+diff --git a/src/additionalFile.c b/src/additionalFile.c
+deleted file mode 100644
+index 34d683d..0000000
+--- a/src/additionalFile.c
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#include "config.h"
+-#include "system.h"
+-
+-int somefunc() {
+-    return 0;
+-}
+diff --git a/src/hello.c b/src/hello.c
+index df67de2..768285a 100644
+--- a/src/hello.c
++++ b/src/hello.c
+@@ -36,6 +36,10 @@ static const struct option longopts[] = {
+ static void print_help (void);
+ static void print_version (void);
+ 
++int somefunc() {
++    return 1;
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+diff --git a/tests/hello-1 b/tests/hello-1
+index e15fa95..3b7a815 100755
+--- a/tests/hello-1
++++ b/tests/hello-1
+@@ -21,7 +21,7 @@ export LANGUAGE LC_ALL LC_MESSAGES LANG
+ 
+ tmpfiles="hello-test1.ok"
+ cat <<EOF > hello-test1.ok
+-Hello, world!
++Hello, incremental world!
+ EOF
+ 
+ tmpfiles="$tmpfiles hello-test1.out"
