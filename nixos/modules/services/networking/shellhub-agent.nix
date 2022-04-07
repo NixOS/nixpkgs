@@ -1,10 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.services.shellhub-agent;
-in {
-
+in
+{
   ###### interface
 
   options = {
@@ -89,3 +90,4 @@ in {
     environment.systemPackages = [ cfg.package ];
   };
 }
+
