@@ -143,7 +143,7 @@ let
           # post url.
           keycloak.succeed(
               "curl -sSf -c cookie '${frontendUrl}/realms/${realm.realm}/protocol/openid-connect/auth?client_id=${client.name}&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&scope=openid+email&response_type=code&response_mode=query&nonce=qw4o89g3qqm' >login_form",
-              "tidy -q -m login_form || true",
+              "tidy -asxml -q -m login_form || true",
               "xml sel -T -t -m \"_:html/_:body/_:div/_:div/_:div/_:div/_:div/_:div/_:form[@id='kc-form-login']\" -v @action login_form >form_post_url",
           )
 
@@ -151,7 +151,7 @@ let
           # the HTML, then extract the authorization code.
           keycloak.succeed(
               "curl -sSf -L -b cookie -d 'username=${user.username}' -d 'password=${password}' -d 'credentialId=' \"$(<form_post_url)\" >auth_code_html",
-              "tidy -q -m auth_code_html || true",
+              "tidy -asxml -q -m auth_code_html || true",
               "xml sel -T -t -m \"_:html/_:body/_:div/_:div/_:div/_:div/_:div/_:input[@id='code']\" -v @value auth_code_html >auth_code",
           )
 
