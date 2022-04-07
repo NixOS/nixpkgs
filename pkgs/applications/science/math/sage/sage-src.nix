@@ -157,6 +157,14 @@ stdenv.mkDerivation rec {
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
 
+    # https://trac.sagemath.org/ticket/33336
+    (fetchSageDiff {
+      base = "9.6.beta2";
+      name = "scipy-1.8-update.patch";
+      rev = "9c8235e44ffb509efa8a3ca6cdb55154e2b5066d";
+      sha256 = "sha256-bfc4ljNOxVnhlmxIuNbjbKl4vJXYq2tlF3Z8bbC8PWw=";
+    })
+
     # https://trac.sagemath.org/ticket/33495
     (fetchSageDiff {
       base = "9.6.beta5";
