@@ -129,6 +129,11 @@ extra-packages:
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
   - SVGFonts < 1.8                      # 2022-03-19: Needed for Chart-diagrams 1.9.3
   - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
+  - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
+  - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
+  - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
 
 package-maintainers:
   abbradar:
