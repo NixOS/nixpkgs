@@ -95,7 +95,7 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
-  niv = enableSeparateBinOutput super.niv;
+  niv = enableSeparateBinOutput (generateOptparseApplicativeCompletion "niv" super.niv);
   ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
 
