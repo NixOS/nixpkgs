@@ -10459,6 +10459,8 @@ in {
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
+  uri-template = callPackage ../development/python-modules/uri-template { };
+
   uritools = callPackage ../development/python-modules/uritools { };
 
   url-normalize = callPackage ../development/python-modules/url-normalize { };
