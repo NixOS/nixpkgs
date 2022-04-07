@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    version = "98.0.2";
+    version = "99.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "b567b53fcdc08491063d535545f558ea56ec5be02ca540661de116986245b79f509e0103cea5661faf9f4b3d30b67758ebdb4b30401e260ee27cbb300203f36e";
+      sha512 = "08f6d5a668140c4275aba6df463ed3af596043dfe5f27573583afbc1e9f6b27ebca79a52ce2c9598261c631b400b5378744e9e70f51ef9c4098b419e9904aa7c";
     };
 
     meta = {
@@ -32,10 +32,10 @@ rec {
 
   firefox-esr-91 = common rec {
     pname = "firefox-esr";
-    version = "91.7.1esr";
+    version = "91.8.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "c56aa38e9d706ff1f1838d2639dac82109dcffb54a7ea17326ae306604d78967ac32da13676756999bc1aa0bf50dc4e7072936ceb16e2e834bea48382ae4b48c";
+      sha512 = "edea2c7d4d3d0322091b20b623019ef041090d9f89f33c8e3140f66a54624261f278257393db70d2038154de8ee02da0bee6ecf85c281f3558338da71fc173c3";
     };
 
     meta = {
