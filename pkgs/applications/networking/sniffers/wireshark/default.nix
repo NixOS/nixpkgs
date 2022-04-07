@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, makeWrapper, wrapGAppsHook
 , withQt ? true, qt5 ? null
@@ -29,21 +29,29 @@ in stdenv.mkDerivation {
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DLEMON_C_COMPILER=cc"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
+    "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
   ];
 
   # Avoid referencing -dev paths because of debug assertions.
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config ]
+  nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config python3 perl ]
     ++ optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   buildInputs = [
-    gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
-    libgpg-error gnutls geoip c-ares python3 glib zlib
+    gettext pcre libpcap lua5 libssh nghttp2 openssl libgcrypt
+    libgpg-error gnutls geoip c-ares glib zlib
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
     ++ optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
+
+  strictDeps = true;
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 

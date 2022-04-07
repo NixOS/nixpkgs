@@ -5,14 +5,14 @@
 let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    alexa = [ ha-av ];
-    camera = [ ha-av ];
+    alexa = [ av ];
+    camera = [ av ];
     cloud = [ mutagen ];
     config = [ pydispatcher ];
-    generic = [ ha-av ];
+    generic = [ av ];
     google_translate = [ mutagen ];
     lovelace = [ PyChromecast ];
-    nest = [ ha-av ];
+    nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
     version = [ aioaseko ];
     voicerss = [ mutagen ];
@@ -67,8 +67,11 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     meta = old.meta // {
       broken = lib.elem component [
         "airtouch4"
+        "bsblan"
         "dnsip"
-        "zwave"
+        "efergy"
+        "ssdp"
+        "subaru"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

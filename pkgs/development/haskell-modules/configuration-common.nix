@@ -619,7 +619,7 @@ self: super: {
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.buildPackages.emacs];
     postInstall = ''
-      local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
+      local lispdir=( "$data/share/${self.ghc.targetPrefix}${self.ghc.haskellCompilerName}/*/${drv.pname}-${drv.version}/elisp" )
       make -C $lispdir
       mkdir -p $data/share/emacs/site-lisp
       ln -s "$lispdir/"*.el{,c} $data/share/emacs/site-lisp/
@@ -654,7 +654,7 @@ self: super: {
     # cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
-      local lispdir=( "$data/share/${self.ghc.name}/"*"/${drv.pname}-"*"/elisp" )
+      local lispdir=( "$data/share/${self.ghc.targetPrefix}${self.ghc.haskellCompilerName}/"*"/${drv.pname}-"*"/elisp" )
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
@@ -665,7 +665,7 @@ self: super: {
     # We cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
-      local lispdir=( "$data/share/${self.ghc.name}/"*"/${drv.pname}-"*"/elisp" )
+      local lispdir=( "$data/share/${self.ghc.targetPrefix}${self.ghc.haskellCompilerName}/"*"/${drv.pname}-"*"/elisp" )
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
@@ -1484,35 +1484,48 @@ self: super: {
 
   # hasura packages need some extra care
   graphql-engine = overrideCabal (drv: {
-    patches = [ ./patches/graphql-engine-mapkeys.patch ];
+    patches = [
+      # Compat with unordered-containers >= 0.2.15.0
+      (fetchpatch {
+        name = "hasura-graphql-engine-updated-deps.patch";
+        url = "https://github.com/hasura/graphql-engine/commit/d50aae87a58794bc1fc66c7a60acb0c34b5e70c7.patch";
+        stripLen = 1;
+        excludes = [ "cabal.project.freeze" ];
+        sha256 = "0lb5l9vfynr85i9xs53w4mpgczp04ncxz7846n3y91ri34fa87v3";
+      })
+      # Compat with hashable >= 1.3.4.0
+      (fetchpatch {
+        name = "hasura-graphql-engine-hashable-1.3.4.0.patch";
+        url = "https://github.com/hasura/graphql-engine/commit/e48b2287315fb09005ffd52c0a686dc321171ae2.patch";
+        sha256 = "1jppnanmsyl8npyf59s0d8bgjy7bq50vkh5zx4888jy6jqh27jb6";
+        stripLen = 1;
+      })
+      # Compat with unordered-containers >= 0.2.17.0
+      (fetchpatch {
+        name = "hasura-graphql-engine-unordered-containers-0.2.17.0.patch";
+        url = "https://github.com/hasura/graphql-engine/commit/3a1eb3128a2ded2da7c5fef089738890828cce03.patch";
+        sha256 = "0vz7s8m8mjvv728vm4q0dvvrirvydaw7xks30b5ddj9f6a72a2f1";
+        stripLen = 1;
+      })
+    ];
     doHaddock = false;
-    version = "2.0.10";
-  }) (super.graphql-engine.overrideScope (self: super: {
+    version = "2.3.1";
+  }) (super.graphql-engine.override {
     immortal = self.immortal_0_2_2_1;
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_9_4;
-    hspec-core = dontCheck self.hspec-core_2_9_4;
-    hspec-discover = dontCheck super.hspec-discover_2_9_4;
-  }));
-  hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_9_4;
-    hspec-core = dontCheck self.hspec-core_2_9_4;
-    hspec-discover = dontCheck super.hspec-discover_2_9_4;
-  }));
-  hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
-    ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_9_4;
-    hspec-core = dontCheck self.hspec-core_2_9_4;
-    hspec-discover = dontCheck super.hspec-discover_2_9_4;
   });
+  hasura-ekg-json = super.hasura-ekg-json.override {
+    ekg-core = self.hasura-ekg-core;
+  };
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
     # wants a running DB to check against
     doCheck = false;
   }) (super.pg-client.override {
     resource-pool = self.hasura-resource-pool;
+    ekg-core = self.hasura-ekg-core;
   });
 
   # https://github.com/bos/statistics/issues/170
@@ -2043,18 +2056,6 @@ self: super: {
       sed -i 's/(!name)/(! name)/' src/Language/Javascript/JSaddle/Object.hs
     '' + (drv.postPatch or "");
   }) (doJailbreak super.jsaddle);
-
-  # 2022-03-22: PR for haskell-gi-base compat https://github.com/ghcjs/jsaddle/pull/129
-  jsaddle-webkit2gtk =
-    appendPatch (
-      fetchpatch {
-        name = "haskell-gi-base-0.26-compat-patch";
-        url = "https://github.com/ghcjs/jsaddle/commit/c9a9ad39addea469f7e3f5bc6b1c778fefaab5d8.patch";
-        sha256 = "sha256-4njoOxtJH2jVqiPmW8f9hGUqpzI3yJ1XP4u85QgmvjU=";
-        relative = "jsaddle-webkit2gtk";
-      }
-    )
-    super.jsaddle-webkit2gtk;
 
   # 2022-03-22: Jailbreak for base bound: https://github.com/reflex-frp/reflex-dom/pull/433
   reflex-dom = assert super.reflex-dom.version == "0.6.1.1"; doJailbreak super.reflex-dom;
