@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "anyascii";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
   disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JPJ0Mftkxsk6MxJftm+MugB6UmK8H6q+r+2l9LtwtZM=";
+    sha256 = "sha256-3t9XcoIG4obJHu18dZUFpeRcjNATZ91Awvcki7FcEfY=";
   };
 
   checkInputs = [
