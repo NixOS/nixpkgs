@@ -23,6 +23,16 @@ in
         '';
       };
 
+      keepAliveInterval = mkOption {
+        type = types.int;
+        default = 30;
+        description = ''
+          Determine the interval to send the keep alive message to
+          the server. This has a direct impact of the bandwidth
+          used by the device.
+        '';
+      };
+
       tenantId = mkOption {
         type = types.str;
         example = "ba0a880c-2ada-11eb-a35e-17266ef329d6";
@@ -71,6 +81,7 @@ in
       environment.SHELLHUB_SERVER_ADDRESS = cfg.server;
       environment.SHELLHUB_PRIVATE_KEY = cfg.privateKey;
       environment.SHELLHUB_TENANT_ID = cfg.tenantId;
+      environment.SHELLHUB_KEEPALIVE_INTERVAL = toString cfg.keepAliveInterval;
 
       serviceConfig = {
         # The service starts sessions for different users.
