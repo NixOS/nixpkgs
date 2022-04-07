@@ -9,7 +9,10 @@ use File::Find;
 use File::Path;
 use File::Slurp;
 
-my $etc = $ARGV[0] or die;
+my $etc = $ARGV[0];
+if ($etc eq "") {
+    die("This script must be called with an argument which expresses the new /etc directory in the nix store");
+}
 my $static = "/etc/static";
 
 sub atomic_symlink {
@@ -28,7 +31,7 @@ sub atomic_symlink {
 
 # Atomically update /etc/static to point at the etc files of the
 # current configuration.
-atomic_symlink($etc, $static) or die;
+atomic_symlink($etc, $static) or die("Failed to create symlink for /etc");
 
 # Returns 1 if the argument points to the files in /etc/static.  That
 # means either argument is a symlink to a file in /etc/static or a
@@ -42,9 +45,9 @@ sub is_static {
     }
 
     if (-d $path) {
-        opendir(DIR, "$path") or return 0;
-        my @names = readdir(DIR) or die;
-        closedir(DIR);
+        opendir(my $dir, "$path") or return 0;
+        my @names = readdir($dir) or die("Failed reading directory `$dir`");
+        closedir($dir);
 
         foreach my $name (@names) {
             if ($name eq "." || $name eq "..") {
@@ -110,7 +113,7 @@ sub link {
     # Rename doesn't work if target is directory.
     if (-l $_ && -d $target) {
         if (is_static($target)) {
-            rmtree($target) or warn;
+            rmtree($target) or warn("Failed to remove $target");
         } else {
             warn("$target directory contains user files. Symlinking may fail.");
         }
