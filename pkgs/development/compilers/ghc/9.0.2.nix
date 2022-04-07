@@ -5,6 +5,7 @@
 , autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
 , autoSignDarwinBinariesHook
 , bash
+, fetchpatch
 
 , libiconv ? null, ncurses
 , glibcLocales ? null
@@ -181,6 +182,17 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [
+    # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
+    (fetchpatch {
+      name = "ghc-9.0.2-fcompact-unwind.patch";
+      # Note that the test suite is not packaged.
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
+      sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
+    })
+  ];
 
   postPatch = "patchShebangs .";
 

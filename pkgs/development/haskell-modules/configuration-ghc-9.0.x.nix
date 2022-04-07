@@ -2,6 +2,10 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -118,4 +122,10 @@ self: super: {
   multistate = doJailbreak super.multistate;
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
+
+  # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
+  # which means that the upstream cabal file isn't allowed to add the flag.
+  inline-c-cpp =
+    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
+    super.inline-c-cpp;
 }

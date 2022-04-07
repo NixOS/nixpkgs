@@ -327,6 +327,8 @@ package-maintainers:
     - hercules-ci-cli
     - hercules-ci-cnix-expr
     - hercules-ci-cnix-store
+    - inline-c
+    - inline-c-cpp
   rvl:
     - taffybar
     - arbtt
