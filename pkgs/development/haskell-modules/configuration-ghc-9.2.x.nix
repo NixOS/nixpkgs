@@ -213,7 +213,9 @@ self: super: {
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
-  fourmolu = super.fourmolu_0_5_0_1;
+  fourmolu = super.fourmolu_0_6_0_0;
+  # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
+  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.2.0"; doJailbreak super.hls-fourmolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
