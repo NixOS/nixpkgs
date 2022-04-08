@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ bash wget ];
   nativeBuildInputs = [ makeWrapper ];
-  patchPhase = ''
+  postPatch = ''
     patchShebangs --host ipfetch
     # Not only does `/usr` have to be replaced but also `/flags` needs to be added because with Nix the script is broken without this. The `/flags` is somehow not needed if you install via the install script in the source repository.
     substituteInPlace ./ipfetch --replace /usr/share/ipfetch $out/usr/share/ipfetch/flags
