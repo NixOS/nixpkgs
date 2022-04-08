@@ -192,6 +192,15 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
       sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
     })
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./cabal-paths.patch
   ];
 
   postPatch = "patchShebangs .";
