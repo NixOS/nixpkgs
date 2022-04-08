@@ -95,8 +95,6 @@ in
         ExecStart = "${cfg.package}/bin/agent";
       };
     };
-
-    environment.systemPackages = [ cfg.package ];
   };
 }
 
