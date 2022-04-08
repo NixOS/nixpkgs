@@ -80,11 +80,13 @@ in
         "time-sync.target"
       ];
 
-      environment.SHELLHUB_SERVER_ADDRESS = cfg.server;
-      environment.SHELLHUB_PRIVATE_KEY = cfg.privateKey;
-      environment.SHELLHUB_TENANT_ID = cfg.tenantId;
-      environment.SHELLHUB_PREFERRED_HOSTNAME = cfg.preferredHostname;
-      environment.SHELLHUB_KEEPALIVE_INTERVAL = toString cfg.keepAliveInterval;
+      environment = {
+        SHELLHUB_SERVER_ADDRESS = cfg.server;
+        SHELLHUB_PRIVATE_KEY = cfg.privateKey;
+        SHELLHUB_TENANT_ID = cfg.tenantId;
+        SHELLHUB_KEEPALIVE_INTERVAL = toString cfg.keepAliveInterval;
+        SHELLHUB_PREFERRED_HOSTNAME = cfg.preferredHostname;
+      };
 
       serviceConfig = {
         # The service starts sessions for different users.
