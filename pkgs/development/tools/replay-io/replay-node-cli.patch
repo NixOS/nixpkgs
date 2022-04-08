@@ -1,0 +1,73 @@
+From 6159ef638ae7bc771a05f982244a73dfd11e52df Mon Sep 17 00:00:00 2001
+From: Lenz Weber <lenz.weber@mayflower.de>
+Date: Fri, 8 Apr 2022 15:11:04 +0200
+Subject: [PATCH] patch for NixOS
+
+---
+ src/bin.js | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+ mode change 100644 => 100755 src/bin.js
+
+diff --git a/src/bin.js b/src/bin.js
+old mode 100644
+new mode 100755
+index 1c5ab19..48e81aa
+--- a/src/bin.js
++++ b/src/bin.js
+@@ -1,3 +1,5 @@
++#!/usr/bin/env node
++
+ const fs = require("fs");
+ const https = require("https");
+ const { spawnSync } = require("child_process");
+@@ -7,7 +9,6 @@ Usage:
+ 
+ replay-node script.js ...args          Record node when running a script.
+ replay-node --exec executable ...args  Record all node scripts when running an executable.
+-replay-node --update                   Ensure the replay version of node is downloaded/updated.
+ `;
+ 
+ const argv = process.argv.slice(2);
+@@ -20,12 +21,9 @@ if (!argv.length) {
+ let gNeedUpdate = false;
+ let gExecutable = false;
+ if (argv[0] == "--update") {
+-  if (argv.length > 1) {
+-    console.log(`Cannot use --update with other arguments`);
+-    console.log(Usage);
+-    process.exit(1);
+-  }
+-  gNeedUpdate = true;
++  console.log(`Cannot use --update in NixOS`);
++  console.log(Usage);
++  process.exit(1);
+ } else if (argv[0] == "--exec") {
+   gExecutable = true;
+   argv.shift();
+@@ -47,7 +45,6 @@ function getDirectory() {
+ }
+ 
+ async function main() {
+-  await updateNode();
+   if (gNeedUpdate) {
+     process.exit(0);
+   }
+@@ -55,13 +52,13 @@ async function main() {
+   if (gExecutable) {
+     // Update the path so that the replay version of node is found first when
+     // subprocesses run.
+-    process.env.PATH = `${getDirectory()}/node:` + process.env.PATH;
++    process.env.PATH = `${process.env.REPLAY_NODE_DIR}:` + process.env.PATH;
+ 
+     const rv = spawnSync(argv[0], argv.slice(1), { stdio: "inherit" });
+     process.exit(rv.status);
+   }
+ 
+-  const rv = spawnSync(`${getDirectory()}/node/node`, argv, { stdio: "inherit" });
++  const rv = spawnSync(`${process.env.REPLAY_NODE_DIR}/node`, argv, { stdio: "inherit" });
+   process.exit(rv.status);
+ }
+ 
+-- 
+2.33.1
+

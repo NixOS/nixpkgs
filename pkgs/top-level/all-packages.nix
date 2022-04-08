@@ -13729,7 +13729,8 @@ in
 
   replacement = callPackage ../development/tools/misc/replacement { };
 
-  replay-io = callPackage ../development/tools/replay-io { };
+  inherit (callPackage ../development/tools/replay-io { })
+    replay-io replay-node-cli;
 
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
