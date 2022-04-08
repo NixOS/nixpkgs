@@ -27847,6 +27847,8 @@ with pkgs;
   };
   mutt-wizard = callPackage ../tools/misc/mutt-wizard { };
 
+  mutt-ics = callPackage ../tools/networking/mutt-ics { };
+
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
