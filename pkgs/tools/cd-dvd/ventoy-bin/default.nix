@@ -24,7 +24,7 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
-  version = "1.0.72";
+  version = "1.0.74";
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
     ++ lib.optional withQt5 qt5.wrapQtAppsHook;
@@ -40,13 +40,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    sha256 = "sha256-1mfe6ZnqkeBNGNjI7Qx7jG5FLgfn6rVwr0VQvSOG7Ow=";
+    sha256 = "sha256-raoVbj1+6nSR4knq/FmgVpzXRV71Hrcqd8C6Zsi34Uo=";
   };
   patches = [
     (fetchpatch {
       name = "sanitize.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=19f8922b3d96c5ff55eeefc269ae43369a0748e8";
-      sha256 = "sha256-RDdxPCmrfNMwXNuJwQW48fAiJPbMjdHiBmF03fKqm2o=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=057f2d1eb496c7a3aaa8229e99a7f709428fa4c5";
+      sha256 = "sha256-iAtLtM+Q4OsXDK83eCnPNomeNSEqdRLFfK2x7ybPSpk=";
     })
     ./fix-for-read-only-file-system.patch
     ./add-mips64.patch
@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
         aarch64) rm -r {tool/,VentoyGUI.}{x86_64,i386,mips64el};;
         mips64el) rm -r {tool/,VentoyGUI.}{x86_64,i386,aarch64};;
     esac
-    rm README tool/VentoyWorker.sh.orig
+    rm README
     rm tool/"$ARCH"/Ventoy2Disk.gtk2 || true  # For aarch64 and mips64el.
 
     # Copy from "$src" to "$out".
@@ -106,10 +106,15 @@ in stdenv.mkDerivation rec {
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
                 --prefix PATH : "${lib.makeBinPath buildInputs}" \
                 --chdir "$VENTOY_PATH"
+    mkdir "$out"/share/{applications,pixmaps}
+    ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
+    cp ${./ventoy-gui.desktop} "$out"/share/applications/
   '' + lib.optionalString (!withGtk3) ''
-    rm "$VENTOY_PATH/tool/$ARCH/Ventoy2Disk.gtk3"
+    rm "$VENTOY_PATH"/tool/{"$ARCH"/Ventoy2Disk.gtk3,VentoyGTK.glade}
   '' + lib.optionalString (!withQt5) ''
     rm "$VENTOY_PATH/tool/$ARCH/Ventoy2Disk.qt5"
+  '' + lib.optionalString (!withGtk3 && !withQt5) ''
+    rm "$VENTOY_PATH"/VentoyGUI.*
   '';
 
   meta = with lib; {
