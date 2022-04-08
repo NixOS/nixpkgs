@@ -17183,7 +17183,12 @@ with pkgs;
 
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
-  grpc = callPackage ../development/libraries/grpc { };
+  grpc = callPackage ../development/libraries/grpc {
+    # grpc builds with c++14 so abseil must also be built that way
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "14";
+    };
+  };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
