@@ -4,9 +4,10 @@ stdenv.mkDerivation rec {
   version = "3.0.2";
 
   src = fetchurl {
-      url    = "https://github.com/kcrawford/dockutil/releases/download/${version}/dockutil-${version}.pkg";
-      sha256 = "175137ea747e83ed221d60b18b712b256ed31531534cde84f679487d337668fd";
-    };
+    url =
+      "https://github.com/kcrawford/dockutil/releases/download/${version}/dockutil-${version}.pkg";
+    sha256 = "175137ea747e83ed221d60b18b712b256ed31531534cde84f679487d337668fd";
+  };
 
   dontBuild = true;
 
