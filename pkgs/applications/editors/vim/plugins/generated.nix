@@ -5110,6 +5110,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-pack/nvim-spectre/";
   };
 
+  nvim-tabline = buildVimPluginFrom2Nix {
+    pname = "nvim-tabline";
+    version = "2022-03-25";
+    src = fetchFromGitHub {
+      owner = "seblj";
+      repo = "nvim-tabline";
+      rev = "4f432666230aa743a360b1c6ee415f87407d1d6a";
+      sha256 = "0f9j3hlygh1z294qhwy8n7h7pn3k3s3sq8dmyzcyli188mh6dxvw";
+    };
+    meta.homepage = "https://github.com/seblj/nvim-tabline/";
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal.lua";
     version = "2019-10-17";
