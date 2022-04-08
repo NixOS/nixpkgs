@@ -17,23 +17,25 @@ self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
-  # Disable GHC 8.7.x core libraries.
+  # Disable GHC core libraries.
   array = null;
   base = null;
   binary = null;
   bytestring = null;
   Cabal = null;
+  Cabal-syntax = null;
   containers = null;
   deepseq = null;
   directory = null;
+  exceptions = null;
   filepath = null;
+  ghc-bignum = null;
   ghc-boot = null;
   ghc-boot-th = null;
-  ghc-bignum = null;
   ghc-compact = null;
   ghc-heap = null;
-  ghci = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hpc = null;
   integer-gmp = null;
@@ -51,7 +53,6 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
-  exceptions = null;
 
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
