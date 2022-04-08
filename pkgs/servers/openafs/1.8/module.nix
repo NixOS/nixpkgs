@@ -70,6 +70,6 @@ stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = with maintainers; [ maggesi spacefrogg ];
-    broken = kernel.kernelOlder "3.18" || kernel.kernelAtLeast "5.17" || kernel.isHardened;
+    broken = kernel.kernelAtLeast "5.17" || kernel.isHardened;
   };
 }

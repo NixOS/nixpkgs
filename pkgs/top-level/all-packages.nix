@@ -10997,23 +10997,9 @@ with pkgs;
 
   witness = callPackage ../tools/security/witness { };
 
-  openconnect = openconnect_gnutls;
+  openconnectPackages = callPackage ../tools/networking/openconnect { };
 
-  openconnect_openssl = callPackage ../tools/networking/openconnect {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-    gnutls = null;
-  };
-
-  openconnect_gnutls = callPackage ../tools/networking/openconnect {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-    openssl = null;
-  };
-
-  openconnect_head = callPackage ../tools/networking/openconnect {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-    head = true;
-    openssl = null;
-  };
+  inherit (openconnectPackages) openconnect openconnect_unstable openconnect_openssl;
 
   globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
 
@@ -21212,7 +21198,7 @@ with pkgs;
 
   inherit (callPackages ../servers/asterisk { })
     asterisk asterisk-stable asterisk-lts
-    asterisk_13 asterisk_16 asterisk_17 asterisk_18;
+    asterisk_16 asterisk_18 asterisk_19;
 
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
@@ -27855,6 +27841,8 @@ with pkgs;
     withSidebar = true;
   };
   mutt-wizard = callPackage ../tools/misc/mutt-wizard { };
+
+  mutt-ics = callPackage ../tools/networking/mutt-ics { };
 
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;

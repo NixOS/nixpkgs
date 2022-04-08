@@ -181,6 +181,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
+    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+
     ds = callPackage ../development/php-packages/ds { };
 
     event = callPackage ../development/php-packages/event { };

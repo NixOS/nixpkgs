@@ -434,6 +434,12 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.klogd</literal> was removed. Logging of
+          kernel messages is handled by systemd since Linux 3.5.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.kubernetes.addons.dashboard</literal> was
           removed due to it being an outdated version.
         </para>
@@ -1463,6 +1469,15 @@
         <para>
           <literal>programs.zsh.autosuggestions.strategy</literal> now
           takes a list of strings instead of a string.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>asterisk</literal> and
+          <literal>asterisk-stable</literal> packages were switched from
+          <literal>asterisk_18</literal> to the newly-packaged
+          <literal>asterisk_19</literal>. Asterisk 13 and 17 have been
+          removed as they have reached their end of life.
         </para>
       </listitem>
       <listitem>

@@ -323,7 +323,9 @@ stdenv.mkDerivation rec {
     gettext() { "${gettext}/bin/gettext" "$@"; }
     '
   '' + optionalString isLinux ''
-    substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
+    for f in $out/lib/systemd/system/*.service ; do
+      substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
+    done
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : /run/libvirt/nix-emulators:${binPath}
