@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) wiki-js; };
+  passthru = {
+    tests = { inherit (nixosTests) wiki-js; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "https://js.wiki/";
