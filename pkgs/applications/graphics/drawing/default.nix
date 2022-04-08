@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -28,6 +29,16 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "sha256-qNaljtuA5E/QaLJ9QILPRQCqOvKmX4ZGq/0z5unA8KA=";
   };
+
+  patches = [
+    # Fix build with meson 0.61, can be removed on next update.
+    # https://github.com/NixOS/nixpkgs/issues/167584
+    (fetchpatch {
+      url = "https://github.com/maoschanz/drawing/commit/6dd271089af76b69322500778e3ad6615a117dcc.patch";
+      sha256 = "sha256-4pKWm3LYstVxZ4+gGsZDfM4K+7WBY8EYjylzc/CQZmo=";
+      includes = [ "data/meson.build" "help/meson.build" ];
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib
