@@ -29,7 +29,7 @@ CORES = {
     "citra": {
         "repo": "citra",
         "fetch_submodules": True,
-        "deep_clone": True,
+        "deep_clone": False,
         "leave_dot_git": True,
     },
     "desmume": {"repo": "desmume"},

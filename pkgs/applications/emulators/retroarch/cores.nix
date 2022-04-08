@@ -1,23 +1,22 @@
 { lib
 , stdenv
-, SDL
 , alsa-lib
 , boost
-, buildPackages
 , bzip2
 , cmake
 , curl
 , fetchFromGitHub
 , ffmpeg
 , fluidsynth
+, gcc10Stdenv
 , gettext
 , hexdump
 , hidapi
 , icu
 , libaio
+, libevdev
 , libGL
 , libGLU
-, libevdev
 , libjpeg
 , libpcap
 , libpng
@@ -32,6 +31,7 @@
 , portaudio
 , python3
 , retroarch
+, SDL
 , sfml
 , snappy
 , udev
@@ -53,6 +53,7 @@ let
     , description
       # Check https://github.com/libretro/libretro-core-info for license information
     , license
+    , stdenvOverride ? stdenv
     , src ? (getCoreSrc core)
     , broken ? false
     , version ? "unstable-2022-04-05"
@@ -62,8 +63,9 @@ let
     , normalizeCore ? true
     , ...
     }@args:
-    stdenv.mkDerivation (
+    stdenvOverride.mkDerivation (
       let
+        inherit (stdenvOverride) hostPlatform;
         d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
       in
       (rec {
@@ -79,12 +81,12 @@ let
             linux = "unix";
             darwin = "osx";
             windows = "win";
-          }.${stdenv.hostPlatform.parsed.kernel.name} or stdenv.hostPlatform.parsed.kernel.name}"
+          }.${hostPlatform.parsed.kernel.name} or hostPlatform.parsed.kernel.name}"
           "ARCH=${{
             armv7l = "arm";
             armv6l = "arm";
             i686 = "x86";
-          }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name}"
+          }.${hostPlatform.parsed.cpu.name} or hostPlatform.parsed.cpu.name}"
         ] ++ (args.makeFlags or [ ]);
 
         coreDir = "${placeholder "out"}/lib/retroarch/cores";
@@ -94,9 +96,9 @@ let
 
           mkdir -p $out/bin
           mkdir -p $coreDir
-          mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $coreDir
+          mv ${d2u args.core}_libretro${hostPlatform.extensions.sharedLibrary} $coreDir
           makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-            --add-flags "-L $coreDir/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+            --add-flags "-L $coreDir/${d2u core}_libretro${hostPlatform.extensions.sharedLibrary} $@"
 
           runHook postInstall
         '';
@@ -298,19 +300,11 @@ in
   citra = mkLibRetroCore {
     core = "citra";
     description = "Port of Citra to libretro";
+    stdenvOverride = gcc10Stdenv;
     license = lib.licenses.gpl2Plus;
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ libGLU libGL boost ];
+    extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
-    cmakeFlags = [
-      "-DENABLE_LIBRETRO=ON"
-      "-DENABLE_QT=OFF"
-      "-DENABLE_SDL2=OFF"
-      "-DENABLE_WEB_SERVICE=OFF"
-      "-DENABLE_DISCORD_PRESENCE=OFF"
-    ];
-    preConfigure = "sed -e '77d' -i externals/cmake-modules/GetGitRevisionDescription.cmake";
-    postBuild = "cd src/citra_libretro";
+    makeFlags = [ "HAVE_FFMPEG_STATIC=0" ];
   };
 
   desmume = mkLibRetroCore {
@@ -462,7 +456,7 @@ in
     dontUseCmakeConfigure = true;
     dontConfigure = true;
     makeFlags = [ "EXTERNAL_ZLIB=1" ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    depsBuildBuild = [ stdenv.cc ];
   };
 
   mame = mkLibRetroCore {

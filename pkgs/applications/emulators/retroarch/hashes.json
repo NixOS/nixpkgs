@@ -105,10 +105,9 @@
         "owner": "libretro",
         "repo": "citra",
         "rev": "44e01f99016008eff18bc7a28234d1098382358d",
-        "sha256": "iUp8O0hGCyrbVGoKb95Z3MuFlEzjvaLhgWxo8hAOLIk=",
+        "sha256": "Vj0d2wAC9UYWgSURL1Qv0LR11g7c789U3W4MV3phv+4=",
         "fetchSubmodules": true,
-        "leaveDotGit": true,
-        "deepClone": true
+        "leaveDotGit": true
     },
     "desmume": {
         "owner": "libretro",
