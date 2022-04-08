@@ -1146,6 +1146,8 @@ with pkgs;
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
+  thumbs = callPackage ../tools/misc/thumbs { };
+
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
   topicctl = callPackage ../tools/misc/topicctl { };
