@@ -92,7 +92,6 @@ find(\&cleanup, "/etc");
 
 # Use /etc/.clean to keep track of copied files.
 my @old_copied = read_file("/etc/.clean", chomp => 1, err_mode => 'quiet');
-open(my $clean, ">>", "/etc/.clean") or die("Couldn't open /etc/.clean");
 
 
 # For every file in the etc tree, create a corresponding symlink in
@@ -157,7 +156,6 @@ sub make_symlinks {
             }
         }
         push(@copied, $fn);
-        print($clean "$fn\n");
     } elsif (-l "$path_to_file") {
         atomic_symlink("$static/$fn", $target) or warn("could not create symlink $target");
     }
@@ -180,8 +178,7 @@ foreach my $fn (@old_copied) {
 
 
 # Rewrite /etc/.clean.
-close($clean) or die("Couldn't close /etc/.clean");
-write_file("/etc/.clean", map({ "$_\n" } sort @copied));
+write_file("/etc/.clean", { atomic => 1 }, map({ "$_\n" } sort @copied));
 
 # Create /etc/NIXOS tag if not exists.
 # When /etc is not on a persistent filesystem, it will be wiped after reboot,
