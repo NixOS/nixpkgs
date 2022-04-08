@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "extension-helpers";
-  version = "0.1";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10iqjzmya2h4sk765dlm1pbqypwlqyh8rw59a5m9i63d3klnz2mc";
+    sha256 = "ca1bfac67c79cf4a7a0c09286ce2a24eec31bf17715818d0726318dd0e5050e6";
   };
 
   nativeBuildInputs = [
