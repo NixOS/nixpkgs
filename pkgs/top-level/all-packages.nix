@@ -15325,6 +15325,8 @@ with pkgs;
 
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
+  kamid = callPackage ../servers/ftp/kamid { };
+
   kati = callPackage ../development/tools/build-managers/kati { };
 
   kcat = callPackage ../development/tools/kcat { };
