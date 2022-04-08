@@ -29677,6 +29677,8 @@ with pkgs;
 
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
 
+  unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
+
   unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
 
   unipicker = callPackage ../applications/misc/unipicker { };
