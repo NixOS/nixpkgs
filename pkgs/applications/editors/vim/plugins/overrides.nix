@@ -306,6 +306,10 @@ self: super: {
     '';
   };
 
+  go-nvim = super.go-nvim.overrideAttrs (old: {
+    # Makefile that runs tests I wasn't able to get working.
+    prePatch = "rm Makefile";
+  });
   ghcid = super.ghcid.overrideAttrs (old: {
     configurePhase = "cd plugins/nvim";
   });

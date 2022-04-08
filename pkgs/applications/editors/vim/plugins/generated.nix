@@ -2758,6 +2758,18 @@ final: prev:
     meta.homepage = "https://github.com/ellisonleao/glow.nvim/";
   };
 
+  go-nvim = buildVimPluginFrom2Nix {
+    pname = "go.nvim";
+    version = "2022-04-07";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "go.nvim";
+      rev = "63d81679d06bff33e3f24bca76f513cadac2f64c";
+      sha256 = "1pyad6036wvgjhk08gq5fqm4wr254pwxmn4b8630fxw55jxmpybf";
+    };
+    meta.homepage = "https://github.com/ray-x/go.nvim/";
+  };
+
   goimpl-nvim = buildVimPluginFrom2Nix {
     pname = "goimpl.nvim";
     version = "2021-12-07";
