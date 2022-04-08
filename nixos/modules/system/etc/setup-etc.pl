@@ -3,11 +3,11 @@
 use strict;
 use warnings;
 
-use File::Basename;
-use File::Copy;
-use File::Find;
-use File::Path;
-use File::Slurp;
+use File::Basename qw(dirname);
+use File::Copy qw(copy);
+use File::Find qw(find);
+use File::Path qw(make_path rmtree);
+use File::Slurp qw(read_file write_file);
 
 my $etc = $ARGV[0];
 if ($etc eq "") {
