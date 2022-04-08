@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.21";
+  version = "0.23";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
