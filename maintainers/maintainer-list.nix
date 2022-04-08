@@ -681,6 +681,12 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+  AnatolyPopov = {
+    email = "aipopov@live.ru";
+    github = "AnatolyPopov";
+    githubId = 2312534;
+    name = "Anatolii Popov";
+  };
   andehen = {
     email = "git@andehen.net";
     github = "andehen";
