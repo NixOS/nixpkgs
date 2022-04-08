@@ -10629,6 +10629,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-scriptease/";
   };
 
+  vim-search-pulse = buildVimPluginFrom2Nix {
+    pname = "vim-search-pulse";
+    version = "2017-01-05";
+    src = fetchFromGitHub {
+      owner = "inside";
+      repo = "vim-search-pulse";
+      rev = "9f8f473e3813bd76ecb66e8d6182d96bda39b6df";
+      sha256 = "1xr90a8wvjfkgw1yrh0zcvpvp9ma6z0wqkl8v8pabf20vckgy2q0";
+    };
+    meta.homepage = "https://github.com/inside/vim-search-pulse/";
+  };
+
   vim-sensible = buildVimPluginFrom2Nix {
     pname = "vim-sensible";
     version = "2019-11-24";
