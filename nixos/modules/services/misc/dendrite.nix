@@ -247,6 +247,7 @@ in
         WorkingDirectory = workingDir;
         RuntimeDirectory = "dendrite";
         RuntimeDirectoryMode = "0700";
+        LimitNOFILE = 65535;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStartPre = ''
           ${pkgs.envsubst}/bin/envsubst \
