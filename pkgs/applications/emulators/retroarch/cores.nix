@@ -56,7 +56,7 @@ let
     , stdenvOverride ? stdenv
     , src ? (getCoreSrc core)
     , broken ? false
-    , version ? "unstable-2022-04-05"
+    , version ? "unstable-2022-04-08"
     , platforms ? retroarch.meta.platforms
       # The resulting core file is based on core name
       # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename

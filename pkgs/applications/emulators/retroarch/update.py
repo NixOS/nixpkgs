@@ -26,12 +26,7 @@ CORES = {
     "bsnes": {"repo": "bsnes-libretro"},
     "bsnes-hd": {"repo": "bsnes-hd", "owner": "DerKoun"},
     "bsnes-mercury": {"repo": "bsnes-mercury"},
-    "citra": {
-        "repo": "citra",
-        "fetch_submodules": True,
-        "deep_clone": False,
-        "leave_dot_git": True,
-    },
+    "citra": { "repo": "citra", "fetch_submodules": True },
     "desmume": {"repo": "desmume"},
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
