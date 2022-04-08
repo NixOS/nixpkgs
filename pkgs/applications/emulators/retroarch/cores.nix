@@ -452,11 +452,9 @@ in
     description = "Port of Hatari to libretro";
     license = lib.licenses.gpl2Only;
     extraBuildInputs = [ SDL zlib ];
-    extraNativeBuildInputs = [ cmake which ];
-    dontUseCmakeConfigure = true;
+    extraNativeBuildInputs = [ which ];
     dontConfigure = true;
     makeFlags = [ "EXTERNAL_ZLIB=1" ];
-    depsBuildBuild = [ stdenv.cc ];
   };
 
   mame = mkLibRetroCore {
@@ -464,7 +462,6 @@ in
     description = "Port of MAME to libretro";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
     extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
-    makefile = "Makefile.libretro";
   };
 
   mame2000 = mkLibRetroCore {
@@ -595,7 +592,6 @@ in
     src = getCoreSrc core;
     description = "Neko Project II kai libretro port";
     license = lib.licenses.mit;
-    makefile = "Makefile.libretro";
     makeFlags = [
       # See https://github.com/AZO234/NP2kai/tags
       "NP2KAI_VERSION=rev.22"
