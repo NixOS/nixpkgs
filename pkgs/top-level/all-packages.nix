@@ -1074,6 +1074,8 @@ with pkgs;
 
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
+  bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
@@ -11622,6 +11624,8 @@ with pkgs;
   zfstools = callPackage ../tools/filesystems/zfstools { };
 
   zfsnap = callPackage ../tools/backup/zfsnap { };
+
+  zpool-auto-expand-partitions = callPackage ../tools/filesystems/zpool-auto-expand-partitions { };
 
   zile = callPackage ../applications/editors/zile { };
 

@@ -66,6 +66,7 @@ let
           timstott
           zimbatm
           zowoq
+          techknowlogick
         ];
       };
     } // attrs');
@@ -191,9 +192,9 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.1.7";
-    sha256 = "sha256-E8qY17MSdA7fQW4wGSDiPzbndBP5SZwelAJAWzka/io=";
-    vendorSha256 = "sha256-lyy/hcr00ix6qZoxzSfCbXvDC8dRB2ZjrONywpqbVZ8=";
+    version = "1.1.8";
+    sha256 = "sha256-U3RuLnDQD1EbPZG/wPuVMbSKmR3EqspkoK0Ky8aZb7k=";
+    vendorSha256 = "sha256-Jy9o0O80OjagrHG25CSPblI49zKx0N8pwvEotk9qm3s=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

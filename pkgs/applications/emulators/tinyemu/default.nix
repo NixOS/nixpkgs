@@ -21,7 +21,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  makeFlags = [ "DESTDIR=$(out)" "bindir=/bin" ];
+  makeFlags = [
+    "CC:=$(CC)"
+    "STRIP:=$(STRIP)"
+    "DESTDIR=$(out)"
+    "bindir=/bin"
+  ];
 
   preInstall = ''
     mkdir -p "$out/bin"
