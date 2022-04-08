@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.20.0";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-afyHVuydk+XFJYyZCIQ08gPpH9vFryjR8sWD/YGbeh0=";
+    sha256 = "0asbapgf485h2gqq0sn9c4qknwi0ccpraf1685ixp2sv23pwgwc1";
   };
 
   outputs = [
