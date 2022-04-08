@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20220223";
+  version = "20220405";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qsZdXDNxT1/gIlkUsC1cfVrULApC+dHreBXXjVTJQiA=";
+    sha256 = "sha256-CBj/SpBWH5xdNCQSJquqIntcmfARI7Cud76Tp8txXL4=";
   };
 
   nativeBuildInputs = [
