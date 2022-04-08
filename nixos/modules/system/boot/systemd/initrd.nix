@@ -125,7 +125,7 @@ let
   };
 
   initrdBinEnv = pkgs.buildEnv {
-    name = "initrd-emergency-env";
+    name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
     postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
@@ -355,8 +355,9 @@ in {
     boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
 
     boot.initrd.systemd = {
-      initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package] ++ config.system.fsPackages;
+      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
       extraBin = {
+        less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
         umount = "${cfg.package.util-linux}/bin/umount";
       };
@@ -367,7 +368,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
+          DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
         '';
 
         "/etc/fstab".source = fstab;
@@ -394,7 +395,9 @@ in {
         "${cfg.package}/lib/systemd/systemd-journald"
         "${cfg.package}/lib/systemd/systemd-makefs"
         "${cfg.package}/lib/systemd/systemd-modules-load"
+        "${cfg.package}/lib/systemd/systemd-random-seed"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
+        "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-udevd"
@@ -410,7 +413,7 @@ in {
         "${cfg.package.util-linux}/bin/sulogin"
 
         # so NSS can look up usernames
-        "${pkgs.glibc}/lib/libnss_files.so"
+        "${pkgs.glibc}/lib/libnss_files.so.2"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
@@ -428,9 +431,6 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
-      services.emergency = mkIf (isBool cfg.emergencyAccess && cfg.emergencyAccess) {
-        environment.SYSTEMD_SULOGIN_FORCE = "1";
-      };
       # The unit in /run/systemd/generator shadows the unit in
       # /etc/systemd/system, but will still apply drop-ins from
       # /etc/systemd/system/foo.service.d/
