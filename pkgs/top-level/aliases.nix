@@ -1036,13 +1036,10 @@ mapAliases ({
   reicast = throw "reicast has been removed from nixpkgs as it is unmaintained, please use flycast instead"; # Added 2022-03-07
   renpy = throw "renpy has been removed from nixpkgs, it was unmaintained and the latest packaged version required python2"; # Added 2022-01-12
 
-  /* 3 resholve aliases below added 2022-04-08 to ease breaking change
-  - convert to throw after 2022-07-01
-  - drop after 2022-11-30?
-  */
-  resholvePackage = builtins.trace "resholvePackage is deprecated, use resholve.mkDerivation instead" resholve.mkDerivation;
-  resholveScript = builtins.trace "resholveScript is deprecated, use resholve.writeScript instead" resholve.writeScript;
-  resholveScriptBin = builtins.trace "resholveScriptBin is deprecated, use resholve.writeScriptBin instead" resholve.writeScriptBin;
+  # 3 resholve aliases below added 2022-04-08; drop after 2022-11-30?
+  resholvePackage = throw "resholvePackage has been renamed to resholve.mkDerivation";
+  resholveScript = throw "resholveScript has been renamed to resholve.writeScript";
+  resholveScriptBin = throw "resholveScriptBin has been renamed to resholve.writeScriptBin";
 
   residualvm = throw "residualvm was merged to scummvm code in 2018-06-15; consider using scummvm"; # Added 2021-11-27
   retroArchCores = throw "retroArchCores has been removed. Please use overrides instead, e.g.: `retroarch.override { cores = with libretro; [ ... ]; }`"; # Added 2021-11-19
