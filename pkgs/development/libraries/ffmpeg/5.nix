@@ -5,10 +5,8 @@
 }@args:
 
 callPackage ./generic.nix (rec {
-  version = "5.0";
+  version = "5.0.1";
   branch = version;
-  sha256 = "1ndy6a2bhl6nvz9grmcaakh4xi0vss455466s47l6qy7na6hn4y0";
+  sha256 = "sha256-KN8z1AChwcGyDQepkZeAmjuI73ZfXwfcH/Bn+sZMWdY=";
   darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
-
-  patches = [ ./0001-fate-ffmpeg-add-missing-samples-dependency-to-fate-s.patch ];
 } // args)
