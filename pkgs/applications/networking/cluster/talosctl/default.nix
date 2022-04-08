@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, OVMF, substituteAll }:
 let
   # look for GO_LDFLAGS getting set in the Makefile
   version = "1.0.1";
@@ -18,6 +18,13 @@ buildGoModule rec {
     rev = "v${version}";
     inherit sha256;
   };
+
+  patches = [
+    (substituteAll {
+      src = ./0001-qemu-provisioner-hardcode-path-to-OVMF.patch;
+      ovmf = "${OVMF.fd}/FV";
+    })
+  ];
 
   ldflags =
     let

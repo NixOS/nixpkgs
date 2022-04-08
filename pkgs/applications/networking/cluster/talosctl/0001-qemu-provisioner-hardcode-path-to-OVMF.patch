@@ -1,0 +1,55 @@
+From 0329d29be24c17eb668b7178e391015eb4ad34ac Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Fri, 8 Apr 2022 08:09:46 +0200
+Subject: [PATCH] qemu provisioner: hardcode path to OVMF
+
+The qemu provisioner needs UEFI firmware, which doesn't live in
+/usr/share/ovmf or /usr/share/qemu-efi-aarch64 on NixOS.
+
+Avoid having to specify `--extra-uefi-search-paths` on every
+`talosctl cluster create` invocation, by also adding a nix-provided path
+to the list of search paths.
+
+Keep the existing search paths intact, so people running a nix-built
+talosctl on non-NixOS can still pick up UEFI firmware that's not
+(yet) provided by Nix - such as the aarch64 OVMF firmware for the
+x86_64-linux talosctl binary.
+---
+ pkg/provision/providers/qemu/arch.go | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/pkg/provision/providers/qemu/arch.go b/pkg/provision/providers/qemu/arch.go
+index 49a298a1..3c1c27c9 100644
+--- a/pkg/provision/providers/qemu/arch.go
++++ b/pkg/provision/providers/qemu/arch.go
+@@ -74,7 +74,12 @@ type PFlash struct {
+ func (arch Arch) PFlash(uefiEnabled bool, extraUEFISearchPaths []string) []PFlash {
+ 	switch arch {
+ 	case ArchArm64:
+-		uefiSourcePaths := []string{"/usr/share/qemu-efi-aarch64/QEMU_EFI.fd", "/usr/share/OVMF/QEMU_EFI.fd"}
++		uefiSourcePaths := []string{
++			"@ovmf@/QEMU_EFI.fd",
++			"/usr/share/qemu-efi-aarch64/QEMU_EFI.fd",
++			"/usr/share/OVMF/QEMU_EFI.fd",
++		}
++
+ 		for _, p := range extraUEFISearchPaths {
+ 			uefiSourcePaths = append(uefiSourcePaths, filepath.Join(p, "QEMU_EFI.fd"))
+ 		}
+@@ -93,7 +98,12 @@ func (arch Arch) PFlash(uefiEnabled bool, extraUEFISearchPaths []string) []PFlas
+ 			return nil
+ 		}
+ 
+-		uefiSourcePaths := []string{"/usr/share/ovmf/OVMF.fd", "/usr/share/OVMF/OVMF.fd"}
++		uefiSourcePaths := []string{
++			"@ovmf@/OVMF.fd",
++			"/usr/share/ovmf/OVMF.fd",
++			"/usr/share/OVMF/OVMF.fd",
++		}
++
+ 		for _, p := range extraUEFISearchPaths {
+ 			uefiSourcePaths = append(uefiSourcePaths, filepath.Join(p, "OVMF.fd"))
+ 		}
+-- 
+2.35.1
+
