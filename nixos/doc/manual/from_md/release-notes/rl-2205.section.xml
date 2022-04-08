@@ -1826,6 +1826,17 @@
       </listitem>
       <listitem>
         <para>
+          xfsprogs was update to version 5.15, which enables inobtcount
+          and bigtime by default on filesystem creation. Support for
+          these features was added in kernel 5.10 and deemed stable in
+          kernel 5.15. If you want to be able to mount XFS filesystems
+          created with this release of xfsprogs on kernel releases older
+          than 5.10, you need to format them with
+          <literal>mkfs.xfs -m bigtime=0 -m inobtcount=0</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.xserver.desktopManager.xfce</literal> now
           includes Xfce’s screen locker,
           <literal>xfce4-screensaver</literal>.
