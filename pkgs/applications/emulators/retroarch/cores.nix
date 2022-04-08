@@ -313,24 +313,6 @@ in
     postBuild = "cd src/citra_libretro";
   };
 
-  citra-canary = mkLibRetroCore {
-    core = "citra-canary";
-    description = "Port of Citra Canary/Experimental to libretro";
-    license = lib.licenses.gpl2Plus;
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ libGLU libGL boost ];
-    makefile = "Makefile";
-    cmakeFlags = [
-      "-DENABLE_LIBRETRO=ON"
-      "-DENABLE_QT=OFF"
-      "-DENABLE_SDL2=OFF"
-      "-DENABLE_WEB_SERVICE=OFF"
-      "-DENABLE_DISCORD_PRESENCE=OFF"
-    ];
-    preConfigure = "sed -e '77d' -i externals/cmake-modules/GetGitRevisionDescription.cmake";
-    postBuild = "cd src/citra_libretro";
-  };
-
   desmume = mkLibRetroCore {
     core = "desmume";
     description = "libretro wrapper for desmume NDS emulator";

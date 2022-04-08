@@ -32,13 +32,6 @@ CORES = {
         "deep_clone": True,
         "leave_dot_git": True,
     },
-    "citra-canary": {
-        "repo": "citra",
-        "fetch_submodules": True,
-        "deep_clone": True,
-        "leave_dot_git": True,
-        "rev": "canary",
-    },
     "desmume": {"repo": "desmume"},
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},

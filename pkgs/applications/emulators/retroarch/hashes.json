@@ -110,15 +110,6 @@
         "leaveDotGit": true,
         "deepClone": true
     },
-    "citra-canary": {
-        "owner": "libretro",
-        "repo": "citra",
-        "rev": "5401990a9be46e4497abc92db3d5f2042674303d",
-        "sha256": "JKKJBa840i7ESwMrB5tKamCBmrYvvoEUdibqxkWg5Gc=",
-        "fetchSubmodules": true,
-        "leaveDotGit": true,
-        "deepClone": true
-    },
     "desmume": {
         "owner": "libretro",
         "repo": "desmume",
