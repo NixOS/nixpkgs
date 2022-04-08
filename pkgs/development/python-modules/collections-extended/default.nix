@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , poetry-core
+, hypothesis
 , pytestCheckHook
 }:
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    hypothesis
   ];
 
   pythonImportsCheck = [ "collections_extended" ];
