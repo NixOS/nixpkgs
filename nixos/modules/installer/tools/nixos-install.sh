@@ -85,6 +85,8 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+extraBuildFlags+=('--option' 'min-free' '0')
+
 if ! test -e "$mountPoint"; then
     echo "mount point $mountPoint doesn't exist"
     exit 1
