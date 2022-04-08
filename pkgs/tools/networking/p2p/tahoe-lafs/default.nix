@@ -1,4 +1,4 @@
-{ lib, nettools, python3Packages, texinfo, fetchFromGitHub }:
+{ lib, nettools, python3Packages, texinfo }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
@@ -7,30 +7,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
-  version = "unstable-2021-07-09";
+  version = "1.17.1";
 
-  src = fetchFromGitHub {
-    owner = "tahoe-lafs";
-    repo = "tahoe-lafs";
-    rev = "8e28a9d0e02fde2388aca549da2b5c452ac4337f";
-    sha256 = "sha256-MuD/ZY+die7RCsuVdcePSD0DdwatXRi7CxW2iFt22L0=";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256:0whngh6j2k768kl70inrsn5l5r2mkw438fcmd7ygkr707w8grird";
   };
 
   outputs = [ "out" "doc" "info" ];
 
-  postPatch = ''
-    sed -i "src/allmydata/util/iputil.py" \
-        -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/bin/ifconfig'|g"
+  patches = [ ./skip-tests.patch ];
 
+  postPatch = ''
     # Chroots don't have /etc/hosts and /etc/resolv.conf, so work around
     # that.
     for i in $(find src/allmydata/test -type f)
     do
       sed -i "$i" -e"s/localhost/127.0.0.1/g"
     done
-
-    sed -i 's/"zope.interface.*"/"zope.interface"/' src/allmydata/_auto_deps.py
-    sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
   '';
 
   # Remove broken and expensive tests.
@@ -44,9 +38,6 @@ python3Packages.buildPythonApplication rec {
       # These require Tor and I2P.
       rm test_connections.py test_iputil.py test_hung_server.py test_i2p_provider.py test_tor_provider.py
 
-      # Fails due to the above tests missing
-      rm test_python3.py
-
       # Expensive
       rm test_system.py
     )
@@ -56,13 +47,15 @@ python3Packages.buildPythonApplication rec {
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs = with python3Packages; [
-    appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
-    html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
-    service-identity simplejson sphinx_rtd_theme testtools treq twisted zfec
-    zope_interface
+    attrs appdirs autobahn cbor2 characteristic collections-extended
+    cryptography distro eliot fixtures foolscap future klein magic-wormhole
+    netifaces pyasn1 pyutil pyyaml recommonmark service-identity simplejson
+    six sphinx_rtd_theme testtools treq twisted zfec zope_interface
   ];
 
-  checkInputs = with python3Packages; [ mock hypothesis twisted ];
+  checkInputs = with python3Packages; [
+    beautifulsoup4 html5lib mock hypothesis twisted tenacity prometheus-client
+  ];
 
   # Install the documentation.
   postInstall = ''
@@ -80,7 +73,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    trial --rterrors allmydata
+    trial --rterrors --jobs $NIX_BUILD_CORES allmydata
   '';
 
   meta = with lib; {
@@ -93,7 +86,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://tahoe-lafs.org/";
     license = [ licenses.gpl2Plus /* or */ "TGPPLv1+" ];
-    maintainers = with lib.maintainers; [ MostAwesomeDude ];
+    maintainers = with lib.maintainers; [ MostAwesomeDude exarkun ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }
