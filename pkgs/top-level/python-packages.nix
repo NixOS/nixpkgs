@@ -9298,6 +9298,8 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
+  sjcl = callPackage ../development/python-modules/sjcl { };
+
   skein = callPackage ../development/python-modules/skein {
     jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
