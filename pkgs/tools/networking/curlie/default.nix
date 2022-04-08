@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-tYZtnD7RUurhl8yccXlTIvOxybBJITM+it1ollYJ1OI=";
 
-  doCheck = false;
-
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   passthru.tests.version = testVersion {
