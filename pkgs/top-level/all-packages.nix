@@ -73,7 +73,8 @@ with pkgs;
   ### Helper functions.
   inherit lib config overlays;
 
-  inherit (lib) lowPrio hiPrio appendToName makeOverridable;
+  # do not import 'appendToName' to get consistent package-names with the same set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
+  inherit (lib) lowPrio hiPrio makeOverridable;
 
   inherit (lib) recurseIntoAttrs;
 
@@ -1147,6 +1148,8 @@ with pkgs;
   termusic = callPackage ../applications/audio/termusic { };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
+
+  thumbs = callPackage ../tools/misc/thumbs { };
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
@@ -3100,7 +3103,9 @@ with pkgs;
 
   envsubst = callPackage ../tools/misc/envsubst { };
 
-  errcheck = callPackage ../development/tools/errcheck { };
+  errcheck = callPackage ../development/tools/errcheck {
+    buildGoModule = buildGo118Module;
+  };
 
   eschalot = callPackage ../tools/security/eschalot { };
 
@@ -5081,6 +5086,8 @@ with pkgs;
   magic-vlsi = callPackage ../applications/science/electronics/magic-vlsi { };
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
+
+  mozillavpn = libsForQt5.callPackage ../tools/networking/mozillavpn { };
 
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -15323,6 +15330,8 @@ with pkgs;
 
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
+  kamid = callPackage ../servers/ftp/kamid { };
+
   kati = callPackage ../development/tools/build-managers/kati { };
 
   kcat = callPackage ../development/tools/kcat { };
@@ -20302,6 +20311,8 @@ with pkgs;
 
   spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
+  splat = callPackage ../applications/radio/splat { };
+
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srm = callPackage ../tools/security/srm { };
@@ -22447,7 +22458,9 @@ with pkgs;
 
   coredns = callPackage ../servers/dns/coredns { };
 
-  corerad = callPackage ../tools/networking/corerad { };
+  corerad = callPackage ../tools/networking/corerad {
+    buildGoModule = buildGo118Module;
+  };
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
@@ -23064,7 +23077,9 @@ with pkgs;
 
   go-langserver = callPackage ../development/tools/go-langserver { };
 
-  gopls = callPackage ../development/tools/gopls { };
+  gopls = callPackage ../development/tools/gopls {
+    buildGoModule = buildGo118Module;
+  };
 
   gops = callPackage ../development/tools/gops { };
 
@@ -28122,6 +28137,7 @@ with pkgs;
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu { };
+  ncdu_2 = callPackage ../tools/misc/ncdu_2 { };
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
