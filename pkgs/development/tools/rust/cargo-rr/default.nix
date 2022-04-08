@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = genericUpdater {
       inherit pname version;
-      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+      versionLister = "${common-updater-scripts}/bin/list-git-tags";
     };
   };
 
