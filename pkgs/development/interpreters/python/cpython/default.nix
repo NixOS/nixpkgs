@@ -240,10 +240,6 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals (pythonAtLeast "3.9" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
-  ] ++ optionals (isPy39 && stdenv.isDarwin) [
-    # ctypes.util.find_library() now finds macOS 11+ system libraries when built on older macOS systems
-    # https://github.com/python/cpython/pull/28053
-    ./3.9/bpo-44689-ctypes.util.find_library-now-finds-macOS-1.patch
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
