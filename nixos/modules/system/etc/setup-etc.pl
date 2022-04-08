@@ -15,6 +15,7 @@ if ($etc eq "") {
 }
 my $static = "/etc/static";
 
+# Create a symlink atomically from argument 2 -> argument 1
 sub atomic_symlink {
     my ($source, $target) = @_;
     my $tmp = "$target.tmp";
@@ -76,6 +77,7 @@ sub cleanup {
         my $target = readlink($filename);
         if (substr($target, 0, length($static)) eq $static) {
             my $x = $static . substr($File::Find::name, length("/etc/"));
+            # Check if symlink is still present in new etc
             if (not (-l $x)) {
                 print(STDERR "removing obsolete symlink ‘$File::Find::name’...\n");
                 unlink("$filename");
@@ -129,6 +131,7 @@ sub make_symlinks {
         }
     }
 
+    # This will set uid/gid if the options were set in the nix config
     if (-e "$path_to_file.mode") {
         chomp(my $mode = read_file("$path_to_file.mode"));
         if ($mode eq "direct-symlink") {
