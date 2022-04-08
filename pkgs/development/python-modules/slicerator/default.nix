@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "1.1.0";
   pname = "slicerator";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18e60393e6765ca96986f801bbae62a617a1eba6ed57784e61b165ffc7dc1848";
+    sha256 = "sha256-RAEKf1zYdoDAchO1yr6B0ftxJSlilD5Tc+59FGBdYEY=";
   };
 
   propagatedBuildInputs = [ six ];
