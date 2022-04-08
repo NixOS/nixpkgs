@@ -2758,6 +2758,18 @@ final: prev:
     meta.homepage = "https://github.com/ellisonleao/glow.nvim/";
   };
 
+  goimpl-nvim = buildVimPluginFrom2Nix {
+    pname = "goimpl.nvim";
+    version = "2021-12-07";
+    src = fetchFromGitHub {
+      owner = "edolphin-ydf";
+      repo = "goimpl.nvim";
+      rev = "90618773b151c7cc05460c26d87ffa00648f0071";
+      sha256 = "0b765m02n4cjj1xmwl04s4cypg7m4aslqhbms1glqw5m0z4jvpzd";
+    };
+    meta.homepage = "https://github.com/edolphin-ydf/goimpl.nvim/";
+  };
+
   golden-ratio = buildVimPluginFrom2Nix {
     pname = "golden-ratio";
     version = "2020-04-03";
