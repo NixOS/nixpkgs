@@ -84,6 +84,7 @@
 , libxml2
 , srt
 , vo-aacenc
+, libfreeaptx
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -170,6 +171,7 @@ stdenv.mkDerivation rec {
     libintl
     srt
     vo-aacenc
+    libfreeaptx
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -261,7 +263,7 @@ stdenv.mkDerivation rec {
     "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
-    "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
+    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
