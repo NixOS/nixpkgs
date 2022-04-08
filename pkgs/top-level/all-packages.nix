@@ -16139,6 +16139,8 @@ with pkgs;
 
   agg = callPackage ../development/libraries/agg { };
 
+  agkozak-zsh-prompt = callPackage ../shells/zsh/agkozak-zsh-prompt { };
+
   alass = callPackage ../applications/video/alass { };
 
   allegro = allegro4;
