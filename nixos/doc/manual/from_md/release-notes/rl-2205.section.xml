@@ -148,6 +148,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://gitlab.com/DarkElvenAngel/argononed">argonone</link>,
+          a replacement daemon for the Raspberry Pi Argon One power
+          button and cooler. Available at
+          <link xlink:href="options.html#opt-services.hardware.argonone.enable">services.hardware.argonone</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
           a C# application with primary purpose of idling Steam cards
           from multiple accounts simultaneously. Available as
