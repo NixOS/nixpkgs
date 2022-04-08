@@ -928,6 +928,8 @@ let
       type = types.bool;
       description = lib.mdDoc ''
         Whether to manage network configuration using {command}`systemd-network`.
+
+        This also enables {option}`systemd.networkd.enable`.
       '';
     };
 
