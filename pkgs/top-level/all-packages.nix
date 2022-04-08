@@ -28130,6 +28130,7 @@ with pkgs;
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu { };
+  ncdu_2 = callPackage ../tools/misc/ncdu_2 { };
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
