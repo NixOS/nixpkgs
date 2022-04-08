@@ -634,13 +634,12 @@
     "version": "2.2.2"
   },
   "logicmonitor": {
-    "deleteVendor": true,
     "owner": "logicmonitor",
     "provider-source-address": "registry.terraform.io/logicmonitor/logicmonitor",
     "repo": "terraform-provider-logicmonitor",
     "rev": "v2.0.0",
     "sha256": "sha256-wamP36zV5HZ1qQlNZWIZyAYx/jOiRO1ODQpcd10Sl4w=",
-    "vendorSha256": "sha256-ccLI662Z+B+xvyuQ5aRHUViREtcdccjOMM5EIJiEaU0=",
+    "vendorSha256": null,
     "version": "2.0.0"
   },
   "lxd": {
