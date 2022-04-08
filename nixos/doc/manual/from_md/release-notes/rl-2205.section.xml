@@ -221,6 +221,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-mobile/mozilla-vpn-client">mozillavpn</link>,
+          the client for the
+          <link xlink:href="https://vpn.mozilla.org/">Mozilla VPN</link>
+          service. Available as
+          <link xlink:href="options.html#opt-services.mozillavpn">services.mozillavpn</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
           a Prometheus exporter for mtr metrics. Available as
           <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.

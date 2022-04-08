@@ -816,6 +816,7 @@
   ./services/networking/mosquitto.nix
   ./services/networking/monero.nix
   ./services/networking/morty.nix
+  ./services/networking/mozillavpn.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/mtprotoproxy.nix
