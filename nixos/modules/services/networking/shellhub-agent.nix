@@ -14,14 +14,7 @@ in
 
       enable = mkEnableOption "ShellHub Agent daemon";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.shellhub-agent;
-        defaultText = literalExpression "pkgs.shellhub-agent";
-        description = ''
-          Which ShellHub Agent package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "shellhub-agent" { };
 
       preferredHostname = mkOption {
         type = types.str;
