@@ -5,6 +5,7 @@
 , iproute2
 , lzo
 , openssl
+, openssl_1_1
 , pam
 , useSystemd ? stdenv.isLinux
 , systemd
@@ -17,7 +18,7 @@
 let
   inherit (lib) versionOlder optional optionals optionalString;
 
-  generic = { version, sha256 }:
+  generic = { version, sha256, extraBuildInputs ? [] }:
     let
       withIpRoute = stdenv.isLinux && (versionOlder version "2.5.4");
     in
@@ -33,11 +34,12 @@ let
 
         nativeBuildInputs = [ pkg-config ];
 
-        buildInputs = [ lzo openssl ]
+        buildInputs = [ lzo ]
           ++ optional stdenv.isLinux pam
           ++ optional withIpRoute iproute2
           ++ optional useSystemd systemd
-          ++ optional pkcs11Support pkcs11helper;
+          ++ optional pkcs11Support pkcs11helper
+          ++ extraBuildInputs;
 
         configureFlags = optionals withIpRoute [
           "--enable-iproute2"
@@ -75,10 +77,12 @@ in
   openvpn_24 = generic {
     version = "2.4.12";
     sha256 = "1vjx82nlkxrgzfiwvmmlnz8ids5m2fiqz7scy1smh3j9jnf2v5b6";
+    extraBuildInputs = [ openssl_1_1 ];
   };
 
   openvpn = generic {
     version = "2.5.6";
     sha256 = "0gdd88rcan9vfiwkzsqn6fxxdim7kb1bsxrcra59c5xksprpwfik";
+    extraBuildInputs = [ openssl ];
   };
 }
