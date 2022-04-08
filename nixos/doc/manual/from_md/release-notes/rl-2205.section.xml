@@ -1281,6 +1281,33 @@
       </listitem>
       <listitem>
         <para>
+          Existing <literal>resholve*</literal> functions have been
+          renamed and nested under <literal>pkgs.resholve</literal>.
+          Update uses to:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>resholvePackage</literal> -&gt;
+              <literal>resholve.mkDerivation</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>resholveScript</literal> -&gt;
+              <literal>resholve.writeScript</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>resholveScriptBin</literal> -&gt;
+              <literal>resholve.writeScriptBin</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.cosmopolitan</literal> no longer provides the
           <literal>cosmoc</literal> command. It has been moved to
           <literal>pkgs.cosmoc</literal>.
