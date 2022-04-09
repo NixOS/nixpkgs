@@ -2,7 +2,7 @@
 , fetchFromGitHub, fetchFromGitLab
 , file, cmake, bash
 , nixosTests, writeText
-, cookieFile ? null
+, cookieFile ? "/var/lib/pleroma/.cookie"
 , ...
 }:
 
@@ -226,7 +226,7 @@ beamPackages.mixRelease rec {
 
   passthru = {
     tests.pleroma = nixosTests.pleroma;
-    inherit mixNixDeps;
+    inherit mixNixDeps cookieFile;
   };
 
   meta = with lib; {
