@@ -134,11 +134,11 @@ sub make_symlinks {
     if (-e "$path_to_file.mode") {
         chomp(my $mode = read_file("$path_to_file.mode"));
         if ($mode eq "direct-symlink") {
-            atomic_symlink(readlink("$static/$fn"), $target) or warn("could not create symlink $target");
+            atomic_symlink(readlink("$static/$fn"), $target) or warn("Failed to symlink `$target`");
         } else {
             my $uid = read_file("$path_to_file.uid", { chomp => 1 });
             my $gid = read_file("$path_to_file.gid", { chomp => 1 });
-            copy("$static/$fn", "$target.tmp") or warn;
+            copy("$static/$fn", "$target.tmp") or warn("Copy failed: $!");
 
             # uid could either be an uid or an username, this gets the uid
             if ($uid !~ /^\+/) {
@@ -148,16 +148,16 @@ sub make_symlinks {
                 $gid = getgrnam($gid);
             }
 
-            chown(int($uid), int($gid), "$target.tmp") or warn;
-            chmod(oct($mode), "$target.tmp") or warn;
+            chown(int($uid), int($gid), "$target.tmp") or warn("Chowning `$target` failed");
+            chmod(oct($mode), "$target.tmp") or warn("Chmod of `$target` failed");
             unless (rename("$target.tmp", $target)) {
-                warn("could not create target $target");
+                warn("Moving of `$target` failed");
                 unlink("$target.tmp");
             }
         }
         push(@copied, $fn);
-    } elsif (-l "$path_to_file") {
-        atomic_symlink("$static/$fn", $target) or warn("could not create symlink $target");
+    } elsif (-l $path_to_file) {
+        atomic_symlink("$static/$fn", $target) or warn("Atomic symlink failed for `$target`");
     }
 
     return;
@@ -172,7 +172,7 @@ foreach my $fn (@old_copied) {
     if (!defined $created{$fn}) {
         $fn = "/etc/$fn";
         warn("removing obsolete file ‘$fn’...\n");
-        unlink($fn);
+        unlink($fn) or warn("Couldn't remove $fn");
     }
 }
 
