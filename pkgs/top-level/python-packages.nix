@@ -5413,6 +5413,8 @@ in {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
+  nomadnet = callPackage ../development/python-modules/nomadnet { };
+
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
     inherit (pkgs) nanomsg;
   };
