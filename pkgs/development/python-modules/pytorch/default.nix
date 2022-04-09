@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
+  cudaSupport ? false, cudaPackages, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
@@ -28,6 +28,10 @@
   pillow, six, future, tensorboard, protobuf,
 
   isPy3k, pythonOlder }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
+in
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
@@ -300,7 +304,7 @@ in buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit cudaSupport;
+    inherit cudaSupport cudaPackages;
     cudaArchList = final_cudaArchList;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
