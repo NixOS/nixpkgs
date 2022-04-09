@@ -5,12 +5,6 @@
 , llvmPackages
 , coreutils
 , targetPackages
-
-  # minimal = true; will remove files that aren't strictly necessary for
-  # regular builds and GHC bootstrapping.
-  # This is "useful" for staying within hydra's output limits for at least the
-  # aarch64-linux architecture.
-, minimal ? false
 }:
 
 # Prebuilt only does native
@@ -356,18 +350,6 @@ stdenv.mkDerivation rec {
     for file in $(find "$out" -name setup-config); do
       substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
     done
-  '' +
-  lib.optionalString minimal ''
-    # Remove profiling files
-    find $out -type f -name '*.p_o' -delete
-    find $out -type f -name '*.p_hi' -delete
-    find $out -type f -name '*_p.a' -delete
-    # `-f` because e.g. musl bindist does not have this file.
-    rm -f $out/lib/ghc-*/bin/ghc-iserv-prof
-    # Hydra will redistribute this derivation, so we have to keep the docs for
-    # legal reasons (retaining the legal notices etc)
-    # As a last resort we could unpack the docs separately and symlink them in.
-    # They're in $out/share/{doc,man}.
   '';
 
   # In nixpkgs, musl based builds currently enable `pie` hardening by default
