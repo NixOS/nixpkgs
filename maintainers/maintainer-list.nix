@@ -4502,6 +4502,12 @@
     githubId = 3217744;
     name = "Peter Ferenczy";
   };
+  ghostbuster91 = {
+    name = "Kasper Kondzielski";
+    email = "kghost0@gmail.com";
+    github = "ghostbuster91";
+    githubId = 5662622;
+  };
   ghuntley = {
     email = "ghuntley@ghuntley.com";
     github = "ghuntley";
@@ -8090,6 +8096,12 @@
     github = "mhaselsteiner";
     githubId = 20536514;
     name = "Magdalena Haselsteiner";
+  };
+  mh182 = {
+    email = "mh182@chello.at";
+    github = "mh182";
+    githubId = 9980864;
+    name = "Max Hofer";
   };
   mic92 = {
     email = "joerg@thalheim.io";

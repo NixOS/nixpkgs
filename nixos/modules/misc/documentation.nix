@@ -64,7 +64,8 @@ let
         filter =
           builtins.filterSource
             (n: t:
-              (t == "directory" -> baseNameOf n != "tests")
+              cleanSourceFilter n t
+              && (t == "directory" -> baseNameOf n != "tests")
               && (t == "file" -> hasSuffix ".nix" n)
             );
       in

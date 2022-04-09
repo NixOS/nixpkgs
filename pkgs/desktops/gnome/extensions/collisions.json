@@ -143,9 +143,21 @@
     ]
   },
   "42": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
     "workspace-indicator": [
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
+    ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
     ]
   }
 }

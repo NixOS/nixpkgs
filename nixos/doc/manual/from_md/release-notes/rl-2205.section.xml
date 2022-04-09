@@ -221,6 +221,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-mobile/mozilla-vpn-client">mozillavpn</link>,
+          the client for the
+          <link xlink:href="https://vpn.mozilla.org/">Mozilla VPN</link>
+          service. Available as
+          <link xlink:href="options.html#opt-services.mozillavpn">services.mozillavpn</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
           a Prometheus exporter for mtr metrics. Available as
           <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
@@ -430,6 +439,12 @@
           <literal>pkgs.emacsPackages.elpaPackages</literal> and
           <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
           new versions will release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.klogd</literal> was removed. Logging of
+          kernel messages is handled by systemd since Linux 3.5.
         </para>
       </listitem>
       <listitem>
@@ -1467,6 +1482,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>asterisk</literal> and
+          <literal>asterisk-stable</literal> packages were switched from
+          <literal>asterisk_18</literal> to the newly-packaged
+          <literal>asterisk_19</literal>. Asterisk 13 and 17 have been
+          removed as they have reached their end of life.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.unifi.openPorts</literal> option default
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
@@ -1798,6 +1822,17 @@
           <literal>security.polkit.enable</literal>, is now disabled by
           default. It will automatically be enabled through services and
           desktop environments as needed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          xfsprogs was update to version 5.15, which enables inobtcount
+          and bigtime by default on filesystem creation. Support for
+          these features was added in kernel 5.10 and deemed stable in
+          kernel 5.15. If you want to be able to mount XFS filesystems
+          created with this release of xfsprogs on kernel releases older
+          than 5.10, you need to format them with
+          <literal>mkfs.xfs -m bigtime=0 -m inobtcount=0</literal>.
         </para>
       </listitem>
       <listitem>

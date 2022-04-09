@@ -1,6 +1,6 @@
-{ lib, buildGo118Module, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "corerad";
   version = "1.1.2";
 
