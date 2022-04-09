@@ -5,7 +5,7 @@
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? config.cudaSupport or false, cudatoolkit_11
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
-    ++ optional cudaSupport cudatoolkit_11
+    ++ optional cudaSupport cudaPackages.cudatoolkit
     ++ optional colladaSupport opencollada
     ++ optional spaceNavSupport libspnav;
   pythonPath = with python310Packages; [ numpy requests ];

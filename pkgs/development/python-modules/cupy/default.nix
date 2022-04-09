@@ -1,15 +1,13 @@
 { lib, buildPythonPackage
 , fetchPypi, isPy3k, cython
 , fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
-, cudatoolkit, cudnn, cutensor, nccl
+, cudaPackages
 , addOpenGLRunpath
 }:
 
-assert cudnn.cudatoolkit == cudatoolkit;
-assert cutensor.cudatoolkit == cudatoolkit;
-assert nccl.cudatoolkit == cudatoolkit;
-
-buildPythonPackage rec {
+let
+  inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
+in buildPythonPackage rec {
   pname = "cupy";
   version = "10.2.0";
   disabled = !isPy3k;

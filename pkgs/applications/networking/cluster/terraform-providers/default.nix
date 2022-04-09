@@ -104,5 +104,8 @@ let
       ultradns = archived "2022/01";
       vthunder = throw "provider was renamed to thunder on 2022/01";
     };
+
+  # excluding aliases, used by terraform-full
+  actualProviders = automated-providers // special-providers;
 in
-automated-providers // special-providers // removed-providers // { inherit mkProvider; }
+actualProviders // removed-providers // { inherit actualProviders mkProvider; }
