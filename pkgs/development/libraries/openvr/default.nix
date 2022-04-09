@@ -1,19 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "openvr";
-  version = "1.12.5";
+  version = "1.16.8";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${version}";
-    sha256 = "1v85qrhgdrmzall4f533l8qw5fbjkkkgw99dmj78hwnz5jbk4rd2";
+    sha256 = "sha256-QSQjmJi4IW0/WJ7tHZkASTlBjdzg/xTq+AA7CkznKVY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-includes.patch";
+      url = "https://github.com/ValveSoftware/openvr/pull/1524/commits/ccdcd5a741bead75f60325f97d59ccdc4f082bac.patch";
+      sha256 = "sha256-H+J+PC+w16ylVURNRT8grQOigsjuqmgSGCJtmQ+tM8s=";
+    })
+    (fetchpatch {
+      name = "add-include-stdarg.h-to-strtools_public.cpp.patch";
+      url = "https://github.com/ValveSoftware/openvr/pull/1542/commits/f9a141cc8c875ab820fa783a81255712296a75bb.patch";
+      sha256 = "sha256-4oMGXdScte6O5/YEHdoLofjYG5Q8Rj6SJNfMwWg7x58=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenVR SDK";
     longDescription = ''
       OpenVR is an API and runtime that allows access to VR hardware from multiple vendors
