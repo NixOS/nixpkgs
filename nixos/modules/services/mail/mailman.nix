@@ -277,13 +277,12 @@ in {
 
     services.nginx = mkIf cfg.serve.enable {
       enable = mkDefault true;
-      virtualHosts."${lib.head cfg.webHosts}" = {
-        serverAliases = cfg.webHosts;
+      virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
           "/".extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
           "/static/".alias = webSettings.STATIC_ROOT + "/";
         };
-      };
+      });
     };
 
     environment.systemPackages = [ (pkgs.buildEnv {
