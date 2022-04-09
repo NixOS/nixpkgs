@@ -2,23 +2,34 @@
 , stdenv
 , alsa-lib
 , CoreAudioKit
+, expat
 , fetchFromGitHub
+, flac
 , fontconfig
 , ForceFeedback
+, glm
 , installShellFiles
+, libjpeg
 , libpcap
 , libpulseaudio
 , libXi
 , libXinerama
+, lua5
 , makeDesktopItem
 , makeWrapper
 , pkg-config
+, portaudio
+, portmidi
+, pugixml
 , python3
 , qtbase
+, rapidjson
 , SDL2
 , SDL2_ttf
+, utf8proc
 , which
 , writeScript
+, zlib
 }:
 
 let
@@ -44,22 +55,47 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
 
   makeFlags = [
-    "TOOLS=1"
-    "USE_LIBSDL=1"
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "TOOLS=1"
+    "USE_LIBSDL=1"
+    # "USE_SYSTEM_LIB_ASIO=1"
+    "USE_SYSTEM_LIB_EXPAT=1"
+    "USE_SYSTEM_LIB_FLAC=1"
+    "USE_SYSTEM_LIB_GLM=1"
+    "USE_SYSTEM_LIB_JPEG=1"
+    "USE_SYSTEM_LIB_LUA=1"
+    "USE_SYSTEM_LIB_PORTAUDIO=1"
+    "USE_SYSTEM_LIB_PORTMIDI=1"
+    "USE_SYSTEM_LIB_PUGIXML=1"
+    "USE_SYSTEM_LIB_RAPIDJSON=1"
+    "USE_SYSTEM_LIB_UTF8PROC=1"
+    "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
   dontWrapQtApps = true;
 
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs =
-    [ SDL2 SDL2_ttf qtbase ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  buildInputs = [
+    expat
+    zlib
+    flac
+    lua5
+    portmidi
+    portaudio
+    utf8proc
+    libjpeg
+    rapidjson
+    pugixml
+    glm
+    SDL2
+    SDL2_ttf
+    qtbase
+  ]
+  ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
+  ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
   nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
 
@@ -110,7 +146,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 gpl2Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
-    # macOS needs more time to build
-    timeout = 24 * 3600;
   };
 }
