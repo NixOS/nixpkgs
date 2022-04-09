@@ -2593,4 +2593,11 @@ self: super: {
     aeson = self.aeson_1_5_6_0;
   });
 
+  # Support network >= 3.1.2
+  # https://github.com/erebe/wstunnel/pull/107
+  wstunnel = appendPatch (fetchpatch {
+    url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
+    sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
+  }) super.wstunnel;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

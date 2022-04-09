@@ -233,6 +233,8 @@ package-maintainers:
     - total
     - turtle
     - typed-spreadsheet
+  gebner:
+    - wstunnel
   gridaphobe:
     - located-base
   jb55:
