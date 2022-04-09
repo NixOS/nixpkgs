@@ -183,5 +183,4 @@ write_file("/etc/.clean", { atomic => 1 }, map({ "$_\n" } sort @copied));
 # Create /etc/NIXOS tag if not exists.
 # When /etc is not on a persistent filesystem, it will be wiped after reboot,
 # so we need to check and re-create it during activation.
-open(my $TAG, ">>", "/etc/NIXOS") or die("Couldn't create /etc/NIXOS");
-close($TAG) or die ("Couldn't close /etc/NIXOS");
+write_file("/etc/NIXOS", { append => 1 }) or die("Couldn't create /etc/NIXOS");
