@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, pkg-config, gcc, glm, glew, SDL2, x11, xorg, openvr
+{ stdenv, lib, fetchgit, pkg-config, gcc, glm, glew, SDL2, xlibsWrapper, xorg, openvr
 , makeWrapper, steam-run }:
 
 stdenv.mkDerivation rec {
   pname = "vr-video-player";
-  version = "2020.07.28";
+  version = "2022.03.23";
 
   src = fetchgit {
-    url = "https://git.dec05eba.com/vr-video-player";
-    rev = "9f104ba2f9ab2f05cc2d296cb1abbfd1011c6b25";
-    sha256 = "0ayhp1sxpjd94xzzl1m1nz410al5j3hxkyzz4zcgccqnfwjbdqy0";
+    url = "https://repo.dec05eba.com/vr-video-player";
+    rev = "e6e1d14c01150872fea9198328d862127b4896b6";
+    sha256 = "sha256-gkpncA/r/Vw/OZrqBWxyJw1y96OhTGVgtcj0+g0dTCc=";
   };
 
   buildInputs = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     glm
     glew
     SDL2
-    x11
+    xlibsWrapper
     xorg.libXcomposite
     xorg.libXfixes
     openvr
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A virtual reality video player for Linux running X11";
     license = licenses.bsd3;
     homepage = "https://git.dec05eba.com/vr-video-player";
