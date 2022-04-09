@@ -6,6 +6,15 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
+  "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
+  "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
+
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
+
+  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
+  "wireguard-indicator@atareao.es" = "wireguard-indicator";
+
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
@@ -15,23 +24,14 @@
 
   # ####### GNOME 41 #######
 
-  "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
-  "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
-
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
   "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
-
-  "lockkeys@vaina.lt" = "lock-keys";
-  "lockkeys@fawtytoo" = "lock-keys-2";
 
   "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
   "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
 
   "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
-
-  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
-  "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
   # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
   # there seem to be upstream plans, so this should be checked periodically:

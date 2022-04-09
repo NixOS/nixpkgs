@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc" ]
+    ++ lib.optionals (cudaSupport && lib.versionAtLeast cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
 
   inherit doCheck;
