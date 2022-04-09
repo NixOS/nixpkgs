@@ -37,11 +37,9 @@ makeSetupHook {
     # We use the wrapProgram function.
     makeWrapper
   ];
-  substitutions = let
-    loadersPath = (lib.strings.removeSuffix "/" gdk-pixbuf.moduleDir) + ".cache";
-  in {
-    STANDARD_GDK_PIXBUF_MODULES = "${gdk-pixbuf}/${loadersPath}:${librsvg}/${loadersPath}";
-    LOADERS_PATH = loadersPath;
+  substitutions = {
+    STANDARD_GDK_PIXBUF_MODULES = lib.makeSearchPathOutput "lib" gdk-pixbuf.cacheFile [ gdk-pixbuf librsvg ];
+    GDK_PIXBUF_CACHE_FILE = gdk-pixbuf.cacheFile;
 
     passthru.tests = let
       sample-project = ./tests/sample-project;

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-    # Allow for multiple loader.cache files specified in $GDK_PIXBUF_MODULE_FILE, delimited by ":"
+    # Allow for multiple loaders.cache files specified in $GDK_PIXBUF_MODULE_FILE, delimited by ":"
     ./multiple-module-files.patch
   ];
 
@@ -144,6 +144,7 @@ stdenv.mkDerivation rec {
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
     moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+    cacheFile = "lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
   };
 
   meta = with lib; {

@@ -15,7 +15,7 @@ gappsWrapperArgsHook() {
 
     if [ -n "$extraGdkPixbufModules" ]; then
         for pkg in $extraGdkPixbufModules; do
-            gappsWrapperArgs+=(--prefix GDK_PIXBUF_MODULE_FILE : "$pkg/@LOADERS_PATH@")
+            gappsWrapperArgs+=(--prefix GDK_PIXBUF_MODULE_FILE : "$pkg/@GDK_PIXBUF_CACHE_FILE@")
         done
     fi
 
