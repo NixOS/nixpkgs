@@ -4894,6 +4894,8 @@ in {
 
   lupupy = callPackage ../development/python-modules/lupupy { };
 
+  lxmf= callPackage ../development/python-modules/lxmf { };
+
   lxml = callPackage ../development/python-modules/lxml {
     inherit (pkgs) libxml2 libxslt zlib;
   };
