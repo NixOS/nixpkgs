@@ -682,7 +682,7 @@ self: super: {
   });
 
   telescope-nvim = super.telescope-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim popup-nvim ];
+    dependencies = with self; [ plenary-nvim ];
   });
 
   telescope-symbols-nvim = super.telescope-symbols-nvim.overrideAttrs (old: {
