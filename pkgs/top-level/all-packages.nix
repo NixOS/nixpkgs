@@ -8214,6 +8214,8 @@ with pkgs;
 
   nethogs = callPackage ../tools/networking/nethogs { };
 
+  nethoscope = callPackage ../tools/networking/nethoscope { };
+
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
   netlify-cli = callPackage ../development/web/netlify-cli { };

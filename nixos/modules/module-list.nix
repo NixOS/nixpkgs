@@ -185,6 +185,7 @@
   ./programs/nbd.nix
   ./programs/nix-ld.nix
   ./programs/neovim.nix
+  ./programs/nethoscope.nix
   ./programs/nm-applet.nix
   ./programs/nncp.nix
   ./programs/npm.nix

@@ -132,6 +132,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/vvilhonen/nethoscope">nethoscope</link>,
+          listen to your network traffic. Available as
+          <link linkend="opt-programs.nethoscope.enable">programs.nethoscope</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
           a lightweight shipper for forwarding and centralizing log
           data. Available as
