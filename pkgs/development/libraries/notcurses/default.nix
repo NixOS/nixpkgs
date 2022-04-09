@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-tFdxQEYmSFr3GlJMud2ICToR+IB5sGnQkARUd/LtJXg=";
+    sha256 = "sha256-5SNWk1iKDNbyoo413Qvzl2bGaR5Lb+q/UPbPQg7YvRU=";
   };
 
   outputs = [ "out" "dev" ];

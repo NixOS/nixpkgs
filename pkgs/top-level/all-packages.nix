@@ -2869,6 +2869,8 @@ with pkgs;
 
   dasher = callPackage ../applications/accessibility/dasher { };
 
+  datafusion-cli = callPackage ../development/misc/datafusion { };
+
   datamash = callPackage ../tools/misc/datamash { };
 
   datasette = with python3Packages; toPythonApplication datasette;
@@ -9540,7 +9542,7 @@ with pkgs;
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   inherit (callPackage ../development/misc/resholve { })
-    resholve resholvePackage resholveScript resholveScriptBin;
+    resholve;
 
   restool = callPackage ../os-specific/linux/restool {};
 
