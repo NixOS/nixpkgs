@@ -27,13 +27,13 @@ in
 stdenv.mkDerivation {
   pname = "macvim";
 
-  version = "8.2.1719";
+  version = "8.2.3455";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-166";
-    sha256 = "1p51q59l1dl5lnf1ms960lm8zfg39p8xq0pdjw6wdyypjj3r8v3v";
+    rev = "snapshot-172";
+    sha256 = "sha256-LLLQ/V1vyKTuSXzHW3SOlOejZD5AV16NthEdMoTnfko=";
   };
 
   enableParallelBuilding = true;
