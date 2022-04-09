@@ -24302,7 +24302,7 @@ with pkgs;
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   starship = callPackage ../tools/misc/starship {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+    inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
   };
 
   stig = callPackage ../applications/networking/p2p/stig { };
