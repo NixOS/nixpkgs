@@ -242,7 +242,15 @@ let
         zsh-git-prompt
         ;
 
-      elmPackages.elm = pkgsPlatforms.elmPackages.elm;
+      # Members of the elmPackages set that are Haskell derivations
+      elmPackages = {
+        inherit (pkgsPlatforms.elmPackages)
+          elm
+          elm-format
+          elm-instrument
+          elmi-to-json
+          ;
+      };
 
       # GHCs linked to musl.
       pkgsMusl.haskell.compiler = lib.recursiveUpdate

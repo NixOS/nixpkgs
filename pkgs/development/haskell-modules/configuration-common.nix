@@ -1045,12 +1045,6 @@ self: super: {
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
 
-  # 2022-03-20: niv is unmaintained we pin stuff to keep it running
-  niv = generateOptparseApplicativeCompletion "niv" (super.niv.overrideScope (self: super: {
-   optparse-applicative = self.optparse-applicative_0_15_1_0;
-   aeson = self.aeson_1_5_6_0;
-  }));
-
   ormolu = generateOptparseApplicativeCompletion "ormolu" super.ormolu;
 
   stack =
