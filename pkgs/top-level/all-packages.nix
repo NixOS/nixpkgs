@@ -28309,7 +28309,7 @@ with pkgs;
 
   vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
-  libopenmpt = callPackage ../applications/audio/libopenmpt { };
+  libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
 
   openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 
