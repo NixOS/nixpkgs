@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2022.3.4";
+  version = "2022.4.0";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    hash   = "sha256-W3XA3AOzuyHlFCps2ne4Fh2X+E48inJT4QrDJLOeD5M=";
+    hash   = "sha256-+40OK2q4WdvlLhoPfZH6q+pghgS7ZLmaZl2VbZK4rdA=";
   };
 
   vendorSha256 = null;
@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage    = "https://www.cloudflare.com/products/tunnel";
     license     = licenses.asl20;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ bbigras enorris thoughtpolice ];
+    maintainers = with maintainers; [ bbigras enorris thoughtpolice techknowlogick ];
   };
 }

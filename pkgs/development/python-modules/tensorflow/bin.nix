@@ -20,8 +20,7 @@
 , tensorflow-estimator
 , tensorboard
 , cudaSupport ? false
-, cudatoolkit
-, cudnn
+, cudaPackages ? {}
 , patchelfUnstable
 , zlib
 , python
@@ -43,6 +42,7 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
+  inherit (cudaPackages) cudatoolkit cudnn;
 in buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
@@ -181,6 +181,10 @@ in buildPythonPackage {
     "tensorflow.python"
     "tensorflow.python.framework"
   ];
+
+  passthru = {
+    inherit cudaPackages;
+  };
 
   meta = with lib; {
     description = "Computation using data flow graphs for scalable machine learning";

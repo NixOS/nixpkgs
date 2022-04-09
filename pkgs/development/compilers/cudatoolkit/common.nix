@@ -254,6 +254,7 @@ stdenv.mkDerivation rec {
   '';
   passthru = {
     cc = gcc;
+    majorMinorVersion = lib.versions.majorMinor version;
     majorVersion = lib.versions.majorMinor version;
   };
 
