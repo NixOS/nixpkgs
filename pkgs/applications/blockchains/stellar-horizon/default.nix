@@ -1,14 +1,14 @@
-#with import <nixpkgs> {};
+with import <nixpkgs> {};
 
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+#{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
-let
-  # A list of binaries to put into separate outputs
-  bins = [
-    "horizon"
-  ];
+#let
+#  # A list of binaries to put into separate outputs
+#  bins = [
+#    "horizon"
+#  ];
 
-in buildGoModule rec {
+buildGoModule rec {
   pname = "stellar-horizon";
   version = "2.16.0";
 
@@ -22,12 +22,12 @@ in buildGoModule rec {
   vendorSha256 = "sha256-Vrfc4nrUjoP2xOXZW1QBBktAQdD1ksCN6Ye86l+Y9Uo=";
   proxyVendor = true;
 
-  outputs = [ "out" ] ++ bins;
+  #outputs = [ "out" ] ++ bins;
 
   # Move binaries to separate outputs and symlink them back to $out
-  postInstall = lib.concatStringsSep "\n" (
-    builtins.map (bin: "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/") bins
-  );
+  #postInstall = lib.concatStringsSep "\n" (
+  #  builtins.map (bin: "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/") bins
+  #);
 
   ldflags = [ "-X github.com/stellar/go/support/app.version=${version}" ];
 
