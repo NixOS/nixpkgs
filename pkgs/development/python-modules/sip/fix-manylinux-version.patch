@@ -1,11 +1,13 @@
 diff --git a/sipbuild/project.py b/sipbuild/project.py
 --- a/sipbuild/project.py
 +++ b/sipbuild/project.py
-@@ -336,13 +336,13 @@ class Project(AbstractProject, Configurable):
+@@ -336,13 +336,15 @@ class Project(AbstractProject, Configurable):
              # We expect a two part tag so leave anything else unchanged.
              parts = platform_tag.split('-')
              if len(parts) == 2:
 -                if self.minimum_glibc_version > (2, 17):
++                if parts[1] == "powerpc64le":
++                    parts[1] = "ppc64le"
 +                if self.minimum_glibc_version > (2, 17) or parts[1] not in {"x86_64", "i686", "aarch64", "armv7l", "ppc64", "ppc64le", "s390x"}:
                      # PEP 600.
                      parts[0] = 'manylinux'
