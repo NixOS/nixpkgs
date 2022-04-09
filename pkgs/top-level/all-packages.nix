@@ -34477,6 +34477,11 @@ with pkgs;
     jre = openjdk11;
   };
 
+  faiss = callPackage ../development/libraries/science/math/faiss {
+    pythonPackages = python3Packages;
+    swig = swig4;
+  };
+
   fityk = callPackage ../applications/science/misc/fityk { };
 
   galario = callPackage ../development/libraries/galario { };
