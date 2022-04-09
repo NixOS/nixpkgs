@@ -5595,7 +5595,6 @@ broken-packages:
   - wsdl
   - wsedit
   - wsjtx-udp
-  - wstunnel
   - wtk
   - wumpus-core
   - wxdirect
