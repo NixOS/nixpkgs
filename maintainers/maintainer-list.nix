@@ -7306,7 +7306,7 @@
     name = "Anthony Lodi";
   };
   loicreynier = {
-    email = "loic@loireynier.fr";
+    email = "loic@loicreynier.fr";
     github = "loicreynier";
     githubId = 88983487;
     name = "Loïc Reynier";
@@ -11045,6 +11045,16 @@
     github = "samuelrivas";
     githubId = 107703;
     name = "Samuel Rivas";
+  };
+  samyak = {
+    name = "Samyak Sarnayak";
+    email = "samyak201@gmail.com";
+    github = "Samyak2";
+    githubId = 34161949;
+    keys = [{
+      longkeyid = "rsa4096/0x365873F2F0C6153B";
+      fingerprint = "155C F413 0129 C058 9A5F  5524 3658 73F2 F0C6 153B";
+    }];
   };
   sander = {
     email = "s.vanderburg@tudelft.nl";

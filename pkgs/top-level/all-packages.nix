@@ -8214,6 +8214,8 @@ with pkgs;
 
   nethogs = callPackage ../tools/networking/nethogs { };
 
+  nethoscope = callPackage ../tools/networking/nethoscope { };
+
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
   netlify-cli = callPackage ../development/web/netlify-cli { };
@@ -29544,6 +29546,8 @@ with pkgs;
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
   toot = callPackage ../applications/misc/toot { };
+
+  toipe = callPackage ../applications/misc/toipe { };
 
   tootle = callPackage ../applications/misc/tootle { };
 
