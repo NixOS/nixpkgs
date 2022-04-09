@@ -14,7 +14,7 @@
 , libpulseaudio
 , libXi
 , libXinerama
-, lua5
+, lua5_3
 , makeDesktopItem
 , makeWrapper
 , pkg-config
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     expat
     zlib
     flac
-    lua5
+    lua5_3
     portmidi
     portaudio
     utf8proc
