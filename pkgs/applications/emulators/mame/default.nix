@@ -18,6 +18,7 @@
 , SDL2
 , SDL2_ttf
 , which
+, writeScript
 }:
 
 let
@@ -92,6 +93,16 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = writeScript "mame-update-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -eu -o pipefail
+
+    latest_version=$(curl -s https://api.github.com/repos/mamedev/mame/releases/latest | jq --raw-output .tag_name)
+    update-source-version mame "''${latest_version/mame0/0.}"
+  '';
 
   meta = with lib; {
     description = "Is a multi-purpose emulation framework";
