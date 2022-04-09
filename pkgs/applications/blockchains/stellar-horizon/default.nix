@@ -1,6 +1,6 @@
-with import <nixpkgs> {};
+#with import <nixpkgs> {};
 
-#{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 #let
 #  # A list of binaries to put into separate outputs
