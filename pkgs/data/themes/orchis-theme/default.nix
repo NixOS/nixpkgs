@@ -45,7 +45,9 @@ rec {
     bash install.sh -d $out/share/themes -t all ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks}
     ${lib.optionalString withWallpapers ''
       mkdir -p $out/share/backgrounds
-      cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds
+      for f in {1080p,2k,4k}.jpg; do
+        cp src/wallpaper/$f $out/share/backgrounds/Orchis-$f
+      done
     ''}
     runHook postInstall
   '';
