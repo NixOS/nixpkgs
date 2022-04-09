@@ -1,15 +1,19 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, nose
-, pandas
 , matplotlib
+, pytestCheckHook
+, numpy
+, pandas
+, pythonOlder
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.11.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -17,16 +21,28 @@ buildPythonPackage rec {
     sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ pandas matplotlib ];
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pandas
+    scipy
+  ];
 
-  checkPhase = ''
-    nosetests -v
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # Computationally very demanding tests
-  doCheck = false;
-  pythonImportsCheck= [ "seaborn" ];
+  disabledTests = [
+    # Tests may occasionally fail with small offsets
+    "test_ndarray_input"
+    "test_df_input"
+    "test_axis0_input"
+    "test_linkage_scipy"
+  ];
+
+  pythonImportsCheck= [
+    "seaborn"
+  ];
 
   meta = {
     description = "Statisitical data visualization";

@@ -20,6 +20,7 @@ buildPythonPackage rec {
   pname = "surepy";
   version = "0.7.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -31,8 +32,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'click = "^7.1.2"' 'click = "*"' \
-      --replace 'attrs = "^20.3.0"' 'attrs = "*"'
+      --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
+      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"'
   '';
 
   nativeBuildInputs = [
@@ -56,7 +57,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "surepy" ];
+  pythonImportsCheck = [
+    "surepy"
+  ];
 
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";

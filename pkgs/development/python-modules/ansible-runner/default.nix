@@ -52,6 +52,7 @@ buildPythonPackage rec {
     "test_callback_plugin_task_args_leak" # requires internet
     "test_env_accuracy"
     "test_large_stdout_blob" # times out on slower hardware
+    "test_prepare_env_defaults" # missing artifact
   ]
     # test_process_isolation_settings is currently broken on Darwin Catalina
     # https://github.com/ansible/ansible-runner/issues/413

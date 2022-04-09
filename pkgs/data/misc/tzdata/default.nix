@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2021c";
+  version = "2022a";
 
   srcs =
     [ (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "0himprzx3ahxkmg4rvp8n5lqry76qzc65j6sfq151hqirg4d3wdl";
+        sha256 = "0r0nhwpk9nyxj5kkvjy58nr5d85568m04dcb69c4y3zmykczyzzg";
       })
       (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "01fsa661vzdij46z286pa8q07cppqz29sr2pf0qqldqpldbb6km3";
+        sha256 = "1iysv8fdkm79k8wh8jizmjmq075q4qjhk090vxjy57my6dz5wmzq";
       })
     ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "BINDIR=$(bin)/bin"
     "ZICDIR=$(bin)/bin"
     "ETCDIR=$(TMPDIR)/etc"
-    "TZDEFAULT=$(TMPDIR)/etc"
+    "TZDEFAULT=tzdefault-to-remove"
     "LIBDIR=$(dev)/lib"
     "MANDIR=$(man)/share/man"
     "AWK=awk"
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       rm $out/share/zoneinfo-posix
+      rm $out/share/zoneinfo/tzdefault-to-remove
       mkdir $out/share/zoneinfo/posix
       ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right

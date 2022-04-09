@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -48,6 +49,9 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
   '';
+
+  # Too many failures due to attempting to connect to com.apple.fonts daemon
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";
