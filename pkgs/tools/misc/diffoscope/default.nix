@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "207";
+  version = "209";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-0PWnaOQV4Pj0hFMpn98xYhZDexctkweIE2ZM3ppYfvg=";
+    sha256 = "sha256-ZyHec9EbLrHmzCGd/Cwg/y9XCUQPtZhRH0xCouHKMp0=";
   };
 
   outputs = [ "out" "man" ];
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
       xz zip zstd
     ]
     ++ (with python3Packages; [
-      argcomplete black debian defusedxml jsondiff jsbeautifier libarchive-c
+      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
       python_magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
@@ -66,20 +66,19 @@ python3Packages.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  # Disable flaky test and a failing one
   disabledTests = [
+    # Disable flaky test and a failing one
     "test_android_manifest"
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
     "test_obj_no_differences"
 
-    # Failing because of file-v5.40 has a slightly different output.
-    # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
-    "test_text_proper_indentation"
-
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
+
+    # disable formatting tests because they can break on black updates
+    "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"

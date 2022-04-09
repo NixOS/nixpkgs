@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "821a8c5c9c4f3a3c52cfa9c541fbe89ac9e28728125125af53724c4c3f129117";
+    sha256 = "sha256-T+Sybq0q93ZzDsI/WHDXQh81qs4ipBxOk4WG702Hh8s=";
   };
 
   propagatedBuildInputs = [ isort ];

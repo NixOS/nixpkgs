@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "go.rice";
+  pname = "go-rice";
   version = "1.0.2";
 
   src = fetchFromGitHub {
@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-VlpdZcqg7yWUADN8oD/IAgAXVdzJeIeymx2Pu/7E21o=";
 
-  doCheck = false;
-
   subPackages = [ "." "rice" ];
 
   meta = with lib; {
@@ -24,4 +22,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

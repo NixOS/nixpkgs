@@ -8,21 +8,24 @@
 , stdenv
 }:
 
+# Updating this package will force an update for nodePackages.prisma. The
+# version of prisma-engines and nodePackages.prisma must be the same for them to
+# function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "3.10.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-0m0RjIasEGB9QxZc7wKCMLnxHXkSlvCDA2QWa87mRRs=";
+    sha256 = "sha256-lIHE63XIPutvTS2cid0+tuo+JMSKMGuSUcnFv1mCRrM=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "sha256-KNQa+wLLl4abz48QKYkWu7A+FTGIyB+1EWAnLuWpJwc=";
+  cargoSha256 = "sha256-SkI+GLHknC+CGhGo7KiZahBxMp/JCIukTe2C0mMTdjY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -33,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
-    export OPENSSL_LIB_DIR=${openssl.out}/lib
+    export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
 
     export PROTOC=${protobuf}/bin/protoc
     export PROTOC_INCLUDE="${protobuf}/include";
@@ -56,6 +59,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pamplemousse pimeys ];
+    maintainers = with maintainers; [ pamplemousse pimeys superherointj ];
   };
 }

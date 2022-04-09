@@ -4,8 +4,8 @@
 let
   inherit (builtins) head tail length;
   inherit (lib.trivial) id;
-  inherit (lib.strings) concatStringsSep sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all;
+  inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
+  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
 
 rec {
@@ -77,6 +77,103 @@ rec {
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg);
 
+
+  /* Update or set specific paths of an attribute set.
+
+     Takes a list of updates to apply and an attribute set to apply them to,
+     and returns the attribute set with the updates applied. Updates are
+     represented as { path = ...; update = ...; } values, where `path` is a
+     list of strings representing the attribute path that should be updated,
+     and `update` is a function that takes the old value at that attribute path
+     as an argument and returns the new
+     value it should be.
+
+     Properties:
+     - Updates to deeper attribute paths are applied before updates to more
+       shallow attribute paths
+     - Multiple updates to the same attribute path are applied in the order
+       they appear in the update list
+     - If any but the last `path` element leads into a value that is not an
+       attribute set, an error is thrown
+     - If there is an update for an attribute path that doesn't exist,
+       accessing the argument in the update function causes an error, but
+       intermediate attribute sets are implicitly created as needed
+
+     Example:
+       updateManyAttrsByPath [
+         {
+           path = [ "a" "b" ];
+           update = old: { d = old.c; };
+         }
+         {
+           path = [ "a" "b" "c" ];
+           update = old: old + 1;
+         }
+         {
+           path = [ "x" "y" ];
+           update = old: "xy";
+         }
+       ] { a.b.c = 0; }
+       => { a = { b = { d = 1; }; }; x = { y = "xy"; }; }
+  */
+  updateManyAttrsByPath = let
+    # When recursing into attributes, instead of updating the `path` of each
+    # update using `tail`, which needs to allocate an entirely new list,
+    # we just pass a prefix length to use and make sure to only look at the
+    # path without the prefix length, so that we can reuse the original list
+    # entries.
+    go = prefixLength: hasValue: value: updates:
+      let
+        # Splits updates into ones on this level (split.right)
+        # And ones on levels further down (split.wrong)
+        split = partition (el: length el.path == prefixLength) updates;
+
+        # Groups updates on further down levels into the attributes they modify
+        nested = groupBy (el: elemAt el.path prefixLength) split.wrong;
+
+        # Applies only nested modification to the input value
+        withNestedMods =
+          # Return the value directly if we don't have any nested modifications
+          if split.wrong == [] then
+            if hasValue then value
+            else
+              # Throw an error if there is no value. This `head` call here is
+              # safe, but only in this branch since `go` could only be called
+              # with `hasValue == false` for nested updates, in which case
+              # it's also always called with at least one update
+              let updatePath = (head split.right).path; in
+              throw
+              ( "updateManyAttrsByPath: Path '${showAttrPath updatePath}' does "
+              + "not exist in the given value, but the first update to this "
+              + "path tries to access the existing value.")
+          else
+            # If there are nested modifications, try to apply them to the value
+            if ! hasValue then
+              # But if we don't have a value, just use an empty attribute set
+              # as the value, but simplify the code a bit
+              mapAttrs (name: go (prefixLength + 1) false null) nested
+            else if isAttrs value then
+              # If we do have a value and it's an attribute set, override it
+              # with the nested modifications
+              value //
+              mapAttrs (name: go (prefixLength + 1) (value ? ${name}) value.${name}) nested
+            else
+              # However if it's not an attribute set, we can't apply the nested
+              # modifications, throw an error
+              let updatePath = (head split.wrong).path; in
+              throw
+              ( "updateManyAttrsByPath: Path '${showAttrPath updatePath}' needs to "
+              + "be updated, but path '${showAttrPath (take prefixLength updatePath)}' "
+              + "of the given value is not an attribute set, so we can't "
+              + "update an attribute inside of it.");
+
+        # We get the final result by applying all the updates on this level
+        # after having applied all the nested updates
+        # We use foldl instead of foldl' so that in case of multiple updates,
+        # intermediate values aren't evaluated if not needed
+      in foldl (acc: el: el.update acc) withNestedMods split.right;
+
+  in updates: value: go 0 true value updates;
 
   /* Return the specified attributes from a set.
 
@@ -476,6 +573,20 @@ rec {
   */
   overrideExisting = old: new:
     mapAttrs (name: value: new.${name} or value) old;
+
+  /* Turns a list of strings into a human-readable description of those
+    strings represented as an attribute path. The result of this function is
+    not intended to be machine-readable.
+
+    Example:
+      showAttrPath [ "foo" "10" "bar" ]
+      => "foo.\"10\".bar"
+      showAttrPath []
+      => "<root attribute path>"
+  */
+  showAttrPath = path:
+    if path == [] then "<root attribute path>"
+    else concatMapStringsSep "." escapeNixIdentifier path;
 
   /* Get a package output.
      If no output is found, fallback to `.out` and then to the default.

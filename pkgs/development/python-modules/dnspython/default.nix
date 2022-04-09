@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , setuptools-scm
 , pytestCheckHook
+, cacert
 }:
 
 buildPythonPackage rec {
@@ -19,11 +21,23 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ] ++ lib.optional stdenv.isDarwin [
+    cacert
   ];
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
+    # fails if IPv6 isn't available
+    "test_resolver_override"
+
+  # Tests that run inconsistently on darwin systems
+  ] ++ lib.optionals stdenv.isDarwin [
+    # 9 tests fail with: BlockingIOError: [Errno 35] Resource temporarily unavailable
+    "testQueryUDP"
+    # 6 tests fail with: dns.resolver.LifetimeTimeout: The resolution lifetime expired after ...
+    "testResolveCacheHit"
+    "testResolveTCP"
   ];
 
   nativeBuildInputs = [

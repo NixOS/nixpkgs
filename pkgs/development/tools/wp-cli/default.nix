@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${lib.getBin php}/bin/php $out/bin/wp \
       --add-flags "-c $dir/php.ini" \
-      --add-flags "-f $dir/wp-cli"
+      --add-flags "-f $dir/wp-cli" \
+      --add-flags "--"
 
     # this is a very basic run test
     $out/bin/wp --info >/dev/null
@@ -53,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
+    mainProgram = "wp";
   };
 }

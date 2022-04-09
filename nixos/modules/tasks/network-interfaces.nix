@@ -1020,6 +1020,14 @@ in
             local = "10.0.0.22";
             dev = "enp4s0f0";
             type = "tap";
+            ttl = 255;
+          };
+          gre6Tunnel = {
+            remote = "fd7a:5634::1";
+            local = "fd7a:5634::2";
+            dev = "enp4s0f0";
+            type = "tun6";
+            ttl = 255;
           };
         }
       '';
@@ -1057,11 +1065,25 @@ in
             '';
           };
 
+          ttl = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            example = 255;
+            description = ''
+              The time-to-live/hoplimit of the connection to the remote tunnel endpoint.
+            '';
+          };
+
           type = mkOption {
-            type = with types; enum [ "tun" "tap" ];
+            type = with types; enum [ "tun" "tap" "tun6" "tap6" ];
             default = "tap";
             example = "tap";
-            apply = v: if v == "tun" then "gre" else "gretap";
+            apply = v: {
+              tun = "gre";
+              tap = "gretap";
+              tun6 = "ip6gre";
+              tap6 = "ip6gretap";
+            }.${v};
             description = ''
               Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
             '';
@@ -1429,7 +1451,7 @@ in
           sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
         in ''
           # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/$name/use_tempaddr'"
         '';
       })
       (pkgs.writeTextFile rec {

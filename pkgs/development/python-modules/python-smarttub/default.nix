@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.29";
+  version = "0.0.31";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdz";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-utUpNuemyS8XEVhfhLgOwTRkPFqCBXyK1s1LWemywmU=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-tyE50HzwnrxXGWJ0+YRxCmSxtqrPnYmJzBH2ZDFJDZ4=";
   };
 
   propagatedBuildInputs = [

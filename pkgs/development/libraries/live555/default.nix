@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
-      --replace '/usr/lib/libssl.46.dylib' "${openssl.out}/lib/libssl.dylib" \
-      --replace '/usr/lib/libcrypto.44.dylib' "${openssl.out}/lib/libcrypto.dylib"
+      --replace '/usr/lib/libssl.46.dylib' "${lib.getLib openssl}/lib/libssl.dylib" \
+      --replace '/usr/lib/libcrypto.44.dylib' "${lib.getLib openssl}/lib/libcrypto.dylib"
     sed -i -e 's|/bin/rm|rm|g' genMakefiles
     sed -i \
       -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \

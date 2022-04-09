@@ -2,7 +2,7 @@
   qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml, qtquick1, libGLU }:
 
 stdenv.mkDerivation rec {
-  name = "qxmledit-${version}" ;
+  pname = "qxmledit" ;
   version = "0.9.15" ;
   src = fetchFromGitHub ( lib.importJSON ./qxmledit.json ) ;
   nativeBuildInputs = [ qmake ] ;

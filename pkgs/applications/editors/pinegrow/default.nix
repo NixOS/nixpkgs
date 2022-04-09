@@ -9,20 +9,22 @@
 , gsettings-desktop-schemas
 , gtk3
 , wrapGAppsHook
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
-  version = "6.4";
+  version = "6.5";
 
   src = fetchurl {
     url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
-    sha256 = "0i8sg4criimrqmz0g68b8xcwcrb362ssid5jazswpa6hhwj6s5n4";
+    sha256 = "1l7cf5jgidpykaf68mzf92kywl1vxwl3fg43ibgr2rg4cnl1g82b";
   };
 
   nativeBuildInputs = [
     unzip
     autoPatchelfHook
+    makeWrapper
     wrapGAppsHook
   ];
 
@@ -32,6 +34,12 @@ stdenv.mkDerivation rec {
     gcc-unwrapped
     gsettings-desktop-schemas
     gtk3
+  ];
+
+  dontWrapGApps = true;
+  makeWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
+    "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 
   sourceRoot = ".";
@@ -46,7 +54,7 @@ stdenv.mkDerivation rec {
     # we can't unzip it in $out/lib, because nw.js will start with
     # an empty screen. Therefore it will be unzipped in a non-typical
     # folder and symlinked.
-    unzip $src -d $out/opt/pinegrow
+    unzip -q $src -d $out/opt/pinegrow
     substituteInPlace $out/opt/pinegrow/Pinegrow.desktop \
       --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/Pinegrow"'
     mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/Pinegrow.desktop
@@ -55,9 +63,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # GSETTINGS_SCHEMAS_PATH is not set in installPhase
   preFixup = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-    wrapGApp "$out/opt/pinegrow/PinegrowLibrary" --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
+    wrapProgram $out/bin/Pinegrow \
+      ''${makeWrapperArgs[@]} \
+      ''${gappsWrapperArgs[@]}
   '';
 
   meta = with lib; {

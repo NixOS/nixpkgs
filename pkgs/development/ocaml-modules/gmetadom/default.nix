@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ocaml findlib ];
-  buildInputs = [ gdome2 libxslt];
-  propagatedBuildInputs = [gdome2];
+  buildInputs = [ libxslt ];
+  propagatedBuildInputs = [ gdome2 ];
 
   strictDeps = true;
 

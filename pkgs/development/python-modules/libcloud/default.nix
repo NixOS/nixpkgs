@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "3.5.0";
+  version = "3.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Bz8QSSl2+qODoisTuCwkmCfP6QoIPHFiDoMW6BWm2zs=";
+    sha256 = "sha256-7JLDlHj+kKJ+PP6IbEPLy5iaRZPCOf+fLB3XdSCGPPI=";
   };
 
   propagatedBuildInputs = [

@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ eelco offline ];
   };
 
-  machine = {
+  nodes.machine = {
     services.rabbitmq = {
       enable = true;
       managementPlugin.enable = true;

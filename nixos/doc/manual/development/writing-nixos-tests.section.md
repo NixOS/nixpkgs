@@ -5,15 +5,9 @@ A NixOS test is a Nix expression that has the following structure:
 ```nix
 import ./make-test-python.nix {
 
-  # Either the configuration of a single machine:
-  machine =
-    { config, pkgs, ... }:
-    { configuration…
-    };
-
-  # Or a set of machines:
+  # One or more machines:
   nodes =
-    { machine1 =
+    { machine =
         { config, pkgs, ... }: { … };
       machine2 =
         { config, pkgs, ... }: { … };
@@ -29,17 +23,16 @@ import ./make-test-python.nix {
 
 The attribute `testScript` is a bit of Python code that executes the
 test (described below). During the test, it will start one or more
-virtual machines, the configuration of which is described by the
-attribute `machine` (if you need only one machine in your test) or by
-the attribute `nodes` (if you need multiple machines). For instance,
-[`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix)
-only needs a single machine to test whether users can log in
+virtual machines, the configuration of which is described by
+the attribute `nodes`.
+
+An example of a single-node test is
+[`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix).
+It only needs a single machine to test whether users can log in
 on the virtual console, whether device ownership is correctly maintained
-when switching between consoles, and so on. On the other hand,
-[`nfs/simple.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix),
-which tests NFS client and server functionality in the
-Linux kernel (including whether locks are maintained across server
-crashes), requires three machines: a server and two clients.
+when switching between consoles, and so on. An interesting multi-node test is
+[`nfs/simple.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix).
+It uses two client nodes to test correct locking across server crashes.
 
 There are a few special NixOS configuration options for test VMs:
 
@@ -67,8 +60,7 @@ The test script is a sequence of Python statements that perform various
 actions, such as starting VMs, executing commands in the VMs, and so on.
 Each virtual machine is represented as an object stored in the variable
 `name` if this is also the identifier of the machine in the declarative
-config. If you didn\'t specify multiple machines using the `nodes`
-attribute, it is just `machine`. The following example starts the
+config. If you specified a node `nodes.machine`, the following example starts the
 machine, waits until it has finished booting, then executes a command
 and checks that the output is more-or-less correct:
 
@@ -79,7 +71,7 @@ if not "Linux" in machine.succeed("uname"):
   raise Exception("Wrong OS")
 ```
 
-The first line is actually unnecessary; machines are implicitly started
+The first line is technically unnecessary; machines are implicitly started
 when you first execute an action on them (such as `wait_for_unit` or
 `succeed`). If you have multiple machines, you can speed up the test by
 starting them in parallel:
@@ -157,6 +149,12 @@ The following methods are available on machine objects:
 :   Simulate typing a sequence of characters on the virtual keyboard,
     e.g., `send_chars("foobar\n")` will type the string `foobar`
     followed by the Enter key.
+
+`send_console`
+
+:   Send keys to the kernel console. This allows interaction with the systemd
+    emergency mode, for example. Takes a string that is sent, e.g.,
+    `send_console("\n\nsystemctl default\n")`.
 
 `execute`
 
@@ -272,6 +270,13 @@ The following methods are available on machine objects:
     Killing the interactive session with `Ctrl-d` or `Ctrl-c` also ends
     the guest session.
 
+`console_interact`
+
+:   Allows you to directly interact with QEMU's stdin. This should
+    only be used during test development, not in production tests.
+    Output from QEMU is only read line-wise. `Ctrl-c` kills QEMU and
+    `Ctrl-d` closes console and returns to the test runner.
+
 To test user units declared by `systemd.user.services` the optional
 `user` argument can be used:
 
@@ -290,7 +295,7 @@ For faster dev cycles it\'s also possible to disable the code-linters
 ```nix
 import ./make-test-python.nix {
   skipLint = true;
-  machine =
+  nodes.machine =
     { config, pkgs, ... }:
     { configuration…
     };

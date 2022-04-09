@@ -38,7 +38,7 @@ trap cleanup EXIT
 pushd $WORK_DIR
 
 echo ":: Creating source.json"
-nix-prefetch-github zammad zammad --rev $VERSION --json > $TARGET_DIR/source.json
+nix-prefetch-github zammad zammad --rev $VERSION --json --fetch-submodules | jq 'del(.leaveDotGit) | del(.deepClone)' > $TARGET_DIR/source.json
 echo >> $TARGET_DIR/source.json
 
 echo ":: Fetching source"
@@ -61,7 +61,7 @@ cp yarn.lock $TARGET_DIR
 yarn2nix > $TARGET_DIR/yarn.nix
 
 # needed to avoid import from derivation
-cp package.json $TARGET_DIR
+jq --arg VERSION "$VERSION" '. += {name: "Zammad", version: $VERSION}' package.json > $TARGET_DIR/package.json
 
 popd
 popd

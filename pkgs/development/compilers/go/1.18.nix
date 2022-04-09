@@ -45,7 +45,8 @@ let
     "riscv64" = "riscv64";
     "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system");
+    "mips64el" = "mips64le";
+  }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target

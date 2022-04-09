@@ -19,18 +19,6 @@ stdenv.mkDerivation {
 
   patches = dxvkPatches;
 
-  # Replace use of DXVK’s threading classes with the ones from the C++ standard library, which uses
-  # mcfgthreads in nixpkgs.
-  postPatch = ''
-    for class in mutex recursive_mutex condition_variable; do
-      for file in $(grep -rl dxvk::$class *); do
-        if [ "$(basename "$file")" != "thread.h" ]; then
-          substituteInPlace "$file" --replace dxvk::$class std::$class
-        fi
-      done
-    done
-  '';
-
   mesonFlags =
     let
       arch = if stdenv.is32bit then "32" else "64";

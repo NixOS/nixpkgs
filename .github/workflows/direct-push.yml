@@ -22,7 +22,7 @@ jobs:
       if: steps.ismerge.outputs.ismerge != 'true'
     - name: Warn if the commit was a direct push
       if: steps.ismerge.outputs.ismerge != 'true'
-      uses: peter-evans/commit-comment@v1
+      uses: peter-evans/commit-comment@v2
       with:
         body: |
           @${{ github.actor }}, you pushed a commit directly to master/release branch

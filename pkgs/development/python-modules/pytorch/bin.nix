@@ -4,6 +4,7 @@
 , isPy37
 , isPy38
 , isPy39
+, isPy310
 , python
 , addOpenGLRunpath
 , future
@@ -19,7 +20,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.10.0";
+  version = "1.11.0";
 in buildPythonPackage {
   inherit version;
 
@@ -28,7 +29,7 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = !(isPy37 || isPy38 || isPy39);
+  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 

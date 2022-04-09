@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.1.2";
+  version = "2.1.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GK/CqmMm67VmvzlhMV6ow+40m0DYUpXCFkP+9NgR/e4=";
+    hash = "sha256-2m5dD+gGDL5LnY7QbDYiGdu4GYu0C49WU29GZY2bnBo=";
   };
 
   propagatedBuildInputs = [

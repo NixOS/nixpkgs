@@ -1,33 +1,34 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-# build inputs
 , appdirs
+, buildPythonPackage
 , click
 , diskcache
+, fetchPypi
 , jinja2
 , jsonschema
+, pytestCheckHook
+, pythonOlder
 , pyyaml
+, setuptools-scm
 , yamllint
 }:
 
 buildPythonPackage rec {
-  pname = "glean_parser";
-  version = "5.1.0";
+  pname = "glean-parser";
+  version = "5.1.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-8oMbaGsW5Lkw9OluNsXXe2IBNbjeoIb9vDjVOt+uHR0=";
+    pname = "glean_parser";
+    inherit version;
+    hash = "sha256-PjOMNUnrz0kDfYEXv5Ni/9RIHn4Yylle6NJOK1Rb3SY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest-runner" ""
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     appdirs
@@ -38,24 +39,29 @@ buildPythonPackage rec {
     pyyaml
     yamllint
   ];
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
 
   checkInputs = [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
+
   disabledTests = [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1741668
     "test_validate_ping"
   ];
 
-  pythonImportsCheck = [ "glean_parser" ];
+  pythonImportsCheck = [
+    "glean_parser"
+  ];
 
   meta = with lib; {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
     homepage = "https://github.com/mozilla/glean_parser";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kvark ];
+    maintainers = with maintainers; [ kvark ];
   };
 }

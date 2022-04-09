@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qscintilla-qt5";
-  version = "2.13.1";
+  version = "2.13.2";
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
-    sha256 = "gA49IHGpa8zNdYE0avDS/ij8MM1oUwy4MCaF0BOv1Uo=";
+    sha256 = "sha256-tsfl8ntR0l8J/mz4Sumn8Idq8NZdjMtVEQnm57JYhfQ=";
   };
 
   sourceRoot = "QScintilla_src-${version}/src";

@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ lib, ... }: {
   name = "user-activation-scripts";
   meta = with lib.maintainers; { maintainers = [ chkno ]; };
 
-  machine = {
+  nodes.machine = {
     system.userActivationScripts.foo = "mktemp ~/user-activation-ran.XXXXXX";
     users.users.alice = {
       initialPassword = "pass1";

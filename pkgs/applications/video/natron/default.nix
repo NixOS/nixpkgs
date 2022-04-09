@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, qt4, pkg-config, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, openexr, ffmpeg_3, opencolorio_1, openimageio,
+  poppler, imagemagick, openexr, ffmpeg, opencolorio_1, openimageio,
   qmake4Hook, libpng, libGL, lndir, libraw, openjpeg, libwebp, fetchFromGitHub }:
 
 let
@@ -74,7 +74,7 @@ let
       sha256 = "OQg6a5wNy9TFFySjmgd1subvXRxY/ZnSOCkaoUo+ZaA=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
-        libpng ffmpeg_3 openexr opencolorio_1 openimageio boost libGL
+        libpng ffmpeg openexr opencolorio_1 openimageio boost libGL
         seexpr libraw openjpeg libwebp
       ];
     })
@@ -135,5 +135,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
+    broken = true; # Last evaluated on Hydra on 2021-05-18
   };
 }

@@ -1,15 +1,15 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, python2
-, boost, db, openssl, geoip, libiconv, miniupnpc
-, srcOnly, fetchgit
+, boost, db, openssl, geoip, libiconv, miniupnpc, srcOnly
 }:
 
 let
   twisterHTML = srcOnly {
     name = "twister-html";
-    src = fetchgit {
-      url = "git://github.com/miguelfreitas/twister-html.git";
+    src = fetchFromGitHub {
+      owner = "miguelfreitas";
+      repo = "twister-html";
       rev = "01e7f7ca9b7e42ed90f91bc42da2c909ca5c0b9b";
-      sha256 = "0scjbin6s1kmi0bqq0dx0qyjw4n5xgmj567n0156i39f9h0dabqy";
+      sha256 = "sha256-Hi/VAEwujWhKAPaYIuvrxRIuPQa9AYwXiHUGbWxckmk=";
     };
   };
 
@@ -38,9 +38,9 @@ in stdenv.mkDerivation rec {
     "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config automake autoconf ];
   buildInputs = [
-    autoconf automake libtool python2
+    libtool python2
     boostPython db openssl geoip miniupnpc libiconv
   ];
 

@@ -27,9 +27,10 @@ The function `mkOption` accepts the following arguments.
 
 `type`
 
-:   The type of the option (see [](#sec-option-types)). It may be
-    omitted, but that's not advisable since it may lead to errors that
-    are hard to diagnose.
+:   The type of the option (see [](#sec-option-types)). This
+    argument is mandatory for nixpkgs modules. Setting this is highly
+    recommended for the sake of documentation and type checking. In case it is
+    not set, a fallback type with unspecified behavior is used.
 
 `default`
 
@@ -119,14 +120,14 @@ lib.mkOption {
 ```nix
 lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
-  example = "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
-  example = lib.literalExpression "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = lib.literalExpression "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
   description = "The GHC package to use.";
 }
 ```

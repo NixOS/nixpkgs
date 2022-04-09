@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, appstream-glib
 , desktop-file-utils
 , gio-sharp
 , glib
@@ -20,22 +21,23 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    sha256 = "5g5SQJc5aopYxtHNP5T85TtcazovrveUCnMhJ90p2t4=";
+    sha256 = "sha256-J7IW329rWFEoB+44762DAkWA8Hq4IVmXgc+QoDQaxV0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-vnLesWXdqNzlWNQsUVy03kfmcDNazQ1BbizQDoG1kgM=";
+    hash = "sha256-elXaikB/RemMxA4OXyZNQOgP1alImQMJHng5oX2j480=";
   };
 
   nativeBuildInputs = [
+    appstream-glib # For appstream-util
     desktop-file-utils # For update-desktop-database
     meson
     ninja

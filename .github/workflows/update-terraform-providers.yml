@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v16
+      - uses: cachix/install-nix-action@v17
       - name: setup
         id: setup
         run: |
@@ -39,7 +39,7 @@ jobs:
           title: ${{ steps.setup.outputs.title }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: comment on failure
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         if: ${{ failure() }}
         with:
           issue-number: 153416

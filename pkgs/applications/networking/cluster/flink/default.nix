@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ mbode ];
-    repositories.git = "git://git.apache.org/flink.git";
   };
 }

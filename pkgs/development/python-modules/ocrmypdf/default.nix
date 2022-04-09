@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.4.0";
+  version = "13.4.2";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "sha256-LgHhF+vztXPCn71d87OMn0umLvps7We6vyjdRJZw+3E=";
+    sha256 = "sha256-P829Tv2848iMEFzweydGSkFEnkfX8Rvyqd6Yqu+2VXY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -79,6 +79,12 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ];
+
+  postPatch = ''
+    # https://github.com/ocrmypdf/OCRmyPDF/issues/933
+    substituteInPlace setup.cfg \
+      --replace "pdfminer.six!=20200720,>=20191110,<=20211012" "pdfminer.six!=20200720,>=20191110,<=20220319"
+  '';
 
   pythonImportsCheck = [
     "ocrmypdf"

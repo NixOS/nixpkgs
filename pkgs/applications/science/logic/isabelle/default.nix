@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, rlwrap, perl, makeDesktopItem }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
       ISABELLE_JDK_HOME=${java}
     EOF
 
-    sed -i -e 's/naproche_server : bool = true/naproche_server : bool = false/' contrib/naproche-*/etc/options
+    rm contrib/naproche-*/x86*/Naproche-SAD
+    ln -s ${naproche}/bin/Naproche-SAD contrib/naproche-*/x86*/
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
@@ -152,4 +153,29 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.linux;
   };
+} // {
+  withComponents = f:
+    let
+      base = "$out/${isabelle.dirname}";
+      components = f isabelle-components;
+    in symlinkJoin {
+      name = "isabelle-with-components-${isabelle.version}";
+      paths = [ isabelle ] ++ components;
+
+      postBuild = ''
+        rm $out/bin/*
+
+        cd ${base}
+        rm bin/*
+        cp ${isabelle}/${isabelle.dirname}/bin/* bin/
+        rm etc/components
+        cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
+
+        export HOME=$TMP
+        bin/isabelle install $out/bin
+        patchShebangs $out/bin
+      '' + lib.concatMapStringsSep "\n" (c: ''
+        echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+      '') components;
+    };
 }

@@ -131,7 +131,6 @@ in buildFHSUserEnv rec {
     rtmpdump
 
     # dependencies for mesa drivers, needed inside pressure-vessel
-    mesa.drivers
     mesa.llvmPackages.llvm.lib
     vulkan-loader
     expat
@@ -207,12 +206,6 @@ in buildFHSUserEnv rec {
   ++ steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
 
-  extraBuildCommands = ''
-    ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
-  '' + lib.optionalString (steam-runtime-wrapped-i686 != null) ''
-    ln -s /usr/lib32/libbz2.so usr/lib32/libbz2.so.1.0
-  '';
-
   extraInstallCommands = ''
     mkdir -p $out/share/applications
     ln -s ${steam}/share/icons $out/share
@@ -229,9 +222,6 @@ in buildFHSUserEnv rec {
         export TZ="$new_TZ"
       fi
     fi
-
-    # XDG_DATA_DIRS is used by pressure-vessel and vulkan loaders to find the corresponding icd
-    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
@@ -273,7 +263,7 @@ in buildFHSUserEnv rec {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs extraBuildCommands profile extraInstallCommands;
+    inherit multiPkgs profile extraInstallCommands;
 
     inherit unshareIpc unsharePid;
 

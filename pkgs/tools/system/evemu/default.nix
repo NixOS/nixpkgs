@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Records and replays device descriptions and events to emulate input devices through the kernel's input system";
     homepage = "https://www.freedesktop.org/wiki/Evemu/";
-    repositories.git = "git://git.freedesktop.org/git/evemu";
     license = with licenses; [ lgpl3Only gpl3Only ];
     maintainers = [ maintainers.amorsillo ];
     platforms = platforms.linux;

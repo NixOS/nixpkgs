@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   pname = "owamp";
   version = "3.5.6";
-  buildInputs = [ autoconf automake mandoc ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ mandoc ];
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";

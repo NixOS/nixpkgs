@@ -22,7 +22,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cardinal-${version}";
+  pname = "cardinal";
   version = "22.02";
 
   src = fetchurl {

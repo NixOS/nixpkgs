@@ -88,6 +88,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-qemu-ga.patch
+    # MTP Devices were broken in QEMU 6.1.0, this patch fixes that.
+     (fetchpatch {
+       url = "https://gitlab.com/qemu-project/qemu/-/commit/9d30c78c7d3b994825cbe63fa277279ae3ef4248.patch";
+       sha256 = "sha256-AChB9HMEShrM+2UW2aOT9+MqlAm568sG3HxHK3nDC/M=";
+     })
     # Cocoa clipboard support only works on macOS 10.14+
     (fetchpatch {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
@@ -135,6 +140,15 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/d3671fd972cd185a6923433aa4802f54d8b62112.patch";
       sha256 = "sha256-GUh5o7mbFTm/dm6CqcGdoMlC+YrV8RlcEwu/mxrfTzo=";
+    })
+    # The next two commits are to make Linux v5.17 work on aarch64-darwin. These are included in QEMU v7.
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/ad99f64f1cfff7c5e7af0e697523d9b7e45423b6.patch";
+      sha256 = "sha256-e6WtfQIPEiXhWucd5ab7UIoccbWEAv3bwksn4hR85CY=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/7f6c295cdfeaa229c360cac9a36e4e595aa902ae.patch";
+      sha256 = "sha256-mORtgfU1CYQFKO5UrXgM9cJyZxeF2bz8iAoq0UlFQeY=";
     })
     ./allow-virtfs-on-darwin.patch
     # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin

@@ -6,7 +6,7 @@ rec {
 
   inherit (src) packageVersion firefox source;
 
-  patches = [ ./verify-telemetry-macros.patch ];
+  extraPatches = [ ./verify-telemetry-macros.patch ];
 
   extraConfigureFlags = [
     "--with-app-name=librewolf"
@@ -34,7 +34,7 @@ rec {
   extraPoliciesFiles = [ "${source}/submodules/settings/distribution/policies.json" ];
 
   extraPassthru = {
-    librewolf = { inherit src patches; };
+    librewolf = { inherit src extraPatches; };
     inherit extraPrefsFiles extraPoliciesFiles;
   };
 }

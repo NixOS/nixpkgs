@@ -5,6 +5,7 @@
 , mirage-profile
 , cstruct
 , ounit
+, stdlib-shims
 }:
 
 buildDunePackage rec {
@@ -25,6 +26,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     mirage-profile
     cstruct
+    stdlib-shims
   ];
 
   doCheck = true;

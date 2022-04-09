@@ -1,5 +1,7 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, fetchpatch, bundlerEnv
+{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
+, fetchYarnDeps, fixup_yarn_lock
+, fetchpatch
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
@@ -15,11 +17,16 @@ stdenv.mkDerivation rec {
   # Putting the callPackage up in the arguments list also does not work.
   src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
 
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    sha256 = "sha256-Ngfs15YKLfSBOKju3BzpZFnenB370jId2G1g9Qy1y5w=";
+  };
+
   patches = [
+    # Fix indexing statuses in ElasticSearch
     (fetchpatch {
-      name = "CVE-2022-0432.patch";
-      url = "https://github.com/mastodon/mastodon/commit/4d6d4b43c6186a13e67b92eaf70fe1b70ea24a09.patch";
-      sha256 = "sha256-C18X2ErBqP/dIEt8NrA7hdiqxUg5977clouuu7Lv4/E=";
+      url = "https://github.com/mastodon/mastodon/commit/ef196c913c77338be5ebb1e02af2f6225f857080.patch";
+      sha256 = "sha256-uw8m6j4BzMQtev0LNLeIHW0xOJEmj3JikT/6gVfmvzs=";
     })
   ];
 
@@ -43,55 +50,48 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  mastodon-js-modules = mkYarnPackage {
+  mastodon-modules = stdenv.mkDerivation {
     pname = "${pname}-modules";
-    yarnNix = dependenciesDir + "/yarn.nix";
-    packageJSON = dependenciesDir + "/package.json";
-    inherit src version;
-  };
-
-  mastodon-assets = stdenv.mkDerivation {
-    pname = "${pname}-assets";
     inherit src version;
 
-    buildInputs = [
-      mastodon-gems nodejs-slim yarn
-    ];
+    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
 
-    # FIXME: "production" would require OTP_SECRET to be set, so we use
-    # development here.
-    RAILS_ENV = "development";
+    RAILS_ENV = "production";
+    NODE_ENV = "production";
 
     buildPhase = ''
-      # Support Mastodon forks which don't call themselves 'mastodon' or which
-      # omit the organization name from package.json.
-      if [ "$(ls ${mastodon-js-modules}/libexec/* | grep node_modules)" ]; then
-          cp -r ${mastodon-js-modules}/libexec/*/node_modules node_modules
-      else
-          cp -r ${mastodon-js-modules}/libexec/*/*/node_modules node_modules
-      fi
-      chmod -R u+w node_modules
-      rake webpacker:compile
-      rails assets:precompile
+      export HOME=$PWD
+      fixup_yarn_lock ~/yarn.lock
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+
+      patchShebangs ~/bin
+      patchShebangs ~/node_modules
+
+      # skip running yarn install
+      rm -rf ~/bin/yarn
+
+      OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder \
+        rails assets:precompile
+      yarn cache clean --offline
+      rm -rf ~/node_modules/.cache
     '';
 
     installPhase = ''
       mkdir -p $out/public
+      cp -r node_modules $out/node_modules
       cp -r public/assets $out/public
       cp -r public/packs $out/public
     '';
   };
 
-  passthru.updateScript = callPackage ./update.nix {};
+  propagatedBuildInputs = [ imagemagick ffmpeg file mastodon-gems.wrappedRuby ];
+  buildInputs = [ mastodon-gems nodejs-slim ];
 
   buildPhase = ''
-    if [ "$(ls ${mastodon-js-modules}/libexec/* | grep node_modules)" ]; then
-        ln -s ${mastodon-js-modules}/libexec/*/node_modules node_modules
-    else
-        ln -s ${mastodon-js-modules}/libexec/*/*/node_modules node_modules
-    fi
-    ln -s ${mastodon-assets}/public/assets public/assets
-    ln -s ${mastodon-assets}/public/packs public/packs
+    ln -s ${mastodon-modules}/node_modules node_modules
+    ln -s ${mastodon-modules}/public/assets public/assets
+    ln -s ${mastodon-modules}/public/packs public/packs
 
     patchShebangs bin/
     for b in $(ls ${mastodon-gems}/bin/)
@@ -106,8 +106,6 @@ stdenv.mkDerivation rec {
     ln -s /tmp tmp
   '';
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodon-gems.wrappedRuby ];
-
   installPhase = let
     run-streaming = writeShellScript "run-streaming.sh" ''
       # NixOS helper script to consistently use the same NodeJS version the package was built with.
@@ -119,11 +117,16 @@ stdenv.mkDerivation rec {
     ln -s ${run-streaming} $out/run-streaming.sh
   '';
 
+  passthru = {
+    tests.mastodon = nixosTests.mastodon;
+    updateScript = callPackage ./update.nix {};
+  };
+
   meta = with lib; {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ petabyteboy happy-river erictapen ];
+    maintainers = with maintainers; [ petabyteboy happy-river erictapen izorkin ];
   };
 }

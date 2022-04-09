@@ -1,19 +1,19 @@
 { lib, fetchPypi, buildPythonPackage
-, six, systemd, pytest, mock, hypothesis, docutils
+, six, udev, pytest, mock, hypothesis, docutils
 }:
 
 buildPythonPackage rec {
   pname = "pyudev";
-  version = "0.22.0";
+  version = "0.23.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xmj6l08iih2js9skjqpv4w7y0dhxyg91zmrs6v5aa65gbmipfv9";
+    sha256 = "sha256-Mq41hbMgpRvCg+CgQAD9iiVZnttEVB4vUDT2r+5dFcw=";
   };
 
   postPatch = ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
-      --replace "find_library(name)" "'${lib.getLib systemd}/lib/libudev.so'"
+      --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
     '';
 
   checkInputs = [ pytest mock hypothesis docutils ];

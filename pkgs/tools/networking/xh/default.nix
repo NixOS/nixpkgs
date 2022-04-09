@@ -38,6 +38,11 @@ rustPlatform.buildRustPackage rec {
       --fish completions/xh.fish \
       --zsh completions/_xh
 
+    installManPage doc/xh.1
+    ln -s $out/share/man/man1/xh.1 $out/share/man/man1/xhs.1
+
+    install -m444 -Dt $out/share/doc/xh README.md CHANGELOG.md
+
     # https://github.com/ducaale/xh#xh-and-xhs
     ln -s $out/bin/xh $out/bin/xhs
   '';

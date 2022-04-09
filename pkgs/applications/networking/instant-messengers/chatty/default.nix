@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , appstream-glib
 , desktop-file-utils
+, itstool
 , meson
 , ninja
 , pkg-config
@@ -11,7 +12,7 @@
 , evolution-data-server
 , feedbackd
 , glibmm
-, gnome
+, gnome-desktop
 , gspell
 , gtk3
 , json-glib
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
+    itstool
     meson
     ninja
     pkg-config
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     feedbackd
     glibmm
-    gnome.gnome-desktop
+    gnome-desktop
     gspell
     gtk3
     json-glib

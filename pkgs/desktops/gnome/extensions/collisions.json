@@ -43,6 +43,10 @@
     "gnome-trash": [
       "gnome-trash@gnome-trash.b00f.gitlab.com",
       "gnome-trash@b00f.github.io"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   },
   "40": {
@@ -98,6 +102,10 @@
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   },
   "41": {
@@ -128,6 +136,28 @@
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
+    ]
+  },
+  "42": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
     ]
   }
 }

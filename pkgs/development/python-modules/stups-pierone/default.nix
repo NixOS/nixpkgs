@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "stups-pierone";
-  version = "1.1.50";
+  version = "1.1.51";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "zalando-stups";
     repo = "pierone-cli";
     rev = version;
-    hash = "sha256-YAoj+Ou0Q64QRN5R0CQSxQGP7xDQQNISS6VT5txV0sw=";
+    hash = "sha256-OypGYHfiFUfcUndylM2N2WfPnfXXJ4gvWypUbltYAYE=";
   };
 
   propagatedBuildInputs = [

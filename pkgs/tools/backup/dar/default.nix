@@ -9,12 +9,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.7.3";
+  version = "2.7.4";
   pname = "dar";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-w7005RdZKjP7XrO/h43yM0Lsho4MOKWLynJimD2oHwY=";
+    sha256 = "sha256-esti2QXoq+5bic639eG96vZOSJboMVHmD+oRNAI6ic4=";
   };
 
   outputs = [ "out" "dev" ];

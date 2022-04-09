@@ -86,5 +86,9 @@ rec {
     gcc = gcc10; # can bump to 11 along with stdenv.cc
   };
 
-  cudatoolkit_11 = cudatoolkit_11_4;
+  # Make sure to only ever update this to a version that is compatible with the
+  # latest cudnn, nccl, cutensor, etc! It sometimes happens that CUDA versions
+  # are released prior to compatibility with the rest of the ecosystem. And
+  # don't forget to request a review from @NixOS/cuda-maintainers!
+  cudatoolkit_11 = cudatoolkit_11_5; # update me to 11_6 when cudnn>=8.3.3
 }

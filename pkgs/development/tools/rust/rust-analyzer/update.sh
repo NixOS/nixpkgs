@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq nix-prefetch libarchive
+# shellcheck shell=bash
 set -euo pipefail
 cd "$(dirname "$0")"
 owner=rust-analyzer

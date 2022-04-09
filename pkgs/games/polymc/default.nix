@@ -11,18 +11,20 @@
 , libpulseaudio
 , qtbase
 , libGL
+, glfw
+, openal
 , msaClientID ? ""
 }:
 
 mkDerivation rec {
   pname = "polymc";
-  version = "1.0.6";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-KgLWbZxtxTpuFdMOJNyADYw9rMWoLgczrbSrH4qv6NI=";
+    sha256 = "sha256-virXfnjCzuR2cJoyzapIopT9B+Yi1neff2ZqfOvsmxY=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +38,7 @@ mkDerivation rec {
       --replace 'scanJavaDir("/usr/lib32/jvm")' 'javas.append("${jdk8}/lib/openjdk/bin/java")'
   '';
 
-  cmakeFlags = [ "-DLauncher_LAYOUT=lin-system" ] ++
+  cmakeFlags = [ "-DLauncher_PORTABLE=0" ] ++
                lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
 
   dontWrapQtApps = true;
@@ -50,6 +52,8 @@ mkDerivation rec {
       libXxf86vm
       libpulseaudio
       libGL
+      glfw
+      openal
     ];
   in ''
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
@@ -68,6 +72,7 @@ mkDerivation rec {
       their associated options with a simple interface.
     '';
     platforms = platforms.linux;
+    changelog = "https://github.com/PolyMC/PolyMC/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };

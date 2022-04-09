@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-Cem53w/pzSDTi9A9mh9VeLlRn1m6KhkxWaqJjEtfwUs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WL9bp77Q1cQakxaptw6ZHCq2+IAscMIDKkbQAHSCo1s=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

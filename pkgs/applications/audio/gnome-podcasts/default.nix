@@ -2,6 +2,7 @@
 , lib
 , rustPlatform
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -30,6 +31,16 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "00vy1qkkpn76jdpybsq9qp8s6fh1ih10j73p2x43sl97m5g8944h";
   };
+
+  patches = [
+    # Fix build with meson 0.61, can be removed on next release.
+    # podcasts-gtk/resources/meson.build:5:0: ERROR: Function does not take positional arguments.
+    # podcasts-gtk/resources/meson.build:30:0: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/podcasts/-/commit/6614bb62ecbec7c3b18ea7fe44beb50fe7942b27.patch";
+      sha256 = "3TVKFV9V6Ofdajgkdc+j+yxsU21C4JWSc6GjLExSM00=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;

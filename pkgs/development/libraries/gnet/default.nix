@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake glib libtool ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ glib libtool ];
 
   preConfigure = "./autogen.sh";
 

@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchFromGitHub
+, pythonAtLeast
 
 , coqpit
 , fsspec
@@ -8,41 +10,46 @@
 
 , pytestCheckHook
 , soundfile
-, tensorboardx
-, torchvision
+, torchvision-bin
 }:
 
 let
   pname = "coqui-trainer";
-  version = "0.0.4";
+  version = "0.0.5";
 in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
 
+  disabled = pythonAtLeast "3.10"; # https://github.com/coqui-ai/Trainer/issues/22
+
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "Trainer";
-    # https://github.com/coqui-ai/Trainer/issues/4
-    rev = "776eba829231543d3207927fc69b321d121e527c";
-    hash = "sha256-ICveftJjBNsCgegTmd/ewd/Y6XGMg7YOvchx640RFPI=";
+    rev = "v${version}";
+    hash = "sha256-NsgCh+N2qWmRkTOjXqisVCP5aInH2zcNz6lsnIfVLiY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/coqui-ai/Trainer/commit/07b447abf3290c8f2e5e723687b8a480b7382265.patch";
+      sha256 = "0v1hl784d9rghkblcfwgzp0gg9d6r5r0yv2kapzdz2qymiajy7y2";
+    })
+  ];
 
   propagatedBuildInputs = [
     coqpit
     fsspec
     pytorch-bin
     soundfile
-    tensorboardx
   ];
 
-  # tests are failing; tests require the clearml library
-  # https://github.com/coqui-ai/Trainer/issues/5
+  # only one test and that requires training data from the internet
   doCheck = false;
 
   checkInputs = [
     pytestCheckHook
-    torchvision
+    torchvision-bin
   ];
 
   pythonImportsCheck = [

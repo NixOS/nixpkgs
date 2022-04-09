@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kubeaudit";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AIvH9HF0Ha1b+NZiJmiT6beYuKnCqJMXKzDFUzV9J4c=";
+    sha256 = "sha256-aMnhEY16SybE5Oavc6stw7xoyNblCwFJpzYHsDBENX4=";
   };
 
-  vendorSha256 = "sha256-XrEzkhQU/KPElQNgCX6yWDMQXZSd3lRXmUDJpsj5ACY=";
+  vendorSha256 = "sha256-plsnzeRIaJNNzrkzQYtxOqWejTDntPRemIhcfpxXgBg=";
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/$pname

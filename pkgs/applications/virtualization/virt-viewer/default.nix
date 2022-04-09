@@ -2,6 +2,7 @@
 , stdenv
 , bash-completion
 , fetchurl
+, fetchpatch
 , gdbm ? null
 , glib
 , gsettings-desktop-schemas
@@ -35,14 +36,22 @@ assert spiceSupport -> (
 with lib;
 
 stdenv.mkDerivation rec {
-  baseName = "virt-viewer";
+  pname = "virt-viewer";
   version = "11.0";
-  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.xz";
+    url = "https://releases.pagure.org/virt-viewer/virt-viewer-${version}.tar.xz";
     sha256 = "sha256-pD+iMlxMHHelyMmAZaww7wURohrJjlkPIjQIabrZq9A=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/117
+    (fetchpatch {
+      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/ed19e51407bee53988878a6ebed4e7279d00b1a1.patch";
+      sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib

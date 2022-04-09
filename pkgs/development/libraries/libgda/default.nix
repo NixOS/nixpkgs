@@ -17,13 +17,10 @@
 , autoconf-archive
 , yelp-tools
 , mysqlSupport ? false
-, libmysqlclient ? null
+, libmysqlclient
 , postgresSupport ? false
-, postgresql ? null
+, postgresql
 }:
-
-assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
 
 stdenv.mkDerivation rec {
   pname = "libgda";
@@ -46,7 +43,6 @@ stdenv.mkDerivation rec {
     pkg-config
     intltool
     itstool
-    libxml2
     gobject-introspection
     vala
     autoreconfHook
@@ -63,6 +59,10 @@ stdenv.mkDerivation rec {
     libmysqlclient
   ] ++ lib.optionals postgresSupport [
     postgresql
+  ];
+
+  propagatedBuildInputs = [
+    libxml2
   ];
 
   configureFlags = [

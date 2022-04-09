@@ -18,7 +18,7 @@ Adding custom .vimrc lines can be done using the following code:
 
 ```nix
 vim_configurable.customize {
-  # `name` specifies the name of the executable and package
+  # `name` optionally specifies the name of the executable and package
   name = "vim-with-plugins";
 
   vimrcConfig.customRC = ''
@@ -28,6 +28,9 @@ vim_configurable.customize {
 ```
 
 This configuration is used when Vim is invoked with the command specified as name, in this case `vim-with-plugins`.
+You can also omit `name` to customize Vim itself. See the
+[definition of `vimUtils.makeCustomizable`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/vim-utils.nix#L408)
+for all supported options.
 
 For Neovim the `configure` argument can be overridden to achieve the same:
 
@@ -286,7 +289,7 @@ Sample output1:
 "reload" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
   name = "reload";
   src = fetchgit {
-    url = "git://github.com/xolox/vim-reload";
+    url = "https://github.com/xolox/vim-reload";
     rev = "0a601a668727f5b675cb1ddc19f6861f3f7ab9e1";
     sha256 = "0vb832l9yxj919f5hfg6qj6bn9ni57gnjd3bj7zpq7d4iv2s4wdh";
   };

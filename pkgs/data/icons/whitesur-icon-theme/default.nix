@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "Whitesur-icon-theme";
-  version = "2021-11-08";
+  version = "2022-03-18";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "LZ0GLJFUUvzsPhU2sBkfy5mPpQHuPzYhbumwFKnogoA=";
+    sha256 = "iHLxZqcDLUo62J67MwZ72CSvsHHiI9/Jk31KwkgIPr4=";
   };
 
   nativeBuildInputs = [ gtk3 ];

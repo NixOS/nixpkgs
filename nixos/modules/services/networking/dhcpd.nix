@@ -7,7 +7,7 @@ let
   cfg4 = config.services.dhcpd4;
   cfg6 = config.services.dhcpd6;
 
-  writeConfig = cfg: pkgs.writeText "dhcpd.conf"
+  writeConfig = postfix: cfg: pkgs.writeText "dhcpd.conf"
     ''
       default-lease-time 600;
       max-lease-time 7200;
@@ -21,7 +21,9 @@ let
           (machine: ''
             host ${machine.hostName} {
               hardware ethernet ${machine.ethernetAddress};
-              fixed-address ${machine.ipAddress};
+              fixed-address${
+                optionalString (postfix == "6") postfix
+              } ${machine.ipAddress};
             }
           '')
           cfg.machines
@@ -33,7 +35,7 @@ let
       configFile =
         if cfg.configFile != null
           then cfg.configFile
-          else writeConfig cfg;
+          else writeConfig postfix cfg;
       leaseFile = "/var/lib/dhcpd${postfix}/dhcpd.leases";
       args = [
         "@${pkgs.dhcp}/sbin/dhcpd" "dhcpd${postfix}" "-${postfix}"

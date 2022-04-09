@@ -1,8 +1,21 @@
-{ lib, fetchFromGitHub, gobject-introspection, imagemagick,
-wrapGAppsHook, python3Packages, gtk3, networkmanager, webkitgtk }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, wrapGAppsHook
+, gobject-introspection
+, imagemagick
+, networkmanager
+, pango
+, webkitgtk
+# Python libs
+, protonvpn-nm-lib
+, psutil
+# Optionals
+, withIndicator ? true
+, libappindicator-gtk3 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "protonvpn-linux-gui";
+buildPythonApplication rec {
+  pname = "protonvpn-gui";
   version = "1.7.0";
 
   src = fetchFromGitHub {
@@ -12,22 +25,26 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-uzooFQBq2mhqTBr/cgea5cVQ889P70sgSk2vjXBQEfw=";
   };
 
-  strictDeps = false;
-
   nativeBuildInputs = [
-    gobject-introspection imagemagick wrapGAppsHook
+    gobject-introspection
+    imagemagick
+    wrapGAppsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     protonvpn-nm-lib
     psutil
   ];
 
   buildInputs = [
-    gtk3 networkmanager webkitgtk
-  ];
+    # To avoid enabling strictDeps = false (#56943)
+    gobject-introspection
+    networkmanager
+    pango
+    webkitgtk
+  ] ++ lib.optionals withIndicator [ libappindicator-gtk3 ];
 
-  postFixup = ''
+  postInstall = ''
     # Setting icons
     for size in 16 32 48 64 72 96 128 192 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
@@ -45,9 +62,9 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Linux GUI for ProtonVPN, written in Python";
+    description = "Official ProtonVPN Linux app";
     homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ offline wolfangaukang ];
+    maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

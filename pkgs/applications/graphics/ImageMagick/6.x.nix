@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     changelog = "https://legacy.imagemagick.org/script/changelog.php";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

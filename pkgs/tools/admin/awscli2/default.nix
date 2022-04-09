@@ -33,13 +33,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.4.19"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.4.23"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-ZOSZBZT4d5jv5lg8KkGoOJqAvStUsGZbiXp3dpsrOpo=";
+    sha256 = "sha256-zpkphlIfmexqZm0lZgDP3RoQJqTpFdT+5dGtaLiRr/U=";
   };
 
   propagatedBuildInputs = [
@@ -69,7 +69,6 @@ with py.pkgs; buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
       --replace "wcwidth<0.2.0" "wcwidth" \

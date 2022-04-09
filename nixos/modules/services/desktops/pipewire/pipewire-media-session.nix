@@ -110,6 +110,11 @@ in {
       source = json.generate "v4l2-monitor.conf" configs.v4l2-monitor;
     };
 
+    environment.etc."pipewire/media-session.d/with-audio" =
+      mkIf config.services.pipewire.audio.enable {
+        text = "";
+      };
+
     environment.etc."pipewire/media-session.d/with-alsa" =
       mkIf config.services.pipewire.alsa.enable {
         text = "";

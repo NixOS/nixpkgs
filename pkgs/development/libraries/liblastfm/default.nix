@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lastfm/liblastfm";
-    repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
     platforms = platforms.unix;
     maintainers = [ ];

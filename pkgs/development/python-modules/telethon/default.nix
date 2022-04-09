@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace telethon/crypto/libssl.py --replace \
-      "ctypes.util.find_library('ssl')" "'${openssl.out}/lib/libssl.so'"
+      "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';
 
   propagatedBuildInputs = [

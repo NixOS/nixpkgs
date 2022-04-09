@@ -12,12 +12,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.2";
+  version = "2.0.3";
   pname = "Flask";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b2fb8e934ddd50731893bdcdb00fc8c0315916f9fcd50d22c7cc1a95ab634e2";
+    sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://flask.pocoo.org/";
+    homepage = "https://flask.palletsprojects.com/";
     description = "The Python micro framework for building web applications";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is

@@ -21,22 +21,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gbenchmark civetweb gtest zlib curl ];
-
+  buildInputs = [ gbenchmark gtest zlib curl ];
+  propagatedBuildInputs = [ civetweb ];
   strictDeps = true;
 
   cmakeFlags = [
     "-DUSE_THIRDPARTY_LIBRARIES=OFF"
-    "-DCIVETWEB_INCLUDE_DIR=${civetweb.dev}/include"
-    "-DCIVETWEB_CXX_LIBRARY=${civetweb}/lib/libcivetweb${stdenv.targetPlatform.extensions.sharedLibrary}"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  NIX_LDFLAGS = "-ldl";
+  outputs = [ "out" "dev" ];
 
   postInstall = ''
-    mkdir -p $out/lib/pkgconfig
-    substituteAll ${./prometheus-cpp.pc.in} $out/lib/pkgconfig/prometheus-cpp.pc
+    mkdir -p $dev/lib/pkgconfig
+    substituteAll ${./prometheus-cpp.pc.in} $dev/lib/pkgconfig/prometheus-cpp.pc
   '';
 
   meta = {

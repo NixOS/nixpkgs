@@ -54,6 +54,36 @@ mkDerivation rec {
       url = "https://github.com/scribusproject/scribus/commit/68ec41169eaceea4a6e1d6f359762a191c7e61d5.patch";
       sha256 = "sha256-xhp65qVvaof0md1jb3XHZw7uFX1RtNxPfUOaVnvZV1Y=";
     })
+    # For Poppler 22.02
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/85c0dff3422fa3c26fbc2e8d8561f597ec24bd92.patch";
+      sha256 = "YR0ii09EVU8Qazz6b8KAIWsUMTwPIwO8JuQPymAWKdw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/f75c1613db67f4067643d0218a2db3235e42ec9f.patch";
+      sha256 = "vJU8HsKHE3oXlhcXQk9uCYINPYVPF5IGmrWYFQ6Py5c=";
+    })
+    # For Poppler 22.03
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/553d1fd5f76ffb3743583b88c78a7232b076a965.patch";
+      sha256 = "56JrEG3eCzyALTH04yjzurKRj2PocpjO6b4PusMRxjY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/1f82e38be0782b065910f5fb4cece23f690349ae.patch";
+      sha256 = "qektUfel5KeA327D3THyqi8dznP1SQQFToUC5Kd0+W4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/f19410ac3b27e33dd62105746784e61e85b90a1d.patch";
+      sha256 = "JHdgntYcioYatPeqpmym3c9dORahj0CinGOzbGtA4ds=";
+    })
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/e013e8126d2100e8e56dea5b836ad43275429389.patch";
+      sha256 = "+siPNtJq9Is9V2PgADeQJB+b4lkl5g8uk6zKBu10Jqw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/48263954a7dee0be815b00f417ae365ab26cdd85.patch";
+      sha256 = "1WE9kALFw79bQH88NUafXaZ1Y/vJEKTIWxlk5c+opsQ=";
+    })
   ];
 
   nativeBuildInputs = [

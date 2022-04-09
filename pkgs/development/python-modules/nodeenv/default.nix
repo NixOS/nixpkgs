@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchPypi, setuptools, python, which }:
 
 buildPythonPackage rec {
   pname = "nodeenv";
@@ -15,6 +15,13 @@ buildPythonPackage rec {
 
   # Tests not included in PyPI tarball
   doCheck = false;
+
+  preFixup = ''
+    substituteInPlace $out/${python.sitePackages}/nodeenv.py \
+      --replace '["which", candidate]' '["${lib.getBin which}/bin/which", candidate]'
+  '';
+
+  pythonImportsCheck = [ "nodeenv" ];
 
   meta = with lib; {
     description = "Node.js virtual environment builder";

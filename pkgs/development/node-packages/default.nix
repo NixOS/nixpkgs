@@ -343,15 +343,22 @@ let
         wrapProgram "$out/bin/postcss" \
           --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
           --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
+        ln -s '${self.postcss}/lib/node_modules/postcss' "$out/lib/node_modules/postcss"
       '';
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
           inherit (self) postcss-cli;
         };
       };
-      meta.mainProgram = "postcss";
+      meta = {
+        mainProgram = "postcss";
+        maintainers = with lib.maintainers; [ Luflosi ];
+      };
     };
 
+    # To update prisma, please first update prisma-engines to the latest
+    # version. Then change the correct hash to this package. The PR should hold
+    # two commits: one for the engines and the other one for the node package.
     prisma = super.prisma.override rec {
       nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -359,7 +366,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-dAld12vtwdz9Rz01nOjmnXe+vHana5PSog8t0XGgLemKsUVsaupYpr74AHaS3s78SaTS5s2HOghnJF+jn91ZrA==";
+        sha512 = "sha512-ltCMZAx1i0i9xuPM692Srj8McC665h6E5RqJom999sjtVSccHSD8Z+HSdBN2183h9PJKvC5dapkn78dd0NWMBg==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
@@ -432,12 +439,28 @@ let
       '';
     };
 
+    thelounge-plugin-closepms = super.thelounge-plugin-closepms.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
+    thelounge-theme-flat-blue = super.thelounge-theme-flat-blue.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
+    thelounge-theme-flat-dark = super.thelounge-theme-flat-dark.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
     tsun = super.tsun.overrideAttrs (oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/tsun" \
         --prefix NODE_PATH : ${self.typescript}/lib/node_modules
       '';
+    });
+
+    typescript = super.typescript.overrideAttrs (oldAttrs: {
+      meta = oldAttrs.meta // { mainProgram = "tsc"; };
     });
 
     typescript-language-server = super.typescript-language-server.override {

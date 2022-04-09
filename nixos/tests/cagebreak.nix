@@ -13,7 +13,7 @@ in
     maintainers = [ berbiche ];
   };
 
-  machine = { config, ... }:
+  nodes.machine = { config, ... }:
   let
     alice = config.users.users.alice;
   in {

@@ -1,10 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage, ocaml }:
 
 buildDunePackage rec {
   pname = "facile";
   version = "1.1.4";
-
-  useDune2 = false;
 
   src = fetchurl {
     url = "https://github.com/Emmanuel-PLF/facile/releases/download/${version}/facile-${version}.tbz";
@@ -12,6 +10,9 @@ buildDunePackage rec {
   };
 
   doCheck = true;
+
+  useDune2 = lib.versionAtLeast ocaml.version "4.12";
+  postPatch = lib.optionalString useDune2 "dune upgrade";
 
   meta = {
     homepage = "http://opti.recherche.enac.fr/facile/";

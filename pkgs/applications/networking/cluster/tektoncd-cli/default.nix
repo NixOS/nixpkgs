@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-rzKEjLjX2bPqgNGJYdyTuu15+9bq9WnsrJtsBzL/oOo=";
+    sha256 = "sha256-fOq67Cxtb2A9Obh2o5/aFy5bYBnyFKYQDPcpxOXMy1s=";
   };
 
   vendorSha256 = null;
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   # third_party/VENDOR-LICENSE breaks build/check as go files are still included
   # docs is a tool for generating docs
-  excludedPackages = "\\(third_party\\|cmd/docs\\)";
+  excludedPackages = [ "third_party" "cmd/docs" ];
 
   preCheck = ''
     # some tests try to write to the home dir

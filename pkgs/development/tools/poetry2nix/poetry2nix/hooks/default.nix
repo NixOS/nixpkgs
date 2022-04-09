@@ -67,6 +67,13 @@ in
         {
           name = "fixup-hook.sh";
           deps = [ ];
+          substitutions = {
+            inherit pythonSitePackages;
+            filenames = builtins.concatStringsSep " " [
+              "pyproject.toml"
+              "README.md"
+            ];
+          };
         } ./fixup-hook.sh
     )
     { };

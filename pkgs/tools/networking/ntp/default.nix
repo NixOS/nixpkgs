@@ -9,10 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
   };
 
+  patches = [
+    # From https://patchwork.openembedded.org/patch/180019/
+    ./glibc-2.34-fix.patch
+  ];
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-openssl-libdir=${openssl.out}/lib"
+    "--with-openssl-libdir=${lib.getLib openssl}/lib"
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"

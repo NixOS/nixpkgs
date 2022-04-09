@@ -796,7 +796,7 @@ in
     # allow `system.build.toplevel' to be included.  (If we had a direct
     # reference to ${regInfo} here, then we would get a cyclic
     # dependency.)
-    boot.postBootCommands =
+    boot.postBootCommands = lib.mkIf config.nix.enable
       ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
           ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
@@ -854,7 +854,7 @@ in
         "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
       ])
       (mkIf (!cfg.useBootLoader) [
-        "-kernel ${config.system.build.toplevel}/kernel"
+        "-kernel \${NIXPKGS_QEMU_KERNEL_${config.system.name}:-${config.system.build.toplevel}/kernel}"
         "-initrd ${config.system.build.toplevel}/initrd"
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
@@ -923,6 +923,8 @@ in
       mkVMOverride (cfg.fileSystems //
       {
         "/".device = cfg.bootDevice;
+        "/".fsType = "ext4";
+        "/".autoFormat = true;
 
         "/tmp" = mkIf config.boot.tmpOnTmpfs
           { device = "tmpfs";
@@ -953,6 +955,28 @@ in
           };
       } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
 
+    boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
+      mounts = [{
+        where = "/sysroot/nix/store";
+        what = "overlay";
+        type = "overlay";
+        options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
+        wantedBy = ["local-fs.target"];
+        before = ["local-fs.target"];
+        requires = ["sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service"];
+        after = ["sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service"];
+        unitConfig.IgnoreOnIsolate = true;
+      }];
+      services.rw-store = {
+        after = ["sysroot-nix-.rw\\x2dstore.mount"];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "/bin/mkdir -p 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
+        };
+      };
+    };
+
     swapDevices = mkVMOverride [ ];
     boot.initrd.luks.devices = mkVMOverride {};
 
@@ -961,7 +985,10 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
+    system.build.vm = pkgs.runCommand "nixos-vm" {
+      preferLocalBuild = true;
+      meta.mainProgram = "run-${config.system.name}-vm";
+    }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system

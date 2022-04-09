@@ -1,0 +1,74 @@
+{
+  "darwin-aarch64": {
+    "graalvm-ce|java11|22.2.0-dev-20220401_1942": {
+      "sha256": "c83dee740ae148486598759e44a717b09d8124e4ea50f9da1e7d49d016572b89",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220401_1942/graalvm-ce-java11-darwin-aarch64-dev.tar.gz"
+    },
+    "native-image-installable-svm|java11|22.2.0-dev-20220401_1942": {
+      "sha256": "661311ae26bfd6c46360b9e65aabe9361dc5cd05878a404343adf16925ae78fa",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220401_1942/native-image-installable-svm-java11-darwin-aarch64-dev.jar"
+    }
+  },
+  "darwin-amd64": {
+    "graalvm-ce|java11|22.0.0.2": {
+      "sha256": "8280159b8a66c51a839c8079d885928a7f759d5da0632f3af7300df2b63a6323",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-darwin-amd64-22.0.0.2.tar.gz"
+    },
+    "native-image-installable-svm|java11|22.0.0.2": {
+      "sha256": "03c27de6cce61ee8073e89252212457f3fbac2c0bc9bfa4acbff12176476c176",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java11-darwin-amd64-22.0.0.2.jar"
+    },
+    "python-installable-svm|java11|22.0.0.2": {
+      "sha256": "67ee2f1cc10b0189e359344c31b22f423e636ff4ec2dd7d9437c3eb0ef54e601",
+      "url": "https://github.com/graalvm/graalpython/releases/download/vm-22.0.0.2/python-installable-svm-java11-darwin-amd64-22.0.0.2.jar"
+    },
+    "ruby-installable-svm|java11|22.0.0.2": {
+      "sha256": "a25c0099a21ca1ca9904dd3acdeef509f67a13b96c6135b6de199e9805330df9",
+      "url": "https://github.com/oracle/truffleruby/releases/download/vm-22.0.0.2/ruby-installable-svm-java11-darwin-amd64-22.0.0.2.jar"
+    },
+    "wasm-installable-svm|java11|22.0.0.2": {
+      "sha256": "d74c210a8a87b8eb0c4d18a65fde6f2c03ebc94d9bf7ed87bbb9cacc460006d7",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java11-darwin-amd64-22.0.0.2.jar"
+    }
+  },
+  "linux-aarch64": {
+    "graalvm-ce|java11|22.0.0.2": {
+      "sha256": "1cc0263d95f642dada4e290dca7f49c0456cefa7b690b67e3e5c159b537b2c58",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-linux-aarch64-22.0.0.2.tar.gz"
+    },
+    "native-image-installable-svm|java11|22.0.0.2": {
+      "sha256": "51d41e890a5aabf8e7b9d4f4e0f88206ee70a261f7dbb0315d51770ab8f3009e",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java11-linux-aarch64-22.0.0.2.jar"
+    },
+    "ruby-installable-svm|java11|22.0.0.2": {
+      "sha256": "e0fb582a9c6b4167e7dc267c58ca1968bd1c471b3bc5c56061b436f175486d80",
+      "url": "https://github.com/oracle/truffleruby/releases/download/vm-22.0.0.2/ruby-installable-svm-java11-linux-aarch64-22.0.0.2.jar"
+    },
+    "wasm-installable-svm|java11|22.0.0.2": {
+      "sha256": "a48470ae391c75cb2805b7fe27cde2c925c0466fdbc0623dfbb67c54f19dbf8c",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java11-linux-aarch64-22.0.0.2.jar"
+    }
+  },
+  "linux-amd64": {
+    "graalvm-ce|java11|22.0.0.2": {
+      "sha256": "bc86083bb7e2778c7e4fe4f55d74790e42255b96f7806a7fefa51d06f3bc7103",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-linux-amd64-22.0.0.2.tar.gz"
+    },
+    "native-image-installable-svm|java11|22.0.0.2": {
+      "sha256": "8504a3441f5b28b8fd625f676674a9216f082ae63a4e30d43930c80f9672e71d",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java11-linux-amd64-22.0.0.2.jar"
+    },
+    "python-installable-svm|java11|22.0.0.2": {
+      "sha256": "2f01d1bbc2ed2c507952d8ceaab1cb2176fc67e2d8c4b3bf5864e8d930c60c55",
+      "url": "https://github.com/graalvm/graalpython/releases/download/vm-22.0.0.2/python-installable-svm-java11-linux-amd64-22.0.0.2.jar"
+    },
+    "ruby-installable-svm|java11|22.0.0.2": {
+      "sha256": "e90f7ebc13b6c1f8e3f98881bb4fe2336870744174b2b6d41dc672d15f0b9a40",
+      "url": "https://github.com/oracle/truffleruby/releases/download/vm-22.0.0.2/ruby-installable-svm-java11-linux-amd64-22.0.0.2.jar"
+    },
+    "wasm-installable-svm|java11|22.0.0.2": {
+      "sha256": "c0fdfc40374b70f6f1597dd21660535c813dc5c3948c8a6ea9559a20f4d3fb5e",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java11-linux-amd64-22.0.0.2.jar"
+    }
+  }
+}

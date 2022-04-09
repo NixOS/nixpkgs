@@ -9,13 +9,14 @@
 , krb5
 , lib
 , libtasn1
+, lttng-ust_2_12
 , makeWrapper
-, stdenv
 , openssl
+, stdenv
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-903";
+  version = "1.8-923";
 
   src =
     let
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-FkB3sh1uwOctBOAW7eO8HFNr9a9RG3Yq4hKKscYYER4=";
+      hash = "sha256-txf8W7SoPb20S7KcQDfExPEn5dubu9JVEX89dWngYFU=";
     };
 
   dontConfigure = true;
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     freetype
     krb5
     libtasn1
+    lttng-ust_2_12
     stdenv.cc.cc.lib
   ];
 
@@ -81,10 +83,6 @@ stdenv.mkDerivation rec {
 
       mkdir -p $out/bin
       makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --run "cd $out"
-
-      # This is unused and depends on an ancient version of lttng-ust, so we
-      # just patch it out
-      patchelf --remove-needed liblttng-ust.so.0 $out/RoonDotnet/shared/Microsoft.NETCore.App/5.0.0/libcoreclrtraceptprovider.so
 
       runHook postInstall
     '';

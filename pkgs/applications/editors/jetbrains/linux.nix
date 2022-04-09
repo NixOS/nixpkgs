@@ -3,30 +3,29 @@
 , vmopts ? null
 }:
 
-{ name, product, productShort ? product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
+{ pname, product, productShort ? product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
 
 with lib;
 
 let loName = toLower productShort;
     hiName = toUpper productShort;
-    mainProgram = concatStringsSep "-" (init (splitString "-" name));
     vmoptsName = loName
                + lib.optionalString stdenv.hostPlatform.is64bit "64"
                + ".vmoptions";
 in
 
 with stdenv; lib.makeOverridable mkDerivation (rec {
-  inherit name src;
-  meta = args.meta // { inherit mainProgram; };
+  inherit pname version src;
+  meta = args.meta // { mainProgram = pname; };
 
   desktopItem = makeDesktopItem {
-    name = mainProgram;
-    exec = mainProgram;
+    name = pname;
+    exec = pname;
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
     categories = [ "Development" ];
-    icon = mainProgram;
+    icon = pname;
     startupWMClass = wmClass;
   };
 
@@ -62,16 +61,16 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
-    cp -a . $out/$name
-    ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${mainProgram}.png
-    mv bin/fsnotifier* $out/libexec/${name}/.
+    mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname}}
+    cp -a . $out/$pname
+    ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
+    mv bin/fsnotifier* $out/libexec/${pname}/.
 
     jdk=${jdk.home}
     item=${desktopItem}
 
-    makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${mainProgram}" \
-      --prefix PATH : "$out/libexec/${name}:${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+    makeWrapper "$out/$pname/bin/${loName}.sh" "$out/bin/${pname}" \
+      --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret e2fsprogs

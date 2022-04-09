@@ -76,7 +76,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) xterm; };
+    tests = {
+      customTest = nixosTests.xterm;
+      standardTest = nixosTests.terminal-emulators.xterm;
+    };
 
     updateScript = let
       # Tags that end in letters are unstable

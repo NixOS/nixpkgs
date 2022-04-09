@@ -31,7 +31,7 @@ let
 in {
   basic = makeTest {
     name = "systemd-binfmt";
-    machine = {
+    nodes.machine = {
       boot.binfmt.emulatedSystems = [
         "armv7l-linux"
         "aarch64-linux"
@@ -56,7 +56,7 @@ in {
 
   preserveArgvZero = makeTest {
     name = "systemd-binfmt-preserve-argv0";
-    machine = {
+    nodes.machine = {
       boot.binfmt.emulatedSystems = [
         "aarch64-linux"
       ];
@@ -71,7 +71,7 @@ in {
 
   ldPreload = makeTest {
     name = "systemd-binfmt-ld-preload";
-    machine = {
+    nodes.machine = {
       boot.binfmt.emulatedSystems = [
         "aarch64-linux"
       ];

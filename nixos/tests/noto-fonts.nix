@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ nickcao midchildan ];
   };
 
-  machine = {
+  nodes.machine = {
     imports = [ ./common/x11.nix ];
     environment.systemPackages = [ pkgs.gnome.gedit ];
     fonts = {

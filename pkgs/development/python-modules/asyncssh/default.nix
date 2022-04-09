@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PMM32AZhlGVFW/GH6KkeP1dUI3GBhOI4+a6MQcTzOvE=";
+    sha256 = "sha256-WF5JmDzHlXFB4D7p9IvRU2pepXFdCqHOnM4Ecobmaws=";
   };
 
   propagatedBuildInputs = [

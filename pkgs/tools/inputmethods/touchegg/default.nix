@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
-  version = "2.0.13";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
     owner = "JoseExposito";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wfXA4+HSLFHMvdsnyiTfRxPqdSsvd0RMkKIacf+rLZI=";
+    sha256 = "sha256-2ZuFZ2PHhbxNTmGdlZONgPfEJC7lI5Rc6dgiBj7VG2o=";
   };
 
   patches = lib.optionals withPantheon [

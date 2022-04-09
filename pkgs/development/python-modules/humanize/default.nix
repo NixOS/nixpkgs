@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.13.1";
+  version = "4.0.0";
   pname = "humanize";
   format = "pyproject";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jmoiron";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lgGBvYb3ciqETBOR31gxQVD7YyopTtmr++nCwvm63Zs=";
+    sha256 = "sha256-v4OdZmUI2LCick4qCSGOHJ7jtWybwKTeTeIcly+QQQQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

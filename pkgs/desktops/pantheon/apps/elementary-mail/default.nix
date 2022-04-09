@@ -17,7 +17,6 @@
 , libgdata
 , sqlite
 , granite
-, elementary-icon-theme
 , evolution-data-server
 , appstream
 , wrapGAppsHook
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     evolution-data-server
     folks
     granite

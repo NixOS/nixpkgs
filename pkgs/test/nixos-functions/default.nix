@@ -26,14 +26,14 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       fileSystems."/".device = "/dev/null";
     }).toplevel;
 
-    nixosTest-test = pkgs.nixosTest ({ lib, pkgs, ... }: {
+    nixosTest-test = pkgs.nixosTest ({ lib, pkgs, figlet, ... }: {
       name = "nixosTest-test";
-      machine = { pkgs, ... }: {
+      nodes.machine = { pkgs, ... }: {
         system.nixos = dummyVersioning;
-        environment.systemPackages = [ pkgs.hello ];
+        environment.systemPackages = [ pkgs.hello figlet ];
       };
       testScript = ''
-        machine.succeed("hello")
+        machine.succeed("hello | figlet >/dev/console")
       '';
     });
 

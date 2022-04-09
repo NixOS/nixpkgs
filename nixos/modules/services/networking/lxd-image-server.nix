@@ -51,18 +51,14 @@ in
 
       environment.etc."lxd-image-server/config.toml".source = format.generate "config.toml" cfg.settings;
 
-      services.logrotate.paths.lxd-image-server = {
-        path = "/var/log/lxd-image-server/lxd-image-server.log";
+      services.logrotate.settings.lxd-image-server = {
+        files = "/var/log/lxd-image-server/lxd-image-server.log";
         frequency = "daily";
-        keep = 21;
-        extraConfig = ''
-          create 755 lxd-image-server ${cfg.group}
-          missingok
-          compress
-          delaycompress
-          copytruncate
-          notifempty
-        '';
+        rotate = 21;
+        create = "755 lxd-image-server ${cfg.group}";
+        compress = true;
+        delaycompress = true;
+        copytruncate = true;
       };
 
       systemd.tmpfiles.rules = [

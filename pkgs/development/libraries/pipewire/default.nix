@@ -68,7 +68,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.48";
+    version = "0.3.49";
 
     outputs = [
       "out"
@@ -86,7 +86,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-+gk/MJ9YimHBwN2I42DRP+I2OqBFFtZ81Fd/l89HcSk=";
+      sha256 = "sha256-8heX/9BsPguIOzHOuqEQdt6MS3eS4HxR4A+FUZKNpdo=";
     };
 
     patches = [
@@ -102,6 +102,12 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+      # Fixes missing function declarations in pipewire headers
+      # Should be removed after the next release
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/a2e98e28c1e6fb58b273ef582398d8bee4d2b769.patch";
+        sha256 = "sha256-tqiiAW2fTEp23HT59XR2D/G08pVENJtpxUI7UVufj/A=";
+      })
     ];
 
     nativeBuildInputs = [

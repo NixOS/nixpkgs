@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.18.0";
+  version = "0.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "v${version}";
-    hash = "sha256-96HoGXVQE5PbUbu0oDOC0es0HXYig4ScTeexiUhGse4=";
+    hash = "sha256-niUGfktP1zVdrRCDy81ou4yAoscnYveHje9423IKcso=";
   };
 
   propagatedBuildInputs = [

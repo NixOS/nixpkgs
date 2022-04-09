@@ -2,7 +2,7 @@
 , bigstringaf, lwt, cstruct, mirage-crypto, zarith, mirage-crypto-ec, ptime, mirage-crypto-rng, mtime, ca-certs
 , cohttp, cohttp-lwt-unix, hmap
 , lwt_log, ocaml_pcre, cryptokit, xml-light, ipaddr
-, pgocaml, camlzip, ocaml_sqlite3
+, camlzip
 , makeWrapper
 }:
 
@@ -17,7 +17,7 @@ let caml_ld_library_path =
 ; in
 
 buildDunePackage rec {
-  version = "4.0.1";
+  version = "5.0.1";
   pname = "ocsigenserver";
 
   useDune2 = true;
@@ -27,11 +27,11 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = version;
-    sha256 = "0pid4irkmdmx1d6n2rvcvx5mnljl3hazzdqc3bql72by35izfac6";
+    sha256 = "sha256:1vzza33hd41740dqrx4854rqpyd8wv7kwpsvvmlpck841i9lh8h5";
   };
 
   nativeBuildInputs = [ makeWrapper which ];
-  buildInputs = [ lwt_react pgocaml camlzip ocaml_sqlite3 ];
+  buildInputs = [ lwt_react camlzip ];
 
   propagatedBuildInputs = [ cohttp cohttp-lwt-unix cryptokit hmap ipaddr lwt_log lwt_ssl
     ocaml_pcre xml-light

@@ -13,7 +13,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "chardet==4.0.0" "chardet"
+      --replace "chardet==4.0.0" "chardet" \
+      --replace "pdfminer.six==20201018" "pdfminer.six"
   '';
 
   propagatedBuildInputs = [ pdfminer chardet ];

@@ -14,7 +14,6 @@
 , libgee
 , libhandy
 , libcanberra
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libcanberra

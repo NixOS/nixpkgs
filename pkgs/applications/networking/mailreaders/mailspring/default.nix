@@ -15,15 +15,17 @@
 , openssl
 , udev
 , xorg
+, mesa
+, libdrm
 }:
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.9.2";
+  version = "1.10.2";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "sha256-o7w2XHd5FnPYt9j8IIGy6OgKtdeNb/qZ+EiXGEn0NUQ=";
+    sha256 = "sha256-6KHhkmHWhj/AgECYqNuJ0iSPEYyuBDac/3fW6J0fgTg=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +46,9 @@ stdenv.mkDerivation rec {
     xorg.libXdamage
     xorg.libXScrnSaver
     xorg.libXtst
+    xorg.libxshmfence
+    mesa
+    libdrm
   ];
 
   runtimeDependencies = [
@@ -70,7 +75,7 @@ stdenv.mkDerivation rec {
       --replace dirname ${coreutils}/bin/dirname
 
     ln -s $out/share/mailspring/mailspring $out/bin/mailspring
-    ln -s ${openssl.out}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
+    ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
 
     runHook postInstall
   '';

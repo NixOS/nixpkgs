@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/klipper
     cp -r ./* $out/lib/klipper
 
+    # Moonraker expects `config_examples` and `docs` to be available
+    # under `klipper_path`
+    cp -r $src/docs $out/lib/docs
+    cp -r $src/config $out/lib/config
+
     chmod 755 $out/lib/klipper/klippy.py
     runHook postInstall
   '';

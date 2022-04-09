@@ -1,25 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
-, fuse, packer
+, fuse, jffi
 , maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
 }:
 
 let
   pname = "cryptomator";
-  version = "1.5.15";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "06n7wda7gfalvsg1rlcm51ss73nlbhh95z6zq18yvn040clkzkij";
-  };
-
-  icons = fetchFromGitHub {
-    owner = "cryptomator";
-    repo = "cryptomator-linux";
-    rev = version;
-    sha256 = "1sqbx858zglv0xkpjya0cpbkxf2hkj1xvxhnir3176y2xyjv6aib";
+    sha256 = "sha256-hOILOdVYBnS9XuEXaIJcf2bPF72Lcr7IBX4CFCIsC8k=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -28,10 +21,10 @@ let
     inherit src;
 
     nativeBuildInputs = [ jdk maven ];
+    buildInputs = [ jre ];
 
     buildPhase = ''
-      cd main
-      while mvn -Prelease package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
+      while mvn -Plinux package -Dmaven.test.skip=true -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
         echo "timeout, restart maven to continue downloading"
       done
     '';
@@ -44,42 +37,52 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "195ysv9l861y9d1lvmvi7wmk172ynlba9n233blpaigq88cjn208";
+    outputHash = "sha256-XFqXjNjPN2vwA3jay7TS79S4FHksjjrODdD/p4oTvpg=";
+
+    doCheck = false;
   };
 
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
   buildPhase = ''
-    cd main
-    mvn -Prelease package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+    mvn -Plinux package --offline -Dmaven.test.skip=true -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
 
   installPhase = ''
-    mkdir -p $out/bin/ $out/usr/share/cryptomator/libs/
+    mkdir -p $out/bin/ $out/share/cryptomator/libs/ $out/share/cryptomator/mods/
 
-    cp buildkit/target/libs/* buildkit/target/linux-libs/* $out/usr/share/cryptomator/libs/
+    cp target/libs/* $out/share/cryptomator/libs/
+    cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
+
+    # The bundeled jffi.so dosn't work on nixos and causes a segmentation fault
+    # we thus replace it with a version build by nixos
+    rm $out/share/cryptomator/libs/jff*.jar
+    cp -f ${jffi}/share/java/jffi-complete.jar $out/share/cryptomator/libs/
 
     makeWrapper ${jre}/bin/java $out/bin/cryptomator \
-      --add-flags "-classpath '$out/usr/share/cryptomator/libs/*'" \
+      --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
+      --add-flags "--module-path '$out/share/cryptomator/mods'" \
       --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcPortPath='~/.config/Cryptomator/ipcPort.bin'" \
+      --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
       --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
       --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
       --add-flags "-Djdk.gtk.version=3" \
       --add-flags "-Xss20m" \
       --add-flags "-Xmx512m" \
-      --add-flags "org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/usr/share/cryptomator/libs/:${lib.makeBinPath [ jre glib ]}" \
+      --add-flags "-Djavafx.embed.singleThread=true " \
+      --add-flags "-Dawt.useSystemAAFontSettings=on" \
+      --add-flags "--module org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
+      --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jre glib ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse ]}" \
       --set JAVA_HOME "${jre.home}"
 
     # install desktop entry and icons
-    cp -r ${icons}/resources/appimage/AppDir/usr/* $out/
+    cp -r ${src}/dist/linux/appimage/resources/AppDir/usr/* $out/
   '';
 
   nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
-  buildInputs = [ fuse packer jre glib ];
+  buildInputs = [ fuse jre glib jffi ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";

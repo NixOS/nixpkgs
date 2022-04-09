@@ -2,14 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.173.0";
+  version = "0.174.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "sha256-F0t85/sq9p+eNEf2XAGxw+ZWeRgUbkhrKFdGASijuAs=";
+    sha256 = "sha256-lfj6KyB9QYvUy4Ybo8f30omAg4K/jT5MEERJPm0aJ7U=";
   };
+
+  makeFlags = [ "FLOW_RELEASE=1" ];
 
   installPhase = ''
     install -Dm755 bin/flow $out/bin/flow

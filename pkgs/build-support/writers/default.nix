@@ -1,7 +1,7 @@
 { pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gawk, gnused, gixy }:
 
 let
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else prev: {};
+  aliases = if config.allowAliases then (import ./aliases.nix lib) else prev: {};
 
   writers = with lib; rec {
   # Base implementation for non-compiled executables.

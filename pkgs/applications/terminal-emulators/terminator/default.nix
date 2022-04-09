@@ -9,6 +9,7 @@
 , libnotify
 , wrapGAppsHook
 , vte
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -61,6 +62,8 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
   meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";

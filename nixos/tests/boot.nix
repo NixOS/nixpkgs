@@ -38,7 +38,6 @@ let
       } // extraConfig);
     in
       makeTest {
-        inherit iso;
         name = "boot-" + name;
         nodes = { };
         testScript =

@@ -11,8 +11,7 @@
 with lib;
 
 mkDerivation rec {
-
-  name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
+  pname = "litecoin" + optionalString (!withGui) "d";
   version = "0.18.1";
 
   src = fetchFromGitHub {

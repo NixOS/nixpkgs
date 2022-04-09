@@ -57,6 +57,7 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
+    sed -i '/tensorboardX/d' requirements.txt
   '';
 
   nativeBuildInputs = with python.pkgs; [
@@ -84,7 +85,6 @@ python.pkgs.buildPythonApplication rec {
     pyworld
     scipy
     soundfile
-    tensorboardx
     tensorflow
     torchaudio-bin
     tqdm

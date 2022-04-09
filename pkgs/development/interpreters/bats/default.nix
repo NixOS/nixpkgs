@@ -1,4 +1,4 @@
-{ resholvePackage
+{ resholve
 , lib
 , stdenv
 , fetchFromGitHub
@@ -10,7 +10,7 @@
 , doInstallCheck ? true
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "bats";
   version = "1.6.0";
 

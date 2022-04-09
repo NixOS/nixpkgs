@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rRYPweqPGeMxoWoUp589ZD2BOmlTS6lhHSyA3BBDna0=";
+    sha256 = "sha256-YNRJ+BQsdC23YPTAvjkSG8jZvoVVVdeEwlLerKHO0/U=";
   };
 
   postPatch = ''
@@ -59,6 +59,15 @@ buildPythonPackage rec {
     "test_request_headers"
     "test_request_error"
     "test_request_basic"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # E MemoryError: Cannot allocate write+execute memory for ffi.callback().
+    # You might be running on a system that prevents this.
+    # For more information, see https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "test_configure_mtls_channel_with_callback"
+    "test_configure_mtls_channel_with_metadata"
+    "TestDecryptPrivateKey"
+    "TestMakeMutualTlsHttp"
+    "TestMutualTlsAdapter"
   ];
 
   meta = with lib; {

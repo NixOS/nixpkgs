@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
   preConfigure = ''
     mkdir openssl
-    ln -s ${openssl.out}/lib openssl
+    ln -s ${lib.getLib openssl}/lib openssl
     ln -s ${openssl.bin}/bin openssl
     ln -s ${openssl.dev}/include openssl
     export SSL_PREFIX=$(realpath openssl)

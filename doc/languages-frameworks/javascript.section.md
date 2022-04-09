@@ -85,7 +85,7 @@ you will still need to commit the modified version of the lock files, but at lea
 
 each tool has an abstraction to just build the node_modules (dependencies) directory. you can always use the stdenv.mkDerivation with the node_modules to build the package (symlink the node_modules directory and then use the package build command). the node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. mkYarnModules to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory
 
-## javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
+## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
 The `pkgs/development/node-packages` folder contains a generated collection of
 [NPM packages](https://npmjs.com/) that can be installed with the Nix package
@@ -121,12 +121,14 @@ requires `node-gyp-build`, so [we override](https://github.com/NixOS/nixpkgs/blo
     };
 ```
 
+### Adding and Updating Javascript packages in nixpkgs
+
 To add a package from NPM to nixpkgs:
 
 1. Modify `pkgs/development/node-packages/node-packages.json` to add, update
     or remove package entries to have it included in `nodePackages` and
     `nodePackages_latest`.
-2. Run the script: `cd pkgs/development/node-packages && ./generate.sh`.
+2. Run the script: `./pkgs/development/node-packages/generate.sh`.
 3. Build your new package to test your changes:
     `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
     To build against the latest stable Current Node.js version (e.g. 14.x):
@@ -136,6 +138,26 @@ To add a package from NPM to nixpkgs:
 For more information about the generation process, consult the
 [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix`
 tool.
+
+To update NPM packages in nixpkgs, run the same `generate.sh` script:
+
+```sh
+./pkgs/development/node-packages/generate.sh
+```
+
+#### Git protocol error
+
+Some packages may have Git dependencies from GitHub specified with `git://`.
+GitHub has
+[disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git),
+so you may see the following error when running the generate script:
+`The unauthenticated git protocol on port 9418 is no longer supported`.
+
+Use the following Git configuration to resolve the issue:
+
+```sh
+git config --global url."https://github.com/".insteadOf git://github.com/
+```
 
 ## Tool specific instructions {#javascript-tool-specific}
 

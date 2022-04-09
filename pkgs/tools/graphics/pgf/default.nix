@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vfm12cfq3an3xg0679bcwdmjq2x1bbij1iwsmm60hwmrm3zvab0";
   };
 
-  buildInputs = [ autoconf automake libtool dos2unix libpgf freeimage doxygen ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool dos2unix libpgf freeimage doxygen ];
 
   patchPhase = ''
       sed 1i'#include <inttypes.h>' -i src/PGF.cpp

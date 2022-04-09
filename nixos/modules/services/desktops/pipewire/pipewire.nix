@@ -116,6 +116,16 @@ in {
         };
       };
 
+      audio = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          # this is for backwards compatibility
+          default = cfg.alsa.enable || cfg.jack.enable || cfg.pulse.enable;
+          defaultText = lib.literalExpression "config.services.pipewire.alsa.enable || config.services.pipewire.jack.enable || config.services.pipewire.pulse.enable";
+          description = "Whether to use PipeWire as the primary sound server";
+        };
+      };
+
       alsa = {
         enable = mkEnableOption "ALSA support";
         support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
@@ -152,12 +162,17 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.pulse.enable -> !config.hardware.pulseaudio.enable;
-        message = "PipeWire based PulseAudio server emulation replaces PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
+        assertion = cfg.audio.enable -> !config.hardware.pulseaudio.enable;
+        message = "Using PipeWire as the sound server conflicts with PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
       }
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
         message = "PipeWire based JACK emulation doesn't use the JACK service. This option requires `services.jack.jackd.enable` to be set to false";
+      }
+      {
+        # JACK intentionally not checked, as PW-on-JACK setups are a thing that some people may want
+        assertion = (cfg.alsa.enable || cfg.pulse.enable) -> cfg.audio.enable;
+        message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Set `services.pipewire.audio.enable` to true.";
       }
     ];
 

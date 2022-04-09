@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "types-paramiko";
-  version = "2.8.16";
+  version = "2.8.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HWkCWoa5509G2OHyPFijb5RVORAvE1tQEgL7myxP0SI=";
+    sha256 = "sha256-1toFPkau9cYpvE6lvatWZwhlNerg/P2N6EBpQ7g00uY=";
   };
 
   pythonImportsCheck = [

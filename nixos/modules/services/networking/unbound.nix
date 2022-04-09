@@ -62,6 +62,7 @@ in {
       };
 
       stateDir = mkOption {
+        type = types.path;
         default = "/var/lib/unbound";
         description = "Directory holding all state for unbound to run.";
       };

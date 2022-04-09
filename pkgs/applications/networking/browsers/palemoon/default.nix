@@ -31,6 +31,8 @@
 , zip
 , zlib
 , withGTK3 ? true, gtk3, gtk2
+, testVersion
+, palemoon
 }:
 
 # Only specific GCC versions are supported with branding
@@ -44,12 +46,12 @@ assert with lib.strings; (
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.4";
+  version = "29.4.5.1";
 
   src = fetchzip {
     name = "${pname}-${version}";
     url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
-    sha256 = "sha256-0R0IJd4rd7NqnxQxkHSx10cNlwECqpKgJnlfYAMx4wc=";
+    sha256 = "sha256-IC7E88dECAz2diVLEEdjMltpNMBhPTlPvbz05BniBMI=";
   };
 
   nativeBuildInputs = [
@@ -194,18 +196,23 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
-  passthru.updateScript = writeScript "update-${pname}" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl libxml2
+  passthru = {
+    updateScript = writeScript "update-${pname}" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
 
-    set -eu -o pipefail
+      set -eu -o pipefail
 
-    # Only release note announcement == finalized release
-    version="$(
-      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
-      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
-      sed 's/v\(\S*\).*/\1/'
-    )"
-    update-source-version ${pname} "$version"
-  '';
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+      update-source-version ${pname} "$version"
+    '';
+    tests.version = testVersion {
+      package = palemoon;
+    };
+  };
 }

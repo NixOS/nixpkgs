@@ -9,14 +9,23 @@
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
-  "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
-  "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
-
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
 
+  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
+  "wireguard-indicator@atareao.es" = "wireguard-indicator";
+
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
+  # ####### GNOME 41 #######
+
+  "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
+  "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
 
   "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
   "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
@@ -30,10 +39,6 @@
   "ShutdownTimer@neumann" = null;
   "shutdown-timer-gnome-shell-extension" = "shutdowntimer-2";
   "ShutdownTimer@deminder" = "shutdowntimer";
-
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
 
   # ####### GNOME 40 #######
 
@@ -49,11 +54,11 @@
   "panel-date-format@keiii.github.com" = "panel-date-format";
   "panel-date-format@atareao.es" = "panel-date-format-2";
 
-  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
-  "wireguard-indicator@atareao.es" = "wireguard-indicator";
-
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
+
+  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
+  "volume_scroller@noskoski" = "volume-scroller-2";
 
   # ####### GNOME 3.38 #######
 

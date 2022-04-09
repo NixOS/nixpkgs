@@ -117,7 +117,7 @@ in
     '';
   };
 
-  config = lib.mkIf (!config.system.disableInstallerTools) {
+  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on

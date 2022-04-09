@@ -1,7 +1,7 @@
 import ./make-test-python.nix {
   name = "systemd-confinement";
 
-  machine = { pkgs, lib, ... }: let
+  nodes.machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
       #!${pkgs.runtimeShell}
       export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}

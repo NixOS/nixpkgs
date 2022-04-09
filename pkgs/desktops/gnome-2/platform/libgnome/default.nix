@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pkg-config, glib, popt, zlib, libcanberra-gtk2
+{ lib, stdenv, fetchurl, pkg-config, glib, popt, zlib, libcanberra-gtk2
 , intltool, libbonobo, GConf, gnome_vfs, libtool, libogg
 }:
 
 stdenv.mkDerivation rec {
-  name = "libgnome-${minVer}.1";
-  minVer = "2.32";
+  pname = "libgnome";
+  version = "2.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgnome/${minVer}/${name}.tar.bz2";
+    url = "mirror://gnome/sources/libgnome/${lib.versions.majorMinor version}/libgnome-${version}.tar.bz2";
     sha256 = "197pnq8y0knqjhm2fg4j6hbqqm3qfzfnd0irhwxpk1b4hqb3kimj";
   };
 

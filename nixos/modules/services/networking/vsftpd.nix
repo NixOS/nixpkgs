@@ -153,6 +153,7 @@ in
 
       userlist = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = "See <option>userlistFile</option>.";
       };
 

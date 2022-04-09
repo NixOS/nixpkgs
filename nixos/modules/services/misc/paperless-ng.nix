@@ -214,6 +214,10 @@ in
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/paperless-ng qcluster";
         Restart = "on-failure";
+        # The `mbind` syscall is needed for running the classifier.
+        SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "mbind" ];
+        # Needs to talk to mail server for automated import rules
+        PrivateNetwork = false;
       };
       environment = env;
       wantedBy = [ "multi-user.target" ];
@@ -256,8 +260,6 @@ in
             '${cfg.passwordFile}' '${cfg.dataDir}/superuser-password'
         '';
         Type = "oneshot";
-        # Needs to talk to mail server for automated import rules
-        PrivateNetwork = false;
       };
     };
 

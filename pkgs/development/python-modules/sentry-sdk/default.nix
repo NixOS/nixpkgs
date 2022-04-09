@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.5.6";
+  version = "1.5.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    sha256 = "sha256-PxoxOeFdmmfpXBnGs9D5aKP6vlGKx9nPO3ngYuTa+Rs=";
+    sha256 = "sha256-28MkwQog+Abk1PSDPWbah650YATiGCBWaTbFO52KgzY=";
   };
 
   propagatedBuildInputs = [
@@ -126,6 +126,8 @@ buildPythonPackage rec {
     "tests/integrations/chalice/"
     # broken since rq-1.10.1: https://github.com/getsentry/sentry-python/issues/1274
     "tests/integrations/rq/"
+    # broken since pytest 7.0.1; AssertionError: previous item was not torn down properly
+    "tests/utils/test_contextvars.py"
   ];
 
   pythonImportsCheck = [

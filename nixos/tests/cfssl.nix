@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "cfssl";
 
-  machine = { config, lib, pkgs, ... }:
+  nodes.machine = { config, lib, pkgs, ... }:
   {
     networking.firewall.allowedTCPPorts = [ config.services.cfssl.port ];
 

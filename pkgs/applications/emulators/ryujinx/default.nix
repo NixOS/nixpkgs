@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.64"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.91"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "54bfaa125d9b6ae1be53ec431d40326fba51d0de";
-    sha256 = "0p8wmnm8sjx7wqb5z62mp8c3cwrv241ji3fawj2qgqx3k9jlb31i";
+    rev = "3f4fb8f73a6635dbdca9dd11738c3a793f53ac65";
+    sha256 = "1amky7a2rikl5sg8y0y6il0jjqwhjgxw0d2ivynfhmhz2v2ciwwi";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -63,6 +63,10 @@ buildDotnetModule rec {
   ];
 
   preInstall = ''
+    # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
+    mkdir -p $out/lib/sndio-6
+    ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
+
     # Ryujinx tries to use ffmpeg from PATH
     makeWrapperArgs+=(
       --suffix PATH : ${lib.makeBinPath [ ffmpeg ]}

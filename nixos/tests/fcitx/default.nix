@@ -5,7 +5,7 @@ import ../make-test-python.nix (
     # copy_from_host works only for store paths
     rec {
         name = "fcitx";
-        machine =
+        nodes.machine =
         {
           pkgs,
           ...

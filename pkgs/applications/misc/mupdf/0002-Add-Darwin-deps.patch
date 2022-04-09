@@ -1,0 +1,57 @@
+From 0f0ccfc01cfe72d96eafee57ec6c5107f09c7238 Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Wed, 9 Mar 2022 00:08:28 +0100
+Subject: [PATCH 2/2] Add Darwin deps
+
+---
+ Makerules | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/Makerules b/Makerules
+index 6d52cca..a6bd0ed 100644
+--- a/Makerules
++++ b/Makerules
+@@ -153,6 +153,40 @@ else ifeq ($(OS),MACOS)
+ 	  LIBCRYPTO_CFLAGS := $(shell pkg-config --cflags libcrypto) -DHAVE_LIBCRYPTO
+ 	  LIBCRYPTO_LIBS := $(shell pkg-config --libs libcrypto)
+     endif
++    # Required for mupdf-gl
++    ifeq ($(shell pkg-config --exists harfbuzz && echo yes),yes)
++          SYS_HARFBUZZ_CFLAGS := $(shell pkg-config --cflags harfbuzz)
++          SYS_HARFBUZZ_LIBS := $(shell pkg-config --libs harfbuzz)
++    endif
++    ifeq ($(shell pkg-config --exists libopenjp2 && echo yes),yes)
++          SYS_OPENJPEG_CFLAGS := $(shell pkg-config --cflags libopenjp2)
++          SYS_OPENJPEG_LIBS := $(shell pkg-config --libs libopenjp2)
++    endif
++    ifeq ($(shell pkg-config --exists freetype2 && echo yes),yes)
++          SYS_FREETYPE_CFLAGS := $(shell pkg-config --cflags freetype2)
++          SYS_FREETYPE_LIBS := $(shell pkg-config --libs freetype2)
++    endif
++    ifeq ($(shell pkg-config --exists gumbo && echo yes),yes)
++          SYS_GUMBO_CFLAGS := $(shell pkg-config --cflags gumbo)
++          SYS_GUMBO_LIBS := $(shell pkg-config --libs gumbo)
++    endif
++    # Required for mupdf-x11
++    HAVE_X11 := $(shell pkg-config --exists x11 xext && echo yes)
++    ifeq ($(HAVE_X11),yes)
++          X11_CFLAGS := $(shell pkg-config --cflags x11 xext)
++          X11_LIBS := $(shell pkg-config --libs x11 xext)
++    endif
++    # Required for mupdf-x11-curl
++    HAVE_SYS_CURL := $(shell pkg-config --exists libcurl && echo yes)
++    ifeq ($(HAVE_SYS_CURL),yes)
++          SYS_CURL_CFLAGS := $(shell pkg-config --cflags libcurl)
++          SYS_CURL_LIBS := $(shell pkg-config --libs libcurl)
++    endif
++    HAVE_PTHREAD := yes
++    ifeq ($(HAVE_PTHREAD),yes)
++          PTHREAD_CFLAGS :=
++          PTHREAD_LIBS := -lpthread
++    endif
+   endif
+ 
+ else ifeq ($(OS),Linux)
+-- 
+2.17.2 (Apple Git-113)
+

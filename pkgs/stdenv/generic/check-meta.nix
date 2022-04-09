@@ -240,7 +240,6 @@ let
     outputsToInstall = listOf str;
     position = str;
     available = bool;
-    repositories = attrsOf str;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;

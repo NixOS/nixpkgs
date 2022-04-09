@@ -5,6 +5,7 @@
 , runCommand
 , cmake
 , llvm
+, lit
 , clang-unwrapped
 , perl
 , pkg-config
@@ -25,16 +26,27 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
-    ./fix-find-tool.patch
+    ./run-lit-directly.patch
   ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake perl pkg-config clang-unwrapped ];
+  nativeBuildInputs = [ cmake perl pkg-config lit ];
   buildInputs = [ llvm ];
 
+  # Unsup:Pass:XFail:Fail
+  # 26:267:16:8
+  doCheck = false;
+  checkTarget = "check-openmp";
+
+  preCheck = ''
+    patchShebangs ../tools/archer/tests/deflake.bash
+  '';
+
   cmakeFlags = [
-    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL currently fails
+    "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
+    "-DOPT_TOOL=${llvm}/bin/opt"
+    "-DLINK_TOOL=${llvm}/bin/llvm-link"
   ];
 
   meta = llvm_meta // {
@@ -50,6 +62,5 @@ stdenv.mkDerivation rec {
     # "All of the code is dual licensed under the MIT license and the UIUC
     # License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
-    broken = true; # TODO: gnu-install-dirs.patch fails to apply
   };
 }

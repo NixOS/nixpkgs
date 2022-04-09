@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     rm -r libraries/*/.libs
     rm -r contrib/slapd-modules/passwd/*/.libs
     for f in $out/lib/libldap.la $out/lib/libldap_r.la; do
-      substituteInPlace "$f" --replace '-lssl' '-L${openssl.out}/lib -lssl'
+      substituteInPlace "$f" --replace '-lssl' '-L${lib.getLib openssl}/lib -lssl'
   '' + lib.optionalString withCyrusSasl ''
       substituteInPlace "$f" --replace '-lsasl2' '-L${cyrus_sasl.out}/lib -lsasl2'
   '' + ''

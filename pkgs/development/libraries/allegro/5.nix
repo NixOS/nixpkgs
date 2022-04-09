@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JdnzEW+qAhAljR+WfmgE3P9xeR2HvjS64tFgCC0tNA0=";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     texinfo libXext xorgproto libX11 libXpm libXt libXcursor
-    alsa-lib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    alsa-lib zlib libpng libvorbis libXxf86dga libXxf86misc
     libXxf86vm openal libGLU libGL
     libjpeg flac
     libXi libXfixes

@@ -1,0 +1,14 @@
+diff -ru source/buildlib/template.pc.in source-fixed/buildlib/template.pc.in
+--- source/buildlib/template.pc.in	1970-01-01 01:00:01.000000000 +0100
++++ source-fixed/buildlib/template.pc.in	2022-03-30 22:29:12.988625941 +0200
+@@ -1,7 +1,6 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++exec_prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@
+ 
+ Name: lib@PC_LIB_NAME@
+ Description: RDMA Core Userspace Library

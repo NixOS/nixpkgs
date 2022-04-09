@@ -20,7 +20,7 @@ Below is a short excerpt of some points in there:
   ```
   (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
 
-  (Motivation for change. Additional information.)
+  (Motivation for change. Link to release notes. Additional information.)
   ```
 
   For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
@@ -29,6 +29,7 @@ Below is a short excerpt of some points in there:
 
   * nginx: init at 2.0.1
   * firefox: 54.0.1 -> 55.0
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
   * nixos/hydra: add bazBaz option
 
     Dual baz behavior is needed to do foo.
@@ -51,6 +52,46 @@ See the nixpkgs manual for more details on [standard meta-attributes](https://ni
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
 
 For package version upgrades and such a one-line commit message is usually sufficient.
+
+## Rebasing between branches (i.e. from master to staging)
+
+From time to time, changes between branches must be rebased, for example, if the
+number of new rebuilds they would cause is too large for the target branch. When
+rebasing, care must be taken to include only the intended changes, otherwise
+many CODEOWNERS will be inadvertently requested for review.  To achieve this,
+rebasing should not be performed directly on the target branch, but on the merge
+base between the current and target branch.
+
+In the following example, we see a rebase from `master` onto the merge base
+between `master` and `staging`, so that a change can eventually be retargeted to
+`staging`. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
+while the `origin` remote is used for the remote you are pushing to.
+
+
+```console
+# Find the common base between two branches
+common=$(git merge-base upstream/master upstream/staging)
+# Find the common base between your feature branch and master
+commits=$(git merge-base $(git branch --show-current) upstream/master)
+# Rebase all commits onto the common base
+git rebase --onto=$common $commits
+# Force push your changes
+git push origin $(git branch --show-current) --force-with-lease
+```
+
+Then change the base branch in the GitHub PR using the *Edit* button in the upper
+right corner, and switch from `master` to `staging`. After the PR has been
+retargeted it might be necessary to do a final rebase onto the target branch, to
+resolve any outstanding merge conflicts.
+
+```console
+# Rebase onto target branch
+git rebase upstream/staging
+# Review and fixup possible conflicts
+git status
+# Force push your changes
+git push origin $(git branch --show-current) --force-with-lease
+```
 
 ## Backporting changes
 

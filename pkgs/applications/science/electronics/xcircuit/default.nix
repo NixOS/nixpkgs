@@ -1,16 +1,12 @@
 { lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config
 , cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
-let
+stdenv.mkDerivation rec {
   version = "3.10.12";
-  name = "xcircuit-${version}";
-  inherit (lib) getBin;
-
-in stdenv.mkDerivation {
-  inherit name version;
+  pname = "xcircuit";
 
   src = fetchurl {
-    url = "http://opencircuitdesign.com/xcircuit/archive/${name}.tgz";
+    url = "http://opencircuitdesign.com/xcircuit/archive/xcircuit-${version}.tgz";
     sha256 = "1h1ywc3mr7plvwnhdii2zgnnv5ih2nhyl4qbdjpi83dq0aq1s2mn";
   };
 
@@ -20,7 +16,7 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
-    "--with-ngspice=${getBin ngspice}/bin/ngspice"
+    "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
   ];
 
   buildInputs = with xorg; [ cairo ghostscript libSM libXt libICE libX11 libXpm tcl tk zlib ];

@@ -119,7 +119,7 @@ in
 
   meta.maintainers = [ pkgs.lib.maintainers.tomberek ];
 
-  machine = { config, pkgs, nodes, ... }: {
+  nodes.machine = { config, pkgs, nodes, ... }: {
     # buildsrht needs space
     virtualisation.diskSize = 4 * 1024;
     virtualisation.memorySize = 2 * 1024;

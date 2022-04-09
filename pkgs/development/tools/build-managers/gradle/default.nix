@@ -96,9 +96,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
-    version = "7.4";
+    version = "7.4.2";
     nativeVersion = "0.22-milestone-23";
-    sha256 = "0d56bgd2m64pzmycjk29hwdlhbpn1kkm7fjik1sibn6vslw71hlc";
+    sha256 = "1nkz9gn1vb5l94dkf9yzb1j3hkll5x2vrl5p320msn2fk089pr19";
     defaultJava = jdk17;
     # Gradle 7 ships some binaries that are only available for some platforms
     # See https://github.com/gradle/native-platform#supported-platforms

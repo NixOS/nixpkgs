@@ -220,9 +220,7 @@ in
       ] config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
-      programs.evince.package = pkgs.pantheon.evince;
       programs.file-roller.enable = mkDefault true;
-      programs.file-roller.package = pkgs.pantheon.file-roller;
 
       # Settings from elementary-default-settings
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";

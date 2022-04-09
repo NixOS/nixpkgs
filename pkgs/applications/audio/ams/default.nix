@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ams";
+  pname = "ams";
   version = "unstable-2019-04-27";
 
   src = fetchgit {

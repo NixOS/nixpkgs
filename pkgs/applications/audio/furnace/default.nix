@@ -1,8 +1,9 @@
 { stdenv
 , lib
-, nix-update-script
+, gitUpdater
+, testVersion
+, furnace
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , makeWrapper
@@ -18,23 +19,15 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-BcaPQuDFkAaxFQKwoI6xdSWcyHo5VsqZcwf++JISqRs=";
+    sha256 = "103ymd3wa1sfsr6qg15vpcs53j350i7zidv3azlf7cynk6k28xim";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "0001-furnace-fix-wrong-include-path.patch";
-      url = "https://github.com/tildearrow/furnace/commit/456db22f9d9f0ed40d74fe50dde492e69e901fcc.patch";
-      sha256 = "17ikb1z9ldm7kdj00m4swsrq1qx94vlzhc6h020x3ryzwnglc8d3";
-    })
-  ];
 
   postPatch = ''
     # rtmidi is not used yet
@@ -85,8 +78,16 @@ stdenv.mkDerivation rec {
     cp -r ../demos $out/share/furnace/
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+  passthru = {
+    updateScript = gitUpdater {
+      inherit pname version;
+      rev-prefix = "v";
+    };
+    tests.version = testVersion {
+      package = furnace;
+      # The command always exits with code 1
+      command = "(furnace --version || [ $? -eq 1 ])";
+    };
   };
 
   meta = with lib; {

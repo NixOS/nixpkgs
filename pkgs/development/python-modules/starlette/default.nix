@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qT/w7r8PsrauLoBolwCGpxiwhDZo3z6hIqKVXeY5yqA=";
+    sha256 = "sha256-N2X9pjCiQ6TKRcm6VlyybLLyCdjQuIZHu1vK99gY8rY=";
   };
 
   postPatch = ''

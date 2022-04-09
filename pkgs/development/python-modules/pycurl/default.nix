@@ -7,18 +7,17 @@
 , openssl
 , bottle
 , pytestCheckHook
-, nose
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.0";
+  version = "7.45.1";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UDbFPG9BBukWDQU6S6o0M6AhX7M4YHPiESc8VqOpXz0=";
+    sha256 = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
   };
 
   preConfigure = ''
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     curl
-    openssl.out
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   checkInputs = [
     bottle
     pytestCheckHook
-    nose
     flaky
   ];
 
@@ -76,9 +74,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://pycurl.sourceforge.net/";
-    description = "Python wrapper for libcurl";
-    license = licenses.lgpl2Only;
+    homepage = "http://pycurl.io/";
+    description = "Python Interface To The cURL library";
+    license = with licenses; [ lgpl2Only mit ];
     maintainers = with maintainers; [];
   };
 }

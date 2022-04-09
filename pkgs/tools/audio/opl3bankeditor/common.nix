@@ -9,7 +9,7 @@
 , pkg-config
 , qttools
 , qtbase
-, qwt
+, qwt6_1
 , rtaudio
 , rtmidi
 }:
@@ -43,7 +43,7 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase
-    qwt
+    qwt6_1
     rtaudio
     rtmidi
   ];
@@ -52,7 +52,7 @@ mkDerivation rec {
     mkdir $out/{bin,Applications}
     mv "${binname}.app" $out/Applications/
 
-    install_name_tool -change {,${qwt}/lib/}libqwt.6.dylib "$out/Applications/${binname}.app/Contents/MacOS/${binname}"
+    install_name_tool -change {,${qwt6_1}/lib/}libqwt.6.dylib "$out/Applications/${binname}.app/Contents/MacOS/${binname}"
 
     ln -s "$out/Applications/${binname}.app/Contents/MacOS/${binname}" $out/bin/${mainProgram}
   '';

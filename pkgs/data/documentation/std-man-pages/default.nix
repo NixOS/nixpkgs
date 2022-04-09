@@ -1,10 +1,11 @@
 { stdenv, lib, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "std-man-pages-4.4.0";
+stdenv.mkDerivation rec {
+  pname = "std-man-pages";
+  version = "4.4.0";
 
   src = fetchurl {
-    url = "mirror://gcc/libstdc++/doxygen/libstdc++-man.4.4.0.tar.bz2";
+    url = "mirror://gcc/libstdc++/doxygen/libstdc++-man.${version}.tar.bz2";
     sha256 = "0153py77ll759jacq41dp2z2ksr08pdcfic0rwjd6pr84dk89y9v";
   };
 

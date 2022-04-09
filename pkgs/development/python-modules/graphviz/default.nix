@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -57,6 +58,9 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
+
+  # Too many failures due to attempting to connect to com.apple.fonts daemon
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";

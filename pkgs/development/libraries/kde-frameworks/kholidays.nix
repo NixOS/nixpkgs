@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kholidays";
+  pname = "kholidays";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = with lib.maintainers; [ bkchr ];

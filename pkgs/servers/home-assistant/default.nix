@@ -30,6 +30,7 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+    (mkOverride "voluptuous" "0.12.2" "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=")
 
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
@@ -56,6 +57,19 @@ let
         doCheck = false; # requires aiohttp>=1.0.0
       });
     })
+
+    (self: super: {
+      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.3";
+        src = fetchFromGitHub {
+          owner = "Noltari";
+          repo = "aioairzone";
+          rev = version;
+          hash = "sha256-vy6NqtlWv2El259rC+Nm0gs/rsY+s8xe7Z+wXvT1Ing=";
+        };
+      });
+    })
+
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -164,7 +178,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.3.5";
+  hassVersion = "2022.4.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -182,7 +196,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-VXE2zQH/HHhogo5qjneC0zlo9892wgGN1qd3ZFKfyqw=";
+    hash = "sha256-b/YwcbcQuRIue4fr4+yF2EEXLvmnI7e3xfyz52flwJw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -202,8 +216,8 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "jinja2"
       "pip"
-      "PyJWT"
       "requests"
       "yarl"
     ];
@@ -306,6 +320,8 @@ in python.pkgs.buildPythonApplication rec {
     "test_merge"
     # Tests are flaky
     "test_config_platform_valid"
+    # Test requires pylint>=2.13.0
+    "test_invalid_discovery_info"
   ];
 
   preCheck = ''

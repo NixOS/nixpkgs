@@ -9,6 +9,8 @@ let
     RAILS_ENV = "production";
     NODE_ENV = "production";
 
+    LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+
     # mastodon-web concurrency.
     WEB_CONCURRENCY = toString cfg.webProcesses;
     MAX_THREADS = toString cfg.webThreads;
@@ -121,7 +123,7 @@ in {
 
           Make sure that websockets are forwarded properly. You might want to set up caching
           of some requests. Take a look at mastodon's provided nginx configuration at
-          <code>https://github.com/tootsuite/mastodon/blob/master/dist/nginx.conf</code>.
+          <code>https://github.com/mastodon/mastodon/blob/master/dist/nginx.conf</code>.
         '';
         type = lib.types.bool;
         default = false;

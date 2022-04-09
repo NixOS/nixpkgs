@@ -13,7 +13,6 @@
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, trustme
 , urllib3
 }:
 
@@ -54,7 +53,6 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    trustme
   ];
 
   # AttributeError: 'KeywordMapping' object has no attribute 'get'

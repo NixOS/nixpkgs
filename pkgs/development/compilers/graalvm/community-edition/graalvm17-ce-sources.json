@@ -1,0 +1,56 @@
+{
+  "darwin-aarch64": {
+    "graalvm-ce|java17|22.2.0-dev-20220401_1942": {
+      "sha256": "f0409c59adbce62da7be46ab7d0e01abe5c080ef97d0b555e6c773f94dbfdecf",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220401_1942/graalvm-ce-java17-darwin-aarch64-dev.tar.gz"
+    },
+    "native-image-installable-svm|java17|22.2.0-dev-20220401_1942": {
+      "sha256": "3770dc4810d7ebae8f9ca2212e91112629096a964d3caea1667b0aaf5f70c1e0",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220401_1942/native-image-installable-svm-java17-darwin-aarch64-dev.jar"
+    }
+  },
+  "darwin-amd64": {
+    "graalvm-ce|java17|22.0.0.2": {
+      "sha256": "d54af9d1f4d0d351827395a714ed84d2489b023b74a9c13a431cc9d31d1e8f9a",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java17-darwin-amd64-22.0.0.2.tar.gz"
+    },
+    "native-image-installable-svm|java17|22.0.0.2": {
+      "sha256": "007fa742cd139d447f83d776b6d78e717c9df11d56a61061a5937547c20028b7",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java17-darwin-amd64-22.0.0.2.jar"
+    },
+    "python-installable-svm|java17|22.0.0.2": {
+      "sha256": "af887b0304d5ec98fab1be2cd1fca2aa3b10e84e823142a7f274560b1e0ea7c1",
+      "url": "https://github.com/graalvm/graalpython/releases/download/vm-22.0.0.2/python-installable-svm-java17-darwin-amd64-22.0.0.2.jar"
+    },
+    "ruby-installable-svm|java17|22.0.0.2": {
+      "sha256": "fc5eb6f833136ae3fda61f46fe0af66a8454ca2f803ca35eaff7336521cb468d",
+      "url": "https://github.com/oracle/truffleruby/releases/download/vm-22.0.0.2/ruby-installable-svm-java17-darwin-amd64-22.0.0.2.jar"
+    },
+    "wasm-installable-svm|java17|22.0.0.2": {
+      "sha256": "b76e6d872ce07ca9facd5b997dbb6e557ba72aa369ddd5f1664431bd11b98796",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java17-darwin-amd64-22.0.0.2.jar"
+    }
+  },
+  "linux-amd64": {
+    "graalvm-ce|java17|22.0.0.2": {
+      "sha256": "4f743e0ed3d974b7d619ca2ed6014554e8c12e5ebbb38b9bc9e820b182169bd4",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java17-linux-amd64-22.0.0.2.tar.gz"
+    },
+    "native-image-installable-svm|java17|22.0.0.2": {
+      "sha256": "8c25f650d58c2649c97061cb806dfaec9e685d5d2b80afc7cf72fe61d6891831",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java17-linux-amd64-22.0.0.2.jar"
+    },
+    "python-installable-svm|java17|22.0.0.2": {
+      "sha256": "b3b78a15bd29b4eaaf0f2607e21181ca2a5b41b38ba43a3ff2656c2f6effda8a",
+      "url": "https://github.com/graalvm/graalpython/releases/download/vm-22.0.0.2/python-installable-svm-java17-linux-amd64-22.0.0.2.jar"
+    },
+    "ruby-installable-svm|java17|22.0.0.2": {
+      "sha256": "d86c9ad50cbed980fa69d69b2eccd47d31880d8c55553483f59ce9eda15628bd",
+      "url": "https://github.com/oracle/truffleruby/releases/download/vm-22.0.0.2/ruby-installable-svm-java17-linux-amd64-22.0.0.2.jar"
+    },
+    "wasm-installable-svm|java17|22.0.0.2": {
+      "sha256": "7f7e51e4a24384b3dd960c12ab9b05b1fea58a0457d6b80e3797228fab93c0bd",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java17-linux-amd64-22.0.0.2.jar"
+    }
+  }
+}

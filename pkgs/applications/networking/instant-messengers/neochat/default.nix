@@ -8,6 +8,7 @@
 , kconfig
 , kdbusaddons
 , ki18n
+, kio
 , kirigami2
 , kitemmodels
 , knotifications
@@ -16,23 +17,25 @@
 , libquotient
 , libsecret
 , olm
+, qcoro
 , qqc2-desktop-style
 , qtgraphicaleffects
 , qtkeychain
 , qtmultimedia
 , qtquickcontrols2
+, sonnet
 }:
 
 mkDerivation rec {
   pname = "neochat";
-  version = "1.2";
+  version = "22.02";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kpv7BY/qS0A3xFlYFhz1RRNwQVsyhOTHHGDbWRTTv1I=";
+    sha256 = "sha256-7EBnHuwpyJ/bGrCldZHWOwcnJWDIDaNWZXHkCYkOTjs=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
@@ -41,6 +44,7 @@ mkDerivation rec {
     cmark
     kconfig
     kdbusaddons
+    kio
     ki18n
     kirigami2
     kitemmodels
@@ -50,11 +54,13 @@ mkDerivation rec {
     libquotient
     libsecret
     olm
+    qcoro
     qtgraphicaleffects
     qtkeychain
     qtmultimedia
     qtquickcontrols2
     qqc2-desktop-style
+    sonnet
   ];
 
   meta = with lib; {

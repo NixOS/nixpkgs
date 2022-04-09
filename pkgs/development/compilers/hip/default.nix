@@ -31,13 +31,13 @@
 let
   hip = stdenv.mkDerivation rec {
     pname = "hip";
-    version = "4.5.2";
+    version = "5.0.2";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
       rev = "rocm-${version}";
-      sha256 = "sha256-AuA5ubRPywXaBBrjdHg5AT8rrVKULKog6Lh8jPaUcXY=";
+      hash = "sha256-w023vBLJaiFbRdvz9UfZLPasRjk3VqM9zwctCIJ5hGU=";
     };
 
     # - fix bash paths
@@ -68,14 +68,14 @@ let
           -e 's,`file,`${file}/bin/file,g' \
           -e 's,`readelf,`${binutils-unwrapped}/bin/readelf,' \
           -e 's, ar , ${binutils-unwrapped}/bin/ar ,g' \
-          -i bin/hipcc
+          -i bin/hipcc.pl
 
       sed -e 's,^\($HSA_PATH=\).*$,\1"${rocm-runtime}";,' \
           -e 's,^\($HIP_CLANG_PATH=\).*$,\1"${clang}/bin";,' \
           -e 's,^\($HIP_PLATFORM=\).*$,\1"amd";,' \
           -e 's,$HIP_CLANG_PATH/llc,${llvm}/bin/llc,' \
           -e 's, abs_path, Cwd::abs_path,' \
-          -i bin/hipconfig
+          -i bin/hipconfig.pl
 
       sed -e 's, abs_path, Cwd::abs_path,' -i bin/hipvars.pm
     '';
@@ -102,13 +102,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hip";
-  version = "4.5.2";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
     rev = "rocm-${version}";
-    sha256 = "WvOuQu/EN81Kwcoc3ZtGlhb996edQJ3OWFsmPuqeNXE=";
+    hash = "sha256-hhTwKG0wDpbIBI8S61AhdNldX+STO8C66xi2EzmJSBs=";
   };
 
   nativeBuildInputs = [ cmake python3 makeWrapper perl ];
@@ -135,6 +135,7 @@ stdenv.mkDerivation rec {
     "-DAMD_OPENCL_PATH=${rocm-opencl-runtime.src}"
     "-DHIP_COMMON_DIR=${hip}"
     "-DROCCLR_PATH=${rocclr}"
+    "-DHIP_VERSION_BUILD_ID=0"
   ];
 
   postInstall = ''

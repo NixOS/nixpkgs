@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchgit, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "carddav";
   version = "0.1-2014-02-26";
 
-  src = fetchgit {
-    url = "git://github.com/ljanyst/carddav-util";
+  src = fetchFromGitHub {
+    owner = "ljanyst";
+    repo = "carddav-util";
     rev = "53b181faff5f154bcd180467dd04c0ce69405564";
-    sha256 = "0f0raffdy032wlnxfck6ky60r163nhqfbr311y4ry55l60s4497n";
+    sha256 = "sha256-9iRCNDC0FJ+JD2Hk5TC0w4QMjJ9mMtct5WIA35xTGTg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

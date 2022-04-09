@@ -30,14 +30,23 @@
 , systemd
 , udev
 , xdg-utils
+
+  # The 1Password polkit file requires a list of users for whom polkit
+  # integrations should be enabled. This should be a list of strings that
+  # correspond to usernames.
+, polkitPolicyOwners ? []
 }:
-stdenv.mkDerivation rec {
+let
+  # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.
+  policyOwners = lib.concatStringsSep " " (map (user: "unix-user:${user}") polkitPolicyOwners);
+
+in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.5.0";
+  version = "8.6.0";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "tnZr+qjUcJ9Fhk6RP8iwu+/JsvYSE03NHhBfhedyCTQ=";
+    sha256 = "AgmLbf2YHZr8McSIL5dxp5HxOC7gLrZWIopuA7aL0JI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -86,8 +95,12 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
+      '' + (lib.optionalString (polkitPolicyOwners != [ ])
+      ''
       # Polkit file
-      install -Dm 0644 -t $out/share/polkit-1/actions com.1password.1Password.policy
+        mkdir -p $out/share/polkit-1/actions
+        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
+        '') + ''
 
       # Icons
       cp -a resources/icons $out/share

@@ -28,7 +28,7 @@ import ./make-test-python.nix (
   {
     name = "systemd-machinectl";
 
-    machine = { lib, ... }: {
+    nodes.machine = { lib, ... }: {
       # use networkd to obtain systemd network setup
       networking.useNetworkd = true;
       networking.useDHCP = false;

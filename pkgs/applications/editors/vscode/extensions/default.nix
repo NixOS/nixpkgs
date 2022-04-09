@@ -5,6 +5,7 @@
 , vscode-utils
 , asciidoctor
 , nodePackages
+, python3Packages
 , jdk
 , llvmPackages_8
 , nixpkgs-fmt
@@ -1313,6 +1314,33 @@ let
         };
       };
 
+      kddejong.vscode-cfn-lint = let
+        inherit (python3Packages) cfn-lint;
+      in buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-cfn-lint";
+          publisher = "kddejong";
+          version = "0.21.0";
+          sha256 = "sha256-IueXiN+077tiecAsVCzgYksWYTs00mZv6XJVMtRJ/PQ=";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [ cfn-lint ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
+        '';
+
+        meta = with lib; {
+          description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
+          homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
+          license = lib.licenses.asl20;
+          maintainers = with maintainers; [ wolfangaukang ];
+        };
+      };
+
       kubukoz.nickel-syntax = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nickel-syntax";
@@ -1368,6 +1396,18 @@ let
           publisher = "mhutchie";
           version = "1.30.0";
           sha256 = "sha256-sHeaMMr5hmQ0kAFZxxMiRk6f0mfjkg2XMnA4Gf+DHwA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      marp-team.marp-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "marp-vscode";
+          publisher = "marp-team";
+          version = "1.5.0";
+          sha256 = "0wqsj8rp58vl3nafkjvyw394h5j4jd7d24ra6hkvfpnlzrgv4yhs";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1676,6 +1716,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      richie5um2.snake-trail = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "snake-trail";
+          publisher = "richie5um2";
+          version = "0.6.0";
+          sha256 = "0wkpq9f48hplrgabb0v1ij6fc4sb8h4a93dagw4biprhnnm3qx49";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
@@ -2277,7 +2329,7 @@ let
   # then apply extension specific modifcations to packages.
 
   # overlays will be applied left to right, overrides should come after aliases.
-  overlays = lib.optionals (config.allowAliases or true) [ aliases ];
+  overlays = lib.optionals config.allowAliases [ aliases ];
 
   toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in

@@ -28,7 +28,6 @@
 , libwebp
 , appstream
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +62,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     geocode-glib
     gexiv2
     granite

@@ -1,69 +1,110 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl
+#!nix-shell -i bash -p curl jq
 
 set -eu
 
-if [[ $# -lt 1 ]]; then
-    echo \"usage: $0 version\" >&2
+release () {
+  local content="$1"
+  local version="$2"
+
+  jq -r '.releases[] | select(."release-version" == "'"$version"'")' <<< "$content"
+}
+
+release_files () {
+  local release="$1"
+  local type="$2"
+
+  jq -r '[."'"$type"'".files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
+}
+
+release_platform_attr () {
+  local release_files="$1"
+  local platform="$2"
+  local attr="$3"
+
+  jq -r '.[] | select(.rid == "'"$platform"'") | ."'"$attr"'"' <<< "$release_files"
+}
+
+platform_sources () {
+  local release_files="$1"
+  local platforms=( \
+    "x86_64-linux   linux-x64" \
+    "aarch64-linux  linux-arm64" \
+    "x86_64-darwin  osx-x64" \
+    "aarch64-darwin osx-arm64" \
+  )
+
+  echo "srcs = {"
+  for kv in "${platforms[@]}"; do
+    local nix_platform=${kv%% *}
+    local ms_platform=${kv##* }
+
+    local url=$(release_platform_attr "$release_files" "$ms_platform" url)
+    local hash=$(release_platform_attr "$release_files" "$ms_platform" hash)
+
+    [[ -z "$url" || -z "$hash" ]] && continue
+    echo "      $nix_platform = {
+        url     = \"$url\";
+        sha512  = \"$hash\";
+      }; "
+    done
+    echo "    };"
+}
+
+main () {
+  pname=$(basename "$0")
+  if [[ ! "$*" =~ ^.*[0-9]{1,}\.[0-9]{1,}.*$ ]]; then
+    echo "Usage: $pname [sem-versions]
+Get updated dotnet src (platform - url & sha512) expressions for specified versions
+
+Examples:
+  $pname 3.1.21 5.0.12    - specific x.y.z versions
+  $pname 3.1 5.0 6.0      - latest x.y versions
+" >&2
     exit 1
-fi
+  fi
 
-VERSION=$1
-HASHFILE=$(mktemp /tmp/dotnet.hashes.XXXXXXXX)
-trap "rm -f $HASHFILE" EXIT
+  for sem_version in "$@"; do
+    patch_specified=false
+    if [[ "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}$ ]]; then
+        patch_specified=true
+    elif [[ ! "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}$ ]]; then
+        continue
+    fi
 
-curl -L https://dotnetcli.blob.core.windows.net/dotnet/checksums/$VERSION-sha.txt -o $HASHFILE
+    major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
+    content=$(curl -sL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
+    major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-release"' <<< "$content")
 
-ASPNETCORE_VERSION=$(grep aspnetcore-runtime- $HASHFILE | grep -- -linux-x64.tar.gz | tail -n -1 | sed -e 's:.*aspnetcore-runtime-::' -e 's:-linux-x64.tar.gz.*$::' )
-ASPNETCORE_HASH_LINUX_X64=$(grep aspnetcore-runtime- $HASHFILE | grep -- -linux-x64.tar.gz | cut -d ' ' -f 1)
-ASPNETCORE_HASH_LINUX_ARM64=$(grep aspnetcore-runtime- $HASHFILE | grep -- -linux-arm64.tar.gz | cut -d ' ' -f 1)
-ASPNETCORE_HASH_OSX_X64=$(grep aspnetcore-runtime- $HASHFILE | grep -- -osx-x64.tar.gz | cut -d ' ' -f 1)
-ASPNETCORE_HASH_OSX_ARM64=$(grep aspnetcore-runtime- $HASHFILE | grep -- -osx-arm64.tar.gz | cut -d ' ' -f 1)
+    release_content=$(release "$content" "$major_minor_patch")
+    aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
+    runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
+    sdk_version=$(jq -r '.sdk.version' <<< "$release_content")
 
-RUNTIME_VERSION=$(grep dotnet-runtime- $HASHFILE | grep -- -linux-x64.tar.gz | tail -n -1 | sed -e 's:.*dotnet-runtime-::' -e 's:-linux-x64.tar.gz.*$::' )
-RUNTIME_HASH_LINUX_X64=$(grep dotnet-runtime- $HASHFILE | grep -- -linux-x64.tar.gz | cut -d ' ' -f 1)
-RUNTIME_HASH_LINUX_ARM64=$(grep dotnet-runtime- $HASHFILE | grep -- -linux-arm64.tar.gz | cut -d ' ' -f 1)
-RUNTIME_HASH_OSX_X64=$(grep dotnet-runtime- $HASHFILE | grep -- -osx-x64.tar.gz | cut -d ' ' -f 1)
-RUNTIME_HASH_OSX_ARM64=$(grep dotnet-runtime- $HASHFILE | grep -- -osx-arm64.tar.gz | cut -d ' ' -f 1)
+    aspnetcore_files="$(release_files "$release_content" "aspnetcore-runtime")"
+    runtime_files="$(release_files "$release_content" "runtime")"
+    sdk_files="$(release_files "$release_content" "sdk")"
 
-# dotnet-sdk has multiple entries in file, but the latest is the newest
-SDK_VERSION=$(grep dotnet-sdk- $HASHFILE | grep -- -linux-x64.tar.gz | tail -n -1 | sed -e 's:.*dotnet-sdk-::' -e 's:-linux-x64.tar.gz.*$::' )
-SDK_HASH_LINUX_X64=$(grep dotnet-sdk- $HASHFILE | grep -- -linux-x64.tar.gz | tail -n 1 | cut -d ' ' -f 1)
-SDK_HASH_LINUX_ARM64=$(grep dotnet-sdk- $HASHFILE | grep -- -linux-arm64.tar.gz | tail -n 1 | cut -d ' ' -f 1)
-SDK_HASH_OSX_X64=$(grep dotnet-sdk- $HASHFILE | grep -- -osx-x64.tar.gz | tail -n 1 | cut -d ' ' -f 1)
-SDK_HASH_OSX_ARM64=$(grep dotnet-sdk- $HASHFILE | grep -- -osx-arm64.tar.gz | tail -n 1 | cut -d ' ' -f 1)
-
-V=${VERSION/./_}
-MAJOR_MINOR_VERSION=${V%%.*}
-
-echo """
-  aspnetcore_${MAJOR_MINOR_VERSION} = buildAspNetCore {
-    version = \"${ASPNETCORE_VERSION}\";
-    sha512 = {
-      x86_64-linux = \"${ASPNETCORE_HASH_LINUX_X64}\";
-      aarch64-linux = \"${ASPNETCORE_HASH_LINUX_ARM64}\";
-      x86_64-darwin = \"${ASPNETCORE_HASH_OSX_X64}\";
-      aarch64-darwin = \"${ASPNETCORE_HASH_OSX_ARM64}\";
-    };
+    major_minor_underscore=${major_minor/./_}
+    channel_version=$(jq -r '."channel-version"' <<< "$content")
+    support_phase=$(jq -r '."support-phase"' <<< "$content")
+    echo "
+  # v$channel_version ($support_phase)
+  aspnetcore_$major_minor_underscore = buildAspNetCore {
+    version = \"${aspnetcore_version}\";
+    $(platform_sources "$aspnetcore_files")
   };
 
-  runtime_${MAJOR_MINOR_VERSION} = buildNetRuntime {
-    version = \"${RUNTIME_VERSION}\";
-    sha512 = {
-      x86_64-linux = \"${RUNTIME_HASH_LINUX_X64}\";
-      aarch64-linux = \"${RUNTIME_HASH_LINUX_ARM64}\";
-      x86_64-darwin = \"${RUNTIME_HASH_OSX_X64}\";
-      aarch64-darwin = \"${RUNTIME_HASH_OSX_ARM64}\";
-    };
+  runtime_$major_minor_underscore = buildNetRuntime {
+    version = \"${runtime_version}\";
+    $(platform_sources "$runtime_files")
   };
 
-  sdk_${MAJOR_MINOR_VERSION} = buildNetSdk {
-    version = \"${SDK_VERSION}\";
-    sha512 = {
-      x86_64-linux = \"${SDK_HASH_LINUX_X64}\";
-      aarch64-linux = \"${SDK_HASH_LINUX_ARM64}\";
-      x86_64-darwin = \"${SDK_HASH_OSX_X64}\";
-      aarch64-darwin = \"${SDK_HASH_OSX_ARM64}\";
-    };
-  };
-"""
+  sdk_$major_minor_underscore = buildNetSdk {
+    version = \"${sdk_version}\";
+    $(platform_sources "$sdk_files")
+  }; "
+  done
+}
+
+main "$@"

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "unstable-2022-01-11";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hardbyte";
     repo = pname;
-    rev = "2e24af08326ecd69fba9f02fed7b9c26f233c92b";
-    hash = "sha256-ZP5qtbjDtBZ2uT9DOSvSnfHyTlirr0oCEXhiLO1ydz0=";
+    rev = version;
+    hash = "sha256-/z7zBfVbO7x4UtzWOXolH2YrtYWgsvRLObWwz8sqOEc=";
   };
 
   propagatedBuildInputs = [
@@ -56,6 +56,9 @@ buildPythonPackage rec {
     # Tests require access socket
     "BasicTestUdpMulticastBusIPv4"
     "BasicTestUdpMulticastBusIPv6"
+    # pytest.approx is not supported in a boolean context (since pytest7)
+    "test_pack_unpack"
+    "test_receive"
   ];
 
   preCheck = ''

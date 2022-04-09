@@ -74,6 +74,9 @@ in with pkgs; rec {
         cp -d ${libc.out}/lib/libresolv*.so* $out/lib
         cp -d ${libc.out}/lib/crt?.o $out/lib
 
+        # Hacky compat with our current unpack-bootstrap-tools.sh
+        ln -s librt.so "$out"/lib/librt-dummy.so
+
         cp -rL ${libc.dev}/include $out
         chmod -R u+w "$out"
 

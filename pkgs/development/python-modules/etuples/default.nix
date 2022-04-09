@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "etuples";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "etuples";
-    rev = "35d760ceb64ec318f302a6e4d3a4a80feda97a9e";
-    sha256 = "sha256-CXD8MhsdWYAcG5WDVTT/A2HDtiO1xfQbrwlYVnxXpBU=";
+    rev = "v${version}";
+    sha256 = "sha256-gJNxrO2d/eF4t3bBlz/BwF+9eT1nKrVrTP3F6/dEN00=";
   };
 
   propagatedBuildInputs = [

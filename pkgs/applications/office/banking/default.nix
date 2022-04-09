@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchpatch
 , fetchFromGitLab
 , python3
 , appstream-glib
@@ -27,6 +27,15 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "1w5x9iczw5hb9bfdm1df37n8xhdrida1yfrd82k9l8hb1k4q3h9d";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://gitlab.com/tabos/banking/-/merge_requests/90
+    (fetchpatch {
+      url = "https://gitlab.com/tabos/banking/-/commit/c3cc9afc380fe666ae6e331aa8a97659c60397a4.patch";
+      sha256 = "r9n9l47XU4Tg4U5sfiFdGkbG8QB7O4ol9CB1ya06yOc=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs meson_post_install.py

@@ -68,7 +68,7 @@ let
       archived = date: throw "the provider has been archived by upstream on ${date}";
       removed = date: throw "removed from nixpkgs on ${date}";
     in
-    lib.optionalAttrs (config.allowAliases or false) {
+    lib.optionalAttrs config.allowAliases {
       arukas = archived "2022/01";
       chef = archived "2022/01";
       cherryservers = archived "2022/01";

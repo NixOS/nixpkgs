@@ -53,8 +53,8 @@ in
 , confDir
 , stateDir
 , storeDir
-}:
-stdenv.mkDerivation {
+}: let
+self = stdenv.mkDerivation {
   pname = "nix";
 
   version = "${version}${suffix}";
@@ -209,6 +209,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit aws-sdk-cpp boehmgc;
 
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version;  });
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; });
   };
-}
+};
+in self

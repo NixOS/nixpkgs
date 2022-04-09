@@ -11,7 +11,6 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gtk2
 , gtk3
 , libkrb5
 , libX11
@@ -110,7 +109,6 @@ stdenv.mkDerivation {
       gdk-pixbuf
       glib
       glibc
-      gtk2
       gtk3
       libkrb5
       mesa
@@ -190,7 +188,7 @@ stdenv.mkDerivation {
       ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
-  passthru.applicationName = "firefox";
+  passthru.binaryName = "firefox";
   passthru.libName = "firefox-bin-${version}";
   passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;

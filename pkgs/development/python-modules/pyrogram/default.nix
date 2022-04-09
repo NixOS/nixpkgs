@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyrogram";
-  version = "1.4.8";
+  version = "1.4.12";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "Pyrogram";
     inherit version;
-    hash = "sha256-mUJEV8DLYhXNvYiuiVDCfgMmZRDCNZuydngj9C9FvQU=";
+    hash = "sha256-rNGdWnZuhCU0Kg/CkeNjazKb76h8/VanZdF4yi0KWGU=";
   };
 
   propagatedBuildInputs = [

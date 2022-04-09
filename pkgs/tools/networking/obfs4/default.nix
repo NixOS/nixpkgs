@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.0.11";
 
   src = fetchgit {
-    url = meta.repositories.git;
+    url = "https://git.torproject.org/pluggable-transports/obfs4.git";
     rev = "refs/tags/${pname}proxy-${version}";
     sha256 = "sha256-VjJ/Pc1YjNB2iLnN/5CxuaxolcaR1IMWgoESMzOXU/g=";
   };
@@ -17,7 +17,6 @@ buildGoModule rec {
   meta = with lib; {
     description = "A pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
-    repositories.git = "https://git.torproject.org/pluggable-transports/obfs4.git";
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

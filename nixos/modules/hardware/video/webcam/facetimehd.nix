@@ -16,11 +16,6 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = singleton {
-      assertion = versionAtLeast kernelPackages.kernel.version "3.19";
-      message = "facetimehd is not supported for kernels older than 3.19";
-    };
-
     boot.kernelModules = [ "facetimehd" ];
 
     boot.blacklistedKernelModules = [ "bdc_pci" ];

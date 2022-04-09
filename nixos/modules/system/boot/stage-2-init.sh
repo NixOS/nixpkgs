@@ -12,10 +12,6 @@ for o in $(</proc/cmdline); do
             # Show each command.
             set -x
             ;;
-        resume=*)
-            set -- $(IFS==; echo $o)
-            resumeDevice=$2
-            ;;
     esac
 done
 
@@ -72,45 +68,11 @@ if [ -n "@readOnlyStore@" ]; then
 fi
 
 
-# Provide a /etc/mtab.
-install -m 0755 -d /etc
-test -e /etc/fstab || touch /etc/fstab # to shut up mount
-rm -f /etc/mtab* # not that we care about stale locks
-ln -s /proc/mounts /etc/mtab
-
-
-# More special file systems, initialise required directories.
-[ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
-install -m 01777 -d /tmp
-install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
-    /run/lock /home /bin # for the /bin/sh symlink
-
-
-# Miscellaneous boot time cleanup.
-rm -rf /var/run /var/lock
-rm -f /etc/{group,passwd,shadow}.lock
-
-
-# Also get rid of temporary GC roots.
-rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
-
-
-# For backwards compatibility, symlink /var/run to /run, and /var/lock
-# to /run/lock.
-ln -s /run /var/run
-ln -s /run/lock /var/lock
-
-
-# Clear the resume device.
-if test -n "$resumeDevice"; then
-    mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
-fi
-
-
 # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
 if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
     resolvconf -m 1000 -a host </etc/resolv.conf
 fi
+
 
 # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
 # Only at this point are all the necessary prerequisites ready for these commands.
@@ -127,27 +89,19 @@ else
 fi
 
 
+# Required by the activation script
+install -m 0755 -d /etc /etc/nixos
+install -m 01777 -d /tmp
+
+
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
 echo "running activation script..."
 $systemConfig/activate
 
 
-# Restore the system time from the hardware clock.  We do this after
-# running the activation script to be sure that /etc/localtime points
-# at the current time zone.
-if [ -e /dev/rtc ]; then
-    hwclock --hctosys
-fi
-
-
 # Record the boot configuration.
 ln -sfn "$systemConfig" /run/booted-system
-
-# Prevent the booted system from being garbage-collected. If it weren't
-# a gcroot, if we were running a different kernel, switched system,
-# and garbage collected all, we could not load kernel modules anymore.
-ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 
 
 # Run any user-specified commands.
@@ -167,10 +121,6 @@ exec 1>&$logOutFd 2>&$logErrFd
 exec {logOutFd}>&- {logErrFd}>&-
 
 
-# Start systemd.
+# Start systemd in a clean environment.
 echo "starting systemd..."
-
-PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
-    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive @systemdUnitPathEnvVar@ \
-    TZDIR=/etc/zoneinfo \
-    exec @systemdExecutable@
+exec @systemdExecutable@ "$@"

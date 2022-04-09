@@ -24,9 +24,9 @@ let
 
   # Sorted alphabetically
 
-  buildClion = { name, version, src, license, description, wmClass, ... }:
+  buildClion = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "CLion";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/clion/";
@@ -49,7 +49,7 @@ let
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
         (
-          cd $out/clion-${version}
+          cd $out/clion
           # bundled cmake does not find libc
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
@@ -62,9 +62,9 @@ let
       '';
     });
 
-  buildDataGrip = { name, version, src, license, description, wmClass, ... }:
+  buildDataGrip = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "DataGrip";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/datagrip/";
@@ -78,9 +78,9 @@ let
       };
     });
 
-  buildGoland = { name, version, src, license, description, wmClass, ... }:
+  buildGoland = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "Goland";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/go/";
@@ -106,9 +106,9 @@ let
       '';
     });
 
-  buildIdea = { name, version, src, license, description, wmClass, product, ... }:
+  buildIdea = { pname, version, src, license, description, wmClass, product, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk product;
+      inherit pname version src wmClass jdk product;
       productShort = "IDEA";
       extraLdPath = [ zlib ];
       extraWrapperArgs = [
@@ -129,9 +129,9 @@ let
       };
     });
 
-  buildMps = { name, version, src, license, description, wmClass, product, ... }:
+  buildMps = { pname, version, src, license, description, wmClass, product, ... }:
     (mkJetBrainsProduct rec {
-      inherit name version src wmClass jdk product;
+      inherit pname version src wmClass jdk product;
       productShort = "MPS";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/mps/";
@@ -146,9 +146,9 @@ let
       };
     });
 
-  buildPhpStorm = { name, version, src, license, description, wmClass, ... }:
+  buildPhpStorm = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "PhpStorm";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
@@ -162,9 +162,9 @@ let
       };
     });
 
-  buildPycharm = { name, version, src, license, description, wmClass, product, ... }:
+  buildPycharm = { pname, version, src, license, description, wmClass, product, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk product;
+      inherit pname version src wmClass jdk product;
       productShort = "PyCharm";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
@@ -186,9 +186,9 @@ let
       };
     });
 
-  buildRider = { name, version, src, license, description, wmClass, ... }:
+  buildRider = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "Rider";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
@@ -211,9 +211,9 @@ let
       '');
     });
 
-  buildRubyMine = { name, version, src, license, description, wmClass, ... }:
+  buildRubyMine = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "RubyMine";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/ruby/";
@@ -223,9 +223,9 @@ let
       };
     });
 
-  buildWebStorm = { name, version, src, license, description, wmClass, ... }:
+  buildWebStorm = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
+      inherit pname version src wmClass jdk;
       product = "WebStorm";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/webstorm/";
@@ -251,7 +251,7 @@ in
   # Sorted alphabetically
 
   clion = buildClion rec {
-    name = "clion-${version}";
+    pname = "clion";
     version = products.clion.version;
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = lib.licenses.unfree;
@@ -264,7 +264,7 @@ in
   };
 
   datagrip = buildDataGrip rec {
-    name = "datagrip-${version}";
+    pname = "datagrip";
     version = products.datagrip.version;
     description = "Your Swiss Army Knife for Databases and SQL";
     license = lib.licenses.unfree;
@@ -277,7 +277,7 @@ in
   };
 
   goland = buildGoland rec {
-    name = "goland-${version}";
+    pname = "goland";
     version = products.goland.version;
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
@@ -290,7 +290,7 @@ in
   };
 
   idea-community = buildIdea rec {
-    name = "idea-community-${version}";
+    pname = "idea-community";
     product = "IntelliJ IDEA CE";
     version = products.idea-community.version;
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
@@ -304,7 +304,7 @@ in
   };
 
   idea-ultimate = buildIdea rec {
-    name = "idea-ultimate-${version}";
+    pname = "idea-ultimate";
     product = "IntelliJ IDEA";
     version = products.idea-ultimate.version;
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
@@ -318,7 +318,7 @@ in
   };
 
   mps = buildMps rec {
-    name = "mps-${version}";
+    pname = "mps";
     product = "MPS ${products.mps.version-major-minor}";
     version = products.mps.version;
     description = "Create your own domain-specific language";
@@ -332,7 +332,7 @@ in
   };
 
   phpstorm = buildPhpStorm rec {
-    name = "phpstorm-${version}";
+    pname = "phpstorm";
     version = products.phpstorm.version;
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
@@ -345,7 +345,7 @@ in
   };
 
   pycharm-community = buildPycharm rec {
-    name = "pycharm-community-${version}";
+    pname = "pycharm-community";
     product = "PyCharm CE";
     version = products.pycharm-community.version;
     description = "PyCharm Community Edition";
@@ -359,7 +359,7 @@ in
   };
 
   pycharm-professional = buildPycharm rec {
-    name = "pycharm-professional-${version}";
+    pname = "pycharm-professional";
     product = "PyCharm";
     version = products.pycharm-professional.version;
     description = "PyCharm Professional Edition";
@@ -373,7 +373,7 @@ in
   };
 
   rider = buildRider rec {
-    name = "rider-${version}";
+    pname = "rider";
     version = products.rider.version;
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = lib.licenses.unfree;
@@ -386,7 +386,7 @@ in
   };
 
   ruby-mine = buildRubyMine rec {
-    name = "ruby-mine-${version}";
+    pname = "ruby-mine";
     version = products.ruby-mine.version;
     description = "The Most Intelligent Ruby and Rails IDE";
     license = lib.licenses.unfree;
@@ -399,7 +399,7 @@ in
   };
 
   webstorm = buildWebStorm rec {
-    name = "webstorm-${version}";
+    pname = "webstorm";
     version = products.webstorm.version;
     description = "Professional IDE for Web and JavaScript development";
     license = lib.licenses.unfree;

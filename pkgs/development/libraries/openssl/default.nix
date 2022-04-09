@@ -170,20 +170,6 @@ let
 
 in {
 
-  openssl_1_0_2 = common {
-    version = "1.0.2u";
-    sha256 = "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16";
-    patches = [
-      ./1.0.2/nix-ssl-cert-file.patch
-
-      (if stdenv.hostPlatform.isDarwin
-       then ./1.0.2/use-etc-ssl-certs-darwin.patch
-       else ./1.0.2/use-etc-ssl-certs.patch)
-    ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
-      ./1.0.2/darwin64-arm64.patch
-    ];
-    extraMeta.knownVulnerabilities = [ "Support for OpenSSL 1.0.2 ended with 2019." ];
-  };
 
   openssl_1_1 = common rec {
     version = "1.1.1n";

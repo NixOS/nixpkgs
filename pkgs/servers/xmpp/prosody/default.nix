@@ -72,17 +72,17 @@ stdenv.mkDerivation rec {
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       wrapProgram $out/bin/prosody \
-        --set LUA_PATH "$luaEnvPath" \
-        --set LUA_CPATH "$luaEnvCPath"
+        --prefix LUA_PATH ';' "$luaEnvPath" \
+        --prefix LUA_CPATH ';' "$luaEnvCPath"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH "$luaEnvPath" \
-        --set LUA_CPATH "$luaEnvCPath"
+        --prefix LUA_PATH ';' "$luaEnvPath" \
+        --prefix LUA_CPATH ';' "$luaEnvCPath"
 
       make -C tools/migration install
       wrapProgram $out/bin/prosody-migrator \
-        --set LUA_PATH "$luaEnvPath" \
-        --set LUA_CPATH "$luaEnvCPath"
+        --prefix LUA_PATH ';' "$luaEnvPath" \
+        --prefix LUA_CPATH ';' "$luaEnvCPath"
     '';
 
   passthru = {

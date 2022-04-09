@@ -51,15 +51,8 @@ in
     version = "6.0.10";
     sha256 = "1sr60wg5mzjb14y75cga836f19sbmmpgh13mwc4alyg3irsbz1bb";
   };
-  varnish70 = (common {
-    version = "7.0.2";
-    sha256 = "0q9z1iilqwbh5flfy9pl18kxv0yjs5z91c4j81z5pgyjd9d4jjjj";
-  }).overrideAttrs (oA: {
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/varnishcache/varnish-cache/commit/20e007a5b17c1f68f70ab42080de384f9e192900.patch";
-        sha256 = "0vvihbjknb0skdv2ksn2lz89pwmn4f2rjmb6q65cvgnnjfj46s82";
-      })
-    ];
-  });
+  varnish71 = common {
+    version = "7.1.0";
+    sha256 = "1flyqr212jamqpwafdil170vc966r1mbb7n3ngjn8xk6hn3bhjpm";
+  };
 }

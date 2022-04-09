@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "caqti";
-  version = "1.5.1";
+  version = "1.7.0";
   useDune2 = true;
 
   minimumOCamlVersion = "4.04";
@@ -11,7 +11,7 @@ buildDunePackage rec {
     owner = "paurkedal";
     repo = "ocaml-${pname}";
     rev = "v${version}";
-    sha256 = "1vl61kdyj89whc3mh4k9bis6rbj9x2scf6hnv9afyalp4j65sqx1";
+    sha256 = "sha256-NGK38so6ZVCRbtV3ww1u31EFAjkHgDdsFfFUwc8ldm4=";
   };
 
   nativeBuildInputs = [ cppo ];

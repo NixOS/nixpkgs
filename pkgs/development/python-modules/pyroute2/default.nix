@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.6.8";
+  version = "0.6.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WhqjvCwKrUUBLKvjpva7pc94UIZvTf7j705Bt2DHyKQ=";
+    hash = "sha256-PRxNGnH7VpyrV49V9xNO8C1I6LMYK05+ZrKndWKO2vs=";
   };
 
   propagatedBuildInputs = [

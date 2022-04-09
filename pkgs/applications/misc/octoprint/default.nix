@@ -34,6 +34,47 @@ let
         (mkOverride "markdown" "3.1.1" "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a")
         (mkOverride "markupsafe" "1.1.1" "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b")
 
+        # black uses hash, not sha256 identifier. Newer black version requires newer click version
+        (
+          self: super: {
+            black = super.black.overridePythonAttrs (oldAttrs: rec {
+              version = "21.12b0";
+              src = oldAttrs.src.override {
+                inherit version;
+                hash = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
+              };
+              doCheck = false;
+            });
+          }
+        )
+
+        # tests need network
+        (
+          self: super: {
+            curio = super.curio.overridePythonAttrs (oldAttrs: rec {
+              disabledTests = [
+                "test_timeout"
+                "test_ssl_outgoing"
+              ];
+            });
+          }
+        )
+
+        # tests need network
+        (
+          self: super: {
+            trio = super.trio.overridePythonAttrs (oldAttrs: rec {
+              disabledTests = [
+                "test_local_address_real"
+              ];
+              disabledTestPaths = [
+                "trio/tests/test_exports.py"
+                "trio/tests/test_socket.py"
+              ];
+            });
+          }
+        )
+
         # Requires flask<2, cannot mkOverride because tests need to be disabled
         (
           self: super: {
@@ -400,7 +441,7 @@ let
                 homepage = "https://octoprint.org/";
                 description = "The snappy web interface for your 3D printer";
                 license = licenses.agpl3Only;
-                maintainers = with maintainers; [ abbradar gebner WhittlesJr ];
+                maintainers = with maintainers; [ abbradar gebner WhittlesJr gador ];
               };
             };
           }

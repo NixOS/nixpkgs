@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ ... }:
 {
   name = "ecryptfs";
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     boot.kernelModules = [ "ecryptfs" ];
     security.pam.enableEcryptfs = true;

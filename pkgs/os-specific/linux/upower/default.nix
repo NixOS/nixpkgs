@@ -8,7 +8,7 @@
 , ninja
 , python3
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
 , udev
 , libgudev
 , libusb1
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "upower";
-  version = "0.99.15";
+  version = "0.99.17";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "upower";
     rev = "v${version}";
-    sha256 = "sha256-GlLy2MPip21KOabdW8Vw6NVe3xhzsd9htxQ2xO/hZ/4=";
+    sha256 = "xvvqzGxgkuGcvnO12jnLURNJUoSlnMw2g/mnII+i6Bs=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     python3
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
     gettext
     gobject-introspection
     libxslt
@@ -99,7 +99,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://upower.freedesktop.org/";
+    changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${version}/NEWS";
     description = "A D-Bus service for power management";
+    maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

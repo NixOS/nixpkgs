@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "4.1.5";
+  version = "4.2.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -37,25 +37,12 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1ps8yaps5kfd7yv7bpdvssbwm6f5qivxcvhwn17cpddc2760a7nk";
+    sha256 = "sha256-BoikYSsQZAv8WswIr5nmBsGmjZbTXaLAbdO2QtPvc7c=";
 
     extraPostFetch = ''
       mv $out ./all
       mv ./all/electrum/tests $out
     '';
-  };
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
   };
 
 in
@@ -66,7 +53,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "188r4zji985z8pm9b942xhmvv174yndk6jxagxl7ljk03wl2wiwi";
+    sha256 = "sha256-2SxSTH9P380j2KaCbkXjgmQO7K2z81AG6PMA/EMggXA=";
   };
 
   postUnpack = ''
@@ -74,27 +61,9 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  postPatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
-
-    # according to upstream, this is fine
-    # https://github.com/spesmilo/electrum/issues/7361
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle<2.9" "qdarkstyle>=2.7"
-  '';
-
-  patches = [
-    # trezorlib 0.13 compatibility
-    (fetchpatch {
-      url = "https://github.com/spesmilo/electrum/commit/97e61cfacdca374103e4184f0f9a07a0c5757afb.patch";
-      sha256 = "sha256-RGVBO9IskC+lQOHNGjrqH6EM/inNPJlcD9sSWedyT5E=";
-    })
-  ];
-
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx

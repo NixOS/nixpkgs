@@ -57,7 +57,7 @@ in {
   meta = with lib.maintainers; {
     maintainers = [ servalcatty ];
   };
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.curl ];
     services.v2ray = {
       enable = true;

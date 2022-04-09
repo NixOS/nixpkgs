@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     maintainers = [ Br1ght0ne ];
   };
 
-  machine = {
+  nodes.machine = {
     services.riak.enable = true;
     services.riak.package = pkgs.riak;
   };

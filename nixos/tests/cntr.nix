@@ -46,7 +46,7 @@ let
 
     meta = with pkgs.lib.maintainers; { maintainers = [ sorki mic92 ]; };
 
-    machine = { lib, ... }: {
+    nodes.machine = { lib, ... }: {
       environment.systemPackages = [ pkgs.cntr ];
       containers.test = {
         autoStart = true;

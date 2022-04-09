@@ -70,8 +70,7 @@ rec {
     # name of the resulting derivation
     }: buildCommand:
     stdenv.mkDerivation ({
-      name = lib.strings.sanitizeDerivationName name;
-      inherit buildCommand;
+      inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
     }
@@ -121,7 +120,7 @@ rec {
         allowSubstitutes = false;
       }
       ''
-        target=$out${destination}
+        target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then

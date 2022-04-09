@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs-14_x, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs-14_x, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
 
 let
   pinData = lib.importJSON ./pin.json;
@@ -48,8 +48,11 @@ in rustPlatform.buildRustPackage rec {
     rm -rf native/!(index.node)
     rm -rf node_modules $HOME
     cp -r . $out
+    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $out/native/index.node
     runHook postInstall
   '';
+
+  disallowedReferences = [ stdenv.cc.cc ];
 
   cargoSha256 = pinData.cargoHash;
 }

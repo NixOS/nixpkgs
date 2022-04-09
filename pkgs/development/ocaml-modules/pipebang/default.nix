@@ -15,7 +15,7 @@ buildOcaml rec {
 
   strictDeps = true;
 
-  buildInputs = [ camlp4 ];
+  propagatedBuildInputs = [ camlp4 ];
 
   meta = with lib; {
     homepage = "https://github.com/janestreet/pipebang";

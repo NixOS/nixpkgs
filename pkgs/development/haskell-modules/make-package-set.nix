@@ -384,6 +384,18 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # for the "shellFor" environment (ensuring that any test/benchmark
         # dependencies for "foo" will be available within the nix-shell).
       , genericBuilderArgsModifier ? (args: args)
+
+        # Extra dependencies, in the form of cabal2nix build attributes.
+        #
+        # An example use case is when you have Haskell scripts that use
+        # libraries that don't occur in your packages' dependencies.
+        #
+        # Example:
+        #
+        #   extraDependencies = p: {
+        #     libraryHaskellDepends = [ p.releaser ];
+        #   };
+      , extraDependencies ? p: {}
       , ...
       } @ args:
       let
@@ -474,7 +486,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # See the Note in `zipperCombinedPkgs` for what gets filtered out from
         # each of these dependency lists.
         packageInputs =
-          pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) cabalDepsForSelected;
+          pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) (cabalDepsForSelected ++ [ (extraDependencies self) ]);
 
         # A attribute set to pass to `haskellPackages.mkDerivation`.
         #
@@ -514,7 +526,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # pkgWithCombinedDepsDevDrv :: Derivation
         pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" ];
+        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" "extraDependencies" ];
 
       in pkgWithCombinedDepsDevDrv.overrideAttrs (old: mkDerivationArgs // {
         nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];

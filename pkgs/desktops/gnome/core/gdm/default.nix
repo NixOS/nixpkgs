@@ -19,6 +19,7 @@
 , gtk3
 , libcanberra-gtk3
 , pam
+, libgudev
 , libselinux
 , keyutils
 , audit
@@ -43,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "41.3";
+  version = "42.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "uwtlCnzqkPCaMyhPvQKXUxVAfvwY6BQAmFLRvK00N9Q=";
+    sha256 = "oyisl2k3vsF5lx/weCmhJGuYznJBgcEorjKguketOFU=";
   };
 
   mesonFlags = [
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     keyutils
     libX11
     libcanberra-gtk3
+    libgudev
     libselinux
     pam
     plymouth

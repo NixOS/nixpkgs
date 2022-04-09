@@ -28,6 +28,11 @@ def process_args() -> argparse.Namespace:
         default=1,
         help="operate on aliases older than $year-$month",
     )
+    arg_parser.add_argument(
+        "--only-throws",
+        action="store_true",
+        help="only operate on throws. e.g remove throws older than $date",
+    )
     arg_parser.add_argument("--file", required=True, type=Path, help="alias file")
     arg_parser.add_argument(
         "--dry-run", action="store_true", help="don't modify files, only print results"
@@ -36,7 +41,7 @@ def process_args() -> argparse.Namespace:
 
 
 def get_date_lists(
-    txt: list[str], cutoffdate: datetimedate
+    txt: list[str], cutoffdate: datetimedate, only_throws: bool
 ) -> tuple[list[str], list[str], list[str]]:
     """get a list of lines in which the date is older than $cutoffdate"""
     date_older_list: list[str] = []
@@ -57,7 +62,11 @@ def get_date_lists(
                 except ValueError:
                     continue
 
-        if my_date is None or my_date > cutoffdate:
+        if (
+            my_date is None
+            or my_date > cutoffdate
+            or "preserve, reason:" in line.lower()
+        ):
             continue
 
         if "=" not in line:
@@ -67,7 +76,7 @@ def get_date_lists(
             print(f"RESOLVE MANUALLY {line}")
         elif "throw" in line:
             date_older_throw_list.append(line)
-        else:
+        elif not only_throws:
             date_older_list.append(line)
 
     return (
@@ -160,6 +169,7 @@ def main() -> None:
     """main"""
     args = process_args()
 
+    only_throws = args.only_throws
     aliasfile = Path(args.file).absolute()
     cutoffdate = (datetime.strptime(f"{args.year}-{args.month}-01", "%Y-%m-%d")).date()
 
@@ -170,13 +180,12 @@ def main() -> None:
     date_older_throw_list: list[str] = []
 
     date_older_list, date_sep_line_list, date_older_throw_list = get_date_lists(
-        txt, cutoffdate
+        txt, cutoffdate, only_throws
     )
 
     converted_to_throw: list[tuple[str, str]] = []
-    converted_to_throw = convert_to_throw(date_older_list)
-
     if date_older_list:
+        converted_to_throw = convert_to_throw(date_older_list)
         print(" Will be converted to throws. ".center(100, "-"))
         for l_n in date_older_list:
             print(l_n)

@@ -10,9 +10,9 @@ rec {
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
       # package dependencies
-      , stdenv, fetchFromGitHub, buildGoPackage
+      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
+      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
@@ -33,7 +33,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd_1_4.overrideAttrs (oldAttrs: {
+    docker-containerd = containerd.overrideAttrs (oldAttrs: {
       name = "docker-containerd-${version}";
       inherit version;
       src = fetchFromGitHub {
@@ -78,6 +78,16 @@ rec {
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
       extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+
+      patches = [
+        # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
+        # It could be removed when a version incorporating this patch is released.
+        (fetchpatch {
+          name = "buildkit-zfs.patch";
+          url = "https://github.com/moby/moby/pull/43136.patch";
+          sha256 = "1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
+        })
+      ];
 
       postPatch = ''
         patchShebangs hack/make.sh hack/make/
@@ -233,20 +243,20 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.12";
+    version = "20.10.14";
     rev = "v${version}";
-    sha256 = "sha256-nU6grb2lSW7BY7w9aAXwVbGp9TyO2ZxnJaxAi0wbk/c=";
+    sha256 = "sha256-eDwgqFx4io++SMOjhxMxVzqzcOgOnv6Xe/qmmPCvZts=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "sha256-qizzK1qJNRGFisahE3iAzZTNW/HmledlMNxcJCMQSJ4=";
+      sha256 = "sha256-I5oxpFLH789I2Sb29OXDaM4fCbQT/KvPq0DYcAVp0aI=";
     };
-    runcRev = "v1.0.2";
-    runcSha256 = "1bpckghjah0rczciw1a1ab8z718lb2d3k4mjm4zb45lpm3njmrcp";
-    containerdRev = "v1.4.12";
-    containerdSha256 = "sha256-g30kshXyGVew5tVaXFAOQUOYvvo0JBqIj1YaC5nTiS8=";
-    tiniRev = "v0.19.0"; # v0.19.0
-    tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
+    runcRev = "v1.0.3";
+    runcSha256 = "sha256-Tl/JKbIpao+FCjngPzaVkxse50zo3XQ9Mg/AdkblMcI=";
+    containerdRev = "v1.5.11";
+    containerdSha256 = "sha256-YzFtv6DIjImSK0SywxhZrEeEmCnHTceAi3pfwnPubKg=";
+    tiniRev = "v0.19.0";
+    tiniSha256 = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 }

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
   meta.maintainers = with lib.maintainers; [ oxalica ];
 
-  machine = { ... }: {};
+  nodes.machine = { ... }: {};
 
   testScript = ''
     machine.succeed("gzip -cd ${pkgs.terminus_font}/share/consolefonts/ter-v16b.psf.gz >font.psf")

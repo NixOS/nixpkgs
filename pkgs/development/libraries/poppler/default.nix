@@ -18,6 +18,7 @@
 , ninja
 , openjpeg
 , pkg-config
+, python3
 , scribusUnstable
 , texlive
 , zlib
@@ -34,19 +35,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "poppler-${suffix}";
-  version = "22.01.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "22.03.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    sha256 = "sha256-fTSTBWtbhkE+XGk8LK4CxcBs2OYY0UwsMeLIS2eyMT4=";
+    sha256 = "sha256-cox4upTXWlX2tjVdT72qb0mTTZYWvljl5nmpz9CYDh4=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+    python3
   ];
 
   buildInputs = [

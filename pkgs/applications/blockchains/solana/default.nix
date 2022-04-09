@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   # checkInputs = lib.optionals stdenv.isDarwin [ pkg-config rustfmt ];
   # Needed to get openssl-sys to use pkg-config.
   # OPENSSL_NO_VENDOR = 1;
-  # OPENSSL_LIB_DIR = "${openssl.out}/lib";
+  # OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   # OPENSSL_DIR="${lib.getDev openssl}";
   # LLVM_CONFIG_PATH="${llvm}/bin/llvm-config";
   # LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";

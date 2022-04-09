@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "printbox";
-  version = "0.6";
+  version = "0.6.1";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:0vqp8j1vp8h8par699nnh31hnikzh6pqn07lqyxw65axqy3sc9dp";
+    sha256 = "sha256-7u2ThRhM3vW4ItcFsK4ycgcaW0JcQOFoZZRq2kqbl+k=";
   };
 
   checkInputs = [ mdx.bin ];

@@ -115,7 +115,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "vmware-horizon-client";
+  pname = "vmware-horizon-client";
+  inherit version;
 
   dontUnpack = true;
 

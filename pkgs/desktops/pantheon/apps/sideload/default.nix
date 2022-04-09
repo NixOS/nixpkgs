@@ -2,7 +2,6 @@
 , stdenv
 , desktop-file-utils
 , nix-update-script
-, elementary-icon-theme
 , fetchFromGitHub
 , flatpak
 , gettext
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     flatpak
     glib
     granite

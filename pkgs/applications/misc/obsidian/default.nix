@@ -2,7 +2,7 @@
 , fetchurl
 , lib
 , makeWrapper
-, electron_16
+, electron_17
 , makeDesktopItem
 , graphicsmagick
 , writeScript
@@ -12,7 +12,8 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "0.13.31";
+  version = "0.14.2";
+  appname = "Obsidian";
   meta = with lib; {
     description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
@@ -21,45 +22,35 @@ let
     maintainers = with maintainers; [ conradmearns zaninime opeik ];
   };
 
+  filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}${extension}";
-    inherit sha256;
+    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
+    sha256 = if stdenv.isDarwin then "128kgqkf54ljkglwqa6i0qnfqhhmsv7hwbaqnml95n5dzyxrbm4s" else "00gip6pvkbywywlx71j87sxyh8yhkd36i1ydncbpnhsplr6smsq3";
   };
 
-  sha256 = rec {
-    x86_64-linux = "v3Zm5y8V1KyWDQeJxhryBojz56OTT7gfT+pLGDUD4zs=";
-    x86_64-darwin = "m/81uuDhMJJ1tHTUPww+xNdwsaYCOmeNtbjdwMAwhBU=";
-    aarch64-darwin = x86_64-darwin;
-  }.${system};
+  icon = fetchurl {
+    url = "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
+    sha256 = "18ylnbvxr6k4x44c4i1d55wxy2dq4fdppp43a4wl6h6zar0sc9s2";
+  };
 
-  extension = rec {
-    x86_64-linux = ".tar.gz";
-    x86_64-darwin = "-universal.dmg";
-    aarch64-darwin = x86_64-darwin;
-  }.${system};
+  desktopItem = makeDesktopItem {
+    name = "obsidian";
+    desktopName = "Obsidian";
+    comment = "Knowledge base";
+    icon = "obsidian";
+    exec = "obsidian %u";
+    categories = [ "Office" ];
+    mimeTypes = [ "x-scheme-handler/obsidian" ];
+  };
 
-  linux = stdenv.mkDerivation rec {
-    icon = fetchurl {
-      url = "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
-      sha256 = "18ylnbvxr6k4x44c4i1d55wxy2dq4fdppp43a4wl6h6zar0sc9s2";
-    };
-
-    desktopItem = makeDesktopItem {
-      name = "obsidian";
-      desktopName = "Obsidian";
-      comment = "Knowledge base";
-      icon = "obsidian";
-      exec = "obsidian";
-      categories = [ "Office" ];
-    };
-
-    inherit pname version src;
-    meta.platforms = [ "x86_64-linux" ];
+  linux = stdenv.mkDerivation {
+    inherit pname version src desktopItem icon;
+    meta = meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; };
     nativeBuildInputs = [ makeWrapper graphicsmagick ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${electron_16}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron_17}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
@@ -81,10 +72,9 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation rec {
-    appname = "Obsidian";
-    inherit pname version src;
-    meta.platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+  darwin = stdenv.mkDerivation {
+    inherit pname version src appname;
+    meta = meta // { platforms = [ "x86_64-darwin" "aarch64-darwin" ]; };
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [ makeWrapper undmg unzip ];
     installPhase = ''

@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.darwin;
     maintainers = [];
-    repositories.git = "https://github.com/musescore/MuseScore";
   };
 }

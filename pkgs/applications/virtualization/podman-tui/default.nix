@@ -4,17 +4,20 @@
 , buildGoModule
 , btrfs-progs
 , gpgme
+, libassuan
 , lvm2
+, testVersion
+, podman-tui
 }:
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-qPQSu6l1WkX6sddVr5h1DqKQCyw6vy8S6lXC/ZO4DL8=";
+    sha256 = "sha256-1WbDmnKyFosp4Kz9QINr3lOR/wD0UW2QZf7nAAaoClM=";
   };
 
   vendorSha256 = null;
@@ -24,12 +27,17 @@ buildGoModule rec {
   buildInputs = [
     btrfs-progs
     gpgme
+    libassuan
     lvm2
   ];
 
   ldflags = [ "-s" "-w" ];
 
-  subPackages = [ "." ];
+  passthru.tests.version = testVersion {
+    package = podman-tui;
+    command = "podman-tui version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/containers/podman-tui";

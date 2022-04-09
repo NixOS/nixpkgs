@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, autoreconfHook}:
+{lib, stdenv, fetchurl, autoreconfHook, fetchpatch }:
 
 let
   version = "5.6";
@@ -11,6 +11,14 @@ stdenv.mkDerivation {
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
   '';
+
+  patches = [
+    # glibc 2.34 compat
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/polyml/raw/4d8868ca5a1ce3268f212599a321f8011c950496/f/polyml-pthread-stack-min.patch";
+      sha256 = "1h5ihg2sxld9ymrl3f2mpnbn2242ka1fsa0h4gl9h90kndvg6kby";
+    })
+  ];
 
   buildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 

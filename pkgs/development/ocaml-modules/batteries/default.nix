@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, num, ounit
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, qcheck, num, ounit
 , doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  checkInputs = [ qtest ounit ];
+  checkInputs = [ qtest ounit qcheck ];
   propagatedBuildInputs = [ num ];
 
   strictDeps = !doCheck;

@@ -11,7 +11,6 @@
 , vala
 , wrapGAppsHook
 , clutter-gtk
-, elementary-icon-theme
 , evolution-data-server
 , granite
 , geoclue2
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clutter-gtk
-    elementary-icon-theme
     evolution-data-server
     granite
     geoclue2

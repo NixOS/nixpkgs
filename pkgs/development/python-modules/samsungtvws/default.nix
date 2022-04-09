@@ -1,21 +1,25 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
+, aiohttp
 , requests
 , websocket-client
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "2.3.0";
+  version = "2.5.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2ly9lbnIHGHB55ml10jKE7dC5LdN1ToGW4GqfxTC5kI=";
+    sha256 = "sha256-AFCN1b80GZ24g3oWe1qqc72yWQy4+/sorL8zwOYM7vo=";
   };
 
   propagatedBuildInputs = [
-    websocket-client
+    aiohttp
     requests
+    websocket-client
+    websockets
   ];
 
   # no tests

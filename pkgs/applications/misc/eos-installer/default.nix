@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoconf, autoconf-archive, automake, glib, intltool, libtool, pkg-config
-, gnome, gnupg, gtk3, udisks
+, gnome-desktop, gnupg, gtk3, udisks
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf autoconf-archive automake glib intltool libtool pkg-config
   ];
-  buildInputs = [ gnome.gnome-desktop gtk3 udisks ];
+  buildInputs = [ gnome-desktop gtk3 udisks ];
 
   preConfigure = ''
     ./autogen.sh

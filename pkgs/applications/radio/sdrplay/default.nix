@@ -4,7 +4,7 @@ let
     else if stdenv.isi686    then "i686"
     else throw "unsupported architecture";
 in stdenv.mkDerivation rec {
-  name = "sdrplay";
+  pname = "sdrplay";
   version = "3.07.1";
 
   src = fetchurl {

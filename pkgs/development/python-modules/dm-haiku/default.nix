@@ -7,6 +7,7 @@
 , jaxlib
 , jmp
 , lib
+, pytest-xdist
 , pytestCheckHook
 , tabulate
 , tensorflow
@@ -14,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "dm-haiku";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mdqjcka0m1div63ngba8w8z94id4c1h8xqmnq1xpmgkc79224wa";
+    sha256 = "sha256-qvKMeGPiWXvvyV+GZdTWdsC6Wp08AmP8nDtWk7sZtqM=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +34,11 @@ buildPythonPackage rec {
     cloudpickle
     dm-tree
     jaxlib
+    pytest-xdist
     pytestCheckHook
     tensorflow
   ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   pythonImportsCheck = [
     "haiku"

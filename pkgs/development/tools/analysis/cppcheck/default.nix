@@ -1,15 +1,19 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
+{ lib, stdenv, fetchFromGitHub, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.7";
+  version = "2.7.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rHTAlzxGoFJ2D0/3ymqEYWyleVUQVC0ZWm8SLFMHkpE=";
+  src = fetchFromGitHub {
+    owner = "danmar";
+    repo = "cppcheck";
+    rev = version;
+    sha256 = "sha256-bMDH3TRAdDoI1AaHTpIl4P/yk9wsV0ReNh6bMmCsKys=";
   };
 
-  buildInputs = [ pcre ] ++ lib.optionals withZ3 [ z3 ];
+  buildInputs = [ pcre
+    (python3.withPackages (ps: [ps.pygments]))
+  ] ++ lib.optionals withZ3 [ z3 ];
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
   makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
@@ -18,6 +22,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   postInstall = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man

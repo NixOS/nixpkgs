@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   # This test checks the creation and reading of a file in sandbox mode. Used simple lua script.
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     nixpkgs.overlays = [
       (self: super: {
         nginx-lua = super.nginx.override {

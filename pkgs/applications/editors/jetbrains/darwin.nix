@@ -5,7 +5,7 @@
 }:
 
 { meta
-, name
+, pname
 , product
 , productShort ? product
 , src
@@ -17,7 +17,7 @@ let
   loname = lib.toLower productShort;
 in
   stdenvNoCC.mkDerivation {
-    inherit meta src version;
+    inherit pname meta src version;
     desktopName = product;
     installPhase = ''
       runHook preInstall
@@ -32,6 +32,5 @@ in
       runHook postInstall
     '';
     nativeBuildInputs = [ undmg ];
-    pname = lib.concatStringsSep "-" (lib.init (lib.splitString "-" name));
     sourceRoot = ".";
   }

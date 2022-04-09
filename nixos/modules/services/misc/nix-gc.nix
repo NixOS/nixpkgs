@@ -39,7 +39,7 @@ in
         type = types.str;
         example = "45min";
         description = ''
-          Add a randomized delay before each automatic upgrade.
+          Add a randomized delay before each garbage collection.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -81,8 +81,14 @@ in
   ###### implementation
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.automatic -> config.nix.enable;
+        message = ''nix.gc.automatic requires nix.enable'';
+      }
+    ];
 
-    systemd.services.nix-gc = {
+    systemd.services.nix-gc = lib.mkIf config.nix.enable {
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       startAt = optional cfg.automatic cfg.dates;

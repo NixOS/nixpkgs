@@ -60,6 +60,9 @@ let
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
+    # XDG_DATA_DIRS is used by pressure-vessel (steam proton) and vulkan loaders to find the corresponding icd
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
+
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
     export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
@@ -138,17 +141,20 @@ let
       if [[ -d  $out/share/gsettings-schemas/ ]]; then
           # Recreate the standard schemas directory if its a symlink to make it writable
           if [[ -L $out/share/glib-2.0 ]]; then
-              ln -s $(readlink $out/share/glib-2.0) $out/share/glib-2.0.old
-              rm -rf $out/share/glib-2.0
+              target=$(readlink $out/share/glib-2.0)
+              rm $out/share/glib-2.0
+              mkdir $out/share/glib-2.0
+              ln -fs $target/* $out/share/glib-2.0
+          fi
+
+          if [[ -L $out/share/glib-2.0/schemas ]]; then
+              target=$(readlink $out/share/glib-2.0/schemas)
+              rm $out/share/glib-2.0/schemas
+              mkdir $out/share/glib-2.0/schemas
+              ln -fs $target/* $out/share/glib-2.0/schemas
           fi
 
           mkdir -p $out/share/glib-2.0/schemas
-
-          # symlink any schema files or overrides to the standard schema directory
-          if [[ -e $out/share/glib-2.0.old/schemas ]]; then
-              ln -fs $out/share/glib-2.0.old/schemas/*.xml $out/share/glib-2.0/schemas
-              ln -fs $out/share/glib-2.0.old/schemas/*.gsettings-schemas.override $out/share/glib-2.0/schemas
-          fi
 
           for d in $out/share/gsettings-schemas/*; do
               # Force symlink, in case there are duplicates

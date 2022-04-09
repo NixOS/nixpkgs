@@ -498,6 +498,7 @@ let
         networking = {
           useNetworkd = networkd;
           useDHCP = false;
+          firewall.extraCommands = "ip6tables -A nixos-fw -p gre -j nixos-fw-accept";
         };
       };
     in {
@@ -506,20 +507,34 @@ let
         mkMerge [
           (node args)
           {
-            virtualisation.vlans = [ 1 2 ];
+            virtualisation.vlans = [ 1 2 4 ];
             networking = {
               greTunnels = {
                 greTunnel = {
                   local = "192.168.2.1";
                   remote = "192.168.2.2";
                   dev = "eth2";
+                  ttl = 225;
                   type = "tap";
+                };
+                gre6Tunnel = {
+                  local = "fd00:1234:5678:4::1";
+                  remote = "fd00:1234:5678:4::2";
+                  dev = "eth3";
+                  ttl = 255;
+                  type = "tun6";
                 };
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth1" ];
               interfaces.eth1.ipv4.addresses = mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = mkOverride 0 [
                 { address = "192.168.1.1"; prefixLength = 24; }
+              ];
+              interfaces.eth3.ipv6.addresses = [
+                { address = "fd00:1234:5678:4::1"; prefixLength = 64; }
+              ];
+              interfaces.gre6Tunnel.ipv6.addresses = mkOverride 0 [
+                { address = "fc00::1"; prefixLength = 64; }
               ];
             };
           }
@@ -528,14 +543,22 @@ let
         mkMerge [
           (node args)
           {
-            virtualisation.vlans = [ 2 3 ];
+            virtualisation.vlans = [ 2 3 4 ];
             networking = {
               greTunnels = {
                 greTunnel = {
                   local = "192.168.2.2";
                   remote = "192.168.2.1";
                   dev = "eth1";
+                  ttl = 225;
                   type = "tap";
+                };
+                gre6Tunnel = {
+                  local = "fd00:1234:5678:4::2";
+                  remote = "fd00:1234:5678:4::1";
+                  dev = "eth3";
+                  ttl = 255;
+                  type = "tun6";
                 };
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth2" ];
@@ -543,11 +566,18 @@ let
               interfaces.bridge.ipv4.addresses = mkOverride 0 [
                 { address = "192.168.1.2"; prefixLength = 24; }
               ];
+              interfaces.eth3.ipv6.addresses = [
+                { address = "fd00:1234:5678:4::2"; prefixLength = 64; }
+              ];
+              interfaces.gre6Tunnel.ipv6.addresses = mkOverride 0 [
+                { address = "fc00::2"; prefixLength = 64; }
+              ];
             };
           }
         ];
       testScript = { ... }:
         ''
+          import json
           start_all()
 
           with subtest("Wait for networking to be configured"):
@@ -562,6 +592,17 @@ let
               client1.wait_until_succeeds("ping -c 1 192.168.1.2")
 
               client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+
+              client1.wait_until_succeeds("ping -c 1 fc00::2")
+
+              client2.wait_until_succeeds("ping -c 1 fc00::1")
+
+          with subtest("Test GRE tunnel TTL"):
+              links = json.loads(client1.succeed("ip -details -json link show greTunnel"))
+              assert links[0]['linkinfo']['info_data']['ttl'] == 225, "ttl not set for greTunnel"
+
+              links = json.loads(client2.succeed("ip -details -json link show gre6Tunnel"))
+              assert links[0]['linkinfo']['info_data']['ttl'] == 255, "ttl not set for gre6Tunnel"
         '';
     };
     vlan = let
@@ -599,7 +640,7 @@ let
     };
     virtual = {
       name = "Virtual";
-      machine = {
+      nodes.machine = {
         networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.tap0 = {
@@ -743,7 +784,7 @@ let
     };
     routes = {
       name = "routes";
-      machine = {
+      nodes.machine = {
         networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.eth0 = {
@@ -824,7 +865,7 @@ let
     };
     rename = {
       name = "RenameInterface";
-      machine = { pkgs, ... }: {
+      nodes.machine = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -875,7 +916,7 @@ let
       testMac = "06:00:00:00:02:00";
     in {
       name = "WlanInterface";
-      machine = { pkgs, ... }: {
+      nodes.machine = { pkgs, ... }: {
         boot.kernelModules = [ "mac80211_hwsim" ];
         networking.wlanInterfaces = {
           wlan0 = { device = "wlan0"; };

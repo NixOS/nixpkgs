@@ -2,13 +2,20 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.5.0";
+  version = "6.5.1";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "a1cf8431a8eb9392b3ff6dc61d832d0447bfdcae5b3e4256a5fa74dbc25b0734";
+    sha256 = "sha256-IE8CQNuJmadJ1jiph7NRhhhD5pI5uBHsPRiBQSw3BqY=";
   };
+
+  patches = [
+    # on non-x86 Linux platforms, sip incorrectly detects the manylinux version
+    # and PIP will refuse to install the resulting wheel.
+    # remove once upstream fixes this, hopefully in 6.5.2
+    ./fix-manylinux-version.patch
+  ];
 
   propagatedBuildInputs = [ packaging toml ];
 

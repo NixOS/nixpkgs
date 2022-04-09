@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
   inherit stdenv src version patches;
 
   buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx_6
+    [ makeWrapper libtool unzip nukeReferences sqlite libpqxx_6
       top-git mercurial /*darcs*/ subversion breezy openssl bzip2 libxslt
       perlDeps perl nix
       postgresql # for running the tests
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
       gzip bzip2 xz gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
-  nativeBuildInputs = [ autoreconfHook pkg-config mdbook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config mdbook autoconf automake ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 

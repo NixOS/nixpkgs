@@ -1,12 +1,12 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , capstone
 , filebytes
 , pytest
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "ropper";
   version = "1.13.6";
 

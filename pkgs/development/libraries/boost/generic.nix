@@ -126,14 +126,19 @@ stdenv.mkDerivation {
     stripLen = 1;
     extraPrefix = "libs/context/";
   })
+  # Fix compiler warning with GCC >= 8; TODO: patch may apply to older versions
+  ++ optional (versionAtLeast version "1.65" && versionOlder version "1.67")
+    (fetchpatch {
+      url = "https://github.com/boostorg/mpl/commit/f48fd09d021db9a28bd7b8452c175897e1af4485.patch";
+      sha256 = "15d2a636hhsb1xdyp44x25dyqfcaws997vnp9kl1mhzvxjzz7hb0";
+      stripLen = 1;
+    })
   ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
   ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch
   ++ optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
+    relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
-    stripLen = 2;
-    extraPrefix = "";
-    includes = [ "boost/math/special_functions/detail/bernoulli_details.hpp" ];
   });
 
   meta = {

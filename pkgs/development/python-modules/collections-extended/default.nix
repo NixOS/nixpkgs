@@ -7,7 +7,7 @@
 }:
 buildPythonPackage rec {
   pname = "collections-extended";
-  version = "2.0.0";
+  version = "2.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mlenzen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1qcr1q49a134b122rpldjiim1fsl32gxs5fpj3232nyb05r68haz";
+    sha256 = "sha256-cK13+CQUELKSiLpG747+C+RB5b6luu0mWLLXTT+uGH4=";
   };
 
   nativeBuildInputs = [

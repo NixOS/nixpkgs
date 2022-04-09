@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromBitbucket, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "8.0";
+  version = "9.0";
   pname = "tab";
 
-  src = fetchFromBitbucket {
-    owner = "tkatchev";
+  src = fetchFromGitHub {
+    owner = "ivan-tkatchev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RcDvghTiqIdH79khwDIo8PhvmcObmix8WBrHToLwcw4=";
+    sha256 = "sha256-2keVGPRYV2KCeJ+LgAcl74cjW5wvp6Rmy7VNMtdliBE=";
   };
 
   checkInputs = [ python3 ];

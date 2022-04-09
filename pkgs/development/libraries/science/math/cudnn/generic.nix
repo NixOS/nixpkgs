@@ -1,10 +1,8 @@
-{ version
-, srcName
-, hash ? null
-, sha256 ? null
+{ minCudaVersion
+, maxCudaVersion
+, mkSrc
+, version
 }:
-
-assert (hash != null) || (sha256 != null);
 
 { stdenv
 , lib
@@ -25,19 +23,18 @@ stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
   inherit version;
-
-  src = let
-    hash_ = if hash != null then { inherit hash; } else { inherit sha256; };
-  in fetchurl ({
-    # URL from NVIDIA docker containers: https://gitlab.com/nvidia/cuda/blob/centos7/7.0/runtime/cudnn4/Dockerfile
-    url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
-  } // hash_);
+  # It's often the case that the src depends on the version of cudatoolkit it's
+  # being linked against, so we pass in `cudatoolkit` as an argument to `mkSrc`.
+  src = mkSrc cudatoolkit;
 
   nativeBuildInputs = [ addOpenGLRunpath ];
 
   # Some cuDNN libraries depend on things in cudatoolkit, eg.
   # libcudnn_ops_infer.so.8 tries to load libcublas.so.11. So we need to patch
   # cudatoolkit into RPATH. See also https://github.com/NixOS/nixpkgs/blob/88a2ad974692a5c3638fcdc2c772e5770f3f7b21/pkgs/development/python-modules/jaxlib/bin.nix#L78-L98.
+  #
+  # Note also that version <=8.3.0 contained a subdirectory "lib64/" but in
+  # version 8.3.2 it seems to have been renamed to simply "lib/".
   installPhase = ''
     runHook preInstall
 
@@ -46,14 +43,16 @@ stdenv.mkDerivation {
       patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc cudatoolkit.lib ]}:${cudatoolkit}/lib:\$ORIGIN/" $1
     }
 
-    for lib in lib64/lib*.so; do
-      fixRunPath $lib
+    for sofile in {lib,lib64}/lib*.so; do
+      fixRunPath $sofile
     done
 
     mkdir -p $out
     cp -a include $out/include
-    cp -a lib64 $out/lib64
+    [ -d "lib/" ] && cp -a lib $out/lib
+    [ -d "lib64/" ] && cp -a lib64 $out/lib64
   '' + lib.optionalString removeStatic ''
+    rm -f $out/lib/*.a
     rm -f $out/lib64/*.a
   '' + ''
     runHook postInstall
@@ -77,10 +76,21 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
+    # Check that the cudatoolkit version satisfies our min/max constraints (both
+    # inclusive). We mark the package as broken if it fails to satisfies the
+    # official version constraints (as recorded in default.nix). In some cases
+    # you _may_ be able to smudge version constraints, just know that you're
+    # embarking into unknown and unsupported territory when doing so.
+    broken = let cudaVer = lib.getVersion cudatoolkit; in
+      !(
+        lib.versionAtLeast cudaVer minCudaVersion
+        && lib.versionAtLeast maxCudaVersion cudaVer
+      );
+
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mdaiter ];
+    maintainers = with maintainers; [ mdaiter samuela ];
   };
 }

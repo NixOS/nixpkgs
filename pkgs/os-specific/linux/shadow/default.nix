@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.8.1";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = version;
-    sha256 = "13407r6qwss00504qy740jghb2dzd561la7dhp47rg8w3g8jarpn";
+    rev = "v${version}";
+    sha256 = "sha256-PxLX5V0t18JftT5wT41krNv18Ew7Kz3MfZkOi/80ODA=";
   };
 
   buildInputs = lib.optional (pam != null && stdenv.isLinux) pam;

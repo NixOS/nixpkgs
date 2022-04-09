@@ -1,7 +1,8 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab
-, file, cmake
+, file, cmake, bash
 , nixosTests, writeText
+, cookieFile ? null
 , ...
 }:
 
@@ -16,6 +17,34 @@ beamPackages.mixRelease rec {
     rev = "v${version}";
     sha256 = "sha256-RcqqNNNCR4cxETUCyjChkpq+cQ1QzNOHHzdqBLtOc6g=";
   };
+
+  preFixup = if (cookieFile != null) then ''
+    # There's no way to use a subprocess to cat the content of the
+    # file cookie using wrapProgram: it gets escaped (by design) with
+    # a pair of backticks :(
+    # We have to come up with our own custom wrapper to do this.
+    function wrapWithCookie () {
+        local hidden
+        hidden="$(dirname "$1")/.$(basename "$1")"-wrapped
+        while [ -e "$hidden" ]; do
+            hidden="''${hidden}_"
+        done
+        mv "$1" "''${hidden}"
+
+        cat > "$1" << EOF
+    #!${bash}/bin/bash
+    export RELEASE_COOKIE="\$(cat "${cookieFile}")"
+    exec -a "\$0" "''${hidden}" "\$@"
+    EOF
+        chmod +x "$1"
+    }
+
+    for f in "$out"/bin/*; do
+        if [[ -x "$f" ]]; then
+            wrapWithCookie "$f"
+        fi
+    done
+  '' else "";
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;

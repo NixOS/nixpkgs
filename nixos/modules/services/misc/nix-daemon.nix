@@ -112,11 +112,11 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
-    (mkRenamedOptionModule [ "nix" "chrootDirs" ] [ "nix" "sandboxPaths" ])
-    (mkRenamedOptionModule [ "nix" "daemonIONiceLevel" ] [ "nix" "daemonIOSchedPriority" ])
+    (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
+    (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
+    (mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" "daemonIONiceLevel" ]; to = [ "nix" "daemonIOSchedPriority" ]; })
     (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
-  ] ++ mapAttrsToList (oldConf: newConf: mkRenamedOptionModule [ "nix" oldConf ] [ "nix" "settings" newConf ]) legacyConfMappings;
+  ] ++ mapAttrsToList (oldConf: newConf: mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" oldConf ]; to = [ "nix" "settings" newConf ]; }) legacyConfMappings;
 
   ###### interface
 
@@ -409,14 +409,14 @@ in
               to = mkOption {
                 type = referenceAttrs;
                 example = { type = "github"; owner = "my-org"; repo = "my-nixpkgs"; };
-                description = "The flake reference <option>from></option> is rewritten to.";
+                description = "The flake reference <option>from</option> is rewritten to.";
               };
               flake = mkOption {
                 type = types.nullOr types.attrs;
                 default = null;
                 example = literalExpression "nixpkgs";
                 description = ''
-                  The flake input <option>from></option> is rewritten to.
+                  The flake input <option>from</option> is rewritten to.
                 '';
               };
               exact = mkOption {
@@ -707,6 +707,14 @@ in
       ];
 
     systemd.packages = [ nixPackage ];
+
+    # Will only work once https://github.com/NixOS/nix/pull/6285 is merged
+    # systemd.tmpfiles.packages = [ nixPackage ];
+
+    # Can be dropped for Nix > https://github.com/NixOS/nix/pull/6285
+    systemd.tmpfiles.rules = [
+      "d /nix/var/nix/daemon-socket 0755 root root - -"
+    ];
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 

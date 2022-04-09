@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.4.4";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "588964319e943679d391cc9c886d40ef858ecd9b33ae160023b4e2b5182b2cea";
+    sha256 = "4e6f48c74d955f143d603f6072670cb41ab9acdd95d4455d6e74b6908562c55a";
   };
 
   outputs = [ "out" "dev" ];

@@ -122,10 +122,10 @@ Reviewing process:
   - [CODEOWNERS](https://help.github.com/articles/about-codeowners/) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the module tests, if any, are succeeding.
 - Ensure that the introduced options are correct.
-  - Type should be appropriate (string related types differs in their merging capabilities, `optionSet` and `string` types are deprecated).
+  - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
 - Ensure that option changes are backward compatible.
-  - `mkRenamedOptionModule` and `mkAliasOptionModule` functions provide way to make option changes backward compatible.
+  - `mkRenamedOptionModuleWith` provides a way to make option changes backward compatible.
 - Ensure that removed options are declared with `mkRemovedOptionModule`
 - Ensure that changes that are not backward compatible are mentioned in release notes.
 - Ensure that documentations affected by the change is updated.
@@ -157,7 +157,7 @@ Reviewing process:
 
 - Ensure that the module tests, if any, are succeeding.
 - Ensure that the introduced options are correct.
-  - Type should be appropriate (string related types differs in their merging capabilities, `optionSet` and `string` types are deprecated).
+  - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
 - Ensure that module `meta` field is present
   - Maintainers should be declared in `meta.maintainers`.

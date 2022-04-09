@@ -5,14 +5,6 @@ pipBuildPhase() {
     echo "Executing pipBuildPhase"
     runHook preBuild
 
-    # Prefer using setup.py to avoid build-system dependencies if we have a setup.py
-    if [ -z "${dontPreferSetupPy-}" ]; then
-      if test -e setup.py && test -e pyproject.toml; then
-        echo "Removing pyproject.toml..."
-        rm -f pyproject.toml
-      fi
-    fi
-
     mkdir -p dist
     echo "Creating a wheel..."
     @pythonInterpreter@ -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .

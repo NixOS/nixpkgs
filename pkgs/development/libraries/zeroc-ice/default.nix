@@ -3,6 +3,7 @@
 , darwin, libiconv, Security
 , python3 # for tests only
 , cpp11 ? false
+, fetchpatch
 }:
 
 let
@@ -31,6 +32,18 @@ in stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0zc8gmlzl2f38m1fj6pv2vm8ka7fkszd6hx2lb8gfv65vn3m4sk4";
   };
+
+  patches = [
+    # Fixes for openssl 3.0 / glibc-2.34.
+    (fetchpatch {
+      url = "https://github.com/zeroc-ice/ice/commit/7204b31a082a10cd481c1f31dbb6184ec699160d.patch";
+      sha256 = "sha256-RN8kQrvWRu1oXB7UV7DkYbZ8A0VyJYGArx6ikovwefo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/zeroc-ice/ice/commit/358e7fea00383d55d1c19d38a3bbb64aca803aeb.patch";
+      sha256 = "sha256-ntrTO6qHB7dw398BRdAyJQUfVYW3iEfzUaBYoWWOEDs=";
+    })
+  ];
 
   buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];

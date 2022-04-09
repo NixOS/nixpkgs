@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "sabyenc3";
-  version = "5.1.1";
+  version = "5.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-muqJCn5FcSp5KNZqfW433NCOxfj1DvFvlZPClmNkPR0=";
+    hash = "sha256-DHHil9ZQsrKLgw5dje0Yo1J5FZAFrY1tn5y3mdBJHWg=";
   };
 
   # Tests are not included in pypi distribution

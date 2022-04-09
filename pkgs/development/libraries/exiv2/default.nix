@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEXIV2_ENABLE_NLS=ON"
     "-DEXIV2_BUILD_DOC=ON"
+    "-DEXIV2_ENABLE_BMFF=ON"
   ];
 
   buildFlags = [

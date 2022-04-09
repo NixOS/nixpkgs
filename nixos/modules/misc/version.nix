@@ -8,8 +8,32 @@ let
     concatStringsSep mapAttrsToList toLower
     literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
 
+  needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
+  escapeIfNeccessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText = attrs:
-    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}="${toString v}"'') attrs);
+    concatStringsSep "\n" (
+      mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
+    );
+
+  osReleaseContents = {
+    NAME = "NixOS";
+    ID = "nixos";
+    VERSION = "${cfg.release} (${cfg.codeName})";
+    VERSION_CODENAME = toLower cfg.codeName;
+    VERSION_ID = cfg.release;
+    BUILD_ID = cfg.version;
+    PRETTY_NAME = "NixOS ${cfg.release} (${cfg.codeName})";
+    LOGO = "nix-snowflake";
+    HOME_URL = "https://nixos.org/";
+    DOCUMENTATION_URL = "https://nixos.org/learn.html";
+    SUPPORT_URL = "https://nixos.org/community.html";
+    BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+  };
+
+  initrdReleaseContents = osReleaseContents // {
+    PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
+  };
+  initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
 
 in
 {
@@ -115,20 +139,12 @@ in
         DISTRIB_DESCRIPTION = "NixOS ${cfg.release} (${cfg.codeName})";
       };
 
-      "os-release".text = attrsToText {
-        NAME = "NixOS";
-        ID = "nixos";
-        VERSION = "${cfg.release} (${cfg.codeName})";
-        VERSION_CODENAME = toLower cfg.codeName;
-        VERSION_ID = cfg.release;
-        BUILD_ID = cfg.version;
-        PRETTY_NAME = "NixOS ${cfg.release} (${cfg.codeName})";
-        LOGO = "nix-snowflake";
-        HOME_URL = "https://nixos.org/";
-        DOCUMENTATION_URL = "https://nixos.org/learn.html";
-        SUPPORT_URL = "https://nixos.org/community.html";
-        BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
-      };
+      "os-release".text = attrsToText osReleaseContents;
+    };
+
+    boot.initrd.systemd.contents = {
+      "/etc/os-release".source = initrdRelease;
+      "/etc/initrd-release".source = initrdRelease;
     };
   };
 

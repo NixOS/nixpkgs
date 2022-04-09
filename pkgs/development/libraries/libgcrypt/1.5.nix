@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     description = "General-pupose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    repositories.git = "git://git.gnupg.org/libgcrypt.git";
     knownVulnerabilities = [
       "CVE-2014-3591"
       "CVE-2015-0837"

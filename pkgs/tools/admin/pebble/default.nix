@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "pebble";
-  version = "2.3.0";
+  version = "2.3.1";
 
   goPackagePath = "github.com/letsencrypt/${pname}";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "letsencrypt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1piwzzfqsdx6s2niczzp4mf4r3qn9nfdgpn7882g52cmmm0vzks2";
+    sha256 = "sha256-S9+iRaTSRt4F6yMKK0OJO6Zto9p0dZ3q/mULaipudVo=";
   };
 
   passthru.tests = {

@@ -24,6 +24,7 @@
 , protobuf
 , pycocotools
 , pydub
+, pytest-xdist
 , pytestCheckHook
 , requests
 , scikitimage
@@ -38,13 +39,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.4.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     rev = "v${version}";
-    sha256 = "11kbpv54nwr0xf7z5mkj2lmrfqfmcdq8qcpapnqck1kiawr3yad6";
+    sha256 = "sha256-OZpaY/6BMISq5IeDXyuyu5L/yG+DwlFliw4BsipPOLg=";
   };
 
   patches = [
@@ -88,12 +89,14 @@ buildPythonPackage rec {
     pillow
     pycocotools
     pydub
+    pytest-xdist
     pytestCheckHook
     scikitimage
     scipy
     tensorflow
     tifffile
   ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   disabledTestPaths = [
     # Sandbox violations: network access, filesystem write attempts outside of build dir, ...

@@ -48,7 +48,9 @@ overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 
 # fix up declaration paths in lazy options, since we don't eval them from a full nixpkgs dir
 for (k, v) in options.items():
-    v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}', v.value['declarations']))
+    # The _module options are not declared in nixos/modules
+    if v.value['loc'][0] != "_module":
+        v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}', v.value['declarations']))
 
 # merge both descriptions
 for (k, v) in overrides.items():
@@ -66,14 +68,21 @@ for (k, v) in overrides.items():
         elif ov is not None or cur.get(ok, None) is None:
             cur[ok] = ov
 
+severity = "error" if warningsAreErrors else "warning"
+
 # check that every option has a description
 hasWarnings = False
 for (k, v) in options.items():
     if v.value.get('description', None) is None:
-        severity = "error" if warningsAreErrors else "warning"
         hasWarnings = True
         print(f"\x1b[1;31m{severity}: option {v.name} has no description\x1b[0m", file=sys.stderr)
         v.value['description'] = "This option has no description."
+    if v.value.get('type', "unspecified") == "unspecified":
+        hasWarnings = True
+        print(
+            f"\x1b[1;31m{severity}: option {v.name} has no type. Please specify a valid type, see " +
+            "https://nixos.org/manual/nixos/stable/index.html#sec-option-types\x1b[0m", file=sys.stderr)
+
 if hasWarnings and warningsAreErrors:
     print(
         "\x1b[1;31m" +
