@@ -1,7 +1,7 @@
-{ lib, stdenv, rustPlatform, Security }:
+{ lib, stdenv, rustPlatform, Security, asNightly ? false }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "rustfmt";
+  pname = "rustfmt" + lib.optionalString asNightly "-nightly";
   inherit (rustPlatform.rust.rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
@@ -19,7 +19,10 @@ rustPlatform.buildRustPackage rec {
   # As of rustc 1.45.0, these env vars are required to build rustfmt (due to
   # https://github.com/rust-lang/rust/pull/72001)
   CFG_RELEASE = rustPlatform.rust.rustc.version;
-  CFG_RELEASE_CHANNEL = "stable";
+  CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
+
+  # FIXME: seems fixed upstream, remove after the next update
+  patches = [ ./rustfmt-fix-self-tests.patch ];
 
   meta = with lib; {
     description = "A tool for formatting Rust code according to style guidelines";
