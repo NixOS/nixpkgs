@@ -68,6 +68,29 @@ makeSetupHook {
         ''
       );
 
+      # Stopgap as no modules have been packaged yet
+      mock-pixbuf-module = stdenv.mkDerivation {
+        name = "mock-gdk-pixbuf-module";
+        outputs = ["lib"];
+        builder = ''
+          mkdir -p $lib/$(dirname ${gdk-pixbuf.cacheFile})
+          touch $lib/${gdk-pixbuf.cacheFile}
+        '';
+      };
+
+      pixbuf-modules = basic.overrideAttrs (old: {extraGdkPixbufModules = [mock-pixbuf-module];});
+
+      pixbuf-modules-check = let
+        tested = pixbuf-modules;
+      in testLib.runTest "pixbuf-modules-check" ''
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE=" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE=" "${librsvg}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE=" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE=" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE=" "${librsvg}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE=" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
+      '';
+
       # Simple derivation containing a gobject-introspection typelib.
       typelib-Mahjong = stdenv.mkDerivation {
         name = "typelib-Mahjong";
