@@ -1,12 +1,10 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , gi-docgen
 , meson
 , ninja
-, python3
 , gnome
 , desktop-file-utils
 , appstream-glib
@@ -17,33 +15,19 @@
 , glib
 , atk
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "4.beta.1";
+  version = "42.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ghex/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sBS/9cY++uHLGCbLeex8ZW697JJn3dK+HaM6tHBdwJ4=";
+    url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "Ly11VO8SimxoAJ2YY5TiBMMWeMU+HUpAnyGQmNS/ybs=";
   };
-
-  patches = [
-    # Fix build with -Werror=format-security
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/ghex/-/commit/3d35359f3a12b6abb4a3d8a12a0f39b7221be408.patch";
-      sha256 = "4z9nUd+/eBOUGwl3MErse+FKLzGqtWKwkIzej57CnYk=";
-    })
-    # Build devhelp index.
-    # https://gitlab.gnome.org/GNOME/ghex/-/merge_requests/25
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/ghex/-/commit/b26a7b1135ea2fe956a9bc0669b3b6ed818716c3.patch";
-      sha256 = "nYjjxds9GNWkW/RhXEe5zJzPF4TnLMsCELEqYR4dXTk=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -53,9 +37,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gi-docgen
-    python3
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -71,12 +54,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

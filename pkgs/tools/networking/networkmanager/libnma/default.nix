@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.36";
+  version = "1.8.38";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "2ZQV9M3/ZCIwAZ7FzdKx+/HsVQqK6GUhn3VIKmQre3o=";
+    sha256 = "Xtk+rhhFb/WopPQIF4we4ZjcjTpGxl+QdbEBkW5k6LQ=";
   };
 
   patches = [
