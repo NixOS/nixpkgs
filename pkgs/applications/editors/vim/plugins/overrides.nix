@@ -487,7 +487,7 @@ self: super: {
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim nvim-lspconfig ];
+    dependencies = with self; [ plenary-nvim ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
