@@ -8869,6 +8869,8 @@ in {
 
   rnginline = callPackage ../development/python-modules/rnginline { };
 
+  rns = callPackage ../development/python-modules/rns { };
+
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   robot-detection = callPackage ../development/python-modules/robot-detection { };
