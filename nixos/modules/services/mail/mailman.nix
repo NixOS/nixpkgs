@@ -225,7 +225,14 @@ in {
               See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
             '';
           };
-    in (lib.optionals cfg.enablePostfix [
+    in [
+      { assertion = cfg.webHosts != [];
+        message = ''
+          services.mailman.serve.enable requires there to be at least one entry
+          in services.mailman.webHosts.
+        '';
+      }
+    ] ++ (lib.optionals cfg.enablePostfix [
       { assertion = postfix.enable;
         message = ''
           Mailman's default NixOS configuration requires Postfix to be enabled.
@@ -275,7 +282,7 @@ in {
           globals().update(json.load(f))
     '';
 
-    services.nginx = mkIf cfg.serve.enable {
+    services.nginx = mkIf (cfg.serve.enable && cfg.webHosts != []) {
       enable = mkDefault true;
       virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
