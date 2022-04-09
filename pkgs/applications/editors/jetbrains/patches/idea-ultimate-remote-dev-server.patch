@@ -1,0 +1,49 @@
+--- idea-ultimate/plugins/remote-dev-server/bin/launcher.sh	2022-04-09 16:18:47.016261219 +0200
++++ idea-ultimate/plugins/remote-dev-server/bin/launcher.sh	2022-04-09 16:22:02.368749316 +0200
+@@ -219,35 +219,6 @@
+ mkdir -p "$IJ_HOST_CONFIG_DIR" || (echo "Failed to create $IJ_HOST_CONFIG_DIR" 1>&2; exit 1)
+ mkdir -p "$IJ_HOST_SYSTEM_DIR" || (echo "Failed to create $IJ_HOST_SYSTEM_DIR" 1>&2; exit 1)
+ 
+-# -------------------------------------------------------------------------------------
+-# Patch JBR to make self-contained JVM (requires nothing from host system except glibc)
+-# -------------------------------------------------------------------------------------
+-
+-SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
+-if [ ! -d "$SELFCONTAINED_LIBS" ]; then
+-  echo "ERROR! Unable to locate libraries for self-contained idea distribution. Directory not found: '$SELFCONTAINED_LIBS'." 1>&2
+-  exit 1
+-fi
+-
+-TEMP_JBR="$IJ_HOST_SYSTEM_DIR/pid.$$.temp.jbr"
+-rm -rf "$TEMP_JBR"
+-cp -r --symbolic-link "$IDE_HOME/jbr" "$TEMP_JBR"
+-
+-export "${IDE_PRODUCT_UC}_JDK"="$TEMP_JBR"
+-
+-patch_bin_file() {
+-  file="$1"
+-  mv "$file" "$file.bin"
+-  cat >"$file" <<EOT
+-#!/bin/sh
+-exec /lib64/ld-linux-x86-64.so.2 --library-path "$SELFCONTAINED_LIBS" "${file}.bin" "\$@"
+-EOT
+-  chmod 755 "$file"
+-}
+-
+-find -L "$TEMP_JBR/bin" -type f -executable | while IFS= read -r line; do patch_bin_file "$line"; done
+-find -L "$TEMP_JBR/lib" -type f -executable | while IFS= read -r line; do patch_bin_file "$line"; done
+-
+ # -----------------------------
+ # Display project trust warning
+ # -----------------------------
+@@ -314,10 +285,6 @@
+ # Replace only default Xmx since users may modify vmoptions file to e.g. make -Xmx even bigger
+ sed -i "s/$IDE_DEFAULT_XMX/-Xmx2048m/g" "$TEMP_VM_OPTIONS"
+ 
+-# Since TEMP_JBR is built on symlinks, java tries to resolve it and calculates java.home incorrectly
+-# Make sure java.home points to our patched JBR
+-echo "-Djava.home=$TEMP_JBR" >>"$TEMP_VM_OPTIONS"
+-
+ export "${IDE_PRODUCT_UC}_VM_OPTIONS"="${TEMP_VM_OPTIONS}"
+ 
+ if [ "${REMOTE_DEV_SERVER_JCEF_ENABLED:-}" = "1" ] || [ "${REMOTE_DEV_SERVER_JCEF_ENABLED:-}" = "true" ]; then

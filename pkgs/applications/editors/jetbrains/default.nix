@@ -303,7 +303,7 @@ in
     update-channel = "IntelliJ IDEA RELEASE";
   };
 
-  idea-ultimate = buildIdea rec {
+  idea-ultimate = (buildIdea rec {
     pname = "idea-ultimate";
     product = "IntelliJ IDEA";
     version = products.idea-ultimate.version;
@@ -315,7 +315,15 @@ in
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
-  };
+  }).overrideAttrs (attrs: {
+    patches = (attrs.patches or []) ++ optionals (stdenv.isLinux) [
+      ./patches/idea-ultimate-remote-dev-server.patch
+    ];
+    postPatch = (attrs.postPatch or "") + optionalString (stdenv.isLinux) ''
+      # NOTE: Assumes that the passed JDK is the JBR. How to validate?
+      ln -s ${jdk} jbr
+    '';
+  });
 
   mps = buildMps rec {
     pname = "mps";
