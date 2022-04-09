@@ -46,9 +46,9 @@ sub is_static {
     }
 
     if (-d $path) {
-        opendir(my $dir, "$path") or return 0;
-        my @names = readdir($dir) or die("Failed reading directory `$dir`");
-        closedir($dir);
+        opendir(my $dh, $path) or return 0;
+        my @names = readdir($dh) or die("Failed reading directory `$dh`");
+        closedir($dh);
 
         foreach my $name (@names) {
             if ($name eq "." || $name eq "..") {
@@ -69,7 +69,7 @@ sub is_static {
 # (where all the NixOS sources live).
 sub cleanup {
     my $filename = $_;
-    if ($File::Find::name eq "/etc/nixos" || $File::Find::name eq "/etc/static") {
+    if ($File::Find::name eq "/etc/nixos" || $File::Find::name eq $static) {
         $File::Find::prune = 1;
         return;
     }
@@ -79,8 +79,8 @@ sub cleanup {
             my $x = $static . substr($File::Find::name, length("/etc/"));
             # Check if symlink is still present in new etc
             if (not (-l $x)) {
-                print(STDERR "removing obsolete symlink ‘$File::Find::name’...\n");
-                unlink("$filename");
+                warn("removing obsolete symlink ‘$File::Find::name’...\n");
+                unlink($filename);
             }
         }
     }
@@ -171,8 +171,8 @@ find(\&make_symlinks, $etc);
 foreach my $fn (@old_copied) {
     if (!defined $created{$fn}) {
         $fn = "/etc/$fn";
-        print(STDERR "removing obsolete file ‘$fn’...\n");
-        unlink("$fn");
+        warn("removing obsolete file ‘$fn’...\n");
+        unlink($fn);
     }
 }
 
