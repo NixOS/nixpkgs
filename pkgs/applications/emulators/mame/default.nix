@@ -99,10 +99,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
 
-  # by default MAME assumes that paths with stock resources
-  # are relative and that you run MAME changing to
-  # install directory, so we add absolute paths here
   patches = [
+    # MAME is now generating the PDF documentation on its release script since commit:
+    # https://github.com/mamedev/mame/commit/c0e93076232e794c919231e4386445d78b2d80b1
+    # however this needs sphinx+latex to build, and it is available in the website
+    # anyway for those who need it
+    ./0001-Revert-Added-PDF-documentation-to-dist.mak.patch
+    # by default MAME assumes that paths with stock resources
+    # are relative and that you run MAME changing to
+    # install directory, so we add absolute paths here
     ./emuopts.patch
   ];
 
