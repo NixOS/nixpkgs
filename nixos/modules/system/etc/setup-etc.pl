@@ -8,7 +8,7 @@ use File::Basename qw(dirname);
 use File::Copy qw(copy);
 use File::Find qw(find);
 use File::Path qw(make_path rmtree);
-use File::Slurp qw(read_file write_file);
+use File::Slurp qw(read_file write_file read_dir);
 
 my $etc = $ARGV[0];
 if ($etc eq "") {
@@ -44,14 +44,8 @@ sub is_static ($path) {
     }
 
     if (-d $path) {
-        opendir(my $dh, $path) or return 0;
-        my @names = readdir($dh) or die("Failed reading directory `$dh`");
-        closedir($dh);
-
+        my @names = read_dir($path);
         foreach my $name (@names) {
-            if ($name eq "." || $name eq "..") {
-                next;
-            }
             if (not (is_static("$path/$name"))) {
                 return 0;
             }
@@ -64,7 +58,8 @@ sub is_static ($path) {
 # Remove dangling symlinks that point to /etc/static.  These are
 # configuration files that existed in a previous configuration but not
 # in the current one.  For efficiency, don't look under /etc/nixos
-# (where all the NixOS sources live).
+# (where all the NixOS sources live) and /etc/static which is what we're
+# comparing to anyway.
 sub cleanup {
     my $filename = $_;
 
@@ -117,7 +112,7 @@ sub make_symlinks {
     }
 
     my $target = "/etc/$fn";
-    File::Path::make_path(dirname($target));
+    make_path(dirname($target));
     $created{$fn} = 1;
 
     # Rename doesn't work if target is directory.
