@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.2.0";
+  version = "3.2.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12d8686454c721de88d8ca5adf07e1f419ef6dbcecedf65e8950d4a329daf3a0";
+    sha256 = "sha256-pX8ncLjCJf6+wcseZQEqac8w3Si+gQ4P+Y0CR2jH0PE=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
