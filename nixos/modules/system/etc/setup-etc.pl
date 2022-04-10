@@ -1,7 +1,8 @@
 #! @perl@/bin/perl
 
-use strict;
+use v5.34;
 use warnings;
+use experimental qw(signatures);
 
 use File::Basename qw(dirname);
 use File::Copy qw(copy);
@@ -16,8 +17,7 @@ if ($etc eq "") {
 my $static = "/etc/static";
 
 # Create a symlink atomically from argument 2 -> argument 1
-sub atomic_symlink {
-    my ($source, $target) = @_;
+sub atomic_symlink ($source, $target) {
     my $tmp = "$target.tmp";
     unlink($tmp);
     symlink($source, $tmp) or return 0;
@@ -37,9 +37,7 @@ atomic_symlink($etc, $static) or die("Failed to create symlink for /etc");
 # Returns 1 if the argument points to the files in /etc/static.  That
 # means either argument is a symlink to a file in /etc/static or a
 # directory with all children being static.
-sub is_static {
-    my $path = shift;
-
+sub is_static ($path) {
     if (-l $path) {
         my $target = readlink($path);
         return substr($target, 0, length($static)) eq $static;
@@ -69,6 +67,7 @@ sub is_static {
 # (where all the NixOS sources live).
 sub cleanup {
     my $filename = $_;
+
     if ($File::Find::name eq "/etc/nixos" || $File::Find::name eq $static) {
         $File::Find::prune = 1;
         return;
