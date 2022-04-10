@@ -32822,6 +32822,10 @@ with pkgs;
 
   lingeling = callPackage ../applications/science/logic/lingeling {};
 
+  ### SCIENCE / ENGINEERING
+
+  brmodelo = callPackage ../applications/science/engineering/brmodelo { };
+
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
