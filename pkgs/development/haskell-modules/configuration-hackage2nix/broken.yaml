@@ -433,7 +433,6 @@ broken-packages:
   - blockfrost-api
   - blockhash
   - Blogdown
-  - bloodhound
   - bloomfilter-redis
   - blubber-server
   - bludigon
