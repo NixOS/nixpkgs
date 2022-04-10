@@ -32,6 +32,10 @@ buildPythonPackage rec {
     mypy
     pytestCheckHook
   ];
+  disabledTestPaths = [
+    # stub tests have been "nuked" upstream anyway as they are too troublesome
+    "tests/stubs/test_stubs.py"
+  ];
 
   pythonImportsCheck = [
     "duckdb"
