@@ -4,6 +4,7 @@
 , pythonOlder
 , pytestCheckHook
 , python-socks
+, six
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     python-socks
+    six
    ];
 
   checkInputs = [
