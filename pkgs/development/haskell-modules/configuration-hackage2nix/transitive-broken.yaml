@@ -2249,6 +2249,7 @@ dont-distribute-packages:
  - hsx-xhtml
  - html-kure
  - html-presentation-text
+ - htoml-parse
  - hts
  - htsn-import
  - http-client-auth
@@ -2426,6 +2427,7 @@ dont-distribute-packages:
  - json-togo
  - json-tokens
  - json2-hdbc
+ - jsonlogic-aeson
  - jsons-to-schema
  - jspath
  - jvm
@@ -2526,6 +2528,7 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
+ - large-anon
  - lat
  - latest-npm-version
  - latex-formulae-hakyll
@@ -3647,6 +3650,7 @@ dont-distribute-packages:
  - soundgen
  - source-code-server
  - spade
+ - spago
  - sparkle
  - sparrow
  - sparsebit

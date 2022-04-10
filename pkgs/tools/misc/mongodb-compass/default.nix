@@ -33,7 +33,7 @@ xorg,
 }:
 
 let
-  version = "1.31.0";
+  version = "1.31.1";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -82,7 +82,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "sha256-kzGBb8h03jPCqpwKPXeqB3yPTGgvVsl1DjIyCbNgjqM=";
+        sha256 = "sha256-sC3ghtOA+Zp7LuAwry460WvyWXXw35aQESlaWznfZYk=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";

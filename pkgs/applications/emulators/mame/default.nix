@@ -2,22 +2,34 @@
 , stdenv
 , alsa-lib
 , CoreAudioKit
+, expat
 , fetchFromGitHub
+, flac
 , fontconfig
 , ForceFeedback
+, glm
 , installShellFiles
+, libjpeg
 , libpcap
 , libpulseaudio
 , libXi
 , libXinerama
+, lua5_3
 , makeDesktopItem
 , makeWrapper
 , pkg-config
+, portaudio
+, portmidi
+, pugixml
 , python3
 , qtbase
+, rapidjson
 , SDL2
 , SDL2_ttf
+, utf8proc
 , which
+, writeScript
+, zlib
 }:
 
 let
@@ -33,39 +45,69 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.239";
+  version = "0.242";
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${builtins.replaceStrings [ "." ] [ "" ] version}";
-    sha256 = "sha256-svclBaFkp4d6db+zWZNvZP8vWIFz/7M5N1M6WseOFEk=";
+    sha256 = "sha256-06iKM9cpjXuNvChQTPjhb9oQptC4KTZEoxzZk8+x3/k=";
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
 
   makeFlags = [
-    "TOOLS=1"
-    "USE_LIBSDL=1"
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "TOOLS=1"
+    "USE_LIBSDL=1"
+    # "USE_SYSTEM_LIB_ASIO=1"
+    "USE_SYSTEM_LIB_EXPAT=1"
+    "USE_SYSTEM_LIB_FLAC=1"
+    "USE_SYSTEM_LIB_GLM=1"
+    "USE_SYSTEM_LIB_JPEG=1"
+    "USE_SYSTEM_LIB_LUA=1"
+    "USE_SYSTEM_LIB_PORTAUDIO=1"
+    "USE_SYSTEM_LIB_PORTMIDI=1"
+    "USE_SYSTEM_LIB_PUGIXML=1"
+    "USE_SYSTEM_LIB_RAPIDJSON=1"
+    "USE_SYSTEM_LIB_UTF8PROC=1"
+    "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
   dontWrapQtApps = true;
 
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs =
-    [ SDL2 SDL2_ttf qtbase ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  buildInputs = [
+    expat
+    zlib
+    flac
+    lua5_3
+    portmidi
+    portaudio
+    utf8proc
+    libjpeg
+    rapidjson
+    pugixml
+    glm
+    SDL2
+    SDL2_ttf
+    qtbase
+  ]
+  ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
+  ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
   nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
 
-  # by default MAME assumes that paths with stock resources
-  # are relative and that you run MAME changing to
-  # install directory, so we add absolute paths here
   patches = [
+    # MAME is now generating the PDF documentation on its release script since commit:
+    # https://github.com/mamedev/mame/commit/c0e93076232e794c919231e4386445d78b2d80b1
+    # however this needs sphinx+latex to build, and it is available in the website
+    # anyway for those who need it
+    ./0001-Revert-Added-PDF-documentation-to-dist.mak.patch
+    # by default MAME assumes that paths with stock resources
+    # are relative and that you run MAME changing to
+    # install directory, so we add absolute paths here
     ./emuopts.patch
   ];
 
@@ -93,13 +135,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = writeScript "mame-update-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -eu -o pipefail
+
+    latest_version=$(curl -s https://api.github.com/repos/mamedev/mame/releases/latest | jq --raw-output .tag_name)
+    update-source-version mame "''${latest_version/mame0/0.}"
+  '';
+
   meta = with lib; {
     description = "Is a multi-purpose emulation framework";
     homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
-    # macOS needs more time to build
-    timeout = 24 * 3600;
   };
 }
