@@ -69,7 +69,6 @@ let
       });
     })
 
-
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.18";
@@ -119,7 +118,7 @@ let
         src = fetchFromGitHub {
           owner = "ManneW";
           repo = "vilfo-api-client-python";
-          rev = "v$version}";
+          rev = "v${version}";
           sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
         };
       });
