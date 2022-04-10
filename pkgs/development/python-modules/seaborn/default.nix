@@ -32,6 +32,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Tests may occasionally fail with small offsets
+    "test_ndarray_input"
+    "test_df_input"
+    "test_axis0_input"
+    "test_linkage_scipy"
+  ];
+
   pythonImportsCheck= [
     "seaborn"
   ];
