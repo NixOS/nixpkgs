@@ -197,54 +197,12 @@ in
         apply = map getBin;
       };
 
-      initrdPackages = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        visible = false;
-        description = ''
-          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
-
-          List of packages containing <command>udev</command> rules that will be copied to stage 1.
-          All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
-          will be included.
-        '';
-      };
-
-      initrdBinPackages = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        visible = false;
-        description = ''
-          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
-
-          Packages to search for binaries that are referenced by the udev rules in stage 1.
-          This list always contains /bin of the initrd.
-        '';
-        apply = map getBin;
-      };
-
       path = mkOption {
         type = types.listOf types.path;
         default = [];
         description = ''
           Packages added to the <envar>PATH</envar> environment variable when
           executing programs from Udev rules.
-        '';
-      };
-
-      initrdRules = mkOption {
-        default = "";
-        example = ''
-          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
-        '';
-        type = types.lines;
-        description = ''
-          <command>udev</command> rules to include in the initrd
-          <emphasis>only</emphasis>. They'll be written into file
-          <filename>99-local.rules</filename>. Thus they are read and applied
-          after the essential initrd rules.
         '';
       };
 
@@ -315,6 +273,52 @@ in
       '';
     };
 
+    boot.initrd.services.udev = {
+
+      packages = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        visible = false;
+        description = ''
+          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+
+          List of packages containing <command>udev</command> rules that will be copied to stage 1.
+          All files found in
+          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
+          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          will be included.
+        '';
+      };
+
+      binPackages = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        visible = false;
+        description = ''
+          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+
+          Packages to search for binaries that are referenced by the udev rules in stage 1.
+          This list always contains /bin of the initrd.
+        '';
+        apply = map getBin;
+      };
+
+      rules = mkOption {
+        default = "";
+        example = ''
+          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
+        '';
+        type = types.lines;
+        description = ''
+          <command>udev</command> rules to include in the initrd
+          <emphasis>only</emphasis>. They'll be written into file
+          <filename>99-local.rules</filename>. Thus they are read and applied
+          after the essential initrd rules.
+        '';
+      };
+
+    };
+
   };
 
 
@@ -330,10 +334,10 @@ in
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
-    boot.initrd.extraUdevRulesCommands = optionalString (!config.boot.initrd.systemd.enable && cfg.initrdRules != "")
+    boot.initrd.extraUdevRulesCommands = optionalString (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
       ''
         cat <<'EOF' > $out/99-local.rules
-        ${cfg.initrdRules}
+        ${config.boot.initrd.services.udev.rules}
         EOF
       '';
 
@@ -348,25 +352,25 @@ in
     boot.initrd.systemd.storePaths = [
       "${config.boot.initrd.systemd.package}/lib/systemd/systemd-udevd"
       "${config.boot.initrd.systemd.package}/lib/udev"
-    ] ++ map toString cfg.initrdBinPackages;
+    ] ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
 
     # Generate the udev rules for the initrd
     boot.initrd.systemd.contents = {
       "/etc/udev/rules.d".source = udevRulesFor {
         name = "initrd-udev-rules";
         initrdBin = config.boot.initrd.systemd.contents."/bin".source;
-        udevPackages = cfg.initrdPackages;
+        udevPackages = config.boot.initrd.services.udev.packages;
         udevPath = config.boot.initrd.systemd.contents."/bin".source;
         udev = config.boot.initrd.systemd.package;
         systemd = config.boot.initrd.systemd.package;
-        binPackages = cfg.initrdBinPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
+        binPackages = config.boot.initrd.services.udev.binPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
       };
     };
     # Insert custom rules
-    services.udev.initrdPackages = mkIf (cfg.initrdRules != "") (pkgs.writeTextFile {
+    boot.initrd.services.udev.packages = mkIf (config.boot.initrd.services.udev.rules != "") (pkgs.writeTextFile {
       name = "initrd-udev-rules";
       destination = "/etc/udev/rules.d/99-local.rules";
-      text = cfg.initrdRules;
+      text = config.boot.initrd.services.udev.rules;
     });
 
     environment.etc =
@@ -408,4 +412,8 @@ in
       };
 
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "udev" "initrdRules" ] [ "boot" "initrd" "services" "udev" "rules" ])
+  ];
 }
