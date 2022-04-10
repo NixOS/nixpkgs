@@ -1,7 +1,13 @@
 diff --git a/sipbuild/project.py b/sipbuild/project.py
+index 7d9c8c7..e5cf0b8 100644
 --- a/sipbuild/project.py
 +++ b/sipbuild/project.py
-@@ -336,13 +336,13 @@ class Project(AbstractProject, Configurable):
+@@ -332,17 +332,17 @@ class Project(AbstractProject, Configurable):
+ 
+                 platform_tag = '-'.join(parts)
+ 
+-        elif self.py_platform == 'linux' and self.manylinux:
++        elif self.py_platform == 'linux' and self.manylinux and not platform_tag.endswith('-powerpc64le'):
              # We expect a two part tag so leave anything else unchanged.
              parts = platform_tag.split('-')
              if len(parts) == 2:
