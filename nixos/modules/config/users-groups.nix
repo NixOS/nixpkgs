@@ -139,6 +139,12 @@ let
         description = "The user's home directory.";
       };
 
+      homeMode = mkOption {
+        type = types.strMatching "[0-7]{1,5}";
+        default = "700";
+        description = "The user's home directory mode in numeric format. See chmod(1).";
+      };
+
       cryptHomeLuks = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -319,6 +325,7 @@ let
           group = mkDefault "users";
           createHome = mkDefault true;
           home = mkDefault "/home/${config.name}";
+          homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -430,7 +437,7 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description home homeMode createHome isSystemUser
           password passwordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword;
