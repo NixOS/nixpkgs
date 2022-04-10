@@ -13,7 +13,7 @@ buildGoModule rec {
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
-    owner = "talos-systems";
+    owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
     inherit sha256;
@@ -26,14 +26,16 @@ buildGoModule rec {
       mgmtHelpersPkg = "github.com/talos-systems/talos/cmd/talosctl/pkg/mgmt/helpers"; #MGMT_HELPERS_PKG
     in
     [
-      "-X ${versionPkg}.Name=Talos"
+      "-X ${versionPkg}.Name=Client"
       "-X ${versionPkg}.SHA=${src.rev}" # should be the hash, but as we build from tags, this needs to do
       "-X ${versionPkg}.Tag=${src.rev}"
       "-X ${versionPkg}.PkgsVersion=${pkgsVersion}" # PKGS
       "-X ${versionPkg}.ExtrasVersion=${extrasVersion}" # EXTRAS
-      "-X ${imagesPkgs}.Username=talos-systems" # USERNAME
+      "-X ${imagesPkgs}.Username=siderolabs" # USERNAME
       "-X ${imagesPkgs}.Registry=ghcr.io" # REGISTRY
       "-X ${mgmtHelpersPkg}.ArtifactsPath=_out" # ARTIFACTS
+      "-s"
+      "-w"
     ];
 
   subPackages = [ "cmd/talosctl" ];
@@ -51,7 +53,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI for out-of-band management of Kubernetes nodes created by Talos";
-    homepage = "https://github.com/talos-systems/talos";
+    homepage = "https://www.talos.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ flokli ];
   };
