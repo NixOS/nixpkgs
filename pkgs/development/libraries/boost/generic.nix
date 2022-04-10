@@ -68,7 +68,7 @@ let
     else
       "$NIX_BUILD_CORES";
 
-  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || stdenv.isDarwin;
+  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
 
   b2Args = concatStringsSep " " ([
     "--includedir=$dev/include"
