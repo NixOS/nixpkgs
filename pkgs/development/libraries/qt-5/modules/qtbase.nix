@@ -151,6 +151,9 @@ stdenv.mkDerivation {
     ''}
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+
+    # paralellize compilation of qtmake, which happens within ./configure
+    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
     ./bin/syncqt.pl -version $version
   '';
