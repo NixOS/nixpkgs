@@ -254,9 +254,13 @@ rec {
   */
   hasInfix = infix: content:
     let
-      drop = x: substring 1 (stringLength x) x;
-    in hasPrefix infix content
-      || content != "" && hasInfix infix (drop content);
+      infixLength = stringLength infix;
+      contentLength = stringLength content;
+      stopAt = contentLength - infixLength;
+      hasInfix' = offset:
+        substring offset infixLength content == infix
+        || offset < stopAt && hasInfix' (offset + 1);
+    in hasInfix' 0;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
