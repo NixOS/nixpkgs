@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
+, gnutls
 , lame
 , libev
 , libmicrohttpd
@@ -20,17 +21,17 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.10";
+  version = "0.97.0";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Aa52pRGq99Pt++aEVZdmVNhhQuBajgfZp39L1AfKvho=";
+    sha256 = "sha256-W9Ng1kqai5qhaDs5KWg/1sOTIAalBXLng1MG8sl/ZOg=";
   };
 
   patches = [
-    # Fix pending upstream inclusion for ncuurses-6.3 support:
+    # Fix pending upstream inclusion for ncurses-6.3 support:
     #  https://github.com/clangen/musikcube/pull/474
     (fetchpatch {
       name = "ncurses-6.3.patch";
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     boost
     curl
     ffmpeg
+    gnutls
     lame
     libev
     libmicrohttpd
