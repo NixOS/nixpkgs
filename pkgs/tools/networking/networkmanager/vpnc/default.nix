@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
       attrPath = "networkmanager-vpnc";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-vpnc-service.name";
   };
 
   meta = with lib; {

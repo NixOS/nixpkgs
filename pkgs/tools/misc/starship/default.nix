@@ -9,22 +9,23 @@
 , nixosTests
 , Security
 , Foundation
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.3.0";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mqUE4JzNBhvtDpT2LM23eHX8q93wtPqA+/zr/PxEDiE=";
+    sha256 = "sha256-nLzqfSRmA+D310MDvX+g8nNsoaiSixG+j+g87CPzYMs=";
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation ];
+  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "sha256-hQNDiayVT4UgbxcxdXssi/evPvwgyvG/UOFyEHj7jpo=";
+  cargoSha256 = "sha256-FXzAvO11NIr6dxF2OeV5XJWHG2kgZiASuBnoC6mSps8=";
 
   preCheck = ''
     HOME=$TMPDIR
