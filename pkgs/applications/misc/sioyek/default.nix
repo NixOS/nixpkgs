@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --replace "-lmupdf-threads" "-lfreetype -lgumbo -ljbig2dec -lopenjp2 -ljpeg"
     substituteInPlace pdf_viewer/main.cpp \
       --replace "/usr/share/sioyek" "$out/share" \
-      --replace "/etc/sioyek" "$out/etc" 
+      --replace "/etc/sioyek" "$out/etc"
   '';
 
   qmakeFlags = "DEFINES+=\"LINUX_STANDARD_PATHS\" pdf_viewer_build_config.pro";
