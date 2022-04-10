@@ -29,7 +29,7 @@ let
     mkIf (stdenv.hostPlatform.isAarch32 ||
           stdenv.hostPlatform.isAarch64 ||
           stdenv.hostPlatform.isx86_64 ||
-          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) ||
           (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
   options = {
