@@ -27058,6 +27058,8 @@ with pkgs;
     abseil-cpp = abseil-cpp_202111;
   };
 
+  kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix {};
+
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
   krane = callPackage ../applications/networking/cluster/krane { };
