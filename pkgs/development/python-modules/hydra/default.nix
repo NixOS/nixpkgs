@@ -1,11 +1,21 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
-, importlib-resources, omegaconf, jre_headless, antlr4-python3-runtime }:
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, isPy39
+, fetchFromGitHub
+, pytestCheckHook
+, antlr4-python3-runtime
+, importlib-resources
+, jre_headless
+, omegaconf
+}:
 
 buildPythonPackage rec {
   pname = "hydra";
   version = "1.1.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" || !pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -23,7 +33,7 @@ buildPythonPackage rec {
   disabledTests = [
     "test_bash_completion_with_dot_in_path"
     "test_install_uninstall"
-  ];
+  ] ++ lib.optionals (!isPy39) [ "test_config_search_path" ];
   disabledTestPaths = [ "tests/test_hydra.py" ];
 
   meta = with lib; {
