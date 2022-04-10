@@ -17,13 +17,13 @@ let
   blasIntSize = if blas64 then "64" else "32";
 in stdenv.mkDerivation rec {
   pname = "blis";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
     rev = version;
-    sha256 = "sha256-D5T/itq9zyD5TkeJ4Ae1vS4yEWU51omyJoIkKQ2NLhY=";
+    sha256 = "sha256-1aHIdt5wCDrT1hBPnaUVThwjwDkJQ0G0+tao2iFXYpM=";
   };
 
   inherit blas64;

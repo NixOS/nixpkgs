@@ -13936,11 +13936,6 @@ with pkgs;
     python = python3;
     mkDerivation = stdenv.mkDerivation;
   };
-  octave-jit = callPackage ../development/interpreters/octave {
-    python = python3;
-    enableJIT = true;
-    mkDerivation = stdenv.mkDerivation;
-  };
   octaveFull = libsForQt5.callPackage ../development/interpreters/octave {
     python = python3;
     enableQt = true;
@@ -32649,6 +32644,8 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  cvc5 = callPackage ../applications/science/logic/cvc5 { };
+
   drat-trim = callPackage ../applications/science/logic/drat-trim {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
@@ -32811,6 +32808,8 @@ with pkgs;
   bitwuzla = callPackage ../applications/science/logic/bitwuzla {};
 
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
+
+  symfpu = callPackage ../applications/science/logic/symfpu {};
 
   mcy = callPackage ../applications/science/logic/mcy {};
 
