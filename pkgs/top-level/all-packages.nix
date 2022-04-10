@@ -21226,8 +21226,6 @@ with pkgs;
 
   dex2jar = callPackage ../development/tools/java/dex2jar { };
 
-  doh-proxy = callPackage ../servers/dns/doh-proxy { };
-
   doh-proxy-rust = callPackage ../servers/dns/doh-proxy-rust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -24773,6 +24771,8 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
+  join-desktop = callPackage ../applications/misc/join-desktop { };
+
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
   };
@@ -27500,6 +27500,8 @@ with pkgs;
   meli = callPackage ../applications/networking/mailreaders/meli { };
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
+
+  melody = callPackage ../tools/misc/melody { };
 
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
