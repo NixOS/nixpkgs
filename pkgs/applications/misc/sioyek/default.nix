@@ -9,6 +9,7 @@
 , openjpeg
 , qt3d
 , qtbase
+, qmake
 , wrapQtAppsHook
 }:
 
@@ -25,29 +26,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gumbo harfbuzz jbig2dec mupdf openjpeg qt3d qtbase ];
 
-  nativeBuildInputs = [ installShellFiles wrapQtAppsHook ];
+  nativeBuildInputs = [ installShellFiles wrapQtAppsHook qmake ];
 
-  buildPhase = ''
-    runHook prebuild
-    # Remove nonexistent lib and insert missing ones
-    sed -i 's/-lmupdf-threads/-lfreetype -lgumbo -ljbig2dec -lopenjp2 -ljpeg/' pdf_viewer_build_config.pro
-    qmake pdf_viewer_build_config.pro
-    make
-    runHook postBuild
+  postPatch = ''
+    substituteInPlace pdf_viewer_build_config.pro \
+      --replace "-lmupdf-threads" "-lfreetype -lgumbo -ljbig2dec -lopenjp2 -ljpeg"
+    substituteInPlace pdf_viewer/main.cpp \
+      --replace "/usr/share/sioyek" "$out/share" \
+      --replace "/etc/sioyek" "$out/etc" 
   '';
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 sioyek $out/bin/sioyek
-    install -Dm644 tutorial.pdf $out/bin/tutorial.pdf
-    install -Dm644 -t $out/bin/ pdf_viewer/{keys,prefs}.config
-    cp -r pdf_viewer/shaders $out/bin/
-    runHook postInstall
-  '';
+  qmakeFlags = "DEFINES+=\"LINUX_STANDARD_PATHS\" pdf_viewer_build_config.pro";
 
   postInstall = ''
-    install -Dm644 resources/sioyek-icon-linux.png $out/share/icons/sioyek-icon-linux.png
-    install -Dm644 resources/sioyek.desktop $out/share/applications/sioyek.desktop
+    install -Dm644 tutorial.pdf $out/share/tutorial.pdf
+    cp -r pdf_viewer/shaders $out/share/
+    install -Dm644 -t $out/etc/ pdf_viewer/{keys,prefs}.config
     installManPage resources/sioyek.1
   '';
 
