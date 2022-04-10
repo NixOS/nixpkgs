@@ -136,10 +136,10 @@ sub make_symlinks {
 
             # uid could either be an uid or an username, this gets the uid
             if ($uid !~ /^\+/) {
-                $uid = getpwnam($uid);
+                $uid = getpwnam($uid) or warn("No user with name `$uid` found!");
             }
             if ($gid !~ /^\+/) {
-                $gid = getgrnam($gid);
+                $gid = getgrnam($gid) or warn("No group with name `$uid` found!");
             }
 
             chown(int($uid), int($gid), "$target.tmp") or warn("Chowning `$target` failed");
