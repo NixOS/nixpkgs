@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "rtsp-to-webrtc";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "rtsp-to-webrtc-client";
-    rev = version;
-    hash = "sha256-ry6xNymWgkkvYXliVLUFOUiPz8gbCsQDrSuGmCaH4ZE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-miMBN/8IO4v03mMoclCa3GFl6HCS3Sh6z2HOQ39MRZY=";
   };
 
   propagatedBuildInputs = [
