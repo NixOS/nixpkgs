@@ -31,7 +31,7 @@ buildGoModule rec {
       "-X ${versionPkg}.Tag=${src.rev}"
       "-X ${versionPkg}.PkgsVersion=${pkgsVersion}" # PKGS
       "-X ${versionPkg}.ExtrasVersion=${extrasVersion}" # EXTRAS
-      "-X ${imagesPkgs}.Username=talos-systems" # USERNAME
+      "-X ${imagesPkgs}.Username=siderolabs" # USERNAME
       "-X ${imagesPkgs}.Registry=ghcr.io" # REGISTRY
       "-X ${mgmtHelpersPkg}.ArtifactsPath=_out" # ARTIFACTS
     ];
