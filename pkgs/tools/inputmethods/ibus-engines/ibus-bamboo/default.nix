@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    glib
-    gtk3
     gettext
     pkg-config
     wrapGAppsHook
@@ -31,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
+    gtk3
     xorg.libX11
     xorg.xorgproto
     xorg.libXtst
