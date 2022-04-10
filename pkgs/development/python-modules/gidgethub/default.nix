@@ -32,10 +32,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "extras_require=extras_require," "extras_require=None,"
-  '';
+  format = "flit";
 
   # requires network (reqests github.com)
   doCheck = false;
