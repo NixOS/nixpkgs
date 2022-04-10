@@ -103,6 +103,8 @@ let
           generateConfig name icfg
         } ${icfg.gateway}";
       StandardInput = "file:${icfg.passwordFile}";
+
+      ProtectHome = true;
     };
   };
 in {
