@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre8 }:
+{ lib, stdenv, fetchurl, makeWrapper, jre8, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "nifi";
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/nifi-env.sh \
       --replace "#export JAVA_HOME=/usr/java/jdk1.8.0/" "export JAVA_HOME=${jre8}"
   '';
+
+  passthru = {
+    tests.nifi = nixosTests.nifi;
+  };
 
   meta = with lib; {
     description = "Easy to use, powerful, and reliable system to process and distribute data";
