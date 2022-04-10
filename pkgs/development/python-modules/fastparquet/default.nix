@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-xV0AXNZSy4LSrHf11OP/+KDbeDQu8yF1ugX+W4mie1E=";
+    sha256 = "05qb4nz87p9vnrdsyl25hdp5sj35lki64gjza5dahc89fwfdnsmd";
   };
 
   postPatch = ''
