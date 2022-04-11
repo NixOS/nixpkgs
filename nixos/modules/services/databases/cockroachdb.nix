@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -6,47 +6,44 @@ let
   cfg = config.services.cockroachdb;
   crdb = cfg.package;
 
-  escape    = builtins.replaceStrings ["%"] ["%%"];
-  ifNotNull = v: s: optionalString (v != null) s;
-
-  startupCommand = lib.concatStringsSep " "
+  startupCommand = utils.escapeSystemdExecArgs
     ([
       # Basic startup
-      "${crdb}/bin/cockroach start"
+      "${crdb}/bin/cockroach"
+      "start"
       "--logtostderr"
       "--store=/var/lib/cockroachdb"
-      (ifNotNull cfg.locality "--locality='${cfg.locality}'")
 
       # WebUI settings
-      "--http-addr='${cfg.http.address}:${toString cfg.http.port}'"
+      "--http-addr=${cfg.http.address}:${toString cfg.http.port}"
 
       # Cluster listen address
-      "--listen-addr='${cfg.listen.address}:${toString cfg.listen.port}'"
+      "--listen-addr=${cfg.listen.address}:${toString cfg.listen.port}"
 
-      # Cluster configuration
-      (ifNotNull cfg.join "--join=${cfg.join}")
-
-      # Cache and memory settings. Must be escaped.
-      "--cache='${escape cfg.cache}'"
-      "--max-sql-memory='${escape cfg.maxSqlMemory}'"
+      # Cache and memory settings.
+      "--cache=${cfg.cache}"
+      "--max-sql-memory=${cfg.maxSqlMemory}"
 
       # Certificate/security settings.
       (if cfg.insecure then "--insecure" else "--certs-dir=${cfg.certsDir}")
-    ] ++ cfg.extraArgs);
+    ]
+    ++ lib.optional (cfg.join != null) "--join=${cfg.join}"
+    ++ lib.optional (cfg.locality != null) "--locality=${cfg.locality}"
+    ++ cfg.extraArgs);
 
-    addressOption = descr: defaultPort: {
-      address = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = "Address to bind to for ${descr}";
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = defaultPort;
-        description = "Port to bind to for ${descr}";
-      };
+  addressOption = descr: defaultPort: {
+    address = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Address to bind to for ${descr}";
     };
+
+    port = mkOption {
+      type = types.port;
+      default = defaultPort;
+      description = "Port to bind to for ${descr}";
+    };
+  };
 in
 
 {
