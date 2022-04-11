@@ -108,6 +108,9 @@ in {
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
+          packages.ghc865Binary
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -124,6 +127,8 @@ in {
         # the oldest ghc with aarch64-darwin support is 8.10.5
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -136,6 +141,8 @@ in {
         # aarch64 ghc8107Binary exceeds max output size on hydra
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -147,7 +154,11 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc8107Binary;
+      bootPkgs =
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
+        else
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
