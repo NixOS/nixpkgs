@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rich-cli";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "18qpdaw4drkwq71xikngwaarkjxhfc0nrb1zm36rw31b8dz0ij2k";
+    sha256 = "0d7rny0la114xp7nfk0qiy25z0ii4515xkqfyampqxrzzfa3iviw";
   };
 
   format = "pyproject";
