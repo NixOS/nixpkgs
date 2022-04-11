@@ -32513,6 +32513,12 @@ with pkgs;
 
   trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
 
+  wolfram-engine = callPackage ../applications/science/math/wolfram-engine { };
+
+  wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
+
+  wolfram-notebook = callPackage ../applications/science/math/wolfram-engine/notebook.nix { };
+
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
