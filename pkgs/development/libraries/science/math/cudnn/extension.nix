@@ -49,7 +49,7 @@ final: prev: let
       rec {
         fileVersion = "10.1";
         fullVersion = "7.6.5.32";
-        hash = "sha256-YAJn8squ0v1Y6yFLpmnY6jXzlqfRm5SCLms2+fcIjCA=";
+        hash = "sha256-fq7IA5osMKsLx1jTA1iHZ2k972v0myJIWiwAvy4TbLM=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${cudatoolkit.majorVersion}-linux-x64-v${fullVersion}.tgz";
         supportedCudaVersions = [ "10.1" ];
       }

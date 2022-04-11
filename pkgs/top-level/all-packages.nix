@@ -3008,10 +3008,6 @@ with pkgs;
 
   dpic = callPackage ../tools/graphics/dpic { };
 
-  dragon-drop = callPackage ../tools/X11/dragon-drop {
-    gtk = gtk3;
-  };
-
   dstp = callPackage ../development/tools/dstp { };
 
   dsvpn = callPackage ../applications/networking/dsvpn { };
@@ -9064,11 +9060,7 @@ with pkgs;
 
   pm2 = nodePackages.pm2;
 
-  pngcheck = callPackage ../tools/graphics/pngcheck {
-    zlib = zlib.override {
-      static = true;
-    };
-  };
+  pngcheck = callPackage ../tools/graphics/pngcheck { };
 
   pngcrush = callPackage ../tools/graphics/pngcrush { };
 
@@ -14561,6 +14553,12 @@ with pkgs;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
+  binutils-unwrapped-all-targets = callPackage ../development/tools/misc/binutils {
+    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
+    # FHS sys dirs presumably only have stuff for the build platform
+    noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
+    withAllTargets = true;
+  };
   binutils = wrapBintoolsWith {
     bintools = binutils-unwrapped;
   };
@@ -16280,6 +16278,7 @@ with pkgs;
     boost174
     boost175
     boost177
+    boost178
   ;
 
   boost15x = boost159;
@@ -21211,8 +21210,6 @@ with pkgs;
 
   dex2jar = callPackage ../development/tools/java/dex2jar { };
 
-  doh-proxy = callPackage ../servers/dns/doh-proxy { };
-
   doh-proxy-rust = callPackage ../servers/dns/doh-proxy-rust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -24299,7 +24296,7 @@ with pkgs;
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   starship = callPackage ../tools/misc/starship {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+    inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
   };
 
   stig = callPackage ../applications/networking/p2p/stig { };
@@ -24770,6 +24767,8 @@ with pkgs;
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
+
+  join-desktop = callPackage ../applications/misc/join-desktop { };
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
@@ -25598,6 +25597,8 @@ with pkgs;
   keepass-qrcodeview = callPackage ../applications/misc/keepass-plugins/qrcodeview { };
 
   kerbrute = callPackage ../tools/security/kerbrute { };
+
+  kvmtool = callPackage ../applications/virtualization/kvmtool { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
@@ -27058,6 +27059,8 @@ with pkgs;
     abseil-cpp = abseil-cpp_202111;
   };
 
+  kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix {};
+
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
   krane = callPackage ../applications/networking/cluster/krane { };
@@ -27498,6 +27501,8 @@ with pkgs;
   meli = callPackage ../applications/networking/mailreaders/meli { };
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
+
+  melody = callPackage ../tools/misc/melody { };
 
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
@@ -32815,6 +32820,10 @@ with pkgs;
 
   lingeling = callPackage ../applications/science/logic/lingeling {};
 
+  ### SCIENCE / ENGINEERING
+
+  brmodelo = callPackage ../applications/science/engineering/brmodelo { };
+
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
@@ -34027,7 +34036,7 @@ with pkgs;
 
   sift = callPackage ../tools/text/sift { };
 
-  xdragon = lowPrio (callPackage ../applications/misc/xdragon { });
+  xdragon = lowPrio (callPackage ../tools/X11/xdragon { });
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
