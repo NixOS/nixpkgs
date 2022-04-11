@@ -11528,6 +11528,12 @@
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
   };
+  sir4ur0n = {
+    email = "sir4ur0n@users.noreply.github.com";
+    github = "sir4ur0n";
+    githubId = 1204125;
+    name = "sir4ur0n";
+  };
   siraben = {
     email = "bensiraphob@gmail.com";
     matrix = "@siraben:matrix.org";

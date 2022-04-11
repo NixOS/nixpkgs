@@ -1787,6 +1787,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.pam.ussh</literal> has been added, which
+          allows authorizing PAM sessions based on SSH
+          <emphasis>certificates</emphasis> held within an SSH agent,
+          using
+          <link xlink:href="https://github.com/uber/pam-ussh">pam-ussh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zrepl</literal> package has been updated from
           0.4.0 to 0.5:
         </para>
