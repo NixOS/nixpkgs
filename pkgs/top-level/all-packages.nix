@@ -8800,8 +8800,6 @@ with pkgs;
 
   pantheon-tweaks = callPackage ../desktops/pantheon/third-party/pantheon-tweaks { };
 
-  paperless-ng = callPackage ../applications/office/paperless-ng { };
-
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
