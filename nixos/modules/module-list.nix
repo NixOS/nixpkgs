@@ -597,7 +597,7 @@
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
-  ./services/misc/paperless-ng.nix
+  ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
