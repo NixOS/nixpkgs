@@ -1,24 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "geos";
-  version = "3.10.2";
+  version = "3.9.2";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ULvFmaw4a0wrOWLcxBHwBAph8gSq7066ciXs3Qz0VxU=";
+    sha256 = "sha256-RKWpviHX1HNDa/Yhwt3MPPWou+PHhuEyKWGKO52GEpc=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  enableParallelBuilding = true;
 
-  postPatch = ''
-    substituteInPlace tools/geos-config.in \
-      --replace "@libdir@" "@prefix@/lib" \
-      --replace "@includedir@" "@prefix@/include"
-  '';
+  # https://trac.osgeo.org/geos/ticket/993
+  configureFlags = lib.optional stdenv.isAarch32 "--disable-inline";
 
   meta = with lib; {
     description = "C++ port of the Java Topology Suite (JTS)";

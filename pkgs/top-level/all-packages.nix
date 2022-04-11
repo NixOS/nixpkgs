@@ -16890,6 +16890,8 @@ with pkgs;
 
   geos = callPackage ../development/libraries/geos { };
 
+  geos39 = callPackage ../development/libraries/geos/3.9.nix { };
+
   getdata = callPackage ../development/libraries/getdata { };
 
   inherit (callPackages ../development/libraries/getdns { })
