@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
@@ -37,7 +38,6 @@ stdenv.mkDerivation rec {
     kirigami2
     kcoreaddons
     ki18n
-    qttools
     qtquickcontrols2
   ];
 
