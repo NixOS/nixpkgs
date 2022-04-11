@@ -11,7 +11,7 @@ let
 
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
-  shouldCheckMeta = config.checkMeta or false;
+  shouldCheckMeta = config.checkMeta or true;
 
   allowUnfree = config.allowUnfree or false
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
