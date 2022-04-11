@@ -33209,6 +33209,8 @@ with pkgs;
 
   avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
 
+  basiliskii = callPackage ../applications/emulators/basiliskii { };
+
   beep = callPackage ../misc/beep { };
 
   bees = callPackage ../tools/filesystems/bees { };
