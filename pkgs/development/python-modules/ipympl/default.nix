@@ -3,6 +3,7 @@
 , fetchPypi
 , ipykernel
 , ipywidgets
+, matplotlib
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   };
 
 
-  propagatedBuildInputs = [ ipykernel ipywidgets ];
+  propagatedBuildInputs = [ ipykernel ipywidgets matplotlib ];
 
   # There are no unit tests in repository
   doCheck = false;
