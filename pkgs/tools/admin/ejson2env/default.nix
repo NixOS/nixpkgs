@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ejson2env";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1nfMmjYKRo5vjOwLb3fX9SQ0CDHme1DAz0AGGpV4piI=";
+    sha256 = "sha256-Oc0fWihOUafYN5t9SxHxaYJEv5e46CCDNe4xo+Dcjrs=";
   };
 
-  vendorSha256 = "sha256-lais54Gm4UGJN8D+iFbP8utTfDr+v8qXZKLdpNKzJi8=";
+  vendorSha256 = "sha256-BY45WirK9AVhvFGB5uqI4dLxzO2WuNNhhJbQ6nsRXao=";
 
   meta = with lib; {
     description = "A tool to simplify storing secrets that should be accessible in the shell environment in your git repo.";
