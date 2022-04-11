@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, openssl, pkg-config, libnl
 , nixosTests, wpa_supplicant_gui
-, withDbus ? true, dbus
+, dbusSupport ? true, dbus
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
 , readOnlyModeSSIDs ? false
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString withDbus ''
+  '' + optionalString dbusSupport ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ openssl libnl ]
-    ++ optional withDbus dbus
+    ++ optional dbusSupport dbus
     ++ optional withReadline readline
     ++ optional withPcsclite pcsclite;
 
