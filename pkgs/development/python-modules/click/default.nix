@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.1";
+  version = "8.1.2";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-erkA44FJyYcjduj5tZht3K9owPQTz3NnigvKVUfm+XY=";
+    sha256 = "sha256-R5cH/hTZ7JoHV2GLehAKCuTE4jb6xbf4DKaAKBQaGnI=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
