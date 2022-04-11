@@ -5,6 +5,7 @@
 , runCommand
 , nix-update-script
 , dsq
+, testVersion
 , diffutils
 }:
 
@@ -23,10 +24,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ diffutils ];
 
+  ldflags = [ "-X" "main.Version=${version}" ];
+
   passthru = {
     updateScript = nix-update-script { attrPath = pname; };
 
     tests = {
+      version = testVersion { package = dsq; };
+
       pretty-csv = runCommand "${pname}-test" { } ''
         mkdir "$out"
         cat <<EOF > "$out/input.csv"
