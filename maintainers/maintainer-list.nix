@@ -10186,6 +10186,12 @@
     githubId = 115877;
     name = "Kenny Shen";
   };
+  quag = {
+    email = "quaggy@gmail.com";
+    github = "quag";
+    githubId = 35086;
+    name = "Jonathan Wright";
+  };
   queezle = {
     email = "git@queezle.net";
     github = "qzle";
