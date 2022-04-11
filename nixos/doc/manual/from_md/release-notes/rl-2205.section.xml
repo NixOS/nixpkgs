@@ -585,6 +585,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>lib.systems.supported</literal> has been removed, as
+          it was overengineered for determining the systems to support
+          in the nixpkgs flake. The list of systems exposed by the
+          nixpkgs flake can now be accessed as
+          <literal>lib.systems.flakeExposed</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For new installations
           <literal>virtualisation.oci-containers.backend</literal> is
           now set to <literal>podman</literal> by default. If you still

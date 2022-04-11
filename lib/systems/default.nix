@@ -8,7 +8,16 @@ rec {
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
-  supported = import ./supported.nix { inherit lib; };
+
+  /* List of all Nix system doubles the nixpkgs flake will expose the package set
+     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+
+     **Warning**: This attribute is considered experimental and is subject to change.
+  */
+  flakeExposed = import ./flake-systems.nix { };
+
+  # TODO(@sternenseemann): remove before 21.11
+  supported = throw "2022-05-23: Use lib.systems.flakeExposed instead of lib.systems.supported.hydra, as lib.systems.supported has been removed";
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
