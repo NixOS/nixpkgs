@@ -9,6 +9,8 @@
 , future
 , imagemagick
 , importlib-resources
+, jax
+, jaxlib
 , jinja2
 , langdetect
 , lib
@@ -78,6 +80,8 @@ buildPythonPackage rec {
     beautifulsoup4
     ffmpeg
     imagemagick
+    jax
+    jaxlib
     jinja2
     langdetect
     matplotlib
@@ -118,6 +122,9 @@ buildPythonPackage rec {
 
     # Requires `tensorflow_io` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/image/lsun_test.py"
+
+    # Requires `envlogger` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`
     # deep in TF AutoGraph. Doesn't reproduce in Docker with Ubuntu 22.04 => might be related
