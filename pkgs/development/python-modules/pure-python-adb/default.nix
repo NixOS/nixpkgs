@@ -23,6 +23,8 @@ buildPythonPackage rec {
     ];
   };
 
+  doCheck = pythonOlder "3.10"; # all tests result in RuntimeError on 3.10
+
   checkInputs = [
     pytestCheckHook
   ]
@@ -30,6 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "ppadb.client"
+  ] ++ lib.optionals doCheck [
     "ppadb.client_async"
   ];
 
