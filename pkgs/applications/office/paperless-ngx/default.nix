@@ -177,6 +177,8 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     # PYTHONPATH of all dependencies used by the package
     pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
     inherit path;
+
+    tests = { inherit (nixosTests) paperless; };
   };
 
   meta = with lib; {
