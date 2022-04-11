@@ -248,9 +248,7 @@ in
       after = [ "redis-paperless-ng.service" ];
     };
 
-    # Password copying can't be implemented as a privileged preStart script
-    # in 'paperless-ng-server' because 'defaultServiceConfig' limits the filesystem
-    # paths accessible by the service.
+    # Reading the user-provided password file requires root access
     systemd.services.paperless-ng-copy-password = mkIf (cfg.passwordFile != null) {
       requiredBy = [ "paperless-ng-server.service" ];
       before = [ "paperless-ng-server.service" ];
