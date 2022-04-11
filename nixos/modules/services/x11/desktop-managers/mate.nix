@@ -74,7 +74,7 @@ in
     # Debugging
     environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-    environment.systemPackages = pkgs.gnome.removePackagesByName
+    environment.systemPackages = lib.utils.removePackagesByName
       (pkgs.mate.basePackages ++
       pkgs.mate.extraPackages ++
       [

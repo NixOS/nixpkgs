@@ -455,7 +455,7 @@ in
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
         with pkgs.gnome;
-        removePackagesByName
+        lib.utils.removePackagesByName
           ([
             baobab
             cheese
@@ -515,7 +515,7 @@ in
     })
 
     (mkIf serviceCfg.games.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
+      environment.systemPackages = with pkgs.gnome; lib.utils.removePackagesByName [
         aisleriot
         atomix
         five-or-more
@@ -536,12 +536,12 @@ in
         quadrapassel
         swell-foop
         tali
-      ] config.environment.gnome.excludePackages);
+      ] config.environment.gnome.excludePackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
     (mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
+      environment.systemPackages = with pkgs.gnome; lib.utils.removePackagesByName [
         dconf-editor
         devhelp
         pkgs.gnome-builder
@@ -550,7 +550,7 @@ in
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
         /* gnome-boxes */
-      ] config.environment.gnome.excludePackages);
+      ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })
