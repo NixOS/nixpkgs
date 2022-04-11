@@ -62,7 +62,6 @@ self: super: {
   headroom = dontCheck super.headroom;
   hgeometry = dontCheck super.hgeometry;
   hhp = dontCheck super.hhp;
-  hint = dontCheck super.hint;
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
   hsakamai = dontCheck super.hsakamai;
   hsemail-ns = dontCheck super.hsemail-ns;

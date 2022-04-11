@@ -54,6 +54,7 @@ in stdenv.mkDerivation {
       packageName = pname;
       attrPath = "networkmanager-sstp";
     };
+    networkManagerPlugin = "VPN/nm-sstp-service.name";
   };
 
   meta = with lib; {

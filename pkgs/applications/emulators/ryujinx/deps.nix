@@ -11,7 +11,7 @@
   (fetchNuGet { pname = "GLibSharp"; version = "3.22.25.128"; sha256 = "1j8i5izk97ga30z1qpd765zqd2q5w71y8bhnkqq4bj59768fyxp5"; })
   (fetchNuGet { pname = "GtkSharp"; version = "3.22.25.128"; sha256 = "0z0wx0p3gc02r8d7y88k1rw307sb2vapbr1k1yc5qdc38fxz5jsy"; })
   (fetchNuGet { pname = "GtkSharp.Dependencies"; version = "1.1.1"; sha256 = "0ffywnc3ca1lwhxdnk99l238vsprsrsh678bgm238lb7ja7m52pw"; })
-  (fetchNuGet { pname = "LibHac"; version = "0.16.0"; sha256 = "1kivnf4c4km1a8y0sl34z9gfazlivna0x31q0065n0sz13g82spi"; })
+  (fetchNuGet { pname = "LibHac"; version = "0.16.1"; sha256 = "131qnqa1asdmymwdvpjza6w646b05jzn1cxjdxgwh7qdcdb77xyx"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "6.0.3"; sha256 = "0rrrfgkr7rzhlnsnajvzb1ijkybp99d992bqxy9pbawmq7d60bdk"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.osx-x64"; version = "6.0.3"; sha256 = "09whyl3i9mzy10n5zxlq66lj3l4p29hm75igmdip2fb376zxyam3"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.win-x64"; version = "6.0.3"; sha256 = "11kv50kll3iq88kn40f5v5qlq8mydv6y6xz2cbzjw4aadd44njwq"; })

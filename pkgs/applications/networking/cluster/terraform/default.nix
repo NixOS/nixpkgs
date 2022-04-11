@@ -66,6 +66,7 @@ let
           timstott
           zimbatm
           zowoq
+          techknowlogick
         ];
       };
     } // attrs');
@@ -84,7 +85,7 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
             # Expose wrappers around the override* functions of the terraform
             # derivation.
@@ -191,9 +192,9 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.1.7";
-    sha256 = "sha256-E8qY17MSdA7fQW4wGSDiPzbndBP5SZwelAJAWzka/io=";
-    vendorSha256 = "sha256-lyy/hcr00ix6qZoxzSfCbXvDC8dRB2ZjrONywpqbVZ8=";
+    version = "1.1.8";
+    sha256 = "sha256-U3RuLnDQD1EbPZG/wPuVMbSKmR3EqspkoK0Ky8aZb7k=";
+    vendorSha256 = "sha256-Jy9o0O80OjagrHG25CSPblI49zKx0N8pwvEotk9qm3s=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

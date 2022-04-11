@@ -1,9 +1,3 @@
-{ minCudaVersion
-, maxCudaVersion
-, mkSrc
-, version
-}:
-
 { stdenv
 , lib
 , cudatoolkit
@@ -19,13 +13,27 @@
   removeStatic ? false
 }:
 
-stdenv.mkDerivation {
+{ fullVersion
+, url
+, hash ? null
+, sha256 ? null
+, supportedCudaVersions ? []
+}:
+
+assert (hash != null) || (sha256 != null);
+
+let
+  majorMinorPatch = version: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
+  version = majorMinorPatch fullVersion;
+in stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
   inherit version;
   # It's often the case that the src depends on the version of cudatoolkit it's
   # being linked against, so we pass in `cudatoolkit` as an argument to `mkSrc`.
-  src = mkSrc cudatoolkit;
+  src = fetchurl {
+    inherit url hash sha256;
+  };
 
   nativeBuildInputs = [ addOpenGLRunpath ];
 
@@ -81,12 +89,7 @@ stdenv.mkDerivation {
     # official version constraints (as recorded in default.nix). In some cases
     # you _may_ be able to smudge version constraints, just know that you're
     # embarking into unknown and unsupported territory when doing so.
-    broken = let cudaVer = lib.getVersion cudatoolkit; in
-      !(
-        lib.versionAtLeast cudaVer minCudaVersion
-        && lib.versionAtLeast maxCudaVersion cudaVer
-      );
-
+    broken = !(elem cudatoolkit.majorMinorVersion supportedCudaVersions);
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
     license = licenses.unfree;

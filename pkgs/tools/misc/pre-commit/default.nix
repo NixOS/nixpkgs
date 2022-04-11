@@ -6,6 +6,7 @@
 , dotnet-sdk
 , git
 , go
+, libiconv
 , nodejs
 }:
 
@@ -52,6 +53,11 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     re-assert
+  ];
+
+  buildInputs = [
+    # Required for rust test on x86_64-darwin
+    libiconv
   ];
 
   doCheck = true;

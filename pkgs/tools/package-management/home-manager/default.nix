@@ -1,7 +1,7 @@
 #Adapted from
 #https://github.com/rycee/home-manager/blob/2c07829be2bcae55e04997b19719ff902a44016d/home-manager/default.nix
 
-{ bash, coreutils, findutils, gnused, less, gettext, nixos-option, lib, stdenv, makeWrapper, fetchFromGitHub }:
+{ bash, coreutils, findutils, gnused, less, ncurses, gettext, nixos-option, lib, stdenv, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/home-manager \
       --subst-var-by bash "${bash}" \
       --subst-var-by DEP_PATH "${
-        lib.makeBinPath [ coreutils findutils gettext gnused less nixos-option ]
+        lib.makeBinPath [ coreutils findutils gettext gnused less ncurses nixos-option ]
       }" \
       --subst-var-by HOME_MANAGER_LIB '${src}/lib/bash/home-manager.sh' \
       --subst-var-by HOME_MANAGER_PATH '${src}' \

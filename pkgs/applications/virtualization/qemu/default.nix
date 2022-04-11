@@ -234,9 +234,10 @@ stdenv.mkDerivation rec {
     # the .desktop is both invalid and pointless
     rm -f $out/share/applications/qemu.desktop
 
-    # copy qemu-ga (guest agent) to separate output
+    # move qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
-    cp $out/bin/qemu-ga $ga/bin/
+    mv $out/bin/qemu-ga $ga/bin/
+    ln -s $ga/bin/qemu-ga $out/bin
     remove-references-to -t $out $ga/bin/qemu-ga
   '' + lib.optionalString gtkSupport ''
     # wrap GTK Binaries

@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Workspace switcher settings, works only when passed after gtk3 schemas in the wrapper for some reason
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath mate.marco}"
+    )
+  '';
+
   enableParallelBuilding = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname version; };

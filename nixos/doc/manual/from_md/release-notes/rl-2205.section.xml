@@ -132,6 +132,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/vvilhonen/nethoscope">nethoscope</link>,
+          listen to your network traffic. Available as
+          <link linkend="opt-programs.nethoscope.enable">programs.nethoscope</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
           a lightweight shipper for forwarding and centralizing log
           data. Available as
@@ -217,6 +224,15 @@
           <link xlink:href="options.html#opt-programs.k4-whisperer.enable">programs.k40-whisperer.enable</link>.
           Users must add themselves to the <literal>k40</literal> group
           to be able to access the device.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mozilla-mobile/mozilla-vpn-client">mozillavpn</link>,
+          the client for the
+          <link xlink:href="https://vpn.mozilla.org/">Mozilla VPN</link>
+          service. Available as
+          <link xlink:href="options.html#opt-services.mozillavpn">services.mozillavpn</link>.
         </para>
       </listitem>
       <listitem>
@@ -365,6 +381,14 @@
           cluster resource manager
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nifi.apache.org">nifi</link>, an
+          easy to use, powerful, and reliable system to process and
+          distribute data. Available as
+          <link xlink:href="options.html#opt-services.nifi.enable">services.nifi</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -430,6 +454,12 @@
           <literal>pkgs.emacsPackages.elpaPackages</literal> and
           <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
           new versions will release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.klogd</literal> was removed. Logging of
+          kernel messages is handled by systemd since Linux 3.5.
         </para>
       </listitem>
       <listitem>
@@ -1281,6 +1311,33 @@
       </listitem>
       <listitem>
         <para>
+          Existing <literal>resholve*</literal> functions have been
+          renamed and nested under <literal>pkgs.resholve</literal>.
+          Update uses to:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>resholvePackage</literal> -&gt;
+              <literal>resholve.mkDerivation</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>resholveScript</literal> -&gt;
+              <literal>resholve.writeScript</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>resholveScriptBin</literal> -&gt;
+              <literal>resholve.writeScriptBin</literal>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.cosmopolitan</literal> no longer provides the
           <literal>cosmoc</literal> command. It has been moved to
           <literal>pkgs.cosmoc</literal>.
@@ -1467,6 +1524,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>asterisk</literal> and
+          <literal>asterisk-stable</literal> packages were switched from
+          <literal>asterisk_18</literal> to the newly-packaged
+          <literal>asterisk_19</literal>. Asterisk 13 and 17 have been
+          removed as they have reached their end of life.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.unifi.openPorts</literal> option default
           value of <literal>true</literal> is now deprecated and will be
           changed to <literal>false</literal> in 22.11. Configurations
@@ -1536,6 +1602,13 @@
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
           configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new module was added for the Envoy reverse proxy, providing
+          the options <literal>services.envoy.enable</literal> and
+          <literal>services.envoy.settings</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1613,6 +1686,13 @@
           <literal>fetchhg</literal> if the argument
           <literal>fetchSubmodules</literal> is set to
           <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A module for declarative configuration of openconnect VPN
+          profiles was added under
+          <literal>networking.openconnect</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1715,6 +1795,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.pam.ussh</literal> has been added, which
+          allows authorizing PAM sessions based on SSH
+          <emphasis>certificates</emphasis> held within an SSH agent,
+          using
+          <link xlink:href="https://github.com/uber/pam-ussh">pam-ussh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zrepl</literal> package has been updated from
           0.4.0 to 0.5:
         </para>
@@ -1791,6 +1880,17 @@
           <literal>security.polkit.enable</literal>, is now disabled by
           default. It will automatically be enabled through services and
           desktop environments as needed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          xfsprogs was update to version 5.15, which enables inobtcount
+          and bigtime by default on filesystem creation. Support for
+          these features was added in kernel 5.10 and deemed stable in
+          kernel 5.15. If you want to be able to mount XFS filesystems
+          created with this release of xfsprogs on kernel releases older
+          than 5.10, you need to format them with
+          <literal>mkfs.xfs -m bigtime=0 -m inobtcount=0</literal>.
         </para>
       </listitem>
       <listitem>

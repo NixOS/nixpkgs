@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
   # look for GO_LDFLAGS getting set in the Makefile
-  version = "0.14.3";
-  sha256 = "sha256-toEbWUZxnJkUe9jkZRdJrcPXu+CIh62fUKyX38OkXxU=";
-  vendorSha256 = "sha256-Pj1918TIOGfhkRiFEKkURL4xMFgWroiNsNU6yWzT8yk=";
-  pkgsVersion = "v0.9.0-6-gbfcc795";
-  extrasVersion = "v0.7.0-2-gb4c9d21";
+  version = "1.0.1";
+  sha256 = "sha256-IqFnVOnmYqf2K3TX+gwFPmBBksYz+56Oy/t8xWhi7fc=";
+  vendorSha256 = "sha256-GKdAMmU4HiOFYR0SFeFvwFGTXc2lmzO/fAlR1vCDfX4=";
+  pkgsVersion = "v1.0.0-6-g7c293d5";
+  extrasVersion = "v1.0.0";
 in
 buildGoModule rec {
   pname = "talosctl";
@@ -13,7 +13,7 @@ buildGoModule rec {
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
-    owner = "talos-systems";
+    owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
     inherit sha256;
@@ -26,14 +26,16 @@ buildGoModule rec {
       mgmtHelpersPkg = "github.com/talos-systems/talos/cmd/talosctl/pkg/mgmt/helpers"; #MGMT_HELPERS_PKG
     in
     [
-      "-X ${versionPkg}.Name=Talos"
+      "-X ${versionPkg}.Name=Client"
       "-X ${versionPkg}.SHA=${src.rev}" # should be the hash, but as we build from tags, this needs to do
       "-X ${versionPkg}.Tag=${src.rev}"
       "-X ${versionPkg}.PkgsVersion=${pkgsVersion}" # PKGS
       "-X ${versionPkg}.ExtrasVersion=${extrasVersion}" # EXTRAS
-      "-X ${imagesPkgs}.Username=talos-systems" # USERNAME
+      "-X ${imagesPkgs}.Username=siderolabs" # USERNAME
       "-X ${imagesPkgs}.Registry=ghcr.io" # REGISTRY
       "-X ${mgmtHelpersPkg}.ArtifactsPath=_out" # ARTIFACTS
+      "-s"
+      "-w"
     ];
 
   subPackages = [ "cmd/talosctl" ];
@@ -51,7 +53,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI for out-of-band management of Kubernetes nodes created by Talos";
-    homepage = "https://github.com/talos-systems/talos";
+    homepage = "https://www.talos.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ flokli ];
   };
