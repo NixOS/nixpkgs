@@ -10,7 +10,8 @@ let
   ifNotNull = v: s: optionalString (v != null) s;
 
   startupCommand = lib.concatStringsSep " "
-    [ # Basic startup
+    ([
+      # Basic startup
       "${crdb}/bin/cockroach start"
       "--logtostderr"
       "--store=/var/lib/cockroachdb"
@@ -31,7 +32,7 @@ let
 
       # Certificate/security settings.
       (if cfg.insecure then "--insecure" else "--certs-dir=${cfg.certsDir}")
-    ];
+    ] ++ cfg.extraArgs);
 
     addressOption = descr: defaultPort: {
       address = mkOption {
@@ -157,6 +158,16 @@ in
           This would primarily be useful to enable Enterprise Edition features
           in your own custom CockroachDB build (Nixpkgs CockroachDB binaries
           only contain open source features and open source code).
+        '';
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
+        description = ''
+          Extra CLI arguments passed to <command>cockroach start</command>.
+          For the full list of supported argumemnts, check <link xlink:href="https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags"/>
         '';
       };
     };
