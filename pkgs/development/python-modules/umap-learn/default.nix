@@ -15,13 +15,14 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.2";
+  # asked for new release in https://github.com/lmcinnes/umap/issues/852
+  version = "unstable-2022-04-11";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = version;
-    sha256 = "sha256-JfYuuE1BP+HdiEl7l01sZ/XXlEwHyAsLjK9nqhRd/3o=";
+    rev = "300cbba82e48fcccc12f68a93521b7d14415be74";
+    sha256 = "sha256-SBUyIqUHbMJx6Rdprycj/6WEtg1fVOYGXXOzQQJ0fc8=";
   };
 
   propagatedBuildInputs = [
