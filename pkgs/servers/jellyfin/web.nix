@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "https://jellyfin.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    platforms = nodejs.meta.platforms;
   };
 }
