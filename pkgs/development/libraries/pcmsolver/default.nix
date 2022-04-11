@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, perl, gfortran, python2
+{ lib, stdenv, fetchFromGitHub, cmake, perl, gfortran, python3
 , boost, eigen, zlib
 } :
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     perl
-    python2
+    python3
   ];
 
   buildInputs = [
