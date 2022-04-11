@@ -5,27 +5,26 @@
 , appstream-glib
 , desktop-file-utils
 , glib
-, gtk3
 , libxml2
 , meson
 , ninja
 , pkg-config
 , wrapGAppsHook
 , gobject-introspection
-, libhandy
+, libadwaita
 , librsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "other";
 
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "banking";
     rev = version;
-    sha256 = "1w5x9iczw5hb9bfdm1df37n8xhdrida1yfrd82k9l8hb1k4q3h9d";
+    sha256 = "sha256-VGNCSirQslRfLIFeo375BNlHujoNXm+s55Ty+hB+ZRI=";
   };
 
   patches = [
@@ -35,17 +34,21 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://gitlab.com/tabos/banking/-/commit/c3cc9afc380fe666ae6e331aa8a97659c60397a4.patch";
       sha256 = "r9n9l47XU4Tg4U5sfiFdGkbG8QB7O4ol9CB1ya06yOc=";
     })
+    # fix build with libadwaita 1.0.0
+    (fetchpatch {
+      url = "https://gitlab.com/tabos/banking/-/commit/27ac4a89ba6047005d43de71a469ef30d1fda8b5.patch";
+      hash = "sha256-dpDjdYf3gDsyFMTfGes+x27yUxKEnKjLulJxX2encG0=";
+    })
   ];
 
   postPatch = ''
-    patchShebangs meson_post_install.py
+    patchShebangs meson_post_conf.py meson_post_install.py
   '';
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
     desktop-file-utils # for desktop-file-validate
     glib # for glib-compile-resources
-    gtk3 # for gtk-update-icon-cache
     libxml2 # for xmllint
     meson
     ninja
@@ -55,8 +58,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gobject-introspection
-    gtk3
-    libhandy
+    libadwaita
     librsvg
   ];
 
