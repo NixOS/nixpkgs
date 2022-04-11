@@ -6427,6 +6427,8 @@ with pkgs;
 
   httplab = callPackage ../tools/networking/httplab { };
 
+  hashlink = callPackage ../development/interpreters/hashlink { };
+
   lucky-cli = callPackage ../development/web/lucky-cli { };
 
   partclone = callPackage ../tools/backup/partclone { };
