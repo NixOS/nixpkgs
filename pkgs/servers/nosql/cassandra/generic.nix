@@ -16,6 +16,7 @@
 , version
 , sha256
 , extraMeta ? { }
+, callPackage
 , ...
 }:
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "mirror://apache/cassandra/${version}/apache-${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/cassandra/${version}/apache-cassandra-${version}-bin.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper coreutils ];
@@ -113,6 +114,8 @@ stdenv.mkDerivation rec {
           assert test.testPackage.version == version;
           test;
       };
+
+    updateScript = callPackage ./update-script.nix { inherit generation; };
   };
 
   meta = with lib; {
