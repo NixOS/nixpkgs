@@ -98,6 +98,11 @@ cfgnetworkenlightenment = """  networking.hostName = "@@hostname@@"; # Define yo
 
 """
 
+cfgnmapplet = """  # Enable network manager applet
+  programs.nm-applet.enable = true;
+
+"""
+
 cfgtime = """  # Set your time zone.
   time.timeZone = "@@timezone@@";
 
@@ -372,6 +377,9 @@ def run():
     else:
         cfg += cfgnetwork
 
+    if (gs.value("packagechooser_packagechooser") == "mate") | (gs.value("packagechooser_packagechooser") == "lxqt") | (gs.value("packagechooser_packagechooser") == "lumina"):
+        cfg += cfgnmapplet
+
     if (gs.value("hostname") is None):
         catenate(variables, "hostname", "nixos")
     else:
@@ -444,8 +452,6 @@ def run():
     cfg += cfgpkgs
     if gs.value("packagechooser_packagechooser") == "plasma":
         catenate(variables, "pkgs", "\n    kate")
-    elif (gs.value("packagechooser_packagechooser") == "mate") | (gs.value("packagechooser_packagechooser") == "lxqt") | (gs.value("packagechooser_packagechooser") == "lumina"):
-        catenate(variables, "pkgs", "\n    networkmanagerapplet")
     else:
         catenate(variables, "pkgs", "")
 
