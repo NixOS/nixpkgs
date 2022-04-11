@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "editables";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6918f16225258f24ef9800c2327e14eded42ddac344e77982380749464024f35";
+    sha256 = "sha256-FnUk43c1jtHxN05hwmjw16S/fb0EbGVve0EM3hYWGxo=";
   };
 
   checkInputs = [

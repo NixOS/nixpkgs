@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "gopls";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "gopls/v${version}";
-    sha256 = "sha256-ypuZQt6iF1QRk/FsoTKnJlb5CWIEkvK7r37t4rSxhmU=";
+    sha256 = "sha256-BXalq73nXMDQg7+x/SJOAeiBK3yLVxH6pPPqPYWZ7KY=";
   };
 
   modRoot = "gopls";
-  vendorSha256 = "sha256-SY08322wuJl8F790oXGmYo82Yadi14kDpoVGCGVMF0c=";
+  vendorSha256 = "sha256-oH3w/17Vem+q2MahM1A5gmEniWLNhTXi0L7ozhza15o=";
 
   doCheck = false;
 

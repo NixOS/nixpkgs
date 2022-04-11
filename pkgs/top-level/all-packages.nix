@@ -16890,6 +16890,8 @@ with pkgs;
 
   geos = callPackage ../development/libraries/geos { };
 
+  geos39 = callPackage ../development/libraries/geos/3.9.nix { };
+
   getdata = callPackage ../development/libraries/getdata { };
 
   inherit (callPackages ../development/libraries/getdns { })
@@ -26509,7 +26511,7 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
-  hugo = callPackage ../applications/misc/hugo { };
+  hugo = callPackage ../applications/misc/hugo { buildGoModule = buildGo118Module; };
 
   go-org = callPackage ../applications/misc/go-org { };
 
@@ -29662,6 +29664,8 @@ with pkgs;
 
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
 
+  unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
+
   unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
 
   unipicker = callPackage ../applications/misc/unipicker { };
@@ -32508,6 +32512,12 @@ with pkgs;
   trilinos = callPackage ../development/libraries/science/math/trilinos {};
 
   trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
+
+  wolfram-engine = callPackage ../applications/science/math/wolfram-engine { };
+
+  wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
+
+  wolfram-notebook = callPackage ../applications/science/math/wolfram-engine/notebook.nix { };
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
