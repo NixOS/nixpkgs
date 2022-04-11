@@ -166,7 +166,7 @@ The following methods are available on machine objects:
         command as a whole will fail.
 
     -   For pipelines, the last non-zero exit status will be returned
-        (if there is one, zero will be returned otherwise).
+        (if there is one; otherwise zero will be returned).
 
     -   Dereferencing unset variables fails the command.
 

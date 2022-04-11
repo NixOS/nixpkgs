@@ -291,8 +291,8 @@ start_all()
             <listitem>
               <para>
                 For pipelines, the last non-zero exit status will be
-                returned (if there is one, zero will be returned
-                otherwise).
+                returned (if there is one; otherwise zero will be
+                returned).
               </para>
             </listitem>
             <listitem>
