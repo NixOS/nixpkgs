@@ -8283,6 +8283,8 @@ with pkgs;
 
   ngrok-1 = callPackage ../tools/networking/ngrok-1 { };
 
+  nifi = callPackage ../servers/web-apps/nifi { };
+
   nitter = callPackage ../servers/nitter { };
 
   noice = callPackage ../applications/misc/noice { };

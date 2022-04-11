@@ -381,6 +381,14 @@
           cluster resource manager
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nifi.apache.org">nifi</link>, an
+          easy to use, powerful, and reliable system to process and
+          distribute data. Available as
+          <link xlink:href="options.html#opt-services.nifi.enable">services.nifi</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
