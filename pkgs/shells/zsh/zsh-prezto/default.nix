@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "ecaed1cfa7591d2304d7eb5d69b42b54961a7145";
-    sha256 = "+7KYBHmzXkdMgyj/x7o7Bf8f1DDFJ6nUMWe8vLUxbZo=";
+    rev = "dea85a0740253c0e17fa7eadb067694e11f5451c";
+    sha256 = "/1hGucZoB+W3lpNX25wafoWwcBTETc8foGUiWfSBrI4=";
     fetchSubmodules = true;
   };
 
