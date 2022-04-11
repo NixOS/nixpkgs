@@ -2,35 +2,41 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.14.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sB7C0IKadgpQ2h6HuH4D6ku/GXnFfFS+fGCW/RBSc10=";
+    sha256 = "sha256-EBjAB0uSMAyiVr6KxqrT/F+GIkntmOKNPHL1D0RBdG0=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
-      commit="$(git rev-parse HEAD)"
-      source_date_epoch=$(git log --date=format:'%Y-%m-%dT%H:%M:%SZ' -1 --pretty=%ad)
-      substituteInPlace "$out/cmd/starboard/main.go" \
-        --replace 'commit  = "none"' "commit  = \"$commit\"" \
-        --replace 'date    = "unknown"' "date    = \"$source_date_epoch\""
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-R7tF724y5WNIByE+9nRoNSZDZzfLtPfK/9tSBkARaN0=";
+  vendorSha256 = "sha256-BxXH+dJyAQRGAq25CljUImxYIT+nCQpmUPUjHOYF0kc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/starboard" ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
+
+  # ldflags based on metadata from git and source
+  preBuild = ''
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   preCheck = ''
     # Remove test that requires networking
