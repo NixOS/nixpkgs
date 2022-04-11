@@ -33,6 +33,7 @@
 , enablePluginDillo ? true
 , enablePluginFancy ? true, libsoup, webkitgtk
 , enablePluginFetchInfo ? true
+, enablePluginKeywordWarner ? true
 , enablePluginLibravatar ? enablePluginRavatar
 , enablePluginLitehtmlViewer ? true, gumbo
 , enablePluginMailmbox ? true
@@ -70,6 +71,7 @@ let
     { flags = [ "enchant" ]; enabled = enableEnchant; deps = [ enchant ]; }
     { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ libsoup webkitgtk ]; }
     { flags = [ "fetchinfo-plugin" ]; enabled = enablePluginFetchInfo; }
+    { flags = [ "keyword_warner-plugin" ]; enabled = enablePluginKeywordWarner; }
     { flags = [ "gnutls" ]; enabled = enableGnuTLS; deps = [ gnutls ]; }
     { flags = [ "ldap" ]; enabled = enableLdap; deps = [ openldap ]; }
     { flags = [ "libetpan" ]; enabled = enableLibetpan; deps = [ libetpan ]; }
