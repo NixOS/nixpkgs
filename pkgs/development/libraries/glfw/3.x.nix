@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aWwt6FRq/ofQmZAeavDa8inrJfrPxb8iyo1XYdQsrKc=";
   };
 
-  # Fix freezing on Wayland (https://github.com/glfw/glfw/pull/1711)
-  # and linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = if waylandSupport then ./wayland.patch else ./x11.patch;
+  # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
+  patches = lib.optional (!waylandSupport) ./x11.patch;
 
   propagatedBuildInputs = [ libGL ];
 
