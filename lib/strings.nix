@@ -252,15 +252,9 @@ rec {
       hasInfix "foo" "abcd"
       => false
   */
-  hasInfix = infix: content:
-    let
-      infixLength = stringLength infix;
-      contentLength = stringLength content;
-      stopAt = contentLength - infixLength;
-      hasInfix' = offset:
-        substring offset infixLength content == infix
-        || offset < stopAt && hasInfix' (offset + 1);
-    in hasInfix' 0;
+  hasInfix = infix:
+    let matchInfix = builtins.match ".*${escapeRegex infix}.*";
+    in content: matchInfix content != null;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
