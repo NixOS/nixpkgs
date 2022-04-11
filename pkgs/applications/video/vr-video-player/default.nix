@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gkpncA/r/Vw/OZrqBWxyJw1y96OhTGVgtcj0+g0dTCc=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     gcc
     pkg-config
     glm
@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
     xorg.libXcomposite
     xorg.libXfixes
     openvr
+    makeWrapper
   ];
-
-  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     substituteInPlace src/main.cpp \
