@@ -27902,6 +27902,8 @@ with pkgs;
 
   odo = callPackage ../applications/networking/cluster/odo { };
 
+  odin2 = callPackage ../applications/audio/odin2 { };
+
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
