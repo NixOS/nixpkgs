@@ -9951,6 +9951,12 @@
       fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A";
     }];
   };
+  podocarp = {
+    email = "xdjiaxd@gmail.com";
+    github = "podocarp";
+    githubId = 10473184;
+    name = "Jia Xiaodong";
+  };
   polendri = {
     email = "paul@ijj.li";
     github = "polendri";
