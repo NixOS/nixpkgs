@@ -7,7 +7,11 @@
 , pytorch
 , pyyaml
 , tensorboard
-, tqdm }:
+, tqdm
+, pydeprecate
+, torchmetrics
+, fsspec
+}:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
@@ -28,6 +32,9 @@ buildPythonPackage rec {
     pyyaml
     tensorboard
     tqdm
+    pydeprecate
+    torchmetrics
+    fsspec
   ];
 
   checkInputs = [ pytestCheckHook ];
