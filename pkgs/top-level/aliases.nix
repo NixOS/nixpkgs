@@ -188,6 +188,7 @@ mapAliases ({
   corsmisc = throw "corsmisc has been removed (upstream is gone)"; # Added 2022-01-24
   couchdb = throw "couchdb was removed from nixpkgs, use couchdb3 instead"; # Added 2021-03-03
   couchdb2 = throw "couchdb2 was removed from nixpkgs, use couchdb3 instead"; # Added 2021-03-03
+  coreclr = throw "coreclr has been removed from nixpkgs, use dotnet-sdk instead"; # added 2022-06-12
   cpp-gsl = throw "'cpp-gsl' has been renamed to/replaced by 'microsoft_gsl'"; # Converted to throw 2022-02-22
   cpp_ethereum = throw "cpp_ethereum has been removed; abandoned upstream"; # Added 2020-11-30
   cpuminer-multi = throw "cpuminer-multi has been removed: deleted by upstream"; # Added 2022-01-07

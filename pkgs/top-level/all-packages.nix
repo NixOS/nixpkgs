@@ -23648,8 +23648,6 @@ with pkgs;
 
   comixcursors = callPackage ../data/icons/comixcursors {};
 
-  coreclr = callPackage ../development/compilers/coreclr { };
-
   corefonts = callPackage ../data/fonts/corefonts { };
 
   courier-prime = callPackage ../data/fonts/courier-prime { };
