@@ -8856,6 +8856,8 @@ with pkgs;
 
   pipe-rename = callPackage ../tools/misc/pipe-rename { };
 
+  pipecontrol = libsForQt5.callPackage ../applications/audio/pipecontrol { };
+
   pipectl = callPackage ../tools/misc/pipectl { };
 
   pitivi = callPackage ../applications/video/pitivi { };
