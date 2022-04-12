@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, pytest-asyncio
 , pytestCheckHook
 }:
 
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytest-asyncio
     pytestCheckHook
   ];
 
