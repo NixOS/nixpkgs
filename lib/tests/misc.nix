@@ -26,10 +26,10 @@ runTests {
 
   testCallLocklessFlake = {
     expr = callLocklessFlake {
-      path = ./..;
-      inputs = {};
+      path = ./flakes/subflakeTest;
+      inputs = { subflake = ./flakes/subflakeTest/subflake; };
     };
-    expected = { lib = import ./..; outPath = ./..; };
+    expected = { x = ./flakes/subflakeTest/subflake; outPath = ./flakes/subflakeTest; };
   };
 
 # TRIVIAL
