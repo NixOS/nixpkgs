@@ -4714,6 +4714,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  grnnja = {
+    email = "grnnja@gmail.com";
+    github = "grnnja";
+    githubId = 31556469;
+    name = "Prem Netsuwan";
+  };
   gruve-p = {
     email = "groestlcoin@gmail.com";
     github = "gruve-p";
