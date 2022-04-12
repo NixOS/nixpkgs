@@ -11398,6 +11398,18 @@ final: prev:
     meta.homepage = "https://github.com/thinca/vim-visualstar/";
   };
 
+  vim-vp4 = buildVimPluginFrom2Nix {
+    pname = "vim-vp4";
+    version = "2021-01-06";
+    src = fetchFromGitHub {
+      owner = "ngemily";
+      repo = "vim-vp4";
+      rev = "511ec1cd651a25b30d75ec6df29e61b9ca75d1b9";
+      sha256 = "1vr8j4w6s26hjbil2kx57nnslrjczp4jvmc7s8lhl41z0r6nj4fb";
+    };
+    meta.homepage = "https://github.com/ngemily/vim-vp4/";
+  };
+
   vim-vsnip = buildVimPluginFrom2Nix {
     pname = "vim-vsnip";
     version = "2022-02-26";
