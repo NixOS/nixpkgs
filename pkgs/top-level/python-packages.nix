@@ -4138,9 +4138,13 @@ in {
 
   ipython = callPackage ../development/python-modules/ipython { };
 
+  ipyvolume = callPackage ../development/python-modules/ipyvolume { };
+
   ipyvue = callPackage ../development/python-modules/ipyvue { };
 
   ipyvuetify = callPackage ../development/python-modules/ipyvuetify { };
+
+  ipywebrtc = callPackage ../development/python-modules/ipywebrtc { };
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
@@ -5561,6 +5565,8 @@ in {
   nitpick = callPackage ../applications/version-management/nitpick { };
 
   nitransforms = callPackage ../development/python-modules/nitransforms { };
+
+  niwidgets = callPackage ../development/python-modules/niwidgets { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel {
     inherit (pkgs) nix;
@@ -8352,6 +8358,8 @@ in {
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
   };
+
+  pythreejs = callPackage ../development/python-modules/pythreejs { };
 
   pyeapi = callPackage ../development/python-modules/pyeapi { };
 
