@@ -82,6 +82,7 @@ mapAliases ({
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
+  pathpy = path; # added 2022-04-12
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   privacyidea = throw "privacyidea has been renamed to pkgs.privacyidea"; # added 2021-06-20
   prometheus_client = prometheus-client; # added 2021-06-10
