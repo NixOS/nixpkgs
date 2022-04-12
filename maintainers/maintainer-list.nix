@@ -7714,6 +7714,13 @@
     githubId = 109141;
     name = "Georges Dubus";
   };
+  madonius = {
+    email = "nixos@madoni.us";
+    github = "madonius";
+    githubId = 1246752;
+    name = "madonius";
+    matrix = "@madonius:entropia.de";
+  };
   Madouura = {
     email = "madouura@gmail.com";
     github = "Madouura";
