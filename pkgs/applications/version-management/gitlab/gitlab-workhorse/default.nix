@@ -5,7 +5,7 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "14.9.2";
+  version = "14.9.3";
 
   src = fetchFromGitLab {
     owner = data.owner;
