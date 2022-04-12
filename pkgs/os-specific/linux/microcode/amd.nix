@@ -12,13 +12,14 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     mkdir -p kernel/x86/microcode
-    find ${linux-firmware}/lib/firmware/amd-ucode -name \*.bin \
-      -exec sh -c 'cat {} >> kernel/x86/microcode/AuthenticAMD.bin' \;
+    find ${linux-firmware}/lib/firmware/amd-ucode -name \*.bin -print0 | sort -z |\
+      xargs -0 -I{} sh -c 'cat {} >> kernel/x86/microcode/AuthenticAMD.bin'
   '';
 
   installPhase = ''
     mkdir -p $out
-    echo kernel/x86/microcode/AuthenticAMD.bin | bsdcpio -o -H newc -R 0:0 > $out/amd-ucode.img
+    touch -d @$SOURCE_DATE_EPOCH kernel/x86/microcode/AuthenticAMD.bin
+    echo kernel/x86/microcode/AuthenticAMD.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/amd-ucode.img
   '';
 
   meta = with lib; {
