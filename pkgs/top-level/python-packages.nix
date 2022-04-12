@@ -2152,6 +2152,8 @@ in {
 
   datatable = callPackage ../development/python-modules/datatable { };
 
+  datauri = callPackage ../development/python-modules/datauri { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   dateutils = callPackage ../development/python-modules/dateutils { };
