@@ -14447,6 +14447,8 @@ with pkgs;
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
   autoconf271 = callPackage ../development/tools/misc/autoconf { };
 
+  acr  = callPackage ../development/tools/misc/acr { };
+
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = automake116x;
