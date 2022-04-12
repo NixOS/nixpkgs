@@ -52,7 +52,7 @@ buildDotnetModule rec {
     xinput
   ];
 
-  autoPatchelfIgnoreMissingDeps = true; # Attempts to patchelf unneeded SOs
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ]; # Attempts to patchelf unneeded SOs
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";
