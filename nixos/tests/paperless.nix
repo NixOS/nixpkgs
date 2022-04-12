@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ lib, ... }: {
-  name = "paperless-ng";
+  name = "paperless";
   meta.maintainers = with lib.maintainers; [ earvstedt Flakebi ];
 
   nodes.machine = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ imagemagick jq ];
-    services.paperless-ng = {
+    services.paperless = {
       enable = true;
       passwordFile = builtins.toFile "password" "admin";
     };
@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ lib, ... }: {
   testScript = ''
     import json
 
-    machine.wait_for_unit("paperless-ng-consumer.service")
+    machine.wait_for_unit("paperless-consumer.service")
 
     with subtest("Add a document via the file system"):
         machine.succeed(
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ lib, ... }: {
         )
 
     with subtest("Web interface gets ready"):
-        machine.wait_for_unit("paperless-ng-web.service")
+        machine.wait_for_unit("paperless-web.service")
         # Wait until server accepts connections
         machine.wait_until_succeeds("curl -fs localhost:28981")
 

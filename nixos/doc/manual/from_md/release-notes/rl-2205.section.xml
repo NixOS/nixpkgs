@@ -552,6 +552,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.paperless-ng</literal> was renamed to
+          <literal>services.paperless</literal>. Accordingly, the
+          <literal>paperless-ng-manage</literal> script (located in
+          <literal>dataDir</literal>) was renamed to
+          <literal>paperless-manage</literal>.
+          <literal>services.paperless</literal> now uses
+          <literal>paperless-ngx</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>matrix-synapse</literal> service
           (<literal>services.matrix-synapse</literal>) has been
           converted to use the <literal>settings</literal> option
