@@ -1688,6 +1688,7 @@ broken-packages:
   - ghc-usage
   - gh-labeler
   - giak
+  - gi-adwaita
   - gi-cogl
   - Gifcurry
   - gi-gio-hs-list-model
