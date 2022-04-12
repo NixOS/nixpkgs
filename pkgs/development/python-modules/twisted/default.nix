@@ -27,6 +27,19 @@
 , setuptools
 , typing-extensions
 , zope_interface
+
+# for passthru.tests
+, cassandra-driver
+, klein
+, magic-wormhole
+, scrapy
+, treq
+, txaio
+, txamqp
+, txrequests
+, txtorcon
+, thrift
+, nixosTests
 }:
 
 buildPythonPackage rec {
@@ -123,6 +136,21 @@ buildPythonPackage rec {
     # race conditions when running in paralell
     ${python.interpreter} -m twisted.trial twisted
   '';
+
+  passthru.tests = {
+    inherit
+      cassandra-driver
+      klein
+      magic-wormhole
+      scrapy
+      treq
+      txaio
+      txamqp
+      txrequests
+      txtorcon
+      thrift;
+    inherit (nixosTests) buildbot matrix-synapse;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/twisted/twisted";
