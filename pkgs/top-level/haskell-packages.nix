@@ -259,10 +259,7 @@ in {
             overrides =
               pkgs.lib.composeExtensions
                 (oldAttrs.overrides or (_: _: {}))
-                (_: _: {
-                  integer-simple = null;
-                  integer-gmp = null;
-                });
+                (_: _: { integer-simple = null; });
           })
         );
 
@@ -274,14 +271,10 @@ in {
       in
       pkgs.lib.genAttrs nativeBignumGhcNames
         (name:
-          packages.${name}.override (oldAttrs: {
+          packages.${name}.override {
             ghc = bh.compiler.native-bignum.${name};
             buildHaskellPackages = bh.packages.native-bignum.${name};
-            overrides =
-              pkgs.lib.composeExtensions
-                (oldAttrs.overrides or (_: _: {}))
-                (_: _: { integer-gmp = null; });
-          })
+          }
         );
   };
 }
