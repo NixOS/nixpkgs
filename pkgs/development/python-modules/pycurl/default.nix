@@ -71,11 +71,6 @@ buildPythonPackage rec {
     "test_libcurl_ssl_gnutls"
     # AssertionError: assert 'crypto' in ['curl']
     "test_ssl_in_static_libs"
-    # pycurl.error: (27, '')
-    "test_getinfo_raw_certinfo"
-    "test_request_with_certinfo"
-    "test_request_with_verifypeer"
-    "test_request_without_certinfo"
   ];
 
   meta = with lib; {
