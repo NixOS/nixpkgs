@@ -39,7 +39,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-v"
-    "--numprocesses $NIX_BUILD_CORES"
   ];
 
   disabledTests = [

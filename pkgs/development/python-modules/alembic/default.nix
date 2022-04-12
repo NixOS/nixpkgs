@@ -42,10 +42,6 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "--numprocesses" "$NIX_BUILD_CORES"
-  ];
-
   meta = with lib; {
     homepage = "https://bitbucket.org/zzzeek/alembic";
     description = "A database migration tool for SQLAlchemy";
