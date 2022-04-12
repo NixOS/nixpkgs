@@ -34057,6 +34057,8 @@ with pkgs;
 
   jflap = callPackage ../applications/science/engineering/jflap { };
 
+  strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
+
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
