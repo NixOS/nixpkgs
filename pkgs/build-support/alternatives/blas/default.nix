@@ -65,7 +65,11 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  libblas="${lib.getLib blasProvider'}/lib/libblas${canonicalExtension}"
+  if [ "${builtins.toString stdenv.hostPlatform.isDarwin}" == "1" ] && [ "${blasImplementation}" == "mkl" ]; then
+    libblas="${lib.getLib blasProvider'}/lib/libmkl_rt${canonicalExtension}"
+  else
+    libblas="${lib.getLib blasProvider'}/lib/libblas${canonicalExtension}"
+  fi
 
   if ! [ -e "$libblas" ]; then
     echo "$libblas does not exist, ${blasProvider'.name} does not provide libblas."
@@ -102,7 +106,11 @@ Libs: -L$out/lib -lblas
 Cflags: -I$dev/include
 EOF
 
-  libcblas="${lib.getLib blasProvider'}/lib/libcblas${canonicalExtension}"
+  if [ "${builtins.toString stdenv.hostPlatform.isDarwin}" == "1" ] && [ "${blasImplementation}" == "mkl" ]; then
+    libcblas="${lib.getLib blasProvider'}/lib/libmkl_rt${canonicalExtension}"
+  else
+    libcblas="${lib.getLib blasProvider'}/lib/libcblas${canonicalExtension}"
+  fi
 
   if ! [ -e "$libcblas" ]; then
     echo "$libcblas does not exist, ${blasProvider'.name} does not provide libcblas."
