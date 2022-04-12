@@ -71,7 +71,11 @@ stdenv.mkDerivation rec {
     substituteInPlace meson.build --replace '>= 1.0.0-alpha.1' '>= 1.0.0'
   '';
 
-  doInstallCheck = true;
+  doCheck = true;
+
+  # thread 'main' panicked at 'Unable to start GTK4.: BoolError { message: "Failed to
+  # initialize GTK", filename: "/build/kooha-2.0.1-vendor.tar.gz/gtk4/src/rt.rs", function: "gtk4::rt", line: 120 }', src/main.rs:37:17
+  doInstallCheck = false;
 
   installCheckPhase = ''
     $out/bin/kooha --help
