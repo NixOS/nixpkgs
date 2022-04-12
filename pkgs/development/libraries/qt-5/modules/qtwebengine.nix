@@ -12,7 +12,6 @@
 , libcap
 , pciutils
 , systemd
-, pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
 , cctools, libobjc, libunwind, sandbox, xnu
@@ -23,6 +22,8 @@
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
+, pipewireSupport ? stdenv.isLinux
+, pipewire_0_2
 }:
 
 qtModule {
@@ -137,7 +138,7 @@ qtModule {
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ lib.optional (pipewireSupport && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -171,7 +172,7 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
-  ] ++ lib.optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
+  ] ++ lib.optionals (pipewireSupport && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire
     pipewire_0_2
   ]

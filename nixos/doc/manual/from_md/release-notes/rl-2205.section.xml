@@ -381,6 +381,14 @@
           cluster resource manager
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nifi.apache.org">nifi</link>, an
+          easy to use, powerful, and reliable system to process and
+          distribute data. Available as
+          <link xlink:href="options.html#opt-services.nifi.enable">services.nifi</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -1783,6 +1791,15 @@
           will work, but issue deprecation warnings and
           <link linkend="opt-services.logrotate.settings">services.logrotate.settings</link>
           should now be used instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.pam.ussh</literal> has been added, which
+          allows authorizing PAM sessions based on SSH
+          <emphasis>certificates</emphasis> held within an SSH agent,
+          using
+          <link xlink:href="https://github.com/uber/pam-ussh">pam-ussh</link>.
         </para>
       </listitem>
       <listitem>

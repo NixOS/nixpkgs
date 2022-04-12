@@ -77,7 +77,9 @@ def generate_extension_versions(
     - Filter out versions that only support old GNOME versions
     - Download the extension and hash it
     """
-    extension_versions: Dict[ShellVersion, Dict[str, str]] = {}
+
+    # Determine extension version per shell version
+    extension_versions: Dict[ShellVersion, ExtensionVersion] = {}
     for shell_version, version_prefix in supported_versions.items():
         # Newest compatible extension version
         extension_version: Optional[int] = max(
@@ -91,11 +93,24 @@ def generate_extension_versions(
         # Extension is not compatible with this GNOME version
         if not extension_version:
             continue
+
+        extension_versions[shell_version] = extension_version
+
+    # Download information once for all extension versions chosen above
+    extension_info_cache: Dict[ExtensionVersion, Tuple[str, str]] = {}
+    for extension_version in sorted(set(extension_versions.values())):
         logging.debug(
-            f"[{shell_version}] Downloading '{uuid}' v{extension_version}"
+            f"[{uuid}] Downloading v{extension_version}"
         )
-        sha256, metadata = fetch_extension_data(uuid, str(extension_version))
-        extension_versions[shell_version] = {
+        extension_info_cache[extension_version] = \
+            fetch_extension_data(uuid, str(extension_version))
+
+    # Fill map
+    extension_versions_full: Dict[ShellVersion, Dict[str, str]] = {}
+    for shell_version, extension_version in extension_versions.items():
+        sha256, metadata = extension_info_cache[extension_version]
+
+        extension_versions_full[shell_version] = {
             "version": str(extension_version),
             "sha256": sha256,
             # The downloads are impure, their metadata.json may change at any time.
@@ -103,7 +118,7 @@ def generate_extension_versions(
             # Upstream issue: https://gitlab.gnome.org/Infrastructure/extensions-web/-/issues/137
             "metadata": metadata,
         }
-    return extension_versions
+    return extension_versions_full
 
 
 def pname_from_url(url: str) -> Tuple[str, str]:

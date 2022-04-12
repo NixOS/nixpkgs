@@ -8283,6 +8283,8 @@ with pkgs;
 
   ngrok-1 = callPackage ../tools/networking/ngrok-1 { };
 
+  nifi = callPackage ../servers/web-apps/nifi { };
+
   nitter = callPackage ../servers/nitter { };
 
   noice = callPackage ../applications/misc/noice { };
@@ -8853,6 +8855,8 @@ with pkgs;
   pick = callPackage ../tools/misc/pick { };
 
   pipe-rename = callPackage ../tools/misc/pipe-rename { };
+
+  pipecontrol = libsForQt5.callPackage ../applications/audio/pipecontrol { };
 
   pipectl = callPackage ../tools/misc/pipectl { };
 
@@ -11563,6 +11567,8 @@ with pkgs;
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
+
+  zfp = callPackage ../tools/compression/zfp {};
 
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
@@ -16889,6 +16895,8 @@ with pkgs;
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
 
   geos = callPackage ../development/libraries/geos { };
+
+  geos39 = callPackage ../development/libraries/geos/3.9.nix { };
 
   getdata = callPackage ../development/libraries/getdata { };
 
@@ -23106,6 +23114,8 @@ with pkgs;
 
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
+  pam_ussh = callPackage ../os-specific/linux/pam_ussh { };
+
   paxctl = callPackage ../os-specific/linux/paxctl { };
 
   paxtest = callPackage ../os-specific/linux/paxtest { };
@@ -26507,7 +26517,7 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
-  hugo = callPackage ../applications/misc/hugo { };
+  hugo = callPackage ../applications/misc/hugo { buildGoModule = buildGo118Module; };
 
   go-org = callPackage ../applications/misc/go-org { };
 
@@ -26583,6 +26593,8 @@ with pkgs;
   slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
 
   singularity = callPackage ../applications/virtualization/singularity { };
+
+  sonixd = callPackage ../applications/audio/sonixd { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
@@ -29660,6 +29672,8 @@ with pkgs;
 
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
 
+  unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
+
   unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
 
   unipicker = callPackage ../applications/misc/unipicker { };
@@ -32506,6 +32520,12 @@ with pkgs;
   trilinos = callPackage ../development/libraries/science/math/trilinos {};
 
   trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
+
+  wolfram-engine = callPackage ../applications/science/math/wolfram-engine { };
+
+  wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
+
+  wolfram-notebook = callPackage ../applications/science/math/wolfram-engine/notebook.nix { };
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 

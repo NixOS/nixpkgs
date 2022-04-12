@@ -25,8 +25,6 @@
 , pydot
 , pyhamcrest
 , pymongo
-, pytest-timeout
-, pytest-xdist
 , pytestCheckHook
 , python
 , pythonAtLeast
@@ -43,26 +41,21 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.36.0";
+  version = "2.37.0";
   disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "v${version}";
-    sha256 = "sha256-f+ICbKSwNjkhrTCCZwxbmqZlQ1+dQSTRag1IflWsqYg=";
+    sha256 = "sha256-FmfTxRLqXUHhhAZIxCRx2+phX0bmU5rIHaftBU4yBJY=";
   };
-
-  patches = [
-    ./relax-deps.patch
-    # Fixes https://issues.apache.org/jira/browse/BEAM-9324
-    ./fix-cython.patch
-  ];
 
   # See https://github.com/NixOS/nixpkgs/issues/156957.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "typing-extensions>=3.7.0,<4" "typing-extensions" \
+      --replace "dill>=0.3.1.1,<0.3.2" "dill" \
+      --replace "httplib2>=0.8,<0.20.0" "httplib2" \
       --replace "pyarrow>=0.15.1,<7.0.0" "pyarrow"
   '';
 
@@ -109,8 +102,6 @@ buildPythonPackage rec {
     parameterized
     psycopg2
     pyhamcrest
-    pytest-timeout
-    pytest-xdist
     pytestCheckHook
     pyyaml
     requests-mock
@@ -123,6 +114,18 @@ buildPythonPackage rec {
   preCheck = "cd $out/lib/${python.libPrefix}/site-packages";
 
   disabledTestPaths = [
+    # Fails with
+    #     _______ ERROR collecting apache_beam/io/external/xlang_jdbcio_it_test.py _______
+    #     apache_beam/io/external/xlang_jdbcio_it_test.py:80: in <module>
+    #         class CrossLanguageJdbcIOTest(unittest.TestCase):
+    #     apache_beam/io/external/xlang_jdbcio_it_test.py:99: in CrossLanguageJdbcIOTest
+    #         container_init: Callable[[], Union[PostgresContainer, MySqlContainer]],
+    #     E   NameError: name 'MySqlContainer' is not defined
+    #
+    # Test relies on the testcontainers package, which is not currently (as of
+    # 2022-04-08) available in nixpkgs.
+    "apache_beam/io/external/xlang_jdbcio_it_test.py"
+
     # These tests depend on the availability of specific servers backends.
     "apache_beam/runners/portability/flink_runner_test.py"
     "apache_beam/runners/portability/samza_runner_test.py"
@@ -136,12 +139,6 @@ buildPythonPackage rec {
     # quite elaborate testing infra with containers and multiple
     # different runners - I don't expect them to help debugging these
     # when running via our (= custom from their PoV) testing infra.
-    "testBuildListUnpack"
-    "testBuildTupleUnpack"
-    "testBuildTupleUnpackWithCall"
-    "test_convert_bare_types"
-    "test_incomparable_default"
-    "test_pardo_type_inference"
     "test_with_main_session"
   ];
 

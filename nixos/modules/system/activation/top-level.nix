@@ -55,11 +55,15 @@ let
       substituteInPlace $out/dry-activate --subst-var out
       chmod u+x $out/activate $out/dry-activate
       unset activationScript dryActivationScript
-      ${pkgs.stdenv.shellDryRun} $out/activate
-      ${pkgs.stdenv.shellDryRun} $out/dry-activate
 
-      cp ${config.system.build.bootStage2} $out/init
-      substituteInPlace $out/init --subst-var-by systemConfig $out
+      ${if config.boot.initrd.systemd.enable then ''
+        cp ${config.system.build.bootStage2} $out/prepare-root
+        substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
+        ln -s "$systemd/lib/systemd/systemd" $out/init
+      '' else ''
+        cp ${config.system.build.bootStage2} $out/init
+        substituteInPlace $out/init --subst-var-by systemConfig $out
+      ''}
 
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
