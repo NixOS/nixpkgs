@@ -67,8 +67,6 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    # parallelize
-    "--numprocesses $NIX_BUILD_CORES"
     # rerun failed tests up to three times
     "--reruns 3"
     # don't run tests that require network access
