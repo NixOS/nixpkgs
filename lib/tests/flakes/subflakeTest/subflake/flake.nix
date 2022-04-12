@@ -1,5 +1,5 @@
 {
   outputs = { self }: {
-    y = 1;
+    subflakeOutput = 1;
   };
 }

@@ -27,9 +27,9 @@ runTests {
   testCallLocklessFlake = {
     expr = callLocklessFlake {
       path = ./flakes/subflakeTest;
-      inputs = { subflake = ./flakes/subflakeTest/subflake; };
+      inputs = { subflake = ./flakes/subflakeTest/subflake; inherit callLocklessFlake; };
     };
-    expected = { x = ./flakes/subflakeTest/subflake; outPath = ./flakes/subflakeTest; };
+    expected = { x = 1; outPath = ./flakes/subflakeTest; };
   };
 
 # TRIVIAL
