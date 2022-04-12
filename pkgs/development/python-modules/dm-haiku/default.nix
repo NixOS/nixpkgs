@@ -38,7 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
     tensorflow
   ];
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   pythonImportsCheck = [
     "haiku"

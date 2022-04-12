@@ -52,9 +52,6 @@ buildPythonPackage rec {
     ujson
   ];
 
-  pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

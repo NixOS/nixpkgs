@@ -65,10 +65,6 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   '';
 
-  pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
-  ];
-
   disabledTestPaths = [
     # tests miss multiple input files
     # FileNotFoundError: [Errno 2] No such file or directory
