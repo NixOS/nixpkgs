@@ -6,7 +6,9 @@ let
 
   defaultUser = "paperless";
 
-  hasCustomRedis = hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
+  # Don't start a redis instance if the user sets a custom redis connection
+  enableRedis = !hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
+  redisServer = config.services.redis.servers.paperless-ng;
 
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
@@ -15,8 +17,8 @@ let
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
-  ) // (optionalAttrs (!hasCustomRedis) {
-    PAPERLESS_REDIS = "unix://${config.services.redis.servers.paperless-ng.unixSocket}";
+  ) // (optionalAttrs enableRedis {
+    PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
   });
 
   manage = let
@@ -36,7 +38,7 @@ let
       "-/etc/hosts"
       "-/etc/localtime"
       "-/run/postgresql"
-    ] ++ (optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.unixSocket);
+    ] ++ (optional enableRedis redisServer.unixSocket);
     BindPaths = [
       cfg.consumptionDir
       cfg.dataDir
@@ -73,7 +75,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    SupplementaryGroups = optional (!hasCustomRedis) config.services.redis.servers.paperless-ng.user;
+    SupplementaryGroups = optional enableRedis redisServer.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
     # Does not work well with the temporary root
@@ -198,8 +200,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Enable redis if no special url is set
-    services.redis.servers.paperless-ng.enable = mkIf (!hasCustomRedis) true;
+    services.redis.servers.paperless-ng.enable = mkIf enableRedis true;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
@@ -247,7 +248,7 @@ in
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
-    } // optionalAttrs (!hasCustomRedis) {
+    } // optionalAttrs enableRedis {
       after = [ "redis-paperless-ng.service" ];
     };
 
