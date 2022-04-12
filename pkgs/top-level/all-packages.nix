@@ -26594,6 +26594,8 @@ with pkgs;
 
   singularity = callPackage ../applications/virtualization/singularity { };
 
+  sonixd = callPackage ../applications/audio/sonixd { };
+
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
