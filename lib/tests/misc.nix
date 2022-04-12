@@ -613,6 +613,21 @@ runTests {
       expected = false;
     };
 
+  testWithRecursionDealsWithFunctors =
+    let
+      functor = {
+        __functor = self: { a, b, }: null;
+      };
+      a = {
+        value = "1234";
+        b = functor;
+        c.d = functor;
+      };
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { depthLimit = 1; throwOnDepthLimit = false; } a);
+      expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
+    };
+
   testToPrettyMultiline = {
     expr = mapAttrs (const (generators.toPretty { })) rec {
       list = [ 3 4 [ false ] ];
