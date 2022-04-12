@@ -10308,6 +10308,14 @@ with pkgs;
 
   nvidia-thrust = callPackage ../development/libraries/nvidia-thrust { };
 
+  nvidia-thrust-intel = callPackage ../development/libraries/nvidia-thrust {
+    enableTbb = true;
+  };
+
+  nvidia-thrust-cuda = callPackage ../development/libraries/nvidia-thrust {
+    cudaSupport = true;
+  };
+
   miller = callPackage ../tools/text/miller { };
 
   milu = callPackage ../applications/misc/milu { };
