@@ -15,6 +15,19 @@
 , setuptools
 , idna
 , typing-extensions
+
+# for passthru.tests
+, cassandra-driver
+, klein
+, magic-wormhole
+, scrapy
+, treq
+, txaio
+, txamqp
+, txrequests
+, txtorcon
+, thrift
+, nixosTests
 }:
 buildPythonPackage rec {
   pname = "Twisted";
@@ -62,6 +75,21 @@ buildPythonPackage rec {
   '';
   # Tests require network
   doCheck = false;
+
+  passthru.tests = {
+    inherit
+      cassandra-driver
+      klein
+      magic-wormhole
+      scrapy
+      treq
+      txaio
+      txamqp
+      txrequests
+      txtorcon
+      thrift;
+    inherit (nixosTests) buildbot matrix-synapse;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/twisted/twisted";
