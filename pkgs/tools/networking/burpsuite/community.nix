@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
+{ lib, stdenv, fetchurl, openjdk, runtimeShell, unzip, chromium }:
 
 stdenv.mkDerivation rec {
   pname = "burpsuite";
-  version = "2021.12";
+  version = "2022.3.4";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=community&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger-cdn.net/burp/releases/download?product=community&version=${version}&type=Jar"
     ];
-    sha256 = "sha256-BLX/SgHctXciOZoA6Eh4zuDJoxNSZgvoj2Teg1fV80g=";
+    sha256 = "1mjfsg6dhiac9i7nicz34x8a5181jpyl7c8sdfk3y1291g7h202y";
   };
 
   dontUnpack = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
     mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
     ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
-    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
+    exec ${openjdk}/bin/java --illegal-access=permit -jar ${src} "$@"' > $out/bin/burpsuite
     chmod +x $out/bin/burpsuite
 
     runHook postInstall
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
     downloadPage = "https://portswigger.net/burp/freedownload";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = jdk11.meta.platforms;
+    platforms = openjdk.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [ madonius ];
   };
 }
