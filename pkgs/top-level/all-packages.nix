@@ -10306,6 +10306,8 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
+  nvidia-thrust = callPackage ../development/libraries/nvidia-thrust { };
+
   miller = callPackage ../tools/text/miller { };
 
   milu = callPackage ../applications/misc/milu { };
