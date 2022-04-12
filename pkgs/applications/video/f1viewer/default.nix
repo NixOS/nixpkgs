@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "f1viewer";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "SoMuchForSubtlety";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z6rnkHypk7r9NnYwqZpWQOuGPbWn/EppS+46PQHIdDM=";
+    sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };
 
   vendorSha256 = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";

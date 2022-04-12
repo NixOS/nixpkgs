@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
   };
+  passthru.gzip = gzip;
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";

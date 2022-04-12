@@ -11566,6 +11566,8 @@ with pkgs;
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
+  zfp = callPackage ../tools/compression/zfp {};
+
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
   zfsbackup = callPackage ../tools/backup/zfsbackup { };

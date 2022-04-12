@@ -6,31 +6,38 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.150";
+  version = "2.0.152";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1D/ixtZI7/H05MD6zRtZCF8yhW1FhvRpdPWieAPwxHs=";
+    hash = "sha256-hibXmA2JerfnkGiSnBUCMHGPm4Tefnsl/x2VAS5z0Fo=";
   };
+  vendorSha256 = "sha256-HfsQfoz1n3FEd2eVBBz3Za2jYCSrozXpL34Z8CgQsTA=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  modRoot = "cmd";
-  vendorSha256 = "sha256-Nznf793OMQ7ZCWb5voVcLyMiBa1Z8Dswp7Tdn1AzlJA=";
-
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/core/cautils.BuildNumber=v${version}"
+    "-X github.com/armosec/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
-  postBuild = ''
-    # kubescape/cmd should be called kubescape
-    mv $GOPATH/bin/{cmd,kubescape}
+  subPackages = [ "." ];
+
+  preCheck = ''
+    # Feed in all but the integration tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    # Skip httphandler tests - the checkPhase doesn't care about excludedPackages
+    getGoDirs() {
+      go list ./... | grep -v httphandler
+    }
+
+    rm core/pkg/resourcehandler/{repositoryscanner,urlloader}_test.go
   '';
 
   postInstall = ''
@@ -44,6 +51,8 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/kubescape --help
+    # `--version` vs `version` shows the version without checking for latest
+    # if the flag is missing the BuildNumber may have moved
     $out/bin/kubescape --version | grep "v${version}"
     runHook postInstallCheck
   '';
