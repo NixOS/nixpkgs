@@ -5,6 +5,14 @@ with lib;
 let
   cfg = config.security.pam.mount;
 
+  oflRequired = cfg.logoutHup || cfg.logoutTerm || cfg.logoutKill;
+
+  fake_ofl = pkgs.writeShellScriptBin "fake_ofl" ''
+    SIGNAL=$1
+    MNTPT=$2
+    ${pkgs.lsof}/bin/lsof | ${pkgs.gnugrep}/bin/grep $MNTPT | ${pkgs.gawk}/bin/awk '{print $2}' | ${pkgs.findutils}/bin/xargs ${pkgs.util-linux}/bin/kill -$SIGNAL
+  '';
+
   anyPamMount = any (attrByPath ["pamMount"] false) (attrValues config.security.pam.services);
 in
 
@@ -51,6 +59,71 @@ in
           You can define volume-specific options in the volume definitions.
         '';
       };
+
+      debugLevel = mkOption {
+        type = types.int;
+        default = 0;
+        example = 1;
+        description = ''
+          Sets the Debug-Level. 0 disables debugging, 1 enables pam_mount tracing,
+          and 2 additionally enables tracing in mount.crypt. The default is 0.
+          For more information, visit <link
+          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+        '';
+      };
+
+      logoutWait = mkOption {
+        type = types.int;
+        default = 0;
+        description = ''
+          Amount of microseconds to wait until killing remaining processes after
+          final logout.
+          For more information, visit <link
+          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+        '';
+      };
+
+      logoutHup = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Kill remaining processes after logout by sending a SIGHUP.
+        '';
+      };
+
+      logoutTerm = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Kill remaining processes after logout by sending a SIGTERM.
+        '';
+      };
+
+      logoutKill = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Kill remaining processes after logout by sending a SIGKILL.
+        '';
+      };
+
+      createMountPoints = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Create mountpoints for volumes if they do not exist.
+        '';
+      };
+
+      removeCreatedMountPoints = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Remove mountpoints created by pam_mount after logout. This
+          only affects mountpoints that have been created by pam_mount
+          in the same session.
+        '';
+      };
     };
 
   };
@@ -77,21 +150,20 @@ in
           <!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
           <!-- auto generated from Nixos: modules/config/users-groups.nix -->
           <pam_mount>
-          <debug enable="0" />
-
+          <debug enable="${toString cfg.debugLevel}" />
           <!-- if activated, requires ofl from hxtools to be present -->
-          <logout wait="0" hup="no" term="no" kill="no" />
+          <logout wait="${toString cfg.logoutWait}" hup="${if cfg.logoutHup then "yes" else "no"}" term="${if cfg.logoutTerm then "yes" else "no"}" kill="${if cfg.logoutKill then "yes" else "no"}" />
           <!-- set PATH variable for pam_mount module -->
           <path>${makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)}</path>
           <!-- create mount point if not present -->
-          <mkmountpoint enable="1" remove="true" />
-
+          <mkmountpoint enable="${if cfg.createMountPoints then "1" else "0"}" remove="${if cfg.removeCreatedMountPoints then "true" else "false"}" />
           <!-- specify the binaries to be called -->
           <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ${concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])}</fusemount>
+          <fuseumount>${pkgs.fuse}/bin/fusermount -u %(MNTPT)</fuseumount>
           <cryptmount>${pkgs.pam_mount}/bin/mount.crypt %(VOLUME) %(MNTPT)</cryptmount>
           <cryptumount>${pkgs.pam_mount}/bin/umount.crypt %(MNTPT)</cryptumount>
           <pmvarrun>${pkgs.pam_mount}/bin/pmvarrun -u %(USER) -o %(OPERATION)</pmvarrun>
-
+          ${optionalString oflRequired "<ofl>${fake_ofl}/bin/fake_ofl %(SIGNAL) %(MNTPT)</ofl>"}
           ${concatStrings (map userVolumeEntry (attrValues extraUserVolumes))}
           ${concatStringsSep "\n" cfg.extraVolumes}
           </pam_mount>

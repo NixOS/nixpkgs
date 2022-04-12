@@ -6,6 +6,7 @@
 , pkg-config
 , which
 , linkFarm
+, fetchgit
 , fetchFromGitHub
 , installShellFiles
 , removeReferencesTo
@@ -39,7 +40,10 @@ let
   crystalLib = linkFarm "crystal-lib" (lib.mapAttrsToList
     (name: value: {
       inherit name;
-      path = fetchFromGitHub value;
+      path =
+        if (builtins.hasAttr "url" value)
+        then fetchgit value
+        else fetchFromGitHub value;
     })
     (import shardsFile));
 

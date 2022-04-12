@@ -37,6 +37,7 @@
 , pango
 , pipewire
 , udev
+, wayland
 , xorg
 , zlib
 , xdg-utils
@@ -82,6 +83,7 @@ rpath = lib.makeLibraryPath [
   pango
   pipewire
   udev
+  wayland
   xdg-utils
   xorg.libxcb
   zlib
@@ -160,6 +162,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # Add command line args to wrapGApp.
     gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
+    gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}")
   '';
 
   installCheckPhase = ''

@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
+
   version = "unstable-2022-04-11";
 
   src = fetchFromGitHub {

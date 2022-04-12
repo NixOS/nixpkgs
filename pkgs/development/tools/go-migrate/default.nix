@@ -15,11 +15,13 @@ buildGoModule rec {
 
   subPackages = [ "cmd/migrate" ];
 
+  tags = [ "postgres" "mysql" "redshift" "cassandra" "spanner" "cockroachdb" "clickhouse" "mongodb" "sqlserver" "firebird" "neo4j" "pgx" ];
+
   meta = with lib; {
-    homepage    = "https://github.com/golang-migrate/migrate";
+    homepage = "https://github.com/golang-migrate/migrate";
     description = "Database migrations. CLI and Golang library";
     maintainers = with maintainers; [ offline ];
-    license     = licenses.mit;
+    license = licenses.mit;
     mainProgram = "migrate";
   };
 }
