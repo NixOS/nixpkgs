@@ -21,6 +21,8 @@ let
     mkdir -p $out/lib{,64}/gcc
     ln -s ${combine gcc64}/lib/gcc/* $out/lib64/gcc/
     ln -s ${combine gcc32}/lib/gcc/* $out/lib/gcc/
+    # needed to force clang to recognize GCC 32-bit installation
+    ln -s $out/lib/gcc/i686-unknown-linux-gnu $out/lib/gcc/i686-pc-linux-gnu
   '';
 
 in combine-gcc-libc
