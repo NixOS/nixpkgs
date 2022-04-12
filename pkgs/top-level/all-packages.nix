@@ -364,6 +364,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  gojq = callPackage ../development/tools/gojq { };
+
   gpick = callPackage ../tools/misc/gpick { };
 
   hobbes = callPackage ../development/tools/hobbes { };
@@ -14447,6 +14449,8 @@ with pkgs;
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
   autoconf271 = callPackage ../development/tools/misc/autoconf { };
 
+  acr  = callPackage ../development/tools/misc/acr { };
+
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = automake116x;
@@ -23473,12 +23477,10 @@ with pkgs;
   util-linux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
               else unixtools.util-linux;
 
-  util-linuxCurses = util-linux;
-
   util-linuxMinimal = if stdenv.isLinux then util-linux.override {
     nlsSupport = false;
-    ncurses = null;
-    systemd = null;
+    ncursesSupport = false;
+    systemdSupport = false;
   } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
@@ -26143,9 +26145,6 @@ with pkgs;
   };
 
   git = callPackage ../applications/version-management/git-and-tools/git {
-    svnSupport = false;         # for git-svn support
-    guiSupport = false;         # requires tcl/tk
-    sendEmailSupport = false;   # requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
       perlPackages.libnet perlPackages.NetSMTPSSL
@@ -27901,6 +27900,8 @@ with pkgs;
 
   odo = callPackage ../applications/networking/cluster/odo { };
 
+  odin2 = callPackage ../applications/audio/odin2 { };
+
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
@@ -28977,6 +28978,8 @@ with pkgs;
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
 
   simple-scan = gnome.simple-scan;
+
+  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -32610,6 +32613,8 @@ with pkgs;
 
   groove = callPackage ../applications/science/programming/groove { };
 
+  jflap = callPackage ../applications/science/programming/jflap { };
+
   plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
@@ -33205,6 +33210,8 @@ with pkgs;
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
   avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
+
+  basiliskii = callPackage ../applications/emulators/basiliskii { };
 
   beep = callPackage ../misc/beep { };
 

@@ -4714,6 +4714,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  grnnja = {
+    email = "grnnja@gmail.com";
+    github = "grnnja";
+    githubId = 31556469;
+    name = "Prem Netsuwan";
+  };
   gruve-p = {
     email = "groestlcoin@gmail.com";
     github = "gruve-p";
@@ -9945,6 +9951,12 @@
       fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A";
     }];
   };
+  podocarp = {
+    email = "xdjiaxd@gmail.com";
+    github = "podocarp";
+    githubId = 10473184;
+    name = "Jia Xiaodong";
+  };
   polendri = {
     email = "paul@ijj.li";
     github = "polendri";
@@ -10203,6 +10215,12 @@
     github = "qoelet";
     githubId = 115877;
     name = "Kenny Shen";
+  };
+  quag = {
+    email = "quaggy@gmail.com";
+    github = "quag";
+    githubId = 35086;
+    name = "Jonathan Wright";
   };
   queezle = {
     email = "git@queezle.net";

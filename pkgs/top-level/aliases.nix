@@ -1297,6 +1297,7 @@ mapAliases ({
   urxvt_vtwheel = rxvt-unicode-plugins.vtwheel; # Added 2020-02-02
   usb_modeswitch = throw "'usb_modeswitch' has been renamed to/replaced by 'usb-modeswitch'"; # Converted to throw 2022-02-22
   usbguard-nox = usbguard; # Added 2019-09-04
+  util-linuxCurses = util-linux; # Added 2022-04-12
   utillinux = util-linux; # Added 2020-11-24
 
   ### V ###
