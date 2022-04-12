@@ -4,31 +4,23 @@
 , stdenv
 , cmake
 , pkg-config
-, cudaSupport ? config.cudaSupport or false
 , cudaPackages
 , symlinkJoin
-, enableOpenmp ? true
-, enableTbb ? false
 , tbb
+  # Upstream defaults:
 , hostSystem ? "CPP"
-, deviceSystem ? let
-    devices = lib.optional cudaSupport "CUDA"
-      ++ lib.optional enableTbb "TBB"
-      ++ lib.optional enableOpenmp "OMP"
-      ++ [ "CPP" ];
-  in
-  builtins.head devices
+, deviceSystem ? if config.cudaSupport or false then "CUDA" else "CPP"
 }:
 
 assert builtins.elem deviceSystem [ "CPP" "OMP" "TBB" "CUDA" ];
 assert builtins.elem hostSystem [ "CPP" "OMP" "TBB" ];
-assert (deviceSystem == "CUDA") -> cudaSupport;
-assert (builtins.elem "TBB" [ deviceSystem hostSystem ]) -> enableTbb;
-assert (builtins.elem "OMP" [ deviceSystem hostSystem ]) -> enableOpenmp;
 
 let
   pname = "nvidia-thrust";
   version = "1.16.0";
+
+  tbbSupport = builtins.elem "TBB" [ deviceSystem hostSystem ];
+  cudaSupport = deviceSystem == "CUDA";
 
   # TODO: Would like to use this:
   cudaJoined = symlinkJoin {
@@ -51,13 +43,13 @@ stdenv.mkDerivation {
     hash = "sha256-/EyznxWKuHuvHNjq+SQg27IaRbtkjXR2zlo2YgCWmUQ=";
   };
 
-  buildInputs = lib.optional enableTbb tbb;
+  buildInputs = lib.optionals tbbSupport [ tbb ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ] ++ lib.optionals cudaSupport [
-    # goes in native build inputs because thrust looks for headers
+    # Goes in native build inputs because thrust looks for headers
     # in a path relative to nvcc...
 
     # Works when build=host, but we only support
