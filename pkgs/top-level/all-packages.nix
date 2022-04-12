@@ -364,6 +364,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  gojq = callPackage ../development/tools/gojq { };
+
   gpick = callPackage ../tools/misc/gpick { };
 
   hobbes = callPackage ../development/tools/hobbes { };
@@ -32611,6 +32613,8 @@ with pkgs;
   dafny = dotnetPackages.Dafny;
 
   groove = callPackage ../applications/science/programming/groove { };
+
+  jflap = callPackage ../applications/science/programming/jflap { };
 
   plm = callPackage ../applications/science/programming/plm { };
 

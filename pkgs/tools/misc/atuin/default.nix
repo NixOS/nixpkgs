@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "ellie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I/ZDaOAiHdWOkmf+jIWWxZ3C25UHsl6MB7mCRLADFNs=";
+    sha256 = "sha256-nrWsEPYW4R5P8KUh4R3cZ4VFO9zoID0cl6lz7nNjnp0=";
   };
 
-  cargoSha256 = "sha256-KMss6Mpn4LHnkhtJyRea+D7mKItBK4lqq9syFEmCiFo=";
+  cargoSha256 = "sha256-sWVMPjG5ZqAKr7BmMJdBnVmBDr1MWl3hhmOBxQJexJY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/ellie/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ onsails SuperSandro2000 ];
+    maintainers = with maintainers; [ onsails SuperSandro2000 sciencentistguy ];
   };
 }
