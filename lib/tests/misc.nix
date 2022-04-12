@@ -22,6 +22,15 @@ in
 
 runTests {
 
+# FLAKES
+
+  testCallLocklessFlake = {
+    expr = callLocklessFlake {
+      path = ./..;
+      inputs = {};
+    };
+    expected = { lib = import ./..; outPath = ./..; };
+  };
 
 # TRIVIAL
 
