@@ -1021,6 +1021,21 @@ configurePhase() {
             echo "fixing libtool script $i"
             fixLibtool "$i"
         done
+
+        # replace `/usr/bin/file` with `file` in any `configure`
+        # scripts with vendored libtool code.  Preserve mtimes to
+        # prevent some packages (e.g. libidn2) from spontaneously
+        # autoreconf'ing themselves
+        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXX)
+        find . \
+          -executable \
+          -type f \
+          -name configure \
+          -execdir grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
+          -execdir touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
+          -execdir sed -i s_/usr/bin/file_file_g {} \;    \
+          -execdir touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
+        rm -f "$CONFIGURE_MTIME_REFERENCE"
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
