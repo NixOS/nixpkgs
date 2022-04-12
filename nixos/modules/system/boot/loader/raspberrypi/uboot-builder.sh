@@ -2,7 +2,7 @@
 
 target=/boot # Target directory
 
-while getopts "t:c:d:g:" opt; do
+while getopts "t:c:d:g:n:" opt; do
     case "$opt" in
         d) target="$OPTARG" ;;
         *) ;;

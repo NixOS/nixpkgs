@@ -4,13 +4,16 @@ with lib;
 
 let
   cfg = config.boot.loader.raspberryPi;
+  dtCfg = config.hardware.deviceTree;
 
   builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
   builder =
     if cfg.uboot.enable then
-      "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
+      "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr}"
+        + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
+        + " -c"
     else
       "${builderGeneric} -c";
 
