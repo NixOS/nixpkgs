@@ -878,7 +878,7 @@ let
                 linkConfig.Name = "custom_name";
               };
             }
-       else { services.udev.initrdRules = ''
+       else { boot.initrd.services.udev.rules = ''
                SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
               '';
             });

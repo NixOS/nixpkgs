@@ -34,7 +34,6 @@ let
     "initrd-switch-root.service"
     "initrd-switch-root.target"
     "initrd.target"
-    "initrd-udevadm-cleanup-db.service"
     "kexec.target"
     "kmod-static-nodes.service"
     "local-fs-pre.target"
@@ -71,12 +70,6 @@ let
     "systemd-sysctl.service"
     "systemd-tmpfiles-setup-dev.service"
     "systemd-tmpfiles-setup.service"
-    "systemd-udevd-control.socket"
-    "systemd-udevd-kernel.socket"
-    "systemd-udevd.service"
-    "systemd-udev-settle.service"
-    "systemd-udev-trigger.service"
-    "systemd-vconsole-setup.service"
     "timers.target"
     "umount.target"
 
@@ -385,6 +378,11 @@ in {
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
+        "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
+          ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+        '';
+        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+
       };
 
       storePaths = [
@@ -400,12 +398,10 @@ in {
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
-        "${cfg.package}/lib/systemd/systemd-udevd"
         "${cfg.package}/lib/systemd/systemd-vconsole-setup"
 
         # additional systemd directories
         "${cfg.package}/lib/systemd/system-generators"
-        "${cfg.package}/lib/udev"
 
         # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
