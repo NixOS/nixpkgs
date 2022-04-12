@@ -902,7 +902,8 @@ mapAliases ({
 
   p11_kit = throw "'p11_kit' has been renamed to/replaced by 'p11-kit'"; # Converted to throw 2022-02-22
   packet-cli = metal-cli; # Added 2021-10-25
-  paperless = paperless-ng; # Added 2021-06-06
+  paperless = paperless-ngx; # Added 2021-06-06
+  paperless-ng = paperless-ngx; # Added 2022-04-11
   parity = openethereum; # Added 2020-08-01
   parity-ui = throw "parity-ui was removed because it was broken and unmaintained by upstream"; # Added 2022-01-10
   parquet-cpp = throw "'parquet-cpp' has been renamed to/replaced by 'arrow-cpp'"; # Converted to throw 2022-02-22
