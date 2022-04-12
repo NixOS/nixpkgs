@@ -12222,6 +12222,7 @@ with pkgs;
           inherit libc;
         };
       in
+        if cc.isGNU then
         lowPrio (wrapCCWith {
           inherit libc gccForLibs;
 
@@ -12242,7 +12243,11 @@ with pkgs;
           extraBuildCommands = ''
             echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
           '';
-        });
+        }) else
+        cc.override {
+          inherit libc gccForLibs;
+          bintools = bintoolsMulti;
+        };
 
 
   gcc_multi = wrapCCMulti gcc;
