@@ -2540,6 +2540,9 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
+  # 2022-04-12: Flaky test suite: https://github.com/ocheron/cryptostore/issues/7
+  cryptostore = dontCheck super.cryptostore;
+
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
 
