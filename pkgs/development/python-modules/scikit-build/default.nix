@@ -12,7 +12,7 @@
 , cython
 , flake8
 , ninja
-, pathpy
+, path
 , pytest
 , pytest-cov
 , pytest-mock
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     cython
     flake8
     ninja
-    pathpy
+    path
     pytest
     pytest-cov
     pytest-mock
