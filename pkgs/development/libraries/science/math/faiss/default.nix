@@ -16,8 +16,8 @@
 , addOpenGLRunpath
 , optLevel ? let
     optLevels =
-      lib.optional stdenv.hostPlatform.avx2Support "avx2"
-      ++ lib.optional stdenv.hostPlatform.sse4_1Support "sse4"
+      lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
+      ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
       ++ [ "generic" ];
   in
   # Choose the maximum available optimization level
