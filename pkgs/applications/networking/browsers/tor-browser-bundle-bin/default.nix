@@ -332,6 +332,17 @@ stdenv.mkDerivation rec {
       echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
     } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
+    # Wayland
+    if [ "\$XDG_SESSION_TYPE" == "wayland" ]; then
+      MOZ_ENABLE_WAYLAND=1
+      WAYLAND_DISPLAY="\$WAYLAND_DISPLAY"
+      XDG_RUNTIME_DIR="\$XDG_RUNTIME_DIR"
+    else
+      MOZ_ENABLE_WAYLAND=
+      WAYLAND_DISPLAY=
+      XDG_RUNTIME_DIR=
+    fi
+
     # Lift-off
     #
     # XAUTHORITY and DISPLAY are required for TBB to work at all.
@@ -365,6 +376,10 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      MOZ_ENABLE_WAYLAND=\$MOZ_ENABLE_WAYLAND \
+      WAYLAND_DISPLAY="\$WAYLAND_DISPLAY" \
+      XDG_RUNTIME_DIR="\$XDG_RUNTIME_DIR" \
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
@@ -404,7 +419,8 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$libPath $TBB_IN_STORE/TorBrowser/Tor/tor --version >/dev/null
 
     echo "Checking tor-browser wrapper ..."
-    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+    DISPLAY="" MOZ_ENABLE_WAYLAND="" WAYLAND_DISPLAY="" XAUTHORITY="" XDG_RUNTIME_DIR="" XDG_SESSION_TYPE="" \
+      DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
   '';
 
