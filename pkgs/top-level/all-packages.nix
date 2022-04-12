@@ -32847,6 +32847,8 @@ with pkgs;
 
   brmodelo = callPackage ../applications/science/engineering/brmodelo { };
 
+  rmtoo = callPackage ../applications/science/engineering/rmtoo { };
+
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
