@@ -23475,8 +23475,6 @@ with pkgs;
   util-linux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
               else unixtools.util-linux;
 
-  util-linuxCurses = util-linux;
-
   util-linuxMinimal = if stdenv.isLinux then util-linux.override {
     nlsSupport = false;
     ncurses = null;
