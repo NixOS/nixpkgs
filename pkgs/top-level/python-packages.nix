@@ -10516,6 +10516,8 @@ in {
 
   textwrap3 = callPackage ../development/python-modules/textwrap3 { };
 
+  textx = callPackage ../development/python-modules/textx { };
+
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
