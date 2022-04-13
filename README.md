@@ -93,7 +93,7 @@ sudo wfs-fuse /dev/sdb /mnt --otp otp.bin --seeprom seeprom.bin -o default_permi
 
 ## Build
 Requirements:
-* Visual Studio 2022 / GCC 12+ / ~~LLVM 13+~~
+* Visual Studio 2022 / GCC 11+ / LLVM 14+
 * CMake 3.20+
 * Ninja
 
