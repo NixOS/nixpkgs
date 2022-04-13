@@ -247,7 +247,7 @@ def main() -> None:
         f.write("  ];\n")
         f.write("}\n")
 
-    supported_components = reduce(lambda n, c: n + (build_inputs[c][1] == []),
+    supported_components = reduce(lambda n, c: n + (build_inputs[c][2] == []),
                                   components.keys(), 0)
     total_components = len(components)
     print(f"{supported_components} / {total_components} components supported, "
