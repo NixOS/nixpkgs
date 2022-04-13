@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "ipfs";
-  version = "0.12.1"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.12.2"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
   repoVersion = "12"; # Also update ipfs-migrator when changing the repo version
@@ -10,7 +10,7 @@ buildGoModule rec {
   # go-ipfs makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
-    sha256 = "sha256-fUExCvE6x5VFBl66y52DGvr8ZNSXZ6MYpVQP/D7X328=";
+    sha256 = "sha256-66NNLMSfeBHQh/QlnETB/ssra9CKbD+jtaJuX+14x00=";
   };
 
   # tarball contains multiple files/directories
