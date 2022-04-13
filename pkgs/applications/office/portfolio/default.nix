@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
     license = licenses.epl10;
-    maintainers = with maintainers; [ elohmeier oyren ];
+    maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
     platforms = [ "x86_64-linux" ];
   };
 }
