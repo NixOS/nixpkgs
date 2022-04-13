@@ -1,17 +1,17 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.0.1)
+    activesupport (7.0.2.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    concurrent-ruby (1.1.9)
-    i18n (1.9.1)
+    concurrent-ruby (1.1.10)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     minitest (5.15.0)
-    rrule (0.4.2)
-      activesupport (>= 4.1)
+    rrule (0.4.4)
+      activesupport (>= 2.3)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
 
@@ -19,7 +19,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rrule (= 0.4.2)
+  rrule (= 0.4.4)
 
 BUNDLED WITH
-   2.2.24
+   2.3.9
