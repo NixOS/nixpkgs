@@ -7165,9 +7165,7 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
-  ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix {
-    buildGoModule = buildGo116Module;
-  };
+  ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
   ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
