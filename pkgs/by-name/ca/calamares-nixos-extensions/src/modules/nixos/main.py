@@ -36,12 +36,8 @@ cfghead = """# Edit this configuration file to define what should be installed o
 
 """
 cfgbootefi = """  # Bootloader.
-  boot.loader.systemd-boot.enable = false;
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.efiSupport = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
 """
@@ -58,13 +54,15 @@ cfgbootnone = """  # Disable bootloader.
 
 """
 
-cfgbootcrypt = """  # Enable grub cryptodisk
-  boot.loader.grub.enableCryptodisk=true;
-
-  # Setup keyfile
+cfgbootcrypt = """  # Setup keyfile
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" = "/crypto_keyfile.bin";
   };
+
+"""
+
+cfgbootgrubcrypt = """  # Enable grub cryptodisk
+  boot.loader.grub.enableCryptodisk=true;
 
 """
 
@@ -124,11 +122,6 @@ cfglocaleextra = """  i18n.extraLocaleSettings = {
     LC_TELEPHONE = "@@LC_TELEPHONE@@";
     LC_TIME = "@@LC_TIME@@";
   };
-
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
 
 """
 
@@ -224,6 +217,9 @@ cfgkeymap = """  # Configure keymap in X11
     xkbVariant = "@@kbvariant@@";
   };
 
+  # Configure console keymap
+  console.keyMap = "@@kblayout@@";
+
 """
 
 cfgmisc = """  # Enable CUPS to print documents.
@@ -269,6 +265,11 @@ cfgautologin = """  # Enable automatic login for the user.
 cfgautologingdm = """  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
+
+"""
+
+cfgautologintty = """  # Enable automatic login for the user.
+  services.getty.autologinUser = "@@username@@";
 
 """
 
@@ -360,6 +361,8 @@ def run():
     for part in gs.value("partitions"):
         if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
             cfg += cfgbootcrypt
+            if fw_type != "efi":
+                cfg += cfgbootgrubcrypt
             break
 
     for part in gs.value("partitions"):
@@ -443,10 +446,12 @@ def run():
         catenate(variables, "fullname", fullname)
         catenate(variables, "groups", (" ").join(
             ["\"" + s + "\"" for s in groups]))
-        if (gs.value("autoLoginUser") is not None):
+        if (gs.value("autoLoginUser") is not None and gs.value("packagechooser_packagechooser") != "" and gs.value("packagechooser_packagechooser") is not None):
             cfg += cfgautologin
             if (gs.value("packagechooser_packagechooser") == "gnome"):
                 cfg += cfgautologingdm
+        else:
+            cfg += cfgautologintty
 
     cfg += cfgpkgs
     if gs.value("packagechooser_packagechooser") == "plasma":
