@@ -8665,9 +8665,7 @@ with pkgs;
 
   neuron-notes = haskell.lib.compose.justStaticExecutables (haskell.lib.compose.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
 
-  ngrok = ngrok-2;
-
-  ngrok-2 = callPackage ../tools/networking/ngrok-2 { };
+  ngrok = callPackage ../tools/networking/ngrok { };
 
   nifi = callPackage ../servers/web-apps/nifi { };
 

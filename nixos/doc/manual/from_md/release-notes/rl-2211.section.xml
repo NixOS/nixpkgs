@@ -102,6 +102,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>ngrok</literal> has been upgraded from 2.3.40 to
+          3.0.4. Please see
+          <link xlink:href="https://ngrok.com/docs/guides/upgrade-v2-v3">the
+          upgrade guide</link> and
+          <link xlink:href="https://ngrok.com/docs/ngrok-agent/changelog">changelog</link>.
+          Notably, breaking changes are that the config file format has
+          changed and support for single hypen arguments was dropped.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>isPowerPC</literal> predicate, found on
           <literal>platform</literal> attrsets
           (<literal>hostPlatform</literal>,
