@@ -68,7 +68,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.49";
+    version = "0.3.50";
 
     outputs = [
       "out"
@@ -86,7 +86,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-8heX/9BsPguIOzHOuqEQdt6MS3eS4HxR4A+FUZKNpdo=";
+      sha256 = "sha256-OMFtHduvSQNeEzQP+PlwfhWC09Jb8HN4SI42Z9KpZHE=";
     };
 
     patches = [
@@ -102,11 +102,11 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Fixes missing function declarations in pipewire headers
+      # Fixes invalid declarations in headers when compiled as ISO C90
       # Should be removed after the next release
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/a2e98e28c1e6fb58b273ef582398d8bee4d2b769.patch";
-        sha256 = "sha256-tqiiAW2fTEp23HT59XR2D/G08pVENJtpxUI7UVufj/A=";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/d3ea3142e1a4de206e616bc18f63a529e6b4986a.patch";
+        sha256 = "sha256-2MTCOwQEA7UAm/eigHDHA+8oFs4JgQfoMHnfzNBjqvI=";
       })
     ];
 
