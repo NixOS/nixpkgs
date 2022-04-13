@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rvdaxyf68qmm5d77gbizpcibyz2ic2pb2x7rgf7p8qwijyc39ws";
+    sha256 = "0j5ngdndm9nm49gcda7m36qzwk5lcbi4jnij9fi96vld54ip6f6v";
   };
 
   buildInputs = [ jaxlib ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     tensorflow
   ];
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES -W ignore::FutureWarning" ];
 
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
