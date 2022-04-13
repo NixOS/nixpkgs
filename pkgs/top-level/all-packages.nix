@@ -19886,6 +19886,8 @@ with pkgs;
 
   rapidcheck = callPackage ../development/libraries/rapidcheck {};
 
+  rapidfuzz-cpp = callPackage ../development/libraries/rapidfuzz-cpp {};
+
   rapidjson = callPackage ../development/libraries/rapidjson {};
 
   rapidxml = callPackage ../development/libraries/rapidxml {};
