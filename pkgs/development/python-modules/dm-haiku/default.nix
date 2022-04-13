@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qvKMeGPiWXvvyV+GZdTWdsC6Wp08AmP8nDtWk7sZtqM=";
+    hash = "sha256-qvKMeGPiWXvvyV+GZdTWdsC6Wp08AmP8nDtWk7sZtqM=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   checkInputs = [
     chex
     cloudpickle
+    dill
     dm-tree
     jaxlib
     pytest-xdist
@@ -53,6 +54,11 @@ buildPythonPackage rec {
     # likely that's the reason the upstream uses TF-nightly for tests?
     # `nixpkgs` doesn't have the corresponding TF version packaged.
     "haiku/_src/integration/jax2tf_test.py"
+  ];
+
+  disabledTests = [
+    # See https://github.com/deepmind/dm-haiku/issues/366.
+    "test_jit_Recurrent"
   ];
 
   meta = with lib; {
