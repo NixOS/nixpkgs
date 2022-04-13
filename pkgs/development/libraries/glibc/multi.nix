@@ -20,8 +20,8 @@ runCommand "${nameVersion.name}-multi-${nameVersion.version}"
     "clang" = ''
       ln -s '${glibc64.out}/lib' "$out/lib/x86_64-unknown-linux-gnu"
       ln -s '${glibc32.out}/lib' "$out/lib/i686-unknown-linux-gnu"
-      
-      # expose linkers  
+
+      # expose linkers
       mkdir $out/lib/32
       ln -s ${glibc64.out}/lib/ld-linux* $out/lib
       ln -s ${glibc32.out}/lib/ld-linux* $out/lib/32
