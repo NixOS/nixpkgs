@@ -120,12 +120,12 @@ let
 
 in {
   subversion_1_10 = common {
-    version = "1.10.7";
-    sha256 = "1nhrd8z6c94sc0ryrzpyd98qdn5a5g3x0xv1kdb9da4drrk8y2ww";
+    version = "1.10.8";
+    sha256 = "sha256-CnO6MSe1ov/7j+4rcCmE8qgI3nEKjbKLfdQBDYvlDlo=";
   };
 
   subversion = common {
-    version = "1.14.1";
-    sha256 = "1ag1hvcm9q92kgalzbbgcsq9clxnzmbj9nciz9lmabjx4lyajp9c";
+    version = "1.14.2";
+    sha256 = "sha256-yRMOjQt1copm8OcDj8dwUuZxgw14W1YWqtU7SBDTzCg=";
   };
 }
