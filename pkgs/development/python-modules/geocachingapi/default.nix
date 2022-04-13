@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "geocachingapi";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "Sholofly";
     repo = "geocachingapi-python";
-    rev = version;
-    sha256 = "1vdknsxd7rvw6g5lwxlxj97l9ic8cch8rdki3aczs6xzw5adxhcs";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-Aj1fZ0dGlV7ynoZ7QwGrbku+IpOCx85wE19JDJaaYmc=";
   };
 
   nativeBuildInputs = [
