@@ -3,6 +3,7 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , setuptools-scm
 , yarl
 }:
@@ -10,6 +11,9 @@
 buildPythonPackage rec {
   pname = "geocachingapi";
   version = "0.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Sholofly";
@@ -33,7 +37,9 @@ buildPythonPackage rec {
   # Tests require a token and network access
   doCheck = false;
 
-  pythonImportsCheck = [ "geocachingapi" ];
+  pythonImportsCheck = [
+    "geocachingapi"
+  ];
 
   meta = with lib; {
     description = "Python API to control the Geocaching API";
