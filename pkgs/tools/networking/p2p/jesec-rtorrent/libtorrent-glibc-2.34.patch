@@ -1,0 +1,13 @@
+diff --git a/test/net/test_address_info.cc b/test/net/test_address_info.cc
+index ef104c96..59e0f56f 100644
+--- a/test/net/test_address_info.cc
++++ b/test/net/test_address_info.cc
+@@ -58,7 +58,7 @@ TEST_F(test_address_info, test_basic) {
+                                               nullptr,
+                                               nullptr,
+                                               std::placeholders::_1),
+-                                    EAI_NONAME));
++                                    EAI_AGAIN));
+   ASSERT_TRUE(test_valid_ai_ref_err(std::bind(torrent::ai_get_addrinfo,
+                                               "2001:db8:a::22123",
+                                               nullptr,

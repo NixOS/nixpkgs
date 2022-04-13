@@ -18,9 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-S3DOKzXkvU+ZJxfrxwLXCVBnepzmiZ+3iiQqz084BEk=";
   };
 
+  patches = [ ./libtorrent-glibc-2.34.patch ];
+
   nativeBuildInputs = [
     cmake
   ];
+
   buildInputs = [
     openssl
     zlib
@@ -30,6 +33,7 @@ stdenv.mkDerivation rec {
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
+
   checkInputs = [
     gtest
   ];
