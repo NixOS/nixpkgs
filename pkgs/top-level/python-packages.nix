@@ -8669,6 +8669,8 @@ in {
 
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
 
+  rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
+
   rarfile = callPackage ../development/python-modules/rarfile {
     inherit (pkgs) libarchive;
   };
