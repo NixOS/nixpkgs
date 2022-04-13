@@ -12,7 +12,6 @@
 , platformdirs
 , tomli
 , typing-extensions
-, pyenchant
 , pytest-benchmark
 , pytest-timeout
 , pytest-xdist
@@ -57,8 +56,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
-    # https://github.com/PyCQA/pylint/blob/main/requirements_test.txt
-    pyenchant
     pytest-benchmark
     pytest-timeout
     pytest-xdist
