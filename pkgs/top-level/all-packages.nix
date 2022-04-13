@@ -2854,6 +2854,8 @@ with pkgs;
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  dabet = callPackage ../tools/misc/dabet { };
+
   dabtools = callPackage ../applications/radio/dabtools { };
 
   daemontools = callPackage ../tools/admin/daemontools { };
