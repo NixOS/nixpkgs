@@ -402,7 +402,7 @@ in
   pam-ussh = handleTest ./pam/pam-ussh.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
-  paperless-ng = handleTest ./paperless-ng.nix {};
+  paperless = handleTest ./paperless.nix {};
   parsedmarc = handleTest ./parsedmarc {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
