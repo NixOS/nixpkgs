@@ -2510,6 +2510,7 @@ with pkgs;
   bukubrow = callPackage ../tools/networking/bukubrow { };
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
+  burpsuite-pro = callPackage ../tools/networking/burpsuite/pro.nix {};
 
   bs-platform = callPackage ../development/compilers/bs-platform {};
 
