@@ -194,6 +194,22 @@ rec {
       (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
     '';
 
+  /* Remove packages of packagesToRemove from packages, based on their names.
+     Relies on package names and has quadratic complexity so use with caution!
+
+     Type:
+       removePackagesByName :: [package] -> [package] -> [package]
+
+     Example:
+       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
+       => [ nautilus ]
+  */
+  removePackagesByName = packages: packagesToRemove:
+    let
+      namesToRemove = map lib.getName packagesToRemove;
+    in
+      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
+
   systemdUtils = {
     lib = import ./systemd-lib.nix { inherit lib config pkgs; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };

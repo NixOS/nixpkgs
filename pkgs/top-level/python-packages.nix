@@ -5429,6 +5429,8 @@ in {
 
   napari-console = callPackage ../development/python-modules/napari-console { };
 
+  napari-npe2 = callPackage ../development/python-modules/napari-npe2 { };
+
   napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
 
   napari-svg = callPackage ../development/python-modules/napari-svg { };
