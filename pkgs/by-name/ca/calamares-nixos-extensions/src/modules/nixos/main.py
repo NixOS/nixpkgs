@@ -314,7 +314,7 @@ cfgtail = """  # Some programs need SUID wrappers, can be configured further or 
 
 
 def pretty_name():
-    return _("Configuring NixOS.")
+    return _("Installing NixOS.")
 
 
 def catenate(d, key, *values):
@@ -346,6 +346,8 @@ def run():
         "bootLoader")['installPath']
 
     # Pick config parts and prepare substitution
+
+    # Check bootloader
     if (fw_type == "efi"):
         cfg += cfgbootefi
     elif (bootdev != "nodev"):
@@ -428,11 +430,8 @@ def run():
     cfg += cfgmisc
 
     if (gs.value("username") is not None):
-        passwd = subprocess.check_output(["chroot", root_mount_point, "getent", "passwd", gs.value(
-            "username")], stderr=subprocess.STDOUT).decode("utf-8").rstrip("\n").split(":")
-        fullname = passwd[4]
-        groups = subprocess.check_output(["chroot", root_mount_point, "groups", gs.value(
-            "username")], stderr=subprocess.STDOUT).decode("utf-8").rstrip("\n").split(":")[1].lstrip().split(" ")
+        fullname = gs.value("fullname")
+        groups = ["users" "networkmanager" "wheel"]
 
         if "users" in groups:
             groups.remove("users")
@@ -481,10 +480,6 @@ def run():
         pattern = "@@{key}@@".format(key=key)
         cfg = cfg.replace(pattern, str(variables[key]))
 
-    # Write the configuration file
-    with open(config, "w") as f:
-        f.write(cfg)
-
     libcalamares.job.setprogress(0.1)
 
     try:
@@ -498,6 +493,10 @@ def run():
 
     libcalamares.job.setprogress(0.3)
 
+    # Write the configuration file
+    with open(config, "w") as f:
+        f.write(cfg)
+
     # Install customizations
     try:
         subprocess.check_output(["nixos-install", "--no-root-passwd",
@@ -506,15 +505,5 @@ def run():
         if e.output != None:
             libcalamares.utils.error(e.output.decode("utf8"))
         return (_("nixos-install failed"), _(e.output.decode("utf8")))
-
-    libcalamares.job.setprogress(0.9)
-
-    try:
-        subprocess.check_output(["nixos-enter", "--root", root_mount_point,
-                                 "--", "nix-collect-garbage", "-d"], stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
-        if e.output != None:
-            libcalamares.utils.error(e.output.decode("utf8"))
-        return (_("nix-collect-garbage failed"), _(e.output.decode("utf8")))
 
     return None

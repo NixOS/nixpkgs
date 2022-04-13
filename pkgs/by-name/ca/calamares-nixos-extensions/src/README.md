@@ -6,10 +6,7 @@
 
 ## Modules
 
-- [nixos-generate-config](modules/nixos-generate-config) is a Python **job** module
-  to gernerate a base configuration for a NixOS system. It creates a config using the `nixos-generate-config`, making minor adjustments to ensure that the base system installs correctly.
-
-- [nixos-customize-config](modules/nixos-customize-config) is a Python **job** module
+- [nixos](modules/nixos) is a Python **job** module
   that creates a new configuration file based on the values given by the following base calamares modules:
   - [locale](https://github.com/calamares/calamares/tree/calamares/src/modules/locale)
   - [keyboard](https://github.com/calamares/calamares/tree/calamares/src/modules/keyboard)
