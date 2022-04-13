@@ -5,12 +5,16 @@
 
 buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.5.13";
+  version = "0.6.2";
+  # As of version 0.6.2, there is both a setup.py and pyproject.toml. However,
+  # the pyproject.toml does not appear to be the main entry point.
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QMUsm148MfrsruafICs/U+ONfBxWPeD63enX7aD9r+g=";
+    hash = "sha256-i0dVPxztB3zXxFN/1dcB1G92gfJLKCdeXMHTR+fJtGs=";
   };
 
   doCheck = false; # Avoid infinite recursion
