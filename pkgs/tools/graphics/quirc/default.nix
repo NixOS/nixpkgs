@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub
-, SDL_gfx, SDL, libjpeg, libpng, opencv, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, SDL_gfx, SDL, libjpeg, libpng, opencv
+, pkg-config }:
 
 stdenv.mkDerivation {
   pname = "quirc";
@@ -19,6 +18,16 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL -I${SDL_gfx}/include/SDL";
 
+  # Disable building of linux-only demos on darwin systems
+  patches = lib.optionals stdenv.isDarwin [ ./0001-dont-build-demos.patch ];
+
+  buildPhase = lib.optionalString stdenv.isDarwin ''
+    runHook preBuild
+    make libquirc.so
+    make qrtest
+    runHook postBuild
+  '';
+
   configurePhase = ''
     runHook preConfigure
 
@@ -27,6 +36,7 @@ stdenv.mkDerivation {
 
     runHook postConfigure
   '';
+
   preInstall = ''
     mkdir -p "$out"/{bin,lib,include}
 
@@ -37,7 +47,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A small QR code decoding library";
     license = lib.licenses.isc;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }
