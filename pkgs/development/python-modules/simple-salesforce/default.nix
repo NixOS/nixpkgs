@@ -6,6 +6,7 @@
 , nose
 , pytz
 , responses
+, zeep
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     authlib
     requests
+    zeep
   ];
 
   checkInputs = [
