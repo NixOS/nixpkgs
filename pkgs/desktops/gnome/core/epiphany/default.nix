@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "42.0";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Pb+owA5Ft/ROGCTQHw/r6DcHtfuTMMJhFz9ot/A81eM=";
+    sha256 = "aKzDxcYpF/G0ORaltGvsE29bMH8DqtpY23QMeLED8Dg=";
   };
 
   patches = lib.optionals withPantheon [

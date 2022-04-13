@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.0";
+  version = "2022.4.3";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -2138,7 +2138,7 @@
     "remote" = ps: with ps; [
     ];
     "remote_rpi_gpio" = ps: with ps; [
-    ]; # missing inputs: gpiozero
+    ]; # missing inputs: gpiozero pigpio
     "renault" = ps: with ps; [
       renault-api
     ];
