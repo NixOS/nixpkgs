@@ -606,6 +606,7 @@ in
       connection_reaper_interval = 30;
       relative_url_root = null;
       message_bus_max_backlog_size = 100;
+      message_bus_clear_every = 50;
       secret_key_base = cfg.secretKeyBaseFile;
       fallback_assets_path = null;
 
