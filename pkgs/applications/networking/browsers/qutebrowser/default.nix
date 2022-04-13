@@ -79,7 +79,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
-    sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
+    sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
