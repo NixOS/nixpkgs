@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -179,6 +179,13 @@ in
         description = ''
           Whether to start the X server automatically.
         '';
+      };
+
+      excludePackages = mkOption {
+        default = [];
+        example = literalExpression "[ pkgs.xterm ]";
+        type = types.listOf types.package;
+        description = "Which X11 packages to exclude from the default environment";
       };
 
       exportConfiguration = mkOption {
@@ -655,7 +662,7 @@ in
           ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
         });
 
-    environment.systemPackages =
+    environment.systemPackages = utils.removePackagesByName
       [ xorg.xorgserver.out
         xorg.xrandr
         xorg.xrdb
@@ -671,7 +678,7 @@ in
         pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
         pkgs.nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
-      ]
+      ] config.services.xserver.excludePackages
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];

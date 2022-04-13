@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -214,7 +214,7 @@ in
         elementary-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]) ++ (gnome.removePackagesByName [
+      ]) ++ (utils.removePackagesByName [
         gnome.gnome-font-viewer
         gnome.gnome-settings-daemon338
       ] config.environment.pantheon.excludePackages);
@@ -272,7 +272,7 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = with pkgs.pantheon; pkgs.gnome.removePackagesByName ([
+      environment.systemPackages = with pkgs.pantheon; utils.removePackagesByName ([
         elementary-calculator
         elementary-calendar
         elementary-camera
