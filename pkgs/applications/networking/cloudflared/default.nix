@@ -16,10 +16,8 @@ buildGoModule rec {
   ldflags = [ "-X main.Version=${version}" ];
 
   preCheck = ''
-    # Workaround for: sshgen_test.go:74:
-    #   mkdir /homeless-shelter/.cloudflared: no such file or directory
-
-    export HOME="''$(mktemp -d)";
+    # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
+    export HOME="$(mktemp -d)";
 
     # Workaround for: protocol_test.go:11:
     #   lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:51876->[::1]:53: read: connection refused
