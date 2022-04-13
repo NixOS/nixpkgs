@@ -13,11 +13,14 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-ZeKokW6jMiKrXLfnxwEBF+wLuFQufnPUnA/EnuhvrwI=";
 
-  doCheck = false;
-
   ldflags = [
     "-X main.buildVersion=${version}" "-X main.buildCommit=${version}" "-X main.buildDate=1970-01-01"
   ];
+
+  preCheck = ''
+    # git_test.go:55: repository does not exist
+    substituteInPlace git_test.go --replace "Test_githubRepoDetect" "Skip_githubRepoDetect"
+  '';
 
   meta = with lib; {
     license = licenses.mit;
