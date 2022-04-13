@@ -13121,6 +13121,12 @@
     githubId = 245573;
     name = "Dmitry Kalinkin";
   };
+  vertion = {
+    email = "vertion@protonmail.com";
+    github = "vertiond";
+    githubId = 35286924;
+    name = "vertion";
+  };
   vidbina = {
     email = "vid@bina.me";
     github = "vidbina";

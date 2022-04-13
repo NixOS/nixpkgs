@@ -30744,13 +30744,17 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
-  vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
-    boost = boost165;
+  vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
+    boost = boost17x;
+    miniupnpc = miniupnpc_2;
     withGui = true;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
   vertcoind = callPackage ../applications/blockchains/vertcoin {
-    boost = boost165;
+    boost = boost17x;
+    miniupnpc = miniupnpc_2;
     withGui = false;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
