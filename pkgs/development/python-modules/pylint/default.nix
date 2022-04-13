@@ -2,15 +2,17 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , installShellFiles
 , astroid
 , dill
 , isort
-, GitPython
 , mccabe
 , platformdirs
-, toml
+, tomli
+, typing-extensions
+, GitPython
 , pytest-benchmark
 , pytest-timeout
 , pytest-xdist
@@ -19,15 +21,16 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.13.4";
+  version = "2.13.5";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6.2";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CMbw6D6szQvur+13halZrskSV/9rDaThMGLeGxfjqWo=";
+    sha256 = "sha256-FB99vmUtoTc0cTjDUSbx80Tesh0vASigSpPktrDYk08=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +43,10 @@ buildPythonPackage rec {
     isort
     mccabe
     platformdirs
-    toml
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    typing-extensions
   ];
 
   postInstall = ''
@@ -51,10 +57,12 @@ buildPythonPackage rec {
 
   checkInputs = [
     GitPython
+    # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     pytest-benchmark
     pytest-timeout
     pytest-xdist
     pytestCheckHook
+    typing-extensions
   ];
 
   dontUseSetuptoolsCheck = true;
