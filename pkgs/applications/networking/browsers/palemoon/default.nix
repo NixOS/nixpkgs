@@ -46,12 +46,12 @@ assert with lib.strings; (
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.5.1";
+  version = "29.4.6";
 
   src = fetchzip {
     name = "${pname}-${version}";
     url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
-    sha256 = "sha256-IC7E88dECAz2diVLEEdjMltpNMBhPTlPvbz05BniBMI=";
+    sha256 = "sha256-6bI3AnIhp0x3BCgTvmbOXDBGrJXg3cN+AmwI8XCKD8g=";
   };
 
   nativeBuildInputs = [
