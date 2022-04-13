@@ -7,12 +7,20 @@
 , cudaPackages
 , symlinkJoin
 , tbb
-  # Upstream defaults:
 , hostSystem ? "CPP"
-, deviceSystem ? if config.cudaSupport or false then "CUDA" else "CPP"
+, deviceSystem ? if config.cudaSupport or false then "CUDA" else "OMP"
 }:
 
-assert builtins.elem deviceSystem [ "CPP" "OMP" "TBB" "CUDA" ];
+# Policy for device_vector<T>
+assert builtins.elem deviceSystem [
+  "CPP" # Serial on CPU
+  "OMP" # Parallel with OpenMP
+  "TBB" # Parallel with Intel TBB
+  "CUDA" # Parallel on GPU
+];
+
+# Policy for host_vector<T>
+# Always lives on CPU, but execution can be made parallel
 assert builtins.elem hostSystem [ "CPP" "OMP" "TBB" ];
 
 let
