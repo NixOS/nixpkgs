@@ -12,9 +12,23 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-kMQ60HdsorZU27qoOY52DpwFwP+Br2bp8mRx+ZwnQlI=";
 
-  # integration tests expect more file changes
-  # types tests are missing CodeLocation
-  excludedPackages = [ "integration" "types" ];
+  excludedPackages = [
+    # integration tests expect more file changes
+    "integration"
+    # types tests are missing CodeLocation
+    "types"
+  ];
+
+  # make sure excludedPackages aren't tested
+  # remove once #167912 reaches master
+  checkPhase = ''
+    runHook preCheck
+    for pkg in $(getGoDirs ""); do
+      grep -q "$exclude" <<<$pkg && continue
+      buildGoDir test "$pkg"
+    done
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "https://onsi.github.io/ginkgo/";
