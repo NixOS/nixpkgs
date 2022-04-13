@@ -18,6 +18,7 @@
 , withLibsecret ? false
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
+, withSsh ? false
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -27,7 +28,6 @@ assert svnSupport -> perlSupport;
 let
   version = "2.35.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
-
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
@@ -49,28 +49,27 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  ## Patch
-
   patches = [
     ./docbook2texi.patch
     ./git-sh-i18n.patch
-    ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+  ] ++ lib.optionals withSsh [
+    ./ssh-path.patch
   ];
 
   postPatch = ''
-    for x in connect.c git-gui/lib/remote_add.tcl ; do
-      substituteInPlace "$x" \
-        --subst-var-by ssh "${openssh}/bin/ssh"
-    done
-
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
 
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
+  '' + lib.optionalString withSsh ''
+    for x in connect.c git-gui/lib/remote_add.tcl ; do
+      substituteInPlace "$x" \
+        --subst-var-by ssh "${openssh}/bin/ssh"
+    done
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
