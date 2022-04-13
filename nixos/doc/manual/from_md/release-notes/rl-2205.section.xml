@@ -377,6 +377,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/lakinduakash/linux-wifi-hotspot">create_ap</link>,
+          a module for creating wifi hotspots using the program
+          linux-wifi-hotspot. Available as
+          <link xlink:href="options.html#opt-services.create_ap.enable">services.create_ap</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
           fast and lightweight DNS proxy as ad-blocker for local network
           with many features.
