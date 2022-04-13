@@ -18,16 +18,6 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       django = super.django_3;
-      # Avoid warning in django-q versions > 1.3.4
-      # https://github.com/jonaswinkler/paperless-ng/issues/857
-      # https://github.com/Koed00/django-q/issues/526
-      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "Uj1U3PG2YVLBtlj5FPAO07UYo0MqnezUiYc4yo274Q8=";
-        };
-      });
 
       # Incompatible with aioredis 2
       aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
@@ -43,29 +33,15 @@ let
   path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
-  pname = "paperless-ng";
-  version = "1.5.0";
+  pname = "paperless-ngx";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
-    sha256 = "oVSq0AWksuWC81MF5xiZ6ZbdKKtqqphmL+xIzJLaDMw=";
+    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/ngx-${version}/${pname}-${version}.tar.xz";
+    sha256 = "07mrxbwahkm00n9nvssd6d13p80w333g84cd38bzp0l34nzim5zl";
   };
 
-  patches = [
-    # Fix the `slow_write_pdf` test:
-    # https://github.com/NixOS/nixpkgs/issues/136626
-    (fetchpatch {
-      url = "https://github.com/paperless-ngx/paperless-ngx/commit/4fbabe43ea12811864e9676b04d82a82b38e799d.patch";
-      sha256 = "sha256-8ULep5aeW3wJAQGy2OEAjFYybELNq1DzCC1uBrZx36I=";
-    })
-  ];
-
   format = "other";
-
-  # Make bind address configurable
-  postPatch = ''
-    substituteInPlace gunicorn.conf.py --replace "bind = '0.0.0.0:8000'" ""
-  '';
 
   propagatedBuildInputs = with py.pkgs.pythonPackages; [
     aioredis
@@ -161,11 +137,17 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     zope_interface
   ];
 
+  # Compile manually because `pythonRecompileBytecodeHook` only works for
+  # files in `python.sitePackages`
+  postBuild = ''
+    ${py.interpreter} -OO -m compileall src
+  '';
+
   installPhase = ''
     mkdir -p $out/lib
-    cp -r . $out/lib/paperless-ng
-    chmod +x $out/lib/paperless-ng/src/manage.py
-    makeWrapper $out/lib/paperless-ng/src/manage.py $out/bin/paperless-ng \
+    cp -r . $out/lib/paperless-ngx
+    chmod +x $out/lib/paperless-ngx/src/manage.py
+    makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : "${path}"
   '';
@@ -200,13 +182,13 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
     inherit path;
 
-    tests = { inherit (nixosTests) paperless-ng; };
+    tests = { inherit (nixosTests) paperless; };
   };
 
   meta = with lib; {
     description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
-    homepage = "https://paperless-ng.readthedocs.io/en/latest/";
+    homepage = "https://paperless-ngx.readthedocs.io/en/latest/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ earvstedt Flakebi ];
+    maintainers = with maintainers; [ lukegb ];
   };
 }
