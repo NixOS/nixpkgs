@@ -4215,6 +4215,8 @@ in {
 
   jaraco_text = callPackage ../development/python-modules/jaraco_text { };
 
+  jarowinkler = callPackage ../development/python-modules/jarowinkler { };
+
   javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
 
   javaproperties = callPackage ../development/python-modules/javaproperties { };
