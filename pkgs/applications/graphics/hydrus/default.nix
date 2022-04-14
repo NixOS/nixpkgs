@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "474";
+  version = "480";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "v${version}";
-    sha256 = "sha256-NeTHq8zlgBajw/eogwpabqeU0b7cp83Frqy6kisrths=";
+    sha256 = "sha256-TZQY9wFXJFJtMAw2N+mlfVymewL96rn0Lza9jnDOGNA=";
   };
 
   nativeBuildInputs = [
@@ -79,13 +79,10 @@ python3Packages.buildPythonPackage rec {
     -e TestServer \
   '';
 
-  outputs = [ "out" "doc" ];
-
   installPhase = ''
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static} $out/${python3Packages.python.sitePackages}
-    mv help $out/doc/
 
     # install the hydrus binaries
     mkdir -p $out/bin
