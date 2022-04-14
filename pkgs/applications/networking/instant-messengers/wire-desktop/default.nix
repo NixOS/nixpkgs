@@ -11,6 +11,7 @@
 , cpio
 , xar
 , libdbusmenu
+, libxshmfence
 }:
 
 let
@@ -23,12 +24,12 @@ let
 
   version = {
     x86_64-darwin = "3.26.4145";
-    x86_64-linux = "3.26.2941";
+    x86_64-linux = "3.27.2944";
   }.${system} or throwSystem;
 
   sha256 = {
     x86_64-darwin = "1ck74a9z2mrwmljrqm347bqhjiaf1v0bf1jfnp58cqngh5ygqnf2";
-    x86_64-linux = "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9";
+    x86_64-linux = "sha256-fnfxO1i4f8PWsbqVCtUeipp9i57PFbHx/pEgjG7NFvM=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -61,9 +62,10 @@ let
   linux = stdenv.mkDerivation rec {
     inherit pname version meta;
 
+
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
+      url = "https://github.com/wireapp/wire-desktop/releases/download/"
+        + "linux%2F${version}/Wire-${version}_amd64.deb";
       inherit sha256;
     };
 
@@ -90,7 +92,7 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = atomEnv.packages ++ [ libxshmfence ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -131,7 +133,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
+        + "macos%2F${version}/Wire.pkg";
       inherit sha256;
     };
 
