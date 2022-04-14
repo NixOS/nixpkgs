@@ -34017,6 +34017,8 @@ with pkgs;
 
   rauc = callPackage ../tools/misc/rauc { };
 
+  rbspy = callPackage ../development/tools/rbspy { };
+
   redprl = callPackage ../applications/science/logic/redprl { };
 
   renderizer = callPackage ../development/tools/renderizer {};
