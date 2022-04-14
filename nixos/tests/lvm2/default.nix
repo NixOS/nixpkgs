@@ -11,6 +11,24 @@ let
     thinpool = { test = callTest ./thinpool.nix; kernelFilter = lib.id; };
     # we would like to test all versions, but the kernel module currently does not compile against the other versions
     vdo = { test = callTest ./vdo.nix; kernelFilter = lib.filter (v: v == "5.15"); };
+
+
+    # systemd in stage 1
+    raid-sd-stage-1 = {
+      test = callTest ./systemd-stage-1.nix;
+      kernelFilter = lib.id;
+      flavour = "raid";
+    };
+    thinpool-sd-stage-1 = {
+      test = callTest ./systemd-stage-1.nix;
+      kernelFilter = lib.id;
+      flavour = "thinpool";
+    };
+    vdo-sd-stage-1 = {
+      test = callTest ./systemd-stage-1.nix;
+      kernelFilter = lib.filter (v: v == "5.15");
+      flavour = "vdo";
+    };
   };
 in
 lib.listToAttrs (
@@ -20,7 +38,7 @@ lib.listToAttrs (
         v' = lib.replaceStrings [ "." ] [ "_" ] version;
       in
       lib.flip lib.mapAttrsToList tests (name: t:
-        lib.nameValuePair "lvm-${name}-linux-${v'}" (lib.optionalAttrs (builtins.elem version (t.kernelFilter kernelVersionsToTest)) (t.test { kernelPackages = pkgs."linuxPackages_${v'}"; }))
+        lib.nameValuePair "lvm-${name}-linux-${v'}" (lib.optionalAttrs (builtins.elem version (t.kernelFilter kernelVersionsToTest)) (t.test ({ kernelPackages = pkgs."linuxPackages_${v'}"; } // builtins.removeAttrs t [ "test" "kernelFilter" ])))
       )
     )
   )
