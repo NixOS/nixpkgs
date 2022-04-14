@@ -30,10 +30,10 @@ in {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
     dns.address = mkOption {
-      type = types.str;
-      default = "0.0.0.0";
+      type = oneOrMore types.str;
+      default = [ "::" "0.0.0.0" ];
       description = ''
-        IP address Recursor DNS server will bind to.
+        IP addresses Recursor DNS server will bind to.
       '';
     };
 
@@ -47,8 +47,12 @@ in {
 
     dns.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16" ];
-      example = [ "0.0.0.0/0" ];
+      default = [
+        "127.0.0.0/8" "10.0.0.0/8" "100.64.0.0/10"
+        "169.254.0.0/16" "192.168.0.0/16" "172.16.0.0/12"
+        "::1/128" "fc00::/7" "fe80::/10"
+      ];
+      example = [ "0.0.0.0/0" "::/0" ];
       description = ''
         IP address ranges of clients allowed to make DNS queries.
       '';
@@ -72,7 +76,8 @@ in {
 
     api.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "0.0.0.0/0" ];
+      default = [ "127.0.0.1" "::1" ];
+      example = [ "0.0.0.0/0" "::/0" ];
       description = ''
         IP address ranges of clients allowed to make API requests.
       '';
@@ -96,7 +101,7 @@ in {
 
     forwardZonesRecurse = mkOption {
       type = types.attrs;
-      example = { eth = "127.0.0.1:5353"; };
+      example = { eth = "[::1]:5353"; };
       default = {};
       description = ''
         DNS zones to be forwarded to other recursive servers.
