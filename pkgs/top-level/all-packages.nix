@@ -23833,6 +23833,8 @@ with pkgs;
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
+  gfs-fonts = callPackage ../data/fonts/gfs-fonts {};
+
   gohufont = callPackage ../data/fonts/gohufont
     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
