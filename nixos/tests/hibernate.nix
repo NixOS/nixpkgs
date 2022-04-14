@@ -3,6 +3,7 @@
 { system ? builtins.currentSystem
 , config ? {}
 , pkgs ? import ../.. { inherit system config; }
+, systemdStage1 ? false
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -29,6 +30,11 @@ let
       "/".device = "/dev/vda2";
     };
     swapDevices = mkOverride 0 [ { device = "/dev/vda1"; } ];
+    boot.resumeDevice = mkIf systemdStage1 "/dev/vda1";
+    boot.initrd.systemd = mkIf systemdStage1 {
+      enable = true;
+      emergencyAccess = true;
+    };
   };
   installedSystem = (import ../lib/eval-config.nix {
     inherit system;
