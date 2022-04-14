@@ -830,7 +830,7 @@
         <para>
           In order to have the previous default configuration add
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.xserver.displayManager.lightdm.greeters.gtk.indicators = [
     &quot;~host&quot; &quot;~spacer&quot;

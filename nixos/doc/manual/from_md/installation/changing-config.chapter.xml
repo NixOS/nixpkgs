@@ -94,7 +94,7 @@ $ ./result/bin/run-*-vm
     unless you have set <literal>mutableUsers = false</literal>. Another
     way is to temporarily add the following to your configuration:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 users.users.your-user.initialHashedPassword = &quot;test&quot;;
 </programlisting>
   <para>

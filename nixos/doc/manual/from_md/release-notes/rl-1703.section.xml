@@ -581,7 +581,7 @@
           <literal>service.nylon</literal> is now declared using named
           instances. As an example:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.nylon = {
     enable = true;
@@ -594,7 +594,7 @@
         <para>
           should be replaced with:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.nylon.myvpn = {
     enable = true;
@@ -615,7 +615,7 @@
           <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
           overlays</link>. For example, the following code:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 let
   pkgs = import &lt;nixpkgs&gt; {};
 in
@@ -624,7 +624,7 @@ in
         <para>
           should be replaced by:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 let
   pkgs = import &lt;nixpkgs&gt; {};
 in

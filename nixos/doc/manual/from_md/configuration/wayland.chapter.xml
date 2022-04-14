@@ -9,7 +9,7 @@
     means it is sufficient to install a Wayland Compositor such as sway
     without separately enabling a Wayland server:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 programs.sway.enable = true;
 </programlisting>
   <para>
@@ -21,7 +21,7 @@ programs.sway.enable = true;
     be able to share your screen, you might want to activate this
     option:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 xdg.portal.wlr.enable = true;
 </programlisting>
   <para>

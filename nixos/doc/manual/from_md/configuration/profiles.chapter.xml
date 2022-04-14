@@ -9,7 +9,7 @@
     to say, expected usage is to add them to the imports list of your
     <literal>/etc/configuration.nix</literal> as such:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 imports = [
   &lt;nixpkgs/nixos/modules/profiles/profile-name.nix&gt;
 ];

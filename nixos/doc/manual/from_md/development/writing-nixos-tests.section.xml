@@ -3,7 +3,7 @@
   <para>
     A NixOS test is a Nix expression that has the following structure:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 import ./make-test-python.nix {
 
   # One or more machines:
@@ -544,7 +544,7 @@ machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
       For faster dev cycles it's also possible to disable the
       code-linters (this shouldn't be commited though):
     </para>
-    <programlisting language="bash">
+    <programlisting>
 import ./make-test-python.nix {
   skipLint = true;
   nodes.machine =
@@ -564,7 +564,7 @@ import ./make-test-python.nix {
       disable the Black linter directly (again, don't commit this within
       the Nixpkgs repository):
     </para>
-    <programlisting language="bash">
+    <programlisting>
   testScript =
     ''
       # fmt: off

@@ -633,7 +633,7 @@
             </para>
           </listitem>
         </itemizedlist>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.paperless-ng.extraConfig = {
     # Provide languages as ISO 639-2 codes
@@ -728,7 +728,7 @@ Superuser created successfully.
           insecure. Out-of-tree modules are likely to require
           adaptation: instead of
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   users.users.foo = {
     isSystemUser = true;
@@ -738,7 +738,7 @@ Superuser created successfully.
         <para>
           also create a group for your user:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   users.users.foo = {
     isSystemUser = true;

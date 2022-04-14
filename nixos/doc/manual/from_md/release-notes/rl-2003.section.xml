@@ -133,7 +133,7 @@
           option to improve support for upstream session files. If you
           used something like:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.xserver.desktopManager.default = &quot;xfce&quot;;
   services.xserver.windowManager.default = &quot;icewm&quot;;
@@ -142,7 +142,7 @@
         <para>
           you should change it to:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.xserver.displayManager.defaultSession = &quot;xfce+icewm&quot;;
 }
@@ -821,7 +821,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           is a <literal>loaOf</literal> option that is commonly used as
           follows:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   users.users =
     [ { name = &quot;me&quot;;
@@ -836,7 +836,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           value of <literal>name</literal> as the name of the attribute
           set:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   users.users.me =
     { description = &quot;My personal user.&quot;;
@@ -940,7 +940,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
           because it permitted root auto-login you can override the
           lightdm-autologin pam module like:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   security.pam.services.lightdm-autologin.text = lib.mkForce ''
       auth     requisite pam_nologin.so
@@ -1004,7 +1004,7 @@ auth required pam_succeed_if.so quiet
               Additionally, some Postfix configuration must now be set
               manually instead of automatically by the Mailman module:
             </para>
-            <programlisting language="bash">
+            <programlisting>
 {
   services.postfix.relayDomains = [ &quot;hash:/var/lib/mailman/data/postfix_domains&quot; ];
   services.postfix.config.transport_maps = [ &quot;hash:/var/lib/mailman/data/postfix_lmtp&quot; ];
@@ -1066,7 +1066,7 @@ auth required pam_succeed_if.so quiet
           or by passing a TOML configuration file via
           <link xlink:href="options.html#opt-services.dnscrypt-proxy2.configFile">services.dnscrypt-proxy2.configFile</link>.
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   # Example configuration:
   services.dnscrypt-proxy2.enable = true;
@@ -1229,7 +1229,7 @@ auth required pam_succeed_if.so quiet
               when upgrading. Otherwise, the package can be deployed
               using the following config:
             </para>
-            <programlisting language="bash">
+            <programlisting>
 { pkgs, ... }: {
   services.hydra.package = pkgs.hydra-migration;
 }
@@ -1319,7 +1319,7 @@ $ hydra-backfill-ids
         <para>
           To continue to use the old approach, you can configure:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.nginx.appendConfig = let cfg = config.services.nginx; in ''user ${cfg.user} ${cfg.group};'';
   systemd.services.nginx.serviceConfig.User = lib.mkForce &quot;root&quot;;
@@ -1432,7 +1432,7 @@ $ hydra-backfill-ids
               older, you simply need to enable postgresql-support
               explicitly:
             </para>
-            <programlisting language="bash">
+            <programlisting>
 { ... }: {
   services.matrix-synapse = {
     enable = true;

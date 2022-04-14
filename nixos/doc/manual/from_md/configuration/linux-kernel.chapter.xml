@@ -5,7 +5,7 @@
     option <literal>boot.kernelPackages</literal>. For instance, this
     selects the Linux 3.10 kernel:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
 </programlisting>
   <para>
@@ -35,7 +35,7 @@ zcat /proc/config.gz
     <xref linkend="sec-customising-packages" />). For instance, to
     enable support for the kernel debugger KGDB:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
   linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
     extraConfig = ''
@@ -56,7 +56,7 @@ nixpkgs.config.packageOverrides = pkgs: pkgs.lib.recursiveUpdate pkgs {
     automatically by <literal>udev</literal>. You can force a module to
     be loaded via <xref linkend="opt-boot.kernelModules" />, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting>
 boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quot; ];
 </programlisting>
   <para>
@@ -64,7 +64,7 @@ boot.kernelModules = [ &quot;fuse&quot; &quot;kvm-intel&quot; &quot;coretemp&quo
     root file system), you can use
     <xref linkend="opt-boot.initrd.kernelModules" />:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 boot.initrd.kernelModules = [ &quot;cifs&quot; ];
 </programlisting>
   <para>
@@ -75,7 +75,7 @@ boot.initrd.kernelModules = [ &quot;cifs&quot; ];
     Kernel runtime parameters can be set through
     <xref linkend="opt-boot.kernel.sysctl" />, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting>
 boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
 </programlisting>
   <para>
@@ -90,7 +90,7 @@ boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
       pass your own config via the <literal>configfile</literal> setting
       of <literal>linuxKernel.manualConfig</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 custom-kernel = let base_kernel = linuxKernel.kernels.linux_4_9;
   in super.linuxKernel.manualConfig {
     inherit (super) stdenv hostPlatform;
@@ -118,7 +118,7 @@ nix-shell -E 'with import &lt;nixpkgs&gt; {}; kernelToOverride.overrideAttrs (o:
       (which you can influence by overriding
       <literal>extraConfig, autoModules, modDirVersion, preferBuiltin, extraConfig</literal>).
     </para>
-    <programlisting language="bash">
+    <programlisting>
 mptcp93.override ({
   name=&quot;mptcp-local&quot;;
 

@@ -6,7 +6,7 @@
     hasn’t been declared in any module. An option declaration generally
     looks like this:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 options = {
   name = mkOption {
     type = type specification;
@@ -119,7 +119,7 @@ options = {
         For example:
       </para>
       <anchor xml:id="ex-options-declarations-util-mkEnableOption-magic" />
-      <programlisting language="bash">
+      <programlisting>
 lib.mkEnableOption &quot;magic&quot;
 # is like
 lib.mkOption {
@@ -134,7 +134,7 @@ lib.mkOption {
         <para>
           Usage:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&quot; &quot;pkgs&quot; ]; example = &quot;literal example&quot;; }
 </programlisting>
         <para>
@@ -169,7 +169,7 @@ mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&qu
           Examples:
         </para>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-hello" />
-        <programlisting language="bash">
+        <programlisting>
 lib.mkPackageOption pkgs &quot;hello&quot; { }
 # is like
 lib.mkOption {
@@ -180,7 +180,7 @@ lib.mkOption {
 }
 </programlisting>
         <anchor xml:id="ex-options-declarations-util-mkPackageOption-ghc" />
-        <programlisting language="bash">
+        <programlisting>
 lib.mkPackageOption pkgs &quot;GHC&quot; {
   default = [ &quot;ghc&quot; ];
   example = &quot;pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
@@ -279,7 +279,7 @@ lib.mkOption {
             <emphasis role="strong">Example: Extensible type placeholder
             in the service module</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting>
 services.xserver.displayManager.enable = mkOption {
   description = &quot;Display manager to use&quot;;
   type = with types; nullOr (enum [ ]);
@@ -291,7 +291,7 @@ services.xserver.displayManager.enable = mkOption {
             <literal>services.xserver.displayManager.enable</literal> in
             the <literal>gdm</literal> module</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting>
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ &quot;gdm&quot; ]);
 };
@@ -302,7 +302,7 @@ services.xserver.displayManager.enable = mkOption {
             <literal>services.xserver.displayManager.enable</literal> in
             the <literal>sddm</literal> module</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting>
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ &quot;sddm&quot; ]);
 };

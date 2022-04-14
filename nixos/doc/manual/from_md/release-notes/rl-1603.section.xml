@@ -378,7 +378,7 @@
         You will need to add an import statement to your NixOS
         configuration in order to use it, e.g.
       </para>
-      <programlisting language="bash">
+      <programlisting>
 {
   imports = [ &lt;nixpkgs/nixos/modules/services/misc/gitit.nix&gt; ];
 }
@@ -395,7 +395,7 @@
         to be built in. All modules now reside in
         <literal>nginxModules</literal> set. Example configuration:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 nginx.override {
   modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
 }
@@ -468,7 +468,7 @@ nginx.override {
         continue to work, but print a warning, until the 16.09 release.
         An example of the new style:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 {
   fileSystems.&quot;/example&quot; = {
     device = &quot;/dev/sdc&quot;;
@@ -524,7 +524,7 @@ nginx.override {
         used input method name, <literal>&quot;ibus&quot;</literal> for
         ibus. An example of the new style:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 {
   i18n.inputMethod.enabled = &quot;ibus&quot;;
   i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ anthy mozc ];
@@ -533,7 +533,7 @@ nginx.override {
       <para>
         That is equivalent to the old version:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 {
   programs.ibus.enable = true;
   programs.ibus.plugins = with pkgs; [ ibus-anthy mozc ];
@@ -587,7 +587,7 @@ $TTL 1800
         point to exact folder where syncthing is writing to. Example
         configuration should look something like:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 {
   services.syncthing = {
       enable = true;

@@ -54,7 +54,7 @@
         <para>
           For example
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   programs.firejail = {
     enable = true;
@@ -695,7 +695,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
           A NixOS system can now be constructed more easily based on a
           preexisting invocation of Nixpkgs. For example:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   inherit (pkgs.nixos {
     boot.loader.grub.enable = false;
@@ -791,7 +791,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
           <para>
             An example usage of this would be:
           </para>
-          <programlisting language="bash">
+          <programlisting>
 { config, ... }:
 
 {

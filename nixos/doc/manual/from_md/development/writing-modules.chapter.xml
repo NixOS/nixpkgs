@@ -32,7 +32,7 @@
     In <xref linkend="sec-configuration-syntax" />, we saw the following
     structure of NixOS modules:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 { config, pkgs, ... }:
 
 { option definitions
@@ -50,7 +50,7 @@
     <emphasis role="strong">Example: Structure of NixOS
     Modules</emphasis>
   </para>
-  <programlisting language="bash">
+  <programlisting>
 { config, pkgs, ... }:
 
 {
@@ -146,7 +146,7 @@
     <emphasis role="strong">Example: NixOS Module for the
     <quote>locate</quote> Service</emphasis>
   </para>
-  <programlisting language="bash">
+  <programlisting>
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -208,7 +208,7 @@ in {
     <emphasis role="strong">Example: Escaping in Exec
     directives</emphasis>
   </para>
-  <programlisting language="bash">
+  <programlisting>
 { config, lib, pkgs, utils, ... }:
 
 with lib;

@@ -4,7 +4,7 @@
     The X Window System (X11) provides the basis of NixOS’ graphical
     user interface. It can be enabled as follows:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.enable = true;
 </programlisting>
   <para>
@@ -13,7 +13,7 @@ services.xserver.enable = true;
     and <literal>intel</literal>). You can also specify a driver
     manually, e.g.
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.videoDrivers = [ &quot;r128&quot; ];
 </programlisting>
   <para>
@@ -25,7 +25,7 @@ services.xserver.videoDrivers = [ &quot;r128&quot; ];
     <literal>xterm</literal> window. Thus you should pick one or more of
     the following lines:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.desktopManager.plasma5.enable = true;
 services.xserver.desktopManager.xfce.enable = true;
 services.xserver.desktopManager.gnome.enable = true;
@@ -42,14 +42,14 @@ services.xserver.windowManager.herbstluftwm.enable = true;
     LightDM. You can select an alternative one by picking one of the
     following lines:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.displayManager.sddm.enable = true;
 services.xserver.displayManager.gdm.enable = true;
 </programlisting>
   <para>
     You can set the keyboard layout (and optionally the layout variant):
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.layout = &quot;de&quot;;
 services.xserver.xkbVariant = &quot;neo&quot;;
 </programlisting>
@@ -57,7 +57,7 @@ services.xserver.xkbVariant = &quot;neo&quot;;
     The X server is started automatically at boot time. If you don’t
     want this to happen, you can set:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.autorun = false;
 </programlisting>
   <para>
@@ -70,7 +70,7 @@ services.xserver.autorun = false;
     On 64-bit systems, if you want OpenGL for 32-bit programs such as in
     Wine, you should also set the following:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 hardware.opengl.driSupport32Bit = true;
 </programlisting>
   <section xml:id="sec-x11-auto-login">
@@ -90,14 +90,14 @@ hardware.opengl.driSupport32Bit = true;
       manager and desktop environment. If you wanted no desktop
       environment and i3 as your your window manager, you'd define:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.displayManager.defaultSession = &quot;none+i3&quot;;
 </programlisting>
     <para>
       Every display manager in NixOS supports auto-login, here is an
       example using lightdm for a user <literal>alice</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.displayManager.lightdm.enable = true;
 services.xserver.displayManager.autoLogin.enable = true;
 services.xserver.displayManager.autoLogin.user = &quot;alice&quot;;
@@ -131,7 +131,7 @@ services.xserver.displayManager.autoLogin.user = &quot;alice&quot;;
       <xref linkend="opt-services.xserver.videoDrivers" /> to set one.
       The recommended configuration for modern systems is:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.videoDrivers = [ &quot;modesetting&quot; ];
 services.xserver.useGlamor = true;
 </programlisting>
@@ -139,7 +139,7 @@ services.xserver.useGlamor = true;
       If you experience screen tearing no matter what, this
       configuration was reported to resolve the issue:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.videoDrivers = [ &quot;intel&quot; ];
 services.xserver.deviceSection = ''
   Option &quot;DRI&quot; &quot;2&quot;
@@ -160,14 +160,14 @@ services.xserver.deviceSection = ''
       enabled by default because it’s not free software. You can enable
       it as follows:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.videoDrivers = [ &quot;nvidia&quot; ];
 </programlisting>
     <para>
       Or if you have an older card, you may have to use one of the
       legacy drivers:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.videoDrivers = [ &quot;nvidiaLegacy390&quot; ];
 services.xserver.videoDrivers = [ &quot;nvidiaLegacy340&quot; ];
 services.xserver.videoDrivers = [ &quot;nvidiaLegacy304&quot; ];
@@ -186,7 +186,7 @@ services.xserver.videoDrivers = [ &quot;nvidiaLegacy304&quot; ];
       features or performance. If you still want to use it anyway, you
       need to explicitly set:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.videoDrivers = [ &quot;amdgpu-pro&quot; ];
 </programlisting>
     <para>
@@ -200,14 +200,14 @@ services.xserver.videoDrivers = [ &quot;amdgpu-pro&quot; ];
       Support for Synaptics touchpads (found in many laptops such as the
       Dell Latitude series) can be enabled as follows:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.libinput.enable = true;
 </programlisting>
     <para>
       The driver has many options (see <xref linkend="ch-options" />).
       For instance, the following disables tap-to-click behavior:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.libinput.touchpad.tapping = false;
 </programlisting>
     <para>
@@ -223,7 +223,7 @@ services.xserver.libinput.touchpad.tapping = false;
       applications look similar to GTK ones, you can use the following
       configuration:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 qt5.enable = true;
 qt5.platformTheme = &quot;gtk2&quot;;
 qt5.style = &quot;gtk2&quot;;
@@ -248,7 +248,7 @@ qt5.style = &quot;gtk2&quot;;
       <literal>symbols</literal>; it's an XKB peculiarity that will help
       with testing):
     </para>
-    <programlisting language="bash">
+    <programlisting>
 xkb_symbols &quot;us-greek&quot;
 {
   include &quot;us(basic)&quot;            // includes the base US keys
@@ -264,7 +264,7 @@ xkb_symbols &quot;us-greek&quot;
     <para>
       A minimal layout specification must include the following:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.extraLayouts.us-greek = {
   description = &quot;US layout with alt-gr greek&quot;;
   languages   = [ &quot;eng&quot; ];
@@ -313,7 +313,7 @@ $ echo &quot;$(nix-build --no-out-link '&lt;nixpkgs&gt;' -A xorg.xkeyboardconfig
       interest, then create a <literal>media-key</literal> file to hold
       the keycodes definitions
     </para>
-    <programlisting language="bash">
+    <programlisting>
 xkb_keycodes &quot;media&quot;
 {
  &lt;volUp&gt;   = 123;
@@ -323,7 +323,7 @@ xkb_keycodes &quot;media&quot;
     <para>
       Now use the newly define keycodes in <literal>media-sym</literal>:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 xkb_symbols &quot;media&quot;
 {
  key.type = &quot;ONE_LEVEL&quot;;
@@ -334,7 +334,7 @@ xkb_symbols &quot;media&quot;
     <para>
       As before, to install the layout do
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.extraLayouts.media = {
   description  = &quot;Multimedia keys remapping&quot;;
   languages    = [ &quot;eng&quot; ];
@@ -358,7 +358,7 @@ services.xserver.extraLayouts.media = {
       default. As a workaround, you can set the keymap using
       <literal>setxkbmap</literal> at the start of the session with:
     </para>
-    <programlisting language="bash">
+    <programlisting>
 services.xserver.displayManager.sessionCommands = &quot;setxkbmap -keycodes media&quot;;
 </programlisting>
     <para>

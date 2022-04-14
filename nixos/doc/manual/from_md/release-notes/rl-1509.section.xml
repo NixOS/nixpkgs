@@ -42,7 +42,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <programlisting language="bash">
+  <programlisting>
 {
   system.autoUpgrade.enable = true;
 }
@@ -432,7 +432,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <programlisting language="bash">
+  <programlisting>
 {
   system.stateVersion = &quot;14.12&quot;;
 }
@@ -523,7 +523,7 @@
       </para>
     </listitem>
   </itemizedlist>
-  <programlisting language="bash">
+  <programlisting>
 {
   fileSystems.&quot;/shiny&quot; = {
     device = &quot;myshinysharedfolder&quot;;
@@ -662,7 +662,7 @@ infinite recursion encountered
         <literal>lib</literal>, after adding it as argument of the
         module. The following module
       </para>
-      <programlisting language="bash">
+      <programlisting>
 { config, pkgs, ... }:
 
 with pkgs.lib;
@@ -677,7 +677,7 @@ with pkgs.lib;
       <para>
         should be modified to look like:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 { config, pkgs, lib, ... }:
 
 with lib;
@@ -695,7 +695,7 @@ with lib;
         replaced by <literal>(import &lt;nixpkgs&gt; {})</literal>. The
         following module
       </para>
-      <programlisting language="bash">
+      <programlisting>
 { config, pkgs, ... }:
 
 let
@@ -712,7 +712,7 @@ in
       <para>
         should be modified to look like:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 { config, pkgs, ... }:
 
 let

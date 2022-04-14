@@ -29,7 +29,7 @@
           head. Apart from that, it's now possible to also set
           additional options by using an attribute set, for example:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 { services.xserver.xrandrHeads = [
     &quot;HDMI-0&quot;
     {

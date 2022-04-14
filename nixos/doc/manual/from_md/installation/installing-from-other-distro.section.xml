@@ -129,7 +129,7 @@ $ sudo `which nixos-generate-config` --root /mnt
         Ubuntu, you may want to add something like this to your
         <literal>configuration.nix</literal>:
       </para>
-      <programlisting language="bash">
+      <programlisting>
 boot.loader.grub.extraEntries = ''
   menuentry &quot;Ubuntu&quot; {
     search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
@@ -229,7 +229,7 @@ $ sudo `which nixos-generate-config` --root /
         account with <literal>sudo passwd -l root</literal> if you use
         <literal>sudo</literal>)
       </para>
-      <programlisting language="bash">
+      <programlisting>
 users.users.root.initialHashedPassword = &quot;&quot;;
 </programlisting>
     </listitem>

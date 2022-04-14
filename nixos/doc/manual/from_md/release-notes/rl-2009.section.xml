@@ -730,7 +730,7 @@
           traditional mysql_native_password plugin method, one must run
           the following:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
 services.mysql.initialScript = pkgs.writeText &quot;mariadb-init.sql&quot; ''
   ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD(&quot;verysecret&quot;);
@@ -755,7 +755,7 @@ services.mysql.initialScript = pkgs.writeText &quot;mariadb-init.sql&quot; ''
           allow MySQL to read from /home and /tmp directories when using
           <literal>LOAD DATA INFILE</literal>
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce &quot;read-only&quot;;
 }
@@ -766,7 +766,7 @@ services.mysql.initialScript = pkgs.writeText &quot;mariadb-init.sql&quot; ''
           <literal>SELECT * INTO OUTFILE</literal>, assuming the mysql
           user has write access to <literal>/var/data</literal>
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   systemd.services.mysql.serviceConfig.ReadWritePaths = [ &quot;/var/data&quot; ];
 }
@@ -885,7 +885,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           <literal>phantomJsSupport = true</literal> to the package
           instantiation:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
     phantomJsSupport = true;
@@ -958,7 +958,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           <literal>opcache</literal>, <literal>pdo</literal> and
           <literal>pdo_mysql</literal> loaded:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   environment.systemPackages = [
     (pkgs.php.withExtensions
@@ -997,7 +997,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           The remaining configuration flags can now be set directly on
           the <literal>php</literal> attribute. For example, instead of
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   php.override {
     config.php.embed = true;
@@ -1008,7 +1008,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           you should now write
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   php.override {
     embedSupport = true;
@@ -1062,7 +1062,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           writing to other folders, use
           <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   systemd.services.nginx.serviceConfig.ReadWritePaths = [ &quot;/var/www&quot; ];
 }
@@ -1076,7 +1076,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
           docs</link> for details). If you require serving files from
           home directories, you may choose to set e.g.
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   systemd.services.nginx.serviceConfig.ProtectHome = &quot;read-only&quot;;
 }
@@ -1093,7 +1093,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           Replace a <literal>nesting.clone</literal> entry with:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   specialisation.example-sub-configuration = {
     configuration = {
@@ -1104,7 +1104,7 @@ WHERE table_schema = &quot;zabbix&quot; AND COLLATION_NAME = &quot;utf8_general_
         <para>
           Replace a <literal>nesting.children</literal> entry with:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   specialisation.example-sub-configuration = {
     inheritParentConfig = false;
@@ -1385,7 +1385,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           multi-instance config with an existing bitcoind data directory
           and user, you have to adjust the original config, e.g.:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.bitcoind = {
     enable = true;
@@ -1397,7 +1397,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
         <para>
           To something similar:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.bitcoind.mainnet = {
     enable = true;
@@ -1447,7 +1447,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           the original SSL settings, you have to adjust the original
           config, e.g.:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.dokuwiki = {
     enable = true;
@@ -1458,7 +1458,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
         <para>
           To something similar:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.dokuwiki.&quot;mywiki&quot; = {
     enable = true;
@@ -1492,7 +1492,7 @@ $ sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
           option is (<literal>/var/db/postgresql</literal>) and then
           explicitly set this value to maintain compatibility:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.postgresql.dataDir = &quot;/var/db/postgresql&quot;;
 }
@@ -1825,7 +1825,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           you must include those directories into the
           <literal>BindPaths</literal> of the service:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   systemd.services.transmission.serviceConfig.BindPaths = [ &quot;/path/to/alternative/download-dir&quot; ];
 }
@@ -1835,7 +1835,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
           <literal>transmission-daemon</literal> is now only available
           on the local network interface by default. Use:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.transmission.settings.rpc-bind-address = &quot;0.0.0.0&quot;;
 }
@@ -1900,7 +1900,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         <para>
           This means that a configuration like this
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.dovecot2.mailboxes = [
     { name = &quot;Junk&quot;;
@@ -1912,7 +1912,7 @@ CREATE ROLE postgres LOGIN SUPERUSER;
         <para>
           should now look like this:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.dovecot2.mailboxes = {
     Junk.auto = &quot;create&quot;;

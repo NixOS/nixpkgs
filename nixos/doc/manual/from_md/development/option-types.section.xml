@@ -67,14 +67,14 @@
           <para>
             Two definitions of this type like
           </para>
-          <programlisting language="bash">
+          <programlisting>
 {
   str = lib.mkDefault &quot;foo&quot;;
   pkg.hello = pkgs.hello;
   fun.fun = x: x + 1;
 }
 </programlisting>
-          <programlisting language="bash">
+          <programlisting>
 {
   str = lib.mkIf true &quot;bar&quot;;
   pkg.gcc = pkgs.gcc;
@@ -84,7 +84,7 @@
           <para>
             will get merged to
           </para>
-          <programlisting language="bash">
+          <programlisting>
 {
   str = &quot;bar&quot;;
   pkg.gcc = pkgs.gcc;
@@ -622,7 +622,7 @@
       <emphasis role="strong">Example: Directly defined
       submodule</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting>
 options.mod = mkOption {
   description = &quot;submodule example&quot;;
   type = with types; submodule {
@@ -642,7 +642,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Submodule defined as a
       reference</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting>
 let
   modOptions = {
     options = {
@@ -677,7 +677,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Declaration of a list of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting>
 options.mod = mkOption {
   description = &quot;submodule example&quot;;
   type = with types; listOf (submodule {
@@ -697,7 +697,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Definition of a list of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting>
 config.mod = [
   { foo = 1; bar = &quot;one&quot;; }
   { foo = 2; bar = &quot;two&quot;; }
@@ -717,7 +717,7 @@ config.mod = [
       <emphasis role="strong">Example: Declaration of attribute sets of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting>
 options.mod = mkOption {
   description = &quot;submodule example&quot;;
   type = with types; attrsOf (submodule {
@@ -737,7 +737,7 @@ options.mod = mkOption {
       <emphasis role="strong">Example: Definition of attribute sets of
       submodules</emphasis>
     </para>
-    <programlisting language="bash">
+    <programlisting>
 config.mod.one = { foo = 1; bar = &quot;one&quot;; };
 config.mod.two = { foo = 2; bar = &quot;two&quot;; };
 </programlisting>
@@ -768,7 +768,7 @@ config.mod.two = { foo = 2; bar = &quot;two&quot;; };
             <emphasis role="strong">Example: Adding a type
             check</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting>
 byte = mkOption {
   description = &quot;An integer between 0 and 255.&quot;;
   type = types.addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
@@ -779,7 +779,7 @@ byte = mkOption {
             <emphasis role="strong">Example: Overriding a type
             check</emphasis>
           </para>
-          <programlisting language="bash">
+          <programlisting>
 nixThings = mkOption {
   description = &quot;words that start with 'nix'&quot;;
   type = types.str // {

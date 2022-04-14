@@ -7,7 +7,7 @@
     states that a user account named <literal>alice</literal> shall
     exist:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 users.users.alice = {
   isNormalUser = true;
   home = &quot;/home/alice&quot;;
@@ -45,7 +45,7 @@ users.users.alice = {
     A user ID (uid) is assigned automatically. You can also specify a
     uid manually by adding
   </para>
-  <programlisting language="bash">
+  <programlisting>
 uid = 1000;
 </programlisting>
   <para>
@@ -55,7 +55,7 @@ uid = 1000;
     Groups can be specified similarly. The following states that a group
     named <literal>students</literal> shall exist:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 users.groups.students.gid = 1000;
 </programlisting>
   <para>

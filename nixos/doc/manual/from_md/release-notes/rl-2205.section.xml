@@ -507,7 +507,7 @@
           <literal>config.nixpkgs.config.allowUnfree</literal> are
           enabled. If you still want these fonts, use:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   fonts.fonts = [
     pkgs.xorg.fontbhlucidatypewriter100dpi
@@ -595,7 +595,7 @@
         <para>
           Before:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.matrix-synapse = {
     enable = true;
@@ -630,7 +630,7 @@
         <para>
           After:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.matrix-synapse = {
     enable = true;

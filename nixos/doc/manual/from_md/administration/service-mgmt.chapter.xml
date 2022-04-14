@@ -91,7 +91,7 @@ Jan 07 15:55:57 hagbard systemd[1]: Started PostgreSQL Server.
       In order to enable a systemd <emphasis>system</emphasis> service
       with provided upstream package, use (e.g):
     </para>
-    <programlisting language="bash">
+    <programlisting>
 systemd.packages = [ pkgs.packagekit ];
 </programlisting>
     <para>

@@ -318,7 +318,7 @@
       used, along with some other related best practices. See the
       comments for explanations.
     </para>
-    <programlisting language="bash">
+    <programlisting>
 { options, config, lib, pkgs, ... }:
 let
   cfg = config.services.foo;
@@ -391,7 +391,7 @@ in {
         <emphasis role="strong">Example: Declaring a type-checked
         <literal>settings</literal> attribute</emphasis>
       </para>
-      <programlisting language="bash">
+      <programlisting>
 settings = lib.mkOption {
   type = lib.types.submodule {
 

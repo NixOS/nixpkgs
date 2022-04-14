@@ -4,7 +4,7 @@
     Sometimes NixOS modules need to be used in configuration but exist
     outside of Nixpkgs. These modules can be imported:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 { config, lib, pkgs, ... }:
 
 {
@@ -23,18 +23,18 @@
     Nixpkgs NixOS modules. Like any NixOS module, this module can import
     additional modules:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 # ./module-list/default.nix
 [
   ./example-module1
   ./example-module2
 ]
 </programlisting>
-  <programlisting language="bash">
+  <programlisting>
 # ./extra-module/default.nix
 { imports = import ./module-list.nix; }
 </programlisting>
-  <programlisting language="bash">
+  <programlisting>
 # NIXOS_EXTRA_MODULE_PATH=/absolute/path/to/extra-module
 { config, lib, pkgs, ... }:
 

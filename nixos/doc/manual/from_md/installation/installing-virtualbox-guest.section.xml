@@ -58,14 +58,14 @@
     There are a few modifications you should make in configuration.nix.
     Enable booting:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 boot.loader.grub.device = &quot;/dev/sda&quot;;
 </programlisting>
   <para>
     Also remove the fsck that runs at startup. It will always fail to
     run, stopping your boot until you press <literal>*</literal>.
   </para>
-  <programlisting language="bash">
+  <programlisting>
 boot.initrd.checkJournalingFS = false;
 </programlisting>
   <para>
@@ -76,7 +76,7 @@ boot.initrd.checkJournalingFS = false;
     If you do not add <literal>&quot;nofail&quot;</literal>, the system
     will not boot properly.
   </para>
-  <programlisting language="bash">
+  <programlisting>
 { config, pkgs, ...} :
 {
   fileSystems.&quot;/virtualboxshare&quot; = {

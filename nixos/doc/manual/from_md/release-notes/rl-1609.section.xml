@@ -192,7 +192,7 @@
         interface has been streamlined. Desktop users should be able to
         simply set
       </para>
-      <programlisting language="bash">
+      <programlisting>
 {
   security.grsecurity.enable = true;
 }

@@ -374,7 +374,7 @@
           setting the <literal>services.nscd.config</literal> option
           with the desired caching parameters.
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.nscd.config =
   ''

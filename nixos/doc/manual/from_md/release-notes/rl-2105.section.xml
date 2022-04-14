@@ -330,7 +330,7 @@
           <literal>mediatomb</literal> package. If you want to keep the
           old behavior, you must declare it with:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.mediatomb.package = pkgs.mediatomb;
 }
@@ -341,7 +341,7 @@
           service declaration to add the firewall rules itself before,
           you should now declare it with:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.mediatomb.openFirewall = true;
 }
@@ -368,7 +368,7 @@
           <link xlink:href="options.html#opt-services.uwsgi.capabilities">services.uwsgi.capabilities</link>.
           The previous behaviour can be restored by setting:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.uwsgi.user = &quot;root&quot;;
   services.uwsgi.group = &quot;root&quot;;
@@ -552,7 +552,7 @@ $ slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
           has been removed. To enable Privoxy, and to configure it to
           use Tor's faster port, use the following configuration:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   opt-services.privoxy.enable = true;
   opt-services.privoxy.enableTor = true;
@@ -689,7 +689,7 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
           <literal>mpich</literal> instead of the default
           <literal>openmpi</literal> can now be achived like this:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 self: super:
 {
   mpi = super.mpich;
@@ -850,7 +850,7 @@ self: super:
           kodiPackages.inputstream-adaptive and kodiPackages.vfs-sftp
           addons:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   environment.systemPackages = [
     pkgs.kodi
@@ -867,7 +867,7 @@ self: super:
           and as a result the above configuration should now be written
           as:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   environment.systemPackages = [
     (pkgs.kodi.withPackages (p: with p; [
@@ -1158,7 +1158,7 @@ self: super:
           users to declare autoscan media directories from their nixos
           configuration:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.mediatomb.mediaDirectories = [
     { path = &quot;/var/lib/mediatomb/pictures&quot;; recursive = false; hidden-files = false; }
@@ -1518,7 +1518,7 @@ self: super:
           been dropped. Users that still want it should add the
           following to their system configuration:
         </para>
-        <programlisting language="bash">
+        <programlisting>
 {
   services.gvfs.package = pkgs.gvfs.override { samba = null; };
 }

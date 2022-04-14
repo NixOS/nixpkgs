@@ -3,7 +3,7 @@
   <para>
     To enable the Xfce Desktop Environment, set
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.xserver.desktopManager.xfce.enable = true;
 services.xserver.displayManager.defaultSession = &quot;xfce&quot;;
 </programlisting>
@@ -11,7 +11,7 @@ services.xserver.displayManager.defaultSession = &quot;xfce&quot;;
     Optionally, <emphasis>picom</emphasis> can be enabled for nice
     graphical effects, some example settings:
   </para>
-  <programlisting language="bash">
+  <programlisting>
 services.picom = {
   enable = true;
   fade = true;
