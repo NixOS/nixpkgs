@@ -62,7 +62,7 @@ buildPythonPackage rec {
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
       --replace "typing==3.6.4" "typing" \
-      --replace "attrs>=19.3.0,<21.3.0" "attrs"
+      --replace "jmespath>=0.9.3,<1.0.0" "jmespath>=0.9.3,<2.0.0"
   '';
 
   disabledTestPaths = [
