@@ -6,8 +6,9 @@
 , cmake
 , cudaPackages ? { }
 , cudaSupport ? config.cudaSupport or false
-, pythonSupport ? true
 , nvidia-thrust
+, useThrustSourceBuild ? true
+, pythonSupport ? true
 , pythonPackages
 , llvmPackages
 , boost
@@ -42,6 +43,10 @@ let
       libcublas
       libcurand
       cuda_nvprof # cuda_profiler_api.h
+    ] ++ lib.optionals useThrustSourceBuild [
+      nvidia-thrust
+    ] ++ lib.optionals (!useThrustSourceBuild) [
+      cuda_cccl
     ];
   };
 in
@@ -68,7 +73,6 @@ stdenv.mkDerivation {
     llvmPackages.openmp
   ] ++ lib.optionals cudaSupport [
     cudaJoined
-    nvidia-thrust
   ];
 
   propagatedBuildInputs = lib.optionals pythonSupport [
