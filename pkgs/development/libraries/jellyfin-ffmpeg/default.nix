@@ -16,7 +16,7 @@
       patch -p1 < debian/patches/$file
     done
 
-    ${old.postPatch}
+    ${old.postPatch or ""}
   '';
 
   doCheck = false; # https://github.com/jellyfin/jellyfin-ffmpeg/issues/79
