@@ -487,6 +487,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>git</literal> no longer hardcodes the path to
+          openssh’ ssh binary to reduce the amount of rebuilds. If you
+          are using git with ssh remotes and do not have a ssh binary in
+          your enviroment consider adding <literal>openssh</literal> to
+          it or switching to <literal>gitFull</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.k3s.enable</literal> no longer implies
           <literal>systemd.enableUnifiedCgroupHierarchy = false</literal>,
           and will default to the <quote>systemd</quote> cgroup driver
@@ -1920,6 +1929,16 @@
           The <literal>R</literal> package now builds again on
           <literal>aarch64-darwin</literal>
           (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/158992">#158992</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nss</literal> package was split into
+          <literal>nss_esr</literal> and <literal>nss_latest</literal>,
+          with <literal>nss</literal> being an alias for
+          <literal>nss_esr</literal>. This was done to ease maintenance
+          of <literal>nss</literal> and dependent high-profile packages
+          like <literal>firefox</literal>.
         </para>
       </listitem>
       <listitem>

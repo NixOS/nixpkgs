@@ -1927,9 +1927,8 @@ in {
 
   cryptography = callPackage ../development/python-modules/cryptography {
     inherit (pkgs.darwin) libiconv;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
-
-  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
@@ -8789,7 +8788,7 @@ in {
 
   requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 
-  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
+  requests-oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
   requests-pkcs12 = callPackage ../development/python-modules/requests-pkcs12 { };
 

@@ -101,7 +101,7 @@ let
         ${lib.concatStrings (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ") runtimeEnv)} \
         --prefix PATH : ${lib.makeBinPath runtimeDeps} \
         --set RAKEOPT '-f ${discourse}/share/discourse/Rakefile' \
-        --run 'cd ${discourse}/share/discourse'
+        --chdir '${discourse}/share/discourse'
   '';
 
   rubyEnv = bundlerEnv {

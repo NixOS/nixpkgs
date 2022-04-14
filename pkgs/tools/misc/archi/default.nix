@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then

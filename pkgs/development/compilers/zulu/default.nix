@@ -63,12 +63,16 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./* "$out/"
   '' + lib.optionalString stdenv.isLinux ''
@@ -90,6 +94,8 @@ in stdenv.mkDerivation {
     for bin in $( find "$out" -executable -type f -not -name jspawnhelper ); do
       wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
     done
+  '' + ''
+    runHook postInstall
   '';
 
   preFixup = ''

@@ -63,10 +63,10 @@ in stdenv.mkDerivation {
     # Reimplement the two launchers mentioned in Unix_shortcutSpec.xml with makeWrapper
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/domination \
-      --run "cd $out/share/domination" \
+      --chdir "$out/share/domination" \
       --add-flags "-jar $out/share/domination/Domination.jar"
     makeWrapper ${jre}/bin/java $out/bin/domination-map-editor \
-      --run "cd $out/share/domination" \
+      --chdir "$out/share/domination" \
       --add-flags "-cp $out/share/domination/Domination.jar net.yura.domination.ui.swinggui.SwingGUIFrame"
 
     install -Dm644 \

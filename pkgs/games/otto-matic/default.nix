@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/OttoMatic
     mv Data $out/share/OttoMatic
     install -Dm755 {.,$out/bin}/OttoMatic
-    wrapProgram $out/bin/OttoMatic --run "cd $out/share/OttoMatic"
+    wrapProgram $out/bin/OttoMatic --chdir "$out/share/OttoMatic"
 
     runHook postInstall
   '';

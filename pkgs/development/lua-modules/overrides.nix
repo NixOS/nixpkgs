@@ -295,7 +295,8 @@ with prev;
 
       buildInputs = [ pkgs.libuv ];
 
-      nativeBuildInputs = [ pkgs.pkg-config pkgs.fixDarwinDylibNames pkgs.cmake ];
+      nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake ]
+        ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
   };
 
   luv = prev.lib.overrideLuarocks prev.luv (drv: {

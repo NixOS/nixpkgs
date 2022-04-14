@@ -43,6 +43,7 @@ mapAliases ({
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
+  cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   dateutil = python-dateutil; # added 2021-07-03
   demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
@@ -108,6 +109,7 @@ mapAliases ({
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
   repeated_test = throw "repeated_test is no longer maintained"; # added 2022-01-11
+  requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01

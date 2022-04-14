@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     homepage = "https://syncterm.bbsdev.net/";
     description = "BBS terminal emulator";
     maintainers = with maintainers; [ embr ];
+    platforms = platforms.unix;
     license = licenses.gpl2Plus;
+    broken = stdenv.isDarwin; # error: unsupported option '-fsanitize=safe-stack' for target 'x86_64-apple-darwin'
   };
 }

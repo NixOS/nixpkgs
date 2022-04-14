@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
+    ./7.82.0-openssl-fix-CN-check.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];

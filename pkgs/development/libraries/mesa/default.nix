@@ -6,7 +6,6 @@
 , libelf, libvdpau
 , libglvnd, libunwind
 , galliumDrivers ? ["auto"]
-, driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
@@ -34,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.3.8";
+  version = "22.0.1";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -48,7 +47,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "19wx5plk6z0hhi0zdzxjx8ynl3lhlc5mbd8vhwqyk92kvhxjf3g7";
+    sha256 = "0vs20kyq9sxh52hd242yf7nz2wzw6di8jw7s19pb6q25qn19cpy0";
   };
 
   # TODO:
@@ -114,7 +113,6 @@ self = stdenv.mkDerivation {
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
     "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Ddri-drivers=${concatStringsSep "," driDrivers}"
     "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
     "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
 
@@ -154,6 +152,7 @@ self = stdenv.mkDerivation {
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
+    jdupes
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
@@ -230,7 +229,7 @@ self = stdenv.mkDerivation {
     done
 
     # NAR doesn't support hard links, so convert them to symlinks to save space.
-    ${jdupes}/bin/jdupes --hard-links --link-soft --recurse "$drivers"
+    jdupes --hard-links --link-soft --recurse "$drivers"
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files

@@ -30,21 +30,15 @@ buildPythonPackage rec {
     ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
   ];
 
-  postPatch = ''
-    # Use latest idna
-    substituteInPlace setup.py \
-      --replace ",<3" ""
-  '';
-
   propagatedBuildInputs = [
     certifi
     idna
     urllib3
     chardet
-  ] ++ lib.optionals (isPy3k) [
+  ] ++ lib.optionals isPy3k [
     brotlicffi
     charset-normalizer
-  ] ++ lib.optionals (isPy27) [
+  ] ++ lib.optionals isPy27 [
     brotli
   ];
 

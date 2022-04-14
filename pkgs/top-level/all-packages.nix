@@ -155,6 +155,7 @@ with pkgs;
       pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
       autoPatchelfScript = ../build-support/setup-hooks/auto-patchelf.py;
     };
+    meta.platforms = lib.platforms.linux;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   appflowy = callPackage ../applications/office/appflowy { };
@@ -857,7 +858,9 @@ with pkgs;
   setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
 
   fixDarwinDylibNames = makeSetupHook {
+    name = "fix-darwin-dylib-names-hook";
     substitutions = { inherit (binutils) targetPrefix; };
+    meta.platforms = lib.platforms.darwin;
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
@@ -5312,7 +5315,8 @@ with pkgs;
   };
 
   exempi = callPackage ../development/libraries/exempi {
-    stdenv = if stdenv.isi686 then gcc6Stdenv else stdenv;
+    stdenv = if stdenv.isi686 then gcc6Stdenv else gcc9Stdenv;
+    boost  = boost15x;
   };
 
   execline = skawarePackages.execline;
@@ -9432,6 +9436,8 @@ with pkgs;
     rekor-cli
     rekor-server;
 
+  rich-cli = callPackage ../misc/rich-cli { };
+
   richgo = callPackage ../development/tools/richgo {  };
 
   rs = callPackage ../tools/text/rs { };
@@ -12121,6 +12127,7 @@ with pkgs;
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isDarwin) then 11
+        else if (stdenv.targetPlatform.isx86_64 && stdenv.isLinux) then 11
         else if stdenv.targetPlatform.isAarch64 then 9
         else 10;
       numS = toString num;
@@ -13240,18 +13247,18 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_59 = callPackage ../development/compilers/rust/1_59.nix {
+  rust_1_60 = callPackage ../development/compilers/rust/1_60.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
-    llvm_13 = llvmPackages_13.libllvm;
+    llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_59;
+  rust = rust_1_60;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_59 = rust_1_59.packages.stable;
-  rustPackages = rustPackages_1_59;
+  rustPackages_1_60 = rust_1_60.packages.stable;
+  rustPackages = rustPackages_1_60;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -14557,7 +14564,7 @@ with pkgs;
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
-    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
+    autoreconfHook = autoreconfHook269;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
@@ -14572,7 +14579,7 @@ with pkgs;
   };
   binutils_nogold = lowPrio (wrapBintoolsWith {
     bintools = binutils-unwrapped.override {
-      gold = false;
+      enableGold = false;
     };
   });
   binutilsNoLibc = wrapBintoolsWith {
@@ -17149,7 +17156,12 @@ with pkgs;
 
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
-  grpc = callPackage ../development/libraries/grpc { };
+  grpc = callPackage ../development/libraries/grpc {
+    # grpc builds with c++14 so abseil must also be built that way
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "14";
+    };
+  };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
@@ -19361,7 +19373,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  nss = lowPrio (callPackage ../development/libraries/nss { });
+  nss_latest = callPackage ../development/libraries/nss/latest.nix { };
+  nss_esr = callPackage ../development/libraries/nss/esr.nix { };
+  nss = nss_esr;
   nssTools = nss.tools;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
@@ -21681,16 +21695,8 @@ with pkgs;
 
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
 
-  pulseaudio-hsphfpd = callPackage ../servers/pulseaudio/pali.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
-
   pulseaudio = callPackage ../servers/pulseaudio ({
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  } // lib.optionalAttrs stdenv.isDarwin {
-    # Default autoreconfHook (2.70) fails on darwin,
-    # with "configure: error: *** Compiler does not support -std=gnu11"
-    autoreconfHook = buildPackages.autoreconfHook269;
   });
 
   qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
@@ -22385,11 +22391,6 @@ with pkgs;
     withExperimental = true;
   };
 
-  pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt {
-    # pulseaudio-modules-bt is most likely to be used with pulseaudioFull
-    pulseaudio = pulseaudioFull;
-  };
-
   bluez = bluez5;
 
   inherit (python3Packages) bedup;
@@ -22889,6 +22890,10 @@ with pkgs;
     # which depends on lvm2 again.  But we only need the libudev part
     # which does not depend on cryptsetup.
     udev = systemdMinimal;
+    # break the cyclic dependency:
+    # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
+    # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
+    util-linux = util-linuxMinimal;
   };
   lvm2-2_02 = callPackage ../os-specific/linux/lvm2/2_02.nix {
     udev = systemdMinimal;
@@ -26161,6 +26166,7 @@ with pkgs;
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = true;
+    withSsh = true;
     withLibsecret = !stdenv.isDarwin;
   };
 
@@ -28287,7 +28293,7 @@ with pkgs;
 
   vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
-  libopenmpt = callPackage ../applications/audio/libopenmpt { };
+  libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
 
   openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 
