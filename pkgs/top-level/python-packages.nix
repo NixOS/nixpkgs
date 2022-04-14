@@ -7719,6 +7719,8 @@ in {
 
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
+  pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
+
   pysigma-pipeline-crowdstrike = callPackage ../development/python-modules/pysigma-pipeline-crowdstrike { };
 
   pysigma-pipeline-sysmon = callPackage ../development/python-modules/pysigma-pipeline-sysmon { };
