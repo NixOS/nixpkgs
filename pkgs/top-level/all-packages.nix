@@ -35010,3 +35010,4 @@ with pkgs;
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
 
   bloomrpc = callPackage ../tools/networking/bloomrpc { };
+}
