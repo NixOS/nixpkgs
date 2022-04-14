@@ -40,6 +40,8 @@ buildGoModule rec {
     substituteAllInPlace doc/aerc-config.5.scd
   '';
 
+  makeFlags = [ "PREFIX=$out" ];
+
   pythonPath = [
     python3.pkgs.colorama
   ];
