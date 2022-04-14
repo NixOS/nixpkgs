@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       )
 
       # connects to the daemon
-      machine.succeed("emacsclient --create-frame $EDITOR >&2 &")
+      machine.succeed("emacsclient --no-wait --frame-parameters='((display . \"'\"$DISPLAY\"'\"))' --create-frame $EDITOR >&2")
 
       # checks that Emacs shows the edited filename
       machine.wait_for_text("emacseditor")
