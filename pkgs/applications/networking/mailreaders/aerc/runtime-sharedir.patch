@@ -1,21 +1,21 @@
 diff --git a/config/aerc.conf b/config/aerc.conf
-index 7a5e42389d4a..495b71d50ba7 100644
+index fbbf587..ede1a03 100644
 --- a/config/aerc.conf
 +++ b/config/aerc.conf
-@@ -101,8 +101,7 @@ next-message-on-delete=true
+@@ -107,8 +107,7 @@ next-message-on-delete=true
  #
- #   ~/.config/aerc/stylesets
- #   ~/.local/share/aerc/stylesets
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
 -#   /usr/local/share/aerc/stylesets
 -#   /usr/share/aerc/stylesets
 +#   @out@/share/aerc/stylesets
  #
  # default: ""
  stylesets-dirs=
-@@ -247,8 +246,7 @@ new-email=
+@@ -254,8 +253,7 @@ new-email=
  #
- #   ~/.config/aerc/templates
- #   ~/.local/share/aerc/templates
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/templates
 -#   /usr/local/share/aerc/templates
 -#   /usr/share/aerc/templates
 +#   @out@/share/aerc/templates
@@ -23,21 +23,22 @@ index 7a5e42389d4a..495b71d50ba7 100644
  # default: ""
  template-dirs=
 diff --git a/config/config.go b/config/config.go
-index f730fe458d3a..c777a3f855f1 100644
+index 2120310..92b7655 100644
 --- a/config/config.go
 +++ b/config/config.go
-@@ -299,8 +299,7 @@ func parseCredential(cred, command string) (string, error) {
- var defaultDirs []string = []string{
- 	path.Join(xdg.ConfigHome(), "aerc"),
- 	path.Join(xdg.DataHome(), "aerc"),
--	"/usr/local/share/aerc",
--	"/usr/share/aerc",
-+	"@out@/share/aerc",
- }
+@@ -331,8 +331,8 @@ func buildDefaultDirs() []string {
+ 	}
  
- func installTemplate(root, name string) error {
+ 	// Add fixed fallback locations
+-	defaultDirs = append(defaultDirs, "/usr/local/share/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/share/aerc")
++	defaultDirs = append(defaultDirs, "@out@/local/share/aerc")
++	defaultDirs = append(defaultDirs, "@out@/share/aerc")
+ 
+ 	return defaultDirs
+ }
 diff --git a/doc/aerc-config.5.scd b/doc/aerc-config.5.scd
-index 1992b59fccb7..3640f04a41b5 100644
+index 885c4f8..77a853e 100644
 --- a/doc/aerc-config.5.scd
 +++ b/doc/aerc-config.5.scd
 @@ -12,7 +12,7 @@ account credentials. We look for these files in your XDG config home plus
@@ -45,48 +46,42 @@ index 1992b59fccb7..3640f04a41b5 100644
  
  Examples of these config files are typically included with your installation of
 -aerc and are usually installed in /usr/share/aerc.
-+aerc and are installed in @out@/share/aerc.
++aerc and are usually installed in @out@/share/aerc.
  
  Each file uses the _ini_ format, and consists of sections with keys and values.
  A line beginning with # is considered a comment and ignored, as are empty lines.
-@@ -215,8 +215,7 @@ These options are configured in the *[ui]* section of aerc.conf.
+@@ -221,8 +221,7 @@ These options are configured in the *[ui]* section of aerc.conf.
  	```
- 	~/.config/aerc/stylesets
- 	~/.local/share/aerc/stylesets
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
 -	/usr/local/share/aerc/stylesets
 -	/usr/share/aerc/stylesets
 +	@out@/share/aerc/stylesets
  	```
  
  	Default: ""
-@@ -374,9 +373,9 @@ You can also match on non-mimetypes, by prefixing with the header to match
- against (non-case-sensitive) and a comma, e.g. subject,text will match a
+@@ -381,7 +380,7 @@ against (non-case-sensitive) and a comma, e.g. subject,text will match a
  subject which contains "text". Use header,~regex to match against a regex.
  
--aerc ships with some default filters installed in the share directory (usually
+ aerc ships with some default filters installed in the share directory (usually
 -_/usr/share/aerc/filters_). Note that these may have additional dependencies
--that aerc does not have alone.
-+aerc ships with some default filters installed in the share directory
-+(_@out@/share/aerc/filters_).
-+Note that these may have additional dependencies that aerc does not have alone.
++_@out@/share/aerc/filters_). Note that these may have additional dependencies
+ that aerc does not have alone.
  
  ## TRIGGERS
- 
-@@ -400,8 +399,8 @@ Templates are used to populate the body of an email. The compose, reply
- and forward commands can be called with the -T flag with the name of the
+@@ -407,7 +406,7 @@ and forward commands can be called with the -T flag with the name of the
  template name.
  
--aerc ships with some default templates installed in the share directory (usually
+ aerc ships with some default templates installed in the share directory (usually
 -_/usr/share/aerc/templates_).
-+aerc ships with some default templates installed in the share directory
-+(_@out@/share/aerc/templates_).
++_@out@/share/aerc/templates_).
  
  These options are configured in the *[templates]* section of aerc.conf.
  
-@@ -413,8 +412,7 @@ These options are configured in the *[templates]* section of aerc.conf.
+@@ -419,8 +418,7 @@ These options are configured in the *[templates]* section of aerc.conf.
  	```
- 	~/.config/aerc/templates
- 	~/.local/share/aerc/templates
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/templates
 -	/usr/local/share/aerc/templates
 -	/usr/share/aerc/templates
 +	@out@/share/aerc/templates
