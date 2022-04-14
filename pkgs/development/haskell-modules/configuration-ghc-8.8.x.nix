@@ -131,18 +131,23 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend self.ghc-lib (overrideCabal (drv: {
+      # Workaround for https://github.com/haskell/haskell-language-server/issues/2728
+      postPatch = ''
+        sed -i 's/(GHC.RealSrcSpan x,/(GHC.RealSrcSpan x Nothing,/' src/Ide/Plugin/Hlint.hs
+      '';
+    })
+     super.hls-hlint-plugin);
+
   haskell-language-server = appendConfigureFlags [
-      "-f-fourmolu"
       "-f-stylishhaskell"
       "-f-brittany"
-      "-f-hlint"
     ]
-  (super.haskell-language-server.override {
-    # Not buildable on 8.8
-    hls-fourmolu-plugin = null;
-    # https://github.com/haskell/haskell-language-server/issues/2728
-    hls-hlint-plugin = null;
-  });
+  super.haskell-language-server;
+
+  # has a restrictive lower bound on Cabal
+  fourmolu = doJailbreak super.fourmolu;
 
   # OneTuple needs hashable instead of ghc-prim for GHC < 9
   OneTuple = super.OneTuple.override {
