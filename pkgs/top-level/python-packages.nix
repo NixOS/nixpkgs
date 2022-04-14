@@ -7765,6 +7765,8 @@ in {
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
+  pysnmp-pyasn1 = callPackage ../development/python-modules/pysnmp-pyasn1 { };
+
   pysnooper = callPackage ../development/python-modules/pysnooper { };
 
   pysnow = callPackage ../development/python-modules/pysnow { };
