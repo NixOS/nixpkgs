@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # needed until codeql/csharp/tools/linux64/libcoreclrtraceptprovider.so updates its liblttng-ust dependency from liblttng-ust.so.0 to liblttng-ust.so.1
   autoPatchelfIgnoreMissingDeps=true;
-  
+
   nativeBuildInputs = [
     zlib
     xorg.libX11
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # resolve java home, so to be able to create databases, we want to make
     # sure that they point somewhere sane/usable since we can not autopatch
     # the codeql packaged java dist, but we DO want to patch the extractors
-    # as well as the builders which are ELF binaries for the most particle
+    # as well as the builders which are ELF binaries for the most part
 
     rm -rf $out/codeql/tools/linux64/java
     ln -s ${jdk11} $out/codeql/tools/linux64/java
