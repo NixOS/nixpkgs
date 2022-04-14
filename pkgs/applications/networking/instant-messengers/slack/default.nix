@@ -47,8 +47,8 @@ let
   x86_64-darwin-version = "4.25.0";
   x86_64-darwin-sha256 = "1ffg003ic0jhkis9ai2873axwzqj9yvjab8212zwhvr3a23zzr5c";
 
-  x86_64-linux-version = "4.25.0";
-  x86_64-linux-sha256 = "0b22hnf9bzdzffnxrsjqcimqhz5imshvp9gw9baz12d45jh610g8";
+  x86_64-linux-version = "4.25.1";
+  x86_64-linux-sha256 = "sha256-ndDVipgcLELRZ2siIAurq7umL62+g3yRL0U311DC8Ik=";
 
   aarch64-darwin-version = "4.25.0";
   aarch64-darwin-sha256 = "0s4c66bzi42y2r1c94r4ds5fyzzgvzkvrria0z45ysa47lnldp0f";
@@ -81,7 +81,7 @@ let
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [ mmahut maxeaubrey ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
   };
 
