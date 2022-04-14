@@ -355,7 +355,7 @@ let
       [ { object = bootStage1;
           symlink = "/init";
         }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
+        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.mdraid.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
@@ -502,14 +502,6 @@ in
       type = types.bool;
       description = ''
         Whether to run <command>fsck</command> on journaling filesystems such as ext3.
-      '';
-    };
-
-    boot.initrd.mdadmConf = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Contents of <filename>/etc/mdadm.conf</filename> in stage 1.
       '';
     };
 
@@ -736,6 +728,9 @@ in
     ];
 
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
-
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "mdraid" "mdadmConf" ])
+  ];
 }
