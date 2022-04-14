@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "3.2.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PUtqIQVgC30CkOoje/MLaw3HY+UPy+QOhJoBm9bby/8=";
+    sha256 = "sha256-rJMEzfgLCcN+6pZXmeDZrAqhzLZTH65Uiqvgm68aJUk=";
   };
 
   nativeBuildInputs = [

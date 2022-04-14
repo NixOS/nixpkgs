@@ -471,6 +471,15 @@
     "vendorSha256": "sha256-HrsjhaMlzs+uel5tBlxJD69Kkjl+4qVisWWREANBx40=",
     "version": "5.0.2"
   },
+  "htpasswd": {
+    "owner": "loafoe",
+    "provider-source-address": "registry.terraform.io/loafoe/htpasswd",
+    "repo": "terraform-provider-htpasswd",
+    "rev": "v1.0.1",
+    "sha256": "sha256-RUkPIsKVMooGy2hYsNFkctMFdJ8MEbtbMB9Qak6HJgQ=",
+    "vendorSha256": "sha256-4P3IX7KGDqcWVYRiD6tXoEjF/phI89rz5QdR09xtnAo=",
+    "version": "1.0.1"
+  },
   "http": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/http",

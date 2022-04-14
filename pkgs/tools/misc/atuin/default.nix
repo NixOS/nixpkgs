@@ -26,15 +26,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   postInstall = ''
-    HOME=$(mktemp -d)
-    for shell in bash fish zsh; do
-      $out/bin/atuin gen-completions -s $shell -o .
-    done
-
     installShellCompletion --cmd atuin \
-      --bash atuin.bash \
-      --fish atuin.fish \
-      --zsh _atuin
+      --bash <($out/bin/atuin gen-completions -s bash) \
+      --fish <($out/bin/atuin gen-completions -s fish) \
+      --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
   meta = with lib; {

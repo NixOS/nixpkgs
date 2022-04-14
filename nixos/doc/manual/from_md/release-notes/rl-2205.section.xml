@@ -1915,7 +1915,10 @@
         <para>
           <literal>services.xserver.desktopManager.xfce</literal> now
           includes Xfce’s screen locker,
-          <literal>xfce4-screensaver</literal>.
+          <literal>xfce4-screensaver</literal> that is enabled by
+          default. You can disable it by setting
+          <literal>false</literal> to
+          <link linkend="opt-services.xserver.desktopManager.xfce.enableScreensaver">services.xserver.desktopManager.xfce.enableScreensaver</link>.
         </para>
       </listitem>
       <listitem>
