@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "obfs4";
-  version = "0.0.11";
+  version = "0.0.13";
 
   src = fetchgit {
-    url = "https://git.torproject.org/pluggable-transports/obfs4.git";
-    rev = "refs/tags/${pname}proxy-${version}";
-    sha256 = "sha256-VjJ/Pc1YjNB2iLnN/5CxuaxolcaR1IMWgoESMzOXU/g=";
+    url = "https://github.com/Yawning/obfs4";
+    rev = "${pname}proxy-${version}";
+    sha256 = "1jqwjg3a2pcadnbip9nq3h2xwhpdf4gg6nhsayyzdx22fri6x3pv";
   };
 
-  vendorSha256 = "sha256-xGCK8biTYcrmKbsl6ZyCjpRrVP9x5xGrC3VcMsR7ETo=";
+  vendorSha256 = "sha256-7NF3yMouhjSM9SBNKHkeWV7qy0XTGnepEX28kBpbgdk=";
 
   meta = with lib; {
     description = "A pluggable transport proxy";
