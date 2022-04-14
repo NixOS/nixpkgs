@@ -459,6 +459,14 @@ let
       '';
     });
 
+    ts-node = super.ts-node.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/ts-node" \
+        --prefix NODE_PATH : ${self.typescript}/lib/node_modules
+      '';
+    });
+
     typescript = super.typescript.overrideAttrs (oldAttrs: {
       meta = oldAttrs.meta // { mainProgram = "tsc"; };
     });
