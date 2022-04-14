@@ -98,14 +98,13 @@ self: super: {
      super.hls-hlint-plugin);
 
   haskell-language-server = appendConfigureFlags [
-      "-f-fourmolu"
       "-f-stylishhaskell"
       "-f-brittany"
     ]
-  (super.haskell-language-server.override {
-    # Not buildable on 8.10
-    hls-fourmolu-plugin = null;
-  });
+  super.haskell-language-server;
+
+  # has a restrictive lower bound on Cabal
+  fourmolu = doJailbreak super.fourmolu;
 
   # ormolu 0.3 requires Cabal == 3.4
   ormolu = super.ormolu_0_2_0_0;
