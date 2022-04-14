@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "tldr";
@@ -12,11 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
 
   makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    installShellCompletion --cmd tldr autocomplete/complete.{bash,fish,zsh}
+  '';
 
   meta = with lib; {
     description = "Simplified and community-driven man pages";
