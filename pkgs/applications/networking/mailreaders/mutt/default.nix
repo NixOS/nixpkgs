@@ -34,7 +34,14 @@ stdenv.mkDerivation rec {
     sha256 = "1q1bq5qfv67s6ynbqga19ifaprgavhdbgg154kb9ffingvj0k8wj";
   };
 
-  patches = optional smimeSupport (fetchpatch {
+  patches = [
+    # https://gitlab.com/muttmua/mutt/-/issues/404
+    (fetchpatch {
+      name = "CVE-2022-1328.patch";
+      url = "https://gitlab.com/muttmua/mutt/-/commit/e5ed080c00e59701ca62ef9b2a6d2612ebf765a5.patch";
+      sha256 = "0mxr95c48ixfh7dbka9sdyrc3c3nf7bv2g8m05fsf30r1565hija";
+    })
+  ] ++ optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
