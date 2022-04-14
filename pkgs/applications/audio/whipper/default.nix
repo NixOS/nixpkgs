@@ -8,6 +8,8 @@
 , flac
 , sox
 , util-linux
+, testVersion
+, whipper
 }:
 
 let
@@ -71,6 +73,11 @@ in python3.pkgs.buildPythonApplication rec {
     HOME=$TMPDIR ${python3.interpreter} -m unittest discover
     runHook postCheck
   '';
+
+  passthru.tests.version = testVersion {
+    package = whipper;
+    command = "HOME=$TMPDIR whipper --version";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";
