@@ -44,6 +44,6 @@ mkDerivation rec {
     description = "Dialogue window providing information about LXQt and the system it's running on";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }
