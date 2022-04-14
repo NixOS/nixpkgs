@@ -56,7 +56,7 @@ cfgbootnone = """  # Disable bootloader.
 
 cfgbootcrypt = """  # Setup keyfile
   boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = "/crypto_keyfile.bin";
+    "/crypto_keyfile.bin" = null;
   };
 
 """
@@ -363,19 +363,39 @@ def run():
             cfg += cfgbootcrypt
             if fw_type != "efi":
                 cfg += cfgbootgrubcrypt
+            try:
+                # Create /crypto_keyfile.bin
+                subprocess.check_output(
+                    ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], stderr=subprocess.STDOUT)
+                subprocess.check_output(
+                    ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError as e:
+                if e.output != None:
+                    libcalamares.utils.error(e.output.decode("utf8"))
+                return (_("Failed to create /crypto_keyfile.bin"), _(e.output.decode("utf8")))
             break
 
+    # Setup keys in /crypto_keyfile. If we use systemd-boot (EFI), don't add /
+    # Goal is to have one password prompt when booted
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
-            cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";
-""".format(part["luksMapperName"])
-
-    for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fs"] == "linuxswap" and part["fsName"] == "luks":
-            cfg += cfgswapcrypt
-            catenate(variables, "swapdev", part["luksMapperName"])
-            catenate(variables, "swapuuid", part["luksUuid"])
-            break
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not (fw_type == "efi" and part["mountPoint"] == "/"):
+            if part["fs"] == "linuxswap":
+                cfg += cfgswapcrypt
+                catenate(variables, "swapdev", part["luksMapperName"])
+                catenate(variables, "swapuuid", part["luksUuid"])
+            else:
+                cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(
+                    part["luksMapperName"])
+            try:
+                # Add luks drives to /crypto_keyfile.bin
+                pswd = subprocess.Popen(
+                    ["echo", part["luksPassphrase"]], stdout=subprocess.PIPE)
+                subprocess.check_output(
+                    ["cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], stdin=pswd.stdout, stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError as e:
+                if e.output != None:
+                    libcalamares.utils.error(e.output.decode("utf8"))
+                return (_("cryptsetup failed"), _(e.output.decode("utf8")))
 
     if gs.value("packagechooser_packagechooser") == "enlightenment":
         cfg += cfgnetworkenlightenment
@@ -434,12 +454,7 @@ def run():
 
     if (gs.value("username") is not None):
         fullname = gs.value("fullname")
-        groups = ["users" "networkmanager" "wheel"]
-
-        if "users" in groups:
-            groups.remove("users")
-        if gs.value("username") in groups:
-            groups.remove(gs.value("username"))
+        groups = ["networkmanager", "wheel"]
 
         cfg += cfgusers
         catenate(variables, "username", gs.value("username"))
@@ -486,6 +501,29 @@ def run():
         cfg = cfg.replace(pattern, str(variables[key]))
 
     libcalamares.job.setprogress(0.1)
+
+    # Mount swap partition
+    for part in gs.value("partitions"):
+        if part["claimed"] == True and part["fs"] == "linuxswap":
+            if part["fsName"] == "luks":
+                try:
+                    subprocess.check_output(
+                        ["swapon", "/dev/mapper/" + part["luksMapperName"]], stderr=subprocess.STDOUT)
+                except subprocess.CalledProcessError as e:
+                    if e.output != None:
+                        libcalamares.utils.error(e.output.decode("utf8"))
+                    return (_("swapon failed to activate swap " + "/dev/mapper/" + part["luksMapperName"]), _(e.output.decode("utf8")))
+            else:
+                try:
+                    subprocess.check_output(
+                        ["swapon", part["device"]], stderr=subprocess.STDOUT)
+                except subprocess.CalledProcessError as e:
+                    if e.output != None:
+                        libcalamares.utils.error(e.output.decode("utf8"))
+                    return (_("swapon failed to activate swap " + part["device"]), _(e.output.decode("utf8")))
+            break
+
+    libcalamares.job.setprogress(0.2)
 
     try:
         # Generate hardware.nix with mounted swap device
