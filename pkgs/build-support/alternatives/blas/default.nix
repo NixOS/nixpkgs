@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  if [ "${builtins.toString stdenv.hostPlatform.isDarwin}" == "1" ] && [ "${blasImplementation}" == "mkl" ]; then
+  if [ -n "${builtins.toString stdenv.hostPlatform.isDarwin}" ] && [ "${blasImplementation}" == "mkl" ]; then
     libblas="${lib.getLib blasProvider'}/lib/libmkl_rt${canonicalExtension}"
   else
     libblas="${lib.getLib blasProvider'}/lib/libblas${canonicalExtension}"
