@@ -9597,8 +9597,6 @@ in {
 
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
 
-  SQLAlchemy-ImageAttach = callPackage ../development/python-modules/sqlalchemy-imageattach { };
-
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
