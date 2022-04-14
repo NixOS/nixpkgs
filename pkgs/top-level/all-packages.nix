@@ -35008,4 +35008,5 @@ with pkgs;
   honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
 
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
-}
+
+  bloomrpc = callPackage ../tools/networking/bloomrpc { };
