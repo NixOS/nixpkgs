@@ -153,7 +153,7 @@ in
           "/etc/vconsole.conf".source = vconsoleConf;
         };
         boot.initrd.systemd.storePaths = [
-          "${config.boot.initrd.systemd}/lib/systemd/systemd-vconsole-setup"
+          "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
           "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
           "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # keyboard layouts are compressed
