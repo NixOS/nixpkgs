@@ -45,6 +45,7 @@ in python3.pkgs.buildPythonApplication rec {
     ruamel-yaml
     discid
     pillow
+    setuptools
   ];
 
   buildInputs = [ libsndfile ];
