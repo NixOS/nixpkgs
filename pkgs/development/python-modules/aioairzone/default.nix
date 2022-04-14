@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aioairzone";
-  version = "0.3.4";
+  version = "0.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ENdgaG30Fll5HQOTcghkmqOAiMYEY1aHRIel4Bd25Pk=";
+    hash = "sha256-X7/6lpQmRVgPDOYBBz71oARKv2C8kyh2nmbJ8yTjEP4=";
   };
 
   propagatedBuildInputs = [
