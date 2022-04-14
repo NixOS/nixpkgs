@@ -853,8 +853,12 @@ in
       (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
         "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
       ])
-      (mkIf (!cfg.useBootLoader) [
-        "-kernel \${NIXPKGS_QEMU_KERNEL_${config.system.name}:-${config.system.build.toplevel}/kernel}"
+      (let
+        alphaNumericChars = lowerChars ++ upperChars ++ (map toString (range 0 9));
+        # Replace all non-alphanumeric characters with underscores
+        sanitizeShellIdent = s: concatMapStrings (c: if builtins.elem c alphaNumericChars then c else "_") (stringToCharacters s);
+      in mkIf (!cfg.useBootLoader) [
+        "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
         "-initrd ${config.system.build.toplevel}/initrd"
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])

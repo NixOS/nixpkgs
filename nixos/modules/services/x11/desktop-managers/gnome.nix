@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -42,7 +42,8 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-blue.gnomeFilePath}'
+       picture-uri-dark='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
 
        [org.gnome.desktop.screensaver]
        picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
@@ -455,7 +456,7 @@ in
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
         with pkgs.gnome;
-        removePackagesByName
+        utils.removePackagesByName
           ([
             baobab
             cheese
@@ -515,7 +516,7 @@ in
     })
 
     (mkIf serviceCfg.games.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
+      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         aisleriot
         atomix
         five-or-more
@@ -536,12 +537,12 @@ in
         quadrapassel
         swell-foop
         tali
-      ] config.environment.gnome.excludePackages);
+      ] config.environment.gnome.excludePackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
     (mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = (with pkgs.gnome; removePackagesByName [
+      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         dconf-editor
         devhelp
         pkgs.gnome-builder
@@ -550,7 +551,7 @@ in
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
         /* gnome-boxes */
-      ] config.environment.gnome.excludePackages);
+      ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })

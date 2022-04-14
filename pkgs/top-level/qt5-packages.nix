@@ -176,6 +176,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+  # Until macOS SDK allows for Qt 5.15, darwin is limited to 2.3.2
+  qca-qt5_2_3_2 = callPackage ../development/libraries/qca-qt5/2.3.2.nix { };
+
   qcoro = callPackage ../development/libraries/qcoro { };
 
   qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };

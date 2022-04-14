@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bullet";
-  version = "3.22a";
+  version = "3.22b";
 
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
     rev = version;
-    sha256 = "sha256-Ng+kg720y69aE0FgTnD60F05zwUX/LzLlImnrODzOuo=";
+    sha256 = "sha256-hf2b7enh9mziPKFcdU8NwLdhcxhV7Ididf9Bwwa+5/M=";
   };
 
   nativeBuildInputs = [ cmake ];

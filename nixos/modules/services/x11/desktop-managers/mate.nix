@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -47,7 +47,7 @@ in
     # Debugging
     environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-    environment.systemPackages = pkgs.gnome.removePackagesByName
+    environment.systemPackages = utils.removePackagesByName
       (pkgs.mate.basePackages ++
       pkgs.mate.extraPackages ++
       [

@@ -381,6 +381,14 @@
           cluster resource manager
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nifi.apache.org">nifi</link>, an
+          easy to use, powerful, and reliable system to process and
+          distribute data. Available as
+          <link xlink:href="options.html#opt-services.nifi.enable">services.nifi</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -520,6 +528,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.prometheus.alertManagerTimeout</literal> has
+          been removed as it has been deprecated upstream and has no
+          effect.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The DHCP server (<literal>services.dhcpd4</literal>,
           <literal>services.dhcpd6</literal>) has been hardened. The
           service is now using the systemd’s
@@ -549,6 +564,17 @@
           rely on systemd interpolating <literal>extraFlags</literal> in
           the service <literal>ExecStart</literal>, this will no longer
           work.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.paperless-ng</literal> was renamed to
+          <literal>services.paperless</literal>. Accordingly, the
+          <literal>paperless-ng-manage</literal> script (located in
+          <literal>dataDir</literal>) was renamed to
+          <literal>paperless-manage</literal>.
+          <literal>services.paperless</literal> now uses
+          <literal>paperless-ngx</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1691,6 +1717,13 @@
       </listitem>
       <listitem>
         <para>
+          A module for declarative configuration of openconnect VPN
+          profiles was added under
+          <literal>networking.openconnect</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>element-desktop</literal> package now has an
           <literal>useKeytar</literal> option (defaults to
           <literal>true</literal>), which allows disabling
@@ -1789,6 +1822,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.pam.ussh</literal> has been added, which
+          allows authorizing PAM sessions based on SSH
+          <emphasis>certificates</emphasis> held within an SSH agent,
+          using
+          <link xlink:href="https://github.com/uber/pam-ussh">pam-ussh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zrepl</literal> package has been updated from
           0.4.0 to 0.5:
         </para>
@@ -1882,7 +1924,10 @@
         <para>
           <literal>services.xserver.desktopManager.xfce</literal> now
           includes Xfce’s screen locker,
-          <literal>xfce4-screensaver</literal>.
+          <literal>xfce4-screensaver</literal> that is enabled by
+          default. You can disable it by setting
+          <literal>false</literal> to
+          <link linkend="opt-services.xserver.desktopManager.xfce.enableScreensaver">services.xserver.desktopManager.xfce.enableScreensaver</link>.
         </para>
       </listitem>
       <listitem>

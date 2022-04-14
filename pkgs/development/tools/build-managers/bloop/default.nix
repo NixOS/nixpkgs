@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   bloop-coursier-channel = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
-    sha256 = "bf3uHuGfmJukf0Qeudv8ZXz/9Uql/qsmvPS0XBb7oTQ=";
+    sha256 = "VbvBAz7mXhgQtbrlB6uCSmZXLcdYaROJRSREbazAReo=";
   };
 
   bloop-bash = fetchurl {
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "sha256-jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
-    else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-WJytRIbsygi4zoIVfkJmzWyFe2p8mQuT4DDO5KDKopY="
+    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "sha256-AiF/ih15Jd0WuDP/0vU0vdaSo3FGjWXos+hNVBayFz4="
+    else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-LD23YpcNhWfioGDMqb1plqLy87ZHzT0zvIyc4O4WP5g="
     else throw "unsupported platform";
   };
 

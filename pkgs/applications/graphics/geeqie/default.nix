@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
-    sha256 = "sha256-Abr7trlms6bxOAqE6xNKRv51TBGNilNdBhUZUg7OTKY=";
+    sha256 = "sha256-O+yz/uNxueR+naEJG8EZ+k/JutRjJ5wwbB9DYb8YNLw=";
   };
 
   patches = [

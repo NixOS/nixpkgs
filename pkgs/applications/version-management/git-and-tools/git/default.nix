@@ -4,15 +4,15 @@
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, svnSupport ? false, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
 , osxkeychainSupport ? stdenv.isDarwin
-, guiSupport
+, guiSupport ? false
 , withManual ? true
 , pythonSupport ? true
 , withpcre2 ? true
-, sendEmailSupport
+, sendEmailSupport ? false
 , darwin
 , nixosTests
 , withLibsecret ? false

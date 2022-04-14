@@ -23,17 +23,16 @@ let
   nixosRules = ''
     # Miscellaneous devices.
     KERNEL=="kvm",                  MODE="0666"
-    KERNEL=="kqemu",                MODE="0666"
 
     # Needed for gpm.
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
 
   # Perform substitutions in all udev rules files.
-  udevRules = pkgs.runCommand "udev-rules"
+  udevRulesFor = { name, udevPackages, udevPath, udev, systemd, binPackages, initrdBin ? null }: pkgs.runCommand name
     { preferLocalBuild = true;
       allowSubstitutes = false;
-      packages = unique (map toString cfg.packages);
+      packages = unique (map toString udevPackages);
     }
     ''
       mkdir -p $out
@@ -61,6 +60,9 @@ let
           --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
           --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
+      ${optionalString (initrdBin != null) ''
+        substituteInPlace $i --replace '/run/current-system/systemd' "${removeSuffix "/bin" initrdBin}"
+      ''}
       done
 
       echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
@@ -85,8 +87,9 @@ let
       for i in $import_progs $run_progs; do
         # if the path refers to /run/current-system/systemd, replace with config.systemd.package
         if [[ $i == /run/current-system/systemd* ]]; then
-          i="${config.systemd.package}/''${i#/run/current-system/systemd/}"
+          i="${systemd}/''${i#/run/current-system/systemd/}"
         fi
+
         if [[ ! -x $i ]]; then
           echo "FAIL"
           echo "$i is called in udev rules but is not executable or does not exist"
@@ -103,7 +106,7 @@ let
         echo "Consider fixing the following udev rules:"
         echo "$filesToFixup" | while read localFile; do
           remoteFile="origin unknown"
-          for i in ${toString cfg.packages}; do
+          for i in ${toString binPackages}; do
             for j in "$i"/*/udev/rules.d/*; do
               [ -e "$out/$(basename "$j")" ] || continue
               [ "$(basename "$j")" = "$(basename "$localFile")" ] || continue
@@ -126,7 +129,7 @@ let
       ${optionalString (!config.boot.hardwareScan) ''
         ln -s /dev/null $out/80-drivers.rules
       ''}
-    ''; # */
+    '';
 
   hwdbBin = pkgs.runCommand "hwdb.bin"
     { preferLocalBuild = true;
@@ -202,20 +205,6 @@ in
         '';
       };
 
-      initrdRules = mkOption {
-        default = "";
-        example = ''
-          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
-        '';
-        type = types.lines;
-        description = ''
-          <command>udev</command> rules to include in the initrd
-          <emphasis>only</emphasis>. They'll be written into file
-          <filename>99-local.rules</filename>. Thus they are read and applied
-          after the essential initrd rules.
-        '';
-      };
-
       extraRules = mkOption {
         default = "";
         example = ''
@@ -283,6 +272,52 @@ in
       '';
     };
 
+    boot.initrd.services.udev = {
+
+      packages = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        visible = false;
+        description = ''
+          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+
+          List of packages containing <command>udev</command> rules that will be copied to stage 1.
+          All files found in
+          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
+          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          will be included.
+        '';
+      };
+
+      binPackages = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        visible = false;
+        description = ''
+          <emphasis>This will only be used when systemd is used in stage 1.</emphasis>
+
+          Packages to search for binaries that are referenced by the udev rules in stage 1.
+          This list always contains /bin of the initrd.
+        '';
+        apply = map getBin;
+      };
+
+      rules = mkOption {
+        default = "";
+        example = ''
+          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
+        '';
+        type = types.lines;
+        description = ''
+          <command>udev</command> rules to include in the initrd
+          <emphasis>only</emphasis>. They'll be written into file
+          <filename>99-local.rules</filename>. Thus they are read and applied
+          after the essential initrd rules.
+        '';
+      };
+
+    };
+
   };
 
 
@@ -298,16 +333,54 @@ in
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
-    boot.initrd.extraUdevRulesCommands = optionalString (cfg.initrdRules != "")
+    boot.initrd.extraUdevRulesCommands = optionalString (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
       ''
         cat <<'EOF' > $out/99-local.rules
-        ${cfg.initrdRules}
+        ${config.boot.initrd.services.udev.rules}
         EOF
       '';
 
+    boot.initrd.systemd.additionalUpstreamUnits = [
+      # TODO: "initrd-udevadm-cleanup-db.service" is commented out because of https://github.com/systemd/systemd/issues/12953
+      "systemd-udevd-control.socket"
+      "systemd-udevd-kernel.socket"
+      "systemd-udevd.service"
+      "systemd-udev-settle.service"
+      "systemd-udev-trigger.service"
+    ];
+    boot.initrd.systemd.storePaths = [
+      "${config.boot.initrd.systemd.package}/lib/systemd/systemd-udevd"
+      "${config.boot.initrd.systemd.package}/lib/udev"
+    ] ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
+
+    # Generate the udev rules for the initrd
+    boot.initrd.systemd.contents = {
+      "/etc/udev/rules.d".source = udevRulesFor {
+        name = "initrd-udev-rules";
+        initrdBin = config.boot.initrd.systemd.contents."/bin".source;
+        udevPackages = config.boot.initrd.services.udev.packages;
+        udevPath = config.boot.initrd.systemd.contents."/bin".source;
+        udev = config.boot.initrd.systemd.package;
+        systemd = config.boot.initrd.systemd.package;
+        binPackages = config.boot.initrd.services.udev.binPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
+      };
+    };
+    # Insert custom rules
+    boot.initrd.services.udev.packages = mkIf (config.boot.initrd.services.udev.rules != "") (pkgs.writeTextFile {
+      name = "initrd-udev-rules";
+      destination = "/etc/udev/rules.d/99-local.rules";
+      text = config.boot.initrd.services.udev.rules;
+    });
+
     environment.etc =
       {
-        "udev/rules.d".source = udevRules;
+        "udev/rules.d".source = udevRulesFor {
+          name = "udev-rules";
+          udevPackages = cfg.packages;
+          systemd = config.systemd.package;
+          binPackages = cfg.packages;
+          inherit udevPath udev;
+        };
         "udev/hwdb.bin".source = hwdbBin;
       };
 
@@ -338,4 +411,8 @@ in
       };
 
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "udev" "initrdRules" ] [ "boot" "initrd" "services" "udev" "rules" ])
+  ];
 }

@@ -45,13 +45,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.1.0-26";
+  version = "7.1.0-29";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = version;
-    hash = "sha256-q1CL64cfyb5fN9aVYJfls+v0XRFd4jH+B8n+UJqPE1I=";
+    hash = "sha256-46fJMOIGnK5aNIcG7+8mJdZDcSFyFmhmkLcuVlnupSU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -64,9 +64,7 @@ stdenv.mkDerivation rec {
     ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optional (liblqr1 != null) "--with-lqr"
-    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
-    # let's disable it for now to unbreak the imagemagick build.
-    ++ lib.optional (libjxl != null && !stdenv.isAarch64) "--with-jxl"
+    ++ lib.optional (libjxl != null ) "--with-jxl"
     ++ lib.optionals (ghostscript != null)
       [
         "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
@@ -92,11 +90,8 @@ stdenv.mkDerivation rec {
       libxml2
       libheif
       djvulibre
+      libjxl
     ]
-    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
-    # let's disable it for now to unbreak the imagemagick build.
-    ++ lib.optionals (!stdenv.isAarch64)
-      [ libjxl ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
     ++ lib.optionals stdenv.isDarwin [

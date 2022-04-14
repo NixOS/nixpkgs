@@ -34,7 +34,6 @@ let
     "initrd-switch-root.service"
     "initrd-switch-root.target"
     "initrd.target"
-    "initrd-udevadm-cleanup-db.service"
     "kexec.target"
     "kmod-static-nodes.service"
     "local-fs-pre.target"
@@ -71,12 +70,6 @@ let
     "systemd-sysctl.service"
     "systemd-tmpfiles-setup-dev.service"
     "systemd-tmpfiles-setup.service"
-    "systemd-udevd-control.socket"
-    "systemd-udevd-kernel.socket"
-    "systemd-udevd.service"
-    "systemd-udev-settle.service"
-    "systemd-udev-trigger.service"
-    "systemd-vconsole-setup.service"
     "timers.target"
     "umount.target"
 
@@ -125,7 +118,7 @@ let
   };
 
   initrdBinEnv = pkgs.buildEnv {
-    name = "initrd-emergency-env";
+    name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
     postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
@@ -355,8 +348,9 @@ in {
     boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
 
     boot.initrd.systemd = {
-      initrdBin = [pkgs.bash pkgs.coreutils pkgs.kmod cfg.package] ++ config.system.fsPackages;
+      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
       extraBin = {
+        less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
         umount = "${cfg.package.util-linux}/bin/umount";
       };
@@ -367,7 +361,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
+          DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
         '';
 
         "/etc/fstab".source = fstab;
@@ -384,6 +378,11 @@ in {
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
+        "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
+          ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+        '';
+        "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+
       };
 
       storePaths = [
@@ -394,15 +393,15 @@ in {
         "${cfg.package}/lib/systemd/systemd-journald"
         "${cfg.package}/lib/systemd/systemd-makefs"
         "${cfg.package}/lib/systemd/systemd-modules-load"
+        "${cfg.package}/lib/systemd/systemd-random-seed"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
+        "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
-        "${cfg.package}/lib/systemd/systemd-udevd"
         "${cfg.package}/lib/systemd/systemd-vconsole-setup"
 
         # additional systemd directories
         "${cfg.package}/lib/systemd/system-generators"
-        "${cfg.package}/lib/udev"
 
         # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
@@ -410,7 +409,7 @@ in {
         "${cfg.package.util-linux}/bin/sulogin"
 
         # so NSS can look up usernames
-        "${pkgs.glibc}/lib/libnss_files.so"
+        "${pkgs.glibc}/lib/libnss_files.so.2"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
@@ -428,9 +427,6 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
-      services.emergency = mkIf (isBool cfg.emergencyAccess && cfg.emergencyAccess) {
-        environment.SYSTEMD_SULOGIN_FORCE = "1";
-      };
       # The unit in /run/systemd/generator shadows the unit in
       # /etc/systemd/system, but will still apply drop-ins from
       # /etc/systemd/system/foo.service.d/
@@ -445,6 +441,67 @@ in {
       '')];
       services."systemd-makefs@".unitConfig.IgnoreOnIsolate = true;
       services."systemd-growfs@".unitConfig.IgnoreOnIsolate = true;
+
+      services.initrd-nixos-activation = {
+        after = [ "initrd-fs.target" ];
+        requiredBy = [ "initrd.target" ];
+        unitConfig.AssertPathExists = "/etc/initrd-release";
+        serviceConfig.Type = "oneshot";
+        description = "NixOS Activation";
+
+        script = /* bash */ ''
+          set -uo pipefail
+          export PATH="/bin:${cfg.package.util-linux}/bin"
+
+          # Figure out what closure to boot
+          closure=
+          for o in $(< /proc/cmdline); do
+              case $o in
+                  init=*)
+                      IFS== read -r -a initParam <<< "$o"
+                      closure="$(dirname "''${initParam[1]}")"
+                      ;;
+              esac
+          done
+
+          # Sanity check
+          if [ -z "''${closure:-}" ]; then
+            echo 'No init= parameter on the kernel command line' >&2
+            exit 1
+          fi
+
+          # If we are not booting a NixOS closure (e.g. init=/bin/sh),
+          # we don't know what root to prepare so we don't do anything
+          if ! [ -x "/sysroot$closure/prepare-root" ]; then
+            echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
+            echo "$closure does not look like a NixOS installation - not activating"
+            exit 0
+          fi
+          echo 'NEW_INIT=' > /etc/switch-root.conf
+
+
+          # We need to propagate /run for things like /run/booted-system
+          # and /run/current-system.
+          mkdir -p /sysroot/run
+          mount --bind /run /sysroot/run
+
+          # Initialize the system
+          export IN_NIXOS_SYSTEMD_STAGE1=true
+          exec chroot /sysroot $closure/prepare-root
+        '';
+      };
+
+      # This will either call systemctl with the new init as the last parameter (which
+      # is the case when not booting a NixOS system) or with an empty string, causing
+      # systemd to bypass its verification code that checks whether the next file is a systemd
+      # and using its compiled-in value
+      services.initrd-switch-root.serviceConfig = {
+        EnvironmentFile = "-/etc/switch-root.conf";
+        ExecStart = [
+          ""
+          ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
+        ];
+      };
     };
   };
 }

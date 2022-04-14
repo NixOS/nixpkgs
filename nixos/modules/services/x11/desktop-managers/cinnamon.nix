@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -196,7 +196,7 @@ in
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
-      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         blueberry
@@ -212,7 +212,7 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
-      ] config.environment.cinnamon.excludePackages);
+      ] config.environment.cinnamon.excludePackages;
     })
   ];
 }
