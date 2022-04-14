@@ -7,20 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "sha256-HnP0dXKkMssDAhrsA99bTCVGdov9t5+1y8fJ+BWTM80=";
+    sha256 = "sha256-s2rWn6EK+io/yxQiWsWuXpqLOGd0F6ehWqVqgHBGZd0=";
   };
 
-  # Upstream now only supports rust 1.58+, but this version is not yet available in nixpkgs.
-  # See https://github.com/hrkfdn/ncspot/issues/714
-  patches = [ ./rust_1_57_support.patch ];
-
-  cargoSha256 = "sha256-g6UMwirsSV+/NtFIfEZrz5h/OitPQcDeSawh7wq4TLI=";
+  cargoSha256 = "sha256-aorRy5j3VaOIibuHc6gf6HuB3g739T59vzbybehPirc=";
 
   nativeBuildInputs = [ pkg-config ];
 
