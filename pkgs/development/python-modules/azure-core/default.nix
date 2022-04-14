@@ -28,6 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     six
+    typing-extensions
   ];
 
   checkInputs = [
@@ -41,7 +42,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-    typing-extensions
   ];
 
   # test server needs to be available
