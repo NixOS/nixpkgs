@@ -66,7 +66,10 @@ buildGoModule rec {
     cp ./conf/defaults.ini $out/share/grafana/conf/
   '';
 
-  passthru.tests = { inherit (nixosTests) grafana; };
+  passthru = {
+    tests = { inherit (nixosTests) grafana; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
