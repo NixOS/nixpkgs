@@ -44,7 +44,11 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  liblapack="${lib.getLib lapackProvider'}/lib/liblapack${canonicalExtension}"
+  if [ -n "${builtins.toString stdenv.hostPlatform.isDarwin}" ] && [ "${lapackImplementation}" == "mkl" ]; then
+    liblapack="${lib.getLib lapackProvider'}/lib/libmkl_rt${canonicalExtension}"
+  else
+    liblapack="${lib.getLib lapackProvider'}/lib/liblapack${canonicalExtension}"
+  fi
 
   if ! [ -e "$liblapack" ]; then
     echo "$liblapack does not exist, ${lapackProvider'.name} does not provide liblapack."
@@ -73,7 +77,11 @@ Cflags: -I$dev/include
 Libs: -L$out/lib -llapack
 EOF
 
-  liblapacke="${lib.getLib lapackProvider'}/lib/liblapacke${canonicalExtension}"
+  if [ -n "${builtins.toString stdenv.hostPlatform.isDarwin}" ] && [ "${lapackImplementation}" == "mkl" ]; then
+    liblapacke="${lib.getLib lapackProvider'}/lib/libmkl_rt${canonicalExtension}"
+  else
+    liblapacke="${lib.getLib lapackProvider'}/lib/liblapacke${canonicalExtension}"
+  fi
 
   if ! [ -e "$liblapacke" ]; then
     echo "$liblapacke does not exist, ${lapackProvider'.name} does not provide liblapacke."
