@@ -100,5 +100,11 @@
     "sha1": "d8321edc9470e56b8ad5c67bbd16beba25843336",
     "version": "1.2.5",
     "javaVersion": null
+  },
+  "snapshot": {
+    "url": "https://launcher.mojang.com/v1/objects/2760f745a00711bcc19bf78d6056019f69318d03/server.jar",
+    "sha1": "2760f745a00711bcc19bf78d6056019f69318d03",
+    "version": "22w15a",
+    "javaVersion": 17
   }
 }

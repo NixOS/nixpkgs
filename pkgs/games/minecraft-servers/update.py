@@ -75,14 +75,17 @@ class Version(DataClassJsonMixin):
         return None
 
 
-def get_versions() -> List[Version]:
-    """Return a list of Version objects for all available versions."""
+def get_manifest() -> (str, List[Version]):
+    """
+    Return a tuple of the id for the latest snapshot version and a list
+    of Version objects for all available versions.
+    """
     response = requests.get(
         "https://launchermeta.mojang.com/mc/game/version_manifest.json"
     )
     response.raise_for_status()
     data = response.json()
-    return [Version.from_dict(version) for version in data["versions"]]
+    return (data["latest"]["snapshot"], [Version.from_dict(version) for version in data["versions"]])
 
 
 def get_major_release(version_id: str) -> str:
@@ -127,11 +130,16 @@ def generate() -> Dict[str, Dict[str, str]]:
     Return a dictionary containing the latest url, sha1 and version for each major
     release.
     """
-    versions = get_versions()
+    (latest_snapshot, versions) = get_manifest()
     releases = list(
         filter(lambda version: version.type == "release", versions)
     )  # remove snapshots and betas
     latest_major_releases = get_latest_major_releases(releases)
+
+    [latest_snapshot_version] = list(
+        filter(lambda version: version.id == latest_snapshot, versions)
+    )
+    latest_major_releases['snapshot'] = latest_snapshot_version
 
     servers = {
         version: Download.schema().dump(download_info)  # Download -> dict
