@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.21";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-LoIZbA1K1s3ZLHlRz2SOFxC4nv/Vgpae0qdxIcvAVRQ=";
+    sha256 = "sha256-JYC5wsv3JIqzv2woHits3wMpvPZ70lVrAZDh/DB1SVE=";
   };
-  vendorSha256 = "sha256-TfO3+pGxR9dPzigkx89a/Ak+tKiBa6Z0a6U4kIdRsSQ=";
+  vendorSha256 = "sha256-/B3hXHRNk6DJ6iC0RalsoWsb6vK0md8asnLkhSAeHXU=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -18,17 +18,18 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # -short only runs the unit-tests tagged short
-  checkFlags = [ "-short" ];
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    # Feed in all tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    unset subPackages
+
+    # checkFlags aren't correctly passed through via buildGoModule so we use buildFlagsArray
+    # -short only runs the unit-tests tagged short
+    buildFlagsArray+="-short"
 
     # remove tests that require networking
     rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
-    # checkFlags aren't correctly passed through via buildGoModule
-    go test $checkFlags ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES ./...
-
-    runHook postCheck
   '';
 
   postInstall = ''
