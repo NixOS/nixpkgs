@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "openhomedevice";
-  version = "2.0.1";
+  version = "2.0.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bazwilliams";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-BQgwXg15+xEGfPm0HJWpKXbNuCgc0VcAD5AuVSDXd8g=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-D4n/fv+tgdKiU7CemI+12cqoox2hsqRYlCHY7daD5fM=";
   };
 
   propagatedBuildInputs = [
