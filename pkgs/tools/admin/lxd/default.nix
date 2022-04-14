@@ -1,4 +1,4 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl, fetchpatch
+{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl, fetchpatch
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
 , squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
@@ -9,15 +9,15 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGo118Package rec {
   pname = "lxd";
-  version = "4.24";
+  version = "5.0.0";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-l/rhWhgmvHOkXL+Omt93X9lwIkiGO4pZl95UlOquslI=";
+    sha256 = "sha256-qZt+37UsgZWy3kmIhE0y1zvmQm9s/yhAglBReyOP3vk=";
   };
 
   postPatch = ''

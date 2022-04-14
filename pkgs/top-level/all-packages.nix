@@ -2858,6 +2858,8 @@ with pkgs;
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
+  dagger = callPackage ../development/tools/continuous-integration/dagger { };
+
   dale = callPackage ../development/compilers/dale { };
 
   damon = callPackage ../tools/admin/damon { };
@@ -13111,7 +13113,7 @@ with pkgs;
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
-  muon = callPackage ../development/compilers/muon { };
+  muonlang = callPackage ../development/compilers/muonlang { };
 
   inherit (callPackages ../development/compilers/nim { })
     nim-unwrapped nimble-unwrapped nim;
@@ -14293,7 +14295,9 @@ with pkgs;
 
   inav-blackbox-tools = callPackage ../tools/misc/inav-blackbox-tools { };
 
-  infracost = callPackage ../tools/misc/infracost { };
+  infracost = callPackage ../tools/misc/infracost {
+    buildGoModule = buildGo118Module;
+  };
 
   msp430GccSupport = callPackage ../development/misc/msp430/gcc-support.nix { };
 
@@ -14651,6 +14655,7 @@ with pkgs;
   libodb = callPackage ../development/libraries/libodb { };
   libodb-sqlite = callPackage ../development/libraries/libodb-sqlite { };
   bdep = callPackage ../development/tools/build-managers/build2/bdep.nix { };
+  bore-cli = callPackage ../tools/networking/bore-cli/default.nix {};
   bpkg = callPackage ../development/tools/build-managers/build2/bpkg.nix { };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
@@ -19842,9 +19847,9 @@ with pkgs;
     qt5 = qt515;
   });
 
-  # TODO bump to 5.14 on darwin once it's not broken; see #95199
-  qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt515;
-  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt515;
+  # TODO bump to 5.15 on darwin once it's not broken; see #125548
+  qt5 =        if stdenv.hostPlatform.isDarwin then qt514 else qt515;
+  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt514 else libsForQt515;
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
@@ -21791,6 +21796,20 @@ with pkgs;
   mongodb-4_2 = callPackage ../servers/nosql/mongodb/v4_2.nix {
     sasl = cyrus_sasl;
     boost = boost169;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
+  mongodb-4_4 = callPackage ../servers/nosql/mongodb/4.4.nix {
+    sasl = cyrus_sasl;
+    boost = boost17x.override { enableShared = false; };
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
+  mongodb-5_0 = callPackage ../servers/nosql/mongodb/5.0.nix {
+    sasl = cyrus_sasl;
+    boost = boost17x.override { enableShared = false; };
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -33999,6 +34018,8 @@ with pkgs;
   rancher = callPackage ../applications/networking/cluster/rancher { };
 
   rauc = callPackage ../tools/misc/rauc { };
+
+  rbspy = callPackage ../development/tools/rbspy { };
 
   redprl = callPackage ../applications/science/logic/redprl { };
 

@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
   # look for GO_LDFLAGS getting set in the Makefile
-  version = "1.0.1";
-  sha256 = "sha256-IqFnVOnmYqf2K3TX+gwFPmBBksYz+56Oy/t8xWhi7fc=";
-  vendorSha256 = "sha256-GKdAMmU4HiOFYR0SFeFvwFGTXc2lmzO/fAlR1vCDfX4=";
-  pkgsVersion = "v1.0.0-6-g7c293d5";
-  extrasVersion = "v1.0.0";
+  version = "1.0.2";
+  sha256 = "sha256-FcwbZAAPsZ1WkLOwXHNRAI1SrEv7JLSkIReCe/FNckQ=";
+  vendorSha256 = "sha256-qDP2b0EAJzqpmAU1/Te9/tD8hm6zCF8B33yr0Z55WFU=";
+  pkgsVersion = "v1.0.0-7-ge6eb485";
+  extrasVersion = "v1.0.0-2-gc5d3ab0";
 in
 buildGoModule rec {
   pname = "talosctl";

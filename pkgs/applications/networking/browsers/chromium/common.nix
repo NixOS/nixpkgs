@@ -279,6 +279,9 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
+    } // optionalAttrs (chromiumVersionAtLeast "101") {
+      # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
+      chrome_pgo_phase = 0;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

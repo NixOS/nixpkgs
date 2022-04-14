@@ -21,6 +21,10 @@ in {
     boot.vdo.enable = mkEnableOption "support for booting from VDOLVs";
   };
 
+  options.boot.initrd.services.lvm.enable = (mkEnableOption "enable booting from LVM2 in the initrd") // {
+    visible = false;
+  };
+
   config = mkMerge [
     ({
       # minimal configuration file to make lvmconfig/lvm2-activation-generator happy
@@ -31,8 +35,13 @@ in {
       environment.systemPackages = [ cfg.package ];
       systemd.packages = [ cfg.package ];
 
-      # TODO: update once https://github.com/NixOS/nixpkgs/pull/93006 was merged
       services.udev.packages = [ cfg.package.out ];
+
+      # We need lvm2 for the device-mapper rules
+      boot.initrd.services.udev.packages = lib.mkIf config.boot.initrd.services.lvm.enable [ cfg.package ];
+      # The device-mapper rules want to call tools from lvm2
+      boot.initrd.systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ cfg.package ];
+      boot.initrd.services.udev.binPackages = lib.mkIf config.boot.initrd.services.lvm.enable [ cfg.package ];
     })
     (mkIf cfg.dmeventd.enable {
       systemd.sockets."dm-event".wantedBy = [ "sockets.target" ];
@@ -47,13 +56,15 @@ in {
       boot.initrd = {
         kernelModules = [ "dm-snapshot" "dm-thin-pool" ];
 
-        extraUtilsCommands = ''
+        systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.thin-provisioning-tools ];
+
+        extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
           for BIN in ${pkgs.thin-provisioning-tools}/bin/*; do
             copy_bin_and_libs $BIN
           done
         '';
 
-        extraUtilsCommandsTest = ''
+        extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
           ls ${pkgs.thin-provisioning-tools}/bin/ | grep -v pdata_tools | while read BIN; do
             $out/bin/$(basename $BIN) --help > /dev/null
           done
@@ -71,13 +82,15 @@ in {
         initrd = {
           kernelModules = [ "kvdo" ];
 
-          extraUtilsCommands = ''
+          systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
+
+          extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)''
             ls ${pkgs.vdo}/bin/ | grep -v adaptLVMVDO | while read BIN; do
               copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
           '';
 
-          extraUtilsCommandsTest = ''
+          extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)''
             ls ${pkgs.vdo}/bin/ | grep -v adaptLVMVDO | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
@@ -91,7 +104,15 @@ in {
       environment.systemPackages = [ pkgs.vdo ];
     })
     (mkIf (cfg.dmeventd.enable || cfg.boot.thin.enable) {
-      boot.initrd.preLVMCommands = ''
+      boot.initrd.systemd.contents."/etc/lvm/lvm.conf".text = optionalString (config.boot.initrd.services.lvm.enable && cfg.boot.thin.enable) (concatMapStringsSep "\n"
+          (bin: "global/${bin}_executable = /bin/${bin}")
+          [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
+        ) + "\n" + optionalString cfg.dmeventd.enable ''
+          dmeventd/executable = /bin/false
+          activation/monitoring = 0
+        '';
+
+      boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) ''
           mkdir -p /etc/lvm
           cat << EOF >> /etc/lvm/lvm.conf
           ${optionalString cfg.boot.thin.enable (
