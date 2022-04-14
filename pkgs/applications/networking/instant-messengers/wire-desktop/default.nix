@@ -11,6 +11,7 @@
 , cpio
 , xar
 , libdbusmenu
+, libxshmfence
 }:
 
 let
@@ -92,7 +93,7 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
 
     unpackPhase = ''
       runHook preUnpack
