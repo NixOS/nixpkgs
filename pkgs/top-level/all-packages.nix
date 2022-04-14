@@ -20480,6 +20480,8 @@ with pkgs;
 
   tomlc99 = callPackage ../development/libraries/tomlc99 { };
 
+  tomlcpp = callPackage ../development/libraries/tomlcpp { };
+
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
