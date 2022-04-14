@@ -139,6 +139,16 @@ let
         description = "The default gateway metric/preference.";
       };
 
+      srcAddress= mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "1.1.1.1";
+        description = ''
+          If the interface has several ip addresses we can select by this option
+          which of them will be used as the source address for outgoing connections";
+        '';
+      };
+
     };
 
   };

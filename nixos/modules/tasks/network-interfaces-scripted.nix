@@ -140,7 +140,9 @@ let
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"} proto static
+                      "dev ${cfg.defaultGateway.interface}"} ${
+                    optionalString (cfg.defaultGateway.srcAddress != null)
+                      "src ${cfg.defaultGateway.srcAddress}"} proto static
                 ''}
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
                   ${optionalString (cfg.defaultGateway6.interface != null) ''
@@ -154,7 +156,9 @@ let
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway6.interface != null)
-                      "dev ${cfg.defaultGateway6.interface}"} proto static
+                      "dev ${cfg.defaultGateway6.interface}"} ${
+                    optionalString (cfg.defaultGateway6.srcAddress != null)
+                      "src ${cfg.defaultGateway6.srcAddress}"} proto static
                 ''}
               '';
           };
