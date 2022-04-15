@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , zlib
+, autoPatchelfHook
 , cudaPackages
 , fetchurl
 , addOpenGLRunpath
@@ -18,18 +19,19 @@
 , url
 , hash ? null
 , sha256 ? null
-, supportedCudaVersions ? []
+, supportedCudaVersions ? [ ]
 }:
 
 assert (hash != null) || (sha256 != null);
 
 let
   inherit (cudaPackages) cudaMajorVersion libcublas;
-  inherit (cudaPackages.cudatoolkit ) cc;
+  inherit (cudaPackages.cudatoolkit) cc;
 
   majorMinorPatch = version: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   version = majorMinorPatch fullVersion;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "cudatoolkit-${cudaMajorVersion}-cudnn-${version}";
 
   inherit version;
@@ -37,25 +39,21 @@ in stdenv.mkDerivation {
     inherit url hash sha256;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath ];
+  nativeBuildInputs = [ autoPatchelfHook addOpenGLRunpath ];
 
-  # Some cuDNN libraries depend on things in cudatoolkit, eg.
-  # libcudnn_ops_infer.so.8 tries to load libcublas.so.11. So we need to patch
-  # cudatoolkit into RPATH. See also https://github.com/NixOS/nixpkgs/blob/88a2ad974692a5c3638fcdc2c772e5770f3f7b21/pkgs/development/python-modules/jaxlib/bin.nix#L78-L98.
+  # Used by autoPatchelfHook
+  buildInputs = builtins.map lib.getLib [
+    cc.cc # libstdc++
+    libcublas
+    zlib
+  ];
+
+  # We used to patch Runpath here, but now we use autoPatchelfHook
   #
   # Note also that version <=8.3.0 contained a subdirectory "lib64/" but in
   # version 8.3.2 it seems to have been renamed to simply "lib/".
   installPhase = ''
     runHook preInstall
-
-    function fixRunPath {
-      p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ cc.cc libcublas zlib ]}:\$ORIGIN/" $1
-    }
-
-    for sofile in {lib,lib64}/lib*.so; do
-      fixRunPath $sofile
-    done
 
     mkdir -p $out
     cp -a include $out/include
@@ -68,17 +66,17 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    ! find -iname '*.so' -exec ldd {} + | grep 'not found'
-  '';
-
-  # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = ''
-    for lib in $out/lib/lib*.so; do
-      addOpenGLRunpath $lib
-    done
+  # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
+  # Prepend /run/opengl-driver/lib using addOpenGLRunpath
+  # so that libcuda (which is not part of DT_NEEDED)
+  # can be found at runtime with dlopen().
+  # Without --add-needed autoPatchelf forgets $ORIGIN on cuda>=8.0.5.
+  dontAutoPatchelf = true;
+  postFixup = lib.optionalString (lib.versionAtLeast fullVersion "8.0.5") ''
+    patchelf $out/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+  '' ++ ''
+    autoPatchelf $out
+    addOpenGLRunpath $out/lib/lib*.so
   '';
 
   passthru = {
