@@ -243,8 +243,8 @@ let
       export CMAKE_PREFIX_PATH=${pybind11}/share/cmake/pybind11:$CMAKE_PREFIX_PATH
       substituteInPlace setup.py --replace "pybind11==2.2.4" "pybind11"
       substituteInPlace dolfin/jit/jit.py \
-        --replace 'pkg-config.exists("dolfin")' 'pkg-config.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
-        --replace 'pkg-config.parse("dolfin")' 'pkg-config.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
+        --replace 'pkgconfig.exists("dolfin")' 'pkgconfig.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
+        --replace 'pkgconfig.parse("dolfin")' 'pkgconfig.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
     '';
     buildInputs = [
       dolfin
