@@ -1,3 +1,16 @@
+diff --git a/src/rtc_base/async_resolver.cc b/src/rtc_base/async_resolver.cc
+index ad1598f2..fe9c3832 100644
+--- a/src/rtc_base/async_resolver.cc
++++ b/src/rtc_base/async_resolver.cc
+@@ -57,7 +57,7 @@ void GlobalGcdRunTask(void* context) {
+ 
+ // Post a task into the system-defined global concurrent queue.
+ void PostTaskToGlobalQueue(std::unique_ptr<webrtc::QueuedTask> task) {
+-  dispatch_queue_global_t global_queue =
++  dispatch_queue_t global_queue =
+       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+   webrtc::QueuedTask* context = task.release();
+   dispatch_async_f(global_queue, context, &GlobalGcdRunTask);
 diff --git a/src/rtc_base/system/gcd_helpers.m b/src/rtc_base/system/gcd_helpers.m
 index fd9a361f..3a63be6d 100644
 --- a/src/rtc_base/system/gcd_helpers.m
@@ -13,10 +26,10 @@ index fd9a361f..3a63be6d 100644
    dispatch_set_target_queue(queue, target);
    return queue;
 diff --git a/src/sdk/objc/components/video_codec/nalu_rewriter.cc b/src/sdk/objc/components/video_codec/nalu_rewriter.cc
-index 61c1e7d6..b19f3f91 100644
+index 1121c921..f21926b0 100644
 --- a/src/sdk/objc/components/video_codec/nalu_rewriter.cc
 +++ b/src/sdk/objc/components/video_codec/nalu_rewriter.cc
-@@ -245,10 +245,7 @@ bool H265CMSampleBufferToAnnexBBuffer(
+@@ -242,10 +242,7 @@ bool H265CMSampleBufferToAnnexBBuffer(
    int nalu_header_size = 0;
    size_t param_set_count = 0;
    OSStatus status = noErr;
@@ -28,7 +41,7 @@ index 61c1e7d6..b19f3f91 100644
      RTC_LOG(LS_ERROR) << "Not supported.";
      return false;
    }
-@@ -271,10 +268,7 @@ bool H265CMSampleBufferToAnnexBBuffer(
+@@ -268,10 +265,7 @@ bool H265CMSampleBufferToAnnexBBuffer(
      size_t param_set_size = 0;
      const uint8_t* param_set = nullptr;
      for (size_t i = 0; i < param_set_count; ++i) {
@@ -40,7 +53,7 @@ index 61c1e7d6..b19f3f91 100644
          RTC_LOG(LS_ERROR) << "Not supported.";
          return false;
        }
-@@ -514,11 +508,7 @@ CMVideoFormatDescriptionRef CreateH265VideoFormatDescription(
+@@ -501,11 +495,7 @@ CMVideoFormatDescriptionRef CreateH265VideoFormatDescription(
    // Parse the SPS and PPS into a CMVideoFormatDescription.
    CMVideoFormatDescriptionRef description = nullptr;
    OSStatus status = noErr;
