@@ -1986,6 +1986,15 @@ in {
 
   cython = callPackage ../development/python-modules/Cython { };
 
+  cython_3 = self.cython.overridePythonAttrs (old: rec {
+    version = "3.0.0a10";
+    src = old.src.override {
+      inherit version;
+      sha256 = "342e95121a3d1a67cbcf7b340391eb40cc5ce3d2a79d7873e005e8783353d89d";
+    };
+    patches = [ ];
+  });
+
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   d2to1 = callPackage ../development/python-modules/d2to1 { };
