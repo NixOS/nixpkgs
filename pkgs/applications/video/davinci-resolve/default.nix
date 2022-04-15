@@ -17,6 +17,10 @@
 , glib
 , libarchive
 , python
+, patchelf
+, libuuid
+, avahi-compat
+, libusb1
 }:
 
 let
@@ -109,15 +113,30 @@ let
         appimage-run ./DaVinci_Resolve_${version}_Linux.run -i -y -n -C $out
 
         mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+
+        tar -zf $out/share/panels/dvpanel-framework-linux-x86_64.tgz -C $out/bin -x libDaVinciPanelAPI.so
+
         runHook postInstall
       '';
 
       dontStrip = true;
 
+      extraLibPaths = lib.makeLibraryPath [
+        libuuid
+        avahi-compat
+        libusb1
+      ];
+
       postFixup = ''
+        addExtraLibPaths() {
+          local origRpath="$(patchelf --print-rpath "$1")"
+          patchelf --set-rpath "$origRpath:$out/libs:$out/bin:/usr/lib64:${extraLibPaths}" "$1"
+        }
+
         for program in $out/bin/*; do
           isELF "$program" || continue
           addOpenGLRunpath "$program"
+          addExtraLibPaths "$program"
         done
 
         for program in $out/libs/*; do
@@ -125,6 +144,7 @@ let
           if [[ "$program" != *"libcudnn_cnn_infer"* ]];then
             echo $program
             addOpenGLRunpath "$program"
+            addExtraLibPaths "$program"
           fi
         done
       '';
@@ -156,6 +176,7 @@ buildFHSUserEnv {
     libarchive
     xdg-utils # xdg-open needed to open URLs
     python
+    dbus
     # currently they want python 3.6 which is EOL
     #python3
   ];
@@ -168,6 +189,10 @@ buildFHSUserEnv {
     ${davinci}/bin/resolve
     ''
   }";
+
+  extraBuildCommands = ''
+    cp ${davinci}/bin/libDaVinciPanelAPI.so $out/usr/lib64/
+  '';
 
   meta = with lib; {
     description = "Professional Video Editing, Color, Effects and Audio Post";
