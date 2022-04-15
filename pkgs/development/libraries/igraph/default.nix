@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SL9PcT18vFvykCv4VRXxXtlcDAcybmwEImnnKXMciFQ=";
+    hash = "sha256-t0GC6FVFcbVbmZ74XNSPCRRUsSr1Z8rRw6Rf++qk4I0=";
   };
 
   postPatch = ''
@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The network analysis package";
     homepage = "https://igraph.org/";
+    changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
