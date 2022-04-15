@@ -30436,6 +30436,8 @@ with pkgs;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
+  ydict = callPackage ../applications/misc/ydict {};
+
   yed = callPackage ../applications/graphics/yed {};
 
   yeetgif = callPackage ../applications/graphics/yeetgif { };
