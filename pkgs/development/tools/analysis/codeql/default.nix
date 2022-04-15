@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ln -s ${jdk11} $out/codeql/tools/linux64/java
 
     ln -s $out/codeql/codeql $out/bin/
-    '';
+  '';
 
   meta = with lib; {
     description = "Semantic code analysis engine";
