@@ -257,8 +257,8 @@ let
 
 in {
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "5" "";
-    sha256 = "1wc1hwmz4m6iqlmqag8liyld917p6a8dvnhnpd1v8d8jl80bjm97";
+    version = rubyVersion "2" "7" "6" "";
+    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
   };
 
   ruby_3_0 = generic {
