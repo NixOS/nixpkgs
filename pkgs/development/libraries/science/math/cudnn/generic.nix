@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, cudatoolkit
+, cudaPackages
 , fetchurl
 , addOpenGLRunpath
 , # The distributed version of CUDNN includes both dynamically liked .so files,
@@ -23,14 +23,15 @@
 assert (hash != null) || (sha256 != null);
 
 let
+  inherit (cudaPackages) cudaMajorVersion libcublas;
+  inherit (cudaPackages.cudatoolkit ) cc;
+
   majorMinorPatch = version: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   version = majorMinorPatch fullVersion;
 in stdenv.mkDerivation {
-  name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
+  name = "cudatoolkit-${cudaMajorVersion}-cudnn-${version}";
 
   inherit version;
-  # It's often the case that the src depends on the version of cudatoolkit it's
-  # being linked against, so we pass in `cudatoolkit` as an argument to `mkSrc`.
   src = fetchurl {
     inherit url hash sha256;
   };
@@ -48,7 +49,7 @@ in stdenv.mkDerivation {
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc cudatoolkit.lib ]}:${cudatoolkit}/lib:\$ORIGIN/" $1
+      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ cc.cc libcublas ]}:\$ORIGIN/" $1
     }
 
     for sofile in {lib,lib64}/lib*.so; do
@@ -66,6 +67,11 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    ! find -iname '*.so' -exec ldd {} + | grep 'not found'
+  '';
+
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
   postFixup = ''
@@ -75,11 +81,16 @@ in stdenv.mkDerivation {
   '';
 
   propagatedBuildInputs = [
-    cudatoolkit
+    # FIXME: we can and should decouple cudnn from runfile-based cudatoolkit
+    # ...leaving this in propagated inputs just to avoid breaking downstream
+    # derivations right now
+    cudaPackages.cudatoolkit
   ];
 
   passthru = {
-    inherit cudatoolkit;
+    cudatoolkit = lib.warn "cudnn.cudatoolkit passthru attribute is deprecated: use cudaPackages" cudaPackages.cudatoolkit;
+    inherit cudaPackages;
+
     majorVersion = lib.versions.major version;
   };
 
@@ -89,7 +100,7 @@ in stdenv.mkDerivation {
     # official version constraints (as recorded in default.nix). In some cases
     # you _may_ be able to smudge version constraints, just know that you're
     # embarking into unknown and unsupported territory when doing so.
-    broken = !(elem cudatoolkit.majorMinorVersion supportedCudaVersions);
+    broken = !(elem cudaPackages.cudaVersion supportedCudaVersions);
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
     license = licenses.unfree;
