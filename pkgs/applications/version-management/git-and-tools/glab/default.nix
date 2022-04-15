@@ -26,13 +26,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      for shell in bash zsh fish; do
-        $out/bin/glab completion -s $shell > glab.$shell
-        installShellCompletion glab.$shell
-      done
-    '';
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    installShellCompletion --cmd glab \
+      --bash <($out/bin/glab completion -s bash) \
+      --fish <($out/bin/glab completion -s fish) \
+      --zsh <($out/bin/glab completion -s zsh)
+  '';
 
   meta = with lib; {
     description = "An open-source GitLab command line tool";
