@@ -26,7 +26,6 @@
 , pipewire
 , mesa
 , libglvnd
-, libepoxy
 , Cocoa
 , AppKit
 , IOKit
@@ -46,13 +45,13 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2022-02-26";
+  version = "unstable-2022-04-13";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "a264028ec71d9096e0aa629113c49c25db89d260";
-    sha256 = "sha256-JR+M+4w0QsQLfIunZ/7W+5Knn+gX+RR3DBrpOz7q44I=";
+    rev = "63a934db1ed212ebf8aaaa20f0010dd7b0d7b396";
+    sha256 = "sha256-WddSsQ9KW1zYyYckzdUOvfFZArYAbyvXmABQNMtK6cM=";
     fetchSubmodules = true;
   };
 
@@ -87,7 +86,6 @@ stdenv.mkDerivation {
     glib
     pipewire
     mesa
-    libepoxy
     libglvnd
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
