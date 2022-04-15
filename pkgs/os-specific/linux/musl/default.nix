@@ -99,7 +99,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    set -x
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
