@@ -13,6 +13,7 @@
 , stb
 , ant
 , alsa-lib
+, alsa-plugins
 , glew
 
 # Make the build version easily overridable.
@@ -180,7 +181,8 @@ stdenv.mkDerivation rec {
     install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar"
+      --add-flags "-jar $out/share/mindustry.jar" \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
     install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
   '' + optionalString enableServer ''
     install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar

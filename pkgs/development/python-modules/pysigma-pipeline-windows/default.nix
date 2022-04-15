@@ -8,17 +8,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pysigma-pipeline-sysmon";
-  version = "0.1.5";
+  pname = "pysigma-pipeline-windows";
+  version = "0.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
-    repo = "pySigma-pipeline-sysmon";
+    repo = "pySigma-pipeline-windows";
     rev = "v${version}";
-    hash = "sha256-Bh0Qh+pY22lm/0vtJC4tFIl1KRF3zFQ8vcH0JEfYGAc=";
+    hash = "sha256-BO6hiPLwEJX0sICqMZfcO4tqljdS+93Z1kG8IWsV9og=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "sigma.pipelines.sysmon"
+    "sigma.pipelines.windows"
   ];
 
   meta = with lib; {
-    description = "Library to support Sysmon pipeline for pySigma";
-    homepage = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon";
+    description = "Library to support Windows service pipeline for pySigma";
+    homepage = "https://github.com/SigmaHQ/pySigma-pipeline-windows";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };
