@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , python3
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,14 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "0snfxk1cf2f4dy4hcxd1fx1grav3di0qjgqqn97k85zsf9f6ys78";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-23901.patch";
+      url = "https://github.com/skvadrik/re2c/commit/a3473fd7be829cb33907cb08612f955133c70a96.patch";
+      sha256 = "1zf6fqgz4l2aggpk6y6ax038gniqd8zsdhwqfl57f45hs0cmfgv5";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
