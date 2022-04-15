@@ -1983,6 +1983,8 @@ in {
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
+  cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
+
   cysignals = callPackage ../development/python-modules/cysignals { };
 
   cython = callPackage ../development/python-modules/Cython { };
@@ -5241,6 +5243,8 @@ in {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  monero = callPackage ../development/python-modules/monero { };
+
   mongomock = callPackage ../development/python-modules/mongomock { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
@@ -7421,6 +7425,8 @@ in {
   pyp = callPackage ../development/python-modules/pyp {
     inherit (pkgs) jq;
   };
+
+  pypng = callPackage ../development/python-modules/pypng { };
 
   phonemizer = callPackage ../development/python-modules/phonemizer { };
 
@@ -10991,6 +10997,8 @@ in {
     ffmpegSupport = false;
     phantomjsSupport = false;
   };
+
+  yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
   yt-dlp = callPackage ../tools/misc/yt-dlp { };
 
