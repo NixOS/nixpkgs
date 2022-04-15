@@ -315,6 +315,9 @@ in
         in
         [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
+  };
 
+  meta = {
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }
