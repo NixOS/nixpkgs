@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   # needed until codeql/csharp/tools/linux64/libcoreclrtraceptprovider.so updates its liblttng-ust dependency from liblttng-ust.so.0 to liblttng-ust.so.1
-  autoPatchelfIgnoreMissingDeps=true;
+  autoPatchelfIgnoreMissingDeps = true;
 
   nativeBuildInputs = [
     zlib
