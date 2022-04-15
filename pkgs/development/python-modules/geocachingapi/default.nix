@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "geocachingapi";
-  version = "0.1.1";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Sholofly";
     repo = "geocachingapi-python";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Aj1fZ0dGlV7ynoZ7QwGrbku+IpOCx85wE19JDJaaYmc=";
+    sha256 = "sha256-36CkbwRDpMTprsZuPJ9khSrzqLb2Sz7iCvXtJ46uTL0=";
   };
 
   nativeBuildInputs = [

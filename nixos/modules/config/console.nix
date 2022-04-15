@@ -12,7 +12,7 @@ let
 
   optimizedKeymap = pkgs.runCommand "keymap" {
     nativeBuildInputs = [ pkgs.buildPackages.kbd ];
-    LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
+    LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
     preferLocalBuild = true;
   } ''
     loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
@@ -24,9 +24,9 @@ let
     FONT=${cfg.font}
   '';
 
-  consoleEnv = pkgs.buildEnv {
+  consoleEnv = kbd: pkgs.buildEnv {
     name = "console-env";
-    paths = [ pkgs.kbd ] ++ cfg.packages;
+    paths = [ kbd ] ++ cfg.packages;
     pathsToLink = [
       "/share/consolefonts"
       "/share/consoletrans"
@@ -136,9 +136,9 @@ in
         # virtual consoles.
         environment.etc."vconsole.conf".source = vconsoleConf;
         # Provide kbd with additional packages.
-        environment.etc.kbd.source = "${consoleEnv}/share";
+        environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
-        boot.initrd.preLVMCommands = mkBefore ''
+        boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
           kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
           printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
           loadkmap < ${optimizedKeymap}
@@ -146,12 +146,23 @@ in
           ${optionalString cfg.earlySetup ''
             setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
           ''}
-        '';
+        '');
+
+        boot.initrd.systemd.contents = {
+          "/etc/kbd".source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share";
+          "/etc/vconsole.conf".source = vconsoleConf;
+        };
+        boot.initrd.systemd.storePaths = [
+          "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
+          "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
+          "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
+          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # keyboard layouts are compressed
+        ];
 
         systemd.services.reload-systemd-vconsole-setup =
           { description = "Reset console on configuration changes";
             wantedBy = [ "multi-user.target" ];
-            restartTriggers = [ vconsoleConf consoleEnv ];
+            restartTriggers = [ vconsoleConf (consoleEnv pkgs.kbd) ];
             reloadIfChanged = true;
             serviceConfig =
               { RemainAfterExit = true;
@@ -175,7 +186,7 @@ in
           ${if substring 0 1 cfg.font == "/" then ''
             font="${cfg.font}"
           '' else ''
-            font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
+            font="$(echo ${consoleEnv pkgs.kbd}/share/consolefonts/${cfg.font}.*)"
           ''}
           if [[ $font == *.gz ]]; then
             gzip -cd $font > $out/share/consolefonts/font.psf
@@ -183,6 +194,10 @@ in
             cp -L $font $out/share/consolefonts/font.psf
           fi
         '';
+        assertions = [{
+          assertion = !config.boot.initrd.systemd.enable;
+          message = "console.earlySetup is implied by systemd stage 1";
+        }];
       })
     ]))
   ];

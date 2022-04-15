@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.3.4";
+  version = "0.4.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FWcPHtEYqS+81dU4lB+4BLFOXtFumcyhucwvmu2TAt8=";
+    hash = "sha256-UA28A/C7RyIs96a/U98WpkgeCotT4qmpZwvO3HYUE9Q=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -24,8 +24,10 @@ python3.pkgs.buildPythonApplication rec {
     prettytable
     pysigma
     pysigma-backend-splunk
+    pysigma-backend-insightidr
     pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
+    pysigma-pipeline-windows
   ];
 
   checkInputs = with python3.pkgs; [
