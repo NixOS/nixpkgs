@@ -3,11 +3,11 @@
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20220118";
+  version = "1.20220308_buster";
 
   src = fetchurl {
     url = "https://github.com/raspberrypi/firmware/archive/${version}.zip";
-    sha256 = "sha256-98rbwKIuB7vb4MWbFCr7TYsvJB0HzPdH8Tw0+bktK/M=";
+    sha256 = "sha256-G79D9uvVbsOLtzvfiGB3gXnNLzoPCJ2+07L6K+45QdA=";
   };
 
   nativeBuildInputs = [ unzip ];
