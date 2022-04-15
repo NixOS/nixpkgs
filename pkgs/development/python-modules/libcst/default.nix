@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , buildPythonPackage
 , dataclasses
 , fetchFromGitHub
 , hypothesis
+, libiconv
 , pytestCheckHook
 , python
 , pythonOlder
@@ -50,6 +52,8 @@ buildPythonPackage rec {
     setuptools-scm
     rustPlatform.cargoSetupHook
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   propagatedBuildInputs = [
     hypothesis
