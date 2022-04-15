@@ -11902,7 +11902,9 @@ with pkgs;
 
   algol68g = callPackage ../development/compilers/algol68g { };
 
-  armips = callPackage ../development/compilers/armips { };
+  armips = callPackage ../development/compilers/armips {
+    stdenv = gcc10Stdenv;
+  };
 
   arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
 
