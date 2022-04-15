@@ -1186,7 +1186,6 @@
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/initrd.nix
-  ./system/boot/systemd/initrd-mdraid.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc-activation.nix
