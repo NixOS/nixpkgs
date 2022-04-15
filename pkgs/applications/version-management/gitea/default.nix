@@ -1,6 +1,7 @@
 { lib
 , buildGoPackage
 , fetchurl
+, fetchpatch
 , makeWrapper
 , git
 , bash
@@ -33,6 +34,16 @@ buildGoPackage rec {
 
   patches = [
     ./static-root-path.patch
+    (fetchpatch {
+      name = "CVE-2022-0905.patch";
+      url = "https://github.com/go-gitea/gitea/commit/1314f38b59748397b3429fb9bc9f9d6bac85d2f2.patch";
+      sha256 = "1hq16rmv69lp9w2qyrrhj04mmmqkdc361n2cls460pnzqk88wj0g";
+    })
+    (fetchpatch {
+      name = "CVE-2022-1058.patch";
+      url = "https://github.com/go-gitea/gitea/commit/e3d8e92bdc67562783de9a76b5b7842b68daeb48.patch";
+      sha256 = "0vvaqqhmx3gkw8fa64ifk2x546zsvlmf65grk29lhzsw1y148sy9";
+    })
   ];
 
   postPatch = ''
