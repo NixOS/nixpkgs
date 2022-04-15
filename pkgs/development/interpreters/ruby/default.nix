@@ -252,10 +252,10 @@ let
 
 in {
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "5" "";
+    version = rubyVersion "2" "7" "6" "";
     sha256 = {
-      src = "1wc1hwmz4m6iqlmqag8liyld917p6a8dvnhnpd1v8d8jl80bjm97";
-      git = "16565fyl7141hr6q6d74myhsz46lvgam8ifnacshi68vzibwjbbh";
+      src = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
+      git = "sha256-RGouKU40Qi4TSxDTrnsqP/tMIhuaU23ExZPr9OXYRM8=";
     };
   };
 
