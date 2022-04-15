@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "mtools";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   # fails to find X on darwin
   configureFlags = lib.optional stdenv.isDarwin "--without-x";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   doCheck = true;
 
