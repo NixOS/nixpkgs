@@ -1,8 +1,8 @@
 diff --git a/Telegram/SourceFiles/platform/mac/file_bookmark_mac.mm b/Telegram/SourceFiles/platform/mac/file_bookmark_mac.mm
-index 337055443..09604b117 100644
+index 9e9a1744b..ae55f873f 100644
 --- a/Telegram/SourceFiles/platform/mac/file_bookmark_mac.mm
 +++ b/Telegram/SourceFiles/platform/mac/file_bookmark_mac.mm
-@@ -12,6 +12,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
+@@ -14,6 +14,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
  
  #include <Cocoa/Cocoa.h>
  #include <CoreFoundation/CFURL.h>
@@ -11,10 +11,10 @@ index 337055443..09604b117 100644
  namespace Platform {
  namespace {
 diff --git a/Telegram/SourceFiles/platform/mac/specific_mac.mm b/Telegram/SourceFiles/platform/mac/specific_mac.mm
-index 3b4395ae3..7f8ee401f 100644
+index 1d68457bb..ac8c4e0ab 100644
 --- a/Telegram/SourceFiles/platform/mac/specific_mac.mm
 +++ b/Telegram/SourceFiles/platform/mac/specific_mac.mm
-@@ -119,6 +119,7 @@ PermissionStatus GetPermissionStatus(PermissionType type) {
+@@ -118,6 +118,7 @@ PermissionStatus GetPermissionStatus(PermissionType type) {
  	switch (type) {
  	case PermissionType::Microphone:
  	case PermissionType::Camera:
@@ -22,7 +22,7 @@ index 3b4395ae3..7f8ee401f 100644
  		const auto nativeType = (type == PermissionType::Microphone)
  			? AVMediaTypeAudio
  			: AVMediaTypeVideo;
-@@ -133,6 +134,7 @@ PermissionStatus GetPermissionStatus(PermissionType type) {
+@@ -132,6 +133,7 @@ PermissionStatus GetPermissionStatus(PermissionType type) {
  					return PermissionStatus::Denied;
  			}
  		}
@@ -30,7 +30,7 @@ index 3b4395ae3..7f8ee401f 100644
  		break;
  	}
  	return PermissionStatus::Granted;
-@@ -142,6 +144,7 @@ void RequestPermission(PermissionType type, Fn<void(PermissionStatus)> resultCal
+@@ -141,6 +143,7 @@ void RequestPermission(PermissionType type, Fn<void(PermissionStatus)> resultCal
  	switch (type) {
  	case PermissionType::Microphone:
  	case PermissionType::Camera:
@@ -38,7 +38,7 @@ index 3b4395ae3..7f8ee401f 100644
  		const auto nativeType = (type == PermissionType::Microphone)
  			? AVMediaTypeAudio
  			: AVMediaTypeVideo;
-@@ -152,6 +155,7 @@ void RequestPermission(PermissionType type, Fn<void(PermissionStatus)> resultCal
+@@ -151,6 +154,7 @@ void RequestPermission(PermissionType type, Fn<void(PermissionStatus)> resultCal
  				});
  			}];
  		}
@@ -217,7 +217,7 @@ index 464f87c9c..9a008c75e 100644
  	controller:(not_null<Window::Controller*>)controller
 Submodule Telegram/ThirdParty/tgcalls contains modified content
 diff --git a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoDecoderFactory.mm b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoDecoderFactory.mm
-index 8a4417b..2d9794e 100644
+index b280c1b..a1ed0d2 100644
 --- a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoDecoderFactory.mm
 +++ b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoDecoderFactory.mm
 @@ -71,7 +71,7 @@
@@ -239,10 +239,10 @@ index 8a4417b..2d9794e 100644
      if ([info.name isEqualToString:kRTCVideoCodecH265Name]) {
        return [[TGRTCVideoDecoderH265 alloc] init];
 diff --git a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoEncoderFactory.mm b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoEncoderFactory.mm
-index 2901417..ac9ec2a 100644
+index 9960607..f3659b3 100644
 --- a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoEncoderFactory.mm
 +++ b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/TGRTCDefaultVideoEncoderFactory.mm
-@@ -76,7 +76,7 @@
+@@ -89,7 +89,7 @@
        [result addObject:h265Info];
      }
    }
@@ -251,7 +251,7 @@ index 2901417..ac9ec2a 100644
    if (@available(macOS 10.13, *)) {
      if ([[AVAssetExportSession allExportPresets] containsObject:AVAssetExportPresetHEVCHighestQuality]) {
        [result addObject:h265Info];
-@@ -112,7 +112,7 @@
+@@ -129,7 +129,7 @@
        return [[TGRTCVideoEncoderH265 alloc] initWithCodecInfo:info];
      }
    }
@@ -261,7 +261,7 @@ index 2901417..ac9ec2a 100644
      if ([info.name isEqualToString:kRTCVideoCodecH265Name]) {
        return [[TGRTCVideoEncoderH265 alloc] initWithCodecInfo:info];
 diff --git a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoCameraCapturerMac.mm b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoCameraCapturerMac.mm
-index de92427..9a5b20d 100644
+index bf99063..b717645 100644
 --- a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoCameraCapturerMac.mm
 +++ b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoCameraCapturerMac.mm
 @@ -507,8 +507,7 @@ static tgcalls::DarwinVideoTrackSource *getObjCVideoSource(const rtc::scoped_ref
@@ -274,11 +274,20 @@ index de92427..9a5b20d 100644
    RTCLogError(@"Dropped sample buffer. Reason: %@", droppedReason);
  }
  
+@@ -682,7 +681,7 @@ static tgcalls::DarwinVideoTrackSource *getObjCVideoSource(const rtc::scoped_ref
+             int closest = -1;
+             CMTime result;
+             for (int i = 0; i < format.videoSupportedFrameRateRanges.count; i++) {
+-                const auto rateRange = format.videoSupportedFrameRateRanges[i];
++                const AVFrameRateRange *rateRange = format.videoSupportedFrameRateRanges[i];
+                 int gap = abs(rateRange.minFrameRate - target);
+                 if (gap <= closest || closest == -1) {
+                     closest = gap;
 diff --git a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoMetalViewMac.mm b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoMetalViewMac.mm
-index bcabcf7..de7b6c7 100644
+index 4ef8630..3fc753c 100644
 --- a/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoMetalViewMac.mm
 +++ b/Telegram/ThirdParty/tgcalls/tgcalls/platform/darwin/VideoMetalViewMac.mm
-@@ -245,9 +245,11 @@ private:
+@@ -243,9 +243,11 @@ private:
      layer.framebufferOnly = true;
      layer.opaque = false;
  //    layer.cornerRadius = 4;
@@ -290,7 +299,7 @@ index bcabcf7..de7b6c7 100644
  //    layer.presentsWithTransaction = YES;
      layer.backgroundColor = [NSColor clearColor].CGColor;
      layer.contentsGravity = kCAGravityResizeAspectFill;
-@@ -334,9 +336,7 @@ private:
+@@ -332,9 +334,7 @@ private:
  - (RTCVideoRotation)rtcFrameRotation {
      if (_rotationOverride) {
          RTCVideoRotation rotation;
@@ -323,10 +332,10 @@ index 5491702..32befc6 100644
  }
  
 diff --git a/Telegram/lib_base/base/platform/mac/base_info_mac.mm b/Telegram/lib_base/base/platform/mac/base_info_mac.mm
-index 29e368f..ea1f65f 100644
+index f1f259a..6629eb6 100644
 --- a/Telegram/lib_base/base/platform/mac/base_info_mac.mm
 +++ b/Telegram/lib_base/base/platform/mac/base_info_mac.mm
-@@ -203,16 +203,20 @@ void Finish() {
+@@ -226,16 +226,20 @@ void Finish() {
  }
  
  void OpenInputMonitoringPrivacySettings() {
@@ -348,10 +357,10 @@ index 29e368f..ea1f65f 100644
  }
  
 diff --git a/Telegram/lib_base/base/platform/mac/base_system_media_controls_mac.mm b/Telegram/lib_base/base/platform/mac/base_system_media_controls_mac.mm
-index c86ac77..b081162 100644
+index 6102705..8981239 100644
 --- a/Telegram/lib_base/base/platform/mac/base_system_media_controls_mac.mm
 +++ b/Telegram/lib_base/base/platform/mac/base_system_media_controls_mac.mm
-@@ -271,6 +271,7 @@ void SystemMediaControls::setThumbnail(const QImage &thumbnail) {
+@@ -277,6 +277,7 @@ void SystemMediaControls::setThumbnail(const QImage &thumbnail) {
  	if (thumbnail.isNull()) {
  		return;
  	}
@@ -359,7 +368,7 @@ index c86ac77..b081162 100644
  	if (@available(macOS 10.13.2, *)) {
  		const auto copy = thumbnail;
  		[_private->info
-@@ -284,6 +285,7 @@ void SystemMediaControls::setThumbnail(const QImage &thumbnail) {
+@@ -290,6 +291,7 @@ void SystemMediaControls::setThumbnail(const QImage &thumbnail) {
  			forKey:MPMediaItemPropertyArtwork];
  		updateDisplay();
  	}
@@ -367,7 +376,7 @@ index c86ac77..b081162 100644
  }
  
  void SystemMediaControls::setDuration(int duration) {
-@@ -302,10 +304,12 @@ void SystemMediaControls::setVolume(float64 volume) {
+@@ -308,10 +310,12 @@ void SystemMediaControls::setVolume(float64 volume) {
  }
  
  void SystemMediaControls::clearThumbnail() {
@@ -380,7 +389,7 @@ index c86ac77..b081162 100644
  }
  
  void SystemMediaControls::clearMetadata() {
-@@ -367,9 +371,11 @@ bool SystemMediaControls::volumeSupported() const {
+@@ -373,9 +377,11 @@ bool SystemMediaControls::volumeSupported() const {
  }
  
  bool SystemMediaControls::Supported() {
