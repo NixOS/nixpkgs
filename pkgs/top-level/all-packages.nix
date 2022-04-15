@@ -3427,7 +3427,11 @@ with pkgs;
 
   jellycli = callPackage ../applications/audio/jellycli { };
 
-  jellyfin = callPackage ../servers/jellyfin { };
+  jellyfin = callPackage ../servers/jellyfin {
+    ffmpeg = jellyfin-ffmpeg;
+  };
+
+  jellyfin-ffmpeg = callPackage ../development/libraries/jellyfin-ffmpeg { };
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
@@ -20498,6 +20502,10 @@ with pkgs;
 
   kyotocabinet = callPackage ../development/libraries/kyotocabinet { };
 
+  tomlc99 = callPackage ../development/libraries/tomlc99 { };
+
+  tomlcpp = callPackage ../development/libraries/tomlcpp { };
+
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
@@ -29706,6 +29714,8 @@ with pkgs;
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
 
   unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
+
+  unigine-sanctuary = pkgsi686Linux.callPackage ../applications/graphics/unigine-sanctuary { };
 
   unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
 
