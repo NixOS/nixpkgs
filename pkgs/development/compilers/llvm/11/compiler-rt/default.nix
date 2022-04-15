@@ -96,6 +96,8 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   ''
