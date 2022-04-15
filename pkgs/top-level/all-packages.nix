@@ -11453,6 +11453,8 @@ with pkgs;
 
   zplug = callPackage ../shells/zsh/zplug { };
 
+  zi = callPackage ../shells/zsh/zi {};
+
   zinit = callPackage ../shells/zsh/zinit {} ;
 
   zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
