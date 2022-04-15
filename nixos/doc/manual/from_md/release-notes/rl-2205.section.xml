@@ -638,6 +638,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>hbase</literal> version 0.98.24 has been removed. The
+          package now defaults to version 2.4.11. Versions 1.7.1 and
+          3.0.0-alpha-2 are also available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.paperless-ng</literal> was renamed to
           <literal>services.paperless</literal>. Accordingly, the
           <literal>paperless-ng-manage</literal> script (located in
