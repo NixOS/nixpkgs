@@ -25,7 +25,8 @@
 , abseil-cpp
 , pipewire
 , mesa
-, libglvnd
+, libdrm
+, libGL
 , Cocoa
 , AppKit
 , IOKit
@@ -60,6 +61,17 @@ stdenv.mkDerivation {
     ./tg_owt-10.12-sdk.patch
   ];
 
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+      --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"'
+    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+      --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"'
+    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"'
+    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+      --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
+  '';
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
@@ -86,7 +98,8 @@ stdenv.mkDerivation {
     glib
     pipewire
     mesa
-    libglvnd
+    libdrm
+    libGL
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     AppKit
