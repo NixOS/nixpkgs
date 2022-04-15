@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
-    util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
@@ -129,7 +128,11 @@ stdenv.mkDerivation rec {
     ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
-  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
+  propagatedBuildInputs = [
+    zlib libffi gettext libiconv
+  ] ++ optionals stdenv.isLinux [
+    util-linuxMinimal # for libmount
+  ];
 
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
