@@ -7462,6 +7462,10 @@ with pkgs;
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
+  hw-probe = perlPackages.callPackage ../tools/system/hw-probe {
+    vulkan-utils = haskell.lib.compose.justStaticExecutables haskellPackages.vulkan-utils;
+  };
+
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
     stdenv = gcc8Stdenv;
   };
