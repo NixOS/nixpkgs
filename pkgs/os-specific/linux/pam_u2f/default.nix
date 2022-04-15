@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ philandstuff ];
+    mainProgram = "pamu2fcfg";
   };
 }

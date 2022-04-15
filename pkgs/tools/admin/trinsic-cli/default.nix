@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://trinsic.id/";
     license = licenses.asl20;
     maintainers = with maintainers; [ tmarkovski ];
+    mainProgram = "trinsic";
   };
 }

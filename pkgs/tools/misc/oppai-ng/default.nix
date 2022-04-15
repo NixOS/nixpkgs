@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Francesco149/oppai-ng";
     license = licenses.unlicense;
     maintainers = with maintainers; [ tadeokondrak ];
+    mainProgram = "oppai";
     platforms = platforms.all;
   };
 }

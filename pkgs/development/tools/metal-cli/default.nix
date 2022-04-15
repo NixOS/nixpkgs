@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/equinix/metal-cli/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne nshalman ];
+    mainProgram = "metal";
   };
 }
