@@ -59,10 +59,10 @@ let
     (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
   ]);
 
-  withNativeImageSvm = builtins.any (p: p == "native-image-installable-svm") platform.products;
-  withRubySvm = builtins.any (p: p == "ruby-installable-svm") platform.products;
-  withPythonSvm = builtins.any (p: p == "python-installable-svm") platform.products;
-  withWasmSvm = builtins.any (p: p == "wasm-installable-svm") platform.products;
+  withNativeImageSvm = builtins.elem "native-image-installable-svm" platform.products;
+  withRubySvm = builtins.elem "ruby-installable-svm" platform.products;
+  withPythonSvm = builtins.elem "python-installable-svm" platform.products;
+  withWasmSvm = builtins.elem "wasm-installable-svm" platform.products;
 
   graalvmXXX-ce = stdenv.mkDerivation rec {
     inherit version;
@@ -282,6 +282,7 @@ let
     '';
 
     passthru = {
+      inherit (platform) products;
       home = graalvmXXX-ce;
       updateScript = import ./update.nix {
         inherit lib writeShellScript jq sourcesFilename name config gnused defaultVersion;
