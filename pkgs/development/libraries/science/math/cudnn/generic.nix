@@ -81,13 +81,6 @@ in stdenv.mkDerivation {
     done
   '';
 
-  propagatedBuildInputs = [
-    # FIXME: we can and should decouple cudnn from runfile-based cudatoolkit
-    # ...leaving this in propagated inputs just to avoid breaking downstream
-    # derivations right now
-    cudaPackages.cudatoolkit
-  ];
-
   passthru = {
     cudatoolkit = lib.warn "cudnn.cudatoolkit passthru attribute is deprecated: use cudaPackages" cudaPackages.cudatoolkit;
     inherit cudaPackages;
