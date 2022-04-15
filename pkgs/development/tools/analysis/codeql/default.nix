@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl, lttng-ust, autoPatchelfHook }:
+{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "codeql";
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     jdk11
     stdenv.cc.cc.lib
     curl
-    lttng-ust
     autoPatchelfHook
   ];
 
