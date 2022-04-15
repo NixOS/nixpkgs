@@ -151,7 +151,7 @@ let
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } proto static
                   ''}
-                  ${optionalString (cfg.defaultGateway6.srcAddress != null) 
+                  ${optionalString (cfg.defaultGateway6.srcAddress != null)
                     "sleep 2s && "}ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } via "${cfg.defaultGateway6.address}" ${
