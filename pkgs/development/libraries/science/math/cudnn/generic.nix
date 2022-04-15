@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , zlib
-, autoPatchelfHook
 , cudaPackages
+, autoPatchelfHook
+, autoAddOpenGLRunpathHook
 , fetchurl
-, addOpenGLRunpath
 , # The distributed version of CUDNN includes both dynamically liked .so files,
   # as well as statically linked .a files.  However, CUDNN is quite large
   # (multiple gigabytes), so you can save some space in your nix store by
@@ -39,7 +39,14 @@ stdenv.mkDerivation {
     inherit url hash sha256;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook addOpenGLRunpath ];
+  # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
+  # Prepend /run/opengl-driver/lib using addOpenGLRunpath
+  # so that libcuda (which is not part of DT_NEEDED)
+  # can be found at runtime with dlopen().
+  nativeBuildInputs = [
+    autoPatchelfHook
+    autoAddOpenGLRunpathHook
+  ];
 
   # Used by autoPatchelfHook
   buildInputs = builtins.map lib.getLib [
@@ -66,17 +73,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
-  # Prepend /run/opengl-driver/lib using addOpenGLRunpath
-  # so that libcuda (which is not part of DT_NEEDED)
-  # can be found at runtime with dlopen().
   # Without --add-needed autoPatchelf forgets $ORIGIN on cuda>=8.0.5.
-  dontAutoPatchelf = true;
   postFixup = lib.optionalString (lib.versionAtLeast fullVersion "8.0.5") ''
     patchelf $out/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
-  '' ++ ''
-    autoPatchelf $out
-    addOpenGLRunpath $out/lib/lib*.so
   '';
 
   passthru = {
