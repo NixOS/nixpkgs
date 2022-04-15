@@ -42,7 +42,6 @@ buildPythonPackage rec {
     pytestCheckHook
     tensorflow
   ];
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.

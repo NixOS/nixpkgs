@@ -38,7 +38,6 @@ buildPythonPackage rec {
     tensorflow
     tensorflow-datasets
   ];
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   pythonImportsCheck = [
     "optax"

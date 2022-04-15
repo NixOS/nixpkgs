@@ -233,7 +233,7 @@ let
           self: super: {
             falcon = super.falcon.overridePythonAttrs (oldAttrs: rec {
               #pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
-              disabledTestPaths = oldAttrs.disabledTestPaths ++ [
+              disabledTestPaths = oldAttrs.disabledTestPaths or [] ++ [
                 "tests/asgi/test_asgi_servers.py"
               ];
             });
@@ -244,7 +244,7 @@ let
         (
           self: super: {
             sanic = super.sanic.overridePythonAttrs (oldAttrs: rec {
-              disabledTestPaths = oldAttrs.disabledTestPaths ++ [
+              disabledTestPaths = oldAttrs.disabledTestPaths or [] ++ [
                 "test_cli.py"
                 "test_cookies.py"
                 # requires network

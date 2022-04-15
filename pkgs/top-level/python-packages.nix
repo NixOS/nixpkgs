@@ -1986,6 +1986,15 @@ in {
 
   cython = callPackage ../development/python-modules/Cython { };
 
+  cython_3 = self.cython.overridePythonAttrs (old: rec {
+    version = "3.0.0a10";
+    src = old.src.override {
+      inherit version;
+      sha256 = "342e95121a3d1a67cbcf7b340391eb40cc5ce3d2a79d7873e005e8783353d89d";
+    };
+    patches = [ ];
+  });
+
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   d2to1 = callPackage ../development/python-modules/d2to1 { };
@@ -2293,7 +2302,7 @@ in {
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
-  django_modelcluster = callPackage ../development/python-modules/django_modelcluster { };
+  django-modelcluster = callPackage ../development/python-modules/django_modelcluster { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
@@ -2661,6 +2670,8 @@ in {
   epc = callPackage ../development/python-modules/epc { };
 
   ephem = callPackage ../development/python-modules/ephem { };
+
+  ephemeral-port-reserve = callPackage ../development/python-modules/ephemeral-port-reserve { };
 
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
@@ -4212,6 +4223,8 @@ in {
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
   jaraco_text = callPackage ../development/python-modules/jaraco_text { };
+
+  jarowinkler = callPackage ../development/python-modules/jarowinkler { };
 
   javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
 
@@ -6017,6 +6030,8 @@ in {
 
   patch-ng = callPackage ../development/python-modules/patch-ng { };
 
+  path = callPackage ../development/python-modules/path { };
+
   path-and-address = callPackage ../development/python-modules/path-and-address { };
 
   pathable = callPackage ../development/python-modules/pathable { };
@@ -6026,8 +6041,6 @@ in {
   pathlib = callPackage ../development/python-modules/pathlib { };
 
   pathos = callPackage ../development/python-modules/pathos { };
-
-  pathpy = callPackage ../development/python-modules/path.py { };
 
   pathspec = callPackage ../development/python-modules/pathspec { };
 
@@ -6090,8 +6103,6 @@ in {
   };
 
   pendulum = callPackage ../development/python-modules/pendulum { };
-
-  pep257 = callPackage ../development/python-modules/pep257 { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
@@ -7984,8 +7995,6 @@ in {
 
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
-  pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
-
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
@@ -8673,6 +8682,8 @@ in {
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
 
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
+
+  rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
 
   rarfile = callPackage ../development/python-modules/rarfile {
     inherit (pkgs) libarchive;
@@ -9483,7 +9494,7 @@ in {
 
   sparklines = callPackage ../development/python-modules/sparklines { };
 
-  SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
+  sparqlwrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
 
@@ -9608,8 +9619,6 @@ in {
   sqlalchemy-continuum = callPackage ../development/python-modules/sqlalchemy-continuum { };
 
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
-
-  SQLAlchemy-ImageAttach = callPackage ../development/python-modules/sqlalchemy-imageattach { };
 
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 

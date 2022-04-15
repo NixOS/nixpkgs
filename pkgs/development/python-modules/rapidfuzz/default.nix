@@ -2,39 +2,55 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pytestCheckHook
+, cmake
+, cython_3
+, rapidfuzz-capi
+, scikit-build
+, jarowinkler
+, numpy
 , hypothesis
 , pandas
-, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.9.1";
+  version = "2.0.8";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-aZqsQHrxmPqZARkqR1hWaj7XndOlCJjmWk1Cosx4skA=";
+    hash = "sha256-LA4UpP3jFcVZTYKuq8aBvfGgEhyOLeCUsUXEgSnwb94=";
   };
 
+  nativeBuildInputs = [
+    cmake
+    cython_3
+    rapidfuzz-capi
+    scikit-build
+  ];
+
+  dontUseCmakeConfigure = true;
+
   propagatedBuildInputs = [
+    jarowinkler
     numpy
   ];
 
   checkInputs = [
-    pytestCheckHook
     hypothesis
     pandas
+    pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_levenshtein_block" # hypothesis data generation too slow
-  ];
+  preCheck = ''
+    # import from $out
+    rm -r rapidfuzz
+  '';
 
   pythonImportsCheck = [
     "rapidfuzz.fuzz"

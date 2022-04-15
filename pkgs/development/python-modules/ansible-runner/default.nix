@@ -5,6 +5,7 @@
 , fetchPypi
 , mock
 , openssh
+, pbr
 , pexpect
 , psutil
 , pytest-mock
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-2m5dD+gGDL5LnY7QbDYiGdu4GYu0C49WU29GZY2bnBo=";
   };
+
+  nativeBuildInputs = [
+    pbr
+  ];
 
   propagatedBuildInputs = [
     ansible

@@ -1,29 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, flask
-, blinker
-, setuptools
-, itsdangerous
-, flask_principal
-, passlib
-, email_validator
-, flask_wtf
-, flask_login
-, pytestCheckHook
+
+# extras: babel
+, Babel
+, flask-babel
+
+# extras: common
+, bcrypt
+, bleach
 , flask_mail
-, sqlalchemy
+
+# extras: fsqla
 , flask_sqlalchemy
+, sqlalchemy
+, sqlalchemy-utils
+
+# extras: mfa
+, cryptography
+, phonenumbers
+, pyqrcode
+
+# propagates
+, blinker
+, email_validator
+, flask
+, flask_login
+, flask_principal
+, flask_wtf
+, itsdangerous
+, passlib
+
+# tests
 , flask-mongoengine
+, mongoengine
+, mongomock
 , peewee
 , pony
+, pytestCheckHook
 , zxcvbn
-, mongoengine
-, cryptography
-, pyqrcode
-, phonenumbers
-, bleach
-, mongomock
 }:
 
 buildPythonPackage rec {
@@ -37,32 +52,73 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    blinker
+    email_validator
     flask
     flask_login
     flask_principal
     flask_wtf
-    email_validator
     itsdangerous
     passlib
-    blinker
-    setuptools
   ];
 
+  passthru.extras-require = {
+    babel = [
+      Babel
+      flask-babel
+    ];
+    common = [
+      bcrypt
+      bleach
+      flask_mail
+    ];
+    fsqla = [
+      flask_sqlalchemy
+      sqlalchemy
+      sqlalchemy-utils
+    ];
+    mfa = [
+      cryptography
+      phonenumbers
+      pyqrcode
+    ];
+  };
+
   checkInputs = [
-    pytestCheckHook
-    flask_mail
-    sqlalchemy
-    flask_sqlalchemy
     flask-mongoengine
+    mongoengine
+    mongomock
     peewee
     pony
+    pytestCheckHook
     zxcvbn
-    mongoengine
-    cryptography
-    pyqrcode
-    phonenumbers
-    bleach
-    mongomock
+  ]
+  ++ passthru.extras-require.babel
+  ++ passthru.extras-require.common
+  ++ passthru.extras-require.fsqla
+  ++ passthru.extras-require.mfa;
+
+  disabledTests = [
+    # flask 2.1.0 incompatibilities https://github.com/Flask-Middleware/flask-security/issues/594
+    "test_admin_setup_reset"
+    "test_authn_freshness"
+    "test_authn_freshness_nc"
+    "test_bad_sender"
+    "test_change_invalidates_auth_token"
+    "test_change_invalidates_session"
+    "test_default_authn_bp"
+    "test_default_unauthn"
+    "test_default_unauthn_bp"
+    "test_email_not_identity"
+    "test_next"
+    "test_post_security_with_application_root"
+    "test_post_security_with_application_root_and_views"
+    "test_recover_invalidates_session"
+    "test_two_factor_flag"
+    "test_unauthorized_access_with_referrer"
+    "test_verify"
+    "test_verify_link"
+    "test_view_configuration"
   ];
 
   pythonImportsCheck = [ "flask_security" ];

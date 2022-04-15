@@ -54,21 +54,27 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
+  # high parallelism will result in the tests getting stuck
+  dontUsePytestXdist = true;
+
   # NOTE: Don't run the tests in the expiremental directory as they require flax
   # which creates a circular dependency. See https://discourse.nixos.org/t/how-to-nix-ify-python-packages-with-circular-dependencies/14648/2.
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
   pytestFlagsArray = [
-    "-n auto"
+    "--numprocesses=4"
     "-W ignore::DeprecationWarning"
     "tests/"
   ];
 
-  # See
-  #  * https://github.com/google/jax/issues/9705
-  #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
-  #  * https://github.com/NixOS/nixpkgs/issues/161960
-  disabledTests = lib.optionals usingMKL [
+  disabledTests = [
+    # Exceeds tolerance when the machine is busy
+    "test_custom_linear_solve_aux"
+  ] ++ lib.optionals usingMKL [
+    # See
+    #  * https://github.com/google/jax/issues/9705
+    #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+    #  * https://github.com/NixOS/nixpkgs/issues/161960
     "test_custom_linear_solve_cholesky"
     "test_custom_root_with_aux"
     "testEigvalsGrad_shape"

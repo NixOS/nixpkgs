@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "5.0.9";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hl9wdCTlRAeMoZbnKuahSIfOdOAr0Sa+VLfAPJcb7xg=";
+    hash = "sha256-RGs+io68LOr9Qk/8qrHDU4MNSBYSVleO16ZUSOYB6+0=";
   };
 
   propagatedBuildInputs = [

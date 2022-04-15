@@ -17,6 +17,7 @@ let
       packageOverrides = self: super: {
         cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
         botocore = changeVersion super.botocore.overridePythonAttrs "1.23.54" "sha256-S7m6FszO5fWiYCBJvD4ttoZTRrJVBmfzATvfM7CgHOs=";
+        jmespath = changeVersion super.jmespath.overridePythonAttrs "0.10.0" "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
         colorama = changeVersion super.colorama.overridePythonAttrs "0.4.3" "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         future = changeVersion super.future.overridePythonAttrs "0.16.0" "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
         requests = super.requests.overridePythonAttrs (oldAttrs: rec {

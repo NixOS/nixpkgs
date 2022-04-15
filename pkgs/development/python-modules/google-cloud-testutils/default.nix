@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, click, google-auth, six }:
+{ lib, buildPythonPackage, fetchPypi, click, google-auth, packaging, six }:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-X85NRgGZt7+OpL4poOyS+UWec4fuABiTxEYyFpkUpqs=";
   };
 
-  propagatedBuildInputs = [ click google-auth six ];
+  propagatedBuildInputs = [ click google-auth packaging six ];
 
   # does not contain tests
   doCheck = false;

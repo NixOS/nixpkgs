@@ -81,6 +81,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  disabledTests = [
+    "test_image_palette" # https://github.com/pikepdf/pikepdf/issues/328
+  ];
+
   pythonImportsCheck = [ "pikepdf" ];
 
   meta = with lib; {

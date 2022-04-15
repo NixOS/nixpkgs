@@ -123,6 +123,8 @@ buildPythonPackage rec {
     "test_version"
     # Sensitive comparison of raw HTTP header fails
     "test_raw_headers"
+    # noisy_exceptions sometimes missing from sanic stdout
+    "test_noisy_exceptions"
   ];
 
   disabledTestPaths = [
