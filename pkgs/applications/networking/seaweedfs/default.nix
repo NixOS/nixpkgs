@@ -27,6 +27,7 @@ buildGoModule rec {
     description = "Simple and highly scalable distributed file system";
     homepage = "https://github.com/chrislusf/seaweedfs";
     maintainers = with maintainers; [ cmacrae raboof ];
+    mainProgram = "weed";
     license = licenses.asl20;
   };
 }

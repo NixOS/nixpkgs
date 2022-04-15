@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.AndersonTorres ];
+    mainProgram = "lolcode-lci";
     platforms = lib.platforms.unix;
   };
 

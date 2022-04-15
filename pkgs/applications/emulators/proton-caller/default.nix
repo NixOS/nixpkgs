@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/caverym/proton-caller";
     license = licenses.mit;
     maintainers = with maintainers; [ kho-dialga ];
+    mainProgram = "proton-call";
   };
 }

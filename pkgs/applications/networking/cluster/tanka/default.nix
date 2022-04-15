@@ -31,6 +31,7 @@ buildGoModule rec {
     homepage = "https://tanka.dev";
     license = licenses.asl20;
     maintainers = with maintainers; [ mikefaille ];
+    mainProgram = "tk";
     platforms = platforms.unix;
   };
 }

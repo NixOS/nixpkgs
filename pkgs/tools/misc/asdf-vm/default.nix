@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://asdf-vm.com/";
     license = licenses.mit;
     maintainers = [ maintainers.c4605 ];
+    mainProgram = "asdf";
     platforms = platforms.unix;
   };
 }

@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.hectorj ];
+    mainProgram = "zipkin-server";
   };
 }
