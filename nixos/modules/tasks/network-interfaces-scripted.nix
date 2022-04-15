@@ -144,13 +144,15 @@ let
                     optionalString (cfg.defaultGateway.srcAddress != null)
                       "src ${cfg.defaultGateway.srcAddress}"} proto static
                 ''}
+                # without 'sleep' we have 'Invalid source address' error
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
                   ${optionalString (cfg.defaultGateway6.interface != null) ''
                     ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } proto static
                   ''}
-                  ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
+                  ${optionalString (cfg.defaultGateway6.srcAddress != null) 
+                    "sleep 2s && "}ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } via "${cfg.defaultGateway6.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
