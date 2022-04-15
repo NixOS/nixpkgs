@@ -4570,10 +4570,6 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
-  modelio = callPackage ../tools/misc/modelio {
-    inherit (eclipses) eclipse-sdk;
-  };
-
   mons = callPackage ../tools/misc/mons {};
 
   monsoon = callPackage ../tools/security/monsoon {};
@@ -23100,11 +23096,14 @@ with pkgs;
 
   smack = callPackage ../development/libraries/java/smack { };
 
-  swt = callPackage ../development/libraries/java/swt { };
-  swt_jdk8 = callPackage ../development/libraries/java/swt {
-    jdk = jdk8;
+  swt = callPackage ../development/libraries/java/swt { 
+    gtk = gtk2;
   };
 
+  swt_jdk8 = callPackage ../development/libraries/java/swt {
+    gtk = gtk2;
+    jdk = jdk8;
+  };
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
@@ -35850,6 +35849,13 @@ with pkgs;
   brmodelo = callPackage ../applications/science/engineering/brmodelo { };
 
   jflap = callPackage ../applications/science/engineering/jflap { };
+
+  modelio = callPackage ../applications/science/engineering/modelio {
+    inherit (eclipses) eclipse-sdk;
+    gtk = lib.getDev gtk3;
+  };
+  
+  };
 
   strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
 

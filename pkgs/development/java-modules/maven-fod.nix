@@ -20,14 +20,15 @@
 stdenv.mkDerivation (rec {
   fetchedMavenDeps = stdenv.mkDerivation ({
     name = "${pname}-${version}-maven-deps";
-    inherit src;
+
+    inherit src patches;
 
     buildInputs = [
       maven
     ];
 
     buildPhase = ''
-      mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
+      mvn clean package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
     '';
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
@@ -49,7 +50,7 @@ stdenv.mkDerivation (rec {
     runHook preBuild
 
     mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
-    mvn package --offline "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
+    mvn clean package --offline "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
 
     runHook postBuild
   '';
