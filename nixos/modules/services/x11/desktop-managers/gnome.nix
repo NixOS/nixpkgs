@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -456,7 +456,7 @@ in
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
         with pkgs.gnome;
-        lib.utils.removePackagesByName
+        utils.removePackagesByName
           ([
             baobab
             cheese
@@ -516,7 +516,7 @@ in
     })
 
     (mkIf serviceCfg.games.enable {
-      environment.systemPackages = with pkgs.gnome; lib.utils.removePackagesByName [
+      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         aisleriot
         atomix
         five-or-more
@@ -542,7 +542,7 @@ in
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
     (mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = with pkgs.gnome; lib.utils.removePackagesByName [
+      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         dconf-editor
         devhelp
         pkgs.gnome-builder

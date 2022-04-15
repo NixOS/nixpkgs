@@ -481,6 +481,31 @@
       </listitem>
       <listitem>
         <para>
+          In the PowerDNS Recursor module
+          (<literal>services.pdns-recursor</literal>), default values of
+          several IP address-related NixOS options have been updated to
+          match the default upstream behavior. In particular, Recursor
+          by default will:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              listen on (and allows connections from) both IPv4 and IPv6
+              addresses
+              (<literal>services.pdns-recursor.dns.address</literal>,
+              <literal>services.pdns-recursor.dns.allowFrom</literal>);
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              allow only local connections to the REST API server
+              (<literal>services.pdns-recursor.api.allowFrom</literal>).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>openssh</literal> has been update to 8.9p1, changing
           the FIDO security key middleware interface.
         </para>

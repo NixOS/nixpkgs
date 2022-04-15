@@ -11,6 +11,7 @@
 , cpio
 , xar
 , libdbusmenu
+, libxshmfence
 }:
 
 let
@@ -22,13 +23,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.26.4145";
-    x86_64-linux = "3.26.2941";
+    x86_64-darwin = "3.27.4357";
+    x86_64-linux = "3.27.2944";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "1ck74a9z2mrwmljrqm347bqhjiaf1v0bf1jfnp58cqngh5ygqnf2";
-    x86_64-linux = "01gy84gr0gw5ap7hpy72azaf6hlzac7vxkn5cgad5sfbyzxgjgc9";
+    x86_64-darwin = "0xihg9fzsbwib2fmb1yqx9015i9q4k0ph8lna4mzgicmrjkw54g8";
+    x86_64-linux = "1wqnrmp8q84izvqv25fgks5pv6la3vahm5dsn7bc6zxqb0xz2xvy";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -90,7 +91,7 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
 
     unpackPhase = ''
       runHook preUnpack

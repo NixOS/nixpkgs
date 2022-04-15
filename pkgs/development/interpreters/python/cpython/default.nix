@@ -236,7 +236,7 @@ in with passthru; stdenv.mkDerivation {
       else
         ./3.5/profile-task.patch
     )
-  ] ++ optionals (pythonAtLeast "3.9" && stdenv.isDarwin) [
+  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
@@ -247,8 +247,10 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if pythonAtLeast "3.7" then
+      else if pythonAtLeast "3.7" && pythonOlder "3.11" then
         ./3.7/python-3.x-distutils-C++.patch
+      else if pythonAtLeast "3.11" then
+        ./3.11/python-3.x-distutils-C++.patch
       else
         fetchpatch {
           url = "https://bugs.python.org/file48016/python-3.x-distutils-C++.patch";

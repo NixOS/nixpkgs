@@ -398,7 +398,6 @@ in {
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
-        "${cfg.package}/lib/systemd/systemd-vconsole-setup"
 
         # additional systemd directories
         "${cfg.package}/lib/systemd/system-generators"
@@ -503,5 +502,8 @@ in {
         ];
       };
     };
+
+    boot.kernelParams = lib.mkIf (config.boot.resumeDevice != "") [ "resume=${config.boot.resumeDevice}" ];
+
   };
 }
