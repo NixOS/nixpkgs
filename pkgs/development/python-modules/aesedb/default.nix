@@ -1,48 +1,44 @@
 { lib
-, aesedb
-, aiosmb
 , aiowinreg
 , buildPythonPackage
+, colorama
 , fetchPypi
-, minidump
-, minikerberos
-, msldap
+, pycryptodomex
 , pythonOlder
-, winsspi
+, tqdm
+, unicrypto
 }:
 
 buildPythonPackage rec {
-  pname = "pypykatz";
-  version = "0.5.6";
+  pname = "aesedb";
+  version = "0.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iuLQfdRNxy6Z+7sYGG+dSHlxicOPtNOdB/VNLyZjRsY=";
+    hash = "sha256-2m4VxqTD9zvUpZ1O8/SBprAzG4vUX4z3LthMpP5Hc8g=";
   };
 
   propagatedBuildInputs = [
-    aesedb
-    aiosmb
     aiowinreg
-    minikerberos
-    msldap
-    winsspi
-    minidump
+    colorama
+    pycryptodomex
+    tqdm
+    unicrypto
   ];
 
-  # Project doesn't have tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
-    "pypykatz"
+    "aesedb"
   ];
 
   meta = with lib; {
-    description = "Mimikatz implementation in Python";
-    homepage = "https://github.com/skelsec/pypykatz";
+    description = "Parser for JET databases";
+    homepage = "https://github.com/skelsec/aesedb";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

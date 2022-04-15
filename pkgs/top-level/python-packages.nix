@@ -209,6 +209,8 @@ in {
 
   aesara = callPackage ../development/python-modules/aesara { };
 
+  aesedb = callPackage ../development/python-modules/aesedb { };
+
   afdko = callPackage ../development/python-modules/afdko { };
 
   affine = callPackage ../development/python-modules/affine { };
