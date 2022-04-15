@@ -15,11 +15,13 @@
 buildPythonPackage rec {
   pname = "sqlite-utils";
   version = "3.26";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-G2Fy9PEYtq0dIWhsgV4HZa5y+wLxcI3CYSgDL6ijkdo=";
+    hash = "sha256-G2Fy9PEYtq0dIWhsgV4HZa5y+wLxcI3CYSgDL6ijkdo=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +35,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     hypothesis
+  ];
+
+  pythonImportsCheck = [
+    "sqlite_utils"
   ];
 
   meta = with lib; {
