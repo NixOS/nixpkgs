@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     ./find-darwin-sdk-version.patch # don't test for macOS being >= 10.15
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
+    ./X86-support-extension.patch # backported from LLVM 11
   ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
