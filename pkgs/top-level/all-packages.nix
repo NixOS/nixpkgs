@@ -32210,15 +32210,25 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  bpp-core = callPackage ../development/libraries/science/biology/bpp-core { };
+  bpp-core = callPackage ../development/libraries/science/biology/bpp-core {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
-  bpp-phyl = callPackage ../development/libraries/science/biology/bpp-phyl { };
+  bpp-phyl = callPackage ../development/libraries/science/biology/bpp-phyl {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
-  bpp-popgen = callPackage ../development/libraries/science/biology/bpp-popgen { };
+  bpp-popgen = callPackage ../development/libraries/science/biology/bpp-popgen {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
-  bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq { };
+  bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
-  bppsuite = callPackage ../applications/science/biology/bppsuite { };
+  bppsuite = callPackage ../applications/science/biology/bppsuite {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
     inherit (llvmPackages) openmp;
