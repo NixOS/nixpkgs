@@ -55,17 +55,33 @@ let
 
   cudatoolkit_joined = symlinkJoin {
     name = "cudatoolkit-root";
+
+    # The list of required cuda redist packages can be found e.g.
+    # at https://github.com/pytorch/pytorch/blob/b09769992f83f94150eaef2ab9d03c37b36da159/cmake/Summary.cmake#L85
+    # Not explicitly listed there are: nvml, nvtx, cccl
+    #
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
     paths = with cudaPackages; [
       cuda_nvcc
+      cuda_nvml_dev # <nvml.h>
+      cuda_nvtx # -llibNVToolsExt
+      cuda_cccl # <thrust/*>
+      cuda_nvprof # <cuda_profiler_api.h>
+      cuda_nvrtc
       cuda_cudart
       libcublas
       libcufft
       libcusolver
       libcusparse
+      libcurand
       nccl.dev
       nccl.out
     ];
+
+    # ld is going to look for static archives (e.g. libcudart_static.a) in lib64
+    postBuild = ''
+      ln -s $out/lib $out/lib64
+    '';
   };
 
   # Give an explicit list of supported architectures for the build, See:
@@ -173,8 +189,10 @@ in buildPythonPackage rec {
     ./pthreadpool-disable-gcd.diff
   ];
 
+  # CUDAHOSTCXX goes into nvcc's -ccbin argument
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
+    export CUDAHOSTCXX=${cc}/bin/
     export CC=${cc}/bin/gcc CXX=${cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
