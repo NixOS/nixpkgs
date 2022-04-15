@@ -12641,6 +12641,8 @@ with pkgs;
 
   zplug = callPackage ../shells/zsh/zplug { };
 
+  zi = callPackage ../shells/zsh/zi {};
+
   zinit = callPackage ../shells/zsh/zinit {} ;
 
   zint = qt6Packages.callPackage ../development/libraries/zint { };
