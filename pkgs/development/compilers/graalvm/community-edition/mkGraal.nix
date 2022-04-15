@@ -59,6 +59,11 @@ let
     (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
   ]);
 
+  withNativeImageSvm = builtins.any (p: p == "native-image-installable-svm") platform.products;
+  withRubySvm = builtins.any (p: p == "ruby-installable-svm") platform.products;
+  withPythonSvm = builtins.any (p: p == "python-installable-svm") platform.products;
+  withWasmSvm = builtins.any (p: p == "wasm-installable-svm") platform.products;
+
   graalvmXXX-ce = stdenv.mkDerivation rec {
     inherit version;
     pname = name;
@@ -69,7 +74,6 @@ let
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       freetype
-      openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
       stdenv.cc.cc.lib # libstdc++.so.6
       xorg.libX11
       xorg.libXext
@@ -77,6 +81,8 @@ let
       xorg.libXrender
       xorg.libXtst
       zlib
+    ] ++ lib.optionals withRubySvm [
+      openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
     ];
 
     nativeBuildInputs = [ unzip perl makeWrapper ]
@@ -172,7 +178,7 @@ let
 
     # Workaround for libssl.so.10 wanted by TruffleRuby
     # Resulting TruffleRuby cannot use `openssl` library.
-    autoPatchelfIgnoreMissingDeps = stdenv.isDarwin;
+    autoPatchelfIgnoreMissingDeps = withRubySvm && stdenv.isDarwin;
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
       # We cannot use -exec since wrapProgram is a function but not a
@@ -191,10 +197,14 @@ let
       find "$out" -name libfontmanager.so -exec \
         patchelf --add-needed libfontconfig.so {} \;
 
-      # Workaround for libssl.so.10/libcrypto.so.10 wanted by TruffleRuby
-      patchelf $out/languages/ruby/lib/mri/openssl.so \
-        --replace-needed libssl.so.10 libssl.so \
-        --replace-needed libcrypto.so.10 libcrypto.so
+      ${
+        lib.optionalString withRubySvm ''
+          # Workaround for libssl.so.10/libcrypto.so.10 wanted by TruffleRuby
+          patchelf $out/languages/ruby/lib/mri/openssl.so \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
+        ''
+      }
     '';
 
     # $out/bin/native-image needs zlib to build native executables.
@@ -222,7 +232,7 @@ let
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
       ${# --static flag doesn't work for darwin
-        lib.optionalString (stdenv.isLinux && !useMusl) ''
+        lib.optionalString (withNativeImageSvm && stdenv.isLinux && !useMusl) ''
           echo "Ahead-Of-Time compilation"
           $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
           ./helloworld | fgrep 'Hello World'
@@ -234,49 +244,38 @@ let
       }
 
       ${# --static flag doesn't work for darwin
-        lib.optionalString (stdenv.isLinux && useMusl) ''
+        lib.optionalString (withNativeImageSvm && stdenv.isLinux && useMusl) ''
           echo "Ahead-Of-Time compilation with --static and --libc=musl"
           $out/bin/native-image --no-server --libc=musl --static HelloWorld
           ./helloworld | fgrep 'Hello World'
         ''
       }
 
-      ${# TODO: Doesn't work on MacOS, we have this error:
-        # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
-        lib.optionalString (stdenv.isLinux) ''
+      ${
+        lib.optionalString withWasmSvm ''
           echo "Testing Jshell"
           echo '1 + 1' | $out/bin/jshell
         ''
       }
 
       ${
-        lib.optionalString (builtins.any (a: a == "python-installable-svm") platform.products) ''
+        lib.optionalString withPythonSvm ''
           echo "Testing GraalPython"
           $out/bin/graalpython -c 'print(1 + 1)'
           echo '1 + 1' | $out/bin/graalpython
         ''
       }
 
-      echo "Testing TruffleRuby"
       ${
-        lib.optionalString (builtins.any (a: a == "ruby-installable-svm") platform.products) ''
-      # Hide warnings about wrong locale
-      export LANG=C
-      export LC_ALL=C
-      $out/bin/ruby -e 'puts(1 + 1)'
-      ''
-      }
-      ${# FIXME: irb is broken in all platforms
-        # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
-        # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
-        # though `openssl` is in `propagatedBuildInputs`. For more details see:
-        # https://github.com/NixOS/nixpkgs/pull/105815
-        # TODO: "truffleruby: an internal exception escaped out of the interpreter"
-        # error on linux-aarch64
-        # TODO: "core/kernel.rb:234:in `gem_original_require':
-        # /nix/store/wlc5xalzj2ip1l83siqw8ac5fjd52ngm-graalvm11-ce/languages/llvm/native/lib:
-        # cannot read file data: Is a directory (RuntimeError)" error on linux-amd64
-        lib.optionalString false ''
+        lib.optionalString withRubySvm ''
+          echo "Testing TruffleRuby"
+          # Hide warnings about wrong locale
+          export LANG=C
+          export LC_ALL=C
+          $out/bin/ruby -e 'puts(1 + 1)'
+        ''
+        # FIXME: irb is broken in all platforms
+        + lib.optionalString false ''
           echo '1 + 1' | $out/bin/irb
         ''
       }
