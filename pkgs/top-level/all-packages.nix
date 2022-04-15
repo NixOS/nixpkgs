@@ -22643,6 +22643,8 @@ with pkgs;
 
   webmetro = callPackage ../servers/webmetro { };
 
+  wishlist = callPackage ../servers/wishlist { };
+
   wsdd = callPackage ../servers/wsdd { };
 
   webhook = callPackage ../servers/http/webhook { };
