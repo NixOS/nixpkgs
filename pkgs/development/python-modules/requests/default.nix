@@ -49,6 +49,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-vvv"
+  ];
+
   # AttributeError: 'KeywordMapping' object has no attribute 'get'
   doCheck = !isPy27;
 
