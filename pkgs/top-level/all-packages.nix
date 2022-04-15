@@ -12364,8 +12364,14 @@ with pkgs;
 
   gcc_latest = gcc11;
 
-  # aarch64-darwin doesn't support earlier gcc
-  gfortran = if (stdenv.isDarwin && stdenv.isAarch64) then gfortran11 else gfortran9;
+  # Use the same GCC version as the one from stdenv by default
+  gfortran = wrapCC (gccStdenv.cc.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
