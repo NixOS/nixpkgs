@@ -52,11 +52,6 @@ in
     platforms = builtins.attrNames config;
   };
 
-  # TODO: fix aarch64-linux, failing during Native Image compilation
-  # "Caused by: java.io.IOException: Cannot run program
-  # "/nix/store/1q1mif7h3lgxdaxg6j39hli5azikrfla-gcc-wrapper-9.3.0/bin/gcc" (in
-  # directory"/tmp/SVM-4194439592488143713"): error=0, Failed to exec spawn
-  # helper: pid: 19865, exit value: 1"
   graalvm17-ce = mkGraal rec {
     config = {
       x86_64-darwin = {
@@ -71,6 +66,15 @@ in
         inherit products;
         arch = "darwin-aarch64";
         version = graalvm17-ce-dev-version;
+      };
+      aarch64-linux = {
+        # TODO: error with native-image-installable-svm in aarch64-linux:
+        # "Caused by: java.io.IOException: Cannot run program
+        # "/nix/store/00000000000000000000000000000000-gcc-wrapper-9.3.0/bin/gcc" (in
+        # directory"/tmp/SVM-0000000000000000000"): error=0, Failed to exec spawn
+        # helper: pid: 19865, exit value: 1"
+        products = [ "graalvm-ce" ];
+        arch = "linux-aarch64";
       };
     };
     defaultVersion = graalvm17-ce-release-version;
