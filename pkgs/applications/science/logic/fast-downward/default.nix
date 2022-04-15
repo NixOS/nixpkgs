@@ -1,16 +1,24 @@
-{ stdenv, lib, fetchhg, cmake, which, python3, osi, cplex }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, osi
+, cplex
+}:
 
 stdenv.mkDerivation {
-  version = "19.12";
   pname = "fast-downward";
+  version = "21.12.0";
 
-  src = fetchhg {
-    url = "http://hg.fast-downward.org/";
-    rev = "41688a4f16b3";
-    sha256 = "08m4k1mkx4sz7c2ab7xh7ip6b67zxv7kl68xrvwa83xw1yigqkna";
+  src = fetchFromGitHub {
+    owner = "aibasel";
+    repo = "downward";
+    rev = "release-21.12.0";
+    sha256 = "sha256-qc+SaUpIYm7bnOZlHH2mdvUaMBB+VRyOCQM/BOoOaPE=";
   };
 
-  nativeBuildInputs = [ cmake which ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ python3 python3.pkgs.wrapPython osi ];
 
   cmakeFlags =
