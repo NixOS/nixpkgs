@@ -42,6 +42,11 @@ stdenv.mkDerivation  rec {
     sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
   '';
 
+  passthru = {
+    cudaSupport = ch4backend.cudaSupport or false;
+    cudaPackages = ch4backend.cudaPackages or { };
+  };
+
   meta = with lib; {
     description = "Implementation of the Message Passing Interface (MPI) standard";
 

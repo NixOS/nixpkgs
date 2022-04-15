@@ -1,10 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
 , numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
 , enableCuda ? false
-, cudatoolkit
+, cudaPackages
 }:
 
 let
+  # TODO: use the redistributable cuda packages instead
+  inherit (cudaPackages) cudatoolkit;
+
   # Needed for configure to find all libraries
   cudatoolkit' = symlinkJoin {
     inherit (cudatoolkit) name meta;
@@ -42,6 +45,11 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}";
 
   enableParallelBuilding = true;
+
+  passthru = {
+    cudaSupport = enableCuda;
+    inherit cudaPackages;
+  };
 
   meta = with lib; {
     description = "Unified Communication X library";

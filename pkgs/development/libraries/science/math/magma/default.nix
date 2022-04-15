@@ -72,5 +72,8 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ tbenst ];
   };
 
-  passthru.cudatoolkit = cudatoolkit;
+  passthru = {
+    # TODO: leave just cudaPackages
+    inherit cudatoolkit cudaPackages;
+  };
 }

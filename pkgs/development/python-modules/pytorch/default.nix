@@ -30,23 +30,42 @@
   isPy3k, pythonOlder }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudnn nccl;
 in
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
+assert cudaSupport -> (let majorIs = cudaPackages.cudaMajorVersion;
                         in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
-assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
-assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
+# TODO: verify it's OK to equality-compare cudaPackages (which are attrsets, scopes, or whatever)
+assert (MPISupport && cudaSupport) -> mpi.cudaPackages == cudaPackages;
+assert cudaSupport -> (magma.cudaPackages == cudaPackages);
 
 let
   setBool = v: if v then "1" else "0";
+
+  # cudatoolkit.cc is a passthru attribute
+  # that points at a compatible gcc version,
+  # we're not really using cudatoolkit;
+  # not sure we really need to hard-code gcc,
+  # but this is out of scope of current PR
+  # (which is: migrating pytorch to redist cuda)
+  inherit (cudaPackages.cudatoolkit) cc;
+
   cudatoolkit_joined = symlinkJoin {
-    name = "${cudatoolkit.name}-unsplit";
+    name = "cudatoolkit-root";
     # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
-    paths = [ cudatoolkit.out cudatoolkit.lib nccl.dev nccl.out ];
+    paths = with cudaPackages; [
+      cuda_nvcc
+      cuda_cudart
+      libcublas
+      libcufft
+      libcusolver
+      libcusparse
+      nccl.dev
+      nccl.out
+    ];
   };
 
   # Give an explicit list of supported architectures for the build, See:
@@ -105,7 +124,7 @@ let
   final_cudaArchList =
     if !cudaSupport || cudaArchList != null
     then cudaArchList
-    else cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
+    else cudaCapabilities."cuda${cudaPackages.cudaMajorVersion}";
 
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
@@ -113,7 +132,7 @@ let
   # to recompile pytorch on every update to nvidia-x11 or the kernel.
   cudaStub = linkFarm "cuda-stub" [{
     name = "libcuda.so.1";
-    path = "${cudatoolkit}/lib/stubs/libcuda.so";
+    path = "${cudaPackages.cuda_cudart}/lib/stubs/libcuda.so";
   }];
   cudaStubEnv = lib.optionalString cudaSupport
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
@@ -156,7 +175,7 @@ in buildPythonPackage rec {
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
-    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
+    export CC=${cc}/bin/gcc CXX=${cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
