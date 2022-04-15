@@ -1,8 +1,7 @@
-{ config, lib, pkgs, options, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.ipfs;
-  opt = options.services.ipfs;
 
   ipfsFlags = utils.escapeSystemdExecArgs (
     optional cfg.autoMount "--mount" ++
