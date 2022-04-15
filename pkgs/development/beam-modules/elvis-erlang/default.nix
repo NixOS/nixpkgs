@@ -42,5 +42,6 @@ in rebar3Relx rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with lib.maintainers; [ dlesl ];
+    mainProgram = "elvis";
   };
 }

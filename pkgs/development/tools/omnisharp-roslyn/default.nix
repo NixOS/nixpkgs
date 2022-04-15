@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ tesq0 ericdallo corngood ];
+    mainProgram = "omnisharp";
   };
 
 }

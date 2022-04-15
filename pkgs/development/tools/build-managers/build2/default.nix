@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
     platforms = platforms.all;
     maintainers = with maintainers; [ hiro98 r-burns ];
+    mainProgram = "b";
   };
 }

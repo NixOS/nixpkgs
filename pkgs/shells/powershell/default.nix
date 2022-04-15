@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://github.com/PowerShell/PowerShell";
     maintainers = with maintainers; [ yrashk srgom p3psi ];
+    mainProgram = "pwsh";
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
     license = with licenses; [ mit ];
   };

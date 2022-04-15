@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/ttyperacer/terminal-typeracer";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ yoctocell ];
+    mainProgram = "typeracer";
     platforms = platforms.unix;
   };
 }

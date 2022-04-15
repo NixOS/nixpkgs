@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/jsonnet-bundler/jsonnet-bundler";
     license = licenses.asl20;
     maintainers = with maintainers; [ preisschild ];
+    mainProgram = "jb";
   };
 }
