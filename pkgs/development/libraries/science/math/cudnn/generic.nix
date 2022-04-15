@@ -1,7 +1,11 @@
 { stdenv
 , lib
 , zlib
-, cudaPackages
+, useCudatoolkitRunfile ? false
+, cudaVersion
+, cudaMajorVersion
+, cudatoolkit # if cuda>=11: only used for .cc
+, libcublas ? null # cuda <11 doesn't ship redist packages
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
 , fetchurl
@@ -24,35 +28,38 @@
 
 assert (hash != null) || (sha256 != null);
 
+assert useCudatoolkitRunfile || (libcublas != null);
+
 let
-  inherit (cudaPackages) cudaMajorVersion libcublas;
-  inherit (cudaPackages.cudatoolkit) cc;
+  inherit (cudatoolkit) cc;
 
   majorMinorPatch = version: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   version = majorMinorPatch fullVersion;
+
+  cudatoolkit_root =
+    if useCudatoolkitRunfile
+    then cudatoolkit
+    else libcublas;
 in
 stdenv.mkDerivation {
   name = "cudatoolkit-${cudaMajorVersion}-cudnn-${version}";
 
-  inherit version;
   src = fetchurl {
     inherit url hash sha256;
   };
 
   # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
-  # Prepend /run/opengl-driver/lib using addOpenGLRunpath
-  # so that libcuda (which is not part of DT_NEEDED)
-  # can be found at runtime with dlopen().
+  # Prepend /run/opengl-driver/lib using addOpenGLRunpath for dlopen("libcudacuda.so")
   nativeBuildInputs = [
     autoPatchelfHook
     autoAddOpenGLRunpathHook
   ];
 
   # Used by autoPatchelfHook
-  buildInputs = builtins.map lib.getLib [
-    cc.cc # libstdc++
-    libcublas
+  buildInputs = [
+    cc.cc.lib # libstdc++
     zlib
+    cudatoolkit_root
   ];
 
   # We used to patch Runpath here, but now we use autoPatchelfHook
@@ -79,8 +86,13 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    cudatoolkit = lib.warn "cudnn.cudatoolkit passthru attribute is deprecated: use cudaPackages" cudaPackages.cudatoolkit;
-    inherit cudaPackages;
+    inherit useCudatoolkitRunfile;
+
+    cudatoolkit = lib.warn ''
+      cudnn.cudatoolkit passthru attribute is deprecated;
+      if your derivation uses cudnn directly, it should probably consume cudaPackages instead
+    ''
+      cudatoolkit;
 
     majorVersion = lib.versions.major version;
   };
@@ -91,9 +103,10 @@ stdenv.mkDerivation {
     # official version constraints (as recorded in default.nix). In some cases
     # you _may_ be able to smudge version constraints, just know that you're
     # embarking into unknown and unsupported territory when doing so.
-    broken = !(elem cudaPackages.cudaVersion supportedCudaVersions);
+    broken = !(elem cudaVersion supportedCudaVersions);
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
+    # TODO: consider marking unfreRedistributable when not using runfile
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mdaiter samuela ];
