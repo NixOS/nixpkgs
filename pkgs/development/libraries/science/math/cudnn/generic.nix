@@ -1,8 +1,11 @@
 { stdenv
 , lib
-, cudatoolkit
+, cudatoolkit ? null
+, libcublas ? null
+, zlib ? null
 , fetchurl
-, addOpenGLRunpath
+, autoPatchelfHook
+, autoAddOpenGLRunpathHook
 , # The distributed version of CUDNN includes both dynamically liked .so files,
   # as well as statically linked .a files.  However, CUDNN is quite large
   # (multiple gigabytes), so you can save some space in your nix store by
@@ -25,6 +28,8 @@ assert (hash != null) || (sha256 != null);
 let
   majorMinorPatch = version: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   version = majorMinorPatch fullVersion;
+  # Use libcublas if available
+  withoutCudaToolkit = libcublas != null;
 in stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
@@ -35,7 +40,19 @@ in stdenv.mkDerivation {
     inherit url hash sha256;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath ];
+  nativeBuildInputs = [
+    autoAddOpenGLRunpathHook
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    stdenv.cc.cc.lib
+  ] ++ lib.optionals withoutCudaToolkit [
+    libcublas
+    zlib
+  ] ++ lib.optionals (!withoutCudaToolkit) [
+    cudatoolkit
+  ];
 
   # Some cuDNN libraries depend on things in cudatoolkit, eg.
   # libcudnn_ops_infer.so.8 tries to load libcublas.so.11. So we need to patch
@@ -45,15 +62,6 @@ in stdenv.mkDerivation {
   # version 8.3.2 it seems to have been renamed to simply "lib/".
   installPhase = ''
     runHook preInstall
-
-    function fixRunPath {
-      p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc cudatoolkit.lib ]}:${cudatoolkit}/lib:\$ORIGIN/" $1
-    }
-
-    for sofile in {lib,lib64}/lib*.so; do
-      fixRunPath $sofile
-    done
 
     mkdir -p $out
     cp -a include $out/include
@@ -65,18 +73,6 @@ in stdenv.mkDerivation {
   '' + ''
     runHook postInstall
   '';
-
-  # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = ''
-    for lib in $out/lib/lib*.so; do
-      addOpenGLRunpath $lib
-    done
-  '';
-
-  propagatedBuildInputs = [
-    cudatoolkit
-  ];
 
   passthru = {
     inherit cudatoolkit;
