@@ -254,15 +254,15 @@ in
         else
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"
-
+      '' + optionalString cfg.autoMigrate ''
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
+      '' + ''
           ipfs --offline config profile apply ${profile}
         fi
       '' + optionalString cfg.autoMount ''
         ipfs --offline config Mounts.FuseAllowOther --json true
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
-      '' + optionalString cfg.autoMigrate ''
-        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
       '' + ''
         ipfs --offline config show \
           | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${
