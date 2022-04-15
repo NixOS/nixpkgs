@@ -7,6 +7,7 @@
 , which
 , libvirt
 , vmnet
+, makeWrapper
 }:
 
 buildGoModule rec {
@@ -24,7 +25,7 @@ buildGoModule rec {
     sha256 = "sha256-WIk4ibq7jcqao0Qiz3mz9yfHdxTUlvtPuEh4gApSDBg=";
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config which ];
+  nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
 
   buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
 
@@ -35,9 +36,8 @@ buildGoModule rec {
   installPhase = ''
     install out/minikube -Dt $out/bin
 
+    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
     export HOME=$PWD
-    export MINIKUBE_WANTUPDATENOTIFICATION=false
-    export MINIKUBE_WANTKUBECTLDOWNLOADMSG=false
 
     for shell in bash zsh fish; do
       $out/bin/minikube completion $shell > minikube.$shell
