@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, zlib
 , cudaPackages
 , fetchurl
 , addOpenGLRunpath
@@ -49,7 +50,7 @@ in stdenv.mkDerivation {
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ cc.cc libcublas ]}:\$ORIGIN/" $1
+      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ cc.cc libcublas zlib ]}:\$ORIGIN/" $1
     }
 
     for sofile in {lib,lib64}/lib*.so; do
