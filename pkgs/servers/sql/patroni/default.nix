@@ -57,7 +57,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.deshaw.members;
   };
 }
