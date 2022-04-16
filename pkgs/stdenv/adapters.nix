@@ -87,6 +87,7 @@ rec {
         ];
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        hardeningDisable = (args.hardeningDisable or []) ++ (if stdenv.hostPlatform.isPower then [ "stackprotector" ] else []);
       });
     });
 
