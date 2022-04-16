@@ -1536,7 +1536,8 @@
       pymeteireann
     ];
     "meteo_france" = ps: with ps; [
-    ]; # missing inputs: meteofrance-api
+      meteofrance-api
+    ];
     "meteoalarm" = ps: with ps; [
       meteoalertapi
     ];
@@ -3420,6 +3421,7 @@
     "meraki"
     "met"
     "met_eireann"
+    "meteo_france"
     "meteoclimatic"
     "microsoft_face"
     "microsoft_face_detect"
