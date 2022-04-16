@@ -22,7 +22,6 @@ buildGoModule rec {
     description = "A command-line Chinese dictionary";
     homepage = "https://github.com/TimothyYe/ydict";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ zendo ];
   };
 }
