@@ -70,6 +70,7 @@
   tree-sitter-ruby = lib.importJSON ./tree-sitter-ruby.json;
   tree-sitter-rust = lib.importJSON ./tree-sitter-rust.json;
   tree-sitter-scala = lib.importJSON ./tree-sitter-scala.json;
+  tree-sitter-scheme = lib.importJSON ./tree-sitter-scheme.json;
   tree-sitter-scss = lib.importJSON ./tree-sitter-scss.json;
   tree-sitter-sparql = lib.importJSON ./tree-sitter-sparql.json;
   tree-sitter-supercollider = lib.importJSON ./tree-sitter-supercollider.json;
