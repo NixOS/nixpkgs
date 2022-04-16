@@ -82,7 +82,7 @@ let
             meta =
               let meta = args.meta or {}; in
               meta // {
-                homepage = meta.homepage or "http://www.kde.org";
+                homepage = meta.homepage or "https://kde.org";
                 license = meta.license or license;
                 maintainers = (meta.maintainers or []) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
