@@ -28,6 +28,8 @@ mkDerivation rec {
   pname = "nextcloud-client";
   version = "3.4.4";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
