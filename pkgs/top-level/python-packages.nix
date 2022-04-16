@@ -8138,6 +8138,8 @@ in {
 
   python-editor = callPackage ../development/python-modules/python-editor { };
 
+  python-family-hub-local = callPackage ../development/python-modules/python-family-hub-local { };
+
   python-fsutil = callPackage ../development/python-modules/python-fsutil { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
