@@ -5919,6 +5919,8 @@ in {
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
 
+  ovs = callPackage ../development/python-modules/ovs { };
+
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
