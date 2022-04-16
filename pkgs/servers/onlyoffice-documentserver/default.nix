@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "onlyoffice-documentserver";
-  version = "7.0.0";
+  version = "7.0.1";
   src = fetchurl {
     url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-    sha256 = "sha256-JhUKaPYPreyWSR2lUlIfnfm8X7wvEYMof9Yd9Xm/NZc=";
+    sha256 = "sha256-5+Ii9CU3/xWUt8YclqpMavcXoKP6WBN/bh1UAnbBgCU=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
   '';
 
-  # docservice is a node program packaged using zeit/pkg.
+  # docservice is a node program packaged using vercel/pkg.
   # thus, it contains hardcoded offsets.
   # patchelf shifts these locations when it expands headers.
 
   # this could probably be generalised into allowing any program packaged
-  # with zeit/pkg to be run on nixos.
+  # with vercel/pkg to be run on nixos.
 
   preFixup = let
     libPath = lib.makeLibraryPath [stdenv.cc.cc];
