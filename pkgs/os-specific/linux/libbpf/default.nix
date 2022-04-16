@@ -8,8 +8,6 @@
 , nixosTests
 }:
 
-with builtins;
-
 stdenv.mkDerivation rec {
   pname = "libbpf";
   version = "0.7.0";
