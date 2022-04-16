@@ -42,7 +42,8 @@ let
     else libcublas;
 in
 stdenv.mkDerivation {
-  name = "cudatoolkit-${cudaMajorVersion}-cudnn-${version}";
+  pname = "cudatoolkit-${cudaMajorVersion}-cudnn";
+  inherit version;
 
   src = fetchurl {
     inherit url hash sha256;
