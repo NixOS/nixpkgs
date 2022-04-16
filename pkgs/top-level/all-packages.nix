@@ -2729,6 +2729,8 @@ with pkgs;
 
   clipman = callPackage ../tools/wayland/clipman { };
 
+  kabeljau = callPackage ../games/kabeljau { };
+
   kanshi = callPackage ../tools/wayland/kanshi { };
 
   oguri = callPackage  ../tools/wayland/oguri { };
