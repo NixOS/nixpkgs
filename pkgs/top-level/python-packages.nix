@@ -8946,6 +8946,8 @@ in {
 
   routes = callPackage ../development/python-modules/routes { };
 
+  rova = callPackage ../development/python-modules/rova { };
+
   rpcq = callPackage ../development/python-modules/rpcq { };
 
   rpdb = callPackage ../development/python-modules/rpdb { };
