@@ -41,6 +41,13 @@ mkDerivation rec {
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
+  postPatch = ''
+    for file in src/libsync/vfs/*/CMakeLists.txt; do
+      substituteInPlace $file \
+        --replace "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
+    done
+  '';
+
   nativeBuildInputs = [
     pkg-config
     cmake
