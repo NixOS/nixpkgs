@@ -10830,6 +10830,8 @@ in {
 
   wiffi = callPackage ../development/python-modules/wiffi { };
 
+  wifi = callPackage ../development/python-modules/wifi { };
+
   willow = callPackage ../development/python-modules/willow { };
 
   winacl = callPackage ../development/python-modules/winacl { };
