@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, autoconf
-, automake
+, autoreconfHook
 , c-ares
 , cryptopp
 , curl
@@ -14,7 +13,6 @@
 , libmediainfo
 , libraw
 , libsodium
-, libtool
 , libuv
 , libzen
 , pcre-cpp
@@ -35,7 +33,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     c-ares
@@ -53,10 +52,6 @@ stdenv.mkDerivation rec {
     readline
     sqlite
   ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
 
   configureFlags = [
     "--disable-curl-checks"

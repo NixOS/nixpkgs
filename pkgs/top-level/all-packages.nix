@@ -9864,6 +9864,8 @@ with pkgs;
 
   shen-sources = callPackage ../development/interpreters/shen-sources { };
 
+  shiv = with python3Packages; toPythonApplication shiv;
+
   shocco = callPackage ../tools/text/shocco { };
 
   shopify-cli = callPackage ../development/web/shopify-cli { };
@@ -25163,7 +25165,7 @@ with pkgs;
   cmctl = callPackage ../applications/networking/cluster/cmctl { };
 
   cmus = callPackage ../applications/audio/cmus {
-    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio VideoToolbox;
     libjack = libjack2;
   };
 
