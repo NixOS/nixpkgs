@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
+, extra-cmake-modules
 , inotify-tools
 , libcloudproviders
 , libsecret
@@ -15,6 +16,7 @@
 , qtwebsockets
 , qtquickcontrols2
 , qtgraphicaleffects
+, plasma5Packages
 , sqlite
 , inkscape
 , xdg-utils
@@ -40,6 +42,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
+    extra-cmake-modules
     inkscape
   ];
 
@@ -49,6 +52,7 @@ mkDerivation rec {
     libsecret
     openssl
     pcre
+    plasma5Packages.kio
     qtbase
     qtkeychain
     qttools
