@@ -4842,6 +4842,8 @@ with pkgs;
 
   cloudlist = callPackage ../tools/security/cloudlist { };
 
+  cmdpack = callPackages ../tools/misc/cmdpack { };
+
   cobalt = callPackage ../applications/misc/cobalt {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
