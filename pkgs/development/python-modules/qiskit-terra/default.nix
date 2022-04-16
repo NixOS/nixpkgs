@@ -2,8 +2,8 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, rustPlatform
   # Python requirements
-, cython
 , dill
 , numpy
 , networkx
@@ -14,6 +14,7 @@
 , retworkx
 , scipy
 , scikit-quant ? null
+, setuptools-rust
 , stevedore
 , symengine
 , sympy
@@ -54,18 +55,24 @@ in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.19.2";
+  version = "0.20.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P2QTdt1H9I5T/ONNoo7XEVnoHweOdq3p2NH3l3/yAn4=";
+    sha256 = "sha256-/t87IgazpJlfd8NT2Pkn5b6/Ut104DcJEFCubQ/bBiw=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ rust.rustc rust.cargo cargoSetupHook ]);
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "sha256-tNiBXn32g1PTuTmKNXSac+4PLSc1Ao9n+oAMfvVYR30=";
+  };
 
   propagatedBuildInputs = [
     dill
@@ -96,7 +103,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "qiskit"
-    "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
+    "qiskit.pulse"
   ];
 
   disabledTestPaths = [
@@ -109,7 +116,10 @@ buildPythonPackage rec {
   ];
   pytestFlagsArray = [ "--durations=10" ];
   disabledTests = [
-    "TestUnitarySynthesisPlugin" # uses unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure
+    "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure
+    # matplotlib tests seems to fail non-deterministically
+    "TestMatplotlibDrawer"
+    "TestGraphMatplotlibDrawer"
     "test_copy" # assertNotIn doesn't seem to work as expected w/ pytest vs unittest
 
     # Flaky tests
@@ -153,18 +163,14 @@ buildPythonPackage rec {
     "test_two_qubit_weyl_decomposition_ab0"
     "test_sample_counts_memory_superposition"
     "test_piecewise_polynomial_function"
-    "test_vqe_qasm"
     "test_piecewise_chebyshev_mutability"
     "test_bit_conditional_no_cregbundle"
     "test_gradient_wrapper2"
     "test_two_qubit_weyl_decomposition_abmb"
     "test_two_qubit_weyl_decomposition_abb"
-    "test_two_qubit_weyl_decomposition_aac"
-    "test_aqc"
-    "test_gradient"
-    "test_piecewise_polynomial_rotations_mutability"
-    "test_confidence_intervals_1"
-    "test_trotter_from_bound"
+    "test_vqe_qasm"
+    "test_dag_from_networkx"
+    "test_defaults_to_dict_46"
   ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding
