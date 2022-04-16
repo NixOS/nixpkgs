@@ -30,6 +30,37 @@ To check the content of an ISO image, mount it like so:
 # mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso
 ```
 
+## Additional drivers or firmware {#sec-building-image-drivers}
+
+If you need additional (non-distributable) drivers or firmware in the
+installer, you might want to extend these configurations.
+
+For example, to build the GNOME graphical installer ISO, but with support for
+certain WiFi adapters present in some MacBooks, you can create the following
+file at `modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix`:
+
+```nix
+{ config, ... }:
+
+{
+  imports = [ ./installation-cd-graphical-gnome.nix ];
+
+  boot.initrd.kernelModules = [ "wl" ];
+
+  boot.kernelModules = [ "kvm-intel" "wl" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+}
+```
+
+Then build it like in the example above:
+
+```ShellSession
+$ git clone https://github.com/NixOS/nixpkgs.git
+$ cd nixpkgs/nixos
+$ export NIXPKGS_ALLOW_UNFREE=1
+$ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix default.nix
+```
+
 ## Technical Notes {#sec-building-image-tech-notes}
 
 The config value enforcement is implemented via `mkImageMediaOverride = mkOverride 60;`
