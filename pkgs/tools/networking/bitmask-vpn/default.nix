@@ -78,8 +78,8 @@ buildGoModule rec {
     substituteInPlace providers/vendor.conf \
       --replace "provider = riseup" "provider = ${provider}"
 
-    substituteInPlace $out/share/applications/${provider}-vpn.desktop \
-      --replace icon ${provider}-vpn
+    substituteInPlace branding/templates/debian/app.desktop-template \
+      --replace "Icon=icon" "Icon=${provider}-vpn"
 
     patchShebangs gui/build.sh
     wrapPythonProgramsIn branding/scripts
