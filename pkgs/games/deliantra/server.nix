@@ -23,16 +23,20 @@ stdenv.mkDerivation rec {
     autoconf perl gperf optipng pngnq rsync imagemagick
     pkg-config makeWrapper
   ];
+
   propagatedBuildInputs = perl-deps;
+
   buildInputs = [
     blitz boost glib
   ];
 
   hardeningDisable = [ "format" ];
+
   patches = [
     ./0001-abs.patch
     ./0002-datadir.patch
   ];
+
   postFixup = ''
     wrapProgram $out/bin/cfutil --prefix PERL5LIB : $PERL5LIB
     wrapProgram $out/bin/deliantra-server --prefix PERL5LIB : $PERL5LIB
