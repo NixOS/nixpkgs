@@ -308,7 +308,15 @@ in
       gcc-unwrapped =
         let makeStaticLibrariesAndMark = pkg:
               lib.makeOverridable (pkg.override { stdenv = self.makeStaticLibraries self.stdenv; })
-                .overrideAttrs (a: { pname = "${a.pname}-stage3"; });
+                .overrideAttrs (a: {
+                  pname = "${a.pname}-stage3";
+                } // lib.optionalAttrs self.stdenv.hostPlatform.isPower64 {
+                  # On powerpc64, `-fstack-protector` requires `-lssp` for dynamically-linked
+                  # executables and `-lssp_nonshared` for statically-linked executables.
+                  # This means that you cannot link libaries built for static linkage (i.e. `*.a`)
+                  # with `-fstack-protector` into a dynamically-linked executable.
+                  hardeningDisable = (a.hardeningDisable or []) ++ [ "stackprotector" ];
+                });
         in super.gcc-unwrapped.override {
         # Link GCC statically against GMP etc.  This makes sense because
         # these builds of the libraries are only used by GCC, so it
