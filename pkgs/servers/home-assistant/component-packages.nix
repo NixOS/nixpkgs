@@ -1808,7 +1808,8 @@
     "nzbget" = ps: with ps; [
     ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [
-    ]; # missing inputs: oasatelematics
+      oasatelematics
+    ];
     "obihai" = ps: with ps; [
       pyobihai
     ];
