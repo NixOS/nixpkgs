@@ -14228,6 +14228,12 @@
     github = "zbioe";
     githubId = 7332055;
   };
+  zendo = {
+    name = "zendo";
+    email = "linzway@qq.com";
+    github = "zendo";
+    githubId = 348013;
+  };
   zenithal = {
     name = "zenithal";
     email = "i@zenithal.me";
