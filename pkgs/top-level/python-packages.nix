@@ -4915,6 +4915,8 @@ in {
 
   lupupy = callPackage ../development/python-modules/lupupy { };
 
+  lxmf= callPackage ../development/python-modules/lxmf { };
+
   lxml = callPackage ../development/python-modules/lxml {
     inherit (pkgs) libxml2 libxslt zlib;
   };
@@ -5433,6 +5435,8 @@ in {
   nampa = callPackage ../development/python-modules/nampa { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
+
+  nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
     inherit (pkgs) nanomsg;
@@ -8905,6 +8909,8 @@ in {
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
 
   rnginline = callPackage ../development/python-modules/rnginline { };
+
+  rns = callPackage ../development/python-modules/rns { };
 
   robomachine = callPackage ../development/python-modules/robomachine { };
 

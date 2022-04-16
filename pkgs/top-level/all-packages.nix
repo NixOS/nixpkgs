@@ -2857,6 +2857,8 @@ with pkgs;
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  dabet = callPackage ../tools/misc/dabet { };
+
   dabtools = callPackage ../applications/radio/dabtools { };
 
   daemontools = callPackage ../tools/admin/daemontools { };
@@ -12806,10 +12808,6 @@ with pkgs;
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image {
     graalvm = graalvm11-ce;
   };
-
-  inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
-    graalvm8-ee
-    graalvm11-ee;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
@@ -28073,8 +28071,6 @@ with pkgs;
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
-
-  sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
 
