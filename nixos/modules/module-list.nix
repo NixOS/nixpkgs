@@ -410,6 +410,7 @@
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
+  ./services/editors/haste.nix
   ./services/finance/odoo.nix
   ./services/games/asf.nix
   ./services/games/crossfire-server.nix

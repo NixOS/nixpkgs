@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     description = "A Java-based tool for generating EPS files for constructing astrolabes and related tools";
     license = licenses.gpl3;
     maintainers = [ ];
+    mainProgram = "AstrolabeGenerator";
     platforms = platforms.all;
   };
 }

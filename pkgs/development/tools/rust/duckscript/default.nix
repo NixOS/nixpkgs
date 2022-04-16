@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sagiegurari/duckscript";
     license = licenses.asl20;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "duck";
   };
 }

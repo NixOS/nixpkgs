@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "Activate/deactivate/verify checksums in offline PostgreSQL clusters";
     homepage = "https://github.com/credativ/pg_checksums";
     maintainers = [ maintainers.marsam ];
+    mainProgram = "pg_checksums_ext";
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
   };

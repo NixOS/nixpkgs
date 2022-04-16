@@ -500,7 +500,7 @@ rec {
   # based on:
   #   https://www.mail-archive.com/qemu-discuss@nongnu.org/msg05179.html
   #   https://gmplib.org/~tege/qemu.html#mips64-debian
-  mips64el-qemu-linux-gnuabi64 = (import ./examples).mips64el-linux-gnuabi64 // {
+  mips64el-qemu-linux-gnuabi64 = {
     linux-kernel = {
       name = "mips64el";
       baseConfig = "64r2el_defconfig";

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     homepage    = "http://tintin.sourceforge.net";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
+    mainProgram = "tt++";
     platforms   = platforms.unix;
   };
 }

@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "http://udis86.sourceforge.net";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timor ];
+    mainProgram = "udcli";
     description = ''
       Easy-to-use, minimalistic x86 disassembler library (libudis86)
     '';

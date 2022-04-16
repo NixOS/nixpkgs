@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ masaeedu SuperSandro2000 zowoq ];
+    mainProgram = "interactive-rebase-tool";
   };
 }

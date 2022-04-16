@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cool functional scripting language written in rust";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "yex";
     platforms = platforms.unix;
     broken = stdenv.isAarch64 && stdenv.isLinux;
   };

@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, gmp }:
+{ lib, stdenv, fetchgit, gmp }:
 
 stdenv.mkDerivation rec {
   pname = "cln";
   version = "1.3.6";
 
-  src = fetchurl {
-    url = "${meta.homepage}${pname}-${version}.tar.bz2";
-    sha256 = "0jlq9l4hphk7qqlgqj9ihjp4m3rwjbhk6q4v00lsbgbri07574pl";
+  src = fetchgit {
+    url = "git://www.ginac.de/cln.git";
+    rev = "cln_${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "sha256-P32F4TIDhE2Dwzydq8iFK6ch3kICJcXeeXHs5PBQG88=";
   };
 
   buildInputs = [ gmp ];
