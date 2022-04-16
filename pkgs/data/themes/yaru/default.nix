@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "unstable-2022-04-07"; # 22.04.3.1 is broken
+  version = "22.04.4";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
-    rev = "9bdbf66bf3718c6595c7a15ef4698ba471a36526";
-    sha256 = "02f6m0jxnsczw3y7v7bqdihxa33sx2z93yn3j8w4z9r9fv2pn06b";
+    rev = version;
+    sha256 = "sha256-EnlzjJDbiMIImn0XmiurK++JnD/kBqv4Mw6B/ps8d4Y=";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
