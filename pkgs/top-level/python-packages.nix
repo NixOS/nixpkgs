@@ -5715,6 +5715,8 @@ in {
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
+  oasatelematics = callPackage ../development/python-modules/oasatelematics { };
+
   oath = callPackage ../development/python-modules/oath { };
 
   oauth2 = callPackage ../development/python-modules/oauth2 { };
