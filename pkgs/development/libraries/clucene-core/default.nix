@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc6.patch ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+  ];
+
   meta = with lib; {
     description = "Core library for full-featured text search engine";
     longDescription = ''
