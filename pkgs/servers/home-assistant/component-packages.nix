@@ -773,7 +773,8 @@
     "fail2ban" = ps: with ps; [
     ];
     "familyhub" = ps: with ps; [
-    ]; # missing inputs: python-family-hub-local
+      python-family-hub-local
+    ];
     "fan" = ps: with ps; [
     ];
     "fastdotcom" = ps: with ps; [
