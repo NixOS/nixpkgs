@@ -85,6 +85,11 @@ stdenv.mkDerivation rec {
 
     patchShebangs build/unix/
     ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
+
+    # __malloc_hook is deprecated
+    substituteInPlace misc/memstat/src/TMemStatHook.cxx \
+      --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
+                "defined(R__GNU) && (defined(__APPLE__))"
   ''
   # Fix CINTSYSDIR for "build" version of rootcint
   # This is probably a bug that breaks out-of-source builds
