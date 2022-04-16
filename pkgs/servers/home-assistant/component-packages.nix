@@ -237,7 +237,8 @@
     ];
     "backup" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: securetar
+      securetar
+    ];
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -3161,6 +3162,7 @@
     "axis"
     "azure_devops"
     "azure_event_hub"
+    "backup"
     "balboa"
     "bayesian"
     "binary_sensor"
