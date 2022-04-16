@@ -14,75 +14,6 @@ let
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
-         (
-           self: super: {
-             sentry-sdk = super.sentry-sdk.overrideAttrs (oldAttrs: rec {
-               disabledTests = oldAttrs.disabledTests ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
-                 "test_leaks"
-               ];
-               disabledTestPaths = [
-                 # Don't test integrations
-                 "tests/integrations"
-                 # test crashes on aarch64
-                 "tests/test_transport.py"
-               ];
-             });
-           }
-         )
-
-        # All test fail on aarch64
-        (
-          self: super: {
-            azure-core = super.azure-core.overridePythonAttrs (oldAttrs: rec {
-              doCheck = stdenv.buildPlatform == "x86_64-linux";
-            });
-          }
-        )
-
-        # needs network
-        (
-          self: super: {
-            falcon = super.falcon.overridePythonAttrs (oldAttrs: rec {
-              #pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
-              disabledTestPaths = oldAttrs.disabledTestPaths or [] ++ [
-                "tests/asgi/test_asgi_servers.py"
-              ];
-            });
-          }
-        )
-
-        # update broke some tests
-        (
-          self: super: {
-            sanic = super.sanic.overridePythonAttrs (oldAttrs: rec {
-              disabledTestPaths = oldAttrs.disabledTestPaths or [] ++ [
-                "test_cli.py"
-                "test_cookies.py"
-                # requires network
-                "test_worker.py"
-              ];
-            });
-          }
-        )
-
-         (
-          self: super: {
-            flask-restful = super.flask-restful.overridePythonAttrs (oldAttrs: rec {
-              # remove werkzeug patch
-              patches = [];
-            });
-          }
-        )
-
-        (
-          self: super: {
-            trytond = super.trytond.overridePythonAttrs (oldAttrs: rec {
-              # remove werkzeug patch
-              patches = [];
-            });
-          }
-        )
-
         # Built-in dependency
         (
           self: super: {
@@ -123,14 +54,14 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
-              version = "2022.3.1";
+              version = "2022.3.28";
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
-                sha256 = "fuDIvmz9u4f1Kptm6pd9TfQd9DVKiak4THUd66QpRO4=";
+                sha256 = "yzE/jz604nX/CHcW3aa7goH1ey8qZ7rLw31SMfNKJZM=";
               };
 
               # requires octoprint itself during tests
@@ -143,13 +74,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.8.0rc2";
+              version = "1.8.0rc5";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-0DX9xQ/yhrVPQD14DhGlIS7ikMJAF4p+uJaQ3MUcaKs=";
+                sha256 = "sha256-FeT45w6VXaFV4BsuOMk58nxxiu9jhCNnA2F7Uh/3sB0=";
               };
 
               propagatedBuildInputs = with super; [
