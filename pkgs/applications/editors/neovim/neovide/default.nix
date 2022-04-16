@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Kethku/neovide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     mainProgram = "neovide";
   };
 }
