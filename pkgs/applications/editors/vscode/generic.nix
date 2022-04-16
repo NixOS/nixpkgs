@@ -123,6 +123,12 @@ let
         --replace "/bin/bash" "${bash}/bin/bash"
       rm -rf "$packed"
 
+      # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,
+      # fails to load with: electron/js2c/renderer_init: Error: Cannot find module 'jschardet'
+      # and the window immediately closes which renders VSCode unusable
+      # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
+      ln -rs "$unpacked" "$packed"
+
       # this fixes bundled ripgrep
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
     '';
