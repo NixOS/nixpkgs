@@ -1,7 +1,9 @@
-{ javaVersion
+{ config
 , defaultVersion
+, javaVersion
 , platforms
-, config
+, forceUpdate ? false
+, sourcesPath ? ./. + "/graalvm${javaVersion}-ce-sources.json"
 , useMusl ? false
 }:
 
@@ -32,10 +34,11 @@
 , gtkSupport ? stdenv.isLinux
 , cairo
 , glib
-, gtk3
-, writeShellScript
-, jq
+  # updateScript deps
 , gnused
+, gtk3
+, jq
+, writeShellScript
 }:
 
 assert useMusl -> stdenv.isLinux;
@@ -44,8 +47,7 @@ let
   platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   version = platform.version or defaultVersion;
   name = "graalvm${javaVersion}-ce";
-  sourcesFilename = "${name}-sources.json";
-  sources = builtins.fromJSON (builtins.readFile (./. + "/${sourcesFilename}"));
+  sources = builtins.fromJSON (builtins.readFile sourcesPath);
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -285,7 +287,7 @@ let
       inherit (platform) products;
       home = graalvmXXX-ce;
       updateScript = import ./update.nix {
-        inherit lib writeShellScript jq sourcesFilename name config gnused defaultVersion;
+        inherit config defaultVersion forceUpdate gnused jq lib name sourcesPath writeShellScript;
         graalVersion = version;
         javaVersion = "java${javaVersion}";
       };
