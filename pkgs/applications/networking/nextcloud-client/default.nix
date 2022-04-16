@@ -4,6 +4,7 @@
 , cmake
 , extra-cmake-modules
 , inotify-tools
+, installShellFiles
 , libcloudproviders
 , libsecret
 , openssl
@@ -17,6 +18,7 @@
 , qtquickcontrols2
 , qtgraphicaleffects
 , plasma5Packages
+, sphinx
 , sqlite
 , inkscape
 , xdg-utils
@@ -44,6 +46,7 @@ mkDerivation rec {
     cmake
     extra-cmake-modules
     inkscape
+    sphinx
   ];
 
   buildInputs = [
@@ -74,6 +77,10 @@ mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
+
+  postBuild = ''
+    make doc-man
+  '';
 
   meta = with lib; {
     description = "Nextcloud themed desktop client";
