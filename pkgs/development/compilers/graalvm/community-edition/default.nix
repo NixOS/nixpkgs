@@ -68,12 +68,7 @@ in
         version = graalvm17-ce-dev-version;
       };
       aarch64-linux = {
-        # TODO: error with native-image-installable-svm in aarch64-linux:
-        # "Caused by: java.io.IOException: Cannot run program
-        # "/nix/store/00000000000000000000000000000000-gcc-wrapper-9.3.0/bin/gcc" (in
-        # directory"/tmp/SVM-0000000000000000000"): error=0, Failed to exec spawn
-        # helper: pid: 19865, exit value: 1"
-        products = [ "graalvm-ce" ];
+        inherit products;
         arch = "linux-aarch64";
       };
     };

@@ -1,12 +1,12 @@
 {
   "darwin-aarch64": {
-    "graalvm-ce|java17|22.2.0-dev-20220414_2112": {
-      "sha256": "1ae8991d95814945d33cf8758a1e7072c48660680d1d90ec5629671e25f99344",
-      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220414_2112/graalvm-ce-java17-darwin-aarch64-dev.tar.gz"
+    "graalvm-ce|java17|22.2.0-dev-20220415_1945": {
+      "sha256": "1dbb0e0b9c85391ea6f1a0bd95ae252a396152d83e3a0e79cffd988144259e68",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220415_1945/graalvm-ce-java17-darwin-aarch64-dev.tar.gz"
     },
-    "native-image-installable-svm|java17|22.2.0-dev-20220414_2112": {
-      "sha256": "8a35491ea5487e755c087072fc827d81ec37a23075dcb29850e6f6cd5ff9630f",
-      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220414_2112/native-image-installable-svm-java17-darwin-aarch64-dev.jar"
+    "native-image-installable-svm|java17|22.2.0-dev-20220415_1945": {
+      "sha256": "029499c011ceb1a4560957db651805325a201488b5f0b7467f007c7385d004e2",
+      "url": "https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/22.2.0-dev-20220415_1945/native-image-installable-svm-java17-darwin-aarch64-dev.jar"
     }
   },
   "darwin-amd64": {
@@ -23,6 +23,10 @@
     "graalvm-ce|java17|22.0.0.2": {
       "sha256": "c7d78387d2a144944f26773697c1b61d3478a081a1c5e7fc20f47f1f5f3c82c7",
       "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java17-linux-aarch64-22.0.0.2.tar.gz"
+    },
+    "native-image-installable-svm|java17|22.0.0.2": {
+      "sha256": "798947d0a93988929d2b8e3555f7c65225e789124cd99fbc0c3aae5f350175db",
+      "url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java17-linux-aarch64-22.0.0.2.jar"
     }
   },
   "linux-amd64": {
