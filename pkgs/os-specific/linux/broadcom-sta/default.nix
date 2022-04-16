@@ -39,6 +39,8 @@ stdenv.mkDerivation {
     ./linux-5.6.patch
     # source: https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
     ./linux-5.9.patch
+    # source: https://github.com/archlinux/svntogit-community/blob/5ec5b248976f84fcd7e3d7fae49ee91289912d12/trunk/012-linux517.patch
+    ./linux-5.17.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];

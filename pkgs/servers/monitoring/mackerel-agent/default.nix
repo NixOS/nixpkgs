@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mackerel-agent";
-  version = "0.72.8";
+  version = "0.72.9";
 
   src = fetchFromGitHub {
     owner = "mackerelio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IejLCi1TJ2Q0lpA2ZK3hea18YX483FV4IisYRRVD1Vg=";
+    sha256 = "sha256-+3a0FyVf5AB85gGGBI8/ssLBqj9Kp3w9DUNbSaAtXvA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
