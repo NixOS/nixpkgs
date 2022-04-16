@@ -1607,6 +1607,8 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chewie = callPackage ../development/python-modules/chewie { };
+
   chex = callPackage ../development/python-modules/chex { };
 
   chiabip158 = callPackage ../development/python-modules/chiabip158 { };
