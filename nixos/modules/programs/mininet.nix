@@ -11,10 +11,10 @@ let
     iperf ethtool iproute2 socat
   ];
 
-  pyEnv = pkgs.python.withPackages(ps: [ ps.mininet-python ]);
+  pyEnv = pkgs.python3.withPackages(ps: [ ps.mininet-python ]);
 
   mnexecWrapped = pkgs.runCommand "mnexec-wrapper"
-    { buildInputs = [ pkgs.makeWrapper pkgs.pythonPackages.wrapPython ]; }
+    { buildInputs = [ pkgs.makeWrapper pkgs.python3Packages.wrapPython ]; }
     ''
       makeWrapper ${pkgs.mininet}/bin/mnexec \
         $out/bin/mnexec \
@@ -24,7 +24,7 @@ let
 
       # mn errors out without a telnet binary
       # pkgs.telnet brings an undesired ifconfig into PATH see #43105
-      ln -s ${pkgs.telnet}/bin/telnet $out/bin/telnet
+      ln -s ${pkgs.inetutils}/bin/telnet $out/bin/telnet
     '';
 in
 {
