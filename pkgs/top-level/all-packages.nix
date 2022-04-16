@@ -26576,6 +26576,8 @@ with pkgs;
     extra-packages = [ csound ];
   };
 
+  hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
+
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
   indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
