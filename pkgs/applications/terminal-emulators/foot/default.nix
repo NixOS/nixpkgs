@@ -24,6 +24,9 @@
 , foot
 , llvmPackages
 , llvmPackages_latest
+# tests
+, testWaylandHeadless
+, sway
 }:
 
 let
@@ -198,6 +201,11 @@ stdenv.mkDerivation rec {
     stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {
       name = "generate-alt-random-writes-${version}.py";
     });
+
+    headless = testWaylandHeadless {
+      package = foot;
+      command = "foot -d error sh -c 'exit'";
+    };
   };
 
   meta = with lib; {

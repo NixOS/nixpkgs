@@ -102,7 +102,7 @@ let
     import ../build-support/trivial-builders.nix {
       inherit lib;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) shellcheck;
+      inherit (self.pkgsBuildHost) shellcheck sway dbus makeFontsConf;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 

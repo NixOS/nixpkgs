@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, sway, dbus, makeFontsConf }:
 
 rec {
 
@@ -821,4 +821,41 @@ rec {
         echo "$output" >&2 && exit 1
       fi
     '';
+
+  testWaylandHeadless =
+    { package,
+      command,
+      enableXwayland ? false,
+    }: runCommand "${package.name}-test-headless-wl" { nativeBuildInputs = [ package sway dbus.daemon ]; } ''
+
+      export HOME=$(mktemp -d)
+      export XDG_RUNTIME_DIR=$HOME/xdg-runtime-dir
+      mkdir -p $XDG_RUNTIME_DIR
+
+      export FONTCONFIG_FILE=${makeFontsConf {
+        fontDirectories = [ ];
+      }}
+
+      export WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 \
+        WLR_RENDERER=pixman WLR_RENDERER_ALLOW_SOFTWARE=1
+
+      cat << EOF > $HOME/test-script.sh
+      ${command} && touch $HOME/worked
+      swaymsg exit
+      EOF
+
+      chmod +x $HOME/test-script.sh
+
+      cat << EOF > $HOME/sway-config
+      ${lib.optionalString (!enableXwayland) "xwayland disable"}
+      exec $HOME/test-script.sh
+      EOF
+
+      dbus-run-session --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+        sway --config $HOME/sway-config
+
+      [ -f $HOME/worked ]
+      touch $out
+    '';
+
 }
