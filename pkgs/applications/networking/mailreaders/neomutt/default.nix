@@ -32,6 +32,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/neomutt/neomutt/commit/4242a31313e0b600693215c01047bbda8a6dd25a.patch";
       sha256 = "sha256-fcuNeBkPjqln5QA9VFcfXCQD/VrUoSEMSxQ//Xj+yxY=";
     })
+
+    # CVE-2022-1328, https://github.com/advisories/GHSA-qfrq-pp74-gpff
+    (fetchpatch {
+      name = "CVE-2022-1328.patch";
+      url = "https://github.com/neomutt/neomutt/commit/ee7cb4e461c1cdf0ac14817b03687d5908b85f84.patch";
+      sha256 = "sha256-PQMXPko/UPlhzmOTsUWjrhVtUQCv22ppmi/u8Xof5d8=";
+    })
   ];
 
   enableParallelBuilding = true;
