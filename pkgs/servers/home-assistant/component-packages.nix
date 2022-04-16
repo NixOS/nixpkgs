@@ -381,7 +381,8 @@
     ];
     "climacell" = ps: with ps; [
       pyclimacell
-    ]; # missing inputs: pytomorrowio
+      pytomorrowio
+    ];
     "climate" = ps: with ps; [
     ];
     "cloud" = ps: with ps; [
@@ -2690,7 +2691,8 @@
     "tomato" = ps: with ps; [
     ];
     "tomorrowio" = ps: with ps; [
-    ]; # missing inputs: pytomorrowio
+      pytomorrowio
+    ];
     "toon" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -3184,6 +3186,7 @@
     "canary"
     "cast"
     "cert_expiry"
+    "climacell"
     "climate"
     "cloud"
     "cloudflare"
@@ -3633,6 +3636,7 @@
     "todoist"
     "tolo"
     "tomato"
+    "tomorrowio"
     "toon"
     "totalconnect"
     "tplink"
