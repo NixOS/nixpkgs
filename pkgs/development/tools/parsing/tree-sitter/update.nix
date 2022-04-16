@@ -312,6 +312,10 @@ let
       orga = "MichaHoffmann";
       repo = "tree-sitter-hcl";
     };
+    "tree-sitter-scheme" = {
+      orga = "6cdh";
+      repo = "tree-sitter-scheme";
+    };
   };
 
   allGrammars =
