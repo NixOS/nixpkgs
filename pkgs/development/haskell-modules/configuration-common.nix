@@ -1515,8 +1515,13 @@ self: super: {
   };
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
-    # wants a running DB to check against
-    doCheck = false;
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.postgresql pkgs.postgresqlTestHook
+    ];
+    preCheck = drv.preCheck or "" + ''
+      # empty string means use default connection
+      export DATABASE_URL=""
+    '';
   }) (super.pg-client.override {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
