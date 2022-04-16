@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config
 , libsndfile, libtool, makeWrapper, perlPackages
 , xorg, libcap, alsa-lib, glib, dconf
-, avahi, libjack2, libasyncns, lirc, dbus
+, avahi, libjack2, libasyncns, lirc, libintl, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
 , check, meson, ninja, m4
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat check ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices libintl ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
