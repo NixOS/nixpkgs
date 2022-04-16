@@ -11,18 +11,20 @@
 , Foundation
 , Cocoa
 }:
-
-rustPlatform.buildRustPackage rec {
+let
   pname = "starship";
+  version = "1.6.2";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
   # unstable was used for a quick fix for darwin
   # revert to stable for the release after 1.5.4
-  version = "unstable-2022-04-12";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
-    rev = "a02e87833d6a0e0da3c239d0bbbf3b485356a655";
-    sha256 = "sha256-oe/dKFgM8h+ur8E9/dw4byBl9vD6foUXyKX19HDozYU=";
+    rev = "v${version}";
+    sha256 = "sha256-Swxc2gl3YP+0Kf+trp37rGhr5G8NT4L3Bb3lHwLm50Q=";
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
@@ -40,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "sha256-lku+K1Y5HIt4gDHqudhDMVs7XGoKw8HcMjXMGDu1vkg=";
+  cargoSha256 = "sha256-UvIectx6qWkXg/yVQe11NXhh2UD0D/dMCtK1kj3ln6M=";
 
   preCheck = ''
     HOME=$TMPDIR
