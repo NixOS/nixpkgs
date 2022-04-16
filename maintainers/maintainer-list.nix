@@ -11989,6 +11989,12 @@
     githubId = 1694705;
     name = "Sam Stites";
   };
+  strikerlulu = {
+    email = "strikerlulu7@gmail.com";
+    github = "strikerlulu";
+    githubId = 38893265;
+    name = "StrikerLulu";
+  };
   stumoss = {
     email = "samoss@gmail.com";
     github = "stumoss";
