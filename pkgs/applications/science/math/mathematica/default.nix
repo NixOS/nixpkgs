@@ -105,6 +105,8 @@ in stdenv.mkDerivation {
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
     # Fix xkeyboard config path for Qt
     "--set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
+    # Always use xcb as the QT backend, wayland doesn't work
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   unpackPhase = ''
