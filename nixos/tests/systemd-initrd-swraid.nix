@@ -1,5 +1,5 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
-  name = "systemd-initrd-mdraid";
+  name = "systemd-initrd-swraid";
 
   nodes.machine = { pkgs, ... }: {
     # Use systemd-boot
@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         enable = true;
         emergencyAccess = true;
       };
-      services.mdraid = {
+      services.swraid = {
         enable = true;
         mdadmConf = ''
           ARRAY /dev/md0 devices=/dev/vdc,/dev/vdd
@@ -26,7 +26,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       kernelModules = [ "raid0" ];
     };
 
-    specialisation.boot-mdraid.configuration.virtualisation.bootDevice = "/dev/disk/by-label/testraid";
+    specialisation.boot-swraid.configuration.virtualisation.bootDevice = "/dev/disk/by-label/testraid";
   };
 
   testScript = ''
@@ -36,7 +36,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("mkdir -p /mnt && mount /dev/md0 /mnt && echo hello > /mnt/test && umount /mnt")
 
     # Boot from the RAID
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-mdraid.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-swraid.conf")
     machine.succeed("sync")
     machine.crash()
     machine.wait_for_unit("multi-user.target")
