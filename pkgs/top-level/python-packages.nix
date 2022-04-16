@@ -8380,6 +8380,8 @@ in {
 
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
+  pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
+
   pytools = callPackage ../development/python-modules/pytools { };
 
   pytorch = callPackage ../development/python-modules/pytorch {
