@@ -71,9 +71,9 @@ let
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
       ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = lib.optional stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
-    nativeBuildInputs = [unzip] ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
+    nativeBuildInputs = [ unzip ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook nodePackages.asar wrapGAppsHook ];
 
     dontBuild = true;
     dontConfigure = true;
@@ -117,7 +117,7 @@ let
       # this is a fix for "save as root" functionality
       packed="resources/app/node_modules.asar"
       unpacked="resources/app/node_modules"
-      ${nodePackages.asar}/bin/asar extract "$packed" "$unpacked"
+      asar extract "$packed" "$unpacked"
       substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
         --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
         --replace "/bin/bash" "${bash}/bin/bash"
