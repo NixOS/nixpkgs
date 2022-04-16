@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "syslog-rfc5424-formatter";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "easypost";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "17ym5ls5r6dd9pg9frdz8myfq5fxyqlwdq1gygc9vnrxbgw2c9kb";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-dvRSOMXRmZf0vEEyX6H7OBSfo/PgyOLKuDS8X6g4qe0=";
   };
 
   # Tests are not picked up, review later again
