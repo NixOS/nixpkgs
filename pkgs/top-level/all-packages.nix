@@ -28048,8 +28048,6 @@ with pkgs;
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
 
-  sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
-
   speedread = callPackage ../applications/misc/speedread { };
 
   station = callPackage ../applications/networking/station { };
