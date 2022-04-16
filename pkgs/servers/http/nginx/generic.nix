@@ -18,6 +18,7 @@
 , sha256 ? null # when not specifying src
 , configureFlags ? []
 , buildInputs ? []
+, extraPatches ? []
 , fixPatch ? p: p
 , preConfigure ? ""
 , postInstall ? null
@@ -134,7 +135,8 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/103-sys_nerr.patch";
       sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
     })
-  ] ++ mapModules "patches");
+  ] ++ mapModules "patches")
+    ++ extraPatches;
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
