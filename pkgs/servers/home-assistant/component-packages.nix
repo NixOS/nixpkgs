@@ -2189,7 +2189,8 @@
       boto3
     ];
     "rova" = ps: with ps; [
-    ]; # missing inputs: rova
+      rova
+    ];
     "rpi_camera" = ps: with ps; [
     ];
     "rpi_gpio" = ps: with ps; [
