@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2022.03.3";
+  version = "2022.04.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-19+p39uZO9pSDzH6YkS9ZDVA4zyl9oJ325yTQ5+SQcw=";
+    sha256 = "sha256-8Ff6RtHaEudPDq7ypCp+kYzo3JN8UgAvsItUc12nvYk=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     # simplipy/api.py:253: InvalidCredentialsError
     "test_request_error_failed_retry"
     "test_update_error"
+    "test_client_async_from_refresh_token_unknown_error"
   ];
 
   disabledTestPaths = [
