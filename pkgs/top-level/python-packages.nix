@@ -1189,6 +1189,8 @@ in {
 
   behave = callPackage ../development/python-modules/behave { };
 
+  beka = callPackage ../development/python-modules/beka { };
+
   bellows = callPackage ../development/python-modules/bellows { };
 
   beniget = callPackage ../development/python-modules/beniget { };
