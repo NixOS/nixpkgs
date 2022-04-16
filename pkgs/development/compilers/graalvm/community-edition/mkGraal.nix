@@ -1,9 +1,36 @@
-{ config
+{
+  # An attrset describing each platform configuration. All values are extract
+  # from the GraalVM releases available on
+  # https://github.com/graalvm/graalvm-ce-builds/releases
+  # Example:
+  # config = {
+  #   x86_64-linux = {
+  #     # List of products that will be included in the GraalVM derivation
+  #     # See `with{NativeImage,Ruby,Python,WASM,*}Svm` variables for the
+  #     # available values
+  #     products = [ "graalvm-ce" "native-image-installable-svm" ];
+  #     # GraalVM arch, not to be confused with the nix platform
+  #     arch = "linux-amd64";
+  #     # GraalVM version
+  #     version = "22.0.0.2";
+  #   };
+  # }
+  config
+  # GraalVM version that will be used unless overriden by `config.<platform>.version`
 , defaultVersion
+  # Java version used by GraalVM
 , javaVersion
-, platforms
+  # Platforms were GraalVM will be allowed to build (i.e. `meta.platforms`)
+, platforms ? builtins.attrNames config
+  # If set to true, update script will (re-)generate the sources file even if
+  # there are no updates available
 , forceUpdate ? false
+  # Path for the sources file that will be used
+  # See `update.nix` file for a description on how this file works
 , sourcesPath ? ./. + "/graalvm${javaVersion}-ce-sources.json"
+  # Use musl instead of glibc to allow true static builds in GraalVM's
+  # Native Image (i.e.: `--static --libc=musl`). This will cause glibc builds
+  # to fail, so it should be used with care
 , useMusl ? false
 }:
 

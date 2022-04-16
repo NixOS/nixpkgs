@@ -49,7 +49,6 @@ in
     };
     defaultVersion = graalvm11-ce-release-version;
     javaVersion = "11";
-    platforms = builtins.attrNames config;
   };
 
   graalvm17-ce = mkGraal rec {
@@ -74,6 +73,5 @@ in
     };
     defaultVersion = graalvm17-ce-release-version;
     javaVersion = "17";
-    platforms = builtins.attrNames config;
   };
 }
