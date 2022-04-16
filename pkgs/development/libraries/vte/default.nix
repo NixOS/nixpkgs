@@ -45,6 +45,12 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://gitlab.gnome.org/GNOME/vte/-/issues/2544
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/22c815f3556450b37596bad48f03aef48d397f45.patch";
+      sha256 = "sha256-hS6KN0YYvS6TszGn/oabmbaufecl4lnm0c6cXj7kWOg=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -78,6 +84,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = lib.optionals (!systemdSupport) [
     "-D_systemd=false"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-D_b_symbolic_functions=false"
   ];
 
   postPatch = ''

@@ -46,10 +46,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libcap_ng
     libvirt
     libxml2
     gobject-introspection
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng
   ];
 
   strictDeps = true;
@@ -66,6 +67,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://libvirt.org/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
