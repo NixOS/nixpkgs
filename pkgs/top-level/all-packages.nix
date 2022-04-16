@@ -3127,8 +3127,6 @@ with pkgs;
 
   extrude = callPackage ../tools/security/extrude { };
 
-  f2 = callPackage ../tools/misc/f2 { };
-
   f3 = callPackage ../tools/filesystems/f3 { };
 
   f3d = callPackage ../applications/graphics/f3d {
