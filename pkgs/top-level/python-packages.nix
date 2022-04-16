@@ -9249,6 +9249,8 @@ in {
 
   shippai = callPackage ../development/python-modules/shippai { };
 
+  shiv = callPackage ../development/python-modules/shiv { };
+
   shodan = callPackage ../development/python-modules/shodan { };
 
   shortuuid = callPackage ../development/python-modules/shortuuid { };
