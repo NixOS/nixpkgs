@@ -1979,6 +1979,12 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>vscode-extensions.ionide.ionide-fsharp</literal>
+          package has been updated to 6.0.0 and now requires .NET 6.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zrepl</literal> package has been updated from
           0.4.0 to 0.5:
         </para>
