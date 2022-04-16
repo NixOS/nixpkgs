@@ -12792,10 +12792,6 @@ with pkgs;
     graalvm = graalvm11-ce;
   };
 
-  inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
-    graalvm8-ee
-    graalvm11-ee;
-
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   lingua-franca = callPackage ../development/compilers/lingua-franca { };

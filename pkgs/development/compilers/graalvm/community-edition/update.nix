@@ -8,6 +8,7 @@
 , writeShellScript
 , jq
 , gnused
+, forceUpdate ? false
 }:
 
 /*
@@ -199,7 +200,7 @@ let
   */
   updateScriptText = newVersion: currentVersion:
 
-    if isNew newVersion currentVersion
+    if (forceUpdate || (isNew newVersion currentVersion))
     then
       let
         versionKey = versionKeyInDefaultNix currentVersion;
