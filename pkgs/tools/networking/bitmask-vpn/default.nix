@@ -78,6 +78,9 @@ buildGoModule rec {
     substituteInPlace providers/vendor.conf \
       --replace "provider = riseup" "provider = ${provider}"
 
+    substituteInPlace $out/share/applications/${provider}-vpn.desktop \
+      --replace icon ${provider}-vpn
+
     patchShebangs gui/build.sh
     wrapPythonProgramsIn branding/scripts
   '' + lib.optionalString stdenv.isLinux ''
@@ -135,6 +138,7 @@ buildGoModule rec {
     VERSION=${version} VENDOR_PATH=providers branding/scripts/generate-debian branding/templates/debian/data.json
     (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
     install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${provider}-vpn.desktop
+    install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${provider}-vpn.svg
   '' + lib.optionalString stdenv.isLinux ''
     install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
   '';
