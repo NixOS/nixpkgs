@@ -3014,6 +3014,11 @@ with pkgs;
     enableSSH = true;
   };
 
+  dynablaster-revenge = libsForQt5.callPackage ../games/dynablaster-revenge { };
+  dynablaster-revenge-server = libsForQt5.callPackage ../games/dynablaster-revenge {
+    isServer = true;
+  };
+
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   dyncall = callPackage ../development/libraries/dyncall { };
