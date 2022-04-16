@@ -45,6 +45,40 @@ $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd
 # mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso
 </programlisting>
   </section>
+  <section xml:id="sec-building-image-drivers">
+    <title>Additional drivers or firmware</title>
+    <para>
+      If you need additional (non-distributable) drivers or firmware in
+      the installer, you might want to extend these configurations.
+    </para>
+    <para>
+      For example, to build the GNOME graphical installer ISO, but with
+      support for certain WiFi adapters present in some MacBooks, you
+      can create the following file at
+      <literal>modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix</literal>:
+    </para>
+    <programlisting language="bash">
+{ config, ... }:
+
+{
+  imports = [ ./installation-cd-graphical-gnome.nix ];
+
+  boot.initrd.kernelModules = [ &quot;wl&quot; ];
+
+  boot.kernelModules = [ &quot;kvm-intel&quot; &quot;wl&quot; ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+}
+</programlisting>
+    <para>
+      Then build it like in the example above:
+    </para>
+    <programlisting>
+$ git clone https://github.com/NixOS/nixpkgs.git
+$ cd nixpkgs/nixos
+$ export NIXPKGS_ALLOW_UNFREE=1
+$ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix default.nix
+</programlisting>
+  </section>
   <section xml:id="sec-building-image-tech-notes">
     <title>Technical Notes</title>
     <para>
