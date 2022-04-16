@@ -5877,6 +5877,8 @@ in {
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
+  os-ken = callPackage ../development/python-modules/os-ken { };
+
   os-service-types = callPackage ../development/python-modules/os-service-types { };
 
   osc = callPackage ../development/python-modules/osc { };
