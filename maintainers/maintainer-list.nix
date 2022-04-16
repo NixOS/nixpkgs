@@ -519,6 +519,12 @@
     githubId = 38869148;
     name = "Alex Eyre";
   };
+  algram = {
+    email = "aliasgram@gmail.com";
+    github = "Algram";
+    githubId = 5053729;
+    name = "Alias Gram";
+  };
   alibabzo = {
     email = "alistair.bill@gmail.com";
     github = "alibabzo";
