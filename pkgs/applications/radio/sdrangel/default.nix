@@ -4,6 +4,7 @@
 , cm256cc
 , cmake
 , codec2
+, dab_lib
 , faad2
 , fetchFromGitHub
 , fetchpatch
@@ -67,6 +68,7 @@ mkDerivation rec {
     boost
     cm256cc
     codec2
+    dab_lib
     faad2
     ffmpeg
     fftwFloat
@@ -98,6 +100,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DDEBUG_OUTPUT=ON"
     "-DRX_SAMPLE_24BIT=ON"
+    "-DDAB_DIR=${dab_lib}"
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
     "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"

@@ -3209,6 +3209,8 @@ with pkgs;
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  dab_lib = callPackage ../development/libraries/dab_lib {};
+
   dabet = callPackage ../tools/misc/dabet { };
 
   dabtools = callPackage ../applications/radio/dabtools { };

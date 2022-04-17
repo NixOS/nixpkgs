@@ -536,6 +536,12 @@
     githubId = 782180;
     name = "Alex Vorobiev";
   };
+  alexwinter = {
+    email = "git@alexwinter.net";
+    github = "lxwntr";
+    githubId = 50754358;
+    name = "Alex Winter";
+  };
   alexeyre = {
     email = "A.Eyre@sms.ed.ac.uk";
     github = "alexeyre";
