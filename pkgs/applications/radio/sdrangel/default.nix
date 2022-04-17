@@ -28,6 +28,7 @@
 , qtwebengine
 , qtwebsockets
 , rtl-sdr
+, sdrplay_source ? false, sdrplay
 , serialdv
 , soapysdr-with-plugins
 , uhd
@@ -83,7 +84,8 @@ mkDerivation rec {
     serialdv
     soapysdr-with-plugins
     uhd
-  ];
+  ]
+    ++ lib.optional sdrplay_source sdrplay;
 
   cmakeFlags = [
     "-DDEBUG_OUTPUT=ON"
