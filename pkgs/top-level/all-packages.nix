@@ -27981,8 +27981,6 @@ with pkgs;
 
   pinegrow = callPackage ../applications/editors/pinegrow { };
 
-  ping = callPackage ../applications/networking/ping { };
-
   piper = callPackage ../os-specific/linux/piper { };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer {};
