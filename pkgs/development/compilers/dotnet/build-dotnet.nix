@@ -92,5 +92,6 @@ in stdenv.mkDerivation rec {
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ kuznero ];
     license = licenses.mit;
+    mainProgram = "dotnet";
   };
 }
