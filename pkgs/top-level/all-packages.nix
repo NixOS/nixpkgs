@@ -8168,6 +8168,8 @@ with pkgs;
 
   ndppd = callPackage ../applications/networking/ndppd { };
 
+  nearcore = callPackage ../applications/blockchains/nearcore { };
+
   nebula = callPackage ../tools/networking/nebula { };
 
   nemiver = callPackage ../development/tools/nemiver { };
