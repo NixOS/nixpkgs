@@ -16,6 +16,6 @@ buildGoPackage {
     homepage = "https://github.com/mailru/easyjson";
     description = "Fast JSON serializer for golang";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }

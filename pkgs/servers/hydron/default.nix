@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/bakape/hydron";
     description = "High performance media tagger and organizer";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }
