@@ -9737,6 +9737,8 @@ in {
 
   stone = callPackage ../development/python-modules/stone { };
 
+  stookalert = callPackage ../development/python-modules/stookalert { };
+
   stopit = callPackage ../development/python-modules/stopit { };
 
   strategies = callPackage ../development/python-modules/strategies { };
