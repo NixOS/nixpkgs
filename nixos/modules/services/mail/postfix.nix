@@ -723,6 +723,34 @@ in
         { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
+      systemd.tmpfiles.rules = [
+        "d '/var/lib/postfix' 0755 postfix postfix - -"
+        "d '/var/lib/postfix/conf' 0755 postfix postfix - -"
+        "d '/var/lib/postfix/data' 0750 postfix postfix - -"
+        "d '/var/lib/postfix/queue' 0755 postfix postfix - -"
+        "d '/var/lib/postfix/queue/active' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/bounce' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/corrupt' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/defer' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/deferred' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/flush' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/hold' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/incoming' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/maildrop' 0730 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/pid' 0755 postfix postfix - -"
+        "d '/var/lib/postfix/queue/private' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/public' 0710 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/saved' 0700 postfix postdrop - -"
+        "d '/var/lib/postfix/queue/trace' 0700 postfix postdrop - -"
+        "d '/var/spool/mail' 1777 root root - -"
+        "Z '/var/lib/postfix' - postfix postfix - -"
+        "Z '/var/lib/postfix/queue/maildrop' - postfix postdrop - -"
+        "Z '/var/lib/postfix/queue/public' - postfix postdrop - -"
+        "L+ '/var/mail' - - - - /var/spool/mail"
+        "L+ '/var/lib/postfix/conf/main.cf' - - - - ${mainCfFile}"
+        "L+ '/var/lib/postfix/conf/master.cf' - - - - ${masterCfFile}"
+      ];
+
       systemd.services.postfix =
         { description = "Postfix mail server";
 
@@ -737,43 +765,36 @@ in
             ExecStart = "${pkgs.postfix}/bin/postfix start";
             ExecStop = "${pkgs.postfix}/bin/postfix stop";
             ExecReload = "${pkgs.postfix}/bin/postfix reload";
+            # Capabilities
+            CapabilityBoundingSet = [ "CAP_DAC_OVERRIDE" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
+            # Security
+            NoNewPrivileges = true;
+            # Sandboxing
+            ProtectSystem = "full";
+            ProtectHome = true;
+            PrivateTmp = true;
+            PrivateDevices = true;
+            ProtectHostname = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+            PrivateMounts = true;
           };
 
           preStart = ''
-            # Backwards compatibility
-            if [ ! -d /var/lib/postfix ] && [ -d /var/postfix ]; then
-              mkdir -p /var/lib
-              mv /var/postfix /var/lib/postfix
-            fi
-
-            # All permissions set according ${pkgs.postfix}/etc/postfix/postfix-files script
-            mkdir -p /var/lib/postfix /var/lib/postfix/queue/{pid,public,maildrop}
-            chmod 0755 /var/lib/postfix
-            chown root:root /var/lib/postfix
-
-            rm -rf /var/lib/postfix/conf
-            mkdir -p /var/lib/postfix/conf
-            chmod 0755 /var/lib/postfix/conf
-            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
-            ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
-            ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
-
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+              test -f '/var/lib/postfix/conf/${to}' || rm -f '/var/lib/postfix/conf/${to}'
               ln -sf ${from} /var/lib/postfix/conf/${to}
               ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/${to}
             '') cfg.aliasFiles)}
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+              test -f '/var/lib/postfix/conf/${to}' || rm -f '/var/lib/postfix/conf/${to}'
               ln -sf ${from} /var/lib/postfix/conf/${to}
               ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
             '') cfg.mapFiles)}
-
-            mkdir -p /var/spool/mail
-            chown root:root /var/spool/mail
-            chmod a+rwxt /var/spool/mail
-            ln -sf /var/spool/mail /var/
-
-            #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
-            ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
 
