@@ -1722,6 +1722,12 @@
     githubId = 200617;
     name = "Ben Sima";
   };
+  bspammer = {
+    name = "Charlie Collard";
+    email = "charliecollard0@gmail.com";
+    github = "bspammer";
+    githubId = 11244353;
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";
