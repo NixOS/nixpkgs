@@ -2,9 +2,9 @@
 
 let
   stableVariant = {
-    version = "5.15.33";
+    version = "5.15.34";
     suffix = "xanmod1";
-    hash = "sha256-FOGjwkzAvautKsTKBMGfXMoRHeKgQtmK94hVKFdy2Ps=";
+    hash = "sha256-sfrcaFhrdvupygXvajGyl6ruuBu+vFsAKjLyINyV3pw=";
   };
 
   edgeVariant = {
