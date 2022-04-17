@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "unstable-2021-12-19";
+  version = "unstable-2022-04-11";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
-    rev = "20c710a8789ec910455ae4e588c72e9e39f8cec9";
-    sha256 = "sha256-uBmD26EYT8zxmHD5FuHCbEuTdWxer/3uhRp8PhUT87M=";
+    rev = "825899c051ea2a1f06a0c4617f41782f37009a18";
+    sha256 = "sha256-VoSy0tyIXWNTmcVdsaiM9ijXLq41AOaPBajvsEIrfjo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];
