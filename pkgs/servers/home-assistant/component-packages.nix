@@ -2519,7 +2519,8 @@
       pymodbus
     ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [
-    ]; # missing inputs: stookalert
+      stookalert
+    ];
     "stream" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -3610,6 +3611,7 @@
     "statistics"
     "statsd"
     "steamist"
+    "stookalert"
     "stream"
     "stt"
     "subaru"
