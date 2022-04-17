@@ -4610,6 +4610,8 @@ with pkgs;
 
   sfz = callPackage ../tools/misc/sfz { };
 
+  sgp4 = callPackage ../development/libraries/sgp4 {};
+
   shab = callPackage ../tools/text/shab { };
 
   sheldon = callPackage ../tools/misc/sheldon { };
