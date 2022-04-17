@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pydantic
 , aiocoap
 , dtlssocket
 , pytestCheckHook
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "9.0.0";
+  version = "10.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "pytradfri";
     rev = version;
-    hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
+    hash = "sha256-pEPWKIMooEScQSzhHt0/1UPU1wXP4jbVPPOJkU48fYA=";
   };
+
+  propagatedBuildInputs = [
+    pydantic
+  ];
 
   passthru.extras-require = {
     async = [
