@@ -43,11 +43,11 @@ mkDerivation rec {
   #    --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH"
   #'';
 
-  preFixup = ''
-    gapsWrapperArgs+=(
-      --set QT_QPA_PLATFORM "xcb"
-    )
-  '';
+  #preFixup = ''
+  #  qtWrapperArgs+=(
+  #    --set QT_QPA_PLATFORM "xcb"
+  #  )
+  #'';
 
   enableParallelBuilding = true;
 }
