@@ -1,13 +1,16 @@
 { airspy
+, airspyhf
 , boost
 , cm256cc
 , cmake
 , codec2
+, faad2
 , fetchFromGitHub
 , fetchpatch
 , fftwFloat
 , glew
 , hackrf
+, hidapi
 , lib
 , ffmpeg
 , libiio
@@ -16,6 +19,7 @@
 , libusb1
 , limesuite
 , libbladeRF
+, mbelib
 , mkDerivation
 , ocl-icd
 , opencv3
@@ -59,19 +63,23 @@ mkDerivation rec {
 
   buildInputs = [
     airspy
+    airspyhf
     boost
     cm256cc
     codec2
+    faad2
     ffmpeg
     fftwFloat
     glew
     hackrf
+    hidapi
     libbladeRF
     libiio
     libopus
     libpulseaudio
     libusb1
     limesuite
+    mbelib
     opencv3
     qtcharts
     qtlocation
