@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages, nixosTests }:
+{ buildPackages
+, db
+, fetchurl
+, groff
+, lib
+, libiconv
+, libpipeline
+, makeWrapper
+, nixosTests
+, pkg-config
+, stdenv
+, zstd
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "man-db";
@@ -50,12 +63,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_mempcpy=no"
   ];
 
-
   preConfigure = ''
-    # deal with autoconf 2.70 bug: https://lists.gnu.org/archive/html/bug-autoconf/2020-12/msg00036.html
-    # can be removed once autoconf 2.71 is merged
-    patch < ${./fix-configure.patch}
-
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
