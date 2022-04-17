@@ -20,8 +20,9 @@ mkDerivation rec {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "mauikit";
-    rev = "v${version}";
-    hash = "sha256-INvh+J484xkAsNGtYdf8NGGpFGp2AG7s9UYESoem3QY=";
+    rev = "master"; 
+    #rev = "v${version}";
+    sha256 = "sha256-uatsvO/YiYCa5IqYR5sufwgiKi/PaKN66fVB0Ao49uA=";
   };
 
   nativeBuildInputs = [

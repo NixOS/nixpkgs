@@ -32065,6 +32065,14 @@ with pkgs;
     inherit qt5 libsForQt5;
   });
 
+  maui-shell = libsForQt5.callPackage ../desktops/maui { };
+
+#  maui-shell = recurseIntoAttrs (import ../desktops/maui {
+ #   inherit pkgs;
+    #inherit (lib) makeScope;
+    #inherit qt5 libsForQt5;
+ # });
+
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
