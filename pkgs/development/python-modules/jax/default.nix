@@ -3,6 +3,7 @@
 , blas
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , jaxlib
 , lapack
 , numpy
@@ -34,6 +35,12 @@ buildPythonPackage rec {
   patches = [
     # See https://github.com/google/jax/issues/7944
     ./cache-fix.patch
+
+    # See https://github.com/google/jax/issues/10292
+    (fetchpatch {
+      url = "https://github.com/google/jax/commit/cadc8046d56e0c1433cf48a2f106947d5f4ecbfd.patch";
+      hash = "sha256-jrpIqt4LzWAswt/Cpwtfa5d1Yn31HcXkVH3ETmaigA0=";
+    })
   ];
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
