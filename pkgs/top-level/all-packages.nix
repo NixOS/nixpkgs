@@ -5730,6 +5730,8 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
+  calcoo = callPackage ../applications/misc/calcoo { };
+
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
   };
