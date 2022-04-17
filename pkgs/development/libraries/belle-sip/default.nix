@@ -30,9 +30,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
-    "-Wno-error=cast-function-type"
+    "-Wno-error=stringop-overflow"
   ];
 
   propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];

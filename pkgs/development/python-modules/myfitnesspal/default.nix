@@ -9,6 +9,7 @@
 , python-dateutil
 , requests
 , rich
+, typing-extensions
 , pytestCheckHook
 , mock
 , nose
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     rich
+    typing-extensions
   ];
 
   checkInputs = [

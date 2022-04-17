@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.4.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
     repo = "aesara";
-    rev = "38d7a813646c1e350170c46bafade0e7d0e2427c";
-    sha256 = "sha256-933bM15BZi4sTjnIOGAg5dc5tXVWQ9lFzktOtzj5DNQ=";
+    rev = "refs/tags/rel-${version}";
+    sha256 = "sha256-20nc70gNdcGjtGxv2WxmYxmswNH8v7yGLkToP2iazjc=";
   };
 
   nativeBuildInputs = [

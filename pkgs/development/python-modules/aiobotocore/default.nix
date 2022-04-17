@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.1.2";
+  version = "2.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AP1/Q8wEhNjtJ0/QvkkqoWp/6medvqlqYCu3IspMLSI=";
+    sha256 = "sha256-cTV5OcMCJnDXu5SDMZQUekTr/OJLFkPk5E/twe5zSbo=";
   };
 
   # relax version constraints: aiobotocore works with newer botocore versions

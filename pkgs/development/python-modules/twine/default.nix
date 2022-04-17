@@ -1,40 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , importlib-metadata
 , keyring
 , pkginfo
-, pyblake2
 , readme_renderer
 , requests
 , requests-toolbelt
-, setuptools-scm
-, tqdm
-, colorama
+, rich
 , rfc3986
+, setuptools-scm
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "3.8.0";
+  version = "4.0.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jvpSZY4K53BoahO2dVaTKPH7qYN+XeGGe/5fRqmu/hk=";
+    sha256 = "sha256-gXqgwL3AKl6+MgUeFo4jxxoGCDNOYkx5MBHxINu8Bbc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [
     importlib-metadata
     keyring
     pkginfo
-    pyblake2
     readme_renderer
     requests
     requests-toolbelt
-    tqdm
-    colorama
     rfc3986
+    rich
+    urllib3
   ];
 
   # Requires network

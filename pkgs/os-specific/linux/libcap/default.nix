@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ] ++ lib.optional isStatic "SHARED=no";
 
   postPatch = ''

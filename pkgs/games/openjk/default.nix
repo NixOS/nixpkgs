@@ -64,10 +64,10 @@ in stdenv.mkDerivation {
     jaPrefix=$openja/opt/JediAcademy
     joPrefix=$openjo/opt/JediOutcast
 
-    makeWrapper $jaPrefix/openjk.* $openja/bin/jamp --run "cd $jaPrefix"
-    makeWrapper $jaPrefix/openjk_sp.* $openja/bin/jasp --run "cd $jaPrefix"
-    makeWrapper $jaPrefix/openjkded.* $openja/bin/openjkded --run "cd $jaPrefix"
-    makeWrapper $joPrefix/openjo_sp.* $openjo/bin/josp --run "cd $joPrefix"
+    makeWrapper $jaPrefix/openjk.* $openja/bin/jamp --chdir "$jaPrefix"
+    makeWrapper $jaPrefix/openjk_sp.* $openja/bin/jasp --chdir "$jaPrefix"
+    makeWrapper $jaPrefix/openjkded.* $openja/bin/openjkded --chdir "$jaPrefix"
+    makeWrapper $joPrefix/openjo_sp.* $openjo/bin/josp --chdir "$joPrefix"
 
     cp $src/shared/icons/OpenJK_Icon_128.png $openjo/share/icons/hicolor/128x128/apps
     cp $src/shared/icons/OpenJK_Icon_128.png $openja/share/icons/hicolor/128x128/apps

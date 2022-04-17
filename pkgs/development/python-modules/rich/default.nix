@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pythonOlder
 , CommonMark
-, colorama
 , dataclasses
 , poetry-core
 , pygments
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "11.2.0";
+  version = "12.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -21,18 +20,18 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19k8c8jnqj1v0ji8kkx3r2ny6wlpwy58ir7lyrh2qyjvzkw08i58";
+    sha256 = "02zypmnc9sijlipki0riywh82piamd3hlrl5xbg2bxlldnlnwx1d";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     CommonMark
-    colorama
     pygments
-    typing-extensions
   ] ++ lib.optional (pythonOlder "3.7") [
     dataclasses
+  ] ++ lib.optional (pythonOlder "3.9") [
+    typing-extensions
   ];
 
   checkInputs = [

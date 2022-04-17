@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1x8rliydhbibmzwdbyr7pd7n87m2jmxnqkpvaalnf4154hj1hfwb";
   };
 
+  patches = [ ./fix-regtest-client.patch ];
+
   outputs = [ "bin" "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   # either $HOME or $PWD - so help it along by moving $PWD to 'share',
   # where we just copied those two directories:
   preFixup = ''
-    wrapProgram "$out/bin/structure-synth" --run "cd $out/share"
+    wrapProgram "$out/bin/structure-synth" --chdir "$out/share"
   '';
 
   meta = with lib; {

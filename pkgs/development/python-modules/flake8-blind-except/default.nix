@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, pycodestyle
 , pythonOlder
 }:
 
@@ -15,6 +16,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-8lpXWp3LPus8dgv5wi22C4taIxICJO0fqppD913X3RY=";
   };
+
+  propagatedBuildInputs = [
+    pycodestyle
+  ];
 
   # Module has no tests
   doCheck = false;

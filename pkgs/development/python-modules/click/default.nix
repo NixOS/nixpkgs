@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchPypi
 , importlib-metadata
-, locale
 , pytestCheckHook
 
 # large-rebuild downstream dependencies
@@ -17,17 +16,13 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.0.4";
+  version = "8.1.2";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hFjXsSh8X7EoyQ4jOBz5nc3nS+r2x/9jhM6E1v4JCts=";
+    sha256 = "sha256-R5cH/hTZ7JoHV2GLehAKCuTE4jb6xbf4DKaAKBQaGnI=";
   };
-
-  postPatch = ''
-    substituteInPlace src/click/_unicodefun.py \
-      --replace '"locale"' "'${locale}/bin/locale'"
-  '';
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata

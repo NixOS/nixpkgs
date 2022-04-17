@@ -3,6 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, six
 , wcwidth
 }:
 
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    six
     wcwidth
   ];
 

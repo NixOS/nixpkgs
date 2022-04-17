@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     makeWrapper $out/aesm/aesm_service $out/bin/aesm_service \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ protobuf ]}:$out/aesm \
-      --run "cd $out/aesm"
+      --chdir "$out/aesm"
 
     # Make sure we didn't forget to handle any files
     rmdir $sgxPswDir || (echo "Error: The directory $installDir still contains unhandled files: $(ls -A $installDir)" >&2 && exit 1)

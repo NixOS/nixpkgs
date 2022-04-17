@@ -2,30 +2,35 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , installShellFiles
 , astroid
+, dill
 , isort
-, GitPython
 , mccabe
 , platformdirs
-, toml
+, tomli
+, typing-extensions
+, GitPython
 , pytest-benchmark
+, pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.12.2";
+  version = "2.13.5";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6.2";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-seBYBTB+8PLIovqxVohkoQEfDAZI1fehLgXuHeTx9Wo=";
+    sha256 = "sha256-FB99vmUtoTc0cTjDUSbx80Tesh0vASigSpPktrDYk08=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +39,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     astroid
+    dill
     isort
     mccabe
     platformdirs
-    toml
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    typing-extensions
   ];
 
   postInstall = ''
@@ -48,9 +57,12 @@ buildPythonPackage rec {
 
   checkInputs = [
     GitPython
+    # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     pytest-benchmark
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
+    typing-extensions
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -60,10 +72,6 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
     export HOME=$TEMPDIR
   '';
-
-  pytestFlagsArray = [
-    "-n auto"
-  ];
 
   disabledTestPaths = [
     # tests miss multiple input files

@@ -42,7 +42,10 @@ buildPythonPackage rec {
     pytestCheckHook
     tensorflow
   ];
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES -W ignore::FutureWarning" ];
+
+  pytestFlagsArray = [
+    "-W ignore::FutureWarning"
+  ];
 
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.

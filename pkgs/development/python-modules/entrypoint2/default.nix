@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, EasyProcess, pathpy, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, EasyProcess, path, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "entrypoint2";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "entrypoint2" ];
 
-  checkInputs = [ EasyProcess pathpy pytestCheckHook ];
+  checkInputs = [ EasyProcess path pytestCheckHook ];
 
   meta = with lib; {
     description = "Easy to use command-line interface for python modules";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flask-login";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Login";
     inherit version;
-    sha256 = "6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b";
+    sha256 = "sha256-qoT8+0w88JyljAjoFre85z8TSboc8T0A2N/8WHLV/PY=";
   };
 
   propagatedBuildInputs = [

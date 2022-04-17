@@ -15,11 +15,11 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.9.4";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    sha256 = "1xxabjv45zlxyryiwhmbfblsx41kl267wsb78bny6m14ly1rr17a";
+    hash = "sha256-7xSuVGsAhM2EJZ9hpV4Ho4w7U6/A9Ua//O8vAbr/6d4=";
   };
 
   outputs = [ "out" "dev" "info" ];
