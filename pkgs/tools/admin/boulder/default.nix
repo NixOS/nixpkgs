@@ -1,24 +1,21 @@
-{ buildGoPackage
-, libtool
-, fetchFromGitHub
-, lib
-}:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec{
-
+buildGoModule rec{
   pname = "boulder";
-  version = "release-2019-10-13";
-
-  goPackagePath = "github.com/letsencrypt/boulder";
-
-  buildInputs = [ libtool ];
+  version = "release-2022-04-04";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
     rev = version;
-    sha256 = "0kis23dnjja6jp192rjpv2m9m2zmzfwhs93440nxg354k6fp8jdg";
+    sha256 = "sha256-4u9aX3AiuVBL7iFsxybn4jvTJyfz13RAxGpsd7Z+UYo=";
   };
+
+  vendorSha256 = null;
+
+  ldflags = [ "-s" "-w" ];
+
+  checkFlags = [ "-short" ];
 
   meta = {
     homepage = "https://github.com/letsencrypt/boulder";
@@ -26,5 +23,4 @@ buildGoPackage rec{
     license = [ lib.licenses.mpl20 ];
     maintainers = [ ];
   };
-
 }
