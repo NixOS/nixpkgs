@@ -10570,6 +10570,8 @@ with pkgs;
 
   tmux-cssh = callPackage ../tools/misc/tmux-cssh { };
 
+  tmux-thumbs = callPackage ../tools/inputmethods/tmux-thumbs { };
+
   tmuxp = callPackage ../tools/misc/tmuxp { };
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
