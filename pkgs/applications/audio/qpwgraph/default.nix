@@ -29,6 +29,6 @@ mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/rncbc/qpwgraph";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kanashimia ];
+    maintainers = with maintainers; [ kanashimia exi ];
   };
 }
