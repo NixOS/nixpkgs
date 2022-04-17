@@ -2067,6 +2067,8 @@ in {
 
   datasette = callPackage ../development/python-modules/datasette { };
 
+  datasette-leaflet = callPackage ../development/python-modules/datasette-leaflet { };
+
   datasette-template-sql = callPackage ../development/python-modules/datasette-template-sql { };
 
   datashader = callPackage ../development/python-modules/datashader { };
