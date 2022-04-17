@@ -4201,6 +4201,8 @@ with pkgs;
 
   s2png = callPackage ../tools/graphics/s2png { };
 
+  sgp4 = callPackage ../development/libraries/sgp4 {};
+
   shab = callPackage ../tools/text/shab { };
 
   shell-hist = callPackage ../tools/misc/shell-hist { };

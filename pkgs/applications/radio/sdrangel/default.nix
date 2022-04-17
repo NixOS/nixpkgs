@@ -37,6 +37,7 @@
 , rtl-sdr
 , sdrplay_source ? false, sdrplay
 , serialdv
+, sgp4
 , soapysdr-with-plugins
 , uhd
 }:
@@ -96,6 +97,7 @@ mkDerivation rec {
     qtwebsockets
     rtl-sdr
     serialdv
+    sgp4
     soapysdr-with-plugins
     uhd
   ]
@@ -109,6 +111,7 @@ mkDerivation rec {
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
     "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
 
