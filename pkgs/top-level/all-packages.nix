@@ -3696,6 +3696,8 @@ with pkgs;
 
   dpic = callPackage ../tools/graphics/dpic { };
 
+  dsdcc = callPackage ../development/libraries/dsdcc {};
+
   dstp = callPackage ../development/tools/dstp { };
 
   dsvpn = callPackage ../applications/networking/dsvpn { };
