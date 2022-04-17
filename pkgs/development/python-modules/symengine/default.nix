@@ -30,7 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace "\"cmake\"" "\"${cmake}/bin/cmake\"" \
       --replace "'cython>=0.29.24'" "'cython'"

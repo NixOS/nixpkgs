@@ -355,7 +355,7 @@ let
       [ { object = bootStage1;
           symlink = "/init";
         }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.mdraid.mdadmConf;
+        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.swraid.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
@@ -731,6 +731,6 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "mdraid" "mdadmConf" ])
+    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "swraid" "mdadmConf" ])
   ];
 }

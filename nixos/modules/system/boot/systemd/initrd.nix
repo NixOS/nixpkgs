@@ -125,6 +125,9 @@ let
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
+    name = "initrd-${kernel-name}";
+    inherit (config.boot.initrd) compressor compressorArgs prepend;
+
     contents = map (path: { object = path; symlink = ""; }) (subtractLists cfg.suppressedStorePaths cfg.storePaths)
       ++ mapAttrsToList (_: v: { object = v.source; symlink = v.target; }) (filterAttrs (_: v: v.enable) cfg.contents);
   };

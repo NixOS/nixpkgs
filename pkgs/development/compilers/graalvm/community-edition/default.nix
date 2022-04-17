@@ -15,8 +15,8 @@ let
   */
   graalvm11-ce-release-version = "22.0.0.2";
   graalvm17-ce-release-version = "22.0.0.2";
-  graalvm11-ce-dev-version = "22.2.0-dev-20220401_1942";
-  graalvm17-ce-dev-version = "22.2.0-dev-20220401_1942";
+  graalvm11-ce-dev-version = "22.2.0-dev-20220415_1945";
+  graalvm17-ce-dev-version = "22.2.0-dev-20220415_1945";
 
   products = [
     "graalvm-ce"
@@ -49,7 +49,6 @@ in
     };
     defaultVersion = graalvm11-ce-release-version;
     javaVersion = "11";
-    platforms = builtins.attrNames config;
   };
 
   graalvm17-ce = mkGraal rec {
@@ -74,6 +73,5 @@ in
     };
     defaultVersion = graalvm17-ce-release-version;
     javaVersion = "17";
-    platforms = builtins.attrNames config;
   };
 }
