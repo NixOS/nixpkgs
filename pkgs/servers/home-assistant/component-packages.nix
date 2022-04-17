@@ -947,7 +947,8 @@
       geniushub-client
     ];
     "geo_json_events" = ps: with ps; [
-    ]; # missing inputs: aio_geojson_generic_client
+      aio-geojson-generic-client
+    ];
     "geo_location" = ps: with ps; [
     ];
     "geo_rss_events" = ps: with ps; [
@@ -3300,6 +3301,7 @@
     "generic"
     "generic_hygrostat"
     "generic_thermostat"
+    "geo_json_events"
     "geo_location"
     "geo_rss_events"
     "geofency"

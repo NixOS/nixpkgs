@@ -63,13 +63,16 @@ in {
       };
 
       dates = mkOption {
-        default = "04:40";
         type = types.str;
+        default = "04:40";
+        example = "daily";
         description = ''
-          Specification (in the format described by
+          How often or when upgrade occurs. For most desktop and server systems
+          a sufficient upgrade frequency is once a day.
+
+          The format is described in
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>) of the time at
-          which the update will occur.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -121,6 +124,22 @@ in {
             };
           };
         });
+      };
+
+      persistent = mkOption {
+        default = true;
+        type = types.bool;
+        example = false;
+        description = ''
+          Takes a boolean argument. If true, the time when the service
+          unit was last triggered is stored on disk. When the timer is
+          activated, the service unit is triggered immediately if it
+          would have been triggered at least once during the time when
+          the timer was inactive. Such triggering is nonetheless
+          subject to the delay imposed by RandomizedDelaySec=. This is
+          useful to catch up on missed runs of the service when the
+          system was powered down.
+        '';
       };
 
     };
@@ -217,11 +236,17 @@ in {
       '';
 
       startAt = cfg.dates;
+
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
     };
 
-    systemd.timers.nixos-upgrade.timerConfig.RandomizedDelaySec =
-      cfg.randomizedDelaySec;
-
+    systemd.timers.nixos-upgrade = {
+      timerConfig = {
+        RandomizedDelaySec = cfg.randomizedDelaySec;
+        Persistent = cfg.persistent;
+      };
+    };
   };
 
 }

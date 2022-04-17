@@ -229,6 +229,8 @@ in {
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
+  aio-geojson-generic-client = callPackage ../development/python-modules/aio-geojson-generic-client { };
+
   aio-geojson-geonetnz-quakes = callPackage ../development/python-modules/aio-geojson-geonetnz-quakes { };
 
   aio-geojson-geonetnz-volcano = callPackage ../development/python-modules/aio-geojson-geonetnz-volcano { };
@@ -7797,6 +7799,12 @@ in {
   pysmt = callPackage ../development/python-modules/pysmt { };
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
+
+  pysnmp-pyasn1 = callPackage ../development/python-modules/pysnmp-pyasn1 { };
+
+  pysnmp-pysmi = callPackage ../development/python-modules/pysnmp-pysmi { };
+
+  pysnmplib = callPackage ../development/python-modules/pysnmplib { };
 
   pysnooper = callPackage ../development/python-modules/pysnooper { };
 
