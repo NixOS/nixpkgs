@@ -26615,6 +26615,8 @@ with pkgs;
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
+  keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
+
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
   levant = callPackage ../applications/networking/cluster/levant { };
