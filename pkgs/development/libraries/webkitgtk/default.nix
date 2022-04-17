@@ -82,6 +82,10 @@ stdenv.mkDerivation rec {
       inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
+
+    # The upgrade to 2.36 has enabled hardware acceleration by
+    # default. This causes problems. See #168645.
+    ./disable-compositing.patch
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

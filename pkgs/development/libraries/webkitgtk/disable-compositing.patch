@@ -1,0 +1,13 @@
+diff --git a/Source/WebKit/UIProcess/gtk/HardwareAccelerationManager.cpp b/Source/WebKit/UIProcess/gtk/HardwareAccelerationManager.cpp
+index 8f10c7e611b7..9c827a4d6d75 100644
+--- a/Source/WebKit/UIProcess/gtk/HardwareAccelerationManager.cpp
++++ b/Source/WebKit/UIProcess/gtk/HardwareAccelerationManager.cpp
+@@ -38,7 +38,7 @@ HardwareAccelerationManager& HardwareAccelerationManager::singleton()
+ }
+ 
+ HardwareAccelerationManager::HardwareAccelerationManager()
+-    : m_canUseHardwareAcceleration(true)
++    : m_canUseHardwareAcceleration(false)
+     , m_forceHardwareAcceleration(false)
+ {
+ #if !ENABLE(WEBGL)
