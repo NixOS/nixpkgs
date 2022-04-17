@@ -1794,6 +1794,12 @@
     githubId = 7214361;
     name = "Roman Gerasimenko";
   };
+  builditluc = {
+    email = "builditluc@icloud.com";
+    github = "builditluc";
+    githubId = 37375448;
+    name = "Buildit";
+  };
   bburdette = {
     email = "bburdette@protonmail.com";
     github = "bburdette";
