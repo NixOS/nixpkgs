@@ -6384,6 +6384,8 @@ in {
 
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
+  pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
@@ -9746,6 +9748,8 @@ in {
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stone = callPackage ../development/python-modules/stone { };
+
+  stookalert = callPackage ../development/python-modules/stookalert { };
 
   stopit = callPackage ../development/python-modules/stopit { };
 

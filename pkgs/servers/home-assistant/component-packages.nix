@@ -382,7 +382,8 @@
     ];
     "climacell" = ps: with ps; [
       pyclimacell
-    ]; # missing inputs: pytomorrowio
+      pytomorrowio
+    ];
     "climate" = ps: with ps; [
     ];
     "cloud" = ps: with ps; [
@@ -2518,7 +2519,8 @@
       pymodbus
     ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [
-    ]; # missing inputs: stookalert
+      stookalert
+    ];
     "stream" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -2696,7 +2698,8 @@
     "tomato" = ps: with ps; [
     ];
     "tomorrowio" = ps: with ps; [
-    ]; # missing inputs: pytomorrowio
+      pytomorrowio
+    ];
     "toon" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -3191,6 +3194,7 @@
     "canary"
     "cast"
     "cert_expiry"
+    "climacell"
     "climate"
     "cloud"
     "cloudflare"
@@ -3607,6 +3611,7 @@
     "statistics"
     "statsd"
     "steamist"
+    "stookalert"
     "stream"
     "stt"
     "subaru"
@@ -3642,6 +3647,7 @@
     "todoist"
     "tolo"
     "tomato"
+    "tomorrowio"
     "toon"
     "totalconnect"
     "tplink"
