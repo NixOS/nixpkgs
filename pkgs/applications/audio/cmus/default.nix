@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
-, libiconv, CoreAudio, AudioUnit
+, libiconv, CoreAudio, AudioUnit, VideoToolbox
 
 , alsaSupport ? stdenv.isLinux, alsa-lib ? null
 # simple fallback for everyone else
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
     ++ lib.optional stdenv.cc.isClang clangGCC
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit VideoToolbox ]
     ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];

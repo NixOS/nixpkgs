@@ -54,6 +54,8 @@ buildPythonPackage rec {
     # likely that's the reason the upstream uses TF-nightly for tests?
     # `nixpkgs` doesn't have the corresponding TF version packaged.
     "haiku/_src/integration/jax2tf_test.py"
+    # `TypeError: lax.conv_general_dilated requires arguments to have the same dtypes, got float32, float16`.
+    "haiku/_src/integration/numpy_inputs_test.py"
   ];
 
   disabledTests = [

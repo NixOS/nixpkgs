@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.4";
+  version = "2022.4.5";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -237,7 +237,8 @@
     ];
     "backup" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: securetar
+      securetar
+    ];
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -773,7 +774,8 @@
     "fail2ban" = ps: with ps; [
     ];
     "familyhub" = ps: with ps; [
-    ]; # missing inputs: python-family-hub-local
+      python-family-hub-local
+    ];
     "fan" = ps: with ps; [
     ];
     "fastdotcom" = ps: with ps; [
@@ -945,7 +947,8 @@
       geniushub-client
     ];
     "geo_json_events" = ps: with ps; [
-    ]; # missing inputs: aio_geojson_generic_client
+      aio-geojson-generic-client
+    ];
     "geo_location" = ps: with ps; [
     ];
     "geo_rss_events" = ps: with ps; [
@@ -1534,7 +1537,8 @@
       pymeteireann
     ];
     "meteo_france" = ps: with ps; [
-    ]; # missing inputs: meteofrance-api
+      meteofrance-api
+    ];
     "meteoalarm" = ps: with ps; [
       meteoalertapi
     ];
@@ -1806,7 +1810,8 @@
     "nzbget" = ps: with ps; [
     ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [
-    ]; # missing inputs: oasatelematics
+      oasatelematics
+    ];
     "obihai" = ps: with ps; [
       pyobihai
     ];
@@ -2189,7 +2194,8 @@
       boto3
     ];
     "rova" = ps: with ps; [
-    ]; # missing inputs: rova
+      rova
+    ];
     "rpi_camera" = ps: with ps; [
     ];
     "rpi_gpio" = ps: with ps; [
@@ -3161,6 +3167,7 @@
     "axis"
     "azure_devops"
     "azure_event_hub"
+    "backup"
     "balboa"
     "bayesian"
     "binary_sensor"
@@ -3294,6 +3301,7 @@
     "generic"
     "generic_hygrostat"
     "generic_thermostat"
+    "geo_json_events"
     "geo_location"
     "geo_rss_events"
     "geofency"
@@ -3416,6 +3424,7 @@
     "meraki"
     "met"
     "met_eireann"
+    "meteo_france"
     "meteoclimatic"
     "microsoft_face"
     "microsoft_face_detect"

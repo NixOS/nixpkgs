@@ -1518,6 +1518,17 @@
           <literal>pkgs.cosmoc</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.graalvmXX-ce</literal> packages no longer
+          provide support for Python/Ruby/WASM, instead focusing only in
+          Java and Native Image Support. If you need to add support
+          back, please see the
+          <literal>pkgs.graalvmCEPackages.mkGraal</literal> function to
+          create your own customized version of GraalVM with support for
+          what you need.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -1630,6 +1641,14 @@
             </para>
           </listitem>
         </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The auto-upgrade service now accepts persistent (default:
+          true) parameter. By default auto-upgrade will now run
+          immediately if it would have been triggered at least once
+          during the time when the timer was inactive.
+        </para>
       </listitem>
       <listitem>
         <para>
@@ -1998,6 +2017,24 @@
               documentation</link> and check the output of
               <literal>zfs get -r encryption,zrepl:placeholder PATH_TO_ROOTFS</literal>
               on the receiver.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>polybar</literal> package has been updated from
+          3.5.7 to 3.6.2. See
+          <link xlink:href="https://github.com/polybar/polybar/releases/tag/3.6.0">the
+          changelog</link> for more details.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Breaking changes include changes to escaping rules in
+              configuration values, changes in behavior when
+              encountering invalid tag names, and changes to
+              inter-process-messaging (IPC).
             </para>
           </listitem>
         </itemizedlist>

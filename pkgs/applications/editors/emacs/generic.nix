@@ -11,7 +11,7 @@
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
-, dontRecurseIntoAttrs ,emacsPackagesFor
+, dontRecurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin

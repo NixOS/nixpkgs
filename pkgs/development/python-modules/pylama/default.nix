@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pylama";
-  version = "8.3.7";
+  version = "8.3.8";
 
   format = "setuptools";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "pylama";
     rev = version;
-    hash = "sha256-//mrvZb4bT4aATURqa4g1DUagYe9SoP3o3OrwmiEJnI=";
+    hash = "sha256-g6Lq5NaieUI/alxqoVFfL5VaCHwB/jLcp02/N1W69yE=";
   };
 
   patches = [
@@ -72,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Code audit tool for python";
     homepage = "https://github.com/klen/pylama";
+    changelog = "https://github.com/klen/pylama/blob/${version}/Changelog";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

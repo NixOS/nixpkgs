@@ -2,15 +2,17 @@
 
 stdenv.mkDerivation {
   pname = "wasilibc";
-  version = "unstable-2021-09-23";
+  version = "unstable-2022-04-12";
 
   src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "ad5133410f66b93a2381db5b542aad5e0964db96";
-    hash = "sha256-RiIClVXrb18jF9qCt+5iALHPCZKYcnad7JsILHBV0pA=";
+    rev = "a279514a6ef30cd8ee1469345b33172fcbc8d52d";
+    sha256 = "0a9ldas8p7jg7jlkhb9wdiw141z7vfz6p18mnmxnnnna7bp1y3fz";
     fetchSubmodules = true;
   };
+
+  outputs = [ "out" "dev" "share" ];
 
   # clang-13: error: argument unused during compilation: '-rtlib=compiler-rt' [-Werror,-Wunused-command-line-argument]
   postPatch = ''
@@ -19,21 +21,24 @@ stdenv.mkDerivation {
   '';
 
   preBuild = ''
-    export NIX_CFLAGS_COMPILE="-I$(pwd)/sysroot/include $NIX_CFLAGS_COMPILE"
+    export SYSROOT_LIB=${builtins.placeholder "out"}/lib
+    export SYSROOT_INC=${builtins.placeholder "dev"}/include
+    export SYSROOT_SHARE=${builtins.placeholder "share"}/share
+    mkdir -p "$SYSROOT_LIB" "$SYSROOT_INC" "$SYSROOT_SHARE"
+    makeFlagsArray+=(
+      "SYSROOT_LIB:=$SYSROOT_LIB"
+      "SYSROOT_INC:=$SYSROOT_INC"
+      "SYSROOT_SHARE:=$SYSROOT_SHARE"
+    )
   '';
-
-  makeFlags = [
-    "WASM_CC=${stdenv.cc.targetPrefix}cc"
-    "WASM_NM=${stdenv.cc.targetPrefix}nm"
-    "WASM_AR=${stdenv.cc.targetPrefix}ar"
-    "INSTALL_DIR=${placeholder "out"}"
-  ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    mv $out/lib/*/* $out/lib
-    ln -s $out/share/wasm32-wasi/undefined-symbols.txt $out/lib/wasi.imports
+  # We just build right into the install paths, per the `preBuild`.
+  dontInstall = true;
+
+  preFixup = ''
+    ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
   '';
 
   meta = with lib; {
