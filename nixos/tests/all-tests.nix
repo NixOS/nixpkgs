@@ -199,6 +199,9 @@ in
   haste-server = handleTest ./haste-server.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
+  hbase1 = handleTest ./hbase.nix { package=pkgs.hbase1; };
+  hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
+  hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
