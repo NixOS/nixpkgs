@@ -504,6 +504,21 @@ in {
           ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
         ];
       };
+
+      services.panic-on-fail = {
+        wantedBy = ["emergency.target"];
+        unitConfig = {
+          DefaultDependencies = false;
+          ConditionKernelCommandLine = [
+            "|boot.panic_on_fail"
+            "|stage1panic"
+          ];
+        };
+        script = ''
+          echo c > /proc/sysrq-trigger
+        '';
+        serviceConfig.Type = "oneshot";
+      };
     };
 
     boot.kernelParams = lib.mkIf (config.boot.resumeDevice != "") [ "resume=${config.boot.resumeDevice}" ];
