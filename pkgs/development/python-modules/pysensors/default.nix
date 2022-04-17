@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, lm_sensors }:
+{ lib, buildPythonPackage, python, fetchFromGitHub, lm-sensors }:
 buildPythonPackage {
   version = "2017-07-13";
   pname = "pysensors";
@@ -11,7 +11,7 @@ buildPythonPackage {
     sha256 = "1xvbxnkz55fk5fpr514263c7s7s9r8hgrw4ybfaj5a0mligmmrfm";
   };
 
-  buildInputs = [ lm_sensors ];
+  buildInputs = [ lm-sensors ];
 
   # Tests are disable because they fail on `aarch64-linux`, probably
   # due to sandboxing

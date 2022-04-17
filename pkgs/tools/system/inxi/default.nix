@@ -2,7 +2,7 @@
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
-, file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
+, file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm-sensors, smartmontools
 , binutils, tree, upower, pciutils
 , withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
 }:
@@ -12,7 +12,7 @@ let
     "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
     util-linuxMinimal dmidecode file hddtemp iproute2 ipmitool usbutils kmod
-    lm_sensors smartmontools binutils tree upower pciutils
+    lm-sensors smartmontools binutils tree upower pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms

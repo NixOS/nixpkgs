@@ -66,7 +66,7 @@ index 62fa580..c017748 100644
      constructor() {
          super();
 -        let path = GLib.find_program_in_path('sensors');
-+        let path = GLib.find_program_in_path('@lm_sensors@/bin/sensors');
++        let path = GLib.find_program_in_path('@lm-sensors@/bin/sensors');
          // -A: Do not show adapter -j: JSON output
          this._argv = path ? [path, '-A', '-j'] : null;
      }

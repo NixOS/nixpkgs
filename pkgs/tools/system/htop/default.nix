@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, stdenv, autoreconfHook
 , ncurses
 , IOKit
-, sensorsSupport ? stdenv.isLinux, lm_sensors
+, sensorsSupport ? stdenv.isLinux, lm-sensors
 , systemdSupport ? stdenv.isLinux, systemd
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ]
     ++ optional stdenv.isDarwin IOKit
-    ++ optional sensorsSupport lm_sensors
+    ++ optional sensorsSupport lm-sensors
     ++ optional systemdSupport systemd
   ;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       optionalPatch = pred: so: optionalString pred "patchelf --add-needed ${so} $out/bin/htop";
     in
     ''
-      ${optionalPatch sensorsSupport "${lm_sensors}/lib/libsensors.so"}
+      ${optionalPatch sensorsSupport "${lm-sensors}/lib/libsensors.so"}
       ${optionalPatch systemdSupport "${systemd}/lib/libsystemd.so"}
     '';
 

@@ -8,7 +8,7 @@
 , coreutils
 , gnugrep
 , gnused
-, lm_sensors
+, lm-sensors
 , net-snmp
 , openssh
 , openssl
@@ -30,7 +30,7 @@ let
     coreutils
     gnugrep
     gnused
-    lm_sensors
+    lm-sensors
     net-snmp
     procps
   ];

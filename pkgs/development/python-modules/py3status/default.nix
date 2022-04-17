@@ -17,7 +17,7 @@
 , alsa-utils
 , i3
 , procps
-, lm_sensors
+, lm-sensors
 , libnotify
 , xorg
 }:
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     sed -i -e "s|'amixer|'${alsa-utils}/bin/amixer|" py3status/modules/volume_status.py
     sed -i -e "s|'i3-nagbar|'${i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
     sed -i -e "s|'free|'${procps}/bin/free|" py3status/modules/sysdata.py
-    sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
+    sed -i -e "s|'sensors|'${lm-sensors}/bin/sensors|" py3status/modules/sysdata.py
     sed -i -e "s|'setxkbmap|'${xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';

@@ -22888,7 +22888,7 @@ with pkgs;
 
   libsurvive = callPackage ../development/libraries/libsurvive { };
 
-  lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
+  lm-sensors = callPackage ../os-specific/linux/lm-sensors { };
 
   lockdep = callPackage ../os-specific/linux/lockdep { };
 

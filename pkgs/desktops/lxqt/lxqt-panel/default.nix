@@ -13,7 +13,7 @@
 , libqtxdg
 , libstatgrab
 , libsysstat
-, lm_sensors
+, lm-sensors
 , lxmenu-data
 , lxqt-build-tools
 , lxqt-globalkeys
@@ -56,7 +56,7 @@ mkDerivation rec {
     libqtxdg
     libstatgrab
     libsysstat
-    lm_sensors
+    lm-sensors
     lxmenu-data
     lxqt-globalkeys
     menu-cache

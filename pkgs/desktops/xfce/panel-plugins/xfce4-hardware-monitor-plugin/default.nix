@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, autoreconfHook, gnome2, gtkmm2,
-  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors, xfce
+  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm-sensors, xfce
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxfce4ui
     libxfce4util
     xfce4-panel
-    lm_sensors
+    lm-sensors
    ];
 
   enableParallelBuilding = true;

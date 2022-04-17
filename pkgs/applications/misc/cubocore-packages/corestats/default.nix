@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, lm_sensors, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, lm-sensors, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "corestats";
@@ -18,7 +18,7 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase
-    lm_sensors
+    lm-sensors
     libcprime
     libcsys
   ];

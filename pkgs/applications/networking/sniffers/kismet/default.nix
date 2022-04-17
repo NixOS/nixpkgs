@@ -2,7 +2,7 @@
 , sqlite, protobuf, protobufc, libusb1, libcap, binutils, elfutils
 , withNetworkManager ? false, glib, networkmanager
 , withPython ? false, python3
-, withSensors ? false, lm_sensors}:
+, withSensors ? false, lm-sensors}:
 
 # couldn't get python modules to build correctly,
 # waiting for some other volunteer to fix it
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libpcap pcre libmicrohttpd libnl zlib sqlite protobuf protobufc
     libusb1 libcap binutils elfutils
   ] ++ lib.optionals withNetworkManager [ networkmanager glib ]
-    ++ lib.optional withSensors lm_sensors
+    ++ lib.optional withSensors lm-sensors
     ++ lib.optional withPython (python3.withPackages(ps: [ ps.setuptools ps.protobuf
                                                                   ps.numpy ps.pyserial ]));
 

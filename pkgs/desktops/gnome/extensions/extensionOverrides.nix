@@ -5,7 +5,7 @@
 , gobject-introspection
 , hddtemp
 , liquidctl
-, lm_sensors
+, lm-sensors
 , netcat-gnu
 , nvme-cli
 , procps
@@ -62,7 +62,7 @@ super: lib.trivial.pipe super [
     patches = [
       (substituteAll {
         src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
-        inherit hddtemp liquidctl lm_sensors procps smartmontools;
+        inherit hddtemp liquidctl lm-sensors procps smartmontools;
         netcat = netcat-gnu;
         nvmecli = nvme-cli;
       })

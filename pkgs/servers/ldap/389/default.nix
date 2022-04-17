@@ -12,7 +12,7 @@
 , icu
 , libevent
 , libkrb5
-, lm_sensors
+, lm-sensors
 , net-snmp
 , nspr
 , nss
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     icu
     libevent
     libkrb5
-    lm_sensors
+    lm-sensors
     net-snmp
     nspr
     nss

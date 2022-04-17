@@ -8,7 +8,7 @@
 , notmuch
 , openssl
 , ethtool
-, lm_sensors
+, lm-sensors
 , iw
 , iproute2
 }:
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ];
+  buildInputs = [ dbus libpulseaudio notmuch openssl lm-sensors ];
 
   buildFeatures = [
     "notmuch"

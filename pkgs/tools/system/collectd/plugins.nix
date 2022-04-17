@@ -22,7 +22,7 @@
 , libapparmor, libcap_ng, numactl
 , lua
 , lvm2
-, lm_sensors
+, lm-sensors
 , mongoc
 , mosquitto
 , net-snmp
@@ -106,7 +106,7 @@ let
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [ rrdtool libxml2 ];
     rrdtool.buildInputs = [ rrdtool libxml2 ];
-    sensors.buildInputs = lib.optionals stdenv.isLinux [ lm_sensors ];
+    sensors.buildInputs = lib.optionals stdenv.isLinux [ lm-sensors ];
     sigrok.buildInputs = lib.optionals stdenv.isLinux [ libsigrok udev ];
     smart.buildInputs = lib.optionals stdenv.isLinux [ libatasmart udev ];
     snmp.buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
