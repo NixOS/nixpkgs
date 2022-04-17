@@ -2446,7 +2446,6 @@ dont-distribute-packages:
  - kansas-lava-shake
  - karakuri
  - karps
- - katip-elasticsearch
  - katip-raven
  - katip-rollbar
  - keenser
@@ -2789,6 +2788,7 @@ dont-distribute-packages:
  - moonshine
  - morley
  - morley-client
+ - morley-prelude
  - morley-upgradeable
  - morpheus-graphql
  - morpheus-graphql-app

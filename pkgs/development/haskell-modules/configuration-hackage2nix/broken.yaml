@@ -1687,8 +1687,8 @@ broken-packages:
   - ghcup
   - ghc-usage
   - gh-labeler
-  - giak
   - gi-adwaita
+  - giak
   - gi-cogl
   - Gifcurry
   - gi-gio-hs-list-model
@@ -2546,6 +2546,7 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
+  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
@@ -4025,6 +4026,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
