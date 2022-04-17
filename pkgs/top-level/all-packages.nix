@@ -20033,6 +20033,8 @@ with pkgs;
     libGLU = null;
   });
 
+  SDL_audiolib = callPackage ../development/libraries/SDL_audiolib { };
+
   SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
