@@ -49,6 +49,7 @@ let
     screengrab = callPackage ./screengrab {};
     qlipper = callPackage ./qlipper {};
     lxqt-archiver = callPackage ./lxqt-archiver {};
+    xdg-desktop-portal-lxqt = callPackage ./xdg-desktop-portal-lxqt {};
 
     preRequisitePackages = [
       libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel

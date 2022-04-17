@@ -62,6 +62,9 @@ in
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
+
+    xdg.portal.enable = true;
+    xdg.portal.extraPortals = [ pkgs.lxqt.xdg-desktop-portal-lxqt ];
   };
 
 }
