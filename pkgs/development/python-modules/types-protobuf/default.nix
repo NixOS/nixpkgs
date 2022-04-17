@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-protobuf";
-  version = "3.19.15";
+  version = "3.19.17";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-03HQpbMueMLWhDKaXUSR04Xm6tyrSXs3xBFy3tMoxdk=";
+    sha256 = "sha256-0NkwMmzXbZ6F/VkuGMIkhja9u/AiZhgIL1eoLwDdfSU=";
   };
 
   propagatedBuildInputs = [
