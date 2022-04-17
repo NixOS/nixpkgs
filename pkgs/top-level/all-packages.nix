@@ -1456,6 +1456,8 @@ with pkgs;
 
   apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
 
+  argagg = callPackage ../development/libraries/argagg { };
+
   argtable = callPackage ../development/libraries/argtable { };
 
   arguments = callPackage ../development/libraries/arguments { };
