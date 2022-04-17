@@ -102,7 +102,7 @@ let
       screengrab
 
       ### Default icon theme
-      libsForQt5.oxygen-icons5
+      libsForQt5.breeze-icons
 
       ### Screen saver
       pkgs.xscreensaver
