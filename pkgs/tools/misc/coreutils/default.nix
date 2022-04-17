@@ -22,21 +22,12 @@ with lib;
 
 stdenv.mkDerivation (rec {
   pname = "coreutils${optionalString (!minimal) "-full"}";
-  version = "9.0";
+  version = "9.1";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
+    sha256 = "sha256:08q4b0w7mwfxbqjs712l6wrwl2ijs7k50kssgbryg9wbsw8g98b1";
   };
-
-  patches = [
-    ./fix-chmod-exit-code.patch
-    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
-    ./disable-seek-hole.patch
-    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=52330
-    # This patch can be dropped, once we upgrade to the next coreutils version after 9.0
-    ./fix-arm64-macos.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -75,8 +66,6 @@ stdenv.mkDerivation (rec {
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
   ])) + (optionalString stdenv.isAarch64 ''
-    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
-
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
     sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
   '');
