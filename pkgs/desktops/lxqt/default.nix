@@ -93,7 +93,6 @@ let
     optionalPackages = [
       ### LXQt project
       qterminal
-      compton-conf
       obconf-qt
       lximage-qt
       lxqt-archiver
