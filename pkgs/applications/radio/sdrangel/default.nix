@@ -5,6 +5,7 @@
 , cmake
 , codec2
 , dab_lib
+, dsdcc
 , faad2
 , fetchFromGitHub
 , fetchpatch
@@ -69,6 +70,7 @@ mkDerivation rec {
     cm256cc
     codec2
     dab_lib
+    dsdcc
     faad2
     ffmpeg
     fftwFloat
