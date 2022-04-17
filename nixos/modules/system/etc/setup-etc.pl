@@ -47,12 +47,12 @@ sub is_static ($path) {
         my @names = read_dir($path);
         foreach my $name (@names) {
             if (not (is_static("$path/$name"))) {
-                return 0;
+                return;
             }
         }
         return 1;
     }
-    return 0;
+    return;
 }
 
 # Remove dangling symlinks that point to /etc/static.  These are
