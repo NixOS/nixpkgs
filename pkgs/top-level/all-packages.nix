@@ -8577,6 +8577,8 @@ with pkgs;
 
   patray = callPackage ../tools/audio/patray { };
 
+  pathvector = callPackage ../tools/networking/pathvector { };
+
   pasystray = callPackage ../tools/audio/pasystray { };
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
