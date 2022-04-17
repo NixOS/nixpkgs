@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.4.8";
+  version = "6.4.10";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Hphcncb2eL3/+53GVzBrVGm/pi1z4D906N77920oQxI=";
+    sha256 = "sha256-JAina8YokoOo7s/KZ+KY7IPGfbUaTC4bcT3RgLs56Q4=";
   };
 
   LC_ALL = "en_US.utf8";

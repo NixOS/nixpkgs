@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "boxx";
-  version = "0.9.10";
+  version = "0.9.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Iw6jRhKAroqfWmbXhD7YTn4s8FrE/Iyd31EOP0tMdkQ=";
+    sha256 = "sha256-xB/bCSIzT0JF5ZPWqSn3P8soBJnzDTfCyan+iOrfWzw=";
   };
 
   propagatedBuildInputs = [

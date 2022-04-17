@@ -35,6 +35,11 @@ buildPythonPackage rec {
     "extension_helpers"
   ];
 
+  disabledTests = [
+    # https://github.com/astropy/extension-helpers/issues/43
+    "test_write_if_different"
+  ];
+
   pythonImportsCheck = [
     "extension_helpers"
   ];

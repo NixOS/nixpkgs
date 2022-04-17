@@ -60,12 +60,6 @@ let
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
     ];
-    qtwayland = [
-      # NixOS-specific, ensure that app_id is correctly determined for
-      # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
-      # context).  Beware: shared among different Qt5 versions.
-      ../modules/qtwayland-app_id.patch
-    ];
     qtwebkit = [
       (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
@@ -107,7 +101,7 @@ let
         }
         { inherit self srcs patches; };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;

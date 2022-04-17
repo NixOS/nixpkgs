@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+    (lib.optional stdenv.cc.isClang "-Wno-error=c++11-narrowing")
+  ];
 
   meta = with lib; {
     description = "Computational Morphometry Toolkit ";

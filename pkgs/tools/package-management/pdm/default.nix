@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "1.13.3";
+  version = "1.14.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5+bjjljmk3AHaDVjYzNuC7lkkvlpLa9/grKgdmERC7k=";
+    sha256 = "sha256-ZUbcuIRutSoHW5egCpwCKca2IZCgQsRAd72ueDzGySI=";
   };
 
   # this patch allows us to run additional tests that invoke pdm, which checks
@@ -71,7 +71,6 @@ buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
     "-m 'not network'"
   ];
 

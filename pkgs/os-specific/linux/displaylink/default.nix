@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       --set-rpath ${libPath} \
       $out/bin/DisplayLinkManager
     wrapProgram $out/bin/DisplayLinkManager \
-      --run "cd $out/lib/displaylink"
+      --chdir "$out/lib/displaylink"
 
     # We introduce a dependency on the source file so that it need not be redownloaded everytime
     echo $src >> "$out/share/workspace_dependencies.pin"

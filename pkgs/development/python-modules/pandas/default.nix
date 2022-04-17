@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jbk+yYrHy1+KwUIMEPXjxDUzFT8lP+f7bYkc9aorgNI=";
+    sha256 = "sha256-krwfxYXxRjyoJ7RVNZV4FbfeshjFSbfBhALDIsdUmhI=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -71,10 +71,16 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64; # upstream doesn't test this architecture
 
+  # don't max out build cores, it breaks tests
+  dontUsePytestXdist = true;
+
   pytestFlagsArray = [
+    # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
+    "--skip-db"
     "--skip-slow"
     "--skip-network"
-    "--numprocesses" "0"
+    "-m" "'not single_cpu'"
+    "--numprocesses" "4"
   ];
 
   disabledTests = [

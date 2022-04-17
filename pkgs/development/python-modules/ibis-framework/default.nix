@@ -119,7 +119,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
     "ibis/tests"
     "ibis/backends/tests"
     "ibis/backends/{${lib.concatStringsSep "," backends}}/tests"

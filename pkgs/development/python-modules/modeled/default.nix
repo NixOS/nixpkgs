@@ -4,7 +4,7 @@
 , zetup
 , six
 , moretools
-, pathpy
+, path
 , pytestCheckHook
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   buildInputs = [ zetup ];
 
-  propagatedBuildInputs = [ six moretools pathpy ];
+  propagatedBuildInputs = [ six moretools path ];
 
   checkInputs = [ pytestCheckHook ];
 

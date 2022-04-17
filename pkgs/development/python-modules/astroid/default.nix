@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.9.3"; # Check whether the version is compatible with pylint
+  version = "2.11.2"; # Check whether the version is compatible with pylint
 
   disabled = pythonOlder "3.6.2";
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x77faggk1dgxy48ng31xj9h6p51w312kvk5zqgvd5f19nvznxyi";
+    sha256 = "sha256-adnvJCchsMWQxsIlenndUb6Mw1MgCNAanZcTmssmsEc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -45,6 +46,9 @@ buildPythonPackage rec {
   disabledTests = [
     # assert (1, 1) == (1, 16)
     "test_end_lineno_string"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    # AssertionError: Lists differ: ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'Protocol', 'object'] != ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'object']
+    "test_mro_typing_extensions"
   ];
 
   passthru.tests = {

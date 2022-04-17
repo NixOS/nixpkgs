@@ -54,7 +54,8 @@ python3.pkgs.buildPythonApplication rec {
       --replace "cryptography==3.*" "cryptography>=3.0" \
       --replace "requests==2.25.*" "requests>=2.25.0" \
       --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23"
+      --replace "botocore==1.23.*" "botocore>=1.23" \
+      --replace "pytz==2021.*" "pytz"
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \

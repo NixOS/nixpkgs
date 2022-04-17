@@ -17,6 +17,7 @@
 let
   # NOTE: check if we can drop any of these overrides when bumping the version
   overrideVersions = [
+    "lxml"
     "pyparsing"
     "pyqt5"
   ];

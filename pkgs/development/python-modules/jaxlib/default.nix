@@ -55,6 +55,8 @@ let
     homepage = "https://github.com/google/jax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin"];
+    hydraPlatforms = ["x86_64-linux" ]; # Don't think anybody is checking the darwin builds
   };
 
   cudatoolkit_joined = symlinkJoin {

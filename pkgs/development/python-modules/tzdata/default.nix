@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2021.5";
+  version = "2022.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aNvkGv0BuGeJS739VPoD9GjPpPAIa/tK3NjejyTz7iE=";
+    hash = "sha256-i1NqjsY9wHUTQrOYQZOjEY+Pyir+JXUrubf//TmFUtM=";
   };
 
   checkInputs = [

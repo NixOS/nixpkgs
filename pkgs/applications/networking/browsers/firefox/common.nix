@@ -61,7 +61,8 @@
 , libwebp
 , nasm
 , nspr
-, nss
+, nss_esr
+, nss_latest
 , pango
 , xorg
 , zip
@@ -356,7 +357,6 @@ buildStdenv.mkDerivation ({
     libwebp
     nasm
     nspr
-    nss
     pango
     perl
     xorg.libX11
@@ -373,6 +373,7 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
+  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gssSupport libkrb5

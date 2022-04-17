@@ -21,6 +21,6 @@ in
     mv plik-*/webapp/dist $out/libexec/plikd/webapp
     cp ${programs.plikd-unwrapped}/bin/plikd $out/libexec/plikd/bin/plikd
     makeWrapper $out/libexec/plikd/bin/plikd $out/bin/plikd \
-      --run "cd $out/libexec/plikd/bin"
+      --chdir "$out/libexec/plikd/bin"
   '';
 }

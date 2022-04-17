@@ -7,7 +7,6 @@
 , perl
 , which
 , pkg-config
-, patch
 , procps
 , pcre
 , cacert
@@ -55,15 +54,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.8";
+  version = "1.17.9";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-Lv/NiYFA2nmgYfN4TKT42LE9gR+yq+na0kBEQtq733o=";
+    sha256 = "sha256-djrUuvuAqSBEWMX6K45zJ/qXGu5FQlLA42LBEjYVaBM=";
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkg-config patch procps ];
+  nativeBuildInputs = [ perl which pkg-config procps ];
   buildInputs = [ cacert pcre ]
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];

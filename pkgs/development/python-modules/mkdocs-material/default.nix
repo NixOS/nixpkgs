@@ -9,13 +9,13 @@
 
 buildPythonApplication rec {
   pname = "mkdocs-material";
-  version = "8.2.7";
+  version = "8.2.9";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Jh0FmtBCYCEk6mYFLOKb1HQXQ4Wc9Z6JCHFVu420IBk=";
+    sha256 = "sha256-lrklTQWWsP1rjixqu5/S7XMN+K095NRGv3JkjRQ4brM=";
   };
 
   propagatedBuildInputs = [

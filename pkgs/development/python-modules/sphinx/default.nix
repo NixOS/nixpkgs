@@ -30,14 +30,16 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.4.0";
-  disabled = pythonOlder "3.5";
+  version = "4.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q4CqPO08AfR+CDB02al65A+FHRFUDUfFTba0u8YQx+8=";
+    sha256 = "sha256-Lw9yZWCQpt02SL/McWPcyFRfVhQHC0TejcYRbVw+VxY=";
     extraPostFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
@@ -45,6 +47,11 @@ buildPythonPackage rec {
       patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
     '';
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils>=0.14,<0.18" "docutils>=0.14"
+  '';
 
   propagatedBuildInputs = [
     Babel

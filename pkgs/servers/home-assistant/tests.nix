@@ -57,7 +57,11 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     disabledTests = old.disabledTests ++ extraDisabledTests.${component} or [];
     disabledTestPaths = old.disabledTestPaths ++ extraDisabledTestPaths.${component} or [ ];
 
+    # components are more often racy than the core
+    dontUsePytestXdist = true;
+
     pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
+      ++ [ "--numprocesses=4" ]
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 
