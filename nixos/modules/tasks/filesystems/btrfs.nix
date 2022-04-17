@@ -78,7 +78,7 @@ in
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf inInitrd
+      boot.initrd.postDeviceCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''
         btrfs device scan
       '';
