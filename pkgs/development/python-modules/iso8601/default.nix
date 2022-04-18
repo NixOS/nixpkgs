@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , hypothesis
+, poetry-core
 , pytestCheckHook
 , pytz
 , pythonOlder
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "iso8601";
   version = "1.0.2";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-J/UDIg5oRdnblU+yErlbA2LYt+bBsjJqhwYcPek1lLE=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   checkInputs = [
     hypothesis
