@@ -165,7 +165,7 @@ stdenv.mkDerivation {
   passthru = {
     modules = modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;
