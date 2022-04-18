@@ -3,12 +3,12 @@
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.8.8";
+  version = "1.8.9";
 
   src = fetchPypi {
     inherit version;
     pname = "Rare";
-    sha256 = "sha256-00CtvBqSrT9yJUHZ5529VrIQtCOYkHRc8+rJHmrTSpg=";
+    sha256 = "sha256-UEvGwWjr4FCsvyFz6Db3VnhVS6MS3FYzYSucumzOoEA=";
   };
 
   nativeBuildInputs = [
