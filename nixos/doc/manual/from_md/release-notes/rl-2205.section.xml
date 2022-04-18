@@ -1240,6 +1240,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>systemd-shutdown</literal> is now properly linked on
+          shutdown to unmount all filesystems and device mapper devices
+          cleanly. This can be disabled using
+          <literal>boot.systemd.shutdown.enable</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Tor SOCKS proxy is now actually disabled if
           <literal>services.tor.client.enable</literal> is set to
           <literal>false</literal> (the default). If you are using this
