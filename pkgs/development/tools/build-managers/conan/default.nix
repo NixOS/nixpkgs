@@ -48,6 +48,13 @@ let newPython = python3.override {
         sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
       };
     });
+    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+      version = "1.5.0";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
+      };
+    });
   };
 };
 
