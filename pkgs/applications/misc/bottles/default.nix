@@ -32,6 +32,11 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/backend/wine/winecommand.py \
+      --replace \
+        'self.__get_runner()' \
+        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
   '';
 
   nativeBuildInputs = [
@@ -85,14 +90,6 @@ python3Packages.buildPythonApplication rec {
   format = "other";
   strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
   dontWrapGApps = true; # prevent double wrapping
-
-  preConfigure = ''
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace src/backend/wine/winecommand.py \
-      --replace \
-        'self.__get_runner()' \
-        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
-  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
