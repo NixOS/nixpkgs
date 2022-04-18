@@ -2089,12 +2089,6 @@
     githubId = 18648043;
     name = "Daniel Cartwright";
   };
-  chiiruno = {
-    email = "okinan@protonmail.com";
-    github = "chiiruno";
-    githubId = 30435868;
-    name = "Okina Matara";
-  };
   Chili-Man = {
     email = "dr.elhombrechile@gmail.com";
     name = "Diego Rodriguez";
@@ -14233,6 +14227,12 @@
     email = "zbioe@protonmail.com";
     github = "zbioe";
     githubId = 7332055;
+  };
+  zendo = {
+    name = "zendo";
+    email = "linzway@qq.com";
+    github = "zendo";
+    githubId = 348013;
   };
   zenithal = {
     name = "zenithal";

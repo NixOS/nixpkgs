@@ -10231,8 +10231,6 @@ with pkgs;
 
   sshoogr = callPackage ../tools/networking/sshoogr { };
 
-  ssmtp = callPackage ../tools/networking/ssmtp { };
-
   ssocr = callPackage ../applications/misc/ssocr { };
 
   ssss = callPackage ../tools/security/ssss { };
@@ -21416,7 +21414,11 @@ with pkgs;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
-  hbase = callPackage ../servers/hbase {};
+  inherit (callPackage ../servers/hbase {}) hbase_1_7 hbase_2_4 hbase_3_0;
+  hbase1 = hbase_1_7;
+  hbase2 = hbase_2_4;
+  hbase3 = hbase_3_0;
+  hbase = hbase2; # when updating, point to the latest stable release
 
   headphones = callPackage ../servers/headphones {};
 
@@ -26613,6 +26615,8 @@ with pkgs;
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
+  keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
+
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
   levant = callPackage ../applications/networking/cluster/levant { };
@@ -28007,8 +28011,6 @@ with pkgs;
   pijuice = with python3Packages; toPythonApplication pijuice;
 
   pinegrow = callPackage ../applications/editors/pinegrow { };
-
-  ping = callPackage ../applications/networking/ping { };
 
   piper = callPackage ../os-specific/linux/piper { };
 
@@ -30475,6 +30477,8 @@ with pkgs;
   yate = callPackage ../applications/misc/yate { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
+
+  ydict = callPackage ../applications/misc/ydict {};
 
   yed = callPackage ../applications/graphics/yed {};
 
