@@ -57,7 +57,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Programa Oficial da Receita para elaboração do IRPF";
+    description = "Brazillian government application for reporting income tax";
+    longDescription = ''
+      Brazillian government application for reporting income tax.
+
+      IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
+    '';
     homepage = "https://www.gov.br/receitafederal/pt-br";
     license = licenses.unfree;
     platforms = platforms.all;
