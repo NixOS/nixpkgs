@@ -11,7 +11,7 @@ let
   # (not via videoDrivers = ["vboxvideo"]).
   # It's likely to work again in some future update.
   xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
-    in if abi == "119" || abi == "120" then "118" else abi;
+    in if abi == "119" || abi == "120" || abi == "211" then "118" else abi;
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
