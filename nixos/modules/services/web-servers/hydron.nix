@@ -161,5 +161,5 @@ in with lib; {
     (mkRenamedOptionModule [ "services" "hydron" "baseDir" ] [ "services" "hydron" "dataDir" ])
   ];
 
-  meta.maintainers = with maintainers; [ chiiruno ];
+  meta.maintainers = with maintainers; [ Madouura ];
 }

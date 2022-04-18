@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     cp edid-decode $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "EDID decoder and conformance tester";
     homepage = "https://cgit.freedesktop.org/xorg/app/edid-decode/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.chiiruno ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ Madouura ];
     platforms = lib.platforms.all;
   };
 }
