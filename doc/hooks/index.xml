@@ -4,7 +4,7 @@
          xml:id="chap-hooks">
  <title>Hooks reference</title>
  <para>
-  Nixpkgs has several hook functions that add augment the stdenv phases.
+  Nixpkgs has several hook packages that augment the stdenv phases.
  </para>
  <xi:include href="./postgresql-test-hook.section.xml" />
 </chapter>
