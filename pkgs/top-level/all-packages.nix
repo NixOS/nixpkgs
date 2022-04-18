@@ -1370,7 +1370,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/BSNES
 
-  ares = callPackage ../applications/emulators/ares { };
+  ares = callPackage ../applications/emulators/bsnes/ares { };
 
   bsnes-hd = callPackage ../applications/emulators/bsnes-hd {
     inherit (gnome2) gtksourceview;
