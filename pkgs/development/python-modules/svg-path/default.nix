@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "5.1";
+  version = "6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CltSq7BGQNmC/3EI5N0wx4QDu0zZWMJLovCUdtXZIws=";
+    sha256 = "sha256-X78HaJFzywl3aA4Sl58wHQu2r1NVyjlsww0+ESx5TdU=";
   };
 
   checkInputs = [
