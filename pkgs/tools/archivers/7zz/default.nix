@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
   sourceRoot = "CPP/7zip/Bundles/Alone2";
 
   makeFlags =
+    [
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "CXX=${stdenv.cc.targetPrefix}c++"
+    ] ++
     lib.optionals useUasm [ "MY_ASM=uasm" ] ++
     # it's the compression code with the restriction, see DOC/License.txt
     lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ];
