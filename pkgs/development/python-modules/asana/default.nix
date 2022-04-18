@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.10.9";
+  version = "0.10.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
-    rev = "v${version}";
-    sha256 = "sha256-9gOkCMY15ChdhiFdzS0TjvWpVTKKEGt7XIcK6EhkSK8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-hHY4GkjIXjvsZz68Ds5JHkalQPIL7/Oh4HX4A6azASI=";
   };
 
   propagatedBuildInputs = [
