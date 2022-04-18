@@ -1,16 +1,29 @@
-{ buildGoPackage, fetchFromGitHub, lib, ... }:
+{ buildGoModule, fetchFromGitHub, lib, testVersion, amazon-ecr-credential-helper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "amazon-ecr-credential-helper";
   version = "0.6.0";
-
-  goPackagePath = "github.com/awslabs/amazon-ecr-credential-helper";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
     rev = "v${version}";
     sha256 = "sha256-lkc8plWWmth8SjeWBCf1HTnCfg09QNIsN3xPePqnv6Y=";
+  };
+
+  vendorSha256 = null;
+
+  modRoot = "./ecr-login";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/awslabs/amazon-ecr-credential-helper/ecr-login/version.Version=${version}"
+  ];
+
+  passthru.tests.version = testVersion {
+    package = amazon-ecr-credential-helper;
+    command = "docker-credential-ecr-login -v";
   };
 
   meta = with lib; {
