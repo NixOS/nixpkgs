@@ -33971,6 +33971,8 @@ with pkgs;
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
+  beancount-black = with python3.pkgs; toPythonApplication beancount-black;
+
   beancount-language-server = callPackage ../development/tools/beancount-language-server {};
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
