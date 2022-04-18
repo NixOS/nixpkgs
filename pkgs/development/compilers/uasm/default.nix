@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, testVersion
+, uasm
+}:
 
 stdenv.mkDerivation rec {
   pname = "uasm";
@@ -40,6 +46,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion {
+    package = uasm;
+    command = "uasm -h";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "http://www.terraspace.co.uk/uasm.html";
