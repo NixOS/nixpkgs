@@ -178,6 +178,8 @@
 
   git-undo = callPackage ./git-undo { };
 
+  header-file-mode = callPackage ./header-file-mode { };
+
   helm-words = callPackage ./helm-words { };
 
   isearch-plus = callPackage ./isearch-plus { };
