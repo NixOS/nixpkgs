@@ -38,6 +38,11 @@ in
         default = if pkgs.stdenv.hostPlatform.libc == "glibc"
           then pkgs.stdenv.cc.libc.bin
           else pkgs.glibc.bin;
+        defaultText = literalExample ''
+          if pkgs.stdenv.hostPlatform.libc == "glibc"
+            then pkgs.stdenv.cc.libc.bin
+            else pkgs.glibc.bin;
+        '';
         description = "package containing the nscd binary to be used by the service";
       };
 
