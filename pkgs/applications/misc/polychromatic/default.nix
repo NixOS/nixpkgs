@@ -23,7 +23,7 @@
 
 python3Packages.buildPythonApplication rec {
   name = "polychromatic";
-  version = "0.7.2";
+  version = "0.7.3";
 
   format = "other";
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     owner = "polychromatic";
     repo = "polychromatic";
     rev = "v${version}";
-    sha256 = "109p89d56qp0pybhrwx9n7xzj5jg74pihh4ic5c6nzjbyjkc9xjn";
+    sha256 = "sha256-H++kQ3Fxw56avEsSE1ctu5p0s50s0eQ+jL5zXS3AA94=";
   };
 
   postPatch = ''
