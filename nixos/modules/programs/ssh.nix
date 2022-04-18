@@ -320,18 +320,17 @@ in
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
-    # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
       { description = "SSH Agent";
         wantedBy = [ "default.target" ];
         unitConfig.ConditionUser = "!@system";
         serviceConfig =
-          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f $SSH_AUTH_SOCK";
             ExecStart =
                 "${cfg.package}/bin/ssh-agent " +
                 optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
                 optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
-                "-a %t/ssh-agent";
+                "-a $SSH_AUTH_SOCK";
             StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";
@@ -342,6 +341,20 @@ in
         # import-environment’).
         environment.SSH_ASKPASS = optionalString cfg.enableAskPassword askPasswordWrapper;
         environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
+        environment.SSH_AUTH_SOCK = "%t/ssh-agent";
+        environment.SSH_AGENT_PID = "$MAINPID";
+      };
+
+    systemd.user.sockets.ssh-agent = mkIf cfg.startAgent
+      { description = "SSH Agent";
+        wantedBy = [ "default.target" ];
+        unitConfig.ConditionUser = "!@system";
+        socketConfig =
+          { Priority = 6;
+            Backlog = 5;
+            ListenStream = "%t/ssh-agent";
+            DirectoryMode=0700;
+          };
       };
 
     environment.extraInit = optionalString cfg.startAgent
