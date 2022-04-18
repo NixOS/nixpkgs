@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (enableShared) "-Wl,-dynamic-linker=$(ls $out/lib/ld-*)"}
   ''
   # Create 'libc.musl-$arch' symlink
-  + lib.optionalString (arch != null) ''
+  + lib.optionalString (arch != null && enableShared) ''
     ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
