@@ -1190,8 +1190,29 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch ./patches/xattr-fix-build.patch super.xattr;
 
-  # Some tests depend on a postgresql instance
-  esqueleto = dontCheck super.esqueleto;
+  esqueleto =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPatch or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          sed -i test/PostgreSQL/Test.hs \
+            -e s^host=localhost^^
+        '';
+        # Match the test suite defaults (or hardcoded values?)
+        preCheck = drv.preCheck or "" + ''
+          PGUSER=esqutest
+          PGDATABASE=esqutest
+        '';
+        testFlags = drv.testFlags or [] ++ [
+          # We don't have a MySQL test hook yet
+          "--skip=/Esqueleto/MySQL"
+        ];
+        testToolDepends = drv.testToolDepends or [] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      super.esqueleto;
 
   # Requires API keys to run tests
   algolia = dontCheck super.algolia;
@@ -1310,7 +1331,25 @@ self: super: {
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
-  persistent-postgresql = dontCheck super.persistent-postgresql;
+  persistent-postgresql =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPath or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          # NOTE: upstream host variable takes only two values...
+          sed -i test/PgInit.hs \
+            -e s^'host=" <> host <> "'^^
+        '';
+        preCheck = drv.preCheck or "" + ''
+          PGDATABASE=test
+          PGUSER=test
+        '';
+        testToolDepends = drv.testToolDepends or [] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      super.persistent-postgresql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
   # https://github.com/robdockins/edison/pull/16
@@ -1515,8 +1554,13 @@ self: super: {
   };
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
-    # wants a running DB to check against
-    doCheck = false;
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.postgresql pkgs.postgresqlTestHook
+    ];
+    preCheck = drv.preCheck or "" + ''
+      # empty string means use default connection
+      export DATABASE_URL=""
+    '';
   }) (super.pg-client.override {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
