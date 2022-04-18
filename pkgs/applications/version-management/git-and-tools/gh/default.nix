@@ -11,6 +11,10 @@ buildGoModule rec {
     sha256 = "sha256-oPLnc3Fv8oGbfQMujcVIwKJrQ3vCV9yIB4rUtjeVOV0=";
   };
 
+  patches = [
+    ./avoid-absoloute-executable-path.patch
+  ];
+
   vendorSha256 = "sha256-YLkNua0Pz0gVIYnWOzOlV5RuLBaoZ4l7l1Pf4QIfUVQ=";
 
   nativeBuildInputs = [ installShellFiles ];

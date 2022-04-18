@@ -1,0 +1,11 @@
+--- a/pkg/cmd/auth/shared/git_credential.go
++++ b/pkg/cmd/auth/shared/git_credential.go
+@@ -93,7 +93,7 @@ func (flow *GitCredentialFlow) gitCredentialSetup(hostname, username, password s
+ 			configureCmd, err := git.GitCommand(
+ 				"config", "--global", "--add",
+ 				credHelperKey,
+-				fmt.Sprintf("!%s auth git-credential", shellQuote(flow.Executable)),
++				"!gh auth git-credential",
+ 			)
+ 			if err != nil {
+ 				configErr = err
