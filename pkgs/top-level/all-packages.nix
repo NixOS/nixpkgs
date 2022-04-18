@@ -6431,7 +6431,11 @@ with pkgs;
 
   google-guest-oslogin = callPackage ../tools/virtualization/google-guest-oslogin { };
 
-  google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
+  google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "14";
+    };
+  };
 
   google-java-format = callPackage ../development/tools/google-java-format { };
 
