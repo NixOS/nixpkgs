@@ -21,8 +21,12 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytest nose ];
+  # test_make_c_files expect a missing test data file, therefore, the test fails.
   checkPhase = ''
-    py.test -p no:warnings $out/${python.sitePackages}
+    py.test \
+      -p no:warnings \
+      -k 'not test_make_c_files' \
+      $out/${python.sitePackages}
   '';
 
   meta = with lib; {
