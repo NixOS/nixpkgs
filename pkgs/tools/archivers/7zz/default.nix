@@ -3,7 +3,7 @@
 , fetchurl
 
 , uasm
-, useUasm ? stdenv.isx86_64
+, useUasm ? stdenv.isLinux
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
@@ -13,11 +13,12 @@
 let
   inherit (stdenv.hostPlatform) system;
   platformSuffix =
-    if useUasm then
-      {
-        x86_64-linux = "_x64";
-      }.${system} or (throw "`useUasm` is not supported for system ${system}")
-    else "";
+    lib.optionalString useUasm {
+      aarch64-linux = "_arm64";
+      i686-linux = "_x86";
+      x86_64-linux = "_x64";
+    }.${system} or
+      (builtins.trace "7zz's ASM optimizations not available for `${system}`. Building without optimizations." "");
 in
 stdenv.mkDerivation rec {
   pname = "7zz";
