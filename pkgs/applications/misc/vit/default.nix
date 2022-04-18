@@ -9,7 +9,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "vit";
   version = "2.2.0";
-  disabled = lib.versionOlder python.version "3.6";
+  disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,9 +17,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pytz
     tasklib
-    tzlocal
     urwid
   ];
 
