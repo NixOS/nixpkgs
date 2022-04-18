@@ -42,11 +42,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.6.1";
+  version = "8.7.0-49.BETA";
 
   src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "sha256-CbSx1UJAvNrA1gTQyi6r8NgjwQ7H+tqWU9t3TUNrDMg=";
+    url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+    sha256 = "sha256-cYT9Pi2WEjZQ5P7Dr84l65AHyD8tZrYC+m4hFxSsNd4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -121,8 +121,6 @@ in stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Multi-platform password manager";

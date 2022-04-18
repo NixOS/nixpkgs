@@ -917,6 +917,8 @@ with pkgs;
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
+  _1password-gui-beta = callPackage ../applications/misc/1password-gui/beta.nix { };
+
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _7zz = callPackage ../tools/archivers/7zz { };
