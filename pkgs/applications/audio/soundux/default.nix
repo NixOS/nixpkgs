@@ -7,14 +7,23 @@
 , makeWrapper
 , wrapGAppsHook
 , libappindicator-gtk3
+, pcre
 , openssl
 , pipewire
 , pulseaudio
 , webkitgtk
 , xorg
+, utillinux
 , libpulseaudio
 , libwnck3
 , makeDesktopItem
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, epoxy
+, dbus_tools
 , downloaderSupport ? true
 , ffmpeg
 , youtube-dl
@@ -67,17 +76,28 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libappindicator-gtk3
     openssl
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    utillinux
+    pcre
     pipewire
     pulseaudio
     webkitgtk
     xorg.libX11
     xorg.libXtst
+    xorg.libXdmcp
+    libxkbcommon
+    epoxy
+    dbus_tools
   ];
 
   meta = with lib; {
     homepage = "https://soundux.rocks/";
-    description = "A cross-platform soundboard";
+    description = "cross-platform soundboard";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ dandellion ];
   };
 }
