@@ -14,9 +14,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CIbHPKJa60SyJeFgF1Tux7RfJZBChhUVXR7HGa+gCtQ=";
   };
 
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "fix-v2_55-compilation-on-macos.patch";
+      url = "https://github.com/Terraspace/UASM/commit/b50c430cc3083c7f32e288a9f64fe1cafb03091d.patch";
+      sha256 = "sha256-FGFB282LSEKtGD1cIRH+Qi5bye5Gx4xb0Ty4J03xjCU";
+    })
+  ];
+
   enableParallelBuilding = true;
 
-  makefile = "gccLinux64.mak";
+  makefile =
+    if stdenv.isDarwin then
+      "ClangOSX64.mak"
+    else
+      "gccLinux64.mak";
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
@@ -30,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.terraspace.co.uk/uasm.html";
     description = "A free MASM-compatible assembler based on JWasm";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;
   };
