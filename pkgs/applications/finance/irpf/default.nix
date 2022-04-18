@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "irpf";
-  version = "2022-1.0";
+  version = "2022-1.3";
 
   src = let
     year = lib.head (lib.splitVersion version);
   in fetchzip {
     url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    sha256 = "0h8f51ilvg7m6hlx0y5mpxhac90p32ksbrffw0hxdqbilgjz1s68";
+    sha256 = "sha256-nAmcVPSnMIWuq2zj1xq/657RmzaSmdtxlI9cp9v5P0A=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
@@ -57,7 +57,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Programa Oficial da Receita para elaboração do IRPF";
+    description = "Brazillian government application for reporting income tax";
+    longDescription = ''
+      Brazillian government application for reporting income tax.
+
+      IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
+    '';
     homepage = "https://www.gov.br/receitafederal/pt-br";
     license = licenses.unfree;
     platforms = platforms.all;
