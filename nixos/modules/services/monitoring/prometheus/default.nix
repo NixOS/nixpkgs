@@ -3,6 +3,7 @@
 with lib;
 
 let
+  json = pkgs.formats.json { };
   cfg = config.services.prometheus;
 
   workingDir = "/var/lib/" + cfg.stateDir;
@@ -34,13 +35,7 @@ let
         promtool ${what} $out
       '' else file;
 
-  # Pretty-print JSON to a file
-  writePrettyJSON = name: x:
-    pkgs.runCommandLocal name { } ''
-      echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
-    '';
-
-  generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
+  generatedPrometheusYml = json.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
