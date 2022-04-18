@@ -21,15 +21,12 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
   version = "2022.4.14-trento-1";
-  sha256 = "16cb01fhxa64f8fadwpr0mawfmchig6xlbx20mz4q9yh5fnagywj";
-  # Note: Update via pkgs/applications/misc/bottles/update.py
-  # mostly copypasted from pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    inherit sha256;
+    sha256 = "16cb01fhxa64f8fadwpr0mawfmchig6xlbx20mz4q9yh5fnagywj";
   };
 
   postPatch = ''
@@ -100,10 +97,6 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = ./update.py;
-  };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
