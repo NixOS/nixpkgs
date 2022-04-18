@@ -2,23 +2,27 @@
 , lib
 , fetchurl
 
+  # Only used for x86/x86_64
 , uasm
-, useUasm ? stdenv.isLinux
+, useUasm ? stdenv.hostPlatform.isx86
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
 , enableUnfree ? false
+
+  # For tests
+, _7zz
+, testVersion
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  platformSuffix =
-    lib.optionalString useUasm {
-      aarch64-linux = "_arm64";
-      i686-linux = "_x86";
-      x86_64-linux = "_x64";
-    }.${system} or
-      (builtins.trace "7zz's ASM optimizations not available for `${system}`. Building without optimizations." "");
+  platformSuffix = {
+    aarch64-linux = "_arm64";
+    i686-linux = "_x86";
+    x86_64-linux = "_x64";
+  }.${system} or
+    (builtins.trace "`platformSuffix` not available for `${system}.` Making a generic `7zz` build." "");
 in
 stdenv.mkDerivation rec {
   pname = "7zz";
@@ -73,17 +77,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/7zz --help | grep ${version}
-
-    runHook postInstallCheck
-  '';
-
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testVersion {
+      package = _7zz;
+      command = "7zz --help";
+    };
+  };
 
   meta = with lib; {
     description = "Command line archiver utility";
