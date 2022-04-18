@@ -33,8 +33,8 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = "cli";
 
   buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ]
-  ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ lld ];
+    ([ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ]
+      ++ lib.optionals stdenv.isAarch64 [ lld ]);
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
