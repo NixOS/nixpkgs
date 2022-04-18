@@ -101,9 +101,6 @@ let
       qps
       screengrab
 
-      ### Qlipper
-      qlipper
-
       ### Default icon theme
       libsForQt5.oxygen-icons5
 
