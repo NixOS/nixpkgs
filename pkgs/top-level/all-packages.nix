@@ -1377,7 +1377,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
   };
 
-  higan = callPackage ../applications/emulators/higan { };
+  higan = callPackage ../applications/emulators/bsnes/higan { };
 
   ### APPLICATIONS/EMULATORS/DOLPHIN-EMU
 
