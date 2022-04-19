@@ -2185,6 +2185,8 @@ with pkgs;
 
   glances = python3Packages.callPackage ../applications/system/glances { };
 
+  nwg-look = callPackage ../applications/system/nwg-look { };
+
   glasgow = with python3Packages; toPythonApplication glasgow;
 
   gmid = callPackage ../servers/gemini/gmid { };
