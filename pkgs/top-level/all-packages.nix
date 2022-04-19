@@ -31101,9 +31101,9 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  lbreakout2 = callPackage ../games/lbreakout2 { };
+  lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
 
-  ltris = callPackage ../games/ltris { };
+  ltris = callPackage ../games/lgames/ltris { };
 
   lunar-client = callPackage ../games/lunar-client { };
 
