@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.19.3";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-JlpjDUX8v7sGADhdKNQXoklbl/fw8DT0A6hEaUG61TQ=";
+    hash = "sha256-vpLa0ipRV+JZoRa7jKn9ZNITvoQ8ABG2Qw1SyMZayK0=";
   };
 
-  cargoSha256 = "sha256-5V8+Mcuu3fxG399QjW++/uWpPMvVWBfhI/L/6pmbkVY=";
+  cargoSha256 = "sha256-zBBU55VlXWYISMbKv07UfOPZ3vWRlpp4estuCcDBDDY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,6 +39,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    $out/bin/miniserve --print-manpage >miniserve.1
+    installManPage miniserve.1
+
     installShellCompletion --cmd miniserve \
       --bash <($out/bin/miniserve --print-completions bash) \
       --fish <($out/bin/miniserve --print-completions fish) \
