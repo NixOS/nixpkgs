@@ -36,6 +36,8 @@
     }
   },
   "dev": {
+    "version_darwin": "102.0.4997.0",
+    "sha256_darwin": "12hi4nyanbjxiizp5gajknl6ppm2lfnik8kava6azvfvpwr2j73x",
     "version": "102.0.4997.0",
     "sha256": "05y9b426wcarq18faw5i79qrfqy158dinvba5d7lwrcjnbqyfr1f",
     "sha256bin64": "0846y3dbs7vghrb8s2s57a2lk7a0x2dha5q0d915qrn29g5x9c6p",
