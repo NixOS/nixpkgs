@@ -31101,6 +31101,8 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
+  ### GAMES/LGAMES
+
   lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
 
   ltris = callPackage ../games/lgames/ltris { };
