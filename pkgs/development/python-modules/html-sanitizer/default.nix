@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "matthiask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1JSdi1PFM+N+UuEPfgWkOZw8S2PZ4ntadU0wnVJNnjw=";
+    hash = "sha256-1JSdi1PFM+N+UuEPfgWkOZw8S2PZ4ntadU0wnVJNnjw=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Tests are sensitive to output
     "test_billion_laughs"
+    "test_10_broken_html"
   ];
 
   pythonImportsCheck = [
