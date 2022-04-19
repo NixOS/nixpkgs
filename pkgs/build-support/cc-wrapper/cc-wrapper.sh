@@ -46,6 +46,8 @@ while (( "$n" < "$nParams" )); do
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
+        -x*-header) dontLink=1 ;; # both `-x c-header` and `-xc-header` are accepted by clang
+        -xc++*) isCxx=1 ;;        # both `-xc++` and `-x c++` are accepted by clang
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
