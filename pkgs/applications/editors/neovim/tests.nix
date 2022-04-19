@@ -13,8 +13,16 @@ let
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
+      type = "viml";
       config = ''
         map <Leader>$ <Cmd>Obsession<CR>
+      '';
+    }
+    {
+      plugin = trouble-nvim;
+      type = "lua";
+      config = ''
+        --placeholder config
       '';
     }
   ];
