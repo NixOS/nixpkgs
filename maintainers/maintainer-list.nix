@@ -1630,6 +1630,12 @@
     githubId = 68566724;
     name = "bootstrap-prime";
   };
+  bnhrkn = {
+    name = "Ben Harkin";
+    email = "github@harkin.tk";
+    github = "bnhrkn";
+    githubId = 56566825;
+  };
   commandodev = {
     email = "ben@perurbis.com";
     github = "commandodev";
