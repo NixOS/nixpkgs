@@ -304,15 +304,14 @@ in
         binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
-      # Link GCC statically against GMP etc.  This makes sense because
-      # these builds of the libraries are only used by GCC, so it
-      # reduces the size of the stdenv closure.
-      gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
       gcc-unwrapped = super.gcc-unwrapped.override {
-        isl = isl_0_20;
+        # Link GCC statically against GMP etc.  This makes sense because
+        # these builds of the libraries are only used by GCC, so it
+        # reduces the size of the stdenv closure.
+        gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
+        mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
+        libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
+        isl = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
         # Use a deterministically built compiler
         # see https://github.com/NixOS/nixpkgs/issues/108475 for context
         reproducibleBuild = true;
