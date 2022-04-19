@@ -55,7 +55,7 @@ let
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
-      inherit (pkgs.llvmPackages_8) llvm;
+      inherit (pkgs.llvmPackages) llvm;
     };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -77,6 +77,8 @@ let
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
+
+    bjack = callPackage ../development/ocaml-modules/bjack { };
 
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
@@ -293,6 +295,8 @@ let
 
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
+    dssi = callPackage ../development/ocaml-modules/dssi { };
+
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     duff = callPackage ../development/ocaml-modules/duff { };
@@ -508,6 +512,8 @@ let
 
     gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
+    gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
+
     gg = callPackage ../development/ocaml-modules/gg { };
 
     git = callPackage ../development/ocaml-modules/git {
@@ -641,9 +647,13 @@ let
 
     lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
+    ladspa = callPackage ../development/ocaml-modules/ladspa { };
+
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
+
+    lastfm = callPackage ../development/ocaml-modules/lastfm { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
 
@@ -998,6 +1008,8 @@ let
 
     odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
 
+    ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
+
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
@@ -1101,6 +1113,8 @@ let
     repr = callPackage ../development/ocaml-modules/repr { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
+
+    samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
       inherit (pkgs) secp256k1;
@@ -1454,6 +1468,8 @@ let
     xenstore-tool = callPackage ../development/ocaml-modules/xenstore-tool { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
+
+    xmlplaylist = callPackage ../development/ocaml-modules/xmlplaylist { };
 
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
 

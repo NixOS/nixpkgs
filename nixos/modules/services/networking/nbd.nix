@@ -4,28 +4,34 @@ with lib;
 
 let
   cfg = config.services.nbd;
-  configFormat = pkgs.formats.ini { };
   iniFields = with types; attrsOf (oneOf [ bool int float str ]);
-  serverConfig = configFormat.generate "nbd-server-config"
-    ({
-      generic =
-        (cfg.server.extraOptions // {
-          user = "root";
-          group = "root";
-          port = cfg.server.listenPort;
-        } // (optionalAttrs (cfg.server.listenAddress != null) {
-          listenaddr = cfg.server.listenAddress;
-        }));
-    }
-    // (mapAttrs
+  # The `[generic]` section must come before all the others in the
+  # config file.  This means we can't just dump an attrset to INI
+  # because that sorts the sections by name.  Instead, we serialize it
+  # on its own first.
+  genericSection = {
+    generic = (cfg.server.extraOptions // {
+      user = "root";
+      group = "root";
+      port = cfg.server.listenPort;
+    } // (optionalAttrs (cfg.server.listenAddress != null) {
+      listenaddr = cfg.server.listenAddress;
+    }));
+  };
+  exportSections =
+    mapAttrs
       (_: { path, allowAddresses, extraOptions }:
         extraOptions // {
           exportname = path;
         } // (optionalAttrs (allowAddresses != null) {
           authfile = pkgs.writeText "authfile" (concatStringsSep "\n" allowAddresses);
         }))
-      cfg.server.exports)
-    );
+      cfg.server.exports;
+  serverConfig =
+    pkgs.writeText "nbd-server-config" ''
+      ${lib.generators.toINI {} genericSection}
+      ${lib.generators.toINI {} exportSections}
+    '';
   splitLists =
     partition
       (path: hasPrefix "/dev/" path)
@@ -103,6 +109,13 @@ in
   };
 
   config = mkIf cfg.server.enable {
+    assertions = [
+      {
+        assertion = !(cfg.server.exports ? "generic");
+        message = "services.nbd.server exports must not be named 'generic'";
+      }
+    ];
+
     boot.kernelModules = [ "nbd" ];
 
     systemd.services.nbd-server = {

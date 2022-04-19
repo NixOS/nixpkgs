@@ -2,30 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "uasm";
-  version = "2.53";
+  version = "2.55";
 
   src = fetchFromGitHub {
     owner = "Terraspace";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Aohwrcb/KTKUFFpfmqVDPNjJh1dMYSNnBJ2eFaP20pM=";
+    # Specifying only the tag results in the following error during download:
+    # the given path has multiple possibilities: #<Git::Ref:0x00007f618689c378>, #<Git::Ref:0x00007f618689c1e8>
+    # Probably because upstream has both a tag and a branch with the same name
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-CIbHPKJa60SyJeFgF1Tux7RfJZBChhUVXR7HGa+gCtQ=";
   };
-
-  # https://github.com/Terraspace/UASM/pull/154
-  patches = [
-    # fix `invalid operands to binary - (have 'char *' and 'uint_8 *' {aka 'unsigned char *'})`
-    (fetchpatch {
-      name = "fix_pointers_compare.patch";
-      url = "https://github.com/clouds56/UASM/commit/9cd3a400990e230571e06d4c758bd3bd35f90ab6.patch";
-      sha256 = "sha256-8mY36dn+g2QNJ1JbWt/y4p0Ha9RSABnOE3vlWANuhsA=";
-    })
-    # fix `dbgcv.c:*:*: fatal error: direct.h: No such file or directory`
-    (fetchpatch {
-      name = "fix_build_dbgcv_c_on_unix.patch";
-      url = "https://github.com/clouds56/UASM/commit/806d54cf778246c96dcbe61a4649bf0aebcb0eba.patch";
-      sha256 = "sha256-uc1LaizdYEh1Ry55Cq+6wrCa1OeBPFo74H5iBpmteAE=";
-    })
-  ];
 
   enableParallelBuilding = true;
 
@@ -43,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.terraspace.co.uk/uasm.html";
     description = "A free MASM-compatible assembler based on JWasm";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;
   };

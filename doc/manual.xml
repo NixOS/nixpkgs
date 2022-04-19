@@ -27,6 +27,7 @@
   <xi:include href="builders/trivial-builders.chapter.xml" />
   <xi:include href="builders/special.xml" />
   <xi:include href="builders/images.xml" />
+  <xi:include href="hooks/index.xml" />
   <xi:include href="languages-frameworks/index.xml" />
   <xi:include href="builders/packages/index.xml" />
  </part>
