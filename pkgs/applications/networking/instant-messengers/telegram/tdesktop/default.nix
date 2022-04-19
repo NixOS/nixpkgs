@@ -82,6 +82,14 @@ env.mkDerivation rec {
     sha256 = "0zcjm08nfdlxrsv0fi6dqg3lk52bcvsxnsf6jm5fv6gf5v9ia3hq";
   };
 
+  patches = [
+    # fix build with KWayland 5.94+
+    # cf. https://invent.kde.org/frameworks/kwayland/-/commit/de442e4a94e249a29cf2e005db8e0a5e4a6a13ed
+    # upstream bug: https://github.com/telegramdesktop/tdesktop/issues/24375
+    # FIXME remove when no longer necessary
+    ./kf594.diff
+  ];
+
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
       --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
