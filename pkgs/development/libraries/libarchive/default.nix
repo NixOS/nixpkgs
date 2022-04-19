@@ -1,6 +1,7 @@
 {
   fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
+  fetchpatch,
 
   # Optional but increases closure only negligibly. Also, while libxml2
   # builds fine on windows, but libarchive has trouble linking windows
@@ -23,6 +24,19 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1q4ij55yirrbrk5iwnh3r90ayq92n02shxc4qkyf73h8zqlfrcj7";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-26280.patch";
+      url = "https://github.com/libarchive/libarchive/commit/cfaa28168a07ea4a53276b63068f94fce37d6aff.patch";
+      sha256 = "1xvgpj6l4a5i6sy5wvq7v9n7am43mcbgbfsvgzmpmrlkr148kn3g";
+    })
+    (fetchpatch {
+      name = "oss-fuzz-38764-fix.patch";
+      url = "https://github.com/libarchive/libarchive/commit/9ad5f077491b9536f01dadca1724385c39cd7613.patch";
+      sha256 = "0106gc5vsp57yg2p7y2lyddradzgsbnmnbbj1g9pw6daypj3czhd";
+    })
+  ];
 
   outputs = [ "out" "lib" "dev" ];
 
