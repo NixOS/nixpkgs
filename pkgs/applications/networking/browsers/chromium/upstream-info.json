@@ -1,5 +1,7 @@
 {
   "stable": {
+    "version_darwin": "100.0.4896.127",
+    "sha256_darwin": "02q8iw2d3cj0frmnq6w9p120a84ahl2pcxkigbvrra6csb44jwvc",
     "version": "100.0.4896.127",
     "sha256": "0kgq38dy9mjyc44556i9gxhlsgd7dfvv1xi1ibk92b4p7i2y6427",
     "sha256bin64": "0mm6lix14bf4ca440dyccnq54z0qvn5c886ghfyzy2q0bqzbq4nh",
