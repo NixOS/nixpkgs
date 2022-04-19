@@ -7,6 +7,7 @@
 , pytest-asyncio
 , aiosqlite
 , databases
+, fetchpatch
 , flask
 , httpx
 , passlib
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.75.1";
+  version = "0.75.2";
   format = "flit";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tSZ5isMzDhDsuVNQdoYXG0IYkgCvdVdARtFXELNjTtk=";
+    hash = "sha256-B4q3Q256Sj4jTQt1TDm3fiEaQKdVxddCF9+KsxkkTWo=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +49,16 @@ buildPythonPackage rec {
     pytest-asyncio
     sqlalchemy
     trio
+  ];
+
+  patches = [
+    # Bump starlette, https://github.com/tiangolo/fastapi/pull/4483
+    (fetchpatch {
+      name = "support-later-starlette.patch";
+      # PR contains multiple commits
+      url = "https://patch-diff.githubusercontent.com/raw/tiangolo/fastapi/pull/4483.patch";
+      sha256 = "sha256-ZWaqAd/QYEYRL1hSQdXdFPgWgdmOill2GtmEn33vz2U=";
+    })
   ];
 
   postPatch = ''
@@ -70,10 +81,13 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_get_custom_response"
-
     # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
     "test_websocket_invalid_data"
     "test_websocket_no_credentials"
+    # TypeError: __init__() missing 1...starlette-releated
+    "test_head"
+    "test_options"
+    "test_trace"
   ];
 
   pythonImportsCheck = [
