@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   patches = [
     ./0001-Fix-cross-compilation-by-looking-for-ar.patch
