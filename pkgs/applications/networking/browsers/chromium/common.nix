@@ -160,6 +160,8 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+      # Check whether there are any cursor metadata before trying to validate https://github.com/NixOS/nixpkgs/issues/167526 / https://webrtc-review.googlesource.com/c/src/+/255601
+      ./patches/check-existence-of-cursor-metadata.patch
     ];
 
     postPatch = ''

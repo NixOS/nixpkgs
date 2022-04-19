@@ -1,0 +1,29 @@
+From c2cd814cdd8cbf8dda6ccec2266327a5321fbde8 Mon Sep 17 00:00:00 2001
+From: Jan Grulich <grulja@gmail.com>
+Date: Tue, 15 Mar 2022 14:31:55 +0100
+Subject: [PATCH] PipeWire capturer: check existence of cursor metadata
+
+Check whether there are any cursor metadata before we try to validate
+and use them, otherwise we might crash on this.
+
+Bug: webrtc:13429
+Change-Id: I365da59a189b6b974cebafc94fec49d5b942efae
+Reviewed-on: https://webrtc-review.googlesource.com/c/src/+/255601
+Reviewed-by: Alexander Cooper <alcooper@chromium.org>
+Commit-Queue: Alexander Cooper <alcooper@chromium.org>
+Cr-Commit-Position: refs/heads/main@{#36240}
+---
+
+diff --git a/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc b/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc
+index a8c86e2..9e81df4 100644
+--- a/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc
++++ b/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc
+@@ -650,7 +650,7 @@
+     const struct spa_meta_cursor* cursor =
+         static_cast<struct spa_meta_cursor*>(spa_buffer_find_meta_data(
+             spa_buffer, SPA_META_Cursor, sizeof(*cursor)));
+-    if (spa_meta_cursor_is_valid(cursor)) {
++    if (cursor && spa_meta_cursor_is_valid(cursor)) {
+       struct spa_meta_bitmap* bitmap = nullptr;
+ 
+       if (cursor->bitmap_offset)
