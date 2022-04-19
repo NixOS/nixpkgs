@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     QuartzCore
   ];
 
-  outputs = [ "out" "bin" ];
+  outputs = [ "out" "bin" "dev" ];
 
   # MoltenVK requires specific versions of its dependencies.
   # Pin them here except for cereal, which is four years old and has several CVEs.
@@ -170,9 +170,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p "$out/lib" "$out/share/vulkan/icd.d" "$bin/bin"
+    mkdir -p "$out/lib" "$out/share/vulkan/icd.d" "$bin/bin" "$dev/include/MoltenVK"
     cp outputs/bin/MoltenVKShaderConverter "$bin/bin/"
     cp outputs/lib/libMoltenVK.dylib "$out/lib/"
+    cp MoltenVK/MoltenVK/API/* "$dev/include/MoltenVK"
     ${cctools}/bin/install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     # FIXME: https://github.com/NixOS/nixpkgs/issues/148189
     /usr/bin/codesign -s - -f "$out/lib/libMoltenVK.dylib"
