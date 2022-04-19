@@ -1309,6 +1309,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.zookeeper</literal> has a new option
+          <literal>jre</literal> for specifying the JRE to start
+          zookeeper with. It defaults to the JRE built with
+          <literal>pkgs.zookeeper</literal> instead of
+          <literal>pkgs.jre</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.pgadmin</literal> now refers to
           <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
           has been removed.
