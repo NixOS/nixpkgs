@@ -43,6 +43,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  postPatch = ''
+    # https://github.com/hacf-fr/meteofrance-api/pull/378
+    substituteInPlace pyproject.toml \
+      --replace 'pytz = ">=2020.4,<2022.0"' 'pytz = ">=2020.4,<2023.0"'
+  '';
+
   pythonImportsCheck = [
     "meteofrance_api"
   ];
