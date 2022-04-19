@@ -79,9 +79,12 @@ in {
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.isAarch64 || stdenv.hostPlatform.isMusl then
+        # 8.10.2 is needed as using 8.10.7 is broken due to RTS-incompatibilities
+        if stdenv.isAarch64 then
           packages.ghc8102BinaryMinimal
+        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+        else if stdenv.hostPlatform.isMusl then
+          packages.ghc8102Binary
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
