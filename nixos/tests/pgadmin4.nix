@@ -5,49 +5,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     pgadmin4Dir = "/var/lib/pgadmin";
     pgadmin4LogDir = "/var/log/pgadmin";
 
-    python-with-needed-packages = pkgs.python3.withPackages (ps: with ps; [
-      selenium
-      testtools
-      testscenarios
-      flask
-      flask-babelex
-      flask-babel
-      flask-gravatar
-      flask_login
-      flask_mail
-      flask_migrate
-      flask_sqlalchemy
-      flask_wtf
-      flask-compress
-      passlib
-      pytz
-      simplejson
-      six
-      sqlparse
-      wtforms
-      flask-paranoid
-      psutil
-      psycopg2
-      python-dateutil
-      sqlalchemy
-      itsdangerous
-      flask-security-too
-      bcrypt
-      cryptography
-      sshtunnel
-      ldap3
-      gssapi
-      flask-socketio
-      eventlet
-      httpagentparser
-      user-agents
-      wheel
-      authlib
-      qrcode
-      pillow
-      pyotp
-      boto3
-    ]);
   in
   {
     name = "pgadmin4";
@@ -55,12 +12,86 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     nodes.machine = { pkgs, ... }: {
       imports = [ ./common/x11.nix ];
+      # needed because pgadmin 6.8 will fail, if those dependencies get updated
+      nixpkgs.overlays = [
+        (self: super: {
+          pythonPackages = super.python3.pkgs.overrideScope (final: prev: rec {
+
+            flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
+              version = "2.0.3";
+              src = oldAttrs.src.override {
+                inherit version;
+                sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
+              };
+              disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
+                "test_aborting"
+              ];
+            });
+            flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
+              # Nothing of interest changed from 0.2 to 0.3
+              doCheck = false;
+            });
+            werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
+              version = "2.0.3";
+              src = oldAttrs.src.override {
+                inherit version;
+                sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+              };
+            });
+          });
+        })
+      ];
+
       environment.systemPackages = with pkgs; [
         pgadmin4
         postgresql
-        python-with-needed-packages
         chromedriver
         chromium
+        (python3.withPackages
+          (ps: with pythonPackages; [
+            selenium
+            testtools
+            testscenarios
+            flask
+            flask-babelex
+            flask-babel
+            flask-gravatar
+            flask_login
+            flask_mail
+            flask_migrate
+            flask_sqlalchemy
+            flask_wtf
+            flask-compress
+            passlib
+            pytz
+            simplejson
+            six
+            sqlparse
+            wtforms
+            flask-paranoid
+            psutil
+            psycopg2
+            python-dateutil
+            sqlalchemy
+            itsdangerous
+            flask-security-too
+            bcrypt
+            cryptography
+            sshtunnel
+            ldap3
+            gssapi
+            flask-socketio
+            eventlet
+            httpagentparser
+            user-agents
+            wheel
+            authlib
+            qrcode
+            pillow
+            pyotp
+            boto3
+          ])
+        )
       ];
       services.postgresql = {
         enable = true;
@@ -121,7 +152,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       with subtest("run browser test"):
           machine.succeed(
                'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
-               && ${python-with-needed-packages.interpreter} regression/runtests.py --pkg browser --exclude \
+               && python regression/runtests.py --pkg browser --exclude \
                browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login'
           )
 
@@ -131,13 +162,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           machine.succeed(
               'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
                && export FONTCONFIG_FILE=${pkgs.makeFontsConf { fontDirectories = [];}} \
-               && ${python-with-needed-packages.interpreter} regression/runtests.py --pkg feature_tests'
+               && python regression/runtests.py --pkg feature_tests'
           )
 
       with subtest("run resql test"):
           machine.succeed(
                'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
-               && ${python-with-needed-packages.interpreter} regression/runtests.py --pkg resql'
+               && python regression/runtests.py --pkg resql'
           )
     '';
   })
