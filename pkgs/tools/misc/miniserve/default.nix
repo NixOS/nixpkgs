@@ -39,6 +39,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    $out/bin/miniserve --print-manpage >miniserve.1
+    installManPage miniserve.1
+
     installShellCompletion --cmd miniserve \
       --bash <($out/bin/miniserve --print-completions bash) \
       --fish <($out/bin/miniserve --print-completions fish) \
