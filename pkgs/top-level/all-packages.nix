@@ -4130,6 +4130,8 @@ with pkgs;
     rainloop-community
     rainloop-standard;
 
+  teip = callPackage ../tools/misc/teip {};
+
   rav1e = callPackage ../tools/video/rav1e { };
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
