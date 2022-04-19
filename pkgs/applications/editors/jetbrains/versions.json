@@ -19,10 +19,10 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
-      "version": "2021.3.3",
-      "sha256": "9d2b709703516eddeb7f4d6568a7de2e268de4258c7bc7787baee806fbaee4a3",
-      "url": "https://download.jetbrains.com/go/goland-2021.3.3.tar.gz",
-      "version-major-minor": "2021.3"
+      "version": "2022.1",
+      "sha256": "0ix9hbgqxpkmw5q2n19b87jv0q0dymsq7m0g6jgrlyrbnqrg80vq",
+      "url": "https://download.jetbrains.com/go/goland-2022.1.tar.gz",
+      "version-major-minor": "2022.1"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -117,10 +117,10 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.dmg",
-      "version": "2021.3.3",
-      "sha256": "4b245b6fe0cf588adbf36e68f12397d5fd311b0b6d49f17ba374ebaa10d207c9",
-      "url": "https://download.jetbrains.com/go/goland-2021.3.3.dmg",
-      "version-major-minor": "2021.3"
+      "version": "2022.1",
+      "sha256": "02whfj27yz3q05cf0cm4jr3rizqdb8j1af5n2ibdij5qhdg4ai7c",
+      "url": "https://download.jetbrains.com/go/goland-2022.1.dmg",
+      "version-major-minor": "2022.1"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -215,10 +215,10 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.dmg",
-      "version": "2021.3.3",
-      "sha256": "54397d48e20fb534206e13f84b35868b1eaea13175176487b1239b23db4e13db",
-      "url": "https://download.jetbrains.com/go/goland-2021.3.3-aarch64.dmg",
-      "version-major-minor": "2021.3"
+      "version": "2022.1",
+      "sha256": "1lwqjz4xxa476f1m8mwgk9c8nqin86zqhjj8fvbx702swcbsh1h5",
+      "url": "https://download.jetbrains.com/go/goland-2022.1-aarch64.dmg",
+      "version-major-minor": "2022.1"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
