@@ -9060,6 +9060,8 @@ with pkgs;
 
   pamtester = callPackage ../tools/security/pamtester { };
 
+  pam-reattach = callPackage ../os-specific/darwin/pam-reattach {};
+
   pantheon-tweaks = callPackage ../desktops/pantheon/third-party/pantheon-tweaks { };
 
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
