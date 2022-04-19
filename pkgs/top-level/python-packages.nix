@@ -3939,6 +3939,8 @@ in {
 
   http-ece = callPackage ../development/python-modules/http-ece { };
 
+  httpie-ntlm = callPackage ../development/python-modules/httpie-ntlm { };
+
   httplib2 = callPackage ../development/python-modules/httplib2 { };
 
   http-message-signatures = callPackage ../development/python-modules/http-message-signatures { };
