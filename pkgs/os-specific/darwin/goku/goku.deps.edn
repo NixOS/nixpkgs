@@ -1,0 +1,13 @@
+;; re-generate goku.deps.nix:
+;; $ nix run github:hlolli/clj2nix -- goku.deps.edn goku.deps.nix
+
+{:mvn/repos
+   {"bintray" {:url "http://jcenter.bintray.com"}
+    "central" {:url "https://repo1.maven.org/maven2/"}
+    "clojars" {:url "https://repo.clojars.org/"}}
+ :deps
+ {org.clojure/clojure {:mvn/version "1.10.1"}
+  org.clojure/tools.cli {:mvn/version "1.0.194"}
+  me.raynes/fs {:mvn/version "1.4.6"}
+  cheshire {:mvn/version "5.10.0"}
+  environ {:mvn/version "1.2.0"}}}
