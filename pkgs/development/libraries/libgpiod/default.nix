@@ -3,7 +3,7 @@
 , enablePython ? false, python3, ncurses }:
 
 stdenv.mkDerivation rec {
-  pname = "libgpiod";
+  pname = lib.optionals enablePython "${python3.libPrefix}-" + "libgpiod";
   version = "1.6.3";
 
   src = fetchurl {
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     autoconf-archive
     pkg-config
     autoreconfHook
+  ] ++ lib.optionals enablePython [
+    python3
   ];
 
   configureFlags = [
@@ -29,6 +31,10 @@ stdenv.mkDerivation rec {
     "--enable-bindings-cxx"
     "--prefix=${placeholder "out"}"
   ] ++ lib.optional enablePython "--enable-bindings-python";
+
+  postInstall = lib.optionals enablePython ''
+    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+  '';
 
   meta = with lib; {
     description = "C library and tools for interacting with the linux GPIO character device";
