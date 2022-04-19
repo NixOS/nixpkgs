@@ -371,6 +371,10 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
+  piv-agent = callPackage ../tools/security/piv-agent {
+    buildGoModule = buildGo118Module;
+  };
+
   probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
