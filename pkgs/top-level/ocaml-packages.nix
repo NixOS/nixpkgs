@@ -427,6 +427,8 @@ let
       inherit (pkgs) flac;
     };
 
+    flex = callPackage ../development/ocaml-modules/flex { };
+
     fmt = callPackage ../development/ocaml-modules/fmt { };
 
     fontconfig = callPackage ../development/ocaml-modules/fontconfig {
