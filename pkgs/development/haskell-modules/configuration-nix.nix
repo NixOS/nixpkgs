@@ -619,8 +619,15 @@ self: super: builtins.intersectAttrs super {
         '';
       }) super.spago;
 
+      spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
+        # spago (and its dependency, bower-json) is not yet updated for aeson-2.0
+        aeson = hfinal.aeson_1_5_6_0;
+        # bower-json needs aeson_1_5_6_0 and is marked broken without it.
+        bower-json = doDistribute (markUnbroken hprev.bower-json);
+      });
+
       # Tests require network access.
-      spagoWithoutChecks = dontCheck spagoDocs;
+      spagoWithoutChecks = dontCheck spagoOldAeson;
     in
     spagoWithoutChecks;
 
