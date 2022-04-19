@@ -11,6 +11,7 @@
 import libcalamares
 import os
 import subprocess
+import re
 
 import gettext
 _ = gettext.translation("calamares-python",
@@ -366,9 +367,9 @@ def run():
             try:
                 # Create /crypto_keyfile.bin
                 subprocess.check_output(
-                    ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], stderr=subprocess.STDOUT)
+                    ["pkexec", "dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], stderr=subprocess.STDOUT)
                 subprocess.check_output(
-                    ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], stderr=subprocess.STDOUT)
+                    ["pkexec", "chmod", "600", root_mount_point+"/crypto_keyfile.bin"], stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError as e:
                 if e.output != None:
                     libcalamares.utils.error(e.output.decode("utf8"))
@@ -391,7 +392,7 @@ def run():
                 pswd = subprocess.Popen(
                     ["echo", part["luksPassphrase"]], stdout=subprocess.PIPE)
                 subprocess.check_output(
-                    ["cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], stdin=pswd.stdout, stderr=subprocess.STDOUT)
+                    ["pkexec", "cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], stdin=pswd.stdout, stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError as e:
                 if e.output != None:
                     libcalamares.utils.error(e.output.decode("utf8"))
@@ -508,7 +509,7 @@ def run():
             if part["fsName"] == "luks":
                 try:
                     subprocess.check_output(
-                        ["swapon", "/dev/mapper/" + part["luksMapperName"]], stderr=subprocess.STDOUT)
+                        ["pkexec", "swapon", "/dev/mapper/" + part["luksMapperName"]], stderr=subprocess.STDOUT)
                 except subprocess.CalledProcessError as e:
                     if e.output != None:
                         libcalamares.utils.error(e.output.decode("utf8"))
@@ -516,7 +517,7 @@ def run():
             else:
                 try:
                     subprocess.check_output(
-                        ["swapon", part["device"]], stderr=subprocess.STDOUT)
+                        ["pkexec", "swapon", part["device"]], stderr=subprocess.STDOUT)
                 except subprocess.CalledProcessError as e:
                     if e.output != None:
                         libcalamares.utils.error(e.output.decode("utf8"))
@@ -528,7 +529,7 @@ def run():
     try:
         # Generate hardware.nix with mounted swap device
         subprocess.check_output(
-            ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+            ["pkexec", "nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         if e.output != None:
             libcalamares.utils.error(e.output.decode("utf8"))
@@ -536,13 +537,39 @@ def run():
 
     libcalamares.job.setprogress(0.3)
 
-    # Write the configuration file
-    with open(config, "w") as f:
+    # Check for unfree stuff in hardware-configuration.nix
+    hf = open(root_mount_point + "/etc/nixos/hardware-configuration.nix", "r")
+    htxt = hf.read()
+    search = re.search("boot\.extraModulePackages = \[ (.*) \];", htxt)
+    # Check if any extraModulePackages are defined
+    if search is not None:
+        expkgs = search.group(1).split(" ")
+        for pkg in expkgs:
+            p = ".".join(pkg.split(".")[3:])
+            # Check package p is unfree
+            isunfree = subprocess.check_output(["nix-instantiate", "--eval", "--strict", "-E",
+                                               "with import <nixpkgs> {{}}; pkgs.linuxKernel.packageAliases.linux_default.{}.meta.unfree".format(p), "--json"], stderr=subprocess.STDOUT)
+            if isunfree == b'true':
+                libcalamares.utils.warning("{} is marked as unfree, removing from hardware-configuration.nix".format(p))
+                expkgs.remove(pkg)
+        hardwareout = re.sub(
+            "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {} ];".format(" ".join(expkgs)), htxt)
+        # Write the hardware-configuration.nix file
+        with open("/tmp/hardware-configuration.nix", "w") as f:
+            f.write(hardwareout)
+        subprocess.check_call(["pkexec", "cp", "/tmp/hardware-configuration.nix",
+                              root_mount_point + "/etc/nixos/hardware-configuration.nix"])
+        subprocess.check_call(["rm", "/tmp/hardware-configuration.nix"])
+
+    # Write the configuration.nix file
+    with open("/tmp/configuration.nix", "w") as f:
         f.write(cfg)
+    subprocess.check_call(["pkexec", "cp", "/tmp/configuration.nix", config])
+    subprocess.check_call(["rm", "/tmp/configuration.nix"])
 
     # Install customizations
     try:
-        subprocess.check_output(["nixos-install", "--no-root-passwd",
+        subprocess.check_output(["pkexec", "nixos-install", "--no-root-passwd",
                                  "--root", root_mount_point], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         if e.output != None:
