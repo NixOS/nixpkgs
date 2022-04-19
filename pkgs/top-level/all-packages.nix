@@ -18240,6 +18240,8 @@ with pkgs;
 
   libdv = callPackage ../development/libraries/libdv { };
 
+  libdvbcsa = callPackage ../development/libraries/libdvbcsa { };
+
   libdvbpsi = callPackage ../development/libraries/libdvbpsi { };
 
   libdwg = callPackage ../development/libraries/libdwg { };
