@@ -33,13 +33,20 @@ let
         inherit version;
         sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
       };
-      disabledTests = (oldAttrs.disabledTests or []) ++ [
+      disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
         "test_aborting"
       ];
     });
     flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
       # Nothing of interest changed from 0.2 to 0.3
       doCheck = false;
+    });
+    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
+      version = "2.0.3";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+      };
     });
   });
 
