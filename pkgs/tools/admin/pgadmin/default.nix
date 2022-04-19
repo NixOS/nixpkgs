@@ -25,9 +25,27 @@ let
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
   };
+
+  pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
+    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
+      version = "2.0.3";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
+      };
+      disabledTests = (oldAttrs.disabledTests or []) ++ [
+        "test_aborting"
+      ];
+    });
+    flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
+      # Nothing of interest changed from 0.2 to 0.3
+      doCheck = false;
+    });
+  });
+
 in
 
-python3.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   inherit pname version src;
 
   # from Dockerfile
@@ -101,10 +119,10 @@ python3.pkgs.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = [ python3 python3.pkgs.cython python3.pkgs.pip ];
+  nativeBuildInputs = with pythonPackages; [ cython pip ];
   buildInputs = [
     zlib
-    python3.pkgs.wheel
+    pythonPackages.wheel
   ];
 
   # tests need an own data, log directory
@@ -112,7 +130,7 @@ python3.pkgs.buildPythonApplication rec {
   # checks will be run through nixos/tests
   doCheck = false;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with pythonPackages; [
     flask
     flask-gravatar
     flask_login
