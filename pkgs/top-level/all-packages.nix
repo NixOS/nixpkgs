@@ -31160,6 +31160,8 @@ with pkgs;
 
   lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
 
+  lpairs2 = callPackage ../games/lgames/lpairs2 { };
+
   ltris = callPackage ../games/lgames/ltris { };
 
   lunar-client = callPackage ../games/lunar-client { };
