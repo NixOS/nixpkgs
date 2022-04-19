@@ -14348,4 +14348,10 @@
     github = "kuwii";
     githubId = 10705175;
   };
+  melias122 = {
+    name = "Martin Elias";
+    email = "martin+nixpkgs@elias.sx";
+    github = "melias122";
+    githubId = 1027766;
+  };
 }
