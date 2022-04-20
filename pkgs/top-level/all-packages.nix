@@ -4976,6 +4976,8 @@ with pkgs;
 
   debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
 
+  debian-goodies = callPackage ../applications/misc/debian-goodies { };
+
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
   debugedit = callPackage ../development/tools/misc/debugedit { };
