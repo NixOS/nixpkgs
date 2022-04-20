@@ -48,6 +48,7 @@ let
       lxml
       pillow
       scour
+      pyserial
     ]);
 in
 stdenv.mkDerivation rec {
