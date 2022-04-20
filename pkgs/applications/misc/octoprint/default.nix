@@ -167,6 +167,7 @@ let
                     "wrapt"
                     "zeroconf"
                     "Flask-Login"
+                    "werkzeug"
                   ];
                 in
                 ''
