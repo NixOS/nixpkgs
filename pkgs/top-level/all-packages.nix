@@ -4018,6 +4018,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
+  pixcat = with python3Packages; toPythonApplication pixcat;
+
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
   waitron = callPackage ../tools/networking/waitron {};
