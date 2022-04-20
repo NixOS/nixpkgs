@@ -54,7 +54,7 @@ let
   inherit (cudaPackages.cudatoolkit) cc;
 
   cudatoolkit_joined = symlinkJoin {
-    name = "cudatoolkit-root";
+    name = "cudatoolkit-root-${cudaPackages.cudaVersion}";
 
     # The list of required cuda redist packages can be found e.g.
     # at https://github.com/pytorch/pytorch/blob/b09769992f83f94150eaef2ab9d03c37b36da159/cmake/Summary.cmake#L85
