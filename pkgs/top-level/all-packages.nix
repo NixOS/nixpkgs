@@ -3579,7 +3579,12 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gpu-burn = callPackage ../applications/misc/gpu-burn { };
+  gpu-burn = callPackage ../applications/misc/gpu-burn {
+    # gpu-burn doesn't build on gcc11. CUDA 11.3 is the last version to use
+    # pre-gcc11, in particular gcc9.
+    cudatoolkit = cudaPackages_11_3.cudatoolkit;
+    stdenv = gcc9Stdenv;
+  };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
@@ -23097,6 +23102,10 @@ with pkgs;
 
   librealsenseWithCuda = callPackage ../development/libraries/librealsense {
     cudaSupport = true;
+    # librealsenseWithCuda doesn't build on gcc11. CUDA 11.3 is the last version
+    # to use pre-gcc11, in particular gcc9.
+    cudaPackages = cudaPackages_11_3;
+    stdenv = gcc9Stdenv;
   };
 
   librealsenseWithoutCuda = callPackage ../development/libraries/librealsense {
