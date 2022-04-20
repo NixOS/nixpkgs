@@ -274,6 +274,11 @@ cfgautologintty = """  # Enable automatic login for the user.
 
 """
 
+cfgunfree = """  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+"""
+
 cfgpkgs = """  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -469,6 +474,13 @@ def run():
         else:
             cfg += cfgautologintty
 
+    # Check if unfree packages are allowed
+    free = True
+    if gs.value("packagechooser_unfree") is not None:
+        if gs.value("packagechooser_unfree") == "unfree":
+          free = False
+          cfg += cfgunfree
+
     cfg += cfgpkgs
     if gs.value("packagechooser_packagechooser") == "plasma":
         catenate(variables, "pkgs", "\n    kate")
@@ -541,8 +553,9 @@ def run():
     hf = open(root_mount_point + "/etc/nixos/hardware-configuration.nix", "r")
     htxt = hf.read()
     search = re.search("boot\.extraModulePackages = \[ (.*) \];", htxt)
-    # Check if any extraModulePackages are defined
-    if search is not None:
+
+    # Check if any extraModulePackages are defined, and remove if only free packages are allowed
+    if search is not None and free:
         expkgs = search.group(1).split(" ")
         for pkg in expkgs:
             p = ".".join(pkg.split(".")[3:])
@@ -550,7 +563,8 @@ def run():
             isunfree = subprocess.check_output(["nix-instantiate", "--eval", "--strict", "-E",
                                                "with import <nixpkgs> {{}}; pkgs.linuxKernel.packageAliases.linux_default.{}.meta.unfree".format(p), "--json"], stderr=subprocess.STDOUT)
             if isunfree == b'true':
-                libcalamares.utils.warning("{} is marked as unfree, removing from hardware-configuration.nix".format(p))
+                libcalamares.utils.warning(
+                    "{} is marked as unfree, removing from hardware-configuration.nix".format(p))
                 expkgs.remove(pkg)
         hardwareout = re.sub(
             "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {} ];".format(" ".join(expkgs)), htxt)
