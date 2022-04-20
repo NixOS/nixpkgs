@@ -12831,6 +12831,8 @@ with pkgs;
 
   stylish-cabal = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-cabal;
 
+  lhs2tex = haskellPackages.lhs2tex;
+
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
   purescript = callPackage ../development/compilers/purescript/purescript { };
