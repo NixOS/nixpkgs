@@ -29,6 +29,10 @@
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "sha256-iDbClCNDUsxT6K6koc4EQuu7dppTbOfzCVedpQIKI5U=";
     };
+    "${version}-aarch64-darwin" = fetchurl {
+      url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${aarch64}-release.zip";
+      sha256 = "sha256-DDE4DpA2m8wKkUZuQDn4NpXVvtaJ6sIHeKNjk3RbpYE=";
+    };
   }
 }:
 
@@ -63,7 +67,7 @@ stdenv.mkDerivation {
       with C-style syntax. It offers compilation to JavaScript, interfaces,
       mixins, abstract classes, reified generics, and optional typing.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     license = licenses.bsd3;
   };
 }
