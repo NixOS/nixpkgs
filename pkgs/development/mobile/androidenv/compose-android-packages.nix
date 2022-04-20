@@ -3,10 +3,10 @@
 }:
 
 { toolsVersion ? "26.1.1"
-, platformToolsVersion ? "31.0.3"
-, buildToolsVersions ? [ "31.0.0" ]
+, platformToolsVersion ? "33.0.1"
+, buildToolsVersions ? [ "32.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "30.9.0"
+, emulatorVersion ? "31.3.7"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -14,7 +14,7 @@
 , abiVersions ? [ "armeabi-v7a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "22.1.7171670"
+, ndkVersion ? "24.0.8215888"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
