@@ -112,6 +112,8 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # Network requests to public web
     "test_crumb_capture"
+    # TypeError: cannot unpack non-iterable TestResponse object
+    "test_rpc_error_page"
   ];
 
   disabledTestPaths = [
@@ -128,7 +130,17 @@ buildPythonPackage rec {
     "tests/integrations/rq/"
     # broken since pytest 7.0.1; AssertionError: previous item was not torn down properly
     "tests/utils/test_contextvars.py"
-  ];
+    # broken since Flask and Werkzeug update to 2.1.0 (different error messages)
+    "tests/integrations/flask/test_flask.py"
+    "tests/integrations/bottle/test_bottle.py"
+    "tests/integrations/django/test_basic.py"
+    "tests/integrations/pyramid/test_pyramid.py"
+  ]
+  # test crashes on aarch64
+  ++ (if stdenv.buildPlatform != "x86_64-linux" then [
+    "tests/test_transport.py"
+    "tests/integrations/threading/test_threading.py"
+  ] else [ ]);
 
   pythonImportsCheck = [
     "sentry_sdk"
