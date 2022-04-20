@@ -74,7 +74,11 @@ rec {
 
   ### neovim tests
   ##################
-  nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
+  # runTest
+  nvim_with_plugins = runTest (wrapNeovim2 "-with-plugins" nvimConfNix) ''
+
+    echo "hello world"
+  '';
 
   nvim_via_override = neovim.override {
     extraName = "-via-override";
