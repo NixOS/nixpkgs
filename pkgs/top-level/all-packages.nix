@@ -3964,6 +3964,8 @@ with pkgs;
 
   oil-buku = callPackage ../applications/misc/oil-buku { };
 
+  osdlyrics = callPackage ../applications/audio/osdlyrics { };
+
   ossutil = callPackage ../tools/admin/ossutil {};
 
   pastel = callPackage ../applications/misc/pastel {
