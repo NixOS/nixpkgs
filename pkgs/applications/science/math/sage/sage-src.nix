@@ -13,9 +13,14 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
+  #
+  # We don't use sage's own build system (which builds all its
+  # dependencies), so we exclude changes to "build/" from patches by
+  # default to avoid conflicts.
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, excludes ? [ "build/*" ]
+                  , ...}@args: (
     fetchpatch ({
-      inherit name sha256;
+      inherit name sha256 excludes;
 
       # There are three places to get changes from:
       #
@@ -49,11 +54,7 @@ let
                "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
              ]
              else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
-
-      # We don't care about sage's own build system (which builds all its dependencies).
-      # Exclude build system changes to avoid conflicts.
-      excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" "excludes" ])
   );
 in
 stdenv.mkDerivation rec {
@@ -172,6 +173,29 @@ stdenv.mkDerivation rec {
       rev = "8452003846a7303100847d8d0ed642fc642c11d6";
       sha256 = "sha256-A/XMouPlc2sjFp30L+56fBGJXydS2EtzfPOV98FCDqI=";
     })
+
+    # https://trac.sagemath.org/ticket/33226
+    (fetchSageDiff {
+      base = "9.6.beta0";
+      name = "giac-1.7.0-45-update.patch";
+      rev = "33ea2adf01e9e2ce9f1e33779f0b1ac0d9d1989c";
+      sha256 = "sha256-DOyxahf3+IaYdkgmAReNDCorRzMgO8+yiVrJ5TW1km0=";
+    })
+
+    # https://trac.sagemath.org/ticket/33398
+    (fetchSageDiff {
+      base = "9.6.beta4";
+      name = "sympy-1.10-update.patch";
+      rev = "6b7c3a28656180e42163dc10f7b4a571b93e5f27";
+      sha256 = "sha256-fnUyM2yjHkCykKRfzQQ4glcUYmCS/fYzDzmCf0nuebk=";
+      # The patch contains a whitespace change to a file that didn't exist in Sage 9.5.
+      excludes = [ "build/*" "src/sage/manifolds/vector_bundle_fiber_element.py" ];
+    })
+
+    # docutils 0.18.1 now triggers Sphinx warnings. tolerate them for
+    # now, because patching Sphinx is not feasible.
+    # https://github.com/sphinx-doc/sphinx/issues/9777#issuecomment-1104481271
+    ./patches/docutils-0.18.1-deprecation.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
