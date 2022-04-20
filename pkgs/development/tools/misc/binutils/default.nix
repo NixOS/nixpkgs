@@ -110,7 +110,7 @@ stdenv.mkDerivation {
     texinfo
   ]
   ++ lib.optionals targetPlatform.isiOS [ autoreconfHook ]
-  ++ lib.optionals targetPlatform.isDarwin [ autoconf269 automake gettext libtool ]
+  ++ lib.optionals buildPlatform.isDarwin [ autoconf269 automake gettext libtool ]
   ++ lib.optionals targetPlatform.isVc4 [ flex ]
   ;
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation {
 
   inherit noSysDirs;
 
-  preConfigure = (lib.optionalString targetPlatform.isDarwin ''
+  preConfigure = (lib.optionalString buildPlatform.isDarwin ''
     for i in */configure.ac; do
       pushd "$(dirname "$i")"
       echo "Running autoreconf in $PWD"

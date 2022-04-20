@@ -380,6 +380,12 @@
     githubId = 209175;
     name = "Alesya Huzik";
   };
+  aidalgol = {
+    email = "aidalgol+nixpkgs@fastmail.net";
+    github = "aidalgol";
+    githubId = 2313201;
+    name = "Aidan Gauland";
+  };
   aij = {
     email = "aij+git@mrph.org";
     github = "aij";
@@ -14353,5 +14359,11 @@
     email = "kuwii.someone@gmail.com";
     github = "kuwii";
     githubId = 10705175;
+  };
+  melias122 = {
+    name = "Martin Elias";
+    email = "martin+nixpkgs@elias.sx";
+    github = "melias122";
+    githubId = 1027766;
   };
 }

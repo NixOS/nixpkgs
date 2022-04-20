@@ -1921,10 +1921,51 @@
       </listitem>
       <listitem>
         <para>
-          ORY Kratos was updated to version 0.8.3-alpha.1.pre.0, which
+          ORY Kratos was updated to version 0.9.0-alpha.3, which
           introduces some breaking changes:
         </para>
         <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              All endpoints at the Admin API are now exposed at
+              <literal>/admin/</literal>. For example, endpoint
+              <literal>https://kratos:4434/identities</literal> is now
+              exposed at
+              <literal>https://kratos:4434/admin/identities</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Configuration key
+              <literal>selfservice.whitelisted_return_urls</literal> has
+              been renamed to <literal>allowed_return_urls</literal>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <literal>password_identifier</literal> form field of
+              the password login strategy has been renamed to
+              <literal>identifier</literal> to make compatibility with
+              passwordless flows possible.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Instead of having a global
+              <literal>default_schema_url</literal> which developers
+              used to update their schema, you now need to define the
+              <literal>default_schema_id</literal> which must reference
+              schema ID in your config.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Calling <literal>/self-service/recovery</literal> without
+              flow ID or with an invalid flow ID while authenticated
+              will now respond with an error instead of redirecting to
+              the default page.
+            </para>
+          </listitem>
           <listitem>
             <para>
               If you are relying on the SQLite images, update your
@@ -1959,6 +2000,18 @@
                 <para>
                   <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.2-alpha.1">Release
                   Notes for v0.8.2-alpha-1</link>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.9.0-alpha.1">Release
+                  Notes for v0.9.0-alpha-1</link>
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.9.0-alpha.3">Release
+                  Notes for v0.9.0-alpha-3</link>
                 </para>
               </listitem>
             </itemizedlist>
@@ -2230,6 +2283,14 @@
           <literal>nss_esr</literal>. This was done to ease maintenance
           of <literal>nss</literal> and dependent high-profile packages
           like <literal>firefox</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Nextcloud module now supports to create a Mysql database
+          automatically with
+          <literal>services.nextcloud.database.createLocally</literal>
+          enabled.
         </para>
       </listitem>
       <listitem>
