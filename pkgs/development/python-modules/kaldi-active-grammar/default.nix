@@ -5,6 +5,7 @@
 , cmake
 , ush
 , requests
+, six
 , numpy
 , cffi
 , openfst
@@ -48,7 +49,7 @@ buildPythonPackage rec {
 
   buildInputs = [ openfst kaldi ];
   nativeBuildInputs = [ scikit-build cmake ];
-  propagatedBuildInputs = [ ush requests numpy cffi ];
+  propagatedBuildInputs = [ ush requests numpy cffi six ];
 
   doCheck = false;  # no tests exist
 
