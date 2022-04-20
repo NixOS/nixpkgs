@@ -112,6 +112,13 @@ stdenv.mkDerivation rec {
     "big-parallel"
   ];
 
+  # On some systems (at least, Intel TGL iGPU), the email composer is
+  # broken since Webkit enables accelerated rending by default in
+  # 2.36. See #168645.
+  preFixup = ''
+    gappsWrapperArgs+=(--set WEBKIT_DISABLE_COMPOSITING_MODE 1)
+  '';
+
   doCheck = true;
 
   passthru = {
