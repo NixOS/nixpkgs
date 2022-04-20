@@ -914,6 +914,8 @@ with pkgs;
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
+  _1password-gui-beta = callPackage ../applications/misc/1password-gui/beta.nix { };
+
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _7zz = callPackage ../tools/archivers/7zz { };
@@ -4870,7 +4872,7 @@ with pkgs;
   cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaVersion = "11.5"; };
   cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaVersion = "11.6"; };
   cudaPackages_11 = cudaPackages_11_5;
-  cudaPackages = cudaPackages_11;
+  cudaPackages = recurseIntoAttrs cudaPackages_11;
 
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;
@@ -18239,6 +18241,8 @@ with pkgs;
   libdrm = callPackage ../development/libraries/libdrm { };
 
   libdv = callPackage ../development/libraries/libdv { };
+
+  libdvbcsa = callPackage ../development/libraries/libdvbcsa { };
 
   libdvbpsi = callPackage ../development/libraries/libdvbpsi { };
 
