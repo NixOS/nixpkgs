@@ -27,6 +27,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonImportsCheck = [ "pixcat" ];
+
   meta = with lib; {
     description = "Display images on a kitty terminal with optional resizing";
     homepage = "https://github.com/mirukan/pixcat";
