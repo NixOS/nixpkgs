@@ -1,10 +1,10 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
   # look for GO_LDFLAGS getting set in the Makefile
-  version = "1.0.2";
-  sha256 = "sha256-FcwbZAAPsZ1WkLOwXHNRAI1SrEv7JLSkIReCe/FNckQ=";
-  vendorSha256 = "sha256-qDP2b0EAJzqpmAU1/Te9/tD8hm6zCF8B33yr0Z55WFU=";
-  pkgsVersion = "v1.0.0-7-ge6eb485";
+  version = "1.0.3";
+  sha256 = "sha256-unGr+T2uYg7/4pAXf8vp9Hpi6IrCsLCqGbyBC7QXGX8=";
+  vendorSha256 = "sha256-9NYr5Ok9oQ1ajYFiTeU9ztmX/55UROBjNawLGjm4HYU=";
+  pkgsVersion = "v1.0.0-8-g76f8c5b";
   extrasVersion = "v1.0.0-2-gc5d3ab0";
 in
 buildGoModule rec {

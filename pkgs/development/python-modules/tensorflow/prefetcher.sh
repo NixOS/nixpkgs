@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="2.7.0"
+version="2.8.0"
 
 bucket="https://storage.googleapis.com/tensorflow"
 
@@ -11,12 +11,15 @@ url_and_key_list=(
 "linux_py_37_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
 "linux_py_38_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp38-cp38-manylinux2010_x86_64.whl"
 "linux_py_39_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp39-cp39-manylinux2010_x86_64.whl"
+"linux_py_310_cpu $bucket/linux/cpu/tensorflow_cpu-${version}-cp310-cp310-manylinux2010_x86_64.whl"
 "linux_py_37_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
 "linux_py_38_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp38-cp38-manylinux2010_x86_64.whl"
 "linux_py_39_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp39-cp39-manylinux2010_x86_64.whl"
-"mac_py_37_cpu $bucket/mac/cpu/tensorflow-${version}-cp37-cp37m-macosx_10_11_x86_64.whl"
-"mac_py_38_cpu $bucket/mac/cpu/tensorflow-${version}-cp38-cp38-macosx_10_11_x86_64.whl"
-"mac_py_39_cpu $bucket/mac/cpu/tensorflow-${version}-cp39-cp39-macosx_10_11_x86_64.whl"
+"linux_py_310_gpu $bucket/linux/gpu/tensorflow_gpu-${version}-cp310-cp310-manylinux2010_x86_64.whl"
+"mac_py_37_cpu $bucket/mac/cpu/tensorflow-${version}-cp37-cp37m-macosx_10_14_x86_64.whl"
+"mac_py_38_cpu $bucket/mac/cpu/tensorflow-${version}-cp38-cp38-macosx_10_14_x86_64.whl"
+"mac_py_39_cpu $bucket/mac/cpu/tensorflow-${version}-cp39-cp39-macosx_10_14_x86_64.whl"
+"mac_py_310_cpu $bucket/mac/cpu/tensorflow-${version}-cp310-cp310-macosx_10_14_x86_64.whl"
 )
 
 hashfile=binary-hashes.nix
