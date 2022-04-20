@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, tree-sitter, difftastic, testVersion }:
+{ lib, fetchFromGitHub, rustPlatform, tree-sitter, difftastic, testers }:
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1kmwd9m94kl3j6ajfndr7rjx66fsqvnn2jh0m54ac5qd5r9hhdc8";
 
-  passthru.tests.version = testVersion { package = difftastic; };
+  passthru.tests.version = testers.testVersion { package = difftastic; };
 
   meta = with lib; {
     description = "A syntax-aware diff";

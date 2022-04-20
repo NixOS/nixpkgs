@@ -12,7 +12,7 @@
 
   # For tests
 , _7zz
-, testVersion
+, testers
 }:
 
 let
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = _7zz;
       command = "7zz --help";
     };

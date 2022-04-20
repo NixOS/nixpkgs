@@ -5,7 +5,7 @@
 , runCommand
 , nix-update-script
 , dsq
-, testVersion
+, testers
 , diffutils
 }:
 
@@ -30,7 +30,7 @@ buildGoModule rec {
     updateScript = nix-update-script { attrPath = pname; };
 
     tests = {
-      version = testVersion { package = dsq; };
+      version = testers.testVersion { package = dsq; };
 
       pretty-csv = runCommand "${pname}-test" { } ''
         mkdir "$out"

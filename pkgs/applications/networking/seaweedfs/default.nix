@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, testVersion
+, testers
 , seaweedfs
 }:
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   subPackages = [ "weed" ];
 
   passthru.tests.version =
-    testVersion { package = seaweedfs; command = "weed version"; };
+    testers.testVersion { package = seaweedfs; command = "weed version"; };
 
   meta = with lib; {
     description = "Simple and highly scalable distributed file system";
