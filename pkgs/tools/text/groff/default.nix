@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
-  enableParallelBuilding = true;
+  # Parallel build is failing for missing depends. Known upstream as:
+  #   https://savannah.gnu.org/bugs/?62084
+  enableParallelBuilding = false;
 
   patches = [
     ./0001-Fix-cross-compilation-by-looking-for-ar.patch
