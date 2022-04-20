@@ -3582,7 +3582,6 @@ with pkgs;
   gpu-burn = callPackage ../applications/misc/gpu-burn {
     # gpu-burn doesn't build on gcc11. CUDA 11.3 is the last version to use
     # pre-gcc11, in particular gcc9.
-    cudatoolkit = cudaPackages_11_3.cudatoolkit;
     stdenv = gcc9Stdenv;
   };
 
@@ -23108,7 +23107,6 @@ with pkgs;
     cudaSupport = true;
     # librealsenseWithCuda doesn't build on gcc11. CUDA 11.3 is the last version
     # to use pre-gcc11, in particular gcc9.
-    cudaPackages = cudaPackages_11_3;
     stdenv = gcc9Stdenv;
   };
 
