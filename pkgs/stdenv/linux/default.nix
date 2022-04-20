@@ -351,6 +351,9 @@ in
       #   stage5.gcc -> stage4.coreutils -> stage3.glibc -> bootstrap
       gmp = super.gmp.override { stdenv = self.stdenv; };
 
+      # coreutils gets rebuilt both here and also in the final stage; we rename this one to avoid confusion
+      coreutils = super.coreutils.overrideAttrs (a: a // { name = "coreutils-stage4"; });
+
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
