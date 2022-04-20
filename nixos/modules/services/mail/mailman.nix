@@ -318,7 +318,9 @@ in {
     systemd.services = {
       mailman = {
         description = "GNU Mailman Master Process";
-        after = [ "network.target" ];
+        before = lib.optional cfg.enablePostfix "postfix.service";
+        after = [ "network.target" ]
+          ++ lib.optional cfg.enablePostfix "postfix-setup.service";
         restartTriggers = [ config.environment.etc."mailman.cfg".source ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
