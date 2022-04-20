@@ -13,8 +13,6 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-ffbp7J8XDxo/s79pjoiDVbft0pr/lJpuJuKiMpQwkT0=";
 
-  doCheck = false;
-
   subPackages = [ "cmd/helm" ];
   ldflags = [
     "-w"
@@ -22,6 +20,13 @@ buildGoModule rec {
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
     "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
   ];
+
+  preCheck = ''
+    # skipping version tests because they require dot git directory
+    substituteInPlace cmd/helm/version_test.go \
+      --replace "TestVersion" \
+                "SkipVersion"
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
