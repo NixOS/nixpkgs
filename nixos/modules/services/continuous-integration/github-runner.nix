@@ -299,6 +299,16 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         UMask = "0066";
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        SystemCallFilter = [
+          "~@debug"
+          "~@mount"
+          "~@privileged"
+          "~@cpu-emulation"
+          "~@obsolete"
+        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
 
         # Needs network access
         PrivateNetwork = false;

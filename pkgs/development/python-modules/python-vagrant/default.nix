@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   version = "1.0.0";
   pname = "python-vagrant";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,6 +12,10 @@ buildPythonPackage rec {
 
   # The tests try to connect to qemu
   doCheck = false;
+
+  pythonImportsCheck = [
+    "vagrant"
+  ];
 
   meta = {
     description = "Python module that provides a thin wrapper around the vagrant command line executable";

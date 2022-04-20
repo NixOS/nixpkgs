@@ -68,8 +68,7 @@ in
     systemd.services.bird2 = {
       description = "BIRD Internet Routing Daemon";
       wantedBy = [ "multi-user.target" ];
-      reloadIfChanged = true;
-      restartTriggers = [ config.environment.etc."bird/bird2.conf".source ];
+      reloadTriggers = [ config.environment.etc."bird/bird2.conf".source ];
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";

@@ -34,6 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # tests require live postgis database
+    "--deselect=tests/test_pickle.py::TestPickle::test_pickle_unpickle"
+    "--deselect=tests/gallery/test_specific_compilation.py::test_specific_compilation"
+  ];
+
   disabledTestPaths = [
     # tests require live postgis database
     "tests/gallery/test_decipher_raster.py"
@@ -41,6 +47,11 @@ buildPythonPackage rec {
     "tests/gallery/test_summarystatsagg.py"
     "tests/gallery/test_type_decorator.py"
     "tests/test_functional.py"
+    "tests/test_functional_postgresql.py"
+  ];
+
+  pythonImportsCheck = [
+    "geoalchemy2"
   ];
 
   meta = with lib; {
