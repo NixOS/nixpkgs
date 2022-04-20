@@ -725,8 +725,8 @@ with pkgs;
 
   installShellFiles = callPackage ../build-support/install-shell-files {};
 
-  # See doc/builders/special/invalidateFetcherByDrvHash.section.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs-invalidateFetcherByDrvHash
+  # See doc/builders/testers.chapter.md or
+  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   invalidateFetcherByDrvHash = f: args:
     let
       drvPath = (f args).drvPath;
