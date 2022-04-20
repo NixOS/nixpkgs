@@ -13,6 +13,11 @@
 , callPackage
 }:
 
+#
+# Maintainer note: only in-tree dependant is `dragonfly`, try to
+# update the two alongside eachother.
+#
+
 let
   kaldi = callPackage ./fork.nix { };
 in
