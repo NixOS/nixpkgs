@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , alsa-lib
+, autoreconfHook
 , fetchFromGitHub
+, fetchpatch
 , gtkmm3
 , libepoxy
 , libpng
@@ -37,8 +39,20 @@ stdenv.mkDerivation rec {
     sha256 = "1kay7aj30x0vn8rkylspdycydrzsc0aidjbs0dd238hr5hid723b";
   };
 
+  patches = [
+    # Fix cross-compilation, otherwise it fails to detect host compiler features
+    # Doesn't affect non CC builds
+    (fetchpatch {
+      url = "https://mirror.its.dal.ca/gentoo-portage/games-emulation/snes9x/files/snes9x-1.53-cross-compile.patch";
+      sha256 = "sha256-ZCmnprimz8PtDIXkB1dYD0oura9icW81yKvJ4coKaDg=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals (!withGtk) [
+    autoreconfHook
   ]
   ++ lib.optionals withGtk [
     meson
@@ -71,8 +85,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     lib.optional stdenv.hostPlatform.sse4_1Support "--enable-sse41"
-    ++ lib.optional stdenv.hostPlatform.avx2Support "--enable-avx2"
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "--enable-neon";
+    ++ lib.optional stdenv.hostPlatform.avx2Support "--enable-avx2";
 
   installPhase = lib.optionalString (!withGtk) ''
     runHook preInstall
@@ -85,11 +98,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preConfigure =
-    if withGtk then
-      "cd gtk"
-    else
-      "cd unix";
+  preAutoreconf = lib.optionalString (!withGtk) "cd unix";
+  preConfigure = lib.optionalString withGtk "cd gtk";
 
   enableParallelBuilding = true;
 
