@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
-, testVersion
+, testers
 , lsd
 }:
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = lsd;
   };
 

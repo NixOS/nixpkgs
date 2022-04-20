@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, curlie, testVersion }:
+{ buildGoModule, fetchFromGitHub, lib, curlie, testers }:
 
 buildGoModule rec {
   pname = "curlie";
@@ -15,7 +15,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = curlie;
     command = "curlie version";
   };

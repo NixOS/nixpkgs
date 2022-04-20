@@ -8,7 +8,7 @@
 , flac
 , sox
 , util-linux
-, testVersion
+, testers
 , whipper
 }:
 
@@ -74,7 +74,7 @@ in python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = whipper;
     command = "HOME=$TMPDIR whipper --version";
   };

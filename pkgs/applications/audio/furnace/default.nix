@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , gitUpdater
-, testVersion
+, testers
 , furnace
 , fetchFromGitHub
 , cmake
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       inherit pname version;
       rev-prefix = "v";
     };
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = furnace;
       # The command always exits with code 1
       command = "(furnace --version || [ $? -eq 1 ])";

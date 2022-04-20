@@ -31,7 +31,7 @@
 , zip
 , zlib
 , withGTK3 ? true, gtk3, gtk2
-, testVersion
+, testers
 , palemoon
 }:
 
@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
       )"
       update-source-version ${pname} "$version"
     '';
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = palemoon;
     };
   };

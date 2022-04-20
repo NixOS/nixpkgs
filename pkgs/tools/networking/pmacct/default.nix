@@ -13,7 +13,7 @@
 , withPgSQL ? true, postgresql
 , withMysql ? true, libmysqlclient, zlib, numactl
 , gnutlsSupport ? false, gnutls
-, testVersion
+, testers
 , pmacct
 }:
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional gnutlsSupport "--enable-gnutls";
 
   passthru.tests = {
-    version = testVersion { package = pmacct; command = "pmacct -V"; };
+    version = testers.testVersion { package = pmacct; command = "pmacct -V"; };
   };
 
   meta = with lib; {

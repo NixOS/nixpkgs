@@ -6,7 +6,7 @@
 , pythonPackages
 , emacs
 , ruby
-, testVersion
+, testers
 , which, dtach, openssl, bash, gdb, man
 , withEmacs ? true
 , withRuby ? true
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
-    tests.version = testVersion { package = notmuch; };
+    tests.version = testers.testVersion { package = notmuch; };
     inherit version;
   };
 

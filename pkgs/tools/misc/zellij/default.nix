@@ -10,7 +10,7 @@
 , Foundation
 , mandown
 , zellij
-, testVersion
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/zellij setup --generate-completion zsh)
   '';
 
-  passthru.tests.version = testVersion { package = zellij; };
+  passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
     description = "A terminal workspace with batteries included";

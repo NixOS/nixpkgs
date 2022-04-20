@@ -1,4 +1,4 @@
-{ cmake, fetchFromGitHub, lib, ninja, stdenv, testVersion, quick-lint-js }:
+{ cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
 
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
-    version = testVersion { package = quick-lint-js; };
+    version = testers.testVersion { package = quick-lint-js; };
   };
 
   meta = with lib; {

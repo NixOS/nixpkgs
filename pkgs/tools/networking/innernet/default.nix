@@ -8,7 +8,7 @@
 , Security
 , libiconv
 , innernet
-, testVersion
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.tests = {
-    serverVersion = testVersion { package = innernet; command = "innernet-server --version"; };
-    version = testVersion { package = innernet; command = "innernet --version"; };
+    serverVersion = testers.testVersion { package = innernet; command = "innernet-server --version"; };
+    version = testers.testVersion { package = innernet; command = "innernet --version"; };
   };
 
   meta = with lib; {

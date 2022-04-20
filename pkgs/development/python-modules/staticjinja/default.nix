@@ -9,7 +9,7 @@
 , pytest-check
 , pythonOlder
 , markdown
-, testVersion
+, testers
 , tomlkit
 , staticjinja
 , callPackage
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    version = testVersion { package = staticjinja; };
+    version = testers.testVersion { package = staticjinja; };
     minimal-template = callPackage ./test-minimal-template {};
   };
 

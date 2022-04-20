@@ -7,7 +7,7 @@
 , pony
 , junit-xml
 , pythonOlder
-, testVersion
+, testers
 }:
 
 let self = buildPythonApplication rec {
@@ -31,7 +31,7 @@ let self = buildPythonApplication rec {
 
   propagatedBuildInputs = [ click glob2 parso pony junit-xml ];
 
-  passthru.tests.version = testVersion { package = self; };
+  passthru.tests.version = testers.testVersion { package = self; };
 
   meta = with lib; {
     description = "mutation testing system for Python, with a strong focus on ease of use";

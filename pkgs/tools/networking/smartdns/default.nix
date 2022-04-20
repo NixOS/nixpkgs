@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, testVersion, smartdns }:
+{ lib, stdenv, fetchFromGitHub, openssl, testers, smartdns }:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   passthru.tests = {
-    version = testVersion { package = smartdns; };
+    version = testers.testVersion { package = smartdns; };
   };
 
   meta = with lib; {

@@ -6,7 +6,6 @@
 , coreutils
 , gawk
 , gnum4
-, testVersion
 , util-linux
 }:
 

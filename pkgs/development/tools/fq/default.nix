@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fq
-, testVersion
+, testers
 }:
 
 buildGoModule rec {
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  passthru.tests = testVersion { package = fq; };
+  passthru.tests = testers.testVersion { package = fq; };
 
   meta = with lib; {
     description = "jq for binary formats";

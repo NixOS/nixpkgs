@@ -2,7 +2,7 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, testVersion
+, testers
 , discordchatexporter-cli
 }:
 
@@ -29,7 +29,7 @@ buildDotnetModule rec {
 
   passthru = {
     updateScript = ./updater.sh;
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = discordchatexporter-cli;
       version = "v${version}";
     };

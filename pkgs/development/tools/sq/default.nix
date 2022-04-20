@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testVersion, sq }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, sq }:
 buildGoModule rec {
   pname = "sq";
   version = "0.15.4";
@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    version = testVersion { package = sq; };
+    version = testers.testVersion { package = sq; };
   };
 
   meta = with lib; {

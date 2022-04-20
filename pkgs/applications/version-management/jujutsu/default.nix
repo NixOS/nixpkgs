@@ -9,7 +9,7 @@
 , Security
 , SystemConfiguration
 , libiconv
-, testVersion
+, testers
 , jujutsu
 }:
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru.tests = {
-    version = testVersion {
+    version = testers.testVersion {
       package = jujutsu;
       command = "jj --version";
     };

@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , promscale
-, testVersion
+, testers
 }:
 
 buildGoModule rec {
@@ -40,7 +40,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = promscale;
     command = "promscale -version";
   };

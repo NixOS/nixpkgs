@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testVersion, ocm }:
+{ lib, buildGoModule, fetchFromGitHub, testers, ocm }:
 
 buildGoModule rec {
   pname = "ocm";
@@ -18,7 +18,7 @@ buildGoModule rec {
     ln -s $GOPATH/bin/ocm ocm
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = ocm;
     command = "ocm version";
   };

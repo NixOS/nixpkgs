@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, testVersion, clash }:
+{ lib, fetchFromGitHub, buildGoModule, testers, clash }:
 
 buildGoModule rec {
   pname = "clash";
@@ -26,7 +26,7 @@ buildGoModule rec {
     "-X github.com/Dreamacro/clash/constant.Version=${version}"
   ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = clash;
     command = "clash -v";
   };

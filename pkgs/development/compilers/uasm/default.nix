@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, testVersion
+, testers
 , uasm
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = uasm;
     command = "uasm -h";
     version = "v${version}";

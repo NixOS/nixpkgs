@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testVersion, git-sizer }:
+{ lib, buildGoModule, fetchFromGitHub, testers, git-sizer }:
 
 buildGoModule rec {
   pname = "git-sizer";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  passthru.tests.vesion = testVersion {
+  passthru.tests.vesion = testers.testVersion {
     package = git-sizer;
   };
 

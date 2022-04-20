@@ -1,7 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, testVersion
+, testers
 , alejandra
 }:
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-SsIpggbRQPjpCYgCG4sSJ022MmMV4bJJ8UAHcJR74O8=";
 
   passthru.tests = {
-    version = testVersion { package = alejandra; };
+    version = testers.testVersion { package = alejandra; };
   };
 
   meta = with lib; {
