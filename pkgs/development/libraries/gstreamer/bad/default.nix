@@ -96,13 +96,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.20.0";
+  version = "1.20.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AVuNTZo5Xr9ETUCHaGeiA03TMEs61IvDoN0MHucdwR0=";
+    sha256 = "0j1q89dl8369djibc5p27lyj8y8p4maplmdzlryvrw0ib77w5lq9";
   };
 
   nativeBuildInputs = [
