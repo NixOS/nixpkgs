@@ -2540,6 +2540,8 @@ in {
 
   dynd = callPackage ../development/python-modules/dynd { };
 
+  eagle100 = callPackage ../development/python-modules/eagle100 { };
+
   easydict = callPackage ../development/python-modules/easydict { };
 
   easygui = callPackage ../development/python-modules/easygui { };
