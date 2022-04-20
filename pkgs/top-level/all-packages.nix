@@ -7121,6 +7121,8 @@ with pkgs;
 
   jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
 
+  jasmin-compiler = callPackage ../development/compilers/jasmin-compiler { };
+
   jazzy = callPackage ../development/tools/jazzy { };
 
   jc = with python3Packages; toPythonApplication jc;
