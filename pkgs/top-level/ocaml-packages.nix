@@ -1110,6 +1110,8 @@ let
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
+    pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
+
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     repr = callPackage ../development/ocaml-modules/repr { };
