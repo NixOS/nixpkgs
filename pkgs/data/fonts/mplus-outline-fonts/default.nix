@@ -1,7 +1,7 @@
 { lib, fetchzip, fetchFromGitHub }:
 
 let pname = "mplus-outline-fonts";
-in {
+in rec {
   osdnRelease = fetchzip {
     name = "${pname}-osdn";
     url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-063a.tar.xz";
@@ -42,4 +42,6 @@ in {
       license = licenses.ofl;
     };
   };
+
+  __toString = _: builtins.trace "'mplus-outline-fonts' is deprecated. Please pick either the legacy 'mplus-outline-fonts.osdnRelease' or the reworked and backward-incompatible 'mplus-outline-fonts.githubRelease'." osdnRelease.outPath; # Added 2022-04-20
 }
