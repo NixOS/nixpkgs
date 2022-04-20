@@ -1255,6 +1255,7 @@ mapAliases ({
   terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # Added 2021-12-08
   terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # Added 2021-06-15
   tesseract_4 = throw "'tesseract_4' has been renamed to/replaced by 'tesseract4'"; # Converted to throw 2022-02-22
+  testVersion = testers.testVersion; # Added 2022-04-20
   tex-gyre-bonum-math = throw "'tex-gyre-bonum-math' has been renamed to/replaced by 'tex-gyre-math.bonum'"; # Converted to throw 2022-02-22
   tex-gyre-pagella-math = throw "'tex-gyre-pagella-math' has been renamed to/replaced by 'tex-gyre-math.pagella'"; # Converted to throw 2022-02-22
   tex-gyre-schola-math = throw "'tex-gyre-schola-math' has been renamed to/replaced by 'tex-gyre-math.schola'"; # Converted to throw 2022-02-22
