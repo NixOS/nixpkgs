@@ -34471,7 +34471,9 @@ with pkgs;
 
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
 
-  tvheadend = callPackage ../servers/tvheadend { };
+  inherit (callPackages ../servers/tvheadend {})
+    tvheadend
+    tvheadend-latest;
 
   ums = callPackage ../servers/ums { };
 
