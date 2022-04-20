@@ -958,6 +958,8 @@ with pkgs;
 
   adafruit-ampy = callPackage ../tools/misc/adafruit-ampy { };
 
+  addlicense = callPackage ../tools/misc/addlicense { };
+
   adlplug = callPackage ../applications/audio/adlplug {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices WebKit DiscRecording;
