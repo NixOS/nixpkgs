@@ -195,6 +195,7 @@ let
         madlang
         matterhorn
         mueval
+        naproche
         neuron-notes
         niv
         nix-delegate

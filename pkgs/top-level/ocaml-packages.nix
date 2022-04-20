@@ -427,6 +427,8 @@ let
       inherit (pkgs) flac;
     };
 
+    flex = callPackage ../development/ocaml-modules/flex { };
+
     fmt = callPackage ../development/ocaml-modules/fmt { };
 
     fontconfig = callPackage ../development/ocaml-modules/fontconfig {
@@ -1109,6 +1111,8 @@ let
     psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
+
+    pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
