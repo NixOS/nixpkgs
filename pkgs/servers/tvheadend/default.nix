@@ -20,12 +20,12 @@ let
     let
       dtv-scan-tables = stdenv.mkDerivation {
         pname = "dtv-scan-tables";
-        version = "2020-05-18";
+        version = "2022-03-14";
         src = fetchFromGitHub {
           owner = "tvheadend";
           repo = "dtv-scan-tables";
-          rev = "e3138a506a064f6dfd0639d69f383e8e576609da";
-          sha256 = "19ac9ds3rfc2xrqcywsbd1iwcpv7vmql7gp01iikxkzcgm2g2b6w";
+          rev = "1cbadfff235047ff255730da0cebeea225602461";
+          sha256 = "11nlqpmp5vin3i8y30zniq3ysf4ny5gjbr2rwcjnyva5vxyjmzxv";
         };
         nativeBuildInputs = [ v4l-utils ];
         installFlags = [ "DATADIR=$(out)" ];
