@@ -945,7 +945,7 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 ### `patch-shebangs.sh` {#patch-shebangs.sh}
 
-This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system what interpreter to use to execute the script's contents.
+This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
 
 ::: note
 The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
@@ -953,8 +953,37 @@ The [generic builder][generic-builder] populates `PATH` from inputs of the deriv
 
 [generic-builder]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/stdenv/generic/builder.sh
 
+#### Invocation
+
+Multiple paths can be specified.
+
+```
+patchShebangs [--build | --host] PATH...
+```
+
+#### Flags
+
+`--build`
+: Look up commands available at build time
+
+`--host`
+: Look up commands available at run time
+
+#### Examples
+
+```sh
+patchShebangs --host /nix/store/<hash>-hello-1.0/bin
+```
+
+```sh
+patchShebangs --build configure
+```
+
 `#!/bin/sh` will be rewritten to `#!/nix/store/<hash>-some-bash/bin/sh`.
-`#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`. Interpreter paths that point to a valid Nix store location are not changed.
+
+`#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`.
+
+Interpreter paths that point to a valid Nix store location are not changed.
 
 ::: note
 A script file must be marked as executable, otherwise it will not be
