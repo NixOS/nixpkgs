@@ -4882,7 +4882,7 @@ with pkgs;
   cudaPackages_11_4 = callPackage ./cuda-packages.nix { cudaVersion = "11.4"; };
   cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaVersion = "11.5"; };
   cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaVersion = "11.6"; };
-  cudaPackages_11 = cudaPackages_11_5;
+  cudaPackages_11 = cudaPackages_11_6;
   cudaPackages = recurseIntoAttrs cudaPackages_11;
 
   # TODO: move to alias
