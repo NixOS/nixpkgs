@@ -17,6 +17,7 @@
 , lib
 , ffmpeg
 , libiio
+, libmirisdr-4
 , libopus
 , libpulseaudio
 , libusb1
@@ -82,6 +83,7 @@ mkDerivation rec {
     hidapi
     libbladeRF
     libiio
+    libmirisdr-4
     libopus
     libpulseaudio
     libusb1

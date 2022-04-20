@@ -7574,6 +7574,8 @@ with pkgs;
     gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
   };
 
+  libmirisdr-4 = callPackage ../development/libraries/libmirisdr-4 { };
+
   libshumate = callPackage ../development/libraries/libshumate { };
 
   libsmartcols = callPackage ../development/libraries/libsmartcols { };
