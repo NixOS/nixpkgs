@@ -178,7 +178,7 @@ stdenvNoCC.mkDerivation rec {
     /usr/bin/codesign -s - -f "$out/lib/libMoltenVK.dylib"
     install -m644 MoltenVK/icd/MoltenVK_icd.json "$out/share/vulkan/icd.d/MoltenVK_icd.json"
     substituteInPlace $out/share/vulkan/icd.d/MoltenVK_icd.json \
-      --replace ./libMoltenVK.dylib "$out/share/vulkan/icd.d/MoltenVK_icd.json"
+      --replace ./libMoltenVK.dylib "$out/lib/libMoltenVK.dylib"
   '';
 
   sandboxProfile = ''
