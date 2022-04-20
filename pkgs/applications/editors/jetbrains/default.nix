@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, zlib, python3
+, jdk, cmake, gdb, zlib, python3
 , dotnet-sdk_5
 , maven
 , autoPatchelfHook
@@ -53,6 +53,9 @@ let
           # bundled cmake does not find libc
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
+          # bundled gdb does not find libcrypto 10
+          rm -rf bin/gdb/linux
+          ln -s ${gdb} bin/gdb/linux
 
           autoPatchelf $PWD/bin
 
