@@ -4485,6 +4485,8 @@ in {
 
   kazoo = callPackage ../development/python-modules/kazoo { };
 
+  kbcstorage = callPackage ../development/python-modules/kbcstorage { };
+
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
   keep = callPackage ../development/python-modules/keep { };
@@ -9087,8 +9089,6 @@ in {
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
-
-  sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
   sarif-om = callPackage ../development/python-modules/sarif-om { };
 
