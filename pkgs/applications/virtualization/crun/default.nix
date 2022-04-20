@@ -11,6 +11,7 @@
 , yajl
 , nixosTests
 , criu
+, fetchpatch
 }:
 
 let
@@ -47,6 +48,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5q8HirGOPsbaJ7JoLa4DRYkZX3kucWOZ633nzx4zVhg=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-27650.patch";
+      url = "https://github.com/containers/crun/commit/1aeeed2e4fdeffb4875c0d0b439915894594c8c6.patch";
+      sha256 = "1ka6nzj43vh8j4wdfkwqicwl6hhb8lyr1yh6pwyjpdxarj5fc3lj";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
