@@ -87,6 +87,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
+
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
