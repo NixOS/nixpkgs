@@ -336,7 +336,7 @@ in
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (prevStage) gettext gnum4 bison gmp perl texinfo zlib linuxHeaders libidn2 libunistring;
+      inherit (prevStage) gettext gnum4 bison perl texinfo zlib linuxHeaders libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
@@ -346,6 +346,11 @@ in
           inherit (prevStage) stdenv;
         };
       };
+
+      # force gmp to rebuild so we have the option of dynamically linking
+      # libgmp without creating a reference path from:
+      #   stage5.gcc -> stage4.coreutils -> stage3.glibc -> bootstrap
+      gmp = super.gmp.override { stdenv = self.stdenv; };
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
@@ -417,7 +422,7 @@ in
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed file
+            gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
         ++ map getLib (
