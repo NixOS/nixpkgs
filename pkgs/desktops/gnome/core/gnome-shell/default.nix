@@ -98,6 +98,17 @@ stdenv.mkDerivation rec {
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
 
+    # Fix OSK being non-functional in modals and unlock dialog
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/5317
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/dd569f17e3c8675f9e89f8d1f0e530c574855d81.patch";
+      sha256 = "sha256-ykzX6aoVxCTMnJH6IN2mQfcu8qAh6upFSqQBC02ra1s=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/34ed5e61c6070b2b9475e2008869f12f45f183f4.patch";
+      sha256 = "sha256-ykzX6aoVxCTMnJH6IN2mQfcu8qAh6upFSqQBC02ra1s=";
+    })
+
     # Work around failing fingerprint auth
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
