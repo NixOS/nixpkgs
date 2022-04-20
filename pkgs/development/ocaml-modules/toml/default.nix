@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "toml";
   version = "7.0.0";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "ocaml-toml";
     repo = "to.ml";
