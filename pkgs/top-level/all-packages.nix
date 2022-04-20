@@ -904,6 +904,8 @@ with pkgs;
   # lib functions depending on pkgs
   inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
 
+  testers = callPackage ../build-support/testers {};
+
   ### TOOLS
 
   _3llo = callPackage ../tools/misc/3llo { };
@@ -10649,8 +10651,6 @@ with pkgs;
   termius = callPackage ../applications/networking/termius { };
 
   termplay = callPackage ../tools/misc/termplay { };
-
-  testEqualDerivation = callPackage ../build-support/test-equal-derivation.nix { };
 
   tetrd = callPackage ../applications/networking/tetrd { };
 
