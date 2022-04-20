@@ -11281,6 +11281,8 @@ with pkgs;
 
   woof = callPackage ../tools/misc/woof { };
 
+  woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker-cli { };
+
   wootility = callPackage ../tools/misc/wootility {
     inherit (xorg) libxkbfile;
   };
