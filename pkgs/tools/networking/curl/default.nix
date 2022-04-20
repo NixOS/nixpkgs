@@ -108,11 +108,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
       # Build without manual
       "--disable-manual"
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
-      # to nss-cacert from the default profile.
-      # https://github.com/curl/curl/issues/8696 - fallback is not supported by HTTP3
-      (if http3Support then "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" else "--without-ca-bundle")
-      "--without-ca-path"
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
@@ -136,6 +131,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"
       "--enable-static"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
+      # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
+      # https://github.com/curl/curl/issues/8696 - fallback is not supported by HTTP3
+      (if http3Support then "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" else "--without-ca-bundle")
+      "--without-ca-path"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
