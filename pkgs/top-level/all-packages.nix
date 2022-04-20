@@ -4634,6 +4634,8 @@ with pkgs;
 
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
+  keyd = callPackage ../tools/inputmethods/keyd { };
+
   kime = callPackage ../tools/inputmethods/kime { };
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
