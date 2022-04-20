@@ -120,7 +120,8 @@ rec {
   };
 
   platform-tools = import ./platform-tools.nix {
-    inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
+    inherit deployAndroidPackage autoPatchelfHook pkgs lib;
+    os = if stdenv.system == "aarch64-darwin" then "macosx" else os; # "macosx" is a universal binary here
     package = packages.platform-tools.${platformToolsVersion};
   };
 
