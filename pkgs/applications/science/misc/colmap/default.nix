@@ -28,7 +28,9 @@ mkDerivation rec {
   buildInputs = [
     boost_static ceres-solver eigen
     freeimage glog libGLU glew qtbase
-  ] ++ lib.optional cudaSupport cudatoolkit;
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
+  ];
 
   nativeBuildInputs = [ cmake ];
 
