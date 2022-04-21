@@ -9266,6 +9266,8 @@ in {
 
   setuptoolsTrial = callPackage ../development/python-modules/setuptoolstrial { };
 
+  seventeentrack = callPackage ../development/python-modules/seventeentrack { };
+
   sexpdata = callPackage ../development/python-modules/sexpdata { };
 
   sfepy = callPackage ../development/python-modules/sfepy { };
