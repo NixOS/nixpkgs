@@ -19670,6 +19670,8 @@ with pkgs;
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
 
   nvtop = callPackage ../tools/system/nvtop { };
+  nvtop-nvidia = callPackage ../tools/system/nvtop { amd = false; };
+  nvtop-amd = callPackage ../tools/system/nvtop { nvidia = false; };
 
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
