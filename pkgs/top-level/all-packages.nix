@@ -12126,6 +12126,10 @@ with pkgs;
     jdk = jdk8;
   };
 
+  alan = callPackage ../development/compilers/alan { };
+
+  alan_2 = callPackage ../development/compilers/alan/2.nix { };
+
   algol68g = callPackage ../development/compilers/algol68g { };
 
   armips = callPackage ../development/compilers/armips {
