@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = lib.optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
 
   patches = [
     ./00-chntpw-build-arch-autodetect.patch
@@ -27,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "An utility to reset the password of any user that has a valid local account on a Windows system";
     maintainers = with lib.maintainers; [ deepfire ];
     license = licenses.gpl2;
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.unix;
   };
 }
