@@ -2581,15 +2581,6 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # Manually upgrade cryptostore to work around
-  # https://github.com/ocheron/cryptostore/issues/7
-  cryptostore = assert super.cryptostore.version == "0.2.1.0"; overrideCabal {
-    version = "0.2.2.0";
-    sha256 = "0n70amg7y2qwfjhj4xaqjia46fbabba9l2g19ry191m7c4zp1skx";
-    revision = null;
-    editedCabalFile = null;
-  } super.cryptostore;
-
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
 
