@@ -14116,9 +14116,7 @@ with pkgs;
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
-  lxpanel = callPackage ../desktops/lxde/core/lxpanel {
-    gtk2 = gtk2-x11;
-  };
+  lxpanel = callPackage ../desktops/lxde/core/lxpanel { };
 
   lxtask = callPackage ../desktops/lxde/core/lxtask { };
 
@@ -18344,7 +18342,9 @@ with pkgs;
 
   libfishsound = callPackage ../development/libraries/libfishsound { };
 
-  libfm = callPackage ../development/libraries/libfm { };
+  libfm = callPackage ../development/libraries/libfm {
+    withGtk3 = true;
+  };
   libfm-extra = libfm.override {
     extraOnly = true;
   };

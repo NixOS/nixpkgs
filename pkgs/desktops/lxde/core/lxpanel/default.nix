@@ -1,25 +1,25 @@
 { lib
 , stdenv
-, fetchurl
-, pkg-config
-, gettext
-, m4
-, intltool
-, libxmlxx
-, keybinder
-, gtk2
-, libX11
-, libfm
-, libwnck2
-, libXmu
-, libXpm
+, autoreconfHook
+, fetchFromGitHub
 , cairo
+, curl
 , gdk-pixbuf
 , gdk-pixbuf-xlib
-, menu-cache
+, gettext
+, gtk3
+, intltool
+, keybinder3
+, libX11
+, libXmu
+, libXpm
+, libfm
+, libwnck
+, libxmlxx
 , lxmenu-data
+, menu-cache
+, pkg-config
 , wirelesstools
-, curl
 , supportAlsa ? false, alsa-lib
 }:
 
@@ -27,36 +27,41 @@ stdenv.mkDerivation rec {
   pname = "lxpanel";
   version = "0.10.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
-    sha256 = "sha256-HjGPV9fja2HCOlBNA9JDDHja0ULBgERRBh8bPqVEHug=";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "lxpanel";
+    rev = version;
+    hash = "sha256-YUoDFO+Ip6uWjXMP+PTJqcfiGPAE4EfjQz8F4M0FxZM=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext m4 intltool libxmlxx ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    intltool
+    libxmlxx
+    pkg-config
+  ];
+
   buildInputs = [
-    keybinder
-    gtk2
-    libX11
-    libfm
-    libwnck2
-    libXmu
-    libXpm
     cairo
+    curl
     gdk-pixbuf
     gdk-pixbuf-xlib.dev
-    menu-cache
+    gtk3
+    keybinder3
+    libX11
+    libXmu
+    libXpm
+    libfm
+    libwnck
     lxmenu-data
-    m4
+    menu-cache
     wirelesstools
-    curl
   ] ++ lib.optional supportAlsa alsa-lib;
 
-  postPatch = ''
-    substituteInPlace src/Makefile.in \
-      --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
-    substituteInPlace plugins/Makefile.in \
-      --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
-  '';
+  configureFlags = [
+    "--enable-gtk3"
+  ];
 
   meta = with lib; {
     description = "Lightweight X11 desktop panel for LXDE";
