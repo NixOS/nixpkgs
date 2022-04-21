@@ -10,12 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "lshw";
-  version = "B.02.19";
+  # Fix repology.org by not including the prefixed B, otherwise the `pname` attr
+  # gets filled as `lshw-B.XX.XX` in `nix-env --query --available --attr nixpkgs.lshw --meta`
+  # See https://github.com/NixOS/nix/pull/4463 for a definitive fix
+  version = "02.19";
 
   src = fetchFromGitHub {
     owner = "lyonel";
     repo = pname;
-    rev = version;
+    rev = "B.${version}";
     sha256 = "sha256-PzbNGc1pPiPLWWgTeWoNfAo+SsXgi1HcjnXfYXA9S0I=";
   };
 
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "VERSION=${version}"
+    "VERSION=${src.rev}"
   ];
 
   buildFlags = [ "all" ] ++ lib.optional withGUI "gui";
