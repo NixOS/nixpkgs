@@ -2,7 +2,7 @@
 #!nix-shell -i python3 -p python3Packages.feedparser python3Packages.requests
 
 # This script prints the Git commit message for stable channel updates.
-# Usage: ./get-commit-message.py [version]
+# Usage: ./get-commit-message.py [version [os]]
 
 import re
 import sys
@@ -15,7 +15,8 @@ import requests
 
 feed = feedparser.parse('https://chromereleases.googleblog.com/feeds/posts/default')
 html_tags = re.compile(r'<[^>]+>')
-target_version = sys.argv[1] if len(sys.argv) == 2 else None
+target_version = sys.argv[1] if len(sys.argv) >= 2 else None
+build_os = sys.argv[2] if len(sys.argv) >= 3 else None
 
 for entry in feed.entries:
     url = requests.get(entry.link).url.split('?')[0]
@@ -28,7 +29,7 @@ for entry in feed.entries:
             continue
     content = entry.content[0].value
     content = html_tags.sub('', content)  # Remove any HTML tags
-    if re.search(r'Linux', content) is None:
+    if build_os is not None and re.search(re.escape(build_os), content) is None:
         continue
     #print(url)  # For debugging purposes
     version = re.search(r'\d+(\.\d+){3}', content).group(0)
@@ -38,11 +39,11 @@ for entry in feed.entries:
     else:
         print('chromium: TODO -> ' + version + '\n')
     print(url)
-    if fixes := re.search(r'This update includes .+ security fix(es)?\.', content):
-        fixes = fixes.group(0)
-        if zero_days := re.search(r'Google is aware( of reports)? th(e|at) .+ in the wild\.', content):
-            fixes += " " + zero_days.group(0)
-        print('\n' + '\n'.join(textwrap.wrap(fixes, width=72)))
+    if result := re.search(r'This update includes .+ security fix(es)?\.', content):
+        if fixes := result.group(0):
+            if zero_days := re.search(r'Google is aware( of reports)? th(e|at) .+ in the wild\.', content):
+                fixes += " " + zero_days.group(0)
+            print('\n' + '\n'.join(textwrap.wrap(fixes, width=72)))
     if cve_list := re.findall(r'CVE-[^: ]+', content):
         cve_list = list(OrderedDict.fromkeys(cve_list))  # Remove duplicates but preserve the order
         cve_string = ' '.join(cve_list)

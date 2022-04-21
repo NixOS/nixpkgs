@@ -1,5 +1,7 @@
 {
   "stable": {
+    "version_darwin": "100.0.4896.127",
+    "sha256_darwin": "02q8iw2d3cj0frmnq6w9p120a84ahl2pcxkigbvrra6csb44jwvc",
     "version": "100.0.4896.127",
     "sha256": "0kgq38dy9mjyc44556i9gxhlsgd7dfvv1xi1ibk92b4p7i2y6427",
     "sha256bin64": "0mm6lix14bf4ca440dyccnq54z0qvn5c886ghfyzy2q0bqzbq4nh",
@@ -19,6 +21,8 @@
     }
   },
   "beta": {
+    "version_darwin": "101.0.4951.34",
+    "sha256_darwin": "1v51gh121c1s2qbcjc6i72cb2487dnwxpqaphax5294qw2kfw6i8",
     "version": "101.0.4951.34",
     "sha256": "1pqglzc8k31a4x06jn9pd6y8m4nmmb7rv5b3zancmh0d3z0nz3v5",
     "sha256bin64": "1zhif47j8nqglaj1z3ism3dl6z8n5ilyyr835an32mf6igkfj217",
@@ -32,6 +36,8 @@
     }
   },
   "dev": {
+    "version_darwin": "102.0.4997.0",
+    "sha256_darwin": "12hi4nyanbjxiizp5gajknl6ppm2lfnik8kava6azvfvpwr2j73x",
     "version": "102.0.4997.0",
     "sha256": "05y9b426wcarq18faw5i79qrfqy158dinvba5d7lwrcjnbqyfr1f",
     "sha256bin64": "0846y3dbs7vghrb8s2s57a2lk7a0x2dha5q0d915qrn29g5x9c6p",
