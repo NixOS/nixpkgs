@@ -219,6 +219,7 @@ let
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       skanlite = callPackage ./skanlite.nix {};
+      skanpage = callPackage ./skanpage.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
       zanshin = callPackage ./zanshin.nix {};
