@@ -20698,8 +20698,6 @@ with pkgs;
 
   tclx = callPackage ../development/libraries/tclx { };
 
-  ntdb = callPackage ../development/libraries/ntdb { };
-
   tdb = callPackage ../development/libraries/tdb {};
 
   tdlib = callPackage ../development/libraries/tdlib { };
