@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages
+, libiconv, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages, openjpeg
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
 , x11Support ? cupsSupport, xlibsWrapper # with CUPS, X11 only adds very little
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib expat openssl
     libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-    libiconv ijs lcms2 bash
+    libiconv ijs lcms2 bash openjpeg
   ]
   ++ lib.optional x11Support xlibsWrapper
   ++ lib.optional cupsSupport cups
@@ -72,8 +72,7 @@ stdenv.mkDerivation rec {
     export CCAUX=$CC_FOR_BUILD
     ${lib.optionalString cupsSupport ''export CUPSCONFIG="${cups.dev}/bin/cups-config"''}
 
-    # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs openjpeg
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
