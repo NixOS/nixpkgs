@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, python3, python3Packages
-, pkg-config, swig
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
+, pkgconfig, asn1crypto, swig
 , tpm2-tss
 , cryptography, ibm-sw-tpm2
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-O0d1b99/V8b3embg8veerTrJGSVb/prlPVb7qSHErdQ=";
   };
 
-  buildInputs = with python3.pkgs; [ pkgconfig asn1crypto ];
+  buildInputs = [ pkgconfig asn1crypto ];
   nativeBuildInputs = [ swig ];
   # The TCTI is dynamically loaded from tpm2-tss, we have to provide the library to the end-user
   propagatedBuildInputs = [ tpm2-tss ];

@@ -10218,7 +10218,9 @@ in {
 
   tox = callPackage ../development/python-modules/tox { };
 
-  tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss { };
+  tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss {
+    inherit asn1crypto pkgconfig;
+  };
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
