@@ -1,11 +1,12 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , blessings
 , fetchFromGitHub
 , invoke
-, lib
 , releases
 , semantic-version
 , tabulate
+, tqdm
 , twine
 }:
 
@@ -27,12 +28,22 @@ buildPythonPackage rec {
       --replace "tabulate==0.7.5" "tabulate"
   '';
 
-  propagatedBuildInputs = [ blessings invoke releases semantic-version tabulate twine ];
+  propagatedBuildInputs = [
+    blessings
+    invoke
+    releases
+    semantic-version
+    tabulate
+    tqdm
+    twine
+  ];
 
   # There's an error loading the test suite. See https://github.com/pyinvoke/invocations/issues/29.
   doCheck = false;
 
-  pythonImportsCheck = [ "invocations" ];
+  pythonImportsCheck = [
+    "invocations"
+  ];
 
   meta = with lib; {
     description = "Common/best-practice Invoke tasks and collections";
