@@ -1,5 +1,12 @@
-{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, lib, stdenv
-, libxslt, docbook_xsl
+{ fetchFromGitHub
+, git
+, gnupg
+, makeWrapper
+, openssl
+, lib
+, stdenv
+, libxslt
+, docbook_xsl
 }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ libxslt makeWrapper ];
 
   buildInputs = [ openssl ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace commands.cpp \
       --replace '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
   '';
@@ -29,7 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/git-crypt --prefix PATH : $out/bin:${git}/bin:${gnupg}/bin
+    wrapProgram $out/bin/git-crypt \
+      --suffix PATH : ${lib.makeBinPath [ git gnupg ]}
   '';
 
   meta = with lib; {
@@ -48,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
     license = licenses.gpl3;
-    maintainers = [ maintainers.dochang ];
+    maintainers = with maintainers; [ dochang SuperSandro2000 ];
     platforms = platforms.unix;
   };
 
