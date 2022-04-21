@@ -68,8 +68,7 @@ core-packages:
 # tracked in stackage.yaml. Adding conflicting overrides with stackage here will
 # not work.
 default-package-overrides:
-  # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
-  # not yet available in Nixpkgs
+  # gi-gdkx11-4.x requires gtk-4.x, but stackage still restricts gi-gtk to 3.*
   - gi-gdkx11 < 4
   # reflex-dom-pandoc is only used by neuron which needs a version < 1.0.0.0
   - reflex-dom-pandoc < 1.0.0.0

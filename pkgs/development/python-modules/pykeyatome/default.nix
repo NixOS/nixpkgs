@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pykeyatome";
-  version = "1.5.1";
+  version = "1.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "jugla";
     repo = "pyKeyAtome";
     rev = "refs/tags/V${version}";
-    sha256 = "sha256-LIPNCItD+qmk9NKAYbhEQC/A05Le9CNXECg7X2SlfdI=";
+    sha256 = "sha256-9J8MaQs3+/Ld+v3WmA98lSu3iMrX4Se4q1jD1KeRTpw=";
   };
 
   propagatedBuildInputs = [
