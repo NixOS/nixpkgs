@@ -86,6 +86,7 @@ let
       dragon = callPackage ./dragon.nix {};
       elisa = callPackage ./elisa.nix {};
       eventviews = callPackage ./eventviews.nix {};
+      falkon = callPackage ./falkon.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       granatier = callPackage ./granatier.nix {};

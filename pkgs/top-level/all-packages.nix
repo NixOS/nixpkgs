@@ -29051,8 +29051,6 @@ with pkgs;
 
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
-
   quodlibet = callPackage ../applications/audio/quodlibet {
     keybinder3 = null;
     libmodplug = null;
