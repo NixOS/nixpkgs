@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.37.0";
+  version = "2.38.0";
   disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    rev = "v${version}";
-    sha256 = "sha256-FmfTxRLqXUHhhAZIxCRx2+phX0bmU5rIHaftBU4yBJY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-J9NcQq/TVYqt8G8QkDgXmU12v8XaFG9bnChWCmrh7vY=";
   };
 
   # See https://github.com/NixOS/nixpkgs/issues/156957.
