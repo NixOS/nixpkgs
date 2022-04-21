@@ -1958,11 +1958,7 @@ in {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  cupy = callPackage ../development/python-modules/cupy {
-    # cupy doesn't build on gcc11. CUDA 11.3 is the last version to use
-    # pre-gcc11, in particular gcc9.
-    cudaPackages = pkgs.cudaPackages_11_3;
-  };
+  cupy = callPackage ../development/python-modules/cupy { };
 
   curio = callPackage ../development/python-modules/curio { };
 
