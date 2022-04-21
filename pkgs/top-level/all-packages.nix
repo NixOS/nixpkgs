@@ -361,6 +361,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  godo = callPackage ../applications/misc/godo { };
+
   gojq = callPackage ../development/tools/gojq { };
 
   gpick = callPackage ../tools/misc/gpick { };
