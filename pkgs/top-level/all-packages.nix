@@ -10018,6 +10018,8 @@ with pkgs;
 
   securefs = callPackage ../tools/filesystems/securefs { };
 
+  seehecht = callPackage ../tools/text/seehecht { };
+
   seexpr = callPackage ../development/compilers/seexpr { };
 
   setroot = callPackage  ../tools/X11/setroot { };
