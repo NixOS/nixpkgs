@@ -68,7 +68,7 @@ let
       cuda_cccl # <thrust/*>
       cuda_nvprof # <cuda_profiler_api.h>
       cuda_nvrtc
-      cuda_cudart
+      cuda_cudart # cuda_runtime.h
       libcublas
       libcufft
       libcusolver
