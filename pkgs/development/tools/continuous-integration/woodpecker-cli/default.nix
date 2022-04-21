@@ -7,8 +7,6 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  doCheck = true;
-
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "woodpecker";
@@ -16,14 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-ilywzKczcER7kO19X6vhn28HieeT7ZTSsoKyu802bS0=";
   };
 
-  buildPhase = ''
-    make build-cli
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv dist/woodpecker-cli $out/bin
-  '';
+  subPackages = [ "cmd/cli" ];
 
   meta = with lib; {
     mainProgram = "woodpecker";
