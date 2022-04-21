@@ -74,8 +74,8 @@ let
       libcusolver
       libcusparse
       libcurand
-      nccl.dev
-      nccl.out
+      (lib.getDev nccl)
+      nccl
     ];
 
     # ld is going to look for static archives (e.g. libcudart_static.a) in lib64
