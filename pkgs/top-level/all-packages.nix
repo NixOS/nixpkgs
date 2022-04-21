@@ -26824,6 +26824,8 @@ with pkgs;
 
   haunt = callPackage ../applications/misc/haunt { };
 
+  hexokinase = callPackage ../applications/misc/hexokinase { };
+
   hugo = callPackage ../applications/misc/hugo { buildGoModule = buildGo118Module; };
 
   go-org = callPackage ../applications/misc/go-org { };
