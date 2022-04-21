@@ -34,4 +34,10 @@ mkDerivation rec {
   description = "Functional sed for JSON";
   maintainers = with lib.maintainers; [ fgaz ];
   homepage = "https://github.com/chrisdone/jl";
+
+  # jl needs to be updated to work with aeson-2.0.
+  # As far as I can tell, there is unfortunately no where to report issues upstream
+  # for us to be able to track when upstream adds aeson-2.0 support.
+  hydraPlatforms = lib.platforms.none;
+  broken = true;
 }
