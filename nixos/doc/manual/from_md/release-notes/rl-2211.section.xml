@@ -541,6 +541,21 @@
       </listitem>
       <listitem>
         <para>
+          systemd-oomd is enabled by default. Depending on which systemd
+          units have <literal>ManagedOOMSwap=kill</literal> or
+          <literal>ManagedOOMMemoryPressure=kill</literal>, systemd-oomd
+          will SIGKILL all the processes under the appropriate
+          descendant cgroups when the configured limits are exceeded.
+          NixOS does currently not configure cgroups with oomd by
+          default, this can be enabled using
+          <link xlink:href="options.html#opt-systemd.oomd.enableRootSlice">systemd.oomd.enableRootSlice</link>,
+          <link xlink:href="options.html#opt-systemd.oomd.enableSystemSlice">systemd.oomd.enableSystemSlice</link>,
+          and
+          <link xlink:href="options.html#opt-systemd.oomd.enableUserServices">systemd.oomd.enableUserServices</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>pass-secret-service</literal> package now
           includes systemd units from upstream, so adding it to the
           NixOS <literal>services.dbus.packages</literal> option will

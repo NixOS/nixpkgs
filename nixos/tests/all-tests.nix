@@ -561,6 +561,7 @@ in {
   systemd-networkd-ipv6-prefix-delegation = handleTest ./systemd-networkd-ipv6-prefix-delegation.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
+  systemd-oomd = handleTest ./systemd-oomd.nix {};
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
