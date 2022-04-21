@@ -22518,6 +22518,8 @@ with pkgs;
 
   urserver = callPackage ../servers/urserver { };
 
+  uxplay = callPackage ../servers/uxplay { };
+
   vouch-proxy = callPackage ../servers/vouch-proxy {
     buildGoModule = buildGo116Module;
   };
