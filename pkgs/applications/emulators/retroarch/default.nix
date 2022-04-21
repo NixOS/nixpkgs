@@ -35,11 +35,11 @@
 }:
 
 let
-  version = "1.10.2";
+  version = "1.10.3";
   libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-XOSIVH3BSwAFKUeRvyYc2OXDa+TLjoKVGl+b8fgnvtY=";
+    sha256 = "sha256-wIIMEWrria8bZe/rcoJwDA9aCMWwbkDQFyEU80TZXFQ=";
     rev = "v${version}";
   };
   runtimeLibs = lib.optional withVulkan vulkan-loader
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-fMsHMQiEoXeFKITxeEyRH829z5SCf8p0Hxq6ww1p3z4=";
+    sha256 = "sha256-nAv1yv0laqlOmB8UUkK5wSYy/ySqXloEErm+yV30bbA=";
     rev = "v${version}";
   };
 
