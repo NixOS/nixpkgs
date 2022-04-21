@@ -97,6 +97,7 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
+      kalendar = callPackage ./kalendar.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};

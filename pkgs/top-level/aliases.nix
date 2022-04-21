@@ -1499,7 +1499,7 @@ mapAliases ({
     akonadi akregator ark bluedevil bomber bovo breeze-grub breeze-gtk
     breeze-icons breeze-plymouth breeze-qt5 discover dolphin dragon elisa
     ffmpegthumbs filelight granatier gwenview k3b kactivitymanagerd kaddressbook
-    kalzium kapman kapptemplate kate katomic kblackbox kblocks kbounce
+    kalendar kalzium kapman kapptemplate kate katomic kblackbox kblocks kbounce
     kcachegrind kcalc kcharselect kcolorchooser kde-cli-tools kde-gtk-config
     kdenlive kdeplasma-addons kdf kdialog kdiamond keditbookmarks kfind kfloppy
     kgamma5 kget kgpg khelpcenter kig kigo killbots kinfocenter kitinerary
