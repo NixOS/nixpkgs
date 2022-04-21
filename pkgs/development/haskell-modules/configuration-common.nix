@@ -252,7 +252,7 @@ self: super: {
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   binary-search = dontCheck super.binary-search;
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
-  bloodhound = dontCheck super.bloodhound;
+  bloodhound = dontCheck super.bloodhound;              # https://github.com/plow-technologies/quickcheck-arbitrary-template/issues/10
   buildwrapper = dontCheck super.buildwrapper;
   burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
   cabal-meta = dontCheck super.cabal-meta;              # http://hydra.cryp.to/build/497892/log/raw
@@ -2583,6 +2583,15 @@ self: super: {
 
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
+
+  # Manually upgrade cryptostore to work around
+  # https://github.com/ocheron/cryptostore/issues/7
+  cryptostore = assert super.cryptostore.version == "0.2.1.0"; overrideCabal {
+    version = "0.2.2.0";
+    sha256 = "0n70amg7y2qwfjhj4xaqjia46fbabba9l2g19ry191m7c4zp1skx";
+    revision = null;
+    editedCabalFile = null;
+  } super.cryptostore;
 
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;

@@ -2446,7 +2446,6 @@ dont-distribute-packages:
  - kansas-lava-shake
  - karakuri
  - karps
- - katip-elasticsearch
  - katip-raven
  - katip-rollbar
  - keenser
@@ -2789,6 +2788,7 @@ dont-distribute-packages:
  - moonshine
  - morley
  - morley-client
+ - morley-prelude
  - morley-upgradeable
  - morpheus-graphql
  - morpheus-graphql-app
@@ -2811,9 +2811,11 @@ dont-distribute-packages:
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
+ - msgpack-arbitrary
  - msgpack-idl
  - msgpack-rpc
  - msgpack-rpc-conduit
+ - msgpack-testsuite
  - mtgoxapi
  - mu-avro
  - mu-graphql
@@ -2965,6 +2967,8 @@ dont-distribute-packages:
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
+ - opentelemetry-lightstep
+ - opentelemetry-lightstep_0_8_0
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -3650,7 +3654,6 @@ dont-distribute-packages:
  - soundgen
  - source-code-server
  - spade
- - spago
  - sparkle
  - sparrow
  - sparsebit
