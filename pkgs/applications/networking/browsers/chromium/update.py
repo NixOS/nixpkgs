@@ -1,13 +1,16 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix nix-prefetch-git
+#! nix-shell -i python -p python3 nix nix-prefetch-git undmg
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
 via upstream-info.json."""
 # Usage: ./update.py [--commit]
 
 import base64
+import copy
 import csv
+import itertools
 import json
+import os
 import re
 import subprocess
 import sys
@@ -17,9 +20,12 @@ from collections import OrderedDict
 from datetime import datetime
 from distutils.version import LooseVersion
 from os.path import abspath, dirname
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from urllib.request import urlopen
 
 HISTORY_URL = 'https://omahaproxy.appspot.com/history?os=linux'
+MAC_HISTORY_URL = 'https://omahaproxy.appspot.com/history?os=mac'
 DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
 
@@ -34,11 +40,18 @@ def load_json(path):
         return json.load(f)
 
 
-def nix_prefetch_url(url, algo='sha256'):
-    """Prefetches the content of the given URL."""
+def nix_prefetch_url(url, algo='sha256', path=False):
+    """Prefetches the content of the given URL.
+    Returns the hash and store path as a tuple if `path` is `True` otherwise it returns only the hash.
+    """
     print(f'nix-prefetch-url {url}')
-    out = subprocess.check_output(['nix-prefetch-url', '--type', algo, url])
-    return out.decode('utf-8').rstrip()
+    path_args = ['--print-path'] if path else []
+    out = subprocess.check_output(['nix-prefetch-url', '--type', algo] + path_args + [url])
+    result = out.decode('utf-8').rstrip()
+    if path:
+        lines = result.splitlines()
+        return lines[0], lines[1]
+    return result
 
 
 def nix_prefetch_git(url, rev):
@@ -105,8 +118,33 @@ def get_latest_ungoogled_chromium_build():
     return {
         'channel': 'ungoogled-chromium',
         'version': version,
-        'ungoogled_tag': tag
+        'ungoogled_tag': tag,
+        'os': 'linux'
     }
+
+
+def chrome_mac_url(channel_name):
+    """Maps a channel name to the corresponding universal macOS download URL for Chrome."""
+    if channel_name == 'stable':
+        return 'https://dl.google.com/chrome/mac/universal/stable/CHFA/googlechrome.dmg'
+    return f'https://dl.google.com/chrome/mac/universal/{channel_name}/googlechrome{channel_name}.dmg'
+
+
+def get_latest_chrome_mac_hash(channel_name, version):
+    """Returns the SHA256 hash of the latest macOS build for Chrome."""
+    url = chrome_mac_url(channel_name)
+    hash, path = nix_prefetch_url(url, path=True)
+    # The macOS download doesn't have a known version specific URL
+    # so download the latest and check that the version is what is
+    # expected.
+    with TemporaryDirectory() as temp_dir:
+        subprocess.run(['undmg', path], cwd=temp_dir, check=True)
+        suffix = '' if channel_name == "stable" else f' {channel_name.capitalize()}'
+        actual_version = os.readlink(Path(temp_dir) / f'Google Chrome{suffix}.app/Contents/Frameworks/Google Chrome Framework.framework/Versions/Current')
+        if actual_version != version:
+            print(f'Error: Unexpected Chrome version. Found {actual_version}, expected {version}', file=sys.stderr)
+            sys.exit(1)
+        return hash
 
 
 def get_ungoogled_chromium_gn_flags(revision):
@@ -144,15 +182,39 @@ def get_channel_key(item):
     sys.exit(1)
 
 
+def version_update(version_old, version_new, suffix=""):
+    if version_new is None:
+        return None
+    if version_old is None:
+        return f'init at {version_new}{suffix}'
+    if LooseVersion(version_old) < LooseVersion(version_new):
+        return f'{version_old} -> {version_new}{suffix}'
+    return None
+
+
+def channel_update(channels_old, channels_new, channel_name):
+    version_linux_old = channels_old[channel_name].get('version')
+    version_linux_new = channels_new[channel_name].get('version')
+    version_darwin_old = channels_old[channel_name].get('version_darwin')
+    version_darwin_new = channels_new[channel_name].get('version_darwin')
+    if version_linux_old == version_darwin_old and version_linux_new == version_darwin_new:
+        update = version_update(version_linux_old, version_linux_new)
+    else:
+        linux_update = version_update(version_linux_old, version_linux_new, " (linux)")
+        darwin_update = version_update(version_darwin_old, version_darwin_new, " (darwin)")
+        update = ', '.join(filter(None, (linux_update, darwin_update)))
+    if update is not None and update != '':
+        attr_name = channel_name_to_attr_name(channel_name)
+        return f'{attr_name}: {update}'
+    return None
+
+
 def print_updates(channels_old, channels_new):
     """Print a summary of the updates."""
     print('Updates:')
     for channel_name in channels_old:
-        version_old = channels_old[channel_name]["version"]
-        version_new = channels_new[channel_name]["version"]
-        if LooseVersion(version_old) < LooseVersion(version_new):
-            attr_name = channel_name_to_attr_name(channel_name)
-            print(f'- {attr_name}: {version_old} -> {version_new}')
+        if update := channel_update(channels_old, channels_new, channel_name):
+            print(f'- {update}')
 
 
 channels = {}
@@ -163,60 +225,72 @@ print(f'GET {HISTORY_URL}', file=sys.stderr)
 with urlopen(HISTORY_URL) as resp:
     builds = csv.DictReader(iterdecode(resp, 'utf-8'))
     builds = list(builds)
+    print(f'GET {MAC_HISTORY_URL}', file=sys.stderr)
+    with urlopen(MAC_HISTORY_URL) as mac_resp:
+        builds.extend(list(csv.DictReader(iterdecode(mac_resp, 'utf-8'))))
     builds.append(get_latest_ungoogled_chromium_build())
-    for build in builds:
+
+    # Get the latest version for each channel and each os.
+    sorted_builds = sorted(
+        builds,
+        key=lambda build: (build['channel'], build['os'], LooseVersion(build['version'])),
+        reverse=True)
+    newest_builds = []
+    for k, g in itertools.groupby(sorted_builds, lambda build: (build['channel'], build['os'])):
+        build = next(g)
+        # Ignore Canary builds.
+        if build['channel'] != 'canary':
+            newest_builds.append(build)
+
+    for build in newest_builds:
         channel_name = build['channel']
+        is_mac = build.get('os') == 'mac'
+        version_attribute = 'version_darwin' if is_mac else 'version'
+        version = build['version']
 
-        # If we've already found a newer build for this channel, we're
-        # no longer interested in it.
-        if channel_name in channels:
-            continue
+        channel = channels.get(channel_name) or {}
+        channel[version_attribute] = version
 
-        # If we're back at the last build we used, we don't need to
-        # keep going -- there's no new version available, and we can
-        # just reuse the info from last time.
-        if build['version'] == last_channels[channel_name]['version']:
-            channels[channel_name] = last_channels[channel_name]
-            continue
-
-        channel = {'version': build['version']}
-        if channel_name == 'dev':
-            google_chrome_suffix = 'unstable'
-        elif channel_name == 'ungoogled-chromium':
-            google_chrome_suffix = 'stable'
+        if build.get('os') == 'mac':
+            channel['sha256_darwin'] = get_latest_chrome_mac_hash(channel_name, version)
         else:
-            google_chrome_suffix = channel_name
-
-        try:
-            channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{build["version"]}.tar.xz')
-            channel['sha256bin64'] = nix_prefetch_url(
-                f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
-                f'google-chrome-{google_chrome_suffix}_{build["version"]}-1_amd64.deb')
-        except subprocess.CalledProcessError:
-            if (channel_name == 'ungoogled-chromium' and 'sha256' in channel and
-                    build['version'].split('.')[0] == last_channels['stable']['version'].split('.')[0]):
-                # Sometimes ungoogled-chromium is updated to a newer tag than
-                # the latest stable Chromium version. In this case we'll set
-                # sha256bin64 to null and the Nixpkgs code will fall back to
-                # the latest stable Google Chrome (only required for
-                # Widevine/DRM which is disabled by default):
-                channel['sha256bin64'] = None
+            if channel_name == 'dev':
+                google_chrome_suffix = 'unstable'
+            elif channel_name == 'ungoogled-chromium':
+                google_chrome_suffix = 'stable'
             else:
-                # This build isn't actually available yet.  Continue to
-                # the next one.
-                continue
+                google_chrome_suffix = channel_name
 
-        channel['deps'] = get_channel_dependencies(channel['version'])
-        if channel_name == 'stable':
-            channel['chromedriver'] = get_matching_chromedriver(channel['version'])
-        elif channel_name == 'ungoogled-chromium':
-            ungoogled_repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
-            channel['deps']['ungoogled-patches'] = {
-                'rev': build['ungoogled_tag'],
-                'sha256': nix_prefetch_git(ungoogled_repo_url, build['ungoogled_tag'])['sha256']
-            }
-            with open(UNGOOGLED_FLAGS_PATH, 'w') as out:
-                out.write(get_ungoogled_chromium_gn_flags(build['ungoogled_tag']))
+            try:
+                channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{version}.tar.xz')
+                channel['sha256bin64'] = nix_prefetch_url(
+                    f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
+                    f'google-chrome-{google_chrome_suffix}_{version}-1_amd64.deb')
+            except subprocess.CalledProcessError:
+                if (channel_name == 'ungoogled-chromium' and 'sha256' in channel and
+                    build['version'].split('.')[0] == last_channels['stable']['version'].split('.')[0]):
+                    # Sometimes ungoogled-chromium is updated to a newer tag than
+                    # the latest stable Chromium version. In this case we'll set
+                    # sha256bin64 to null and the Nixpkgs code will fall back to
+                    # the latest stable Google Chrome (only required for
+                    # Widevine/DRM which is disabled by default):
+                    channel['sha256bin64'] = None
+                else:
+                    # This build isn't actually available yet.  Continue to
+                    # the next one.
+                    continue
+
+            channel['deps'] = get_channel_dependencies(version)
+            if channel_name == 'stable':
+                channel['chromedriver'] = get_matching_chromedriver(version)
+            elif channel_name == 'ungoogled-chromium':
+                ungoogled_repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
+                channel['deps']['ungoogled-patches'] = {
+                    'rev': build['ungoogled_tag'],
+                    'sha256': nix_prefetch_git(ungoogled_repo_url, build['ungoogled_tag'])['sha256']
+                }
+                with open(UNGOOGLED_FLAGS_PATH, 'w') as out:
+                    out.write(get_ungoogled_chromium_gn_flags(build['ungoogled_tag']))
 
         channels[channel_name] = channel
 
@@ -224,22 +298,24 @@ with urlopen(HISTORY_URL) as resp:
 sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
 if len(sys.argv) == 2 and sys.argv[1] == '--commit':
     for channel_name in sorted_channels.keys():
-        version_old = last_channels[channel_name]['version']
-        version_new = sorted_channels[channel_name]['version']
-        if LooseVersion(version_old) < LooseVersion(version_new):
+        if update := channel_update(last_channels, sorted_channels, channel_name):
             last_channels[channel_name] = sorted_channels[channel_name]
             with open(JSON_PATH, 'w') as out:
                 json.dump(last_channels, out, indent=2)
                 out.write('\n')
             attr_name = channel_name_to_attr_name(channel_name)
-            commit_message = f'{attr_name}: {version_old} -> {version_new}'
             if channel_name == 'stable':
-                body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT, version_new]).decode('utf-8')
-                commit_message += '\n\n' + body
+                version_linux_new = sorted_channels[channel_name]['version']
+                version_darwin_new = sorted_channels[channel_name].get('version_darwin')
+                body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT, version_linux_new, 'Linux']).decode('utf-8')
+                update += '\n\n' + body
+                if version_darwin_new is not None and version_linux_new != version_darwin_new:
+                    body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT, version_darwin_new, 'Mac']).decode('utf-8')
+                    update += '\n\n' + body
             elif channel_name == 'ungoogled-chromium':
                 subprocess.run(['git', 'add', UNGOOGLED_FLAGS_PATH], check=True)
             subprocess.run(['git', 'add', JSON_PATH], check=True)
-            subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
+            subprocess.run(['git', 'commit', '--file=-'], input=update.encode(), check=True)
 else:
     with open(JSON_PATH, 'w') as out:
         json.dump(sorted_channels, out, indent=2)
