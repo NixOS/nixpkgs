@@ -46,55 +46,10 @@ in lib.makeExtensible (self: {
     };
   }).override { boehmgc = boehmgc-nix_2_3; };
 
-  nix_2_4 = common {
-    version = "2.4";
-    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    # https://github.com/NixOS/nix/pull/5537
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
-
-  nix_2_5 = common {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
-
-  nix_2_6 = common {
-    version = "2.6.1";
-    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
-  };
-
-  nix_2_7 = common {
-    version = "2.7.0";
-    sha256 = "sha256-m8tqCS6uHveDon5GSro5yZor9H+sHeh+v/veF1IGw24=";
-    patches = [
-      # remove when there's a 2.7.1 release
-      # https://github.com/NixOS/nix/pull/6297
-      # https://github.com/NixOS/nix/issues/6243
-      # https://github.com/NixOS/nixpkgs/issues/163374
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
-        sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
-      })
-    ];
-  };
-
   nix_2_8 = common {
     version = "2.8.0";
     sha256 = "sha256-gWYNlEyleqkPfxtGXeq6ggjzJwcXJVdieJxA1Obly9s=";
   };
 
   stable = self.nix_2_8;
-
-  unstable = lib.lowPrio (common rec {
-    version = "2.8";
-    suffix = "pre20220411_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "f7276bc948705f452b2bfcc2a08bc44152f1d5a8";
-      sha256 = "sha256-brqGGdr2CzqufY3NXU8tGm6QbCTSFGfboruU2cUWhu8=";
-    };
-  });
 })
