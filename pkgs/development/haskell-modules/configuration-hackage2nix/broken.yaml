@@ -4467,7 +4467,6 @@ broken-packages:
   - semigroups-actions
   - sendgrid-haskell
   - sendgrid-v3
-  - sensei
   - sensu-run
   - sentry
   - separated

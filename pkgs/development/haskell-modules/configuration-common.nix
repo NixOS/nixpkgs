@@ -851,6 +851,18 @@ self: super: {
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
+  # requires git at test-time *and* runtime, but we'll just rely on users to
+  # bring their own git at runtime
+  sensei = overrideCabal (drv: {
+    testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
+  }) (super.sensei.overrideScope (self: super: {
+    hspec-meta = self.hspec-meta_2_9_3;
+    hspec = self.hspec_2_9_7;
+    hspec-core = dontCheck self.hspec-core_2_9_7;
+    hspec-discover = self.hspec-discover_2_9_7;
+  }));
+
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
