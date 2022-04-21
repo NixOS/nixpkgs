@@ -5,7 +5,6 @@
 , lib
 , bc-soci
 , sqlite
-, boost
 , stdenv
 }:
 
@@ -31,12 +30,13 @@ stdenv.mkDerivation rec {
     bc-soci
 
     sqlite
-    boost
   ];
   nativeBuildInputs = [ cmake ];
 
-  # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO" # Do not build static libraries
+    "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+  ];
 
   meta = with lib; {
     description = "End-to-end encryption library for instant messaging. Part of the Linphone project.";
