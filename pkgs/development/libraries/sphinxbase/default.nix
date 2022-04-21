@@ -8,7 +8,7 @@
 , multipleOutputs ? false #Uses incomplete features of nix!
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation {
   pname = "sphinxbase";
   version = "unstable-2022-02-21";
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation (rec {
     mkdir -p $headers
     cp -av $out/include $headers
   '';
-}))
+})

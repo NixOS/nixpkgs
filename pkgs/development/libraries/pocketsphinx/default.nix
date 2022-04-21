@@ -1,28 +1,33 @@
 { lib, stdenv
-, fetchurl
+, fetchFromGitHub
 , sphinxbase
 , pkg-config
-, python27 # >= 2.6
+, python3
 , swig2 # 2.0
+, autoreconfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pocketsphinx";
-  version = "5prealpha";
+  version = "unstable-2022-02-22";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cmusphinx/pocketsphinx-${version}.tar.gz";
-    sha256 = "1n9yazzdgvpqgnfzsbl96ch9cirayh74jmpjf7svs4i7grabanzg";
+  src = fetchFromGitHub {
+    owner = "cmusphinx";
+    repo = "pocketsphinx";
+    rev = "5da71f0a05350c923676b02a69423d1291825d5b";
+    hash = "sha256-YZwuVYg8Uqt1gOYXeYC8laRj+IObbuO9f/BjcQKRwkY=";
   };
 
   propagatedBuildInputs = [ sphinxbase ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python27 swig2 ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs = [ python3 swig2 ];
+
+  preBuild = "gcc --version";
 
   meta = {
     description = "Voice recognition library written in C";
-    homepage = "http://cmusphinx.sourceforge.net";
+    homepage = "https://cmusphinx.github.io";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
   };
