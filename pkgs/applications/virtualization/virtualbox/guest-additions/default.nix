@@ -5,13 +5,9 @@ let
   version = virtualbox.version;
   xserverVListFunc = builtins.elemAt (lib.splitVersion xorg.xorgserver.version);
 
-  # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
-  # as it even fails to build otherwise.  Still, override this even here,
-  # in case someone does just a standalone build
-  # (not via videoDrivers = ["vboxvideo"]).
-  # It's likely to work again in some future update.
-  xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
-    in if abi == "119" || abi == "120" then "118" else abi;
+  # Forced to 1.18; vboxvideo doesn't seem to provide any newer ABI,
+  # and nixpkgs doesn't support older ABIs anymore.
+  xserverABI = "118";
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch

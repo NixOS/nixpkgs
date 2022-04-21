@@ -19,20 +19,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MvzJ6bFEt8sdtMhuEEyngoPNwiXhP+grJzZgWGrv4yM=";
   };
 
-  preBuild = ''
+  preBuild = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace programs/mkwinpeimg.in \
       --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
   postInstall = let
-    path = lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
+    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux ]);
   in ''
     for prog in $out/bin/*; do
       wrapProgram $prog --prefix PATH : ${path}
     done
   '';
 
-  doCheck = true;
+  doCheck = (!stdenv.isDarwin);
 
   preCheck = ''
     patchShebangs tests

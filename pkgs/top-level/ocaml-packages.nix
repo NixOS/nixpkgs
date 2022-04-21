@@ -87,6 +87,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
+
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
@@ -424,6 +426,8 @@ let
     flac = callPackage ../development/ocaml-modules/flac {
       inherit (pkgs) flac;
     };
+
+    flex = callPackage ../development/ocaml-modules/flex { };
 
     fmt = callPackage ../development/ocaml-modules/fmt { };
 
@@ -1107,6 +1111,8 @@ let
     psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
+
+    pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 

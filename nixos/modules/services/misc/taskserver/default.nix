@@ -106,7 +106,7 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = with pkgs.python2.pkgs; buildPythonApplication {
+  nixos-taskserver = with pkgs.python3.pkgs; buildPythonApplication {
     name = "nixos-taskserver";
 
     src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
@@ -277,10 +277,6 @@ in {
         example = "::";
         description = ''
           The address (IPv4, IPv6 or DNS) to listen on.
-
-          If the value is something else than <literal>localhost</literal> the
-          port defined by <option>listenPort</option> is automatically added to
-          <option>networking.firewall.allowedTCPPorts</option>.
         '';
       };
 
@@ -289,6 +285,14 @@ in {
         default = 53589;
         description = ''
           Port number of the Taskserver.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for the specified Taskserver port.
         '';
       };
 
@@ -560,7 +564,7 @@ in {
         '';
       };
     })
-    (mkIf (cfg.enable && cfg.listenHost != "localhost") {
+    (mkIf (cfg.enable && cfg.openFirewall) {
       networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
   ];
