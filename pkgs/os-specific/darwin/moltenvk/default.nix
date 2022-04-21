@@ -29,7 +29,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "MoltenVK";
-  version = "1.1.8";
+  version = "1.1.9";
 
   buildInputs = [
     AppKit
@@ -51,8 +51,8 @@ stdenvNoCC.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "glslang";
-        rev = "90d4bd05cd77ef5782a6779a0fe3d084440dc80d";
-        hash = "sha256-Q0sk4bPj/skPat1n4GJyuXAlZqpfEn4Td8Bm2IBNUqE=";
+        rev = "9bb8cfffb0eed010e07132282c41d73064a7a609";
+        hash = "sha256-YLn/Mxuk6mXPGtBBgfwky5Nl1TCAW6i2g+AZLzqVz+A=";
       };
     })).override {
       inherit (passthru) spirv-headers spirv-tools;
@@ -64,27 +64,24 @@ stdenvNoCC.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Cross";
-        rev = "131278458ea8eebe6a6e9c476fbcf71278726e1a";
-        hash = "sha256-LrRYDFGv3Zxfy4qRNLwM2OOa8jbcq0ttPxDamCH21xU=";
+        rev = "0d4ce028bf8b8a94d325dc1e1c20446153ba19c4";
+        hash = "sha256-OluTxOEfDIGMdrXhvIifjpMgZBvyh9ofLKxKt0dX5ZU=";
       };
     });
     spirv-headers = spirv-headers.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "spirv-headers";
-        rev = "b42ba6d92faf6b4938e6f22ddd186dbdacc98d78";
-        hash = "sha256-ks9JCj5rj+Xu++7z5RiHDkU3/sFXhcScw8dATfB/ot0";
+        rev = "4995a2f2723c401eb0ea3e10c81298906bf1422b";
+        hash = "sha256-LkIrTFWYvZffLVJJW3152um5LTEsMJEDEsIhBAdhBlk=";
       };
     });
     spirv-tools = (spirv-tools.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "spirv-tools";
-        rev = "45dd184c790d6bfc78a5a74a10c37e888b1823fa";
-        hash = "sha256-DSqZlwfNTbN4fyIrVBKltm5U2U4GthW3L+Ksw4lSVG8=";
-      };
-      meta = old.meta // {
-        platforms = old.meta.platforms ++ lib.platforms.darwin;
+        rev = "eed5c76a57bb965f2e1b56d1dc40b50910b5ec1d";
+        hash = "sha256-2Mr3HbhRslLpRfwHascl7e/UoPijhrij9Bjg3aCiqBM=";
       };
     })).override {
       inherit (passthru) spirv-headers;
@@ -93,11 +90,8 @@ stdenvNoCC.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "Vulkan-Headers";
-        rev = "1dace16d8044758d32736eb59802d171970e9448";
-        hash = "sha256-C6YgxWcinI3QumcWmoJaiTAf0u6jSDc8sCIarn2t04k";
-      };
-      meta = old.meta // {
-        platforms = old.meta.platforms ++ lib.platforms.darwin;
+        rev = "76f00ef6cbb1886eb1162d1fa39bee8b51e22ee8";
+        hash = "sha256-FqrcFHsUS8e4ZgZpxVc8nNZWdNltniFmMjyyWVoNc7w=";
       };
     });
   };
@@ -106,7 +100,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${version}";
-    hash = "sha256-IfTBtA2fM7YN4qaSDUTfsiCXzn+omSV6oroL1ivKiVA=";
+    hash = "sha256-5ie1IGzZqaYbciFnrBJ1/9V0LEuz7JsEOFXXkG3hJzg=";
   };
 
   patches = [

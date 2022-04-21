@@ -593,6 +593,15 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
+  mysql-shell = callPackage ../development/tools/mysql-shell {
+    inherit (darwin) cctools developer_cmds DarwinTools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost173; # Configure checks for specific version.
+    protobuf = protobuf3_11;
+    icu =  icu67;
+    v8 = v8_8_x;
+  };
+
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
 
   fetchpatch = callPackage ../build-support/fetchpatch { }
@@ -904,6 +913,8 @@ with pkgs;
   # lib functions depending on pkgs
   inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
 
+  testers = callPackage ../build-support/testers {};
+
   ### TOOLS
 
   _3llo = callPackage ../tools/misc/3llo { };
@@ -913,6 +924,8 @@ with pkgs;
   _1password = callPackage ../applications/misc/1password { };
 
   _1password-gui = callPackage ../applications/misc/1password-gui { };
+
+  _1password-gui-beta = callPackage ../applications/misc/1password-gui/beta.nix { };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
@@ -953,6 +966,8 @@ with pkgs;
   actkbd = callPackage ../tools/system/actkbd { };
 
   adafruit-ampy = callPackage ../tools/misc/adafruit-ampy { };
+
+  addlicense = callPackage ../tools/misc/addlicense { };
 
   adlplug = callPackage ../applications/audio/adlplug {
     inherit (darwin) libobjc;
@@ -3575,7 +3590,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gpu-burn = callPackage ../applications/misc/gpu-burn { };
+  gpu-burn = callPackage ../applications/misc/gpu-burn {
+    # gpu-burn doesn't build on gcc11. CUDA 11.3 is the last version to use
+    # pre-gcc11, in particular gcc9.
+    stdenv = gcc9Stdenv;
+  };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
@@ -3955,6 +3974,8 @@ with pkgs;
 
   oil-buku = callPackage ../applications/misc/oil-buku { };
 
+  osdlyrics = callPackage ../applications/audio/osdlyrics { };
+
   ossutil = callPackage ../tools/admin/ossutil {};
 
   pastel = callPackage ../applications/misc/pastel {
@@ -4008,6 +4029,8 @@ with pkgs;
   pueue = callPackage ../applications/misc/pueue {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
+
+  pixcat = with python3Packages; toPythonApplication pixcat;
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
@@ -4405,7 +4428,7 @@ with pkgs;
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
-  cantoolz = python3Packages.callPackage ../tools/networking/cantoolz { };
+  cantoolz = callPackage ../tools/networking/cantoolz { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -4869,8 +4892,8 @@ with pkgs;
   cudaPackages_11_4 = callPackage ./cuda-packages.nix { cudaVersion = "11.4"; };
   cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaVersion = "11.5"; };
   cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaVersion = "11.6"; };
-  cudaPackages_11 = cudaPackages_11_5;
-  cudaPackages = cudaPackages_11;
+  cudaPackages_11 = cudaPackages_11_6;
+  cudaPackages = recurseIntoAttrs cudaPackages_11;
 
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;
@@ -4962,6 +4985,8 @@ with pkgs;
   debianutils = callPackage ../tools/misc/debianutils { };
 
   debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
+
+  debian-goodies = callPackage ../applications/misc/debian-goodies { };
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
@@ -7118,6 +7143,10 @@ with pkgs;
   jadx = callPackage ../tools/security/jadx { };
 
   jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
+  jamesdsp-pulse = libsForQt5.callPackage ../applications/audio/jamesdsp {
+    usePipewire = false;
+    usePulseaudio = true;
+  };
 
   jazzy = callPackage ../development/tools/jazzy { };
 
@@ -8582,6 +8611,8 @@ with pkgs;
   panicparse = callPackage ../tools/misc/panicparse { };
 
   patray = callPackage ../tools/audio/patray { };
+
+  pathvector = callPackage ../tools/networking/pathvector { };
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
@@ -10648,8 +10679,6 @@ with pkgs;
 
   termplay = callPackage ../tools/misc/termplay { };
 
-  testEqualDerivation = callPackage ../build-support/test-equal-derivation.nix { };
-
   tetrd = callPackage ../applications/networking/tetrd { };
 
   tewisay = callPackage ../tools/misc/tewisay { };
@@ -11532,8 +11561,6 @@ with pkgs;
 
   webalizer = callPackage ../tools/networking/webalizer { };
 
-  weighttp = callPackage ../tools/networking/weighttp { };
-
   wget = callPackage ../tools/networking/wget {
     libpsl = null;
   };
@@ -12109,6 +12136,10 @@ with pkgs;
   adoptopenjdk-icedtea-web = callPackage ../development/compilers/adoptopenjdk-icedtea-web {
     jdk = jdk8;
   };
+
+  alan = callPackage ../development/compilers/alan { };
+
+  alan_2 = callPackage ../development/compilers/alan/2.nix { };
 
   algol68g = callPackage ../development/compilers/algol68g { };
 
@@ -14437,6 +14468,20 @@ with pkgs;
   };
 
   supercollider_scel = supercollider.override { useSCEL = true; };
+
+  supercolliderPlugins = recurseIntoAttrs {
+    sc3-plugins = callPackage ../development/interpreters/supercollider/plugins/sc3-plugins.nix {
+      fftw = fftwSinglePrec;
+    };
+  };
+
+  supercollider-with-plugins = callPackage ../development/interpreters/supercollider/wrapper.nix {
+    plugins = [];
+  };
+
+  supercollider-with-sc3-plugins = supercollider-with-plugins.override {
+    plugins = with supercolliderPlugins; [ sc3-plugins ];
+  };
 
   taktuk = callPackage ../applications/networking/cluster/taktuk { };
 
@@ -18240,6 +18285,8 @@ with pkgs;
 
   libdv = callPackage ../development/libraries/libdv { };
 
+  libdvbcsa = callPackage ../development/libraries/libdvbcsa { };
+
   libdvbpsi = callPackage ../development/libraries/libdvbpsi { };
 
   libdwg = callPackage ../development/libraries/libdwg { };
@@ -20258,6 +20305,8 @@ with pkgs;
     # libGLU doesn’t work with Android’s SDL
     libGLU = null;
   });
+
+  SDL_audiolib = callPackage ../development/libraries/SDL_audiolib { };
 
   SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
 
@@ -23070,6 +23119,8 @@ with pkgs;
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
   linux_xanmod = linuxKernel.kernels.linux_xanmod;
+  linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
+  linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
@@ -23093,6 +23144,9 @@ with pkgs;
 
   librealsenseWithCuda = callPackage ../development/libraries/librealsense {
     cudaSupport = true;
+    # librealsenseWithCuda doesn't build on gcc11. CUDA 11.3 is the last version
+    # to use pre-gcc11, in particular gcc9.
+    stdenv = gcc9Stdenv;
   };
 
   librealsenseWithoutCuda = callPackage ../development/libraries/librealsense {
@@ -27862,7 +27916,9 @@ with pkgs;
 
   mnamer = callPackage ../applications/misc/mnamer { };
 
-  moc = callPackage ../applications/audio/moc { };
+  moc = callPackage ../applications/audio/moc {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   mod-arpeggiator-lv2 = callPackage ../applications/audio/mod-arpeggiator-lv2 { };
 
@@ -31101,9 +31157,9 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  lbreakout2 = callPackage ../games/lbreakout2 { };
+  lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
 
-  ltris = callPackage ../games/ltris { };
+  ltris = callPackage ../games/lgames/ltris { };
 
   lunar-client = callPackage ../games/lunar-client { };
 
@@ -32969,12 +33025,28 @@ with pkgs;
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = lib.overrideDerivation polyml (_: {
+    polyml = polyml.overrideAttrs (_: {
+      pname = "polyml-for-isabelle";
+      version = "2021-1";
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
+      buildFlags = [ "compiler" ];
+      src = fetchFromGitHub {
+        owner = "polyml";
+        repo = "polyml";
+        rev = "39d96a2def903ed019c6855e3b688df5070d633a";
+        sha256 = "sha256-S7d2Vr/nB+rCX9d4qQj4f7edVZKocKIjc5rrx9A/B4Q=";
+      };
     });
 
     java = openjdk17;
-    z3 = z3_4_4_0;
+    z3 = z3_4_4_0.overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "Z3Prover";
+        repo = "z3";
+        rev = "0482e7fe727c75e259ac55a932b28cf1842c530e";
+        sha256 = "1m53avlljxqd2p8w266ksmjywjycsd23h224yn786qsnf36dr63x";
+      };
+    });
   };
   isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
 

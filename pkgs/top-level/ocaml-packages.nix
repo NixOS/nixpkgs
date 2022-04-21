@@ -87,6 +87,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
+
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
@@ -424,6 +426,8 @@ let
     flac = callPackage ../development/ocaml-modules/flac {
       inherit (pkgs) flac;
     };
+
+    flex = callPackage ../development/ocaml-modules/flex { };
 
     fmt = callPackage ../development/ocaml-modules/fmt { };
 
@@ -1108,6 +1112,8 @@ let
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
+    pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
+
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     repr = callPackage ../development/ocaml-modules/repr { };
@@ -1259,6 +1265,8 @@ let
     reason = callPackage ../development/compilers/reason { };
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
+
+    rebez = callPackage ../development/ocaml-modules/rebez { };
 
     rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
 

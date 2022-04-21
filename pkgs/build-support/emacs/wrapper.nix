@@ -144,6 +144,7 @@ runCommand
           find $pkg -name "*-autoloads.el" \
               -exec echo \(load \"{}\" \'noerror \'nomessage\) \; >> $siteAutoloads
         done
+        echo "(provide 'nix-generated-autoload)" >> $siteAutoloads
 
         siteStart="$out/share/emacs/site-lisp/site-start.el"
         siteStartByteCompiled="$siteStart"c
@@ -196,12 +197,18 @@ runCommand
     # Wrap emacs and friends so they find our site-start.el before the original.
     for prog in $emacs/bin/*; do # */
       local progname=$(basename "$prog")
+      local autoloadExpression=""
       rm -f "$out/bin/$progname"
+      if [[ $progname == emacs ]]; then
+        # progs other than "emacs" do not understand the `-l` switches
+        autoloadExpression="-l cl-loaddefs -l nix-generated-autoload"
+      fi
 
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+        --subst-var autoloadExpression \
         --subst-var prog
       chmod +x $out/bin/$progname
     done

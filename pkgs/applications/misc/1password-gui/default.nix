@@ -128,7 +128,7 @@ in stdenv.mkDerivation rec {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey ];
+    maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
     platforms = [ "x86_64-linux" ];
   };
 }

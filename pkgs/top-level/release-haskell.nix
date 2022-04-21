@@ -129,7 +129,18 @@ let
   jobs = recursiveUpdateMany [
     (mapTestOn {
       haskellPackages = packagePlatforms pkgs.haskellPackages;
-      haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+      haskell.compiler = packagePlatforms pkgs.haskell.compiler // (lib.genAttrs [
+        "ghcjs"
+        "ghcjs810"
+      ] (ghcjsName: {
+        # We can't build ghcjs itself, since it exceeds 3GB (Hydra's output limit) due
+        # to the size of its bundled libs. We can however save users a bit of compile
+        # time by building the bootstrap ghcjs on Hydra. For this reason, we overwrite
+        # the ghcjs attributes in haskell.compiler with a reference to the bootstrap
+        # ghcjs attribute in their bootstrap package set (exposed via passthru) which
+        # would otherwise be ignored by Hydra.
+        bootGhcjs = (packagePlatforms pkgs.haskell.compiler.${ghcjsName}.passthru).bootGhcjs;
+      }));
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
@@ -195,6 +206,7 @@ let
         madlang
         matterhorn
         mueval
+        naproche
         neuron-notes
         niv
         nix-delegate

@@ -4,6 +4,7 @@
 , makeWrapper, runtimeShell, removeReferencesTo
 , attr, libcap, libcap_ng, socat
 , CoreServices, Cocoa, Hypervisor, rez, setfile
+, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isSunOS || isWindows
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.2.0";
+  version = "7.0.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
+    sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -82,80 +83,26 @@ stdenv.mkDerivation rec {
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
-  outputs = [ "out" "ga" ];
+  outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
   separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch
-    # MTP Devices were broken in QEMU 6.1.0, this patch fixes that.
-     (fetchpatch {
-       url = "https://gitlab.com/qemu-project/qemu/-/commit/9d30c78c7d3b994825cbe63fa277279ae3ef4248.patch";
-       sha256 = "sha256-AChB9HMEShrM+2UW2aOT9+MqlAm568sG3HxHK3nDC/M=";
-     })
-    # Cocoa clipboard support only works on macOS 10.14+
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
-      sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
-      revert = true;
-    })
-    # 9p-darwin for 7.0 backported to 6.2.0
-    #
-    # Can generally be removed when updating derivation to 7.0. Nine of the
-    # patches can be drawn directly from QEMU upstream, but the second commit
-    # and the eleventh commit had to be modified when rebasing back to 6.2.0.
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/e0bd743bb2dd4985791d4de880446bdbb4e04fed.patch";
-      sha256 = "sha256-c6QYL3zig47fJwm6rqkqGp3E1PakVTaihvXDRebbBlQ=";
-    })
-    ./rename-9p-util.patch
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/f41db099c71151291c269bf48ad006de9cbd9ca6.patch";
-      sha256 = "sha256-70/rrhZw+02JJbJ3CoW8B1GbdM4Lwb2WkUdwstYAoIQ=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/6b3b279bd670c6a2fa23c9049820c814f0e2c846.patch";
-      sha256 = "sha256-7WqklSvLirEuxTXTIMQDQhWpXnwMseJ1RumT+faq/Y8=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/67a71e3b71a2834d028031a92e76eb9444e423c6.patch";
-      sha256 = "sha256-COFm/SwfJSoSl9YDpL6ceAE8CcE4mGhsGxw1HMuL++o=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/38d7fd68b0c8775b5253ab84367419621aa032e6.patch";
-      sha256 = "sha256-iwGIzq9FWW6zpbDg/IKrp5OZpK9cgQqTRWWq8WBIHRQ=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/57b3910bc3513ab515296692daafd1c546f3c115.patch";
-      sha256 = "sha256-ybl9+umZAcQKHYL7NkGJQC0W7bccTagA9KQiFaR2LYA=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/b5989326f558faedd2511f29459112cced2ca8f5.patch";
-      sha256 = "sha256-s+O9eCgj2Ev+INjL9LY9MJBdISIdZLslI3lue2DICGM=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/029ed1bd9defa33a80bb40cdcd003699299af8db.patch";
-      sha256 = "sha256-mGqcRWcEibDJdhTRrN7ZWrMuCfUWW8vWiFj7sb2/RYo=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/d3671fd972cd185a6923433aa4802f54d8b62112.patch";
-      sha256 = "sha256-GUh5o7mbFTm/dm6CqcGdoMlC+YrV8RlcEwu/mxrfTzo=";
-    })
-    # The next two commits are to make Linux v5.17 work on aarch64-darwin. These are included in QEMU v7.
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/ad99f64f1cfff7c5e7af0e697523d9b7e45423b6.patch";
-      sha256 = "sha256-e6WtfQIPEiXhWucd5ab7UIoccbWEAv3bwksn4hR85CY=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7f6c295cdfeaa229c360cac9a36e4e595aa902ae.patch";
-      sha256 = "sha256-mORtgfU1CYQFKO5UrXgM9cJyZxeF2bz8iAoq0UlFQeY=";
-    })
-    ./allow-virtfs-on-darwin.patch
+
     # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
     # support on nix requires utimensat fallback. The patch adding this fallback
     # set was removed during the process of upstreaming this functionality, and
     # will still be needed in nix until the macOS SDK reaches 10.13+.
     ./provide-fallback-for-utimensat.patch
+    # Cocoa clipboard support only works on macOS 10.14+
+    ./revert-ui-cocoa-add-clipboard-support.patch
+    # Standard about panel requires AppKit and macOS 10.13+
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
+      sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
+      revert = true;
+    })
   ]
     ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -194,7 +141,6 @@ stdenv.mkDerivation rec {
     "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
-    "--enable-guest-agent"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     # Always use our Meson, not the bundled version, which doesn't
@@ -202,6 +148,7 @@ stdenv.mkDerivation rec {
     "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--cpu=${stdenv.hostPlatform.uname.processor}"
+    (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
@@ -233,7 +180,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # the .desktop is both invalid and pointless
     rm -f $out/share/applications/qemu.desktop
-
+  '' + lib.optionalString guestAgentSupport ''
     # move qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
     mv $out/bin/qemu-ga $ga/bin/

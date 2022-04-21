@@ -1,34 +1,54 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pubs";
-  version = "0.8.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
     rev = "v${version}";
-    sha256 = "0npgsyxj7kby5laznk5ilkrychs3i68y57gphwk48w8k9fvnl3zc";
+    hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    argcomplete python-dateutil configobj feedparser bibtexparser pyyaml requests six
+  propagatedBuildInputs = with python3.pkgs; [
+    pyyaml
+    bibtexparser
+    python-dateutil
+    six
+    requests
+    configobj
     beautifulsoup4
+    feedparser
+    argcomplete
   ];
 
-  checkInputs = with python3Packages; [ pyfakefs mock ddt ];
+  checkInputs = with python3.pkgs; [
+    pyfakefs
+    mock
+    ddt
+    pytestCheckHook
+  ];
 
-  # Disabling git tests because they expect git to be preconfigured
-  # with the user's details. See
-  # https://github.com/NixOS/nixpkgs/issues/94663
-  preCheck = ''
-    rm tests/test_git.py
-    '';
+  disabledTestPaths = [
+    # Disabling git tests because they expect git to be preconfigured
+    # with the user's details. See
+    # https://github.com/NixOS/nixpkgs/issues/94663
+    "tests/test_git.py"
+  ];
+
+  disabledTests = [
+    # https://github.com/pubs/pubs/issues/276
+    "test_readme"
+  ];
 
   meta = with lib; {
     description = "Command-line bibliography manager";
     homepage = "https://github.com/pubs/pubs";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ gebner ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ gebner dotlambda ];
   };
 }

@@ -357,6 +357,7 @@ broken-packages:
   - binary-communicator
   - binary-derive
   - binary-ext
+  - binary-generic-combinators
   - binary-indexed-tree
   - binary-protocol
   - binary-tree
@@ -433,7 +434,6 @@ broken-packages:
   - blockfrost-api
   - blockhash
   - Blogdown
-  - bloodhound
   - bloomfilter-redis
   - blubber-server
   - bludigon
@@ -1688,6 +1688,7 @@ broken-packages:
   - ghcup
   - ghc-usage
   - gh-labeler
+  - gi-adwaita
   - giak
   - gi-cogl
   - Gifcurry
@@ -2546,6 +2547,7 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
+  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
@@ -2779,6 +2781,7 @@ broken-packages:
   - kangaroo
   - karabiner-config
   - katip-datadog
+  - katip-elasticsearch
   - katip-kafka
   - katip-logzio
   - katip-scalyr-scribe
@@ -3331,6 +3334,7 @@ broken-packages:
   - msgpack
   - msgpack-binary
   - msgpack-persist
+  - msgpack-types
   - msh
   - msi-kb-backlit
   - MTGBuilder
@@ -3596,6 +3600,7 @@ broken-packages:
   - open-signals
   - opensoundcontrol-ht
   - openssh-protocol
+  - opentelemetry-extra
   - opentelemetry-http-client
   - opentheory-char
   - opentok
@@ -4025,6 +4030,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
@@ -4331,6 +4337,7 @@ broken-packages:
   - robin
   - robots-txt
   - roc-cluster
+  - roc-id
   - roku-api
   - rollbar-client
   - rollbar-hs

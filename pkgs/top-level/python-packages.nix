@@ -375,6 +375,8 @@ in {
 
   aiopylgtv = callPackage ../development/python-modules/aiopylgtv { };
 
+  aioqsw = callPackage ../development/python-modules/aioqsw { };
+
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
@@ -2406,7 +2408,11 @@ in {
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
-  dm-tree = callPackage ../development/python-modules/dm-tree { };
+  dm-tree = callPackage ../development/python-modules/dm-tree {
+    abseil-cpp = pkgs.abseil-cpp.override {
+      cxxStandard = "14";
+    };
+  };
 
   dnachisel = callPackage ../development/python-modules/dnachisel { };
 
@@ -2531,6 +2537,8 @@ in {
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
   dynd = callPackage ../development/python-modules/dynd { };
+
+  eagle100 = callPackage ../development/python-modules/eagle100 { };
 
   easydict = callPackage ../development/python-modules/easydict { };
 
@@ -4243,20 +4251,23 @@ in {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (self.tensorflow) cudaPackages;
+    # At the time of writing (2022-04-18), `cudaPackages.nccl` is broken, so we
+    # pin to `cudaPackages_11_6` instead.
+    cudaPackages = pkgs.cudaPackages_11_6;
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (self.tensorflow) cudaPackages;
+    # At the time of writing (2022-04-18), `cudaPackages.nccl` is broken, so we
+    # pin to `cudaPackages_11_6` instead.
+    cudaPackages = pkgs.cudaPackages_11_6;
   };
 
   jaxlib = self.jaxlib-build;
 
   jaxlibWithCuda = self.jaxlib-build.override {
     cudaSupport = true;
-
   };
 
   jaxlibWithoutCuda = self.jaxlib-build.override {
@@ -4484,6 +4495,8 @@ in {
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
   kazoo = callPackage ../development/python-modules/kazoo { };
+
+  kbcstorage = callPackage ../development/python-modules/kbcstorage { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
@@ -6188,6 +6201,8 @@ in {
   parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
+
+  pixcat = callPackage ../development/python-modules/pixcat { };
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
@@ -9088,8 +9103,6 @@ in {
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
 
-  sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
-
   sarif-om = callPackage ../development/python-modules/sarif-om { };
 
   sarge = callPackage ../development/python-modules/sarge { };
@@ -9252,6 +9265,8 @@ in {
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 
   setuptoolsTrial = callPackage ../development/python-modules/setuptoolstrial { };
+
+  seventeentrack = callPackage ../development/python-modules/seventeentrack { };
 
   sexpdata = callPackage ../development/python-modules/sexpdata { };
 
