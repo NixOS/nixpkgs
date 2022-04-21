@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-
   version = "1.1.0";
   disabled = pythonOlder "3.5";
   format = "pyproject";
