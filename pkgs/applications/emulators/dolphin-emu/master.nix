@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
-, libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
+, libXrandr, libusb1, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
-, miniupnpc, enet, mbedtls, soundtouch, sfml, writeScript
+, miniupnpc, enet, mbedtls, soundtouch, sfml, xz, writeScript
 , vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
-    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
+    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp
+    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml xz
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsa-lib vulkan-loader
