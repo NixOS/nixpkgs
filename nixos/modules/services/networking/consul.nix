@@ -80,13 +80,21 @@ in
             The name of the interface to pull the bind_addr from.
           '';
         };
+      };
 
+      forceAddrFamily = mkOption {
+        type = types.enum [ "any" "ipv4" "ipv6" ];
+        default = "any";
+        description = ''
+          Whether to bind ipv4/ipv6 or both kind of addresses.
+        '';
       };
 
       forceIpv4 = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = ''
+          Deprecated: Use consul.forceAddrFamily instead.
           Whether we should force the interfaces to only pull ipv4 addresses.
         '';
       };
@@ -175,6 +183,13 @@ in
         systemPackages = [ cfg.package ];
       };
 
+      warnings = lib.flatten [
+        (lib.optional (cfg.forceIpv4 != null) ''
+          The option consul.forceIpv4 is deprecated, please use
+          consul.forceAddrFamily instead.
+        '')
+      ];
+
       systemd.services.consul = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ systemdDevices;
@@ -196,15 +211,21 @@ in
         });
 
         path = with pkgs; [ iproute2 gnugrep gawk consul ];
-        preStart = ''
+        preStart = let
+          family = if cfg.forceAddrFamily == "ipv6" then
+            "-6"
+          else if cfg.forceAddrFamily == "ipv4" then
+            "-4"
+          else
+            "";
+        in ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}
 
           # Determine interface addresses
           getAddrOnce () {
-            ip addr show dev "$1" \
-              | grep 'inet${optionalString (cfg.forceIpv4) " "}.*scope global' \
-              | awk -F '[ /\t]*' '{print $3}' | head -n 1
+            ip ${family} addr show dev "$1" scope global \
+              | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
           }
           getAddr () {
             ADDR="$(getAddrOnce $1)"
@@ -233,6 +254,11 @@ in
         '';
       };
     }
+
+    # deprecated
+    (mkIf (cfg.forceIpv4 != null && cfg.forceIpv4) {
+      services.consul.forceAddrFamily = "ipv4";
+    })
 
     (mkIf (cfg.alerts.enable) {
       systemd.services.consul-alerts = {
