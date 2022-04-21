@@ -958,6 +958,8 @@ with pkgs;
 
   adafruit-ampy = callPackage ../tools/misc/adafruit-ampy { };
 
+  addlicense = callPackage ../tools/misc/addlicense { };
+
   adlplug = callPackage ../applications/audio/adlplug {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices WebKit DiscRecording;
@@ -3964,6 +3966,8 @@ with pkgs;
 
   oil-buku = callPackage ../applications/misc/oil-buku { };
 
+  osdlyrics = callPackage ../applications/audio/osdlyrics { };
+
   ossutil = callPackage ../tools/admin/ossutil {};
 
   pastel = callPackage ../applications/misc/pastel {
@@ -4973,6 +4977,8 @@ with pkgs;
   debianutils = callPackage ../tools/misc/debianutils { };
 
   debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
+
+  debian-goodies = callPackage ../applications/misc/debian-goodies { };
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
@@ -20269,6 +20275,8 @@ with pkgs;
     # libGLU doesn’t work with Android’s SDL
     libGLU = null;
   });
+
+  SDL_audiolib = callPackage ../development/libraries/SDL_audiolib { };
 
   SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
 
