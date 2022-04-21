@@ -122,6 +122,8 @@ buildPythonPackage rec {
     export PATH=$(pwd):$PATH
   '';
 
+  setupPyBuildFlags = [ "--parallel" "$NIX_BUILD_CORES" ];
+
   pythonImportsCheck = [ "pandas" ];
 
   meta = with lib; {
