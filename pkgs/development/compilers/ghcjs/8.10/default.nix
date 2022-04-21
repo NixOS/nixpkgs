@@ -2,6 +2,7 @@
 , pkgsHostHost
 , callPackage
 , fetchgit
+, fetchpatch
 , ghcjsSrcJson ? null
 , ghcjsSrc ? fetchgit (lib.importJSON ghcjsSrcJson)
 , bootPkgs
@@ -36,7 +37,7 @@ let
       })
 
       (callPackage ./common-overrides.nix {
-        inherit haskellLib;
+        inherit haskellLib fetchpatch buildPackages;
       })
       ghcjsDepOverrides
     ]);

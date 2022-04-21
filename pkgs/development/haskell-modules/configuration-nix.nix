@@ -619,8 +619,15 @@ self: super: builtins.intersectAttrs super {
         '';
       }) super.spago;
 
+      spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
+        # spago (and its dependency, bower-json) is not yet updated for aeson-2.0
+        aeson = hfinal.aeson_1_5_6_0;
+        # bower-json needs aeson_1_5_6_0 and is marked broken without it.
+        bower-json = doDistribute (markUnbroken hprev.bower-json);
+      });
+
       # Tests require network access.
-      spagoWithoutChecks = dontCheck spagoDocs;
+      spagoWithoutChecks = dontCheck spagoOldAeson;
     in
     spagoWithoutChecks;
 
@@ -869,7 +876,10 @@ self: super: builtins.intersectAttrs super {
   cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_7; });
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_7; };
-  hercules-ci-cnix-expr = super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_7; };
+  hercules-ci-cnix-expr =
+    addTestToolDepend pkgs.git (
+      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_7; }
+    );
   hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_7; };
 
   # Enable extra optimisations which increase build time, but also
