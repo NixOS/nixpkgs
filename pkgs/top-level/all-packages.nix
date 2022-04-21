@@ -3730,6 +3730,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  kroki-server = callPackage ../tools/graphics/kroki-server/default.nix { };
+
   lapce = callPackage ../applications/editors/lapce { };
 
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
