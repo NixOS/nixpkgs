@@ -84,7 +84,6 @@ buildPythonPackage rec {
   # Override default arguments in pytest.ini
   pytestFlagsArray = [
     "--timeout=0"
-    "-n=$NIX_BUILD_CORES"
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [

@@ -3,6 +3,7 @@
 , fetchPypi
 , isPy27
 , decorator
+, six
 , pytestCheckHook
 }:
 
@@ -18,6 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     decorator
+    six
   ];
 
   checkInputs = [

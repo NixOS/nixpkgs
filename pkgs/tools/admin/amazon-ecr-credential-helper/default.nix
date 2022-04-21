@@ -18,6 +18,7 @@ buildGoPackage rec {
     homepage = "https://github.com/awslabs/amazon-ecr-credential-helper";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "docker-credential-ecr-login";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

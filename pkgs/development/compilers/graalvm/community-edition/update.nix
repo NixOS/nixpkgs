@@ -1,13 +1,14 @@
-{ javaVersion
-, graalVersion
+{ config
 , defaultVersion
-, config
-, sourcesFilename
-, name
-, lib
-, writeShellScript
-, jq
+, forceUpdate
 , gnused
+, graalVersion
+, javaVersion
+, jq
+, lib
+, name
+, sourcesPath
+, writeShellScript
 }:
 
 /*
@@ -184,7 +185,7 @@ let
 
   newVersion = getLatestVersion graalVersion;
   sourcesJson = genSources javaVersion defaultVersion config;
-  sourcesJsonPath = lib.strings.escapeShellArg ./. + "/${sourcesFilename}";
+  sourcesJsonPath = lib.strings.escapeShellArg sourcesPath;
 
   # versionKeyInDefaultNix String -> String
   versionKeyInDefaultNix = graalVersion:
@@ -199,7 +200,7 @@ let
   */
   updateScriptText = newVersion: currentVersion:
 
-    if isNew newVersion currentVersion
+    if (forceUpdate || (isNew newVersion currentVersion))
     then
       let
         versionKey = versionKeyInDefaultNix currentVersion;

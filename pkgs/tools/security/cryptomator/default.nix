@@ -6,13 +6,13 @@
 
 let
   pname = "cryptomator";
-  version = "1.6.7";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-hOILOdVYBnS9XuEXaIJcf2bPF72Lcr7IBX4CFCIsC8k=";
+    sha256 = "sha256-2bvIjfutxfTPBtYiSXpgdEh63Eg74uqSf8CDo/Oma0U=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -37,7 +37,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-XFqXjNjPN2vwA3jay7TS79S4FHksjjrODdD/p4oTvpg=";
+    outputHash = "sha256-quYUJX/JErtWuUQBYXXee/uZGkO0UBr4qxcGticxGUc=";
 
     doCheck = false;
   };
@@ -46,9 +46,14 @@ in stdenv.mkDerivation rec {
   inherit pname version src;
 
   buildPhase = ''
+    VERSION=${version}
+    SEMVER_STR=${version}
+
     mvn -Plinux package --offline -Dmaven.test.skip=true -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
 
+
+  # This is based on the instructins in https://github.com/cryptomator/cryptomator/blob/develop/dist/linux/appimage/build.sh
   installPhase = ''
     mkdir -p $out/bin/ $out/share/cryptomator/libs/ $out/share/cryptomator/mods/
 
@@ -63,10 +68,14 @@ in stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/cryptomator \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
+      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
+      --add-flags "-Dcryptomator.pluginDir='~/.local/share/Cryptomator/plugins'" \
       --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
       --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
-      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
       --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
+      --add-flags "-Dcryptomator.showTrayIcon=false" \
+      --add-flags "-Dcryptomator.buildNumber='nix'" \
+      --add-flags "-Dcryptomator.appVersion='${version}'" \
       --add-flags "-Djdk.gtk.version=3" \
       --add-flags "-Xss20m" \
       --add-flags "-Xmx512m" \
@@ -79,6 +88,14 @@ in stdenv.mkDerivation rec {
 
     # install desktop entry and icons
     cp -r ${src}/dist/linux/appimage/resources/AppDir/usr/* $out/
+    # The directory is read only when copied, enable read to install additional files
+    chmod +w -R $out/
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator256.png $out/share/icons/hicolor/256x256/apps/org.cryptomator.Cryptomator.png
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator512.png $out/share/icons/hicolor/512x512/apps/org.cryptomator.Cryptomator.png
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.svg $out/share/icons/hicolor/scalable/apps/org.cryptomator.Cryptomator.svg
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.desktop $out/share/applications/org.cryptomator.Cryptomator.desktop
+    cp ${src}/dist/linux/common/org.cryptomator.Cryptomator.metainfo.xml $out/share/metainfo/org.cryptomator.Cryptomator.metainfo.xml
+    cp ${src}/dist/linux/common/application-vnd.cryptomator.vault.xml $out/share/mime/packages/application-vnd.cryptomator.vault.xml
   '';
 
   nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];

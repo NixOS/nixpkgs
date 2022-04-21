@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       sha256 = "1wvy7x56cc7imycf0d83mxcqzdvv56cc0zbp913xgghjn9dl2z7a";
     });
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dontStrip = stdenv.isDarwin;
 

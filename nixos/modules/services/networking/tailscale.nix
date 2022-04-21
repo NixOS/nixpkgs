@@ -21,6 +21,12 @@ in {
       description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
+    permitCertUid = mkOption {
+      type = types.nullOr types.nonEmptyStr;
+      default = null;
+      description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.tailscale;
@@ -38,7 +44,9 @@ in {
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
-      ];
+      ] ++ (lib.optionals (cfg.permitCertUid != null) [
+        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+      ]);
     };
   };
 }

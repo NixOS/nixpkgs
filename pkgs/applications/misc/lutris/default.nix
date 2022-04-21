@@ -84,13 +84,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.10";
+  version = "0.5.10.1";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    rev = "v${version}";
-    sha256 = "sha256-PrnULCdQXNZ9OTa00NVyqiTdKRRkAYBcDj7lMwEqkw4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Bf8UEGEM6M4PKoX/qKQNb9XxrxLcjKZD1vR3R2/PykI=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -148,7 +148,7 @@ buildPythonApplication rec {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
   };
 }

@@ -16,6 +16,7 @@
       armv7l-linux = import ./bootstrap-files/armv7l.nix;
       aarch64-linux = import ./bootstrap-files/aarch64.nix;
       mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+      powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
       riscv64-linux = import ./bootstrap-files/riscv64.nix;
     };
     musl = {
@@ -204,7 +205,7 @@ in
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
       binutils-unwrapped = super.binutils-unwrapped.override {
-        gold = false;
+        enableGold = false;
       };
       inherit (prevStage)
         ccWrapperStdenv

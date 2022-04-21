@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.7.1";
+  version = "3.8.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05hj2mw3ppfjaig5zdk5db9vfrbbq5gmv5rzggmvvrj0yyfpr0pd";
+    sha256 = "sha256-BaSpw7TiBymCvoP0/z1zynWKQJH/PjbbGf85ZI9LOZw=";
   };
 
   format = "pyproject";
@@ -40,12 +40,6 @@ buildPythonPackage rec {
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
-
-    # Fix compatibility with latest fonttools.
-    (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/120752c50a562e4f6c12ff4be1e3bd96ed664e82.patch";
-      sha256 = "RDGIpNAuCmK+zqZOeOK7ddCjr9BuqPpcnbnxdtoE48M=";
-    })
   ];
 
   # setup.py will always (re-)execute cmake in buildPhase

@@ -39,6 +39,7 @@ buildGoModule rec {
     description = "The official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with maintainers; [ ris ];
+    mainProgram = "cf";
     license = licenses.asl20;
   };
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , requests
 , oauthlib
-, requests_oauthlib
+, requests-oauthlib
 , pyjwt
 , cryptography
 , defusedxml
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     oauthlib
-    requests_oauthlib
+    requests-oauthlib
     pyjwt
     cryptography
     defusedxml

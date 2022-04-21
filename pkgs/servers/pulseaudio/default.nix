@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config
 , libsndfile, libtool, makeWrapper, perlPackages
 , xorg, libcap, alsa-lib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
+, check, meson, ninja, m4
 
 , x11Support ? false
 
@@ -31,23 +32,29 @@
 
 stdenv.mkDerivation rec {
   pname = "${if libOnly then "lib" else ""}pulseaudio";
-  version = "14.2";
+  version = "15.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "sha256-ddP3dCwa5EkEmkyIkA5FS4s1DsqoxUTzSIolYqn/ZvE=";
+    sha256 = "pAuIejupjMJpdusRvbZhOYjxRbGQJNG2VVxqA8nLoaA=";
   };
+
+  patches = [
+    # Install sysconfdir files inside of the nix store,
+    # but use a conventional runtime sysconfdir outside the store
+    ./add-option-for-installation-sysconfdir.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ]
+  nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
     ++ lib.optionals stdenv.isLinux [ glib ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile soxr speexdsp fftwFloat ]
+    [ libtool libsndfile soxr speexdsp fftwFloat check ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
     ++ lib.optionals (!libOnly) (
@@ -62,53 +69,45 @@ stdenv.mkDerivation rec {
       ++ lib.optional zeroconfSupport  avahi
   );
 
-  prePatch = ''
-    substituteInPlace bootstrap.sh \
-      --replace pkg-config $PKG_CONFIG
+  mesonFlags = [
+    "-Dalsa=${if !libOnly then "enabled" else "disabled"}"
+    "-Dasyncns=${if !libOnly then "enabled" else "disabled"}"
+    "-Davahi=${if zeroconfSupport then "enabled" else "disabled"}"
+    "-Dbluez5=${if !libOnly then "enabled" else "disabled"}"
+    "-Dbluez5-gstreamer=disabled"
+    "-Ddatabase=simple"
+    "-Ddoxygen=false"
+    "-Delogind=disabled"
+    # gsettings does not support cross-compilation
+    "-Dgsettings=${if stdenv.buildPlatform == stdenv.hostPlatform then "enabled" else "disabled"}"
+    "-Dgstreamer=disabled"
+    "-Dgtk=disabled"
+    "-Djack=${if jackaudioSupport && !libOnly then "enabled" else "disabled"}"
+    "-Dlirc=${if remoteControlSupport then "enabled" else "disabled"}"
+    "-Dopenssl=${if airtunesSupport then "enabled" else "disabled"}"
+    "-Dorc=disabled"
+    "-Dsystemd=${if useSystemd && !libOnly then "enabled" else "disabled"}"
+    "-Dtcpwrap=disabled"
+    "-Dudev=${if !libOnly then "enabled" else "disabled"}"
+    "-Dvalgrind=disabled"
+    "-Dwebrtc-aec=${if !libOnly then "enabled" else "disabled"}"
+    "-Dx11=${if x11Support then "enabled" else "disabled"}"
+
+    "-Dlocalstatedir=/var"
+    "-Dsysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+  ]
+    ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    ;
+
+  doCheck = true;
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
-
-  autoreconfPhase = ''
-    # Performs an autoreconf
-    patchShebangs bootstrap.sh
-    NOCONFIGURE=1 ./bootstrap.sh
-
-    # Move the udev rules under $(prefix).
-    sed -i "src/Makefile.in" \
-        -e "s|udevrulesdir[[:blank:]]*=.*$|udevrulesdir = $out/lib/udev/rules.d|g"
-
-    # don't install proximity-helper as root and setuid
-    sed -i "src/Makefile.in" \
-        -e "s|chown root|true |" \
-        -e "s|chmod r+s |true |"
-  '';
-
-  configureFlags =
-    [ "--disable-solaris"
-      "--disable-jack"
-      "--disable-oss-output"
-    ] ++ lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
-    [ "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-access-group=audio"
-      "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
-    ]
-    ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
-    ++ lib.optionals stdenv.isDarwin [
-      "--disable-neon-opt"
-    ]
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
-
-  enableParallelBuilding = true;
-
-  installFlags =
-    [ "sysconfdir=${placeholder "out"}/etc"
-      "pulseconfdir=${placeholder "out"}/etc/pulse"
-    ];
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   ''
     + ''
     moveToOutput lib/cmake "$dev"

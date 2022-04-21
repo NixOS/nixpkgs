@@ -1,11 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, requests_oauthlib
-, simplejson
 , pkce
 , pytestCheckHook
+, pythonOlder
+, requests-oauthlib
+, simplejson
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
-    requests_oauthlib
+    requests-oauthlib
     simplejson
     pkce
   ];

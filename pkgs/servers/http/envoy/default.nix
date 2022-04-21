@@ -74,7 +74,10 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "0f7mls2zrpjjvbz6pgkzrvr55bv05xn2l76j9i1r0cf367qqfkz8";
+    sha256 = {
+      x86_64-linux = "0f7mls2zrpjjvbz6pgkzrvr55bv05xn2l76j9i1r0cf367qqfkz8";
+      aarch64-linux = "1l3ls47z20xrw6x9qps5jm7vq50xb1acv9gczfdrj9hw6jybgwgg";
+    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -124,6 +127,7 @@ buildBazelPackage rec {
     "--noexperimental_strict_action_env"
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
+    "--cxxopt=-Wno-error=type-limits"
   ];
 
   passthru.tests = {
@@ -137,6 +141,6 @@ buildBazelPackage rec {
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Other platforms will generate different fetch hashes.
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

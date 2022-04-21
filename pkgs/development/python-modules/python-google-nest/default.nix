@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, requests_oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
@@ -14,11 +14,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "y3BOhorVkJ3rFPifNOopLMqk6y1fHX5vxHGiqWvWHhE=";
+    hash = "sha256-y3BOhorVkJ3rFPifNOopLMqk6y1fHX5vxHGiqWvWHhE=";
   };
 
   propagatedBuildInputs = [
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   # Project has no tests

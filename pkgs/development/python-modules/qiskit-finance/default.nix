@@ -33,6 +33,10 @@ buildPythonPackage rec {
     sha256 = "sha256-wnto3IqrJFAqIv6QAXe3BB9fvXQXe2fw/iUZe3+198M=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
+  '';
+
   propagatedBuildInputs = [
     fastdtw
     numpy

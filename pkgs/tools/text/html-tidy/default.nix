@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "http://html-tidy.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ edwtjo ];
+    mainProgram = "tidy";
   };
 }

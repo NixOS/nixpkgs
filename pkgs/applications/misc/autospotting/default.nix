@@ -22,6 +22,7 @@ buildGoPackage {
     description = "Automatically convert your existing AutoScaling groups to up to 90% cheaper spot instances with minimal configuration changes";
     license = licenses.free;
     maintainers = [ maintainers.costrouc ];
+    mainProgram = "AutoSpotting";
     platforms = platforms.unix;
   };
 

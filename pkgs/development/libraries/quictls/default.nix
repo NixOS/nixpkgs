@@ -9,20 +9,15 @@
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
-assert (
-  lib.assertMsg (!withPerl -> stdenv.hostPlatform != stdenv.buildPlatform)
-  "withPerl should not be disabled unless cross compiling"
-);
-
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.1+quick_unstable-2021-12.14";
+  version = "3.0.2+quick_unstable-2022-03.15";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "ab8b87bdb436b11bf2a10a2a57a897722224f828";
-    sha256 = "sha256-835oZgoM1CTS+JLxPO3oGSTnhLmJXGT1cFaJhCJK++8=";
+    rev = "7f2ab56a2b842b8e6fefc7b9d20eb5ff9c6ef151";
+    sha256 = "sha256-We4ow0mGJFXqYM4PqbGn8qY5IYH/MtNaefrSaJreoRA=";
   };
 
   patches = [

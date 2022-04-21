@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.changlinli ];
+    mainProgram = "bfg";
     platforms = platforms.unix;
     downloadPage = "https://mvnrepository.com/artifact/com.madgag/bfg/${version}";
   };

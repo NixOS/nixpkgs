@@ -26,6 +26,7 @@ buildGoPackage rec {
     '';
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "mk";
     platforms = platforms.unix;
   };
 }

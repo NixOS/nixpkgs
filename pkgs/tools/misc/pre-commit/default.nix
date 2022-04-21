@@ -74,7 +74,6 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
     "--forked"
   ];
 

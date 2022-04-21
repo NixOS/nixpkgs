@@ -110,7 +110,8 @@ stdenv.mkDerivation rec {
       "--disable-manual"
       # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
       # to nss-cacert from the default profile.
-      "--without-ca-bundle"
+      # https://github.com/curl/curl/issues/8696 - fallback is not supported by HTTP3
+      (if http3Support then "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" else "--without-ca-bundle")
       "--without-ca-path"
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")

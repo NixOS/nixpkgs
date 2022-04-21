@@ -24,6 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/rakyll/statik";
     description = "Embed files into a Go executable ";
     license = licenses.asl20;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }

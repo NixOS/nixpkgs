@@ -111,6 +111,7 @@ buildPythonPackage rec {
     # Tests require terminal
     "test_integration"
   ];
+  dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
 

@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 , pytest
+, jinja2
 , matplotlib
 , nose
 , pillow
@@ -17,11 +19,18 @@ buildPythonPackage rec {
     sha256 = "sha256-iE4HjS1TgK9WQzhOIzw1jpZZgl+y2X/9r48YXENMjYk=";
   };
 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   buildInputs = [
     pytest
   ];
 
+  SETUPTOOLS_SCM_PRETEND_VERSION=version;
+
   propagatedBuildInputs = [
+    jinja2
     matplotlib
     nose
     pillow
@@ -31,10 +40,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee
+
   disabledTests = [
+    # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee
     "test_hash_fails"
     "test_hash_missing"
+  ];
+
+  disabledTestPaths = [
+    # Following are broken since at least a1548780dbc79d76360580691dc1bb4af4e837f6
+    "tests/subtests/test_subtest.py"
   ];
 
   preCheck = ''

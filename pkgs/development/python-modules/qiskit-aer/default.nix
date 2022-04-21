@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.10.3";
+  version = "0.10.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    sha256 = "sha256-COvJCj18qRNQJUXKrtlYJQGLjna44IgtNZeNVJJaIHg=";
+    sha256 = "sha256-mf+Pgw/daFkt1bvqSeYzlO/Sd2F2MtwZcLr+h1u+eb0=";
   };
 
   postPatch = ''
@@ -55,15 +55,14 @@ buildPythonPackage rec {
     cmake
     ninja
     scikit-build
-    pybind11
   ];
 
   buildInputs = [
     blas
     catch2
+    nlohmann_json
     fmt
     muparserx
-    nlohmann_json
     spdlog
   ];
 
@@ -71,6 +70,7 @@ buildPythonPackage rec {
     cvxpy
     cython  # generates some cython files at runtime that need to be cython-ized
     numpy
+    pybind11
   ];
 
   preBuild = ''
@@ -80,19 +80,18 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   # *** Testing ***
-
   pythonImportsCheck = [
     "qiskit.providers.aer"
     "qiskit.providers.aer.backends.qasm_simulator"
     "qiskit.providers.aer.backends.controller_wrappers" # Checks C++ files built correctly. Only exists if built & moved to output
   ];
-  # Slow tests
   disabledTests = [
-    "test_snapshot" # TODO: these ~30 tests fail on setup due to pytest fixture issues?
-    "test_initialize_2" # TODO: simulations appear incorrect, off by >10%.
-    # These tests fail on cvxpy >= 1.1.15
+    # these tests don't work with cvxpy >= 1.1.15
     "test_clifford"
     "test_approx_random"
+    "test_snapshot" # TODO: these ~30 tests fail on setup due to pytest fixture issues?
+    "test_initialize_2" # TODO: simulations appear incorrect, off by >10%.
+    "test_pauli_error_2q_gate_from_string_1qonly"
 
     # these fail for some builds. Haven't been able to reproduce error locally.
     "test_kraus_gate_noise"

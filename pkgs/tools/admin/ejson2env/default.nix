@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-BY45WirK9AVhvFGB5uqI4dLxzO2WuNNhhJbQ6nsRXao=";
 
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "A tool to simplify storing secrets that should be accessible in the shell environment in your git repo.";
     homepage = "https://github.com/Shopify/ejson2env";

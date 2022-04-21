@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-H0jvOnrWE4/xxRYNehshHBRNc/qLX1+sCV7O1ACCdew=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pytz = "^2021.1"' 'pytz = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -53,12 +58,6 @@ buildPythonPackage rec {
     beautifulsoup4
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/coveooss/json-schema-for-humans/issues/127
-    substituteInPlace pyproject.toml \
-      --replace 'PyYAML = "^5.4.1"' 'PyYAML = "*"'
-  '';
 
   disabledTests = [
     # Tests require network access

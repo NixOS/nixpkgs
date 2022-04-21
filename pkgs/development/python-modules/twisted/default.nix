@@ -1,6 +1,5 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , python
 , zope_interface
@@ -18,25 +17,13 @@
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "22.2.0";
+  version = "22.4.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    sha256 = "1wml02jxni8k15984pskks7d6yin81w4d2ac026cpyiqd0gjpwsp";
+    sha256 = "sha256-oEeZD1ffrh4L0rffJSbU8W3NyEN3TcEIt4xS8qXxNoA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/twisted/twisted/security/advisories/GHSA-c2jg-hw38-jrqq
-      name = "CVE-2022-24801.patch";
-      url = "https://github.com/twisted/twisted/commit/592217e951363d60e9cd99c5bbfd23d4615043ac.patch";
-      hash = "sha256-psX5vAM9myuILuTazpebSk8QTT52CB6N7RXAY4MAV8g=";
-      excludes = [
-        "src/twisted/web/newsfragments/10323.bugfix"
-      ];
-    })
-  ];
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];
 

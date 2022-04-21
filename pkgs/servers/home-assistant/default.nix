@@ -168,7 +168,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.4.4";
+  hassVersion = "2022.4.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -186,7 +186,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-NcFQjLNBGT0tNrlgkVLB3uFr9Yh4rc4HnLzALYvcrYA=";
+    hash = "sha256-f2cPkORh6DoNjqZFz7XjxQdZwej3k+8NtZTstYIbrc4=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -283,8 +283,6 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    # parallelize test run
-    "--numprocesses $NIX_BUILD_CORES"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # retry racy tests that end in "RuntimeError: Event loop is closed"

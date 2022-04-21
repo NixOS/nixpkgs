@@ -5,6 +5,7 @@
 # since this is a dependency of pytest, we need to avoid
 # circular dependencies
 , jinja2
+, pytestCheckHook
 , railroad-diagrams
 }:
 
@@ -24,12 +25,11 @@ let
     doCheck = false;
     checkInputs = [
       jinja2
+      pytestCheckHook
       railroad-diagrams
     ];
 
-    checkPhase = ''
-      python -m unittest
-    '';
+    pythonImportsCheck = [ "pyparsing" ];
 
     passthru.tests = {
       check = pyparsing.overridePythonAttrs (_: { doCheck = true; });
@@ -39,9 +39,7 @@ let
       homepage = "https://github.com/pyparsing/pyparsing";
       description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
       license = licenses.mit;
-      maintainers = with maintainers; [
-        kamadorueda
-      ];
+      maintainers = with maintainers; [ kamadorueda ];
     };
   };
 in

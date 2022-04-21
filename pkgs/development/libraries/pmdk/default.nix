@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pmdk";
-  version = "1.9.2";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "pmdk";
     rev    = "refs/tags/${version}";
-    sha256 = "0awmkj6j9y2pbqqmp9ql00s7qa3mnpppa82dfy5324lindq0z8a1";
+    hash = "sha256-8bnyLtgkKfgIjJkfY/ZS1I9aCYcrz0nrdY7m/TUVWAk=";
   };
 
   nativeBuildInputs = [ autoconf pkg-config gnum4 pandoc ];
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "man" ];
 
   patchPhase = "patchShebangs utils";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
     make install prefix=$out

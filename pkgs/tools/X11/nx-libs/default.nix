@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     ln -s libNX_X11.so.6.3.0
   '';
 
+  preConfigure = ''
+    # binutils 2.37 fix
+    # https://github.com/ArcticaProject/nx-libs/issues/1003
+    substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
+  '';
+
   PREFIX=""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install

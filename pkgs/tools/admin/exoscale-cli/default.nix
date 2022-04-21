@@ -29,5 +29,6 @@ buildGoPackage rec {
     homepage    = "https://github.com/exoscale/cli";
     license     = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dramaturg ];
+    mainProgram = "exo";
   };
 }

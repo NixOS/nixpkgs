@@ -17,6 +17,7 @@ buildGoPackage rec {
     src.meta // {
       description = "Utility to convert JSON to and from HJSON";
       maintainers = with maintainers; [ ehmry ];
+      mainProgram = "hjson-cli";
       license = licenses.mit;
     };
 }

@@ -30,7 +30,8 @@ in stdenv.mkDerivation rec {
     unzip -d $out/share/fonts/truetype $src
   '';
 
-  meta = iosevka.meta // {
+  meta = {
+    inherit (iosevka.meta) homepage downloadPage description license platforms;
     maintainers = with lib.maintainers; [
       cstrahan
     ];

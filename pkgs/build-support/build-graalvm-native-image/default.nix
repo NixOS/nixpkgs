@@ -55,5 +55,7 @@ stdenv.mkDerivation (args // {
     platforms = graalvmDrv.meta.platforms;
     # default to executable name
     mainProgram = executable;
+    # need to have native-image-installable-svm available
+    broken = !(builtins.elem "native-image-installable-svm" graalvmDrv.products);
   } // meta;
 })

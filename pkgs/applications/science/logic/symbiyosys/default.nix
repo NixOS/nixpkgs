@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     homepage    = "https://symbiyosys.readthedocs.io/";
     license     = lib.licenses.isc;
     maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    mainProgram = "sby";
     platforms   = lib.platforms.all;
   };
 }

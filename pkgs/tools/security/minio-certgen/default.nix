@@ -18,5 +18,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/minio/certgen";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bryanasdev000 ];
+    mainProgram = "certgen";
   };
 }

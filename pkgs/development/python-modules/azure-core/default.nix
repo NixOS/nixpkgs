@@ -15,19 +15,20 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.22.1";
+  version = "1.23.1";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-S25AUmijO4cxB3lklc7D8vGx/+k1Ykzg+93/NtONOk0=";
+    sha256 = "sha256-KKAd+68KaBLE4qgtFkLqMJVqlznyW8d8myO5H06mjw8=";
   };
 
   propagatedBuildInputs = [
     requests
     six
+    typing-extensions
   ];
 
   checkInputs = [
@@ -41,7 +42,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-    typing-extensions
   ];
 
   # test server needs to be available
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     "response"
     "request"
     "timeout"
+    "test_sync_transport_short_read_download_stream"
+    "test_aio_transport_short_read_download_stream"
   # disable 8 tests failing on some darwin machines with errors:
   # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
   # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'

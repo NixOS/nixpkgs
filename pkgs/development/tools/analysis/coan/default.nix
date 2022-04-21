@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+  ];
+
   enableParallelBuilding = true;
 
   postInstall = ''

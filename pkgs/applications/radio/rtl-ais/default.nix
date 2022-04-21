@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/dgiardini/rtl-ais";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ mgdm ];
+    mainProgram = "rtl_ais";
     platforms = platforms.unix;
   };
 }

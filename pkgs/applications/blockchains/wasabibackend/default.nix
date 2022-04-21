@@ -32,7 +32,7 @@ buildDotnetModule rec {
 
   preConfigure = ''
     makeWrapperArgs+=(
-      --run "cd $out/lib/${pname}"
+      --chdir "$out/lib/${pname}"
     )
   '';
 

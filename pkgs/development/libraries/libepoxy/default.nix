@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libepoxy";
-  version = "1.5.9";
+  version = "1.5.10";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8rdmC8FZUkKkEvWPJIdfrBQHiwa81vl5tmVqRdU4UIY=";
+    sha256 = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
   };
 
   patches = [ ./libgl-path.patch ];
@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
       --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
   '';
 
-  # tests are running from version 1.5.9
   doCheck = true;
 
   meta = with lib; {

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "ZODB";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zh7rd182l15swkbkm3ib0wgyn16xasdz2mzry8k4lwk6dagnm26";
+    sha256 = "sha256-+kC7wF7NoewkNc0MbdAqE7dphGBVikYENm9qCmhAHNM=";
   };
 
   # remove broken test

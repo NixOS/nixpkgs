@@ -100,7 +100,6 @@ buildPythonPackage rec {
     tensorflow
     tifffile
   ];
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
 
   disabledTestPaths = [
     # Sandbox violations: network access, filesystem write attempts outside of build dir, ...

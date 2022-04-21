@@ -90,5 +90,5 @@ in with lib; {
     (mkRemovedOptionModule [ "services" "zeronet" "logDir" ] "Zeronet will log by default in /var/lib/zeronet")
   ];
 
-  meta.maintainers = with maintainers; [ chiiruno ];
+  meta.maintainers = with maintainers; [ Madouura ];
 }

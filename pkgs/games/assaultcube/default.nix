@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
       install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
 
       makeWrapper $out/bin/ac_client $out/bin/${pname} \
-        --run "cd $out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
+        --chdir "$out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi
 
     if (test -e source/src/ac_server) then
       cp source/src/ac_server $bindir
       makeWrapper $out/bin/ac_server $out/bin/${pname}-server \
-        --run "cd $out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
+        --chdir "$out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
     fi
     '';
 

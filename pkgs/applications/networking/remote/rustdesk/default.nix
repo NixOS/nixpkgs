@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
     ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk
 
     makeWrapper $out/lib/rustdesk/rustdesk $out/bin/rustdesk \
-      --run "cd $out/share"
+      --chdir "$out/share"
 
     cp -a $src/src/ui $out/share/src
 

@@ -9,8 +9,13 @@ import ./make-test-python.nix ({ lib, ... }:
     {
       services.mailcatcher.enable = true;
 
-      services.ssmtp.enable = true;
-      services.ssmtp.hostName = "localhost:1025";
+      programs.msmtp = {
+        enable = true;
+        accounts.default = {
+          host = "localhost";
+          port = 1025;
+        };
+      };
 
       environment.systemPackages = [ pkgs.mailutils ];
     };

@@ -58,7 +58,7 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = version;
-    sha256 = "sha256-n3fR6wvcSfIo7760seB+5SxtoYSqQmqkzZ9VlNQF200=";
+    hash = "sha256-n3fR6wvcSfIo7760seB+5SxtoYSqQmqkzZ9VlNQF200=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -94,7 +94,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'atpublic = ">=2.3,<3"' 'atpublic = ">=2.3"'
+      --replace 'atpublic = ">=2.3,<3"' 'atpublic = ">=2.3"' \
+      --replace 'regex = "^2021.7.6"' 'regex = "*"'
   '';
 
   preBuild = ''
@@ -119,7 +120,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
     "ibis/tests"
     "ibis/backends/tests"
     "ibis/backends/{${lib.concatStringsSep "," backends}}/tests"

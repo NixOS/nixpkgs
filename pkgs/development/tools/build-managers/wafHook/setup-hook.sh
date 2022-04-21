@@ -10,6 +10,10 @@ wafConfigurePhase() {
         wafConfigureFlags="${prefixKey:---prefix=}$prefix $wafConfigureFlags"
     fi
 
+    if [ -n "${PKG_CONFIG}" ]; then
+      export PKGCONFIG="${PKG_CONFIG}"
+    fi
+
     local flagsArray=(
         "${flagsArray[@]}"
         $wafConfigureFlags "${wafConfigureFlagsArray[@]}"

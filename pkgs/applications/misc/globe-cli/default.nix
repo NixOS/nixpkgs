@@ -16,5 +16,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/adamsky/globe";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ devhell ];
+    mainProgram = "globe";
   };
 }

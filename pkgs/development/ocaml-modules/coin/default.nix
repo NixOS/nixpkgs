@@ -1,20 +1,19 @@
 { buildDunePackage
-, fetchzip
+, fetchurl
 , findlib
 , lib
-, menhir
 , ocaml
 , re
 }:
 
 buildDunePackage rec {
   pname = "coin";
-  version = "0.1.3";
+  version = "0.1.4";
   minimalOCamlVersion = "4.03";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/coin/releases/download/v${version}/coin-v${version}.tbz";
-    sha256 = "06bfidvglyp9hzvr2xwbdx8wf26is2xrzc31fldzjf5ab0vd076p";
+  src = fetchurl {
+    url = "https://github.com/mirage/coin/releases/download/v${version}/coin-${version}.tbz";
+    sha256 = "sha256:0069qqswd1ik5ay3d5q1v1pz0ql31kblfsnv0ax0z8jwvacp3ack";
   };
 
   postPatch = ''
@@ -22,9 +21,7 @@ buildDunePackage rec {
       'ocaml} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib '
   '';
 
-  useDune2 = true;
-
-  nativeBuildInputs = [ menhir findlib ];
+  nativeBuildInputs = [ findlib ];
   buildInputs = [ re ];
 
   strictDeps = true;

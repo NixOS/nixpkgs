@@ -1,6 +1,5 @@
 { lib, stdenv
-, fetchpatch
-, fetchurl
+, fetchurl, unzip
 , hdf5
 , m4
 , curl # for DAP
@@ -11,24 +10,12 @@ let
   inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.8.0"; # Remove patch mentioned below on upgrade
+  version = "4.8.1";
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${version}.tar.gz";
-    sha256 = "1mfn8qi4k0b8pyar3wa8v0npj69c7rhgfdlppdwmq5jqk88kb5k7";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    sha256 = "1cbjwjmp9691clacw5v88hmpz46ngxs3bfpkf2xy1j7cvlkc72l0";
   };
-
-  patches = [
-    # Fixes:
-    #     *** Checking vlen of compound file...Sorry! Unexpected result, tst_h_atts3.c, line: 289
-    #     FAIL tst_h_atts3 (exit status: 2)
-    # TODO: Remove with next netcdf release (see https://github.com/Unidata/netcdf-c/pull/1980)
-    (fetchpatch {
-      name = "netcdf-Fix-tst_h_atts3-for-hdf5-1.12.patch";
-      url = "https://github.com/Unidata/netcdf-c/commit/9fc8ae62a8564e095ff17f4612874581db0e4db5.patch";
-      sha256 = "128kxz5jikq32x5qjmi0xdngi0k336rf6bvbcppvlk5gibg5nk7v";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -61,6 +48,7 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+  checkInputs = [ unzip ];
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";

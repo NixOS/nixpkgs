@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.freedesktop.members ++ [ maintainers.mimame ];
+    mainProgram = "update-mime-database";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2022-02-01";
+  version = "2022-04-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "sha256-3RspCfJD2jV7GYuzeBUcxkZsdHyL14kaz8lSoIrH7b8=";
+    sha256 = "sha256-ywmXIAyVWYMKBOsAndcq7dFYpn9ZgNz5YWTPjylXxsk=";
   };
 
   preConfigure = ''

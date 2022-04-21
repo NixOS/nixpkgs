@@ -13,6 +13,11 @@ buildPythonPackage rec {
     sha256 = "sha256-TAfVXh1fSKhNn/lsi7elq4wFyKCxCtCYUTrnH3ytBTw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "lxml<4.7.1" "lxml<5"
+  '';
+
   propagatedBuildInputs = [
     isodate lxml xmlsec
   ];

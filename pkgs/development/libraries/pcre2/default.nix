@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-pcre2-16"
     "--enable-pcre2-32"
-  ] ++ lib.optional (!stdenv.hostPlatform.isRiscV &&
-                     !(stdenv.hostPlatform.isDarwin &&
-                       stdenv.hostPlatform.isAarch64)) "--enable-jit";
+  ] ++ lib.optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto";
 
   outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
 

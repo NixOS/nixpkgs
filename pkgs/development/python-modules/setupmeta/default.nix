@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, six
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     mock
     pep440
     pytestCheckHook
+    six
   ];
 
   preCheck = ''
@@ -45,6 +47,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests want to scan site-packages
     "test_check_dependencies"
+    "test_clean"
     "test_scenario"
     "test_git_versioning"
   ];

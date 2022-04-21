@@ -90,7 +90,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "$NIX_BUILD_CORES"
     "--benchmark-skip"
     "--pyargs" "borg.testsuite"
   ];
@@ -109,6 +108,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+    # https://github.com/borgbackup/borg/issues/6573
+    "test_basic_functionality"
   ];
 
   preCheck = ''

@@ -1305,6 +1305,23 @@ showPhaseHeader() {
 }
 
 
+showPhaseFooter() {
+    local phase="$1"
+    local startTime="$2"
+    local endTime="$3"
+    local delta=$(( endTime - startTime ))
+    (( $delta < 30 )) && return
+
+    local H=$((delta/3600))
+    local M=$((delta%3600/60))
+    local S=$((delta%60))
+    echo -n "$phase completed in "
+    (( $H > 0 )) && echo -n "$H hours "
+    (( $M > 0 )) && echo -n "$M minutes "
+    echo "$S seconds"
+}
+
+
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
         source "$buildCommandPath"
@@ -1340,11 +1357,20 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
+        local startTime=$(date +"%s")
+
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
         eval "${!curPhase:-$curPhase}"
 
+        local endTime=$(date +"%s")
+
+        showPhaseFooter "$curPhase" "$startTime" "$endTime"
+
         if [ "$curPhase" = unpackPhase ]; then
+            # make sure we can cd into the directory
+            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
+
             cd "${sourceRoot:-.}"
         fi
     done

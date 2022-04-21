@@ -32,34 +32,25 @@ let newPython = python3.override {
         "test_ec_verify_should_return_false_if_signature_invalid"
       ];
     });
-    # conan needs jinja2<3
-    jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-      version = "2.11.3";
+    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+      version = "1.5.0";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
-      };
-    });
-    # old jinja2 needs old markupsafe
-    markupsafe = super.markupsafe.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
+        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.43.1";
+  version = "1.47.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "0jwi7smgy2d9m49igijqr2p4ncw5nksjbijj8fzjvf1lgxgnyjhr";
+    sha256 = "1zs2xb22rsy5fsc0fd7c95vrx1mfz7vasyg1lqkzyfimvn5zah6n";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [

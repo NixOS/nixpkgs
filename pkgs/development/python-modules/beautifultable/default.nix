@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, wcwidth
 , pytestCheckHook
 }:
 
@@ -15,6 +16,10 @@ buildPythonPackage rec {
     sha256 = "12ci6jy8qmbphsvzvj98466nlhclfzs0a0pmbsv3mf5bfcdwvbh7";
   };
 
+  propagatedBuildInputs = [
+    wcwidth
+  ];
+
   checkInputs = [
     pytestCheckHook
   ];
@@ -25,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package for printing visually appealing tables";
-    homepage = "https://github.com/CERT-Polska/mwdblib";
+    homepage = "https://github.com/pri22296/beautifultable";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

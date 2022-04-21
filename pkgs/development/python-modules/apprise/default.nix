@@ -13,7 +13,7 @@
 , pythonOlder
 , pyyaml
 , requests
-, requests_oauthlib
+, requests-oauthlib
 , six
 , slixmpp
 }:
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     markdown
     pyyaml
     requests
-    requests_oauthlib
+    requests-oauthlib
     six
   ];
 

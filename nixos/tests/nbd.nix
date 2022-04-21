@@ -28,6 +28,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
         ## It's also a loopback device to test exporting /dev/...
         systemd.services.create-priv-file =
           mkCreateSmallFileService { path = "/vault-priv.disk"; loop = true; };
+        ## `aaa.disk` is just here because "[aaa]" sorts before
+        ## "[generic]" lexicographically, and nbd-server breaks if
+        ## "[generic]" isn't the first section.
+        systemd.services.create-aaa-file =
+          mkCreateSmallFileService { path = "/aaa.disk"; };
 
         # Needed only for nbd-client used in the tests.
         environment.systemPackages = [ pkgs.nbd ];
@@ -39,6 +44,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
         services.nbd.server = {
           enable = true;
           exports = {
+            aaa = {
+              path = "/aaa.disk";
+            };
             vault-pub = {
               path = "/vault-pub.disk";
             };
@@ -80,6 +88,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
       server.succeed("nbd-client localhost ${toString listenPort} /dev/nbd0 -name vault-priv -persist")
       server.succeed(f"echo '{testString}' | dd of=/dev/nbd0 conv=notrunc")
       foundString = server.succeed(f"dd status=none if=/dev/loop0 count={len(testString)}")[:len(testString)]
+      if foundString != testString:
+         raise Exception(f"Read the wrong string from nbd disk. Expected: '{testString}'. Found: '{foundString}'")
+      server.succeed("nbd-client -d /dev/nbd0")
+
+      # Server: Successfully connect to the aaa disk
+      server.succeed("nbd-client localhost ${toString listenPort} /dev/nbd0 -name aaa -persist")
+      server.succeed(f"echo '{testString}' | dd of=/dev/nbd0 conv=notrunc")
+      foundString = server.succeed(f"dd status=none if=/aaa.disk count={len(testString)}")[:len(testString)]
       if foundString != testString:
          raise Exception(f"Read the wrong string from nbd disk. Expected: '{testString}'. Found: '{foundString}'")
       server.succeed("nbd-client -d /dev/nbd0")

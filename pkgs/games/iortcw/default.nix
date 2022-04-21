@@ -17,7 +17,7 @@ in buildEnv {
   # so we can launch sp from mp game and vice versa
   postBuild = ''
     for i in `find -L $out/opt/iortcw -maxdepth 1 -type f -executable`; do
-      makeWrapper $i $out/bin/`basename $i` --run "cd $out/opt/iortcw"
+      makeWrapper $i $out/bin/`basename $i` --chdir "$out/opt/iortcw"
     done
   '';
 

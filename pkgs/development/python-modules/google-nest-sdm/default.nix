@@ -11,7 +11,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, requests_oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     google-auth
     google-auth-oauthlib
     google-cloud-pubsub
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   checkInputs = [

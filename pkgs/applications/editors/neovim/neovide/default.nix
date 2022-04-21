@@ -25,16 +25,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "unstable-2022-02-04";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
-    rev = "92bc1725f1733547eb0ae25b740425f03f358c2a";
-    sha256 = "sha256-bKTteaj6gddp0NuV5Y0pfHotezU9Hmb136xOC9zkJ/M=";
+    rev = version;
+    sha256 = "sha256-pbniOWjEw1Z+PoXqbbFOUkW5Ii1UDOMoZpAvVF1uNEg=";
   };
 
-  cargoSha256 = "sha256-TaZN49ou6bf1vW0mEsmaItp1c73d0M826MMrSGXpnGE=";
+  cargoSha256 = "sha256-7o7uJXH68pvfuiG1eSNmbPx8OO8QJjCe+oEFl38bFm4=";
 
   SKIA_SOURCE_DIR =
     let
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
         sha256 = "sha256-F1DWLm7bdKnuCu5tMMekxSyaGq8gPRNtZwcRVXJxjZQ=";
       };
       # The externals for skia are taken from skia/DEPS
-      externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
+      externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);
     in
       runCommand "source" {} (
         ''
@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Kethku/neovide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     mainProgram = "neovide";
   };
 }

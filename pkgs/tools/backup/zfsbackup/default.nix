@@ -21,5 +21,6 @@ buildGoPackage rec {
     homepage = "https://github.com/someone1/zfsbackup-go";
     license = licenses.mit;
     maintainers = [ maintainers.xfix ];
+    mainProgram = "zfsbackup-go";
   };
 }

@@ -21,36 +21,13 @@
 , meson
 , ninja
 }:
-let
-  # hqplayerd relies on some package versions available for the fc34 release,
-  # which has out-of-date pkgs compared to nixpkgs. The following drvs
-  # can/should be removed when the fc35 hqplayer rpm is made available.
-  gupnp_1_2 = gupnp.overrideAttrs (old: rec {
-    pname = "gupnp";
-    version = "1.2.7";
-    src = fetchurl {
-      url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-hEEnbxr9AXbm9ZUCajpQfu0YCav6BAJrrT8hYis1I+w=";
-    };
-  });
-
-  gupnp-av_0_12 = gupnp-av.overrideAttrs (old: rec {
-    pname = "gupnp-av";
-    version = "0.12.11";
-    src = fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-aJ3PFJKriZHa6ikTZaMlSKd9GiKU2FszYitVzKnOb9w=";
-    };
-    nativeBuildInputs = lib.subtractLists [ meson ninja ] old.nativeBuildInputs;
-  });
-in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
   version = "4.30.3-87";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
-    hash = "sha256-RX9KI+4HGDUJ3y3An1zTMJTz28Of2Awn7COeX6EQc38=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc35/${pname}-${version}.fc35.x86_64.rpm";
+    hash = "sha256-fEze4aScWDwHDTXU0GatdopQf6FWcywWCGhR/7zXK7A=";
   };
 
   unpackPhase = ''
@@ -66,8 +43,8 @@ stdenv.mkDerivation rec {
     gcc11.cc.lib
     gnome.rygel
     gssdp
-    gupnp_1_2
-    gupnp-av_0_12
+    gupnp
+    gupnp-av
     lame
     libgmpris
     llvmPackages_10.openmp
@@ -130,6 +107,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software embedded HD-audio player";
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];
   };
 }

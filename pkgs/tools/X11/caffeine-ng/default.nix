@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     mkdir -p $out/share
     cp -r share $out/
+    cp -r caffeine/assets/icons $out/share/icons
     # autostart file
     cp -r $out/lib/python*/site-packages/etc $out/etc/
     glib-compile-schemas --strict $out/share/glib-2.0/schemas

@@ -30,7 +30,7 @@ in buildEnv {
 
   postBuild = ''
     wrapProgram $out/bin/frogatto \
-      --run "cd $out/share/frogatto"
+      --chdir "$out/share/frogatto"
   '';
 
   meta = with lib; {

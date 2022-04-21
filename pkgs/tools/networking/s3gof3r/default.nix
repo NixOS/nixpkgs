@@ -19,6 +19,7 @@ buildGoPackage rec {
     description = "Fast, concurrent, streaming access to Amazon S3, including gof3r, a CLI";
     homepage = "https://pkg.go.dev/github.com/rlmcpherson/s3gof3r";
     maintainers = with maintainers; [ ];
+    mainProgram = "gof3r";
     license = licenses.mit;
   };
 }

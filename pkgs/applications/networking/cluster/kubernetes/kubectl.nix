@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
     installShellCompletion --cmd kubectl \
       --bash <($out/bin/kubectl completion bash) \
+      --fish <($out/bin/kubectl completion fish) \
       --zsh <($out/bin/kubectl completion zsh)
     runHook postInstall
   '';

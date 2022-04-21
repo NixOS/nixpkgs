@@ -33,11 +33,10 @@ in mkDerivation rec {
   };
 
   patches = [
-    # Poppler requires at least C++17
+    # Fix build with poppler >= 22.01
     (fetchpatch {
-      name = "use-c-17-for-pdf-on-linux-builds";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/use-c-17-for-pdf-on-linux-builds.patch?h=openboard";
-      sha256 = "sha256-M6HigpOo8ul7qaub4cd7/ATUc85HezEyKyDuzsrZvC8=";
+      url = "https://github.com/OpenBoard-org/OpenBoard/commit/3a9b043e0fafec08e4123f362dcb7750f7476b59.patch";
+      sha256 = "sha256-yD163FK79HBU1W7m6sLxhfsRo4r/38zYTFWgeyqwU1o=";
     })
   ];
 

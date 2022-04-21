@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.0";
+  version = "1.1.1";
 
   disabled = !isPy3k;
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "dateparser";
     rev = "v${version}";
-    sha256 = "sha256-RpQWDsj7vGtfu6wf4yETdswfXDfoTkburTl6aOA03Ww=";
+    sha256 = "sha256-bDup3q93Zq+pvwsy/lQy2byOMjG6C/+7813hWQMbZRU=";
   };
 
   propagatedBuildInputs = [

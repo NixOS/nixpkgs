@@ -58,7 +58,7 @@ in {
             Configuration for the media session core. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/media-session.conf
           '';
-          default = {};
+          default = defaults.media-session;
         };
 
         alsa-monitor = mkOption {
@@ -67,7 +67,7 @@ in {
             Configuration for the alsa monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/alsa-monitor.conf
           '';
-          default = {};
+          default = defaults.alsa-monitor;
         };
 
         bluez-monitor = mkOption {
@@ -76,7 +76,7 @@ in {
             Configuration for the bluez5 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/bluez-monitor.conf
           '';
-          default = {};
+          default = defaults.bluez-monitor;
         };
 
         v4l2-monitor = mkOption {
@@ -85,7 +85,7 @@ in {
             Configuration for the V4L2 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/v4l2-monitor.conf
           '';
-          default = {};
+          default = defaults.v4l2-monitor;
         };
       };
     };

@@ -12,11 +12,11 @@
 
 buildPythonApplication rec {
   pname = "phonemizer";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b4ea53b8da9a156361dff1d0c04ac1a8e65e6966d1cb9a8147c200960b32296";
+    sha256 = "sha256-PWVK0NLVa0Rx1xyUyQF2/RvUo3/geskn53FcEv0Jr0c=";
   };
 
   postPatch = ''

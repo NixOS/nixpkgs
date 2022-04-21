@@ -26,6 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-fCxLobQuCnUzfFS3d78GcQVrRWllDj/5J+S5s4WvyOw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "redis<4.2.0" "redis"
+  '';
+
   propagatedBuildInputs = [
     aioredis
     lupa

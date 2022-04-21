@@ -7,11 +7,10 @@
 , libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
 , CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
 
-, dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite
-, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
-, libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev
-, xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
-, zlib, at-spi2-core
+, dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
+, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
+, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev, xcbutil
+, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm , zlib, at-spi2-core
 
   # optional dependencies
 , cups ? null, libmysqlclient ? null, postgresql ? null
@@ -61,6 +60,8 @@ stdenv.mkDerivation {
 
       # Text rendering
       fontconfig freetype
+
+      libdrm
 
       # X11 libs
       libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
@@ -151,6 +152,9 @@ stdenv.mkDerivation {
     ''}
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+
+    # paralellize compilation of qtmake, which happens within ./configure
+    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
     ./bin/syncqt.pl -version $version
   '';

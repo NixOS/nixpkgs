@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "omf-install";
     platforms = fish.meta.platforms;
   };
 }

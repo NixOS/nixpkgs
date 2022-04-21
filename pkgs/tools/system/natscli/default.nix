@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/nats-io/natscli";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "nats";
   };
 }

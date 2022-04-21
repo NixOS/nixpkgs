@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, zopfli, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, zopfli, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "zopfli";
-  version = "0.2.0";
+  version = "0.2.1";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-x9PzVcSR84TkNNsuYmheq269pmuWTonhdUuxFLLTjOo=";
+    sha256 = "1ipjkcgdbplsrhr31ypk48px8cax4cm9gcjj7yrcrhg20ql3s9p5";
     extension = "zip";
   };
 
@@ -15,8 +17,7 @@ buildPythonPackage rec {
   buildInputs = [ zopfli ];
   USE_SYSTEM_ZOPFLI = "True";
 
-  # doesn't work with pytestCheckHook
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "cPython bindings for zopfli";

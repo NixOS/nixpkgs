@@ -16,6 +16,14 @@ let
         };
       });
 
+      jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
+        };
+      });
+
     };
   };
 in
@@ -23,14 +31,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.6.0";
+  version = "3.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     rev = "v${version}";
-    hash = "sha256-ADjHPRG3QzSWR7FvcTIJdcBYmzZK+SWipdY1giNtaME=";
+    hash = "sha256-20Tnn0s+sfLEsAG9S6f61OVGpRf53wFPtt4a2/TJbCg=";
   };
 
   propagatedBuildInputs = [

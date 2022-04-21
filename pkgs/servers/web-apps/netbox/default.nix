@@ -10,15 +10,6 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       django = super.django_3;
-      graphql-core = super.graphql-core.overridePythonAttrs (old: rec {
-        version = "3.1.7";
-        src = fetchFromGitHub {
-          owner = "graphql-python";
-          repo = old.pname;
-          rev = "v${version}";
-          sha256 = "1mwwh55qd5bcpvgy6pyliwn8jkmj4yk4d2pqb6mdkgqhdic2081l";
-        };
-      });
       jsonschema = super.jsonschema.overridePythonAttrs (old: rec {
         version = "3.2.0";
         src = self.fetchPypi {
@@ -28,13 +19,25 @@ let
         };
       });
       lxml = super.lxml.overridePythonAttrs (old: rec {
-        pname = "lxml";
         version = "4.6.5";
-
         src = self.fetchPypi {
-          inherit pname version;
+          pname = old.pname;
+          inherit version;
           sha256 = "6e84edecc3a82f90d44ddee2ee2a2630d4994b8471816e226d2b771cda7ac4ca";
         };
+      });
+      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
+        version = "2.0.3";
+        src = self.fetchPypi {
+          pname = "Werkzeug";
+          inherit version;
+          sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+        };
+      });
+      sentry-sdk = super.sentry-sdk.overridePythonAttrs (old: rec {
+        disabledTestPaths = old.disabledTestPaths ++ [
+          "tests/integrations/flask/test_flask.py"
+        ];
       });
     };
   };
@@ -43,13 +46,13 @@ let
 in
 py.pkgs.buildPythonApplication rec {
     pname = "netbox";
-    version = "3.1.10";
+    version = "3.2.1";
 
     src = fetchFromGitHub {
       owner = "netbox-community";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-qREq4FJHHTA9Vm6f9kSfiYqur2omFmdsoZ4OdaPFcpU=";
+      sha256 = "sha256-iA0KIgaHQh0OsN/tXmTATIlvnf0aLRdjeQ6VkiR9VJ4=";
     };
 
     format = "other";
@@ -57,6 +60,7 @@ py.pkgs.buildPythonApplication rec {
     patches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch
+      ./graphql-3_2_0.patch
     ];
 
     propagatedBuildInputs = with py.pkgs; [
@@ -75,6 +79,7 @@ py.pkgs.buildPythonApplication rec {
       django-timezone-field
       djangorestframework
       drf-yasg
+      swagger-spec-validator # from drf-yasg[validation]
       graphene-django
       jinja2
       markdown

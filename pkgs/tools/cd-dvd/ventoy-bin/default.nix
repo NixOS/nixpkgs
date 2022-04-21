@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
         local bin="''${f%_*}" wrapper="''${f#*_}"
         makeWrapper "$VENTOY_PATH/$bin" "$out/bin/$wrapper" \
                     --prefix PATH : "${lib.makeBinPath buildInputs}" \
-                    --run "cd '$VENTOY_PATH' || exit 1"
+                    --chdir "$VENTOY_PATH"
     done
   '' + lib.optionalString (withGtk3 || withQt5) ''
     # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
@@ -105,7 +105,7 @@ in stdenv.mkDerivation rec {
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
                 --prefix PATH : "${lib.makeBinPath buildInputs}" \
-                --run "cd '$VENTOY_PATH' || exit 1"
+                --chdir "$VENTOY_PATH"
   '' + lib.optionalString (!withGtk3) ''
     rm "$VENTOY_PATH/tool/$ARCH/Ventoy2Disk.gtk3"
   '' + lib.optionalString (!withQt5) ''

@@ -6,25 +6,25 @@
 , jinja2
 , ipython
 , jsonpickle
-, numpy }:
+, numpy
+}:
 
 buildPythonPackage rec {
   pname = "pyvis";
-  version = "unstable-2021-04-29";
+  version = "0.2.1";
 
-  # We use unstable, as test are failing for 0.1.9
   src = fetchFromGitHub {
     owner = "WestHealth";
     repo = pname;
-    rev = "4c521302abf9725dcbe7f59962baf85360b2718d";
-    sha256 = "sha256-DYbHQpxtSfiLbzmBGclym/ChM0WLBzSEC/3phDTtGY8=";
+    rev = "v${version}";
+    sha256 = "sha256-cER5XYxnURzRLtrisWBu2kxtOiRqgaRTJYyaCMh2qqE=";
   };
 
   patches = [
-    # Remove when https://github.com/WestHealth/pyvis/pull/101 is merged.
+    # Fix test: https://github.com/WestHealth/pyvis/issues/138
     (fetchpatch {
-      url = "https://github.com/WestHealth/pyvis/commit/158a34de45f970b17ffd746c6e705b89128e2445.patch";
-      sha256 = "sha256-zK72nrnn5YLGNW6PKYUyHry5ORCdt1T1oH6n1X64DKg=";
+      url = "https://github.com/WestHealth/pyvis/commit/eaa24b882401e2e74353efa78bf4e71a880cfc47.patch";
+      sha256 = "sha256-hyDypavoCM36SiuQda1U4FLUPdAjTIMtaeZ0KqfHKzI=";
     })
   ];
 

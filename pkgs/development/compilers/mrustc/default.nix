@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     sed -i 's/\$(shell git show --pretty=%H -s)/${rev}/' Makefile
     sed -i 's/\$(shell git symbolic-ref -q --short HEAD || git describe --tags --exact-match)/${tag}/' Makefile
     sed -i 's/\$(shell git diff-index --quiet HEAD; echo $$?)/0/' Makefile
+    sed '1i#include <limits>' -i src/trans/codegen_c.cpp
   '';
 
   strictDeps = true;
