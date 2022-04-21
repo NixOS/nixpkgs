@@ -357,6 +357,7 @@ broken-packages:
   - binary-communicator
   - binary-derive
   - binary-ext
+  - binary-generic-combinators
   - binary-indexed-tree
   - binary-protocol
   - binary-tree
@@ -2780,6 +2781,7 @@ broken-packages:
   - kangaroo
   - karabiner-config
   - katip-datadog
+  - katip-elasticsearch
   - katip-kafka
   - katip-logzio
   - katip-scalyr-scribe
@@ -3332,6 +3334,7 @@ broken-packages:
   - msgpack
   - msgpack-binary
   - msgpack-persist
+  - msgpack-types
   - msh
   - msi-kb-backlit
   - MTGBuilder
@@ -3597,6 +3600,7 @@ broken-packages:
   - open-signals
   - opensoundcontrol-ht
   - openssh-protocol
+  - opentelemetry-extra
   - opentelemetry-http-client
   - opentheory-char
   - opentok
@@ -4333,6 +4337,7 @@ broken-packages:
   - robin
   - robots-txt
   - roc-cluster
+  - roc-id
   - roku-api
   - rollbar-client
   - rollbar-hs

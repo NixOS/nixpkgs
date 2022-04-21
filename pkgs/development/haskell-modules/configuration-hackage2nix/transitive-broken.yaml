@@ -2811,9 +2811,11 @@ dont-distribute-packages:
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
+ - msgpack-arbitrary
  - msgpack-idl
  - msgpack-rpc
  - msgpack-rpc-conduit
+ - msgpack-testsuite
  - mtgoxapi
  - mu-avro
  - mu-graphql
@@ -2965,6 +2967,8 @@ dont-distribute-packages:
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
+ - opentelemetry-lightstep
+ - opentelemetry-lightstep_0_8_0
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
