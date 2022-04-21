@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional (!jsonRpcSupport) "-DUSE_JSONRPC=NO"
   ++ lib.optional (!xmlRpcSupport) "-DUSE_XMLRPC=NO";
 
-
   doCheck = true;
+
   checkInputs = [
     gtest
   ];
