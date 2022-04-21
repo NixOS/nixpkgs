@@ -3,6 +3,7 @@
 , fetchPypi
 , regex
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -10,9 +11,11 @@ buildPythonPackage rec {
   version = "0.9.0";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sq0a5jovZb149eCorFEKmPNgekPx2yqNRmNqXZ5KMME=";
+    hash = "sha256-sq0a5jovZb149eCorFEKmPNgekPx2yqNRmNqXZ5KMME=";
   };
 
   propagatedBuildInputs = [
@@ -23,6 +26,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "regex>=2022.3.15" "regex"
+  '';
+
   pythonImportsCheck = [
     "parsimonious"
     "parsimonious.grammar"
@@ -30,9 +38,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    description = "Arbitrary-lookahead parser";
     homepage = "https://github.com/erikrose/parsimonious";
-    description = "Fast arbitrary-lookahead parser written in pure Python";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }
