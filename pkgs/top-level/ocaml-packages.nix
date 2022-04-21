@@ -1268,6 +1268,8 @@ let
 
     rebez = callPackage ../development/ocaml-modules/rebez { };
 
+    reperf = callPackage ../development/ocaml-modules/reperf { };
+
     rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
 
     ezresto = callPackage ../development/ocaml-modules/resto/ezresto.nix { };
