@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, python2
 , libidn
 , lua
 , miniupnpc
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python2
     libidn
     lua
     miniupnpc
