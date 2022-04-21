@@ -43,6 +43,8 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  setupPyBuildFlags = [ "--parallel" "$NIX_BUILD_CORES" ];
+
   pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {
