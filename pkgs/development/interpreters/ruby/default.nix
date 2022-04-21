@@ -310,7 +310,7 @@ let
 
 in
 {
-  ruby_2_4_4 = generic {
+  ruby_2_4 = generic {
     version = rubyVersion "2" "4" "4" "";
     sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
   };
