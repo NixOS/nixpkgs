@@ -85,7 +85,8 @@ let
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
-    override = attr: let python = attr.override (inputs // { self = python; }); in python;
+    inputs' = lib.filterAttrs (_: v: ! lib.isDerivation v) inputs;
+    override = attr: let python = attr.override (inputs' // { self = python; }); in python;
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
