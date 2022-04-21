@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     sha256 = "sha256-pq/LkyOCS0PnujfN9aIx42aeZ8tw4XvRQ4Vid/nXgWE=";
   };
 
