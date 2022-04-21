@@ -21,15 +21,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
   ];
+
   buildInputs = [
     openssl
     zlib
   ];
 
   doCheck = true;
+
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
+
   checkInputs = [
     gtest
   ];
