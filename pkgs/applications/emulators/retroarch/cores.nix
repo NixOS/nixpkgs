@@ -359,6 +359,7 @@ in
     core = "dosbox";
     description = "Port of DOSBox to libretro";
     license = lib.licenses.gpl2Only;
+    stdenvOverride = gcc10Stdenv;
   };
 
   eightyone = mkLibRetroCore {
