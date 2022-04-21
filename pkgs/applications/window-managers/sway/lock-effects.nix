@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -23,6 +24,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-71IX0fC4xCPP6pK63KtvDMb3KoP1rw/Iz3S7BgiLSpg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mortie/swaylock-effects/commit/dfff235b09b475e79d75a040a0307a359974d360.patch";
+      sha256 = "t8Xz2wRSBlwGtkpWZyIGWX7V/y0P1r/50P8MfauMh4c=";
+    })
+  ];
 
   postPatch = ''
     sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
