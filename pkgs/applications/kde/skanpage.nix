@@ -6,6 +6,7 @@
 , ktextwidgets
 , libksane
 , qtquickcontrols2
+, kpurpose
 }:
 
 mkDerivation rec {
@@ -18,6 +19,7 @@ mkDerivation rec {
     ktextwidgets
     libksane
     qtquickcontrols2
+    kpurpose
   ];
 
   meta = with lib; {

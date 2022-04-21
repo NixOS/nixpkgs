@@ -21,4 +21,7 @@ mkDerivation {
     kdbusaddons ki18n kontactinterface kparts kpimtextedit
     kxmlgui libkdepim libkleo mailcommon pimcommon prison qgpgme qtbase
   ];
+  postInstall = ''
+    mkdir -p "$out/include/KF5"
+  '';
 }
