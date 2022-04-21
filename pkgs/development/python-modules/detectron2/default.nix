@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   name = "detectron2";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = name;
     rev = "v${version}";
-    sha256 = "15fvf38vaxmnf5yhnn0dk9smf9gmkbs3mp1jfpxzxh4s3r05fvgd";
+    sha256 = "1w6cgvc8r2lwr72yxicls650jr46nriv1csivp2va9k1km8jx2sf";
   };
 
   patchPhase = ''
