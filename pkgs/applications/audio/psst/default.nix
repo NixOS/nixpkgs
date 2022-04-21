@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2022-01-25";
+  version = "unstable-2022-03-19";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = pname;
-    rev = "1627cd4a301dd51e9ee3034294cd7b0d94d02ddc";
-    sha256 = "sha256-kepvYhmieXx6Hj79aqaA7tYUnueaBsNx0U4lV7K6LuU=";
+    rev = "2d2cf6511da401b7e8e6e3c16b9386b9fb8f6c92";
+    sha256 = "sha256-E0cgs1e67bky8VMxUcKDCoMba48fVkCqDDo4MhEwpBA=";
   };
 
-  cargoSha256 = "sha256-DcdlQudGyWUUAacV7pAOLDvhd1fgAkEesdxDkHSYm4M=";
+  cargoSha256 = "sha256-nMeBRS/0JfHoo96AVcusO4CJlDSqGkWlYif8+gXG7AE=";
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
