@@ -8650,6 +8650,8 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
 
+  nickel = callPackage ../development/interpreters/nickel { };
+
   npiet = callPackage ../development/interpreters/npiet { };
 
   npth = callPackage ../development/libraries/npth {};
