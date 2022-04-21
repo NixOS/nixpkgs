@@ -10836,6 +10836,12 @@
     githubId = 373566;
     name = "Ronuk Raval";
   };
+  rsHalford = {
+    email = "richard@xhalford.com";
+    github = "rsHalford";
+    githubId = 63303646;
+    name = "Richard Halford";
+  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
