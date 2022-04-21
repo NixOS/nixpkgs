@@ -1670,6 +1670,12 @@
     github = "bouk";
     githubId = 97820;
   };
+  bradbeck = {
+    email = "bradley.beck@gmail.com";
+    github = "bradbeck";
+    githubId = 425664;
+    name = "Brad Beck";
+  };
   bradediger = {
     email = "brad@bradediger.com";
     github = "bradediger";
