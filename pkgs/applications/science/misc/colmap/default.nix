@@ -17,7 +17,7 @@ mkDerivation rec {
      owner = "colmap";
      repo = "colmap";
      rev = version;
-     sha256 = "sha256-uVAw6qwhpgIpHkXgxttKupU9zU+vD0Za0maw2Iv4x+I=";
+     hash = "sha256-uVAw6qwhpgIpHkXgxttKupU9zU+vD0Za0maw2Iv4x+I=";
   };
 
   # TODO: rm once the gcc11 issue is closed, https://github.com/colmap/colmap/issues/1418#issuecomment-1049305256
