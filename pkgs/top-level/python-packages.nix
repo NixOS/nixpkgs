@@ -9964,15 +9964,8 @@ in {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
-  tensorflow-bin = let
-    # CUDA-related packages that are compatible with the currently packaged version
-    # of TensorFlow, used to keep these versions in sync in related packages like `jaxlib`.
-    cudaPackages = pkgs.cudaPackages_11_2.overrideScope' (final: prev: {
-      cudnn = prev.cudnn_8_1_1;
-    });
-  in callPackage ../development/python-modules/tensorflow/bin.nix {
+  tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    inherit cudaPackages;
   };
 
   tensorflow-build = callPackage ../development/python-modules/tensorflow {
