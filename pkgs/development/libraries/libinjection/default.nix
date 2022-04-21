@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub
-, python2
+, python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname   = "libinjection";
-  version = "3.10.0";
+  version = "unstable-2021-04-09";
 
   src = fetchFromGitHub {
-    owner  = "client9";
-    repo   = pname;
-    rev    = "refs/tags/v${version}";
-    sha256 = "0chsgam5dqr9vjfhdcp8cgk7la6nf3lq44zs6z6si98cq743550g";
+    owner = "libinjection";
+    repo  = "libinjection";
+    rev   = "49904c42a6e68dc8f16c022c693e897e4010a06c";
+    hash  = "sha256-Y6ZPxjJUBn2P5UdejJdUuBvrSHaUoIs3lZo14gCB16Y=";
   };
 
-  nativeBuildInputs = [ python2 ];
+  nativeBuildInputs = [ python3 ];
 
   strictDeps = true;
 
