@@ -160,5 +160,5 @@ stdenvNoCC.mkDerivation {
   '';
 
   inherit meta;
-  inherit passthru;
+  passthru = { inherit url; } // passthru;
 }

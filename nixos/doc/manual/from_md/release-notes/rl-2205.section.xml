@@ -1045,6 +1045,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>taskserver</literal> module no longer implicitly
+          opens ports in the firewall configuration. This is now
+          controlled through the option
+          <literal>services.taskserver.openFirewall</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>autorestic</literal> package has been upgraded
           from 1.3.0 to 1.5.0 which introduces breaking changes in
           config file, check
@@ -2148,6 +2156,12 @@
           <emphasis>certificates</emphasis> held within an SSH agent,
           using
           <link xlink:href="https://github.com/uber/pam-ussh">pam-ussh</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>vscode-extensions.ionide.ionide-fsharp</literal>
+          package has been updated to 6.0.0 and now requires .NET 6.0.
         </para>
       </listitem>
       <listitem>

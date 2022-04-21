@@ -1123,8 +1123,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "5.10.1";
-          sha256 = "sha256-LkWWgyh4khPyUgekVeO8ZzPK+1gTrS8d9Yz6/kHomr8=";
+          version = "6.0.1";
+          sha256 = "sha256-1W1qKnjmyK80np+J6S/nku3QJGypxYnuE0BPw8Onzas=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";

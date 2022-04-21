@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.5";
+  version = "2022.4.6";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -1244,7 +1244,10 @@
     "input_text" = ps: with ps; [
     ];
     "insteon" = ps: with ps; [
+      aiohttp-cors
       pyinsteon
+      pyserial
+      pyudev
     ];
     "integration" = ps: with ps; [
     ];
