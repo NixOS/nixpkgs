@@ -198,7 +198,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
     for shell_version in shell_version_map.keys():
         if pname in package_name_registry[shell_version]:
-            logging.warning(f"Package name '{pname}' is colliding.")
+            logging.warning(f"Package name '{pname}' for GNOME '{shell_version}' is colliding.")
             package_name_registry[shell_version][pname].append(uuid)
         else:
             package_name_registry[shell_version][pname] = [uuid]
