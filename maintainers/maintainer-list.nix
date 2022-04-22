@@ -3849,6 +3849,13 @@
     githubId = 222467;
     name = "Dmitry Ivanov";
   };
+  ethindp = {
+    name = "Ethin Probst";
+    email = "harlydavidsen@gmail.com";
+    matrix = "@ethindp:the-gdn.net";
+    github = "ethindp";
+    githubId = 8030501;
+  };
   Etjean = {
     email = "et.jean@outlook.fr";
     github = "Etjean";

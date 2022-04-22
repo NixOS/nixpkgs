@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , html5lib
 , pillow
+, pyhanko
 , pypdf3
 , pytestCheckHook
 , python-bidi
@@ -14,22 +15,25 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.6";
+  version = "0.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
+  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-EyIERvAC98LqPTMCdwWqTkm1RiMhikscL0tnMZUHIT8=";
+    # Currently it is not possible to fetch from version as there is a branch with the same name
+    rev = "afa72cdbbdaf7d459261c1605263101ffcd999af";
+    sha256 = "sha256-plyIM7Ohnp5UBWz/UDTJa1UeWK9yckSZR16wxmLrpnc=";
   };
 
   propagatedBuildInputs = [
     arabic-reshaper
     html5lib
     pillow
+    pyhanko
     pypdf3
     python-bidi
     reportlab
