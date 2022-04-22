@@ -26,6 +26,7 @@
 , ninja
 , perl
 , perlPackages
+, polkit
 , pkg-config
 , pmutils
 , python3
@@ -226,6 +227,9 @@ stdenv.mkDerivation rec {
         --replace "gsed" "sed" \
         --replace "gmake" "make" \
         --replace "ggrep" "grep"
+
+      substituteInPlace src/util/virpolkit.h \
+        --replace '"/usr/bin/pkttyagent"' '"${polkit.bin}/bin/pkttyagent"'
 
       patchShebangs .
     ''
