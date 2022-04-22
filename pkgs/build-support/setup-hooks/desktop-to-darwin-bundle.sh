@@ -200,12 +200,12 @@ convertDesktopFile() {
     local -r iconName=$(getDesktopParam "${file}" "^Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
-    mkdir -p "$out/Applications/${name}.app/Contents/MacOS"
-    mkdir -p "$out/Applications/${name}.app/Contents/Resources"
+    mkdir -p "${!outputBin}/Applications/${name}.app/Contents/MacOS"
+    mkdir -p "${!outputBin}/Applications/${name}.app/Contents/Resources"
 
-    convertIconTheme "$out/Applications/${name}.app/Contents/Resources" "$sharePath" "$iconName"
+    convertIconTheme "${!outputBin}/Applications/${name}.app/Contents/Resources" "$sharePath" "$iconName"
 
-    write-darwin-bundle "$out" "$name" "$exec" "$iconName" "$squircle"
+    write-darwin-bundle "${!outputBin}" "$name" "$exec" "$iconName" "$squircle"
 }
 
 convertDesktopFiles() {
