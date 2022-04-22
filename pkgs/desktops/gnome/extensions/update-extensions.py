@@ -10,6 +10,7 @@ import urllib.error
 import urllib.request
 import zipfile
 from operator import itemgetter
+from pathlib import Path
 from typing import List, Dict, Optional, Any, Tuple
 
 # We don't want all those deprecated legacy extensions
@@ -34,6 +35,8 @@ ExtensionVersion = int
 package_name_registry: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {}
 for shell_version in supported_versions.keys():
     package_name_registry[shell_version] = {}
+
+updater_dir_path = Path(__file__).resolve().parent
 
 
 def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
@@ -271,7 +274,7 @@ if __name__ == "__main__":
         f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
     )
 
-    with open("extensions.json", "w") as out:
+    with open(updater_dir_path / "extensions.json", "w") as out:
         # Manually pretty-print the outer level, but then do one compact line per extension
         # This allows for the diffs to be manageable (one line of change per extension) despite their quantity
         for index, extension in enumerate(processed_extensions):
@@ -283,14 +286,14 @@ if __name__ == "__main__":
             out.write("\n")
         out.write("]\n")
 
-    with open("extensions.json", "r") as out:
+    with open(updater_dir_path / "extensions.json", "r") as out:
         # Check that the generated file actually is valid JSON, just to be sure
         json.load(out)
 
     logging.info(
         "Done. Writing name collisions to collisions.json (please check manually)"
     )
-    with open("collisions.json", "w") as out:
+    with open(updater_dir_path / "collisions.json", "w") as out:
         # Filter out those that are not duplicates
         package_name_registry_filtered: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {
             # The outer level keys are shell versions
