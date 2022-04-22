@@ -5736,6 +5736,8 @@ in {
 
   nunavut = callPackage ../development/python-modules/nunavut { };
 
+  nutils = callPackage ../development/python-modules/nutils { };
+
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };

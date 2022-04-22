@@ -1,4 +1,4 @@
-{ lib , buildPythonPackage , fetchPypi, typing-extensions }:
+{ lib , python, buildPythonPackage , fetchPypi, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "treelog";
@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256:0hnivz4p4llky6djxgcsr9r3j4vr46mkjvp0ksybhpx0fsnhdi81";
+    sha256 = "0hnivz4p4llky6djxgcsr9r3j4vr46mkjvp0ksybhpx0fsnhdi81";
   };
 
   pythonImportsCheck = [ "treelog" ];
@@ -15,10 +15,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
+
   meta = with lib; {
     description = "Logging framework that organizes messages in a tree structure";
     homepage = "https://github.com/evalf/treelog";
     license = licenses.mit;
-    maintainers = [ lib.maintainers.Scriptkiddi ];
+    maintainers = [ maintainers.Scriptkiddi ];
   };
 }
