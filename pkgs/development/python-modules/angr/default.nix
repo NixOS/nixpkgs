@@ -46,8 +46,8 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.1.12332";
-  format = "setuptools";
+  version = "9.2.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GaW1XyFOnjU28HqptFC6+Fe41zYZMR716Nsq0dPy660=";
+    hash = "sha256-7t4NV1udBq3tK7czuKYUsQ+9tLahFM8DlUUBT3d6bco=";
   };
 
   propagatedBuildInputs = [
