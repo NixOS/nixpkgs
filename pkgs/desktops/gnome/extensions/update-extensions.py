@@ -46,6 +46,10 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
     uuid = uuid.replace("@", "")
     url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
 
+    # TODO remove when Vitals@CoreCoding.com version != 53, this extension has a missing manifest.json
+    if url == 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension.zip':
+        url = 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension_v1BI2FB.zip'
+
     # Yes, we download that file three times:
 
     # The first time is for the maintainter, so they may have a personal backup to fix potential issues
