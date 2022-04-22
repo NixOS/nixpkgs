@@ -1323,6 +1323,8 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    stb-image = callPackage ../development/ocaml-modules/stb-image { };
+
     stdcompat = callPackage ../development/ocaml-modules/stdcompat { };
 
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
