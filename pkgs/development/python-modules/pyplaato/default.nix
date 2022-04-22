@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyplaato";
-  version = "0.0.17";
+  version = "0.0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fd7gHDah5yoqpH5d3bwEDsIfeflXzXevJLMD7lvz180=";
+    hash = "sha256-HZF3Yxb/dTQSVzTkdAbfeD1Zyf8jFHoF3nt6OcdCnAM=";
   };
 
   propagatedBuildInputs = [
