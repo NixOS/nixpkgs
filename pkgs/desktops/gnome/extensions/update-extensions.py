@@ -238,13 +238,13 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
                     f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
             ) as response:
                 data = json.loads(response.read().decode())["extensions"]
-                responseLength = len(data)
+                response_length = len(data)
 
                 for extension in data:
                     extensions.append(extension)
 
                 # If our page isn't "full", it must have been the last one
-                if responseLength < 25:
+                if response_length < 25:
                     logging.debug(
                         f"\tThis page only has {responseLength} entries, so it must be the last one."
                     )
