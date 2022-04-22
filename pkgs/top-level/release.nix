@@ -24,6 +24,7 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; 
 let
 
   systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
+  platformsWithAnySupport = map lib.systems.elaborate systemsWithAnySupport;
 
   supportDarwin = lib.genAttrs [
     "x86_64"
@@ -166,17 +167,17 @@ let
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport
-          (system: {
+        genAttrs (map (p: p.config) platformsWithAnySupport)
+          (config: {
             inherit
               (import ../stdenv/linux/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+                localSystem = { inherit config; };
               })
               dist test;
           })
         # darwin is special in this
         // optionalAttrs supportDarwin.x86_64 {
-          x86_64-darwin =
+          x86_64-apple-darwin =
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
             in {
@@ -187,7 +188,7 @@ let
             };
         } // optionalAttrs supportDarwin.aarch64 {
           # Cross compiled bootstrap tools
-          aarch64-darwin =
+          aarch64-apple-darwin =
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
             in {
