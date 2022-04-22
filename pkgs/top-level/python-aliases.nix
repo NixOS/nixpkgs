@@ -79,6 +79,7 @@ mapAliases ({
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
   Markups = markups; # added 2022-02-14
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
+  net2grid = gridnet; # add 2022-04-22
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
