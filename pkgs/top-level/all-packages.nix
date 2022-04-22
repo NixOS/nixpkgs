@@ -14497,9 +14497,6 @@ with pkgs;
 
   inherit (ocamlPackages) reason;
 
-  pixie = callPackage ../development/interpreters/pixie { };
-  dust = callPackage ../development/interpreters/pixie/dust.nix { };
-
   buildRubyGem = callPackage ../development/ruby-modules/gem { };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
     inherit (darwin) DarwinTools cctools;
