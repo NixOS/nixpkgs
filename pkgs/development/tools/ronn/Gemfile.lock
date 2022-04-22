@@ -1,19 +1,25 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    hpricot (0.8.6)
-    mustache (1.0.3)
-    rdiscount (2.2.0.1)
-    ronn (0.7.3)
-      hpricot (>= 0.8.2)
-      mustache (>= 0.7.0)
-      rdiscount (>= 1.5.8)
+    kramdown (2.3.2)
+      rexml
+    mini_portile2 (2.8.0)
+    mustache (0.99.8)
+    nokogiri (1.13.4)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    racc (1.6.0)
+    rexml (3.2.5)
+    ronn-ng (0.9.1)
+      kramdown (~> 2.1)
+      mustache (~> 0.7, >= 0.7.0)
+      nokogiri (~> 1.9, >= 1.9.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  ronn
+  ronn-ng
 
 BUNDLED WITH
-   2.1.4
+   2.3.9
