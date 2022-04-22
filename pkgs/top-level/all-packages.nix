@@ -31158,6 +31158,8 @@ with pkgs;
 
   ### GAMES/LGAMES
 
+  barrage = callPackage ../games/lgames/barrage { };
+
   lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
 
   lbreakouthd = callPackage ../games/lgames/lbreakouthd { };
