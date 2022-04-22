@@ -31156,7 +31156,15 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
+  ### GAMES/LGAMES
+
+  barrage = callPackage ../games/lgames/barrage { };
+
   lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
+
+  lbreakouthd = callPackage ../games/lgames/lbreakouthd { };
+
+  lpairs2 = callPackage ../games/lgames/lpairs2 { };
 
   ltris = callPackage ../games/lgames/ltris { };
 
