@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "falkon";
-  version = "3.2.0";
+  version = "22.04.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "falkon";
     rev    = "v${version}";
-    sha256 = "sha256-esi9YWd1PtQpDBhI1NtWEjZIoMoNUpAF+kQad67mLzE=";
+    sha256 = "sha256-6Z0+j0E4N9g96ODGEoj+ec9X8j/V1QASf79mToW6Vso=";
   };
 
   preConfigure = ''
