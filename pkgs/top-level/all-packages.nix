@@ -593,6 +593,15 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
+  mysql-shell = callPackage ../development/tools/mysql-shell {
+    inherit (darwin) cctools developer_cmds DarwinTools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost173; # Configure checks for specific version.
+    protobuf = protobuf3_11;
+    icu =  icu67;
+    v8 = v8_8_x;
+  };
+
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
 
   fetchpatch = callPackage ../build-support/fetchpatch { }
@@ -1427,13 +1436,12 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/YUZU
 
-  yuzu-mainline = import ../applications/emulators/yuzu {
+  yuzu-mainline = callPackage ../applications/emulators/yuzu {
     branch = "mainline";
-    inherit libsForQt5 fetchFromGitHub;
   };
-  yuzu-ea = import ../applications/emulators/yuzu {
+
+  yuzu-ea = callPackage ../applications/emulators/yuzu {
     branch = "early-access";
-    inherit libsForQt5 fetchFromGitHub;
   };
 
   ### APPLICATIONS/EMULATORS/COMMANDERX16
@@ -7134,6 +7142,10 @@ with pkgs;
   jadx = callPackage ../tools/security/jadx { };
 
   jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
+  jamesdsp-pulse = libsForQt5.callPackage ../applications/audio/jamesdsp {
+    usePipewire = false;
+    usePulseaudio = true;
+  };
 
   jazzy = callPackage ../development/tools/jazzy { };
 
@@ -8598,6 +8610,8 @@ with pkgs;
   panicparse = callPackage ../tools/misc/panicparse { };
 
   patray = callPackage ../tools/audio/patray { };
+
+  pathvector = callPackage ../tools/networking/pathvector { };
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
@@ -11546,8 +11560,6 @@ with pkgs;
 
   webalizer = callPackage ../tools/networking/webalizer { };
 
-  weighttp = callPackage ../tools/networking/weighttp { };
-
   wget = callPackage ../tools/networking/wget {
     libpsl = null;
   };
@@ -12123,6 +12135,10 @@ with pkgs;
   adoptopenjdk-icedtea-web = callPackage ../development/compilers/adoptopenjdk-icedtea-web {
     jdk = jdk8;
   };
+
+  alan = callPackage ../development/compilers/alan { };
+
+  alan_2 = callPackage ../development/compilers/alan/2.nix { };
 
   algol68g = callPackage ../development/compilers/algol68g { };
 
@@ -14453,6 +14469,20 @@ with pkgs;
   };
 
   supercollider_scel = supercollider.override { useSCEL = true; };
+
+  supercolliderPlugins = recurseIntoAttrs {
+    sc3-plugins = callPackage ../development/interpreters/supercollider/plugins/sc3-plugins.nix {
+      fftw = fftwSinglePrec;
+    };
+  };
+
+  supercollider-with-plugins = callPackage ../development/interpreters/supercollider/wrapper.nix {
+    plugins = [];
+  };
+
+  supercollider-with-sc3-plugins = supercollider-with-plugins.override {
+    plugins = with supercolliderPlugins; [ sc3-plugins ];
+  };
 
   taktuk = callPackage ../applications/networking/cluster/taktuk { };
 
@@ -23090,6 +23120,8 @@ with pkgs;
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
   linux_xanmod = linuxKernel.kernels.linux_xanmod;
+  linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
+  linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
@@ -33473,6 +33505,8 @@ with pkgs;
   ### MISC
 
   acpilight = callPackage ../misc/acpilight { };
+
+  alpnpass = callPackage ../applications/networking/alpnpass { };
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 

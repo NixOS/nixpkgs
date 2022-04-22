@@ -1043,8 +1043,8 @@
     name = "Kirill Boltaev";
   };
   ashley = {
-    email = "personavinny@protonmail.com";
-    github = "paranoidcat";
+    email = "ashley@kira64.xyz";
+    github = "kira64xyz";
     githubId = 84152630;
     name = "Ashley Chiara";
   };
@@ -7190,6 +7190,13 @@
     githubId = 714;
     name = "Lily Ballard";
   };
+  lilyinstarlight = {
+    email = "lily@lily.flowers";
+    matrix = "@lily:lily.flowers";
+    github = "lilyinstarlight";
+    githubId = 298109;
+    name = "Lily Foster";
+  };
   limeytexan = {
     email = "limeytexan@gmail.com";
     github = "limeytexan";
@@ -8849,6 +8856,12 @@
     github = "neeasade";
     githubId = 3747396;
     name = "Nathan Isom";
+  };
+  neilmayhew = {
+    email = "nix@neil.mayhew.name";
+    github = "neilmayhew";
+    githubId = 166791;
+    name = "Neil Mayhew";
   };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
