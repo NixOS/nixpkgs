@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, stdenv }:
 rec {
   inherit (pkgs) eggDerivation fetchegg;
 
@@ -32,6 +32,22 @@ rec {
     ];
   };
 
+  r7rs = eggDerivation {
+    name = "r7rs-1.0.5";
+
+    src = fetchegg {
+      name = "r7rs";
+      version = "1.0.5";
+      sha256 = "0zyi1z4m1995hm2wfc5wpi8jjgxcwk03qknq5v2ygff3akxazsf6";
+    };
+
+    buildInputs = [
+      matchable
+      srfi-1
+      srfi-13
+    ];
+  };
+
   srfi-1 = eggDerivation {
     name = "srfi-1-0.5.1";
 
@@ -47,12 +63,12 @@ rec {
   };
 
   srfi-13 = eggDerivation {
-    name = "srfi-13-0.3";
+    name = "srfi-13-0.3.1";
 
     src = fetchegg {
       name = "srfi-13";
-      version = "0.3";
-      sha256 = "0yaw9i6zhpxl1794pirh168clprjgmsb0xlr96drirjzsslgm3zp";
+      version = "0.3.1";
+      sha256 = "12ryxs3w3las0wjdh0yp52g1xmyq1fb48xi3i26l5a9sfx7gbilp";
     };
 
     buildInputs = [
@@ -71,6 +87,36 @@ rec {
 
     buildInputs = [
       
+    ];
+  };
+
+  srfi-145 = eggDerivation {
+    name = "srfi-145-0.1";
+
+    src = fetchegg {
+      name = "srfi-145";
+      version = "0.1";
+      sha256 = "1r4278xhpmm8gww64j6akpyv3qjnn14b6nsisyb9qm7yx3pkpim9";
+    };
+
+    buildInputs = [
+      
+    ];
+  };
+
+  srfi-189 = eggDerivation {
+    name = "srfi-189-0.1";
+
+    src = fetchegg {
+      name = "srfi-189";
+      version = "0.1";
+      sha256 = "1nmrywpi9adi5mm1vcbxxsgw0j3v6m7s4j1mii7icj83xn81cgvx";
+    };
+
+    buildInputs = [
+      r7rs
+      srfi-1
+      srfi-145
     ];
   };
 
