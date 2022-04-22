@@ -2,13 +2,11 @@
 #!nix-shell -I nixpkgs=../../../.. -i python3 -p python3
 
 import base64
-import io
 import json
 import logging
 import subprocess
 import urllib.error
 import urllib.request
-import zipfile
 from operator import itemgetter
 from pathlib import Path
 from typing import List, Dict, Optional, Any, Tuple
@@ -53,22 +51,29 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
     if url == 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension.zip':
         url = 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension_v1BI2FB.zip'
 
-    # Yes, we download that file three times:
+    # Yes, we download that file two times:
 
     # The first time is for the maintainer, so they may have a personal backup to fix potential issues
     # subprocess.run(
     #     ["wget", url], capture_output=True, text=True
     # )
 
-    # The second time, we extract the metadata.json because we need it too
-    with urllib.request.urlopen(url) as response:
-        data = zipfile.ZipFile(io.BytesIO(response.read()), 'r')
-        metadata = base64.b64encode(data.read('metadata.json')).decode()
+    # The second time, we add the file to store
+    process = subprocess.run(
+        ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
+    )
 
-    # The third time is to get the file into the store and to get its hash
-    hash = subprocess.run(
-        ["nix-prefetch-url", "--unpack", url], capture_output=True, text=True
-    ).stdout.strip()
+    lines = process.stdout.splitlines()
+
+    # Get hash from first line of nix-prefetch-url output
+    hash = lines[0].strip()
+
+    # Get path from second line of nix-prefetch-url output
+    path = Path(lines[1].strip())
+
+    # Get metadata.json content from nix-store
+    with open(path / "metadata.json", "r") as out:
+        metadata = base64.b64encode(out.read().encode("ascii")).decode()
 
     return hash, metadata
 
