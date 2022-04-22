@@ -19952,7 +19952,6 @@ with pkgs;
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
-  poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix { lcms = lcms2; };
 
   poppler_gi = lowPrio (poppler.override {
     introspectionSupport = true;
@@ -25321,10 +25320,7 @@ with pkgs;
 
   calibre-web = callPackage ../servers/calibre-web { };
 
-  calligra = libsForQt5.callPackage ../applications/office/calligra {
-    # Must use the same Qt version as Calligra itself:
-    poppler = libsForQt5.poppler_0_61;
-  };
+  calligra = libsForQt5.callPackage ../applications/office/calligra { };
 
   perkeep = callPackage ../applications/misc/perkeep { };
 
