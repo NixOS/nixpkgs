@@ -4,11 +4,14 @@
 , fetchpatch
 , makeWrapper
 , cmake
+, coreutils
 , git
 , davix
 , ftgl
 , gl2ps
 , glew
+, gnugrep
+, gnused
 , gsl
 , lapack
 , libX11
@@ -20,14 +23,18 @@
 , libxcrypt
 , libxml2
 , llvm_9
+, lsof
 , lz4
 , xz
+, man
 , openblas
 , openssl
 , pcre
 , nlohmann_json
 , pkg-config
+, procps
 , python
+, which
 , xxHash
 , zlib
 , zstd
@@ -36,6 +43,9 @@
 , libjpeg
 , libtiff
 , libpng
+, patchRcPathCsh
+, patchRcPathFish
+, patchRcPathPosix
 , tbb
 , Cocoa
 , CoreSymbolication
@@ -93,6 +103,9 @@ stdenv.mkDerivation rec {
     libtiff
     libpng
     nlohmann_json
+    patchRcPathCsh
+    patchRcPathFish
+    patchRcPathPosix
     python.pkgs.numpy
     tbb
   ]
@@ -195,6 +208,45 @@ stdenv.mkDerivation rec {
         --set PYTHONPATH "$out/lib" \
         --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
+
+    # Make ldd and sed available to the ROOT executable
+    wrapProgram "$out/bin/root" --prefix PATH : "${lib.makeBinPath [
+      gnused # sed
+      stdenv.cc # c++ ld etc.
+      stdenv.cc.libc # ldd
+    ]}"
+
+    # Patch thisroot.{sh,csh,fish}
+
+    # The main target of `thisroot.sh` is "bash-like shells",
+    # but it also need to support Bash-less POSIX shell like dash,
+    # as they are mentioned in `thisroot.sh`.
+
+    # `thisroot.sh` would include commands `lsof` and `procps` since ROOT 6.28.
+    # See https://github.com/root-project/root/pull/10332
+
+    patchRcPathPosix "$out/bin/thisroot.sh" "${lib.makeBinPath [
+      coreutils # dirname tail
+      gnugrep # grep
+      gnused # sed
+      lsof # lsof # for ROOT (>=6.28)
+      man # manpath
+      procps # ps # for ROOT (>=6.28)
+      which # which
+    ]}"
+    patchRcPathCsh "$out/bin/thisroot.csh" "${lib.makeBinPath [
+      coreutils
+      gnugrep
+      gnused
+      lsof # lsof # for ROOT (>=6.28)
+      man
+      which
+    ]}"
+    patchRcPathFish "$out/bin/thisroot.fish" "${lib.makeBinPath [
+      coreutils
+      man
+      which
+    ]}"
   '';
 
   setupHook = ./setup-hook.sh;
