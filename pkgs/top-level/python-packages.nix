@@ -8321,6 +8321,8 @@ in {
 
   python-packer = callPackage ../development/python-modules/python-packer { };
 
+  python-pae = callPackage ../development/python-modules/python-pae { };
+
   python-pam = callPackage ../development/python-modules/python-pam {
     inherit (pkgs) pam;
   };
