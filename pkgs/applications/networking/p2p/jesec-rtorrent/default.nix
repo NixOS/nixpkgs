@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jesec-rtorrent";
-  version = "0.9.8-r15";
+  version = "0.9.8-r16";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "rtorrent";
     rev = "v${version}";
-    hash = "sha256-yYOw8wsiQd478JijLgPtEWsw2/ewd46re+t9D705rmk=";
+    hash = "sha256-i7c1jSawHshj1kaXl8tdpelIKU24okeg9K5/+ht6t2k=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional (!jsonRpcSupport) "-DUSE_JSONRPC=NO"
   ++ lib.optional (!xmlRpcSupport) "-DUSE_XMLRPC=NO";
 
-
   doCheck = true;
+
   checkInputs = [
     gtest
   ];
