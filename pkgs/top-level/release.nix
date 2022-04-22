@@ -13,6 +13,7 @@
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
 , limitedSupportedSystems ? [ "i686-linux" ]
+, limitedSupportedExtraConfigs ? [ "aarch64-unknown-linux-musl" "x86_64-unknown-linux-musl" ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -24,7 +25,8 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; 
 let
 
   systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
-  platformsWithAnySupport = map lib.systems.elaborate systemsWithAnySupport;
+  platformsWithAnySupport = map lib.systems.elaborate
+    (systemsWithAnySupport ++ limitedSupportedExtraConfigs);
 
   supportDarwin = lib.genAttrs [
     "x86_64"
