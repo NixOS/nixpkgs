@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     (boost.override { enablePython = usePython; python = python3; })
-    gmp mpfr libedit python3 gnused
-  ];
+    gmp mpfr libedit gnused
+  ] ++ lib.optional usePython python3;
 
   nativeBuildInputs = [ cmake texinfo ];
 
