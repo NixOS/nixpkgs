@@ -6,6 +6,7 @@
 , stdenv
 , pkg-config
 , gnutls
+, p11-kit
 , openssl
 , useOpenSSL ? false
 , gmp
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ gmp libxml2 stoken zlib (if useOpenSSL then openssl else gnutls) ]
-    ++ lib.optional stdenv.isDarwin PCSC;
+    ++ lib.optional stdenv.isDarwin PCSC
+    ++ lib.optional stdenv.isLinux p11-kit;
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   meta = with lib; {
