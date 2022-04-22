@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, bat
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
 , getconf
@@ -33,7 +33,7 @@ let
     };
 
     # bat needs to be in the PATH during building so EXECUTABLE_BAT picks it up
-    nativeBuildInputs = [ bash bat ];
+    nativeBuildInputs = [ bat ];
 
     dontConfigure = true;
 
@@ -93,7 +93,7 @@ let
 
       src = core;
 
-      nativeBuildInputs = [ bash makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       # Make the dependencies available to the tests.
       buildInputs = dependencies;
 

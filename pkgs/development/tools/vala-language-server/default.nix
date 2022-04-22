@@ -6,7 +6,6 @@
 , pkg-config
 , scdoc
 , gnome-builder
-, gnused
 , glib
 , libgee
 , json-glib
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     pkg-config
     scdoc
     # GNOME Builder Plugin
-    gnused
     gnome-builder
   ];
 

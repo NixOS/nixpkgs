@@ -7,7 +7,7 @@
 # Native build inputs:
 , ninja, pkg-config
 , python3, perl
-, gnutar, which
+, which
 , llvmPackages
 # postPatch:
 , pkgsBuildHost
@@ -133,7 +133,7 @@ let
     nativeBuildInputs = [
       ninja pkg-config
       python3WithPackages perl
-      gnutar which
+      which
       llvmPackages.bintools
     ];
 

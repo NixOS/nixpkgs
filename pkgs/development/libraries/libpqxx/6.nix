@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2, gnused }:
+{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "libpqxx";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0djmjr2b5x5nd2a4idv5j8s6w0kdmvil910iv1kyc7x94dirbrni";
   };
 
-  nativeBuildInputs = [ gnused python2 ];
+  nativeBuildInputs = [ python2 ];
   buildInputs = [ postgresql doxygen xmlto ];
 
   preConfigure = ''
