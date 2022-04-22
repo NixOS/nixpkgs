@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  doCheck = true;
+  # Disabled because a test is flaky; see https://github.com/jesec/libtorrent/issues/4.
+  # doCheck = true;
 
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
