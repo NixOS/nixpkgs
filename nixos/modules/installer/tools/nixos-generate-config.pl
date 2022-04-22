@@ -116,8 +116,8 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 
-push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault (config.hardware.enableRedistributableFirmware || config.hardware.enableAllFirmware);" if cpuManufacturer "AuthenticAMD";
-push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault (config.hardware.enableRedistributableFirmware || config.hardware.enableAllFirmware);" if cpuManufacturer "GenuineIntel";
+push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
 
 
 # Look at the PCI devices and add necessary modules.  Note that most
