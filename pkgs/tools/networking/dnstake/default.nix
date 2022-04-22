@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "dnstake";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "pwnesia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XfZDRu1UrH5nVh1GQCQVaEamKorWSOxQZs556iDqfS8=";
+    sha256 = "sha256-k6j7DIwK8YAKmEjn8JJO7XBcap9ui6cgUSJG7CeHAAM=";
   };
 
   vendorSha256 = "sha256-l3IKvcO10C+PVDX962tFWny7eMNC48ATIVqiHjpVH/Y=";
