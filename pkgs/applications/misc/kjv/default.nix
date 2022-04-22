@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     description = "The Bible, King James Version";
     homepage = "https://github.com/bontibon/kjv";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ jtobin samuelgrf ];
+    maintainers = with maintainers; [ jtobin ];
     mainProgram = "kjv";
   };
 }
