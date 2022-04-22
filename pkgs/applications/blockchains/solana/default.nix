@@ -10,18 +10,22 @@
 , zlib
 , protobuf
 }:
+let
+  pinData = lib.importJSON ./pin.json;
+  version = pinData.version;
+  sha256 = pinData.sha256;
+  cargoSha256 = pinData.cargoSha256;
+in
 rustPlatform.buildRustPackage rec {
   pname = "solana-testnet-cli";
-  version = "1.9.2";
+  inherit version cargoSha256;
 
   src = fetchFromGitHub {
     owner = "solana-labs";
     repo = "solana";
     rev = "v${version}";
-    sha256 = "sha256-wrv35vBohLztMZPb6gfZdCaXcjj/Y7vnQqINaI6dBM4=";
+    inherit sha256;
   };
-
-  cargoSha256 = "sha256-A5uVa+cRmrkVyw7MFH4QAr0VIFi18wcc2VPFvQyT9EM=";
 
   buildAndTestSubdir = "cli";
 
@@ -53,4 +57,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ happysalada ];
     platforms = platforms.unix;
   };
+  passthru.updateScript = ./update.sh;
 }

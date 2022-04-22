@@ -2,7 +2,7 @@
 
 let
   pname = "phe";
-  version = "1.4.0";
+  version = "1.5.0";
 in
 
 buildPythonPackage {
@@ -13,7 +13,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wzlk7d24kp0f5kpm0kvvc88mm42144f5cg9pcpb1dsfha75qy5m";
+    sha256 = "sha256-mS+3CR0kJ/DZczlG+PNQrN1NHQEgV/Kq02S6eflwM5w=";
   };
 
   buildInputs = [ click gmpy2 numpy ];
