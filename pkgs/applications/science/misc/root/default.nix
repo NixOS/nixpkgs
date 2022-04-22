@@ -8,6 +8,8 @@
 , ftgl
 , gl2ps
 , glew
+, gnugrep
+, gnused
 , gsl
 , lapack
 , libX11
@@ -20,11 +22,14 @@
 , llvm_9
 , lz4
 , xz
+, man
 , openblas
 , pcre
 , nlohmann_json
 , pkg-config
+, procps
 , python
+, which
 , xxHash
 , zlib
 , zstd
@@ -33,6 +38,9 @@
 , libjpeg
 , libtiff
 , libpng
+, patchSourcetimePathCsh
+, patchSourcetimePathFish
+, patchSourcetimePathPosix
 , tbb
 , Cocoa
 , CoreSymbolication
@@ -85,6 +93,9 @@ stdenv.mkDerivation rec {
     libtiff
     libpng
     nlohmann_json
+    patchSourcetimePathCsh
+    patchSourcetimePathFish
+    patchSourcetimePathPosix
     python.pkgs.numpy
     tbb
   ]
@@ -185,6 +196,15 @@ stdenv.mkDerivation rec {
         --set PYTHONPATH "$out/lib" \
         --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
+
+    # Make ldd and sed available to the ROOT executable
+    wrapProgram "$out/bin/root" --prefix PATH : "${lib.makeBinPath [ gnused stdenv.cc.libc ]}"
+
+    # Patch thisroot.{sh,csh,fish} setxrd.{sh,csh}
+    patchSourcetimePathPosix "$out/bin/thisroot.sh" "${lib.makeBinPath [ gnugrep gnused man procps which ]}"
+    patchSourcetimePathCsh "$out/bin/thisroot.csh" "${lib.makeBinPath [ gnugrep gnused man which ]}"
+    patchSourcetimePathFish "$out/bin/thisroot.fish" "${lib.makeBinPath [ man which]}"
+    patchSourcetimePathPosix "$out/bin/setxrd.sh" "${lib.makeBinPath [ gnused man which ]}"
   '';
 
   setupHook = ./setup-hook.sh;
