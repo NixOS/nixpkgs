@@ -1343,6 +1343,8 @@ with pkgs;
 
   retrofe = callPackage ../applications/emulators/retrofe { };
 
+  ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
+
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
   ruffle = callPackage ../applications/emulators/ruffle { };
