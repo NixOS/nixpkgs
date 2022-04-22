@@ -9786,6 +9786,8 @@ in {
 
   stringcase = callPackage ../development/python-modules/stringcase { };
 
+  stringly = callPackage ../development/python-modules/stringly { };
+
   stripe = callPackage ../development/python-modules/stripe { };
 
   striprtf = callPackage ../development/python-modules/striprtf { };
