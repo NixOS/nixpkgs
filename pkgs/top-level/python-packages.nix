@@ -1555,6 +1555,8 @@ in {
 
   certipy = callPackage ../development/python-modules/certipy { };
 
+  certomancer = callPackage ../development/python-modules/certomancer { };
+
   certvalidator = callPackage ../development/python-modules/certvalidator { };
 
   cffi = callPackage ../development/python-modules/cffi { };
