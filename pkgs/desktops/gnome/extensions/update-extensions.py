@@ -21,7 +21,7 @@ supported_versions = {
     "42": "42",
 }
 
-# Some type alias to increase readility of complex compound types
+# Some type alias to increase readability of complex compound types
 PackageName = str
 ShellVersion = str
 Uuid = str
@@ -52,7 +52,7 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
 
     # Yes, we download that file three times:
 
-    # The first time is for the maintainter, so they may have a personal backup to fix potential issues
+    # The first time is for the maintainer, so they may have a personal backup to fix potential issues
     # subprocess.run(
     #     ["wget", url], capture_output=True, text=True
     # )
@@ -116,7 +116,7 @@ def generate_extension_versions(
             "version": str(extension_version),
             "sha256": sha256,
             # The downloads are impure, their metadata.json may change at any time.
-            # Thus, be back it up / pin it to remain deterministic
+            # Thus, we back it up / pin it to remain deterministic
             # Upstream issue: https://gitlab.gnome.org/Infrastructure/extensions-web/-/issues/137
             "metadata": metadata,
         }
@@ -153,7 +153,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                    Don't make any assumptions on it, and treat it like an opaque string!
             "link" follows the following schema: "/extension/$number/$string/"
                    The number is monotonically increasing and unique to every extension.
-                   The string is usually derived from the extensions's name (but shortened, kebab-cased and URL friendly).
+                   The string is usually derived from the extension name (but shortened, kebab-cased and URL friendly).
                    It may diverge from the actual name.
             The keys of "shell_version_map" are GNOME Shell version numbers.
 
