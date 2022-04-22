@@ -24128,8 +24128,6 @@ with pkgs;
 
   gsettings-desktop-schemas = callPackage ../development/libraries/gsettings-desktop-schemas { };
 
-  gnome-breeze = callPackage ../data/themes/gnome-breeze { };
-
   gnome-icon-theme = callPackage ../data/icons/gnome-icon-theme { };
 
   go-font = callPackage ../data/fonts/go-font { };
