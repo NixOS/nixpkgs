@@ -1,16 +1,16 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../.. -i python3 -p python3
 
-import json
-import urllib.request
-import urllib.error
-from typing import List, Dict, Optional, Any, Tuple
-import logging
-from operator import itemgetter
-import subprocess
-import zipfile
-import io
 import base64
+import io
+import json
+import logging
+import subprocess
+import urllib.error
+import urllib.request
+import zipfile
+from operator import itemgetter
+from typing import List, Dict, Optional, Any, Tuple
 
 # We don't want all those deprecated legacy extensions
 # Group extensions by GNOME "major" version for compatibility reasons
@@ -21,13 +21,11 @@ supported_versions = {
     "42": "42",
 }
 
-
 # Some type alias to increase readility of complex compound types
 PackageName = str
 ShellVersion = str
 Uuid = str
 ExtensionVersion = int
-
 
 # Keep track of all names that have been used till now to detect collisions.
 # This works because we deterministically process all extensions in historical order
@@ -69,7 +67,7 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
 
 
 def generate_extension_versions(
-    extension_version_map: Dict[ShellVersion, ExtensionVersion], uuid: str
+        extension_version_map: Dict[ShellVersion, ExtensionVersion], uuid: str
 ) -> Dict[ShellVersion, Dict[str, str]]:
     """
     Takes in a mapping from shell versions to extension versions and transforms it the way we need it:
@@ -127,7 +125,7 @@ def pname_from_url(url: str) -> Tuple[str, str]:
     """
 
     url = url.split("/")  # type: ignore
-    return (url[3], url[2])
+    return url[3], url[2]
 
 
 def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -225,7 +223,7 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
         logging.info("Scraping page " + str(page))
         try:
             with urllib.request.urlopen(
-                f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
+                    f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
             ) as response:
                 data = json.loads(response.read().decode())["extensions"]
                 responseLength = len(data)
