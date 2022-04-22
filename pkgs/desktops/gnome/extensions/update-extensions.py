@@ -275,10 +275,6 @@ if __name__ == "__main__":
             processed_extensions.append(processed_extension)
             logging.debug(f"Processed {num + 1} / {len(raw_extensions)}")
 
-    logging.info(
-        f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
-    )
-
     with open(updater_dir_path / "extensions.json", "w") as out:
         # Manually pretty-print the outer level, but then do one compact line per extension
         # This allows for the diffs to be manageable (one line of change per extension) despite their quantity
@@ -291,13 +287,14 @@ if __name__ == "__main__":
             out.write("\n")
         out.write("]\n")
 
+    logging.info(
+        f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
+    )
+
     with open(updater_dir_path / "extensions.json", "r") as out:
         # Check that the generated file actually is valid JSON, just to be sure
         json.load(out)
 
-    logging.info(
-        "Done. Writing name collisions to collisions.json (please check manually)"
-    )
     with open(updater_dir_path / "collisions.json", "w") as out:
         # Filter out those that are not duplicates
         package_name_registry_filtered: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {
@@ -309,3 +306,7 @@ if __name__ == "__main__":
         }
         json.dump(package_name_registry_filtered, out, indent=2, ensure_ascii=False)
         out.write("\n")
+
+    logging.info(
+        "Done. Writing name collisions to collisions.json (please check manually)"
+    )
