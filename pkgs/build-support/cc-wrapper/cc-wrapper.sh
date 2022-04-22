@@ -122,10 +122,10 @@ fi
 
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
-        NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
+        NIX_CFLAGS_COMPILE_@suffixSalt@="$NIX_CXXSTDLIB_COMPILE_@suffixSalt@ $NIX_CFLAGS_COMPILE_@suffixSalt@"
     fi
     if [[ "$cxxLibrary" = 1 ]]; then
-        NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
+        NIX_CFLAGS_LINK_@suffixSalt@="$NIX_CXXSTDLIB_LINK_@suffixSalt@ $NIX_CFLAGS_LINK_@suffixSalt@"
     fi
 fi
 
