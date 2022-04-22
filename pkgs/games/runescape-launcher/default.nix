@@ -12,7 +12,7 @@ let
 
     src = fetchurl {
       url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
-      sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
+      sha256 = "12d9nmzkipsms6nyrkbncgpjwngkg6lfj68qc5mxdrb81ns4zsp3";
     };
 
     nativeBuildInputs = [
