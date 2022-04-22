@@ -790,6 +790,7 @@ let
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
         (assertOnlyFields [
+          "ServerAddress"
           "PoolOffset"
           "PoolSize"
           "DefaultLeaseTimeSec"
