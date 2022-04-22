@@ -9,27 +9,31 @@
 
 stdenv.mkDerivation rec {
   pname = "jesec-libtorrent";
-  version = "0.13.8-r3";
+  version = "0.13.8-r4";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "libtorrent";
     rev = "v${version}";
-    hash = "sha256-S3DOKzXkvU+ZJxfrxwLXCVBnepzmiZ+3iiQqz084BEk=";
+    hash = "sha256-jC/hgGSi2qy+ToZgdxl1PhASLYbUL0O8trX0th2v5H0=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
+
   buildInputs = [
     openssl
     zlib
   ];
 
-  doCheck = true;
+  # Disabled because a test is flaky; see https://github.com/jesec/libtorrent/issues/4.
+  # doCheck = true;
+
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
+
   checkInputs = [
     gtest
   ];
