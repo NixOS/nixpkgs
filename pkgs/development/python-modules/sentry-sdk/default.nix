@@ -137,10 +137,10 @@ buildPythonPackage rec {
     "tests/integrations/pyramid/test_pyramid.py"
   ]
   # test crashes on aarch64
-  ++ (if stdenv.buildPlatform != "x86_64-linux" then [
+  ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
     "tests/test_transport.py"
     "tests/integrations/threading/test_threading.py"
-  ] else [ ]);
+  ];
 
   pythonImportsCheck = [
     "sentry_sdk"
