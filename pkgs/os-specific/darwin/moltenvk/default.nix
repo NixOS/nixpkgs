@@ -192,6 +192,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/KhronosGroup/MoltenVK";
     changelog = "https://github.com/KhronosGroup/MoltenVK/releases";
     maintainers = [ lib.maintainers.reckenrode ];
+    hydraPlatforms = [ ]; # Prevent building on Hydra until MoltenVK no longer requires Xcode.
     license = lib.licenses.asl20;
     platforms = lib.platforms.darwin;
   };
