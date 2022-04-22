@@ -24861,6 +24861,8 @@ with pkgs;
 
   theme-vertex = callPackage ../data/themes/vertex { };
 
+  tibetan-machine = callPackage ../data/fonts/tibetan-machine { };
+
   times-newer-roman = callPackage ../data/fonts/times-newer-roman { };
 
   tipa = callPackage ../data/fonts/tipa { };
