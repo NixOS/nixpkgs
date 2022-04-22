@@ -2747,6 +2747,8 @@ with pkgs;
 
   waypoint = callPackage ../applications/networking/cluster/waypoint { };
 
+  weblate = callPackage ../servers/web-apps/weblate { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   gomobile = callPackage ../development/mobile/gomobile { };

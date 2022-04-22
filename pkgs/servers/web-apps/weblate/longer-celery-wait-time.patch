@@ -1,0 +1,16 @@
+diff --git a/weblate/utils/checks.py b/weblate/utils/checks.py
+index 3b97c8849c..af4ec1f1c6 100644
+--- a/weblate/utils/checks.py
++++ b/weblate/utils/checks.py
+@@ -254,7 +254,10 @@ def check_celery(app_configs, **kwargs):
+     heartbeat = cache.get("celery_heartbeat")
+     loaded = cache.get("celery_loaded")
+     now = time.monotonic()
+-    if loaded and now - loaded > 60 and (not heartbeat or now - heartbeat > 600):
++    print(f"heartbeat: {heartbeat}")
++    print(f"loaded: {loaded}")
++    print(f"now: {now}")
++    if loaded and now - loaded > 240 and (not heartbeat or now - heartbeat > 600):
+         errors.append(
+             weblate_check(
+                 "weblate.C030",
