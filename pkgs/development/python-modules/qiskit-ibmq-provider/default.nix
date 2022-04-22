@@ -40,15 +40,15 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.19.0";
+  version = "0.19.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-ODu8OgGpzlMjRX7ebMu4DXKj6jUyohCq4Hb8aV5eWIU=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-VdGdaOxCwD2Qa0JCCDVZJtcjhmTssS/KgpcjoaPXYB8=";
   };
 
   propagatedBuildInputs = [
