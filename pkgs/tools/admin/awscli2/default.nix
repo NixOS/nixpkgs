@@ -52,7 +52,7 @@ with py.pkgs; buildPythonApplication rec {
     rsa
     ruamel-yaml
     wcwidth
-    python-dateutil
+    dateutil
     jmespath
     urllib3
   ];
