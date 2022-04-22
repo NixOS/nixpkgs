@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-43PqIM61MXY35BSprRNPTMyVUEVD15sq4+6PHS/P2o0=";
+    sha256 = "sha256-vEgYmtRAashBRsGDExewqaGsVYF7EJ4ky+cE/PMFW38=";
   };
 
-  cargoSha256 = "sha256-ue93L8pyjKR+bxNdltQcsHSPJ3Iz+4gpeskIhhR2/wI=";
+  cargoSha256 = "sha256-xstcKIXQDk4ngwWSzMueO47U2oFRHAqvvjRnDXFsPE8=";
 
   nativeBuildInputs = [ pkg-config ];
 
