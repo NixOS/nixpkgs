@@ -11,6 +11,7 @@
 , newScope
 , lib
 , fetchurl
+, gcc10Stdenv
 }:
 
 # When adding a kernel:
@@ -493,7 +494,10 @@ in {
 
     linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
 
-    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 { });
+    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
     linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
     linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
