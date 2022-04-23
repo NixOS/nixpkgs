@@ -522,6 +522,29 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
+    globalProfiles = mkEnableOption "global profiles" // {
+      description = ''
+        Makes user-profiles globally available under <literal>nextcloud.tld/u/user.name</literal>.
+        Even though it's enabled by default in Nextcloud, it must be explicitly enabled
+        here because it has the side-effect that personal information is even accessible to
+        unauthenticated users by default.
+
+        By default, the following properties are set to <quote>Show to everyone</quote>
+        if this flag is enabled:
+        <itemizedlist>
+        <listitem><para>About</para></listitem>
+        <listitem><para>Full name</para></listitem>
+        <listitem><para>Headline</para></listitem>
+        <listitem><para>Organisation</para></listitem>
+        <listitem><para>Profile picture</para></listitem>
+        <listitem><para>Role</para></listitem>
+        <listitem><para>Twitter</para></listitem>
+        <listitem><para>Website</para></listitem>
+        </itemizedlist>
+
+        Only has an effect in Nextcloud 23 and later.
+      '';
+    };
 
     nginx.recommendedHttpHeaders = mkOption {
       type = types.bool;
@@ -650,6 +673,8 @@ in {
               if x == null then "false"
               else boolToString x;
 
+          nextcloudGreaterOrEqualThan = req: versionAtLeast cfg.package.version req;
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
             ${optionalString requiresReadSecretFunction ''
@@ -689,6 +714,7 @@ in {
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles}"}
               ${objectstoreConfig}
             ];
           '';
