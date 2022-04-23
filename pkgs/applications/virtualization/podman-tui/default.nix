@@ -6,7 +6,7 @@
 , gpgme
 , libassuan
 , lvm2
-, testVersion
+, testers
 , podman-tui
 }:
 buildGoModule rec {
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = podman-tui;
     command = "podman-tui version";
     version = "v${version}";

@@ -4,7 +4,7 @@
 , libkrb5
 , git
 , installShellFiles
-, testVersion
+, testers
 , openshift
 }:
 
@@ -52,7 +52,7 @@ buildGoModule rec {
     installShellCompletion --zsh contrib/completions/zsh/*
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = openshift;
     command = "oc version";
     version = "v${version}";

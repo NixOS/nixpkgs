@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , protobuf
 , git
-, testVersion
+, testers
 , buf
 , installShellFiles
 }:
@@ -70,7 +70,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = buf; };
 
   meta = with lib; {
     homepage = "https://buf.build";
