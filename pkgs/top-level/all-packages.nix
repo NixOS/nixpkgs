@@ -8651,6 +8651,8 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
 
+  nickel = callPackage ../development/interpreters/nickel { };
+
   npiet = callPackage ../development/interpreters/npiet { };
 
   npth = callPackage ../development/libraries/npth {};
@@ -13266,7 +13268,7 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_11.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_11.libraries or llvmPackages_11.libraries;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
 
@@ -13274,7 +13276,7 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_12.libraries or llvmPackages_12.libraries;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
 
@@ -13282,7 +13284,7 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_13.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
 
@@ -13290,7 +13292,7 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_14.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_14.libraries or llvmPackages_14.libraries;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
 
@@ -17159,6 +17161,7 @@ with pkgs;
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
+    libraw = libraw_0_20;
   };
 
   gensio = callPackage ../development/libraries/gensio {};
@@ -23138,6 +23141,7 @@ with pkgs;
   };
 
   libraw = callPackage ../development/libraries/libraw { };
+  libraw_0_20 = callPackage ../development/libraries/libraw/0_20.nix { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
