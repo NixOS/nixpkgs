@@ -377,6 +377,8 @@ with pkgs;
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
+
   evans = callPackage ../development/tools/evans { };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
