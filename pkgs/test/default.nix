@@ -51,6 +51,8 @@ with pkgs;
 
   php = recurseIntoAttrs (callPackages ./php {});
 
+  pkg-configPackages = callPackage ./pkg-config-packages.nix { };
+
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
