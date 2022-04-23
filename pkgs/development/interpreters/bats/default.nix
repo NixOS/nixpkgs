@@ -103,22 +103,33 @@ resholve.mkDerivation rec {
     };
   };
 
-  inherit doInstallCheck;
-  installCheckInputs = [
-    ncurses
-    parallel # skips some tests if it can't detect
-    flock # skips some tests if it can't detect
-    ps
-  ] ++ lib.optionals stdenv.isDarwin [ lsof ];
-  installCheckPhase = ''
-    # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
-    sed -i '/test works even if PATH is reset/a skip' test/bats.bats
+  passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
+    name = "${bats.name}-tests";
+    installCheckInputs = [
+      ncurses
+      parallel # skips some tests if it can't detect
+      flock # skips some tests if it can't detect
+      ps
+    ] ++ lib.optionals stdenv.isDarwin [ lsof ];
+    inherit doInstallCheck;
+    installCheckPhase = ''
+      # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
+      sed -i '/test works even if PATH is reset/a skip "disabled for nix build"' test/bats.bats
+      # TODO: cut when https://github.com/bats-core/bats-core/pull/554 allows
+      substituteInPlace test/parallel.bats --replace '&& type -p shlock' '|| type -p shlock'
 
-    # test generates file with absolute shebang dynamically
-    substituteInPlace test/install.bats --replace \
-      "/usr/bin/env bash" "${bash}/bin/bash"
-    bin/bats test
-  '';
+      # skip tests that assume bats `install.sh` will be in BATS_ROOT
+      rm test/root.bats
+
+      # test generates file with absolute shebang dynamically
+      substituteInPlace test/install.bats --replace \
+        "/usr/bin/env bash" "${bash}/bin/bash"
+
+      ${bats}/bin/bats test
+      rm -rf $out
+      touch $out
+    '';
+  });
 
   meta = with lib; {
     homepage = "https://github.com/bats-core/bats-core";
