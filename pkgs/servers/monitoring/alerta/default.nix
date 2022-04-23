@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pyjwt
     pymongo
+    pyparsing
     python-dateutil
     pytz
     pyyaml
@@ -29,13 +30,17 @@ python3.pkgs.buildPythonApplication rec {
     sentry-sdk
   ];
 
-  doCheck = false; # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+  doCheck = false;
 
-  disabled = python3.pythonOlder "3.6";
+  pythonImportsCheck = [
+    "alerta"
+  ];
 
   meta = with lib; {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }
