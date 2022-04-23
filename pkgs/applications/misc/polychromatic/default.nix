@@ -13,7 +13,7 @@
 , sassc
 , ibus
 , usbutils
-, xorg
+, libxcb
 , python3Packages
 , gobject-introspection
 , gtk3
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-H++kQ3Fxw56avEsSE1ctu5p0s50s0eQ+jL5zXS3AA94=";
   };
 
-  postPatch = ''
+  preConfigure = ''
     patchShebangs scripts
 
     substituteInPlace scripts/build-styles.sh \
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    xorg.libxcb
+    libxcb
     colour
     colorama
     setproctitle
@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator-gtk3
   ];
 
-  nativePropagatedBuildInputs = [
+  propagatedNativeBuildInputs = [
     gobject-introspection
     gtk3
     gdk-pixbuf
