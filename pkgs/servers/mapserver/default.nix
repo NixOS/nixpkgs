@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
 , libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python2
+, withPython ? true, swig, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional withPython swig;
+  ] ++ lib.optional withPython [ swig python3.pkgs.setuptools ];
 
   buildInputs = [
     cairo
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     proj
     protobufc
     zlib
-  ] ++ lib.optional withPython python2;
+  ] ++ lib.optional withPython python3;
 
   cmakeFlags = [
     "-DWITH_KML=ON"
