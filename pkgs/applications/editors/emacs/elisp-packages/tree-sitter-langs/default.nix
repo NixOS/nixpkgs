@@ -10,14 +10,15 @@
 
 let
   version = "0.10.14";
-  tree-sitter-grammars = stdenv.mkDerivation rec {
+
+  tree-sitter-grammars = stdenv.mkDerivation {
     name = "tree-sitter-grammars";
 
     inherit version;
 
-    src = fetchzip {
+    src = fetchzip rec {
       name = "tree-sitter-grammars-linux-${version}.tar.gz";
-      url = "https://github.com/emacs-tree-sitter/tree-sitter-langs/releases/download/${version}/${src.name}";
+      url = "https://github.com/emacs-tree-sitter/tree-sitter-langs/releases/download/${version}/${name}";
       sha256 = "sha256-J8VplZWhyWN8ur74Ep0CTl4nPtESzfs2Gh6MxfY5Zqc=";
       stripRoot = false;
     };
@@ -28,7 +29,8 @@ let
       install -m444 * $out/langs/bin
     '';
   };
-in melpaBuild rec {
+
+in melpaBuild {
   inherit version;
 
   pname = "tree-sitter-langs";

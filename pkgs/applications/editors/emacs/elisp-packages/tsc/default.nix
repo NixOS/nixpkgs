@@ -18,7 +18,7 @@ let
     sha256 = "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=";
   };
 
-  tsc = melpaBuild rec {
+  tsc = melpaBuild {
     inherit src;
     inherit version;
 
