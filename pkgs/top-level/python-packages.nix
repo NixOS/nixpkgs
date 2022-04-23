@@ -4750,6 +4750,11 @@ in {
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
+
+  libsixel = callPackage ../development/python-modules/libsixel {
+    inherit (pkgs) libsixel;
+  };
+
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
     (p:
