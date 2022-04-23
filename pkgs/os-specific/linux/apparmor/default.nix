@@ -107,6 +107,11 @@ let
     postPatch = ''
       cd ./libraries/libapparmor
     '';
+    
+    # -flto-partition=none is not recognized by Clang
+    preConfigure = if (stdenv.cc.isClang or false) then ''
+      grep -lr "\-flto" | xargs sed -i s/\-flto\-partition\=none//
+    '' else "";
 
     # https://gitlab.com/apparmor/apparmor/issues/1
     configureFlags = [
