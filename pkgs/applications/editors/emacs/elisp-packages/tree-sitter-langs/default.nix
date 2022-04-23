@@ -6,52 +6,66 @@
 , stdenv
 , fetchFromGitHub
 , writeText
+, melpaStablePackages
+, runCommand
+, tree-sitter-grammars
 }:
 
 let
-  version = "0.10.14";
 
-  tree-sitter-grammars = stdenv.mkDerivation {
-    name = "tree-sitter-grammars";
+  inherit (melpaStablePackages) tree-sitter-langs;
 
-    inherit version;
+  # Note: Commented grammars are in upstream bundle but missing from our packaged grammars
+  grammars = [
+    "agda"
+    "bash"
+    "c"
+    "c-sharp"
+    "cpp"
+    "css"
+    # "d"
+    "elixir"
+    "elm"
+    "fluent"
+    "go"
+    "haskell"
+    "hcl"
+    "html"
+    # "janet-simple"
+    "java"
+    "javascript"
+    "jsdoc"
+    "json"
+    "julia"
+    "nix"
+    "ocaml"
+    "ocaml-interface"
+    # "pgn"
+    "php"
+    "prisma"
+    "python"
+    "ruby"
+    "rust"
+    "scala"
+    "swift"
+    "tsx"
+    "typescript"
+    "verilog"
+    "zig"
+  ];
 
-    src = fetchzip rec {
-      name = "tree-sitter-grammars-linux-${version}.tar.gz";
-      url = "https://github.com/emacs-tree-sitter/tree-sitter-langs/releases/download/${version}/${name}";
-      sha256 = "sha256-J8VplZWhyWN8ur74Ep0CTl4nPtESzfs2Gh6MxfY5Zqc=";
-      stripRoot = false;
-    };
+  grammarDir = runCommand "emacs-tree-sitter-grammars" {
+    # Fake same version number as upstream language bundle to prevent triggering downloads
+    inherit (tree-sitter-langs) version;
+  } (''
+    install -d $out/langs/bin
+    echo -n $version > $out/langs/bin/BUNDLE-VERSION
+  '' + lib.concatStringsSep "\n" (map (g: "ln -s ${tree-sitter-grammars."tree-sitter-${g}"}/parser $out/langs/bin/${g}.so") grammars));
 
-    installPhase = ''
-      install -d $out/langs/bin
-      echo -n $version > $out/langs/bin/BUNDLE-VERSION
-      install -m444 * $out/langs/bin
-    '';
-  };
-
-in melpaBuild {
-  inherit version;
-
-  pname = "tree-sitter-langs";
-  commit = version;
-
-  src = fetchFromGitHub {
-    owner = "emacs-tree-sitter";
-    repo = "tree-sitter-langs";
-    rev = version;
-    sha256 = "sha256-uKfkhcm1k2Ov4fSr7ALVnpQoX/l9ssEWMn761pa7Y/c=";
-  };
-
-  recipe = writeText "recipe" ''
-    (tree-sitter-langs
-    :repo "emacs-tree-sitter/tree-sitter-langs"
-    :fetcher github
-    :files (:defaults "queries"))
-  '';
-
-  postPatch = ''
+in
+melpaStablePackages.tree-sitter-langs.overrideAttrs(old: {
+  postPatch = old.postPatch or "" + ''
     substituteInPlace ./tree-sitter-langs-build.el \
-    --replace "tree-sitter-langs-grammar-dir tree-sitter-langs--dir"  "tree-sitter-langs-grammar-dir \"${tree-sitter-grammars}/langs\""
+    --replace "tree-sitter-langs-grammar-dir tree-sitter-langs--dir"  "tree-sitter-langs-grammar-dir \"${grammarDir}/langs\""
   '';
-}
+})
