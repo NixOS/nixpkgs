@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/mikalstill/pngtools";
     description = "PNG manipulation tools";
     maintainers = with maintainers; [ zendo ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }
