@@ -7,9 +7,6 @@
 , clang
 , llvmPackages
 }:
-with lib.licenses;
-with rustPlatform;
-with llvmPackages;
 
 let
   version = "0.16.1";
@@ -37,7 +34,7 @@ let
     '';
   };
 
-  tsc-dyn = buildRustPackage {
+  tsc-dyn = rustPlatform.buildRustPackage {
     inherit version;
     inherit src;
 
@@ -47,7 +44,7 @@ let
     sourceRoot = "source/core";
 
     configurePhase = ''
-      export LIBCLANG_PATH="${libclang.lib}/lib"
+      export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
     '';
 
     postInstall = ''
@@ -61,13 +58,14 @@ let
 
     cargoSha256 = "sha256-7UOhs3wx6fGvqPjNxUKoEHwPtiJ5zgLFPwDSvhYlmis=";
   };
+
 in symlinkJoin {
-  name = "tsc";
+  name = "tsc-${version}";
   paths = [ tsc tsc-dyn ];
 
   meta = {
     description = "The core APIs of the Emacs binding for tree-sitter.";
-    license = mit;
-    maintainers = with maintainers; [ pimeys ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pimeys ];
   };
 }
