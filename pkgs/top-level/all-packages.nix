@@ -31861,6 +31861,8 @@ with pkgs;
 
   prboom = callPackage ../games/prboom { };
 
+  prboom-plus = callPackage ../games/prboom-plus { };
+
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
   qqwing = callPackage ../games/qqwing { };
