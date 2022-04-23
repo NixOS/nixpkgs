@@ -614,18 +614,16 @@ runTests {
       a.b = 1;
       a.c = a;
     in {
-      expr = generators.toPretty { } (generators.withRecursion { throwOnDepthLimit = false; depthLimit = 2; } a);
-      expected = "{\n  b = 1;\n  c = {\n    b = \"<unevaluated>\";\n    c = {\n      b = \"<unevaluated>\";\n      c = \"<unevaluated>\";\n    };\n  };\n}";
-    };
-
-  testToPrettyLimitThrow =
-    let
-      a.b = 1;
-      a.c = a;
-    in {
-      expr = (builtins.tryEval
-        (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
-      expected = false;
+      expr = generators.toPretty { maxDepth = 2; } a;
+      expected = ''
+        {
+          b = 1;
+          c = {
+            b = <...>;
+            c = <...>;
+          };
+        }'';
+        # ^ important: toPretty does not include a trailing newline
     };
 
   testToPrettyMultiline = {

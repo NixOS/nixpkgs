@@ -267,6 +267,29 @@ rec {
       in
         mapAny 0;
 
+  /*
+   * Wrap a function enforcing a maximum recursion depth limit.
+   * The function needs to take { recurse, depth, value } as
+   * arguments, and call `recurse nextValue` to recurse
+   * and increment the depth counter properly.
+   *
+   * Mostly useful for limited-depth serializers.
+   */
+  withRecursionLimit = maxDepth: fn:
+    let
+      wrapper = { value, depth }: fn {
+        recurse = value:
+        let
+          newDepth = depth + 1;
+        in
+          if maxDepth == null || newDepth < maxDepth then
+            wrapper { inherit value; depth = newDepth; }
+          else "<...>";
+        inherit value depth;
+      };
+    in
+      v: wrapper { value = v; depth = 0; };
+
   /* Pretty print a value, akin to `builtins.trace`.
     * Should probably be a builtin as well.
     */
@@ -276,11 +299,15 @@ rec {
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
-    multiline ? true
+    multiline ? true,
+    /* Maximum recursion depth to evaluate things */
+    maxDepth ? null
   }@args:
     let
-    go = indent: v: with builtins;
-    let     isPath   = v: typeOf v == "path";
+    go = { recurse, value, depth }: with builtins;
+    let     v          = value;
+            indent     = libStr.repeat depth "  ";
+            isPath     = v: typeOf v == "path";
             introSpace = if multiline then "\n${indent}  " else " ";
             outroSpace = if multiline then "\n${indent}" else " ";
     in if   isInt      v then toString v
@@ -305,7 +332,7 @@ rec {
     else if isList     v then
       if v == [] then "[ ]"
       else "[" + introSpace
-        + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
+        + libStr.concatMapStringsSep introSpace recurse v
         + outroSpace + "]"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -324,10 +351,10 @@ rec {
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+                "${libStr.escapeNixIdentifier name} = ${recurse value};") v)
         + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
-  in go "";
+  in withRecursionLimit maxDepth go;
 
   # PLIST handling
   toPlist = {}: v: let
