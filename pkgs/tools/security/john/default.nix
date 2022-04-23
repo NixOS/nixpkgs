@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
-, gcc, python3Packages, perl, perlPackages, makeWrapper
+, gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
 }:
 
 with lib;
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
     sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc-11-struct-allignment-incompatibility.patch";
+      url = "https://github.com/openwall/john/commit/154ee1156d62dd207aff0052b04c61796a1fde3b.patch";
+      sha256 = "sha256-3rfS2tu/TF+KW2MQiR+bh4w/FVECciTooDQNTHNw31A=";
+    })
+  ];
 
   postPatch = ''
     sed -ri -e '
