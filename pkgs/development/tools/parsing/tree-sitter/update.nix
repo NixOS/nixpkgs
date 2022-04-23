@@ -280,6 +280,10 @@ let
       orga = "uyha";
       repo = "tree-sitter-cmake";
     };
+    "tree-sitter-janet-simple" = {
+      orga = "sogaiu";
+      repo = "tree-sitter-janet-simple";
+    };
     "tree-sitter-json5" = {
       orga = "joakker";
       repo = "tree-sitter-json5";
