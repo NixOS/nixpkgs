@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "geographiclib";
-  version = "1.52";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rEANZyuJVLAwa8qJCwiLuLoqdX3IEzzKC4ePNLM7J0A=";
+    sha256 = "sha256-9/Qchdw+HC09k17IZmDcOyyEjIPhf5qeUbqdUUahWFk=";
   };
 
   checkInputs = [
