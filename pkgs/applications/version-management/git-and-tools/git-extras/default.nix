@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "tj";
     repo = "git-extras";
     rev = version;
-    sha256 = "sha256-mmvDsK+SgBXQSKNKuPt+K4sgtdrtqPx9Df2E3kKLdJM=";
+    sha256 = "sha256-Cn7IXMzgg0QIsNIHz+X14Gkmop0UbsSBlGlGkmg71ek=";
   };
 
   postPatch = ''

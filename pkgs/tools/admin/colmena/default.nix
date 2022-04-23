@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, colmena, testVersion }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, colmena, testers }:
 
 rustPlatform.buildRustPackage rec {
   pname = "colmena";
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     # We guarantee CLI and Nix API stability for the same minor version
     apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
 
-    tests.version = testVersion { package = colmena; };
+    tests.version = testers.testVersion { package = colmena; };
   };
 
   meta = with lib; {

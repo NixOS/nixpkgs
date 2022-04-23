@@ -725,8 +725,8 @@ with pkgs;
 
   installShellFiles = callPackage ../build-support/install-shell-files {};
 
-  # See doc/builders/special/invalidateFetcherByDrvHash.section.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs-invalidateFetcherByDrvHash
+  # See doc/builders/testers.chapter.md or
+  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   invalidateFetcherByDrvHash = f: args:
     let
       drvPath = (f args).drvPath;
@@ -16343,8 +16343,6 @@ with pkgs;
 
   zydis = callPackage ../development/libraries/zydis { };
 
-  winpdb = callPackage ../development/tools/winpdb { };
-
   grabserial = callPackage ../development/tools/grabserial { };
 
   mypy = with python3Packages; toPythonApplication mypy;
@@ -20699,8 +20697,6 @@ with pkgs;
   tcltls = callPackage ../development/libraries/tcltls { };
 
   tclx = callPackage ../development/libraries/tclx { };
-
-  ntdb = callPackage ../development/libraries/ntdb { };
 
   tdb = callPackage ../development/libraries/tdb {};
 

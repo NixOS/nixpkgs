@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , Security
-, testVersion
+, testers
 , igrep
 }:
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   passthru.tests = {
-    version = testVersion { package = igrep; command = "ig --version"; };
+    version = testers.testVersion { package = igrep; command = "ig --version"; };
   };
 
   meta = with lib; {
