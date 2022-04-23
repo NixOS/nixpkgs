@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
-  version = "4.5.0";
+  version = "4.6.0";
 
   disabled = python.pythonOlder "3";
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
     version = version;
-    sha256 = "0ada63rkcvwkakjyx4ay98fjzwx5h55br12ys40ghkc5lbyl0l1r";
+    sha256 = "sha256-IHbPhuhMaqRC7gM0S/91Hq4TPTWhpIkx5vmfFHFhtVs=";
   };
 
   checkInputs = [ pytestCheckHook ];
