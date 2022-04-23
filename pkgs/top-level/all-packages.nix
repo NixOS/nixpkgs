@@ -112,6 +112,8 @@ with pkgs;
 
   tests = callPackages ../test {};
 
+  pkg-configPackages = import ./pkg-config-packages.nix pkgs;
+
   ### Nixpkgs maintainer tools
 
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
