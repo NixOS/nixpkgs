@@ -159,12 +159,7 @@ in {
       ];
     };
 
-    linux_5_16 = callPackage ../os-specific/linux/kernel/linux-5.16.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
+    linux_5_16 = throw "linux 5.16 was removed because it has reached its end of life upstream";
 
     linux_5_17 = callPackage ../os-specific/linux/kernel/linux-5.17.nix {
       kernelPatches = [
@@ -186,7 +181,7 @@ in {
        else testing;
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_5_16;
+      kernel = linux_5_17;
       kernelPatches = kernel.kernelPatches;
    };
 
@@ -472,7 +467,7 @@ in {
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
-    linux_5_16 = recurseIntoAttrs (packagesFor kernels.linux_5_16);
+    linux_5_16 = throw "linux 5.16 was removed because it reached its end of life upstream"; # Added 2022-04-23
     linux_5_17 = recurseIntoAttrs (packagesFor kernels.linux_5_17);
   };
 
