@@ -293,7 +293,7 @@ checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
-checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
+checkConfigOutput '^"a b y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
 
 ## emptyValue's
@@ -326,6 +326,10 @@ checkConfigError 'The option .theOption.nested. in .other.nix. is already declar
 
 # Test that types.optionType leaves types untouched as long as they don't need to be merged
 checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survives-type-merge.nix
+
+# Anonymous submodules don't get nixed by import resolution/deduplication
+# because of an `extendModules` bug, issue 168767.
+checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
 cat <<EOF
 ====== module tests ======
