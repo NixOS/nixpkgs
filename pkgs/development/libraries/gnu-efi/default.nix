@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
     "PREFIX=\${out}"
     "HOSTCC=${buildPackages.stdenv.cc.targetPrefix}cc"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals (!stdenv.cc.isGNU) [
+    # Make unconditional next mass rebuild
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   passthru.updateScript = gitUpdater {
