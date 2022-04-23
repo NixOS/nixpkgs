@@ -105,6 +105,8 @@ let
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
+    camlp-streams = callPackage ../development/ocaml-modules/camlp-streams { };
+
     camlp4 =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/tools/ocaml/camlp4 { }
