@@ -96,8 +96,9 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast version "2.03.15") [
     # fixes paths to and checks for tools
+    # TODO: needs backport to LVM 2.02 used by static/musl
     (substituteAll (let
       optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
     in {
