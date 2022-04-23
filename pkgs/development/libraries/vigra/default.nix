@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , boost
 , cmake
 , fftw
@@ -31,13 +32,21 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
-  # Fixes compilation with clang (on darwin) see https://github.com/ukoethe/vigra/issues/414
-  patches =
-    let clangPatch = fetchurl {
+
+  patches = [
+    # Fixes compilation with clang (on darwin) see https://github.com/ukoethe/vigra/issues/414
+    (fetchpatch {
+      name = "clangPatch";
       url = "https://github.com/ukoethe/vigra/commit/81958d302494e137f98a8b1d7869841532f90388.patch";
-      sha256 = "1i1w6smijgb5z8bg9jaq84ccy00k2sxm87s37lgjpyix901gjlgi";
-    };
-    in [ clangPatch ];
+      hash = "sha256-UtV7cO5lMU1W7viMdcgMocHt7UWobqtA4+ivHztm8bs=";
+    })
+    #Fixes error: C++17 does not allow dynamic exception specifications
+    (fetchpatch {
+      name = "dynamicException";
+      url = "https://github.com/ukoethe/vigra/commit/dc730be49fc8def4304a651fa525e43b7754955e.patch";
+      hash = "sha256-2MFzqQCrdxWiINs4UzwSIVbfcmChawaBOJebtAW8MRA=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
