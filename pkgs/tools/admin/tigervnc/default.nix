@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , xorg, xkeyboard_config, zlib
 , libjpeg_turbo, pixman, fltk
 , cmake, gettext, libtool
@@ -23,11 +23,22 @@ stdenv.mkDerivation rec {
   };
 
 
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/TigerVNC/tigervnc/pull/1383.patch";
+      sha256 = "sha256-r3QLtxVD0wIv2NWVN9r0LVxSlLurDHgkAZfkpIjmZyU=";
+      name = "Xvnc-support-Xorg-1.21-PR1383.patch";
+    })
+  ];
+
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
     substituteInPlace vncviewer/vncviewer.cxx \
        --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
+
+    cp unix/xserver21.1.1.patch unix/xserver211.patch
+    source_top="$(pwd)"
   '';
 
   dontUseCmakeBuildDir = true;
@@ -46,7 +57,7 @@ stdenv.mkDerivation rec {
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
     version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).\([0-9]\+\).*/\1\2/g')
-    patch -p1 < ${src}/unix/xserver$version.patch
+    patch -p1 < "$source_top/unix/xserver$version.patch"
     autoreconf -vfi
     ./configure $configureFlags  --disable-devel-docs --disable-docs \
         --disable-xorg --disable-xnest --disable-xvfb --disable-dmx \
