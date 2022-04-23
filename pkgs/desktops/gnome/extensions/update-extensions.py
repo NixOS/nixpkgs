@@ -51,14 +51,7 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
     if url == 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension.zip':
         url = 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension_v1BI2FB.zip'
 
-    # Yes, we download that file two times:
-
-    # The first time is for the maintainer, so they may have a personal backup to fix potential issues
-    # subprocess.run(
-    #     ["wget", url], capture_output=True, text=True
-    # )
-
-    # The second time, we add the file to store
+    # Download extension and add the zip content to nix-store
     process = subprocess.run(
         ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
     )
