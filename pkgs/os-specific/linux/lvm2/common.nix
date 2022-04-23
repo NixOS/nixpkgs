@@ -4,18 +4,19 @@
 , fetchpatch
 , fetchurl
 , pkg-config
-, util-linux
 , coreutils
 , libuuid
 , libaio
 , substituteAll
 , enableCmdlib ? false
 , enableDmeventd ? false
-, udevSupport ? !stdenv.hostPlatform.isStatic, udev ? null
+, udevSupport ? !stdenv.hostPlatform.isStatic, udev
 , onlyLib ? stdenv.hostPlatform.isStatic
-, enableVDO ? false, vdo ? null
-, enableMdadm ? false, mdadm ? null
-, enableMultipath ? false, multipath-tools ? null
+  # Otherwise we have a infinity recursion during static compilation
+, enableUtilLinux ? !stdenv.hostPlatform.isStatic, util-linux
+, enableVDO ? false, vdo
+, enableMdadm ? false, mdadm
+, enableMultipath ? false, multipath-tools
 , nixosTests
 }:
 
@@ -95,14 +96,15 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast version "2.03.15") [
     # fixes paths to and checks for tools
+    # TODO: needs backport to LVM 2.02 used by static/musl
     (substituteAll (let
       optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
     in {
       src = ./fix-blkdeactivate.patch;
       inherit coreutils;
-      util_linux = util-linux;
+      util_linux = optionalTool enableUtilLinux util-linux;
       mdadm = optionalTool enableMdadm mdadm;
       multipath_tools = optionalTool enableMultipath multipath-tools;
       vdo = optionalTool enableVDO vdo;
