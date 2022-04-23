@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   luks = config.boot.initrd.luks;
   kernelPackages = config.boot.kernelPackages;
+  defaultPrio = (mkOptionDefault {}).priority;
 
   commonFunctions = ''
     die() {
@@ -474,6 +475,16 @@ let
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
+  stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: let
+    opts = v.crypttabExtraOpts
+      ++ optional v.allowDiscards "discard"
+      ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
+      ++ optional (v.header != null) "header=${v.header}"
+      ++ optional (v.keyFileOffset != null) "keyfile-offset=${v.keyFileOffset}"
+      ++ optional (v.keyFileSize != null) "keyfile-size=${v.keyFileSize}"
+    ;
+  in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
+
 in
 {
   imports = [
@@ -802,6 +813,18 @@ in
               Commands that should be run right after we have mounted our LUKS device.
             '';
           };
+
+          crypttabExtraOpts = mkOption {
+            type = with types; listOf singleLineStr;
+            default = [];
+            example = [ "_netdev" ];
+            visible = false;
+            description = ''
+              Only used with systemd stage 1.
+
+              Extra options to append to the last column of the generated crypttab file.
+            '';
+          };
         };
       }));
     };
@@ -853,6 +876,31 @@ in
                       -> versionAtLeast kernelPackages.kernel.version "5.9";
           message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
         }
+
+        { assertion = config.boot.initrd.systemd.enable -> all (dev: !dev.fallbackToPassword) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.fallbackToPassword is implied by systemd stage 1.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> options.boot.initrd.luks.reusePassphrases.highestPrio == defaultPrio;
+          message = "boot.initrd.luks.reusePassphrases has no effect with systemd stage 1.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
+        }
+        # TODO
+        { assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
+          message = "systemd stage 1 does not support GPG smartcards yet.";
+        }
+        # TODO
+        { assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
+          message = "systemd stage 1 does not support FIDO2 yet.";
+        }
+        # TODO
+        { assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
+          message = "systemd stage 1 does not support Yubikeys yet.";
+        }
       ];
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
@@ -867,7 +915,7 @@ in
       ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
 
     # copy the cryptsetup binary and it's dependencies
-    boot.initrd.extraUtilsCommands = ''
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
       copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
@@ -915,7 +963,7 @@ in
       ''}
     '';
 
-    boot.initrd.extraUtilsCommandsTest = ''
+    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
       $out/bin/cryptsetup --version
       ${optionalString luks.yubikeySupport ''
         $out/bin/ykchalresp -V
@@ -932,9 +980,27 @@ in
       ''}
     '';
 
-    boot.initrd.preFailCommands = postCommands;
-    boot.initrd.preLVMCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands;
-    boot.initrd.postDeviceCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands;
+    boot.initrd.systemd = {
+      contents."/etc/crypttab".source = stage1Crypttab;
+
+      extraBin.systemd-cryptsetup = "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup";
+
+      additionalUpstreamUnits = [
+        "cryptsetup-pre.target"
+        "cryptsetup.target"
+        "remote-cryptsetup.target"
+      ];
+      storePaths = [
+        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup"
+      ];
+
+    };
+    # We do this because we need the udev rules from the package
+    boot.initrd.services.lvm.enable = true;
+
+    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) postCommands;
+    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands);
+    boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands);
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };
