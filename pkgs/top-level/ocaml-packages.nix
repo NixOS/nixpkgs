@@ -48,6 +48,8 @@ let
 
     atdgen-codec-runtime = callPackage ../development/ocaml-modules/atdgen/codec-runtime.nix { };
 
+    atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
+
     awa = callPackage ../development/ocaml-modules/awa { };
 
     awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { };
