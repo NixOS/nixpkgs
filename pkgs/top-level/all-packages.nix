@@ -30138,6 +30138,8 @@ with pkgs;
 
   vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
 
+  vmware-workstation = callPackage ../applications/virtualization/vmware-workstation { };
+
   vocproc = callPackage ../applications/audio/vocproc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
