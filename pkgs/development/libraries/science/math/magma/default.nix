@@ -1,10 +1,6 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
+{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas, symlinkJoin }:
 
-let
-  inherit (cudaPackages) cudatoolkit;
-in
-
-assert let majorIs = lib.versions.major cudatoolkit.version;
+assert let majorIs = cudaPackages.cudaMajorVersion;
        in majorIs == "9" || majorIs == "10" || majorIs == "11";
 
 let
@@ -37,8 +33,22 @@ let
     ];
   };
 
+  inherit (cudaPackages) cudaMajorVersion;
+  inherit (cudaPackages.cudatoolkit) cc;
+
+  cuda_joined = symlinkJoin {
+    name = "cuda-redist-${cudaPackages.cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_nvcc
+      cuda_cudart # cuda_runtime.h
+      libcublas
+      libcusparse
+      cuda_nvprof # <cuda_profiler_api.h>
+    ];
+  };
+
   capabilityString = lib.strings.concatStringsSep ","
-    cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
+    cudaCapabilities."cuda${cudaMajorVersion}";
 
 in stdenv.mkDerivation {
   pname = "magma";
@@ -51,14 +61,14 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ gfortran cmake ninja ];
 
-  buildInputs = [ cudatoolkit libpthreadstubs lapack blas ];
+  buildInputs = [ libpthreadstubs lapack blas cuda_joined ];
 
   cmakeFlags = [ "-DGPU_TARGET=${capabilityString}" ];
 
   doCheck = false;
 
   preConfigure = ''
-    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
+    export CC=${cc}/bin/gcc CXX=${cc}/bin/g++
   '';
 
   enableParallelBuilding=true;
@@ -73,7 +83,6 @@ in stdenv.mkDerivation {
   };
 
   passthru = {
-    # TODO: leave just cudaPackages
-    inherit cudatoolkit cudaPackages;
+    inherit cudaPackages;
   };
 }
