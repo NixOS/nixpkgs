@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W ignore::FutureWarning"
+    "-W ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
