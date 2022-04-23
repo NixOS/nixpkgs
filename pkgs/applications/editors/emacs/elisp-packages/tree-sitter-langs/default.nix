@@ -12,55 +12,22 @@
 }:
 
 let
-
   inherit (melpaStablePackages) tree-sitter-langs;
 
-  # Note: Commented grammars are in upstream bundle but missing from our packaged grammars
-  grammars = [
-    "agda"
-    "bash"
-    "c"
-    "c-sharp"
-    "cpp"
-    "css"
-    # "d"
-    "elixir"
-    "elm"
-    "fluent"
-    "go"
-    "haskell"
-    "hcl"
-    "html"
-    # "janet-simple"
-    "java"
-    "javascript"
-    "jsdoc"
-    "json"
-    "julia"
-    "nix"
-    "ocaml"
-    "ocaml-interface"
-    # "pgn"
-    "php"
-    "prisma"
-    "python"
-    "ruby"
-    "rust"
-    "scala"
-    "swift"
-    "tsx"
-    "typescript"
-    "verilog"
-    "zig"
-  ];
+  grammars = map (g: tree-sitter-grammars.${g}) (lib.importJSON ./default-grammars.json);
+
+  libSuffix = if stdenv.isDarwin then "dylib" else "so";
+  soName = g: lib.removeSuffix "-grammar" (lib.removePrefix "tree-sitter-" g.pname) + "." + libSuffix;
 
   grammarDir = runCommand "emacs-tree-sitter-grammars" {
-    # Fake same version number as upstream language bundle to prevent triggering downloads
+    # Fake same version number as upstream language bundle to prevent triggering runtime downloads
     inherit (tree-sitter-langs) version;
   } (''
     install -d $out/langs/bin
     echo -n $version > $out/langs/bin/BUNDLE-VERSION
-  '' + lib.concatStringsSep "\n" (map (g: "ln -s ${tree-sitter-grammars."tree-sitter-${g}"}/parser $out/langs/bin/${g}.so") grammars));
+  '' + lib.concatStringsSep "\n" (map (
+    g: "ln -s ${g}/parser $out/langs/bin/${soName g}") grammars
+  ));
 
 in
 melpaStablePackages.tree-sitter-langs.overrideAttrs(old: {
