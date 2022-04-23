@@ -4,7 +4,8 @@
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
-, check, meson, ninja, m4
+, gst_all_1
+, check, meson, ninja, m4, wrapGAppsHook
 
 , x11Support ? false
 
@@ -19,6 +20,7 @@
 , airtunesSupport ? false
 
 , bluetoothSupport ? true
+, advancedBluetoothCodecs ? false
 
 , remoteControlSupport ? false
 
@@ -48,7 +50,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
-    ++ lib.optionals stdenv.isLinux [ glib ];
+    ++ lib.optionals stdenv.isLinux [ glib ]
+    # gstreamer plugin discovery requires wrapping
+    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook;
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
@@ -65,6 +69,8 @@ stdenv.mkDerivation rec {
       ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
+      # aptX and LDAC codecs are in gst-plugins-bad so far, rtpldacpay is in -good
+      ++ lib.optionals (bluetoothSupport && advancedBluetoothCodecs) (builtins.attrValues { inherit (gst_all_1) gst-plugins-bad gst-plugins-good gst-plugins-base gstreamer; })
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
   );
@@ -74,7 +80,8 @@ stdenv.mkDerivation rec {
     "-Dasyncns=${if !libOnly then "enabled" else "disabled"}"
     "-Davahi=${if zeroconfSupport then "enabled" else "disabled"}"
     "-Dbluez5=${if !libOnly then "enabled" else "disabled"}"
-    "-Dbluez5-gstreamer=disabled"
+    # advanced bluetooth audio codecs are provided by gstreamer
+    "-Dbluez5-gstreamer=${if (!libOnly && bluetoothSupport && advancedBluetoothCodecs) then "enabled" else "disabled"}"
     "-Ddatabase=simple"
     "-Ddoxygen=false"
     "-Delogind=disabled"

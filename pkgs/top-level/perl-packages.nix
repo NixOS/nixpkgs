@@ -17133,7 +17133,6 @@ let
       sha256 = "0xl8lcv9gfv0nn8vrrxa4az359whqdhmzw4r51nn3add8pn3s9ip";
     };
     buildInputs = [ pkgs.zookeeper_mt ];
-    nativeBuildInputs = [ pkgs.gnused ];
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
     hardeningDisable = [ "format" ];
     # Make the async API accessible

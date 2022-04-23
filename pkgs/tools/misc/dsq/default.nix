@@ -6,7 +6,6 @@
 , nix-update-script
 , dsq
 , testers
-, diffutils
 }:
 
 buildGoModule rec {
@@ -21,8 +20,6 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-yfhLQBmWkG0ZLjI/ArLZkEGvClmZXkl0o7fEu5JqHM8=";
-
-  nativeBuildInputs = [ diffutils ];
 
   ldflags = [ "-X" "main.Version=${version}" ];
 
