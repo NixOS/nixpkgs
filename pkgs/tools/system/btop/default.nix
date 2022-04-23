@@ -8,8 +8,8 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.2.5";
-  hash = "sha256-W7DTaJVA9xqdgBjrrR+OK1buBMrjpw2T0I//ZZKQFOw=";
+  version = "1.2.6";
+  hash = "sha256-q1Dpdw7bVSG10xtoUpelRgMrWe71vCWajjsAHjAZzQ4=";
 
   src = fetchFromGitHub {
     owner = "aristocratos";

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "eagle100";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i9ZvbjxSENJlQ+9sqWnIl1fL6tVbG3E/IUhe7b59sBk=";
+    hash = "sha256-eyYY1x8IjIfUx5OiaOomiWunsO1++seFwXlI/iKDDLw=";
   };
 
   propagatedBuildInputs = [
