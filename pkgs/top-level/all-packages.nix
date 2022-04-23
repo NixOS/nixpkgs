@@ -17161,6 +17161,7 @@ with pkgs;
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
+    libraw = libraw_0_20;
   };
 
   gensio = callPackage ../development/libraries/gensio {};
@@ -23146,6 +23147,7 @@ with pkgs;
   };
 
   libraw = callPackage ../development/libraries/libraw { };
+  libraw_0_20 = callPackage ../development/libraries/libraw/0_20.nix { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
