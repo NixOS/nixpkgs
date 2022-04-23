@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-p5/UKLVoDYclp2o/MBb2oX1pHzxsQpHjmfwU1kFSKbw=";
+    sha256 = "sha256-d6gS+v/oQlME44DC0Kq4Tsoy09ShGLZQtUeAQNB27PY=";
   };
 
   nativeBuildInputs = [
