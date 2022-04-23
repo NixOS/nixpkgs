@@ -17200,6 +17200,12 @@ with pkgs;
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
 
+  muon = callPackage ../development/tools/build-managers/muon { };
+  muonStandalone = muon.override {
+    embedSamurai = true;
+    buildDocs = false;
+  };
+
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
   saleae-logic-2 = callPackage ../development/tools/misc/saleae-logic-2 { };
