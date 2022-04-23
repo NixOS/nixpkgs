@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles, testVersion, sigi }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, testers, sigi }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     installManPage sigi.1
   '';
 
-  passthru.tests.version = testVersion { package = sigi; };
+  passthru.tests.version = testers.testVersion { package = sigi; };
 
   meta = with lib; {
     description = "Organizing CLI for people who don't love organizing.";

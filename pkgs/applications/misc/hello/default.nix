@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , nixos
-, testVersion
 , testers
 , hello
 }:
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
-    version = testVersion { package = hello; };
+    version = testers.testVersion { package = hello; };
 
     invariant-under-noXlibs =
       testers.testEqualDerivation

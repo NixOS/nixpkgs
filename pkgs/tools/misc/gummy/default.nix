@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, testVersion
+, testers
 , gummy
 , cmake
 , libX11
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';
 
-  passthru.tests.version = testVersion { package = gummy; };
+  passthru.tests.version = testers.testVersion { package = gummy; };
 
   meta = with lib; {
     homepage = "https://github.com/Fushko/gummy";

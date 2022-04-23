@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , llvmPackages
 , rustPlatform
-, testVersion
+, testers
 }:
 
 let
@@ -27,7 +27,7 @@ let
 
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-    passthru.tests.version = testVersion { inherit package; };
+    passthru.tests.version = testers.testVersion { inherit package; };
 
     meta = with lib; {
       description = "An interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";

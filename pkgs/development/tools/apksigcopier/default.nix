@@ -1,10 +1,10 @@
 { lib
-, fetchFromGitHub
-, python3
-, installShellFiles
-, bash
-, pandoc
 , apksigner
+, bash
+, fetchFromGitHub
+, installShellFiles
+, pandoc
+, python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,33 +18,48 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "07ldq3q1x2lpb15q5s5i1pbg89sn6ah45amskm9pndqlh16z9k2x";
   };
 
-  nativeBuildInputs = [ installShellFiles pandoc ];
-  propagatedBuildInputs = with python3.pkgs; [ click ];
-  checkInputs = with python3.pkgs; [ flake8 mypy pylint ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    click
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ apksigner ]}"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /bin/bash ${bash}/bin/bash \
-      --replace 'apksigcopier --version' '${python3.interpreter} apksigcopier --version'
+      --replace /bin/bash ${bash}/bin/bash
   '';
 
   postBuild = ''
     make ${pname}.1
   '';
 
-  checkPhase = ''
-    make test
-  '';
-
   postInstall = ''
     installManPage ${pname}.1
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/apksigcopier --version | grep "${version}"
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
-    description = "Copy/extract/patch android apk signatures & compare apks";
+    description = "Copy/extract/patch android apk signatures & compare APKs";
     longDescription = ''
-      apksigcopier is a tool for copying android APK signatures from a signed APK to an unsigned one (in order to verify reproducible builds).
+      apksigcopier is a tool for copying android APK signatures from a signed
+      APK to an unsigned one (in order to verify reproducible builds).
       It can also be used to compare two APKs with different signatures.
       Its command-line tool offers four operations:
 
@@ -55,6 +70,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/obfusk/apksigcopier";
     license = with licenses; [ gpl3Plus ];
-    maintainers = [ maintainers.obfusk ];
+    maintainers = with maintainers; [ obfusk ];
   };
 }

@@ -8,7 +8,13 @@
 , iw
 , makeWrapper
 , qrencode
-, hostapd }:
+, hostapd
+, getopt
+, dnsmasq
+, iproute2
+, flock
+, iptables
+, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "linux-wifi-hotspot";
@@ -41,9 +47,6 @@ stdenv.mkDerivation rec {
       --replace "etc" "$out/etc"
     substituteInPlace ./src/scripts/wihotspot \
       --replace "/usr" "$out"
-    substituteInPlace ./src/scripts/create_ap.service \
-      --replace "/usr/bin/create_ap" "$out/bin/create_cap" \
-      --replace "/etc/create_ap.conf" "$out/etc/create_cap.conf"
   '';
 
   makeFlags = [
@@ -52,7 +55,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/create_ap \
-      --prefix PATH : ${lib.makeBinPath [ hostapd ]}
+      --prefix PATH : ${lib.makeBinPath [
+          hostapd getopt iw which dnsmasq iproute2 flock iptables gawk
+        ]}
 
     wrapProgram $out/bin/wihotspot-gui \
       --prefix PATH : ${lib.makeBinPath [ iw ]} \
