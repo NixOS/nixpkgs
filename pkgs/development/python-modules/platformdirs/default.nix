@@ -1,32 +1,29 @@
 { lib
 , appdirs
 , buildPythonPackage
-, fetchFromGitHub
-, platformdirs
+, fetchPypi
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
+, hatchling
+, hatch-vcs
 }:
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "2.5.1";
-  format = "setuptools";
+  version = "2.5.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-z6WIwTWLlc/chNRxt3dqqa/IxYj1BBTcQ6OcfliHrvA=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-WMirsH3LRB5u5LEdjfCshWA4+USrmLe+ayeyo8f+7xk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   checkInputs = [
