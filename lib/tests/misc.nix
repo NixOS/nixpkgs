@@ -154,6 +154,21 @@ runTests {
     expected = "a,b,c";
   };
 
+  testRepeat = {
+    expr = strings.repeat 5 "nix";
+    expected = "nixnixnixnixnix";
+  };
+
+  testRepeatZeroTimes = {
+    expr = strings.repeat 0 "A";
+    expected = "";
+  };
+
+  testRepeatEmptyString = {
+    expr = strings.repeat 1000 "";
+    expected = "";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];

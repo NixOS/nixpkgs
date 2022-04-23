@@ -126,6 +126,20 @@ rec {
     # List of input strings
     list: concatStringsSep sep (lib.imap1 f list);
 
+  /* Generate a string by repeating a given string a given number of times.
+
+     Type: repeat :: string -> int -> string
+
+     Example:
+       repeat "Nix" 3
+       => "NixNixNix"
+  */
+  repeat =
+    # Number of times to repeat the string
+    n:
+    # String to repeat
+    s: concatMapStrings (lib.const s) (lib.range 0 (n - 1));
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 
