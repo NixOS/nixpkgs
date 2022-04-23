@@ -5537,8 +5537,6 @@ in {
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
 
-  net2grid = callPackage ../development/python-modules/net2grid { };
-
   netaddr = callPackage ../development/python-modules/netaddr { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
