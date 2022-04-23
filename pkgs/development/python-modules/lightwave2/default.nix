@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "lightwave2";
-  version = "0.8.8";
+  version = "0.8.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6z4w6GMwShhdF8JUwySOR2RNvCXJ22IzQvoahmSS6Zk=";
+    sha256 = "sha256-iSxVnUYohCJMr4ESFhZg0vgg9balP87Hm1hDdpWsnv4=";
   };
 
   propagatedBuildInputs = [
