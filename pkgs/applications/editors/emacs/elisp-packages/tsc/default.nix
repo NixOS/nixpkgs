@@ -15,14 +15,11 @@
 }:
 
 let
-  version = "0.16.1";
 
-  src = fetchFromGitHub {
-    owner = "emacs-tree-sitter";
-    repo = "elisp-tree-sitter";
-    rev = version;
-    sha256 = "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=";
-  };
+  srcMeta = lib.importJSON ./src.json;
+  inherit (srcMeta) version;
+
+  src = fetchFromGitHub srcMeta.src;
 
   tsc = melpaBuild {
     inherit src;
@@ -62,7 +59,7 @@ let
       rm -r $out/lib
     '';
 
-    cargoSha256 = "sha256-7UOhs3wx6fGvqPjNxUKoEHwPtiJ5zgLFPwDSvhYlmis=";
+    inherit (srcMeta) cargoSha256;
   };
 
 in symlinkJoin {
