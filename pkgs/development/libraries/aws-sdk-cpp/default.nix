@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , curl
 , openssl
@@ -30,13 +31,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.9.238";
+  version = if stdenv.system == "i686-linux" then "1.9.150"
+    else "1.9.238";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-pEmsTfZXsvJMV79dGkjDNbUVajwyoYgzE5DCsC53pGY=";
+    sha256 = if version == "1.9.150" then "fgLdXWQKHaCwulrw9KV3vpQ71DjnQAL4heIRW7Rk7UY="
+      else "sha256-pEmsTfZXsvJMV79dGkjDNbUVajwyoYgzE5DCsC53pGY=";
   };
 
   postPatch = ''
@@ -109,7 +112,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cmake-dirs.patch
-  ];
+  ]
+    ++ lib.optional (lib.versionOlder version "1.9.163")
+      (fetchpatch {
+        url = "https://github.com/aws/aws-sdk-cpp/commit/b102aaf5693c4165c84b616ab9ffb9edfb705239.diff";
+        sha256 = "sha256-38QBo3MEFpyHPb8jZEURRPkoeu4DqWhVeErJayiHKF0=";
+      });
 
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
