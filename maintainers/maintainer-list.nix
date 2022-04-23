@@ -14111,6 +14111,12 @@
     github = "deifactor";
     githubId = 30192992;
   };
+  deinferno = {
+    name = "deinferno";
+    email = "14363193+deinferno@users.noreply.github.com";
+    github = "deinferno";
+    githubId = 14363193;
+  };
   fzakaria = {
     name = "Farid Zakaria";
     email = "farid.m.zakaria@gmail.com";
