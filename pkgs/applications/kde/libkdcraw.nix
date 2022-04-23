@@ -1,4 +1,4 @@
-{ mkDerivation, lib, extra-cmake-modules, libraw, qtbase }:
+{ mkDerivation, lib, extra-cmake-modules, libraw_0_20, qtbase }:
 
 mkDerivation {
   pname = "libkdcraw";
@@ -8,6 +8,6 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ];
-  propagatedBuildInputs = [ libraw ];
+  propagatedBuildInputs = [ libraw_0_20 ];
   outputs = [ "out" "dev" ];
 }
