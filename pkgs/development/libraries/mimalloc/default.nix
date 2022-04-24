@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, ninja
 , secureBuild ? false
+, overrideMalloc ? true
 }:
 
 let
@@ -24,11 +25,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja ];
-  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ]
-    ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
-    ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ]
-  ;
+
+  cmakeFlags = [
+    (lib.cmakeBool "MI_INSTALL_TOPLEVEL" true)
+    (lib.cmakeBool "MI_OVERRIDE" overrideMalloc)
+    (lib.cmakeBool "MI_SECURE" secureBuild)
+    (lib.cmakeBool "MI_BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "MI_BUILD_TESTS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   postInstall = let
     rel = lib.versions.majorMinor version;
@@ -41,8 +45,10 @@ stdenv.mkDerivation rec {
     find $dev $out -type f
   '' + (lib.optionalString secureBuild ''
     # pretend we're normal mimalloc
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     ln -sfv $out/lib/libmimalloc-secure${suffix} $out/lib/libmimalloc${suffix}
     ln -sfv $out/lib/libmimalloc-secure${suffix} $out/lib/libmimalloc${soext}
+    ''}
     ln -sfv $out/lib/libmimalloc-secure.a $out/lib/libmimalloc.a
     ln -sfv $out/lib/mimalloc-secure.o $out/lib/mimalloc.o
   '');
