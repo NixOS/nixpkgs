@@ -61,7 +61,12 @@ in {
     };
 
     servers = mkOption {
-      description = "All Zookeeper Servers.";
+      description = ''
+        All Zookeeper Servers.
+
+        Set `networking.includeFQDNAndHostnameEntries` to false to
+        prevent each peer binding on 127.0.0.2
+      '';
       default = "";
       type = types.lines;
       example = ''
