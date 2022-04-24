@@ -182,6 +182,7 @@ let
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       chmod -x third_party/webgpu-cts/src/tools/run_deno
+      ${lib.optionalString (chromiumVersionAtLeast "102") "chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno"}
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
