@@ -3124,7 +3124,8 @@
       ifaddr
       url-normalize
       zeroconf
-    ]; # missing inputs: zwave_me_ws
+      zwave-me-ws
+    ];
   };
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
@@ -3739,5 +3740,6 @@
     "zodiac"
     "zone"
     "zwave_js"
+    "zwave_me"
   ];
 }
