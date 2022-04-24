@@ -15167,7 +15167,11 @@ with pkgs;
       then targetPackages.stdenv.cc.cc
     else gcc.cc;
 
-  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
+  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix {
+    # gcc-11.2.0 has a bug in cpp: https://github.com/NixOS/nixpkgs/issues/170055
+    # TODO: remove stdenv override when nixpkgs gets updated to gcc-11.3.0.
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
   libsigrok = callPackage ../development/tools/libsigrok {
     python = python3;
