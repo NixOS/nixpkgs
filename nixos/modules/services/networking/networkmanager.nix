@@ -385,6 +385,16 @@ in {
         '';
       };
 
+      enablePlugins =  mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable some VPN plugins.
+          Disable this if you do not configure VPNs with
+          networkmanager and wish to reduce bloat.
+        '';
+      };
+
       enableStrongSwan = mkOption {
         type = types.bool;
         default = false;
@@ -465,12 +475,7 @@ in {
 
     environment.systemPackages = packages;
 
-    users.groups = {
-      networkmanager.gid = config.ids.gids.networkmanager;
-      nm-openvpn.gid = config.ids.gids.nm-openvpn;
-    };
-
-    users.users = {
+    users.users = mkIf cfg.enablePlugins {
       nm-openvpn = {
         uid = config.ids.uids.nm-openvpn;
         group = "nm-openvpn";
@@ -482,15 +487,21 @@ in {
       };
     };
 
+    users.groups = {
+      networkmanager.gid = config.ids.gids.networkmanager;
+    } // (mkIf cfg.enablePlugins {
+      nm-openvpn.gid = config.ids.gids.nm-openvpn;
+    });
+
     systemd.packages = packages;
 
     systemd.tmpfiles.rules = [
       "d /etc/NetworkManager/system-connections 0700 root root -"
       "d /etc/ipsec.d 0700 root root -"
-      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
-    ];
+    ] ++ lib.optional cfg.enablePlugins
+      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -";
 
     systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
@@ -526,20 +537,18 @@ in {
       })
 
       {
-        networkmanager.plugins = with pkgs; [
-          networkmanager-fortisslvpn
-          networkmanager-iodine
-          networkmanager-l2tp
-          networkmanager-openconnect
-          networkmanager-openvpn
-          networkmanager-vpnc
-          networkmanager-sstp
-        ];
+        networkmanager.plugins = with pkgs;
+          lib.optionals cfg.enablePlugins [
+            networkmanager-openconnect
+            networkmanager-fortisslvpn
+            networkmanager-iodine
+            networkmanager-l2tp
+            networkmanager-openvpn
+            networkmanager-sstp
+            networkmanager-vpnc
+          ] ++ lib.optional cfg.enableStrongSwan
+            networkmanager_strongswan;
       }
-
-      (mkIf cfg.enableStrongSwan {
-        networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
-      })
 
       (mkIf enableIwd {
         wireless.iwd.enable = true;
