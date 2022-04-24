@@ -1958,7 +1958,8 @@
       sqlalchemy
     ];
     "peco" = ps: with ps; [
-    ]; # missing inputs: peco
+      peco
+    ];
     "pencom" = ps: with ps; [
     ]; # missing inputs: pencompy
     "persistent_notification" = ps: with ps; [
@@ -3508,6 +3509,7 @@
     "p1_monitor"
     "panel_custom"
     "panel_iframe"
+    "peco"
     "persistent_notification"
     "person"
     "philips_js"
