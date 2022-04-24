@@ -14748,7 +14748,7 @@ with pkgs;
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = bazel_3;
+  bazel = bazel_4;
 
   bazel_0 = bazel_0_26;
 
