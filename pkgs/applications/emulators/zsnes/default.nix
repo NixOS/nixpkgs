@@ -41,12 +41,19 @@ in stdenv.mkDerivation {
     cd src
   '';
 
+  autoreconfFlags = [
+    "--install" "--force" "--verbose"
+    "-I${lib.getDev SDL}/share/aclocal"
+  ];
+
   preConfigure = ''
     sed -i "/^STRIP/d" configure
     sed -i "/\$STRIP/d" configure
   '';
 
   configureFlags = [ "--enable-release" ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
