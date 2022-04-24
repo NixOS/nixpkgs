@@ -37,8 +37,9 @@ in
 assert cudaSupport -> (let majorIs = cudaPackages.cudaMajorVersion;
                         in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
-# confirm that cudatoolkits are sync'd across dependencies
-# TODO: verify it's OK to equality-compare cudaPackages (which are attrsets, scopes, or whatever)
+# We expect referential equality of all cudaPackages used to ensure consistency
+# You can make an overlay and pass the same cudaPackages to pytorch, mpi, and magma
+# TODO: `==` is an implementation detail; move comparison logic to cudaPackages
 assert (MPISupport && cudaSupport) -> mpi.cudaPackages == cudaPackages;
 assert cudaSupport -> (magma.cudaPackages == cudaPackages);
 
