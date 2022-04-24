@@ -3,10 +3,11 @@
 let metadata = lib.importJSON ./meta.json;
 in rec {
   replay-recordreplay = stdenv.mkDerivation rec {
-    name = "replay-recordreplay";
+    pname = "replay-recordreplay";
     version = builtins.head (builtins.match ".*/linux-recordreplay-(.*).tgz"
       metadata.recordreplay.url);
-    buildInputs = [ autoPatchelfHook stdenv.cc.cc.lib openssl zlib ];
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ stdenv.cc.cc.lib openssl zlib ];
 
     src = (fetchurl metadata.recordreplay);
     unpackPhase = ''
@@ -14,35 +15,35 @@ in rec {
     '';
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
       cp linux-recordreplay.so $out
+      runHook postInstall
     '';
+    meta = with lib; {
+      description = "RecordReplay internal recording library";
+      homepage = "https://www.replay.io/";
+      license = lib.licenses.unfree;
+      maintainers = with maintainers; [ phryneas ];
+      platforms = [ "x86_64-linux" ];
+    };
   };
 
   replay-io = stdenv.mkDerivation rec {
-    name = "replay-io";
+    pname = "replay-io";
     version = builtins.head
       (builtins.match ".*/linux-gecko-(.*).tar.bz2" metadata.replay.url);
     srcs = fetchurl metadata.replay;
-    buildInputs = [
-      autoPatchelfHook
-      makeWrapper
-      dbus-glib
-      glib
-      gtk3
-      libX11
-      libXdamage
-      libXt
-    ];
-    patchPhase = ''
-      patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} replay
-    '';
+    nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+    buildInputs = [ dbus-glib glib gtk3 libX11 libXdamage libXt ];
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/opt/replay-io
       cp -r * $out/opt/replay-io
       mkdir $out/bin
       makeWrapper $out/opt/replay-io/replay \
         $out/bin/replay-io \
         --set "RECORD_REPLAY_DRIVER" "${replay-recordreplay}"
+      runHook postInstall
     '';
 
     passthru.updateScript = ./update.sh;
@@ -65,15 +66,17 @@ in rec {
   };
 
   replay-node = stdenv.mkDerivation rec {
-    name = "replay-node";
+    pname = "replay-node";
     version = builtins.head
       (builtins.match ".*/linux-node-(.*)" metadata.replay-node.url);
-    buildInputs = [ makeWrapper autoPatchelfHook stdenv.cc.cc.lib ];
+    nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+    buildInputs = [ stdenv.cc.cc.lib ];
 
     src = (fetchurl metadata.replay-node);
     dontUnpack = true;
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin $out/opt/replay-node
       cp $src $out/opt/replay-node/node-unwrapped
       chmod +x $out/opt/replay-node/node-unwrapped
@@ -83,29 +86,59 @@ in rec {
         --set "RECORD_REPLAY_DRIVER" "${replay-recordreplay}"
 
       ln -s $out/opt/replay-node/node $out/bin/replay-node
+      runHook postInstall
     '';
+
+    meta = {
+      description =
+        "Event-driven I/O framework for the V8 JavaScript engine, patched for replay";
+      homepage = "https://github.com/RecordReplay/node";
+      license = licenses.mit;
+      maintainers = with maintainers; [ phryneas ];
+      platforms = platforms.linux;
+      mainProgram = "replay-node";
+    };
   };
 
   replay-node-cli = stdenv.mkDerivation {
-    name = "replay-node-cli";
-    version = builtins.head
+    pname = "replay-node-cli";
+    version = "0.1.7-" + builtins.head
       (builtins.match ".*/linux-node-(.*)" metadata.replay-node.url);
     src = fetchgit {
       url = "https://github.com/RecordReplay/replay-node-cli";
-      rev = "48ebf1c419285dc623ee4a78bce491cc12b64e64";
-      sha256 = "00g8q3cp5x3rca6rgdkmn266s52wgr0s3y1wmqphsgyag9pcnxz0";
+      rev = "5269c8b8e7c5c7a9618a68f883d19c11a68be837";
+      sha256 = "04d22q3dvs9vxpb9ps64pdxq9ziwgvnzdgsn6p9p0lzjagh0f5n0";
     };
-    patches = ./replay-node-cli.patch;
 
-    buildInputs = [ makeWrapper stdenv.cc.cc.lib nodejs ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ stdenv.cc.cc.lib nodejs ];
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/opt/replay-node-cli
       cp -r * $out/opt/replay-node-cli
-      makeWrapper $out/opt/replay-node-cli/src/bin.js \
+      makeWrapper $out/opt/replay-node-cli/bin/replay-node \
         $out/bin/replay-node \
         --prefix "PATH" ":" "${nodejs}/bin" \
-        --set "REPLAY_NODE_DIR" "${replay-node}/opt/replay-node" \
+        --set "RECORD_REPLAY_NODE_DIRECTORY" "${replay-node}/opt/replay-node"
+      runHook postInstall
     '';
+
+    meta = with lib; {
+      description =
+        "The Time Travel Debugger for Web Development - Node Command Line";
+      longDescription = ''
+        The Replay Node Command Line allows you to record node applications and debug them
+        with familiar browser dev tools.
+        You can access the browser DevTools at any point of the recording, adding new logger
+        statements and inspecting the status of variables and the current call stack.
+        Your recordings can be shared with other users for collaborative debugging.
+      '';
+      homepage = "https://www.replay.io/";
+      mainProgram = "replay-node";
+      license = lib.licenses.bsd3;
+      maintainers = with maintainers; [ phryneas ];
+      platforms = [ "x86_64-linux" ];
+    };
   };
 }

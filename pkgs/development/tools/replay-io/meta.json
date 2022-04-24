@@ -1,14 +1,14 @@
 {
   "replay": {
-     "url": "https://static.replay.io/downloads/linux-gecko-20220407-8f491157fe18-c9630d84689b.tar.bz2",
-     "sha256": "059il7z1rs336bjipybn95j22qia5l2r8ijjrn8abfvqfrpi76wc"
+     "url": "https://static.replay.io/downloads/linux-gecko-20220422-1d46e798ffbf-3eecf49b757b.tar.bz2",
+     "sha256": "1s601fjca69ncvzkzwrlpvdldlmxl39gzy0g9x3rlzdlrjxl48ai"
   },
   "recordreplay": {
-     "url": "https://static.replay.io/downloads/linux-recordreplay-c9630d84689b.tgz",
-     "sha256": "0srzq74cgs521p7wmk9ql7v6sk8i2lfl49xm3ssjh1i9adzbby41"
+     "url": "https://static.replay.io/downloads/linux-recordreplay-3eecf49b757b.tgz",
+     "sha256": "0hcd5wslw7bgn3vy6fq0dmw7lzpha6xcvqilp7qnxi6dpv4q07vx"
   },
   "replay-node": {
-      "url": "https://static.replay.io/downloads/linux-node-20220404-dfd3123c41e3-4e44aca4c7ee",
-      "sha256": "1w12spdgl8y1ws3bpfvxiskqfnspkh0790r0crm5zm5wxjwpyz1s"
+      "url": "https://static.replay.io/downloads/linux-node-20220422-a26b4562ebf7-3eecf49b757b",
+      "sha256": "1l66w4fb0xz9ik2vh4cvwmi1576zf2mhf6bmjj5b3qfis40ihw7c"
   }
 }
