@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "letsencrypt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0sh67bzq3hlagk73w2kp45viq15g2rcxm760jk9fqshamq784m6m";
+    sha256 = "0sh67bzq3hlagk73w2kp45viq15g2rcxm760jk9fqshamq784m6m";
   };
 
   passthru.tests = {
