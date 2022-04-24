@@ -1,4 +1,20 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], ... }:
+
+  /*
+  This test suite replaces the typical pytestCheckHook function in python
+  packages. Pgadmin4 test suite needs a running and configured postgresql
+  server. This is why this test exists.
+
+  To not repeat all the python dependencies needed, this test is called directly
+  from the pgadmin4 derivation, which also passes the currently
+  used propagatedBuildInputs.
+
+  Unfortunately, there doesn't seem to be an easy way to otherwise include
+  the needed packages here.
+
+  Also any python Overrides need to be duplicated here, too.
+
+  */
 
   let
     pgadmin4SrcDir = "/pgadmin";
@@ -47,50 +63,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         postgresql
         chromedriver
         chromium
+        # include the same packages as in pgadmin minus speaklater3
         (python3.withPackages
-          (ps: with pythonPackages; [
-            selenium
-            testtools
-            testscenarios
-            flask
-            flask-babelex
-            flask-babel
-            flask-gravatar
-            flask_login
-            flask_mail
-            flask_migrate
-            flask_sqlalchemy
-            flask_wtf
-            flask-compress
-            passlib
-            pytz
-            simplejson
-            six
-            sqlparse
-            wtforms
-            flask-paranoid
-            psutil
-            psycopg2
-            python-dateutil
-            sqlalchemy
-            itsdangerous
-            flask-security-too
-            bcrypt
-            cryptography
-            sshtunnel
-            ldap3
-            gssapi
-            flask-socketio
-            eventlet
-            httpagentparser
-            user-agents
-            wheel
-            authlib
-            qrcode
-            pillow
-            pyotp
-            boto3
-          ])
+          (ps: buildDeps ++
+            [
+              # test suite package requirements
+              pythonPackages.testscenarios
+              pythonPackages.selenium
+            ])
         )
       ];
       services.postgresql = {
