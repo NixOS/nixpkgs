@@ -22,7 +22,7 @@ in {
           memcached = false;
         };
         config = {
-          #dbtype = "pgsql";
+          dbtype = "pgsql";
           dbname = "nextcloud";
           dbuser = "nextcloud";
           dbhost = "/run/postgresql";
@@ -31,6 +31,7 @@ in {
             ${adminpass}
           '');
         };
+        secretFile = "/etc/nextcloud-secrets.json";
       };
 
       systemd.services.nextcloud-setup= {
@@ -38,6 +39,10 @@ in {
         after = [
           "postgresql.service"
         ];
+      };
+
+      services.redis = {
+        enable = true;
       };
 
       services.postgresql = {
@@ -55,7 +60,17 @@ in {
       # databyse type to postgres.
       environment.etc."nextcloud-secrets.json".text = ''
         {
-          "dbtype" : "pgsql"
+          "redis": {
+            "host": "/run/redis/redis.sock",
+            "port": 0,
+            "dbindex": 0,
+            "password": "secret",
+            "timeout": 1.5
+          },
+          "memcache": {
+            "local": "\\OC\\Memcache\\Redis",
+            "locking": "\\OC\\Memcache\\Redis"
+          }
         }
       '';
     };
@@ -91,5 +106,8 @@ in {
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
+
+    # redis cache should not be empty
+    nextcloud.fail("redis-cli KEYS * | grep -q 'empty array'")
   '';
 })
