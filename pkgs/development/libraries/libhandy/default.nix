@@ -15,6 +15,7 @@
 , xvfb-run
 , gdk-pixbuf
 , librsvg
+, libxml2
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
@@ -48,6 +49,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals enableGlade [
+    libxml2 # for xmllint
   ];
 
   buildInputs = [
