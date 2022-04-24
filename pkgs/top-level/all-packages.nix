@@ -15245,7 +15245,9 @@ with pkgs;
 
   doit = with python3Packages; toPythonApplication doit;
 
-  dolt = callPackage ../servers/sql/dolt { };
+  dolt = callPackage ../servers/sql/dolt {
+    buildGoModule = buildGo118Module;
+  };
 
   dot2tex = with python3.pkgs; toPythonApplication dot2tex;
 
