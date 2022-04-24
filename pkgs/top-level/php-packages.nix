@@ -361,6 +361,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "intl";
           buildInputs = [ icu64 ];
+          configureFlags = [ "--with-icu-dir=${icu64.dev}" ];
           patches = lib.optionals (lib.versionOlder php.version "7.4") [
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
