@@ -3443,6 +3443,8 @@ in {
 
   google-cloud-bigquery-logging = callPackage ../development/python-modules/google-cloud-bigquery-logging { };
 
+  google-cloud-bigquery-storage = callPackage ../development/python-modules/google-cloud-bigquery-storage { };
+
   google-cloud-bigtable = callPackage ../development/python-modules/google-cloud-bigtable { };
 
   google-cloud-container = callPackage ../development/python-modules/google-cloud-container { };
