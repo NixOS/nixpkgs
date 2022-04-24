@@ -11225,6 +11225,8 @@ in {
 
   zulip = callPackage ../development/python-modules/zulip { };
 
+  zwave-me-ws = callPackage ../development/python-modules/zwave-me-ws { };
+
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
