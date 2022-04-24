@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "ocamlformat-rpc-lib";
-  version = "0.19.0";
+  version = "0.21.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
-    sha256 = "sha256-YvxGqujwpKM85/jXcm1xCb/2Fepvy1DRSC8h0g7lD0Y=";
+    sha256 = "sha256-KhgX9rxYH/DM6fCqloe4l7AnJuKrdXSe6Y1XY3BXMy0=";
   };
 
   minimumOCamlVersion = "4.08";
