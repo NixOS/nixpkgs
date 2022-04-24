@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceware.org/elfutils/";
     description = "A set of utilities to handle ELF objects";
     platforms = platforms.linux;
+    # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
+    broken = stdenv.hostPlatform.isStatic;
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
     license = with licenses; [ gpl2Only lgpl3Plus gpl3Plus ];
