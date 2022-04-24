@@ -7231,6 +7231,8 @@ in {
 
   pykeyatome = callPackage ../development/python-modules/pykeyatome { };
 
+  pykickstart = callPackage ../development/python-modules/pykickstart { };
+
   pykira = callPackage ../development/python-modules/pykira { };
 
   pykka = callPackage ../development/python-modules/pykka { };
