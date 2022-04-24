@@ -2292,7 +2292,8 @@
       aiosenseme
     ];
     "sensibo" = ps: with ps; [
-    ]; # missing inputs: pysensibo
+      pysensibo
+    ];
     "sensor" = ps: with ps; [
       fnvhash
       lru-dict
@@ -3569,6 +3570,7 @@
     "select"
     "sense"
     "senseme"
+    "sensibo"
     "sensor"
     "sentry"
     "seventeentrack"
