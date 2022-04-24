@@ -158,8 +158,6 @@ cfgpantheon = """  # Enable the X11 windowing system.
 
   # Enable the Pantheon Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
-  # services.xserver.displayManager.lightdm.greeters.pantheon.enable = true;
-  # services.pantheon.apps.enable = true;
   services.xserver.desktopManager.pantheon.enable = true;
 
 """
@@ -324,6 +322,13 @@ def pretty_name():
     return _("Installing NixOS.")
 
 
+status = pretty_name()
+
+
+def pretty_status_message():
+    return status
+
+
 def catenate(d, key, *values):
     """
     Sets @p d[key] to the string-concatenation of @p values
@@ -339,6 +344,10 @@ def catenate(d, key, *values):
 
 def run():
     """NixOS Configuration."""
+
+    global status
+    status = _("Configuring NixOS")
+    libcalamares.job.setprogress(0.1)
 
     # Create initial config file
     cfg = cfghead
@@ -369,16 +378,17 @@ def run():
             cfg += cfgbootcrypt
             if fw_type != "efi":
                 cfg += cfgbootgrubcrypt
+            status = _("Setting up LUKS")
+            libcalamares.job.setprogress(0.15)
             try:
                 # Create /crypto_keyfile.bin
-                subprocess.check_output(
-                    ["pkexec", "dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], stderr=subprocess.STDOUT)
-                subprocess.check_output(
-                    ["pkexec", "chmod", "600", root_mount_point+"/crypto_keyfile.bin"], stderr=subprocess.STDOUT)
+                libcalamares.utils.host_env_process_output(
+                    ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
+                libcalamares.utils.host_env_process_output(
+                    ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
             except subprocess.CalledProcessError as e:
-                if e.output != None:
-                    libcalamares.utils.error(e.output.decode("utf8"))
-                return (_("Failed to create /crypto_keyfile.bin"), _(e.output.decode("utf8")))
+                libcalamares.utils.error(e)
+                return (_("Failed to create /crypto_keyfile.bin"), _(e))
             break
 
     # Setup keys in /crypto_keyfile. If we use systemd-boot (EFI), don't add /
@@ -392,16 +402,17 @@ def run():
             else:
                 cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(
                     part["luksMapperName"])
+
             try:
                 # Add luks drives to /crypto_keyfile.bin
-                pswd = subprocess.Popen(
-                    ["echo", part["luksPassphrase"]], stdout=subprocess.PIPE)
-                subprocess.check_output(
-                    ["pkexec", "cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], stdin=pswd.stdout, stderr=subprocess.STDOUT)
+                libcalamares.utils.host_env_process_output(
+                    ["cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], None, part["luksPassphrase"])
             except subprocess.CalledProcessError as e:
-                if e.output != None:
-                    libcalamares.utils.error(e.output.decode("utf8"))
-                return (_("cryptsetup failed"), _(e.output.decode("utf8")))
+                libcalamares.utils.error(e)
+                return (_("cryptsetup failed"), _(e))
+
+    status = _("Configuring NixOS")
+    libcalamares.job.setprogress(0.18)
 
     if gs.value("packagechooser_packagechooser") == "enlightenment":
         cfg += cfgnetworkenlightenment
@@ -478,8 +489,8 @@ def run():
     free = True
     if gs.value("packagechooser_unfree") is not None:
         if gs.value("packagechooser_unfree") == "unfree":
-          free = False
-          cfg += cfgunfree
+            free = False
+            cfg += cfgunfree
 
     cfg += cfgpkgs
     if gs.value("packagechooser_packagechooser") == "plasma":
@@ -513,41 +524,37 @@ def run():
         pattern = "@@{key}@@".format(key=key)
         cfg = cfg.replace(pattern, str(variables[key]))
 
-    libcalamares.job.setprogress(0.1)
-
     # Mount swap partition
     for part in gs.value("partitions"):
         if part["claimed"] == True and part["fs"] == "linuxswap":
+            status = _("Mounting swap")
+            libcalamares.job.setprogress(0.2)
             if part["fsName"] == "luks":
                 try:
-                    subprocess.check_output(
-                        ["pkexec", "swapon", "/dev/mapper/" + part["luksMapperName"]], stderr=subprocess.STDOUT)
+                    libcalamares.utils.host_env_process_output(
+                        ["swapon", "/dev/mapper/" + part["luksMapperName"]], None)
                 except subprocess.CalledProcessError as e:
-                    if e.output != None:
-                        libcalamares.utils.error(e.output.decode("utf8"))
-                    return (_("swapon failed to activate swap " + "/dev/mapper/" + part["luksMapperName"]), _(e.output.decode("utf8")))
+                    libcalamares.utils.error(e)
+                    return (_("swapon failed to activate swap " + "/dev/mapper/" + part["luksMapperName"]), _(e))
             else:
                 try:
-                    subprocess.check_output(
-                        ["pkexec", "swapon", part["device"]], stderr=subprocess.STDOUT)
+                    libcalamares.utils.host_env_process_output(
+                        ["swapon", part["device"]], None)
                 except subprocess.CalledProcessError as e:
-                    if e.output != None:
-                        libcalamares.utils.error(e.output.decode("utf8"))
-                    return (_("swapon failed to activate swap " + part["device"]), _(e.output.decode("utf8")))
+                    libcalamares.utils.error(e)
+                    return (_("swapon failed to activate swap " + part["device"]), _(e))
             break
 
-    libcalamares.job.setprogress(0.2)
+    status = _("Generating NixOS configuration")
+    libcalamares.job.setprogress(0.25)
 
     try:
         # Generate hardware.nix with mounted swap device
-        subprocess.check_output(
-            ["pkexec", "nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+        libcalamares.utils.host_env_process_output(
+            ["nixos-generate-config", "--root", root_mount_point], None)
     except subprocess.CalledProcessError as e:
-        if e.output != None:
-            libcalamares.utils.error(e.output.decode("utf8"))
-        return (_("nixos-generate-config failed"), _(e.output.decode("utf8")))
-
-    libcalamares.job.setprogress(0.3)
+        libcalamares.utils.error(e)
+        return (_("nixos-generate-config failed"), _(e))
 
     # Check for unfree stuff in hardware-configuration.nix
     hf = open(root_mount_point + "/etc/nixos/hardware-configuration.nix", "r")
@@ -569,25 +576,21 @@ def run():
         hardwareout = re.sub(
             "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {} ];".format(" ".join(expkgs)), htxt)
         # Write the hardware-configuration.nix file
-        with open("/tmp/hardware-configuration.nix", "w") as f:
-            f.write(hardwareout)
-        subprocess.check_call(["pkexec", "cp", "/tmp/hardware-configuration.nix",
-                              root_mount_point + "/etc/nixos/hardware-configuration.nix"])
-        subprocess.check_call(["rm", "/tmp/hardware-configuration.nix"])
+        libcalamares.utils.host_env_process_output(["cp", "/dev/stdin",
+                                                    root_mount_point+"/etc/nixos/hardware-configuration.nix"], None, hardwareout)
 
     # Write the configuration.nix file
-    with open("/tmp/configuration.nix", "w") as f:
-        f.write(cfg)
-    subprocess.check_call(["pkexec", "cp", "/tmp/configuration.nix", config])
-    subprocess.check_call(["rm", "/tmp/configuration.nix"])
+    libcalamares.utils.host_env_process_output(
+        ["cp", "/dev/stdin", config], None, cfg)
+
+    status = _("Installing NixOS")
+    libcalamares.job.setprogress(0.3)
 
     # Install customizations
     try:
-        subprocess.check_output(["pkexec", "nixos-install", "--no-root-passwd",
-                                 "--root", root_mount_point], stderr=subprocess.STDOUT)
+        libcalamares.utils.host_env_process_output(
+            ["nixos-install", "--no-root-passwd", "--root", root_mount_point], None)
     except subprocess.CalledProcessError as e:
-        if e.output != None:
-            libcalamares.utils.error(e.output.decode("utf8"))
-        return (_("nixos-install failed"), _(e.output.decode("utf8")))
+        return (_("nixos-install failed"), _(e))
 
     return None
