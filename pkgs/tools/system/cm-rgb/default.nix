@@ -12,13 +12,13 @@
 
 buildPythonApplication rec {
   pname = "cm-rgb";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "gfduszynski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04brldaa2zpvzkcg43i5hpbj03d1nqrgiplm5nh4shn12cif19ag";
+    sha256 = "sha256-m0ZAjSLRzcjzygLEbvCiDd7krc1gRqTg1ZV4H/o2c68=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +37,6 @@ buildPythonApplication rec {
   ];
 
   postInstall = ''
-    # Remove this line when/if this PR gets merged:
-    # https://github.com/gfduszynski/cm-rgb/pull/43
-    install -m0755 scripts/cm-rgb-gui $out/bin/cm-rgb-gui
-
     mkdir -p $out/etc/udev/rules.d
     echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="2516", ATTR{idProduct}=="0051", TAG+="uaccess"' \
       > $out/etc/udev/rules.d/60-cm-rgb.rules
@@ -51,13 +47,13 @@ buildPythonApplication rec {
     longDescription = ''
       cm-rgb controls AMD Wraith Prism RGB LEDS.
 
-      To permit non-root accounts to change use this utility on
+      To permit non-root accounts to use this utility on
       NixOS, add this package to <literal>services.udev.packages</literal>
       in <filename>configuration.nix</filename>.
     '';
     homepage = "https://github.com/gfduszynski/cm-rgb";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

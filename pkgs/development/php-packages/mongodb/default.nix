@@ -1,11 +1,21 @@
-{ stdenv, buildPecl, lib, pcre', pkg-config, cyrus_sasl, icu64
-, openssl, snappy, zlib, darwin }:
+{ stdenv
+, buildPecl
+, lib
+, pcre2
+, pkg-config
+, cyrus_sasl
+, icu64
+, openssl
+, snappy
+, zlib
+, darwin
+}:
 
 buildPecl {
   pname = "mongodb";
 
-  version = "1.9.0";
-  sha256 = "16mbw3p80qxsj86nmjbfch8wv6jaq8wbz4rlpmixvhj9nwbp37hs";
+  version = "1.13.0";
+  sha256 = "sha256-IoZbYdJkyQyeqoXZTy9fV+VkFAyth8jCYB+jP4Dv4Ls=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -14,8 +24,13 @@ buildPecl {
     openssl
     snappy
     zlib
-    pcre'
+    pcre2
   ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "MongoDB driver for PHP";
+    license = licenses.asl20;
+    homepage = "https://docs.mongodb.com/drivers/php/";
+    maintainers = teams.php.members;
+  };
 }

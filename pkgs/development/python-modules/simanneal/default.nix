@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "simanneal";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "perrygeo";
     repo = "simanneal";
     rev = version;
-    sha256 = "0p75da4nbk6iy16aahl0ilqg605jrr6aa1pzfyd9hc7ak2vs6840";
+    sha256 = "sha256-yKZHkrf6fM0WsHczIEK5Kxusz5dSBgydK3fLu1nDyvk=";
   };
 
   checkInputs = [ pytest ];

@@ -18,7 +18,12 @@ let
     else toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+
+  configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
+    ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
+    touch $out
+  '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
@@ -39,7 +44,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql_11";
+        example = literalExpression "pkgs.postgresql_11";
         description = ''
           PostgreSQL package to use.
         '';
@@ -53,9 +58,15 @@ in
         '';
       };
 
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Check the syntax of the configuration file at compile time";
+      };
+
       dataDir = mkOption {
         type = types.path;
-        defaultText = "/var/lib/postgresql/\${config.services.postgresql.package.psqlSchema}";
+        defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/11";
         description = ''
           The data directory for PostgreSQL. If left as the default value
@@ -148,11 +159,11 @@ in
                 For more information on how to specify the target
                 and on which privileges exist, see the
                 <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+                The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 {
-                  "DATABASE nextcloud" = "ALL PRIVILEGES";
+                  "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
                   "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
                 }
               '';
@@ -168,7 +179,7 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           [
             {
               name = "nextcloud";
@@ -210,7 +221,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
+        example = literalExpression "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
         description = ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
           match version for <literal>services.postgresql.package</literal> value.
@@ -230,7 +241,7 @@ in
             escaped with two single quotes as described by the upstream documentation linked above.
           </para></note>
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             log_connections = true;
             log_statement = "all";
@@ -278,14 +289,16 @@ in
         port = cfg.port;
       };
 
-    services.postgresql.package =
+    services.postgresql.package = let
+        mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
+    in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
-            else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
-            else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
+      mkDefault (if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+            else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
+            else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
+            else mkThrow "9_5");
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
@@ -314,6 +327,8 @@ in
      "/share/postgresql"
     ];
 
+    system.extraDependencies = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
 
@@ -337,7 +352,7 @@ in
               touch "${cfg.dataDir}/.first_startup"
             fi
 
-            ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
+            ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"

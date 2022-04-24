@@ -1,20 +1,21 @@
-{ stdenv, lib, fetchFromGitHub
-, python37Packages
+{ lib
+, stdenv
+, fetchFromGitHub
+, gexiv2
+, gobject-introspection
+, gtk3
+, hicolor-icon-theme
+, intltool
+, libnotify
+, librsvg
+, python3
+, runtimeShell
+, wrapGAppsHook
 , fehSupport ? false, feh
 , imagemagickSupport ? true, imagemagick
-, intltool
-, gtk3
-, gexiv2
-, libnotify
-, gobject-introspection
-, hicolor-icon-theme
-, librsvg
-, wrapGAppsHook
 }:
 
-with python37Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "variety";
   version = "0.8.5";
 
@@ -25,40 +26,50 @@ buildPythonApplication rec {
     sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
   };
 
-  nativeBuildInputs = [ intltool wrapGAppsHook ];
-
-  buildInputs = [ distutils_extra ];
-
-  doCheck = false;
-
-  prePatch = ''
-    substituteInPlace variety_lib/varietyconfig.py \
-      --replace "__variety_data_directory__ = \"../data\"" "__variety_data_directory__ = \"$out/share/variety\""
-    substituteInPlace data/scripts/set_wallpaper \
-      --replace /bin/bash ${stdenv.shell}
-    substituteInPlace data/scripts/get_wallpaper \
-      --replace /bin/bash ${stdenv.shell}
-  '';
+  nativeBuildInputs = [
+    intltool
+    wrapGAppsHook
+  ];
 
   propagatedBuildInputs = [
+   gexiv2
+   gobject-introspection
+   gtk3
+   hicolor-icon-theme
+   libnotify
+   librsvg
+  ]
+  ++ (with python3.pkgs; [
     beautifulsoup4
     configobj
     dbus-python
-    gexiv2
-    gobject-introspection
-    gtk3
-    hicolor-icon-theme
+    distutils_extra
     httplib2
-    libnotify
-    librsvg
     lxml
     pillow
     pycairo
     pygobject3
     requests
     setuptools
-  ] ++ lib.optional fehSupport feh
-    ++ lib.optional imagemagickSupport imagemagick;
+  ])
+  ++ lib.optional fehSupport feh
+  ++ lib.optional imagemagickSupport imagemagick;
+
+  doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  '';
+
+  prePatch = ''
+    substituteInPlace variety_lib/varietyconfig.py \
+      --replace "__variety_data_directory__ = \"../data\"" \
+                "__variety_data_directory__ = \"$out/share/variety\""
+    substituteInPlace data/scripts/set_wallpaper \
+      --replace /bin/bash ${runtimeShell}
+    substituteInPlace data/scripts/get_wallpaper \
+      --replace /bin/bash ${runtimeShell}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/varietywalls/variety";
@@ -75,8 +86,7 @@ buildPythonApplication rec {
       Variety also includes a range of image effects, such as oil painting and
       blur, as well as options to layer quotes and a clock onto the background.
     '';
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ AndersonTorres zfnmxt ];
-    platforms = with platforms; linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
   };
 }

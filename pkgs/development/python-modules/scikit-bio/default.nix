@@ -12,7 +12,7 @@
 , pandas
 , scipy
 , hdmedians
-, scikitlearn
+, scikit-learn
 , coverage
 , python
 , isPy3k
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
   checkInputs = [ coverage ];
-  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy hdmedians scikitlearn ];
+  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy hdmedians scikit-learn ];
 
   # cython package not included for tests
   doCheck = false;
@@ -45,6 +45,7 @@ buildPythonPackage rec {
     homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.costrouc ];
   };
 }

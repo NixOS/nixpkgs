@@ -1,19 +1,21 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, isPyPy, isPy3k
 , olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2
-, tk, libX11, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+, libxcb, tk, libX11, openjpeg, libimagequant, pyroma, numpy, defusedxml
+, pytestCheckHook
 }@args:
 
 import ../pillow/generic.nix (rec {
   pname = "Pillow-SIMD";
-  version = "7.0.0.post3";
-
+  # check for release version on https://pypi.org/project/Pillow-SIMD/#history
+  # does not match the latest pillow release version!
+  version = "9.0.0.post1";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "uploadcare";
     repo = "pillow-simd";
     rev = "v${version}";
-    sha256 = "1h832xp1bzf951hr4dmjmxqfsv28sx9lr2cq96qdz1c72k40zj1h";
+    sha256 = "sha256-qTZYhgHjVMXqoYl3mG1xVrFaWrPidSY8HlyFQizV27Y=";
   };
 
   meta = with lib; {

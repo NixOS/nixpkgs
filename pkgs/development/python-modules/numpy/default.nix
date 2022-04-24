@@ -1,5 +1,6 @@
 { lib
 , fetchPypi
+, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
@@ -8,7 +9,6 @@
 , blas
 , lapack
 , writeTextFile
-, isPyPy
 , cython
 , setuptoolsBuildHook
 , pythonOlder
@@ -40,14 +40,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.20.1";
+
+  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
+  # build both to verify they don't break.
+  # https://github.com/scipy/scipy/issues/15414
+  version = "1.21.5";
+
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "02m6sms6wb4flfg8y4h0msan4y7w7qgfqxhdk21lcabhm2339iiv";
+    sha256 = "sha256-alkovGJBJk3OXtUJ5m8zZ2/Jf0ZOepGe3GcvtVMiIe4=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -74,8 +79,6 @@ in buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
-
-  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
 
   checkInputs = [
     pytest

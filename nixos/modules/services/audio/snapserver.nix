@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -44,28 +44,28 @@ let
 
   optionString = concatStringsSep " " (mapAttrsToList streamToOption cfg.streams
     # global options
-    ++ [ "--stream.bind_to_address ${cfg.listenAddress}" ]
-    ++ [ "--stream.port ${toString cfg.port}" ]
-    ++ optionalNull cfg.sampleFormat "--stream.sampleformat ${cfg.sampleFormat}"
-    ++ optionalNull cfg.codec "--stream.codec ${cfg.codec}"
-    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${toString cfg.streamBuffer}"
-    ++ optionalNull cfg.buffer "--stream.buffer ${toString cfg.buffer}"
+    ++ [ "--stream.bind_to_address=${cfg.listenAddress}" ]
+    ++ [ "--stream.port=${toString cfg.port}" ]
+    ++ optionalNull cfg.sampleFormat "--stream.sampleformat=${cfg.sampleFormat}"
+    ++ optionalNull cfg.codec "--stream.codec=${cfg.codec}"
+    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer=${toString cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "--stream.buffer=${toString cfg.buffer}"
     ++ optional cfg.sendToMuted "--stream.send_to_muted"
     # tcp json rpc
-    ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
+    ++ [ "--tcp.enabled=${toString cfg.tcp.enable}" ]
     ++ optionals cfg.tcp.enable [
-      "--tcp.address ${cfg.tcp.listenAddress}"
-      "--tcp.port ${toString cfg.tcp.port}" ]
+      "--tcp.bind_to_address=${cfg.tcp.listenAddress}"
+      "--tcp.port=${toString cfg.tcp.port}" ]
      # http json rpc
-    ++ [ "--http.enabled ${toString cfg.http.enable}" ]
+    ++ [ "--http.enabled=${toString cfg.http.enable}" ]
     ++ optionals cfg.http.enable [
-      "--http.address ${cfg.http.listenAddress}"
-      "--http.port ${toString cfg.http.port}"
-    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
+      "--http.bind_to_address=${cfg.http.listenAddress}"
+      "--http.port=${toString cfg.http.port}"
+    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\"");
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "snapserver" "controlPort"] [ "services" "snapserver" "tcp" "port" ])
+    (mkRenamedOptionModule [ "services" "snapserver" "controlPort" ] [ "services" "snapserver" "tcp" "port" ])
   ];
 
   ###### interface
@@ -101,6 +101,8 @@ in {
 
       openFirewall = mkOption {
         type = types.bool;
+        # Make the behavior consistent with other services. Set the default to
+        # false and remove the accompanying warning after NixOS 22.05 is released.
         default = true;
         description = ''
           Whether to automatically open the specified ports in the firewall.
@@ -200,12 +202,21 @@ in {
             location = mkOption {
               type = types.oneOf [ types.path types.str ];
               description = ''
-                The location of the pipe, file, Librespot/Airplay/process binary, or a TCP address.
-                Use an empty string for alsa.
+                For type <literal>pipe</literal> or <literal>file</literal>, the path to the pipe or file.
+                For type <literal>librespot</literal>, <literal>airplay</literal> or <literal>process</literal>, the path to the corresponding binary.
+                For type <literal>tcp</literal>, the <literal>host:port</literal> address to connect to or listen on.
+                For type <literal>meta</literal>, a list of stream names in the form <literal>/one/two/...</literal>. Don't forget the leading slash.
+                For type <literal>alsa</literal>, use an empty string.
+              '';
+              example = literalExpression ''
+                "/path/to/pipe"
+                "/path/to/librespot"
+                "192.168.1.2:4444"
+                "/MyTCP/Spotify/MyPipe"
               '';
             };
             type = mkOption {
-              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" ];
+              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" "meta" ];
               default = "pipe";
               description = ''
                 The type of input stream.
@@ -217,7 +228,7 @@ in {
               description = ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 # for type == "pipe":
                 {
                   mode = "create";
@@ -245,7 +256,7 @@ in {
         description = ''
           The definition for an input source.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             mpd = {
               type = "pipe";
@@ -264,10 +275,16 @@ in {
 
   config = mkIf cfg.enable {
 
-    # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
-    warnings = filter (w: w != "") (mapAttrsToList (k: v: if v.type == "spotify" then ''
-      services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
-    '' else "") cfg.streams);
+    warnings =
+      # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
+      filter (w: w != "") (mapAttrsToList (k: v: if v.type == "spotify" then ''
+        services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
+      '' else "") cfg.streams)
+      # Remove this warning after NixOS 22.05 is released.
+      ++ optional (options.services.snapserver.openFirewall.highestPrio >= (mkOptionDefault null).priority) ''
+        services.snapserver.openFirewall will no longer default to true starting with NixOS 22.11.
+        Enable it explicitly if you need to control Snapserver remotely.
+      '';
 
     systemd.services.snapserver = {
       after = [ "network.target" ];
@@ -295,8 +312,8 @@ in {
 
     networking.firewall.allowedTCPPorts =
       optionals cfg.openFirewall [ cfg.port ]
-      ++ optional cfg.tcp.enable cfg.tcp.port
-      ++ optional cfg.http.enable cfg.http.port;
+      ++ optional (cfg.openFirewall && cfg.tcp.enable) cfg.tcp.port
+      ++ optional (cfg.openFirewall && cfg.http.enable) cfg.http.port;
   };
 
   meta = {

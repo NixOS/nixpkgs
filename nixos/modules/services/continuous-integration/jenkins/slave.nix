@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.jenkinsSlave;
@@ -46,6 +46,15 @@ in {
           this is the home of the "jenkins" user.
         '';
       };
+
+      javaPackage = mkOption {
+        default = pkgs.jdk;
+        defaultText = literalExpression "pkgs.jdk";
+        description = ''
+          Java package to install.
+        '';
+        type = types.package;
+      };
     };
   };
 
@@ -63,6 +72,11 @@ in {
         useDefaultShell = true;
         uid = config.ids.uids.jenkins;
       };
+    };
+
+    programs.java = {
+      enable = true;
+      package = cfg.javaPackage;
     };
   };
 }

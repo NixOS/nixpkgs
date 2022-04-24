@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
-, pytest, pytestrunner, pytestCheckHook }:
+, pytest, pytest-runner, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "1.0.0";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "12ax07n81vxbyayhwzi1q6x7gfmwmvrvwm1n4ii6qa6fqlp9pzj7";
   };
 
-  nativeBuildInputs = [ pytestrunner ];  # pytest-runner included in setup-requires
+  nativeBuildInputs = [ pytest-runner ];  # pytest-runner included in setup-requires
   checkInputs = [ pytest pytestCheckHook ];
 
   pythonImportsCheck = [ "ci" ];

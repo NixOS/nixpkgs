@@ -8,16 +8,15 @@
 
 buildDunePackage rec {
   pname = "arp";
-  version = "2.3.1";
-
-  minimumOCamlVersion = "4.06";
-
-  useDune2 = true;
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "1nzm3fbkvz702g8f60fs49736lpffwchy64i1l1raxm9b4lmdk3p";
+    sha256 = "1x3l8v96ywc3wrcwbf0j04b8agap4fif0fz6ki2ndzx57yqcjszn";
   };
+
+  minimumOCamlVersion = "4.06";
+  useDune2 = true;
 
   nativeBuildInputs = [
     bisect_ppx
@@ -25,33 +24,32 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     cstruct
-    ipaddr
-    macaddr
-    logs
-    mirage-time
-    mirage-protocols
-    lwt
     duration
+    ipaddr
+    logs
+    lwt
+    macaddr
     mirage-profile
+    mirage-protocols
+    mirage-time
   ];
 
   doCheck = true;
   checkInputs = [
     alcotest
+    ethernet
+    mirage-clock-unix
     mirage-profile
     mirage-random
     mirage-random-test
-    mirage-vnetif
-    mirage-clock-unix
-    mirage-random
     mirage-time-unix
-    ethernet
+    mirage-vnetif
   ];
 
   meta = with lib; {
     description = "Address Resolution Protocol purely in OCaml";
-    license = licenses.isc;
     homepage = "https://github.com/mirage/arp";
-    maintainers = [ maintainers.sternenseemann ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

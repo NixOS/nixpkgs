@@ -2,6 +2,8 @@
 
 bundlerEnv {
   name = "chef-dk-4.13.3";
+  # Do not change this to pname & version until underlying issues with Ruby
+  # packaging are resolved ; see https://github.com/NixOS/nixpkgs/issues/70171
 
   inherit ruby;
   gemdir = ./.;

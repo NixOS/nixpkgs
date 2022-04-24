@@ -5,25 +5,38 @@
 , google-api-core
 , google-cloud-core
 , google-cloud-testutils
-, grpcio
 , libcst
 , mock
 , proto-plus
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.0.2";
+  version = "3.7.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s2gvlzfqd2gsrzaz7yl9q8s1k03dlsjahgg95s017vlcn21d0v1";
+    hash = "sha256-icZG33G/noii9V0rsHTG/Qe8cKDVDfASRKy2XRYM5Yg=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # prevent shadowing imports

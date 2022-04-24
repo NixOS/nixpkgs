@@ -9,14 +9,14 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-bTh+Z5w5ZkL2iPteStqVcoFDGZIbpVjuXn20TZsfgtY=";
-    arm64-linux_hash = "sha256-aIzVSIRuGNiIFJPToXCQwYsbICKuPtwKATnQhkxvJuA=";
-    x64-osx_hash = "sha256-FxRSAJvRQya2x1kei6yRceGcyQ2mCaFveyeMGw0Jqw4=";
+    x64-linux_hash = "sha256-4jzQ/bax323r4OzWwr9vq+6x0GasBZhRT+i6bDS/RMs=";
+    arm64-linux_hash = "sha256-IOFKlqey9biL8wCpbIxMnZZ5Svvrh6KMkNoZ7GBht3M=";
+    x64-osx_hash = "sha256-tdyEYY6qXNKjMPW652gtPAhTm/aNyTe+CgZ5aA9k2EM=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "3.0.2.4552";
+  version = "4.0.5.5981";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -26,13 +26,17 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
 
-    makeWrapper "${dotnetCorePackages.netcore_3_1}/bin/dotnet" $out/bin/Radarr \
+    makeWrapper "${dotnetCorePackages.runtime_3_1}/bin/dotnet" $out/bin/Radarr \
       --add-flags "$out/share/${pname}-${version}/Radarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         curl sqlite libmediainfo mono openssl icu ]}
+
+    runHook postInstall
   '';
 
   passthru = {

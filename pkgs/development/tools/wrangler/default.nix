@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
-  version = "1.15.0";
+  version = "1.19.11";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/5iIdEUbesX+IRQQzeJazt3i/xAtghblct718EmYci4=";
+    sha256 = "sha256-8Vka8HTU0YkTS1DeQuqVLsnRGnig7Aiql5e/6NBk7qs=";
   };
 
-  cargoSha256 = "sha256-6XWFhfY8QIl4S6zDyyM2YvFUoGMnKZQ3d/GT4yQWb7A=";
+  cargoSha256 = "sha256-bw6Z4SW+NOFFpUJ5xGwdccv8KQnSri/TFxAJp+9fsWk=";
 
   nativeBuildInputs = [ pkg-config ];
 

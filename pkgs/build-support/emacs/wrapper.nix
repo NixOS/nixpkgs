@@ -27,12 +27,12 @@ let customEmacsPackages =
         # use the unstable MELPA version of magit
         magit = self.melpaPackages.magit;
       });
-in customEmacsPackages.emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 ```
 
 */
 
-{ lib, lndir, makeWrapper, runCommand }: self:
+{ lib, lndir, makeWrapper, runCommand, gcc }: self:
 
 with lib;
 
@@ -65,7 +65,10 @@ runCommand
     # Store all paths we want to add to emacs here, so that we only need to add
     # one path to the load lists
     deps = runCommand "emacs-packages-deps"
-      { inherit explicitRequires lndir emacs; }
+      {
+        inherit explicitRequires lndir emacs;
+        nativeBuildInputs = lib.optional nativeComp gcc;
+      }
       ''
         findInputsOld() {
           local pkg="$1"; shift
@@ -132,10 +135,16 @@ runCommand
           ''}
         }
 
+        siteAutoloads="$out/share/emacs/site-lisp/nix-generated-autoload.el"
+        touch $siteAutoloads
+
         # Iterate over the array of inputs (avoiding nix's own interpolation)
         for pkg in "''${requires[@]}"; do
           linkEmacsPackage $pkg
+          find $pkg -name "*-autoloads.el" \
+              -exec echo \(load \"{}\" \'noerror \'nomessage\) \; >> $siteAutoloads
         done
+        echo "(provide 'nix-generated-autoload)" >> $siteAutoloads
 
         siteStart="$out/share/emacs/site-lisp/site-start.el"
         siteStartByteCompiled="$siteStart"c
@@ -159,19 +168,24 @@ runCommand
         (add-to-list 'load-path "$out/share/emacs/site-lisp")
         (add-to-list 'exec-path "$out/bin")
         ${optionalString nativeComp ''
-          (add-to-list 'comp-eln-load-path "$out/share/emacs/native-lisp/")
+          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
         ''}
         EOF
-        # Link subdirs.el from the emacs distribution
-        ln -s $emacs/share/emacs/site-lisp/subdirs.el -T $subdirs
+
+        # Generate a subdirs.el that statically adds all subdirectories to load-path.
+        $emacs/bin/emacs \
+          --batch \
+          --load ${./mk-wrapper-subdirs.el} \
+          --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
+          > "$subdirs"
 
         # Byte-compiling improves start-up time only slightly, but costs nothing.
-        $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
+        $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs" "$siteAutoloads"
 
         ${optionalString nativeComp ''
           $emacs/bin/emacs --batch \
-            --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
-            -f batch-native-compile "$siteStart" "$subdirs"
+            --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
+            -f batch-native-compile "$siteStart" "$subdirs" "$siteAutoloads"
         ''}
       '';
 
@@ -183,12 +197,18 @@ runCommand
     # Wrap emacs and friends so they find our site-start.el before the original.
     for prog in $emacs/bin/*; do # */
       local progname=$(basename "$prog")
+      local autoloadExpression=""
       rm -f "$out/bin/$progname"
+      if [[ $progname == emacs ]]; then
+        # progs other than "emacs" do not understand the `-l` switches
+        autoloadExpression="-l cl-loaddefs -l nix-generated-autoload"
+      fi
 
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+        --subst-var autoloadExpression \
         --subst-var prog
       chmod +x $out/bin/$progname
     done
@@ -207,6 +227,8 @@ runCommand
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
+        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+        --subst-var-by autoloadExpression "-l cl-loaddefs -l nix-generated-autoload" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi

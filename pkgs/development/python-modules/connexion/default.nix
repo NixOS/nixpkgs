@@ -1,89 +1,75 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, glibcLocales
-, lib
-, pythonOlder
-
+{ lib
 , aiohttp
-, aiohttp-swagger
 , aiohttp-jinja2
+, aiohttp-remotes
+, aiohttp-swagger
+, buildPythonPackage
 , clickclick
 , decorator
-, flake8
+, fetchFromGitHub
 , flask
-, gevent
 , inflection
 , jsonschema
-, mock
 , openapi-spec-validator
-, pathlib
-, pytest
 , pytest-aiohttp
-, pytestcov
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , requests
-, six
 , swagger-ui-bundle
 , testfixtures
-, typing
-, ujson
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.4.0";
+  version = "2.12.0";
+  format = "setuptools";
 
-  # we're fetching from GitHub because tests weren't distributed on PyPi
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = version;
-    sha256 = "1b9q027wrks0afl7l3a1wxymz3aick26b9fq2m07pc5wb9np0vvg";
+    sha256 = "sha256-JMuI3h0Pg7nCXrJtF0fhSFJTOWelEqcvmqv3ooIfkqM=";
   };
 
-  checkInputs = [
-    decorator
-    mock
-    pytest
-    pytestcov
-    testfixtures
-    flask
-    swagger-ui-bundle
-  ]
-  ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson pytest-aiohttp ]
-  ++ lib.optional (pythonOlder "3.7") glibcLocales
-  ;
   propagatedBuildInputs = [
+    aiohttp
+    aiohttp-jinja2
+    aiohttp-swagger
     clickclick
+    flask
+    inflection
     jsonschema
+    openapi-spec-validator
     pyyaml
     requests
-    six
-    inflection
-    openapi-spec-validator
     swagger-ui-bundle
-    flask
-  ]
-  ++ lib.optional (pythonOlder "3.4") pathlib
-  ++ lib.optional (pythonOlder "3.6") typing
-  ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson ]
-  ;
+  ];
 
-  preConfigure = lib.optional (pythonOlder "3.7") ''
-    export LANG=en_US.UTF-8
-  '';
+  checkInputs = [
+    aiohttp-remotes
+    decorator
+    pytest-aiohttp
+    pytestCheckHook
+    testfixtures
+  ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'aiohttp>=2.3.10,<3.5.2'" "'aiohttp>=2.3.10'"
+    substituteInPlace setup.py \
+      --replace "PyYAML>=5.1,<6" "PyYAML>=5.1" \
+      --replace "jsonschema>=2.5.1,<4" "jsonschema>=2.5.1"
   '';
 
-  checkPhase = if isPy3k then ''
-    pytest -k "not test_app_get_root_path and \
-               not test_verify_oauth_scopes_remote and \
-               not test_verify_oauth_scopes_local and \
-               not test_run_with_aiohttp_not_installed"''
-  else "pytest --ignore=tests/aiohttp";
+  disabledTests = [
+    # We have a later PyYAML release
+    "test_swagger_yaml"
+  ];
+
+  pythonImportsCheck = [
+    "connexion"
+  ];
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";

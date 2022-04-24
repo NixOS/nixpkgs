@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.7.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0dmgmvpghsm938iznalbg8h8k17a5h3q466yfc67mcll428n4nx3";
+    sha256 = "18bpnnwjx72d5ps06dr89mkixiwzc9hf5gr75k8qcnrkshl038v2";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     pikepdf
     img2pdf
     setuptools
-    dateutil
+    python-dateutil
   ];
 
   # incompatible with wrapGAppsHook

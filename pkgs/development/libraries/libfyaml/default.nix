@@ -2,16 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libfyaml";
-  version = "0.6.3";
+  version = "0.7.12";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1aw5s0ns79jr3lpcy3hdsrlr79rrv5aqymv4h43axvy2bi90nrr0";
+    sha256 = "sha256-gmVjiwf8PsDYRt8jmXNrd+hJSL099hbLjq8Z0c1u2HE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  doCheck = true;
+
+  preCheck = ''
+    patchShebangs test
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/pantoniou/libfyaml";

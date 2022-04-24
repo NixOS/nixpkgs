@@ -1,0 +1,59 @@
+Source: https://github.com/Gcenx/MoltenVK/commit/1f268bd45f6c928784d7cb90dedce382895f10ae
+
+Fake extensions for DXVK;
+- _features.geometryShader
+- _features.tessellationShader
+- _features.shaderCullDistance
+
+Enabled defaults;
+- MVK_ALLOW_METAL_FENCES=1
+- MVK_CONFIG_RESUME_LOST_DEVICE=1
+---
+ MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm  | 3 +++
+ MoltenVK/MoltenVK/Utility/MVKEnvironment.h | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm b/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm
+index bc6d19df..e1959c6e 100644
+--- a/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm
++++ b/MoltenVK/MoltenVK/GPUObjects/MVKDevice.mm
+@@ -1656,6 +1656,8 @@
+     _features.robustBufferAccess = true;  // XXX Required by Vulkan spec
+     _features.fullDrawIndexUint32 = true;
+     _features.independentBlend = true;
++    _features.geometryShader = true;  // XXX Required by DXVK for D3D10
++    _features.tessellationShader = true;  // XXX Required by DXVK for D3D11
+     _features.sampleRateShading = true;
+     _features.depthBiasClamp = true;
+     _features.fillModeNonSolid = true;
+@@ -1669,6 +1671,7 @@
+     _features.shaderUniformBufferArrayDynamicIndexing = true;
+     _features.shaderStorageBufferArrayDynamicIndexing = true;
+     _features.shaderClipDistance = true;
++    _features.shaderCullDistance = true;  // XXX Required by DXVK for 10level9
+     _features.shaderInt16 = true;
+     _features.multiDrawIndirect = true;
+     _features.inheritedQueries = true;
+diff --git a/MoltenVK/MoltenVK/Utility/MVKEnvironment.h b/MoltenVK/MoltenVK/Utility/MVKEnvironment.h
+index 81d0defc..80c414d3 100644
+--- a/MoltenVK/MoltenVK/Utility/MVKEnvironment.h
++++ b/MoltenVK/MoltenVK/Utility/MVKEnvironment.h
+@@ -240,7 +240,7 @@ void mvkSetConfig(const MVKConfiguration& mvkConfig);
+ #   define MVK_ALLOW_METAL_EVENTS    1
+ #endif
+ #ifndef MVK_ALLOW_METAL_FENCES
+-#   define MVK_ALLOW_METAL_FENCES    0
++#   define MVK_ALLOW_METAL_FENCES    1 // XXX Required by DXVK for Apple/NVidia GPUs (better FPS than CPU Emulation)
+ #endif
+ 
+ /** Substitute Metal 2D textures for Vulkan 1D images. Enabled by default. */
+@@ -275,7 +275,7 @@ void mvkSetConfig(const MVKConfiguration& mvkConfig);
+ 
+ /** Resume MVKDevice VK_ERROR_DEVICE_LOST errors that do not cause MVKPhysicalDevice errors. Disabled by default. */
+ #ifndef MVK_CONFIG_RESUME_LOST_DEVICE
+-#   define MVK_CONFIG_RESUME_LOST_DEVICE    0
++#   define MVK_CONFIG_RESUME_LOST_DEVICE    1
+ #endif
+ 
+ /** Support Metal argument buffers. Disabled by default. */
+ 

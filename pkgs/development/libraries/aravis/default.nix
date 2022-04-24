@@ -6,7 +6,7 @@
 , gst-plugins-good ? null
 , gst-plugins-bad ? null
 , libnotify ? null
-, gnome3 ? null
+, gnome ? null
 , gtk3 ? null
 , enableUsb ? true
 , enablePacketSocket ? true
@@ -26,7 +26,7 @@ in
   assert enableGstPlugin -> lib.all (pkg: pkg != null) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ];
   assert enableViewer -> enableGstPlugin;
   assert enableViewer -> libnotify != null;
-  assert enableViewer -> gnome3 != null;
+  assert enableViewer -> gnome != null;
   assert enableViewer -> gtk3 != null;
   assert enableViewer -> gstreamerAtLeastVersion1;
 
@@ -56,7 +56,7 @@ in
       ++ lib.optional enableUsb libusb1
       ++ lib.optional enablePacketSocket audit
       ++ lib.optionals (enableViewer || enableGstPlugin) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]
-      ++ lib.optionals (enableViewer) [ libnotify gtk3 gnome3.adwaita-icon-theme ];
+      ++ lib.optionals (enableViewer) [ libnotify gtk3 gnome.adwaita-icon-theme ];
 
     preAutoreconf = "./autogen.sh";
 

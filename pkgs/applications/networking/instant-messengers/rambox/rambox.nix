@@ -1,6 +1,6 @@
 { pname, version, src, meta, desktopName ? "Rambox" }:
 
-{ appimageTools, lib, fetchurl, makeDesktopItem }:
+{ appimageTools, lib, fetchurl, gsettings-desktop-schemas, gtk3, makeDesktopItem }:
 
 let
   name = "${pname}-${version}";
@@ -10,8 +10,7 @@ let
     name = pname;
     exec = pname;
     icon = pname;
-    type = "Application";
-    categories = "Network;";
+    categories = [ "Network" ];
   });
 
   appimageContents = appimageTools.extractType2 {
@@ -19,6 +18,9 @@ let
   };
 in appimageTools.wrapType2 rec {
   inherit name src meta;
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps

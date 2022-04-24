@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , poetry

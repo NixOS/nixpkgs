@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "smmap";
-  version = "3.0.5";
+  version = "5.0.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84c2751ef3072d4f6b2785ec7ee40244c6f45eb934d9e543e2c51f1bd3d54c50";
+    sha256 = "c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936";
   };
 
   checkInputs = [ nosexcover ];

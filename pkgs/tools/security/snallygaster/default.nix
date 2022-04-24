@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snallygaster";
-  version = "0.0.9";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "hannob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gan5asgrxdgfi9lalhxzj3vs7nkazi8nqia36bpz1qb5fz7jrx3";
+    sha256 = "sha256-JXuRCUWpoGhBbU38XMEQovCiVfbyBMJ+SIrt3iqFuAo=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -5,44 +5,63 @@
 , dnspython
 , fetchFromGitHub
 , mock
+, poetry-core
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, six
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "5.1.1";
-  disabled = pythonOlder "3.6";
+  version = "9.0.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Dinnerbone";
+    owner = "py-mine";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "1a3qrl6w76ayqkl1knaz5ai0brrzpjfdk33lyb1n1p7gnc73nhlr";
+    rev = "v${version}";
+    hash = "sha256-h5pPtzs04TDqOkDFBpcn6faFN4sz/nEMsjjiH7mTEH0=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     asyncio-dgram
     click
     dnspython
-    six
   ];
 
   checkInputs = [
     mock
+    pytest-asyncio
     pytestCheckHook
   ];
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "dnspython3" "dnspython"
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" "" \
+      --replace 'asyncio-dgram = "2.1.2"' 'asyncio-dgram = ">=2.1.2"' \
+      --replace 'dnspython = "2.2.1"' 'dnspython = ">=2.2.0"'
   '';
 
-  pythonImportsCheck = [ "mcstatus" ];
+  pythonImportsCheck = [
+    "mcstatus"
+  ];
+
+  disabledTests = [
+    # DNS features are limited in the sandbox
+    "test_query"
+    "test_query_retry"
+  ];
 
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
-    homepage = "https://github.com/Dinnerbone/mcstatus";
+    homepage = "https://github.com/py-mine/mcstatus";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

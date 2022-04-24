@@ -1,57 +1,62 @@
 { lib, stdenv
 , fetchFromGitHub
 , sassc
-, autoreconfHook
-, pkg-config
-, gtk3
-, gnome3
+, meson
+, ninja
+, glib
+, gnome
 , gtk-engine-murrine
-, optipng
 , inkscape
 , cinnamon
+, makeFontsConf
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20210127";
+  version = "20220405";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P7YZTD5bAWNWepL7qsZZAMf8ujzNbHOj/SLx8Fw3bi4=";
+    sha256 = "sha256-CBj/SpBWH5xdNCQSJquqIntcmfARI7Cud76Tp8txXL4=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
+    meson
+    ninja
     sassc
-    optipng
     inkscape
-    gtk3
+    glib # for glib-compile-resources
+    python3
   ];
 
   propagatedUserEnvPkgs = [
-    gnome3.gnome-themes-extra
+    gnome.gnome-themes-extra
     gtk-engine-murrine
   ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    patchShebangs meson/install-file.py
+  '';
 
   preBuild = ''
     # Shut up inkscape's warnings about creating profile directory
-    export HOME="$NIX_BUILD_ROOT"
+    export HOME="$TMPDIR"
   '';
 
-  configureFlags = [
-    "--with-cinnamon=${cinnamon.cinnamon-common.version}"
-    "--with-gnome-shell=${gnome3.gnome-shell.version}"
-    "--disable-unity"
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  mesonFlags = [
+    # "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm,metacity"
+    # "-Dvariants=light,darker,dark,lighter"
+    "-Dcinnamon_version=${cinnamon.cinnamon-common.version}"
+    "-Dgnome_shell_version=${gnome.gnome-shell.version}"
+    # You will need to patch gdm to make use of this.
+    "-Dgnome_shell_gresource=true"
   ];
-
-  postInstall = ''
-    install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
-  '';
 
   meta = with lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";

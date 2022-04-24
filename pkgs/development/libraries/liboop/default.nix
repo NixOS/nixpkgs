@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "liboop-1.0";
+  pname = "liboop";
+  version = "1.0";
 
   src = fetchurl {
     url = "http://download.ofb.net/liboop/liboop.tar.gz";

@@ -6,6 +6,7 @@
 , zlib
 , openssl
 , readline
+, withInternalSqlite ? true
 , sqlite
 , ed
 , which
@@ -15,30 +16,26 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.14";
+  version = "2.18";
 
   src = fetchurl {
-    urls =
-      [
-        "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
-      ];
-    name = "${pname}-${version}.tar.gz";
-    sha256 = "sha256-uNDJIBlt2K4pFS+nRI5ROh+nxYiHG3heP7/Ae0KgX7k=";
+    url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
+    sha256 = "0iimdzfdl5687xyqxfadbn640x45n3933q1nfx7b32rl4v3vk778";
   };
 
-  nativeBuildInputs = [ installShellFiles tcl ];
+  nativeBuildInputs = [ installShellFiles tcl tcllib ];
 
-  buildInputs = [ zlib openssl readline sqlite which ed ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ zlib openssl readline which ed ]
+    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optional (!withInternalSqlite) sqlite;
+
+  enableParallelBuilding = true;
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  configureFlags = [ "--disable-internal-sqlite" ]
+  configureFlags =
+    lib.optional (!withInternalSqlite) "--disable-internal-sqlite"
     ++ lib.optional withJson "--json";
-
-  preCheck = ''
-    export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
-  '';
 
   preBuild = ''
     export USER=nonexistent-but-specified-user
@@ -61,8 +58,9 @@ stdenv.mkDerivation rec {
       many such systems in use today. Fossil strives to distinguish itself
       from the others by being extremely simple to setup and operate.
     '';
-    homepage = "http://www.fossil-scm.org/";
+    homepage = "https://www.fossil-scm.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ maggesi viric ];
+    platforms = platforms.all;
   };
 }

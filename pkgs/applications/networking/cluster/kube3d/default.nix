@@ -1,26 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.4-k3s1" }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.22.2-k3s2" }:
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "4.4.0";
-
-  excludedPackages = "tools";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-+9VtFHZ4ZZiX04u5YvPoQaelH9Q9oKMrbFHFFiNUxBA=";
+    sha256 = "sha256-ZuUjk1wb7iRZX+OpjLJHp1T0WYNjCHU6DpYF4V/heVc=";
   };
 
   vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = let t = "github.com/rancher/k3d/v4/version"; in
-    ''
-      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.K3sVersion=v${k3sVersion}")
-    '';
+  excludedPackages = [ "tools" "docgen" ];
+
+  ldflags =
+    let t = "github.com/rancher/k3d/v5/version"; in
+    [ "-s" "-w" "-X ${t}.Version=v${version}" "-X ${t}.K3sVersion=v${k3sVersion}" ];
 
   doCheck = false;
 
@@ -35,7 +34,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/k3d --help
-    $out/bin/k3d version | grep "k3d version v${version}"
+    $out/bin/k3d --version | grep -e "k3d version v${version}" -e "k3s version v${k3sVersion}"
     runHook postInstallCheck
   '';
 
@@ -50,7 +49,8 @@ buildGoModule rec {
       multi-node k3s cluster on a single machine using docker.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
+    mainProgram = "k3d";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

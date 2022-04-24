@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, coreutils, ncurses, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "4.8";
+  version = "5.1";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
-    sha256 = "1bi5fhr93n72pkap4mqsjd1pwnqjf6czg359c5xwczavfk6mamgh";
+    hash = "sha256-D4f1d7zodkHFJa3bm8xgu6pXn+mB2rdZBD484VVtu5I=";
   };
 
   postPatch = ''

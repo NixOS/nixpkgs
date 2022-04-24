@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, libgpgerror, libgcrypt, libksba, zlib }:
-
-with lib;
+{ lib, stdenv, fetchurl, gettext, libgpg-error, libgcrypt, libksba, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "ntbtls";
@@ -13,14 +11,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  buildInputs = [ libgcrypt libgpgerror libksba zlib ]
+  buildInputs = [ libgcrypt libgpg-error libksba zlib ]
     ++ lib.optional stdenv.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A tiny TLS 1.2 only implementation";
     homepage = "https://www.gnupg.org/software/ntbtls/";
     license = licenses.gpl3Plus;

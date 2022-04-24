@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) literalExpression mkOption types;
   cfg = config.security.dhparams;
+  opt = options.security.dhparams;
 
   bitType = types.addCheck types.int (b: b >= 16) // {
     name = "bits";
@@ -13,6 +14,7 @@ let
     options.bits = mkOption {
       type = bitType;
       default = cfg.defaultBitSize;
+      defaultText = literalExpression "config.${opt.defaultBitSize}";
       description = ''
         The bit size for the prime that is used during a Diffie-Hellman
         key exchange.
@@ -53,7 +55,7 @@ in {
           coerce = bits: { inherit bits; };
         in attrsOf (coercedTo int coerce (submodule paramsSubmodule));
         default = {};
-        example = lib.literalExample "{ nginx.bits = 3072; }";
+        example = lib.literalExpression "{ nginx.bits = 3072; }";
         description = ''
           Diffie-Hellman parameters to generate.
 

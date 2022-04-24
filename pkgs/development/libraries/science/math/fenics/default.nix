@@ -26,9 +26,19 @@
 , zlib
 , blas
 , lapack
+, nixosTests
 }:
 let
   version = "2019.1.0";
+
+  # TODO: test with newer pytest
+  pytest = pythonPackages.callPackage
+    ../../../../python2-modules/pytest {
+      # hypothesis tests require pytest that causes dependency cycle
+      hypothesis = pythonPackages.hypothesis.override {
+        doCheck = false;
+      };
+    };
 
   dijitso = pythonPackages.buildPythonPackage {
     pname = "dijitso";
@@ -233,8 +243,8 @@ let
       export CMAKE_PREFIX_PATH=${pybind11}/share/cmake/pybind11:$CMAKE_PREFIX_PATH
       substituteInPlace setup.py --replace "pybind11==2.2.4" "pybind11"
       substituteInPlace dolfin/jit/jit.py \
-        --replace 'pkg-config.exists("dolfin")' 'pkg-config.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
-        --replace 'pkg-config.parse("dolfin")' 'pkg-config.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
+        --replace 'pkgconfig.exists("dolfin")' 'pkgconfig.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
+        --replace 'pkgconfig.parse("dolfin")' 'pkgconfig.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
     '';
     buildInputs = [
       dolfin
@@ -251,6 +261,7 @@ let
       pythonPackages.pybind11
     ];
     doCheck = false; # Tries to orte_ess_init and call ssh to localhost
+    passthru.tests = { inherit (nixosTests) fenics; };
     meta = {
       description = "Python bindings for the DOLFIN FEM compiler";
       homepage = "https://fenicsproject.org/";

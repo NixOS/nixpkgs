@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, zlib, python3, bzip2, lzma}:
+{lib, stdenv, fetchFromGitHub, zlib, python3, bzip2, xz}:
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [ zlib bzip2 lzma ];
+  buildInputs = [ zlib bzip2 xz ];
+
   cxx = if stdenv.cc.isClang then "clang++" else "g++";
   cc = if stdenv.cc.isClang then "clang" else "gcc";
   buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} -j $NIX_BUILD_CORES";

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
+{ lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
+, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -23,13 +23,13 @@ in {
   ] mkPlugin);
 
   femon = stdenv.mkDerivation rec {
-
-    name = "vdr-femon-2.4.0";
+    pname = "vdr-femon";
+    version = "2.4.0";
 
     buildInputs = [ vdr ];
 
     src = fetchurl {
-      url = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/files/${name}.tgz";
+      url = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/files/${pname}-${version}.tgz";
       sha256 = "1hra1xslj8s68zbyr8zdqp8yap0aj1p6rxyc6cwy1j122kwcnapp";
     };
 
@@ -48,13 +48,12 @@ in {
   };
 
   vaapidevice = stdenv.mkDerivation {
-
     pname = "vdr-vaapidevice";
     version = "20190525";
 
     buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg_3
-      alsaLib
+      vdr libxcb xcbutilwm ffmpeg
+      alsa-lib
       libvdpau # vdpau
       libva # va-api
     ] ++ (with xorg; [ libxcb libX11 ]);
@@ -63,6 +62,8 @@ in {
 
     postPatch = ''
       substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
+      # https://github.com/rofafor/vdr-plugin-vaapidevice/issues/5
+      substituteInPlace Makefile --replace libva libva-x11
     '';
 
     src = fetchFromGitHub {
@@ -84,7 +85,8 @@ in {
 
 
   markad = stdenv.mkDerivation rec {
-    name = "vdr-markad-2017-03-13";
+    pname = "vdr-markad";
+    version = "unstable-2017-03-13";
 
     src = fetchgit {
       url = "git://projects.vdr-developer.org/vdr-plugin-markad.git";
@@ -130,12 +132,12 @@ in {
 
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
-    version = "20191202";
+    version = "2.4.1";
 
     src = fetchgit {
       url = "git://projects.vdr-developer.org/vdr-plugin-epgsearch.git";
-      sha256 = "18kskwnnscr4rb4yzfikw1la318zjgraf340cl7n9z77chi2gi8m";
-      rev = "602d66c55964998ce25c6c57b302949a9517f149";
+      sha256 = "sha256-UlbPCkUFN0Gyxjw9xq2STFTDZRVcPPNjadSQd4o2o9U=";
+      rev = "v${version}";
     };
 
     postPatch = ''
@@ -176,18 +178,16 @@ in {
 
   };
 
-  vnsiserver = let
-    name = "vnsiserver";
+  vnsiserver = stdenv.mkDerivation rec {
+    pname = "vdr-vnsiserver";
     version = "1.8.0";
-  in stdenv.mkDerivation {
-    name = "vdr-${name}-${version}";
 
     buildInputs = [ vdr ];
 
     installFlags = [ "DESTDIR=$(out)" ];
 
     src = fetchFromGitHub {
-      repo = "vdr-plugin-${name}";
+      repo = "vdr-plugin-vnsiserver";
       owner = "FernetMenta";
       rev = "v${version}";
       sha256 = "0n7idpxqx7ayd63scl6xwdx828ik4kb2mwz0c30cfjnmnxxd45lw";
@@ -204,7 +204,8 @@ in {
   };
 
   text2skin = stdenv.mkDerivation {
-    name = "vdr-text2skin-1.3.4-20170702";
+    pname = "vdr-text2skin";
+    version = "1.3.4-20170702";
 
     src = fetchgit {
       url = "git://projects.vdr-developer.org/vdr-plugin-text2skin.git";
@@ -226,7 +227,7 @@ in {
       mkdir -p $out/lib/vdr
     '';
 
-    installPhase = ":";
+    dontInstall = true;
 
     meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-text2skin";
@@ -308,7 +309,6 @@ in {
 
   in stdenv.mkDerivation rec {
     pname = "vdr-fritzbox";
-
     version = "1.5.3";
 
     src = fetchFromGitHub {

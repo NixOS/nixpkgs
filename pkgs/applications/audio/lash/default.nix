@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, gtk2, libjack2, libuuid, libxml2
+{ lib, stdenv, fetchurl, alsa-lib, gtk2, libjack2, libuuid, libxml2
 , makeWrapper, pkg-config, readline }:
 
 assert libuuid != null;
@@ -16,7 +16,7 @@ stdenv.mkDerivation  rec {
   patches = [ ./socket.patch ./gcc-47.patch ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ alsaLib gtk2 libjack2 libxml2 readline ];
+  buildInputs = [ alsa-lib gtk2 libjack2 libxml2 readline ];
   propagatedBuildInputs = [ libuuid ];
   NIX_LDFLAGS = "-lm -lpthread -luuid";
 

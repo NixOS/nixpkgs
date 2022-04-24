@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, alsaUtils, fltk, libjack2, libXft,
+{ lib, stdenv, fetchurl, alsa-lib, alsa-utils, fltk, libjack2, libXft,
 libXpm, libjpeg, libpng, libsamplerate, libsndfile, zlib }:
 
 stdenv.mkDerivation  rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
 
   patches = [ ./fltk-path.patch ];
 
-  buildInputs = [ alsaLib alsaUtils fltk libjack2 libXft libXpm libjpeg
+  buildInputs = [ alsa-lib alsa-utils fltk libjack2 libXft libXpm libjpeg
     libpng libsamplerate libsndfile zlib ];
 
   meta = with lib; {

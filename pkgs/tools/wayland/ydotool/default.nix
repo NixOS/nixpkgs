@@ -1,33 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, boost, libevdevplus, libuinputplus }:
+{ lib, stdenv, fetchFromGitHub, cmake, scdoc, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
-  version = "0.1.8";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "ReimuNotMoe";
     repo = "ydotool";
     rev = "v${version}";
-    sha256 = "0mx3636p0f8pznmwm4rlbwq7wrmjb2ygkf8b3a6ps96a7j1fw39l";
+    sha256 = "sha256-maXXGCqB8dkGO8956hsKSwM4HQdYn6z1jBFENQ9sKcA=";
   };
 
-  # disable static linking
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace \
-      "-static" \
-      ""
+  nativeBuildInputs = [ cmake scdoc ];
+
+  postInstall = ''
+    substituteInPlace ${placeholder "out"}/lib/systemd/user/ydotool.service \
+      --replace /usr/bin/kill "${util-linux}/bin/kill"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    boost libevdevplus libuinputplus
-  ];
-
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ReimuNotMoe/ydotool";
     description = "Generic Linux command-line automation tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ willibutz ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ willibutz kraem ];
     platforms = with platforms; linux;
   };
 }

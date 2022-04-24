@@ -1,23 +1,23 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , boehmgc
 , boost
 , cairo
 , cmake
-, double-conversion
 , fetchurl
+, fetchpatch
 , gettext
-, gdl
 , ghostscript
 , glib
-, glib-networking
 , glibmm
 , gsl
+, gspell
 , gtk-mac-integration
 , gtkmm3
-, gtkspell3
 , gdk-pixbuf
 , imagemagick
 , lcms
+, lib2geom
 , libcdr
 , libexif
 , libpng
@@ -46,16 +46,18 @@ let
     (ps: with ps; [
       numpy
       lxml
+      pillow
       scour
+      pyserial
     ]);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.0.2";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2j4jBRGgjL8h6GcQ0WFFhZT+qHhn6RV7Z+0BoE6ieYo=";
+    sha256 = "sha256-P/5UoG0LJaTNi260JFNu8e0gW+E0Q6Oc1DfIx7ibltE=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -71,6 +73,13 @@ stdenv.mkDerivation rec {
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
     })
+
+    # Fix build with poppler 22.03
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/4187
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/a18c57ffff313fd08bc8a44f6b6bf0b01d7e9b75.patch";
+      sha256 = "UZb8ZTtfA5667uo5ZlVQ5vPowiSgd4ItAJ9U1BOsRQg=";
+    })
   ];
 
   postPatch = ''
@@ -83,6 +92,10 @@ stdenv.mkDerivation rec {
       --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
+
+    # double-conversion is a dependency of 2geom
+    substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
+      --replace 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
   nativeBuildInputs = [
@@ -101,16 +114,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boehmgc
     boost
-    double-conversion
-    gdl
     gettext
     glib
-    glib-networking
     glibmm
     gsl
     gtkmm3
     imagemagick
     lcms
+    lib2geom
     libcdr
     libexif
     libpng
@@ -130,7 +141,7 @@ stdenv.mkDerivation rec {
     python3Env
     zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    gtkspell3
+    gspell
   ] ++ lib.optionals stdenv.isDarwin [
     cairo
     gtk-mac-integration

@@ -2,8 +2,9 @@
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 
-stdenv.mkDerivation {
-  name = "tk-${tcl.version}";
+tcl.mkTclDerivation {
+  pname = "tk";
+  version = tcl.version;
 
   inherit src patches;
 
@@ -14,6 +15,12 @@ stdenv.mkDerivation {
   preConfigure = ''
     configureFlagsArray+=(--mandir=$man/share/man --enable-man-symlinks)
     cd unix
+  '';
+
+  postPatch = ''
+    for file in $(find library/demos/. -type f ! -name "*.*"); do
+      substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
+    done
   '';
 
   postInstall = ''
@@ -27,14 +34,15 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--enable-threads"
-    "--with-tcl=${tcl}/lib"
   ] ++ lib.optional stdenv.is64bit "--enable-64bit"
     ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
-  propagatedBuildInputs = [ tcl libXft ];
+  propagatedBuildInputs = [ libXft ];
+
+  enableParallelBuilding = true;
 
   doCheck = false; # fails. can't find itself
 

@@ -1,26 +1,34 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, cryptography
 , fetchPypi
-, pycryptodome
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.0.10";
+  version = "0.3.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sJj4RkVaELNitcz1H8YitNgIx4f35WeQf7M5miYD5yI=";
+    sha256 = "sha256-jvDjitS8r0oyANxUGbYksX7O7dbEqZeWEpYc9gABb78=";
   };
 
-  propagatedBuildInputs = [ aiohttp pycryptodome ];
+  propagatedBuildInputs = [
+    aiohttp
+    cryptography
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pymazda" ];
+
+  pythonImportsCheck = [
+    "pymazda"
+  ];
 
   meta = with lib; {
     description = "Python client for interacting with the MyMazda API";

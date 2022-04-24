@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
+{ lib, stdenv, fetchurl, unzip, alsa-lib, libX11, libXi, SDL2 }:
 
 let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc alsa-lib libX11 libXi SDL2 ];
   arch =
     if stdenv.isAarch64
     then "arm64"
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SunVox";
-  version = "1.9.6c";
+  version = "2.0e";
 
   src = fetchurl {
-    url = "http://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
-    sha256 = "0lqzr68n2c6aifw2vbyars91wn1chmgb9xfdk463g4vjqiava3ih";
+    url = "https://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
+    sha256 = "sha256-v4dQnRr7pusOAHX8ytDChKixYxEIjg30vOTD6uA/S0o=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -44,7 +44,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.warmplace.ru/soft/sunvox/";
     maintainers = with maintainers; [ puffnfresh ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    # hash mismatch
-    broken = true;
   };
 }

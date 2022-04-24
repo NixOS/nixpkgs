@@ -1,7 +1,7 @@
-{ lib, appleDerivation, IOKitSrcs, xnu, darwin-stubs }:
+{ lib, appleDerivation', stdenv, IOKitSrcs, xnu, darwin-stubs }:
 
 # Someday it'll make sense to split these out into their own packages, but today is not that day.
-appleDerivation {
+appleDerivation' stdenv {
   srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
 

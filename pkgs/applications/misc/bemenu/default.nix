@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
 , pango, fribidi, harfbuzz, pcre, pkg-config
 , ncursesSupport ? true, ncurses ? null
 , waylandSupport ? true, wayland ? null, wayland-protocols ? null
@@ -11,13 +11,13 @@ assert x11Support -> xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.5.0";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = pname;
     rev = version;
-    sha256 = "1ifq5bk7782b9m6bl111x33fn38rpppdrww7hfavqia9a9gi2sl5";
+    sha256 = "sha256-cUkSXEB92I0UYTobQzUb2so1MUXJkryAqrmASx9RMF0=";
   };
 
   nativeBuildInputs = [ pkg-config pcre ];

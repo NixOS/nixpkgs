@@ -1,24 +1,17 @@
-{lib, stdenv, fetchurl, openssl}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="mailsend";
-    version="1.19";
-    name="${baseName}-${version}";
-    hash="1xwk6jvl5li8ddlik1lj88qswnyminp9wlf5cm8gg3n54szgcpjn";
-    url="https://github.com/muquit/mailsend/archive/1.19.tar.gz";
-    sha256="1xwk6jvl5li8ddlik1lj88qswnyminp9wlf5cm8gg3n54szgcpjn";
+{ lib, stdenv, fetchurl, openssl }:
+
+stdenv.mkDerivation rec {
+  pname = "mailsend";
+  version = "1.19";
+
+  src = fetchurl {
+    url = "https://github.com/muquit/mailsend/archive/${version}.tar.gz";
+    sha256 = "sha256-Vl72vibFjvdQZcVRnq6N1VuuMUKShhlpayjSQrc0k/c=";
   };
+
   buildInputs = [
     openssl
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
   configureFlags = [
     "--with-openssl=${openssl.dev}"
   ];
@@ -29,12 +22,11 @@ stdenv.mkDerivation {
       sha256 = "0vz373zcfl19inflybfjwshcq06rvhx0i5g0f4b021cxfhyb1sm0";
     })
   ];
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "CLI email sending tool";
-    license = lib.licenses.bsd3 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
     homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
   };

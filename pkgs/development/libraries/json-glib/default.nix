@@ -6,48 +6,71 @@
 , ninja
 , pkg-config
 , gettext
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
 , fixDarwinDylibNames
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gnome3
+, gi-docgen
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.6.2";
+  version = "1.6.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "092g2dyy1hhl0ix9kp33wcab0pg1qicnsv0cj5ms9g9qs336cgd3";
+    sha256 = "luyYvnqR9t3jNjZyDj2i/27LuQ52zKpJSX8xpoVaSQ4=";
   };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gettext
-    gobject-introspection
     glib
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_43
   ] ++ lib.optional stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
+  mesonFlags = lib.optionals (!withIntrospection) [
+    "-Dintrospection=disabled"
+    # gi-docgen relies on introspection data
+    "-Dgtk_doc=disabled"
+  ];
+
   doCheck = true;
 
+  postFixup = ''
+    # Move developer documentation to devdoc output.
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    if [[ -d "$out/share/doc" ]]; then
+        find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+          | while IFS= read -r -d ''' file; do
+            moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+        done
+    fi
+  '';
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

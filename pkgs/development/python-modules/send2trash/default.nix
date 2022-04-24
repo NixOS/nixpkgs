@@ -6,13 +6,14 @@
 
 buildPythonPackage rec {
   pname = "Send2Trash";
-  version = "1.5.0";
+  version = "1.8.1b0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
     rev = version;
-    sha256 = "1c76zldhw2ay7q7r00nnzcampjz9lkqfcbzqpm0iqp5i6bmmv30v";
+    sha256 = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
   };
 
   doCheck = !stdenv.isDarwin;

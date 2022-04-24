@@ -5,18 +5,18 @@
 , numpy
 , scipy
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-timeout
 , h5py
 , matplotlib
 , nibabel
 , pandas
-, scikitlearn
+, scikit-learn
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "0.21.2";
+  version = "0.24.1";
 
   disabled = isPy27;
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18nfdbkffmxzkkbp3d4w8r2kfi0sxip3hy997d3mx6dy74jc7nmg";
+    sha256 = "0n91pj97xmpn0bmlv56q2117szlvvs4b52pjjlm3g8ny4xb3iwr0";
   };
 
   propagatedBuildInputs = [ numpy scipy ];
@@ -34,13 +34,13 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-timeout
     h5py
     matplotlib
     nibabel
     pandas
-    scikitlearn
+    scikit-learn
   ];
   preCheck = ''
     export HOME=$TMP

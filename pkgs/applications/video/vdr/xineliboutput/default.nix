@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, vdr
 , libav, libcap, libvdpau
-, xineLib, libjpeg, libextractor, libglvnd, libGLU
+, xine-lib, libjpeg, libextractor, libglvnd, libGLU
 , libX11, libXext, libXrender, libXrandr
 , makeWrapper
 }: let
@@ -34,7 +34,7 @@
     postFixup = ''
       for f in $out/bin/*; do
         wrapProgram $f \
-          --prefix XINE_PLUGIN_PATH ":" "${makeXinePluginPath [ "$out" xineLib ]}"
+          --prefix XINE_PLUGIN_PATH ":" "${makeXinePluginPath [ "$out" xine-lib ]}"
       done
     '';
 
@@ -53,10 +53,10 @@
       libXrender
       libX11
       vdr
-      xineLib
+      xine-lib
     ];
 
-    passthru.requiredXinePlugins = [ xineLib self ];
+    passthru.requiredXinePlugins = [ xine-lib self ];
 
     meta = with lib;{
       homepage = "https://sourceforge.net/projects/xineliboutput/";

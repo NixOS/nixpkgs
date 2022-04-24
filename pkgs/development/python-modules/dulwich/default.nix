@@ -8,29 +8,48 @@
 , geventhttpclient
 , git
 , glibcLocales
+, gpgme
 , mock
+, pkgs
 , urllib3
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.20.21";
+  version = "0.20.35";
   pname = "dulwich";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rHZMmpuA+mGv40BNUnDFBgqlf38IexGpU5XTt287cf0=";
+    hash = "sha256-lT9jAanfigkfqI1V7tOUqIv5mIzei+NBd1NUkQkYwZY=";
   };
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  # Only test dependencies
-  checkInputs = [ git glibcLocales gevent geventhttpclient mock fastimport ];
+  checkInputs = [
+    fastimport
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    gpgme
+    pkgs.gnupg
+    mock
+  ];
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [ "dulwich" ];
+  pythonImportsCheck = [
+    "dulwich"
+  ];
 
   meta = with lib; {
     description = "Simple Python implementation of the Git file formats and protocols";

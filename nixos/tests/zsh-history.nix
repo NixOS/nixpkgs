@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     # Login
     default.wait_until_tty_matches(1, "login: ")
     default.send_chars("root\n")
-    default.wait_until_tty_matches(1, "root@default>")
+    default.wait_until_tty_matches(1, r"\nroot@default\b")
 
     # Generate some history
     default.send_chars("echo foobar\n")

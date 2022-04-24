@@ -32,25 +32,27 @@
 , python3Minimal
 }:
 
-{ name
+{ pname
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
 , meta
+, extraBuildInputs ? []
+, extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
-  version = "2.32";
-  patchSuffix = "-37";
-  sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
+  version = "2.34";
+  patchSuffix = "-115";
+  sha256 = "sha256-RNJqH+ILiFOkj0cOrQHkJ56GmsFJsZXdpORKGV2YGrI=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit version;
+  version = version + patchSuffix;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
 
   inherit (stdenv) is64bit;
@@ -59,14 +61,15 @@ stdenv.mkDerivation ({
 
   patches =
     [
-      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git
-         and using git or something would complicate bootstrapping.
-         Fortunately it's not too big.
-          $ git checkout origin/release/2.32/master; git describe
-          glibc-2.32-37-g760e1d2878
-          $ git show --reverse glibc-2.32.. | gzip -n -9 --rsyncable - > 2.32-master.patch.gz
+      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
+          $ git fetch --all -p && git checkout origin/release/2.34/master && git describe
+          glibc-2.34-115-gd5d1c95aaf
+          $ git show --minimal --reverse glibc-2.34.. | gzip -9n --rsyncable - > 2.34-master.patch.gz
+
+         To compare the archive contents zdiff can be used.
+          $ zdiff -u 2.34-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.34-master.patch.gz
        */
-      ./2.32-master.patch.gz
+      ./2.34-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -119,6 +122,18 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
+
+      /* https://github.com/NixOS/nixpkgs/pull/137601 */
+      ./nix-nss-open-files.patch
+
+      ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Fix segfault in getpwuid when stat fails
+         https://sourceware.org/bugzilla/show_bug.cgi?id=28752 */
+      (fetchurl {
+        url = "https://patchwork.sourceware.org/project/glibc/patch/20220314175316.3239120-2-sam@gentoo.org/raw/";
+        sha256 = "sq0BoPqXHQ69Vq4zJobCspe4XRfnAiuac/wqzVQJESc=";
+      })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -132,6 +147,10 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+
+      # Ensure that `__nss_files_fopen` can still be wrapped by `libredirect`.
+      sed -i -e '/libc_hidden_def (__nss_files_fopen)/d' nss/nss_files_fopen.c
+      sed -i -e '/libc_hidden_proto (__nss_files_fopen)/d' include/nss_files.h
     ''
     # FIXME: find a solution for infinite recursion in cross builds.
     # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
@@ -152,8 +171,15 @@ stdenv.mkDerivation ({
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
+      "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
+    ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
+      # This feature is currently supported on
+      # i386, x86_64 and x32 with binutils 2.29 or later,
+      # and on aarch64 with binutils 2.30 or later.
+      # https://sourceware.org/glibc/wiki/PortStatus
+      "--enable-static-pie"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -178,22 +204,21 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison python3Minimal ];
-  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
+  nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
+  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
 
-  passthru = { inherit version; };
+  # Used by libgcc, elf-header, and others to determine ABI
+  passthru = { inherit version; minorRelease = version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}${patchSuffix}";
-
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
     inherit sha256;
@@ -226,6 +251,28 @@ stdenv.mkDerivation ({
     libc_cv_c_cleanup=yes
     libc_cv_gnu89_inline=yes
     EOF
+
+    # ./configure has logic like
+    #
+    #     AR=`$CC -print-prog-name=ar`
+    #
+    # This searches various directories in the gcc and its wrapper. In nixpkgs,
+    # this returns the bare string "ar", which is build ar. This can result as
+    # a build failure with the following message:
+    #
+    #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
+    #
+    # (Observed cross compiling from aarch64-linux -> armv7l-linux).
+    #
+    # Nixpkgs passes a correct value for AR and friends, so to use the correct
+    # set of tools, we only need to delete this special handling.
+    sed -i \
+      -e '/^AR=/d' \
+      -e '/^AS=/d' \
+      -e '/^LD=/d' \
+      -e '/^OBJCOPY=/d' \
+      -e '/^OBJDUMP=/d' \
+      $configureScript
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
@@ -254,9 +301,4 @@ stdenv.mkDerivation ({
 
 // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
-
-  # To avoid a dependency on the build system 'bash'.
-  preFixup = ''
-    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-  '';
 })

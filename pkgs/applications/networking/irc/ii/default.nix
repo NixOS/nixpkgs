@@ -1,16 +1,17 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "ii-1.8";
+  pname = "ii";
+  version = "1.9";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "1lk8vjl7i8dcjh4jkg8h8bkapcbs465sy8g9c0chfqsywbmf3ndr";
+    url = "https://dl.suckless.org/tools/${pname}-${version}.tar.gz";
+    sha256 = "sha256-hQyzI7WD0mG1G9qZk+5zMzQ1Ko5soeLwK1fBVL9WjBc=";
   };
 
-  installPhase = ''
-    make install PREFIX=$out
-  '';
+  makeFlags = [ "CC:=$(CC)" ];
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = "https://tools.suckless.org/ii/";

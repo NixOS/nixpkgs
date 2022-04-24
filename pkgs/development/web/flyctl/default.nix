@@ -2,31 +2,44 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.0.163";
+  version = "0.0.320";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "sha256-cotv0EQKnrUgpBF7ibOHm8gKg6zXS2i19PTi29PajWc=";
+    sha256 = "sha256-hljQzMdA+dfZDQMqehkdZ1giv56IRygby4UF57Cogq8=";
   };
+
+  vendorSha256 = "sha256-8+EYVaWOppzv4bV/rBWyTTdAFSx7QI0a3+oplBglxyQ=";
+
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}"
+    "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000"
+    "-X github.com/superfly/flyctl/flyctl.Environment=production"
+    "-X github.com/superfly/flyctl/flyctl.Version=${version}"
+  ];
 
   preBuild = ''
     go generate ./...
   '';
 
-  subPackages = [ "." ];
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
 
-  vendorSha256 = "sha256-KLqfP5XxR/ObnWZK4qACr0XRpCpa6CW7GLhV34i3CNY=";
-
-  doCheck = false;
-
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/superfly/flyctl/flyctl.Version=${version} -X github.com/superfly/flyctl/flyctl.Commit=${src.rev} -X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000 -X github.com/superfly/flyctl/flyctl.Environment=production" ];
+  postCheck = ''
+    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00+0000'"
+  '';
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
+    downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [ aaronjanse jsierles ];
   };
 }

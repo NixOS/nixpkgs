@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.39.0";
+  version = "1.45.2";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "0c9yka27k4v1waijk7mn7k31l5a373sclykypflchy7xnlrsa18v";
+    sha256 = "sha256-Mr45nJbpyzxo0ZPwx22JW2WrjyjI9FPpl+gZ7NIc6WQ=";
   };
 
-  vendorSha256 = "1685iv1lsal462c8xqvs76x9dwvbwazrak902j0p12s0fyb66lpl";
+  vendorSha256 = "sha256-pcbKg1ePN8pObS9EzP3QYjtaty27L9sroKUs/qEPtJo=";
 
   doCheck = false;
 
@@ -19,12 +19,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags=-s -w -X main.version=${version} -X main.commit=v${version} -X main.date=19700101-00:00:00")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" "-X main.date=19700101-00:00:00"
+  ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
       installShellCompletion golangci-lint.$shell
     done

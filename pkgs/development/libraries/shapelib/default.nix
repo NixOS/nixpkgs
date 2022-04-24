@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "shapelib-1.5.0";
+  pname = "shapelib";
+  version = "1.5.0";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/shapelib/${name}.tar.gz";
+    url = "https://download.osgeo.org/shapelib/shapelib-${version}.tar.gz";
     sha256 = "1qfsgb8b3yiqwvr6h9m81g6k9fjhfys70c22p7kzkbick20a9h0z";
   };
 

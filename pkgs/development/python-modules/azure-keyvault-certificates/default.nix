@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
 , azure-common
 , azure-core
 , msrest
 , msrestazure
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.2.1";
+  version = "4.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ea651883ad00d0a9a25b38e51feff7111f6c7099c6fb2597598da5bb21d3451c";
+    hash = "sha256-DAFU84AbI4Tdf6TtYDZvSwrpERxf/MqHjQU2igBLh88=";
   };
 
   propagatedBuildInputs = [
@@ -26,11 +28,16 @@ buildPythonPackage rec {
     msrestazure
   ];
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  pythonNamespaces = [
+    "azure.keyvault"
+  ];
 
   # has no tests
   doCheck = false;
-  pythonImportsCheck = [ "azure.keyvault.certificates" ];
+
+  pythonImportsCheck = [
+    "azure.keyvault.certificates"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Key Vault Certificates Client Library for Python";

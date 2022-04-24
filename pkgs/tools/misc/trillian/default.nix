@@ -5,28 +5,21 @@
 
 buildGoModule rec {
   pname = "trillian";
-  version = "1.3.11";
-  vendorSha256 = "0zxp1gjzcc3z6vkpc2bchbs1shwm1b28ks0jh4gf6zxpp4361j4l";
+  version = "1.4.0";
+  vendorSha256 = "sha256-n5PD3CGgNGrqSYLJS+3joGFNue2fF/tdimC6CtO15yU=";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lh19wba90y91l5jj8ilzjqxgmqqqdvyn7pzrwvmzv7iiy18wcmh";
+    sha256 = "sha256-c7Sii6GMWZOeD46OwdkXU/wt9zY+EyPSnahYPJQKJcA=";
   };
-
-  # Remove tests that require networking
-  postPatch = ''
-    rm cmd/get_tree_public_key/main_test.go
-  '';
 
   subPackages = [
     "cmd/trillian_log_server"
     "cmd/trillian_log_signer"
-    "cmd/trillian_map_server"
     "cmd/createtree"
     "cmd/deletetree"
-    "cmd/get_tree_public_key"
     "cmd/updatetree"
   ];
 

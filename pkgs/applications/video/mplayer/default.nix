@@ -1,11 +1,11 @@
-{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg_3
+{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsa-lib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
 , cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
@@ -36,7 +36,7 @@ assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
 assert cddaSupport -> cdparanoia != null;
@@ -93,11 +93,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mplayer";
-  version = "1.4";
+  version = "unstable-2022-02-03";
 
-  src = fetchurl {
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
-    sha256 = "0j5mflr0wnklxsvnpmxvk704hscyn2785hvvihj2i3a7b3anwnc2";
+  src = fetchsvn {
+    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
+    rev = "38331";
+    sha256 = "1vpic8i6zvg0zsy50vhm45ysqag561bpn9jycfbvvwl9ji7l55zi";
   };
 
   prePatch = ''
@@ -109,12 +110,12 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
   buildInputs = with lib;
-    [ freetype ffmpeg_3 ]
+    [ freetype ffmpeg ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext libGLU libGL ]
-    ++ optional alsaSupport alsaLib
+    ++ optional alsaSupport alsa-lib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
     ++ optional cacaSupport libcaca
@@ -161,7 +162,6 @@ stdenv.mkDerivation rec {
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
     (if v4lSupport then "--enable-v4l2 --enable-tv-v4l2" else "--disable-v4l2 --disable-tv-v4l2")
     "--disable-xanim"
-    "--disable-ivtv"
     "--disable-xvid --disable-xvid-lavc"
     "--disable-ossaudio"
     "--disable-ffmpeg_a"
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
          (useUnfreeCodecs && codecs != null && !crossBuild)
          "--codecsdir=${codecs}"
     ++ optional
-         ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
+         (stdenv.hostPlatform.isx86 && !crossBuild)
          "--enable-runtime-cpudetection"
     ++ optional fribidiSupport "--enable-fribidi"
     ++ optional stdenv.isLinux "--enable-vidix"
@@ -203,6 +203,7 @@ stdenv.mkDerivation rec {
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ optional  x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 
@@ -220,11 +221,11 @@ stdenv.mkDerivation rec {
       fi
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
-    license = "GPL";
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ eelco ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

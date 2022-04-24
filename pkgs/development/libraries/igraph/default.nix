@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , arpack
 , bison
 , blas
@@ -13,7 +12,9 @@
 , lapack
 , libxml2
 , libxslt
+, llvmPackages
 , pkg-config
+, plfit
 , python3
 , sourceHighlight
 , suitesparse
@@ -22,27 +23,15 @@
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.1";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "sha256-i6Zg6bfHZ9NHwqCouX9m9YqD0VtiWW8DEkxS0hdUyIE=";
+    hash = "sha256-t0GC6FVFcbVbmZ74XNSPCRRUsSr1Z8rRw6Rf++qk4I0=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "pkg-config-paths.patch";
-      url = "https://github.com/igraph/igraph/commit/980521cc948777df471893f7b6de8f3e3916a3c0.patch";
-      sha256 = "0mbq8v5h90c3dhgmyjazjvva3rn57qhnv7pkc9hlbqdln9gpqg0g";
-    })
-  ];
-
-  # Normally, igraph wants us to call bootstrap.sh, which will call
-  # tools/getversion.sh. Instead, we're going to put the version directly
-  # where igraph wants, and then let autoreconfHook do the rest of the
-  # bootstrap. ~ C.
   postPatch = ''
     echo "${version}" > IGRAPH_VERSION
   '' + lib.optionalString stdenv.isAarch64 ''
@@ -55,7 +44,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [
+    bison
     cmake
+    flex
     fop
     libxml2
     libxslt
@@ -67,14 +58,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack
-    bison
     blas
-    flex
     glpk
     gmp
     lapack
     libxml2
+    plfit
     suitesparse
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   cmakeFlags = [
@@ -84,17 +76,21 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_GLPK=OFF"
     "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF"
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
+    "-DIGRAPH_USE_INTERNAL_PLFIT=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
     "-DIGRAPH_GRAPHML_SUPPORT=ON"
-    "-DIGRAPH_ENABLE_LTO=ON"
+    "-DIGRAPH_OPENMP_SUPPORT=ON"
+    "-DIGRAPH_ENABLE_LTO=AUTO"
     "-DIGRAPH_ENABLE_TLS=ON"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = true;
 
-  preCheck = ''
-    # needed to find libigraph.so
+  # needed to find libigraph, and liblas on darwin
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
+  '' else ''
     export LD_LIBRARY_PATH="$PWD/src"
   '';
 
@@ -103,9 +99,14 @@ stdenv.mkDerivation rec {
     cp -r doc "$out/share"
   '';
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
+  '';
+
   meta = with lib; {
     description = "The network analysis package";
     homepage = "https://igraph.org/";
+    changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];

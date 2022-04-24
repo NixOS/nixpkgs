@@ -5,8 +5,7 @@
 , cli-helpers
 , click
 , configobj
-, humanize
-, prompt_toolkit
+, prompt-toolkit
 , psycopg2
 , pygments
 , sqlparse
@@ -15,26 +14,24 @@
 , keyring
 , pendulum
 , pytestCheckHook
+, sshtunnel
 , mock
 }:
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.1.0";
-
-  disabled = !isPy3k;
+  version = "3.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d5b2d803f7e4e7fe679306a000bde5d14d15ec590ddd108f3dc4c0ecad169d2b";
+    sha256 = "sha256-8DkwGH4n1g32WMqKBPtgHsXXR2xzXysVQsat7Fysj+I=";
   };
 
   propagatedBuildInputs = [
     cli-helpers
     click
     configobj
-    humanize
-    prompt_toolkit
+    prompt-toolkit
     psycopg2
     pygments
     sqlparse
@@ -42,6 +39,7 @@ buildPythonApplication rec {
     setproctitle
     keyring
     pendulum
+    sshtunnel
   ];
 
   checkInputs = [ pytestCheckHook mock ];
@@ -55,7 +53,7 @@ buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "https://pgcli.com";
-    changelog = "https://github.com/dbcli/pgcli/blob/v${version}/changelog.rst";
+    changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dywedir ];
   };

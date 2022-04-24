@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "matgeom";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "05xfmlh1k3mhq8yag7gr8q1ysl1s43vm46fr1i3gcg9b1kkwi8by";
+    sha256 = "12q66dy4ninhki3jslzcamfblcb3cdkfbbzn3a5har1s212lsfiw";
   };
 
   meta = with lib; {

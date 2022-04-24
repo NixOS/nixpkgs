@@ -1,5 +1,5 @@
-{ lib, stdenv, autoconf, automake, curl, fetchurl, jdk8, makeWrapper, nettools
-, python, git
+{ lib, stdenv, autoconf, automake, curl, fetchurl, fetchpatch, jdk8, makeWrapper, nettools
+, python2, git
 }:
 
 let jdk = jdk8; jre = jdk8.jre; in
@@ -13,8 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ autoconf automake curl jdk nettools python git ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-35476.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/b89fded4ee326dc064b9d7e471e9f29f7d1dede9.patch";
+      sha256 = "1vb9m0a4fsjqcjagiypvkngzgsw4dil8jrlhn5xbz7rwx8x96wvb";
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper autoconf automake ];
+  buildInputs = [ curl jdk nettools python2 git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/
@@ -33,8 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
-    knownVulnerabilities = [
-      "CVE-2020-35476" # https://github.com/OpenTSDB/opentsdb/issues/2051
-    ];
   };
 }

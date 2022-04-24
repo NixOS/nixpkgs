@@ -7,16 +7,16 @@
 , attrs
 , espeak-ng
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonApplication rec {
   pname = "phonemizer";
-  version = "2.2.2";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae252f0bc7633e172b08622f318e7e112cde847e9281d4675ea7210157325146";
+    sha256 = "sha256-PWVK0NLVa0Rx1xyUyQF2/RvUo3/geskn53FcEv0Jr0c=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
   ];
 
   # We tried to package festvial, but were unable to get the backend running,
@@ -65,6 +65,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/bootphon/phonemizer";
     description = "Simple text to phones converter for multiple languages";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

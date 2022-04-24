@@ -4,11 +4,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ peterhoeg ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     environment.systemPackages = with pkgs; [ dbus ];
     services.packagekit = {
       enable = true;
-      backend = "test_nop";
     };
   };
 

@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, mkDerivation
-, pkg-config, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
+, pkg-config, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsa-lib, libv4l, libXrandr
 , ffmpeg
 }:
 
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     libv4l
     qtbase
     qtmultimedia

@@ -1,4 +1,5 @@
 { buildOctavePackage
+, stdenv
 , lib
 , fetchurl
 , pcre
@@ -33,5 +34,7 @@ buildOctavePackage rec {
     # Claims to have a freebsd license, but I found none.
     maintainers = with maintainers; [ KarlJoad ];
     description = "Additional functions for manipulation and analysis of strings";
+    # Some pcre symbols claimed to be missing
+    broken = stdenv.isDarwin;
   };
 }

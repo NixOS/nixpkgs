@@ -1,11 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
 , dbus
 , desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
 , fetchFromGitHub
 , fetchpatch
 , flatpak
@@ -15,36 +14,40 @@
 , gtk3
 , json-glib
 , libgee
+, libhandy
 , libsoup
 , libxml2
 , meson
 , ninja
 , packagekit
-, pantheon
 , pkg-config
 , python3
 , vala
 , polkit
-, libhandy_0
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.5.1";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8r0DlmG8xlCQ1uFHZQjXG2ls4VBrsRzrVY8Ey3/OYAU=";
+    sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix AppStream.PoolFlags being renamed
+    # Though the API break has been fixed in latest appstream,
+    # let's use the non-deprecated version anyway.
+    # https://github.com/elementary/appcenter/pull/1794
+    (fetchpatch {
+      url = "https://github.com/elementary/appcenter/commit/84bc6400713484aa9365f0ba73f59c495da3f08b.patch";
+      sha256 = "sha256-HNRCJ/5mRbEVjCq9nrXtdQOOk1Jj5jalApkghD8ecpk=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -61,15 +64,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
-    elementary-icon-theme
     flatpak
     glib
     granite
     gtk3
     json-glib
     libgee
-    libhandy_0 # doesn't support libhandy-1 yet
+    libhandy
     libsoup
     libxml2
     packagekit
@@ -77,7 +78,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -87,11 +87,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

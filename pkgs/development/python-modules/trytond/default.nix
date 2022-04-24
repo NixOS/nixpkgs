@@ -1,17 +1,19 @@
 { lib
 , buildPythonApplication
+, fetchpatch
 , fetchPypi
 , pythonOlder
 , mock
 , lxml
 , relatorio
 , genshi
-, dateutil
+, python-dateutil
 , polib
 , python-sql
 , werkzeug
 , wrapt
 , passlib
+, pillow
 , bcrypt
 , pydot
 , python-Levenshtein
@@ -23,13 +25,23 @@
 
 buildPythonApplication rec {
   pname = "trytond";
-  version = "5.8.4";
-  disabled = pythonOlder "3.5";
+  version = "6.2.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28e467b51f6dc67b8b4ca60afec82614bba8cf78852c1941cc9071d615ba7972";
+    sha256 = "sha256-Sof6A9lxU70YnCbboJr56CAdTL0cRbaRNxdvG5Tnqnw=";
   };
+
+  patches = [
+    (fetchpatch {
+      # werkzeug 2.1 compatibility for the tests
+      url = "https://github.com/tryton/trytond/commit/86a50ca06cf0d79404dbd731141ed29f8e9fcb9d.patch";
+      hash = "sha256-xY5Sdhkd0lEgscV7NHwX2YWxobWqQFElY5BJvDT+we8=";
+    })
+  ];
 
   # Tells the tests which database to use
   DB_NAME = ":memory:";
@@ -37,15 +49,17 @@ buildPythonApplication rec {
   buildInputs = [
     mock
   ];
+
   propagatedBuildInputs = [
     lxml
     relatorio
     genshi
-    dateutil
+    python-dateutil
     polib
     python-sql
     werkzeug
     wrapt
+    pillow
     passlib
 
     # extra dependencies

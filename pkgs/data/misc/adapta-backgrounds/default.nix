@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "04hmbmzf97rsii8gpwy3wkljy5xhxmlsl34d63s6hfy05knclydj";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config glib ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config ];
+  buildInputs = [ glib ];
 
   meta = with lib; {
     description = "Wallpaper collection for adapta-project";

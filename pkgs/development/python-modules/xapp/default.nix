@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.0.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
-    sha256 = "1zgh4k96i939w4scikajmlriayk1zg3md16f8fckjvqbphpxrysl";
+    hash = "sha256-UC+0nbf+SRQsF5R0LcrPpmNbaoRM14DC82JccSpsKsY=";
   };
 
   propagatedBuildInputs = [

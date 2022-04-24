@@ -30,7 +30,6 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/restya-board";
-        example = "/var/lib/restya-board";
         description = ''
           Data of the application.
         '';
@@ -39,7 +38,6 @@ in
       user = mkOption {
         type = types.str;
         default = "restya-board";
-        example = "restya-board";
         description = ''
           User account under which the web-application runs.
         '';
@@ -48,7 +46,6 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        example = "nginx";
         description = ''
           Group account under which the web-application runs.
         '';
@@ -238,7 +235,7 @@ in
       locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
-          include ${pkgs.nginx}/conf/fastcgi_params;
+          include ${config.services.nginx.package}/conf/fastcgi_params;
           fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;

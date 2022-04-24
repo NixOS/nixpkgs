@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , substituteAll
 , autoreconfHook
 , pkg-config
@@ -34,6 +33,7 @@
 , libexif
 , gettext
 , makeWrapper
+, gtk-doc
 , xorg
 , glib-networking
 , libmypaint
@@ -53,13 +53,13 @@ let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.22";
+  version = "2.10.30";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1fqqyshakvdarf1jipk2n33ibqr23ni22z3d8srq13bpydblpf1d";
+    sha256 = "iIFdqnbtfUJ37rNTNYuvoRbNL80shh2VuVE1wdUrZ9w=";
   };
 
   patches = [
@@ -73,12 +73,6 @@ in stdenv.mkDerivation rec {
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
     ./hardcode-plugin-interpreters.patch
-
-    # Fix crash without dot.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/f83fd22c4b8701ffc4ce14383e5e22756a4bce04.patch";
-      sha256 = "POuvBhOSStO7hBGp4HgNx5F9pElFRoqN3W+i3u4zOnk=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -87,6 +81,7 @@ in stdenv.mkDerivation rec {
     intltool
     gettext
     makeWrapper
+    gtk-doc
   ];
 
   buildInputs = [
@@ -149,9 +144,9 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
+
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
   # Check if librsvg was built with --disable-pixbuf-loader.
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
@@ -185,5 +180,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "gimp";
   };
 }

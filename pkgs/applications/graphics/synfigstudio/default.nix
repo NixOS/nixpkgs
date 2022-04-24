@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
 , libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkg-config
-, imagemagick, intltool, autoreconfHook, which, gnome3
+, imagemagick, intltool, autoreconfHook, which, gnome
 }:
 
 let
@@ -103,11 +103,11 @@ stdenv.mkDerivation {
 
   preConfigure = "./bootstrap.sh";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook gettext ];
+  nativeBuildInputs = [ pkg-config autoreconfHook gettext makeWrapper ];
   buildInputs = [
     ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
-    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
-    synfig which gnome3.adwaita-icon-theme
+    libjack2 libsigcxx libxmlxx mlt-qt5
+    synfig which gnome.adwaita-icon-theme
   ];
 
   postInstall = ''

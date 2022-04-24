@@ -4,16 +4,18 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "unstable-2021-02-14";
+  version = "unstable-2022-02-10";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
-    rev = "8cebb8f01ca57076c3c7cd66365270d989bcaa89";
-    sha256 = "119m84g2c4z9xdr22j401p09n3cpiyj61dw5m7xkm6309nd7zz0a";
+    rev = "e8145d541a35d8a03df49fbbeefa50c4a0076bbf";
+    sha256 = "h/3XP/BiNnUgQI29gEBl6RFee77WDhFyvsnTi1eRbKg=";
   };
 
   buildInputs = [ ncurses ];
+
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   postConfigure = ''
     pushd modules
@@ -40,6 +42,6 @@ in stdenv.mkDerivation rec {
     description = "Replace zsh's default completion selection menu with fzf!";
     license = licenses.mit;
     maintainers = with maintainers; [ vonfry ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

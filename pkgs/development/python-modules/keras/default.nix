@@ -1,22 +1,23 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pytestcov, pytest_xdist
+, pytest, pytest-cov, pytest-xdist
 , six, numpy, scipy, pyyaml, h5py
 , keras-applications, keras-preprocessing
 }:
 
 buildPythonPackage rec {
-  pname = "Keras";
-  version = "2.4.3";
+  pname = "keras";
+  version = "2.8.0";
+  format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "fedd729b52572fb108a98e3d97e1bac10a81d3917d2103cc20ab2a5f03beb973";
+    inherit format pname version;
+    sha256 = "sha256-dE053GV33NgP9KTUFUnpK3fWoX4O3VikMdMGVuKbyU4=";
   };
 
   checkInputs = [
     pytest
-    pytestcov
-    pytest_xdist
+    pytest-cov
+    pytest-xdist
   ];
 
   propagatedBuildInputs = [

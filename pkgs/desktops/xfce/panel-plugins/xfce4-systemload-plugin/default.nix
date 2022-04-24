@@ -3,10 +3,9 @@
 , fetchurl
 , pkg-config
 , intltool
-, libxfce4util
 , xfce4-panel
 , libxfce4ui
-, gtk3
+, xfconf
 , xfce
 }:
 
@@ -14,11 +13,11 @@ let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-systemload-plugin";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "BTG435I8ujvo0GTLi2OLlU33SRXlpEciiZlReEd4mDU=";
+    sha256 = "sha256-VtEAeAHVLXwrWhO7VHRfbX8G/aKLSc6TYUVjMGiBdlI=";
   };
 
   nativeBuildInputs = [
@@ -27,23 +26,18 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libxfce4util
     libxfce4ui
     xfce4-panel
-    gtk3
+    xfconf
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-systemload-plugin";
     description = "System load plugin for Xfce panel";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

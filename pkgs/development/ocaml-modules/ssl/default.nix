@@ -24,6 +24,7 @@ buildDunePackage rec {
     maintainers = [
       lib.maintainers.maggesi
       lib.maintainers.anmonteiro
+      lib.maintainers.dandellion
     ];
   };
 }

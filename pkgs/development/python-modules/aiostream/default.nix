@@ -3,23 +3,23 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.4.2";
+  version = "0.4.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ss41hzvlnyll5xc5ddxqyqqw4gnd67yyhci25xnb1vpcz0jqsq8";
+    sha256 = "07if27z1h0mg236sj9lc8nl0bqy9sdrj83ls73mrc69h76bzg5xi";
   };
 
-  checkInputs = [ pytestCheckHook pytestcov pytest-asyncio ];
+  checkInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];
 
   meta = with lib; {
     description = "Generator-based operators for asynchronous iteration";

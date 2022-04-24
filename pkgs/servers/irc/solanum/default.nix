@@ -1,37 +1,42 @@
 { lib, stdenv
-, fetchFromGitHub
 , autoreconfHook
-, pkg-config
 , bison
+, fetchFromGitHub
 , flex
-, openssl
-, sqlite
 , lksctp-tools
+, openssl
+, pkg-config
+, sqlite
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "unstable-2020-12-14";
+  version = "unstable-2021-11-14";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = pname;
-    rev = "551e5a146eab4948ce4a57d87a7f671f2d7cc02d";
-    sha256 = "14cd2cb04w6nwck7q49jw5zvifkzhkmblwhjfskc2nxcdb5x3l96";
+    rev = "bd38559fedcdfded4d9acbcbf988e4a8f5057eeb";
+    sha256 = "sha256-2P+mqf5b+TD9+9dLahXOdH7ZZhPWUoR1eV73YHbRbAA=";
   };
 
   patches = [
     ./dont-create-logdir.patch
   ];
 
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+  '';
+
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
     "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=solanum-"
-    "--localstatedir=/var/lib/solanum"
-    "--with-rundir=/run/solanum"
-    "--with-logdir=/var/log/solanum"
+    "--localstatedir=/var/lib"
+    "--with-rundir=/run"
+    "--with-logdir=/var/log"
   ] ++ lib.optionals (stdenv.isLinux) [
     "--enable-sctp=${lksctp-tools.out}/lib"
   ];
@@ -41,6 +46,7 @@ stdenv.mkDerivation rec {
     bison
     flex
     pkg-config
+    util-linux
   ];
 
   buildInputs = [
@@ -55,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.unix;
   };

@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/src-d/go-license-detector";
     license = licenses.asl20;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "license-detector";
   };
 }

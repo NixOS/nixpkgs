@@ -8,24 +8,27 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.19.0";
+  version = "1.26.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EexwwLIOpECAfiyGmUDxSE7qk9cbQ1gHtjhW3YK3RN0=";
+    sha256 = "sha256-niXqE6W3/Mg7AmBR18bk3NUiHpUOvlOT3nFaP+oVJ9M=";
   };
 
-  propagatedBuildInputs = [passlib scramp ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "scramp==1.3.0" "scramp>=1.3.0"
-  '';
+  propagatedBuildInputs = [
+    passlib
+    scramp
+  ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
-  pythonImportsCheck = [ "pg8000" ];
+
+  pythonImportsCheck = [
+    "pg8000"
+  ];
 
   meta = with lib; {
     description = "Python driver for PostgreSQL";

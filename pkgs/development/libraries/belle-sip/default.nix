@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "4.4.34";
+  version = "4.5.14";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1kknnlczq7dpqaj1dwxvy092dzrqjy11ndkv90rqwmdryigkjk6z";
+    sha256 = "sha256-L6dhgBJrzYgBuMNd2eMZJCqB/GIZjKipfn1SffxBFWw=";
   };
 
   nativeBuildInputs = [ antlr3_4 cmake ];
@@ -30,9 +30,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=cast-function-type"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=format-truncation"
-    "-Wno-error=cast-function-type"
+    "-Wno-error=stringop-overflow"
   ];
 
   propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];

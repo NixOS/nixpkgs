@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , autoconf213
 , pkg-config
 , perl
@@ -14,18 +15,35 @@
 , rustc
 , rust-cbindgen
 , yasm
-, llvmPackages_11
 , nspr
 }:
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "78.8.0";
+  version = "78.15.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "0451hhjrj9hb6limxim7sbhvw4gs6dd2gmnfxjjx07z3wbgdzwhw";
+    sha256 = "0l91cxdc5v9fps79ckb1kid4gw6v5qng1jd9zvaacwaiv628shx4";
   };
+
+  patches = [
+    # Fix build failure on armv7l using Debian patch
+    # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
+    (fetchpatch {
+      url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
+      sha256 = "02b7zwm6vxmk61aj79a6m32s1k5sr0hwm3q1j4v6np9jfyd10g1j";
+    })
+
+    # Remove this when updating to 79 - The patches are already applied upstream
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1318905
+
+    # Combination of 3 changesets, modified to apply on 78:
+    # - https://hg.mozilla.org/mozilla-central/rev/06d7e1b6b7e7
+    # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
+    # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
+    ./add-riscv64-support.patch
+  ];
 
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
@@ -33,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf213
     cargo
-    llvmPackages_11.llvm # for llvm-objdump
+    rustc.llvmPackages.llvm # for llvm-objdump
     perl
     pkg-config
     python3
@@ -82,9 +100,15 @@ stdenv.mkDerivation rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
+  # mkDerivation by default appends --build/--host to configureFlags when cross compiling
+  # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
   configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  # cc-rs insists on using -mabi=lp64 (soft-float) for riscv64,
+  # while we have a double-float toolchain
+  NIX_CFLAGS_COMPILE = lib.optionalString (with stdenv.hostPlatform; isRiscV && is64bit) "-mabi=lp64d";
 
   # Remove unnecessary static lib
   preFixup = ''

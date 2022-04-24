@@ -117,8 +117,55 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
-    in makeOverridable f (auto // args);
+      fargs = lib.functionArgs f;
+
+      # All arguments that will be passed to the function
+      # This includes automatic ones and ones passed explicitly
+      allArgs = builtins.intersectAttrs fargs autoArgs // args;
+
+      # A list of argument names that the function requires, but
+      # wouldn't be passed to it
+      missingArgs = lib.attrNames
+        # Filter out arguments that have a default value
+        (lib.filterAttrs (name: value: ! value)
+        # Filter out arguments that would be passed
+        (removeAttrs fargs (lib.attrNames allArgs)));
+
+      # Get a list of suggested argument names for a given missing one
+      getSuggestions = arg: lib.pipe (autoArgs // args) [
+        lib.attrNames
+        # Only use ones that are at most 2 edits away. While mork would work,
+        # levenshteinAtMost is only fast for 2 or less.
+        (lib.filter (lib.strings.levenshteinAtMost 2 arg))
+        # Put strings with shorter distance first
+        (lib.sort (x: y: lib.strings.levenshtein x arg < lib.strings.levenshtein y arg))
+        # Only take the first couple results
+        (lib.take 3)
+        # Quote all entries
+        (map (x: "\"" + x + "\""))
+      ];
+
+      prettySuggestions = suggestions:
+        if suggestions == [] then ""
+        else if lib.length suggestions == 1 then ", did you mean ${lib.elemAt suggestions 0}?"
+        else ", did you mean ${lib.concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
+
+      errorForArg = arg:
+        let
+          loc = builtins.unsafeGetAttrPos arg fargs;
+          # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
+          # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
+          loc' = if loc != null then loc.file + ":" + toString loc.line
+            else if ! lib.isFunction fn then
+              toString fn + lib.optionalString (lib.sources.pathIsDirectory fn) "/default.nix"
+            else "<unknown location>";
+        in "Function called without required argument \"${arg}\" at "
+        + "${loc'}${prettySuggestions (getSuggestions arg)}";
+
+      # Only show the error for the first missing argument
+      error = errorForArg (lib.head missingArgs);
+
+    in if missingArgs == [] then makeOverridable f allArgs else throw error;
 
 
   /* Like callPackage, but for a function that returns an attribute
@@ -152,6 +199,7 @@ rec {
         { name = outputName;
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
+            outputSpecified = true;
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           };
@@ -159,7 +207,6 @@ rec {
 
       outputsList = map outputToAttrListElement outputs;
     in commonAttrs // {
-      outputUnspecified = true;
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };
@@ -219,16 +266,17 @@ rec {
 
   /* Like the above, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
-  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: f:
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
     let
-      spliced = splicePackages {
+      spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
         pkgsBuildHost = otherSplices.selfBuildHost;
         pkgsBuildTarget = otherSplices.selfBuildTarget;
         pkgsHostHost = otherSplices.selfHostHost;
         pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
         pkgsTargetTarget = otherSplices.selfTargetTarget;
-      } // keep self;
+      };
+      spliced = extra spliced0 // spliced0 // keep self;
       self = f self // {
         newScope = scope: newScope (spliced // scope);
         callPackage = newScope spliced; # == self.newScope {};
@@ -239,6 +287,7 @@ rec {
           newScope
           otherSplices
           keep
+          extra
           (lib.fixedPoints.extends g f);
         packages = f;
       };

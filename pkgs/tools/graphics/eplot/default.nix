@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, gnuplot, ruby }:
 
 stdenv.mkDerivation {
-  name = "eplot-2.07";
+  pname = "eplot";
+  version = "2.09";
 
   # Upstream has been contacted (2015-03) regarding providing versioned
   # download URLs. Initial response was positive, but no action yet.
@@ -20,12 +21,16 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp "$src" "$out/bin/eplot"
     cp "$ecSrc" "$out/bin/ec"
     chmod +x "$out/bin/"*
 
     sed -i -e "s|gnuplot -persist|${gnuplot}/bin/gnuplot -persist|" "$out/bin/eplot"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -39,9 +44,9 @@ stdenv.mkDerivation {
       This package also includes the complementary 'ec' tool (say "extract
       column").
     '';
-    homepage = "http://liris.cnrs.fr/christian.wolf/software/eplot/";
+    homepage = "https://perso.liris.cnrs.fr/christian.wolf/software/eplot/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor shamilton ];
   };
 }

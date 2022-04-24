@@ -95,6 +95,8 @@ rec {
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
+    m68k     = { bits = 32; significantByte = bigEndian; family = "m68k"; };
+
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
     powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
@@ -102,6 +104,9 @@ rec {
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+
+    s390     = { bits = 32; significantByte = bigEndian; family = "s390"; };
+    s390x    = { bits = 64; significantByte = bigEndian; family = "s390"; };
 
     sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
     sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };
@@ -121,15 +126,29 @@ rec {
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
-  # Determine where two CPUs are compatible with each other. That is,
-  # can we run code built for system b on system a? For that to
-  # happen, then the set of all possible possible programs that system
-  # b accepts must be a subset of the set of all programs that system
-  # a accepts. This compatibility relation forms a category where each
-  # CPU is an object and each arrow from a to b represents
-  # compatibility. CPUs with multiple modes of Endianness are
-  # isomorphic while all CPUs are endomorphic because any program
-  # built for a CPU can run on that CPU.
+  # GNU build systems assume that older NetBSD architectures are using a.out.
+  gnuNetBSDDefaultExecFormat = cpu:
+    if (cpu.family == "arm" && cpu.bits == 32) ||
+       (cpu.family == "sparc" && cpu.bits == 32) ||
+       (cpu.family == "m68k" && cpu.bits == 32) ||
+       (cpu.family == "x86" && cpu.bits == 32)
+    then execFormats.aout
+    else execFormats.elf;
+
+  # Determine when two CPUs are compatible with each other. That is,
+  # can code built for system B run on system A? For that to happen,
+  # the programs that system B accepts must be a subset of the
+  # programs that system A accepts.
+  #
+  # We have the following properties of the compatibility relation,
+  # which must be preserved when adding compatibility information for
+  # additional CPUs.
+  # - (reflexivity)
+  #   Every CPU is compatible with itself.
+  # - (transitivity)
+  #   If A is compatible with B and B is compatible with C then A is compatible with C.
+  # - (compatible under multiple endianness)
+  #   CPUs with multiple modes of endianness are pairwise compatible.
   isCompatible = a: b: with cpuTypes; lib.any lib.id [
     # x86
     (b == i386 && isCompatible a i486)
@@ -271,7 +290,7 @@ rec {
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
-    # the nnormalized name for macOS.
+    # the normalized name for macOS.
     macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
     ios      = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd  = { execFormat = elf;     families = { inherit bsd; }; };
@@ -337,24 +356,23 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
-        { assertion = platform: platform.system != "powerpc64-linux";
-          message = ''
-            The "gnu" ABI is ambiguous on big-endian 64-bit PPC. Use "elfv1" or "elfv2" instead.
-          '';
-        }
       ];
     };
     gnuabi64     = { abi = "64"; };
+    muslabi64    = { abi = "64"; };
 
-    elfv1        = { abi = "elfv1"; };
-    elfv2        = { abi = "elfv2"; };
+    # NOTE: abi=n32 requires a 64-bit MIPS chip!  That is not a typo.
+    # It is basically the 64-bit abi with 32-bit pointers.  Details:
+    # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
+    gnuabin32    = { abi = "n32"; };
+    muslabin32   = { abi = "n32"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
     musl         = {};
 
-    uclibceabihf = { float = "soft"; };
-    uclibceabi   = { float = "hard"; };
+    uclibceabi   = { float = "soft"; };
+    uclibceabihf = { float = "hard"; };
     uclibc       = {};
 
     unknown = {};
@@ -452,7 +470,6 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
-          else if cpu == "powerpc64" then abis.elfv2
           else abis.gnu
         else                     abis.unknown;
     };
@@ -467,8 +484,12 @@ rec {
     else "${cpu.name}-${kernel.name}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
+    optExecFormat =
+      lib.optionalString (kernel.name == "netbsd" &&
+                          gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
+        kernel.execFormat.name;
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
-  in "${cpu.name}-${vendor.name}-${kernel.name}${optAbi}";
+  in "${cpu.name}-${vendor.name}-${kernel.name}${optExecFormat}${optAbi}";
 
   ################################################################################
 

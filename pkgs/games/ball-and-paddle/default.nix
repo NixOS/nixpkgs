@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "ballandpaddle-0.8.1";
+  pname = "ballandpaddle";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://gnu/ballandpaddle/${name}.tar.gz";
+    url = "mirror://gnu/ballandpaddle/ballandpaddle-${version}.tar.gz";
     sha256 = "0zgpydad0mj7fbkippw3n9hlda6nac084dq5xfbsks9jn1xd30ny";
   };
 

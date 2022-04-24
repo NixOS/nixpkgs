@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mongoengine";
-  version = "0.22.0";
+  version = "0.24.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14n9rl8w3i1fq96f3jzsg7gy331d7fmrapva6m38ih53rnf38bdf";
+    sha256 = "sha256-BQSB4SGlejARFreeTfqFMzCWvBc6Vvq9EOMLjhAihdI=";
   };
 
   propagatedBuildInputs = [
@@ -36,11 +36,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "coverage==4.2" "coverage"
+      --replace "coverage==4.2" "coverage" \
+      --replace "pymongo>=3.4,<=4.0" "pymongo"
   '';
 
   # tests require mongodb running in background
   doCheck = false;
+
+  pythonImportsCheck = [ "mongoengine" ];
 
   meta = with lib; {
     description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";

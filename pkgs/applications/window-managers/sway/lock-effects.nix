@@ -1,19 +1,36 @@
-{ lib, stdenv, fetchFromGitHub,
-  meson, ninja, pkg-config, scdoc,
-  wayland, wayland-protocols, libxkbcommon,
-  cairo, gdk-pixbuf, pam
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, libxkbcommon
+, cairo
+, gdk-pixbuf
+, pam
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "v1.6-2";
+  version = "1.6-3";
 
   src = fetchFromGitHub {
     owner = "mortie";
     repo = "swaylock-effects";
-    rev = version;
-    sha256 = "0fs3c4liajgkax0a2pdc7117v1g9k73nv87g3kyv9wsnkfbbz534";
+    rev = "v${version}";
+    sha256 = "sha256-71IX0fC4xCPP6pK63KtvDMb3KoP1rw/Iz3S7BgiLSpg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mortie/swaylock-effects/commit/dfff235b09b475e79d75a040a0307a359974d360.patch";
+      sha256 = "t8Xz2wRSBlwGtkpWZyIGWX7V/y0P1r/50P8MfauMh4c=";
+    })
+  ];
 
   postPatch = ''
     sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
@@ -23,7 +40,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
-    "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dpam=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
   ];
 
   meta = with lib; {

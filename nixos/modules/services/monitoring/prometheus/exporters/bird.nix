@@ -17,7 +17,7 @@ in
     };
     birdSocket = mkOption {
       type = types.path;
-      default = "/var/run/bird.ctl";
+      default = "/run/bird/bird.ctl";
       description = ''
         Path to BIRD2 (or BIRD1 v4) socket.
       '';
@@ -41,6 +41,10 @@ in
           -format.new=${if cfg.newMetricFormat then "true" else "false"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

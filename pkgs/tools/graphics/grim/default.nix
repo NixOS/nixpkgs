@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols }:
+{ lib, stdenv, fetchFromGitHub, pixman, libpng, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols }:
 
 stdenv.mkDerivation rec {
   pname = "grim";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fjmjq0ws9rlblkcqxxw2lv7zvvyi618jqzlnz5z9zb477jwdfib";
+    sha256 = "sha256-lwJn1Lysv1qLauqmrduUlzdoKUrUM5uBjv+dWSsrM6w=";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cairo
+    pixman
+    libpng
     libjpeg
     wayland
     wayland-protocols

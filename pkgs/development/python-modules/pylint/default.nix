@@ -1,27 +1,36 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , installShellFiles
 , astroid
+, dill
 , isort
 , mccabe
-, toml
+, platformdirs
+, tomli
+, typing-extensions
+, GitPython
 , pytest-benchmark
+, pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.7.1";
+  version = "2.13.5";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "10nrvzk1naf5ryawmi59wp99k31053sz37q3x9li2hj2cf7i1kl1";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-FB99vmUtoTc0cTjDUSbx80Tesh0vASigSpPktrDYk08=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +39,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     astroid
+    dill
     isort
     mccabe
-    toml
+    platformdirs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    typing-extensions
   ];
 
   postInstall = ''
@@ -42,9 +56,13 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    GitPython
+    # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     pytest-benchmark
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
+    typing-extensions
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -52,10 +70,13 @@ buildPythonPackage rec {
   # calls executable in one of the tests
   preCheck = ''
     export PATH=$PATH:$out/bin
+    export HOME=$TEMPDIR
   '';
 
-  pytestFlagsArray = [
-    "-n auto"
+  disabledTestPaths = [
+    # tests miss multiple input files
+    # FileNotFoundError: [Errno 2] No such file or directory
+    "tests/pyreverse/test_writer.py"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -67,6 +88,6 @@ buildPythonPackage rec {
     homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

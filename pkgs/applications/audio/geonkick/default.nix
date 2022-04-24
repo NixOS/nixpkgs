@@ -1,24 +1,23 @@
-{ lib, stdenv, fetchFromGitLab, cmake, pkg-config, redkite, libsndfile, rapidjson
+{ lib, stdenv, fetchFromGitLab, cmake, pkg-config, libsndfile, rapidjson
 , libjack2, lv2, libX11, cairo }:
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "2.6.1";
+  version = "2.9.0";
 
   src = fetchFromGitLab {
     owner = "iurie-sw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l647j11pb9lkknnh4q99mmfcvr644b02lfcdjh98z60vqm1s54c";
+    sha256 = "sha256-/BDK1PyRw4xOt+rzC9yX29aRQb1aDnDBIenSz+859OY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ redkite libsndfile rapidjson libjack2 lv2 libX11 cairo ];
+  buildInputs = [ libsndfile rapidjson libjack2 lv2 libX11 cairo ];
 
   # https://github.com/iurie-sw/geonkick/issues/120
   cmakeFlags = [
-    "-DGKICK_REDKITE_SDK_PATH=${redkite}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 

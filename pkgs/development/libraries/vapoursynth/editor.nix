@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromBitbucket, makeWrapper, runCommand
+{ lib, mkDerivation, fetchFromGitHub, makeWrapper, runCommand
 , python3, vapoursynth
 , qmake, qtbase, qtwebsockets
 }:
@@ -6,13 +6,13 @@
 let
   unwrapped = mkDerivation rec {
     pname = "vapoursynth-editor";
-    version = "R19";
+    version = "R19-mod-4";
 
-    src = fetchFromBitbucket {
-      owner = "mystery_keeper";
+    src = fetchFromGitHub {
+      owner = "YomikoR";
       repo = pname;
       rev = lib.toLower version;
-      sha256 = "1zlaynkkvizf128ln50yvzz3b764f5a0yryp6993s9fkwa7djb6n";
+      sha256 = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -35,7 +35,7 @@ let
 
     meta = with lib; {
       description = "Cross-platform editor for VapourSynth scripts";
-      homepage = "https://bitbucket.org/mystery_keeper/vapoursynth-editor";
+      homepage = "https://github.com/YomikoR/VapourSynth-Editor";
       license = licenses.mit;
       maintainers = with maintainers; [ tadeokondrak ];
       platforms = platforms.all;

@@ -44,6 +44,9 @@ let
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
+  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                  "${stdenv.targetPlatform.config}-";
+
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
@@ -90,6 +93,7 @@ let
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
+    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
@@ -112,13 +116,25 @@ let
 
     # Basic configuration
     ++ [
+      # Force target prefix. The behavior if `--target` and `--host`
+      # are specified is inconsistent: Sometimes specifying `--target`
+      # always causes a prefix to be generated, sometimes it's only
+      # added if the `--host` and `--target` differ. This means that
+      # sometimes there may be a prefix even though nixpkgs doesn't
+      # expect one and sometimes there may be none even though nixpkgs
+      # expects one (since not all information is serialized into the
+      # config attribute). The easiest way out of these problems is to
+      # always set the program prefix, so gcc will conform to our
+      # expectations.
+      "--program-prefix=${targetPrefix}"
+
       (lib.enableFeature enableLTO "lto")
       "--disable-libstdcxx-pch"
       "--without-included-gettext"
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
-        lib.concatStrings (lib.intersperse ","
+        lib.concatStringsSep ","
           (  lib.optional langC        "c"
           ++ lib.optional langCC       "c++"
           ++ lib.optional langD        "d"
@@ -131,7 +147,6 @@ let
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
           ++ lib.optional langJit      "jit"
           )
-        )
       }"
     ]
 
@@ -143,9 +158,15 @@ let
       (lib.enableFeature enablePlugin "plugin")
     ]
 
-    # Support -m32 on powerpc64le
+    # Support -m32 on powerpc64le/be
     ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
       "--enable-targets=powerpcle-linux"
+    ++ lib.optional (targetPlatform.system == "powerpc64-linux")
+      "--enable-targets=powerpc-linux"
+
+    # Fix "unknown long double size, cannot define BFP_FMT"
+    ++ lib.optional (targetPlatform.isPower && targetPlatform.isMusl)
+      "--disable-decimal-float"
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
@@ -155,8 +176,11 @@ let
       "--enable-cloog-backend=isl"
     ]
 
-    # Ada options
-    ++ lib.optional langAda "--enable-libada"
+    # Ada options, gcc can't build the runtime library for a cross compiler
+    ++ lib.optional langAda
+      (if hostPlatform == targetPlatform
+       then "--enable-libada"
+       else "--disable-libada")
 
     # Java options
     ++ lib.optionals langJava [
@@ -170,12 +194,14 @@ let
     ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
-    ++ (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
+    # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
+    ++ lib.optional (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred

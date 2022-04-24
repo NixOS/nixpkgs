@@ -192,6 +192,20 @@ let
       mkdir -p $out/Library/Frameworks/
       cp -r ${darwin-stubs}/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework \
         $out/Library/Frameworks
+
+      cd $out/Library/Frameworks/${name}.framework
+
+      versions=(./Versions/*)
+      if [ "''${#versions[@]}" != 1 ]; then
+        echo "Unable to determine current version of framework ${name}"
+        exit 1
+      fi
+      current=$(basename ''${versions[0]})
+
+      chmod u+w -R .
+      ln -s "$current" Versions/Current
+      ln -s Versions/Current/* .
+
       # NOTE there's no re-export checking here, this is probably wrong
     '';
   };
@@ -257,7 +271,7 @@ in rec {
 
   overrides = super: {
     AppKit = lib.overrideDerivation super.AppKit (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/PrivateFrameworks/"
       ];
     });
@@ -271,13 +285,13 @@ in rec {
     });
 
     CoreMedia = lib.overrideDerivation super.CoreMedia (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/Frameworks/CoreImage.framework"
       ];
     });
 
     CoreMIDI = lib.overrideDerivation super.CoreMIDI (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps or [] ++ [
         "/System/Library/PrivateFrameworks/"
       ];
       setupHook = ./private-frameworks-setup-hook.sh;
@@ -312,7 +326,7 @@ in rec {
         "Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy.tbd"
       ];
     });
-  } // lib.genAttrs [ "ContactsPersistence" "UIFoundation" "GameCenter" ] (x: tbdOnlyFramework x {});
+  } // lib.genAttrs [ "ContactsPersistence" "CoreSymbolication" "GameCenter" "SkyLight" "UIFoundation" ] (x: tbdOnlyFramework x {});
 
   bareFrameworks = lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;

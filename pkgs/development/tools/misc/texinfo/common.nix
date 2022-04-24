@@ -1,4 +1,4 @@
-{ version, sha256 }:
+{ version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, gettext
 
@@ -18,7 +18,7 @@ in
 with lib;
 
 stdenv.mkDerivation {
-  name = "texinfo-${optionalString interactive "interactive-"}${version}";
+  pname = "texinfo${optionalString interactive "-interactive"}";
   inherit version;
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = optional crossBuildTools ./cross-tools-flags.patch;
+  patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
@@ -53,6 +53,12 @@ stdenv.mkDerivation {
   doCheck = interactive
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
+
+  checkFlagsArray = [
+    # Test is known to fail on various locales on texinfo-6.8:
+    #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
+    "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
+  ];
 
   meta = {
     homepage = "https://www.gnu.org/software/texinfo/";

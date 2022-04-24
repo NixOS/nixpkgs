@@ -8,7 +8,6 @@
 , gpgme
 , gobject-introspection
 , vala
-, help2man
 , gtk-doc
 , meson
 , ninja
@@ -19,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.6";
+  version = "0.1.10";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-X+mFl0YZpnt6zzvVTGZN7PROVUaQ8ZmU3T0EgyoZX6g=";
+    sha256 = "sha256-6fqcP8LWvRoDf5gJz+kW0w5+3PP/luuoPMak1QLKzzM=";
   };
 
   patches = [
@@ -43,11 +42,8 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     gobject-introspection
     vala
-    help2man
     gtk-doc
-    (python3.withPackages (pkgs: with pkgs; [
-      setuptools
-    ]))
+    python3
   ];
 
   buildInputs = [
@@ -61,10 +57,6 @@ stdenv.mkDerivation rec {
     "-Dgtkdoc=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
-
-  postPatch = ''
-    patchShebangs contrib/generate-version-script.py
-  '';
 
   doCheck = true;
 

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, opencl-clhpp, ocl-icd }:
 
 stdenv.mkDerivation {
-  name = "opencl-info-2014-02-21";
+  pname = "opencl-info";
+  version = "unstable-2014-02-21";
 
   src = fetchFromGitHub {
     owner = "marchv";

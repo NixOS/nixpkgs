@@ -1,16 +1,16 @@
 { lib, fetchPypi, buildPythonPackage
 , six, sqlalchemy
-, mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, dateutil
+, mock, pytz, isort, flake8, jinja2, pg8000, pyodbc, pytest, pymysql, python-dateutil
 , docutils, flexmock, psycopg2, pygments }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.36.6";
+  version = "0.38.2";
 
   src = fetchPypi {
     inherit version;
     pname = "SQLAlchemy-Utils";
-    sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";
+    sha256 = "9e01d6d3fb52d3926fcd4ea4a13f3540701b751aced0316bff78264402c2ceb4";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pyodbc
     pytest
     pymysql
-    dateutil
+    python-dateutil
     docutils
     flexmock
     psycopg2

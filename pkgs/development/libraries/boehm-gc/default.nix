@@ -1,31 +1,26 @@
 { lib, stdenv, fetchurl
 , autoreconfHook
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
+, nixVersions
 }:
 
 stdenv.mkDerivation rec {
   pname = "boehm-gc";
-  version = "8.0.4";
+  version = "8.0.6";
 
   src = fetchurl {
     urls = [
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
       "https://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
     ];
-    sha256 = "1798rp3mcfkgs38ynkbg2p47bq59pisrc6mn0l20pb5iczf0ssj3";
+    sha256 = "3b4914abc9fa76593596773e4da671d7ed4d5390e3d46fbf2e5f155e121bea11";
   };
 
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
-  '';
-
-  patches = # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch
-    # boehm-gc whitelists GCC threading models
-    ++ lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
+  # boehm-gc whitelists GCC threading models
+  patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
   configureFlags =
     [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
@@ -37,6 +32,8 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
 
   enableParallelBuilding = true;
+
+  passthru.tests = nixVersions;
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";

@@ -1,23 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.0.0";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1q6kmgwb8jxmc4ijzk9pkqzz8lsbfsv9hyzqvy944w7306zx1r5h";
+    hash = "sha256-i1RbyHw+Fr1QABra6fskRpIbYxEfhOVToeesyax4NtU=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+  outputs = [ "out" "dev"];
+
+  buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
+  ] ++ lib.optionals stdenv.hostPlatform.isMips64 [
+    # See https://github.com/aws/s2n-tls/issues/1592 and https://github.com/aws/s2n-tls/pull/1609
+    "-DS2N_NO_PQ=ON"
   ];
+
+  propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+
+  postInstall = ''
+    # Glob for 'shared' or 'static' subdir
+    for f in $out/lib/s2n/cmake/*/s2n-targets.cmake; do
+      substituteInPlace "$f" \
+        --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+    done
+  '';
 
   meta = with lib; {
     description = "C99 implementation of the TLS/SSL protocols";

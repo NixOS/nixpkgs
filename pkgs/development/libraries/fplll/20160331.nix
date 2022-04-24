@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [autoconf automake libtool gettext autoreconfHook];
   buildInputs = [gmp mpfr];
   meta = {
-    inherit version;
     description = "Lattice algorithms using floating-point arithmetic";
     license = lib.licenses.lgpl21Plus;
     maintainers = [lib.maintainers.raskin];

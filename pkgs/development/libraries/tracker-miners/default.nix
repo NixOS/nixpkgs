@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, substituteAll
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -20,13 +20,12 @@
 , exempi
 , giflib
 , glib
-, gnome3
+, gnome
 , gst_all_1
 , icu
 , json-glib
 , libcue
 , libexif
-, libgrss
 , libgsf
 , libgxps
 , libiptcdata
@@ -48,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.0.1";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfi5d6pccqx28hbnja6k1mpwjd53k5zs704sg01rlzmbshz1zn6";
+    sha256 = "izh967d0BhwGrfsmeg4ODz0heZNxvwHQVklaubjdlBc=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +85,6 @@ stdenv.mkDerivation rec {
     json-glib
     libcue
     libexif
-    libgrss
     libgsf
     libgxps
     libiptcdata
@@ -108,13 +106,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
-  ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
+    # libgrss is unmaintained and has no new releases since 2015, and an open
+    # security issue since then. Despite a patch now being availab, we're opting
+    # to be safe due to the general state of the project
+    "-Dminer_rss=false"
   ];
 
   postInstall = ''
@@ -122,9 +118,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

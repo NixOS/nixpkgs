@@ -4,15 +4,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.2.1";
+  version = "0.3.0";
   pname = "secure";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "typeerror";
     repo = "secure.py";
-    rev = "v${version}";
-    sha256 = "1nbxwi0zccrha6js14ibd596kdi1wpqr7jgs442mqclw4b3f77q5";
+    rev = version;
+    sha256 = "1ajz1nx0nnhsc80xbgbc42ib2h08qnccvsp5i583rd9b0f9pklwk";
   };
 
   propagatedBuildInputs = [ maya requests ];

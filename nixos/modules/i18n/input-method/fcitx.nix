@@ -17,7 +17,7 @@ in
       engines = mkOption {
         type    = with types; listOf fcitxEngine;
         default = [];
-        example = literalExample "with pkgs.fcitx-engines; [ mozc hangul ]";
+        example = literalExpression "with pkgs.fcitx-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.fcitx-engines;
@@ -40,4 +40,7 @@ in
     };
     services.xserver.displayManager.sessionCommands = "${fcitxPackage}/bin/fcitx";
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

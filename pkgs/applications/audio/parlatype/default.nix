@@ -40,15 +40,12 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  mesonFlags = [ "-Dlibreoffice=false" ];
-
   postPatch = ''
     chmod +x data/meson_post_install.py
     patchShebangs data/meson_post_install.py
   '';
 
   doCheck = false;
-  enableParallelBuilding = true;
 
   buildPhase = ''
     export GST_PLUGIN_SYSTEM_PATH_1_0="$out/lib/gstreamer-1.0/:$GST_PLUGIN_SYSTEM_PATH_1_0"

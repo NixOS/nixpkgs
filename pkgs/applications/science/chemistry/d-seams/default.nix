@@ -2,13 +2,13 @@
 , eigen, lua, luaPackages, liblapack, blas, lib, boost, gsl }:
 
 clangStdenv.mkDerivation rec {
-  version = "v1.0.1";
+  version = "1.0.1";
   pname = "d-SEAMS";
 
   src = fetchFromGitHub {
     owner = "d-SEAMS";
     repo = "seams-core";
-    rev = "v1.0.1";
+    rev = "v${version}";
     sha256 = "03zhhl9vhi3rhc3qz1g3zb89jksgpdlrk15fcr8xcz8pkj6r5b1i";
   };
 

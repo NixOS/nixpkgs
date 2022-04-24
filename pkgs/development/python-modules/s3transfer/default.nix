@@ -1,51 +1,53 @@
 { lib
-, fetchPypi
-, pythonOlder
+, botocore
 , buildPythonPackage
 , docutils
+, fetchFromGitHub
 , mock
-, nose
-, coverage
+, pytestCheckHook
+, pythonOlder
+, stdenv
 , wheel
-, unittest2
-, botocore
-, futures
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.3.4";
+  version = "0.5.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7fdddb4f22275cf1d32129e21f056337fd2a80b6ccef1664528145b72c49e6d2";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = pname;
+    rev = version;
+    hash = "sha256-0Dl7oKB2xxq/a8do3HgBUIGay88yOGBUdOGo+QCtnUE=";
   };
 
-  propagatedBuildInputs =
-    [ botocore
-    ] ++ lib.optional (pythonOlder "3") futures;
+  propagatedBuildInputs = [ botocore ];
 
-  buildInputs = [
-    docutils
-    mock
-    nose
-    coverage
-    wheel
-    unittest2
-  ];
+  buildInputs = [ docutils mock pytestCheckHook wheel ];
 
-  checkPhase = ''
-    pushd s3transfer/tests
-    nosetests -v unit/ functional/
-    popd
-  '';
+  disabledTestPaths = [
+    # Requires network access
+    "tests/integration/test_copy.py"
+    "tests/integration/test_delete.py"
+    "tests/integration/test_download.py"
+    "tests/integration/test_processpool.py"
+    "tests/integration/test_s3transfer.py"
+    "tests/integration/test_upload.py"
+  ] ++
+  # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
+  # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
+  # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
+  lib.optionals stdenv.isDarwin [ "tests/unit/test_compat.py" ];
 
-  # version on pypi has no tests/ dir
-  doCheck = false;
+  pythonImportsCheck = [ "s3transfer" ];
 
   meta = with lib; {
+    description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     license = licenses.asl20;
-    description = "A library for managing Amazon S3 transfers";
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ alsaLib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups
+{ alsa-lib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups
 , dbus, electron_9, expat, fetchurl, gdk-pixbuf, glib, gtk3, lib
 , libappindicator-gtk3, libdbusmenu-gtk3, libuuid, makeWrapper
 , nspr, nss, pango, squashfsTools, stdenv, systemd, xorg
@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "authy";
-  version = "1.8.3";
-  rev = "5";
+  version = "1.9.0";
+  rev = "7";
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "1yfvkmy34mc1dan9am11yka88jv7a4dslsszy4kcc8vap4cjmgpn";
+    sha256 = "10az47cc3lgsdi0ixmmna08nqf9xm7gsl1ph00wfwrxzsi05ygx3";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];

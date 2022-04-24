@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules, perl,
   giflib, karchive, kcodecs, kglobalaccel, ki18n, kiconthemes, kio, kjs,
   knotifications, kparts, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem,
@@ -7,8 +7,7 @@
 }:
 
 mkDerivation {
-  name = "khtml";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "khtml";
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [
     giflib karchive kcodecs kglobalaccel ki18n kiconthemes kio knotifications

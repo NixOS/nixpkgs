@@ -1,24 +1,31 @@
 { lib
 , buildPythonPackage
 , construct
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.1.2";
+  version = "2.1.3";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ILBleqxEO7wTxAw/fvDW+4O4H4XWV5m5WWtaNeRBr4g=";
+  src = fetchFromGitHub {
+    owner = "happyleavesaoc";
+    repo = "python-snapcast";
+    rev = version;
+    sha256 = "1jigdccdd7bffszim942mxcwxyznfjx7y3r5yklz3psl7zgbzd6c";
   };
 
-  propagatedBuildInputs = [ construct ];
+  propagatedBuildInputs = [
+    construct
+  ];
 
-  # no checks from Pypi - https://github.com/happyleavesaoc/python-snapcast/issues/23
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "snapcast" ];
 
   meta = with lib; {

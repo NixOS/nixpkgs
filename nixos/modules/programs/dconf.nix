@@ -54,11 +54,13 @@ in
 
     services.dbus.packages = [ pkgs.dconf ];
 
+    systemd.packages = [ pkgs.dconf ];
+
     # For dconf executable
     environment.systemPackages = [ pkgs.dconf ];
 
     # Needed for unwrapped applications
-    environment.variables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
+    environment.sessionVariables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
   };
 
 }

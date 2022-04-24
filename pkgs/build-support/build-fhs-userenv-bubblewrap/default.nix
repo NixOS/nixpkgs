@@ -8,12 +8,14 @@ args @ {
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
+, extraBwrapArgs ? []
 , unshareUser ? true
 , unshareIpc ? true
 , unsharePid ? true
 , unshareNet ? false
 , unshareUts ? true
 , unshareCgroup ? true
+, dieWithParent ? true
 , ...
 }:
 
@@ -22,7 +24,7 @@ let
   buildFHSEnv = callPackage ./env.nix { };
 
   env = buildFHSEnv (removeAttrs args [
-    "runScript" "extraInstallCommands" "meta" "passthru"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
@@ -30,6 +32,13 @@ let
     files = [
       # NixOS Compatibility
       "static"
+      "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+      # Shells
+      "bashrc"
+      "zshenv"
+      "zshrc"
+      "zinputrc"
+      "zprofile"
       # Users, Groups, NSS
       "passwd"
       "group"
@@ -54,13 +63,15 @@ let
       # Fonts
       "fonts"
       # ALSA
+      "alsa"
       "asound.conf"
       # SSL
       "ssl/certs"
+      "ca-certificates"
       "pki"
     ];
   in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try /etc/${file} /etc/${file}") files);
+  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -f /etc/${file}) /etc/${file}") files);
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
@@ -95,7 +106,7 @@ let
       if [[ $path == '/etc' ]]; then
         :
       elif [[ -L $i ]]; then
-        symlinks+=(--symlink "$(readlink "$i")" "$path")
+        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$path")
         blacklist+=("$path")
       else
         ro_mounts+=(--ro-bind "$i" "$path")
@@ -136,7 +147,7 @@ let
       ${lib.optionalString unshareNet "--unshare-net"}
       ${lib.optionalString unshareUts "--unshare-uts"}
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
-      --die-with-parent
+      ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
@@ -159,6 +170,7 @@ let
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
+      ${concatStringsSep "\n  " extraBwrapArgs}
       ${init runScript}/bin/${name}-init ${initArgs}
     )
     exec "''${cmd[@]}"

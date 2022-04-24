@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.9.26";
 
   src = fetchzip {
-    url = "https://repo1.maven.org/maven2/com/aestasit/infrastructure/${pname}/${pname}/${version}/${pname}-${version}.zip";
+    url = "mirror://maven/com/aestasit/infrastructure/${pname}/${pname}/${version}/${pname}-${version}.zip";
     sha256 = "134qlx90y82g1rfxhyn12z9r2imm1l3fz09hrrn3pgcdcq5jz2s1";
   };
 

@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64 }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, sqlite, pkg-config, dovecot, libtool, xapian, icu64 }:
 stdenv.mkDerivation rec {
-  pname = "fts-xapian";
-  version = "1.4.7";
+  pname = "dovecot-fts-xapian";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    sha256 = "K2d1FFAilIggNuP0e698s+9bN08x2s/0Jryp7pmeixc=";
+    sha256 = "sha256-KAZno4N/4dFH3QHFTs0wkY4PtGF+j4ZEjZzn9ljCjrM=";
   };
 
-  buildInputs = [ dovecot xapian icu64 ];
+  buildInputs = [ dovecot xapian icu64 sqlite ];
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
@@ -21,15 +21,16 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
-    "--without-dovecot-install-dirs"
     "--with-moduledir=$(out)/lib/dovecot"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/grosjo/fts-xapian";
     description = "Dovecot FTS plugin based on Xapian";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ julm ];
+    changelog = "https://github.com/grosjo/fts-xapian/releases";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ julm symphorien ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/dovecot_fts_xapian.x86_64-darwin
   };
 }

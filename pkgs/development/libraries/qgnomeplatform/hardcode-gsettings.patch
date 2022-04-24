@@ -1,13 +1,14 @@
-diff --git a/common/gnomehintssettings.cpp b/common/gnomehintssettings.cpp
-index 9860e57..40fa6ec 100644
---- a/common/gnomehintssettings.cpp
-+++ b/common/gnomehintssettings.cpp
-@@ -80,9 +80,17 @@ void gtkMessageHandler(const gchar *log_domain,
- GnomeHintsSettings::GnomeHintsSettings()
-     : QObject(0)
+diff --git a/src/common/gnomesettings.cpp b/src/common/gnomesettings.cpp
+index 717cc9b..ee255ea 100644
+--- a/src/common/gnomesettings.cpp
++++ b/src/common/gnomesettings.cpp
+@@ -150,10 +150,18 @@ GnomeSettingsPrivate::GnomeSettingsPrivate(QObject *parent)
+     : GnomeSettings(parent)
      , m_usePortal(checkUsePortalSupport())
+     , m_canUseFileChooserPortal(!m_usePortal)
 -    , m_gnomeDesktopSettings(g_settings_new("org.gnome.desktop.wm.preferences"))
 -    , m_settings(g_settings_new("org.gnome.desktop.interface"))
+     , m_fallbackFont(new QFont(QLatin1String("Sans"), 10))
  {
 +    g_autoptr(GSettingsSchemaSource) schemaSource = nullptr;
 +    g_autoptr(GSettingsSchema) gnomeDesktopSchema = nullptr;

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
-, alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
+, alsa-lib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
@@ -53,8 +53,7 @@ let
     comment = "A game in which you build and maintain factories.";
     exec = "factorio";
     icon = "factorio";
-    type = "Application";
-    categories = "Game";
+    categories = [ "Game" ];
   };
 
   branch = if experimental then "experimental" else "stable";
@@ -133,9 +132,8 @@ let
   modDir = factorio-utils.mkModDirDrv mods;
 
   base = with actual; {
-    name = "factorio-${releaseType}-${version}";
-
-    inherit src;
+    pname = "factorio-${releaseType}";
+    inherit version src;
 
     preferLocalBuild = true;
     dontBuild = true;
@@ -182,7 +180,7 @@ let
       buildInputs = [ libpulseaudio ];
 
       libPath = lib.makeLibraryPath [
-        alsaLib
+        alsa-lib
         libpulseaudio
         libX11
         libXcursor

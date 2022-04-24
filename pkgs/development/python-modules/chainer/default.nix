@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ config, lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , filelock, protobuf, numpy, pytestCheckHook, mock, typing-extensions
-, cupy, cudaSupport ? false
+, cupy, cudaSupport ? config.cudaSupport or false
 }:
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "7.7.0";
+  version = "7.8.1";
   disabled = !isPy3k; # python2.7 abandoned upstream
 
   # no tests in Pypi tarball
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "chainer";
     repo = "chainer";
     rev = "v${version}";
-    sha256 = "0m97k5bv4pcp5rvbczvrr2vxddwzw2h42cm021f5y779jx5ghclh";
+    sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
   };
 
   checkInputs = [
@@ -39,6 +39,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";
     homepage = "https://chainer.org/";
+    # Un-break me when updating chainer next time!
+    broken = cudaSupport && (lib.versionAtLeast cupy.version "8.0.0");
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };

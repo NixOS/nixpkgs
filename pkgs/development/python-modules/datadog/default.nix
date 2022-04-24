@@ -2,9 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, hatchling
 , decorator
 , requests
-, typing
+, typing ? null
 , configparser
 , click
 , freezegun
@@ -17,16 +18,21 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.39.0";
+  version = "0.44.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0ef69a27aad0e4412c1ac3e6894fa1b5741db735515c34dfe1606d8cf30e4e5";
+    sha256 = "sha256-BxFw8MfvIlEdv3+b12xL5QDuLT1SBykApch7VJXSxzM=";
   };
 
   postPatch = ''
     find . -name '*.pyc' -exec rm {} \;
   '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [ decorator requests ]
     ++ lib.optional (pythonOlder "3.5") typing
@@ -43,12 +49,11 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "tests/unit/dogstatsd/test_statsd.py" # does not work in sandbox
+    "tests/performance"
   ];
 
   disabledTests = [
     "test_default_settings_set"
-    "test_threadstats_thread_safety"
   ];
 
   pythonImportsCheck = [ "datadog" ];

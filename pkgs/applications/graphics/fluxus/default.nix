@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
-, alsaLib
+, alsa-lib
 , bzip2
 , fftw
 , freeglut
@@ -17,13 +17,13 @@
 , ode
 , openal
 , openssl
-, racket
+, racket_7_9
 , sconsPackages
 , zlib
 }:
 let
   libs = [
-    alsaLib
+    alsa-lib
     bzip2
     fftw
     freeglut
@@ -42,6 +42,7 @@ let
     openssl
     zlib
   ];
+  racket = racket_7_9;
 in
 stdenv.mkDerivation rec {
   pname = "fluxus";
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fftw
     freeglut.dev
     freetype
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     ode
     openal
     openssl.dev
-    racket
+    racket_7_9
   ];
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
 

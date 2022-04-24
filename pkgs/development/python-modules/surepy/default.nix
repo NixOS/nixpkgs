@@ -2,6 +2,7 @@
 , aiodns
 , aiohttp
 , async-timeout
+, attrs
 , brotlipy
 , buildPythonPackage
 , cchardet
@@ -17,23 +18,34 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.5.0";
+  version = "0.7.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "benleb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1adsnjya142bxdhfxqsi2qa35ylvdcibigs1wafjlxazlxs3mg0j";
+    sha256 = "sha256-yc+jXA4ndFhRZmFPz11HbVs9qaPFNa6WdwXj6hRyjw4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
+      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
+      --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiodns
     aiohttp
     async-timeout
+    attrs
     brotlipy
     cchardet
     click
@@ -43,14 +55,12 @@ buildPythonPackage rec {
     rich
   ];
 
-  postPatch = ''
-    # halo is out-dated, https://github.com/benleb/surepy/pull/7
-    substituteInPlace pyproject.toml --replace "^0.0.30" "^0.0.31"
-  '';
-
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "surepy" ];
+
+  pythonImportsCheck = [
+    "surepy"
+  ];
 
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";

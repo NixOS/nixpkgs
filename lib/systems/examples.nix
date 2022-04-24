@@ -21,14 +21,10 @@ rec {
     config = "powerpc64le-unknown-linux-musl";
   };
 
-  ppc64-elfv1 = {
-    config = "powerpc64-unknown-linux-elfv1";
+  ppc64 = {
+    config = "powerpc64-unknown-linux-gnu";
+    gcc = { abi = "elfv2"; }; # for gcc configuration
   };
-  ppc64-elfv2 = {
-    config = "powerpc64-unknown-linux-elfv2";
-  };
-  ppc64 = ppc64-elfv2; # default to modern elfv2
-
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
     gcc = { abi = "elfv2"; }; # for gcc configuration
@@ -60,6 +56,7 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
+    rustc.config = "armv7-linux-androideabi";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
@@ -67,9 +64,19 @@ rec {
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
+    rustc.config = "aarch64-linux-android";
     sdkVer = "29";
     ndkVer = "21";
     useAndroidPrebuilt = true;
+  };
+
+  aarch64-android = {
+    config = "aarch64-unknown-linux-android";
+    sdkVer = "30";
+    ndkVer = "21";
+    libc = "bionic";
+    useAndroidPrebuilt = false;
+    useLLVM = true;
   };
 
   scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
@@ -85,6 +92,26 @@ rec {
   fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;
+
+  # MIPS ABI table transcribed from here: https://wiki.debian.org/Multiarch/Tuples
+
+  # can execute on 32bit chip
+  mips-linux-gnu                = { config = "mips-linux-gnu";                } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu              = { config = "mipsel-linux-gnu";              } // platforms.gcc_mips32r2_o32;
+  mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-linux-gnu";         } // platforms.gcc_mips32r6_o32;
+  mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-linux-gnu";       } // platforms.gcc_mips32r6_o32;
+
+  # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
+  mips64-linux-gnuabin32        = { config = "mips64-linux-gnuabin32";        } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32      = { config = "mips64el-linux-gnuabin32";      } // platforms.gcc_mips64r2_n32;
+  mipsisa64r6-linux-gnuabin32   = { config = "mipsisa64r6-linux-gnuabin32";   } // platforms.gcc_mips64r6_n32;
+  mipsisa64r6el-linux-gnuabin32 = { config = "mipsisa64r6el-linux-gnuabin32"; } // platforms.gcc_mips64r6_n32;
+
+  # 64bit pointers
+  mips64-linux-gnuabi64         = { config = "mips64-linux-gnuabi64";         } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64       = { config = "mips64el-linux-gnuabi64";       } // platforms.gcc_mips64r2_64;
+  mipsisa64r6-linux-gnuabi64    = { config = "mipsisa64r6-linux-gnuabi64";    } // platforms.gcc_mips64r6_64;
+  mipsisa64r6el-linux-gnuabi64  = { config = "mipsisa64r6el-linux-gnuabi64";  } // platforms.gcc_mips64r6_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -135,6 +162,18 @@ rec {
   or1k = {
     config = "or1k-elf";
     libc = "newlib";
+  };
+
+  m68k = {
+    config = "m68k-unknown-linux-gnu";
+  };
+
+  s390 = {
+    config = "s390-unknown-linux-gnu";
+  };
+
+  s390x = {
+    config = "s390x-unknown-linux-gnu";
   };
 
   arm-embedded = {
@@ -219,6 +258,7 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
   };
 
@@ -228,7 +268,20 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
+  };
+
+  aarch64-darwin = {
+    config = "aarch64-apple-darwin";
+    xcodePlatform = "MacOSX";
+    platform = {};
+  };
+
+  x86_64-darwin = {
+    config = "x86_64-apple-darwin";
+    xcodePlatform = "MacOSX";
+    platform = {};
   };
 
   #
@@ -250,9 +303,18 @@ rec {
 
   # BSDs
 
-  amd64-netbsd = {
+  amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
+
+  x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
     libc = "nblibc";
+  };
+
+  # this is broken and never worked fully
+  x86_64-netbsd-llvm = {
+    config = "x86_64-unknown-netbsd";
+    libc = "nblibc";
+    useLLVM = true;
   };
 
   #

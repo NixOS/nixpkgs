@@ -1,9 +1,9 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python2Packages, fetchFromGitHub }:
 
 let
   version = "3.13";
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication {
+in python2Packages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ in pythonPackages.buildPythonApplication {
     description = "A utility to accurately report the in core memory usage for a program";
     homepage = "https://github.com/pixelb/ps_mem";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

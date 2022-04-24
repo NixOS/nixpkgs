@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
-  version = "1.045";
+  version = "1.048";
 
   src = fetchurl {
-    url = "http://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
-    sha256 = "1y45jx7i30ik2pjv33y16fi5i5jpmi0zp1jh32pwywd3diaiazv6";
+    url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
+    sha256 = "sha256-+ZidO2rrIoSLz5EJXDBgfwJ9PvJ3pPD3BKjw/C52aYE=";
   };
 
   buildInputs = [ fastjet ];
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
-    license = licenses.gpl2;
+    changelog = "https://phab.hepforge.org/source/fastjetsvn/browse/contrib/tags/${version}/NEWS?as=source&blame=off";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
   };

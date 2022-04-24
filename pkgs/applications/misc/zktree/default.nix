@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "11w86k1w5zryiq6bqr98pjhffd3l76377yz53qx0n76vc5374fk9";
   };
 
-  cargoSha256 = "1d35jrxvhf7m04s1kh0yrfhy9j9i6qzwbw2mwapgsrcsr5vhxasn";
+  cargoSha256 = "18v7agm39acnblc703278cn8py5971hm8p5kxmznpw119fjp36s5";
 
   meta = with lib; {
     description = "A small tool to display Znodes in Zookeeper in tree structure.";

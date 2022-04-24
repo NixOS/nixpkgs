@@ -18,6 +18,8 @@
         Additional commands to be executed for finalizing the derivation with runner script.
 - `runScript`
         A command that would be executed inside the sandbox and passed all the command line arguments. It defaults to `bash`.
+- `profile`
+        Optional script for `/etc/profile` within the sandbox.
 
 One can create a simple environment using a `shell.nix` like that:
 
@@ -28,7 +30,7 @@ One can create a simple environment using a `shell.nix` like that:
   name = "simple-x11-env";
   targetPkgs = pkgs: (with pkgs;
     [ udev
-      alsaLib
+      alsa-lib
     ]) ++ (with pkgs.xorg;
     [ libX11
       libXcursor
@@ -36,10 +38,12 @@ One can create a simple environment using a `shell.nix` like that:
     ]);
   multiPkgs = pkgs: (with pkgs;
     [ udev
-      alsaLib
+      alsa-lib
     ]);
   runScript = "bash";
 }).env
 ```
 
 Running `nix-shell` would then drop you into a shell with these libraries and binaries available. You can use this to run closed-source applications which expect FHS structure without hassles: simply change `runScript` to the application path, e.g. `./bin/start.sh` -- relative paths are supported.
+
+Additionally, the FHS builder links all relocated gsettings-schemas (the glib setup-hook moves them to `share/gsettings-schemas/${name}/glib-2.0/schemas`) to their standard FHS location. This means you don't need to wrap binaries with `wrapGAppsHook`.

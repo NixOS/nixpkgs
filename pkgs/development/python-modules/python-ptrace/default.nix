@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "python-ptrace";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b998e3436cec975b6907552af6e7f3ff8779097e32d2b905696e5a9feb09e070";
+    sha256 = "1e3bc6223f626aaacde8a7979732691c11b13012e702fee9ae16c87f71633eaa";
   };
 
   # requires distorm, which is optionally

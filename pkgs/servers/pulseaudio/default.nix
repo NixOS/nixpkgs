@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config
 , libsndfile, libtool, makeWrapper, perlPackages
-, xorg, libcap, alsaLib, glib, dconf
+, xorg, libcap, alsa-lib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
+, check, meson, ninja, m4
 
 , x11Support ? false
 
@@ -26,93 +27,87 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, CoreServices, AudioUnit, Cocoa
+, AudioUnit, Cocoa, CoreServices
 }:
 
 stdenv.mkDerivation rec {
-  name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "14.2";
+  pname = "${if libOnly then "lib" else ""}pulseaudio";
+  version = "15.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "sha256-ddP3dCwa5EkEmkyIkA5FS4s1DsqoxUTzSIolYqn/ZvE=";
+    sha256 = "pAuIejupjMJpdusRvbZhOYjxRbGQJNG2VVxqA8nLoaA=";
   };
+
+  patches = [
+    # Install sysconfdir files inside of the nix store,
+    # but use a conventional runtime sysconfdir outside the store
+    ./add-option-for-installation-sysconfdir.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
+  nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
+    ++ lib.optionals stdenv.isLinux [ glib ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile soxr speexdsp fftwFloat ]
+    [ libtool libsndfile soxr speexdsp fftwFloat check ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
       ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
       ++ lib.optional useSystemd systemd
-      ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
+      ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
   );
 
-  prePatch = ''
-    substituteInPlace bootstrap.sh \
-      --replace pkg-config $PKG_CONFIG
+  mesonFlags = [
+    "-Dalsa=${if !libOnly then "enabled" else "disabled"}"
+    "-Dasyncns=${if !libOnly then "enabled" else "disabled"}"
+    "-Davahi=${if zeroconfSupport then "enabled" else "disabled"}"
+    "-Dbluez5=${if !libOnly then "enabled" else "disabled"}"
+    "-Dbluez5-gstreamer=disabled"
+    "-Ddatabase=simple"
+    "-Ddoxygen=false"
+    "-Delogind=disabled"
+    # gsettings does not support cross-compilation
+    "-Dgsettings=${if stdenv.buildPlatform == stdenv.hostPlatform then "enabled" else "disabled"}"
+    "-Dgstreamer=disabled"
+    "-Dgtk=disabled"
+    "-Djack=${if jackaudioSupport && !libOnly then "enabled" else "disabled"}"
+    "-Dlirc=${if remoteControlSupport then "enabled" else "disabled"}"
+    "-Dopenssl=${if airtunesSupport then "enabled" else "disabled"}"
+    "-Dorc=disabled"
+    "-Dsystemd=${if useSystemd && !libOnly then "enabled" else "disabled"}"
+    "-Dtcpwrap=disabled"
+    "-Dudev=${if !libOnly then "enabled" else "disabled"}"
+    "-Dvalgrind=disabled"
+    "-Dwebrtc-aec=${if !libOnly then "enabled" else "disabled"}"
+    "-Dx11=${if x11Support then "enabled" else "disabled"}"
+
+    "-Dlocalstatedir=/var"
+    "-Dsysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+  ]
+    ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    ;
+
+  doCheck = true;
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
-
-  autoreconfPhase = ''
-    # Performs an autoreconf
-    patchShebangs bootstrap.sh
-    NOCONFIGURE=1 ./bootstrap.sh
-
-    # Move the udev rules under $(prefix).
-    sed -i "src/Makefile.in" \
-        -e "s|udevrulesdir[[:blank:]]*=.*$|udevrulesdir = $out/lib/udev/rules.d|g"
-
-    # don't install proximity-helper as root and setuid
-    sed -i "src/Makefile.in" \
-        -e "s|chown root|true |" \
-        -e "s|chmod r+s |true |"
-  '';
-
-  configureFlags =
-    [ "--disable-solaris"
-      "--disable-jack"
-      "--disable-oss-output"
-    ] ++ lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
-    [ "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-access-group=audio"
-      "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
-    ]
-    ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
-    ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
-
-  enableParallelBuilding = true;
-
-  # not sure what the best practices are here -- can't seem to find a way
-  # for the compiler to bring in stdlib and stdio (etc.) properly
-  # the alternative is to copy the files from /usr/include to src, but there are
-  # probably a large number of files that would need to be copied (I stopped
-  # after the seventh)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
-
-  installFlags =
-    [ "sysconfdir=${placeholder "out"}/etc"
-      "pulseconfdir=${placeholder "out"}/etc/pulse"
-    ];
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   ''
     + ''
     moveToOutput lib/cmake "$dev"
@@ -121,7 +116,7 @@ stdenv.mkDerivation rec {
 
   preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
-     --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
+     --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 

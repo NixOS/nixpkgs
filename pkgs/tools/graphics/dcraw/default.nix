@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, libjpeg, lcms2, gettext, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "dcraw-9.28.0";
+  pname = "dcraw";
+  version = "9.28.0";
 
   src = fetchurl {
-    url = "https://www.dechifro.org/dcraw/archive/${name}.tar.gz";
+    url = "https://www.dechifro.org/dcraw/archive/dcraw-${version}.tar.gz";
     sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 

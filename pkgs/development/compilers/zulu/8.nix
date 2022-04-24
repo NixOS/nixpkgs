@@ -7,7 +7,7 @@
 , setJavaClassPath
 , zulu
 # minimum dependencies
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , xorg
@@ -49,7 +49,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = lib.optionals stdenv.isLinux [
-    alsaLib # libasound.so wanted by lib/libjsound.so
+    alsa-lib # libasound.so wanted by lib/libjsound.so
     fontconfig
     freetype
     stdenv.cc.cc # libstdc++.so.6
@@ -61,15 +61,22 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook makeWrapper
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./* "$out/"
-
+  '' + lib.optionalString stdenv.isLinux ''
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
+  '' + ''
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
@@ -84,6 +91,8 @@ in stdenv.mkDerivation {
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       fi
     done
+  '' + ''
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -105,5 +114,6 @@ in stdenv.mkDerivation {
     '';
     maintainers = with maintainers; [ fpletz ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "java";
   };
 }

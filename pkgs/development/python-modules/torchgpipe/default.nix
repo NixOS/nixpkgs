@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 , pytorch
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytorch ];
 
-  checkInputs = [ pytestrunner pytestCheckHook ];
+  checkInputs = [ pytest-runner pytestCheckHook ];
   disabledTests = [
     "test_inplace_on_requires_grad"
     "test_input_requiring_grad"

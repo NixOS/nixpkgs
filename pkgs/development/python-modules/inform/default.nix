@@ -2,29 +2,32 @@
 , arrow
 , six
 , hypothesis
-, pytest
-, pytestrunner
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.23";
+  version = "1.26";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
     rev = "v${version}";
-    sha256 = "02zlprvidkz51aypss4knhv7dbr0sbpz3caqjzf9am2n1jx2viyy";
+    sha256 = "0snrmvmc3rnz90cql5ayzs878rrkadk46rhvf2sn78nb0x57wa20";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner>=2.0" ""
+  '';
+
   propagatedBuildInputs = [ arrow six ];
 
-  checkInputs = [ pytest hypothesis ];
-  checkPhase = ''
+  checkInputs = [ pytestCheckHook hypothesis ];
+  preCheck = ''
     patchShebangs test.doctests.py test.inform.py
-    ./test.doctests.py && ./test.inform.py && pytest
+    ./test.doctests.py
+    ./test.inform.py
   '';
 
   meta = with lib; {

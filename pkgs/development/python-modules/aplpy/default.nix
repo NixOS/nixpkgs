@@ -11,6 +11,7 @@
 , pyregion
 , pillow
 , scikitimage
+, cython
 , shapely
 , pytest
 , pytest-astropy
@@ -18,26 +19,18 @@
 
 buildPythonPackage rec {
   pname = "aplpy";
-  version = "2.0.3";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchPypi {
-    pname = "APLpy";
+    pname = "aplpy";
     inherit version;
-    sha256 = "239f3d83635ca4251536aeb577df7c60df77fc4d658097b92094719739aec3f3";
+    sha256 = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
   };
-
-  patches = [ (fetchpatch {
-      # Can be removed in next release after 2.0.3
-      url = "https://github.com/aplpy/aplpy/pull/448.patch";
-      sha256 = "1pnzh7ykjc8hwahzbzyryrzv5a8fddgd1bmzbhagkrn6lmvhhpvq";
-      excludes = [ "tox.ini" "azure-pipelines.yml" ".circleci/config.yml" "MANIFEST.in" ".gitignore"
-       "setup.cfg" "appveyor.yml" "readthedocs.yml" "CHANGES.rst" ".gitmodules" ".travis.yml" "astropy_helpers" ];
-    })
-  ];
 
   propagatedBuildInputs = [
     numpy
+    cython
     astropy
     matplotlib
     reproject

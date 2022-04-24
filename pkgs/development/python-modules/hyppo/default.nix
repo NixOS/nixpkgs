@@ -1,40 +1,49 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
-, pytestCheckHook , pytestcov , numba
+, pytestCheckHook
+, autograd
+, numba
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
+, matplotlib
+, seaborn
 }:
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.1.3";
+  version = "0.3.2";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "neurodata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qdnb1l4hz4dgwhapz1fp9sb2vxxvr8h2ngsbvyf50h3kapcn19r";
+    sha256 = "sha256-DQ5DrQrFBJ3dnGAjD1c/7GCJeR3g+aL2poR4hwOvmPA=";
   };
 
   propagatedBuildInputs = [
+    autograd
     numba
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook pytestcov ];
-  pytestFlagsArray = [ "--ignore=docs" ];
+  checkInputs = [ pytestCheckHook matplotlib seaborn ];
+  disabledTestPaths = [
+    "docs"
+    "benchmarks"
+    "examples"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";
-    description = "Indepedence testing in Python";
-    license = licenses.asl20;
+    description = "Python package for multivariate hypothesis testing";
+    license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

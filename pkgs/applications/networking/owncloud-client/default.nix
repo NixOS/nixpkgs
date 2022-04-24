@@ -1,16 +1,16 @@
-{ lib, fetchurl, mkDerivation, cmake, pkg-config, qtbase, qtkeychain, sqlite, libsecret }:
+{ lib, fetchurl, mkDerivation, cmake, extra-cmake-modules, pkg-config, qtbase, qtkeychain, sqlite, libsecret }:
 
 mkDerivation rec {
   pname = "owncloud-client";
-  version = "2.6.3.14058";
+  version = "2.10.1.7187";
 
   src = fetchurl {
-    url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "1xcklhvbyg34clm9as2rjnjfwxpwq77lmdxj6qc0w7q43viqvlz3";
+    url = "https://download.owncloud.com/desktop/ownCloud/stable/${version}/source/ownCloud-${version}.tar.xz";
+    sha256 = "sha256-SNabKv5z7viDI3XDQ2mWjEgFKAGSR5K9sI3Tu5eZbwU=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ qtbase qtkeychain sqlite ];
+  nativeBuildInputs = [ pkg-config cmake extra-cmake-modules ];
+  buildInputs = [ qtbase qtkeychain sqlite libsecret ];
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"

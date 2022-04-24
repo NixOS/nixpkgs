@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , python3
 , fetchFromGitHub
 , makeWrapper
@@ -13,7 +14,7 @@ let
     pycparser
     pyelftools
     python-ptrace
-    ROPGadget
+    ropgadget
     six
     unicorn
     pygments
@@ -21,14 +22,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pwndbg";
-  version = "2020.07.23";
+  version = "2022.01.05";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
     rev = version;
-    sha256 = "0w1dmjy8ii12367wza8c35a9q9x204fppf6x328q75bhb3gd845c";
+    sha256 = "sha256-24WWA3wLUxylC8LkukwTOcqbpxpAg8DfrEkI3Ikyzlk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

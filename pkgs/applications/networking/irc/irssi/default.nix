@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr, git }:
 
 stdenv.mkDerivation rec {
   pname = "irssi";
-  version = "1.2.2";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://github.com/irssi/irssi/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0g2nxazn4lszmd6mf1s36x5ablk4999g1qx7byrnvgnjsihjh62k";
+
+  src = fetchFromGitHub {
+    "owner" = "irssi";
+    "repo" = "irssi";
+    "rev" = "91dc3e4dfa1a9558c5a7fe0ea982cb9df0e2de65";
+    "sha256" = "efnE4vuDd7TnOBxMPduiV0/nez1jVhTjbJ0vzN4ZMcg=";
+    "leaveDotGit" = true;
   };
 
-  # Fix irssi on GLib >2.62 input being stuck after entering a NUL byte
-  # See https://github.com/irssi/irssi/issues/1180 - remove after next update.
-  patches = fetchpatch {
-    url = "https://github.com/irssi/irssi/releases/download/1.2.2/glib-2-63.patch";
-    sha256 = "1ad1p7395n8dfmv97wrf751wwzgncqfh9fp27kq5kfdvh661da1i";
-  };
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool git ];
   buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [
     "--with-proxy"

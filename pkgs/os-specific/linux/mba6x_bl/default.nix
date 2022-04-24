@@ -1,7 +1,8 @@
 { fetchFromGitHub, kernel, lib, stdenv }:
 
 stdenv.mkDerivation {
-  name = "mba6x_bl-2016-12-08";
+  pname = "mba6x_bl";
+  version = "unstable-2016-12-08";
 
   src = fetchFromGitHub {
     owner = "patjak";
@@ -15,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];

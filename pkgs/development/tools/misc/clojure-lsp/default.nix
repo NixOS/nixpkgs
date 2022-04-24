@@ -1,66 +1,64 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, leiningen, openjdk11
-, graalvm11-ce, babashka }:
+{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
 
-let
+buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2021.02.14-19.46.47";
-  leiningen11 = leiningen.override ({ jdk = openjdk11; });
+  version = "2022.04.18-00.59.32";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zj7/8RcuxCy2xdd+5jeOb1GTsQsX0EVW32k32fA6uf4=";
+    sha256 = "sha256-14EsJIKYl8TWbDqM9PyVrbs/4EssqXp0EK70RrFz+RE=";
   };
 
-  repository = callPackage ./repository.nix {
-    inherit src pname version;
-    leiningen = leiningen11;
+  jar = fetchurl {
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
+    sha256 = "d78094b015bd9e671eea2eb89ca0bb3ec58d39802ad1bfdf875b50e1cdd4995e";
   };
-in stdenv.mkDerivation rec {
-  inherit src pname version;
 
-  postPatch = ''
-    # Hack to set maven cache in another directory since MAVEN_OPTS doesn't work
-    substituteInPlace project.clj \
-      --replace ":main" ":local-repo \"${repository}\" :main"
-  '';
-
-  GRAALVM_HOME = graalvm11-ce;
-
-  buildInputs = [ graalvm11-ce leiningen11 repository ];
-
-  buildPhase = with lib; ''
-    runHook preBuild
-
-    export LEIN_HOME="$(mktemp -d)"
-    bash ./graalvm/native-unix-compile.sh
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ./clojure-lsp $out/bin/clojure-lsp
-
-    runHook postInstall
-  '';
+  extraNativeImageBuildArgs = [
+    "--no-fallback"
+    "--native-image-info"
+  ];
 
   doCheck = true;
   checkPhase = ''
     runHook preCheck
 
-    ${babashka}/bin/bb ./integration-test/run-all.clj ./clojure-lsp
-
+    export HOME="$(mktemp -d)"
+    ./${pname} --version | fgrep -q '${version}'
+  ''
+    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
+    #${babashka}/bin/bb integration-test ./${pname}
+  + ''
     runHook postCheck
+  '';
+
+  passthru.updateScript = writeScript "update-clojure-lsp" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts gnused jq nix
+
+    set -eu -o pipefail
+
+    latest_version=$(curl -s https://api.github.com/repos/clojure-lsp/clojure-lsp/releases/latest | jq --raw-output .tag_name)
+
+    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
+
+    curl -o clojure-lsp-standalone.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
+    new_jar_hash=$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | sed -re 's|[+]|\\&|g')
+
+    rm -f clojure-lsp-standalone.jar
+
+    nixFile=$(nix-instantiate --eval --strict -A "clojure-lsp.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+
+    sed -i "$nixFile" -re "s|\"$old_jar_hash\"|\"$new_jar_hash\"|"
+    update-source-version clojure-lsp "$latest_version"
   '';
 
   meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
-    homepage = "https://github.com/snoe/clojure-lsp";
+    homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
-    maintainers = [ maintainers.ericdallo ];
-    platforms = graalvm11-ce.meta.platforms;
+    maintainers = with maintainers; [ ericdallo babariviere ];
   };
 }

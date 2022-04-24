@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, dateutil }:
+{ lib, fetchFromGitHub, buildPythonApplication, python-dateutil }:
 
 buildPythonApplication rec {
   pname = "pdd";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   format = "other";
 
-  propagatedBuildInputs = [ dateutil ];
+  propagatedBuildInputs = [ python-dateutil ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "oapi-codegen";
-  version = "1.5.6";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "deepmap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-edIm1O+LQdmKhH8/5WuSsxVtOcf3VlkObGjIY+30mms=";
+    sha256 = "sha256-Po0HCAK9h1GWSfKzV+1j3ddikCNIULbywx501GvRT/Q=";
   };
 
-  vendorSha256 = "sha256-lhWnPZavtBEa4A76rvr0xw3L5W6HYK1Uw+PW8z8gWuU=";
+  vendorSha256 = "sha256-GSNNOWhWpXRJEIzLoBci25sp9pu0W1mS18G8eFOsfhw=";
 
   # Tests use network
   doCheck = false;

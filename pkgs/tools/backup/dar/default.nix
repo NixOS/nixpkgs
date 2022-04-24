@@ -1,27 +1,30 @@
 { lib, stdenv, fetchurl
+, which
 , attr, e2fsprogs
-, curl, librsync, libthreadar
+, curl, libargon2, librsync, libthreadar
 , gpgme, libgcrypt, openssl
-, bzip2, lzo, xz, zlib
+, bzip2, lz4, lzo, xz, zlib
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.6.13";
+  version = "2.7.4";
   pname = "dar";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "15yhpzyzw7h7d74xxh104cnbh19639yxx0502xz85fazwpwrzsiz";
+    sha256 = "sha256-esti2QXoq+5bic639eG96vZOSJboMVHmD+oRNAI6ic4=";
   };
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ which ];
+
   buildInputs = [
     curl librsync libthreadar
-    gpgme libgcrypt openssl
-    bzip2 lzo xz zlib
+    gpgme libargon2 libgcrypt openssl
+    bzip2 lz4 lzo xz zlib
   ] ++ optionals stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = [

@@ -19,7 +19,7 @@ with lib;
         wantedBy = [ "multi-user.target" "sshd.service" ];
         before = [ "sshd.service" ];
 
-        path = [ pkgs.iproute ];
+        path = [ pkgs.iproute2 ];
 
         script =
           ''

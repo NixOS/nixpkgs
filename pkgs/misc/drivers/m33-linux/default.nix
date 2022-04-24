@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "M33-Linux-2016-06-23";
+  pname = "M33-Linux";
+  version = "unstable-2016-06-23";
 
   src = fetchFromGitHub {
     owner = "donovan6000";

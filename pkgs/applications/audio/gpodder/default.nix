@@ -1,18 +1,18 @@
 { lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome3, gtk3, wrapGAppsHook
+, glibcLocales, gnome, gtk3, wrapGAppsHook
 , gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.17";
+  version = "3.10.21";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0wrk8d4q6ricbcjzlhk10vrk1qg9hi323kgyyd0c8nmh7a82h8pd";
+    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
   };
 
   patches = [
@@ -29,14 +29,23 @@ python3Packages.buildPythonApplication rec {
     glibcLocales
   ];
 
+  # as of 2021-07, the gobject-introspection setup hook does not
+  # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
+  # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   buildInputs = [
     python3
+    gtk3
     gobject-introspection
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   checkInputs = with python3Packages; [
-    coverage minimock
+    minimock
+    pytest
+    pytest-httpserver
+    pytest-cov
   ];
 
   doCheck = true;
@@ -45,11 +54,11 @@ python3Packages.buildPythonApplication rec {
     feedparser
     dbus-python
     mygpoclient
+    requests
     pygobject3
     eyeD3
     podcastparser
     html5lib
-    gtk3
   ];
 
   makeFlags = [
@@ -64,7 +73,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installCheckPhase = ''
-    LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
   meta = with lib; {

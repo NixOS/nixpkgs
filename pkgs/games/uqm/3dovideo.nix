@@ -1,4 +1,4 @@
-{ stdenv, lib, requireFile, writeText, fetchurl, haskellPackages }:
+{ stdenv, lib, requireFile, writeText, fetchFromGitHub, haskellPackages }:
 
 let
   makeSpin = num: let
@@ -13,13 +13,15 @@ let
     slides.intro = 3DOVID:addons/3dovideo/intro/intro.duk
   '' + lib.concatMapStrings makeSpin (lib.range 0 24));
 
-  helper = with haskellPackages; mkDerivation {
+  helper = with haskellPackages; mkDerivation rec {
     pname = "uqm3donix";
     version = "0.1.0.0";
 
-    src = fetchurl {
-      url = "https://github.com/aszlig/uqm3donix/archive/v0.1.0.0.tar.gz";
-      sha256 = "0d40gpc3bqkw68varjxwgbdzxw0dvwqksijmvij5ixmlcspbjgvb";
+    src = fetchFromGitHub {
+      owner = "aszlig";
+      repo = "uqm3donix";
+      rev = "v${version}";
+      hash = "sha256-rK30u2PBysiSGSA9829F1Nom/wtoVN6rGTBneRKeWEw=";
     };
 
     isLibrary = false;

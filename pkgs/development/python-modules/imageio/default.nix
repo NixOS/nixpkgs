@@ -1,55 +1,70 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy27
-, pathlib
 , fetchPypi
+, substituteAll
+, imageio-ffmpeg
+, numpy
 , pillow
 , psutil
-, imageio-ffmpeg
-, pytest
-, numpy
-, isPy3k
-, ffmpeg_3
-, futures
-, enum34
+, pytestCheckHook
+, tifffile
+, fsspec
+, libGL
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.9.0";
+  version = "2.16.1";
   disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "52ddbaeca2dccf53ba2d6dec5676ca7bc3b2403ef8b37f7da78b7654bb3e10f0";
+    sha256 = "sha256-fxI8sjp3rFq+jtTnrWpggxqC3ixdEjRj3PHUJ4xHedI=";
     inherit pname version;
   };
 
-  checkInputs = [ pytest psutil ] ++ lib.optionals isPy3k [
-    imageio-ffmpeg ffmpeg_3
-    ];
-  propagatedBuildInputs = [ numpy pillow ];
+  patches = [
+    (substituteAll {
+      src = ./libgl-path.patch;
+      libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
-  checkPhase = ''
+  propagatedBuildInputs = [
+    imageio-ffmpeg
+    numpy
+    pillow
+  ];
+
+  checkInputs = [
+    fsspec
+    psutil
+    pytestCheckHook
+    tifffile
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_internet'"
+  ];
+
+  preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
-    export IMAGEIO_NO_INTERNET="true"
-    export HOME="$(mktemp -d)"
-    py.test
+    export HOME=$TMPDIR
   '';
 
-  # For some reason, importing imageio also imports xml on Nix, see
-  # https://github.com/imageio/imageio/issues/395
-
-  # Also, there are tests that test the downloading of ffmpeg if it's not installed.
-  # "Uncomment" those by renaming.
-  postPatch = ''
-    substituteInPlace tests/test_meta.py --replace '"urllib",' "\"urllib\",\"xml\","
-    substituteInPlace tests/test_ffmpeg.py --replace 'test_get_exe_installed' 'get_exe_installed'
-  '';
+  disabledTestPaths = [
+    # tries to fetch fixtures over the network
+    "tests/test_freeimage.py"
+    "tests/test_pillow.py"
+    "tests/test_spe.py"
+    "tests/test_swf.py"
+  ];
 
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
-
 }

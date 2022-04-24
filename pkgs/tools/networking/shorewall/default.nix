@@ -1,10 +1,8 @@
 { coreutils
-, ebtables
 , fetchurl
 , gnugrep
 , gnused
-, iproute
-, ipset
+, iproute2
 , iptables
 , perl
 , perlPackages
@@ -15,10 +13,8 @@
 let
   PATH = lib.concatStringsSep ":"
            [ "${coreutils}/bin"
-             "${iproute}/bin"
+             "${iproute2}/bin"
              "${iptables}/bin"
-             "${ipset}/bin"
-             "${ebtables}/bin"
              "${util-linux}/bin"
              "${gnugrep}/bin"
              "${gnused}/bin"
@@ -46,10 +42,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     coreutils
-    iproute
-    ipset
+    iproute2
     iptables
-    ebtables
     util-linux
     gnugrep
     gnused

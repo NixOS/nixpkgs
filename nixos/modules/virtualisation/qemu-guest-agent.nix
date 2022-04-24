@@ -14,7 +14,8 @@ in {
       };
       package = mkOption {
         type = types.package;
-        default = pkgs.qemu.ga;
+        default = pkgs.qemu_kvm.ga;
+        defaultText = literalExpression "pkgs.qemu_kvm.ga";
         description = "The QEMU guest agent package.";
       };
   };
@@ -30,9 +31,12 @@ in {
       systemd.services.qemu-guest-agent = {
         description = "Run the QEMU Guest Agent";
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/qemu-ga";
+          ExecStart = "${cfg.package}/bin/qemu-ga --statedir /run/qemu-ga";
           Restart = "always";
           RestartSec = 0;
+          # Runtime directory and mode
+          RuntimeDirectory = "qemu-ga";
+          RuntimeDirectoryMode = "0755";
         };
       };
     }

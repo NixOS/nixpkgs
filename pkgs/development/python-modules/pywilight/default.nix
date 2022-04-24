@@ -3,15 +3,19 @@
 , fetchPypi
 , ifaddr
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pywilight";
-  version = "0.0.68";
+  version = "0.0.74";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s1xyw5hkfr4rlni1p9z4941pp1740fsg4a3b23a618hv2p1i4ww";
+    sha256 = "sha256-patCdQ7qLEfy+RpH9T/Fa8ubI7QF6OmLzFUokZc5syQ=";
   };
 
   propagatedBuildInputs = [
@@ -19,9 +23,12 @@ buildPythonPackage rec {
     requests
   ];
 
-  # no tests are present
+  # Module has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pywilight" ];
+
+  pythonImportsCheck = [
+    "pywilight"
+  ];
 
   meta = with lib; {
     description = "Python API for WiLight device";

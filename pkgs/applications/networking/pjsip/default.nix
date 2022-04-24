@@ -1,29 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib, AppKit }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.10";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "1aklicpgwc88578k03i5d5cm5h8mfm7hmx8vfprchbmaa2p8f4z0";
+    sha256 = "sha256-snp9+PlffU9Ay8o42PM8SqyP60hu9nozp457HM+0bM8=";
   };
 
   patches = [
     ./fix-aarch64.patch
+    (fetchpatch {
+      name = "CVE-2022-24764.patch";
+      url = "https://github.com/pjsip/pjproject/commit/560a1346f87aabe126509bb24930106dea292b00.patch";
+      sha256 = "1fy78v3clm0gby7qcq3ny6f7d7f4qnn01lkqq67bf2s85k2phisg";
+    })
   ];
 
   buildInputs = [ openssl libsamplerate ]
-    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AppKit;
 
   preConfigure = ''
     export LD=$CC
-  '' # Fixed on master, remove with 2.11
-     + lib.optionalString stdenv.isDarwin ''
-    NIX_CFLAGS_COMPILE+=" -framework Security"
   '';
 
   postInstall = ''
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ olynch ];
+    mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

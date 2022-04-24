@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre, pkg-config, sqlite, ragel, icu
+, glib, luajit, openssl, pcre2, pkg-config, sqlite, ragel, icu
 , hyperscan, jemalloc, blas, lapack, lua, libsodium
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
@@ -11,17 +11,19 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "2.7";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "sha256-LMLRDnKfGpApVsIvPNY2nxl+H5+qeVvwvwr3wdyyhjs=";
+    sha256 = "122d5m1nfxxz93bhsk8lm4dazvdknzphb0a1188m7bsa4iynbfv2";
   };
 
+  hardeningEnable = [ "pie" ];
+
   nativeBuildInputs = [ cmake pkg-config perl ];
-  buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
+  buildInputs = [ glib openssl pcre2 sqlite ragel icu jemalloc libsodium ]
     ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [ blas lapack ]
     ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://rspamd.com";
     license = licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [ avnik fpletz globin ];
+    maintainers = with maintainers; [ avnik fpletz globin lewo ];
     platforms = with platforms; linux;
   };
 }

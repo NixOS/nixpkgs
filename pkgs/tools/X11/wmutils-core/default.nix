@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, libxcb, xcbutil, xcb-util-cursor }:
+{ lib, stdenv, fetchFromGitHub, libxcb, xcbutil, xcb-util-cursor }:
 
 stdenv.mkDerivation rec {
   pname = "wmutils-core";
-  version = "1.5";
+  version = "1.6";
 
-  src = fetchurl {
-    url = "https://github.com/wmutils/core/archive/v${version}.tar.gz";
-    sha256 = "0wk39aq2lrnc0wjs8pv3cigw3lwy2qzaw0v61bwknd5wabm25bvj";
+  src = fetchFromGitHub {
+    owner = "wmutils";
+    repo = "core";
+    rev = "v${version}";
+    sha256 = "sha256-Nv8ZTi3qVQyOkwyErjtE6/lLCubcLM2BRTY48r1HhHo=";
   };
 
   buildInputs = [ libxcb xcbutil xcb-util-cursor ];

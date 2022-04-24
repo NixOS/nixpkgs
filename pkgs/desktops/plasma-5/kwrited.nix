@@ -5,8 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kwrited";
+  pname = "kwrited";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcoreaddons kdbusaddons ki18n knotifications kpty qtbase ];
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
 }

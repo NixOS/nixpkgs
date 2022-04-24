@@ -1,28 +1,32 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
-, pandoc, ethtool, iproute, libnl, udev, python3, perl
-, makeWrapper
+, pandoc, ethtool, iproute2, libnl, udev, python3, perl
 } :
 
-let
-  version = "33.1";
 
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rdma-core";
-  inherit version;
+  version = "39.1";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "1p97r8ngfx1d9aq8p3f027323m7kgmk30kfrikf3jlkpr30rksbv";
+    sha256 = "19jfrb0jv050abxswzh34nx2zr8if3rb2k5a7n5ydvi3x9r8827w";
   };
 
-  nativeBuildInputs = [ cmake pkg-config pandoc docutils makeWrapper ];
-  buildInputs = [ libnl ethtool iproute udev python3 perl ];
+  strictDeps = true;
+  nativeBuildInputs = [ cmake pkg-config pandoc docutils python3 ];
+  buildInputs = [ libnl ethtool iproute2 udev perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
+  ];
+
+  patches = [
+    # this has been fixed in master. As soon as it gets into a release, this
+    # patch won't apply anymore and can be removed.
+    ./pkg-config-template.patch
   ];
 
   postPatch = ''
@@ -39,7 +43,8 @@ in stdenv.mkDerivation {
   postFixup = ''
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
-      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
+      substituteInPlace $pls --replace \
+        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
     done
   '';
 

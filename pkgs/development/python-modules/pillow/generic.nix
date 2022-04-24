@@ -3,13 +3,14 @@
 , disabled
 , src
 , meta
+, passthru ? {}
 , ...
 }@args:
 
 with args;
 
 buildPythonPackage rec {
-  inherit pname version src meta;
+  inherit pname version src meta passthru;
 
   # Disable imagefont tests, because they don't work well with infinality:
   # https://github.com/python-pillow/Pillow/issues/1259
@@ -31,7 +32,8 @@ buildPythonPackage rec {
     "test_custom_metadata"
   ];
 
-  propagatedBuildInputs = [ olefile ];
+  propagatedBuildInputs = [ olefile ]
+    ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
 
   checkInputs = [ pytestCheckHook pyroma numpy ];
 

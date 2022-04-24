@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, libogg }:
+{ lib, stdenv, fetchurl, fetchpatch, libogg }:
 
 stdenv.mkDerivation rec {
-  name = "flac-1.3.3";
+  pname = "flac";
+  version = "1.3.4";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/flac/${name}.tar.xz";
-    sha256 = "0j0p9sf56a2fm2hkjnf7x3py5ir49jyavg4q5zdyd7bcf6yq4gi1";
+    url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
+    sha256 = "0dz7am8kbc97a6afml1h4yp085274prg8j7csryds8m3fmz61w4g";
   };
 
   buildInputs = [ libogg ];

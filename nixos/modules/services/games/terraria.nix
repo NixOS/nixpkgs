@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg   = config.services.terraria;
+  opt   = options.services.terraria;
   worldSizeMap = { small = 1; medium = 2; large = 3; };
   valFlag = name: val: optionalString (val != null) "-${name} \"${escape ["\\" "\""] (toString val)}\"";
   boolFlag = name: val: optionalString val "-${name}";
@@ -36,13 +37,13 @@ in
         type        = types.bool;
         default     = false;
         description = ''
-          If enabled, starts a Terraria server. The server can be connected to via <literal>tmux -S ${cfg.dataDir}/terraria.sock attach</literal>
+          If enabled, starts a Terraria server. The server can be connected to via <literal>tmux -S ''${config.${opt.dataDir}}/terraria.sock attach</literal>
           for administration by users who are a part of the <literal>terraria</literal> group (use <literal>C-b d</literal> shortcut to detach again).
         '';
       };
 
       port = mkOption {
-        type        = types.int;
+        type        = types.port;
         default     = 7777;
         description = ''
           Specifies the port to listen on.
@@ -50,7 +51,7 @@ in
       };
 
       maxPlayers = mkOption {
-        type        = types.int;
+        type        = types.ints.u8;
         default     = 255;
         description = ''
           Sets the max number of players (between 1 and 255).
@@ -111,6 +112,13 @@ in
         default     = false;
         description = "Disables automatic Universal Plug and Play.";
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Wheter to open ports in the firewall";
+      };
+
       dataDir = mkOption {
         type        = types.str;
         default     = "/var/lib/terraria";
@@ -151,5 +159,11 @@ in
         ${pkgs.coreutils}/bin/chgrp terraria ${cfg.dataDir}/terraria.sock
       '';
     };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
+    };
+
   };
 }

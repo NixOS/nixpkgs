@@ -1,6 +1,6 @@
-{ appleDerivation }:
+{ appleDerivation', stdenvNoCC }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   installPhase = ''
     mkdir $out
     cp -r include $out/include

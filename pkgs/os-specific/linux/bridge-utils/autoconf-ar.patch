@@ -1,7 +1,5 @@
-diff --git a/configure.in b/configure.in
-index 5e3f89b..19be6d9 100644
---- a/configure.in
-+++ b/configure.in
+--- a/configure.ac
++++ b/configure.ac
 @@ -9,6 +9,7 @@ dnl Checks for programs.
  AC_PROG_CC
  AC_PROG_INSTALL
@@ -10,8 +8,6 @@ index 5e3f89b..19be6d9 100644
  
  dnl Checks for header files.
  AC_HEADER_STDC
-diff --git a/libbridge/Makefile.in b/libbridge/Makefile.in
-index 20512c4..83c802b 100644
 --- a/libbridge/Makefile.in
 +++ b/libbridge/Makefile.in
 @@ -1,7 +1,7 @@

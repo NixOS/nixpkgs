@@ -1,6 +1,6 @@
 { stdenv, runCommand, ruby, lib, rsync
 , defaultGemConfig, buildRubyGem, buildEnv
-, makeWrapper
+, makeBinaryWrapper
 , bundler
 }@defs:
 
@@ -38,7 +38,7 @@ let
   filteredGemset = filterGemset { inherit ruby groups; } importedGemset;
 
   configuredGemset = lib.flip lib.mapAttrs filteredGemset (name: attrs:
-    applyGemConfigs (attrs // { inherit ruby; gemName = name; })
+    applyGemConfigs (attrs // { inherit ruby document; gemName = name; })
   );
 
   hasBundler = builtins.hasAttr "bundler" filteredGemset;
@@ -118,8 +118,12 @@ let
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
-        nativeBuildInputs = [ makeWrapper ];
-        buildCommand = ''
+
+        nativeBuildInputs = [ makeBinaryWrapper ];
+
+        dontUnpack = true;
+
+        buildPhase = ''
           mkdir -p $out/bin
           for i in ${ruby}/bin/*; do
             makeWrapper "$i" $out/bin/$(basename "$i") \
@@ -130,6 +134,15 @@ let
               --set GEM_PATH ${basicEnv}/${ruby.gemPath}
           done
         '';
+
+        dontInstall = true;
+
+        doCheck = true;
+        checkPhase = ''
+          $out/bin/ruby --help > /dev/null
+        '';
+
+        inherit (ruby) meta;
       };
 
       env = let

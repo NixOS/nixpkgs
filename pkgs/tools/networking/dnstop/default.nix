@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libpcap, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "dnstop-20140915";
+  pname = "dnstop";
+  version = "2014-09-15";
 
   src = fetchurl {
-    url = "http://dns.measurement-factory.com/tools/dnstop/src/${name}.tar.gz";
+    url = "http://dns.measurement-factory.com/tools/dnstop/src/dnstop-${lib.replaceStrings ["-"] [""] version}.tar.gz";
     sha256 = "0yn5s2825l826506gclbcfk3lzllx9brk9rzja6yj5jv0013vc5l";
   };
 

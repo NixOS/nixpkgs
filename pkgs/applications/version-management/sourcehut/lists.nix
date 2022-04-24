@@ -1,15 +1,30 @@
-{ lib, fetchgit, buildPythonPackage
-, srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, asyncpg
+, aiosmtpd
+, pygit2
+, emailthreads
+, redis
+, python
+}:
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.45.15";
+  version = "0.51.7";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "lists.sr.ht";
     rev = version;
-    sha256 = "0f3yl5nf385j7mhcrmda7zk58i1y6fm00i479js90xxhjifmqkq6";
+    sha256 = "sha256-oNY5A98oVoL2JKO0fU/8YVl8u7ywmHb/RHD8A6z9yIM=";
   };
+
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/lists/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -19,18 +34,20 @@ buildPythonPackage rec {
     asyncpg
     aiosmtpd
     emailthreads
+    redis
   ];
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "listssrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

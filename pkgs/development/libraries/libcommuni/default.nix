@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcommuni";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "communi";
     repo = "libcommuni";
     rev = "v${version}";
-    sha256 = "sha256-ABvrMoOVSycbQ8iRDzi7zkFnuSgHMMBgm9cDUWlD4uc=";
+    sha256 = "sha256-9eYJpmjW1J48RD6wVJOHmsAgTbauNeeCrXe076ufq1I=";
   };
 
   buildInputs = [ qtbase qtdeclarative ];
@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
-  configureFlags = [ "-config" "release" ];
+  configureFlags = [ "-config" "release" ]
+    # Build mixes up dylibs/frameworks if one is not explicitely specified.
+    ++ lib.optionals stdenv.isDarwin [ "-config" "qt_framework" ];
 
   dontWrapQtApps = true;
 

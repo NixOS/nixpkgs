@@ -11,7 +11,7 @@ let
 in
 
 stdenv'.mkDerivation rec {
-  name = "xmr-stak-${version}";
+  pname = "xmr-stak";
   version = "2.10.8";
 
   src = fetchFromGitHub {

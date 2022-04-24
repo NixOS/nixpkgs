@@ -43,7 +43,8 @@ stdenv.mkDerivation {
     curlOpts = "-r ${dmgRange}";
   };
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
 
   buildInputs = [ cpio xz ];
 

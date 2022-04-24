@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "0.9.10";
+  version = "0.9.14";
 
   format = "other";
 
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    sha256 = "06hk0kx6h8w263qa71bik68rg4r8qs94b6s60pyhzicfc822k0j4";
+    hash = "sha256-mrb202ON0B6VlY+U+jN0jJmbT36jQ8krNnuODynaCUA=";
   };
 
   postPatch = ''
@@ -55,6 +55,10 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
   ];
+
+  checkPhase = ''
+    meson test
+  '';
 
   postInstall = ''
     ln -s dev.tchx84.Portfolio "$out/bin/portfolio"

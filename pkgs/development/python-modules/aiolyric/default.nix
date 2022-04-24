@@ -8,25 +8,34 @@
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "1.0.6";
+  version = "1.0.10";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lnzsdw6kvgk0762f3vyw4xfzn7qkvsff16q61gm0ryjqg9j8whx";
+    hash = "sha256-yKeG0UCQ8haT1hvywoIwKQ519GK2wFg0wXaRTFeKYIk=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # AssertionError, https://github.com/timmo001/aiolyric/issues/5
     "test_location"
   ];
-  pythonImportsCheck = [ "aiolyric" ];
+
+  pythonImportsCheck = [
+    "aiolyric"
+  ];
 
   meta = with lib; {
     description = "Python module for the Honeywell Lyric Platform";

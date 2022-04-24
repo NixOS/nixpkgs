@@ -1,43 +1,23 @@
-{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
-, assetOverrides ? {}
+{ lib, fetchFromGitHub, fetchurl, symlinkJoin, buildGoModule, runCommand, makeWrapper, nixosTests
+, v2ray-geoip, v2ray-domain-list-community, assets ? [ v2ray-geoip v2ray-domain-list-community ]
 }:
 
 let
-  version = "4.36.2";
+  version = "4.44.0";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "1gvzr4kq4klld8m0jv6mizgrx3xj6s2i69kl9vmh5n355bakb7kk";
+    sha256 = "1yk02n2lllbcwqkz4f3l3d2df1w3m768zxvdawgmafjgmbqf0gjf";
   };
 
-  vendorSha256 = "sha256-8O0xUNIdu3W//LtwiMZlSs1wkpa6Jt+vFkTavz6TBKU=";
+  vendorSha256 = "sha256-kTwISKPIFpb/OPh9rIzLH8a6mqpyDBJo2stSu5bc02Q=";
 
-  assets = {
-    # MIT licensed
-    "geoip.dat" = let
-      geoipRev = "202103170314";
-      geoipSha256 = "147kajdhby92yxsvcpa6bpk11ilzvc4nj7rc0h84wp2f0y692kq2";
-    in fetchurl {
-      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
-      sha256 = geoipSha256;
-    };
-
-    # MIT licensed
-    "geosite.dat" = let
-      geositeRev = "20210317031429";
-      geositeSha256 = "0nzd0ll0x7hv75cbh1i3kgmffasi002a8n3mjw22zywj71v2jwmz";
-    in fetchurl {
-      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
-      sha256 = geositeSha256;
-    };
-
-  } // assetOverrides;
-
-  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
-    inherit name path;
-  }) assets);
+  assetsDrv = symlinkJoin {
+    name = "v2ray-assets";
+    paths = assets;
+  };
 
   core = buildGoModule rec {
     pname = "v2ray-core";
@@ -84,6 +64,6 @@ in runCommand "v2ray-${version}" {
 } ''
   for file in ${core}/bin/*; do
     makeWrapper "$file" "$out/bin/$(basename "$file")" \
-      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}
+      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}/share/v2ray
   done
 ''

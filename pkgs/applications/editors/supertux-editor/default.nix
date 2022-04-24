@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, mono, gtk-sharp-2_0, pkg-config, makeWrapper, gnome2, gtk2 }:
 stdenv.mkDerivation {
-  version = "git-2014-08-20";
+  version = "unstable-2014-08-20";
   pname = "supertux-editor";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [mono gtk-sharp-2_0 gnome2.libglade gtk2 ];
+  buildInputs = [ mono gtk-sharp-2_0 gnome2.libglade gtk2 ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/supertux-editor
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     description = "Level editor for SuperTux";
     homepage = "https://github.com/SuperTux/supertux-editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mathnerd314 ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

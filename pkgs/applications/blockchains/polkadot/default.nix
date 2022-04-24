@@ -4,23 +4,46 @@
 , llvmPackages
 , protobuf
 , rustPlatform
+, stdenv
+, writeShellScriptBin
+, Security
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.8.29";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-O5GIbX7qp+Te5QQuqytC9rsQJ5FuXtUl5h2DZXsfMPk=";
+    sha256 = "sha256-pjHSiVspBV15jKUFv+Uf2l3tah40l55Pv8vwDuwgwjc=";
+
+    # the build process of polkadot requires a .git folder in order to determine
+    # the git commit hash that is being built and add it to the version string.
+    # since having a .git folder introduces reproducibility issues to the nix
+    # build, we check the git commit hash after fetching the source and save it
+    # into a .git_commit file, and then delete the .git folder. we can then use
+    # this file to populate an environment variable with the commit hash, which
+    # is picked up by polkadot's build process.
+    leaveDotGit = true;
+    postFetch = ''
+      ( cd $out; git rev-parse --short HEAD > .git_commit )
+      rm -rf $out/.git
+    '';
   };
 
-  cargoSha256 = "sha256-4VmRIrd79odnYrHuBLdFwere+7bvtUI3daVs3ZUKsdY=";
+  cargoSha256 = "sha256-Gc5WbayQUlsl7Fk8NyLPh2Zg2yrLl3WJqKorNZMLi94=";
+
+  buildInputs = lib.optional stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ clang ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  preBuild = ''
+    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
+    rm .git_commit
+  '';
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
@@ -36,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akru andresilva asymmetric RaghavSood ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
+    platforms = platforms.unix;
   };
 }

@@ -10,7 +10,7 @@ let
     name = "ircd-hybrid-service";
     scripts = [ "=>/bin" ./control.in ];
     substFiles = [ "=>/conf" ./ircd.conf ];
-    inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
+    inherit (pkgs) ircdHybrid coreutils su iproute2 gnugrep procps;
 
     ipv6Enabled = boolToString config.networking.enableIPv6;
 
@@ -64,7 +64,7 @@ in
 
       rsaKey = mkOption {
         default = null;
-        example = literalExample "/root/certificates/irc.key";
+        example = literalExpression "/root/certificates/irc.key";
         type = types.nullOr types.path;
         description = "
           IRCD server RSA key.
@@ -73,7 +73,7 @@ in
 
       certificate = mkOption {
         default = null;
-        example = literalExample "/root/certificates/irc.pem";
+        example = literalExpression "/root/certificates/irc.pem";
         type = types.nullOr types.path;
         description = "
           IRCD server SSL certificate. There are some limitations - read manual.

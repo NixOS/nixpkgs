@@ -9,12 +9,12 @@ buildPythonPackage rec {
 
   # Last version on github is 0.2.4, but it looks
   # like a mistake (it's missing commits from 0.1.9)
-  version = "0.1.9";
+  version = "1.1.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v5Xth0A3tFnLFg54nvWYL2TD201e/GWv+2y5Qc60CmU=";
+    sha256 = "sha256-O0d1b99/V8b3embg8veerTrJGSVb/prlPVb7qSHErdQ=";
   };
   postPatch = ''
     substituteInPlace tpm2_pytss/config.py --replace \

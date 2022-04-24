@@ -30,92 +30,92 @@ postInstall() {
     # add the current package to the paths
     local tmp="$out/lib/GNUstep/Applications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
     fi
     tmp="$out/lib/GNUstep/Applications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_ADMIN_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
     fi
     tmp="$out/lib/GNUstep/WebApplications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_WEB_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
     fi
     tmp="$out/bin"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_TOOLS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
     fi
     tmp="$out/sbin"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
     fi
     tmp="$out/lib/GNUstep"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_LIBRARY" in *"${tmp}"*) false;; *) true;; esac; then
-    	addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
+            addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
     fi
     tmp="$out/include"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_HEADERS" in *"${tmp}"*) false;; *) true;; esac; then
-    	if [ -z "$NIX_GNUSTEP_SYSTEM_HEADERS" ]; then
-    	    export NIX_GNUSTEP_SYSTEM_HEADERS="$tmp"
-    	else
-    	    export NIX_GNUSTEP_SYSTEM_HEADERS+=" $tmp"
-    	fi
+            if [ -z "$NIX_GNUSTEP_SYSTEM_HEADERS" ]; then
+                export NIX_GNUSTEP_SYSTEM_HEADERS="$tmp"
+            else
+                export NIX_GNUSTEP_SYSTEM_HEADERS+=" $tmp"
+            fi
     fi
     tmp="$out/lib"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_LIBRARIES" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
     fi
     tmp="$out/share/GNUstep/Documentation"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
     fi
     tmp="$out/share/man"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_MAN" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
     fi
     tmp="$out/share/info"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_INFO" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
+        addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
     fi
-    
+
     # write the config file
     echo GNUSTEP_MAKEFILES=$GNUSTEP_MAKEFILES >> $conf
     if [ -n "$NIX_GNUSTEP_SYSTEM_APPS" ]; then
-	echo NIX_GNUSTEP_SYSTEM_APPS="$NIX_GNUSTEP_SYSTEM_APPS"
+        echo NIX_GNUSTEP_SYSTEM_APPS="$NIX_GNUSTEP_SYSTEM_APPS"
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_ADMIN_APPS" ]; then
-	echo NIX_GNUSTEP_SYSTEM_ADMIN_APPS="$NIX_GNUSTEP_SYSTEM_ADMIN_APPS" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_ADMIN_APPS="$NIX_GNUSTEP_SYSTEM_ADMIN_APPS" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_WEB_APPS" ]; then
-	echo NIX_GNUSTEP_SYSTEM_WEB_APPS="$NIX_GNUSTEP_SYSTEM_WEB_APPS" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_WEB_APPS="$NIX_GNUSTEP_SYSTEM_WEB_APPS" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_TOOLS" ]; then
-	echo NIX_GNUSTEP_SYSTEM_TOOLS="$NIX_GNUSTEP_SYSTEM_TOOLS" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_TOOLS="$NIX_GNUSTEP_SYSTEM_TOOLS" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" ]; then
-	echo NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS="$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS="$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_LIBRARY" ]; then
-	echo NIX_GNUSTEP_SYSTEM_LIBRARY="$NIX_GNUSTEP_SYSTEM_LIBRARY" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_LIBRARY="$NIX_GNUSTEP_SYSTEM_LIBRARY" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_HEADERS" ]; then
-	echo NIX_GNUSTEP_SYSTEM_HEADERS="$NIX_GNUSTEP_SYSTEM_HEADERS" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_HEADERS="$NIX_GNUSTEP_SYSTEM_HEADERS" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_LIBRARIES" ]; then
-	echo NIX_GNUSTEP_SYSTEM_LIBRARIES="$NIX_GNUSTEP_SYSTEM_LIBRARIES" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_LIBRARIES="$NIX_GNUSTEP_SYSTEM_LIBRARIES" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_DOC" ]; then
-	echo NIX_GNUSTEP_SYSTEM_DOC="$NIX_GNUSTEP_SYSTEM_DOC" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_DOC="$NIX_GNUSTEP_SYSTEM_DOC" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_DOC_MAN" ]; then
-	echo NIX_GNUSTEP_SYSTEM_DOC_MAN="$NIX_GNUSTEP_SYSTEM_DOC_MAN" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_DOC_MAN="$NIX_GNUSTEP_SYSTEM_DOC_MAN" >> $conf
     fi
     if [ -n "$NIX_GNUSTEP_SYSTEM_DOC_INFO" ]; then
-	echo NIX_GNUSTEP_SYSTEM_DOC_INFO="$NIX_GNUSTEP_SYSTEM_DOC_INFO" >> $conf
+        echo NIX_GNUSTEP_SYSTEM_DOC_INFO="$NIX_GNUSTEP_SYSTEM_DOC_INFO" >> $conf
     fi
-    
+
     for i in $out/bin/*; do
-	echo "wrapping $(basename $i)"
-	wrapGSMake "$i" "$out/share/.GNUstep.conf"
+        echo "wrapping $(basename $i)"
+        wrapGSMake "$i" "$out/share/.GNUstep.conf"
     done
 }
 

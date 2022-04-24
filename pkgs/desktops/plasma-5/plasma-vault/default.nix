@@ -14,13 +14,13 @@
 }:
 
 mkDerivation {
-  name = "plasma-vault";
+  pname = "plasma-vault";
   nativeBuildInputs = [ extra-cmake-modules ];
 
   patches = [
-    ./encfs-path.patch
-    ./cryfs-path.patch
-    ./fusermount-path.patch
+    ./0001-encfs-path.patch
+    ./0002-cryfs-path.patch
+    ./0003-fusermount-path.patch
   ];
 
   buildInputs = [

@@ -26,6 +26,7 @@
 , phonon-backend-gstreamer
 , qtdeclarative
 , qtmultimedia
+, qtnetworkauth
 , qtquickcontrols2
 , qtscript
 , rttr
@@ -61,6 +62,7 @@ mkDerivation {
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
+    qtnetworkauth
     qtquickcontrols2
     qtscript
     shared-mime-info
@@ -99,6 +101,9 @@ mkDerivation {
   '';
 
   meta = {
+    homepage = "https://apps.kde.org/kdenlive/";
+    description = "Video editor";
     license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ turion ];
   };
 }

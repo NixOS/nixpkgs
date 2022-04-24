@@ -1,47 +1,99 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, gdk-pixbuf, pango, cairo, libxml2
-, bzip2, libintl, darwin, rustc, cargo, gnome3
-, vala, gobject-introspection }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gdk-pixbuf
+, pango
+, cairo
+, libxml2
+, bzip2
+, libintl
+, ApplicationServices
+, Foundation
+, libobjc
+, rustPlatform
+, rustc
+, rust
+, cargo
+, gi-docgen
+, python3
+, gnome
+, vala
+, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, gobject-introspection
+, nixosTests
+}:
 
-let
-  pname = "librsvg";
-  version = "2.50.1";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "librsvg";
+  version = "2.54.0";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "02csvx2nzygh8kyal2qiy3y6xb7d52vszxxr37dzav704a9pkncv";
-  };
-
-  outputs = [ "out" "dev" "installedTests" ];
-
-  buildInputs = [ libxml2 bzip2 pango libintl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
-
-  propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
-
-  nativeBuildInputs = [ pkg-config rustc cargo vala gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      ApplicationServices
-    ]);
-
-  configureFlags = [
-    "--enable-introspection"
-    "--enable-vala"
-    "--enable-installed-tests"
-    "--enable-always-build-tests"
-  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic";
-
-  makeFlags = [
-    "installed_test_metadir=$(installedTests)/share/installed-tests/RSVG"
-    "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
+  outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
+    "devdoc"
   ];
 
-  NIX_CFLAGS_COMPILE
-    = lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "uvjrwUfxRrQmG7PQzQ+slEv427Sx8jR9IzQfl03MMIU=";
+  };
+
+  cargoVendorDir = "vendor";
+
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    gdk-pixbuf
+    pkg-config
+    rustc
+    cargo
+    python3.pkgs.docutils
+    vala
+    rustPlatform.cargoSetupHook
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+  ];
+
+  buildInputs = [
+    libxml2
+    bzip2
+    pango
+    libintl
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
+    Foundation
+    libobjc
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gdk-pixbuf
+    cairo
+  ];
+
+  configureFlags = [
+    (lib.enableFeature withIntrospection "introspection")
+
+    # Vapi does not build on MacOS.
+    # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
+    (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
+
+    "--enable-installed-tests"
+    "--enable-always-build-tests"
+  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
+
+  makeFlags = [
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/RSVG"
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/RSVG"
+  ];
+
+  doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
@@ -61,20 +113,31 @@ stdenv.mkDerivation rec {
     # Fix thumbnailer path
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
+
+    # 'error: linker `cc` not found' when cross-compiling
+    export RUSTFLAGS="-Clinker=$CC"
   '';
 
-  doCheck = false; # fails 20 of 145 tests, very likely to be buggy
+  # Not generated when cross compiling.
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    # Merge gdkpixbuf and librsvg loaders
+    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+  '';
 
-  # Merge gdkpixbuf and librsvg loaders
-  postInstall = ''
-    mv $GDK_PIXBUF/loaders.cache $GDK_PIXBUF/loaders.cache.tmp
-    cat ${gdk-pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
-    rm $GDK_PIXBUF/loaders.cache.tmp
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.librsvg;
     };
   };
 

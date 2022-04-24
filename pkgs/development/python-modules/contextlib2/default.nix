@@ -1,23 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, unittest2
+, python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "contextlib2";
-  version = "0.6.0.post1";
+  version = "21.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01f490098c18b19d2bd5bb5dc445b2054d2fa97f09a4280ba2c5f3c394c8162e";
+    hash = "sha256-qx4r/h0B2Wjht+jZAjvFHvNQm7ohe7cwzuOCfh7oKGk=";
   };
 
-  checkInputs = [ unittest2 ];
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
+  '';
 
-  meta = {
+  pythonImportsCheck = [
+    "contextlib2"
+  ];
+
+  meta = with lib; {
     description = "Backports and enhancements for the contextlib module";
     homepage = "https://contextlib2.readthedocs.org/";
-    license = lib.licenses.psfl;
+    license = licenses.psfl;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -5,12 +5,16 @@ stdenv.mkDerivation rec {
   version = "0.7.4";
 
   src = fetchurl {
-    url = "${meta.homepage}/files/${pname}-${version}.tar.gz";
+    url = "https://liba52.sourceforge.io/files/${pname}-${version}.tar.gz";
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
   configureFlags = [
     "--enable-shared"
+  ];
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   # fails 1 out of 1 tests with "BAD GLOBAL SYMBOLS" on i686
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ATSC A/52 stream decoder";
-    homepage = "https://liba52.sourceforge.net/";
+    homepage = "https://liba52.sourceforge.io/";
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };

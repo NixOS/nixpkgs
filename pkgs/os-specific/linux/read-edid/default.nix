@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional (stdenv.isi686 || stdenv.isx86_64) libx86;
+  buildInputs = lib.optional stdenv.hostPlatform.isx86 libx86;
 
-  cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.isi686 || stdenv.isx86_64 then "ON" else "OFF"}" ];
+  cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.hostPlatform.isx86 then "ON" else "OFF"}" ];
 
   patchPhase = ''
     substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'

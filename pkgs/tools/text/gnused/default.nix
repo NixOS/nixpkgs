@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mic92 ];
+    mainProgram = "sed";
   };
 }

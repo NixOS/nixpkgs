@@ -6,6 +6,7 @@
 , geckodriver
 , urllib3
 , xorg
+, nixosTests
 }:
 
 
@@ -46,6 +47,10 @@ buildPythonPackage rec {
       x_ignore_nofocus.o
     cp -v x_ignore_nofocus.so selenium/webdriver/firefox/${if stdenv.is64bit then "amd64" else "x86"}/
   '';
+
+  passthru.tests = {
+    testing-vaultwarden = nixosTests.vaultwarden;
+  };
 
   meta = with lib; {
     description = "The selenium package is used to automate web browser interaction from Python";

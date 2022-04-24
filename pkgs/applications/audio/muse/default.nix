@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools, wrapQtAppsHook
-, alsaLib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
+, alsa-lib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
 , libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
-    alsaLib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
+    alsa-lib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
     libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
   ];
 

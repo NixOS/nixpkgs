@@ -3,21 +3,30 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.23";
+  version = "0.9.26";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "newville";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9Zxb2EzB6nxDQHdlryFiwyNW+76VvysLUB78bXKzfv0=";
+    sha256 = "0l2iv51yclqn52w3yvyz3brpbca076ivv70h4gd6bkhwjbax1i2b";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "asteval" ];
 

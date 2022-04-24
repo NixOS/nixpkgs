@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
-, fetchpatch
 , pkg-config
 , glib
 , sqlite
@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zeitgeist";
-  version = "1.0.2";
+  version = "1.0.4";
 
   outputs = [ "out" "lib" "dev" "man" ] ++ lib.optional pythonSupport "py";
 
@@ -29,16 +29,8 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
+    sha256 = "kG1N8DXgjYAJ8fbrGHsp7eTqB20H5smzRnW0PSRUYR0=";
   };
-
-  patches = [
-    # Fix build with gettext 0.20
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/b5c00e80189fd59a059a95c4e276728a2492cb89.patch";
-      sha256 = "1r7f7j3l2p6xlzxajihgx8bzbc2sxcb9spc9pi26rz9bwmngdyq7";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -82,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
-    maintainers = with maintainers; [ lethalman worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

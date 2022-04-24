@@ -51,7 +51,7 @@ url="${ql_src##* }"
 [ "$ql_src_type" = github ] && {
   ql_src_type=git
   url="https://github.com/$url";
-  version="$("$(dirname "$0")/../../../build-support/upstream-updater/urls-from-page.sh" "$url/releases/" | grep /tag/ | head -n 1 | xargs -l1 basename)"
+  version="$("$(dirname "$0")/urls-from-page.sh" "$url/releases/" | grep /tag/ | head -n 1 | xargs -l1 basename)"
   rev="refs/tags/$version";
 }
 
@@ -62,7 +62,7 @@ url="${ql_src##* }"
     ) && {
     url="${url/git:/https:}"
     url="${url%.git}"
-    [ -z "$rev" ] && rev=$("$(dirname "$0")/../../../build-support/upstream-updater/urls-from-page.sh" "$url/commits" | grep /commit/ | head -n 1 | xargs basename)
+    [ -z "$rev" ] && rev=$("$(dirname "$0")/urls-from-page.sh" "$url/commits" | grep /commit/ | head -n 1 | xargs basename)
     hash=$("$(dirname "$0")/../../../build-support/fetchgit/nix-prefetch-git" "$url" "$rev" | grep . | tail -n 1)
     [ -z "$version" ] && version="git-$(date +%Y%m%d)";
   }
@@ -122,8 +122,8 @@ url="${ql_src##* }"
   with (import <nixpkgs> {});
       fetchdarcs {
         url=''$url'';
-	rev=''$version'';
-	sha256=''0000000000000000000000000000000000000000000000000000000000000000'';
+    rev=''$version'';
+    sha256=''0000000000000000000000000000000000000000000000000000000000000000'';
     }" | nix-instantiate - | tail -n 1 |
     xargs nix-store -r 2>&1 | tee /dev/stderr | grep 'instead has' | tail -n 1 |
     sed -e 's/.* instead has .//;s/[^0-9a-z].*//')
@@ -131,7 +131,7 @@ url="${ql_src##* }"
 
 [ "$ql_src_type" = froydware-http ] && {
   dirurl="http://method-combination.net/lisp/files/";
-  url="$("$(dirname "$0")/../../../build-support/upstream-updater/urls-from-page.sh" "$dirurl" |
+  url="$("$(dirname "$0")/urls-from-page.sh" "$dirurl" |
     grep "/${url}_" | grep -v "[.]asc\$" | tail -n 1)"
   ql_src_type=http
 }
@@ -149,7 +149,7 @@ url="${ql_src##* }"
 }
 
 if [ "$ql_src" = '{"error":"Not Found"}' ]; then
-	echo "# $name: not found"
+    echo "# $name: not found"
 else
 cat << EOF | grep -Ev '^[ ]+$'
 

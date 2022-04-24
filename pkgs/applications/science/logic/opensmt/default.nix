@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmt";
-  version = "2.0.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "usi-verification-and-security";
     repo = "opensmt";
     rev = "v${version}";
-    sha256 = "uoIcXWsxxRsIuFsou3RcN9e48lc7cWMgRPVJLFVslDE=";
+    sha256 = "sha256-3F4Q/ZWlgkiiW7QVjnaaDLSNLVdfAOSmwYdQo1v9Lv4=";
   };
 
   nativeBuildInputs = [ cmake bison flex ];

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , rustPlatform
 , substituteAll
 , desktop-file-utils
@@ -19,26 +20,33 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.2.2";
+  version = "0.3.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
-    sha256 = "16284gv31wdwmb99056962d1gh6xz26ami6synr47nsbbp5l0s6k";
+    sha256 = "sha256-8jT3n+bTNjhm64AMS24Ju+San75ytfqFXloH/TOgO1g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "12ymjwpxx3sdna8w5j9fnwwfk8ynk9ziwl0lkpq68y0vyllln5an";
+    sha256 = "198bs4z7l22sh8ck7v46s45mj8zpfbg03n1xzc6pnafdd8hf3q15";
   };
 
   patches = [
     (substituteAll {
       src = ./borg-path.patch;
       borg = "${borgbackup}/bin/borg";
+    })
+    # Fix build with meson 0.61, can be removed on next release.
+    # https://gitlab.gnome.org/World/pika-backup/-/issues/156
+    # https://github.com/mesonbuild/meson/issues/9441
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/pika-backup/-/commit/54be149c88fd69fb9e74b7362fe7182863237869.patch";
+      sha256 = "sha256-Tffxo5hlf/gSkp1GfyL4eHthX49tuTq6B+S53N8oA2M=";
     })
   ];
 
@@ -73,5 +81,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

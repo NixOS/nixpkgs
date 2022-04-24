@@ -44,6 +44,7 @@ in
 , libraryFrameworkDepends ? [], executableFrameworkDepends ? []
 , homepage ? "https://hackage.haskell.org/package/${pname}"
 , platforms ? with lib.platforms; all # GHC can cross-compile
+, badPlatforms ? lib.platforms.none
 , hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
@@ -51,13 +52,16 @@ in
 , license
 , enableParallelBuilding ? true
 , maintainers ? null
+, changelog ? null
+, mainProgram ? null
 , doCoverage ? false
-, doHaddock ? !(ghc.isHaLVM or false)
+, doHaddock ? !(ghc.isHaLVM or false) && (ghc.hasHaddock or true)
+, doHaddockInterfaces ? doHaddock && lib.versionAtLeast ghc.version "9.0.1"
 , passthru ? {}
 , pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
 , benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
-, testTarget ? ""
+, testTarget ? "", testFlags ? []
 , broken ? false
 , preCompileBuildDriver ? null, postCompileBuildDriver ? null
 , preUnpack ? null, postUnpack ? null
@@ -71,7 +75,7 @@ in
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, hardeningDisable ? null
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
@@ -177,7 +181,8 @@ let
   ] ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
-  ];
+  ] ++ optional (allPkgconfigDepends != [])
+    "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
 
   parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
 
@@ -191,13 +196,13 @@ let
     "--prefix=$out"
     "--libdir=\\$prefix/lib/\\$compiler"
     "--libsubdir=\\$abi/\\$libname"
-    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
+    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
   ] ++ optionals stdenv.hasCC [
     "--with-gcc=$CC" # Clang won't work without that extra information.
   ] ++ [
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghcNameWithPrefix}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
@@ -223,7 +228,11 @@ let
   ] ++ optionals isCross ([
     "--configure-option=--host=${stdenv.hostPlatform.config}"
   ] ++ crossCabalFlags
-  ) ++ optionals enableSeparateBinOutput ["--bindir=${binDir}"];
+  ) ++ optionals enableSeparateBinOutput [
+    "--bindir=${binDir}"
+  ] ++ optionals (doHaddockInterfaces && isLibrary) [
+    "--ghc-options=-haddock"
+  ];
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
@@ -266,6 +275,8 @@ let
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
 
+  ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
+
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
   buildPkgDb = ghcName: packageConfDir: ''
@@ -288,7 +299,7 @@ in lib.fix (drv:
 assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
@@ -341,14 +352,14 @@ stdenv.mkDerivation ({
   # pkgs* arrays defined in stdenv/setup.hs
   + ''
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
+      ${buildPkgDb "${nativeGhcCommand}-${nativeGhc.version}" "$setupPackageConfDir"}
     done
     ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
   ''
   # For normal components
   + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      ${buildPkgDb ghc.name "$packageConfDir"}
+      ${buildPkgDb ghcNameWithPrefix "$packageConfDir"}
       if [ -d "$p/include" ]; then
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
@@ -416,6 +427,17 @@ stdenv.mkDerivation ({
   configurePlatforms = [];
   inherit configureFlags;
 
+  # Note: the options here must be always added, regardless of whether the
+  # package specifies `hardeningDisable`.
+  hardeningDisable = lib.optionals (args ? hardeningDisable) hardeningDisable
+    ++ lib.optional (ghc.isHaLVM or false) "all"
+    # Static libraries (ie. all of pkgsStatic.haskellPackages) fail to build
+    # because by default Nix adds `-pie` to the linker flags: this
+    # conflicts with the `-r` and `-no-pie` flags added by GHC (see
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/19580). hardeningDisable
+    # changes the default Nix behavior regarding adding "hardening" flags.
+    ++ lib.optional enableStaticLibraries "pie";
+
   configurePhase = ''
     runHook preConfigure
 
@@ -442,9 +464,13 @@ stdenv.mkDerivation ({
 
   inherit doCheck;
 
+  # Run test suite(s) and pass `checkFlags` as well as `checkFlagsArray`.
+  # `testFlags` are added to `checkFlagsArray` each prefixed with
+  # `--test-option`, so Cabal passes it to the underlying test suite binary.
   checkPhase = ''
     runHook preCheck
-    ${setupCommand} test ${testTarget}
+    checkFlagsArray+=(${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)})
+    ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 
@@ -463,9 +489,14 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !isLibrary then "${setupCommand} install" else ''
-      ${setupCommand} copy
-      local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
+    ${if !isLibrary && buildTarget == "" then "${setupCommand} install"
+      # ^^ if the project is not a library, and no build target is specified, we can just use "install".
+      else if !isLibrary then "${setupCommand} copy ${buildTarget}"
+      # ^^ if the project is not a library, and we have a build target, then use "copy" to install
+      # just the target specified; "install" will error here, since not all targets have been built.
+    else ''
+      ${setupCommand} copy ${buildTarget}
+      local packageConfDir="$out/lib/${ghcNameWithPrefix}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -642,6 +673,9 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? description)    { inherit description; }
          // optionalAttrs (args ? maintainers)    { inherit maintainers; }
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
+         // optionalAttrs (args ? badPlatforms)   { inherit badPlatforms; }
+         // optionalAttrs (args ? changelog)      { inherit changelog; }
+         // optionalAttrs (args ? mainProgram)    { inherit mainProgram; }
          ;
 
 }
@@ -667,7 +701,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? preFixup)               { inherit preFixup; }
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
-// optionalAttrs (args ? hardeningDisable)       { inherit hardeningDisable; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )

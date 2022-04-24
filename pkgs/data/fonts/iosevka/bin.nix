@@ -3,14 +3,15 @@
 }:
 
 let
-  name = "iosevka" + lib.optionalString (variant != "") "-" + variant;
+  name = if lib.hasPrefix "sgr" variant then variant
+    else "iosevka" + lib.optionalString (variant != "") "-" + variant;
 
   variantHashes = import ./variants.nix;
   validVariants = map (lib.removePrefix "iosevka-")
     (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
 in stdenv.mkDerivation rec {
   pname = "${name}-bin";
-  version = "5.0.5";
+  version = "15.0.1";
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-${name}-${version}.zip";
@@ -22,14 +23,15 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" ];
+  dontInstall = true;
 
   unpackPhase = ''
     mkdir -p $out/share/fonts
     unzip -d $out/share/fonts/truetype $src
   '';
 
-  meta = iosevka.meta // {
+  meta = {
+    inherit (iosevka.meta) homepage downloadPage description license platforms;
     maintainers = with lib.maintainers; [
       cstrahan
     ];

@@ -37,13 +37,15 @@ with pkgs;
           keep = self: {
             # TODO maybe only define these here so nothing is needed to be kept in sync.
             inherit (self)
-              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder
+              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy310 isPy3k isPyPy pythonAtLeast pythonOlder
               python bootstrapped-pip buildPythonPackage buildPythonApplication
               fetchPypi
               hasPythonModule requiredPythonModules makePythonPath disabledIf
               toPythonModule toPythonApplication
               buildSetupcfg
 
+              condaInstallHook
+              condaUnpackHook
               eggUnpackHook
               eggBuildHook
               eggInstallHook
@@ -69,14 +71,21 @@ with pkgs;
               recursivePthLoader
             ;
           };
+          extra = _: {};
+          optionalExtensions = cond: as: if cond then as else [];
+          python2Extension = import ../../../top-level/python2-packages.nix;
+          extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
+          aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
         in lib.makeScopeWithSplicing
           pkgs.splicePackages
           pkgs.newScope
           otherSplices
           keep
-          (lib.extends overrides pythonPackagesFun))
+          extra
+          (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
         {
           overrides = packageOverrides;
+          python = self;
         };
     in rec {
         isPy27 = pythonVersion == "2.7";
@@ -86,6 +95,7 @@ with pkgs;
         isPy38 = pythonVersion == "3.8";
         isPy39 = pythonVersion == "3.9";
         isPy310 = pythonVersion == "3.10";
+        isPy311 = pythonVersion == "3.11";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
@@ -108,6 +118,28 @@ with pkgs;
           python = self;
         };
   };
+
+  sources = {
+    python39 = {
+      sourceVersion = {
+        major = "3";
+        minor = "9";
+        patch = "12";
+        suffix = "";
+      };
+      sha256 = "sha256-LNlLIGcOQVnG2atX+R2/JVuX2MGhRR0cNfTsGWit+XE=";
+    };
+    python310 = {
+      sourceVersion = {
+        major = "3";
+        minor = "10";
+        patch = "4";
+        suffix = "";
+      };
+      sha256 = "sha256-gL+SX1cdpDazUhCIbPefbrX6XWxXExa3NWg0NFH3ehk=";
+    };
+  };
+
 in {
 
   python27 = callPackage ./cpython/2.7 {
@@ -123,28 +155,15 @@ in {
     inherit passthruFun;
   };
 
-  python36 = callPackage ./cpython {
-    self = python36;
-    sourceVersion = {
-      major = "3";
-      minor = "6";
-      patch = "13";
-      suffix = "";
-    };
-    sha256 = "pHpDpTq7QihqLBGWU0P/VnEbnmTo0RvyxnAaT7jOGg8=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
   python37 = callPackage ./cpython {
     self = python37;
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "10";
+      patch = "13";
       suffix = "";
     };
-    sha256 = "+NgudXLIbsnVXIYnquUEAST9IgOvQAw4PIIbmAMG7ms=";
+    sha256 = "sha256-mfEGJ134iZw+jLnXwBzmhsIC7ydZUzAUJxlGk95b74Q=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -154,43 +173,43 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "8";
+      patch = "13";
       suffix = "";
     };
-    sha256 = "fGZCSf935EPW6g5M8OWH6ukYyjxI0IHRkV/iofG8xcw=";
+    sha256 = "sha256-bzCQdwEgQKo5/o8MYduMD6HEUTZ2MpnTdcnldW8Jz1c=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python39 = callPackage ./cpython {
+  python39 = callPackage ./cpython ({
     self = python39;
-    sourceVersion = {
-      major = "3";
-      minor = "9";
-      patch = "2";
-      suffix = "";
-    };
-    sha256 = "PCA0xU+BFEj1FmaNzgnSQAigcWw6eU3YY5tTiMveJH0=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python39);
 
-  python310 = callPackage ./cpython {
+  python310 = callPackage ./cpython ({
     self = python310;
+    inherit (darwin) configd;
+    inherit passthruFun;
+  } // sources.python310);
+
+  python311 = callPackage ./cpython {
+    self = python311;
     sourceVersion = {
       major = "3";
-      minor = "10";
+      minor = "11";
       patch = "0";
-      suffix = "a5";
+      suffix = "a7";
     };
-    sha256 = "BBjlfnA24hnx5rYwOyHnEfZM/Q/dsIlNjxnzev/8XU0=";
+    sha256 = "sha256-t8Vt10wvRy1Ja1qNNWvWrZ75sD8mKIwyN9P/aYqwPXQ=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
   # Minimal versions of Python (built without optional dependencies)
-  python3Minimal = (python38.override {
+  python3Minimal = (callPackage ./cpython ({
     self = python3Minimal;
+    inherit passthruFun;
     pythonAttr = "python3Minimal";
     # strip down that python version as much as possible
     openssl = null;
@@ -199,6 +218,8 @@ in {
     gdbm = null;
     sqlite = null;
     configd = null;
+    tzdata = null;
+    libffi = pkgs.libffiBoot; # without test suite
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
@@ -207,7 +228,9 @@ in {
     stripBytecode = true;
     includeSiteCustomize = false;
     enableOptimizations = false;
-  }).overrideAttrs(old: {
+    enableLTO = false;
+    mimetypesSupport = false;
+  } // sources.python39)).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];
@@ -219,9 +242,9 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "5";
     };
-    sha256 = "0di3dr5ry4r0hwxh4fbqjhyl5im948wdby0bhijzsxx83c2qhd7n";
+    sha256 = "sha256-wERP2YcwWMHA2Z4TqTTpIoXLBZksmWi/Ujwyv5vsCp0=";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -230,51 +253,60 @@ in {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pypy36 = callPackage ./pypy {
-    self = pypy36;
+  pypy38 = callPackage ./pypy {
+    self = pypy38;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "7";
     };
-    sha256 = "1bq5i2mqgjjfc4rhxgxm6ihwa76vn2qapd7l59ri7xp01p522gd2";
-    pythonVersion = "3.6";
+    sha256 = "sha256-Ia4zn09QFtbKcwAwXz47VUNzg1yzw5qQQf4w5oEcgMY=";
+    pythonVersion = "3.8";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
     inherit passthruFun;
     inherit (darwin) libunwind;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  pypy37 = pypy38.override {
+    self = pythonInterpreters.pypy37;
+    pythonVersion = "3.7";
+    sha256 = "sha256-LtAqyecQhZxBvILer7CGGXkruaJ+6qFnbHQe3t0hTdc=";
+  };
 
-  pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy27_prebuilt = callPackage ./pypy/prebuilt_2_7.nix {
     # Not included at top-level
     self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "8";
     };
-    sha256 = "1cfpdyvbvzwc0ynjr7248jhwgcpl7073wlp7w3g2v4fnrh1bc4pl"; # linux64
+    sha256 = "0h493q0lhpz035afi4g09f4mz5a72vqx4sa7qcry5z4zagxq8bhz"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
   };
 
-  pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy38_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = pythonInterpreters.pypy36_prebuilt;
+    self = pythonInterpreters.pypy38_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "7";
     };
-    sha256 = "02lys9bjky9bqg6ggv8djirbd3zzcsq7755v4yvwm0k4a7fmzf2g"; # linux64
-    pythonVersion = "3.6";
+    sha256 = "sha256-Xe43x8PLixYAKPveOlkBxoBD36VFoWeUUCuJfUvEDX4="; # linux64
+    pythonVersion = "3.8";
     inherit passthruFun;
   };
 
   graalpython37 = callPackage ./graalpython/default.nix {
     self = pythonInterpreters.graalpython37;
     inherit passthruFun;
+  };
+
+  rustpython = callPackage ./rustpython/default.nix {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
 })

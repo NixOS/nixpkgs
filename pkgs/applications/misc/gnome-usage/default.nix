@@ -12,18 +12,18 @@
 , gtk3
 , libgtop
 , libdazzle
-, gnome3
+, gnome
 , tracker
 , libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mqs39yi2cqwkzlmmgzrszsva5hbdpws6zk4lbi4w2cjzl185mcl";
+    sha256 = "mMdm4X4VZXEfx0uaJP0u0NX618y0VRlhLdTiFHaO05M=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gtk3
     libdazzle
     libgtop
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

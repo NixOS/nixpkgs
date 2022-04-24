@@ -1,5 +1,6 @@
 { lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , itstool
@@ -11,7 +12,8 @@
 , gobject-introspection
 , libpeas
 , librsvg
-, gnome3
+, gnome
+, gnome-desktop
 , libnotify
 , gsound
 , meson
@@ -21,13 +23,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2020.09.2";
+  version = "2021.05";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hzvv4wia4rk0kvq16y27imq2qd4q5lg3vx99hdcjdb1x3zqqfg0";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "z1aTxGxCqw2hSi5Zv89LyIBgS0HpzTqo0uvcYIJ7dcc=";
   };
 
   patches = [
@@ -35,6 +37,13 @@ python3Packages.buildPythonApplication rec {
     # and saves them to the generated binary. This would make the build-time
     # dependencies part of the closure so we remove it.
     ./prevent-closure-contamination.patch
+
+    # Fix build with meson 0.61
+    # https://gitlab.gnome.org/GNOME/pitivi/-/merge_requests/414
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pitivi/-/commit/ddf2369d1fc6fddd63f676cc905a8b8e96291a4c.patch";
+      sha256 = "MC4naGnqhrYlFBFHZaSzbOzrqaNK5/Xv5jBmCu0fLQE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -52,9 +61,9 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libpeas
     librsvg
-    gnome3.gnome-desktop
+    gnome-desktop
     gsound
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
   ] ++ (with gst_all_1; [
@@ -89,7 +98,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "pitivi";
       versionPolicy = "none"; # we are using dev version, since the stable one is too old
     };

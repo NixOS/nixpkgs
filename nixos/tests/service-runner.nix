@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed(
             """
             mkdir -p /run/nginx /var/log/nginx /var/cache/nginx
-            ${nodes.machine.config.systemd.services.nginx.runner} &
+            ${nodes.machine.config.systemd.services.nginx.runner} >&2 &
             echo $!>my-nginx.pid
             """
         )

@@ -12,6 +12,14 @@ in stdenv.mkDerivation rec {
     sha256 = "1w0qmyj3v9sb2g7ff39pp38b9850y9hyy0bag26ifrby5f7ksvm6";
   };
 
+  postPatch = lib.optionalString stdenv.isAarch32 ''
+    # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/20
+    sed -i '/exec_opcodes_sys/d' testsuite/meson.build
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # This benchmark times out on Hydra.nixos.org
+    sed -i '/memcpy_speed/d' testsuite/meson.build
+  '';
+
   outputs = [ "out" "dev" ]
      ++ optional buildDevDoc "devdoc"
   ;

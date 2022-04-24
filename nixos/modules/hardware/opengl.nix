@@ -63,8 +63,7 @@ in
         description = ''
           On 64-bit systems, whether to support Direct Rendering for
           32-bit applications (such as Wine).  This is currently only
-          supported for the <literal>nvidia</literal> and
-          <literal>ati_unfree</literal> drivers, as well as
+          supported for the <literal>nvidia</literal> as well as
           <literal>Mesa</literal>.
         '';
       };
@@ -90,7 +89,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl ]";
+        example = literalExpression "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl ]";
         description = ''
           Additional packages to add to OpenGL drivers. This can be used
           to add OpenCL drivers, VA-API/VDPAU drivers etc.
@@ -100,7 +99,7 @@ in
       extraPackages32 = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "with pkgs.pkgsi686Linux; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
+        example = literalExpression "with pkgs.pkgsi686Linux; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
         description = ''
           Additional packages to add to 32-bit OpenGL drivers on
           64-bit systems. Used when <option>driSupport32Bit</option> is

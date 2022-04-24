@@ -1,30 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "betterdiscordctl";
-  version = "1.7.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${version}";
-    sha256 = "0qpmm5l8jhm7k0kqblc0bnr9fl4b6z8iddhjar03bb4kqgr962fa";
+    sha256 = "0p321rfcihz2779sdd6qfgpxgk5yd53d33vq5pvb50dbdgxww0bc";
   };
 
-  patches = [
-    (fetchpatch { # Required till https://github.com/bb010g/betterdiscordctl/pull/67 is merged upstream.
-      url = "https://github.com/bb010g/betterdiscordctl/pull/67/commits/f1c7170fc2626d9aec4d244977b5a73c401aa1d4.patch";
-      sha256 = "003zqd9ljb9h674sjwjvvdfs7q4cw0p1ydg3lax132vb4vz9k0zi";
-    })
-  ];
-
-  preBuild = "sed -i 's/^nix=$/&yes/g;s/^DISABLE_UPGRADE=$/&yes/g' ./betterdiscordctl";
+  postPatch = ''
+    substituteInPlace betterdiscordctl \
+      --replace "DISABLE_SELF_UPGRADE=" "DISABLE_SELF_UPGRADE=yes"
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/doc/betterdiscordctl
+    runHook preInstall
+
+    mkdir -p "$out/bin" "$out/share/doc/betterdiscordctl"
     install -Dm744 betterdiscordctl $out/bin/betterdiscordctl
     install -Dm644 README.md $out/share/doc/betterdiscordctl/README.md
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/betterdiscordctl --version
   '';
 
   meta = with lib; {

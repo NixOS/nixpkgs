@@ -1,22 +1,22 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python2 }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
-  version = "5.10.1";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-5doytVxemqaXWXiqDSQUEAe71xmY0pOLASj/NJNyM5g=";
+    sha256 = "sha256-2Sjl9XO01ko0BwbFQSFv9mNoetyMa8Dxx17y0JmlLS0=";
   };
 
   postPatch = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
-    for script in $(grep -lr '^#!/usr/bin/env python$'); do patchShebangs $script; done
+    for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python2 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
 

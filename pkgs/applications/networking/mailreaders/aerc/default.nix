@@ -1,21 +1,27 @@
-{ lib, buildGoModule, fetchFromSourcehut
-, ncurses, notmuch, scdoc
-, python3, w3m, dante
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, ncurses
+, notmuch
+, scdoc
+, python3
+, w3m
+, dante
 }:
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.5.2";
+  version = "0.9.0";
 
   src = fetchFromSourcehut {
-    owner = "~sircmpwn";
+    owner = "~rjarry";
     repo = pname;
     rev = version;
-    sha256 = "1ja639qry8h2d6y7qshf62ypkzs2rzady59p81scqh8nx0g9bils";
+    sha256 = "sha256-D4cZVNh3YFaVRHGFn5Nt6kMSRCShj0w5n7pTxgYik2s=";
   };
 
-  runVend = true;
-  vendorSha256 = "9PXdUH0gu8PGaKlRJCUF15W1/LxA+sv3Pwl2UnjYxWY=";
+  proxyVendor = true;
+  vendorSha256 = "sha256-fGQ15i3mWNmmfypRt5A7SAVYSEg9m4so4FYlUY+7mW8=";
 
   doCheck = false;
 
@@ -28,22 +34,25 @@ buildGoModule rec {
     ./runtime-sharedir.patch
   ];
 
+  postPatch = ''
+    substituteAllInPlace config/aerc.conf
+    substituteAllInPlace config/config.go
+    substituteAllInPlace doc/aerc-config.5.scd
+  '';
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   pythonPath = [
     python3.pkgs.colorama
   ];
 
   buildInputs = [ python3 notmuch ];
 
-  buildPhase = "
-    runHook preBuild
-    # we use make instead of go build
-    runHook postBuild
-  ";
-
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
-    wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
+
+    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
+
     runHook postInstall
   '';
 

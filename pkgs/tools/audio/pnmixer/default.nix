@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext, alsaLib, gtk3, glib, libnotify, libX11, pcre }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext, alsa-lib, gtk3, glib, libnotify, libX11, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "pnmixer";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config gettext ];
 
-  buildInputs = [ alsaLib gtk3 glib libnotify libX11 pcre ];
+  buildInputs = [ alsa-lib gtk3 glib libnotify libX11 pcre ];
 
   meta = with lib; {
     homepage = "https://github.com/nicklan/pnmixer";

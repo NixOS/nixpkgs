@@ -1,13 +1,10 @@
-{ janePackage
-, ctypes
-, num
-, octavius
-, ppxlib
-, re
+{ self
 , openssl
 }:
 
-rec {
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";
@@ -27,6 +24,7 @@ rec {
     hash = "0gl89zpgsf3n30nb6v5cns27g2bfg4rf3s2427gqvwbkr5gcf7ri";
     meta.description = "Full standard library replacement for OCaml";
     propagatedBuildInputs = [ sexplib0 ];
+    buildInputs = [ dune_1 ];
   };
 
   stdio = janePackage {
@@ -210,7 +208,7 @@ rec {
     pname = "jst-config";
     hash = "0yxcz13vda1mdh9ah7qqxwfxpcqang5sgdssd8721rszbwqqaw93";
     meta.description = "Compile-time configuration for Jane Street libraries";
-    buildInputs = [ ppx_assert ];
+    buildInputs = [ dune_1 ppx_assert ];
   };
 
   ppx_optcomp = janePackage {

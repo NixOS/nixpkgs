@@ -1,16 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "3.0.0";
   pname = "xxhash";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58ca818554c1476fa1456f6cd4b87002e2294f09baf0f81e5a2a4968e62c423c";
+    sha256 = "sha256-MLLZeq8R+xIgI/a0TruXxpVengDXRhqWQVygMLXOucc=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ifduyue/python-xxhash";

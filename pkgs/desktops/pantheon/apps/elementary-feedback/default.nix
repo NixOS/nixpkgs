@@ -1,7 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -11,30 +12,31 @@
 , glib
 , granite
 , libgee
-, elementary-icon-theme
-, elementary-gtk-theme
+, libhandy
 , gettext
 , wrapGAppsHook
+, appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
-  version = "1.0";
-
-  repoName = "feedback";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "feedback";
     rev = version;
-    sha256 = "sha256-GkVnowqGXwnEgplT34Po/BKzC2F/IQE2kIw0SLSLhGU=";
+    sha256 = "02wydbpa5qaa4xmmh4m7rbj4djbrn2i44zjakj5i6mzwjlj6sv5n";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/feedback/pull/48
+    (fetchpatch {
+      url = "https://github.com/elementary/feedback/commit/080005153977a86d10099eff6a5b3e68f7b12847.patch";
+      sha256 = "01710i90qsaqsrjs92ahwwj198bdrrif6mnw29l9har2rncfkfk2";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -47,11 +49,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
+    appstream
     granite
     gtk3
-    elementary-gtk-theme
     libgee
+    libhandy
     glib
   ];
 
@@ -60,11 +62,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "GitHub Issue Reporter designed for elementary OS";
     homepage = "https://github.com/elementary/feedback";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.feedback";
   };
 }

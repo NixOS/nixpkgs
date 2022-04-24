@@ -1,60 +1,54 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , django
 , factory_boy
-, glibcLocales
 , mock
 , pygments
-, pytest
-, pytestcov
 , pytest-django
-, python-dateutil
+, pytestCheckHook
 , shortuuid
-, six
-, tox
-, typing
 , vobject
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.1.1";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0ss5x3d21c3g8i1s79l4akazlf116yp4y50gx4vrk1dxh3jb29zj";
+    sha256 = "sha256-NAMa78KhAuoJfp0Cb0Codz84sRfRQ1JhSLNYRI4GBPM=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
+  '';
+
+  propagatedBuildInputs = [
+    django
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [ six ]
-    ++ lib.optional (pythonOlder "3.5") typing;
-
   checkInputs = [
-    django
     factory_boy
-    glibcLocales
     mock
     pygments # not explicitly declared in setup.py, but some tests require it
-    pytest
-    pytestcov
     pytest-django
-    python-dateutil
+    pytestCheckHook
     shortuuid
-    tox
     vobject
     werkzeug
   ];
 
-  # remove tests that need network access
-  checkPhase = ''
-    rm tests/management/commands/test_pipchecker.py
-    DJANGO_SETTINGS_MODULE=tests.testapp.settings \
-      pytest django_extensions tests
-  '';
+  disabledTestPaths = [
+    # requires network access
+    "tests/management/commands/test_pipchecker.py"
+  ];
 
   meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";

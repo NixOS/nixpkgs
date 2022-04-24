@@ -1,19 +1,41 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake
-, alsaLib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, alsa-lib
+, boost
+, glib
+, lash
+, libjack2
+, libarchive
+, libsndfile
+, lrdf
+, qt4
 }:
 
 stdenv.mkDerivation rec {
   version = "0.9.7";
   pname = "hydrogen";
 
-  src = fetchurl {
-    url = "https://github.com/hydrogen-music/hydrogen/archive/${version}.tar.gz";
-    sha256 = "1dy2jfkdw0nchars4xi4isrz66fqn53a9qk13bqza7lhmsg3s3qy";
+  src = fetchFromGitHub {
+    owner = "hydrogen-music";
+    repo = "hydrogen";
+    rev = version;
+    sha256 = "sha256-6ycNUcumtAEl/6XbIpW6JglGv4nNOdMrOJ1nvJg3z/c=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    alsaLib boost glib lash libjack2 libarchive libsndfile lrdf qt4
+    alsa-lib
+    boost
+    glib
+    lash
+    libjack2
+    libarchive
+    libsndfile
+    lrdf
+    qt4
   ];
 
   meta = with lib; {

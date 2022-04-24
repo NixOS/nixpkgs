@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "hyperrogue";
     exec = "hyperrogue";
-    categories = "Game;AdventureGame;";
+    categories = [ "Game" "AdventureGame" ];
   };
 
   postInstall = ''

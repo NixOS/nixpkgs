@@ -1,52 +1,59 @@
-{ lib, fetchurl, python3Packages
-, mercurial, qt5
-}@args:
-let
-  tortoisehgSrc = fetchurl rec {
-    meta.name = "tortoisehg-${meta.version}";
-    meta.version = "5.6";
-    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${meta.version}.tar.gz";
-    sha256 = "031bafj88wggpvw0lgvl0djhlbhs9nls9vzwvni8yn0m0bgzc9gr";
+{ lib
+, fetchurl
+, python3Packages
+, mercurial
+, qt5
+}:
+
+python3Packages.buildPythonApplication rec {
+  pname = "tortoisehg";
+  version = "6.1";
+
+  src = fetchurl {
+    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
+    sha256 = "sha256-UG13BlFY9DcsCPWaBiYa6r2oA3ieJtTYfXknDoKNkYI=";
   };
 
-  tortoiseMercurial = mercurial.overridePythonAttrs (old: rec {
-    inherit (tortoisehgSrc.meta) version;
-    src = fetchurl {
-      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "1hk2y30zzdnlv8f71kabvh0xi9c7qhp28ksh20vpd0r712sv79yz";
-    };
-  });
+  # Extension point for when thg's mercurial is lagging behind mainline.
+  tortoiseMercurial = mercurial;
 
-in python3Packages.buildPythonApplication {
-    inherit (tortoisehgSrc.meta) name version;
-    src = tortoisehgSrc;
+  propagatedBuildInputs = with python3Packages; [
+    tortoiseMercurial
+    qscintilla-qt5
+    iniparse
+  ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-    propagatedBuildInputs = with python3Packages; [
-      tortoiseMercurial qscintilla-qt5 iniparse
-    ];
-    nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  doCheck = true;
+  postInstall = ''
+    mkdir -p $out/share/doc/tortoisehg
+    cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
+    # convenient alias
+    ln -s $out/bin/thg $out/bin/tortoisehg
+    wrapQtApp $out/bin/thg
+  '';
 
-    doCheck = false; # tests fail with "thg: cannot connect to X server"
-    postInstall = ''
-      mkdir -p $out/share/doc/tortoisehg
-      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
-      # convenient alias
-      ln -s $out/bin/thg $out/bin/tortoisehg
-      wrapQtApp $out/bin/thg
-    '';
+  checkPhase = ''
+    export QT_QPA_PLATFORM=offscreen
+    echo "test: thg smoke test"
+    $out/bin/thg -h > help.txt &
+    sleep 1s
+    if grep "list of commands" help.txt; then
+      echo "thg help output was captured. Seems like package in a working state."
+      exit 0
+    else
+      echo "thg help output was not captured. Seems like package is broken."
+      exit 1
+    fi
+  '';
 
-    checkPhase = ''
-      echo "test: thg version"
-      $out/bin/thg version
-    '';
+  passthru.mercurial = tortoiseMercurial;
 
-    passthru.mercurial = tortoiseMercurial;
-
-    meta = {
-      description = "Qt based graphical tool for working with Mercurial";
-      homepage = "https://tortoisehg.bitbucket.io/";
-      license = lib.licenses.gpl2;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ danbst ];
-    };
+  meta = {
+    description = "Qt based graphical tool for working with Mercurial";
+    homepage = "https://tortoisehg.bitbucket.io/";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ danbst ];
+  };
 }

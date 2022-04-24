@@ -1,4 +1,5 @@
 { lib
+, aesedb
 , aiosmb
 , aiowinreg
 , buildPythonPackage
@@ -6,19 +7,24 @@
 , minidump
 , minikerberos
 , msldap
+, pythonOlder
 , winsspi
 }:
 
 buildPythonPackage rec {
   pname = "pypykatz";
-  version = "0.4.7";
+  version = "0.5.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0il5sj47wyf9gn76alm8v1l63rqw2vsd27v6f7q1dpn0wq209syi";
+    hash = "sha256-iuLQfdRNxy6Z+7sYGG+dSHlxicOPtNOdB/VNLyZjRsY=";
   };
 
   propagatedBuildInputs = [
+    aesedb
     aiosmb
     aiowinreg
     minikerberos
@@ -29,7 +35,10 @@ buildPythonPackage rec {
 
   # Project doesn't have tests
   doCheck = false;
-  pythonImportsCheck = [ "pypykatz" ];
+
+  pythonImportsCheck = [
+    "pypykatz"
+  ];
 
   meta = with lib; {
     description = "Mimikatz implementation in Python";

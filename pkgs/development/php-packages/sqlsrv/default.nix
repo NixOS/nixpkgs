@@ -3,12 +3,17 @@
 buildPecl {
   pname = "sqlsrv";
 
-  version = "5.9.0";
-  sha256 = "1css440b4qrbblmcswd5wdr2v1rjxlj2iicbmvjq9fg81028w40a";
+  version = "5.10.0";
+  sha256 = "sha256-drPwg6Go8QNYHCG6OkbWyiV76uZyjNFYpkpGq1miJrQ=";
 
   buildInputs = [
     unixODBC
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Microsoft Drivers for PHP for SQL Server";
+    license = licenses.mit;
+    homepage = "https://github.com/Microsoft/msphpsql";
+    maintainers = teams.php.members;
+  };
 }

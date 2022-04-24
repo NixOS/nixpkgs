@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "fish-irssi-20130413-e98156bebd";
+  pname = "fish-irssi";
+  version = "unstable-2013-04-13";
 
-  src = fetchurl {
-    url = "https://github.com/falsovsky/FiSH-irssi/tarball/e98156bebd";
-    name = "${name}.tar.gz";
-    sha256 = "1ndr51qrg66h1mfzacwzl1vd6lj39pdc4p4z5iihrj4r2f6gk11a";
+  src = fetchFromGitHub {
+    owner = "falsovsky";
+    repo = "FiSH-irssi";
+    rev = "e98156bebd8c150bf100b3a0356e7103bb5c20e6";
+    sha256 = "0mqq7q3rnkzx4j352g1l8sv3g687d76ikjl9c7g6xw96y91kqvdp";
   };
 
   preConfigure = ''
-    tar xf ${irssi.src}
+    cp -a "${irssi.src}" "./${irssi.name}"
     configureFlags="$configureFlags --with-irssi-source=`pwd`/${irssi.name}"
 
     ./regen.sh
@@ -21,8 +23,8 @@ stdenv.mkDerivation rec {
     cp src/.libs/libfish.so $out/lib/irssi/modules
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gmp automake autoconf libtool openssl glib ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ gmp libtool openssl glib ];
 
   meta = {
     homepage = "https://github.com/falsovsky/FiSH-irssi";

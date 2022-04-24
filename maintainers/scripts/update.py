@@ -39,6 +39,9 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
     if temp_dir is not None:
         worktree, _branch = temp_dir
 
+        # Ensure the worktree is clean before update.
+        await check_subprocess('git', 'reset', '--hard', '--quiet', 'HEAD', cwd=worktree)
+
         # Update scripts can use $(dirname $0) to get their location but we want to run
         # their clones in the git worktree, not in the main nixpkgs repo.
         update_script_command = map(lambda arg: re.sub(r'^{0}'.format(re.escape(nixpkgs_root)), worktree, arg), update_script_command)
@@ -85,6 +88,10 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
         async with merge_lock:
             await check_subprocess('git', 'add', *change['files'], cwd=worktree)
             commit_message = '{attrPath}: {oldVersion} → {newVersion}'.format(**change)
+            if 'commitMessage' in change:
+                commit_message = change['commitMessage']
+            elif 'commitBody' in change:
+                commit_message = commit_message + '\n\n' + change['commitBody']
             await check_subprocess('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
             await check_subprocess('git', 'cherry-pick', branch)
 
@@ -111,7 +118,7 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
             changes[0]['newVersion'] = json.loads((await obtain_new_version_process.stdout.read()).decode('utf-8'))
 
         if 'files' not in changes[0]:
-            changed_files_process = await check_subprocess('git', 'diff', '--name-only', stdout=asyncio.subprocess.PIPE, cwd=worktree)
+            changed_files_process = await check_subprocess('git', 'diff', '--name-only', 'HEAD', stdout=asyncio.subprocess.PIPE, cwd=worktree)
             changed_files = (await changed_files_process.stdout.read()).splitlines()
             changes[0]['files'] = changed_files
 

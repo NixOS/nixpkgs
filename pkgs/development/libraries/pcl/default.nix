@@ -12,42 +12,55 @@
 , qtbase
 , libusb1
 , libpcap
+, libtiff
 , libXt
 , libpng
 , Cocoa
 , AGL
 , OpenGL
+, withCuda ? false, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcl";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = "${pname}-${version}";
-    sha256 = "1cli2rxqsk6nxp36p5mgvvahjz8hm4fb68yi8cf9nw4ygbcvcwb1";
+    sha256 = "0jhvciaw43y6iqqk7hyxnfhn1b4bsw5fpy04s01r5pkcsjjbdbqc";
   };
+
+  # remove attempt to prevent (x86/x87-specific) extended precision use
+  # when SSE not detected
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
+  '';
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
-    qhull
-    flann
-    boost
     eigen
     libusb1
     libpcap
-    libpng
-    vtk
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
+  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
+  ++ lib.optionals withCuda [ cudatoolkit ];
+
+  propagatedBuildInputs = [
+    boost
+    flann
+    libpng
+    libtiff
+    qhull
+    vtk
+  ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ];
+  ] ++ lib.optionals withCuda [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";

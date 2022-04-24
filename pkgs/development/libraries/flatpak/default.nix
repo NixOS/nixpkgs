@@ -13,7 +13,7 @@
 , xmlto
 , appstream-glib
 , substituteAll
-, yacc
+, bison
 , xdg-dbus-proxy
 , p11-kit
 , bubblewrap
@@ -35,7 +35,7 @@
 , fuse
 , nixosTests
 , libsoup
-, lzma
+, xz
 , zstd
 , ostree
 , polkit
@@ -48,18 +48,19 @@
 , dconf
 , gsettings-desktop-schemas
 , librsvg
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.10.2";
+  version = "1.12.7";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2xUnOdBy+P8pnk6IjYljobRTjaexDguGUlvkOPLh3eQ=";
+    sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
       src = ./fix-paths.patch;
-      p11kit = "${p11-kit.dev}/bin/p11-kit";
+      p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
     # Adapt paths exposed to sandbox for NixOS.
@@ -88,10 +89,6 @@ stdenv.mkDerivation rec {
     # Allow gtk-doc to find schemas using XML_CATALOG_FILES environment variable.
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
-
-    # Don’t hardcode flatpak binary path in launchers stored under user’s profile otherwise they will break after Flatpak update.
-    # https://github.com/NixOS/nixpkgs/issues/43581
-    ./use-flatpak-from-path.patch
 
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
@@ -114,7 +111,7 @@ stdenv.mkDerivation rec {
     pkg-config
     xmlto
     appstream-glib
-    yacc
+    bison
     wrapGAppsNoGuiHook
   ];
 
@@ -129,7 +126,7 @@ stdenv.mkDerivation rec {
     libcap
     libseccomp
     libsoup
-    lzma
+    xz
     zstd
     polkit
     python3
@@ -179,7 +176,14 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Use flatpak from PATH in exported assets (e.g. desktop files).
+      --set FLATPAK_BINARY flatpak
+    )
   '';
 
   passthru = {

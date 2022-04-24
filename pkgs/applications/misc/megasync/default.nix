@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoconf
 , automake
 , c-ares
@@ -6,7 +7,8 @@
 , curl
 , doxygen
 , fetchFromGitHub
-, ffmpeg_3
+, ffmpeg
+, freeimage
 , libmediainfo
 , libraw
 , libsodium
@@ -24,30 +26,38 @@
 , unzip
 , wget
 }:
-
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.5.0";
+  version = "4.6.5.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0rr1jjy0n5bj1lh6xi3nbbcikvq69j3r9qnajp4mhywr5izpccvs";
+    sha256 = "sha256-2gsJmMnt0+4vknd2HgOtCYCjVWT7eD0WBimmtsFEhvY=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkg-config qttools swig unzip ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    doxygen
+    libtool
+    lsb-release
+    pkg-config
+    qttools
+    swig
+    unzip
+  ];
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg_3
+    ffmpeg
+    freeimage
     libmediainfo
     libraw
     libsodium
-    libtool
     libuv
     libzen
     qtbase
@@ -62,10 +72,11 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
+    ./ffmpeg_44.patch
   ];
 
   postPatch = ''
-    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
+    for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
   '';
@@ -87,7 +98,7 @@ mkDerivation rec {
     "--with-cryptopp"
     "--with-curl"
     "--with-ffmpeg"
-    "--without-freeimage" # unreferenced even when found
+    "--with-freeimage"
     "--without-readline"
     "--without-termcap"
     "--with-sodium"

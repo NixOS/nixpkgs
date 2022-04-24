@@ -1,4 +1,4 @@
-{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
+{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python2
 , lib, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   version = "1.5.1.81";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which attr python ];
+  buildInputs = [ which attr python2 ];
 
   patches = [
     (fetchpatch {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     export BOOST_INCLUDEDIR=${boost.dev}/include
     export BOOST_LIBRARYDIR=${boost.out}/lib
     export CMAKE_INCLUDE_PATH=${openssl.dev}/include
-    export CMAKE_LIBRARY_PATH=${openssl.out}/lib
+    export CMAKE_LIBRARY_PATH=${lib.getLib openssl}/lib
 
     substituteInPlace cpp/cmake/FindValgrind.cmake \
       --replace "/usr/local" "${valgrind}"

@@ -93,7 +93,7 @@ in
   boot.initrd.availableKernelModules =
     [ "vfat" "reiserfs" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_10;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
   boot.kernelParams = [ "console=tty1" ];
 
   boot.postBootCommands =

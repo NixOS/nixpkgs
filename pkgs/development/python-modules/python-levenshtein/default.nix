@@ -4,8 +4,9 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-Levenshtein";
+  pname = "python-levenshtein";
   version = "0.12.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,11 +16,14 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
+  pythonImportsCheck = [
+    "Levenshtein"
+  ];
+
   meta = with lib; {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
-    homepage    = "https://github.com/ztane/python-Levenshtein";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/ztane/python-Levenshtein";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ aske ];
   };
-
 }

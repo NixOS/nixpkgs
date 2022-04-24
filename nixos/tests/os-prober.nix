@@ -43,32 +43,35 @@ let
       # vda is a filesystem without partition table
       forceInstall = true;
     };
-    nix.binaryCaches = lib.mkForce [ ];
-    nix.extraOptions = ''
-      hashed-mirrors =
-      connect-timeout = 1
-    '';
+    nix.settings = {
+      substituters = lib.mkForce [];
+      hashed-mirrors = null;
+      connect-timeout = 1;
+    };
     # save some memory
     documentation.enable = false;
   };
   # /etc/nixos/configuration.nix for the vm
   configFile = pkgs.writeText "configuration.nix"  ''
-    {config, pkgs, ...}: ({
+    {config, pkgs, lib, ...}: ({
     imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
-    } // (builtins.fromJSON (builtins.readFile ${
+    } // lib.importJSON ${
       pkgs.writeText "simpleConfig.json" (builtins.toJSON simpleConfig)
-    })))
+    })
   '';
 in {
   name = "os-prober";
 
-  machine = { config, pkgs, ... }: (simpleConfig // {
+  nodes.machine = { config, pkgs, ... }: (simpleConfig // {
       imports = [ ../modules/profiles/installation-device.nix
                   ../modules/profiles/base.nix ];
       virtualisation.memorySize = 1300;
+      # To add the secondary disk:
+      virtualisation.qemu.options = [ "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio" ];
+
       # The test cannot access the network, so any packages
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
@@ -95,11 +98,6 @@ in {
   });
 
   testScript = ''
-    # hack to add the secondary disk
-    os.environ[
-        "QEMU_OPTS"
-    ] = "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio"
-
     machine.start()
     machine.succeed("udevadm settle")
     machine.wait_for_unit("multi-user.target")
@@ -116,7 +114,7 @@ in {
         "${configFile}",
         "/etc/nixos/configuration.nix",
     )
-    machine.succeed("nixos-rebuild boot >&2")
+    machine.succeed("nixos-rebuild boot --show-trace >&2")
 
     machine.succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg")
   '';

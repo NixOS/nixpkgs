@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "tuyaha";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
     repo = pname;
     rev = version;
-    sha256 = "0n08mqrz76zv1cyqky6ibs6im1fqcywkiyvfmfabml0vzvr43awf";
+    sha256 = "sha256-PTIw/2NRHHiqV6E5oj2pMeGq1uApevKfT2n5zV8AQmM=";
   };
 
   propagatedBuildInputs = [ requests ];

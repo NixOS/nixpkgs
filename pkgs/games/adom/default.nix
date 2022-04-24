@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU, libGL, alsaLib, libpulseaudio
+{ lib, stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU, libGL, alsa-lib, libpulseaudio
 , xorg }:
 
 let
@@ -6,7 +6,7 @@ let
   inherit (xorg) libXext libX11;
 
   lpath = "${stdenv.cc.cc.lib}/lib64:" + lib.makeLibraryPath [
-      zlib libmad libpng12 libcaca libXext libX11 libGLU libGL alsaLib libpulseaudio];
+      zlib libmad libpng12 libcaca libXext libX11 libGLU libGL alsa-lib libpulseaudio];
 
 in
 stdenv.mkDerivation rec {

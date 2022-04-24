@@ -1,28 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , serpent
 , dill
 , cloudpickle
 , msgpack
 , isPy27
-, selectors34
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Pyro4";
-  version = "4.80";
+  pname = "pyro4";
+  version = "4.82";
+  format = "setuptools";
+
+  disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "46847ca703de3f483fbd0b2d22622f36eff03e6ef7ec7704d4ecaa3964cb2220";
+    pname = "Pyro4";
+    inherit version;
+    hash = "sha256-UR9bCATpLdd9wzrfnJR3h+P56cWpaxIWLwVXp8TOIfs=";
   };
 
   propagatedBuildInputs = [
     serpent
-  ] ++ lib.optionals isPy27 [ selectors34 ];
+  ];
 
   buildInputs = [
     dill
@@ -30,13 +32,18 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # add testsupport.py to PATH
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
 
-  # ignore network related tests, which fail in sandbox
-  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
+
+  pytestFlagsArray = [
+    # ignore network related tests, which fail in sandbox
+    "--ignore=tests/PyroTests/test_naming.py"
+  ];
 
   disabledTests = [
     "StartNSfunc"
@@ -46,6 +53,10 @@ buildPythonPackage rec {
 
   # otherwise the tests hang the build
   __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "Pyro4"
+  ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";

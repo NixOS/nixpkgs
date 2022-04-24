@@ -12,30 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openethereum";
-  version = "3.2.1";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "sha256-+bzMo0s+wdp8T/YjPk6mrPSPid1G8WScB8FJhXdL9JQ=";
+    sha256 = "sha256-PpRRoufuZ9fXbLonMAo6qaA/jtJZXW98uM0BEXdJ2oU=";
   };
 
-  cargoSha256 = "sha256-ibjjJ5zGF6wbO24/RoYKsTYsMNXHb1EdekDwSICPc5g=";
+  cargoSha256 = "sha256-xXUNXQvVq6XqW/hmCfJ2/mHKkZu0amRZ77vX+Jib0iM=";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.clang
-    llvmPackages.libclang
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isLinux [ systemd ]
     ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
-  cargoBuildFlags = [ "--features final" ];
+  buildFeatures = [ "final" ];
 
   # Fix tests by preventing them from writing to /homeless-shelter.
   preCheck = ''
@@ -50,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast, light, robust Ethereum implementation";
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akru xrelkd ];
+    maintainers = with maintainers; [ akru ];
     platforms = lib.platforms.unix;
   };
 }

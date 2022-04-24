@@ -1,7 +1,8 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
-, alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
+, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, soxr
+, x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
+, srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
 , libmfxSupport ? false, intel-media-sdk ? null
 , libaomSupport ? false, libaom ? null
@@ -17,7 +18,11 @@
 # Darwin frameworks
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, patches ? [], ...
+, branch, sha256, version, patches ? [], knownVulnerabilities ? []
+, doCheck ? true
+, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
+, ...
 }:
 
 /* Maintainer notes:
@@ -51,6 +56,8 @@ let
   reqMatch = requiredVersion: (cmpVer requiredVersion branch == 0);
 
   ifMinVer = minVer: flag: if reqMin minVer then flag else null;
+
+  ifVerOlder = maxVer: flag: if (lib.versionOlder branch maxVer) then flag else null;
 
   # Version specific fix
   verFix = withoutFix: fixVer: withFix: if reqMatch fixVer then withFix else withoutFix;
@@ -94,6 +101,7 @@ stdenv.mkDerivation rec {
     # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
+      (ifMinVer "4.0" (enableFeature (srt != null) "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
@@ -118,7 +126,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" "--enable-avdevice")
       "--enable-avfilter"
       (ifMinVer "0.6" "--enable-avformat")
-      (ifMinVer "1.0" "--enable-avresample")
+      (ifMinVer "1.0" (ifVerOlder "5.0" "--enable-avresample"))
       (ifMinVer "1.1" "--enable-avutil")
       "--enable-postproc"
       (ifMinVer "0.9" "--enable-swresample")
@@ -144,11 +152,12 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
       (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
       (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
-      (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
+      (disDarwinOrArmFix (ifMinVer "0.9" (lib.optionalString pulseaudioSupport "--enable-libpulse")) "0.9" "--disable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
+      "--enable-libzimg"
       "--enable-zlib"
       (ifMinVer "2.8" "--enable-libopus")
       "--enable-libspeex"
@@ -171,15 +180,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex srt nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
-    ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optionals (!isDarwin && !isAarch32 && pulseaudioSupport) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
-    ++ optional isLinux alsaLib
+    ++ optional isLinux alsa-lib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
@@ -187,7 +196,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # fails
+  inherit doCheck;
+  checkPhase = let
+    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavresample:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
+      make check -j$NIX_BUILD_CORES
+  '';
 
   # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
   # form automatically handled by the multiple-outputs hooks.
@@ -213,7 +228,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = "http://www.ffmpeg.org/";
+    homepage = "https://www.ffmpeg.org/";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines
@@ -224,6 +240,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ codyopel ];
-    inherit branch;
+    inherit branch knownVulnerabilities;
   };
 }

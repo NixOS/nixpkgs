@@ -1,16 +1,12 @@
-{
-  stdenv,
-  clangStdenv,
-  fetchgit,
-  fetchpatch,
-  libuuid,
-  python3,
-  iasl,
-  bc,
-  clang_9,
-  llvmPackages_9,
-  overrideCC,
-  lib,
+{ stdenv
+, clangStdenv
+, fetchFromGitHub
+, fetchpatch
+, libuuid
+, python3
+, bc
+, llvmPackages_9
+, lib
 }:
 
 let
@@ -26,7 +22,7 @@ else
   throw "Unsupported architecture";
 
 buildStdenv = if stdenv.isDarwin then
-  overrideCC clangStdenv [ clang_9 llvmPackages_9.llvm llvmPackages_9.lld ]
+  llvmPackages_9.stdenv
 else
   stdenv;
 
@@ -37,13 +33,15 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202011";
+  version = "202202";
 
   # submodules
-  src = fetchgit {
-    url = "https://github.com/tianocore/edk2";
+  src = fetchFromGitHub {
+    owner = "tianocore";
+    repo = "edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "1fvlz1z075jr6smq9qa0asy6fxga1gljcfd0764ypzy1mw963c9s";
+    fetchSubmodules = true;
+    sha256 = "0srmhi6c27n5vyl01nhh0fq8k4vngbwn79siyjvcacjbj2ivhh8d";
   };
 
   buildInputs = [ libuuid pythonEnv ];
@@ -65,7 +63,7 @@ edk2 = buildStdenv.mkDerivation {
 
   meta = with lib; {
     description = "Intel EFI development kit";
-    homepage = "https://sourceforge.net/projects/edk2/";
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
   };

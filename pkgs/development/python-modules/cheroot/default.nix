@@ -1,20 +1,20 @@
 { lib
 , stdenv
-, fetchPypi
 , buildPythonPackage
-, isPy3k
+, fetchPypi
 , jaraco_functools
 , jaraco_text
 , more-itertools
 , portend
 , pyopenssl
-, pytestCheckHook
-, pytestcov
+, pypytools
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
 , requests
 , requests-toolbelt
 , requests-unixsocket
-, setuptools_scm
+, setuptools-scm
 , setuptools-scm-git-archive
 , six
 , trustme
@@ -22,21 +22,22 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.4.8";
+  version = "8.6.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r98qqdp9ww5r5ma6wf1n66r9813rrmfvc54z7yij39jkj5c528h";
+    hash = "sha256-NmrfbnyslVVIbC0b5il5kwIu/2+MRlXBRDJozKPwjiU=";
   };
 
-  nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
+  nativeBuildInputs = [
+    setuptools-scm
+    setuptools-scm-git-archive
+  ];
 
   propagatedBuildInputs = [
-    # install_requires
     jaraco_functools
-
     more-itertools
     six
   ];
@@ -45,9 +46,9 @@ buildPythonPackage rec {
     jaraco_text
     portend
     pyopenssl
-    pytestCheckHook
-    pytestcov
+    pypytools
     pytest-mock
+    pytestCheckHook
     requests
     requests-toolbelt
     requests-unixsocket
@@ -79,6 +80,10 @@ buildPythonPackage rec {
     "cheroot/test/test_wsgi.py"
   ];
 
+  pythonImportsCheck = [
+    "cheroot"
+  ];
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
@@ -86,5 +91,6 @@ buildPythonPackage rec {
     description = "High-performance, pure-Python HTTP";
     homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

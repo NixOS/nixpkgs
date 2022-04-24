@@ -2,24 +2,33 @@
 , bluepy
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.9.1";
+  version = "0.13.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = version;
-    sha256 = "16p11fmyms4q93m3rna76nkp2la9m8lmfmaflbvga666vljwfw6v";
+    hash = "sha256-Zgpnw4It3yyy9RQqt5SxeJXl1Z3J3Rp9baLfiw5Bgow=";
   };
 
-  propagatedBuildInputs = [ bluepy ];
+  propagatedBuildInputs = [
+    bluepy
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "switchbot" ];
+
+  pythonImportsCheck = [
+    "switchbot"
+  ];
 
   meta = with lib; {
     description = "Python library to control Switchbot IoT devices";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libxml++";
@@ -21,6 +21,15 @@ stdenv.mkDerivation rec {
     substituteInPlace $dev/lib/pkgconfig/libxml++-3.0.pc \
       --replace 'docdir=''${datarootdir}' "docdir=$doc/share"
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      attrPath = "libxmlxx3";
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
+    };
+  };
 
   meta = with lib; {
     homepage = "http://libxmlplusplus.sourceforge.net/";

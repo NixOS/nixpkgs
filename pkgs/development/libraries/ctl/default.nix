@@ -19,6 +19,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Fix include guard name
+    substituteInPlace lib/dpx/dpx_raw.hh \
+        --replace CRL_DPX_RAW_INTERNAL_INCLUDE CTL_DPX_RAW_INTERNAL_INCLUDE
+
+    # Fix undefined symbols (link with Imath)
+    substituteInPlace lib/IlmCtlMath/CMakeLists.txt \
+        --replace "( IlmCtlMath IlmCtl )" "( IlmCtlMath IlmCtl Imath)"
+  '';
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libtiff ilmbase openexr ];
 

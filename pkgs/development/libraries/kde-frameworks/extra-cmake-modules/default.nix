@@ -1,7 +1,7 @@
 { mkDerivation, lib, cmake, pkg-config }:
 
 mkDerivation {
-  name = "extra-cmake-modules";
+  pname = "extra-cmake-modules";
 
   patches = [
     ./nix-lib-path.patch
@@ -17,6 +17,5 @@ mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     homepage = "http://www.kde.org";
     license = licenses.bsd2;
-    maintainers = [ maintainers.ttuegel ];
   };
 }

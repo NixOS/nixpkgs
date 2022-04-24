@@ -19,13 +19,13 @@
 
 mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "0.16.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "05qi550cjyjzhlma4zxnp1pn8i5cgak2k2mwwh2a5gpicp5axavn";
+    sha256 = "0hmxzkkggnpci305xax9663cbjqdh6n0j0dawwcpwj4ks8mp7xh7";
   };
 
   nativeBuildInputs = [

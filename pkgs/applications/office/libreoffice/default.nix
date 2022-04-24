@@ -2,7 +2,7 @@
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
+, icu, boost, jdk, ant, cups, xorg, fontforge, jre_minimal
 , openssl, gperf, cppunit, poppler, util-linux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
@@ -12,8 +12,8 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome3, glib, ncurses, epoxy, gpgme
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
+, gnome, glib, ncurses, libepoxy, gpgme
+, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
 , ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
@@ -24,6 +24,10 @@
 assert builtins.elem variant [ "fresh" "still" ];
 
 let
+  jre' = jre_minimal.override {
+    modules = [ "java.base" "java.desktop" "java.logging" ];
+  };
+
   importVariant = f: import (./. + "/src-${variant}/${f}");
 
   primary-src = importVariant "primary.nix" { inherit fetchurl; };
@@ -63,8 +67,6 @@ in (mkDrv rec {
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
 
-  patches = [ ./xdg-open-brief.patch ];
-
   tarballPath = "external/tarballs";
 
   postUnpack = ''
@@ -79,6 +81,16 @@ in (mkDrv rec {
     tar -xf ${srcs.help}
     tar -xf ${srcs.translations}
   '';
+
+  patches = [
+    ./skip-failed-test-with-icu70.patch
+
+    # Fix build with poppler 22.03
+    (fetchurl {
+      url = "https://github.com/archlinux/svntogit-packages/raw/f82958b9538f86e41b51f1ba7134968d2f3788d1/trunk/poppler-22.03.0.patch";
+      sha256 = "5h4qJmx6Q3Q3dHUlSi8JXBziN2mAswGVWk5aDTLTwls=";
+    })
+  ];
 
   ### QT/KDE
   #
@@ -106,6 +118,7 @@ in (mkDrv rec {
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
   '' + lib.optionalString kdeIntegration ''
       substituteInPlace configure.ac \
+        --replace kcoreaddons_version.h KCoreAddons/kcoreaddons_version.h \
         --replace '$QT5INC'             ${qtbase.dev}/include \
         --replace '$QT5LIB'             ${qtbase.out}/lib \
         --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\
@@ -312,21 +325,19 @@ in (mkDrv rec {
     "--with-boost-libdir=${boost.out}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
-    "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
     "--disable-report-builder"
     "--disable-online-update"
     "--enable-python=system"
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-jdk-home=${jdk.home}"
     "--with-ant-home=${ant}/lib/ant"
     "--with-system-cairo"
     "--with-system-libs"
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-libabw"
-    "--with-system-libcmis"
+    "--without-system-libcmis"
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
@@ -367,7 +378,6 @@ in (mkDrv rec {
     "--without-system-mdds" # we have mdds but our version is too new
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
-    "--without-system-qrcodegen"
     "--without-system-xmlsec"
   ] ++ lib.optionals kdeIntegration [
     "--enable-kf5"
@@ -381,7 +391,7 @@ in (mkDrv rec {
   '';
 
   nativeBuildInputs = [
-    gdb fontforge autoconf automake bison pkg-config libtool
+    gdb fontforge autoconf automake bison pkg-config libtool jdk
   ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
     ++ lib.optional kdeIntegration wrapQtAppsHook;
 
@@ -389,17 +399,17 @@ in (mkDrv rec {
     [ ant ArchiveZip boost box2d cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype getopt gperf gtk3
-      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
+      hunspell icu jre' lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes
       glib libmysqlclient
       neon nspr nss openldap openssl pam perl pkg-config poppler
       python3 sane-backends unzip which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf
+      mdds bluez5 libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
-      librevenge libe-book libmwaw glm ncurses epoxy
-      libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
+      librevenge libe-book libmwaw glm ncurses libepoxy
+      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
     ]
     ++ (with gst_all_1; [
       gstreamer
@@ -409,7 +419,8 @@ in (mkDrv rec {
     ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
-    inherit srcs jdk;
+    inherit srcs;
+    jdk = jre';
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

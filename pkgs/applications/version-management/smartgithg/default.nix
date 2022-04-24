@@ -4,7 +4,7 @@
 , jre
 , gtk3
 , glib
-, gnome3
+, gnome
 , wrapGAppsHook
 , libXtst
 , which
@@ -12,16 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "19.1.1";
+  version = "21.2.2";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "0i0dvyy9d63f4hk8czlyk83ai0ywhqp7wbdkq3s87l7irwgs42jy";
+    sha256 = "10v6sg0lmjby3v8g3sk2rzzvdx5p69ia4zz2c0hbf30rk0p6gqn3";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ jre gnome3.adwaita-icon-theme gtk3 ];
+  buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
 
   preFixup = with lib; ''
     gappsWrapperArgs+=( \
@@ -65,23 +65,19 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "smartgit";
     desktopName = "SmartGit";
-    categories = concatStringsSep ";" [
+    categories = [
       "Application"
       "Development"
       "RevisionControl"
     ];
-    mimeType = concatStringsSep ";" [
+    mimeTypes = [
       "x-scheme-handler/git"
       "x-scheme-handler/smartgit"
       "x-scheme-handler/sourcetree"
     ];
-    startupNotify = "true";
-    extraEntries = ''
-      Keywords=git
-      StartupWMClass=${name}
-      Version=1.0
-      Encoding=UTF-8
-    '';
+    startupNotify = true;
+    startupWMClass = name;
+    keywords = [ "git" ];
   };
 
   meta = with lib; {

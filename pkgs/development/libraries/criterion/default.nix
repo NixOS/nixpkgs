@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
-, dyncall , nanomsg, python37Packages }:
+, dyncall , nanomsg, python3Packages }:
 
 stdenv.mkDerivation rec {
   version = "2.3.3";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     nanomsg
   ];
 
-  checkInputs = with python37Packages; [ cram ];
+  checkInputs = with python3Packages; [ cram ];
 
   cmakeFlags = [ "-DCTESTS=ON" ];
   doCheck = true;

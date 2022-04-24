@@ -5,7 +5,7 @@
 , git
 , nettle
 # Use the same llvmPackages version as Rust
-, llvmPackages_10
+, llvmPackages_12
 , cargo
 , rustc
 , rustPlatform
@@ -25,24 +25,24 @@ rustPlatform.buildRustPackage rec {
   pname = "sequoia";
   # Upstream has separate version numbering for the library and the CLI frontend.
   # This derivation provides the CLI frontend, and thus uses its version number.
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia";
     rev = "sq/v${version}";
-    sha256 = "0zavkf0grkqljyiywcprsiv8igidk8vc3yfj3fzqvbhm43vnnbdw";
+    sha256 = "1rcbv1s7wpxhrzw082q6vfrq1ja2ssfxn53c90h8fh5wrj7ns751";
   };
 
-  cargoSha256 = "172f0gsy5hssrqv0l1np3c0qd1ayp6nqbpqmgwrkc4l37y5fn232";
+  cargoSha256 = "0f3b8rh4pl03n8j9ihazaak214sv1rsksbgrb1nfcy8sq2yqfj4g";
 
   nativeBuildInputs = [
     pkg-config
     cargo
     rustc
     git
-    llvmPackages_10.libclang
-    llvmPackages_10.clang
+    llvmPackages_12.libclang.lib
+    llvmPackages_12.clang
     ensureNewerSourcesForZipFilesHook
     capnproto
   ] ++
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = lib.optionals pythonSupport [
     pythonPackages.pytest
-    pythonPackages.pytestrunner
+    pythonPackages.pytest-runner
   ];
 
   buildInputs = [
@@ -72,19 +72,10 @@ rustPlatform.buildRustPackage rec {
     "build-release"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages_10.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages_12.libclang.lib}/lib";
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   CARGO_TEST_ARGS = "--workspace --exclude sequoia-store";
-
-  # Without this, the examples won't build
-  postPatch = ''
-    substituteInPlace openpgp-ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-    substituteInPlace ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-  '';
-
 
   preInstall = lib.optionalString pythonSupport ''
     export installFlags="PYTHONPATH=$PYTHONPATH:$out/${pythonPackages.python.sitePackages}"
@@ -102,7 +93,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson doronbehar ];
   };
 }

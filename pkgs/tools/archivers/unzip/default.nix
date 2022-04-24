@@ -3,11 +3,12 @@
 , enableNLS ? false, libnatspec
 }:
 
-stdenv.mkDerivation {
-  name = "unzip-6.0";
+stdenv.mkDerivation rec {
+  pname = "unzip";
+  version = "6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/infozip/unzip60.tar.gz";
+    url = "mirror://sourceforge/infozip/unzip${lib.replaceStrings ["."] [""] version}.tar.gz";
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation {
     })
   ] ++ lib.optional enableNLS
     (fetchurl {
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
       name = "unzip-6.0-natspec.patch";
       sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
     });

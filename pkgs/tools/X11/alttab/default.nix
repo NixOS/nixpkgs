@@ -2,7 +2,7 @@
 libpng, uthash , which, xnee, xorg, python3Packages }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.0";
+  version = "1.6.1";
 
   pname = "alttab";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "sagb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G4tu008IC3RCeCRZVKFPY2+ioLuUa9hDDKUx1q5C5FQ=";
+    sha256 = "sha256-g56207IGNDnBIqZmbpcgOLcfAGKwBE0DYu2Dq0bLS8o=";
   };
 
   nativeBuildInputs = [

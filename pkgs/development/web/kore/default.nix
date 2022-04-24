@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kore";
-  version = "4.0.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "jorisvink";
     repo = pname;
     rev = version;
-    sha256 = "0186lih30zps2d4600ikafbgsml269jzpcszdggzzkdw8p628qw9";
+    sha256 = "sha256-MC4PCjRuAqWuGvNDsZXKohb4HdSWMV0Oc0pZ0rnhG7Y=";
   };
 
   buildInputs = [ openssl curl postgresql yajl ];

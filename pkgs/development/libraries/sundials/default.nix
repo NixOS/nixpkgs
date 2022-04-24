@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "examples" ];
 
   src = fetchurl {
-    url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "jW3QlP7Mu41uzEE0DsFqZfq6yC7UQVAj9tfBwjkOovM=";
+    url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
+    hash = "sha256-SNp7qoFS3bIq7RsC2C0du0+/6iKs9nY0ARqgMDoQCkM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
 
   buildInputs = [
     python
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lapackSupport)
     # Check that the same index size is used for both libraries
     (assert (blas.isILP64 == lapack.isILP64); [
-      gfortran
       blas
       lapack
     ])
@@ -59,6 +58,19 @@ stdenv.mkDerivation rec {
       "-DSUNDIALS_INDEX_SIZE=32"
   )]
   ;
+
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/127608
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-sundials-5.7.0.drv-0/ccD2dUtR.s:21:15: error: index must be an integer in range [-256, 255].
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+  #                          ^
+  # /private/tmp/nix-build-sundials-5.7.0.drv-0/ccD2dUtR.s:46:15: error: index must be an integer in range [-256, 255].
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   doCheck = true;
   checkTarget = "test";

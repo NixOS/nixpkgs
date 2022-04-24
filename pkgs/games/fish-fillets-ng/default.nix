@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     icon = "fish-fillets-ng";
     desktopName = "Fish Fillets";
     comment     = "Puzzle game about witty fish saving the world sokoban-style";
-    categories  = "Game;LogicGame;";
+    categories  = [ "Game" "LogicGame" ];
   }) ];
 
   postInstall = ''
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "A puzzle game";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];

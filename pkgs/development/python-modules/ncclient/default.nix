@@ -1,34 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , paramiko
 , selectors2
 , lxml
-, nose
-, rednose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.9";
+  version = "0.6.13";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0112f2ad41fb658f52446d870853a63691d69299c73c7351c520d38dbd8dc0c4";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-NrilXB1NFcqNCGrwshhuLdhQoeHJ12PSp4MBScT9kYc=";
   };
 
-  checkInputs = [ nose rednose ];
-
   propagatedBuildInputs = [
-    paramiko lxml selectors2
+    paramiko
+    lxml
   ];
 
-  checkPhase = ''
-    nosetests test --rednose --verbosity=3 --with-coverage --cover-package ncclient
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  #Unfortunately the test hangs at te end
-  doCheck = false;
+  pythonImportsCheck = [ "ncclient" ];
 
   meta = with lib; {
     homepage = "https://github.com/ncclient/ncclient";

@@ -1,8 +1,9 @@
 { lib
 , boost
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
-, mkDerivationWith
+, mkDerivation
 , muparser
 , pkg-config
 , qmake
@@ -10,10 +11,9 @@
 , qtsvg
 , qttools
 , runtimeShell
-, stdenv
 }:
 
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "librecad";
   version = "2.2.0-rc2";
 
@@ -23,6 +23,14 @@ mkDerivationWith stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-RNg7ioMriH4A7V65+4mh8NhsUHs/8IbTt38nVkYilCE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/LibreCAD/LibreCAD/pull/1465/commits/4edcbe72679f95cb60979c77a348c1522a20b0f4.patch";
+      sha256 = "sha256-P0G2O5sL7Ip860ByxFQ87TfV/lq06wCQnzPxADGqFPs=";
+      name = "CVE-2021-45342.patch";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace scripts/postprocess-unix.sh \

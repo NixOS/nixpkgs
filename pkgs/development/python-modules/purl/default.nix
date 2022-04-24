@@ -1,22 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, nose
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "purl";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "codeinthehole";
     repo = "purl";
     rev = version;
-    sha256 = "0vi7xdm2xc1rbqrz5jwpr7x7dnkcrbjf1mb4w1q2c2f8jca0kk0g";
+    sha256 = "sha256-Jb3JRW/PtQ7NlO4eQ9DmTPu/sjvFTg2mztphoIF79gc=";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "purl"
+  ];
 
   meta = with lib; {
     description = "Immutable URL class for easy URL-building and manipulation";

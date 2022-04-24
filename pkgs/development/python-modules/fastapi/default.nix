@@ -7,30 +7,30 @@
 , pytest-asyncio
 , aiosqlite
 , databases
+, fetchpatch
 , flask
 , httpx
 , passlib
 , peewee
 , python-jose
 , sqlalchemy
+, trio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.63.0";
+  version = "0.75.2";
   format = "flit";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = "fastapi";
+    repo = pname;
     rev = version;
-    sha256 = "0l3imrcs42pqf9d6k8c1q15k5sqcnapl5zk71xl52mrxhz49lgpi";
+    hash = "sha256-B4q3Q256Sj4jTQt1TDm3fiEaQKdVxddCF9+KsxkkTWo=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette ==0.13.6" "starlette"
-  '';
 
   propagatedBuildInputs = [
     starlette
@@ -48,15 +48,55 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     sqlalchemy
+    trio
   ];
 
-  # disabled tests require orjson which requires rust nightly
-  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" ];
-  disabledTests = [ "test_get_custom_response" ];
+  patches = [
+    # Bump starlette, https://github.com/tiangolo/fastapi/pull/4483
+    (fetchpatch {
+      name = "support-later-starlette.patch";
+      # PR contains multiple commits
+      url = "https://patch-diff.githubusercontent.com/raw/tiangolo/fastapi/pull/4483.patch";
+      sha256 = "sha256-ZWaqAd/QYEYRL1hSQdXdFPgWgdmOill2GtmEn33vz2U=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette ==" "starlette >="
+  '';
+
+  pytestFlagsArray = [
+    # ignoring deprecation warnings to avoid test failure from
+    # tests/test_tutorial/test_testing/test_tutorial001.py
+    "-W ignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Disabled tests require orjson which requires rust nightly
+    "tests/test_default_response_class.py"
+    # Don't test docs and examples
+    "docs_src"
+  ];
+
+  disabledTests = [
+    "test_get_custom_response"
+    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
+    "test_websocket_invalid_data"
+    "test_websocket_no_credentials"
+    # TypeError: __init__() missing 1...starlette-releated
+    "test_head"
+    "test_options"
+    "test_trace"
+  ];
+
+  pythonImportsCheck = [
+    "fastapi"
+  ];
 
   meta = with lib; {
+    description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
-    description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

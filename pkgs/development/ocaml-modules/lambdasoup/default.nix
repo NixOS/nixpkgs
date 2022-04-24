@@ -2,9 +2,9 @@
 
 buildDunePackage rec {
   pname = "lambdasoup";
-  version = "0.7.2";
+  version = "0.7.3";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "aantron";
     repo = pname;
     rev = version;
-    sha256 = "0php51lyz3ll0psazjd59yw02xb9w84150gkyiwmn3fa0iq8nf7m";
+    sha256 = "sha256:1wclkn1pl0d150dw0xswb29jc7y1q9mhipff1pnsc1hli3pyvvb7";
   };
 
   propagatedBuildInputs = [ markup ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-libthai";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchurl {
     url = "https://linux.thai.net/pub/ThaiLinux/software/libthai/ibus-libthai-${version}.tar.xz";
-    sha256 = "0iam7308rxkx2xwaabc5wyj7vrxgd4cr95pvwrkm8fr9gh2xnwgv";
+    sha256 = "sha256-egAxttjwuKiDoIuJluoOTJdotFZJe6ZOmJgdiFCAwx0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

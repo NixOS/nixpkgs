@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dwm";
-  version = "6.2";
+  version = "6.3";
 
   src = fetchurl {
     url = "https://dl.suckless.org/dwm/${pname}-${version}.tar.gz";
-    sha256 = "03hirnj8saxnsfqiszwl2ds7p0avg20izv9vdqyambks00p2x44p";
+    sha256 = "utqgKFKbH7of1/moTztk8xGQRmyFgBG1Pi97cMajB40=";
   };
 
   buildInputs = [ libX11 libXinerama libXft ];
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   meta = with lib; {
     homepage = "https://dwm.suckless.org/";
     description = "An extremely fast, small, and dynamic window manager for X";
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       tags.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric neonfuz ];
     platforms = platforms.all;
   };
 }

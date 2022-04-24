@@ -14,13 +14,13 @@ let php-embed = php.override {
     };
 
     pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
-                           interpreter = pkg.interpreter;
+                           interpreter = pkg.pythonForBuild.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];
                            install = ''
                              install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-                             ${pkg.executable} -m compileall $out/${pkg.sitePackages}/
-                             ${pkg.executable} -O -m compileall $out/${pkg.sitePackages}/
+                             ${pkg.pythonForBuild.executable} -m compileall $out/${pkg.sitePackages}/
+                             ${pkg.pythonForBuild.executable} -O -m compileall $out/${pkg.sitePackages}/
                            '';
                          };
 
@@ -59,16 +59,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "uwsgi";
-  version = "2.0.19.1";
+  version = "2.0.20";
 
   src = fetchurl {
     url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0256v72b7zr6ds4srpaawk1px3bp0djdwm239w3wrxpw7dzk1gjn";
+    sha256 = "1yfz5h07rxzrqf1rdj5fzhk47idgglxj7kqr8zl8lgcpv1kriaw8";
   };
 
   patches = [
         ./no-ext-session-php_session.h-on-NixOS.patch
         ./additional-php-ldflags.patch
+        ./missing-arginfo-php8.patch # https://github.com/unbit/uwsgi/issues/2356
   ];
 
   nativeBuildInputs = [ python3 pkg-config ];
@@ -90,6 +91,16 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit python2 python3;
   };
+
+  postPatch = ''
+    for f in uwsgiconfig.py plugins/*/uwsgiplugin.py; do
+      substituteInPlace "$f" \
+        --replace pkg-config "$PKG_CONFIG"
+    done
+    ${lib.optionalString (lib.versionAtLeast php.version "8") ''
+        sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py
+    ''}
+  '';
 
   configurePhase = ''
     export pluginDir=$out/lib/uwsgi

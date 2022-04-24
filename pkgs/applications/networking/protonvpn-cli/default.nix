@@ -30,7 +30,8 @@ python3Packages.buildPythonApplication rec {
     description = "Linux command-line client for ProtonVPN";
     homepage = "https://github.com/protonvpn/linux-cli";
     maintainers = with maintainers; [ jtcoolen jefflabonte shamilton ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "protonvpn";
   };
 }

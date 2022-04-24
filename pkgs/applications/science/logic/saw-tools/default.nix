@@ -48,8 +48,6 @@ stdenv.mkDerivation {
     done
   '';
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   meta = {
     description = "Tools for software verification and analysis";
     homepage    = "https://saw.galois.com";

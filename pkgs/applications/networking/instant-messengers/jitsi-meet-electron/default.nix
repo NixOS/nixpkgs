@@ -2,20 +2,18 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron_12
+, electron
 , xorg
+, pipewire
 }:
 
-let
-  electron = electron_12;
-in
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-electron";
-  version = "2.7.0";
+  version = "2022.1.1";
 
   src = fetchurl {
     url = "https://github.com/jitsi/jitsi-meet-electron/releases/download/v${version}/jitsi-meet-x86_64.AppImage";
-    sha256 = "1g8was4anrsdpv4h11z544mi0v79him2xjyknixyrqfy87cbh97n";
+    sha256 = "0x3fdqgjnsd570b7nszfx3h8l5c8x2kg32ig85n2a2g481c7xi6l";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -48,7 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst pipewire ]}"
   '';
 
   meta = with lib; {

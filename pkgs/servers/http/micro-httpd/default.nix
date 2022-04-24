@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "micro-httpd-20140814";
+  pname = "micro-httpd";
+  version = "20140814";
 
   src = fetchurl {
     url   = "https://acme.com/software/micro_httpd/micro_httpd_14Aug2014.tar.gz";
@@ -20,6 +21,7 @@ stdenv.mkDerivation {
     license     = licenses.bsd2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ copumpkin ];
+    mainProgram = "micro_httpd";
   };
 }
 

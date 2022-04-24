@@ -1,23 +1,23 @@
 { lib, stdenv, fetchFromGitHub
-, alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
+, alsa-lib, freetype, xorg, curl, libGL, libjack2, gnome
 , pkg-config, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "3.4";
+  version = "3.9";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-zXsDu/xi7OV6VtnZK9ZJ8uwPeA5uTgNpAQsqe90iwG4=";
+    sha256 = "sha256-AtgKgw+F5lc0Ma3zOxmk3iaZQp2KZb2FP5F8QvvYTT4=";
   };
 
   buildInputs = [
-    alsaLib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
-    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome3.zenity
+    alsa-lib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
+    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    install -Dm755 build/Helio $out/bin
-    wrapProgram $out/bin/Helio --prefix PATH ":" ${gnome3.zenity}/bin
+    install -Dm755 build/helio $out/bin
+    wrapProgram $out/bin/helio --prefix PATH ":" ${gnome.zenity}/bin
 
     mkdir -p $out/share
     cp -r ../Deployment/Linux/Debian/x64/usr/share/* $out/share
     substituteInPlace $out/share/applications/Helio.desktop \
-      --replace "/usr/bin/helio" "$out/bin/Helio"
+      --replace "/usr/bin/helio" "$out/bin/helio"
   '';
 
   meta = with lib; {

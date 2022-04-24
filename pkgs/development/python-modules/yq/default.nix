@@ -1,22 +1,23 @@
 { lib
-, nixosTests
 , buildPythonPackage
 , fetchPypi
 , substituteAll
 , argcomplete
 , pyyaml
+, toml
 , xmltodict
 , jq
+, setuptools-scm
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.12.0";
+  version = "2.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HSrUA1BNMGtSWLhsaY+YVtetWLe7F6K4dWkaanuMTCA=";
+    sha256 = "sha256-9L8rKZ0eXH69dM+yXR9dm2QBBjusB6LQmhVhRMHWROE=";
   };
 
   patches = [
@@ -26,14 +27,14 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace test/test.py \
-      --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     pyyaml
     xmltodict
+    toml
     argcomplete
   ];
 
@@ -45,10 +46,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yq" ];
 
-  passthru.tests = { inherit (nixosTests) yq; };
-
   meta = with lib; {
-    description = "Command-line YAML processor - jq wrapper for YAML documents";
+    description = "Command-line YAML/XML/TOML processor - jq wrapper for YAML, XML, TOML documents";
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo SuperSandro2000 ];

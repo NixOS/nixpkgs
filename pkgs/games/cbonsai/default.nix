@@ -1,18 +1,20 @@
-{ stdenv, lib, fetchFromGitLab, ncurses, pkg-config, nix-update-script }:
+{ stdenv, lib, fetchFromGitLab, ncurses, pkg-config, nix-update-script, scdoc }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.4";
   pname = "cbonsai";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "jallbrit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5yyvisExf4Minyr1ApJQ2SoctfjhdU6kEbgBGgHDtCg=";
+    sha256 = "sha256-XFK6DiIb8CzVubTnEMkqRW8xZkX/SWjUsrfS+I7LOs8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config scdoc ];
   buildInputs = [ ncurses ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   passthru.updateScript = nix-update-script { attrPath = pname; };

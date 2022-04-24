@@ -3,7 +3,7 @@
 fetchzip {
   name = "ipafont-003.03";
 
-  url = "http://ipafont.ipa.go.jp/old/ipafont/IPAfont00303.php";
+  url = "https://moji.or.jp/wp-content/ipafont/IPAfont/IPAfont00303.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -19,7 +19,7 @@ fetchzip {
       Promotion Agency of Japan. It provides both Mincho and Gothic fonts,
       suitable for both display and printing.
     '';
-    homepage = "http://ipafont.ipa.go.jp/ipafont/";
+    homepage = "https://moji.or.jp/ipafont/";
     license = lib.licenses.ipa;
     maintainers = [ lib.maintainers.auntie ];
   };

@@ -1,37 +1,49 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
-, certifi
-, chardet
+, fetchFromGitHub
 , deprecated
-, idna
 , oauthlib
 , requests
-, requests_oauthlib
+, requests-oauthlib
 , six
-, urllib3
-, pytestrunner
-, pytest
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "2.1.2";
+  version = "3.20.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f852bfd293fdcb0ab2d7a9ea907f8303cf14fe6f55e90c103d4de00393ea9555";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "atlassian-api";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-yTRJz5zLt5eV+IHrVVLmVZnkbf0FBLM7CiCQ28X1cgc=";
   };
 
-  checkInputs = [ pytestrunner pytest ];
+  propagatedBuildInputs = [
+    deprecated
+    oauthlib
+    requests
+    requests-oauthlib
+    six
+  ];
 
-  propagatedBuildInputs = [ deprecated oauthlib requests requests_oauthlib six ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "atlassian"
+  ];
 
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
     license = licenses.asl20;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

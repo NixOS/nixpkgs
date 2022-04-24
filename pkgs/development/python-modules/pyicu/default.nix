@@ -8,23 +8,23 @@
 
 buildPythonPackage rec {
   pname = "PyICU";
-  version = "2.6";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wb3v421i2fnnxdywam4ay8hqvnxlz0r2nrpx5lqy3rn6dlbz9d9";
+    sha256 = "sha256-8LlUmof4e6fEE/E2edE3Jx4LN/HzmwEJrOOCV9TRSNY=";
   };
 
-  nativeBuildInputs = [ icu ]; # for icu-config
+  nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
   buildInputs = [ icu ];
   checkInputs = [ pytestCheckHook six ];
 
-  meta = with lib; {
-    homepage = "https://github.com/ovalhub/pyicu/";
-    description = "Python extension wrapping the ICU C++ API";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.rycee ];
-  };
+  pythonImportsCheck = [ "icu" ];
 
+  meta = with lib; {
+    homepage = "https://gitlab.pyicu.org/main/pyicu";
+    description = "Python extension wrapping the ICU C++ API";
+    changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
+    license = licenses.mit;
+  };
 }

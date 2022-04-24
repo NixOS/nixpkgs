@@ -27,7 +27,7 @@ platforms, run
 to start EPGStation.
 .Sh FILES
 .Bl -tag -width Ds -compact
-.It Pa /etc/epgstation/config.json
+.It Pa /etc/epgstation/config.yml
 .Nm
 configuration file.
 .El
@@ -47,6 +47,10 @@ Backup the EPGstation database.
 Restore the EPGstation database.
 .Pp
 .Dl $ epgstation run restore /path/to/src
+.Pp
+Restore the EPGstation database from the prior v1 release.
+.Pp
+.Dl $ epgstation run v1migrate /path/to/src
 .Pp
 .Sh SEE ALSO
 .Xr npm 1

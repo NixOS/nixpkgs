@@ -10,7 +10,8 @@
 , ninja
 , pkg-config
 , python3
-, lib, stdenv
+, lib
+, stdenv
 , vala
 , wrapGAppsHook
 , inxi
@@ -21,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "2.0.6";
+  version = "2.2.8";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "11qbz547qlfsvkz4bdxhryrsf10aw5jc2f1glbik7pvmmm87gf4f";
+    hash = "sha256-70troRGklu5xGjBIrGvshcOX/UT96hIEFXyo4yj2GT4=";
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gobject-introspection
-    (python3.withPackages(ps: with ps; [
+    (python3.withPackages (ps: with ps; [
       pygobject3
       setproctitle # mate applet
     ]))

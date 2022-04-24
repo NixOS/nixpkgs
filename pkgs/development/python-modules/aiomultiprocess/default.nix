@@ -24,6 +24,14 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "aiomultiprocess/tests/*.py" ];
+
+  disabledTests = [
+    # tests are flaky and make the whole test suite time out
+    "test_pool_worker_exceptions"
+    "test_pool_worker_max_tasks"
+    "test_pool_worker_stop"
+  ];
+
   pythonImportsCheck = [ "aiomultiprocess" ];
 
   meta = with lib; {

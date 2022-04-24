@@ -1,13 +1,12 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   kconfig, kcoreaddons, kcrash, kdbusaddons, kservice, kwindowsystem,
   qtbase, qttools, qtx11extras, libXdmcp,
 }:
 
 mkDerivation {
-  name = "kglobalaccel";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kglobalaccel";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kconfig kcoreaddons kcrash kdbusaddons kservice kwindowsystem qttools

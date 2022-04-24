@@ -7,7 +7,7 @@
 , pytest
 , pytestcache
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -21,17 +21,18 @@ buildPythonPackage rec {
     sha256 = "0v6b4ly0p8nknpnp3f4dbslfsifzzjx2vv27rfylx04kzdhg4m9p";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
     factory_boy
     inflection
-    pytest
   ];
 
   checkInputs = [
     mock
     pytestCheckHook
     pytestcache
-    pytestcov
+    pytest-cov
   ];
 
   pytestFlagsArray = [ "--ignore=docs" ];

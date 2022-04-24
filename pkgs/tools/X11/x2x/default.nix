@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, imake, libX11, libXtst, libXext, gccmakedep }:
 
-stdenv.mkDerivation {
-  name = "x2x-1.27";
+stdenv.mkDerivation rec {
+  pname = "x2x";
+  version = "1.27";
 
   src = fetchurl {
-    url = "https://github.com/downloads/dottedmag/x2x/x2x-1.27.tar.gz";
+    url = "https://github.com/downloads/dottedmag/x2x/x2x-${version}.tar.gz";
     sha256 = "0dha0kn1lbc4as0wixsvk6bn4innv49z9a0sm5wlx4q1v0vzqzyj";
   };
 

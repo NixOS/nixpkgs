@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
-, pam, apacheHttpd, pamtester, xscreensaver }:
+, pam, apacheHttpd, pamtester, xscreensaver, coreutils, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook pkg-config makeWrapper
   ];
+
   buildInputs = [
     libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
     pam apacheHttpd pamtester
@@ -30,6 +31,10 @@ stdenv.mkDerivation rec {
     cat > version.c <<'EOF'
       const char *const git_version = "${version}";
     EOF
+  '';
+
+  postInstall = ''
+    wrapProgram $out/libexec/xsecurelock/saver_blank --prefix PATH : ${coreutils}/bin
   '';
 
   meta = with lib; {

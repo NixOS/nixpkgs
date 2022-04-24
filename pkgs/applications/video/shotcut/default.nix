@@ -17,24 +17,22 @@
 , qtgraphicaleffects
 , qmake
 , qttools
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "21.02.27";
+  version = "21.09.20";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "bcuJz27jDAB3OPEKq3xNgfv6C31UoMKosS4YIRZNMjM=";
+    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     SDL2
@@ -58,7 +56,7 @@ mkDerivation rec {
   ];
 
   prePatch = ''
-    sed 's_shotcutPath, "melt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
+    sed 's_shotcutPath, "melt[^"]*"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
     sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
     sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
@@ -77,9 +75,8 @@ mkDerivation rec {
     cp -r src/qml $out/share/shotcut/
   '';
 
-  passthru.updateScript = genericUpdater {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     rev-prefix = "v";
   };
 
@@ -95,7 +92,7 @@ mkDerivation rec {
       please use the official build from shotcut.org instead.
     '';
     homepage = "https://shotcut.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
   };

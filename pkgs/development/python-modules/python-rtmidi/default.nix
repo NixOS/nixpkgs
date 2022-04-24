@@ -1,19 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, pkg-config, alsaLib, libjack2, tox, flake8, alabaster
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pkg-config
+, alsa-lib
+, libjack2
+, tox
+, flake8
+, alabaster
+, CoreAudio
+, CoreMIDI
+, CoreServices
 }:
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
-  version = "1.4.7";
+  version = "1.4.9";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d7dbc2b174b09015dfbee449a672a072aa72b367be40b13e04ee35a2e2e399e3";
+    sha256 = "bfeb4ed99d0cccf6fa2837566907652ded7adc1c03b69f2160c9de4082301302";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib libjack2 ];
+  buildInputs = [
+    libjack2
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudio
+    CoreMIDI
+    CoreServices
+  ];
   checkInputs = [
     tox
     flake8

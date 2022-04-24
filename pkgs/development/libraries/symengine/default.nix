@@ -5,18 +5,23 @@
 , flint
 , mpfr
 , libmpc
+, catch
 }:
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    sha256 = "sha256-aoitTT9fwTIs3ovfqQjKGgrU+kT5mj+vDHt5lg49JHU=";
+    sha256 = "sha256-5KpxBusJCuwrfFWHbrRKlH6Ic7YivYqz2m+BCbNfZp0=";
   };
+
+  postPatch = ''
+    cp ${catch}/include/catch/catch.hpp symengine/utilities/catch/catch.hpp
+  '';
 
   nativeBuildInputs = [ cmake ];
 

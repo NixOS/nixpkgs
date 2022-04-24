@@ -1,29 +1,24 @@
-{ fetchurl, fetchgit, lib, stdenv
+{ fetchurl, lib, stdenv
 , pkg-config, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
+, notmuch
 , pythonPackages
 , emacs
 , ruby
+, testers
 , which, dtach, openssl, bash, gdb, man
 , withEmacs ? true
+, withRuby ? true
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  version = "0.31.4";
   pname = "notmuch";
+  version = "0.35";
 
-  passthru = {
-    pythonSourceRoot = "${src.name}/bindings/python";
-    inherit version;
-  };
-
-  src = fetchgit {
-    url = "https://git.notmuchmail.org/git/notmuch";
-    sha256 = "sha256-M+LEf257OcDlHOCYYxzEVQpop+i2gzO/QJPdajz/CRM=";
-    rev = version;
+  src = fetchurl {
+    url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
+    sha256 = "0fdc81m24xrbhfrhw00g12ak4b8hap4961sq7ap6q2pjqhac8cd8";
   };
 
   nativeBuildInputs = [
@@ -31,23 +26,23 @@ stdenv.mkDerivation rec {
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
-  ] ++ optional withEmacs [ emacs ];
+    pythonPackages.cffi
+  ] ++ lib.optional withEmacs emacs
+    ++ lib.optional withRuby ruby;
 
   buildInputs = [
     gnupg                     # undefined dependencies
     xapian gmime talloc zlib  # dependencies described in INSTALL
     perl
     pythonPackages.python
-    ruby
-  ];
+  ] ++ lib.optional withRuby ruby;
 
   postPatch = ''
-    patchShebangs configure
-    patchShebangs test/
+    patchShebangs configure test/
 
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
-  '' + optionalString withEmacs ''
+  '' + lib.optionalString withEmacs ''
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
       --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
@@ -57,9 +52,9 @@ stdenv.mkDerivation rec {
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
     "--infodir=${placeholder "info"}/share/info"
-  ] ++ optional (!withEmacs) "--without-emacs"
-    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
-    ++ optional (isNull ruby) "--without-ruby";
+  ] ++ lib.optional (!withEmacs) "--without-emacs"
+    ++ lib.optional withEmacs "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
+    ++ lib.optional (!withRuby) "--without-ruby";
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
@@ -67,8 +62,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
 
+  postConfigure = ''
+    mkdir ${placeholder "bindingconfig"}
+    cp bindings/python-cffi/_notmuch_config.py ${placeholder "bindingconfig"}/
+  '';
 
-  outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
+  outputs = [ "out" "man" "info" "bindingconfig" ]
+    ++ lib.optional withEmacs "emacs"
+    ++ lib.optional withRuby "ruby";
 
   preCheck = let
     test-database = fetchurl {
@@ -79,31 +80,36 @@ stdenv.mkDerivation rec {
     mkdir -p test/test-databases
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
-  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
+
+  doCheck = !stdenv.hostPlatform.isDarwin && (lib.versionAtLeast gmime.version "3.0.3");
   checkTarget = "test";
   checkInputs = [
     which dtach openssl bash
     gdb man emacs
   ];
 
-  # Expects there to always be a thread with ID
-  # thread:0000000000000009, but notmuch new is non-deterministic so
-  # this isn't always the case.  Upstream bug report:
-  # https://nmbug.notmuchmail.org/nmweb/show/871reno6g7.fsf%40alyssa.is
-  NOTMUCH_SKIP_TESTS = "lib-thread";
-
   installTargets = [ "install" "install-man" "install-info" ];
 
   postInstall = lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
+  '' + lib.optionalString withRuby ''
+    make -C bindings/ruby install \
+      vendordir=$ruby/lib/ruby \
+      SHELL=$SHELL \
+      $makeFlags "''${makeFlagsArray[@]}" \
+      $installFlags "''${installFlagsArray[@]}"
   '';
 
-  dontGzipMan = true; # already compressed
+  passthru = {
+    pythonSourceRoot = "notmuch-${version}/bindings/python";
+    tests.version = testers.testVersion { package = notmuch; };
+    inherit version;
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
-    license     = licenses.gpl3;
+    license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
   };

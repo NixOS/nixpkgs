@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-applicationinsights";
-  version = "1.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c287a2c7def4de19f92c0c31ba02867fac6f5b8df71b5dbdab19288bb455fc5b";
+    sha256 = "sha256-K46J0WqQt4vwr1CE4yjxKUT/Atds5BLs0k8EjOA4yzA=";
   };
 
   propagatedBuildInputs = [

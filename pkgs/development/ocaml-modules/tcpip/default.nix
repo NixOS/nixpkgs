@@ -6,25 +6,21 @@
 , lwt, lwt-dllist, logs, duration, randomconv, ethernet
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
 , mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
-, lru
+, lru, metrics
 , withFreestanding ? false
 , ocaml-freestanding
 }:
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "6.1.0";
+  version = "7.1.0";
 
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "7b3ed2e1ca835c1cc65ac911bcb0de12ebc2b580dd195006bdea2cb387510474";
+    url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    sha256 = "sha256-4nd2OVZa4w22I4bgglnS8lrNfjTk40PL5n6Oh6n+osw=";
   };
-
-  patches = [
-    ./makefile-no-opam.patch
-  ];
 
   nativeBuildInputs = [
     bisect_ppx
@@ -55,18 +51,19 @@ buildDunePackage rec {
     randomconv
     ethernet
     lru
+    metrics
+    arp
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
   ];
 
-  doCheck = true;
+  doCheck = false;
   checkInputs = [
     alcotest
     mirage-flow
     mirage-vnetif
     pcap-format
     mirage-clock-unix
-    arp
     ipaddr-cstruct
   ];
 

@@ -5,10 +5,10 @@
 
 let
   computeUrl = {format ? "setuptools", ... } @attrs: let
-    computeWheelUrl = {pname, version, python ? "py2.py3", abi ? "none", platform ? "any"}:
+    computeWheelUrl = {pname, version, dist ? "py2.py3", python ? "py2.py3", abi ? "none", platform ? "any"}:
     # Fetch a wheel. By default we fetch an universal wheel.
     # See https://www.python.org/dev/peps/pep-0427/#file-name-convention for details regarding the optional arguments.
-      "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
+      "https://files.pythonhosted.org/packages/${dist}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
 
     computeSourceUrl = {pname, version, extension ? "tar.gz"}:
     # Fetch a source tarball.

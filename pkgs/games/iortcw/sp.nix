@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for i in `find $out/opt/iortcw -maxdepth 1 -type f -executable`; do
-      makeWrapper $i $out/bin/`basename $i` --run "cd $out/opt/iortcw"
+      makeWrapper $i $out/bin/`basename $i` --chdir "$out/opt/iortcw"
     done
   '';
 
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

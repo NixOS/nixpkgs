@@ -1,39 +1,80 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, six
-, scp
-, pyserial
-, paramiko
-, netaddr
-, ncclient
-, ntc-templates
-, lxml
+, fetchpatch
+, fetchFromGitHub
+
+# propagates
 , jinja2
+, lxml
+, ncclient
+, netaddr
+, ntc-templates
+, paramiko
+, pyparsing
+, pyserial
 , pyyaml
+, scp
+, six
 , transitions
 , yamlordereddictloader
+
+# tests
+, mock
 , nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.5.4";
+  version = "2.6.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bf036d0af9ee5c5e4f517cb5fc902fe891fa120e18f459805862c53d4a97193a";
+  src = fetchFromGitHub {
+    owner = "Juniper";
+    repo = "py-junos-eznc";
+    rev = version;
+    hash = "sha256-XhQJwtS518AzSwyaWE392nfNdYe9+iYHvXxQsjJfzI8=";
   };
 
-  checkInputs = [ nose ];
+  patches = [
+    (fetchpatch {
+      # Fixes tests with lxml>=4.8.0; remove > 2.6.3
+      url = "https://github.com/Juniper/py-junos-eznc/commit/048f750bb7357b6f6b9db8ad64bea479298c74fb.patch";
+      hash = "sha256-DYVj0BNPwDSbxDrzHhaq4F4kz1bliXB6Au3I63mRauc=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "ncclient==0.6.9" "ncclient"
+  '';
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient ntc-templates lxml jinja2 pyyaml transitions yamlordereddictloader
+    jinja2
+    lxml
+    ncclient
+    netaddr
+    ntc-templates
+    paramiko
+    pyparsing
+    pyserial
+    pyyaml
+    scp
+    six
+    transitions
+    yamlordereddictloader
+  ];
+
+  checkInputs = [
+    mock
+    nose
   ];
 
   checkPhase = ''
-    nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
+    nosetests -v -a unit --exclude=test_sw_put_ftp
   '';
+
+  pythonImportsCheck = [ "jnpr.junos" ];
 
   meta = with lib; {
     homepage = "http://www.github.com/Juniper/py-junos-eznc";

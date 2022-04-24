@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "udpt";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "naim94a";
     repo = "udpt";
     rev = "${pname}-${version}";
-    sha256 = "1g6l0y5x9pdra3i1npkm474glysicm4hf2m01700ack2rp43vldr";
+    sha256 = "sha256-G3LzbV3b1Y/2SPIBS1kZDuLuGF5gV/H1LFBRhevpdjU=";
   };
 
-  cargoSha256 = "1cmd80ndjxdmyfjpm1f04rwf64501nyi6wdsj7lxidgd1v92wy2c";
+  cargoSha256 = "sha256-ebLVyUB65fW8BWctxXnYxrnl/2IESd4YJXeiMsMXn9s=";
 
   postInstall = ''
     install -D udpt.toml $out/share/udpt/udpt.toml
@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ makefu ];
+    mainProgram = "udpt-rs";
   };
 }

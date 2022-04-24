@@ -1,4 +1,4 @@
-{ mkXfceDerivation, dbus, dbus-glib
+{ lib, mkXfceDerivation, dbus, dbus-glib
 , gst_all_1, gtk3, libnotify, libxfce4ui, libxfce4util
 , taglib, xfconf }:
 
@@ -7,9 +7,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "parole";
-  version = "1.0.5";
+  version = "4.16.0";
 
-  sha256 = "0qgis2gnkcvg7xwp76cbi0ihqdjprvvw2d66hk7klhrafp7c0v13";
+  sha256 = "sha256-9Rvhc8asFEb/+OU6uhuHKPl7w5mWBfzGP5ia0tiyDB4=";
 
   postPatch = ''
     substituteInPlace src/plugins/mpris2/Makefile.am \
@@ -31,7 +31,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern simple media player";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

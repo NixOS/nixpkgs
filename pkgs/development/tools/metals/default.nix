@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "0.10.0";
+  version = "0.11.2";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch org.scalameta:metals_2.12:${version} \
+      ${coursier}/bin/cs fetch org.scalameta:metals_2.12:${version} \
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1v9br6nad6yhq9y1z4b9z6xdsjrgqh7wlxww7vp7ws28cg85mqyg";
+    outputHash     = "sha256-sriiHgKs2hC8inBGWuLM9qFfGgtcYqKHh0VZWNmg51U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk deps ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   extraJavaOpts = "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m";
 
@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Work-in-progress language server for Scala";
-    maintainers = with maintainers; [ ceedubs tomahna ];
+    maintainers = with maintainers; [ fabianhjr tomahna ];
   };
 }

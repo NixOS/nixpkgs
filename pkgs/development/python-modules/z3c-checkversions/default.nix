@@ -2,21 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, zc_buildout
+, zc-buildout
 , zope_testrunner
 }:
 
 buildPythonPackage rec {
   pname = "z3c-checkversions";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchPypi {
     inherit version;
     pname = "z3c.checkversions";
-    sha256 = "b45bd22ae01ed60933694fb5abede1ff71fe8ffa79b37082b2fcf38a2f0dec9d";
+    sha256 = "94c7ab0810ee6fdb66a4689b48e537b57e2dbee277cb1de2ece7a7f4d8c83001";
   };
 
-  propagatedBuildInputs = [ zc_buildout ];
+  propagatedBuildInputs = [ zc-buildout ];
   checkInputs = [ zope_testrunner ];
   doCheck = !python.pkgs.isPy27;
   checkPhase = ''

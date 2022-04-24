@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
-  name = "perseus-4-beta";
+  pname = "perseus";
   version = "4-beta";
   nativeBuildInputs = [ unzip ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.sas.upenn.edu/~vnanda/perseus/index.html";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [erikryb];
+    maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;
   };
 }

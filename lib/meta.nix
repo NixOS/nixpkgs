@@ -78,7 +78,7 @@ rec {
 
        2. (modern) a pattern for the platform `parsed` field.
 
-     We can inject these into a patten for the whole of a structured platform,
+     We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
   platformMatch = platform: elem: let
@@ -87,4 +87,43 @@ rec {
         then { system = elem; }
         else { parsed = elem; };
     in lib.matchAttrs pattern platform;
+
+  /* Check if a package is available on a given platform.
+
+     A package is available on a platform if both
+
+       1. One of `meta.platforms` pattern matches the given platform.
+
+       2. None of `meta.badPlatforms` pattern matches the given platform.
+  */
+  availableOn = platform: pkg:
+    lib.any (platformMatch platform) pkg.meta.platforms &&
+    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+
+  /* Get the corresponding attribute in lib.licenses
+     from the SPDX ID.
+     For SPDX IDs, see
+     https://spdx.org/licenses
+
+     Type:
+       getLicenseFromSpdxId :: str -> AttrSet
+
+     Example:
+       lib.getLicenseFromSpdxId "MIT" == lib.licenses.mit
+       => true
+       lib.getLicenseFromSpdxId "mIt" == lib.licenses.mit
+       => true
+       lib.getLicenseFromSpdxId "MY LICENSE"
+       => trace: warning: getLicenseFromSpdxId: No license matches the given SPDX ID: MY LICENSE
+       => { shortName = "MY LICENSE"; }
+  */
+  getLicenseFromSpdxId =
+    let
+      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
+        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
+    in licstr:
+      spdxLicenses.${ lib.toLower licstr } or (
+        lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
+        { shortName = licstr; }
+      );
 }

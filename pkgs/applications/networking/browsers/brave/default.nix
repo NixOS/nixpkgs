@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl
 , dpkg
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -12,8 +12,7 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , gtk3
 , libpulseaudio
@@ -36,17 +35,20 @@
 , nspr
 , nss
 , pango
+, pipewire
 , udev
+, wayland
 , xorg
 , zlib
 , xdg-utils
 , wrapGAppsHook
+, commandLineArgs ? ""
 }:
 
 let
 
 rpath = lib.makeLibraryPath [
-  alsaLib
+  alsa-lib
   at-spi2-atk
   at-spi2-core
   atk
@@ -58,7 +60,6 @@ rpath = lib.makeLibraryPath [
   freetype
   gdk-pixbuf
   glib
-  gnome2.GConf
   gtk3
   libdrm
   libpulseaudio
@@ -80,7 +81,9 @@ rpath = lib.makeLibraryPath [
   nspr
   nss
   pango
+  pipewire
   udev
+  wayland
   xdg-utils
   xorg.libxcb
   zlib
@@ -90,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.21.77";
+  version = "1.37.116";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "Q7paeGAvdmc4+FP28ASLlJhN1ui7M5fDpxnrh+gbEm4=";
+    sha256 = "HoqmzUyYas5ho9S8ZeXHj+LuNspejuQ69B6HxuKXWtw=";
   };
 
   dontConfigure = true;
@@ -104,11 +107,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
-  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+  buildInputs = [ glib gsettings-desktop-schemas gnome.adwaita-icon-theme ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out $out/bin
 
       cp -R usr/share $out
@@ -122,9 +127,11 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+          --set-rpath "${rpath}" $exe
+      done
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
@@ -148,6 +155,14 @@ stdenv.mkDerivation rec {
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+
+      runHook postInstall
+  '';
+
+  preFixup = ''
+    # Add command line args to wrapGApp.
+    gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
+    gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}")
   '';
 
   installCheckPhase = ''
@@ -160,7 +175,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#" + lib.replaceStrings [ "." ] [ "" ] version;
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you

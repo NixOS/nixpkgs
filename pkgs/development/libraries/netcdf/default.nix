@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl
+, fetchurl, unzip
 , hdf5
 , m4
 , curl # for DAP
@@ -7,15 +7,14 @@
 }:
 
 let
-  mpiSupport = hdf5.mpiSupport;
-  mpi = hdf5.mpi;
+  inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
-  pname = "netcdf";
-  version = "4.7.4";
+  pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
+  version = "4.8.1";
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
-    sha256 = "1a2fpp15a2rl1m50gcvvzd9y6bavl6vjf9zzf63sz5gdmq06yiqf";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    sha256 = "1cbjwjmp9691clacw5v88hmpz46ngxs3bfpkf2xy1j7cvlkc72l0";
   };
 
   postPatch = ''
@@ -31,8 +30,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
-    mpiSupport = mpiSupport;
-    inherit mpi;
+    inherit mpiSupport mpi;
   };
 
   configureFlags = [
@@ -49,7 +47,8 @@ in stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
-  doCheck = !mpiSupport;
+  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+  checkInputs = [ unzip ];
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";

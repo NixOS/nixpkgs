@@ -3,7 +3,7 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkg-config
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
-, alsaLib
+, alsa-lib
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2, gdk-pixbuf
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
@@ -15,22 +15,17 @@
 , libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
-let
-  v_maj = "4.8";
-  v_min = "7";
-  vers = "${v_maj}.${v_min}";
-in
-
 # TODO:
 #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
 #    false build-time dependencies
 
 stdenv.mkDerivation rec {
-  name = "qt-${vers}";
+  pname = "qt" + lib.optionalString ( docs && demos && examples && developerBuild ) "-full";
+  version = "4.8.7";
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
-      + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
+      + "${lib.versions.majorMinor version}/${version}/qt-everywhere-opensource-src-${version}.tar.gz";
     sha256 = "183fca7n7439nlhxyg1z7aky0izgbyll3iwakw4gwivy16aj5272";
   };
 
@@ -40,8 +35,6 @@ stdenv.mkDerivation rec {
 
   setOutputFlags = false;
 
-  # The version property must be kept because it will be included into the QtSDK package name
-  version = vers;
 
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
@@ -97,6 +90,16 @@ stdenv.mkDerivation rec {
           + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
         sha256 = "0dzn6qxrgxb75rvck9kmy5gspawdn970wsjw56026dhkih8cp3pg";
       })
+
+      # Pull upstream fix for gcc-11 support.
+      (fetchpatch {
+        name = "gcc11-ptr-cmp.patch";
+        url = "https://github.com/qt/qttools/commit/7138c963f9d1258bc1b49cb4d63c3e2b7d0ccfda.patch";
+        sha256 = "1a9g05r267c94qpw3ssb6k4lci200vla3vm5hri1nna6xwdsmrhc";
+        # "src/" -> "tools/"
+        stripLen = 2;
+        extraPrefix = "tools/";
+      })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
@@ -121,13 +124,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     configureFlags+="
-      -docdir $out/share/doc/${name}
+      -docdir $out/share/doc/qt-${version}
       -plugindir $out/lib/qt4/plugins
       -importdir $out/lib/qt4/imports
-      -examplesdir $TMPDIR/share/doc/${name}/examples
-      -demosdir $TMPDIR/share/doc/${name}/demos
-      -datadir $out/share/${name}
-      -translationdir $out/share/${name}/translations
+      -examplesdir $TMPDIR/share/doc/qt-${version}/examples
+      -demosdir $TMPDIR/share/doc/qt-${version}/demos
+      -datadir $out/share/qt-${version}
+      -translationdir $out/share/qt-${version}/translations
       --jobs=$NIX_BUILD_CORES
     "
     unset LD # Makefile uses gcc for linking; setting LD interferes
@@ -204,7 +207,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
     ++ lib.optionals (stdenv.isFreeBSD || stdenv.isDarwin)
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
-    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
+    ++ lib.optional stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1");
 
   NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
@@ -229,10 +232,10 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
-    homepage    = "http://qt-project.org/";
+    homepage    = "https://qt-project.org/";
     description = "A cross-platform application framework for C++";
     license     = lib.licenses.lgpl21Plus; # or gpl3
-    maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
+    maintainers = with lib.maintainers; [ orivej lovek323 sander ];
     platforms   = lib.platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];
   };

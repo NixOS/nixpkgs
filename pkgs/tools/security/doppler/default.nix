@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "doppler";
-  version = "3.23.1";
+  version = "3.38.0";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
     rev = version;
-    sha256 = "sha256-6sTsASfHIFH1V3Q20R2y8AiOVZ4NR4GGRCKRVr25kkc=";
+    sha256 = "sha256-GKsq6AhkhacG+5XIELpe58bDe5l3BnLCwJHMkCzTzJU=";
   };
 
-  vendorSha256 = "sha256-UaR/xYGMI+C9aID85aPSfVzmTWXj4KcjfOJ6TTJ8KoY=";
+  vendorSha256 = "sha256-VPxHxNtDeP5CFDMTeMsZYED9ZGWMquJdeupeCVldY/E=";
 
-  buildFlagsArray = "-ldflags=-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}";
+  ldflags = [ "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}" ];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/doppler

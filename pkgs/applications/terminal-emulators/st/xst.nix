@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, ncurses, libXext, libXft, fontconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, libX11
+, libXext
+, libXft
+, ncurses
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "xst";
@@ -11,11 +20,23 @@ stdenv.mkDerivation rec {
     sha256 = "nOJcOghtzFkl7B/4XeXptn2TdrGQ4QTKBo+t+9npxOA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 ncurses libXext libXft fontconfig ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    fontconfig
+    libX11
+    libXext
+    libXft
+    ncurses
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     TERMINFO=$out/share/terminfo make install PREFIX=$out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

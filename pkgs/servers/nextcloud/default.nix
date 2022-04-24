@@ -16,8 +16,10 @@ let
     passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/
       cp -R . $out/
+      runHook postInstall
     '';
 
     meta = with lib; {
@@ -31,34 +33,27 @@ let
     };
   };
 in {
-  nextcloud18 = throw ''
-    Nextcloud v18 has been removed from `nixpkgs` as the support for it was dropped
-    by upstream in 2021-01. Please upgrade to at least Nextcloud v19 by
-    declaring
+  nextcloud21 = throw ''
+    Nextcloud v21 has been removed from `nixpkgs` as the support for it was dropped
+    by upstream in 2022-02. Please upgrade to at least Nextcloud v22 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud19;
+        services.nextcloud.package = pkgs.nextcloud22;
 
     in your NixOS config.
 
-    [1] https://docs.nextcloud.com/server/18/admin_manual/release_schedule.html
+    WARNING: if you were on Nextcloud 20 on NixOS 21.11 you have to upgrade to Nextcloud 21
+    first on 21.11 because Nextcloud doesn't support upgrades accross multiple major versions!
   '';
 
-  # FIXME(@Ma27) remove on 21.05
-  nextcloud19 = generic {
-    version = "19.0.6";
-    sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
-    extraVulnerabilities = [
-      "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed! Please note that both CVEs only affect the file encryption module which is turned off by default. Alternatively, `pkgs.nextcloud20` can be used."
-    ];
+  nextcloud22 = generic {
+    version = "22.2.7";
+    sha256 = "5ada41cb3e69665e8a13946f71978829c0a0163d0277a49e599c9e8ccf960eab";
   };
 
-  nextcloud20 = generic {
-    version = "20.0.7";
-    sha256 = "sha256-jO2Ct3K/CvZ9W+EyPkD5d0KbwKK8yGQJXvx4dnUAtys=";
+  nextcloud23 = generic {
+    version = "23.0.4";
+    sha256 = "67191c2b8b41591ae42accfb32216313fde0e107201682cb39029f890712bc6a";
   };
-
-  nextcloud21 = generic {
-    version = "21.0.0";
-    sha256 = "sha256-zq2u72doWhGvxbI7Coa6PHvQp7E41dHswFJiODZV8fA=";
-  };
+  # tip: get she sha with:
+  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

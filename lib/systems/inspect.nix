@@ -17,6 +17,10 @@ rec {
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isMips         = { cpu = { family = "mips"; }; };
+    isMips32       = { cpu = { family = "mips"; bits = 32; }; };
+    isMips64       = { cpu = { family = "mips"; bits = 64; }; };
+    isMips64n32    = { cpu = { family = "mips"; bits = 64; }; abi = { abi = "n32"; }; };
+    isMips64n64    = { cpu = { family = "mips"; bits = 64; }; abi = { abi = "64";  }; };
     isMmix         = { cpu = { family = "mmix"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
@@ -26,6 +30,8 @@ rec {
     isAvr          = { cpu = { family = "avr"; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
     isOr1k         = { cpu = { family = "or1k"; }; };
+    isM68k         = { cpu = { family = "m68k"; }; };
+    isS390         = { cpu = { family = "s390"; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
 
     is32bit        = { cpu = { bits = 32; }; };
@@ -54,7 +60,8 @@ rec {
     isNone         = { kernel = kernels.none; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
-    isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
+    isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnu gnueabi gnueabihf ];
+    isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
     isEfi          = map (family: { cpu.family = family; })

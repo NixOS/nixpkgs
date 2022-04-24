@@ -1,6 +1,6 @@
-{ appleDerivation }:
+{ appleDerivation', stdenv }:
 
-appleDerivation {
+appleDerivation' stdenv {
   dontBuild = true;
   installPhase = ''
     mkdir -p $out/include/ppp

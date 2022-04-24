@@ -22,7 +22,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     maintainers = with maintainers; [ dtzWill ];
-
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

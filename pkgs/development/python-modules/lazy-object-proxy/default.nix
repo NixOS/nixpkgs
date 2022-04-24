@@ -1,25 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
-, setuptools_scm
+, pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.5.2";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5944a9b95e97de1980c65f03b79b356f30a43de48682b8bdd90aa5089f0ec1f4";
+    sha256 = "d609c75b986def706743cdebe5e47553f4a5a1da9c5ff66d76013ef396b5a8a4";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test tests
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace ",<6.0" ""
+    substituteInPlace setup.cfg --replace ",<6.0" ""
   '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # Broken tests. Seem to be fixed upstream according to Travis.
   doCheck = false;

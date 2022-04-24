@@ -1,10 +1,11 @@
 let
   testString = "can-use-subgroups";
-in import ../make-test-python.nix ({lib, php, ...}: {
+in
+import ../make-test-python.nix ({ lib, php, ... }: {
   name = "php-${php.version}-httpd-pcre-jit-test";
   meta.maintainers = lib.teams.php.members;
 
-  machine = { lib, pkgs, ... }: {
+  nodes.machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";
     services.httpd = {
       enable = true;
@@ -12,14 +13,15 @@ in import ../make-test-python.nix ({lib, php, ...}: {
       phpPackage = php;
       enablePHP = true;
       phpOptions = "pcre.jit = true";
-      extraConfig = let
-        testRoot = pkgs.writeText "index.php"
-          ''
-            <?php
-            preg_match('/(${testString})/', '${testString}', $result);
-            var_dump($result);
-          '';
-      in
+      extraConfig =
+        let
+          testRoot = pkgs.writeText "index.php"
+            ''
+              <?php
+              preg_match('/(${testString})/', '${testString}', $result);
+              var_dump($result);
+            '';
+        in
         ''
           Alias / ${testRoot}/
 

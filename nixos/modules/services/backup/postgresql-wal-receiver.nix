@@ -7,7 +7,7 @@ let
     options = {
       postgresqlPackage = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql_11";
+        example = literalExpression "pkgs.postgresql_11";
         description = ''
           PostgreSQL package to use.
         '';
@@ -15,7 +15,7 @@ let
 
       directory = mkOption {
         type = types.path;
-        example = literalExample "/mnt/pg_wal/main/";
+        example = literalExpression "/mnt/pg_wal/main/";
         description = ''
           Directory to write the output to.
         '';
@@ -88,7 +88,7 @@ let
       extraArgs = mkOption {
         type = with types; listOf str;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "--no-sync"
           ]
@@ -101,7 +101,7 @@ let
       environment = mkOption {
         type = with types; attrsOf str;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           {
             PGPASSFILE = "/private/passfile";
             PGSSLMODE = "require";
@@ -121,7 +121,7 @@ in {
       receivers = mkOption {
         type = with types; attrsOf (submodule receiverSubmodule);
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           {
             main = {
               postgresqlPackage = pkgs.postgresql_11;

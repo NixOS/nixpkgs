@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  name = "z3-${version}";
+  pname = "z3";
   version = "4.4.0";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # z3's install phase is stupid because it tries to calculate the
   # python package store location itself, meaning it'll attempt to
   # write files into the nix store, and fail.
-  soext = if stdenv.system == "x86_64-darwin" then ".dylib" else ".so";
+  soext = stdenv.hostPlatform.extensions.sharedLibrary;
   installPhase = ''
     mkdir -p $out/bin $out/lib/${python.libPrefix}/site-packages $out/include
     cp ../src/api/z3*.h       $out/include

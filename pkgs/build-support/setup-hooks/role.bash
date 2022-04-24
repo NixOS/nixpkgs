@@ -17,7 +17,7 @@ function getRole() {
             role_post='_FOR_TARGET'
             ;;
         *)
-            echo "@name@: used as improper sort of dependency" >2
+            echo "@name@: used as improper sort of dependency" >&2
             return 1
             ;;
     esac
@@ -64,7 +64,7 @@ function getTargetRoleWrapper() {
             export NIX_@wrapperName@_TARGET_TARGET_@suffixSalt@=1
             ;;
         *)
-            echo "@name@: used as improper sort of dependency" >2
+            echo "@name@: used as improper sort of dependency" >&2
             return 1
             ;;
     esac

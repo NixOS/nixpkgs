@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hy5a3q5092szk2x3s9lpn1zkszgq9bp15rxzdncxlvnanyzsasf";
   };
 
-
-  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff xlibsWrapper SDL ];
+  nativeBuildInputs = [ automake autoconf ];
+  buildInputs = [ boost zlib libpng libjpeg libtiff xlibsWrapper SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out

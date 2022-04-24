@@ -76,13 +76,14 @@ in
 
   enableOCR = true;
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     { imports = [ ./common/user-account.nix ./common/x11.nix ];
 
       # chromium-based browsers refuse to run as root
       test-support.displayManager.auto.user = "alice";
+
       # browsers may hang with the default memory
-      virtualisation.memorySize = "500";
+      virtualisation.memorySize = 600;
 
       networking.hosts."127.0.0.1" = [ "good.example.com" "bad.example.com" ];
       security.pki.certificateFiles = [ "${example-good-cert}/ca.crt" ];
@@ -92,20 +93,32 @@ in
         { onlySSL = true;
           sslCertificate = "${example-good-cert}/server.crt";
           sslCertificateKey = "${example-good-cert}/server.key";
-          locations."/".extraConfig = "return 200 'It works!';";
+          locations."/".extraConfig = ''
+            add_header Content-Type text/plain;
+            return 200 'It works!';
+          '';
         };
       services.nginx.virtualHosts."bad.example.com" =
         { onlySSL = true;
           sslCertificate = "${example-bad-cert}/server.crt";
           sslCertificateKey = "${example-bad-cert}/server.key";
-          locations."/".extraConfig = "return 200 'It does not work!';";
+          locations."/".extraConfig = ''
+            add_header Content-Type text/plain;
+            return 200 'It does not work!';
+          '';
         };
 
-      environment.systemPackages = with pkgs;
-        [ xdotool firefox chromium falkon midori ];
+      environment.systemPackages = with pkgs; [
+        xdotool
+        firefox
+        chromium
+        qutebrowser
+        midori
+      ];
     };
 
   testScript = ''
+    from typing import Tuple
     def execute_as(user: str, cmd: str) -> Tuple[int, str]:
         """
         Run a shell command as a specific user.
@@ -138,14 +151,19 @@ in
     with subtest("Unknown CA is untrusted in curl"):
         machine.fail("curl -fv https://bad.example.com")
 
-    browsers = ["firefox", "chromium", "falkon", "midori"]
-    errors = ["Security Risk", "not private", "Certificate Error", "Security"]
+    browsers = {
+      "firefox": "Security Risk",
+      "chromium": "not private",
+      "qutebrowser -T": "Certificate error",
+      "midori": "Security"
+    }
 
     machine.wait_for_x()
-    for browser, error in zip(browsers, errors):
+    for command, error in browsers.items():
+        browser = command.split()[0]
         with subtest("Good certificate is trusted in " + browser):
             execute_as(
-                "alice", f"env P11_KIT_DEBUG=trust {browser} https://good.example.com & >&2"
+                "alice", f"{command} https://good.example.com >&2 &"
             )
             wait_for_window_as("alice", browser)
             machine.wait_for_text("It works!")
@@ -153,9 +171,9 @@ in
             execute_as("alice", "xdotool key ctrl+w")  # close tab
 
         with subtest("Unknown CA is untrusted in " + browser):
-            execute_as("alice", f"{browser} https://bad.example.com & >&2")
+            execute_as("alice", f"{command} https://bad.example.com >&2 &")
             machine.wait_for_text(error)
             machine.screenshot("bad" + browser)
-            machine.succeed("pkill " + browser)
+            machine.succeed("pkill -f " + browser)
   '';
 })

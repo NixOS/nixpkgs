@@ -1,9 +1,11 @@
 #! @runtimeShell@
+# shellcheck shell=bash
 
 if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
 set -e
 set -o pipefail
+shopt -s inherit_errexit
 
 export PATH=@path@:$PATH
 
@@ -15,6 +17,7 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
+copyClosureFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=()
@@ -24,11 +27,19 @@ fast=
 rollback=
 upgrade=
 upgrade_all=
-repair=
 profile=/nix/var/nix/profiles/system
-buildHost=
+buildHost=localhost
 targetHost=
-maybeSudo=()
+remoteSudo=
+verboseScript=
+noFlake=
+# comma separated list of vars to preserve when using sudo
+preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+
+# log the given argument to stderr
+log() {
+    echo "$@" >&2
+}
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -41,7 +52,7 @@ while [ "$#" -gt 0 ]; do
         action="$i"
         ;;
       --install-grub)
-        echo "$0: --install-grub deprecated, use --install-bootloader instead" >&2
+        log "$0: --install-grub deprecated, use --install-bootloader instead"
         export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --install-bootloader)
@@ -60,15 +71,18 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
-      --repair)
-        repair=1
-        extraBuildFlags+=("$i")
+      --use-substitutes|-s)
+        copyClosureFlags+=("$i")
         ;;
-      --max-jobs|-j|--cores|-I|--builders)
+      -I|--max-jobs|-j|--cores|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--offline|--impure)
+      -j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
+        extraBuildFlags+=("$i")
+        ;;
+      --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
+        verboseScript="true"
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -79,11 +93,10 @@ while [ "$#" -gt 0 ]; do
       --fast)
         buildNix=
         fast=1
-        extraBuildFlags+=(--show-trace)
         ;;
       --profile-name|-p)
         if [ -z "$1" ]; then
-            echo "$0: ‘--profile-name’ requires an argument"
+            log "$0: ‘--profile-name’ requires an argument"
             exit 1
         fi
         if [ "$1" != system ]; then
@@ -101,12 +114,15 @@ while [ "$#" -gt 0 ]; do
         shift 1
         ;;
       --use-remote-sudo)
-        maybeSudo=(sudo --)
+        remoteSudo=1
         ;;
       --flake)
         flake="$1"
-        flakeFlags=(--experimental-features 'nix-command flakes')
+        flakeFlags=(--extra-experimental-features 'nix-command flakes')
         shift 1
+        ;;
+      --no-flake)
+        noFlake=1
         ;;
       --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
         lockFlags+=("$i")
@@ -121,17 +137,17 @@ while [ "$#" -gt 0 ]; do
         lockFlags+=("$i" "$j" "$k")
         ;;
       *)
-        echo "$0: unknown option \`$i'"
+        log "$0: unknown option \`$i'"
         exit 1
         ;;
     esac
 done
 
-if [ -n "$SUDO_USER" ]; then
-    maybeSudo=(sudo --)
+if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
+    maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
-if [ -z "$buildHost" -a -n "$targetHost" ]; then
+if [[ -z "$buildHost" && -n "$targetHost" ]]; then
     buildHost="$targetHost"
 fi
 if [ "$targetHost" = localhost ]; then
@@ -141,42 +157,61 @@ if [ "$buildHost" = localhost ]; then
     buildHost=
 fi
 
+# log the given argument to stderr if verbose mode is on
+logVerbose() {
+    if [ -n "$verboseScript" ]; then
+      echo "$@" >&2
+    fi
+}
+
+# Run a command, logging it first if verbose mode is on
+runCmd() {
+    logVerbose "$" "$@"
+    "$@"
+}
+
 buildHostCmd() {
     if [ -z "$buildHost" ]; then
-        "$@"
+        runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix":'$PATH' "${maybeSudo[@]}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
-        ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
     fi
 }
 
 targetHostCmd() {
     if [ -z "$targetHost" ]; then
-        "${maybeSudo[@]}" "$@"
+        runCmd "${maybeSudo[@]}" "$@"
     else
-        ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
+        runCmd ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
     fi
 }
 
 copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --from "$buildHost" "$1"
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$targetHost" "$1"
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
         else
-            buildHostCmd nix-copy-closure --to "$targetHost" "$1"
+            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
         fi
     fi
 }
 
 nixBuild() {
+    logVerbose "Building in legacy (non-flake) mode."
     if [ -z "$buildHost" ]; then
-        nix-build "$@"
+        logVerbose "No --build-host given, running nix-build locally"
+        runCmd nix-build "$@"
     else
+        logVerbose "buildHost set to \"$buildHost\", running nix-build remotely"
         local instArgs=()
         local buildArgs=()
+        local drv=
 
         while [ "$#" -gt 0 ]; do
             local i="$1"; shift 1
@@ -203,15 +238,67 @@ nixBuild() {
             esac
         done
 
-        local drv="$(nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
+        drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
-            NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$buildHost" "$drv"
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
-            echo "nix-instantiate failed"
+            log "nix-instantiate failed"
             exit 1
         fi
   fi
+}
+
+nixFlakeBuild() {
+    logVerbose "Building in flake mode."
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot ]]
+    then
+        runCmd nix "${flakeFlags[@]}" build "$@"
+        readlink -f ./result
+    elif [ -z "$buildHost" ]; then
+        runCmd nix "${flakeFlags[@]}" build "$@" --out-link "${tmpDir}/result"
+        readlink -f "${tmpDir}/result"
+    else
+        local attr="$1"
+        shift 1
+        local evalArgs=()
+        local buildArgs=()
+        local drv=
+
+        while [ "$#" -gt 0 ]; do
+            local i="$1"; shift 1
+            case "$i" in
+              --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+                evalArgs+=("$i")
+                ;;
+              --update-input)
+                local j="$1"; shift 1
+                evalArgs+=("$i" "$j")
+                ;;
+              --override-input)
+                local j="$1"; shift 1
+                local k="$1"; shift 1
+                evalArgs+=("$i" "$j" "$k")
+                ;;
+              --impure) # We don't want this in buildArgs, it's only needed at evaluation time, and unsupported during realisation
+                ;;
+              *)
+                buildArgs+=("$i")
+                ;;
+            esac
+        done
+
+        drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
+        if [ -a "$drv" ]; then
+            logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+            buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
+        else
+            log "nix eval failed"
+            exit 1
+        fi
+    fi
 }
 
 
@@ -223,7 +310,7 @@ if [ -z "$action" ]; then showSyntax; fi
 # executed, so it's safe to run nixos-rebuild against a potentially
 # untrusted tree.
 canRun=
-if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
+if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
     canRun=1
 fi
 
@@ -239,11 +326,11 @@ if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
         channel_name=$(basename "$channelpath")
 
         if [[ "$channel_name" == "nixos" ]]; then
-            nix-channel --update "$channel_name"
+            runCmd nix-channel --update "$channel_name"
         elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
-            nix-channel --update "$channel_name"
+            runCmd nix-channel --update "$channel_name"
         elif [[ -n $upgrade_all ]] ; then
-            nix-channel --update "$channel_name"
+            runCmd nix-channel --update "$channel_name"
         fi
     done
 fi
@@ -261,18 +348,8 @@ fi
 
 # Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
 # actual flake.
-if [[ -z $flake && -e /etc/nixos/flake.nix ]]; then
+if [[ -z $flake && -e /etc/nixos/flake.nix && -z $noFlake ]]; then
     flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
-fi
-
-# Re-execute nixos-rebuild from the Nixpkgs tree.
-# FIXME: get nixos-rebuild from $flake.
-if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast && -z $flake ]]; then
-    if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
-        export _NIXOS_REBUILD_REEXEC=1
-        exec $p/bin/nixos-rebuild "${origArgs[@]}"
-        exit 1
-    fi
 fi
 
 # For convenience, use the hostname as the default configuration to
@@ -293,28 +370,8 @@ if [[ -n $flake ]]; then
     fi
 fi
 
-# Resolve the flake.
-if [[ -n $flake ]]; then
-    flake=$(nix "${flakeFlags[@]}" flake metadata --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
-fi
-
-# Find configuration.nix and open editor instead of building.
-if [ "$action" = edit ]; then
-    if [[ -z $flake ]]; then
-        NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
-        if [[ -d $NIXOS_CONFIG ]]; then
-            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
-        fi
-        exec ${EDITOR:-nano} "$NIXOS_CONFIG"
-    else
-        exec nix "${flakeFlags[@]}" edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
-    fi
-    exit 1
-fi
-
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 cleanup() {
     for ctrl in "$tmpDir"/ssh-*; do
@@ -325,9 +382,47 @@ cleanup() {
 trap cleanup EXIT
 
 
+# Re-execute nixos-rebuild from the Nixpkgs tree.
+if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
+    if [[ -z $flake ]]; then
+        if p=$(runCmd nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
+            SHOULD_REEXEC=1
+        fi
+    else
+        runCmd nix "${flakeFlags[@]}" build --out-link "${tmpDir}/nixos-rebuild" "$flake#$flakeAttr.config.system.build.nixos-rebuild" "${extraBuildFlags[@]}" "${lockFlags[@]}"
+        if p=$(readlink -e "${tmpDir}/nixos-rebuild"); then
+            SHOULD_REEXEC=1
+        fi
+    fi
+
+    if [[ -n $SHOULD_REEXEC ]]; then
+        export _NIXOS_REBUILD_REEXEC=1
+        # Manually call cleanup as the EXIT trap is not triggered when using exec
+        cleanup
+        runCmd exec "$p/bin/nixos-rebuild" "${origArgs[@]}"
+        exit 1
+    fi
+fi
+
+# Find configuration.nix and open editor instead of building.
+if [ "$action" = edit ]; then
+    if [[ -z $flake ]]; then
+        NIXOS_CONFIG=${NIXOS_CONFIG:-$(runCmd nix-instantiate --find-file nixos-config)}
+        if [[ -d $NIXOS_CONFIG ]]; then
+            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
+        fi
+        runCmd exec ${EDITOR:-nano} "$NIXOS_CONFIG"
+    else
+        runCmd exec nix "${flakeFlags[@]}" edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
+    fi
+    exit 1
+fi
+
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
+
 # First build Nix, since NixOS may require a newer version than the
 # current one.
-if [ -n "$rollback" -o "$action" = dry-build ]; then
+if [[ -n "$rollback" || "$action" = dry-build ]]; then
     buildNix=
 fi
 
@@ -345,43 +440,43 @@ prebuiltNix() {
         echo @nix_x86_64_linux@
     elif [[ "$machine" =~ i.86 ]]; then
         echo @nix_i686_linux@
+    elif [[ "$machine" = aarch64 ]]; then
+        echo @nix_aarch64_linux@
     else
-        echo "$0: unsupported platform"
+        log "$0: unsupported platform"
         exit 1
     fi
 }
 
-remotePATH=
-
 if [[ -n $buildNix && -z $flake ]]; then
-    echo "building Nix..." >&2
+    log "building Nix..."
     nixDrv=
-    if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
-        if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
-            if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A $(nixSystem) | sed -e 's/^"//' -e 's/"$//')"; then
+    if ! nixDrv="$(runCmd nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
+        if ! nixDrv="$(runCmd nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then
+            if ! nixStorePath="$(runCmd nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
                 nixStorePath="$(prebuiltNix "$(uname -m)")"
             fi
-            if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
+            if ! runCmd nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
-                echo "warning: don't know how to get latest Nix" >&2
+                log "warning: don't know how to get latest Nix"
             fi
             # Older version of nix-store -r don't support --add-root.
-            [ -e $tmpDir/nix ] || ln -sf $nixStorePath $tmpDir/nix
+            [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
             if [ -n "$buildHost" ]; then
-                remoteNixStorePath="$(prebuiltNix "$(buildHostCmd uname -m)")"
+                remoteNixStorePath="$(runCmd prebuiltNix "$(buildHostCmd uname -m)")"
                 remoteNix="$remoteNixStorePath/bin"
-                if ! buildHostCmd nix-store -r $remoteNixStorePath \
+                if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
                   --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
                     remoteNix=
-                    echo "warning: don't know how to get latest Nix" >&2
+                    log "warning: don't know how to get latest Nix"
                 fi
             fi
         fi
     fi
     if [ -a "$nixDrv" ]; then
-        nix-store -r "$nixDrv"'!'"out" --add-root $tmpDir/nix --indirect >/dev/null
+        nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
-            nix-copy-closure --to "$buildHost" "$nixDrv"
+            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"
@@ -395,8 +490,8 @@ fi
 # Update the version suffix if we're building from Git (so that
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
-    if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$($SHELL $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
+    if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
+        suffix=$(runCmd $SHELL "$nixpkgs/nixos/modules/installer/tools/get-version-suffix" "${extraBuildFlags[@]}" || true)
         if [ -n "$suffix" ]; then
             echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi
@@ -413,53 +508,45 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
-    echo "building the system configuration..." >&2
-    if [ "$action" = switch -o "$action" = boot ]; then
+    log "building the system configuration..."
+    if [[ "$action" = switch || "$action" = boot ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
-            outLink=$tmpDir/result
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
-            pathToConfig="$(readlink -f $outLink)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
-    elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
+    elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
-            pathToConfig="$(readlink -f ./result)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     elif [ "$action" = build-vm ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
         else
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vm" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}"
-            pathToConfig="$(readlink -f ./result)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vm" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     elif [ "$action" = build-vm-with-bootloader ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vmWithBootLoader" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}"
-            pathToConfig="$(readlink -f ./result)"
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     else
         showSyntax
     fi
     # Copy build to target host if we haven't already done it
-    if ! [ "$action" = switch -o "$action" = boot ]; then
+    if ! [[ "$action" = switch || "$action" = boot ]]; then
         copyToTarget "$pathToConfig"
     fi
 else # [ -n "$rollback" ]
-    if [ "$action" = switch -o "$action" = boot ]; then
+    if [[ "$action" = switch || "$action" = boot ]]; then
         targetHostCmd nix-env --rollback -p "$profile"
         pathToConfig="$profile"
-    elif [ "$action" = test -o "$action" = build ]; then
+    elif [[ "$action" = test || "$action" = build ]]; then
         systemNumber=$(
             targetHostCmd nix-env -p "$profile" --list-generations |
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
@@ -476,17 +563,17 @@ fi
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = dry-activate ]; then
-    if ! targetHostCmd $pathToConfig/bin/switch-to-configuration "$action"; then
-        echo "warning: error(s) occurred while switching to the new configuration" >&2
+if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
+        log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi
 fi
 
 
-if [ "$action" = build-vm ]; then
+if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
     cat >&2 <<EOF
 
-Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)
+Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
 fi

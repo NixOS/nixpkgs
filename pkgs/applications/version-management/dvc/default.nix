@@ -1,65 +1,108 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
+, fetchpatch
 , enableGoogle ? false
 , enableAWS ? false
 , enableAzure ? false
 , enableSSH ? false
 }:
 
-with python3Packages;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "0.24.3";
+  version = "2.9.5";
+  format = "setuptools";
 
-  # PyPi only has wheel
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = "dvc";
+    repo = pname;
     rev = version;
-    sha256 = "1wqq4i23hppilp20fx5a5nj93xwf3wwwr2f8aasvn6jkv2l22vpl";
+    hash = "sha256-MviiA0ja1IaxMPlqu2dhIGBcdEXiEvBYnK9731dihMg=";
   };
 
-  propagatedBuildInputs = [
-    ply
-    configparser
-    zc_lockfile
-    future
-    colorama
-    configobj
-    networkx
-    pyyaml
-    GitPython
-    setuptools
-    nanotime
-    pyasn1
-    schema
-    jsonpath_rw
-    requests
-    grandalf
-    asciimatics
-    distro
-    appdirs
-  ]
-  ++ lib.optional enableGoogle google-cloud-storage
-  ++ lib.optional enableAWS boto3
-  ++ lib.optional enableAzure azure-storage-blob
-  ++ lib.optional enableSSH paramiko;
+  # make the patch apply
+  prePatch = ''
+    substituteInPlace setup.cfg \
+      --replace "scmrepo==0.0.7" "scmrepo==0.0.10"
+  '';
 
-  # tests require access to real cloud services
-  # nix build tests have to be isolated and run locally
-  doCheck = false;
-
-  patches = [ ./dvc-daemon.patch ];
+  patches = [
+    ./dvc-daemon.patch
+    (fetchpatch {
+      url = "https://github.com/iterative/dvc/commit/ab54b5bdfcef3576b455a17670b8df27beb504ce.patch";
+      sha256 = "sha256-wzMK6Br7/+d3EEGpfPuQ6Trj8IPfehdUvOvX3HZlS+o=";
+    })
+  ];
 
   postPatch = ''
-    substituteInPlace dvc/daemon.py --subst-var-by dvc "$out/bin/dcv"
+    substituteInPlace setup.cfg \
+      --replace "grandalf==0.6" "grandalf>=0.6" \
+      --replace "scmrepo==0.0.13" "scmrepo"
+    substituteInPlace dvc/daemon.py \
+      --subst-var-by dvc "$out/bin/dcv"
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+    setuptools-scm-git-archive
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    appdirs
+    aiohttp-retry
+    colorama
+    configobj
+    configobj
+    dictdiffer
+    diskcache
+    distro
+    dpath
+    flatten-dict
+    flufl_lock
+    funcy
+    grandalf
+    nanotime
+    networkx
+    pathspec
+    ply
+    psutil
+    pydot
+    pygtrie
+    pyparsing
+    python-benedict
+    requests
+    rich
+    ruamel-yaml
+    scmrepo
+    shortuuid
+    shtab
+    tabulate
+    toml
+    tqdm
+    typing-extensions
+    voluptuous
+    zc_lockfile
+  ] ++ lib.optional enableGoogle [
+    google-cloud-storage
+  ] ++ lib.optional enableAWS [
+    boto3
+  ] ++ lib.optional enableAzure [
+    azure-storage-blob
+  ] ++ lib.optional enableSSH [
+    paramiko
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
+
+  # Tests require access to real cloud services
+  doCheck = false;
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
-    license = licenses.asl20;
     homepage = "https://dvc.org";
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cmcdragonkai fab ];
   };
 }

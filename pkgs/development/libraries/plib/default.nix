@@ -2,11 +2,12 @@
 , libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "plib-1.8.5";
+  pname = "plib";
+  version = "1.8.5";
 
   src = fetchurl {
     # XXX: The author doesn't use the orthodox SF way to store tarballs.
-    url = "http://plib.sourceforge.net/dist/${name}.tar.gz";
+    url = "http://plib.sourceforge.net/dist/${pname}-${version}.tar.gz";
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 

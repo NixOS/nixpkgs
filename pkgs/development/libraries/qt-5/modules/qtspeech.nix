@@ -1,7 +1,7 @@
 { qtModule }:
 
 qtModule {
-  name = "qtspeech";
+  pname = "qtspeech";
   qtInputs = [ ];
   outputs = [ "out" "dev" ];
 }

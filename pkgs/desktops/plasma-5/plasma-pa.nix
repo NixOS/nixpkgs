@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-pa";
+  pname = "plasma-pa";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     gconf glib libcanberra-gtk3 libpulseaudio sound-theme-freedesktop
@@ -17,5 +17,4 @@ mkDerivation {
 
     qtbase qtdeclarative
   ];
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
 }

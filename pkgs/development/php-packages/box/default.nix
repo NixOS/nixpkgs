@@ -11,14 +11,17 @@ mkDerivation {
     sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/box/box.phar
     makeWrapper ${php}/bin/php $out/bin/box \
       --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {

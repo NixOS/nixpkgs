@@ -1,4 +1,7 @@
-{ lib, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
+{ lib, mkChromiumDerivation
+, channel, chromiumVersionAtLeast
+, enableWideVine, ungoogled
+}:
 
 with lib;
 
@@ -14,8 +17,11 @@ mkChromiumDerivation (base: rec {
   installPhase = ''
     mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/libvulkan.so.1" "$libExecPath/"
+    cp -v "$buildPath/vk_swiftshader_icd.json" "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
+    cp -v "$buildPath/chrome_crashpad_handler" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     # Swiftshader
@@ -81,14 +87,14 @@ mkChromiumDerivation (base: rec {
       then "https://github.com/Eloston/ungoogled-chromium"
       else "https://www.chromium.org/";
     maintainers = with maintainers; if ungoogled
-      then [ squalus primeos ]
-      else [ primeos thefloweringash bendlas ];
+      then [ squalus primeos michaeladler ]
+      else [ primeos thefloweringash ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "chromium";
     hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
       then ["aarch64-linux" "x86_64-linux"]
       else [];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
-    broken = elem channel [ "beta" "dev" ]; # Build requires LLVM 12
   };
 })

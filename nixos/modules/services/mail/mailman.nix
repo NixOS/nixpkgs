@@ -87,8 +87,8 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.mailman;
-        defaultText = "pkgs.mailman";
-        example = literalExample "pkgs.mailman.override { archivers = []; }";
+        defaultText = literalExpression "pkgs.mailman";
+        example = literalExpression "pkgs.mailman.override { archivers = []; }";
         description = "Mailman package to use";
       };
 
@@ -165,7 +165,7 @@ in {
 
         baseUrl = mkOption {
           type = types.str;
-          default = "http://localhost/hyperkitty/";
+          default = "http://localhost:18507/archives/";
           description = ''
             Where can Mailman connect to Hyperkitty's internal API, preferably on
             localhost?
@@ -192,7 +192,6 @@ in {
         log_dir = "/var/log/mailman";
         lock_dir = "$var_dir/lock";
         etc_dir = "/etc";
-        ext_dir = "$etc_dir/mailman.d";
         pid_file = "/run/mailman/master.pid";
       };
 
@@ -225,7 +224,14 @@ in {
               See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
             '';
           };
-    in (lib.optionals cfg.enablePostfix [
+    in [
+      { assertion = cfg.webHosts != [];
+        message = ''
+          services.mailman.serve.enable requires there to be at least one entry
+          in services.mailman.webHosts.
+        '';
+      }
+    ] ++ (lib.optionals cfg.enablePostfix [
       { assertion = postfix.enable;
         message = ''
           Mailman's default NixOS configuration requires Postfix to be enabled.
@@ -263,7 +269,8 @@ in {
       # settings_local.json is loaded.
       os.environ["SECRET_KEY"] = ""
 
-      from mailman_web.settings import *
+      from mailman_web.settings.base import *
+      from mailman_web.settings.mailman import *
 
       import json
 
@@ -274,15 +281,14 @@ in {
           globals().update(json.load(f))
     '';
 
-    services.nginx = mkIf cfg.serve.enable {
+    services.nginx = mkIf (cfg.serve.enable && cfg.webHosts != []) {
       enable = mkDefault true;
-      virtualHosts."${lib.head cfg.webHosts}" = {
-        serverAliases = cfg.webHosts;
+      virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
           "/".extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
           "/static/".alias = webSettings.STATIC_ROOT + "/";
         };
-      };
+      });
     };
 
     environment.systemPackages = [ (pkgs.buildEnv {
@@ -312,7 +318,9 @@ in {
     systemd.services = {
       mailman = {
         description = "GNU Mailman Master Process";
-        after = [ "network.target" ];
+        before = lib.optional cfg.enablePostfix "postfix.service";
+        after = [ "network.target" ]
+          ++ lib.optional cfg.enablePostfix "postfix-setup.service";
         restartTriggers = [ config.environment.etc."mailman.cfg".source ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -332,6 +340,7 @@ in {
         before = [ "mailman.service" "mailman-web-setup.service" "mailman-uwsgi.service" "hyperkitty.service" ];
         requiredBy = [ "mailman.service" "mailman-web-setup.service" "mailman-uwsgi.service" "hyperkitty.service" ];
         path = with pkgs; [ jq ];
+        serviceConfig.Type = "oneshot";
         script = ''
           mailmanDir=/var/lib/mailman
           mailmanWebDir=/var/lib/mailman-web
@@ -390,6 +399,7 @@ in {
           plugins = ["python3"];
           home = pythonEnv;
           module = "mailman_web.wsgi";
+          http = "127.0.0.1:18507";
         };
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
@@ -452,7 +462,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann ];
+    maintainers = with lib.maintainers; [ lheckemann qyliss ];
     doc = ./mailman.xml;
   };
 

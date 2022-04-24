@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy36, flake8, click, pyyaml, six, pytestCheckHook, pytestcov }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy36, flake8, click, pyyaml, six, pytestCheckHook, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "clickclick";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1rij9ws9nhsmagiy1vclzliiqfkxi006rf65qvrw1k3sm2s8p5g0";
   };
 
-  checkInputs = [ pytestCheckHook pytestcov ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
   propagatedBuildInputs = [ flake8 click pyyaml six ];
 
   # test_cli asserts on exact quoting style of output

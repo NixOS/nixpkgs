@@ -2,13 +2,12 @@
 , pari_data
 , pari
 , singular
-, maxima-ecl
+, maxima
 , conway_polynomials
 , graphs
 , elliptic_curves
 , polytopes_db
 , gap
-, ecl
 , combinatorial_designs
 , jmol
 , mathjax
@@ -30,14 +29,14 @@ writeTextFile rec {
     export SINGULAR_SO='${singular}/lib/libSingular.so'
     export GAP_SO='${gap}/lib/libgap.so'
     export SINGULAR_EXECUTABLE='${singular}/bin/Singular'
-    export MAXIMA_FAS='${maxima-ecl}/lib/maxima/${maxima-ecl.version}/binary-ecl/maxima.fas'
-    export MAXIMA_PREFIX="${maxima-ecl}"
+    export MAXIMA_FAS='${maxima}/lib/maxima/${maxima.version}/binary-ecl/maxima.fas'
+    export MAXIMA_PREFIX="${maxima}"
     export CONWAY_POLYNOMIALS_DATA_DIR='${conway_polynomials}/share/conway_polynomials'
     export GRAPHS_DATA_DIR='${graphs}/share/graphs'
     export ELLCURVE_DATA_DIR='${elliptic_curves}/share/ellcurves'
     export POLYTOPE_DATA_DIR='${polytopes_db}/share/reflexive_polytopes'
     export GAP_ROOT_DIR='${gap}/share/gap/build-dir'
-    export ECLDIR='${ecl}/lib/ecl-${ecl.version}/'
+    export ECLDIR='${maxima.lisp-compiler}/lib/${maxima.lisp-compiler.pname}-${maxima.lisp-compiler.version}/'
     export COMBINATORIAL_DESIGN_DATA_DIR="${combinatorial_designs}/share/combinatorial_designs"
     export CREMONA_MINI_DATA_DIR="${elliptic_curves}/share/cremona"
     export JMOL_DIR="${jmol}/share/jmol" # point to the directory that contains JmolData.jar

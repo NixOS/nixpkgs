@@ -1,21 +1,23 @@
 { lib, buildPythonPackage, fetchPypi
 , msrestazure
 , azure-common
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "g8BtUpIGOse8Jrws48gQ/o7sgymlgX0XIxl1ThHS3XA=";
+    sha256 = "04090062bc1e8f00c2f45315a3bceb0fb3b3479ec1474d71b88342e13499b087";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
   ];
 
   # no tests in pypi tarball

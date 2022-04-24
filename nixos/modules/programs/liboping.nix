@@ -13,8 +13,10 @@ in {
     security.wrappers = mkMerge (map (
       exec: {
         "${exec}" = {
-          source = "${pkgs.liboping}/bin/${exec}";
+          owner = "root";
+          group = "root";
           capabilities = "cap_net_raw+p";
+          source = "${pkgs.liboping}/bin/${exec}";
         };
       }
     ) [ "oping" "noping" ]);

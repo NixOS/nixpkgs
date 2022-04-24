@@ -2,8 +2,8 @@
 
 grafanaPlugin rec {
   pname = "grafana-polystat-panel";
-  version = "1.2.2";
-  zipHash = "sha256-HWQdhstnrDuXPithZ8kOG2ZtSeAT215MJ1ftMCt6/tc=";
+  version = "1.2.6";
+  zipHash = "sha256-gbMD2o8A2YYZzkpYiXNkv8Oj958RP47fL6DXj1SBYF0=";
   meta = with lib; {
     description = "Hexagonal multi-stat panel for Grafana";
     license = licenses.asl20;

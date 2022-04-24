@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "http://pulkomandy.tk/projects/GrafX2";
     license = lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ lib.maintainers.zoomulator ];
+    maintainers = [];
   };
 }

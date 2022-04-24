@@ -1,32 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, meson, pkg-config, ninja, wayland
+{ stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
 , minimal ? false, libva-minimal
-, libX11, libXext, libXfixes, libffi, libGL
+, libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.10.0";
+  pname = "libva" + lib.optionalString minimal "-minimal";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "1xyxnxmq04s3s6135v6av1rl5z809j9vxvg7af9wvyh3dgsxrlds";
+    sha256 = "0q395lg6gp05mwf04zbrwgj6q9073lahh3wrcfa2i8ll60cfq9fg";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   mesonFlags = [
-    # Add FHS paths for non-NixOS applications:
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    # Add FHS and Debian paths for non-NixOS applications
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
   meta = with lib; {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/linuxmedia/vaapi";
     changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

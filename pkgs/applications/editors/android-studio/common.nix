@@ -1,6 +1,6 @@
-{ channel, pname, version, build ? null, sha256Hash }:
+{ channel, pname, version, sha256Hash }:
 
-{ alsaLib
+{ alsa-lib
 , bash
 , buildFHSUserEnv
 , cacert
@@ -46,6 +46,7 @@
 , stdenv
 , systemd
 , unzip
+, usbutils
 , which
 , runCommand
 , xkeyboard_config
@@ -55,7 +56,7 @@
 
 let
   drvName = "android-studio-${channel}-${version}";
-  filename = "android-studio-" + (if (build != null) then "ide-${build}" else version) + "-linux.tar.gz";
+  filename = "android-studio-${version}-linux.tar.gz";
 
   androidStudio = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
@@ -65,10 +66,14 @@ let
       sha256 = sha256Hash;
     };
 
-    nativeBuildInputs = [ unzip ];
-    buildInputs = [
+    nativeBuildInputs = [
+      unzip
       makeWrapper
     ];
+
+    # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
+    dontPatchShebangs = true;
+
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
@@ -98,6 +103,7 @@ let
           # Runtime stuff
           git
           ps
+          usbutils
         ]}" \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
 
@@ -121,7 +127,7 @@ let
           libXrandr
 
           # For Android emulator
-          alsaLib
+          alsa-lib
           dbus
           expat
           libpulseaudio
@@ -145,25 +151,22 @@ let
         ]}"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
-      wrapProgram $out/bin/lldb/bin/LLDBFrontend --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ncurses5
         zlib
       ]}"
     '';
   };
 
-  # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
-  dontPatchShebangs = true;
-
   desktopItem = makeDesktopItem {
-    name = drvName;
+    name = pname;
     exec = pname;
-    icon = drvName;
+    icon = pname;
     desktopName = "Android Studio (${channel} channel)";
     comment = "The official Android IDE";
-    categories = "Development;IDE;";
-    startupNotify = "true";
-    extraEntries="StartupWMClass=jetbrains-studio";
+    categories = [ "Development" "IDE" ];
+    startupNotify = true;
+    startupWMClass = "jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
@@ -213,9 +216,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ meutraa ];
-        beta = [ meutraa ];
-        canary = [ meutraa ];
+        stable = [ ];
+        beta = [ ];
+        canary = [ ];
         dev = canary;
       }."${channel}";
     };
@@ -226,6 +229,6 @@ in runCommand
     echo -n "$startScript" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
 
-    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
+    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${pname}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''

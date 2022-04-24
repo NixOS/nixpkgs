@@ -1,17 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , aiohttp
 , async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hole";
-  version = "0.5.1";
+  version = "0.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "065fxc0l16j8xkjd0y0qar9cmqmjyp8jcshakbakldkfscpx3s5m";
+    sha256 = "sha256-yZpzGfB5RTWaRn2DmT+cbSDC0pL16FyUc0Nr/V6TlhU=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +26,9 @@ buildPythonPackage rec {
   # no tests are present
   doCheck = false;
 
-  pythonImportsCheck = [ "hole" ];
+  pythonImportsCheck = [
+    "hole"
+  ];
 
   meta = with lib; {
     description = "Python API for interacting with a Pihole instance.";

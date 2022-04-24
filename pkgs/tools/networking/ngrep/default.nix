@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.
     license = "ngrep";  # Some custom BSD-style, see LICENSE.txt
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

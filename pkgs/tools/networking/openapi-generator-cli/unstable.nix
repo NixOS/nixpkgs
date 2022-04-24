@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ callPackage, lib, stdenv, fetchurl, jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  version = "6.0.0-2021-01-18";  # Also update the fetchurl link
+let this = stdenv.mkDerivation rec {
+  version = "6.0.0-2022-03-18";  # Also update the fetchurl link
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";
@@ -11,17 +11,21 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/6.0.0-SNAPSHOT/openapi-generator-cli-6.0.0-20210118.082537-4.jar";
-    sha256 = "1ji3yw9dp4srlgqxvb21vrcp2bzj4himxsmp8l8zid9nxsc1m71x";
+    url = "https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/6.0.0-SNAPSHOT/openapi-generator-cli-6.0.0-20220318.042704-93.jar";
+    sha256 = "1h126kpbnpbrsnjrxb09hzb796dwl4g58d6wrh1hhv8svwy5p0bl";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D "$src" "$out/share/java/${jarfilename}"
 
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${jarfilename}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -30,5 +34,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
   };
-}
 
+  passthru.tests.example = callPackage ./example.nix {
+    openapi-generator-cli = this;
+  };
+};
+in this

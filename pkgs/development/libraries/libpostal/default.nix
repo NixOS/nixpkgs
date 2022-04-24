@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openvenues/libpostal";
     license = licenses.mit;
     maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

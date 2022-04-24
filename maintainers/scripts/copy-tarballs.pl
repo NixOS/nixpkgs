@@ -165,6 +165,20 @@ elsif (defined $expr) {
         my $hash = $fetch->{hash};
         my $name = $fetch->{name};
 
+        if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
+            $algo = $1;
+            $hash = `nix hash to-base16 $hash` or die;
+            chomp $hash;
+        }
+
+        next unless $algo =~ /^[a-z0-9]+$/;
+
+        # Convert non-SRI base-64 to base-16.
+        if ($hash =~ /^[A-Za-z0-9+\/=]+$/) {
+            $hash = `nix hash to-base16 --type '$algo' $hash` or die;
+            chomp $hash;
+        }
+
         if (defined $ENV{DEBUG}) {
             print "$url $algo $hash\n";
             next;
@@ -184,7 +198,7 @@ elsif (defined $expr) {
 
         my $storePath = makeFixedOutputPath(0, $algo, $hash, $name);
 
-        print STDERR "mirroring $url ($storePath)...\n";
+        print STDERR "mirroring $url ($storePath, $algo, $hash)...\n";
 
         if ($dryRun) {
             $mirrored++;

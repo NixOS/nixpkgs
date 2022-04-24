@@ -51,6 +51,7 @@
 , makeWrapper
 , autoreconfHook
 , gtk-doc
+, graphviz
 }:
 let
   python = python2.withPackages (pp: [ pp.pygtk ]);
@@ -154,7 +155,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/glimpse-${lib.versions.majorMinor version} \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix PATH ":" ${ lib.makeBinPath [ graphviz ] }
   '';
 
   passthru = rec {
@@ -193,5 +195,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ashkitten erictapen ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "glimpse";
   };
 }

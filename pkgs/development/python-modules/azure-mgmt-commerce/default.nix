@@ -5,8 +5,6 @@
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
-, python
-, isPy3k
 }:
 
 buildPythonPackage rec {

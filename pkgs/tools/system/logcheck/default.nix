@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
-  version = "1.3.22";
+  version = "1.3.23";
   _name    = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "sha256-e7XeRNlFsexlVskK2OnLTmNV/ES2xWU+/+AElexV6E4=";
+    sha256 = "sha256-ohiLpUn/9EEsggdLJxiE/2bSXz/bKkGRboF85naFWyk=";
   };
 
   prePatch = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.bluescreen303 ];
   };
 }

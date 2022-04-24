@@ -1,25 +1,44 @@
-{ buildPythonPackage
-, enum34
-, fetchPypi
-, isPy27
-, lib
-, pathlib
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
 , pyyaml
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "1.4.0";
+  version = "1.7.0";
+  format = "flit";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-kvwEUcbiwnMqw2PQ9Z1+pgir3b7QYt2o6Y6ajJhs5GQ=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "beetbox";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-zdH5DNXnuAfYTuaG9EIKiXL2EbLSfzYjPSkC3G06bU8=";
   };
 
-  propagatedBuildInputs = [ pyyaml ] ++ lib.optionals isPy27 [ enum34 pathlib ] ;
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
+    pyyaml
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "confuse"
+  ];
 
   meta = with lib; {
-    description = "Confuse is a configuration library for Python that uses YAML.";
+    description = "Python configuration library for Python that uses YAML";
     homepage = "https://github.com/beetbox/confuse";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

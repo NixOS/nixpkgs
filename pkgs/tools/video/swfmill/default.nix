@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "swfmill-0.3.3";
+  pname = "swfmill";
+  version = "0.3.3";
 
   src = fetchurl {
-    url = "http://swfmill.org/releases/${name}.tar.gz";
+    url = "http://swfmill.org/releases/swfmill-${version}.tar.gz";
     sha256 = "15mcpql448vvgsbxs7wd0vdk1ln6rdcpnif6i2zjm5l4xng55s7r";
   };
 

@@ -33,7 +33,7 @@ in
 
   config = mkIf cfg.enable (mkMerge [{
     assertions = [{
-      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      assertion = pkgs.stdenv.hostPlatform.isx86;
       message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     }];
 
@@ -68,7 +68,7 @@ in
         SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
       '';
   } (mkIf cfg.x11 {
-    services.xserver.videoDrivers = mkOverride 50 [ "vmware" "virtualbox" "modesetting" ];
+    services.xserver.videoDrivers = [ "vmware" "virtualbox" "modesetting" ];
 
     services.xserver.config =
       ''

@@ -33,6 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ telotortium ];
     platforms = platforms.unix;
   };
-
-  phases = ["unpackPhase" "installPhase"];
 }

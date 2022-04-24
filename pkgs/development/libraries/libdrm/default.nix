@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.104";
+  version = "2.4.110";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1jqvx9c23hgwhq109zqj6vg3ng40pcvh3r1k2fn1a424qasxhsnn";
+    sha256 = "0dwpry9m5l27dlhq48j4bsiqwm0247cxdqwv3b7ddmkynk2f9kpf";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -19,12 +19,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withValgrind valgrind-light;
 
   patches = [ ./cross-build-nm-path.patch ];
-
-  postPatch = ''
-    for a in */*-symbol-check ; do
-      patchShebangs $a
-    done
-  '';
 
   mesonFlags = [
     "-Dnm-path=${stdenv.cc.targetPrefix}nm"

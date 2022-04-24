@@ -21,7 +21,7 @@ let
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    nativeBuildInputs = [ makeWrapper which ];
+    nativeBuildInputs = [ makeWrapper which llvm.dev ];
     buildInputs = [ llvm ];
 
     makeFlags = [ "PREFIX=$(out)" ];

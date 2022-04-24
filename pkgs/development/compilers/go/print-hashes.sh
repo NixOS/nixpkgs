@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASEURL=https://golang.org/dl/
+BASEURL=https://go.dev/dl/
 VERSION=${1:-}
 
 if [[ -z $VERSION ]]

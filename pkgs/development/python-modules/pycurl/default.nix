@@ -1,28 +1,33 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , isPyPy
 , fetchPypi
 , pythonOlder
 , curl
 , openssl
 , bottle
-, pytest
-, nose
+, pytestCheckHook
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.43.0.6";
+  version = "7.45.1";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8301518689daefa53726b59ded6b48f33751c383cf987b0ccfbbc4ed40281325";
+    sha256 = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
   };
+
+  preConfigure = ''
+    substituteInPlace setup.py --replace '--static-libs' '--libs'
+    export PYCURL_SSL_LIBRARY=openssl
+  '';
 
   buildInputs = [
     curl
-    openssl.out
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -31,34 +36,37 @@ buildPythonPackage rec {
 
   checkInputs = [
     bottle
-    pytest
-    nose
+    pytestCheckHook
     flaky
   ];
 
-  # skip impure or flakey tests
-  # See also:
-  #   * https://github.com/NixOS/nixpkgs/issues/77304
-  checkPhase = ''
-    HOME=$TMPDIR pytest tests -k "not test_ssl_in_static_libs \
-                     and not test_keyfunction \
-                     and not test_keyfunction_bogus_return \
-                     and not test_libcurl_ssl_gnutls \
-                     and not test_libcurl_ssl_nss \
-                     and not test_libcurl_ssl_openssl" \
-                 --ignore=tests/getinfo_test.py \
-                 --ignore=tests/memory_mgmt_test.py \
-                 --ignore=tests/multi_memory_mgmt_test.py \
-                 --ignore=tests/multi_timer_test.py
+  pytestFlagsArray = [
+    # don't pick up the tests directory below examples/
+    "tests"
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
-  preConfigure = ''
-    substituteInPlace setup.py --replace '--static-libs' '--libs'
-    export PYCURL_SSL_LIBRARY=openssl
-  '';
+  disabledTests = [
+    # tests that require network access
+    "test_keyfunction"
+    "test_keyfunction_bogus_return"
+    # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_openssl"
+    # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_nss"
+    # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_gnutls"
+    # AssertionError: assert 'crypto' in ['curl']
+    "test_ssl_in_static_libs"
+  ];
 
-  meta = {
-    homepage = "http://pycurl.sourceforge.net/";
-    description = "Python wrapper for libcurl";
+  meta = with lib; {
+    homepage = "http://pycurl.io/";
+    description = "Python Interface To The cURL library";
+    license = with licenses; [ lgpl2Only mit ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

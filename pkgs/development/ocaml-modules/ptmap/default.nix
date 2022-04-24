@@ -14,11 +14,12 @@ buildDunePackage rec {
     sha256 = "1apk61fc1y1g7x3m3c91fnskvxp6i0vk5nxwvipj56k7x2pzilgb";
   };
 
+  strictDeps = true;
+
+  buildInputs = [ stdlib-shims ];
   propagatedBuildInputs = [ seq ];
 
   doCheck = true;
-
-  checkInputs = [ stdlib-shims ];
 
   meta = {
     homepage = "https://www.lri.fr/~filliatr/software.en.html";

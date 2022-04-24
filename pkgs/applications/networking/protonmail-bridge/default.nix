@@ -2,34 +2,43 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "1.5.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "br-${version}";
-    sha256 = "lHqwKlFwz9iO7LJMGFTGCauw12z/BKnQte2sVoVkOaY=";
+    sha256 = "sha256-8oDA1QU5ZjtQZoCPVDa1U3P2KLzXtegtOxm6rNh+Ahk=";
   };
 
-  vendorSha256 = "eP+7fqBctX9XLCoHVJDI/qaa5tocgg3F5nfUM6dzNRg=";
+  vendorSha256 = "sha256-n+WwkNHT+/CrC4vWIVHqYs2a8Qe/LNc0L3uoPZWDTts=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret ];
 
   buildPhase = ''
-    make BUILD_TIME= build-nogui
+    runHook preBuild
+
+    patchShebangs ./utils/
+    make BUILD_TIME= -j$NIX_BUILD_CORES build-nogui
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm555 Desktop-Bridge $out/bin/protonmail-bridge
+    runHook preInstall
+
+    install -Dm555 proton-bridge $out/bin/protonmail-bridge
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://github.com/ProtonMail/proton-bridge";
     changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lightdiscord ];
     description = "Use your ProtonMail account with your local e-mail client";
     longDescription = ''

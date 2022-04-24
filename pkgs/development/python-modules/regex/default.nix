@@ -2,30 +2,33 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, pythonOlder
 }:
-
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2020.11.13";
+  version = "2022.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83d6b356e116ca119db8e7c6fc2983289d87b27b3fac238cfe5dca529d884562";
+    hash = "sha256-eeWvH/JYvA/gvdb2m8SuM5NaiY48vvu8zyLoiif6BTs=";
   };
 
-  postCheck = ''
-    echo "We now run tests ourselves, since the setuptools installer doesn't."
-    ${python.interpreter} -c 'import test_regex; test_regex.test_main();'
+  checkPhase = ''
+    ${python.interpreter} -m unittest
   '';
 
-  # No tests in archive
-  doCheck = false;
+  pythonImportsCheck = [
+    "regex"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Alternative regular expression module, to replace re";
     homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = licenses.psfl;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

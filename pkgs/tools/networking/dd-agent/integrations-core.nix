@@ -41,10 +41,10 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
-    rev = "7e9bebbb5b79ac30c16814ecefdc8f5c63cb4ea4";
-    sha256 = "0yi7dlbd0rkzzl8cag713r86f40vl87aqrj97ral58csnnj7vfzb";
+    rev = version;
+    sha256 = "0424zsnf747s10kfzv5y0m0ac9sgczip78yvghhrc2i089i5z2h4";
   };
-  version = "git-2018-09-18";
+  version = "7.30.1";
 
   # Build helper to build a single datadog integration package.
   buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
@@ -65,7 +65,7 @@ let
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus_client uuid simplejson uptime
+      requests protobuf prometheus-client simplejson uptime
     ];
   };
 
@@ -75,7 +75,8 @@ let
     mongo    = (ps: [ ps.pymongo ]);
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000_1_12 psycopg2 ]);
+    postgres = (ps: with ps; [ pg8000 psycopg2 ]);
+    process  = (ps: []);
   };
 
   # All integrations (default + extra):

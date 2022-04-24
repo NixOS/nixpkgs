@@ -5,21 +5,15 @@
 , unstableGitUpdater
 }:
 stdenv.mkDerivation rec {
-  name = "klipper";
-  version = "unstable-2021-01-31";
+  pname = "klipper";
+  version = "unstable-2022-03-11";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "ef4d9c3abd30ae8a485020fd9ff2fb4529a143b3";
-    sha256 = "sha256-puAkSGL0DD0JUWejPdzr7zKIW2UP2soBBtgm2msUKzA=";
+    rev = "e3beafbdb4f2ac3f889f81aec0cad5ec473c8612";
+    sha256 = "sha256-xZSZUJ2TNaUzfwEFpnzr5EPlOvILLyiQ/3K1iiup7kU=";
   };
-
-  # We have no LTO on i686 since commit 22284b0
-  postPatch = lib.optional stdenv.isi686 ''
-    substituteInPlace chelper/__init__.py \
-      --replace "-flto -fwhole-program " ""
-  '';
 
   sourceRoot = "source/klippy";
 
@@ -29,7 +23,7 @@ stdenv.mkDerivation rec {
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [ (python2.withPackages ( p: with p; [ cffi ] )) ];
 
-  buildInputs = [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 ])) ];
+  buildInputs = [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 numpy ])) ];
 
   # we need to run this to prebuild the chelper.
   postBuild = "python2 ./chelper/__init__.py";
@@ -42,6 +36,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/klipper
     cp -r ./* $out/lib/klipper
 
+    # Moonraker expects `config_examples` and `docs` to be available
+    # under `klipper_path`
+    cp -r $src/docs $out/lib/docs
+    cp -r $src/config $out/lib/config
+
     chmod 755 $out/lib/klipper/klippy.py
     runHook postInstall
   '';
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Klipper 3D printer firmware";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault zhaofengli ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

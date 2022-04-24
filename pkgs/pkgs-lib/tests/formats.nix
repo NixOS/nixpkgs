@@ -9,12 +9,16 @@ let
     let
       formatSet = format args;
       config = formatSet.type.merge [] (imap1 (n: def: {
-        value = def;
+        # We check the input values, so that
+        #  - we don't write nonsensical tests that will impede progress
+        #  - the test author has a slightly more realistic view of the
+        #    final format during development.
+        value = lib.throwIfNot (formatSet.type.check def) (builtins.trace def "definition does not pass the type's check function") def;
         file = "def${toString n}";
       }) [ def ]);
     in formatSet.generate "test-format-file" config;
 
-  runBuildTest = name: { drv, expected }: pkgs.runCommandNoCC name {} ''
+  runBuildTest = name: { drv, expected }: pkgs.runCommand name {} ''
     if diff -u '${builtins.toFile "expected" expected}' '${drv}'; then
       touch "$out"
     else
@@ -38,6 +42,7 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
+      path = ./formats.nix;
     };
     expected = ''
       {
@@ -52,6 +57,7 @@ in runBuildTests {
           null
         ],
         "null": null,
+        "path": "${./formats.nix}",
         "str": "foo",
         "true": true
       }
@@ -67,22 +73,20 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
+      path = ./formats.nix;
     };
     expected = ''
-      {
-        "attrs": {
-          "foo": null
-        },
-        "false": false,
-        "float": 3.141,
-        "list": [
-          null,
-          null
-        ],
-        "null": null,
-        "str": "foo",
-        "true": true
-      }
+      attrs:
+        foo: null
+      'false': false
+      float: 3.141
+      list:
+      - null
+      - null
+      'null': null
+      path: ${./formats.nix}
+      str: foo
+      'true': true
     '';
   };
 
@@ -124,6 +128,22 @@ in runBuildTests {
     '';
   };
 
+  testIniListToValue = {
+    drv = evalFormat formats.ini { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
+      foo = {
+        bar = [ null true "test" 1.2 10 ];
+        baz = false;
+        qux = "qux";
+      };
+    };
+    expected = ''
+      [foo]
+      bar=null, true, test, 1.200000, 10
+      baz=false
+      qux=qux
+    '';
+  };
+
   testTomlAtoms = {
     drv = evalFormat formats.toml {} {
       false = false;
@@ -146,10 +166,27 @@ in runBuildTests {
       [attrs]
       foo = "foo"
 
-      [level1]
-      [level1.level2]
       [level1.level2.level3]
       level4 = "deep"
+    '';
+  };
+
+  # See also java-properties/default.nix for more complete tests
+  testJavaProperties = {
+    drv = evalFormat formats.javaProperties {} {
+      foo = "bar";
+      "1" = "2";
+      "ütf 8" = "dûh";
+      # NB: Some editors (vscode) show this _whole_ line in right-to-left order
+      "الجبر" = "أكثر من مجرد أرقام";
+    };
+    expected = ''
+      # Generated with Nix
+
+      1 = 2
+      foo = bar
+      \u00fctf\ 8 = d\u00fbh
+      \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
     '';
   };
 }

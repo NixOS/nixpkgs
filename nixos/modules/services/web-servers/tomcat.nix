@@ -23,9 +23,9 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.tomcat85;
-        defaultText = "pkgs.tomcat85";
-        example = lib.literalExample "pkgs.tomcat9";
+        default = pkgs.tomcat9;
+        defaultText = literalExpression "pkgs.tomcat9";
+        example = lib.literalExpression "pkgs.tomcat9";
         description = ''
           Which tomcat package to use.
         '';
@@ -127,7 +127,7 @@ in
       webapps = mkOption {
         type = types.listOf types.path;
         default = [ tomcat.webapps ];
-        defaultText = "[ pkgs.tomcat85.webapps ]";
+        defaultText = literalExpression "[ config.services.tomcat.package.webapps ]";
         description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 
@@ -166,7 +166,7 @@ in
       jdk = mkOption {
         type = types.package;
         default = pkgs.jdk;
-        defaultText = "pkgs.jdk";
+        defaultText = literalExpression "pkgs.jdk";
         description = "Which JDK to use.";
       };
 
@@ -201,6 +201,7 @@ in
       { uid = config.ids.uids.tomcat;
         description = "Tomcat user";
         home = "/homeless-shelter";
+        group = "tomcat";
         extraGroups = cfg.extraGroups;
       };
 

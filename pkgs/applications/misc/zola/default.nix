@@ -1,37 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, oniguruma, CoreServices }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, openssl
+, oniguruma
+, CoreServices
+, installShellFiles
+, libsass
+, zola
+, testers
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.13.0";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "getzola";
-    repo = pname;
+    repo = "zola";
     rev = "v${version}";
-    sha256 = "sha256-yTvFQWmNxoB+CNZLHGmzJq7mKuOUxUqV4g8PWlOlRbM=";
+    sha256 = "sha256-LK8twqWaS+SQ3oqvMGE7oP/IJNLvQ45Pu92pkbSKzDs=";
   };
 
-  cargoSha256 = "sha256:19vijhcs1i02jhz68acil7psv3pcn0jzi1i4y2l05i4m3ayxivjf";
+  cargoSha256 = "sha256-7W0vjbAWZl/eKBZvUWWWolEOh8aQeKegt823EebcKMQ=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl oniguruma ]
-    ++ lib.optional stdenv.isDarwin CoreServices;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    openssl
+    oniguruma
+    libsass
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
   postInstall = ''
-    install -D -m 444 completions/zola.bash \
-      -t $out/share/bash-completion/completions
-    install -D -m 444 completions/_zola \
-      -t $out/share/zsh/site-functions
-    install -D -m 444 completions/zola.fish \
-      -t $out/share/fish/vendor_completions.d
+    installShellCompletion --cmd zola \
+      --fish completions/zola.fish \
+      --zsh completions/_zola \
+      --bash completions/zola.bash
   '';
+
+  passthru.tests.version = testers.testVersion { package = zola; };
 
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
+    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir _0x4A6F ];
+    maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
   };
 }

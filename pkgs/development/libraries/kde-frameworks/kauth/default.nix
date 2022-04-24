@@ -1,13 +1,13 @@
 {
-  mkDerivation, lib, propagate,
-  extra-cmake-modules, kcoreaddons, polkit-qt, qttools
+  lib, mkDerivation, propagate,
+  extra-cmake-modules, kcoreaddons, qttools,
+  enablePolkit ? true, polkit-qt
 }:
 
 mkDerivation {
-  name = "kauth";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kauth";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ polkit-qt qttools ];
+  buildInputs = lib.optional enablePolkit polkit-qt ++ [ qttools ];
   propagatedBuildInputs = [ kcoreaddons ];
   patches = [
     ./cmake-install-paths.patch

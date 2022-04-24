@@ -23,7 +23,8 @@
 let inherit (lib) getBin getLib; in
 
 mkDerivation {
-  name = "plasma-workspace";
+  pname = "plasma-workspace";
+  passthru.providedSessions = [ "plasma" "plasmawayland" ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

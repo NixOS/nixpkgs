@@ -1,21 +1,23 @@
-{ lib, stdenv, fetchzip, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "1.32";
+  version = "1.35";
 
-  src = fetchzip {
-    url = "https://github.com/tio/tio/archive/v${version}.tar.gz";
-    sha256 = "0lwqdm73kshi9qs8pks1b4by6yb9jf3bbyw3bv52xmggnr5s1hcv";
+  src = fetchFromGitHub {
+    owner = "tio";
+    repo = "tio";
+    rev = "v${version}";
+    hash = "sha256-JXY6C2gYG7UmTrYIvHjn/8mL70uvXTsXbNoFr09qhcw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ meson ninja ];
 
   meta = with lib; {
     description = "Serial console TTY";
     homepage = "https://tio.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
-, asciidoc-full
 , buildPythonApplication
+, asciidoc-full
 , docopt
 , gettext
 , gobject-introspection
@@ -19,14 +19,16 @@
 
 buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-eucAFMzLf2RfMfVgFTfPAgVNpDADddvTUZQO/XbBhGo=";
+    hash = "sha256-T4kMPMXfehZT7P+TOd1llR2TbHPA/quNL545xxlmJfE=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     asciidoc-full # Man page
@@ -40,7 +42,7 @@ buildPythonApplication rec {
     gtk3
     libappindicator-gtk3
     libnotify
-    librsvg # Because it uses SVG icons
+    librsvg # SVG icons
     udisks2
   ];
 
@@ -50,16 +52,18 @@ buildPythonApplication rec {
     pyyaml
   ];
 
-  postBuild = "make -C doc";
+  postBuild = ''
+    make -C doc
+  '';
 
   postInstall = ''
-    mkdir -p $out/share/man/man8
-    cp -v doc/udiskie.8 $out/share/man/man8/
+    mkdir -p $man/share/man/man8
+    cp -v doc/udiskie.8 $man/share/man/man8/
   '';
 
   checkInputs = [
-    nose
     keyutils
+    nose
   ];
 
   checkPhase = ''

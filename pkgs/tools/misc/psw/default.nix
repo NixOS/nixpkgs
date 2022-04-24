@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1nwmps3zw99lrz6k1j14w4rcm7yj8vhf4cs9wjfc3c1zfjibz9iz";
   };
 
-  cargoSha256 = "0a6hhangbx62nsyrfzbxjv7cg5c9d8wh83f02ay72gkf48sqy75h";
+  cargoSha256 = "1y2am1bz68q7d9bn4264al13fv2j6a87bwrd60ycx0qak9fczlmv";
 
   meta = with lib; {
     description = "A command line tool to write random bytes to stdout";

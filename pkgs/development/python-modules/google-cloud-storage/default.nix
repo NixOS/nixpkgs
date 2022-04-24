@@ -9,15 +9,19 @@
 , google-cloud-testutils
 , google-resumable-media
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.35.1";
+  version = "2.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc076b6af6da991252416639cb93831f8e50c8328d5ac3fb8e03e40cd8de2290";
+    hash = "sha256-AkT0YScQy17ERfxndDh1ZOI/mCM2P7QIsock4hAkAbc=";
   };
 
   propagatedBuildInputs = [
@@ -40,17 +44,29 @@ buildPythonPackage rec {
     "download"
     "get"
     "post"
+    "upload"
     "test_build_api_url"
+    "test_ctor_mtls"
+    "test_hmac_key_crud"
+    "test_list_buckets"
+    "test_open"
+    "test_anonymous_client_access_to_public_bucket"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=tests/unit/test_bucket.py"
-    "--ignore=tests/system/test_system.py"
+  disabledTestPaths = [
+    "tests/unit/test_bucket.py"
+    "tests/system/test_blob.py"
+    "tests/system/test_bucket.py"
+    "tests/system/test_fileio.py"
+    "tests/system/test_kms_integration.py"
   ];
 
-  # prevent google directory from shadowing google imports
   preCheck = ''
+    # prevent google directory from shadowing google imports
     rm -r google
+
+    # requires docker and network
+    rm tests/conformance/test_conformance.py
   '';
 
   pythonImportsCheck = [ "google.cloud.storage" ];

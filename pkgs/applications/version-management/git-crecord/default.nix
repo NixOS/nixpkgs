@@ -1,17 +1,20 @@
-{ lib, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, python3 }:
 
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "git-crecord";
-  version = "20161216.0";
+  version = "20201025.0";
 
   src = fetchFromGitHub {
     owner = "andrewshadura";
     repo = "git-crecord";
     rev = version;
-    sha256 = "0v3y90zi43myyi4k7q3892dcrbyi9dn2q6xgk12nw9db9zil269i";
+    sha256 = "1rkdmy2d2vsx22fx97nd9afh0g5lq4pns7rdxyl711apq1bhiihn";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ docutils ];
+  propagatedBuildInputs = with python3.pkgs; [ docutils ];
+
+  # has no tests
+  doCheck = false;
 
   meta = {
     homepage = "https://github.com/andrewshadura/git-crecord";

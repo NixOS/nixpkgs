@@ -1,20 +1,17 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
 , qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2, qtgraphicaleffects
-, faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123 }:
-let
+, faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123
+} :
 
-  version = "2.2";
-
-in mkDerivation {
-
+mkDerivation rec {
   pname = "welle-io";
-  inherit version;
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "AlbrechtL";
     repo = "welle.io";
     rev = "v${version}";
-    sha256 = "04fpm6sc431dl9i5h53xpd6k85j22sv8aawl7b6wv2fzpfsd9fwa";
+    sha256 = "sha256-xXiCL/A2SwCSr5SA4AQQEdieRzBksXx9Z78bHtlFiW4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

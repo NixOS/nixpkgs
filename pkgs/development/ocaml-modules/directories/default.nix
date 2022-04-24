@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "directories";
-  version = "0.2";
+  version = "0.5";
   useDune2 = true;
 
   minimumOCamlVersion = "4.07";
@@ -11,7 +11,7 @@ buildDunePackage rec {
     owner = "ocamlpro";
     repo = pname;
     rev = version;
-    sha256 = "0s7ginh0g0fhw8xf9v58cx99a8q9jqsf4i0p134m5qzf84qpjwff";
+    sha256 = "sha256-31CGhmmfOORJ1ewgp+IU+p1+f2kfX/W+lxK7EGU62vc=";
   };
 
   meta = {

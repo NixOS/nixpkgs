@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfst";
-  version = "1.7.9";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${pname}-${version}.tar.gz";
-    sha256 = "1pmx1yhn2gknj0an0zwqmzgwjaycapi896244np50a8y3nrsw6ck";
+    sha256 = "sha256-JPtTtyu2h+P6julscqMf8pINmbmAoKj2HdpCb8pnE/A=";
   };
 
   configureFlags = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       FSTs have key applications in speech recognition and synthesis, machine translation, optical character recognition,
       pattern matching, string processing, machine learning, information extraction and retrieval among others
     '';
-    homepage = "http://www.openfst.org/twiki/bin/view/FST/WebHome";
+    homepage = "https://www.openfst.org/twiki/bin/view/FST/WebHome";
     license = licenses.asl20;
     maintainers = [ maintainers.dfordivam ];
     platforms = platforms.unix;

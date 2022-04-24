@@ -13,7 +13,7 @@ let
     sha256 = "10bdjn481jsh32vll7r756l392anz44h6207vjqwby3rplk31np1";
   };
 in clangStdenv.mkDerivation rec {
-  name    = "fcitx-mozc-${version}";
+  pname = "fcitx-mozc";
   version = "2.23.2815.102";
 
   src = fetchFromGitHub {

@@ -2,15 +2,19 @@
 , bash
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "1.4.1";
+  version = "1.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de3f23bfe669e3db1085789fd859eb8ca8e0c5d9c20811e2407fa042e8a5e15d";
+    hash = "sha256-4zLkneQEY/IBYxX1HfQjE4VXcr6GQ1aGFWvBj0W1zGw=";
   };
 
   patchPhase = ''
@@ -20,8 +24,14 @@ buildPythonPackage rec {
   # errors with vendored libs
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "invoke"
+  ];
+
+  meta = with lib; {
     description = "Pythonic task execution";
-    license = lib.licenses.bsd2;
+    homepage = "https://www.pyinvoke.org/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
 }

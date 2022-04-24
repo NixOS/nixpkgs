@@ -10,7 +10,7 @@
 , librest
 , libarchive
 , libsoup
-, gnome3
+, gnome
 , libxml2
 , lua5_3
 , liboauth
@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.12";
+  version = "0.3.14";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xr59gzb8gw2bgj14mjllgn8y7srh373j0fp0v16ak8nd84dzdn6";
+    sha256 = "aGhEs07HOySTH/bMT2Az8AcpR6bbYKzcf7Pq8Velgcg=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # * chromaprint (gst-plugins-bad)
     (substituteAll {
       src = ./chromaprint-gst-plugins.patch;
-      load_plugins = lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
+      load_plugins = lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
         gstreamer
         gst-plugins-base
         gst-plugins-bad
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Grilo";
     description = "A collection of plugins for the Grilo framework";
     maintainers = teams.gnome.members;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

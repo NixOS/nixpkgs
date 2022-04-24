@@ -48,13 +48,13 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.18.2";
+  version = "1.20.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1929nhjsvbl4bw37nfagnfsnxz737cm2x3ayz9ayrn9lwkfm45zp";
+    sha256 = "sha256-LRGcFauMnnn4zTxr9YL/egULKMyuUqtIZeGhRkmRZZw=";
   };
 
   nativeBuildInputs = [
@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
   ] ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"
   ] ++ lib.optionals (!gtkSupport) [

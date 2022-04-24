@@ -1,5 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
-, msgpack, neovim, pythonPackages, qtbase, neovim-qt-unwrapped }:
+{ stdenv, makeWrapper, neovim, neovim-qt-unwrapped }:
 
 let
   unwrapped = neovim-qt-unwrapped;

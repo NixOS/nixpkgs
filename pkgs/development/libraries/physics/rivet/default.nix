@@ -2,46 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.3";
+  version = "3.1.5";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "08g0f84l7r6vm4n7gn36qi3bzacscpv061m9xar2572vf10wxpak";
+    hash = "sha256-YhcXW3gab7z3EJd3qGePeplVEapV4a5WKIc151hQXZo=";
   };
 
   patches = [
-    ./darwin.patch # configure relies on impure sw_vers to -Dunix
-
-    # fix compilation errors (fails depending on number of cores filesystem ordering?)
-    # https://gitlab.com/hepcedar/rivet/-/merge_requests/220
+    # Fixes build
     (fetchpatch {
-      url = "https://gitlab.com/hepcedar/rivet/commit/3203bf12a4bef81f880789eb9cde7ff489ae5115.diff";
-      sha256 = "0zn5yxlv6dk4vcqgz0syzb9mp4qc9smpmgshcqimcvii7qcp20mc";
-    })
-    # https://gitlab.com/hepcedar/rivet/-/merge_requests/223
-    (fetchpatch {
-      url = "https://gitlab.com/hepcedar/rivet/commit/476f267c46b126fa163a92aa6cbcb7806c4624c3.diff";
-      sha256 = "0dhkraddzp06v5z0d2wf0c8vsd50hl5pqsjgsrb8x14d0vwi8rnc";
-    })
-
-    # fix for new python and fix transparency gs 9.52
-    # gs 9.52 opacity fix
-    (fetchpatch {
-      url = "https://gitlab.com/hepcedar/rivet/commit/25c4bee19882fc56407b0a438f86e1a11753d5e6.diff";
-      sha256 = "18p2wk54r0qfq6l27z6805zq1z5jhk5sbxbjixgibzq8prj1a78v";
-    })
-
-    # make-plots: fix wrong logic in Plot.set_xmax()
-    (fetchpatch {
-      url = "https://gitlab.com/hepcedar/rivet/commit/d371c6c10cf67a41c0e4e27c16ff5723d6276ad2.diff";
-      sha256 = "0w622rd5darj7qafbbc84blznvy5rnhsdyr2n1i1fkz19mrf5h2p";
-    })
-
-    # fix https://gitlab.com/hepcedar/rivet/-/issues/200
-    (fetchpatch {
-      url = "https://gitlab.com/hepcedar/rivet/commit/442dbd17dcb3bd6e30b26e54c50f6a8237f966f9.diff";
-      includes = [ "bin/make-pgfplots" "bin/make-plots" "bin/make-plots-fast" ];
-      sha256 = "0c3rysgcib49km1zdpgsdai3xi4s6ijqgxp4whn04mrh3qf4bmr3";
+      name = "rivet-3.1.5-namespace-fix.patch";
+      url = "https://gitlab.com/hepcedar/rivet/-/commit/17a99b38b52e65a4a3fd6289124bd9dd874c30bf.diff";
+      sha256 = "sha256-OknqghpMMB5nRHeeRc2ddxybhnkVGRB1x8jfOjrkyms=";
     })
   ];
 

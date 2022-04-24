@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, transfig, tex, ghostscript, colm
+{ lib, stdenv, fetchurl, fig2dev, tex, ghostscript, colm
 , build-manual ? false
 }:
 
@@ -13,9 +13,9 @@ let
         inherit sha256;
       };
 
-      buildInputs = lib.optional build-manual [ transfig ghostscript tex ];
+      buildInputs = lib.optional build-manual [ fig2dev ghostscript tex ];
 
-      preConfigure = lib.optional build-manual ''
+      preConfigure = lib.optionalString build-manual ''
         sed -i "s/build_manual=no/build_manual=yes/g" DIST
       '';
 

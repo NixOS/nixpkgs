@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, requests, mock }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm, requests, mock }:
 
 buildPythonPackage rec {
   pname = "pysolr";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1rj5jmscvxjwcmlfi6hmkj44l4x6n3ln5p7d8d18j566hzmmzw3f";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ requests ];
 

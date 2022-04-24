@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zuki-themes";
-  version = "3.36-4";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14r8dhfycpmwp2nj6vj0b2cwaaphc9sxbzglc4sr4q566whrhbgd";
+    sha256 = "1q026wa8xgyb6f5k7pqpm5zav30dbnm3b8w59as3sh8rhfgpbf80";
   };
 
   nativeBuildInputs = [ meson ninja sassc ];

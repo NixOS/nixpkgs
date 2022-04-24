@@ -34,5 +34,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/arteria/django-hijack-admin";
     license = licenses.mit;
     maintainers = with maintainers; [ lsix ];
+    # may be unmaintained, doesn't work with recent django-hijack:
+    # https://github.com/django-hijack/django-hijack-admin/issues/46
+    broken = true;
   };
 }

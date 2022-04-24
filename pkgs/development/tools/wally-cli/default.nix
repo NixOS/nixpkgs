@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "wally-cli";
-  version = "2.0.0";
+  version = "2.0.1";
 
   subPackages = [ "." ];
 
@@ -14,14 +14,10 @@ buildGoModule rec {
     owner = "zsa";
     repo = "wally-cli";
     rev = "${version}-linux";
-    sha256 = "0xz3z18bbnf736ngjj6jhnp3p2j55m5jhnb2xl6l5hybracfyhm7";
+    sha256 = "NuyQHEygy4LNqLtrpdwfCR+fNy3ZUxOClVdRen6AXMc=";
   };
 
-  vendorSha256 = "0jqx38x5qvir6zc5yq9p2adafwqhy4hil1k5g81rr1fvbn06k3a6";
-  runVend = true;
-
-  # Can be removed when https://github.com/zsa/wally-cli/pull/1 is merged.
-  doCheck = false;
+  vendorSha256 = "sha256-HffgkuKmaOjTYi+jQ6vBlC50JqqbYiikURT6TCqL7e0=";
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";

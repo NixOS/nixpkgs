@@ -2,28 +2,31 @@
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.5.3";
+  version = "1.8.1";
+
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "vmware-tanzu";
     repo = "velero";
-    sha256 = "sha256-DZ6phJxc8n9LCSsER09K3j+pUJxkYrBZQaI4h+bcV94=";
+    rev = "v${version}";
+    sha256 = "sha256-oiYr9JQlJVxjZxGhZyOIUy934KedBmDhzK+71qmaD58=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=456eb19668f8da603756353d9179b59b5a7bfa04
-      -X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=${version}"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
+  ];
+
+  vendorSha256 = "sha256-DyQ+MHRNZFg80Yz/SCxhnF4NVbIsyhz4mApx0+kgHoA=";
+
+  excludedPackages = [ "issue-template-gen" "release-tools" "v1" "velero-restic-restore-helper" ];
+
+  doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/velero version --client-only | grep ${version} > /dev/null
   '';
-
-  vendorSha256 = "sha256-m/zShJeclZ1k8Fr9faK2x1Mpwbwun674iMPJhMw/9Mc=";
-
-  excludedPackages = [ "issue-template-gen" ];
-
-  doCheck = false;
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
@@ -40,6 +43,5 @@ buildGoModule rec {
       "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.mbode maintainers.bryanasdev000 ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -5,6 +5,21 @@ with lib;
 let
   cfg = config.services.sshguard;
 
+  configFile = let
+    args = lib.concatStringsSep " " ([
+      "-afb"
+      "-p info"
+      "-o cat"
+      "-n1"
+    ] ++ (map (name: "-t ${escapeShellArg name}") cfg.services));
+    backend = if config.networking.nftables.enable
+      then "sshg-fw-nft-sets"
+      else "sshg-fw-ipset";
+  in pkgs.writeText "sshguard.conf" ''
+    BACKEND="${pkgs.sshguard}/libexec/${backend}"
+    LOGREADER="LANG=C ${pkgs.systemd}/bin/journalctl ${args}"
+  '';
+
 in {
 
   ###### interface
@@ -85,20 +100,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.etc."sshguard.conf".text = let
-      args = lib.concatStringsSep " " ([
-        "-afb"
-        "-p info"
-        "-o cat"
-        "-n1"
-      ] ++ (map (name: "-t ${escapeShellArg name}") cfg.services));
-      backend = if config.networking.nftables.enable
-        then "sshg-fw-nft-sets"
-        else "sshg-fw-ipset";
-    in ''
-      BACKEND="${pkgs.sshguard}/libexec/${backend}"
-      LOGREADER="LANG=C ${pkgs.systemd}/bin/journalctl ${args}"
-    '';
+    environment.etc."sshguard.conf".source = configFile;
 
     systemd.services.sshguard = {
       description = "SSHGuard brute-force attacks protection system";
@@ -107,9 +109,11 @@ in {
       after = [ "network.target" ];
       partOf = optional config.networking.firewall.enable "firewall.service";
 
+      restartTriggers = [ configFile ];
+
       path = with pkgs; if config.networking.nftables.enable
-        then [ nftables iproute systemd ]
-        else [ iptables ipset iproute systemd ];
+        then [ nftables iproute2 systemd ]
+        else [ iptables ipset iproute2 systemd ];
 
       # The sshguard ipsets must exist before we invoke
       # iptables. sshguard creates the ipsets after startup if

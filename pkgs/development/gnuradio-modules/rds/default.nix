@@ -8,6 +8,7 @@
 , python
 , log4cpp
 , mpir
+, thrift
 , boost
 , gmp
 , icu
@@ -40,6 +41,9 @@ in mkDerivation {
     boost
     gmp
     icu
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+    thrift
+    python.pkgs.thrift
   ];
 
   nativeBuildInputs = [

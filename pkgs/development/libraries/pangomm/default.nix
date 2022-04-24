@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, pango, glibmm, cairomm, gnome3
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm, cairomm, gnome
 , ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.42.1";
+  version= "2.46.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "03zli5amizhv9bfklwfq7xyf0b5dagchx1lnz9f0v1rhk69h9gql";
+    sha256 = "sha256-V0QqtNwEOHe/44OZFXMastaT/GY0pxYUQi+1MMnqpvQ=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
   propagatedBuildInputs = [ pango glibmm cairomm ];
@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

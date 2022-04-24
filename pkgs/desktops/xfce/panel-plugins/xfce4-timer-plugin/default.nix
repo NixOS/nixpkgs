@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1qr4m3n2l3rvsizsr3h7fyfajszfalqm7rhvjx2yjj8r3f8x4ljb";
+    sha256 = "sha256-S1LSkRsZSelFlxvmUzFV7mupnHcHjqx/1DsPKuyoJOM=";
   };
 
   nativeBuildInputs = [
@@ -28,17 +28,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-timer-plugin";
     description = "Simple countdown and alarm plugin for the Xfce panel";
     platforms = platforms.linux;
-    license = licenses.gpl2;
-    maintainers = [ ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

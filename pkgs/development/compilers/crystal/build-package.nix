@@ -1,4 +1,16 @@
-{ stdenv, lib, crystal, shards, git, pkg-config, which, linkFarm, fetchFromGitHub, installShellFiles }:
+{ stdenv
+, lib
+, crystal
+, shards
+, git
+, pkg-config
+, which
+, linkFarm
+, fetchgit
+, fetchFromGitHub
+, installShellFiles
+, removeReferencesTo
+}:
 
 {
   # Some projects do not include a lock file, so you can pass one
@@ -10,7 +22,7 @@
 , format ? "make"
 , installManPages ? true
   # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
-  # The default `crystal build` options can be overridden with { foo.options = [ "--no-debug" ]; }
+  # The default `crystal build` options can be overridden with { foo.options = [ "--optionname" ]; }
 , crystalBinaries ? { }
 , ...
 }@args:
@@ -28,12 +40,14 @@ let
   crystalLib = linkFarm "crystal-lib" (lib.mapAttrsToList
     (name: value: {
       inherit name;
-      path = fetchFromGitHub value;
+      path =
+        if (builtins.hasAttr "url" value)
+        then fetchgit value
+        else fetchFromGitHub value;
     })
     (import shardsFile));
 
-  # we previously had --no-debug here but that is not recommended by upstream
-  defaultOptions = [ "--release" "--progress" "--verbose" ];
+  defaultOptions = [ "--release" "--progress" "--verbose" "--no-debug" ];
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
 
@@ -61,7 +75,13 @@ stdenv.mkDerivation (mkDerivationArgs // {
   buildInputs = args.buildInputs or [ ] ++ [ crystal ]
     ++ lib.optional (format != "crystal") shards;
 
-  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkg-config which ];
+  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+    git
+    installShellFiles
+    removeReferencesTo
+    pkg-config
+    which
+  ];
 
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"
@@ -78,7 +98,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
     '')
     crystalBinaries)
   ++ lib.optional (format == "shards")
-    "shards build --local --production ${lib.concatStringsSep " " defaultOptions}"
+    "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
   ++ [ "runHook postBuild" ]));
 
   installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
@@ -103,6 +123,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
       installManPage man/*.?
     fi
   '') ++ [
+    "remove-references-to -t ${lib.getLib crystal} $out/bin/*"
     "runHook postInstall"
   ]));
 
@@ -120,7 +141,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
-      $f --help
+      $f --help > /dev/null
     done
   '';
 

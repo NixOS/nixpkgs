@@ -2,59 +2,66 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
-, python
-, pytest
 , cmake
+, boost
+, eigen
+, python
 , catch
 , numpy
-, eigen
-, scipy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.6.1";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "TXljeRFonQwEmlIGMnTHwdfPsd9cMOVn5/1zb3tYBfI=";
+    hash = "sha256-wBvEWQlZhHoSCMbGgYtB3alWBLA8mA8Mz6JPLhXa3Pc=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ catch ];
+  dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
+    "-DBUILD_TESTING=on"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
-  # Enable some tests only on Python 3. The "test_string_view" test
-  # 'testTypeError: string_view16_chars(): incompatible function arguments'
-  # fails on Python 2.
-    "-DPYBIND11_CPP_STANDARD=-std=c++17"
+    "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
 
-  dontUseSetuptoolsBuild = true;
-  dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
+  postBuild = ''
+    # build tests
+    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+  '';
 
-  preFixup = ''
-    pushd ..
-    export PYBIND11_USE_CMAKE=1
-    setuptoolsBuildPhase
-    pipInstallPhase
+  postInstall = ''
+    make install
     # Symlink the CMake-installed headers to the location expected by setuptools
     mkdir -p $out/include/${python.libPrefix}
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
-    popd
   '';
 
   checkInputs = [
-    pytest
+    catch
     numpy
-    scipy
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # require dependencies not available in nixpkgs
+    "tests/test_embed/test_trampoline.py"
+    "tests/test_embed/test_interpreter.py"
+    # numpy changed __repr__ output of numpy dtypes
+    "tests/test_numpy_dtypes.py"
+    # no need to test internal packaging
+    "tests/extra_python_package/test_files.py"
+    # tests that try to parse setuptools stdout
+    "tests/extra_setuptools/test_setuphelper.py"
   ];
 
   meta = with lib; {
@@ -66,6 +73,6 @@ buildPythonPackage rec {
       bindings of existing C++ code.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers;[ yuriaisaka ];
+    maintainers = with maintainers; [ yuriaisaka dotlambda ];
   };
 }

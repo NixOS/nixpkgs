@@ -1,6 +1,6 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pytestCheckHook
 , cachetools
@@ -9,22 +9,34 @@
 , mock
 , oauth2client
 , pyasn1-modules
+, pyu2f
 , pytest-localserver
 , responses
 , rsa
-, six
+, pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.24.0";
+  version = "2.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bmdqkyv8k8n6s8dss4zpbcq1cdxwicpb42kwybd02ia85mh43hb";
+    sha256 = "sha256-YNRJ+BQsdC23YPTAvjkSG8jZvoVVVdeEwlLerKHO0/U=";
   };
 
-  propagatedBuildInputs = [ pyasn1-modules cachetools rsa six ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cachetools>=2.0.0,<5.0" "cachetools"
+  '';
+
+  propagatedBuildInputs = [
+    cachetools
+    pyasn1-modules
+    rsa
+    pyopenssl
+    pyu2f
+  ];
 
   checkInputs = [
     flask
@@ -39,6 +51,23 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_request_with_timeout_success"
+    "test_request_with_timeout_failure"
+    "test_request_headers"
+    "test_request_error"
+    "test_request_basic"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # E MemoryError: Cannot allocate write+execute memory for ffi.callback().
+    # You might be running on a system that prevents this.
+    # For more information, see https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "test_configure_mtls_channel_with_callback"
+    "test_configure_mtls_channel_with_metadata"
+    "TestDecryptPrivateKey"
+    "TestMakeMutualTlsHttp"
+    "TestMutualTlsAdapter"
   ];
 
   meta = with lib; {

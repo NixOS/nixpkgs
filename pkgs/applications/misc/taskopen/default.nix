@@ -1,20 +1,27 @@
-{ fetchurl, lib, stdenv, makeWrapper, which, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, which, perl, perlPackages }:
 
-stdenv.mkDerivation {
-  name = "taskopen-1.1.4";
-  src = fetchurl {
-    url = "https://github.com/ValiValpas/taskopen/archive/v1.1.4.tar.gz";
-    sha256 = "774dd89f5c92462098dd6227e181268e5ec9930bbc569f25784000df185c71ba";
+stdenv.mkDerivation rec {
+  pname = "taskopen";
+  version = "1.1.5";
+
+  src = fetchFromGitHub {
+    owner = "ValiValpas";
+    repo = "taskopen";
+    rev = "v${version}";
+    sha256 = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which perl ] ++ (with perlPackages; [ JSON ]);
-
-  installPhase = ''
+  postPatch = ''
     # We don't need a DESTDIR and an empty string results in an absolute path
     # (due to the trailing slash) which breaks the build.
     sed 's|$(DESTDIR)/||' -i Makefile
+  '';
 
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ which ]
+    ++ (with perlPackages; [ JSON perl ]);
+
+  installPhase = ''
     make PREFIX=$out
     make PREFIX=$out install
   '';
@@ -28,7 +35,7 @@ stdenv.mkDerivation {
     description = "Script for taking notes and open urls with taskwarrior";
     homepage = "https://github.com/ValiValpas/taskopen";
     platforms = platforms.linux;
-    license = lib.licenses.free ;
+    license = licenses.free;
     maintainers = [ maintainers.winpat ];
   };
 }

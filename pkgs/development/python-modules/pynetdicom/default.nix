@@ -6,17 +6,21 @@
 , pyfakefs
 , pytestCheckHook
 , sqlalchemy
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "1.5.5";
+  version = "2.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zjpscxdhlcv99py7jx5r6dw32nzbcr49isrzkdr6g3zwyxwzbfm";
+    sha256 = "sha256-/JWQUtFBW4uqCbs/nUxj1pRBfTCXV4wcqTkqvzpdFrM=";
   };
 
   propagatedBuildInputs = [
@@ -32,24 +36,44 @@ buildPythonPackage rec {
   disabledTests = [
     # Some tests needs network capabilities
     "test_str_types_empty"
+    "test_associate_reject"
+    "TestAEGoodAssociation"
     "TestEchoSCP"
     "TestEchoSCPCLI"
+    "TestEventHandlingAcceptor"
+    "TestFindSCP"
+    "TestFindSCPCLI"
+    "TestGetSCP"
+    "TestGetSCPCLI"
+    "TestMoveSCP"
+    "TestMoveSCPCLI"
+    "TestPrimitive_N_GET"
+    "TestQRGetServiceClass"
+    "TestQRMoveServiceClass"
+    "TestSearch"
+    "TestState"
+    "TestStorageServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestQRGetServiceClass"
-    "TestQRMoveServiceClass"
   ];
 
-  pythonImportsCheck = [ "pynetdicom" ];
+  disabledTestPaths = [
+    # Ignore apps tests
+    "pynetdicom/apps/tests/"
+  ];
+
+  pythonImportsCheck = [
+    "pynetdicom"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    # Tests are not passing on Darwin, thus it's assumed that it doesn't work
-    broken = stdenv.isDarwin;
+    # Tests are not passing on Darwin/Aarch64, thus it's assumed that it doesn't work
+    broken = stdenv.isDarwin || stdenv.isAarch64;
   };
 }

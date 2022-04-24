@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , coreutils
 , sharutils
+, runtimeShell
 , version
 , sha256
 }:
@@ -18,7 +19,8 @@ stdenv.mkDerivation {
     rev    = version;
   };
 
-  buildInputs = [ coreutils sharutils ]; # for uuencode
+  nativeBuildInputs = [ sharutils ]; # for uuencode
+  buildInputs = [ coreutils ];
 
   makeFlags = [
     "PREFIX=$(out)"

@@ -1,16 +1,17 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
 , desktop-file-utils
 , gtk3
-, libaccounts-glib
 , libexif
 , libgee
+, libhandy
 , geocode-glib
 , gexiv2
 , libgphoto2
@@ -23,33 +24,31 @@
 , libsoup
 , sqlite
 , python3
-, scour
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.0";
-
-  repoName = "photos";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "photos";
     rev = version;
-    sha256 = "sha256-bTk4shryAWWMrKX3mza6xQ05qpBPf80Ey7fmYgKLUiY=";
+    sha256 = "sha256-NhF/WgS6IOwgALSCNyFNxz8ROVTb+mUX+lBtnWEyhEI=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix build with vala 0.56
+    # https://github.com/elementary/photos/pull/711
+    (fetchpatch {
+      url = "https://github.com/elementary/photos/commit/6594f1323726fb0d38519a7bdafe16f9170353cb.patch";
+      sha256 = "sha256-Ie9ULC8Xw4KLQJANPXh4LDywMjWfniPX/P76eHW8LHc=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -62,32 +61,30 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    elementary-icon-theme
+  buildInputs = [
     geocode-glib
     gexiv2
     granite
+    gtk3
+    json-glib
+    libexif
+    libgee
+    libgphoto2
+    libgudev
+    libhandy
+    libraw
+    librest
+    libsoup
+    libwebp
+    sqlite
+    webkitgtk
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libexif
-    libgee
-    libgphoto2
-    libgudev
-    libraw
-    librest
-    libsoup
-    libunity
-    libwebp
-    scour
-    sqlite
-    webkitgtk
-  ];
+  ]);
 
   mesonFlags = [
     "-Dplugins=false"
@@ -98,11 +95,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta =  with lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.photos";
   };
 }

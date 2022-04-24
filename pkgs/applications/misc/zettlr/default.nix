@@ -10,11 +10,11 @@
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
 let
   pname = "zettlr";
-  version = "1.8.7";
+  version = "2.2.5";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
-    sha256 = "0zbmlk5qk92b3zycs0bmdwgc8fn4a4dv1yvq9q8q2wxz4ammx6c0";
+    sha256 = "sha256-KP3lt0CweT1f/BR3IpnjwCqNvhFbrpz9KLg6K8OMs+I=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit name src;
@@ -31,9 +31,10 @@ appimageTools.wrapType2 rec {
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ texlive pandoc ];
   extraInstallCommands = ''
     mv $out/bin/{${name},${pname}}
-    install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/zettlr.desktop
-    install -m 444 -D ${appimageContents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/zettlr.png
-    substituteInPlace $out/share/applications/zettlr.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+    install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop
+    install -m 444 -D ${appimageContents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/Zettlr.png
+    substituteInPlace $out/share/applications/Zettlr.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

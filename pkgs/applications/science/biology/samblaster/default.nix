@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g24fq5hplnfgqkh3xqpg3lgx3wmxwnh9c7m6yw7pbi40lmgl1jv";
   };
 
+  makeFlags = [ "CPP=${stdenv.cc.targetPrefix}c++" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp samblaster $out/bin

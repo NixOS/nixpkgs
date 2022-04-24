@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gdbm";
-  version = "1.19";
+  version = "1.23";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${pname}-${version}.tar.gz";
-    sha256 = "sha256-N+0SIUEiuXLhig2UmVA55XdIGRk573QRWx1B2IETZLw=";
+    sha256 = "sha256-dLEIHSH/8TrkvXwW5dblBKTCb3zeHcoNljpIQXS7ys0=";
   };
 
   doCheck = true; # not cross;

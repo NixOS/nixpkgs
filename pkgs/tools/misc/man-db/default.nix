@@ -1,17 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ buildPackages
+, db
+, fetchurl
+, groff
+, lib
+, libiconv
+, libpipeline
+, makeWrapper
+, nixosTests
+, pkg-config
+, stdenv
+, zstd
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.9.4";
+  pname = "man-db";
+  version = "2.10.2";
 
   src = fetchurl {
-    url = "mirror://savannah/man-db/${name}.tar.xz";
-    sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
+    url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
+    sha256 = "sha256-7peVTUkqE3MZA8nQcnubAeUIntvWlfDNtY1AWlr1UU0=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
+  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -27,6 +41,12 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
+
+    # use absolute paths to reference programs, otherwise artifacts will have undeclared dependencies
+    for f in configure.ac m4/man-check-progs.m4 m4/man-po4a.m4; do
+      substituteInPlace $f \
+        --replace AC_CHECK_PROGS AC_PATH_PROGS
+    done
   '';
 
   configureFlags = [
@@ -72,10 +92,15 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
 
+  passthru.tests = {
+    nixos = nixosTests.man;
+  };
+
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
     platforms = lib.platforms.unix;
+    mainProgram = "man";
   };
 }

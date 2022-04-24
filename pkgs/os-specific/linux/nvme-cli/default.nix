@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "1.13";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    sha256 = "1d538kp841bjh8h8d9q7inqz56rdcwb3m78zfx8607ddykv7wcqb";
+    sha256 = "sha256-/wDQxsN1sji56zfcvqx02iciYnyxjIbL85bNaRwrHYw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos tavyc ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

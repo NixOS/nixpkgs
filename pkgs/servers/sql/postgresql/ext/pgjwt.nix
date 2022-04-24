@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1riz0xvwb6y02j0fljbr9hcbqb2jqs4njlivmavy9ysbcrrv1vrf";
   };
 
-  buildPhase = ":";
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/share/postgresql/extension
     cp pg*sql *.control $out/share/postgresql/extension

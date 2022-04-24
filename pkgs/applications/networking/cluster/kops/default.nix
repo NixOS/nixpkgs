@@ -21,11 +21,10 @@ let
         nativeBuildInputs = [ go-bindata installShellFiles ];
         subPackages = [ "cmd/kops" ];
 
-        buildFlagsArray = ''
-          -ldflags=
-              -X k8s.io/kops.Version=${version}
-              -X k8s.io/kops.GitVersion=${version}
-        '';
+        ldflags = [
+          "-X k8s.io/kops.Version=${version}"
+          "-X k8s.io/kops.GitVersion=${version}"
+        ];
 
         preBuild = ''
           (cd go/src/k8s.io/kops
@@ -44,7 +43,7 @@ let
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [ offline zimbatm ];
+          maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
           platforms = platforms.unix;
         };
       } // attrs';
@@ -53,19 +52,21 @@ rec {
 
   mkKops = generic;
 
-  kops_1_16 = mkKops {
-    version = "1.16.4";
-    sha256 = "0qi80hzd5wc8vn3y0wsckd7pq09xcshpzvcr7rl5zd4akxb0wl3f";
+  kops_1_21 = mkKops rec {
+    version = "1.21.4";
+    sha256 = "sha256-f2xOVa3N/GH5IoI6H/QwDdKTeQoF/kEHX6lNytCZ9cs=";
+    rev = "v${version}";
   };
 
-  kops_1_17 = mkKops {
-    version = "1.17.2";
-    sha256 = "0fmrzjz163hda6sl1jkl7cmg8fw6mmqb9953048jnhmd3w428xlz";
+  kops_1_22 = mkKops rec {
+    version = "1.22.4";
+    sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
+    rev = "v${version}";
   };
 
-  kops_1_18 = mkKops rec {
-    version = "1.18.2";
-    sha256 = "17na83j6sfhk69w9ssvicc0xd1904z952ad3zzbpha50lcy6nlhp";
+  kops_1_23 = mkKops rec {
+    version = "1.23.1";
+    sha256 = "sha256-SiseHs5cMj8DR1f6z9PTbtF/h3Bn9riiLWW5KMYwVUg=";
     rev = "v${version}";
   };
 }

@@ -27,7 +27,7 @@ let
     text = ''
       #! /bin/sh
 
-      export PATH=$PATH:${pkgs.iproute}/sbin
+      export PATH=$PATH:${pkgs.iproute2}/sbin
 
       ip link set $IFNAME up
       ip address add ${cfg.ipAddress} dev $IFNAME

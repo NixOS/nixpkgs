@@ -1,18 +1,33 @@
-{ lib, mkFranzDerivation, fetchurl }:
+{ lib, mkFranzDerivation, fetchurl, xorg, xdg-utils, buildEnv, writeShellScriptBin }:
 
-mkFranzDerivation rec {
+let
+  mkFranzDerivation' = mkFranzDerivation.override {
+    xdg-utils = buildEnv {
+      name = "xdg-utils-for-ferdi";
+      paths = [
+        xdg-utils
+        (lib.hiPrio (writeShellScriptBin "xdg-open" ''
+          unset GDK_BACKEND
+          exec ${xdg-utils}/bin/xdg-open "$@"
+        ''))
+      ];
+    };
+  };
+in
+mkFranzDerivation' rec {
   pname = "ferdi";
   name = "Ferdi";
-  version = "5.5.0";
+  version = "5.8.1";
   src = fetchurl {
-    url = "https://github.com/getferdi/ferdi/releases/download/v${version}/ferdi_${version}_amd64.deb";
-    sha256 = "0i24vcnq4iz5amqmn2fgk92ff9x9y7fg8jhc3g6ksvmcfly7af3k";
+    url = "https://master.dl.sourceforge.net/project/ferdi.mirror/v${version}/ferdi_${version}_amd64.deb";
+    sha256 = "sha256-Bl7bM5iDQlfPSZxksqlg7GbuwWlm53QkOf/TQEg3/n0=";
   };
+  extraBuildInputs = [ xorg.libxshmfence ];
   meta = with lib; {
     description = "Combine your favorite messaging services into one application";
     homepage = "https://getferdi.com/";
-    license = licenses.free;
-    maintainers = [ maintainers.davidtwco ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ davidtwco ma27 ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
   };

@@ -5,18 +5,18 @@
 
 buildPythonApplication rec {
   pname = "pwncat";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sfdqphs0v3lj3vffda4w05r6sqir7qafa8lmlh0wr921wyiqwag";
+    sha256 = "1230fdn5mx3wwr3a3nn6z2vwh973n248m11hnx9y3fjq7bgpky67";
   };
 
   # Tests requires to start containers
   doCheck = false;
 
   meta = with lib; {
-    description = " TCP/UDP communication suite";
+    description = "TCP/UDP communication suite";
     homepage = "https://pwncat.org/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

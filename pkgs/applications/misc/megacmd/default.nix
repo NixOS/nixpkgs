@@ -1,17 +1,18 @@
-{ lib, stdenv
-, autoconf
-, automake
+{ lib
+, stdenv
+, autoreconfHook
 , c-ares
 , cryptopp
 , curl
 , fetchFromGitHub
-, ffmpeg_3
+  # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
+  # to be re-enabled when patch available
+  # , ffmpeg
 , freeimage
 , gcc-unwrapped
 , libmediainfo
 , libraw
 , libsodium
-, libtool
 , libuv
 , libzen
 , pcre-cpp
@@ -22,34 +23,29 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "0czyhsms0a0237d6h9b21n9p4nm4zkjanhhbvw26k6266g6c1nyr";
+    sha256 = "Y/FkbN9mTuBpcKCSQg0M+3/IPzJ58X4iZhX2kMVDv7A=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkg-config
-  ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg_3
+    # ffmpeg
     freeimage
     gcc-unwrapped
     libmediainfo
     libraw
     libsodium
-    libtool
     libuv
     libzen
     pcre-cpp
@@ -57,17 +53,13 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   configureFlags = [
     "--disable-curl-checks"
     "--disable-examples"
     "--with-cares"
     "--with-cryptopp"
     "--with-curl"
-    "--with-ffmpeg"
+    # "--with-ffmpeg"
     "--with-freeimage"
     "--with-libmediainfo"
     "--with-libuv"
@@ -80,9 +72,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
-    homepage    = "https://mega.nz/";
-    license     = licenses.unfree;
-    platforms   = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.wedens ];
+    homepage = "https://mega.io/cmd";
+    license = with licenses; [ bsd2 gpl3Only ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ lunik1 ];
   };
 }

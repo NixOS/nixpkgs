@@ -110,7 +110,7 @@ overrides = self: super: rec {
   haskell-mode = self.melpaPackages.haskell-mode;
   ...
 };
-((emacsPackagesFor emacs).overrideScope' overrides).emacs.pkgs.withPackages
+((emacsPackagesFor emacs).overrideScope' overrides).withPackages
   (p: with p; [
     # here both these package will use haskell-mode of our own choice
     ghc-mod

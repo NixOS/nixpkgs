@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ghorg";
-  version = "1.5.1";
+  version = "1.7.13";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
-    rev = version;
-    sha256 = "sha256-HkOMG7VG8jyvr1W1T/62murtNYE8wyT/p3lDtuxfm5M=";
+    rev = "v${version}";
+    sha256 = "sha256-EQCu+2qMKu+e6G5iXAQn5cz0MZqHrF2wnKNO8Fkpp/Y=";
   };
 
   doCheck = false;
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Quickly clone an entire org/users repositories into one directory";
@@ -32,6 +32,5 @@ buildGoModule rec {
     homepage = "https://github.com/gabrie30/ghorg";
     license = licenses.asl20;
     maintainers = with maintainers; [ vidbina ];
-    platforms = platforms.all;
   };
 }

@@ -1,11 +1,11 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , ffmpegthumbnailer
 , gdk-pixbuf
 , glib
 , freetype
 , libgsf
 , poppler
-, libjpeg
 , gst_all_1
 }:
 
@@ -14,9 +14,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "0.2.9";
+  version = "4.16.0";
 
-  sha256 = "0b3mli40msv35qn67c1m9rn5bigj6ls10l08qk7fa3fwvzl49hmw";
+  sha256 = "sha256-JLcmYjStF9obDoRHsxnZ1e9HPTeJUVKjnn5Ip1BBmPw=";
 
   buildInputs = [
     ffmpegthumbnailer
@@ -33,7 +33,8 @@ mkXfceDerivation {
     wrapProgram $out/lib/tumbler-1/tumblerd "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A D-Bus thumbnailer service";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

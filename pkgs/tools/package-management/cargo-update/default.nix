@@ -1,6 +1,6 @@
 { lib, stdenv
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , cmake
 , pkg-config
 , installShellFiles
@@ -15,17 +15,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "4.1.2";
+  version = "8.1.2";
 
-  src = fetchFromGitHub {
-    owner = "nabijaczleweli";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0bpl4y5p0acn1clxgwn2sifx6ggpq9jqw5zrmva7asjf8p8dx3v5";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-9/4HQbf6wPNzsYqXbtrWoe9n2iKQoNILhjhwrbOY3Z0=";
   };
 
-  cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.2.patch ];
-  cargoSha256 = "150fpb7wyyxi40z4wai6c94mn84g700c2228316g6y8i07c8ix0d";
+  cargoSha256 = "sha256-iUJBhBKWYRpzwMcOvMIP8smmw5OnsTv1olv61pel5dY=";
 
   nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
 

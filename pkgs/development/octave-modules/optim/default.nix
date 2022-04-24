@@ -9,11 +9,11 @@
 
 buildOctavePackage rec {
   pname = "optim";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1z2h8gy99glxh5qi3r22am2vdirlbklkq0lx4r8jrx1ak7awh47r";
+    sha256 = "1175bckiryz0i6zm8zvq7y5rq3lwkmhyiky1gbn33np9qzxcsl3i";
   };
 
   buildInputs = [

@@ -4,10 +4,9 @@ let
 
     # Update script tailored to LXQt packages from git repository
     lxqtUpdateScript = { pname, version, src }:
-      pkgs.genericUpdater {
+      pkgs.gitUpdater {
         inherit pname version;
         attrPath = "lxqt.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
       };
 
     # For compiling information, see:
@@ -52,7 +51,6 @@ let
     lxqt-archiver = callPackage ./lxqt-archiver {};
 
     preRequisitePackages = [
-      pkgs.gvfs # virtual file systems support for PCManFM-QT
       libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
       libsForQt5.libkscreen # provides plugins for screen management software
       pkgs.libfm

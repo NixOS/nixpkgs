@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "IPMIView";
-  version = "2.18.0";
-  buildVersion = "201007";
+  version = "2.20.0";
+  buildVersion = "220309";
 
   src = fetchurl {
     url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "10cv63yhh81gjxahsg4y3zp4mjivc217m4z1vcpwvvnds46c65h8";
+    hash = "sha256-qtklBMuK0jb9Ye0IkYM2WYFRMAfZg9tk08a1JQ64cjA=";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
       else throw "IPMIView is not supported on this platform";
     in
   ''
-    patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/libawt_xawt.so
-    patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/amd64/libfontmanager.so
-    patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
+    runHook preBuild
+
+    patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/libawt_xawt.so
+    patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so
+    patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
+
+    runHook postBuild
   '';
 
   desktopItem = makeDesktopItem rec {
@@ -40,10 +44,12 @@ stdenv.mkDerivation rec {
     exec = "IPMIView";
     desktopName = name;
     genericName = "Supermicro BMC manager";
-    categories = "Network";
+    categories = [ "Network" ];
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R . $out/
 
@@ -61,6 +67,8 @@ stdenv.mkDerivation rec {
              mkdir -p $WORK_DIR
              ln -snf '$out'/iKVM.jar '$out'/iKVM_ssl.jar '$out'/libiKVM* '$out'/libSharedLibrary* $WORK_DIR
              cd $WORK_DIR'
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -1,11 +1,14 @@
 { buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , lib
 }:
 
 buildPythonPackage rec {
   pname = "wasm";
   version = "1.2";
+
+  disabled = pythonAtLeast "3.10"; # project is abandoned, remove we whe move to py310/311
 
   src = fetchPypi {
     inherit pname version;

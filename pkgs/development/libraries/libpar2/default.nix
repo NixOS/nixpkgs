@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, libsigcxx }:
 
-let version = "0.4"; in
-
 stdenv.mkDerivation rec {
   pname = "libpar2";
-  inherit version;
+  version = "0.4";
 
   src = fetchurl {
     url = "https://launchpad.net/libpar2/trunk/${version}/+download/${pname}-${version}.tar.gz";

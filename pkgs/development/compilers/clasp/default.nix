@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchFromGitLab
 , llvmPackages
 , cmake, boehmgc, gmp, zlib, ncurses, boost, libelf
-, python, git, sbcl
+, python3, git, sbcl
 , wafHook
 }:
 let
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake python git sbcl wafHook ] ++
+  nativeBuildInputs = [ cmake python3 git sbcl wafHook ] ++
     (with llvmPackages; [ llvm clang ]);
 
   buildInputs = with llvmPackages;
@@ -118,7 +118,6 @@ stdenv.mkDerivation rec {
   CLASP_SRC_DONTTOUCH = "true";
 
   meta = {
-    inherit version;
     description = "A Common Lisp implementation based on LLVM with C++ integration";
     license = lib.licenses.lgpl21Plus ;
     maintainers = [lib.maintainers.raskin];

@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -8,7 +10,8 @@
 , python3
 , wrapGAppsHook
 , libxml2
-, libgda
+, libgda6
+, libhandy
 , libsoup
 , json-glib
 , gspell
@@ -16,18 +19,27 @@
 , libdazzle
 , gtk3
 , gtksourceview4
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "3.38.0";
+  version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "282puBoi2SM74Y6Z/VxEj2qwV1nR6UwQWAu4McotdjU=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "E28R/gOhlJkMQ6/jOL0eoK0U5+H26Gjlv3xbUsTF5eE=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:15:5: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtranslator/-/commit/7ac572cc8c8c37ca3826ecf0d395edd3c38e8e22.patch";
+      sha256 = "aRg6dYweftV8F7FXykO7m0G+p4SLTFnhTcZx72UCMDE=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -45,7 +57,8 @@ stdenv.mkDerivation rec {
     gtk3
     libdazzle
     gtksourceview4
-    libgda
+    libgda6
+    libhandy
     libsoup
     json-glib
     gettext
@@ -59,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };

@@ -1,48 +1,53 @@
 { lib
+, stdenv
 , bokeh
 , buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, pytestCheckHook
-, pytest-rerunfailures
-, pythonOlder
 , cloudpickle
+, distributed
+, fetchFromGitHub
+, fetchpatch
+, fsspec
+, jinja2
 , numpy
-, toolz
-, dill
+, packaging
 , pandas
 , partd
+, pytest-rerunfailures
 , pytest-xdist
-, withExtraComplete ? false
-, distributed
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, toolz
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.03.0";
-  disabled = pythonOlder "3.5";
+  version = "2022.02.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "LACv7lWpQULQknNGX/9vH9ckLsypbqKDGnsNBgKT1eI=";
+    hash = "sha256-A8ktvfpow/QKAEEt9SUnkTqYFJCrV1mgnuDIP3gdyrE=";
   };
 
   propagatedBuildInputs = [
-    bokeh
     cloudpickle
-    dill
     fsspec
-    numpy
-    pandas
+    packaging
     partd
+    pyyaml
     toolz
-  ] ++ lib.optionals withExtraComplete [
-    distributed
+    pandas
+    jinja2
+    bokeh
+    numpy
   ];
 
-  doCheck = false;
+  doCheck = true;
 
   checkInputs = [
     pytestCheckHook
@@ -61,12 +66,41 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
-
-  disabledTests = [
-    "test_annotation_pack_unpack"
-    "test_annotations_blockwise_unpack"
+  pytestFlagsArray = [
+    # rerun failed tests up to three times
+    "--reruns 3"
+    # don't run tests that require network access
+    "-m 'not network'"
   ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # this test requires features of python3Packages.psutil that are
+    # blocked in sandboxed-builds
+    "test_auto_blocksize_csv"
+  ] ++ [
+    # A deprecation warning from newer sqlalchemy versions makes these tests
+    # to fail https://github.com/dask/dask/issues/7406
+    "test_sql"
+    # Test interrupt fails intermittently https://github.com/dask/dask/issues/2192
+    "test_interrupt"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "dask"
+    "dask.array"
+    "dask.bag"
+    "dask.bytes"
+    "dask.dataframe"
+    "dask.dataframe.io"
+    "dask.dataframe.tseries"
+    "dask.diagnostics"
+  ];
+
+  passthru.extras-require = {
+    complete = [ distributed ];
+  };
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

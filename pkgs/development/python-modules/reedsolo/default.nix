@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cython, nose }:
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchFromGitHub
+, cython
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "reedsolo";
@@ -8,10 +14,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "reedsolomon";
-    # https://github.com/tomerfiliba/reedsolomon/issues/28
-    rev = "73926cdf81b39009bd6e46c8d49f3bbc0eaad4e4";
-    sha256 = "03wrr0c32dsl7h9k794b8fwnyzklvmxgriy49mjvvd3val829cc1";
+    rev = "v${version}";
+    hash = "sha256-GUMdL5HclXxqMYasq9kUE7fCqOkjr1D20wjd/E+xPBk=";
   };
+
+  patches = [
+    (fetchpatch {
+      # python3.10 compat; https://github.com/tomerfiliba/reedsolomon/pull/38
+      url = "https://github.com/tomerfiliba/reedsolomon/commit/63e5bd9fc3ca503990c212eb2c77c10589e6d6c3.patch";
+      hash = "sha256-47g+jUsJEAyqGnlzRA1oSyc2XFPUOfH0EW+vcOJzsxI=";
+    })
+  ];
 
   nativeBuildInputs = [ cython ];
 

@@ -1,13 +1,14 @@
 { lib, fetchFromGitHub, beets, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication {
-  name = "beets-copyartifacts";
+  pname = "beets-copyartifacts";
+  version = "unstable-2020-02-15";
 
   src = fetchFromGitHub {
     repo = "beets-copyartifacts";
-    owner = "sbarakat";
-    rev = "d0bb75c8fc8fe125e8191d73de7ade6212aec0fd";
-    sha256 = "19b4lqq1p45n348ssmql60jylw2fw7vfj9j22nly5qj5qx51j3g5";
+    owner = "adammillerio";
+    rev = "85eefaebf893cb673fa98bfde48406ec99fd1e4b";
+    sha256 = "sha256-bkT2BZZ2gdcacgvyrVe2vMrOMV8iMAm8Q5xyrZzyqU0=";
   };
 
   postPatch = ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
+{ stdenv, lib, fetchurl, fetchpatch, alsa-lib, AudioUnit, CoreServices }:
 
 let
 
@@ -11,17 +11,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "audiofile-0.3.6";
+  pname = "audiofile";
+  version = "0.3.6";
 
   buildInputs =
     lib.optionals stdenv.isLinux [
-      alsaLib
+      alsa-lib
     ] ++ lib.optionals stdenv.isDarwin [
       CoreServices AudioUnit
     ];
 
   src = fetchurl {
-    url = "https://audiofile.68k.org/${name}.tar.gz";
+    url = "https://audiofile.68k.org/audiofile-${version}.tar.gz";
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 

@@ -8,5 +8,6 @@ buildDunePackage {
 
   inherit (js_of_ocaml-compiler) version src meta useDune2;
 
-  buildInputs = [ ppxlib js_of_ocaml ];
+  buildInputs = [ js_of_ocaml ];
+  propagatedBuildInputs = [ ppxlib ];
 }

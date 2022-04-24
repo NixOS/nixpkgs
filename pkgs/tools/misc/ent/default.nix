@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "ent-1.1";
+  pname = "ent";
+  version = "1.1";
 
   src = fetchurl {
     url = "https://www.fourmilab.ch/random/random.zip";
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Pseudorandom Number Sequence Test Program";
-    homepage = "http://www.fourmilab.ch/random/";
+    homepage = "https://www.fourmilab.ch/random/";
     platforms = platforms.all;
     license = licenses.publicDomain;
   };

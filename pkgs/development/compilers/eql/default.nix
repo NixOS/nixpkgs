@@ -1,8 +1,8 @@
 { lib, stdenv, fetchgit, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
-  version = src.rev;
-  pname = "eql-git";
+  version = "unstable-2012-12-10";
+  pname = "eql";
   src = fetchgit {
     rev = "9097bf98446ee33c07bb155d800395775ce0d9b2";
     url = "https://gitlab.com/eql/eql.git";

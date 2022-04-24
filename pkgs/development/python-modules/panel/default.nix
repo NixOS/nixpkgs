@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, bleach
 , bokeh
 , param
 , pyviz-comms
@@ -8,20 +9,25 @@
 , pyct
 , testpath
 , tqdm
+, nodejs
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.9.7";
-  # Version 10 attempts to download models from the web during build-time
-  # https://github.com/holoviz/panel/issues/1819
+  version = "0.13.0";
 
+  format = "wheel";
+
+  # We fetch a wheel because while we can fetch the node
+  # artifacts using npm, the bundling invoked in setup.py
+  # tries to fetch even more artifacts
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "2e86d82bdd5e7664bf49558eedad62b664d5403ec9e422e5ddfcf69e3bd77318";
+    inherit pname version format;
+    hash = "sha256-Iv1Lb45n2XUHSluZzdF2Bf/hXZmgs++9/av26rHgePc=";
   };
 
   propagatedBuildInputs = [
+    bleach
     bokeh
     param
     pyviz-comms
@@ -33,6 +39,10 @@ buildPythonPackage rec {
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
+
+  passthru = {
+    inherit nodejs; # For convenience
+  };
 
   meta = with lib; {
     description = "A high level dashboarding library for python visualization libraries";

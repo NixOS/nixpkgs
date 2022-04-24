@@ -11,15 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.1.9";
-
-  outputs = [ "out" "lib" "dev" ];
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    hash = "sha256-MqnHtqOjLl6R5GZ4f2UX1iLoO9FUT2IfZlSN58wW8JA=";
+    hash = "sha256-7H1WF5VkpA65xCdEa0Sw4r4jj+kGhDVCMr5AeE+3Ii4=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +30,8 @@ stdenv.mkDerivation rec {
     curl
     zstd
   ] ++ lib.optional stdenv.isDarwin argp-standalone;
+
+  outputs = [ "out" "lib" "dev" ];
 
   meta = with lib; {
     homepage = "https://github.com/zchunk/zchunk";
@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # does not find argp-standalone
   };
 }

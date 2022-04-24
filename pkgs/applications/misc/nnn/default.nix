@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline
-, conf ? null, withIcons ? false, withNerdIcons ? false }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pkg-config
+, file
+, ncurses
+, readline
+, which
+# options
+, conf ? null
+, withIcons ? false
+, withNerdIcons ? false
+}:
 
 # Mutually exclusive options
 assert withIcons -> withNerdIcons == false;
@@ -7,30 +20,33 @@ assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "3.6";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hwv7ncp8pmzdir30877ni4qlmczmb3yjdkbfd1pssr08y1srsc7";
+    sha256 = "sha256-g9GaCc/IWKtih0/A2AZEPImjj7ymJIdYwC5I/6GUh5c=";
   };
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
   buildInputs = [ readline ncurses ];
 
-  makeFlags = [ "PREFIX=$(out)" ]
+  makeFlags = [ "PREFIX=${placeholder "out"}" ]
     ++ lib.optional withIcons [ "O_ICONS=1" ]
     ++ lib.optional withNerdIcons [ "O_NERD=1" ];
 
-  # shell completions
+  binPath = lib.makeBinPath [ file which ];
+
   postInstall = ''
-    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash
+    installShellCompletion --fish misc/auto-completion/fish/nnn.fish
+    installShellCompletion --zsh misc/auto-completion/zsh/_nnn
+
+    wrapProgram $out/bin/nnn --prefix PATH : "$binPath"
   '';
 
   meta = with lib; {

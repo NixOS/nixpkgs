@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "lxqt-admin";
-  version = "0.16.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0mi119ji0260idi14980nhmylx3krnfmkj9r81nmbbrg02h158nz";
+    sha256 = "06l7vs8aqx37bhrxf9xa16g7rdmia8j73q78qfj6syw57f3ssjr9";
   };
 
   nativeBuildInputs = [
@@ -40,8 +40,11 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    sed "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" \
-      -i lxqt-admin-user/CMakeLists.txt
+    for f in lxqt-admin-{time,user}/CMakeLists.txt; do
+      substituteInPlace $f --replace \
+        "\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}" \
+        "$out/share/polkit-1/actions"
+    done
   '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

@@ -3,7 +3,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradleGen
+, gradle_6
 , jdk
 , perl
 
@@ -12,7 +12,8 @@
 , pkg-config
 , stb
 , ant
-, alsaLib
+, alsa-lib
+, alsa-plugins
 , glew
 
 # Make the build version easily overridable.
@@ -29,20 +30,20 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "126.1";
+  version = "126.2";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "cyg4TofSSFLv8pM3zzvc0FxXMiTm+OIchBJF9PDQrkg=";
+    sha256 = "URmjmfzQAVVl6erbh3+FVFdN7vGTNwYKPtcrwtt9vkg=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "uBIm82mt1etBB/HrNY6XGa7mmBfwd1E3RtqN8Rk5qeY=";
+    sha256 = "pUUak5P9t4RmSdT+/oH/8oo6l7rjIN08XDJ06TcUn8I=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -66,7 +67,6 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    type = "Application";
     name = "Mindustry";
     desktopName = "Mindustry";
     exec = "mindustry";
@@ -87,8 +87,7 @@ let
     popd
   '';
 
-  # The default one still uses jdk8 (#89731)
-  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_8;
+  gradle = (gradle_6.override (old: { java = jdk; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
@@ -96,7 +95,7 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [ gradle perl ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -114,7 +113,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
+    outputHash = "+7vSwQT6LwHgKE9DubISznq4G4DgvlnD7WaF1KywBzU=";
   };
 
 in
@@ -129,14 +128,23 @@ stdenv.mkDerivation rec {
     rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
   '' + cleanupMindustrySrc;
 
+  # Propagate glew to prevent it from being cleaned up.
+  # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+  # and will assume that it's not actually needed.
+  # This can cause issues.
+  # See https://github.com/NixOS/nixpkgs/issues/109798.
+  propagatedBuildInputs = lib.optionals enableClient [
+    glew.out
+  ];
+
   buildInputs = lib.optionals enableClient [
     SDL2
     glew
-    alsaLib
+    alsa-lib
   ];
   nativeBuildInputs = [
     pkg-config
-    gradle_6
+    gradle
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [
@@ -157,9 +165,11 @@ stdenv.mkDerivation rec {
   '' + optionalString enableClient ''
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed ${glew.out}/lib/libGLEW.so \
-      --add-needed ${SDL2}/lib/libSDL2.so
+      --add-needed $glewlib \
+      --add-needed $sdllib
     gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
   '' + optionalString enableServer ''
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
@@ -171,7 +181,8 @@ stdenv.mkDerivation rec {
     install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar"
+      --add-flags "-jar $out/share/mindustry.jar" \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
     install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
   '' + optionalString enableServer ''
     install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar

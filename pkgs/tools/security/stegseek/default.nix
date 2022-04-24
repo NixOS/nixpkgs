@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stegseek";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "RickdeJager";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19hzr5533b607ihmjj71x682qjr45s75cqxh9zap21z16346ahqn";
+    sha256 = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
   };
 
   nativeBuildInputs = [ cmake ];

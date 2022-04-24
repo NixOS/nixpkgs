@@ -1,61 +1,90 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
-, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
-, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
-, withGUI ? true, wrapQtAppsHook }:
+{ withGUI ? true
+, stdenv
+, lib
+, fetchpatch
+, fetchFromGitHub
+, wrapQtAppsHook
+
+, cmake
+, openssl
+, pcre
+, util-linux
+, libselinux
+, libsepol
+, pkg-config
+, gdk-pixbuf
+, libnotify
+, qttools
+, xlibsWrapper
+, libX11
+, libXi
+, libXtst
+, libXrandr
+, xinput
+, avahi-compat
+
+# macOS / darwin
+, ApplicationServices
+, Carbon
+, Cocoa
+, CoreServices
+, ScreenSaver
+}:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.11.1";
+  version = "1.14.1.32";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = "${version}-stable";
-    sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
+    fetchSubmodules = true;
+    sha256 = "123p75rm22vb3prw1igh0yii2y4bvv7r18iykfvmnr41hh4w7z2p";
   };
 
-  patches = [
-    ./build-tests.patch
-    (fetchpatch {
-      name = "CVE-2020-15117.patch";
-      url = "https://github.com/symless/synergy-core/commit/"
-          + "0a97c2be0da2d0df25cb86dfd642429e7a8bea39.patch";
-      sha256 = "03q8m5n50fms7fjfjgmqrgy9mrxwi9kkz3f3vlrs2x5h21dl6bmj";
-    })
-  ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
-
-  # Since the included gtest and gmock don't support clang and the
-  # segfault when built with gcc9, we replace it with 1.10.0 for
-  # synergy-1.11.0. This should become unnecessary when upstream
-  # updates these dependencies.
-  googletest = fetchFromGitHub {
-    owner = "google";
-    repo = "googletest";
-    rev = "release-1.10.0";
-    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
-  };
+  patches = [ ./macos_build_fix.patch ];
 
   postPatch = ''
-    rm -r ext/*
-    cp -r ${googletest}/googlemock ext/gmock/
-    cp -r ${googletest}/googletest ext/gtest/
-    chmod -R +w ext/
+    substituteInPlace src/gui/src/SslCertificate.cpp \
+      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
   '';
 
-  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
+  cmakeFlags = lib.optionals (!withGUI) [
+    "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.09"
+  ];
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   dontWrapQtApps = true;
 
   buildInputs = [
     openssl
+    pcre
   ] ++ lib.optionals withGUI [
     qttools
   ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+    ApplicationServices
+    Carbon
+    Cocoa
+    CoreServices
+    ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+    util-linux
+    libselinux
+    libsepol
+    xlibsWrapper
+    libX11
+    libXi
+    libXtst
+    libXrandr
+    xinput
+    avahi-compat
+    gdk-pixbuf
+    libnotify
   ];
 
   installPhase = ''
@@ -63,7 +92,7 @@ stdenv.mkDerivation rec {
     cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
   '' + lib.optionalString withGUI ''
     cp bin/synergy $out/bin/
-    wrapQtApp $out/bin/synergy --prefix PATH : ${lib.makeBinPath [ openssl ]}
+    wrapQtApp $out/bin/synergy
   '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share/icons/hicolor/scalable/apps
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
@@ -80,9 +109,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = "http://synergy-project.org/";
+    homepage = "https://symless.com/synergy";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ talyz ];
     platforms = platforms.all;
   };
 }

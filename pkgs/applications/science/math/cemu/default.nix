@@ -1,6 +1,5 @@
 { fetchFromGitHub
 , lib
-, mkDerivation
 , SDL2
 , libGL
 , libarchive
@@ -8,11 +7,13 @@
 , qtbase
 , qmake
 , git
-, libpng_apng
+, libpng
 , pkg-config
+, wrapQtAppsHook
+, stdenv
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "CEmu";
   version = "1.3";
   src = fetchFromGitHub {
@@ -26,6 +27,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     git
+    wrapQtAppsHook
     pkg-config
   ];
 
@@ -35,11 +37,12 @@ mkDerivation rec {
     libarchive
     libusb-compat-0_1
     qtbase
-    libpng_apng
+    libpng
   ];
 
   qmakeFlags = [
     "gui/qt"
+    "CONFIG+=ltcg"
   ];
 
   meta = with lib; {
@@ -49,5 +52,6 @@ mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ luc65r ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isDarwin;
   };
 }

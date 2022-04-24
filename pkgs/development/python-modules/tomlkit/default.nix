@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
-, enum34, functools32, typing
+, enum34, functools32, typing ? null
 }:
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.7.0";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ac57f29693fab3e309ea789252fcce3061e19110085aa31af5446ca749325618";
+    sha256 = "sha256-PFF4lOre9T6QctND035EJ7jwtiAKcLfJoZsuvR9TuVE=";
   };
 
   propagatedBuildInputs =

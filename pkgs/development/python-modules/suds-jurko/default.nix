@@ -27,6 +27,7 @@ buildPythonPackage rec {
     description = "Lightweight SOAP client (Jurko's fork)";
     homepage = "https://bitbucket.org/jurko/suds";
     license = licenses.lgpl3;
+    broken = true; # Uses use2to3, which has been removed in setuptools>=58
   };
 
 }

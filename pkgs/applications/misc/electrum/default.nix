@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 , python3
 , zbar
@@ -19,7 +21,7 @@
 }:
 
 let
-  version = "4.0.9";
+  version = "4.2.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -35,13 +37,14 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "0cmdyfabllw4wnpqpdxp3l6hjnm0cvkwxn0z8ph4x54sf4zq9iz3";
+    sha256 = "sha256-BoikYSsQZAv8WswIr5nmBsGmjZbTXaLAbdO2QtPvc7c=";
 
     extraPostFetch = ''
       mv $out ./all
       mv ./all/electrum/tests $out
     '';
   };
+
 in
 
 python3.pkgs.buildPythonApplication {
@@ -50,7 +53,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1fvjiagi78f32nxgr2rx8jas8hxfvpp1c8fpfcalvykmlhdc2gva";
+    sha256 = "sha256-2SxSTH9P380j2KaCbkXjgmQO7K2z81AG6PMA/EMggXA=";
   };
 
   postUnpack = ''
@@ -77,11 +80,14 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     # plugins
+    btchip
     ckcc-protocol
     keepkey
     trezor
-    btchip
-  ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  ] ++ lib.optionals enableQt [
+    pyqt5
+    qdarkstyle
+  ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -112,7 +118,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pycryptodomex ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum/tests" ];
 
@@ -148,6 +154,8 @@ python3.pkgs.buildPythonApplication {
       of the blockchain.
     '';
     homepage = "https://electrum.org/";
+    downloadPage = "https://electrum.org/#download";
+    changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ joachifm np prusnak ];

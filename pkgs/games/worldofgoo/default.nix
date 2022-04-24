@@ -8,11 +8,10 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "World of Goo";
     genericName = "World of Goo";
-    categories = "Game;";
+    categories = [ "Game" ];
     exec = "WorldOfGoo.bin.${arch}";
     icon = "2dboy-worldofgoo";
     name = "worldofgoo";
-    type = "Application";
   };
 
 in
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
       Balls who live in the beautiful World of Goo don't know that they are in a
       game, or that they are extremely delicious.
     '';
-    homepage = "http://worldofgoo.com";
+    homepage = "https://worldofgoo.com";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ jcumming maxeaubrey ];

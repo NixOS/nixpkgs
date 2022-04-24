@@ -1,28 +1,24 @@
 { lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
 , openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tome4";
+  version = "1.7.4";
+
+  src = fetchurl {
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
+    sha256 = "sha256-w1NPM/SMnPAnAl6z9E6Xsj3mEqZtXzFe1IMPmlKr8qQ=";
+  };
 
   desktop = makeDesktopItem {
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
-    categories = "Game;RolePlaying;";
+    categories = [ "Game" "RolePlaying" ];
     genericName = pname;
-  };
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.6.7";
-
-  src = fetchurl {
-    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0283hvms5hr29zr0grd6gq059k0hg8hcz3fsmwjmysiih8790i68";
   };
 
   prePatch = ''
@@ -56,7 +52,7 @@ in stdenv.mkDerivation rec {
     install -Dm755 t-engine $dir/t-engine
     cp -r bootstrap game $dir
     makeWrapper $dir/t-engine $out/bin/${pname} \
-      --run "cd $dir"
+      --chdir "$dir"
 
     install -Dm755 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \

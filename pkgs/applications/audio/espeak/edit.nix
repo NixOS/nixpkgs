@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, unzip, portaudio, wxGTK, sox }:
 
 stdenv.mkDerivation rec {
-  name = "espeakedit-1.48.03";
+  pname = "espeakedit";
+  version = "1.48.03";
 
   src = fetchurl {
-    url = "mirror://sourceforge/espeak/${name}.zip";
+    url = "mirror://sourceforge/espeak/espeakedit-${version}.zip";
     sha256 = "0x8s7vpb7rw5x37yjzy1f98m4f2csdg89libb74fm36gn8ly0hli";
   };
 

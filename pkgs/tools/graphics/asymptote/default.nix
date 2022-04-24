@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, autoreconfHook, bison, glm, yacc, flex
+, autoreconfHook, bison, glm, flex
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3Packages
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     bison
     flex
-    yacc
+    bison
     texinfo
   ];
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raskin maintainers.peti ];
+    maintainers = [ maintainers.raskin ];
     broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };

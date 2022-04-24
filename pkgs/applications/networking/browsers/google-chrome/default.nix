@@ -1,12 +1,12 @@
 { lib, stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
-, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
+, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
-, alsaLib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
+, alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, kerberos, libdrm, mesa
-, libxkbcommon, wayland # ozone/wayland
+, libkrb5, libdrm, libglvnd, mesa
+, libxkbcommon, pipewire, wayland # ozone/wayland
 
 # Command line programs
 , coreutils
@@ -18,7 +18,7 @@
 , systemd
 
 # Loaded at runtime.
-, libexif
+, libexif, pciutils
 
 # Additional dependencies according to other distros.
 ## Ubuntu
@@ -38,13 +38,13 @@
 , chromium
 
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
 , libvaSupport ? true, libva
 
 # For Vulkan support (--enable-features=Vulkan)
-, vulkanSupport ? true, vulkan-loader
+, addOpenGLRunpath
 }:
 
 with lib;
@@ -57,23 +57,26 @@ let
   version = chromium.upstream-info.version;
 
   deps = [
-    glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
+    glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
-    alsaLib libXdamage libXtst libXrandr libxshmfence expat cups
+    alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
-    libexif
+    libexif pciutils
     liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos libdrm mesa coreutils
-    libxkbcommon wayland
+    libkrb5 libdrm libglvnd mesa coreutils
+    libxkbcommon pipewire wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva
-    ++ optional vulkanSupport vulkan-loader
     ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
+
+  crashpadHandlerBinary = if lib.versionAtLeast version "94"
+    then "chrome_crashpad_handler"
+    else "crashpad_handler";
 
 in stdenv.mkDerivation {
   inherit version;
@@ -88,7 +91,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   unpackPhase = ''
@@ -100,6 +103,8 @@ in stdenv.mkDerivation {
   binpath = makeBinPath deps;
 
   installPhase = ''
+    runHook preInstall
+
     case ${channel} in
       beta) appname=chrome-beta      dist=beta     ;;
       dev)  appname=chrome-unstable  dist=unstable ;;
@@ -113,12 +118,9 @@ in stdenv.mkDerivation {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
-    # To fix --use-gl=egl:
-    test -e $out/share/google/$appname/libEGL.so
-    ln -s libEGL.so $out/share/google/$appname/libEGL.so.1
-    test -e $out/share/google/$appname/libGLESv2.so
-    ln -s libGLESv2.so $out/share/google/$appname/libGLESv2.so.2
 
+    substituteInPlace $out/share/google/$appname/google-$appname \
+      --replace 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
@@ -143,13 +145,17 @@ in stdenv.mkDerivation {
     makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
-      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags ${escapeShellArg commandLineArgs}
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
+      --set CHROME_WRAPPER  "google-chrome-$dist" \
+      --add-flags ${escapeShellArg commandLineArgs} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary},nacl_helper}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
+
+    runHook postInstall
   '';
 
   meta = {
@@ -161,5 +167,8 @@ in stdenv.mkDerivation {
     # will try to merge PRs and respond to issues but I'm not actually using
     # Google Chrome.
     platforms = [ "x86_64-linux" ];
+    mainProgram =
+      if (channel == "dev") then "google-chrome-unstable"
+      else "google-chrome-${channel}";
   };
 }

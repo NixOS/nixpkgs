@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "GPy";
-  version = "1.9.9";
+  version = "1.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04faf0c24eacc4dea60727c50a48a07ddf9b5751a3b73c382105e2a31657c7ed";
+    sha256 = "a2b793ef8d0ac71739e7ba1c203bc8a5afa191058b42caa617e0e29aa52aa6fb";
   };
 
   buildInputs = [ cython ];

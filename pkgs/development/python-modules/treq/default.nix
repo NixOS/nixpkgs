@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "20.9.0";
+  version = "22.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83cd2ca75aef4f1fbdbe144c186426d930c3e8b20385df8cec9e12d442986da2";
+    sha256 = "sha256-33V+PxQfx4Lt4HamBFIRlP/LQPomRc9I5aNwYDB/Uuw=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/treq";
     description = "A requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

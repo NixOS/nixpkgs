@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "07j3sv9ar9l074krajw8nfmsfmdp836irsbd053dbqk2v880gfm6";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   installPhase = ''
     mkdir -p $out/bin $out/share/bash-completion/completions
     cp gibo $out/bin

@@ -3,7 +3,6 @@
 , fetchPypi
 , lib
 , pytestCheckHook
-, pytestrunner
 }:
 
 buildPythonPackage rec {
@@ -15,9 +14,16 @@ buildPythonPackage rec {
     sha256 = "sha256-ySU1gtskQTv9cDq/wbKkneePMbSQcjnyhumhkpoebjo=";
   };
 
-  propagatedBuildInputs = [ cffi pytestrunner ];
+  propagatedBuildInputs = [ cffi ];
+
+  propagatedNativeBuildInputs = [ cffi ];
 
   checkInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
 
   # FIXME: These do not work, and I have been unable to figure out why.
   doCheck = false;

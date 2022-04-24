@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
+{ lib, stdenv, fetchurl, boost, curl, ffmpeg_4, icoutils, libGLU, libmad, libogg
 , libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
 , SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
 , alephone }:
@@ -7,12 +7,12 @@ let
   self = stdenv.mkDerivation rec {
     outputs = [ "out" "icons" ];
     pname = "alephone";
-    version = "1.3.1";
+    version = "1.4";
 
     src = fetchurl {
-      url = let date = "20200904";
+      url = let date = "20210408";
       in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-      sha256 = "13ck3mp9qd5pkiq6zwvr744bwvmnqkgj5vpf325sz1mcvnv7l8lh";
+      sha256 = "sha256-tMwATUhUpo8W2oSWxGSZcAHVkj1PWEvUR/rpMZwWCWA=";
     };
 
     nativeBuildInputs = [ pkg-config icoutils ];
@@ -20,7 +20,7 @@ let
     buildInputs = [
       boost
       curl
-      ffmpeg
+      ffmpeg_4
       libGLU
       libmad
       libsndfile
@@ -72,7 +72,7 @@ in self // {
         name = desktopName;
         exec = pname;
         genericName = pname;
-        categories = "Game;";
+        categories = [ "Game" ];
         comment = meta.description;
         inherit desktopName icon;
       };
@@ -91,10 +91,10 @@ in self // {
         makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
           --add-flags $out/data/$pname
       '';
-
+    } // extraArgs // {
       meta = alephone.meta // {
         license = lib.licenses.free;
         hydraPlatforms = [ ];
       } // meta;
-    } // extraArgs);
+    });
 }

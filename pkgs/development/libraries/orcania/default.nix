@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake, check, subunit }:
 stdenv.mkDerivation rec {
   pname = "orcania";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tArXiXmoWHd42IGBZKtc4QJIBy3USPlSeW+Dv5xl1EU=";
+    sha256 = "sha256-lrc4VEqmCp/P/h0+5/ix6tx4pjfkLy9BLBZtKYLlyGI=";
   };
 
   nativeBuildInputs = [ cmake ];

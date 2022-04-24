@@ -1,0 +1,15 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p bash bundix bundler
+
+set -e
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+rm -f Gemfile.lock Gemfile-beta.lock
+
+export BUNDLE_FORCE_RUBY_PLATFORM=1
+bundler lock
+BUNDLE_GEMFILE=Gemfile-beta bundler lock --lockfile=Gemfile-beta.lock
+
+bundix --gemfile=Gemfile --lockfile=Gemfile.lock --gemset=gemset.nix
+bundix --gemfile=Gemfile-beta --lockfile=Gemfile-beta.lock --gemset=gemset-beta.nix

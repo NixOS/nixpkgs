@@ -1,14 +1,14 @@
 { lib, gcc9Stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
 
 gcc9Stdenv.mkDerivation rec {
-  version = "5.4.0";
+  version = "5.5.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "1sfldgkkmsdyaqa28i5agcykc63gwm3zjihd64g86i852w8al2w6";
+    sha256 = "sha256-ZZhkmDWGNWejwXZEcFO9p9NG1dopK7kXRj7OrkJCPR0=";
   };
 
   postPatch = ''

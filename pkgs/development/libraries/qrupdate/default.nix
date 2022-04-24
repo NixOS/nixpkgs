@@ -25,12 +25,14 @@ stdenv.mkDerivation rec {
       "LAPACK=-L${lapack}/lib -llapack"
       "BLAS=-L${blas}/lib -lblas"
       "PREFIX=${placeholder "out"}"
-      ${lib.optionalString blas.isILP64
-      # If another application intends to use qrupdate compiled with blas with
-      # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
-      # https://savannah.gnu.org/bugs/?50339
-      "FFLAGS=-fdefault-integer-8"
-      }
+      "FFLAGS=${toString ([
+        "-std=legacy"
+      ] ++ lib.optionals blas.isILP64 [
+        # If another application intends to use qrupdate compiled with blas with
+        # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
+        # https://savannah.gnu.org/bugs/?50339
+        "-fdefault-integer-8"
+      ])}"
     )
   '';
 
@@ -42,9 +44,7 @@ stdenv.mkDerivation rec {
 
   installTargets = lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
 
-  buildInputs = [ gfortran ];
-
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which gfortran ];
 
   meta = with lib; {
     description = "Library for fast updating of qr and cholesky decompositions";

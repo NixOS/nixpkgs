@@ -1,38 +1,28 @@
-{ lib, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 let
-  inherit (pythonPackages) python;
+  inherit (python3Packages) python;
   pname = "honcho";
 
 in
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
-  version = "1.0.1";
-  namePrefix = "";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nickstenning";
     repo = "honcho";
     rev = "v${version}";
-    sha256 = "11bd87474qpif20xdcn0ra1idj5k16ka51i658wfpxwc6nzsn92b";
+    sha256 = "1y0r8dw4pqcq7r4n58ixjdg1iy60lp0gxsd7d2jmhals16ij71rj";
   };
 
-  checkInputs = with pythonPackages; [ jinja2 pytest mock coverage ];
+  propagatedBuildInputs = [ python3Packages.setuptools ];
 
-  buildPhase = ''
-    ${python.interpreter} setup.py build
-  '';
+  checkInputs = with python3Packages; [ jinja2 pytest mock coverage ];
 
-  installPhase = ''
-    mkdir -p "$out/${python.sitePackages}"
-
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-
-    ${python.interpreter} setup.py install \
-      --install-lib=$out/${python.sitePackages} \
-      --prefix="$out"
-  '';
+  # missing plugins
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck

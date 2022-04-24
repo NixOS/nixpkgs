@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -11,7 +11,16 @@ in {
     dataDir = mkOption {
       default = "/var/lib/cfssl";
       type = types.path;
-      description = "Cfssl work directory.";
+      description = ''
+        The work directory for CFSSL.
+
+        <note><para>
+          If left as the default value this directory will automatically be
+          created before the CFSSL server starts, otherwise you are
+          responsible for ensuring the directory exists with appropriate
+          ownership and permissions.
+        </para></note>
+      '';
     };
 
     address = mkOption {
@@ -22,18 +31,18 @@ in {
 
     port = mkOption {
       default = 8888;
-      type = types.ints.u16;
+      type = types.port;
       description = "Port to bind.";
     };
 
     ca = mkOption {
-      defaultText = "\${cfg.dataDir}/ca.pem";
+      defaultText = literalExpression ''"''${cfg.dataDir}/ca.pem"'';
       type = types.str;
       description = "CA used to sign the new certificate -- accepts '[file:]fname' or 'env:varname'.";
     };
 
     caKey = mkOption {
-      defaultText = "file:\${cfg.dataDir}/ca-key.pem";
+      defaultText = literalExpression ''"file:''${cfg.dataDir}/ca-key.pem"'';
       type = types.str;
       description = "CA private key -- accepts '[file:]fname' or 'env:varname'.";
     };
@@ -147,13 +156,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups.cfssl = {
+    users.groups.cfssl = {
       gid = config.ids.gids.cfssl;
     };
 
-    users.extraUsers.cfssl = {
+    users.users.cfssl = {
       description = "cfssl user";
-      createHome = true;
       home = cfg.dataDir;
       group = "cfssl";
       uid = config.ids.uids.cfssl;
@@ -164,41 +172,46 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      serviceConfig = {
-        WorkingDirectory = cfg.dataDir;
-        StateDirectory = cfg.dataDir;
-        StateDirectoryMode = 700;
-        Restart = "always";
-        User = "cfssl";
+      serviceConfig = lib.mkMerge [
+        {
+          WorkingDirectory = cfg.dataDir;
+          Restart = "always";
+          User = "cfssl";
+          Group = "cfssl";
 
-        ExecStart = with cfg; let
-          opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
-        in
-          lib.concatStringsSep " \\\n" [
-            "${pkgs.cfssl}/bin/cfssl serve"
-            (opt "address" address)
-            (opt "port" (toString port))
-            (opt "ca" ca)
-            (opt "ca-key" caKey)
-            (opt "ca-bundle" caBundle)
-            (opt "int-bundle" intBundle)
-            (opt "int-dir" intDir)
-            (opt "metadata" metadata)
-            (opt "remote" remote)
-            (opt "config" configFile)
-            (opt "responder" responder)
-            (opt "responder-key" responderKey)
-            (opt "tls-key" tlsKey)
-            (opt "tls-cert" tlsCert)
-            (opt "mutual-tls-ca" mutualTlsCa)
-            (opt "mutual-tls-cn" mutualTlsCn)
-            (opt "mutual-tls-client-key" mutualTlsClientKey)
-            (opt "mutual-tls-client-cert" mutualTlsClientCert)
-            (opt "tls-remote-ca" tlsRemoteCa)
-            (opt "db-config" dbConfig)
-            (opt "loglevel" (toString logLevel))
-          ];
-      };
+          ExecStart = with cfg; let
+            opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
+          in
+            lib.concatStringsSep " \\\n" [
+              "${pkgs.cfssl}/bin/cfssl serve"
+              (opt "address" address)
+              (opt "port" (toString port))
+              (opt "ca" ca)
+              (opt "ca-key" caKey)
+              (opt "ca-bundle" caBundle)
+              (opt "int-bundle" intBundle)
+              (opt "int-dir" intDir)
+              (opt "metadata" metadata)
+              (opt "remote" remote)
+              (opt "config" configFile)
+              (opt "responder" responder)
+              (opt "responder-key" responderKey)
+              (opt "tls-key" tlsKey)
+              (opt "tls-cert" tlsCert)
+              (opt "mutual-tls-ca" mutualTlsCa)
+              (opt "mutual-tls-cn" mutualTlsCn)
+              (opt "mutual-tls-client-key" mutualTlsClientKey)
+              (opt "mutual-tls-client-cert" mutualTlsClientCert)
+              (opt "tls-remote-ca" tlsRemoteCa)
+              (opt "db-config" dbConfig)
+              (opt "loglevel" (toString logLevel))
+            ];
+        }
+        (mkIf (cfg.dataDir == options.services.cfssl.dataDir.default) {
+          StateDirectory = baseNameOf cfg.dataDir;
+          StateDirectoryMode = 700;
+        })
+      ];
     };
 
     services.cfssl = {

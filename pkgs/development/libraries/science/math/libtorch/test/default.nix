@@ -6,10 +6,11 @@
 , symlinkJoin
 
 , cudaSupport
-, cudatoolkit
-, cudnn
+, cudaPackages ? {}
 }:
 let
+  inherit (cudaPackages) cudatoolkit cudnn;
+
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
@@ -42,8 +43,9 @@ in stdenv.mkDerivation {
     touch $out
   '';
 
-  checkPhase = ''
+  checkPhase = lib.optionalString cudaSupport ''
     LD_LIBRARY_PATH=${cudaStub}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH \
-      ./test
+  '' + ''
+    ./test
   '';
 }

@@ -1,20 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, nix, nixFlakes }:
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnugrep
+, nix
+, enableFlakes ? null # deprecated
+}:
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
-  version = "1.2.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    sha256 = "sha256-a0OyIONKtVWh9g/FZ6H0JSRuA1U48HSOX53G9z/h7t8=";
+    sha256 = "sha256-0gBb/U7tNNSjazJE/Z2qAxHPX53wRSPMJ8rHc7HtCNg=";
   };
 
   # Substitute instead of wrapping because the resulting file is
   # getting sourced, not executed:
   postPatch = ''
-    sed -i "1a NIX_BIN_PREFIX=${nixFlakes}/bin/" direnvrc
+    sed -i "1a NIX_BIN_PREFIX=${nix}/bin/" direnvrc
     substituteInPlace direnvrc --replace "grep" "${gnugrep}/bin/grep"
   '';
 

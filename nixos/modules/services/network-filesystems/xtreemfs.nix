@@ -142,7 +142,7 @@ in
           '';
         };
         syncMode = mkOption {
-          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "ASYNC" ];
+          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
           default = "FSYNC";
           example = "FDATASYNC";
           description = ''
@@ -268,7 +268,7 @@ in
         };
         syncMode = mkOption {
           default = "FSYNC";
-          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "ASYNC" ];
+          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
           example = "FDATASYNC";
           description = ''
             The sync mode influences how operations are committed to the disk

@@ -7,11 +7,11 @@
   , patches ? [ ]
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
-, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
-, jansson, harfbuzz
-, dontRecurseIntoAttrs ,emacsPackagesFor
+, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
+, libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
+, alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
+, sigtool, jansson, harfbuzz, sqlite, nixosTests
+, dontRecurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
@@ -20,15 +20,22 @@
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withMotif ? false, motif ? null
+, withSQLite3 ? false
 , withCsrc ? true
+, withWebP ? false
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
+, withAthena ? false
+, withToolkitScrollBars ? true
+, withPgtk ? false
+, withXinput2 ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
   else if withMotif then "motif"
+  else if withAthena then "athena"
   else "lucid")
 }:
 
@@ -46,10 +53,11 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
-} // lib.optionalAttrs stdenv.isDarwin {
-  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 } // {
-  inherit pname version patches;
+  pname = pname + lib.optionalString ( !withX && !withNS && !withGTK2 && !withGTK3 ) "-nox";
+  inherit version;
+
+  patches = patches fetchpatch;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
@@ -62,6 +70,16 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
+
+    # Add the name of the wrapped gvfsd
+    # This used to be carried as a patch but it often got out of sync with upstream
+    # and was hard to maintain for emacs-overlay.
+    (lib.concatStrings (map (fn: ''
+      sed -i 's#(${fn} "gvfs-fuse-daemon")#(${fn} "gvfs-fuse-daemon") (${fn} ".gvfsd-fuse-wrapped")#' lisp/net/tramp-gvfs.el
+    '') [
+      "tramp-compat-process-running-p"
+      "tramp-process-running-p"
+    ]))
 
     # Reduce closure size by cleaning the environment of the emacs dumper
     ''
@@ -94,8 +112,8 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
         ]));
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
-        "(defcustom comp-native-driver-options nil" \
-        "(defcustom comp-native-driver-options '(${backendPath})"
+        "(defcustom native-comp-driver-options nil" \
+        "(defcustom native-comp-driver-options '(${backendPath})"
     ''))
     ""
   ];
@@ -105,10 +123,10 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson harfbuzz.dev ]
+    [ ncurses gconf libxml2 gnutls alsa-lib acl gpm gettext jansson harfbuzz.dev ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
-      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff libXft
+      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
         gconf cairo ]
     ++ lib.optionals (withX || withNS) [ librsvg ]
     ++ lib.optionals withImageMagick [ imagemagick ]
@@ -116,10 +134,12 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (withX && withMotif) motif
+    ++ lib.optional withSQLite3 sqlite
+    ++ lib.optional withWebP libwebp
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
-    ++ lib.optionals nativeComp [ libgccjit ]
-    ;
+    ++ lib.optionals stdenv.isDarwin [ sigtool ]
+    ++ lib.optionals nativeComp [ libgccjit ];
 
   hardeningDisable = [ "format" ];
 
@@ -138,7 +158,10 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
-    ;
+    ++ lib.optional withPgtk "--with-pgtk"
+    ++ lib.optional withXinput2 "--with-xinput2"
+    ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
+  ;
 
   installTargets = [ "tags" "install" ];
 
@@ -175,7 +198,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
           (comp-trampoline-compile (intern (pop argv))))"
     mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
-      --eval "(add-to-list 'comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
+      --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
@@ -192,13 +215,14 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   passthru = {
     inherit nativeComp;
     pkgs = dontRecurseIntoAttrs (emacsPackagesFor emacs);
+    tests = { inherit (nixosTests) emacs-daemon; };
   };
 
   meta = with lib; {
     description = "The extensible, customizable GNU text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 peti jwiegley adisbladis ];
+    maintainers = with maintainers; [ lovek323 jwiegley adisbladis ];
     platforms   = platforms.all;
 
     longDescription = ''

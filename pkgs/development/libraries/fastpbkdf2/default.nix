@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, openssl }:
 
-stdenv.mkDerivation {
-  name = "fastpbkdf2-1.0.0";
+stdenv.mkDerivation rec {
+  pname = "fastpbkdf2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ctz";
     repo = "fastpbkdf2";
-    rev = "v1.0.0";
+    rev = "v${version}";
     sha256 = "09ax0h4ik3vhvp3s98lic93l3g9f4v1jkr5k6z4g1lvm7s3lrha2";
   };
 

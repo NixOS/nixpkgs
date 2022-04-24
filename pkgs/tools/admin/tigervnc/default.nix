@@ -1,40 +1,44 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , xorg, xkeyboard_config, zlib
 , libjpeg_turbo, pixman, fltk
-, fontDirectories
 , cmake, gettext, libtool
 , libGLU
 , gnutls, pam, nettle
 , xterm, openssh, perl
 , makeWrapper
+, nixosTests
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.11.0";
+  version = "1.12.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     rev = "v${version}";
-    sha256 = "sha256-IX39oEhTyk7NV+9dD9mFtes22fBdMTAVIv5XkqFK560=";
+    sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
   };
 
-  inherit fontDirectories;
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/TigerVNC/tigervnc/pull/1383.patch";
+      sha256 = "sha256-r3QLtxVD0wIv2NWVN9r0LVxSlLurDHgkAZfkpIjmZyU=";
+      name = "Xvnc-support-Xorg-1.21-PR1383.patch";
+    })
+  ];
 
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
-    for i in $fontDirectories; do
-      for j in $(find $i -name fonts.dir); do
-        addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
-      done
-    done
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver/vncserver.in
     substituteInPlace vncviewer/vncviewer.cxx \
        --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
+
+    cp unix/xserver21.1.1.patch unix/xserver211.patch
+    source_top="$(pwd)"
   '';
 
   dontUseCmakeBuildDir = true;
@@ -53,7 +57,7 @@ stdenv.mkDerivation rec {
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
     version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).\([0-9]\+\).*/\1\2/g')
-    patch -p1 < ${src}/unix/xserver$version.patch
+    patch -p1 < "$source_top/unix/xserver$version.patch"
     autoreconf -vfi
     ./configure $configureFlags  --disable-devel-docs --disable-docs \
         --disable-xorg --disable-xnest --disable-xvfb --disable-dmx \
@@ -97,6 +101,8 @@ stdenv.mkDerivation rec {
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
+
+  passthru.tests.tigervnc = nixosTests.vnc.testTigerVNC;
 
   meta = {
     homepage = "https://tigervnc.org/";

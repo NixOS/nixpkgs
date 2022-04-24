@@ -1,14 +1,21 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, uvloop, postgresql }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, uvloop
+, postgresql
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.22.0";
-  disabled = !isPy3k;
+  version = "0.25.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "348ad471d9bdd77f0609a00c860142f47c81c9123f4064d13d65c8569415d802";
+    hash = "sha256-Y/jmppczsoVJfChVRko03mV/LMzSWurutQcYcuk4JUA=";
   };
 
   checkInputs = [
@@ -16,15 +23,17 @@ buildPythonPackage rec {
     postgresql
   ];
 
-  pythonImportsCheck = [ "asyncpg" ];
+  pythonImportsCheck = [
+    "asyncpg"
+  ];
 
   meta = with lib; {
+    description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
-    description = "An asyncio PosgtreSQL driver";
     longDescription = ''
       Asyncpg is a database interface library designed specifically for
       PostgreSQL and Python/asyncio. asyncpg is an efficient, clean
-      implementation of PostgreSQL server binary protocol for use with Python’s
+      implementation of PostgreSQL server binary protocol for use with Python's
       asyncio framework.
     '';
     license = licenses.asl20;

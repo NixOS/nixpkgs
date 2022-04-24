@@ -45,7 +45,7 @@ let runtimeDeps = []
 
 in
 mkDerivation rec {
-  name = "soundkonverter";
+  pname = "soundkonverter";
   version = "3.0.1";
   src = fetchFromGitHub {
     owner = "dfaust";

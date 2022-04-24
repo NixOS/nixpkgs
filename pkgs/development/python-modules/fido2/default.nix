@@ -9,16 +9,26 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "0.8.1";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hzprnd407g2xh9kyv8j8pq949hwr1snmg3fp65pqfbghzv6i424";
+    sha256 = "b45e89a6109cfcb7f1bb513776aa2d6408e95c4822f83a253918b944083466ec";
   };
 
   propagatedBuildInputs = [ six cryptography ];
 
   checkInputs = [ mock pyfakefs ];
+
+  # Testing with `python setup.py test` doesn't work:
+  # https://github.com/Yubico/python-fido2/issues/108#issuecomment-763513576
+  checkPhase = ''
+    runHook preCheck
+
+    python -m unittest discover -v
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "fido2" ];
 

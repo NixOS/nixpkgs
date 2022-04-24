@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g0aa6h6bm00mdgkb38wm66rcrhqfvs2xj9rl04bwprsa05q5lca";
+    sha256 = "bTOfnEmJHTuniewH//SugNNDuKIFMQb1Safs0UVKH1c=";
   };
 
-  vendorSha256 = "14ya5advpv4q5il235h5dxy8c2ap2yzrvqs0sjqgw0v1vm6vpwdx";
+  vendorSha256 = "PuNROoxL7UmcuYDgfnsMUsGk9i1jnQyWtaUmT7vXdKE=";
 
   doCheck = false;
 
@@ -40,10 +40,10 @@ buildGoModule rec {
       makeDesktopItem {
         name = "net.maunium.gomuks.desktop";
         exec = "@out@/bin/gomuks";
-        terminal = "true";
+        terminal = true;
         desktopName = "Gomuks";
         genericName = "Matrix client";
-        categories = "Network;Chat";
+        categories = [ "Network" "Chat" ];
         comment = meta.description;
       }
     }/* $out/

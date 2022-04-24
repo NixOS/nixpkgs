@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "grpcui";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l8ldx7nx2pa2ac5znss0j0dhapn3syj02xqys4jz22hr5gvfj6m";
+    sha256 = "sha256-XDVt5fml2zYXOcZYXnxxGu4uaUA75DnRlFkbcc6tDag=";
   };
 
-  vendorSha256 = "15qgpbsl41swifw8w1lx0pbniwv3rf35127ald7h1r157vfa0r8b";
+  vendorSha256 = "sha256-jHNjvh4rpZdQ/RC9gN3KXnuOLkJX8Ow5GV+Qwfyvx1o=";
 
   doCheck = false;
 
   subPackages = [ "cmd/grpcui" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "An interactive web UI for gRPC, along the lines of postman";

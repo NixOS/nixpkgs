@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   pname = "lemon";
   version = "1.69";
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   buildPhase = ''
     sh -xc "$CC ${srcs.lemon} -o lemon"

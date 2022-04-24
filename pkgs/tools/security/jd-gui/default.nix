@@ -62,9 +62,9 @@ let
     comment = "Java Decompiler JD-GUI";
     desktopName = "JD-GUI";
     genericName = "Java Decompiler";
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development;Debugger;";
-    extraEntries="StartupWMClass=org-jd-gui-App";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" "Debugger" ];
+    startupWMClass = "org-jd-gui-App";
   };
 
 in stdenv.mkDerivation rec {

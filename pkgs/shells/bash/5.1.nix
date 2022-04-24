@@ -7,14 +7,15 @@
 
   # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin
-, readline80 ? null
+, readline81 ? null
 , withDocs ? false
 , texinfo ? null
+, forFHSEnv ? false
 }:
 
 with lib;
 
-assert interactive -> readline80 != null;
+assert interactive -> readline81 != null;
 assert withDocs -> texinfo != null;
 assert stdenv.hostPlatform.isDarwin -> binutils != null;
 let
@@ -39,8 +40,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
+  '' + optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+  '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
   '';
@@ -74,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ optional withDocs texinfo
     ++ optional stdenv.hostPlatform.isDarwin binutils;
 
-  buildInputs = optional interactive readline80;
+  buildInputs = optional interactive readline81;
 
   enableParallelBuilding = true;
 
@@ -123,7 +126,9 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
 
-    maintainers = with maintainers; [ peti dtzWill ];
+    maintainers = with maintainers; [ dtzWill ];
+
+    mainProgram = "bash";
   };
 
   passthru = {

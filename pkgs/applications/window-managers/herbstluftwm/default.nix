@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, freetype, asciidoc
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, freetype, asciidoc
 , xdotool, xorgserver, xsetroot, xterm, runtimeShell
 , nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "0avfhr68f6fjnafjdcyxcx7dkg38f2nadmhpj971qyqzfq2f6i38";
+    sha256 = "1k03rdr6irsgnjl4w0vac0kk9nsz46qhy74iflmaycxgfv8fxy7f";
   };
 
   outputs = [
@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     libXinerama
     libXrandr
     libXft
+    libXrender
+    libXdmcp
+    libXfixes
     freetype
   ];
 
@@ -74,7 +77,10 @@ stdenv.mkDerivation rec {
 
   pytestFlagsArray = [ "../tests" ];
   disabledTests = [
-    "test_title_different_letters_are_drawn"
+    "test_title_different_letters_are_drawn" # font problems
+    "test_completable_commands" # font problems
+    "test_autostart" # $PATH problems
+    "test_wmexec_to_other" # timeouts in sandbox
   ];
 
   passthru = {

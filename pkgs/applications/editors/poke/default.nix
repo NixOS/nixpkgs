@@ -13,18 +13,23 @@
 , nbdSupport ? !stdenv.isDarwin, libnbd
 , textStylingSupport ? true
 , dejagnu
+
+# update script only
+, writeScript
 }:
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "1.1";
+  version = "2.3";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-zWjfY8dBtBYLEsvqAvJ8RxWCeUZuNEOTDSU1pFLAatY=";
+    sha256 = "sha256-NpDPERbafLOp7GtPcAPiU+JotRAhKiiP04qv7Q68x2Y=";
   };
+
+  outputs = [ "out" "dev" "info" "lib" "man" ];
 
   postPatch = ''
     patchShebangs .
@@ -40,13 +45,15 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional guiSupport makeWrapper;
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optional guiSupport tk
+  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
   ++ lib.optional textStylingSupport gettext
   ++ lib.optional (!isCross) dejagnu;
 
-  configureFlags = lib.optionals guiSupport [
+  configureFlags = [
+    "--datadir=${placeholder "lib"}/share"
+  ] ++ lib.optionals guiSupport [
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-tkinclude=${tk.dev}/include"
@@ -57,17 +64,31 @@ in stdenv.mkDerivation rec {
   doCheck = !isCross;
   checkInputs = lib.optionals (!isCross) [ dejagnu ];
 
-  postFixup = lib.optionalString guiSupport ''
-    wrapProgram "$out/bin/poke-gui" \
-      --prefix TCLLIBPATH ' ' ${tcllib}/lib/tcllib${tcllib.version}
+  postInstall = ''
+    moveToOutput share/emacs "$out"
   '';
+
+  passthru = {
+    updateScript = writeScript "update-poke" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<a href="...">poke 2.0</a>'
+      new_version="$(curl -s https://www.jemarch.net/poke |
+          pcregrep -o1 '>poke ([0-9.]+)</a>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "Interactive, extensible editor for binary data";
     homepage = "http://www.jemarch.net/poke";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres metadark ];
+    maintainers = with maintainers; [ AndersonTorres kira-bruneau ];
     platforms = platforms.unix;
+    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${version}";
   };
 }
 

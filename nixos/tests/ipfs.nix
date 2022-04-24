@@ -10,6 +10,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       # Also will add a unix domain socket socket API address, see module.
       startWhenNeeded = true;
       apiAddress = "/ip4/127.0.0.1/tcp/2324";
+      dataDir = "/mnt/ipfs";
     };
   };
 
@@ -35,5 +36,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.succeed(
         f"ipfs --api /unix/run/ipfs.sock cat /ipfs/{ipfs_hash.strip()} | grep fnord2"
     )
+
+    # Test if setting dataDir works properly with the hardened systemd unit
+    machine.succeed("test -e /mnt/ipfs/config")
+    machine.succeed("test ! -e /var/lib/ipfs/")
   '';
 })

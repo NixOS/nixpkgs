@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "less";
-  version = "563";
+  version = "600";
 
   src = fetchurl {
-    url = "http://www.greenwoodsoftware.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "16lsvk88vwjwp5ax1wnll44wxwnzs8lb2fn90xx2si64kwmnsnyf";
+    url = "https://www.greenwoodsoftware.com/less/less-${version}.tar.gz";
+    sha256 = "sha256-ZjPWqis8xxevssIFd4x8QsRiD2Ox1oLz0SyYrwvnTSA=";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
-    homepage = "http://www.greenwoodsoftware.com/less/";
+    homepage = "https://www.greenwoodsoftware.com/less/";
     description = "A more advanced file pager than ‘more’";
     platforms = platforms.unix;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eelco dtzWill ];
   };
 }

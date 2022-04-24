@@ -2,19 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, futures
+, futures ? null
 , docloud
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.20.204";
+  version = "2.23.222";
 
   # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JNjD9UtLHsMGwTuXydZ+L5+pPQ2eobkr26Yt9pgs1qA=";
+    sha256 = "sha256-c5XpfEGTkojgzk+ATHCSzzh04zeEVJEEKBp+lPfS+x4=";
   };
 
   propagatedBuildInputs = [

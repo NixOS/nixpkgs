@@ -1,33 +1,50 @@
 { lib
+, stdenv
+, brotli
+, brotlicffi
 , buildPythonPackage
 , certifi
 , chardet
+, charset-normalizer
 , fetchPypi
 , idna
+, isPy27
+, isPy3k
+, pysocks
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
 , urllib3
-, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.25.1";
+  version = "2.27.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J5c91KkEpPE7JjoZyGbBO5KjntHJZGVfAl8/jT11uAQ=";
+    hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
   };
+
+  patches = [
+    # Use the default NixOS CA bundle from the certifi package
+    ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
+  ];
 
   propagatedBuildInputs = [
     certifi
-    chardet
     idna
     urllib3
+    chardet
+  ] ++ lib.optionals isPy3k [
+    brotlicffi
+    charset-normalizer
+  ] ++ lib.optionals isPy27 [
+    brotli
   ];
 
   checkInputs = [
+    pysocks
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -50,13 +67,24 @@ buildPythonPackage rec {
     "test_use_proxy_from_environment"
     "TestRequests"
     "TestTimeout"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fatal Python error: Aborted
+    "test_basic_response"
+    "test_text_response"
   ];
 
-  pythonImportsCheck = [ "requests" ];
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fatal Python error: Aborted
+    "tests/test_lowlevel.py"
+  ];
+
+  pythonImportsCheck = [
+    "requests"
+  ];
 
   meta = with lib; {
-    description = "Simple HTTP library for Python";
-    homepage = "http://docs.python-requests.org/en/latest/";
+    description = "HTTP library for Python";
+    homepage = "http://docs.python-requests.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

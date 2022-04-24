@@ -51,7 +51,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
@@ -72,9 +72,7 @@ in
         RuntimeDirectoryMode = "700";
         SystemCallFilter = [
           "@system-service"
-          "~@aio" "~@chown" "~@keyring" "~@memlock"
-          "~@privileged" "~@resources" "~@setuid"
-          "~@sync" "~@timer"
+          "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@setuid" "~@sync" "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";

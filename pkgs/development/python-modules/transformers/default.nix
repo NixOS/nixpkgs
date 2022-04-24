@@ -4,11 +4,14 @@
 , pythonOlder
 , cookiecutter
 , filelock
+, huggingface-hub
 , importlib-metadata
 , regex
 , requests
 , numpy
+, packaging
 , protobuf
+, pyyaml
 , sacremoses
 , tokenizers
 , tqdm
@@ -16,20 +19,24 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.4.2";
+  version = "4.16.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kl1Z2FBo+yqVXUqLaUtet6IycmdcAtfydNTI4MNNrkc=";
+    sha256 = "sha256-XF29JKIaOqZ/PdU+zu+wX7TAl1TKz+HcOutHDABc/PY=";
   };
+
+  nativeBuildInputs = [ packaging ];
 
   propagatedBuildInputs = [
     cookiecutter
     filelock
+    huggingface-hub
     numpy
     protobuf
+    pyyaml
     regex
     requests
     sacremoses
@@ -52,6 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk pashashocky ];
+    maintainers = with maintainers; [ pashashocky ];
   };
 }

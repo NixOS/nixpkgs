@@ -1,8 +1,19 @@
+--- a/tests/basic-test.sh
++++ b/tests/basic-test.sh
+@@ -226,7 +226,7 @@ cd ${test_tmpdir}
+ if $OSTREE commit ${COMMIT_ARGS} -b test-bootable --bootable $test_tmpdir/checkout-test2-4 2>err.txt; then
+     fatal "committed non-bootable tree"
+ fi
+-assert_file_has_content err.txt "error: .*No such file or directory"
++assert_file_has_content err.txt "error:.*No such file or directory"
+ echo "ok commit fails bootable if no kernel"
+ 
+ cd ${test_tmpdir}
 diff --git a/tests/pull-test.sh b/tests/pull-test.sh
-index a8bc49a9..4a08ebb5 100644
+index f4084290..4af5ec6f 100644
 --- a/tests/pull-test.sh
 +++ b/tests/pull-test.sh
-@@ -275,7 +275,7 @@
+@@ -297,7 +297,7 @@ ostree_repo_init mirrorrepo-local --mode=archive
  if ${CMD_PREFIX} ostree --repo=mirrorrepo-local pull-local otherrepo 2>err.txt; then
      fatal "pull with mixed refs succeeded?"
  fi
@@ -11,7 +22,7 @@ index a8bc49a9..4a08ebb5 100644
  ${CMD_PREFIX} ostree --repo=mirrorrepo-local pull-local otherrepo localbranch
  ${CMD_PREFIX} ostree --repo=mirrorrepo-local rev-parse localbranch
  ${CMD_PREFIX} ostree --repo=mirrorrepo-local fsck
-@@ -286,7 +286,7 @@
+@@ -308,7 +308,7 @@ if ${CMD_PREFIX} ostree --repo=mirrorrepo-local pull-local otherrepo nosuchbranc
      fatal "pulled nonexistent branch"
  fi
  # So true
@@ -20,7 +31,7 @@ index a8bc49a9..4a08ebb5 100644
  echo "ok pull-local nonexistent branch"
  
  cd ${test_tmpdir}
-@@ -593,5 +593,5 @@
+@@ -687,5 +687,5 @@ rm ostree-srv/gnomerepo/summary
  if ${CMD_PREFIX} ostree --repo=repo pull origin main 2>err.txt; then
      fatal "pull of invalid ref succeeded"
  fi
@@ -28,10 +39,10 @@ index a8bc49a9..4a08ebb5 100644
 +assert_file_has_content_literal err.txt 'Fetching checksum for ref ((empty), main): Invalid rev lots of html here  lots of html here  lots of html here  lots of'
  echo "ok pull got HTML for a ref"
 diff --git a/tests/test-config.sh b/tests/test-config.sh
-index 7e913d32..69d1675d 100755
+index 2d9aaf53..f1e28614 100755
 --- a/tests/test-config.sh
 +++ b/tests/test-config.sh
-@@ -46,7 +46,7 @@
+@@ -44,7 +44,7 @@ assert_file_has_content list.txt "http://example\.com/ostree/repo/"
  if ${CMD_PREFIX} ostree config --repo=repo get --group=core lock-timeout-secs extra 2>err.txt; then
      assert_not_reached "ostree config get should error out if too many arguments are given"
  fi
@@ -40,7 +51,7 @@ index 7e913d32..69d1675d 100755
  echo "ok config get"
  
  ${CMD_PREFIX} ostree config --repo=repo set core.mode bare-user-only
-@@ -63,7 +63,7 @@
+@@ -61,7 +61,7 @@ assert_file_has_content repo/config "http://example\.com/ostree/"
  if ${CMD_PREFIX} ostree config --repo=repo set --group=core lock-timeout-secs 120 extra 2>err.txt; then
      assert_not_reached "ostree config set should error out if too many arguments are given"
  fi
@@ -48,8 +59,8 @@ index 7e913d32..69d1675d 100755
 +assert_file_has_content err.txt "Too many arguments given"
  echo "ok config set"
  
- # Check that "ostree config unset" works
-@@ -78,7 +78,7 @@
+ # Check that using `--` works and that "ostree config unset" works
+@@ -78,7 +78,7 @@ if ${CMD_PREFIX} ostree config --repo=repo get core.lock-timeout-secs 2>err.txt;
  fi
  # Check for any character where quotation marks would be as they appear differently in the Fedora and Debian
  # test suites (“” and '' respectively). See: https://github.com/ostreedev/ostree/pull/1839
@@ -58,7 +69,7 @@ index 7e913d32..69d1675d 100755
  
  # Check that it's idempotent
  ${CMD_PREFIX} ostree config --repo=repo unset core.lock-timeout-secs
-@@ -95,5 +95,5 @@
+@@ -95,5 +95,5 @@ ${CMD_PREFIX} ostree config --repo=repo unset --group='remote "aoeuhtns"' 'xa.ti
  if ${CMD_PREFIX} ostree config --repo=repo unset core.lock-timeout-secs extra 2>err.txt; then
      assert_not_reached "ostree config unset should error out if too many arguments are given"
  fi
@@ -66,10 +77,10 @@ index 7e913d32..69d1675d 100755
 +assert_file_has_content err.txt "Too many arguments given"
  echo "ok config unset"
 diff --git a/tests/test-fsck-collections.sh b/tests/test-fsck-collections.sh
-index dc6bcfeb..4a5eef55 100755
+index 3dbcdd23..d6359979 100755
 --- a/tests/test-fsck-collections.sh
 +++ b/tests/test-fsck-collections.sh
-@@ -100,7 +100,7 @@
+@@ -98,7 +98,7 @@ ${CMD_PREFIX} ostree fsck --repo=repo
  if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
      assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
  fi
@@ -78,7 +89,7 @@ index dc6bcfeb..4a5eef55 100755
  assert_file_has_content fsck "^Validating refs\.\.\.$"
  
  echo "ok 3 fsck detects missing ref bindings"
-@@ -113,7 +113,7 @@
+@@ -111,7 +111,7 @@ ${CMD_PREFIX} ostree --repo=repo refs --collections --create=org.example.Collect
  if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
      assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
  fi
@@ -87,7 +98,7 @@ index dc6bcfeb..4a5eef55 100755
  assert_file_has_content fsck "^Validating refs\.\.\.$"
  assert_file_has_content fsck "^Validating refs in collections\.\.\.$"
  
-@@ -127,7 +127,7 @@
+@@ -125,7 +125,7 @@ ${CMD_PREFIX} ostree --repo=repo refs --collections --create=org.example.Collect
  if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
      assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
  fi
@@ -96,7 +107,7 @@ index dc6bcfeb..4a5eef55 100755
  assert_file_has_content fsck "^Validating refs\.\.\.$"
  assert_file_has_content fsck "^Validating refs in collections\.\.\.$"
  
-@@ -147,7 +147,7 @@
+@@ -145,7 +145,7 @@ echo "ok 6 fsck ignores unreferenced ref bindings"
  if ${CMD_PREFIX} ostree fsck --repo=repo --verify-back-refs > fsck 2> fsck-error; then
      assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
  fi
@@ -105,7 +116,7 @@ index dc6bcfeb..4a5eef55 100755
  assert_file_has_content fsck "^Validating refs\.\.\.$"
  assert_file_has_content fsck "^Validating refs in collections\.\.\.$"
  
-@@ -186,7 +186,7 @@
+@@ -184,7 +184,7 @@ ${CMD_PREFIX} ostree --repo=repo refs --create=new-ref $(cat ref3-checksum)
  if ${CMD_PREFIX} ostree fsck --repo=repo --verify-bindings > fsck 2> fsck-error; then
      assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
  fi
@@ -114,7 +125,7 @@ index dc6bcfeb..4a5eef55 100755
  assert_file_has_content fsck "^Validating refs\.\.\.$"
  
  echo "ok 9 fsck detects missing ref bindings"
-@@ -205,7 +205,7 @@
+@@ -203,7 +203,7 @@ echo "ok 10 fsck ignores unreferenced ref bindings"
  if ${CMD_PREFIX} ostree fsck --repo=repo --verify-back-refs > fsck 2> fsck-error; then
      assert_not_reached "fsck unexpectedly succeeded after adding unbound ref!"
  fi
@@ -124,10 +135,10 @@ index dc6bcfeb..4a5eef55 100755
  
  echo "ok 11 fsck ignores unreferenced ref bindings"
 diff --git a/tests/test-remote-add.sh b/tests/test-remote-add.sh
-index bb7eae89..62a3bcd7 100755
+index 2f5ea634..0f63853c 100755
 --- a/tests/test-remote-add.sh
 +++ b/tests/test-remote-add.sh
-@@ -83,7 +83,7 @@
+@@ -81,7 +81,7 @@ echo "ok remote delete"
  if $OSTREE remote delete nosuchremote 2>err.txt; then
      assert_not_reached "Deleting remote unexpectedly succeeded"
  fi

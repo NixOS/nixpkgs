@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "qtads";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "realnc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02kk2hs20h9ffhylwms9f8zikmmlrz1nvbrm97gis9iljkyx035c";
+    sha256 = "sha256-xMAGbOA+qtwMk5VT5yi//GDzTKtYfGku/Sm4l5smzEs=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

@@ -15,13 +15,12 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X=main.Version=${version}
-  '';
+  ldflags = [
+    "-X=main.Version=${version}"
+  ];
 
   meta = {
-    homepage = "https://cayley.io/";
+    homepage = "https://github.com/cayleygraph/cayley";
     description = "A graph database inspired by Freebase and Knowledge Graph";
     maintainers = with lib.maintainers; [ sigma ];
     license = lib.licenses.asl20;

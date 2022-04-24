@@ -2,10 +2,12 @@
 
 throw "It still does not build"
 
-stdenv.mkDerivation {
-  name = "fsfs-0.1.1";
+stdenv.mkDerivation rec {
+  pname = "fsfs";
+  version = "0.1.1";
+
   src = fetchurl {
-    url = "mirror://sourceforge/fsfs/fsfs-0.1.1.tar.gz";
+    url = "mirror://sourceforge/fsfs/fsfs-${version}.tar.gz";
     sha256 = "05wka9aq182li2r7gxcd8bb3rhpns7ads0k59v7w1jza60l57c74";
   };
 

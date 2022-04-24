@@ -2,16 +2,13 @@
 
 buildPythonPackage rec {
   pname = "labmath";
-  version = "1.2.0";
+  version = "2.2.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/fZ61tJ6PVZsubr3OXlbg/VxyyKimz36uPV+r33kgD0=";
+    sha256 = "sha256-dzJ4szPxnck0Cgc5IEp5FBmHvIyAC0rqKRVrkt20ntQ=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "labmath/DESCRIPTION.rst" "PKG-INFO"
-  '';
 
   pythonImportsCheck = [ "labmath" ];
 

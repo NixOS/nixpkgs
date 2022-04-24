@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "barrier";
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "debauchee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11vqkzpcjiv3pq6ps022223j6skgm1d23dj18n4a5nsf53wsvvp4";
+    sha256 = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
     fetchSubmodules = true;
   };
 

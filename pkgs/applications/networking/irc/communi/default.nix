@@ -1,21 +1,21 @@
-{ fetchgit, libcommuni, qtbase, qmake, lib, stdenv }:
+{ fetchFromGitHub, libcommuni, qtbase, qmake, lib, stdenv, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "communi";
   version = "3.5.0";
 
-  src = fetchgit {
-    url = "https://github.com/communi/communi-desktop.git";
+  src = fetchFromGitHub {
+    owner = "communi";
+    repo = "communi-desktop";
     rev = "v${version}";
-    sha256 = "10grskhczh8601s90ikdsbjabgr9ypcp2j7vivjkl456rmg6xbji";
+    sha256 = "sha256-Ua5uXs2mEDrljvtIcdn1Kb+l5NJtRpB0AAbBz+DU+YE=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake ]
+    ++ lib.optional stdenv.isDarwin wrapQtAppsHook;
 
   buildInputs = [ libcommuni qtbase ];
-
-  enableParallelBuilding = true;
 
   dontWrapQtApps = true;
 
@@ -25,14 +25,21 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [
     "COMMUNI_INSTALL_PREFIX=${placeholder "out"}"
-    "COMMUNI_INSTALL_BINS=${placeholder "out"}/bin"
     "COMMUNI_INSTALL_PLUGINS=${placeholder "out"}/lib/communi/plugins"
     "COMMUNI_INSTALL_ICONS=${placeholder "out"}/share/icons/hicolor"
     "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
+    (if stdenv.isDarwin
+      then [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/Applications" ]
+      else [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/bin" ])
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = if stdenv.isDarwin then ''
+    # Nix qmake does not add the bundle rpath by default.
+    install_name_tool \
+      -add_rpath @executable_path/../Frameworks \
+      $out/Applications/Communi.app/Contents/MacOS/Communi
+  '' else ''
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
   '';

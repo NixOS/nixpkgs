@@ -3,7 +3,7 @@
 deployAndroidPackage {
   inherit package os;
   buildInputs = [ autoPatchelfHook makeWrapper ]
-  ++ lib.optional (os == "linux") [
+  ++ lib.optionals (os == "linux") [
     pkgs.glibc
     pkgs.xorg.libX11
     pkgs.xorg.libXext
@@ -18,6 +18,7 @@ deployAndroidPackage {
     pkgs.libcxx
     pkgs.libGL
     pkgs.libpulseaudio
+    pkgs.libuuid
     pkgs.zlib
     pkgs.ncurses5
     pkgs.stdenv.cc.cc
@@ -26,7 +27,7 @@ deployAndroidPackage {
     pkgs.freetype
     pkgs.nss
     pkgs.nspr
-    pkgs.alsaLib
+    pkgs.alsa-lib
   ];
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib

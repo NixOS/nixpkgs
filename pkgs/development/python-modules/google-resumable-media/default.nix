@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "1.2.0";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hwxdgsqh6933kp4jkv6hwwdcqs7bgjn9j08ga399njv3s9b367f";
+    sha256 = "sha256-BpJOix558VjwIC590VGtdbDqnVm5l8hQ9WvdSlo2FRM=";
   };
 
   propagatedBuildInputs = [ google-auth google-crc32c requests ];
 
-  checkInputs = [ google-auth google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 
   preCheck = ''
     # prevent shadowing imports

@@ -4,21 +4,23 @@ let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 buildGoModule rec {
   pname = "stern";
-  version = "1.14.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
-    sha256 = "sha256-8l/Tr+IxR3yPmt9hI70XuUQ4YEYzRTMLbo8BsngoU60=";
+    sha256 = "sha256-+V0mRSjAwhZoiIS/OpZyqa5rvlqU9pGJwmW0QZ3H2g4=";
   };
 
-  vendorSha256 = "sha256-pvFT4A7bDBvBf1odyv3z4inw1/IsvOA+++OPbfNjzxM=";
+  vendorSha256 = "sha256-IPHu23/2e6406FELB1Mwegp0C16cFD65mbW5Ah32D4Q=";
+
+  subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray =
-    [ "-ldflags=-s -w -X github.com/stern/stern/cmd.version=${version}" ];
+  ldflags =
+    [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
 
   postInstall =
     let stern = if isCrossBuild then buildPackages.stern else "$out";

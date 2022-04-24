@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, clang-unwrapped
 , cmake
 , libclang
 , libffi
@@ -15,30 +14,24 @@
 
 stdenv.mkDerivation rec {
   pname = "CastXML";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MschwCEkZrZmNgr8a1ocdukjXzHbXl2gmkPmygJaA6k=";
+    hash = "sha256-VtkMjZOcF5OAHkezlupXOpNwqUD1oKHdRbtG2FZBRL4=";
   };
 
   nativeBuildInputs = [
     cmake
-    llvm
+    llvm.dev
   ] ++ lib.optionals (withManual || withHTML) [
     sphinx
   ];
 
-  cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${clang-unwrapped}/lib/clang/${lib.getVersion clang-unwrapped}/"
-    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
-    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
-  ];
-
   buildInputs = [
-    clang-unwrapped
+    libclang
     libffi
     libxml2
     zlib
@@ -46,6 +39,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     libclang
+  ];
+
+  cmakeFlags = [
+    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
+    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
+    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
 
   # 97% tests passed, 97 tests failed out of 2881

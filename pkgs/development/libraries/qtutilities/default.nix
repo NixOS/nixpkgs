@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtutilities";
-  version = "6.3.3";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RoI1huVei4SmAUhuYruzgod0/qIlnrZSHEMceQc2jzc=";
+    sha256 = "sha256-ArPTWUQV9h+AK/m4oUIXsGWFO6Fj9IIOKSXCdWGztNM=";
   };
 
   buildInputs = [ qtbase cpp-utilities ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/qtutilities";
-    description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
+    description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms   = platforms.linux;

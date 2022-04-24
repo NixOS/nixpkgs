@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  version = "2.10.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "14v4mw0asjgg4l0683hn87d8jai8lrmcpbfcm9z93p4mpn2sp7aw";
+    sha256 = "sha256-WuNJCFBbXbLSftL+L15ruq9PxM1XhIfYpP/IccB+aBs=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/libva-utils";
     changelog = "https://raw.githubusercontent.com/intel/libva-utils/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

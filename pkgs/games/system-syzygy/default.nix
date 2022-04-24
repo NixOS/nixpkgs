@@ -6,7 +6,7 @@ let
     exec = "@out@/bin/syzygy";
     comment = "A puzzle game";
     desktopName = "System Syzygy";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 in
 rustPlatform.buildRustPackage rec {
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ SDL2 ];
 
-  cargoSha256 = "001cwdq8zxji56yahwfsydi7s0j7c5zsip60lxk3qmn078wcipdp";
+  cargoSha256 = "1jp9wnavq92w52ksj2q9fi3y58wq7ybfkx2kfbx2i2xv8d7y88ax";
 
   postInstall = ''
     mkdir -p $out/share/syzygy/

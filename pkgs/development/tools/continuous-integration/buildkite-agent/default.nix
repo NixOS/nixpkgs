@@ -1,17 +1,18 @@
 { fetchFromGitHub, lib, buildGoModule,
-  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
+  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
+  nixosTests }:
 buildGoModule rec {
-  name = "buildkite-agent-${version}";
-  version = "3.28.1";
+  pname = "buildkite-agent";
+  version = "3.35.2";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "sha256-5YOXYOAh/0fOagcqdK2IEwm5XDCxyfTeTzwBGtsQRCs=";
+    sha256 = "sha256-BpfWeSEX4N77yXfWKpH7KWKsncdOYquxF+L+g13DdiA=";
   };
 
-  vendorSha256 = "sha256-3UXZxeiL0WO4X/3/hW8ubL1TormGbn9X/k0PX+/cLuM=";
+  vendorSha256 = "sha256-E51LBpNN/N3wH1LMxv/+nnwpQAxHhyDW2jgVIDkNeQ4=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
@@ -30,6 +31,10 @@ buildGoModule rec {
       --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
 
+  passthru.tests = {
+    smoke-test = nixosTests.buildkite-agents;
+  };
+
   meta = with lib; {
     description = "Build runner for buildkite.com";
     longDescription = ''
@@ -41,7 +46,7 @@ buildGoModule rec {
     '';
     homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
+    maintainers = with maintainers; [ pawelpacana zimbatm rvl techknowlogick ];
     platforms = with platforms; unix ++ darwin;
   };
 }

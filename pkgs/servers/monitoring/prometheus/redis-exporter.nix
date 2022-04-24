@@ -1,26 +1,26 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "redis_exporter";
-  version = "1.7.0";
-
-  goPackagePath = "github.com/oliver006/redis_exporter";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
     rev = "v${version}";
-    sha256 = "0rwaxpylividyxz0snfgck32kvpgjkhg20bmdnlp35cdzxcxi8m1";
+    sha256 = "sha256-S60/SwbMp6INf98MGc26zMZH8q7gBynyaT/ivN7o0rA=";
   };
 
-  goDeps = ./redis-exporter-deps.nix;
+  vendorSha256 = "sha256-u9FfKOD6kiCFTjwQ7LHE9WC4j2vPm0ZCluL8pC4aQIc=";
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X main.BuildVersion=${version}
-       -X main.BuildCommitSha=unknown
-       -X main.BuildDate=unknown
-  '';
+  ldflags = [
+    "-X main.BuildVersion=${version}"
+    "-X main.BuildCommitSha=unknown"
+    "-X main.BuildDate=unknown"
+  ];
+
+  # needs a redis server
+  doCheck = false;
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
 

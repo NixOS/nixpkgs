@@ -10,7 +10,7 @@ let
     comment = "Crossover between Super Mario Bros. and Portal";
     desktopName = "mari0";
     genericName = "mari0";
-    categories = "Game";
+    categories = [ "Game" ];
   };
 
 in
@@ -27,8 +27,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love_11 zip ];
-
-  phases = [ "unpackPhase" "installPhase" ];
 
   installPhase =
   ''

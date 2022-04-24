@@ -1,19 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, future, cppy }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, future
+, cppy
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.6.0";
+  version = "0.8.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "df65a654744ccdc4843ce09c38612fd8f702c84be501b1d955c3ac0b9ad28dc5";
+  src = fetchFromGitHub {
+    owner = "nucleic";
+    repo = pname;
+    rev = version;
+    hash = "sha256-Xby3QopKw7teShMi80RMG8YdhOOvfQb5vwOuFEUTxHQ=";
   };
 
-  buildInputs = [ cppy ];
-  propagatedBuildInputs = [ future ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # Tests not released to pypi
-  doCheck = true;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    cppy
+  ];
+
+  preCheck = ''
+    rm -rf atom
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "atom.api"
+  ];
 
   meta = with lib; {
     description = "Memory efficient Python objects";

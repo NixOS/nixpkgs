@@ -1,5 +1,6 @@
 { stdenv
 , tree-sitter
+, lib
 }:
 
 # Build a parser grammar and put the resulting shared object in `$out/parser`
@@ -14,40 +15,46 @@
 , location ? null
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
   pname = "${language}-grammar";
   inherit version;
 
-  src =
-    if location == null
-    then
-      source
-    else
-      "${source}/${location}"
-  ;
+  src = if location == null then source else "${source}/${location}";
 
   buildInputs = [ tree-sitter ];
 
   dontUnpack = true;
-  configurePhase = ":";
+  dontConfigure = true;
+
+  CFLAGS = [ "-I${src}/src" "-O2" ];
+  CXXFLAGS = [ "-I${src}/src" "-O2" ];
+
+  # When both scanner.{c,cc} exist, we should not link both since they may be the same but in
+  # different languages. Just randomly prefer C++ if that happens.
   buildPhase = ''
     runHook preBuild
-    scanner_cc="$src/src/scanner.cc"
-    if [ ! -f "$scanner_cc" ]; then
-      scanner_cc=""
+    if [[ -e "$src/src/scanner.cc" ]]; then
+      $CXX -c "$src/src/scanner.cc" -o scanner.o $CXXFLAGS
+    elif [[ -e "$src/src/scanner.c" ]]; then
+      $CC -c "$src/src/scanner.c" -o scanner.o $CFLAGS
     fi
-    scanner_c="$src/src/scanner.c"
-    if [ ! -f "$scanner_c" ]; then
-      scanner_c=""
-    fi
-    $CC -I$src/src/ -shared -o parser -Os $src/src/parser.c $scanner_cc $scanner_c -lstdc++
+    $CC -c "$src/src/parser.c" -o parser.o $CFLAGS
+    $CXX -shared -o parser *.o
     runHook postBuild
   '';
+
   installPhase = ''
     runHook preInstall
     mkdir $out
     mv parser $out/
     runHook postInstall
+  '';
+
+  # Strip failed on darwin: strip: error: symbols referenced by indirect symbol table entries that can't be stripped
+  fixupPhase = lib.optionalString stdenv.isLinux ''
+    runHook preFixup
+    $STRIP $out/parser
+    runHook postFixup
   '';
 }

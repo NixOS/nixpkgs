@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , pciutils
 , libconfuse
-, alsaLib
+, alsa-lib
 , audiofile
 , pkg-config
 , zlib
@@ -10,13 +10,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pkgname = "pommed-light";
+  pname = "pommed-light";
   version = "1.51lw";
-  name = "${pkgname}-${version}";
 
   src = fetchFromGitHub {
     owner = "bytbox";
-    repo = pkgname;
+    repo = "pommed-light";
     rev = "v${version}";
     sha256 = "18fvdwwhcl6s4bpf2f2i389s71c8k4g0yb81am9rdddqmzaw27iy";
   };
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pciutils
     libconfuse
-    alsaLib
+    alsa-lib
     audiofile
     zlib
     eject

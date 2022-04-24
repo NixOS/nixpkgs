@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , glibcLocales
+, libnotify
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -28,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     lxml
     typing-extensions
     python-dateutil
+    pytz
     tzlocal
   ];
 
@@ -35,9 +37,13 @@ python3.pkgs.buildPythonApplication rec {
     glibcLocales
   ] ++ (with python3.pkgs; [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-mock
   ]);
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ libnotify ])
+  ];
 
   meta = with lib; {
     description = "Zulip's official terminal client";

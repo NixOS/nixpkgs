@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchPypi
-, isPy38
 , lib
 
 # pythonPackages
@@ -17,13 +16,18 @@
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.5.0";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "872adfa760b2efdd62595659b283deba92d47b7a67557eb9ff48f0b5d04ee396";
+    sha256 = "sha256-CFTRnaTFZEZBgU3E+VHELgFAC1eS8J37a/+nJti5Fg0=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "msal-extensions~=0.3.0" "msal-extensions"
+  '';
 
   propagatedBuildInputs = [
     azure-common

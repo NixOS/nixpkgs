@@ -1,39 +1,61 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
-, fix, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
+{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_2
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.6.2";
+  pname = "ocaml${ocaml.version}-reason";
+  version = "3.8.0";
 
-  src = fetchFromGitHub {
-    owner = "facebook";
-    repo = "reason";
-    rev = "6017d6dd930f4989177c3f7c3c20cffbaabaa49a";
-    sha256 = "17wkcl3r0ckhlki9fk0mcwbnd7kpkqm1h0xjw2j2x1097n470df0";
+  src = fetchurl {
+    url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
+    sha256 = "sha256:0yc94m3ddk599crg33yxvkphxpy54kmdsl599c320wvn055p4y4l";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    menhir
+  ];
 
-  propagatedBuildInputs = [ menhir merlin-extend ppx_tools_versioned ];
+  buildInputs = [
+    cppo
+    dune_2
+    findlib
+    fix
+    menhir
+    menhirSdk
+    ocaml
+    ppxlib
+    utop
+  ];
 
-  buildInputs = [ ocaml findlib dune_2 cppo fix utop menhir ];
+  propagatedBuildInputs = [
+    menhirLib
+    merlin-extend
+    ppx_derivers
+  ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
   installPhase = ''
+    runHook preInstall
     dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
       --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \
       --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
+    runHook postInstall
   '';
+
+  passthru.tests = {
+    hello = callPackage ./tests/hello { };
+  };
 
   meta = with lib; {
     homepage = "https://reasonml.github.io/";
+    downloadPage = "https://github.com/reasonml/reason";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ ];
   };
 }

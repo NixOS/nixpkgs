@@ -5,6 +5,7 @@
 stdenv.mkDerivation {
   pname = "yosys-ghdl";
   version = "2021.01.25";
+  plugin = "ghdl";
 
   src = fetchFromGitHub {
     owner  = "ghdl";

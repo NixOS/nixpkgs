@@ -1,20 +1,26 @@
-{ lib, stdenv }:
+{ lib, stdenv, buildEnv }:
 
 # A special kind of derivation that is only meant to be consumed by the
 # nix-shell.
-{
-  inputsFrom ? [], # a list of derivations whose inputs will be made available to the environment
-  buildInputs ? [],
-  nativeBuildInputs ? [],
-  propagatedBuildInputs ? [],
-  propagatedNativeBuildInputs ? [],
-  ...
+{ name ? "nix-shell"
+, # a list of packages to add to the shell environment
+  packages ? [ ]
+, # propagate all the inputs from the given derivations
+  inputsFrom ? [ ]
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, propagatedBuildInputs ? [ ]
+, propagatedNativeBuildInputs ? [ ]
+, ...
 }@attrs:
 let
-  mergeInputs = name: lib.concatLists (lib.catAttrs name
-    ([attrs] ++ inputsFrom));
+  mergeInputs = name:
+    (attrs.${name} or [ ]) ++
+    (lib.subtractLists inputsFrom (lib.flatten (lib.catAttrs name inputsFrom)));
 
   rest = builtins.removeAttrs attrs [
+    "name"
+    "packages"
     "inputsFrom"
     "buildInputs"
     "nativeBuildInputs"
@@ -25,21 +31,25 @@ let
 in
 
 stdenv.mkDerivation ({
-  name = "nix-shell";
-  phases = ["nobuildPhase"];
+  inherit name;
 
   buildInputs = mergeInputs "buildInputs";
-  nativeBuildInputs = mergeInputs "nativeBuildInputs";
+  nativeBuildInputs = packages ++ (mergeInputs "nativeBuildInputs");
   propagatedBuildInputs = mergeInputs "propagatedBuildInputs";
   propagatedNativeBuildInputs = mergeInputs "propagatedNativeBuildInputs";
 
   shellHook = lib.concatStringsSep "\n" (lib.catAttrs "shellHook"
-    (lib.reverseList inputsFrom ++ [attrs]));
+    (lib.reverseList inputsFrom ++ [ attrs ]));
 
-  nobuildPhase = ''
-    echo
-    echo "This derivation is not meant to be built, aborting";
-    echo
-    exit 1
+  phases = [ "buildPhase" ];
+
+  buildPhase = ''
+    echo "------------------------------------------------------------" >>$out
+    echo " WARNING: the existence of this path is not guaranteed." >>$out
+    echo " It is an internal implementation detail for pkgs.mkShell."   >>$out
+    echo "------------------------------------------------------------" >>$out
+    echo >> $out
+    # Record all build inputs as runtime dependencies
+    export >> $out
   '';
 } // rest)

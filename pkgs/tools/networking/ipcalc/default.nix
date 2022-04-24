@@ -1,20 +1,38 @@
-{lib, stdenv, fetchurl, perl}:
+{ lib
+, stdenv
+, fetchFromGitLab
+, glib
+, meson
+, ninja
+, libmaxminddb
+, pkg-config
+, ronn
+}:
+
 stdenv.mkDerivation rec {
   pname = "ipcalc";
-  version = "0.41";
-  src = fetchurl {
-    url = "http://jodies.de/ipcalc-archive/${pname}-${version}.tar.gz";
-    sha256 = "dda9c571ce3369e5b6b06e92790434b54bec1f2b03f1c9df054c0988aa4e2e8a";
+  version = "1.0.1";
+
+  src = fetchFromGitLab {
+    owner = "ipcalc";
+    repo = "ipcalc";
+    rev = version;
+    sha256 = "0qg516jv94dlk0qj0bj5y1dd0i31ziqcjd6m00w8xp5wl97bj2ji";
   };
-  buildInputs = [perl];
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ipcalc $out/bin
-  '';
-  meta = {
+
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+    libmaxminddb
+    ronn
+  ];
+
+  meta = with lib; {
     description = "Simple IP network calculator";
-    homepage = "http://jodies.de/ipcalc";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    homepage = "https://gitlab.com/ipcalc/ipcalc";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
   };
 }

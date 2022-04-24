@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, setuptools-scm
 , pytestCheckHook
 , packaging
 , appdirs
@@ -10,13 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.3.0";
+  version = "1.6.0";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30d448e825904e2d763bbbe418831a788813c32f636b21c8d60ee5f474532898";
+    sha256 = "sha256-V9IOxLEN1pTSsFu2S8axCcboWmwUBXlM6H7Ys0GrP0Q=";
   };
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ packaging appdirs requests ];
 

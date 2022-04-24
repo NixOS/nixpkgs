@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2020f";
+  version = "2022a";
 
   srcs =
     [ (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "10b8cr55x6ji14n3kqkn3avj1s9b79b8gszh81fxrrisij8k248j";
+        sha256 = "0r0nhwpk9nyxj5kkvjy58nr5d85568m04dcb69c4y3zmykczyzzg";
       })
       (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "1i998crd9fxdfhv4jd241j1arx0ng7j7cvczpmj4y5j5fwmfmvng";
+        sha256 = "1iysv8fdkm79k8wh8jizmjmq075q4qjhk090vxjy57my6dz5wmzq";
       })
     ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "BINDIR=$(bin)/bin"
     "ZICDIR=$(bin)/bin"
     "ETCDIR=$(TMPDIR)/etc"
-    "TZDEFAULT=$(TMPDIR)/etc"
+    "TZDEFAULT=tzdefault-to-remove"
     "LIBDIR=$(dev)/lib"
     "MANDIR=$(man)/share/man"
     "AWK=awk"
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       rm $out/share/zoneinfo-posix
+      rm $out/share/zoneinfo/tzdefault-to-remove
       mkdir $out/share/zoneinfo/posix
       ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
@@ -68,7 +69,11 @@ stdenv.mkDerivation rec {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
+    license = with licenses; [
+      bsd3 # tzcode
+      publicDomain # tzdata
+    ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ajs124 fpletz ];
   };
 }

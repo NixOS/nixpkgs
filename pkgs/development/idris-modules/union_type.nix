@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "union_type";
+  pname = "union_type";
   version = "2018-01-30";
 
   src = fetchFromGitHub {

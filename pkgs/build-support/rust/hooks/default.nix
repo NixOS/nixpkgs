@@ -1,11 +1,13 @@
 { buildPackages
 , callPackage
 , cargo
+, clang
 , diffutils
 , lib
 , makeSetupHook
 , maturin
 , rust
+, rustc
 , stdenv
 , target ? rust.toRustTargetSpec stdenv.hostPlatform
 }:
@@ -85,10 +87,19 @@ in {
   maturinBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "maturin-build-hook.sh";
-      deps = [ cargo maturin ];
+      deps = [ cargo maturin rustc ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
       };
     } ./maturin-build-hook.sh) {};
+
+    bindgenHook = callPackage ({}: makeSetupHook {
+      name = "rust-bindgen-hook";
+      substitutions = {
+        libclang = clang.cc.lib;
+        inherit clang;
+      };
+    }
+    ./rust-bindgen-hook.sh) {};
 }

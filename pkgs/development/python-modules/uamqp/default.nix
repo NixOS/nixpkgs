@@ -1,57 +1,54 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPy3k
 , certifi
-, cmake
-, enum34
-, openssl
-, six
 , CFNetwork
+, cmake
 , CoreFoundation
+, enum34
+, fetchpatch
+, fetchPypi
+, isPy3k
+, openssl
 , Security
+, six
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.2.13";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zDUFe/yMCThn+qJqDekMrUHEf1glGxBw4pioExLLoqg=";
+    sha256 = "sha256-guhfOMvddC4E+oOmvpeG8GsXEfqLcSHVdtj3w8fF2Vs=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Azure/azure-c-shared-utility/commit/52ab2095649b5951e6af77f68954209473296983.patch";
-      sha256 = "06pxhdpkv94pv3lhj1vy0wlsqsdznz485bvg3zafj67r55g40lhd";
-      stripLen = "2";
-      extraPrefix = "src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/";
-    })
-  ];
-
-  buildInputs = [
-    openssl
-    certifi
-    six
-  ] ++ lib.optionals (!isPy3k) [
-    enum34
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    CFNetwork
-    Security
-  ];
-
-  dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
     cmake
   ];
 
-  # has no tests
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    CFNetwork
+    Security
+  ];
+
+  propagatedBuildInputs = [
+    certifi
+    openssl
+    six
+  ] ++ lib.optionals (!isPy3k) [
+    enum34
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  # Project has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "uamqp"
+  ];
 
   meta = with lib; {
     description = "An AMQP 1.0 client library for Python";

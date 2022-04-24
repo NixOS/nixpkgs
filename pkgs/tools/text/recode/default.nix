@@ -2,24 +2,27 @@
 
 stdenv.mkDerivation rec {
   pname = "recode";
-  version = "3.7.8";
+  version = "3.7.12";
 
   # Use official tarball, avoid need to bootstrap/generate build system
   src = fetchurl {
     url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "19yg20z1smj9kag1axgvc4s4kd6jmw75h0pa8xqxl3xqqyn5rdsg";
+    hash = "sha256-TbHJB28E26oVlyb1AAhH5eWoOuyOXGT4ygQ4P2zaEtU=";
   };
 
   nativeBuildInputs = [ python3 python3.pkgs.cython perl intltool flex texinfo libiconv ];
   buildInputs = [ libintl ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
   meta = {
     homepage = "https://github.com/rrthomas/recode";
     description = "Converts files between various character sets and usages";
+    changelog = "https://github.com/rrthomas/recode/raw/v${version}/NEWS";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
+    license = with lib.licenses; [ lgpl3Plus gpl3Plus ];
     maintainers = with lib.maintainers; [ jcumming ];
   };
 }

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , ninja
 , intltool
@@ -24,7 +25,8 @@
 , db
 , gcr
 , sqlite
-, gnome3
+, gnome
+, gnome-desktop
 , librsvg
 , gdk-pixbuf
 , libsecret
@@ -32,6 +34,8 @@
 , nspr
 , icu
 , libcanberra-gtk3
+, geocode-glib
+, cmark
 , bogofilter
 , gst_all_1
 , procps
@@ -42,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.38.4";
+  version = "3.44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "NB+S0k4rRMJ4mwA38aiU/xZUh9qksAuA+uMTii4Fr9Q=";
+    sha256 = "3yHT31Ik36hC6ikO/82QKv1LFBhgik37aQejt9TZlPk=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     bogofilter
     db
     evolution-data-server
@@ -68,7 +72,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     glib-networking
-    gnome3.gnome-desktop
+    gnome-desktop
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -77,6 +81,8 @@ stdenv.mkDerivation rec {
     highlight
     icu
     libcanberra-gtk3
+    geocode-glib
+    cmark
     libgdata
     libgweather
     libical
@@ -106,6 +112,7 @@ stdenv.mkDerivation rec {
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
+    "-DWITH_GWEATHER4=ON"
   ];
 
   requiredSystemFeatures = [
@@ -114,13 +121,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  patches = [
-    ./moduledir_from_env.patch
-  ];
-
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "evolution";
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg }:
+{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj_7, libpng, openjpeg }:
 
 stdenv.mkDerivation rec {
   version = "1.2.6.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ bzip2 qtbase libnova proj openjpeg libpng ];
+  buildInputs = [ bzip2 qtbase libnova proj_7 openjpeg libpng ];
   cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 

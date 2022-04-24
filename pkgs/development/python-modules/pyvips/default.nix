@@ -1,23 +1,23 @@
-{ buildPythonPackage, fetchPypi, pytestrunner, pytestCheckHook, glib, vips, cffi
-, pkg-config, pkgconfig, lib }:
+{ buildPythonPackage, fetchFromGitHub, pytestCheckHook, glib, vips, cffi
+, pkgconfig, lib }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.1.14";
+  version = "2.1.16";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "244e79c625be65237677c79424d4476de6c406805910015d4adbd0186c64a6a2";
+  src = fetchFromGitHub {
+    owner = "libvips";
+    repo = "pyvips";
+    rev = "v${version}";
+    sha256 = "sha256-8CeQbx3f2i0lEU0wxPeUwHlUGtzOztzTOdFNjIDy8s0=";
   };
 
-  nativeBuildInputs = [ pytestrunner pkgconfig pkg-config ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ glib vips ];
 
   propagatedBuildInputs = [ cffi ];
 
-  # tests are not included in pypi tarball
-  doCheck = false;
   checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyvips" ];

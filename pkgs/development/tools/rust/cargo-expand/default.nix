@@ -1,17 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-expand";
-  version = "1.0.6";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6FjFG4RYvmsV/W7OMxj1ZWvruwUeP9Nvsdiv8toZmTk=";
+    sha256 = "sha256-NhBUN+pf+j/4IozFDEb+XZ1ijSk6dNvCANyez823a0c=";
   };
 
-  cargoSha256 = "sha256-1+A+n5VQS8zJULiR8IWLGo+RnFuVjg6ist8G3eCsXJM=";
+  cargoSha256 = "sha256-7rqtxyoo1SQ7Rae04+b+B0JgCKeW0p1j7bZzPpJ8+ks=";
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description =

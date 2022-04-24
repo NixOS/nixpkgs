@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-order";
-  version = "0.9.5";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c9e4f1b060414c642e88ad98ca60f1fd37937debd704bd8f4a2ef8e08b9cb6d";
+    sha256 = "sha256-Xda5KfvX6qbQ7gdYb2XGI7q7Cv5ytIQ8XxUFXWs7Gx8=";
   };
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
 
   checkInputs = [
     pytestCheckHook
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pytest plugin that allows you to customize the order in which your tests are run";
-    homepage = "https://github.com/mrbean-bremen/pytest-order";
+    homepage = "https://github.com/pytest-dev/pytest-order";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jacg ];
   };

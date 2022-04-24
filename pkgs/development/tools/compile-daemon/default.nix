@@ -20,6 +20,7 @@ buildGoPackage rec {
     description = "Very simple compile daemon for Go";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
+    mainProgram = "CompileDaemon";
     inherit (src.meta) homepage;
   };
 }

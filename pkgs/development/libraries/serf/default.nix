@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
+{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, libkrb5
 , pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
@@ -6,13 +6,13 @@ stdenv.mkDerivation rec {
   version = "1.3.9";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/serf/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/serf/${pname}-${version}.tar.bz2";
     sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 
   nativeBuildInputs = [ pkg-config scons ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
-    ++ lib.optional (!stdenv.isCygwin) kerberos;
+    ++ lib.optional (!stdenv.isCygwin) libkrb5;
 
   patches = [ ./scons.patch ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sconsFlags+=" OPENSSL=${openssl}"
     sconsFlags+=" ZLIB=${zlib}"
   '' + lib.optionalString (!stdenv.isCygwin) ''
-    sconsFlags+=" GSSAPI=${kerberos.dev}"
+    sconsFlags+=" GSSAPI=${libkrb5.dev}"
   '';
 
   enableParallelBuilding = true;

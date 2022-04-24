@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, pkgsCross, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages
+
+# Warning: this blob runs on the main CPU (not the GPU) at privilege
+# level EL3, which is above both the kernel and the hypervisor.
+, unfreeIncludeHDCPBlob ? true
+}:
 
 let
   buildArmTrustedFirmware = { filesToInstall
@@ -6,19 +11,24 @@ let
             , platform ? null
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.4"
+            , version ? "2.6"
             , ... } @ args:
            stdenv.mkDerivation ({
 
-    name = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}-${version}";
+    pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
     inherit version;
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "12k0n79j156bdzqws18kpbli04kn00nh6dy42pjv6gakqrkx9px3";
+      sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
     };
+
+    patches = lib.optionals (!unfreeIncludeHDCPBlob) [
+      # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
+      ./remove-hdcp-blob.patch
+    ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -50,7 +60,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
-      license = licenses.bsd3;
+      license = (if unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
@@ -76,6 +86,12 @@ in {
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
     platform = "sun50i_a64";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
+  };
+
+  armTrustedFirmwareAllwinnerH616 = buildArmTrustedFirmware rec {
+    platform = "sun50i_h616";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };

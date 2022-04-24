@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "1f37qlw4nxdhlqlqzzb4j11gsv26abk2nk2qhbzj77kp4v2b125x";
+    sha256 = "sha256-yF46jCdC4UDswKa/83ZrM9VkZXQqzua2/S7y2bqYa+c=";
   };
 
-  cargoSha256 = "0g5fjj677qzhw3nw7f3n5gghsj2y811bdclxpy8aq2n58gbwvhvc";
+  cargoSha256 = "sha256-BIMaVeNSdKl2A9613S+wgmb6YmiF5YJU8pTMVQfjDwI=";
 
   buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 
@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
+    mainProgram = "tldr";
   };
 }

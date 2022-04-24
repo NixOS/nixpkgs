@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper
-, SDL2, alsaLib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
+, SDL2, alsa-lib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
 
 stdenv.mkDerivation rec {
   version = "1.03.00";
@@ -12,9 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "025fj34gq2kmkpwcswcyx7wdxb89vm944dh685zi4bxx0hz16vvk";
   };
 
+  postPatch = ''
+    # https://github.com/milkytracker/MilkyTracker/issues/262
+    substituteInPlace CMakeLists.txt \
+      --replace 'CMAKE_CXX_STANDARD 98' 'CMAKE_CXX_STANDARD 11'
+  '';
+
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
-  buildInputs = [ SDL2 alsaLib libjack2 lhasa perl rtmidi zlib zziplib ];
+  buildInputs = [ SDL2 alsa-lib libjack2 lhasa perl rtmidi zlib zziplib ];
 
   # Somehow this does not get set automatically
   cmakeFlags = [ "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2.so" ];
@@ -27,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Music tracker application, similar to Fasttracker II";
-    homepage = "http://milkytracker.org";
+    homepage = "https://milkytracker.org/";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ zoomulator ];
+    maintainers = with maintainers; [];
   };
 }

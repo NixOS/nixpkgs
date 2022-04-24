@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, rustPackages, pkg-config, openssl
-, withALSA ? true, alsaLib
+, withALSA ? true, alsa-lib
 , withPulseAudio ? false, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMpris ? false
@@ -9,30 +9,31 @@
 
 rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     rev = "v${version}";
-    sha256 = "1a578h13iv8gqmskzlncfr42jlg5gp0zfcizv4wbd48y9hl8fh2l";
+    sha256 = "1liql2wp7cx0x4ha1578wx3m4byd295m4ph268s05yw2wrnr3v6c";
   };
 
-  cargoSha256 = "1sm5yfgjx5xfnqqh1v8ycwzxw4kl6dq5gcvsdnc4h1cj3pdhbpcc";
-
-  cargoBuildFlags = [
-    "--no-default-features"
-    "--features"
-    "${lib.optionalString withALSA "alsa_backend,"}${lib.optionalString withPulseAudio "pulseaudio_backend,"}${lib.optionalString withPortAudio "portaudio_backend,"}${lib.optionalString withMpris "dbus_mpris,"}${lib.optionalString withKeyring "dbus_keyring,"}"
-  ];
+  cargoSha256 = "1plvqd55d1gj0ydimv3154pwgj2sh1fqx2182nw8akzdfmzg1150";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional withALSA alsaLib
+    ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMpris || withKeyring) dbus;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withALSA "alsa_backend"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withKeyring "dbus_keyring";
 
   doCheck = false;
 

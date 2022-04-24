@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "gsl";
   version = "1.24.3";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {

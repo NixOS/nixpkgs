@@ -1,27 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, pytestCheckHook, case, psutil, fetchpatch }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, case
+, psutil
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "3.6.3.0";
-  disabled = isPyPy;
+  version = "3.6.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0spssl3byzqsplra166d59jx8iqfxyzvcbx7vybkmwr5ck72a5yr";
+    sha256 = "0ismj2p8c66ykpss94rs0bfra5agxxmljz8r3gaq79r8valfb799";
   };
-  patches = [(fetchpatch {
-    # Add Python 3.9 support to spawnv_passfds()
-    # Should be included in next release after 3.6.3.0
-    url = "https://github.com/celery/billiard/pull/310/commits/a508ebafadcfe2e25554b029593f3e66d01ede6c.patch";
-    sha256 = "05zsr1bvjgi01qg7r274c0qvbn65iig3clyz14c08mpfyn38h84i";
-    excludes = [ "tox.ini" ];
-  })];
 
-  checkInputs = [ pytestCheckHook case psutil ];
+  checkInputs = [
+    case
+    psutil
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "billiard"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/celery/billiard";
     description = "Python multiprocessing fork with improvements and bugfixes";
+    homepage = "https://github.com/celery/billiard";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

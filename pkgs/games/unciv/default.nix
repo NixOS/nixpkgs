@@ -14,7 +14,7 @@ let
     exec = "unciv";
     comment = "An open-source Android/Desktop remake of Civ V";
     desktopName = "Unciv";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   envLibPath = lib.makeLibraryPath [
@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "3.13.11";
+  version = "3.19.14";
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    sha256 = "sha256-U0kTkdcEC1cu+UFmQmgadNn1bIZ5Rq4+bBqjFU3c4+M=";
+    sha256 = "sha256-Q0OiXjqZ6RmQg3Ob6k4NjaHsc+K50a0bAGBaaaUcP3I=";
   };
 
   dontUnpack = true;

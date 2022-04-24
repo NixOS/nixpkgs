@@ -42,18 +42,12 @@ stdenv.mkDerivation rec {
     comment = "Views Adobe PDF files";
     icon = "xpdf";
     exec = "xpdf %f";
-    categories = "Office;";
-    terminal = "false";
+    categories = [ "Office" ];
   };
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
-  '';
-
-  # wrapQtAppsHook broken on macOS (https://github.com/NixOS/nixpkgs/issues/102044)
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/bin/xpdf
   '';
 
   meta = with lib; {

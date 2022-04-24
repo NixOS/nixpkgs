@@ -1,22 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , requests
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "swisshydrodata";
-  version = "0.0.3";
+  version = "0.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1adpy6k2bknffzl5rckqpvaqyrvc00d6a4a4541438dqasx61npl";
+  src = fetchFromGitHub {
+    owner = "Bouni";
+    repo = pname;
+    rev = version;
+    sha256 = "1rdgfc6zg5j3fvrpbqs9vc3n5m66r5yljawyl7nmrqd5lwq1lqak";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  # Tests are not releases at the moment
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    requests-mock
+  ];
+
   pythonImportsCheck = [ "swisshydrodata" ];
 
   meta = with lib; {

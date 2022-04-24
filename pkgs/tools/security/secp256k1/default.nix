@@ -1,45 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, jdk
-
-# Enable ECDSA pubkey recovery module
-, enableRecovery ? true
-
-# Enable ECDH shared secret computation (disabled by default because it is
-# experimental)
-, enableECDH ? false
-
-# Enable libsecp256k1_jni (disabled by default because it requires a jdk,
-# which is a large dependency)
-, enableJNI ? false
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
 }:
-
-let inherit (lib) optionals; in
 
 stdenv.mkDerivation {
   pname = "secp256k1";
 
-  # I can't find any version numbers, so we're just using the date of the
-  # last commit.
-  version = "2020-08-16";
+  version = "unstable-2022-02-06";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "670cdd3f8be25f81472b2d16dcd228b0d24a5c45";
-    sha256 = "0ak2hrr0wznl5d9s905qwn5yds7k22i28d2jp957l4a8yf8cqv3s";
+    rev = "5dcc6f8dbdb1850570919fc9942d22f728dbc0af";
+    sha256 = "x9qG2S6tBSRseWaFIN9N2fRpY1vkv8idT3d3rfJnmaU=";
   };
-
-  buildInputs = optionals enableJNI [ jdk ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags =
-    [ "--enable-benchmark=no" "--enable-tests=yes" "--enable-exhaustive-tests=no" ] ++
-    optionals enableECDH [ "--enable-module-ecdh" "--enable-experimental" ] ++
-    optionals enableRecovery [ "--enable-module-recovery" ] ++
-    optionals enableJNI [ "--enable-jni" ];
+  configureFlags = [
+    "--enable-benchmark=no"
+    "--enable-exhaustive-tests=no"
+    "--enable-experimental"
+    "--enable-module-ecdh"
+    "--enable-module-recovery"
+    "--enable-module-schnorrsig"
+    "--enable-tests=yes"
+  ];
 
   doCheck = true;
+
   checkPhase = "./tests";
 
   meta = with lib; {
@@ -51,7 +41,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/bitcoin-core/secp256k1";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

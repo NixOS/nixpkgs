@@ -1,20 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, readline, postgresql }:
+{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, installShellFiles, readline, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pspg";
-  version = "4.4.0";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kRKU6ynZffV17GqEArkXxz6M9xoa3kn2yNqjyLRY0rc=";
+    sha256 = "sha256-2j1K9enoPBPLL+0oOhzcYVxfsjb8BzsfeHNi9TJOnmc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ gnugrep ncurses readline postgresql ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  postInstall = ''
+    installShellCompletion --bash --cmd pspg bash-completion.sh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/okbob/pspg";

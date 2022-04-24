@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-emoji";
-  version = "2.1.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0knsvsdff2c7ww94120bq92735qrfriyd28mi0n72ccb2iikyi8b";
+    sha256 = "sha256-y+WJYSiDXYvg+N3wok44hJ8Tuqrd3E63pZyiYx0NWXg=";
   };
 
   patches = [

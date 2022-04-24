@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytestCheckHook, mock, pytestcov, coverage
-, future, futures, ujson, isPy38
-}:
+, pytestCheckHook, mock, pytest-cov, coverage
+, future, futures ? null, ujson}:
 
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    pytestCheckHook mock pytestcov coverage
+    pytestCheckHook mock pytest-cov coverage
   ];
 
   propagatedBuildInputs = [ future ujson ]

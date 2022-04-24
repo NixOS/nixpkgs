@@ -1,56 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll,
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll, python3,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
-  version = "0.38.3";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "14kivmyphi7gbd7mgd4cnsiwl4cl7wih8kwzh7n79s2s4c5hj4ak";
-
-# Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
-# LLVM.  (The submodule is a specific tag in the LLVM source tree).
-#
-# The pony developers are currently working to get off 9.x as quickly
-# as possible so hopefully in a few revisions this package build will
-# become a lot simpler.
-#
-# https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
+    sha256 = "sha256-WS3/POC+2vdx6bA8314sjkdWCIWGu9lJG4kbKMWfnX8=";
 
     fetchSubmodules = true;
   };
 
-  ponygbenchmark = fetchurl {
-    url = "https://github.com/google/benchmark/archive/v1.5.0.tar.gz";
-    sha256 = "06i2cr4rj126m1zfz0x1rbxv1mw1l7a11mzal5kqk56cdrdicsiw";
-    name = "v1.5.0.tar.gz";
+  ponygbenchmark = fetchFromGitHub {
+    owner = "google";
+    repo = "benchmark";
+    rev = "v1.5.4";
+    sha256 = "1dbjdjzkpbsq3jl9ksyg8mw759vkac8qzq1557m73ldnavbhz48x";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper which ];
+  nativeBuildInputs = [ cmake makeWrapper which python3 ];
   buildInputs = [ libxml2 z3 ];
-  propagatedBuildInputs = [ cc ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
   patches = [
     ./disable-tests.patch
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
-      googletest = fetchurl {
-        url = "https://github.com/google/googletest/archive/release-1.8.1.tar.gz";
-        sha256 = "17147961i01fl099ygxjx4asvjanwdd446nwbq9v8156h98zxwcv";
-        name = "release-1.8.1.tar.gz";
+      googletest = fetchFromGitHub {
+        owner = "google";
+        repo = "googletest";
+        rev = "release-1.10.0";
+        sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
       };
     })
   ];
 
   postUnpack = ''
     mkdir -p source/build/build_libs/gbenchmark-prefix/src
-    tar -C source/build/build_libs/gbenchmark-prefix/src -zxvf "$ponygbenchmark"
-    mv source/build/build_libs/gbenchmark-prefix/src/benchmark-1.5.0 \
-       source/build/build_libs/gbenchmark-prefix/src/benchmark
+    cp -r "$ponygbenchmark"/ source/build/build_libs/gbenchmark-prefix/src/benchmark
+    chmod -R u+w source/build/build_libs/gbenchmark-prefix/src/benchmark
   '';
 
   dontConfigure = true;
@@ -58,10 +49,7 @@ stdenv.mkDerivation (rec {
   postPatch = ''
     # Patching Vendor LLVM
     patchShebangs --host build/build_libs/gbenchmark-prefix/src/benchmark/tools/*.py
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-09-01-is-trivially-copyable.diff
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-01-07-01-c-exports.diff
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2019-12-23-01-jit-eh-frames.diff
-
+    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-07-28-01-c-exports.diff
     substituteInPlace packages/process/_test.pony \
         --replace '"/bin/' '"${coreutils}/bin/' \
         --replace '=/bin' "${coreutils}/bin"
@@ -91,7 +79,6 @@ stdenv.mkDerivation (rec {
     + lib.optionalString stdenv.isDarwin "bits=64 "
     + lib.optionalString (stdenv.isDarwin && (!lto)) "lto=no "
     + '' install
-
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \

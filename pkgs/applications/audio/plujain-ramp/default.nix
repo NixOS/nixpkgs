@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, lv2  }:
 
 stdenv.mkDerivation rec {
-  version = "v1.1.3";
+  version = "1.1.3";
   pname = "plujain-ramp";
 
   src = fetchFromGitHub {

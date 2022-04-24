@@ -7,13 +7,13 @@
 , alembic
 , async_generator
 , certipy
-, dateutil
+, python-dateutil
 , entrypoints
 , jinja2
 , jupyter-telemetry
 , oauthlib
 , pamela
-, prometheus_client
+, prometheus-client
 , requests
 , sqlalchemy
 , tornado
@@ -115,13 +115,13 @@ buildPythonPackage rec {
     alembic
     async_generator
     certipy
-    dateutil
+    python-dateutil
     entrypoints
     jinja2
     jupyter-telemetry
     oauthlib
     pamela
-    prometheus_client
+    prometheus-client
     requests
     sqlalchemy
     tornado
@@ -149,6 +149,8 @@ buildPythonPackage rec {
     "test_upgrade"
     # Testcase fails to find requests import
     "test_external_service"
+    # attempts to do ssl connection
+    "test_connection_notebook_wrong_certs"
   ];
 
   meta = with lib; {

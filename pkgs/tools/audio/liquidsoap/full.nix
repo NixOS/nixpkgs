@@ -1,8 +1,8 @@
 { lib, stdenv, makeWrapper, fetchurl, which, pkg-config
 , ocamlPackages
-, libao, portaudio, alsaLib, libpulseaudio, libjack2
+, libao, portaudio, alsa-lib, libpulseaudio, libjack2
 , libsamplerate, libmad, taglib, lame, libogg
-, libvorbis, speex, libtheora, libopus
+, libvorbis, speex, libtheora, libopus, zlib
 , faad2, flac, ladspaH, ffmpeg, frei0r, dssi
 }:
 
@@ -52,14 +52,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs =
     [ which ocamlPackages.ocaml ocamlPackages.findlib
-      libao portaudio alsaLib libpulseaudio libjack2
+      libao portaudio alsa-lib libpulseaudio libjack2
       libsamplerate libmad taglib lame libogg
-      libvorbis speex libtheora libopus
+      libvorbis speex libtheora libopus zlib
       faad2 flac ladspaH ffmpeg frei0r dssi
       ocamlPackages.xmlm ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
       ocamlPackages.fdkaac
-      ocamlPackages.srt ocamlPackages.sedlex_2 ocamlPackages.menhir
+      ocamlPackages.srt ocamlPackages.sedlex_2 ocamlPackages.menhir ocamlPackages.menhirLib
     ];
 
   hardeningDisable = [ "format" "fortify" ];

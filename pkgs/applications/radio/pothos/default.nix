@@ -9,11 +9,11 @@
 , poco
 , qtbase
 , qtsvg
-, libsForQt5
+, qwt6_1
 , nlohmann_json
 , soapysdr-with-plugins
 , portaudio
-, alsaLib
+, alsa-lib
 , muparserx
 , python3
 }:
@@ -38,8 +38,8 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config doxygen wrapQtAppsHook ];
 
   buildInputs = [
-    pcre poco qtbase qtsvg libsForQt5.qwt nlohmann_json
-    soapysdr-with-plugins portaudio alsaLib muparserx python3
+    pcre poco qtbase qtsvg qwt6_1 nlohmann_json
+    soapysdr-with-plugins portaudio alsa-lib muparserx python3
   ];
 
   postInstall = ''
@@ -69,6 +69,6 @@ mkDerivation rec {
     homepage = "https://github.com/pothosware/PothosCore/wiki";
     license = licenses.boost;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

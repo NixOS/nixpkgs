@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.26.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "0p9hslaawnqnnf1s6hj3vdh11ncq7mrb4w4i933mdkychw5jav38";
+    sha256 = "sha256-7E6fj/Sjew+zz+iMFkiSJjVn2rymKRvZtEJZH65INxk=";
   };
 
-  vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";
+  vendorSha256 = "sha256-omvCzM5kH3nAE57S33NV0OFRJmU+Ty7hhriaG/Dc0o0=";
 
   outputs = [ "out" "man" ];
 
@@ -19,8 +19,8 @@ buildGoModule rec {
 
   buildInputs = [ ncurses ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -71,5 +71,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
+    changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
   };
 }

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, cairo
 , meson
 , ninja
 , pkg-config
@@ -12,16 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.18.2";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0mhascwvgirgh7b5dykpnk06f7f5g62gh3sl30i6kygiidqkv9vf";
+    sha256 = "sha256-afyHVuydk+XFJYyZCIQ08gPpH9vFryjR8sWD/YGbeh0=";
   };
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   outputs = [
     "out"
@@ -40,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     python3
     json-glib
   ];
@@ -51,6 +49,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   meta = with lib; {

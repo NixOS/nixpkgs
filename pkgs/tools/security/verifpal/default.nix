@@ -6,17 +6,15 @@
 
 buildGoModule rec {
   pname = "verifpal";
-  version = "0.13.7";
+  version = "0.26.1";
 
   src = fetchgit {
     url = "https://source.symbolic.software/verifpal/verifpal.git";
     rev = "v${version}";
-    sha256 = "1ia3mxwcvcxghga2vvhf6mia59cm3jl7vh8laywh421bfj42sh9d";
+    sha256 = "sha256-y07RXv2QSyUJpGuFsLJ2sGNo4YzhoCYQr3PkUj4eIOY=";
   };
 
-  vendorSha256 = "0cmj6h103igg5pcs9c9wrcmrsf0mwp9vbgzf5amsnj1206ryb1p2";
-
-  doCheck = false;
+  vendorSha256 = "sha256-gUpgnd/xiLqRNl1bPzVp+0GM/J5GEx0VhUfo6JsX8N8=";
 
   nativeBuildInputs = [ pigeon ];
 

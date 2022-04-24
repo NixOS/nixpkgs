@@ -1,20 +1,17 @@
 { lib, stdenv, fetchurl, autoconf, automake, libtool, dos2unix, libpgf, freeimage, doxygen }:
 
 with lib;
-
-let
-  version = "6.14.12";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pgf";
-  inherit version;
+  version = "6.14.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpgf/pgf-console-src-${version}.tar.gz";
     sha256 = "1vfm12cfq3an3xg0679bcwdmjq2x1bbij1iwsmm60hwmrm3zvab0";
   };
 
-  buildInputs = [ autoconf automake libtool dos2unix libpgf freeimage doxygen ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool dos2unix libpgf freeimage doxygen ];
 
   patchPhase = ''
       sed 1i'#include <inttypes.h>' -i src/PGF.cpp

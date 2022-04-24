@@ -13,7 +13,15 @@ stdenv.mkDerivation rec {
     sha256 = "1i7nhbq1fcbrjwfg64znz8p4l7662f7qz2l6xcvwd5z93dnmgmdr";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
+
+  # fix
+  # src/lsbom.cpp:70:10: error: reference to 'data' is ambiguous
+  # which refers to std::data from C++17
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
 
   meta = with lib; {
     homepage = "https://github.com/hogliux/bomutils";

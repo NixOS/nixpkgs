@@ -1,24 +1,21 @@
-{ lib, python3Packages, fetchFromGitHub, gettext }:
+{ lib, python3Packages, fetchFromGitHub, gettext, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.1.0";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "04l5bfyq53r8803q24bfw49ji7jx8z9irhhh30cvq2va1ywwd4ww";
+    sha256 = "sha256-DjyVcjU2dVku5ademm6DygMnzWHB7iMqPfU56BBjAwU=";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext installShellFiles ];
 
   propagatedBuildInputs = with python3Packages; [
+    yt-dlp
     click
-    feedparser
-    lxml
-    sqlalchemy
-    youtube-dl
     wcwidth
   ];
 
@@ -38,10 +35,14 @@ python3Packages.buildPythonApplication rec {
     "test_download"
   ];
 
+  postInstall = ''
+    installManPage doc/ytcc.1
+  '';
+
   meta = {
     description = "Command Line tool to keep track of your favourite YouTube channels without signing up for a Google account";
     homepage = "https://github.com/woefe/ytcc";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ marius851000 ];
+    maintainers = with lib.maintainers; [ marius851000 marsam ];
   };
 }

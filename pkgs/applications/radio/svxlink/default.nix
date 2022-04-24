@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsaLib, speex
+{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsa-lib, speex
 , libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
 , wrapQtAppsHook, rtl-sdr, tcl, doxygen, groff }:
 
@@ -9,7 +9,7 @@ let
     icon = "qtel";
     desktopName = name;
     genericName = "EchoLink Client";
-    categories = "HamRadio;Qt;Network;";
+    categories = [ "HamRadio" "Qt" "Network" ];
   };
 
 in stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config doxygen groff wrapQtAppsHook ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     curl
     gsm
     libgcrypt

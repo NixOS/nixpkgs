@@ -1,35 +1,57 @@
-{lib, stdenv, fetchurl, libX11, xorgproto, libXt, libXaw, libSM, libICE, libXmu
-, libXext, gnuchess, texinfo, libXpm, pkg-config, librsvg, cairo, pango
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, xorgproto
+, libXt
+, libXaw
+, libSM
+, libICE
+, libXmu
+, libXext
+, gnuchess
+, texinfo
+, libXpm
+, pkg-config
+, librsvg
+, cairo
+, pango
 , gtk2
 }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="xboard";
-    version="4.9.1";
-    name="${baseName}-${version}";
-    hash="1mkh36xnnacnz9r00b5f9ld9309k32jv6mcavklbdnca8bl56bib";
-    url="https://ftp.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz";
-    sha256="1mkh36xnnacnz9r00b5f9ld9309k32jv6mcavklbdnca8bl56bib";
-  };
-  buildInputs = [
-    libX11 xorgproto libXt libXaw libSM libICE libXmu
-    libXext gnuchess texinfo libXpm pkg-config librsvg
-    cairo pango gtk2
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+
+stdenv.mkDerivation rec {
+  pname = "xboard";
+  version = "4.9.1";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "mirror://gnu/xboard/xboard-${version}.tar.gz";
+    sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
   };
-  meta = {
-    inherit (s) version;
+
+  buildInputs = [
+    libX11
+    xorgproto
+    libXt
+    libXaw
+    libSM
+    libICE
+    libXmu
+    libXext
+    gnuchess
+    texinfo
+    libXpm
+    pkg-config
+    librsvg
+    cairo
+    pango
+    gtk2
+  ];
+
+  meta = with lib; {
     description = "GUI for chess engines";
     homepage = "https://www.gnu.org/software/xboard/";
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
   };
 }

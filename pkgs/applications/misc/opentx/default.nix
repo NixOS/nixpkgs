@@ -6,13 +6,16 @@
 
 mkDerivation rec {
   pname = "opentx";
-  version = "2.3.11";
+  version = "2.3.14";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
-    rev = "release/${version}";
-    sha256 = "sha256-0B41TkTs4sNGYzpMGbsgCLT2ThkP6foeuwLUIzKKGkU=";
+    # 2.3.14 release tag points to the commit before the one that updates the
+    # version number.
+    # rev = "release/${version}";
+    rev = "1e09791a1e2fe2a0ca9835019d634a4c6a4fa3bf";
+    sha256 = "0mhzp1j6nmqvkjxg8lv8xa637m1lavdsak30mdlq0g25dhwg6k92";
   };
 
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
@@ -41,7 +44,7 @@ mkDerivation rec {
       running radio simulators.
     '';
     homepage = "https://www.open-tx.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ elitak lopsided98 ];
   };

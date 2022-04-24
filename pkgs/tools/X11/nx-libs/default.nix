@@ -1,4 +1,5 @@
-{ lib, stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch
+, libgcc, libjpeg_turbo
 , libpng, libtool, libxml2, pkg-config, which, xorg
 , libtirpc
 }:
@@ -11,6 +12,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://github.com/ArcticaProject/nx-libs/commit/605a266911b50ababbb3f8a8b224efb42743379c.patch";
+      sha256 = "sha256-kk5ms3i0PrHL74I4OlsqDrdDcCJ0us03cQcBy4zjAoQ=";
+    })
+  ];
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config which
     xorg.gccmakedep xorg.imake ];
@@ -27,6 +36,12 @@ stdenv.mkDerivation rec {
     patchShebangs .
     find . -type f -name Makefile -exec sed -i 's|^\(SHELL:=\)/bin/bash$|\1${stdenv.shell}|g' {} \;
     ln -s libNX_X11.so.6.3.0
+  '';
+
+  preConfigure = ''
+    # binutils 2.37 fix
+    # https://github.com/ArcticaProject/nx-libs/issues/1003
+    substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
   PREFIX=""; # Don't install to $out/usr/local

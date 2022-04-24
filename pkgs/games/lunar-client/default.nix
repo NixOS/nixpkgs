@@ -1,16 +1,17 @@
 { appimageTools, lib, fetchurl, makeDesktopItem }:
+
 let
   name = "lunar-client";
-  version = "2.4.0";
+  version = "2.10.0";
 
   desktopItem = makeDesktopItem {
-    name = "Lunar Client";
+    name = "lunar-client";
     exec = "lunar-client";
     icon = "lunarclient";
-    comment = "Optimized Minecraft Client for 1.7.10 and 1.8.9";
+    comment = "Minecraft 1.7, 1.8, 1.12, 1.15, 1.16, 1.17, and 1.18 Client";
     desktopName = "Lunar Client";
     genericName = "Minecraft Client";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   appimageContents = appimageTools.extract {
@@ -20,9 +21,10 @@ let
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
     name = "lunar-client.AppImage";
-    sha256 = "bb85a62127a9b3848cc60796c20ac75655794f1d3cd17cb6b5499bbf19d16019";
+    sha256 = "1kfi3rgy401ll3gn9k30j0a1zds1ghl5g2ibfwlsnr826nckfmzw";
   };
-in appimageTools.wrapType1 rec {
+in
+appimageTools.wrapType1 rec {
   inherit name src;
 
   extraInstallCommands = ''
@@ -31,11 +33,13 @@ in appimageTools.wrapType1 rec {
     cp -r ${appimageContents}/usr/share/icons/ $out/share/
   '';
 
+  extraPkgs = pkgs: [ pkgs.libpulseaudio ];
+
   meta = with lib; {
-    description = "Minecraft 1.7.10 & 1.8.9 PVP Client";
+    description = "Minecraft 1.7, 1.8, 1.12, 1.15, 1.16, 1.17, and 1.18 Client";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ zyansheep ];
+    maintainers = with maintainers; [ zyansheep Technical27 ];
     platforms = [ "x86_64-linux" ];
   };
 }

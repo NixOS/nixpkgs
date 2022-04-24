@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "gphoto2";
-  version = "2.2.4";
+  version = "2.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48b4c4ab70826d3ddaaf7440564d513c02d78680fa690994b0640d383ffb8a7d";
+    sha256 = "sha256-bhHGvUGzXrk7snMzv+R0fd/gnZTFJ3xfse5i2Krpl3I=";
   };
 
   nativeBuildInputs = [ pkg-config ];

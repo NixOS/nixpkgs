@@ -1,21 +1,45 @@
-{ lib, fetchPypi, buildPythonApplication, editorconfig, pytest, six }:
+{ lib
+, fetchPypi
+, buildPythonApplication
+, editorconfig
+, pytestCheckHook
+, pythonOlder
+, six
+}:
 
 buildPythonApplication rec {
   pname = "jsbeautifier";
-  version = "1.13.5";
+  version = "1.14.3";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ six editorconfig ];
-  checkInputs = [ pytest ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4532a6bc85ba91ffc542b55d65cd13cedc971a934f26f51ed56d4c680b3fbe66";
+    hash = "sha256-1tV2J8+ezYzZAbnsetSogSeo3t6RAXf6SyGedtAvm9c=";
   };
 
+  propagatedBuildInputs = [
+    editorconfig
+    six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "jsbeautifier"
+  ];
+
+  pytestFlagsArray = [
+    "jsbeautifier/tests/testindentation.py"
+  ];
+
   meta = with lib; {
-    homepage    = "http://jsbeautifier.org";
-    description = "JavaScript unobfuscator and beautifier.";
-    license     = licenses.mit;
+    description = "JavaScript unobfuscator and beautifier";
+    homepage = "http://jsbeautifier.org";
+    license = licenses.mit;
     maintainers = with maintainers; [ apeyroux ];
   };
 }

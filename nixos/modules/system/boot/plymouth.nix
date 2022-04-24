@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   inherit (pkgs) plymouth nixos-icons;
 
   cfg = config.boot.plymouth;
+  opt = options.boot.plymouth;
 
   nixosBreezePlymouth = pkgs.plasma5Packages.breeze-plymouth.override {
     logoFile = cfg.logo;
@@ -62,6 +63,7 @@ in
 
       font = mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
+        defaultText = literalExpression ''"''${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf"'';
         type = types.path;
         description = ''
           Font file made available for displaying text on the splash screen.
@@ -70,6 +72,11 @@ in
 
       themePackages = mkOption {
         default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
+        defaultText = literalDocBook ''
+          A NixOS branded variant of the breeze theme when
+          <literal>config.${opt.theme} == "breeze"</literal>, otherwise
+          <literal>[ ]</literal>.
+        '';
         type = types.listOf types.package;
         description = ''
           Extra theme packages for plymouth.
@@ -88,7 +95,7 @@ in
         type = types.path;
         # Dimensions are 48x48 to match GDM logo
         default = "${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
-        defaultText = ''pkgs.fetchurl {
+        defaultText = literalExpression ''pkgs.fetchurl {
           url = "https://nixos.org/logo/nixos-hires.png";
           sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
         }'';

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, autoPatchelfHook, electron, curl, expat, gcc, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.0.15";
+  version = "0.6.5";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "4mnS2ikDPmIyT4P8zXssk6AVx50C24bsP4WpD5xJbD8=";
+    sha256 = "WKROcCv0IzRnQd74j5Iget5jlfyDbeJ/PXgZmSNrSsQ=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  buildInputs = [ stdenv.cc.cc curl expat openssl zlib ];
 
   installPhase = ''
     runHook preInstall

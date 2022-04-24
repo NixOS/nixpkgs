@@ -8,7 +8,7 @@
 , unzip
 , nodePackages
 , xcbuild
-, python
+, python2
 , openssl
 , pkgs
 , fetchgit
@@ -154,7 +154,7 @@ stdenv.mkDerivation {
     nodejs
     clojure
     jre
-    python
+    python2
     openssl
     gnutar
     nodePackages."lumo-build-deps-../interpreters/clojurescript/lumo"

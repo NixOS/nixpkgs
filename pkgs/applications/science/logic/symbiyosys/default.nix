@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "symbiyosys";
-  version = "2020.08.22";
+  version = "2021.11.30";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "SymbiYosys";
-    rev    = "33b0bb7d836fe2a73dc7b10587222f2a718beef4";
-    sha256 = "03rbrbwsji1sqcp2yhgbc0fca04zsryv2g4izjhdzv64nqjzjyhn";
+    owner = "YosysHQ";
+    repo  = "SymbiYosys";
+    rev   = "b409b1179e36d2a3fff66c85b7d4e271769a2d9e";
+    hash  = "sha256-S7of2upntiMkSdh4kf1RsrjriS31Eh8iEcVvG36isQg=";
   };
 
   buildInputs = [ ];
@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     homepage    = "https://symbiyosys.readthedocs.io/";
     license     = lib.licenses.isc;
     maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    mainProgram = "sby";
     platforms   = lib.platforms.all;
   };
 }

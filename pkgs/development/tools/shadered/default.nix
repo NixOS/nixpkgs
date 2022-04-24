@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "SHADERed";
-  version = "1.4.1";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "dfranx";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "ivOd4NJgx5KWSDnXSBQLMrdvBuOm8NRzcb2S4lvOrms=";
+    sha256 = "0drf8wwx0gcmi22jq2yyjy7ppxynfq172wqakchscm313j248fjr";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     glm
     python3
     sfml
+  ];
+
+  patches = [
+    ./install_path_fix.patch
   ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=format-security";

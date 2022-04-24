@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, qt4, alsaLib }:
+{ lib, stdenv, fetchurl, pkg-config, qt4, alsa-lib }:
 
 stdenv.mkDerivation rec {
   version = "0.4.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ qt4 alsaLib ];
+  buildInputs = [ qt4 alsa-lib ];
 
   meta = with lib; {
     description = "MIDI event processor and router";

@@ -9,7 +9,8 @@
 , libnotify
 , libutempter
 , vte
-, libwnck3
+, libwnck
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     keybinder3
     libnotify
-    libwnck3
+    libwnck
     python3
     vte
   ];
@@ -65,6 +66,8 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libutempter ]}")
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.guake;
 
   meta = with lib; {
     description = "Drop-down terminal for GNOME";

@@ -1,23 +1,25 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "process-exporter";
-  version = "0.7.1";
-
-  goPackagePath = "github.com/ncabatoff/process-exporter";
+  version = "0.7.10";
 
   src = fetchFromGitHub {
     owner = "ncabatoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jkh4xzjlrlabpll3igpyhqs35f1dxifjkbfxvijjcq9yahxfj0x";
+    sha256 = "sha256-TAgMA9IV3i8dpgOBDmnlt4iyGlmWN5Nj3BexXb5vzlc=";
   };
+
+  vendorSha256 = "sha256-LAEnXJ3qShfCGjtsYAGyW5x/TTFQxQxXM0hebJrqiW4=";
 
   postPatch = ''
     substituteInPlace proc/read_test.go --replace /bin/cat cat
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) process; };
 
   meta = with lib; {
     description = "Prometheus exporter that mines /proc to report on selected processes";

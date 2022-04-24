@@ -32,7 +32,6 @@ let
     last
     length
     tail
-    unique
     ;
   inherit (lib.attrsets)
     attrNames
@@ -48,6 +47,7 @@ let
     mergeDefaultOption
     mergeEqualOption
     mergeOneOption
+    mergeUniqueOption
     showFiles
     showOption
     ;
@@ -61,7 +61,11 @@ let
     boolToString
     ;
 
-  inherit (lib.modules) mergeDefinitions;
+  inherit (lib.modules)
+    mergeDefinitions
+    fixupOptionType
+    mergeOptionDecls
+    ;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -147,9 +151,13 @@ rec {
     , # The deprecation message to display when this type is used by an option
       # If null, the type isn't deprecated
       deprecationMessage ? null
+    , # The types that occur in the definition of this type. This is used to
+      # issue deprecation warnings recursively. Can also be used to reuse
+      # nested types
+      nestedTypes ? {}
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage nestedTypes;
       description = if description == null then name else description;
     };
 
@@ -157,6 +165,13 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
+
+    raw = mkOptionType rec {
+      name = "raw";
+      description = "raw value";
+      check = value: true;
+      merge = mergeOneOption;
+    };
 
     anything = mkOptionType {
       name = "anything";
@@ -188,6 +203,12 @@ rec {
               else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
+            lambda = loc: defs: arg: anything.merge
+              (loc ++ [ "<function body>" ])
+              (map (def: {
+                file = def.file;
+                value = def.value arg;
+              }) defs);
             # Otherwise fall back to only allowing all equal definitions
           }.${commonType} or mergeEqualOption;
         in mergeFunction loc defs;
@@ -256,14 +277,14 @@ rec {
         };
         u8 = unsign 8 256;
         u16 = unsign 16 65536;
-        # the biggest int a 64-bit Nix accepts is 2^63 - 1 (9223372036854775808), for a 32-bit Nix it is 2^31 - 1 (2147483647)
-        # the smallest int a 64-bit Nix accepts is -2^63 (-9223372036854775807), for a 32-bit Nix it is -2^31 (-2147483648)
-        # u32 = unsign 32 4294967296;
+        # the biggest int Nix accepts is 2^63 - 1 (9223372036854775808)
+        # the smallest int Nix accepts is -2^63 (-9223372036854775807)
+        u32 = unsign 32 4294967296;
         # u64 = unsign 64 18446744073709551616;
 
         s8 = sign 8 256;
         s16 = sign 16 65536;
-        # s32 = sign 32 4294967296;
+        s32 = sign 32 4294967296;
       };
 
     # Alias of u16 for a port number
@@ -282,6 +303,26 @@ rec {
       check = isString;
       merge = mergeEqualOption;
     };
+
+    nonEmptyStr = mkOptionType {
+      name = "nonEmptyStr";
+      description = "non-empty string";
+      check = x: str.check x && builtins.match "[ \t\n]*" x == null;
+      inherit (str) merge;
+    };
+
+    # Allow a newline character at the end and trim it in the merge function.
+    singleLineStr =
+      let
+        inherit (strMatching "[^\n\r]*\n?") check merge;
+      in
+      mkOptionType {
+        name = "singleLineStr";
+        description = "(optionally newline-terminated) single-line string";
+        inherit check;
+        merge = loc: defs:
+          lib.removeSuffix "\n" (merge loc defs);
+      };
 
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
@@ -327,17 +368,25 @@ rec {
       emptyValue = { value = {}; };
     };
 
-    # derivation is a reserved keyword.
+    # A package is a top-level store path (/nix/store/hash-name). This includes:
+    # - derivations
+    # - more generally, attribute sets with an `outPath` or `__toString` attribute
+    #   pointing to a store path, e.g. flake inputs
+    # - strings with context, e.g. "${pkgs.foo}" or (toString pkgs.foo)
+    # - hardcoded store path literals (/nix/store/hash-foo) or strings without context
+    #   ("/nix/store/hash-foo"). These get a context added to them using builtins.storePath.
     package = mkOptionType {
       name = "package";
       check = x: isDerivation x || isStorePath x;
       merge = loc: defs:
         let res = mergeOneOption loc defs;
-        in if isDerivation res then res else toDerivation res;
+        in if builtins.isPath res || (builtins.isString res && ! builtins.hasContext res)
+          then toDerivation res
+          else res;
     };
 
     shellPackage = package // {
-      check = x: (package.check x) && (hasAttr "shellPath" x);
+      check = x: isDerivation x && hasAttr "shellPath" x;
     };
 
     path = mkOptionType {
@@ -360,18 +409,19 @@ rec {
             ).optionalValue
           ) def.value
         ) defs)));
-      emptyValue = { value = {}; };
+      emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     nonEmptyListOf = elemType:
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
         description = "non-empty " + list.description;
-        # Note: emptyValue is left as is, because another module may define an element.
+        emptyValue = { }; # no .value attr, meaning unset
       };
 
     attrsOf = elemType: mkOptionType rec {
@@ -389,6 +439,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     # A version of attrsOf that's lazy in its values at the expense of
@@ -413,6 +464,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     # TODO: drop this in the future:
@@ -421,6 +473,7 @@ rec {
       deprecationMessage = "Mixing lists with attribute values is no longer"
         + " possible; please use `types.attrsOf` instead. See"
         + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
+      nestedTypes.elemType = elemType;
     };
 
     # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
@@ -433,6 +486,19 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: uniq (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
+    };
+
+    unique = { message }: type: mkOptionType rec {
+      name = "unique";
+      inherit (type) description check;
+      merge = mergeUniqueOption { inherit message; };
+      emptyValue = type.emptyValue;
+      getSubOptions = type.getSubOptions;
+      getSubModules = type.getSubModules;
+      substSubModules = m: uniq (type.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = type; };
+      nestedTypes.elemType = type;
     };
 
     # Null or value of ...
@@ -451,11 +517,12 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     functionTo = elemType: mkOptionType {
       name = "functionTo";
-      description = "function that evaluates to a(n) ${elemType.name}";
+      description = "function that evaluates to a(n) ${elemType.description}";
       check = isFunction;
       merge = loc: defs:
         fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
@@ -470,6 +537,33 @@ rec {
       modules = toList modules;
     };
 
+    # The type of a type!
+    optionType = mkOptionType {
+      name = "optionType";
+      description = "optionType";
+      check = value: value._type or null == "option-type";
+      merge = loc: defs:
+        if length defs == 1
+        then (head defs).value
+        else let
+          # Prepares the type definitions for mergeOptionDecls, which
+          # annotates submodules types with file locations
+          optionModules = map ({ value, file }:
+            {
+              _file = file;
+              # There's no way to merge types directly from the module system,
+              # but we can cheat a bit by just declaring an option with the type
+              options = lib.mkOption {
+                type = value;
+              };
+            }
+          ) defs;
+          # Merges all the types into a single one, including submodule merging.
+          # This also propagates file information to all submodules
+          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+        in mergedOption.type;
+    };
+
     submoduleWith =
       { modules
       , specialArgs ? {}
@@ -478,21 +572,44 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        coerce = unify: value: if isFunction value
-          then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
+        shorthandToModule = if shorthandOnlyDefinesConfig == false
+          then value: value
+          else value: { config = value; };
 
-        allModules = defs: modules ++ imap1 (n: { value, file }:
-          if isAttrs value || isFunction value then
-            # Annotate the value with the location of its definition for better error messages
-            coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+        allModules = defs: imap1 (n: { value, file }:
+          if isFunction value
+          then setFunctionArgs
+                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (value args))
+                (functionArgs value)
+          else if isAttrs value
+          then
+            lib.modules.unifyModuleSyntax file "${toString file}-${toString n}" (shorthandToModule value)
           else value
         ) defs;
 
-        freeformType = (evalModules {
-          inherit modules specialArgs;
-          args.name = "‹name›";
-        })._module.freeformType;
+        base = evalModules {
+          inherit specialArgs;
+          modules = [{
+            # This is a work-around for the fact that some sub-modules,
+            # such as the one included in an attribute set, expects an "args"
+            # attribute to be given to the sub-module. As the option
+            # evaluation does not have any specific attribute name yet, we
+            # provide a default for the documentation and the freeform type.
+            #
+            # This is necessary as some option declaration might use the
+            # "name" attribute given as argument of the submodule and use it
+            # as the default of option declarations.
+            #
+            # We use lookalike unicode single angle quotation marks because
+            # of the docbook transformation the options receive. In all uses
+            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+            # would be used, and use of `<` and `>` would break the XML document.
+            # It shouldn't cause an issue since this is cosmetic for the manual.
+            _module.args.name = lib.mkOptionDefault "‹name›";
+          }] ++ modules;
+        };
+
+        freeformType = base._module.freeformType;
 
       in
       mkOptionType rec {
@@ -500,32 +617,13 @@ rec {
         description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
-          (evalModules {
-            modules = allModules defs;
-            inherit specialArgs;
-            args.name = last loc;
+          (base.extendModules {
+            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
           }).config;
         emptyValue = { value = {}; };
-        getSubOptions = prefix: (evalModules
-          { inherit modules prefix specialArgs;
-            # This is a work-around due to the fact that some sub-modules,
-            # such as the one included in an attribute set, expects a "args"
-            # attribute to be given to the sub-module. As the option
-            # evaluation does not have any specific attribute name, we
-            # provide a default one for the documentation.
-            #
-            # This is mandatory as some option declaration might use the
-            # "name" attribute given as argument of the submodule and use it
-            # as the default of option declarations.
-            #
-            # Using lookalike unicode single angle quotation marks because
-            # of the docbook transformation the options receive. In all uses
-            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
-            # would be used, and use of `<` and `>` would break the XML document.
-            # It shouldn't cause an issue since this is cosmetic for the manual.
-            args.name = "‹name›";
-          }).options // optionalAttrs (freeformType != null) {
+        getSubOptions = prefix: (base.extendModules
+          { inherit prefix; }).options // optionalAttrs (freeformType != null) {
             # Expose the sub options of the freeform type. Note that the option
             # discovery doesn't care about the attribute name used here, so this
             # is just to avoid conflicts with potential options from the submodule
@@ -535,6 +633,9 @@ rec {
         substSubModules = m: submoduleWith (attrs // {
           modules = m;
         });
+        nestedTypes = lib.optionalAttrs (freeformType != null) {
+          freeformType = freeformType;
+        };
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
@@ -550,7 +651,11 @@ rec {
               then lhs.specialArgs // rhs.specialArgs
               else throw "A submoduleWith option is declared multiple times with the same specialArgs \"${toString (attrNames intersecting)}\"";
             shorthandOnlyDefinesConfig =
-              if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
+              if lhs.shorthandOnlyDefinesConfig == null
+              then rhs.shorthandOnlyDefinesConfig
+              else if rhs.shorthandOnlyDefinesConfig == null
+              then lhs.shorthandOnlyDefinesConfig
+              else if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
           };
@@ -560,6 +665,7 @@ rec {
     # A value from a set of allowed ones.
     enum = values:
       let
+        inherit (lib.lists) unique;
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v
@@ -568,7 +674,17 @@ rec {
       in
       mkOptionType rec {
         name = "enum";
-        description = "one of ${concatMapStringsSep ", " show values}";
+        description =
+          # Length 0 or 1 enums may occur in a design pattern with type merging
+          # where an "interface" module declares an empty enum and other modules
+          # provide implementations, each extending the enum with their own
+          # identifier.
+          if values == [] then
+            "impossible (empty enum)"
+          else if builtins.length values == 1 then
+            "value ${show (builtins.head values)} (singular enum)"
+          else
+            "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
         merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
@@ -596,6 +712,8 @@ rec {
            then functor.type mt1 mt2
            else null;
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
+      nestedTypes.left = t1;
+      nestedTypes.right = t2;
     };
 
     # Any of the types in the given list
@@ -627,16 +745,10 @@ rec {
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
         typeMerge = t1: t2: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
+        nestedTypes.coercedType = coercedType;
+        nestedTypes.finalType = finalType;
       };
 
-    # Obsolete alternative to configOf.  It takes its option
-    # declarations from the ‘options’ attribute of containing option
-    # declaration.
-    optionSet = mkOptionType {
-      name = "optionSet";
-      description = "option set";
-      deprecationMessage = "Use `types.submodule' instead";
-    };
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 

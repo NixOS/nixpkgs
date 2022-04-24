@@ -17,7 +17,7 @@ in {
       description = "unclutter-xfixes derivation to use.";
       type = types.package;
       default = pkgs.unclutter-xfixes;
-      defaultText = "pkgs.unclutter-xfixes";
+      defaultText = literalExpression "pkgs.unclutter-xfixes";
     };
 
     timeout = mkOption {

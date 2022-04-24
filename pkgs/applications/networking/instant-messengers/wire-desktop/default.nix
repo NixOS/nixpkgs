@@ -11,6 +11,7 @@
 , cpio
 , xar
 , libdbusmenu
+, libxshmfence
 }:
 
 let
@@ -22,13 +23,13 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.24.4059";
-    x86_64-linux = "3.24.2939";
+    x86_64-darwin = "3.27.4357";
+    x86_64-linux = "3.27.2944";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "1zjv3d8jp0wldrzl02q9kir7q3y5bcb6hsfli6wip8bmaq78dksy";
-    x86_64-linux = "1k9n58pr5fnqv9vacay5vrbs4pvq2p36c0dpg9rjdcnb2fwaqg5p";
+    x86_64-darwin = "0xihg9fzsbwib2fmb1yqx9015i9q4k0ph8lna4mzgicmrjkw54g8";
+    x86_64-linux = "1wqnrmp8q84izvqv25fgks5pv6la3vahm5dsn7bc6zxqb0xz2xvy";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -51,7 +52,6 @@ let
       arianvp
       kiwi
       toonn
-      worldofpeace
     ];
     platforms = [
       "x86_64-darwin"
@@ -69,16 +69,14 @@ let
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Network;InstantMessaging;Chat;VideoConference";
+      categories = [ "Network" "InstantMessaging" "Chat" "VideoConference" ];
       comment = "Secure messenger for everyone";
       desktopName = "Wire";
       exec = "wire-desktop %U";
       genericName = "Secure messenger";
       icon = "wire-desktop";
       name = "wire-desktop";
-      extraEntries = ''
-        StartupWMClass=Wire
-      '';
+      startupWMClass = "Wire";
     };
 
     dontBuild = true;
@@ -93,7 +91,7 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
 
     unpackPhase = ''
       runHook preUnpack

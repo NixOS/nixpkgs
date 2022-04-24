@@ -1,34 +1,41 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
+let
+  # The web client verifies, that the server version is a valid datetime string:
+  # https://github.com/minio/minio/blob/3a0e7347cad25c60b2e51ff3194588b34d9e424c/browser/app/js/web.js#L51-L53
+  #
+  # Example:
+  #   versionToTimestamp "2021-04-22T15-44-28Z"
+  #   => "2021-04-22T15:44:28Z"
+  versionToTimestamp = version:
+    let
+      splitTS = builtins.elemAt (builtins.split "(.*)(T.*)" version) 1;
+    in
+    builtins.concatStringsSep "" [ (builtins.elemAt splitTS 0) (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1)) ];
+in
 buildGoModule rec {
   pname = "minio";
-  version = "2021-03-26T00-00-41Z";
+  version = "2022-03-22T02-05-10Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-WH7gAO8ghwMhLU/ioHrZUgIk1h6yeUzM+xg1GnkFDHM=";
+    sha256 = "sha256-N0ua+XHkLr33PElSdOzVQF3POPU+lx4/M6LJzxtkisI=";
   };
 
-  vendorSha256 = "sha256-VeYc+UtocpeNSV+0MocZj/83X/SMMv5PX2cPIPBV/sk=";
+  vendorSha256 = "sha256-Ql3J2r489Hzhy6E9uZwQXJIw/njb5oafCYjOyWGzbXs=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  patchPhase = ''
-    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
-    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
-    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
-  '';
+  CGO_ENABLED = 0;
 
-  postConfigure = ''
-    export CGO_ENABLED=0
-  '';
+  tags = [ "kqueue" ];
 
-  buildFlagsArray = [
-    "-tags=kqueue"
+  ldflags = let t = "github.com/minio/minio/cmd"; in [
+    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
   ];
 
   passthru.tests.minio = nixosTests.minio;
@@ -36,8 +43,9 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
+    changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;
-    license = licenses.asl20;
+    license = licenses.agpl3Plus;
   };
 }

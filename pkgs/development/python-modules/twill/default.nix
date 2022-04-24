@@ -1,18 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, nose
+{ lib
+, buildPythonPackage
+, fetchPypi
 , lxml
 , requests
 , pyparsing
+, pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "twill";
-  version = "2.0.2";
+  version = "3.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc694ac1cb0616cfba2f9db4720e9d354bf656c318e21ef604a7e3caaef83d10";
+    hash = "sha256-dWtrdkiR1+IBfeF9jwbOjKE2UMXDJji0iOb+USbY7zk=";
   };
-
-  checkInputs = [ nose ];
 
   propagatedBuildInputs = [
     lxml
@@ -20,12 +25,17 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  doCheck = false; # pypi package comes without tests, other homepage does not provide all verisons
+  pythonImportsCheck = [
+    "twill"
+  ];
+
+  # pypi package comes without tests, other homepage does not provide all verisons
+  doCheck = false;
 
   meta = with lib; {
-    homepage = "https://twill-tools.github.io/twill/";
     description = "A simple scripting language for Web browsing";
-    license     = licenses.mit;
+    homepage = "https://twill-tools.github.io/twill/";
+    license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
 }

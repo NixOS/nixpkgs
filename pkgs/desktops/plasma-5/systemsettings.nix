@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "systemsettings";
+  pname = "systemsettings";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kconfig kdbusaddons khtml ki18n kiconthemes kio kitemviews kservice

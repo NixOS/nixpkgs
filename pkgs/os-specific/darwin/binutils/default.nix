@@ -9,6 +9,7 @@ let
   cmds = [
     "ar" "ranlib" "as" "install_name_tool"
     "ld" "strip" "otool" "lipo" "nm" "strings" "size"
+    "codesign_allocate"
   ];
 in
 
@@ -55,8 +56,8 @@ stdenv.mkDerivation {
   # and using clang directly here is a better option than relying on cctools.
   # On x86_64-darwin the Clang version is too old to support this mode.
   + lib.optionalString stdenv.isAarch64 ''
-    rm $out/bin/as
-    makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/as" \
+    rm $out/bin/${targetPrefix}as
+    makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
       --add-flags "-x assembler -integrated-as -c"
   '';
 

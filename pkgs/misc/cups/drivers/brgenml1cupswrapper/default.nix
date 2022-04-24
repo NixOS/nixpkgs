@@ -52,10 +52,11 @@
 */
 
 stdenv.mkDerivation rec {
+  pname = "brgenml1cupswrapper";
+  version = "3.1.0-1";
 
-  name = "brgenml1cupswrapper-3.1.0-1";
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101125/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf101125/brgenml1cupswrapper-${version}.i386.deb";
     sha256 = "0kd2a2waqr10kfv1s8is3nd5dlphw4d1343srdsbrlbbndja3s6r";
   };
 

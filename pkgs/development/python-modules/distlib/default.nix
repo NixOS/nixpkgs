@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "distlib";
-  version = "0.3.1";
+  version = "0.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "edf6116872c863e1aa9d5bb7cb5e05a022c519a4594dc703843343a9ddd9bff1";
+    sha256 = "e4b58818180336dc9c529bfb9a0b58728ffc09ad92027a3f30b7cd91e3458579";
     extension = "zip";
   };
 

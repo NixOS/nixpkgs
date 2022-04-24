@@ -1,9 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, libpng, libX11, libXext, libXi, libXtst }:
 
-let version = "1.09"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xautomation";
-  inherit version;
+  version = "1.09";
   src = fetchurl {
     url = "https://www.hoopajoo.net/static/projects/xautomation-${version}.tar.gz";
     sha256 = "03azv5wpg65h40ip2kk1kdh58vix4vy1r9bihgsq59jx2rhjr3zf";

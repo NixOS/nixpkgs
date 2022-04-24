@@ -10,26 +10,26 @@
 , nbclient
 , six
 , tqdm
-, jupyter_client
+, jupyter-client
 , requests
 , entrypoints
 , tenacity
-, futures
+, futures ? null
 , black
 , backports_tempfile
 , isPy27
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ptwZXypS9b7Y1CkszqOa8PMzgyS+r9VikPlhbJUDNiM=";
+    sha256 = "be12d2728989c0ae17b42fcb05b623500004e94b34f56bd153355ccebb84a59a";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     nbclient
     six
     tqdm
-    jupyter_client
+    jupyter-client
     requests
     entrypoints
     tenacity
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
   ];
 

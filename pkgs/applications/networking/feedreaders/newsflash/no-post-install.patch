@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 53f911c..361a233 100644
+index 1d7089c..1952e7f 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -61,5 +61,3 @@ meson.add_dist_script(

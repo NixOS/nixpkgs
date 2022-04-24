@@ -4,8 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ patryk27 ];
   };
 
-  machine = { pkgs, ... }: {
-    virtualisation.memorySize = 768;
+  nodes.machine = { pkgs, ... }: {
     virtualisation.writableStore = true;
 
     containers.webserver = {

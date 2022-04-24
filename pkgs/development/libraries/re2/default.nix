@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, nix-update-script }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "re2";
-  version = "20201001";
+  version = "2022-04-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
-    rev = "2020-10-01";
-    sha256 = "0a5f7av1pk6p3jxc2w6prl00lyrplap97m68hnhw7jllnwljk0bx";
+    rev = version;
+    sha256 = "sha256-ywmXIAyVWYMKBOsAndcq7dFYpn9ZgNz5YWTPjylXxsk=";
   };
 
   preConfigure = ''
@@ -19,6 +19,13 @@ stdenv.mkDerivation {
 
   buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
 
+  enableParallelBuilding = true;
+  # Broken when shared/static are tested in parallel:
+  #   cp: cannot create regular file 'obj/testinstall.cc': File exists
+  #   make: *** [Makefile:334: static-testinstall] Error 1
+  # Will be fixed by https://code-review.googlesource.com/c/re2/+/59830
+  enableParallelChecking = false;
+
   preCheck = "patchShebangs runtests";
   doCheck = true;
   checkTarget = "test";
@@ -27,6 +34,12 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/google/re2";

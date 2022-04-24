@@ -1,23 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , numpy
+, packaging
+, python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.7.2";
+  version = "2.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ai3i5n07csnzfsxf2dxp8cpdk6ajl5iv8rv0fj6n9ag7qphixac";
+    hash = "sha256-zXeapE3ZhsTvEBY1GSOWArAnvgalJ5RmViB6zx9YETs=";
   };
-
-  # Remove existing site.cfg, use the one we built for numpy.
-  preBuild = ''
-    ln -s ${numpy.cfg} site.cfg
-  '';
 
   nativeBuildInputs = [
     numpy
@@ -25,7 +25,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+    packaging
   ];
+
+  preBuild = ''
+    # Remove existing site.cfg, use the one we built for numpy
+    ln -s ${numpy.cfg} site.cfg
+  '';
 
   checkPhase = ''
     runtest="$(pwd)/numexpr/tests/test_numexpr.py"
@@ -34,9 +40,14 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "numexpr"
+  ];
+
+  meta = with lib; {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

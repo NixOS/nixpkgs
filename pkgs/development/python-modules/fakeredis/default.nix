@@ -16,13 +16,20 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.5.0";
-  disabled = pythonOlder "3.5";
+  version = "1.7.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ac0cef767c37f51718874a33afb5413e69d132988cb6a80c6e6dbeddf8c7623";
+    hash = "sha256-fCxLobQuCnUzfFS3d78GcQVrRWllDj/5J+S5s4WvyOw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "redis<4.2.0" "redis"
+  '';
 
   propagatedBuildInputs = [
     aioredis
@@ -40,7 +47,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "fakeredis" ];
+  pythonImportsCheck = [
+    "fakeredis"
+  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

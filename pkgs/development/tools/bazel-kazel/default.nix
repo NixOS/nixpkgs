@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "bazel-kazel";
-  version = "0.2.1";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "repo-infra";
     rev = "v${version}";
-    sha256 = "sha256-g7jfuWe4UeAbNf+kOa0Y9BamUnGEbOGxZ+KdQWdWl48=";
+    sha256 = "sha256-Y9VOlFrFmJQCQuwf3UztHGuJqmq/lSibTbI3oGjtNuE=";
   };
 
   vendorSha256 = "sha256-1+7Mx1Zh1WolqTpWNe560PRzRYaWVUVLvNvUOysaW5I=";
@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes/repo-infra";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "kazel";
   };
 }

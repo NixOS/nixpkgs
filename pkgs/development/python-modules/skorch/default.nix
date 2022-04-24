@@ -3,12 +3,12 @@
 , fetchPypi
 , pytestCheckHook
 , pytest
-, pytestcov
+, pytest-cov
 , flaky
 , numpy
 , pandas
 , pytorch
-, scikitlearn
+, scikit-learn
 , scipy
 , tabulate
 , tqdm
@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bdce9370153fd80c5c4ec499a639f55eef0620e45d4b15fbf7d7ff2a225a3d40";
+    sha256 = "b35cb4e50045742f0ffcfad33044af691d5d36b50212573753a804483a947ca9";
   };
 
-  propagatedBuildInputs = [ numpy pytorch scikitlearn scipy tabulate tqdm ];
-  checkInputs = [ pytest pytestcov flaky pandas pytestCheckHook ];
+  propagatedBuildInputs = [ numpy pytorch scikit-learn scipy tabulate tqdm ];
+  checkInputs = [ pytest pytest-cov flaky pandas pytestCheckHook ];
 
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run

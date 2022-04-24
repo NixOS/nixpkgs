@@ -43,7 +43,7 @@ let
             maintainers = tested.meta.maintainers;
           };
 
-          machine = { ... }: {
+          nodes.machine = { ... }: {
             imports = [
               testConfig
             ] ++ optional withX11 ../common/x11.nix;
@@ -84,6 +84,8 @@ let
 in
 
 {
+  appstream = callInstalledTest ./appstream.nix {};
+  appstream-qt = callInstalledTest ./appstream-qt.nix {};
   colord = callInstalledTest ./colord.nix {};
   flatpak = callInstalledTest ./flatpak.nix {};
   flatpak-builder = callInstalledTest ./flatpak-builder.nix {};
@@ -97,11 +99,13 @@ in
   gsconnect = callInstalledTest ./gsconnect.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
+  librsvg = callInstalledTest ./librsvg.nix {};
   glib-testing = callInstalledTest ./glib-testing.nix {};
   libjcat = callInstalledTest ./libjcat.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
+  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

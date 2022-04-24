@@ -1,12 +1,11 @@
 { lib, stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
-, fetchpatch
 , libgcrypt
-, epoxy
+, libepoxy
 , at-spi2-core
 , sqlite
 , dbus
@@ -14,17 +13,19 @@
 , pcre
 , qrencode
 , icu
+, gspell
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good
  }:
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "0wy1hb3kz3k4gqqwx308n37cqag2d017jwfz0b5s30nkx2pbwspw";
+    sha256 = "sha256-L5a5QlF9qlr4X/hGTabbbvOE5J1x/UVneWl/BRAa29Q=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
     gtk3
@@ -51,12 +52,19 @@ stdenv.mkDerivation rec {
     libgcrypt
     libsoup
     pcre
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
     icu
     libsignal-protocol-c
     librsvg
+    gspell
+    srtp
+    libnice
+    gnutls
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
     xorg.libpthreadstubs
@@ -82,8 +90,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ mic92 qyliss ];
+    maintainers = with maintainers; [ qyliss tomfitzhenry ];
   };
 }

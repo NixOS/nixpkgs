@@ -1,8 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchPypi
+{ buildPythonPackage
+, lib
+, isPy27
+, nixosTests
+, fetchPypi
 , alembic
 , aniso8601
 , Babel
 , blinker
+, cachetools
 , click
 , dnspython
 , email_validator
@@ -12,8 +17,8 @@
 , flask_mail
 , flask_migrate
 , flask-restful
-, flask_script
 , flask_sqlalchemy
+, flask-talisman
 , flask_wtf
 , debts
 , idna
@@ -23,68 +28,36 @@
 , markupsafe
 , python-dateutil
 , pytz
+, requests
 , six
 , sqlalchemy
+, sqlalchemy-utils
 , sqlalchemy-continuum
+, sqlalchemy-i18n
 , werkzeug
 , wtforms
 , psycopg2 # optional, for postgresql support
 , flask_testing
 , pytestCheckHook
+, fetchpatch
 }:
-
-# ihatemoney is not really a library. It will only ever be imported
-# by the interpreter of uwsgi. So overrides for its depencies are fine.
-let
-  # https://github.com/spiral-project/ihatemoney/issues/567
-  pinned_wtforms = wtforms.overridePythonAttrs (old: rec {
-    pname = "WTForms";
-    version = "2.2.1";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0q9vkcq6jnnn618h27lx9sas6s9qlg2mv8ja6dn0hy38gwzarnqc";
-    };
-  });
-  pinned_flask_wtf = flask_wtf.override { wtforms = pinned_wtforms; };
-in
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.2";
+  version = "5.1.1";
 
-  src = fetchFromGitHub {
-    owner = "spiral-project";
-    repo = pname;
-    rev = version;
-    sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0gsqba9qbs1dpmfys8qpiahy4pbn4khcc6mgmdnhssmkjsb94sx6";
   };
 
   disabled = isPy27;
 
-  patches = [
-    # fix migration on postgresql
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/spiral-project/ihatemoney/commit/6129191b26784b895e203fa3eafb89cee7d88b71.patch";
-      sha256 = "0yc24gsih9x3pnh2mhj4v5i71x02dq93a9jd2r8b1limhcl4p1sw";
-    })
-    (fetchpatch {
-      name = "CVE-2020-15120.patch";
-      url = "https://github.com/spiral-project/ihatemoney/commit/8d77cf5d5646e1d2d8ded13f0660638f57e98471.patch";
-      sha256 = "0y855sk3qsbpq7slj876k2ifa1lccc2dccag98pkyaadpz5gbabv";
-    })
-  ];
-
-  postPatch = ''
-    # remove draconian pinning
-    sed -i 's/==.*$//' setup.cfg
-  '';
-
   propagatedBuildInputs = [
-    alembic
     aniso8601
     Babel
     blinker
+    cachetools
     click
     dnspython
     email_validator
@@ -94,9 +67,8 @@ buildPythonPackage rec {
     flask_mail
     flask_migrate
     flask-restful
-    flask_script
-    flask_sqlalchemy
-    pinned_flask_wtf
+    flask-talisman
+    flask_wtf
     idna
     itsdangerous
     jinja2
@@ -104,23 +76,44 @@ buildPythonPackage rec {
     markupsafe
     python-dateutil
     pytz
+    requests
     six
-    sqlalchemy
     sqlalchemy-continuum
     werkzeug
-    pinned_wtforms
+    wtforms
     psycopg2
     debts
   ];
 
-  checkInputs = [
-    flask_testing pytestCheckHook
+  patches = [
+    # fix build with wtforms 3. remove with next release
+    (fetchpatch {
+      url = "https://github.com/spiral-project/ihatemoney/commit/40ce32d9fa58a60d26a4d0df547b8deb709c330d.patch";
+      sha256 = "sha256-2ewOu21qhq/AOZaE9qrF5J6HH0h6ohFgjDb+BYjJnuQ=";
+      excludes = [ "setup.cfg" ];
+    })
   ];
 
-  pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "cachetools>=4.1,<5" "cachetools>=4.1" \
+      --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2" \
+      --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
+      --replace "WTForms>=2.3.1,<2.4" "WTForms" \
+      --replace "Flask-Talisman>=0.8,<1" "Flask-Talisman>=0.8,<2" # https://github.com/spiral-project/ihatemoney/pull/1006
+  '';
+
+  checkInputs = [
+    flask_testing
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "ihatemoney" ];
+
   disabledTests = [
     "test_notifications"  # requires running service.
     "test_invite"         # requires running service.
+    "test_invitation_email_failure" # requires dns resolution
   ];
 
   passthru.tests = {
@@ -134,5 +127,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.symphorien ];
   };
 }
-
-

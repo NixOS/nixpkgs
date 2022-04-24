@@ -2,20 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "sorl-thumbnail";
-  version = "12.7.0";
+  version = "12.8.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbe6dfd66a1aceb7e0203895ff5622775e50266f8d8cfd841fe1500bd3e19018";
+    sha256 = "sha256-7io8nwuInlmRk4PTeB8TF9ycSSf7RLIvsUN/b+cFS5Y=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
   doCheck = false;
 

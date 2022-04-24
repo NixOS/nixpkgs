@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "evohome-async";
-  version = "0.3.8";
+  version = "0.3.15";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = pname;
     rev = version;
-    sha256 = "04xy72k79cnb8pc19v5jzkc0djazfm6pbm10ysphx06ndwvxr9mn";
+    sha256 = "sha256-/dZRlcTcea26FEpw/XDItKh4ncr/eEFQcdfIE2KIMo8=";
   };
 
   propagatedBuildInputs = [

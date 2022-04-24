@@ -1,28 +1,27 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, systemd
+, meson, ninja, pkg-config, scdoc, wayland-scanner
+, wayland, wayland-protocols
+, systemdSupport ? stdenv.isLinux, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "swayidle";
-  version = "1.6";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "1nd3v8r9549lykdwh4krldfl59lzaspmmai5k1icy7dvi6kkr18r";
+    sha256 = "06iq12p4438d6bv3jlqsf01wjaxrzlnj1bnicn41kad563aq41xl";
   };
 
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "version: '1.5'" "version: '${version}'"
-  '';
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  buildInputs = [ wayland wayland-protocols ]
+                ++ lib.optionals systemdSupport [ systemd ];
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
-  buildInputs = [ wayland wayland-protocols systemd ];
+  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=${if systemdSupport then "enabled" else "disabled"}" ];
 
-  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];
+  postPatch = "substituteInPlace main.c --replace '%lu' '%zu'";
 
   meta = with lib; {
     description = "Idle management daemon for Wayland";

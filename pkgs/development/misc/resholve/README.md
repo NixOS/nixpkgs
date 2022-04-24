@@ -1,8 +1,18 @@
 # Using resholve's Nix API
+resholve replaces bare references (subject to a PATH search at runtime) to external commands and scripts with absolute paths.
 
-resholve converts bare executable references in shell scripts to absolute
-paths. This will hopefully make its way into the Nixpkgs manual soon, but
-until then I'll outline how to use the `resholvePackage` function.
+This small super-power helps ensure script dependencies are declared, present, and don't unexpectedly shift when the PATH changes.
+
+resholve is developed to enable the Nix package manager to package and integrate Shell projects, but its features are not Nix-specific and inevitably have other applications.
+
+<!-- generated from resholve's repo; best to suggest edits there (or at least notify me) -->
+
+This will hopefully make its way into the Nixpkgs manual soon, but
+until then I'll outline how to use the functions:
+- `resholve.mkDerivation` (formerly `resholvePackage`)
+- `resholve.writeScript` (formerly `resholveScript`)
+- `resholve.writeScriptBin` (formerly `resholveScriptBin`)
+- `resholve.phraseSolution` (new in resholve 0.8.0)
 
 > Fair warning: resholve does *not* aspire to resolving all valid Shell
 > scripts. It depends on the OSH/Oil parser, which aims to support most (but
@@ -10,7 +20,7 @@ until then I'll outline how to use the `resholvePackage` function.
 
 ## API Concepts
 
-The main difference between `resholvePackage` and other builder functions
+The main difference between `resholve.mkDerivation` and other builder functions
 is the `solutions` attrset, which describes which scripts to resolve and how.
 Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 
@@ -21,69 +31,139 @@ Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 > - Packages with scripts that require conflicting directives can use multiple
 >   solutions to resolve the scripts separately, but produce a single package.
 
-## Basic Example
+`resholve.writeScript` and `resholve.writeScriptBin` support a _single_
+`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution--but it _does_ still require the `scripts` attr.
 
-Here's a simple example from one of my own projects, with annotations:
-<!--
-TODO: ideally this will use a nixpkgs example; but we don't have any IN yet
-and the first package PR (bashup-events) is too complex for this context.
--->
+## Basic `resholve.mkDerivation` Example
+
+Here's a simple example of how `resholve.mkDerivation` is already used in nixpkgs:
+
+<!-- TODO: figure out how to pull this externally? -->
 
 ```nix
-{ stdenv, lib, resholvePackage, fetchFromGitHub, bashup-events44, bashInteractive_5, doCheck ? true, shellcheck }:
+{ lib
+, fetchFromGitHub
+, resholve
+, substituteAll
+, bash
+, coreutils
+, goss
+, which
+}:
 
-resholvePackage rec {
-  pname = "shellswain";
-  version = "unreleased";
+resholve.mkDerivation rec {
+  pname = "dgoss";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
-    # ...
+    owner = "aelsabbahy";
+    repo = "goss";
+    rev = "v${version}";
+    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
   };
 
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
+    install -D extras/dgoss/dgoss $out/bin/dgoss
+  '';
+
   solutions = {
-    # Give each solution a short name. This is what you'd use to
-    # override its settings, and it shows in (some) error messages.
-    profile = {
-      # the only *required* arguments are the 3 below
-
-      # Specify 1 or more $out-relative script paths. Unlike many
-      # builders, resholvePackage modifies the output files during
-      # fixup (to correctly resolve in-package sourcing).
-      scripts = [ "bin/shellswain.bash" ];
-
-      # "none" for no shebang, "${bash}/bin/bash" for bash, etc.
-      interpreter = "none";
-
-      # packages resholve should resolve executables from
-      inputs = [ bashup-events44 ];
+    default = {
+      scripts = [ "bin/dgoss" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = [ coreutils which ];
+      fake = {
+        external = [ "docker" ];
+      };
     };
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
-
-  inherit doCheck;
-  checkInputs = [ shellcheck ];
-
-  # ...
+  meta = with lib; {
+    homepage = "https://github.com/aelsabbahy/goss/blob/v${version}/extras/dgoss/README.md";
+    description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hyzual ];
+  };
 }
 ```
 
+
+## Basic `resholve.writeScript` and `resholve.writeScriptBin` examples
+
+Both of these functions have the same basic API. This example is a little
+trivial for now. If you have a real usage that you find helpful, please PR it.
+
+```nix
+resholvedScript = resholve.writeScript "name" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+resholvedScriptBin = resholve.writeScriptBin "name" {
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+```
+
+
+## Basic `resholve.phraseSolution` example
+
+This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of build. This example is a little
+trivial for now. If you have a real usage that you find helpful, please PR it.
+
+```nix
+{ stdenv, resholve, module1 }:
+
+stdenv.mkDerivation {
+  # pname = "testmod3";
+  # version = "unreleased";
+  # src = ...;
+
+  installPhase = ''
+    mkdir -p $out/bin
+    install conjure.sh $out/bin/conjure.sh
+    ${resholve.phraseSolution "conjure" {
+      scripts = [ "bin/conjure.sh" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = [ module1 ];
+      fake = {
+        external = [ "jq" "openssl" ];
+      };
+    }}
+  '';
+}
+```
+
+
 ## Options
 
-`resholvePackage` maps Nix types/idioms into the flags and environment variables
+`resholve.mkDerivation` maps Nix types/idioms into the flags and environment variables
 that the `resholve` CLI expects. Here's an overview:
 
-| Option        | Type    | Containing                                            |
-| ------------- | ------- | ----------------------------------------------------- |
-| scripts       | list    | $out-relative string paths to resolve                 |
-| inputs        | list    | packages to resolve executables from                  |
-| interpreter   | string  | 'none' or abspath for shebang                         |
-| prologue      | file    | text to insert before the first code-line             |
-| epilogue      | file    | text to isnert after the last code-line               |
-| flags         | list    | strings to pass as flags                              |
-| fake          | attrset | [directives](#controlling-resolution-with-directives) |
-| fix           | attrset | [directives](#controlling-resolution-with-directives) |
-| keep          | attrset | [directives](#controlling-resolution-with-directives) |
+| Option | Type | Containing |
+|--------|------|------------|
+| scripts | `<list>` | scripts to resolve (`$out`-relative paths) |
+| interpreter | `"none"` `<path>` | The absolute interpreter `<path>` for the script's shebang. The special value `none` ensures there is no shebang. |
+| inputs | `<packages>` | Packages to resolve external dependencies from. |
+| fake | `<directives>` | pretend some commands exist |
+| fix | `<directives>` | fix things we can't auto-fix/ignore |
+| keep | `<directives>` | keep things we can't auto-fix/ignore |
+| lore | `<directory>` | control nested resolution |
+| execer | `<statements>` | modify nested resolution |
+| wrapper | `<statements>` | modify nested resolution |
+| prologue | `<file>` | insert file before resolved script |
+| epilogue | `<file>` | insert file after resolved script |
+
+<!-- TODO: section below is largely custom for nixpkgs, but I would LIKE to wurst it. -->
 
 ## Controlling resolution with directives
 
@@ -132,27 +212,83 @@ from the manpage, and the Nix equivalents:
 ```nix
 # --fake 'f:setUp;tearDown builtin:setopt source:/etc/bashrc'
 fake = {
-  # fake accepts the initial of valid identifier types as a CLI convienience.
+  # fake accepts the initial of valid identifier types as a CLI convenience.
   # Use full names in the Nix API.
   function = [ "setUp" "tearDown" ];
   builtin = [ "setopt" ];
   source = [ "/etc/bashrc" ];
 };
 
-# --fix 'aliases xargs:ls $GIT:gix'
+# --fix 'aliases $GIT:gix /bin/bash'
 fix = {
   # all single-word directives use `true` as value
   aliases = true;
-  xargs = [ "ls" ];
   "$GIT" = [ "gix" ];
+  "/bin/bash";
 };
 
-# --keep 'which:git;ls .:$HOME $LS:exa /etc/bashrc ~/.bashrc'
+# --keep 'source:$HOME /etc/bashrc ~/.bashrc'
 keep = {
-  which = [ "git" "ls" ];
-  "." = [ "$HOME" ];
-  "$LS" = [ "exa" ];
+  source = [ "$HOME" ];
   "/etc/bashrc" = true;
   "~/.bashrc" = true;
 };
 ```
+
+
+> **Note:** For now, at least, you'll need to reference the manpage to completely understand these examples.
+
+## Controlling nested resolution with lore
+
+Initially, resolution of commands in the arguments to command-executing
+commands was limited to one level for a hard-coded list of builtins and
+external commands. resholve can now resolve these recursively.
+
+This feature combines information (_lore_) that the resholve Nix API
+obtains via binlore ([nixpkgs](../../tools/analysis/binlore), [repo](https://github.com/abathur/resholve)),
+with some rules (internal to resholve) for locating sub-executions in
+some of the more common commands.
+
+- "execer" lore identifies whether an executable can, cannot,
+  or might execute its arguments. Every "can" or "might" verdict requires
+  either built-in rules for finding the executable, or human triage.
+- "wrapper" lore maps shell exec wrappers to the programs they exec so
+  that resholve can substitute an executable's verdict for its wrapper's.
+
+> **Caution:** At least when it comes to common utilities, it's best to treat
+> overrides as a stopgap until they can be properly handled in resholve and/or
+> binlore. Please report things you have to override and, if possible, help
+> get them sorted.
+
+There will be more mechanisms for controlling this process in the future
+(and your reports/experiences will play a role in shaping them...) For now,
+the main lever is the ability to substitute your own lore. This is how you'd
+do it piecemeal:
+
+```nix
+# --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
+execer = [
+  /*
+    This is the same verdict binlore will
+    come up with. It's a no-op just to demo
+    how to fiddle lore via the Nix API.
+  */
+  "cannot:${openssl.bin}/bin/openssl"
+  # different verdict, but not used
+  "can:${openssl.bin}/bin/c_rehash"
+];
+
+# --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
+execer = [
+  /*
+    This is the same verdict binlore will
+    come up with. It's a no-op just to demo
+    how to fiddle lore via the Nix API.
+  */
+  "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
+];
+```
+
+
+The format is fairly simple to generate--you can script your own generator if
+you need to modify the lore.

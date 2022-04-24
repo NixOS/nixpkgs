@@ -1,3 +1,10 @@
+# Note: lib/systems/default.nix takes care of producing valid,
+# fully-formed "platform" values (e.g. hostPlatform, buildPlatform,
+# targetPlatform, etc) containing at least the minimal set of attrs
+# required (see types.parsedPlatform in lib/systems/parse.nix).  This
+# file takes an already-valid platform and further elaborates it with
+# optional fields such as linux-kernel, gcc, etc.
+
 { lib }:
 rec {
   pc = {
@@ -20,15 +27,17 @@ rec {
       name = "PowerNV";
 
       baseConfig = "powernv_defconfig";
-      target = "zImage";
-      installTarget = "install";
-      file = "vmlinux";
+      target = "vmlinux";
       autoModules = true;
       # avoid driver/FS trouble arising from unusual page size
       extraConfig = ''
         PPC_64K_PAGES n
         PPC_4K_PAGES y
         IPV6 y
+
+        ATA_BMDMA y
+        ATA_SFF y
+        VIRTIO_MENU y
       '';
     };
   };
@@ -233,7 +242,7 @@ rec {
     };
   };
 
-  scaleway-c1 = lib.recursiveUpdate armv7l-hf-multiplatform {
+  scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";
       fpu = "vfpv3";
@@ -315,6 +324,12 @@ rec {
         # Disable OABI to have seccomp_filter (required for systemd)
         # https://github.com/raspberrypi/firmware/issues/651
         OABI_COMPAT n
+
+        # >=5.12 fails with:
+        # drivers/net/ethernet/micrel/ks8851_common.o: in function `ks8851_probe_common':
+        # ks8851_common.c:(.text+0x179c): undefined reference to `__this_module'
+        # See: https://lore.kernel.org/netdev/20210116164828.40545-1-marex@denx.de/T/
+        KS8851_MLL y
       '';
     };
     gcc = {
@@ -372,6 +387,13 @@ rec {
     };
     gcc = {
       arch = "armv8-a";
+    };
+  };
+
+  apple-m1 = {
+    gcc = {
+      arch = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc";
+      cpu = "apple-a13";
     };
   };
 
@@ -467,6 +489,43 @@ rec {
     };
   };
 
+  # can execute on 32bit chip
+  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
+  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
+  gcc_mips64r2_n32 = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
+  gcc_mips64r6_n32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
+  gcc_mips64r2_64  = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
+  gcc_mips64r6_64  = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
+
+  # based on:
+  #   https://www.mail-archive.com/qemu-discuss@nongnu.org/msg05179.html
+  #   https://gmplib.org/~tege/qemu.html#mips64-debian
+  mips64el-qemu-linux-gnuabi64 = {
+    linux-kernel = {
+      name = "mips64el";
+      baseConfig = "64r2el_defconfig";
+      target = "vmlinuz";
+      autoModules = false;
+      DTB = true;
+      # for qemu 9p passthrough filesystem
+      extraConfig = ''
+        MIPS_MALTA y
+        PAGE_SIZE_4KB y
+        CPU_LITTLE_ENDIAN y
+        CPU_MIPS64_R2 y
+        64BIT y
+        CPU_MIPS64_R2 y
+
+        NET_9P y
+        NET_9P_VIRTIO y
+        9P_FS y
+        9P_FS_POSIX_ACL y
+        PCI y
+        VIRTIO_PCI y
+      '';
+    };
+  };
+
   ##
   ## Other
   ##
@@ -474,16 +533,19 @@ rec {
   riscv-multiplatform = {
     linux-kernel = {
       name = "riscv-multiplatform";
-      target = "vmlinux";
+      target = "Image";
       autoModules = true;
       baseConfig = "defconfig";
+      DTB = true;
       extraConfig = ''
-        FTRACE n
         SERIAL_OF_PLATFORM y
       '';
     };
   };
 
+  # This function takes a minimally-valid "platform" and returns an
+  # attrset containing zero or more additional attrs which should be
+  # included in the platform in order to further elaborate it.
   select = platform:
     # x86
     /**/ if platform.isx86 then pc
@@ -495,7 +557,10 @@ rec {
         else if lib.versionOlder version "6" then sheevaplug
         else if lib.versionOlder version "7" then raspberrypi
         else armv7l-hf-multiplatform
-    else if platform.isAarch64 then aarch64-multiplatform
+
+    else if platform.isAarch64 then
+      if platform.isDarwin then apple-m1
+      else aarch64-multiplatform
 
     else if platform.isRiscV then riscv-multiplatform
 

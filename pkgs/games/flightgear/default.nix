@@ -6,18 +6,18 @@
 }:
 
 let
-  version = "2020.3.4";
+  version = "2020.3.12";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "1cqikbqvidfaynml9bhqfr9yw5ga35gpqrbz62z94a1skdijkpkg";
+      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
+      sha256 = "sha256-gCsW9e8IuXwmJfAfxJ/nORF5W/PwCka+O8Chwm26OnY=";
     };
 
-    phases = [ "installPhase" ];
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "02d9h10p8hyn0a25csragj6pbwmrir1z8zb92023s9vi21j7bwy8";
+    sha256 = "sha256-wPeZIAiGU0zPBkzeBCO1xEgm+iZd/hWvBEr2ZcsX0Qc=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     comment = "FlightGear Flight Simulator";
     desktopName = "FlightGear";
     genericName = "Flight simulator";
-    categories = "Game;Simulation";
+    categories = [ "Game" "Simulation" ];
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

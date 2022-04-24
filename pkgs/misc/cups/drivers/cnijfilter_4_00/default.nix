@@ -30,7 +30,8 @@ in stdenv.mkDerivation {
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
-  buildInputs = [ autoconf libtool automake
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool
                   cups popt libtiff libpng
                   ghostscript glib libusb1 libxml2 ];
 
@@ -41,6 +42,7 @@ in stdenv.mkDerivation {
     ./patches/cnijfilter-4.00-4-ppd.patch
     ./patches/cnijfilter-4.00-5-abi_x86_32.patch
     ./patches/cnijfilter-4.00-6-headers.patch
+    ./patches/cnijfilter-4.00-7-sysctl.patch
   ];
 
   postPatch = ''

@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1afclc57b9017a73mfs9w7lbdvdipmf9q0xdk116f61gnvyix2np";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ glib.dev ];
   buildInputs = [ libX11 libXmu glib ];
 
   patches = [ ./64-bit-data.patch ];

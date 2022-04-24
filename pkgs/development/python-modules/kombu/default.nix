@@ -1,44 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
 , amqp
-, botocore
+, azure-servicebus
+, buildPythonPackage
+, cached-property
 , case
-, Pyro4
-, pytest
-, pytz
-, sqlalchemy
+, fetchPypi
 , importlib-metadata
+, Pyro4
+, pytestCheckHook
 , pythonOlder
+, pytz
+, vine
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.0.2";
+  version = "5.2.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4965fba0a4718d47d470beeb5d6446e3357a62402b16c510b6a2f251e05ac3c";
+    hash = "sha256-N87j7nJflOqLsXPqq3wXYCA+pTu+uuImMoYA+dJ5lhA=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "pytest-sugar" ""
-  '';
 
   propagatedBuildInputs = [
     amqp
+    vine
   ] ++ lib.optionals (pythonOlder "3.8") [
+    cached-property
     importlib-metadata
   ];
 
-  checkInputs = [ botocore pytest case pytz Pyro4 sqlalchemy ];
-  # test_redis requires fakeredis, which isn't trivial to package
-  checkPhase = ''
-    pytest --ignore t/unit/transport/test_redis.py
-  '';
+  checkInputs = [
+    azure-servicebus
+    case
+    Pyro4
+    pytestCheckHook
+    pytz
+  ];
+
+  pythonImportsCheck = [
+    "kombu"
+  ];
 
   meta = with lib; {
     description = "Messaging library for Python";
-    homepage    = "https://github.com/celery/kombu";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/celery/kombu";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

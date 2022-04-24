@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;

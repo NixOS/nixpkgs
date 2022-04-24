@@ -1,24 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub
+, python3
+, fetchpatch
+}:
 
-let version = "0.11.1"; in
-
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "fail2ban";
-  inherit version;
+  version = "0.11.2";
 
   src = fetchFromGitHub {
-    owner  = "fail2ban";
-    repo   = "fail2ban";
-    rev    = version;
-    sha256 = "0kqvkxpb72y3kgmxf6g36w67499c6gcd2a9yyblagwx12y05f1sh";
+    owner = "fail2ban";
+    repo = "fail2ban";
+    rev = version;
+    sha256 = "q4U9iWCa1zg8sA+6pPNejt6v/41WGIKN5wITJCrCqQE=";
   };
 
   pythonPath = with python3.pkgs;
     lib.optionals stdenv.isLinux [
       systemd
+      pyinotify
     ];
 
+  patches = [
+    # remove references to use_2to3, for setuptools>=58
+    # has been merged into master, remove next release
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497.patch";
+      sha256 = "sha256-aozQJHwPcJTe/D/PLQzBk1YH3OAP6Qm7wO7cai5CVYI=";
+    })
+  ];
+
   preConfigure = ''
+    # workaround for setuptools 58+
+    # https://github.com/fail2ban/fail2ban/issues/3098
+    patchShebangs fail2ban-2to3
+    ./fail2ban-2to3
+
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail \
@@ -42,18 +58,23 @@ python3.pkgs.buildPythonApplication {
     ${stdenv.shell} ./fail2ban-2to3
   '';
 
-  postInstall = let
-    sitePackages = "$out/${python3.sitePackages}";
-  in ''
-    # see https://github.com/NixOS/nixpkgs/issues/4968
-    rm -rf ${sitePackages}/etc ${sitePackages}/usr ${sitePackages}/var;
-  '';
+  postInstall =
+    let
+      sitePackages = "$out/${python3.sitePackages}";
+    in
+    ''
+      # see https://github.com/NixOS/nixpkgs/issues/4968
+      rm -r "${sitePackages}/etc"
+    '' + lib.optionalString stdenv.isLinux ''
+      # see https://github.com/NixOS/nixpkgs/issues/4968
+      rm -r "${sitePackages}/usr"
+    '';
 
   meta = with lib; {
-    homepage    = "https://www.fail2ban.org/";
+    homepage = "https://www.fail2ban.org/";
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 fpletz ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

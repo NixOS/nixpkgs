@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, librdf_raptor2, gmp, pkg-config, pcre, libxml2, perl }:
 
 stdenv.mkDerivation rec {
-  name = "rasqal-0.9.33";
+  pname = "rasqal";
+  version = "0.9.33";
 
   src = fetchurl {
-    url = "http://download.librdf.org/source/${name}.tar.gz";
+    url = "http://download.librdf.org/source/rasqal-${version}.tar.gz";
     sha256 = "0z6rrwn4jsagvarg8d5zf0j352kjgi33py39jqd29gbhcnncj939";
   };
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library that handles Resource Description Framework (RDF)";
-    homepage = "http://librdf.org/rasqal";
+    homepage = "https://librdf.org/rasqal";
     license = with lib.licenses; [ lgpl21 asl20 ];
     maintainers = with lib.maintainers; [ marcweber ];
     platforms = lib.platforms.unix;

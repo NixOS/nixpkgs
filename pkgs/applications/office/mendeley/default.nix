@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, mkDerivation, dpkg, which
 , makeWrapper
-, alsaLib
+, alsa-lib
 , desktop-file-utils
 , dbus
 , libcap
@@ -59,7 +59,7 @@ let
     qtquickcontrols
     qtwebkit
     qtwebengine
-    alsaLib
+    alsa-lib
     dbus
     freetype
     fontconfig

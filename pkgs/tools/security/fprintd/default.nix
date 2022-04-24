@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fprintd";
-  version = "1.90.9";
+  version = "1.94.2";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "rOTVThHOY/Q2IIu2RGiv26UE2V/JFfWWnfKZQfKl5Mg=";
+    sha256 = "sha256-ePhcIZyXoGr8XlBuzKjpibU9D/44iCXYBlpVR9gcswQ=";
   };
 
   nativeBuildInputs = [

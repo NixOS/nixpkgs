@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx }:
 stdenv.mkDerivation rec {
   pname = "givaro";
-  version = "4.1.1";
+  version = "4.2.0";
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11wz57q6ijsvfs5r82masxgr319as92syi78lnl9lgdblpc6xigk";
+    sha256 = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [autoconf automake libtool];
+  nativeBuildInputs = [ autoreconfHook autoconf automake ];
+  buildInputs = [libtool];
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    inherit version;
     description = "A C++ library for arithmetic and algebraic computations";
     license = lib.licenses.cecill-b;
     maintainers = [lib.maintainers.raskin];

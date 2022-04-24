@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pystache";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
+    sha256 = "93bf92b2149a4c4b58d12142e2c4c6dd5c08d89e4c95afccd4b6efe2ee1d470d";
   };
 
   LC_ALL = "en_US.UTF-8";

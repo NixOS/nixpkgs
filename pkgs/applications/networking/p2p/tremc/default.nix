@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages
 , x11Support ? !stdenv.isDarwin
 , xclip ? null
 , pbcopy ? null
@@ -21,6 +21,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1fqspp2ckafplahgba54xmx0sjidx1pdzyjaqjhz0ivh98dkx2n5";
   };
 
+  patches = [
+    # Remove when version >0.9.2 is released
+    (fetchpatch {
+      url = "https://github.com/tremc/tremc/commit/bdffff2bd76186a4e3488b83f719fc7f7e3362b6.patch";
+      sha256 = "1zip2skh22v0yyv2hmszxn5jshp9m1jpw0fsyfvmqfxzq7m3czy5";
+      name = "replace-decodestring-with-decodebytes.patch";
+    })
+  ];
+
   buildInputs = with python3Packages; [
     python
     wrapPython
@@ -32,7 +41,8 @@ python3Packages.buildPythonApplication rec {
   ] ++
   lib.optional useGeoIP GeoIP;
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  doCheck = false;
 
   makeWrapperArgs = ["--prefix PATH : ${wrapperPath}"];
 

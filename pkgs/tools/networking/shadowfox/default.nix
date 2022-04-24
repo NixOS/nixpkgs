@@ -11,12 +11,12 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
-  vendorSha256 = "06ar9ivry9b01609izjbl6hqgg0cy7aqd8n2cqpyq0g7my0l0lbj";
+  vendorSha256 = "17m0ssfw9n3g2lkv63qajz3adrk5yp0c9hx66x7dl79snwqd49yg";
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags=-X main.tag=v${version}"
+  ldflags = [
+    "-X main.tag=v${version}"
   ];
 
   meta = with lib; {
@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://overdodactyl.github.io/ShadowFox/";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
+    mainProgram = "shadowfox-updater";
   };
 }

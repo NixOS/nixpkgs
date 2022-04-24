@@ -1,10 +1,12 @@
-{ config, lib, stdenv
+{ config
+, lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
 , cmake
 , fdk_aac
-, ffmpeg
+, ffmpeg_4
 , jansson
 , libjack2
 , libxkbcommon
@@ -19,44 +21,58 @@
 , curl
 , wayland
 , xorg
-, makeWrapper
 , pkg-config
 , libvlc
 , mbedtls
-
+, wrapGAppsHook
 , scriptingSupport ? true
 , luajit
 , swig
 , python3
-
 , alsaSupport ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pciutils
+, pipewireSupport ? stdenv.isLinux
+, pipewire
+, libdrm
 }:
 
 let
   inherit (lib) optional optionals;
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "obs-studio";
-  version = "26.1.2";
+  version = "27.2.4";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "1plr5a7k5scxlibhbknhhk19ipk8las14dzs7v64zx7rhpj00009";
+    sha256 = "sha256-OiSejQovSmhItrnrQlcVp9PCDRgAhuxTinSpXbH8bo0=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+  ];
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    cmake
+    pkg-config
+    wrapGAppsHook
+  ]
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
     fdk_aac
-    ffmpeg
+    ffmpeg_4
     jansson
     libcef
     libjack2
@@ -71,12 +87,13 @@ in mkDerivation rec {
     wayland
     x264
     libvlc
-    makeWrapper
     mbedtls
+    pciutils
   ]
-  ++ optionals scriptingSupport [ luajit swig python3 ]
-  ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport libpulseaudio;
+  ++ optionals scriptingSupport [ luajit python3 ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optionals pipewireSupport [ pipewire libdrm ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -102,14 +119,17 @@ in mkDerivation rec {
     "-DCEF_ROOT_DIR=../../cef"
   ];
 
-  postInstall = ''
-      wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+      ''${gappsWrapperArgs[@]}
+    )
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-      addOpenGLRunpath $out/lib/lib*.so
-      addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addOpenGLRunpath $out/lib/lib*.so
+    addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
   meta = with lib; {
@@ -120,8 +140,9 @@ in mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E ];
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ jb55 MP2E V ];
+    license = licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    mainProgram = "obs";
   };
 }

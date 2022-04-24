@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dwith_sysprofd=none"
     "-Dlibsysprof=false"
+    "-Dlibunwind=false"
     "-Dhelp=false"
     "-Denable_tools=false"
     "-Denable_tests=false"
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = sysprof.meta // {
     description = "Static library for Sysprof capture data generation";
+    license = lib.licenses.bsd2Patent;
     platforms = lib.platforms.all;
   };
 }

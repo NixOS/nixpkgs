@@ -20,7 +20,6 @@ buildGoPackage rec {
     license          = licenses.gpl3;
     maintainers      = with maintainers; [ mbode tazjin ];
     platforms        = platforms.unix;
-    repositories.git = "git://github.com/tazjin/kontemplate.git";
 
     longDescription = ''
       Kontemplate is a simple CLI tool that can take sets of

@@ -1,33 +1,44 @@
-{ lib, stdenv, fetchgit
-, meson
-, ninja
-, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
 , alacritty
 , cage
 , cairo
 , libxkbcommon
+, makeWrapper
+, mesa
+, meson
+, ninja
+, pkg-config
 , udev
 , wayland
 , wayland-protocols
 , wlroots
 , xwayland
-, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "wio";
-  version = "unstable-2020-11-02";
+  version = "0.pre+unstable=2021-06-27";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/wio";
-    rev = "31b742e473b15a2087be740d1de28bc2afd47a4d";
-    sha256 = "1vpvlahv6dmr7vfb11p5cc5ds2y2vfvcb877nkqx18yin6pg357l";
+  src = fetchFromGitHub {
+    owner = "museoa";
+    repo = pname;
+    rev = "e0b258777995055d69e61a0246a6a64985743f42";
+    sha256 = "sha256-8H9fOnZsNjjq9XvOv68F4RRglGNluxs5/jp/h4ROLiI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+  ];
+
   buildInputs = [
     cairo
     libxkbcommon
+    mesa # for libEGL
     udev
     wayland
     wayland-protocols
@@ -41,15 +52,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://wio-project.org/";
     description = "That Plan 9 feel, for Wayland";
     longDescription = ''
       Wio is a Wayland compositor for Linux and FreeBSD which has a similar look
       and feel to plan9's rio.
     '';
-    homepage = "https://wio-project.org/";
     license = licenses.mit;
-    platforms = with platforms; linux;
     maintainers = with maintainers; [ AndersonTorres ];
+    inherit (wayland.meta) platforms;
   };
 
   passthru.providedSessions = [ "wio" ];

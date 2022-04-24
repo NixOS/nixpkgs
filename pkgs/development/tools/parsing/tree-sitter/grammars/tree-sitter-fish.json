@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/ram02z/tree-sitter-fish",
+  "rev": "d482d70ea8e191c05b2c1b613ed6fdff30a14da0",
+  "date": "2022-03-14T15:15:13+00:00",
+  "path": "/nix/store/5ajcf2hl1hph7iky6lwp5vh7a49k587s-tree-sitter-fish",
+  "sha256": "0idnm9lrvj1jhrvrgcddppkc09hr7inciz6k02d0nnxv8pqaw3w6",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -20,31 +20,25 @@ let
         mv $out/webapps $webapps/
       '';
 
-    meta = {
+    meta = with lib; {
       homepage = "https://tomcat.apache.org/";
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
-      platforms = with lib.platforms; all;
-      maintainers = with lib.maintainers; [ danbst ];
-      license = [ lib.licenses.asl20 ];
+      platforms = platforms.all;
+      maintainers = [ ];
+      license = [ licenses.asl20 ];
     };
   });
 
 in {
-  tomcat7 = common {
-    versionMajor = "7";
-    versionMinor = "0.100";
-    sha256 = "0wjjnvxjz0xbnsfgyp0xc7nlij4z093v54hg59vww2nmkz5mg01v";
-  };
-
-  tomcat8 = common {
-    versionMajor = "8";
-    versionMinor = "5.51";
-    sha256 = "1zmg0hi4nw4y5sknd0jgq9lb3bncjjscay5fdiiq3qh5cs0wsvl3";
-  };
-
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.31";
-    sha256 = "0hybcy280qhhp9if58xw0rmyyqz1m1bzby7qnwz3y2wc1y4is48v";
+    versionMinor = "0.53";
+    sha256 = "1zdnbb0bfbi7762lz69li0wf48jbfz1mv637jzcl42vbsxp4agkv";
+  };
+
+  tomcat10 = common {
+    versionMajor = "10";
+    versionMinor = "0.11";
+    sha256 = "1hjvsxxxavni7bis1hm56281ffmf4x0zdh65zqkrnhqa1rbs0lg2";
   };
 }

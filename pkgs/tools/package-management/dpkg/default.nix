@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
+{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, zstd
+, makeWrapper, coreutils, autoreconfHook, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.20.7.1";
+  version = "1.20.9ubuntu2";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "sha256-Cq0t5of3l++OvavHuv0W3BSX8c4jvZFG+apz85alY28=";
+    url = "mirror://ubuntu/pool/main/d/dpkg/dpkg_${version}.tar.xz";
+    sha256 = "sha256-BuCofGpi9R0cyhvkZqu9IxupqZvZhbE2J/B4wgUqMQw=";
   };
 
   configureFlags = [
@@ -16,6 +18,8 @@ stdenv.mkDerivation rec {
     (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
     (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
   ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     # Nice: dpkg has a circular dependency on itself. Its configure
@@ -49,14 +53,15 @@ stdenv.mkDerivation rec {
        --replace '"diff"' \"${coreutils}/bin/diff\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz ];
-  nativeBuildInputs = [ makeWrapper perl ];
+  buildInputs = [ perl zlib bzip2 xz zstd ];
+  nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =
     ''
       for i in $out/bin/*; do
         if head -n 1 $i | grep -q perl; then
-          wrapProgram $i --prefix PERL5LIB : $out/${perl.libPrefix}
+          substituteInPlace $i --replace \
+            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
         fi
       done
 

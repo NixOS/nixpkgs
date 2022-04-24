@@ -179,10 +179,6 @@ let
       ) cfg.allowedUDPPortRanges
     ) allInterfaces)}
 
-    # Accept IPv4 multicast.  Not a big security risk since
-    # probably nobody is listening anyway.
-    #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
-
     # Optionally respond to ICMPv4 pings.
     ${optionalString cfg.allowPing ''
       iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
@@ -325,8 +321,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.iptables;
-        defaultText = "pkgs.iptables";
-        example = literalExample "pkgs.iptables-nftables-compat";
+        defaultText = literalExpression "pkgs.iptables";
+        example = literalExpression "pkgs.iptables-legacy";
         description =
           ''
             The iptables package to use for running the firewall service."
@@ -339,6 +335,8 @@ in
         description =
           ''
             Whether to log rejected or dropped incoming connections.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -350,6 +348,8 @@ in
             Whether to log all rejected or dropped incoming packets.
             This tends to give a lot of log messages, so it's mostly
             useful for debugging.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -417,6 +417,7 @@ in
       checkReversePath = mkOption {
         type = types.either types.bool (types.enum ["strict" "loose"]);
         default = kernelHasRPFilter;
+        defaultText = literalDocBook "<literal>true</literal> if supported by the chosen kernel";
         example = "loose";
         description =
           ''
@@ -432,8 +433,6 @@ in
             drop the packet if the source address is not reachable via any
             interface) or false.  Defaults to the value of
             kernelHasRPFilter.
-
-            (needs kernel 3.3+)
           '';
       };
 
@@ -496,7 +495,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample "[ pkgs.ipset ]";
+        example = literalExpression "[ pkgs.ipset ]";
         description =
           ''
             Additional packages to be included in the environment of the system

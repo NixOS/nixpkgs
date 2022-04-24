@@ -12,7 +12,14 @@ stdenv.mkDerivation rec {
   configureFlags =
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "ac_cv_func_malloc_0_nonnull=yes" ];
 
-  patches = [ ./fedora-fixes.patch ];
+  patches = [
+    ./fedora-fixes.patch
+    ./fno-common.patch
+  ];
+
+  # Disable parallel build as it fails as:
+  #    ld: cannot find -lomxil-bellagio
+  enableParallelBuilding = false;
 
   doCheck = false; # fails
 

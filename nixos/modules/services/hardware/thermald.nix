@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.thermald;
-in {
+in
+{
   ###### interface
   options = {
     services.thermald = {
@@ -27,7 +28,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.thermald;
-        defaultText = "pkgs.thermald";
+        defaultText = literalExpression "pkgs.thermald";
         description = "Which thermald package to use.";
       };
     };
@@ -41,6 +42,7 @@ in {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        PrivateNetwork = true;
         ExecStart = ''
           ${cfg.package}/sbin/thermald \
             --no-daemon \

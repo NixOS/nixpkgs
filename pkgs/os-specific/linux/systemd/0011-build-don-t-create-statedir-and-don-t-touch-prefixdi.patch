@@ -1,26 +1,26 @@
-From d410a7a6d1bb0fe730c3ef690676232bfaa49f85 Mon Sep 17 00:00:00 2001
+From 3bc3462165cd72de93a1c71f03e6c4150726b159 Mon Sep 17 00:00:00 2001
 From: Franz Pletz <fpletz@fnordicwalking.de>
 Date: Sun, 11 Feb 2018 04:37:44 +0100
-Subject: [PATCH 11/18] build: don't create statedir and don't touch prefixdir
+Subject: [PATCH 11/19] build: don't create statedir and don't touch prefixdir
 
 ---
  meson.build | 3 ---
  1 file changed, 3 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index f406d595e6..f05f579816 100644
+index c0cbadecb1..8266bf57de 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -3517,9 +3517,6 @@ install_data('LICENSE.GPL2',
-              'src/libsystemd/sd-bus/GVARIANT-SERIALIZATION',
-              install_dir : docdir)
+@@ -3729,9 +3729,6 @@ install_data('LICENSE.GPL2',
+ install_subdir('LICENSES',
+                install_dir : docdir)
  
 -meson.add_install_script('sh', '-c', mkdir_p.format(systemdstatedir))
 -meson.add_install_script('sh', '-c', 'touch $DESTDIR@0@'.format(prefixdir))
 -
  ############################################################
  
- check_help = find_program('tools/check-help.sh')
+ # Ensure that changes to the docs/ directory do not break the
 -- 
-2.29.2
+2.34.0
 

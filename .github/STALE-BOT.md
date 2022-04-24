@@ -3,7 +3,7 @@
 - Thanks for your contribution!
 - To remove the stale label, just leave a new comment.
 - _How to find the right people to ping?_ &rarr; [`git blame`](https://git-scm.com/docs/git-blame) to the rescue! (or GitHub's history and blame buttons.)
-- You can always ask for help on [our Discourse Forum](https://discourse.nixos.org/) or on the [#nixos IRC channel](https://webchat.freenode.net/#nixos).
+- You can always ask for help on [our Discourse Forum](https://discourse.nixos.org/), [our Matrix room](https://matrix.to/#/#nix:nixos.org), or on the [#nixos IRC channel](https://web.libera.chat/#nixos).
 
 ## Suggestions for PRs
 

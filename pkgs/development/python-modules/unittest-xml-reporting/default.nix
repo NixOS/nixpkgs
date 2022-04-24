@@ -1,18 +1,21 @@
-{lib, fetchPypi, buildPythonPackage, isPy27, six}:
+{lib, fetchPypi, buildPythonPackage, isPy27, six, lxml }:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
-  version = "3.0.4";
+  version = "3.2.0";
   disabled = isPy27;
 
-  propagatedBuildInputs = [six];
+  propagatedBuildInputs = [
+    lxml
+    six
+  ];
 
   # The tarball from Pypi doesn't actually contain the unit tests
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "984cebba69e889401bfe3adb9088ca376b3a1f923f0590d005126c1bffd1a695";
+    sha256 = "sha256-7djTFwtAw6gbjPkQ9GxqMErihH7AEDbQLpwPm4V2LSg=";
   };
   meta = with lib; {
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting/tree/master/";

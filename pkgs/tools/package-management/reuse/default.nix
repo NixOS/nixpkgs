@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "0ql0krnz0fmq405r2qrm9ysm3cvmqfw14j06pny6na7qshibj78z";
+    sha256 = "1pjc8pckacjlrb8xypyca7jq8ii4an7m5b1g7941d7kkhnlbzm7v";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     license-expression
     requests
     setuptools
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = with python3Packages; [ pytestCheckHook ];

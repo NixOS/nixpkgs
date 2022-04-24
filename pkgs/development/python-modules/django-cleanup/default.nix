@@ -1,13 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, django
-, redis, async-timeout, hiredis
 }:
 
 buildPythonPackage rec {
   pname = "django-cleanup";
-  version = "5.1.0";
+  version = "6.0.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8976aec12a22913afb3d1fcb541b1aedde2f5ec243e4260c5ff78bb6aa75a089";
+    sha256 = "922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a";
   };
 
   checkInputs = [ django ];

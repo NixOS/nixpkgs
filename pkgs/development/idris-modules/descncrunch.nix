@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "descncrunch";
+  pname = "descncrunch";
   version = "2017-11-15";
 
   idrisDeps = [ pruviloj ];

@@ -2,7 +2,6 @@
 
 let
   version = "0.9.3-3";
-  name = "mucommander-${version}";
 
   src = fetchFromGitHub {
     owner = "mucommander";
@@ -34,8 +33,8 @@ let
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
-    inherit src postPatch;
+    pname = "mucommander-deps";
+    inherit version src postPatch;
     nativeBuildInputs = [ gradle_6 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -53,7 +52,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  inherit name src postPatch;
+  pname = "mucommander";
+  inherit version src postPatch;
   nativeBuildInputs = [ gradle_6 perl makeWrapper ];
 
   buildPhase = ''
@@ -81,9 +81,6 @@ in stdenv.mkDerivation {
     description = "Cross-platform file manager";
     license = licenses.gpl3;
     maintainers = with maintainers; [ volth ];
-    # build is broken on MacOS
-    # https://github.com/NixOS/nixpkgs/pull/105784
-    broken = stdenv.isDarwin;
     platforms = platforms.all;
   };
 }

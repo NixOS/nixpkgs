@@ -1,19 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
-
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "versioneer";
-  version = "0.19";
-  disabled = isPy27;
+  version = "0.22";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4fed39bbebcbd2d07f8a86084773f303cb442709491955a0e6754858e47afae";
+    hash = "sha256-nw6aLLXvUhy/0QTUOiCN2RJN+0rM+nLWlODQQwoBQrw=";
   };
 
   # Couldn't get tests to work because, for instance, they used virtualenv and
   # pip.
   doCheck = false;
+
+  pythonImportsCheck = [
+    "versioneer"
+  ];
 
   meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
@@ -21,5 +30,4 @@ buildPythonPackage rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jluttine ];
   };
-
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ssh-tools";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "vaporup";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m0x9383p9ab4hdirncmrfha130iasa0v4cbif2y5nbxnxgh101r";
+    sha256 = "sha256-PDoljR/e/qraPhG9RRjHx1gBIMtTJ815TZDJws8Qg6o=";
   };
 
   installPhase = ''

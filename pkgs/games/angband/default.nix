@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "angband";
-  version = "4.2.2";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "angband";
     repo = "angband";
     rev = version;
-    sha256 = "sha256-z1HTt3+lWIr2F9YZFdw47lkYVgYl17qbb/OJ9YyYQa8=";
+    sha256 = "sha256-Fp3BGCZYYdQCKXOLYsT4zzlibNRlbELZi26ofrbGGPQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "bindir=$(out)/bin" ];
 
   meta = with lib; {
-    homepage = "http://rephial.org/";
+    homepage = "https://angband.github.io/angband";
     description = "A single-player roguelike dungeon exploration game";
     maintainers = [ maintainers.chattered ];
     license = licenses.gpl2;

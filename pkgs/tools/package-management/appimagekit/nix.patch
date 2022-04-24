@@ -1,174 +1,82 @@
-diff --git a/cmake/dependencies.cmake b/cmake/dependencies.cmake
-index ea133a3..916606c 100644
---- a/cmake/dependencies.cmake
-+++ b/cmake/dependencies.cmake
-@@ -224,21 +224,23 @@ if(NOT USE_SYSTEM_XZ)
-         LIBRARY_DIRS <INSTALL_DIR>/lib/
-         LIBRARIES "<INSTALL_DIR>/lib/liblzma.a"
-         INCLUDE_DIRS "<SOURCE_DIR>/src/liblzma/api/"
+Submodule lib/libappimage contains modified content
+diff --git a/lib/libappimage/cmake/dependencies.cmake b/lib/libappimage/cmake/dependencies.cmake
+index 8d96484..c7b17a1 100644
+--- a/lib/libappimage/cmake/dependencies.cmake
++++ b/lib/libappimage/cmake/dependencies.cmake
+@@ -91,9 +91,18 @@ if(NOT USE_SYSTEM_SQUASHFUSE)
+         INCLUDE_DIRS "<SOURCE_DIR>"
      )
  else()
-     message(STATUS "Using system xz")
- 
-     import_pkgconfig_target(TARGET_NAME xz PKGCONFIG_TARGET liblzma STATIC)
- endif()
- 
-+set(USE_SYSTEM_SQUASHFUSE OFF CACHE BOOL "Use system squashfuse instead of building our own")
- 
-+if(NOT USE_SYSTEM_SQUASHFUSE)
- # as distros don't provide suitable squashfuse and squashfs-tools, those dependencies are bundled in, can, and should
- # be used from this repository
- # TODO: implement out-of-source builds for squashfuse, as for the other dependencies
- configure_file(
-     ${CMAKE_CURRENT_SOURCE_DIR}/src/patch-squashfuse.sh.in
-     ${CMAKE_CURRENT_BINARY_DIR}/patch-squashfuse.sh
-     @ONLY
- )
- 
- ExternalProject_Add(squashfuse-EXTERNAL
-@@ -259,20 +261,34 @@ ExternalProject_Add(squashfuse-EXTERNAL
-     BUILD_IN_SOURCE ON
-     INSTALL_COMMAND ${MAKE} install
- )
- 
- import_external_project(
-     TARGET_NAME squashfuse
-     EXT_PROJECT_NAME squashfuse-EXTERNAL
-     LIBRARIES "<SOURCE_DIR>/.libs/libsquashfuse.a;<SOURCE_DIR>/.libs/libsquashfuse_ll.a;<SOURCE_DIR>/.libs/libfuseprivate.a"
-     INCLUDE_DIRS "<SOURCE_DIR>"
- )
-+else()
+-    message(STATUS "Using system squashfuse")
 +    message(STATUS "Using system squashfsfuse from ${SQUASHFUSE}")
-+
-+    add_library(squashfuse INTERFACE IMPORTED GLOBAL)
+
+-    import_pkgconfig_target(TARGET_NAME libsquashfuse PKGCONFIG_TARGET squashfuse)
++    add_library(libsquashfuse INTERFACE IMPORTED GLOBAL)
 +
 +    set(squashfuse_INCLUDE_DIRS "${SQUASHFUSE}/include")
 +    set(squashfuse_LIBRARIES "${SQUASHFUSE}/lib/libsquashfuse.a;${SQUASHFUSE}/lib/libsquashfuse_ll.a;${SQUASHFUSE}/lib/libfuseprivate.a")
 +
 +    set_property(
-+      TARGET squashfuse
++      TARGET libsquashfuse
 +      PROPERTY INTERFACE_LINK_LIBRARIES ${squashfuse_LIBRARIES}
 +    )
 +    include_directories(${squashfuse_INCLUDE_DIRS})
-+endif()
- 
- 
- set(USE_SYSTEM_INOTIFY_TOOLS OFF CACHE BOOL "Use system libinotifytools instead of building our own")
- 
- if(NOT USE_SYSTEM_INOTIFY_TOOLS)
-     message(STATUS "Downloading and building inotify-tools")
- 
-     # TODO: build out of source
-     ExternalProject_Add(inotify-tools-EXTERNAL
-         URL https://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
-@@ -345,20 +361,23 @@ if(NOT USE_SYSTEM_GTEST)
-             INCLUDE_DIRS "<INSTALL_DIR>/include/"
-         )
-     else()
-         message(STATUS "Using system GTest")
- 
-         import_find_pkg_target(gtest GTest GTEST)
-     endif()
  endif()
- 
- 
-+set(USE_SYSTEM_MKSQUASHFS OFF CACHE BOOL "Use system mksquashfs instead of downloading and building our own")
-+
-+if(NOT USE_SYSTEM_MKSQUASHFS)
- # TODO: allow using system wide mksquashfs
- set(mksquashfs_cflags "-DXZ_SUPPORT ${CFLAGS}")
- 
- if(xz_LIBRARIES MATCHES "\\.a$")
-     set(mksquashfs_ldflags "${xz_LIBRARIES}")
- else()
-     set(mksquashfs_ldflags "-l${xz_LIBRARIES}")
- endif()
- 
- if(xz_INCLUDE_DIRS)
-@@ -385,20 +404,25 @@ ExternalProject_Add(mksquashfs
-     INSTALL_COMMAND ${MAKE} -C squashfs-tools/ install INSTALL_DIR=<INSTALL_DIR>
- )
- 
- ExternalProject_Get_Property(mksquashfs INSTALL_DIR)
- set(mksquashfs_INSTALL_DIR "${INSTALL_DIR}")
- mark_as_advanced(mksquashfs_INSTALL_DIR)
- 
- # for later use when packaging as an AppImage
- set(mksquashfs_BINARY "${mksquashfs_INSTALL_DIR}/mksquashfs")
- mark_as_advanced(mksquashfs_BINARY)
-+else()
-+    message(STATUS "Using system mksquashfs")
-+
-+    set(mksquashfs_BINARY "mksquashfs")
-+endif()
- 
- 
- #### build dependency configuration ####
- 
- # only have to build custom xz when not using system libxz
- if(TARGET xz-EXTERNAL)
-     if(TARGET squashfuse-EXTERNAL)
-         ExternalProject_Add_StepDependencies(squashfuse-EXTERNAL configure xz-EXTERNAL)
-     endif()
-     if(TARGET mksquashfs)
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 3f25442..974ed0e 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -197,27 +197,27 @@ target_include_directories(digest_md5
- 
- target_link_libraries(digest_md5
-     PRIVATE
-     libglib
- )
- 
- 
- # install binaries
- if(AUXILIARY_FILES_DESTINATION)
-     install(
--        PROGRAMS ${mksquashfs_INSTALL_DIR}/mksquashfs ${CMAKE_CURRENT_BINARY_DIR}/runtime
-+        PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/runtime
-         DESTINATION ${AUXILIARY_FILES_DESTINATION}
-         COMPONENT applications
-     )
- else()
-     install(
--        PROGRAMS ${mksquashfs_INSTALL_DIR}/mksquashfs ${CMAKE_CURRENT_BINARY_DIR}/runtime
-+        PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/runtime
-         DESTINATION bin
-         COMPONENT applications
-     )
- endif()
- 
- install(
-     TARGETS AppRun appimagetool digest validate
-     RUNTIME DESTINATION bin COMPONENT applications
-     LIBRARY DESTINATION lib COMPONENT applications
-     ARCHIVE DESTINATION lib/static COMPONENT applications
-diff --git a/src/shared.c b/src/shared.c
-index cf5fd5c..4f48dbc 100644
---- a/src/shared.c
-+++ b/src/shared.c
-@@ -34,21 +34,21 @@
- #include <sys/stat.h>
+
+
+diff --git a/src/appimagetool.c b/src/appimagetool.c
+index 6b37419..23425e7 100644
+--- a/src/appimagetool.c
++++ b/src/appimagetool.c
+@@ -38,7 +38,7 @@
+ #include <argp.h>
+
+ #include <fcntl.h>
+-#include "squashfuse.h"
++#include <squashfuse.h>
+
  #include <sys/types.h>
- #include <dirent.h>
- #include <errno.h>
- 
- #include <glib.h>
- #include <glib/gprintf.h>
- #include <glib/gstdio.h>
- #include <gio/gio.h>
- 
+ #include <sys/stat.h>
+@@ -96,7 +96,7 @@ static void die(const char *msg) {
+ }
+
+ /* Function that prints the contents of a squashfs file
+-* using libsquashfuse (#include "squashfuse.h") */
++* using libsquashfuse (#include <squashfuse.h>) */
+ int sfs_ls(char* image) {
+     sqfs_err err = SQFS_OK;
+     sqfs_traverse trv;
+diff --git a/src/appimagetoolnoglib.c b/src/appimagetoolnoglib.c
+index f900e76..ffa87f8 100644
+--- a/src/appimagetoolnoglib.c
++++ b/src/appimagetoolnoglib.c
+@@ -3,7 +3,7 @@
+
+ #include <stdlib.h>
+ #include <fcntl.h>
+-#include "squashfuse.h"
++#include <squashfuse.h>
+
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -118,7 +118,7 @@ int is_regular_file(const char *path)
+ }
+
+ /* Function that prints the contents of a squashfs file
+- * using libsquashfuse (#include "squashfuse.h") */
++ * using libsquashfuse (#include <squashfuse.h>) */
+ int sfs_ls(char* image) {
+ 	sqfs_err err = SQFS_OK;
+ 	sqfs_traverse trv;
+diff --git a/src/runtime.c b/src/runtime.c
+index bada3af..70a642b 100644
+--- a/src/runtime.c
++++ b/src/runtime.c
+@@ -29,7 +29,7 @@
+
+ #define _GNU_SOURCE
+
 -#include "squashfuse.h"
 +#include <squashfuse.h>
  #include <squashfs_fs.h>
- #include "getsection.h"
- #include "elf.h"
- 
- #include "xdg-basedir.h"
- 
- // own header
- #include "shared.h"
- 
- #if HAVE_LIBARCHIVE3 == 1 // CentOS
+ #include <nonstd.h>

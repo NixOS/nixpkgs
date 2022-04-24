@@ -1,28 +1,28 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute, ronn }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
-  version = "1.6.4";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "06b6k1rzqkd7cdl7n0gz5ky48fs2nhn0q2qxx1rww38vbfc7lpmf";
+    sha256 = "sha256-aM0FkcrSd5dEJVdJryIGuyWNFwvKH0SBfOuy4dIMK4A=";
   };
 
   preConfigure = ''
-      patchShebangs ./doc/build.sh
-      substituteInPlace ./doc/build.sh \
-        --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+    patchShebangs ./doc/build.sh
+    substituteInPlace ./doc/build.sh \
+      --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
-      substituteInPlace ./make-linux.mk \
-        --replace 'armv5' 'armv6'
+    substituteInPlace ./make-linux.mk \
+      --replace 'armv5' 'armv6'
   '';
 
 
   nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute ];
+  buildInputs = [ openssl lzo zlib iproute2 ];
 
   enableParallelBuilding = true;
 

@@ -6,7 +6,7 @@
 mkDerivation {
   pname = "bomber";
   meta = with lib; {
-    homepage = "https://kde.org/applications/en/games/org.kde.bomber";
+    homepage = "https://apps.kde.org/bomber/";
     description = "A single player arcade game";
     longDescription = ''
       Bomber is a single player arcade game. The player is invading various

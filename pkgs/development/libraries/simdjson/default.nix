@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simdjson";
-  version = "0.9.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
     rev = "v${version}";
-    sha256 = "sha256-e9Y5QEs9xqfJpaWxnA6iFwHE6TTGyVM7hfFuMEmpW78=";
+    sha256 = "sha256-WuqBR1/Iqly+Y8kJxTuZLTVkR3ltXdyr+/6J3zhBNkQ=";
   };
 
   nativeBuildInputs = [ cmake ];

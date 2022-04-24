@@ -1,18 +1,18 @@
-From 2bf6614a6d7516e194e39eb691c05b486860153c Mon Sep 17 00:00:00 2001
+From d68fcb793d70032e978ecf8e0577eea955a741cf Mon Sep 17 00:00:00 2001
 From: worldofpeace <worldofpeace@protonmail.ch>
-Date: Thu, 16 May 2019 21:15:15 -0400
+Date: Sun, 10 Apr 2022 12:02:10 +0800
 Subject: [PATCH] meson: add options for tests installation dirs
 
 ---
  meson_options.txt |  6 ++++++
- tests/meson.build | 19 ++++++++++++++-----
- 2 files changed, 20 insertions(+), 5 deletions(-)
+ tests/meson.build | 13 +++++++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
 diff --git a/meson_options.txt b/meson_options.txt
-index 578bdae..6f5fa23 100644
+index b9a2fb5..4b8629f 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -22,3 +22,9 @@ option('tests', type: 'boolean',
+@@ -23,3 +23,9 @@ option('tests', type: 'boolean',
  option('installed_tests', type: 'boolean',
         value: true,
         description: 'Install tests')
@@ -23,54 +23,29 @@ index 578bdae..6f5fa23 100644
 +       value: '',
 +       description: 'Installation directory for binary files in tests')
 diff --git a/tests/meson.build b/tests/meson.build
-index 1f9bd0e..0253ac3 100644
+index 2b925e7..3276849 100644
 --- a/tests/meson.build
 +++ b/tests/meson.build
-@@ -22,8 +22,17 @@ unit_tests = [
- python = python3.find_python()
- gen_installed_test = join_paths(meson.current_source_dir(), 'gen-installed-test.py')
+@@ -21,8 +21,17 @@ unit_tests = [
+ 
+ gen_installed_test = find_program('gen-installed-test.py')
  
 -installed_test_datadir = join_paths(get_option('prefix'), get_option('datadir'), 'installed-tests', graphene_api_path)
 -installed_test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), 'installed-tests', graphene_api_path)
-+test_suffix = join_paths('installed-tests', graphene_api_path)
++installed_test_suffix = join_paths('installed-tests', graphene_api_path)
 +
-+test_datadir = join_paths(get_option('installed_test_datadir'), test_suffix)
-+if test_datadir == ''
-+    test_datadir = join_paths(get_option('prefix'), get_option('datadir'), test_suffix)
++installed_test_datadir = join_paths(get_option('installed_test_datadir'), installed_test_suffix)
++if installed_test_datadir == ''
++  installed_test_datadir = join_paths(get_option('prefix'), get_option('datadir'), installed_test_suffix)
 +endif
 +
-+test_bindir = join_paths(get_option('installed_test_bindir'), test_suffix)
-+if test_bindir == ''
-+    test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), test_suffix)
++installed_test_bindir = join_paths(get_option('installed_test_bindir'), installed_test_suffix)
++if installed_test_bindir == ''
++  installed_test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), installed_test_suffix)
 +endif
  
  # Make tests conditional on having mutest-1 installed system-wide, or
  # available as a subproject
-@@ -42,13 +51,13 @@ if mutest_dep.found()
-       command: [
-         python,
-         gen_installed_test,
--        '--testdir=@0@'.format(installed_test_bindir),
-+        '--testdir=@0@'.format(test_bindir),
-         '--testname=@0@'.format(unit),
-         '--outdir=@OUTDIR@',
-         '--outfile=@0@'.format(wrapper),
-       ],
-       install: get_option('installed_tests'),
--      install_dir: installed_test_datadir,
-+      install_dir: test_datadir,
-     )
- 
-     test(unit,
-@@ -57,7 +66,7 @@ if mutest_dep.found()
-         include_directories: graphene_inc,
-         c_args: common_cflags,
-         install: get_option('installed_tests'),
--        install_dir: installed_test_bindir,
-+        install_dir: test_bindir,
-       ),
-       env: ['MUTEST_OUTPUT=tap'],
-       protocol: 'tap',
 -- 
-2.22.0
+2.35.1
 

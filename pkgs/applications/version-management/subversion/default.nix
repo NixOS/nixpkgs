@@ -6,42 +6,50 @@
 , javahlBindings ? false
 , saslSupport ? false
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
-, apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
+, autoconf, libtool
+, apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
 , sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> apacheHttpd != null;
-assert pythonBindings -> swig != null && python != null;
+assert pythonBindings -> swig != null && python3 != null && py3c != null;
 assert javahlBindings -> jdk != null && perl != null;
 
 let
+  # Update libtool for macOS 11 support
+  needsAutogen = stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11";
 
-  common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
+  common = { version, sha256, extraPatches ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
-    pname = "subversion";
+    pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
 
     src = fetchurl {
-      url = "mirror://apache/subversion/${pname}-${version}.tar.bz2";
+      url = "mirror://apache/subversion/subversion-${version}.tar.bz2";
       inherit sha256;
     };
 
     # Can't do separate $lib and $bin, as libs reference bins
     outputs = [ "out" "dev" "man" ];
 
-    buildInputs = [ zlib apr aprutil sqlite openssl ]
-      ++ extraBuildInputs
+    nativeBuildInputs = lib.optionals needsAutogen [ autoconf libtool python3 ];
+
+    buildInputs = [ zlib apr aprutil sqlite openssl lz4 utf8proc ]
       ++ lib.optional httpSupport serf
-      ++ lib.optional pythonBindings python
+      ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl;
 
-    patches = [ ./apr-1.patch ];
+    patches = [ ./apr-1.patch ] ++ extraPatches;
 
     # We are hitting the following issue even with APR 1.6.x
     # -> https://issues.apache.org/jira/browse/SVN-4813
     # "-P" CPPFLAG is needed to build Python bindings and subversionClient
     CPPFLAGS = [ "-P" ];
+
+    preConfigure = lib.optionalString needsAutogen ''
+      ./autogen.sh
+    '';
 
     configureFlags = [
       (lib.withFeature bdbSupport "berkeley-db")
@@ -84,7 +92,7 @@ let
           --replace "${expat.dev}/lib" "${expat.out}/lib" \
           --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
           --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
-          --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+          --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
       done
     '';
 
@@ -92,13 +100,13 @@ let
 
     enableParallelBuilding = true;
 
-    checkInputs = [ python ];
+    checkInputs = [ python3 ];
     doCheck = false; # fails 10 out of ~2300 tests
 
     meta = with lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       license = licenses.asl20;
-      homepage = "http://subversion.apache.org/";
+      homepage = "https://subversion.apache.org/";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -111,20 +119,13 @@ let
   });
 
 in {
-  subversion19 = common {
-    version = "1.9.12";
-    sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";
-  };
-
   subversion_1_10 = common {
-    version = "1.10.6";
-    sha256 = "19zc215mhpnm92mlyl5jbv57r5zqp6cavr3s2g9yglp6j4kfgj0q";
-    extraBuildInputs = [ lz4 utf8proc ];
+    version = "1.10.8";
+    sha256 = "sha256-CnO6MSe1ov/7j+4rcCmE8qgI3nEKjbKLfdQBDYvlDlo=";
   };
 
   subversion = common {
-    version = "1.12.2";
-    sha256 = "0wgpw3kzsiawzqk4y0xgh1z93kllxydgv4lsviim45y5wk4bbl1v";
-    extraBuildInputs = [ lz4 utf8proc ];
+    version = "1.14.2";
+    sha256 = "sha256-yRMOjQt1copm8OcDj8dwUuZxgw14W1YWqtU7SBDTzCg=";
   };
 }

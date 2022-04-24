@@ -1,16 +1,24 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake
-, qtscript, qtwebengine, gdal, proj, routino, quazip }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, substituteAll
+, qtscript, qttranslations, qtwebengine, gdal, proj, routino, quazip }:
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.15.2";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = pname;
     rev = "V_${version}";
-    sha256 = "1l1j2axf94pdqwirwwhwy3y6k8v1aix78ifqbv6j8sv131h2j7y7";
+    sha256 = "sha256-2otvRKtFb51PLrIh/Hxltp69n5nyR63HGGvk73TFjqA=";
   };
+
+  patches = [
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    (substituteAll {
+      src = ./fix-qttranslations-path.patch;
+      inherit qttranslations;
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -18,13 +26,6 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DROUTINO_XML_PATH=${routino}/share/routino"
-    "-DQUAZIP_INCLUDE_DIR=${quazip}/include/quazip5"
-    "-DLIBQUAZIP_LIBRARY=${quazip}/lib/libquazip.so"
-  ];
-
-  patches = [
-    "${src}/FindPROJ4.patch"
-    "${src}/FindQuaZip5.patch"
   ];
 
   qtWrapperArgs = [

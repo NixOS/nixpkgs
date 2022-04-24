@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.21.0";
+  version = "2022.4.0";
   pname = "dask-mpi";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "76e153fc8c58047d898970b33ede0ab1990bd4e69cc130c6627a96f11b12a1a7";
+    sha256 = "sha256-CgTx19NaBs3/UGWTMw1EFOokLJFySYzhkfV0LqxJnhc=";
   };
 
   propagatedBuildInputs = [ dask distributed mpi4py ];

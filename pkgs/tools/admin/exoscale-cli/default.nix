@@ -2,18 +2,18 @@
 
 buildGoPackage rec {
   pname = "exoscale-cli";
-  version = "1.26.0";
+  version = "1.52.1";
 
   src = fetchFromGitHub {
     owner  = "exoscale";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-vYezpO5Oe5KXmCx6D70GMKamhK8/EiaV2BPb0tQLDzg=";
+    sha256 = "sha256-CSltvSdKLAH711ubT6ROgkmq2EcFJplPmavsJa9xupM=";
   };
 
   goPackagePath = "github.com/exoscale/cli";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   # ensures only the cli binary is built and we don't clutter bin/ with submodules
   subPackages = [ "." ];
@@ -29,5 +29,6 @@ buildGoPackage rec {
     homepage    = "https://github.com/exoscale/cli";
     license     = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dramaturg ];
+    mainProgram = "exo";
   };
 }

@@ -15,6 +15,8 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ easy-format ];
 
+  strictDeps = true;
+
   postPatch = ''
    patchShebangs .
   '';

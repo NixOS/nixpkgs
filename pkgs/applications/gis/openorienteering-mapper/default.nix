@@ -76,9 +76,6 @@ mkDerivation rec {
   postInstall = with stdenv; lib.optionalString isDarwin ''
     mkdir -p $out/Applications
     mv $out/Mapper.app $out/Applications
-    # Fixes "This application failed to start because it could not find or load the Qt
-    # platform plugin "cocoa"."
-    wrapQtApp $out/Applications/Mapper.app/Contents/MacOS/Mapper
     mkdir -p $out/bin
     ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
   '';

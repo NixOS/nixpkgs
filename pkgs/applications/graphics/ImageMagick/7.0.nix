@@ -1,7 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libtool
+, bzip2
+, zlib
+, libX11
+, libXext
+, libXt
+, fontconfig
+, freetype
+, ghostscript
+, libjpeg
+, djvulibre
+, lcms2
+, openexr
+, libjxl
+, libpng
+, liblqr1
+, libraw
+, librsvg
+, libtiff
+, libxml2
+, openjpeg
+, libwebp
+, libheif
+, potrace
+, curl
 , ApplicationServices
+, Foundation
+, testers
+, imagemagick
 }:
 
 let
@@ -9,29 +38,21 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
+    else if stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
-    else throw "ImageMagick is not supported on this platform.";
-
-  cfg = {
-    version = "7.0.10-61";
-    sha256 = "sha256-c/90N5H9iz5JYmn7/ynHgSOAmO5NTtkxajChZvjfMP8=";
-    patches = [];
-  };
+    else null;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "imagemagick";
-  inherit (cfg) version;
+  version = "7.1.0-31";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = cfg.version;
-    inherit (cfg) sha256;
+    rev = version;
+    hash = "sha256-Pf+x3TnmvKTCDL3dGLyAr6JUl5E3BRi/XW/dkuCr2YA=";
   };
-
-  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -40,31 +61,49 @@ stdenv.mkDerivation {
 
   configureFlags =
     [ "--with-frozenpaths" ]
-    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
+    ++ lib.optional (liblqr1 != null) "--with-lqr"
+    ++ lib.optional (libjxl != null ) "--with-jxl"
     ++ lib.optionals (ghostscript != null)
-      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
+      [
+        "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
       ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
-    ;
+  ;
 
   nativeBuildInputs = [ pkg-config libtool ];
 
   buildInputs =
-    [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif djvulibre
+    [
+      zlib
+      fontconfig
+      freetype
+      ghostscript
+      potrace
+      liblqr1
+      libpng
+      libraw
+      libtiff
+      libxml2
+      libheif
+      djvulibre
+      libjxl
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Foundation
+    ];
 
   propagatedBuildInputs =
-    [ bzip2 freetype libjpeg lcms2 ]
+    [ bzip2 freetype libjpeg lcms2 curl ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
-    ;
+  ;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -80,10 +119,15 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.tests.version =
+    testers.testVersion { package = imagemagick; };
+
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ erictapen dotlambda ];
     license = licenses.asl20;
+    mainProgram = "magick";
   };
 }

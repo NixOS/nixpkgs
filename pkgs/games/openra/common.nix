@@ -2,7 +2,7 @@
     and out-of-tree mod packages (mod.nix).
 */
 { lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
-, lua, mono, dotnetPackages, python
+, lua, mono, dotnetPackages, python2
 , libGL, freetype, openal, SDL2
 , zenity
 }:
@@ -10,7 +10,7 @@
 with lib;
 
 let
-  path = makeBinPath ([ mono python ] ++ optional (zenity != null) zenity);
+  path = makeBinPath ([ mono python2 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook { } ./mkdirp.sh;
 
@@ -34,7 +34,7 @@ in {
       --set TERM xterm
 
     makeWrapper $out/lib/openra${openraSuffix}/launch-game.sh $(mkdirp $out/bin)/openra${openraSuffix} \
-      --run "cd $out/lib/openra${openraSuffix}"
+      --chdir "$out/lib/openra${openraSuffix}"
   '';
 
   packageAttrs = {
@@ -66,7 +66,7 @@ in {
       makeWrapper
       mkdirp
       mono
-      python
+      python2
     ];
 
     makeFlags = [ "prefix=$(out)" ];

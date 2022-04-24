@@ -1,30 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, libnl, readline, libbfd, ncurses, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libbfd
+, libnl
+, libpcap
+, ncurses
+, readline
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "dropwatch";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qmax0l7z1qik42c949fnvjh5r6awk4gpgzdsny8iwnmwzjyp8b8";
+    sha256 = "0axx0zzrs7apqnl0r70jyvmgk7cs5wk185id479mapgngibwkyxy";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libbfd libnl ncurses readline zlib ];
-
-  # To avoid running into https://sourceware.org/bugzilla/show_bug.cgi?id=14243 we need to define:
-  NIX_CFLAGS_COMPILE = "-DPACKAGE=${pname} -DPACKAGE_VERSION=${version}";
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libbfd
+    libnl
+    libpcap
+    ncurses
+    readline
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Linux kernel dropped packet monitor";
     homepage = "https://github.com/nhorman/dropwatch";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.c0bw3b ];
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     desktopName = "AssaultCube";
     comment = "A multiplayer, first-person shooter game, based on the CUBE engine. Fast, arcade gameplay.";
     genericName = "First-person shooter";
-    categories = "Game;ActionGame;Shooter";
+    categories = [ "Game" "ActionGame" "Shooter" ];
     icon = "assaultcube.png";
     exec = pname;
   };
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
       install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
 
       makeWrapper $out/bin/ac_client $out/bin/${pname} \
-        --run "cd $out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
+        --chdir "$out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi
 
     if (test -e source/src/ac_server) then
       cp source/src/ac_server $bindir
       makeWrapper $out/bin/ac_server $out/bin/${pname}-server \
-        --run "cd $out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
+        --chdir "$out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
     fi
     '';
 
@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://assault.cubers.net";
     maintainers = [ ];
     platforms = platforms.linux; # should work on darwin with a little effort.
-    license = lib.licenses.zlib;
+    license = lib.licenses.unfree;
   };
 }

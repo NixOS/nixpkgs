@@ -2,19 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
   pname = "slicerator";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18e60393e6765ca96986f801bbae62a617a1eba6ed57784e61b165ffc7dc1848";
+    hash = "sha256-RAEKf1zYdoDAchO1yr6B0ftxJSlilD5Tc+59FGBdYEY=";
   };
-
-  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     ${python.interpreter} run_tests.py
@@ -24,9 +25,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://github.com/soft-matter/slicerator";
     description = "A lazy-loading, fancy-sliceable iterable";
+    homepage = "https://github.com/soft-matter/slicerator";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

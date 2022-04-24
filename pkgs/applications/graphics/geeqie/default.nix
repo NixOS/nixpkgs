@@ -1,15 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext, intltool
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch
+, wrapGAppsHook, fetchpatch, bash, doxygen
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.5.1";
+  version = "1.7.3";
 
-  src = fetchurl {
-    url = "http://geeqie.org/${pname}-${version}.tar.xz";
-    sha256 = "02m1vqaasin249xx792cdj11xyag8lnanwzxd108y7y34g9xam28";
+  src = fetchFromGitHub {
+    owner = "BestImageViewer";
+    repo = "geeqie";
+    rev = "v${version}";
+    sha256 = "sha256-O+yz/uNxueR+naEJG8EZ+k/JutRjJ5wwbB9DYb8YNLw=";
   };
 
   patches = [
@@ -21,11 +24,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkg-config autoconf automake gettext intltool
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config autoconf automake gettext intltool
+      wrapGAppsHook bash doxygen
+    ];
 
   buildInputs = [
     gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
@@ -39,6 +47,12 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Lightweight GTK based image viewer";
@@ -56,7 +70,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    homepage = "http://geeqie.sourceforge.net";
+    homepage = "https://www.geeqie.org/";
 
     maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;

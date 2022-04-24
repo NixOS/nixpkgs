@@ -4,7 +4,7 @@
 }:
 
 stdenvNoLibs.mkDerivation rec {
-  name = "libgcc-${version}";
+  pname = "libgcc";
   inherit (gcc.cc) src version;
 
   outputs = [ "out" "dev" ];
@@ -21,6 +21,8 @@ stdenvNoLibs.mkDerivation rec {
   postPatch = ''
     sourceRoot=$(readlink -e "./libgcc")
   '';
+
+  hardeningDisable = [ "pie" ];
 
   preConfigure = ''
     cd "$buildRoot"

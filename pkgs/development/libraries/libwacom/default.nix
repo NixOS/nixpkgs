@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, glib, pkg-config, udev, libgudev, doxygen }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, glib
+, pkg-config
+, udev
+, libgudev
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "1.9";
+  version = "2.2.0";
 
   outputs = [ "out" "dev" ];
 
@@ -10,14 +20,25 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "sha256-o1xCSrWKPzz1GePEVB1jgx2cGzRtw0I6c4wful08Vx4=";
+    sha256 = "sha256-SqKXxmyP31kb6ikMQRqPaKNIpeLcMLLEGInCGIx5jWM=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja doxygen ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
 
-  mesonFlags = [ "-Dtests=disabled" ];
+  buildInputs = [
+    glib
+    udev
+    libgudev
+  ];
 
-  buildInputs = [ glib udev libgudev ];
+  mesonFlags = [
+    "-Dtests=disabled"
+  ];
 
   meta = with lib; {
     platforms = platforms.linux;

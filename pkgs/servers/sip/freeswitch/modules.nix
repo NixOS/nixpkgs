@@ -11,6 +11,7 @@
 , postgresql
 , spandsp3
 , sofia_sip
+, libks
 }:
 
 let
@@ -139,7 +140,7 @@ in
     rtmp = mk "endpoints/mod_rtmp" [];
     skinny = mk "endpoints/mod_skinny" [];
     sofia = mk "endpoints/mod_sofia" [ sofia_sip ];
-    verto = mk "endpoints/mod_verto" [];
+    verto = mk "endpoints/mod_verto" [ libks ];
   };
 
   event_handlers = {

@@ -14,9 +14,6 @@ in {
         default = false;
         description = ''
           Open ports in the firewall for the server.
-
-          UDP: 9003
-          TCP: 9100 - 9200
         '';
       };
       user = mkOption {
@@ -45,7 +42,7 @@ in {
       environment.ROON_DATAROOT = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-server}/start.sh";
+        ExecStart = "${pkgs.roon-server}/bin/RoonServer";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;
@@ -56,8 +53,16 @@ in {
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [
         { from = 9100; to = 9200; }
+        { from = 9330; to = 9332; }
       ];
       allowedUDPPorts = [ 9003 ];
+      extraCommands = ''
+        iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
+        iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
+        iptables -A INPUT -s 240.0.0.0/5 -j ACCEPT
+        iptables -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
+        iptables -A INPUT -m pkttype --pkt-type broadcast -j ACCEPT
+      '';
     };
 
 

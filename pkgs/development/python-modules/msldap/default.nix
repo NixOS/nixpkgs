@@ -4,26 +4,30 @@
 , asn1crypto
 , asysocks
 , minikerberos
-, prompt_toolkit
+, prompt-toolkit
 , tqdm
 , winacl
 , winsspi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.3.28";
+  version = "0.3.38";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0sMi5PpwMWf/W+Hu0akQVF/1ZkbanfOzYDC3R6lZrSE=";
+    hash = "sha256-zJEp8/jPTAb3RpzyXySdtVl2uSLpSirGkJh7GB/3Qwc=";
   };
 
   propagatedBuildInputs = [
     asn1crypto
     asysocks
     minikerberos
-    prompt_toolkit
+    prompt-toolkit
     tqdm
     winacl
     winsspi
@@ -31,7 +35,10 @@ buildPythonPackage rec {
 
   # Project doesn't have tests
   doCheck = false;
-  pythonImportsCheck = [ "msldap" ];
+
+  pythonImportsCheck = [
+    "msldap"
+  ];
 
   meta = with lib; {
     description = "Python LDAP library for auditing MS AD";

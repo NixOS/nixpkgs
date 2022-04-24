@@ -12,7 +12,7 @@ import ./versions.nix ({ version, sha256 }:
 
     modRoot = "src/go";
 
-    vendorSha256 = "1ral3xg58x0lf5vl839nlabf443yzqnbrlzm0q127mvv412f5ajc";
+    vendorSha256 = "1417qi061xc4m55z0vz420fr7qpi24kw5yj9wq7iic92smakgkjn";
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];
@@ -33,6 +33,7 @@ import ./versions.nix ({ version, sha256 }:
       ./configure \
         --prefix=${placeholder "out"} \
         --enable-agent2 \
+        --enable-ipv6 \
         --with-iconv \
         --with-libpcre \
         --with-openssl=${openssl.dev}
@@ -46,8 +47,13 @@ import ./versions.nix ({ version, sha256 }:
     '';
 
     installPhase = ''
+      mkdir -p $out/sbin
+
       install -Dm0644 src/go/conf/zabbix_agent2.conf $out/etc/zabbix_agent2.conf
       install -Dm0755 src/go/bin/zabbix_agent2 $out/bin/zabbix_agent2
+
+      # create a symlink which is compatible with the zabbixAgent module
+      ln -s $out/bin/zabbix_agent2 $out/sbin/zabbix_agentd
     '';
 
     meta = with lib; {

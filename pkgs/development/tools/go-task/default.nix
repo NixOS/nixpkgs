@@ -1,28 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.3.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
     rev = "v${version}";
-    sha256 = "sha256-+JhU0DXSUbpaHWJYEgiUwsR8DucGRwkiNiKDyhJroqk=";
+    sha256 = "sha256-FArt9w4nZJW/Kql3Y2rr/IVz+SnWCS2lzNMWF6TN0Bg=";
   };
 
-  vendorSha256 = "sha256-pNKzqUtEIQs0TP387ACHfCv1RsMjZi7O8P1A8df+QtI=";
+  vendorSha256 = "sha256-73DtLYyq3sltzv4VtZMlZaSbP9zA9RZw2wgXVkzwrso=";
 
   doCheck = false;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   subPackages = [ "cmd/task" ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
   ];
 
   postInstall = ''
     ln -s $out/bin/task $out/bin/go-task
+
+    installShellCompletion completion/{bash,fish,zsh}/*
   '';
 
   meta = with lib; {

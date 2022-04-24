@@ -44,7 +44,7 @@
              continue
 -        ui.write('<tag revision="%d" node="%s" name="%s"/>\n'
 +        ui.write(b'<tag revision="%d" node="%s" name="%s"/>\n'
-                  % (r, _x(node.hex(n)), _x(t)))
+                  % (r, _x(node.hex(n)), _u(t)))
  
  def _branches(ui, repo):
 @@ -104,136 +107,148 @@ def _branches(ui, repo):
@@ -59,7 +59,7 @@
          if lookup(r, n) in branchheads(t):
 -            ui.write('<branch revision="%d" node="%s" name="%s"/>\n'
 +            ui.write(b'<branch revision="%d" node="%s" name="%s"/>\n'
-                      % (r, _x(node.hex(n)), _x(t)))
+                      % (r, _x(node.hex(n)), _u(t)))
  
  def _manifest(ui, repo, path, rev):
      ctx = _changectx(repo, rev)

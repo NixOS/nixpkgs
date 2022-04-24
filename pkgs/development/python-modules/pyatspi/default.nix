@@ -1,13 +1,13 @@
-{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome3 }:
+{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome }:
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.38.0";
+  version = "2.38.2";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "/4CTEv0ML2HhkcGBoaY4owtXm5G2gs+1oFU1pVJltD0=";
+    sha256 = "DnCJwLYwlhS1NiCDazRi1/kShOQ2/kkpuhYZqEHPEYU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,9 +20,10 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}";
+      versionPolicy = "odd-unstable";
     };
   };
 

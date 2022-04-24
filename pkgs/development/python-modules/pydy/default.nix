@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pydy";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b487a62b55a8c8664009b09bf789254b2c942cd704a380bedb1057418c94fa2";
+    sha256 = "sha256-e/Ssfd5llioA7ccLULlRdHR113IbR4AJ4/HmzQuU7vI=";
   };
 
   checkInputs = [

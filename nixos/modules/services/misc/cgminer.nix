@@ -35,7 +35,7 @@ in
 
       package = mkOption {
         default = pkgs.cgminer;
-        defaultText = "pkgs.cgminer";
+        defaultText = literalExpression "pkgs.cgminer";
         description = "Which cgminer derivation to use.";
         type = types.package;
       };
@@ -86,7 +86,7 @@ in
 
       config = mkOption {
         default = {};
-        type = (types.either types.bool types.int);
+        type = types.attrsOf (types.either types.bool types.int);
         description = "Additional config";
         example = {
           auto-fan = true;
@@ -110,9 +110,13 @@ in
 
     users.users = optionalAttrs (cfg.user == "cgminer") {
       cgminer = {
-        uid = config.ids.uids.cgminer;
+        isSystemUser = true;
+        group = "cgminer";
         description = "Cgminer user";
       };
+    };
+    users.groups = optionalAttrs (cfg.user == "cgminer") {
+      cgminer = {};
     };
 
     environment.systemPackages = [ cfg.package ];

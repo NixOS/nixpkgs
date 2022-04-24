@@ -1,24 +1,40 @@
 { lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, setuptools_scm
-, setuptools
-, requests
-, lxml
 , beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, pythonOlder
+, pytz
+, requests
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "0.3.4";
+  version = "unstable-2021-08-30";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "36ba7f95c8bf5202749189f760e591952f19c849379c35ff598aafafe5d0cfef";
+  src = fetchFromGitHub {
+    owner = "JustAnotherArchivist";
+    repo = pname;
+    rev = "c76f1637ce1d7a154af83495b67ead2559cd5715";
+    sha256 = "01x4961fxj1p98y6fcyxw5sv8fa87x41fdx9p31is12bdkmqxi6v";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    beautifulsoup4
+    lxml
+    requests
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    pytz
+  ];
 
   # There are no tests; make sure the executable works.
   checkPhase = ''
@@ -26,8 +42,7 @@ buildPythonPackage rec {
     snscrape --help
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ setuptools requests lxml beautifulsoup4 ];
+  pythonImportsCheck = [ "snscrape" ];
 
   meta = with lib; {
     homepage = "https://github.com/JustAnotherArchivist/snscrape";

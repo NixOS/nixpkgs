@@ -1,41 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, darwin } :
-
-assert (openssl != null) == (gnutls == null);
-
-let vpnc = fetchgit {
-  url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
-  rev = "c0122e891f7e033f35f047dad963702199d5cb9e";
-  sha256 = "11b1ls012mb704jphqxjmqrfbbhkdjb64j2q4k8wb5jmja8jnd14";
-};
-
-in stdenv.mkDerivation rec {
-  pname = "openconnect";
-  version = "8.10";
-
-  src = fetchurl {
-    urls = [
-      "ftp://ftp.infradead.org/pub/openconnect/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "1cdsx4nsrwawbsisfkldfc9i4qn60g03vxb13nzppr2br9p4rrih";
+{ callPackage, fetchFromGitLab, fetchurl, darwin }:
+let
+  common = opts: callPackage (import ./common.nix opts) {
+    inherit (darwin.apple_sdk.frameworks) PCSC;
+  };
+in rec {
+  openconnect = common rec {
+    version = "8.20";
+    src = fetchurl {
+      url = "ftp://ftp.infradead.org/pub/openconnect/openconnect-${version}.tar.gz";
+      sha256 = "sha256-wUUjhMb3lrruRdTpGa4b/CgdbIiGLh9kaizFE/xE5Ys=";
+    };
   };
 
-  outputs = [ "out" "dev" ];
+  openconnect_unstable = common {
+    version = "unstable-2022-03-14";
+    src = fetchFromGitLab {
+      owner = "openconnect";
+      repo = "openconnect";
+      rev = "a27a46f1362978db9723c8730f2533516b4b31b1";
+      sha256 = "sha256-Kz98GHCyEcx7vUF+AXMLR7886+iKGKNwx1iRaYcH8ps=";
+    };
+  };
 
-  configureFlags = [
-    "--with-vpnc-script=${vpnc}/vpnc-script"
-    "--disable-nls"
-    "--without-openssl-version-check"
-  ];
-
-  buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
-  nativeBuildInputs = [ pkg-config ];
-
-  meta = with lib; {
-    description = "VPN Client for Cisco's AnyConnect SSL VPN";
-    homepage = "http://www.infradead.org/openconnect/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ pradeepchhetri tricktron ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  openconnect_openssl = openconnect.override {
+    useOpenSSL = true;
   };
 }
+
+
+

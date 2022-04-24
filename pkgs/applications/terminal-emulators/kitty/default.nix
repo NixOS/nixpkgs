@@ -1,40 +1,48 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
-  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  lcms2,
-  installShellFiles,
-  dbus,
-  Cocoa,
-  CoreGraphics,
-  Foundation,
-  IOKit,
-  Kernel,
-  OpenGL,
-  libcanberra,
-  libicns,
-  libpng,
-  python3,
-  zlib,
+{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
+, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel
+, libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
+, libxkbcommon, libXi, libXext, wayland-protocols, wayland
+, lcms2
+, librsync
+, installShellFiles
+, dbus
+, darwin
+, Cocoa
+, CoreGraphics
+, Foundation
+, IOKit
+, Kernel
+, OpenGL
+, libcanberra
+, libicns
+, libpng
+, python3
+, zlib
+, bashInteractive
+, zsh
+, fish
+, fetchpatch
+, nixosTests
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.19.3";
+  version = "0.24.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0r49bybqy6c0n1lz6yc85py80wb40w757m60f5rszjf200wnyl6s";
+    sha256 = "sha256-c6XM/xeGZ68srf8xQJA1iYCUR3kXNceTMxsZAnbFmug=";
   };
 
   buildInputs = [
     harfbuzz
     ncurses
     lcms2
+    librsync
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
@@ -45,6 +53,8 @@ buildPythonApplication rec {
     libpng
     python3
     zlib
+  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
+    darwin.apple_sdk.frameworks.UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -52,8 +62,14 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config sphinx ncurses
     installShellFiles
+    ncurses
+    pkg-config
+    sphinx
+    furo
+    sphinx-copybutton
+    sphinxext-opengraph
+    sphinx-inline-tabs
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
@@ -61,10 +77,24 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
-    ./fix-paths.patch
+    (fetchpatch {
+      name = "fix-zsh-completion-test-1.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/297592242c290a81ca4ba08802841f4c33a4de25.patch";
+      sha256 = "sha256-/V6y/4AaJsZvx1KS5UFZ+0zyAoZuLgbgFORZ1dX/1qE=";
+    })
+    (fetchpatch {
+      name = "fix-zsh-completion-test-2.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/d8ed42ae8e014d9abf9550a65ae203468f8bfa43.patch";
+      sha256 = "sha256-Azgzqf5atW999FVn9rSGKMyZLsI692dYXhJPx07GBO0=";
+    })
+    (fetchpatch {
+      name = "fix-build-with-non-framework-python-on-darwin.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/57cffc71b78244e6a9d49f4c9af24d1a88dbf537.patch";
+      sha256 = "sha256-1IGONSVCVo5SmLKw90eqxaI5Mwc764O1ur+aMsc7h94=";
+    })
   ];
 
   # Causes build failure due to warning
@@ -72,20 +102,36 @@ buildPythonApplication rec {
 
   dontConfigure = true;
 
-  buildPhase = if stdenv.isDarwin then ''
-    ${python.interpreter} setup.py kitty.app \
-    --update-check-interval=0 \
-    --disable-link-time-optimization
-    make man
-  '' else ''
-    ${python.interpreter} setup.py linux-package \
-    --update-check-interval=0 \
-    --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
-    --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
-    --canberra-library='${libcanberra}/lib/libcanberra.so'
+  buildPhase = let
+    commonOptions = ''
+      --update-check-interval=0 \
+      --shell-integration=enabled\ no-rc
+    '';
+  in ''
+    runHook preBuild
+    ${if stdenv.isDarwin then ''
+      ${python.interpreter} setup.py kitty.app \
+      --disable-link-time-optimization \
+      ${commonOptions}
+      make man
+    '' else ''
+      ${python.interpreter} setup.py linux-package \
+      --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
+      --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
+      --canberra-library='${libcanberra}/lib/libcanberra.so' \
+      ${commonOptions}
+    ''}
+    runHook postBuild
   '';
 
-  checkInputs = [ pillow ];
+  checkInputs = [
+    pillow
+
+    # Shells needed for shell integration tests
+    bashInteractive
+    zsh
+    fish
+  ];
 
   checkPhase =
     let buildBinPath =
@@ -94,6 +140,9 @@ buildPythonApplication rec {
         else "linux-package/bin";
     in
     ''
+      # Fontconfig error: Cannot load default config file: No such file: (null)
+      export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+
       env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
     '';
 
@@ -111,15 +160,12 @@ buildPythonApplication rec {
     cp -r linux-package/{bin,share,lib} $out
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
-    runHook postInstall
 
     installShellCompletion --cmd kitty \
-      --bash <("$out/bin/kitty" + complete setup bash) \
-      --fish <("$out/bin/kitty" + complete setup fish) \
-      --zsh  <("$out/bin/kitty" + complete setup zsh)
-  '';
+      --bash <("$out/bin/kitty" +complete setup bash) \
+      --fish <("$out/bin/kitty" +complete setup fish2) \
+      --zsh  <("$out/bin/kitty" +complete setup zsh)
 
-  postInstall = ''
     terminfo_src=${if stdenv.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
       else
@@ -130,13 +176,19 @@ buildPythonApplication rec {
 
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    cp -r 'shell-integration' "$shell_integration"
+
+    runHook postInstall
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
-    license = licenses.gpl3;
-    changelog = "https://sw.kovidgoyal.net/kitty/changelog.html";
+    license = licenses.gpl3Only;
+    changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
   };

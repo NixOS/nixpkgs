@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -10,17 +11,17 @@
 , gettext
 , gupnp-av
 , gtksourceview4
-, gnome3
+, gnome
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13d1qr1avz9r76989nvgxhhclmqzr025xjk4rfnja94fpbspznj1";
+    sha256 = "beSe9LN1uKFk90t2YWixGE4NKBlrawek9TQfCN/YXWw=";
   };
 
   nativeBuildInputs = [
@@ -38,12 +39,13 @@ stdenv.mkDerivation rec {
     gtk3
     gupnp-av
     gtksourceview4
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -4,6 +4,7 @@
 let
   inherit (lib.strings) toInt;
   inherit (lib.trivial) compare min;
+  inherit (lib.attrsets) mapAttrs;
 in
 rec {
 
@@ -340,15 +341,15 @@ rec {
        groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
        => { true = 12; false = 3; }
   */
-  groupBy' = op: nul: pred: lst:
-    foldl' (r: e:
-              let
-                key = pred e;
-              in
-                r // { ${key} = op (r.${key} or nul) e; }
-           ) {} lst;
+  groupBy' = op: nul: pred: lst: mapAttrs (name: foldl op nul) (groupBy pred lst);
 
-  groupBy = groupBy' (sum: e: sum ++ [e]) [];
+  groupBy = builtins.groupBy or (
+    pred: foldl' (r: e:
+       let
+         key = pred e;
+       in
+         r // { ${key} = (r.${key} or []) ++ [e]; }
+    ) {});
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -642,7 +643,7 @@ rec {
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
    */
- unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 
@@ -663,9 +664,6 @@ rec {
   /* Test if two lists have no common element.
      It should be slightly more efficient than (intersectLists a b == [])
   */
-  mutuallyExclusive = a: b:
-    (builtins.length a) == 0 ||
-    (!(builtins.elem (builtins.head a) b) &&
-     mutuallyExclusive (builtins.tail a) b);
+  mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
 }

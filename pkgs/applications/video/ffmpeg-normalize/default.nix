@@ -1,20 +1,20 @@
 { lib
 , buildPythonApplication
 , fetchPypi
-, ffmpeg_3
-, tqdm
+, ffmpeg
+, ffmpeg-progress-yield
 }:
 
 buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.19.0";
+  version = "1.22.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18dpck9grnr3wgbjvdh4mjlx0zfwcxpy4rnpmc39in0yk3w7li2x";
+    sha256 = "sha256-RBrCIDinPXbXKqrrhqVf3rV4rfi+2PttIaYxUKOk7hs=";
   };
 
-  propagatedBuildInputs = [ ffmpeg_3 tqdm ];
+  propagatedBuildInputs = [ ffmpeg ffmpeg-progress-yield ];
 
   checkPhase = ''
     $out/bin/ffmpeg-normalize --help > /dev/null

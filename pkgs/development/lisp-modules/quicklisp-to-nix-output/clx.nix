@@ -2,7 +2,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "clx";
-  version = "20200715-git";
+  version = "20211020-git";
 
   parasites = [ "clx/test" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."fiasco" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/clx/2020-07-15/clx-20200715-git.tgz";
-    sha256 = "1fvx6m3imvkkd0z5a3jmm2v6mkrndwsidhykrs229rqx343zg8ra";
+    url = "http://beta.quicklisp.org/archive/clx/2021-10-20/clx-20211020-git.tgz";
+    sha256 = "1mgqcqakbm8s4w2r9831xzhy9lyifcl2b3rhl5p76s5vpnjmp88k";
   };
 
   packageName = "clx";
@@ -22,8 +22,8 @@ rec {
 }
 /* (SYSTEM clx DESCRIPTION
     An implementation of the X Window System protocol in Lisp. SHA256
-    1fvx6m3imvkkd0z5a3jmm2v6mkrndwsidhykrs229rqx343zg8ra URL
-    http://beta.quicklisp.org/archive/clx/2020-07-15/clx-20200715-git.tgz MD5
-    c0e08c88e78587bdbbbea188848dc39d NAME clx FILENAME clx DEPS
-    ((NAME fiasco FILENAME fiasco)) DEPENDENCIES (fiasco) VERSION 20200715-git
+    1mgqcqakbm8s4w2r9831xzhy9lyifcl2b3rhl5p76s5vpnjmp88k URL
+    http://beta.quicklisp.org/archive/clx/2021-10-20/clx-20211020-git.tgz MD5
+    ac10db96a6426cf462f8d417a7797621 NAME clx FILENAME clx DEPS
+    ((NAME fiasco FILENAME fiasco)) DEPENDENCIES (fiasco) VERSION 20211020-git
     SIBLINGS NIL PARASITES (clx/test)) */

@@ -21,16 +21,33 @@
 
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "4.0.0";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "0m7zy5k2595vf5xr2r4m75rfsdddigrv2hilm1c3zaif4srxmvpj";
+    sha256 = "sha256-axNImzBJTHxd2kU/xQmB5ZQ9ZxW2ybW3qFq7gLvm0RY=";
   };
 
-  nativeBuildInputs = [ cmake flex bison file ];
-  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python3 swig ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ gettext ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    file
+    flex
+  ];
+
+  buildInputs = [
+    curl
+    gperftools
+    libmaxminddb
+    libpcap
+    ncurses
+    openssl
+    python3
+    swig
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    gettext
+  ];
 
   outputs = [ "out" "lib" "py" ];
 
@@ -54,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Powerful network analysis framework much different from a typical IDS";
+    description = "Network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;

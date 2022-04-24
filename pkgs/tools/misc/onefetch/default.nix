@@ -1,25 +1,42 @@
-{ fetchFromGitHub, rustPlatform, lib, stdenv, fetchpatch
-, CoreFoundation, libiconv, libresolv, Security }:
+{ fetchFromGitHub
+, rustPlatform
+, lib
+, stdenv
+, pkg-config
+, zstd
+, CoreFoundation
+, libiconv
+, libresolv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.9.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-owa+HmzMXpLR7H1FssW4gQiVAQGJRXhcitgJj6pxJRc=";
+    sha256 = "sha256-nSvqAXzA/4CSnOMCZri2ks58bW+9v+SoyIIzb+K5S88=";
   };
 
-  cargoSha256 = "sha256-TqWe4eARQmmWcwnvb6BIZrzGeKMpiIObPv0cW1JvWj4=";
+  cargoPatches = [
+    # enable pkg-config feature of zstd
+    ./zstd-pkg-config.patch
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
+  cargoSha256 = "sha256-uSef6x5QkXKwajglbwyoIsUFGbz0zntVM1ko0FZqnck=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ]
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
 
   meta = with lib; {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne kloenk ];
+    maintainers = with maintainers; [ Br1ght0ne kloenk SuperSandro2000 ];
   };
 }

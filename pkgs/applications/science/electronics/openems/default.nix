@@ -15,12 +15,9 @@
 , withQcsxcad ? true
 , withMPI ? false
 , withHyp2mat ? true
-, qcsxcad ? null
-, hyp2mat ? null
+, qcsxcad
+, hyp2mat
 }:
-
-assert withQcsxcad -> qcsxcad != null;
-assert withHyp2mat -> hyp2mat != null;
 
 stdenv.mkDerivation {
   pname = "openems";

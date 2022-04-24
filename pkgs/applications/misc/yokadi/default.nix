@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, dateutil,
+{ lib, fetchurl, buildPythonApplication, python-dateutil,
   sqlalchemy, setproctitle, icalendar }:
 
 buildPythonApplication rec {
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     sqlalchemy
     setproctitle
     icalendar
@@ -24,6 +24,6 @@ buildPythonApplication rec {
     description = "A command line oriented, sqlite powered, todo-list";
     homepage = "https://yokadi.github.io/index.html";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.nipav ];
+    maintainers = [ maintainers.nkpvk ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, fetchpatch }:
+{ lib, stdenv, fetchurl, ncurses, gettext, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gcal";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin gettext;
 
   meta = {
     description = "Program for calculating and printing calendars";

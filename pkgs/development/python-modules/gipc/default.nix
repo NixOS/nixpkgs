@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.1.1";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9a9d557e65e17bab8d7ff727ee3f1935e25bd52b01e63c23c7b3b52415728a5";
+    sha256 = "sha256-P8d2GIxFAAHeXjXgIxKGwahiH1TW/9fE+V0f9Ra54wo=";
   };
 
   propagatedBuildInputs = [ gevent ];
@@ -27,8 +27,6 @@ buildPythonPackage rec {
     '';
     homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
-    # gipc only has support for older versions of gevent
-    broken = versionOlder "1.6" gevent.version;
   };
 
 }

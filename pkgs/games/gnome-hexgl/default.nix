@@ -5,7 +5,7 @@
 , pkg-config
 , gthree
 , gsound
-, epoxy
+, libepoxy
 , gtk3
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gthree
     gsound
-    epoxy
+    libepoxy
     gtk3
   ];
 

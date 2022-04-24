@@ -1,12 +1,12 @@
-{lib, stdenv, fetchurl, gettext, python3}:
+{ lib, stdenv, fetchurl, gettext, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "iso-codes";
-  version = "4.5.0";
+  version = "4.9.0";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.bz2";
-    sha256 = "17nnyx07q8vbyqsxbvp4m5s2nrc4fxl3dvgbgmkqww2wl4x1fv9y";
+    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "02lq602ghws423w04jsyjr92p0nmrfp59n1m5hbbi1c6fhxryghc";
   };
 
   patchPhase = ''

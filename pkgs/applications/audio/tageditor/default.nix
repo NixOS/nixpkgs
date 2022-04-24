@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
     tagparser
   ];
 
-  enableParallelBuilding = true;
-
   meta = with pkgs.lib; {
     homepage = "https://github.com/Martchus/tageditor";
     description = "A tag editor with Qt GUI and command-line interface supporting MP4/M4A/AAC (iTunes), ID3, Vorbis, Opus, FLAC and Matroska";

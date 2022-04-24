@@ -12,20 +12,22 @@
 , xz
 , e2fsprogs
 , libsoup
+, glib-networking
+, wrapGAppsHook
 , gpgme
 , which
 , makeWrapper
 , autoconf
 , automake
 , libtool
-, fuse
+, fuse3
 , util-linuxMinimal
 , libselinux
 , libsodium
 , libarchive
 , libcap
 , bzip2
-, yacc
+, bison
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
@@ -39,13 +41,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2020.8";
+  version = "2022.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "16v73v63h16ika73kgh2cvgm0v27r2d48m932mbj3xm6s295kapx";
+    sha256 = "sha256-duL1tXhNjLaG6QvjL87LtWxsaoJOA3ShpoILV3EDZ2s=";
   };
 
   patches = [
@@ -74,10 +76,11 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     which
     makeWrapper
-    yacc
+    bison
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -85,8 +88,9 @@ in stdenv.mkDerivation rec {
     systemd
     e2fsprogs
     libsoup
+    glib-networking
     gpgme
-    fuse
+    fuse3
     libselinux
     libsodium
     libcap

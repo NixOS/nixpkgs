@@ -4,7 +4,6 @@
 , daemonize
 , dbus-python
 , fetchFromGitHub
-, fetchpatch
 , gobject-introspection
 , gtk3
 , makeWrapper
@@ -22,8 +21,6 @@ buildPythonApplication (common // rec {
 
   disabled = !isPy3k;
 
-  sourceRoot = "source/daemon";
-
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
@@ -37,6 +34,14 @@ buildPythonApplication (common // rec {
     pyudev
     setproctitle
   ];
+
+  prePatch = ''
+    cd daemon
+  '';
+
+  postPatch = ''
+    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
+  '';
 
   postBuild = ''
     DESTDIR="$out" PREFIX="" make install manpages

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, zlib, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, zlib, perl, perlPackages, openmp }:
 
 stdenv.mkDerivation rec {
   version = "4.8.1";
@@ -11,11 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "032nva6iiwmw59gjipm1mv0xlcckhxsf45mc2qbnv19lbis0q22i";
   };
 
-  propagatedBuildInputs = [ perl perlPackages.TextNSP perlPackages.PerlMagick ];
+  propagatedBuildInputs = [ perl perlPackages.TextNSP perlPackages.ImageMagick ];
 
   nativeBuildInputs = [ zlib makeWrapper ];
+  buildInputs = lib.optional stdenv.cc.isClang openmp;
 
-  makeFlags = [ "PREFIX=$(out)/bin" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}c++" # remove once https://github.com/weizhongli/cdhit/pull/114 is merged
+    "PREFIX=$(out)/bin"
+  ];
 
   preInstall = "mkdir -p $out/bin";
 

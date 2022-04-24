@@ -1,5 +1,6 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libdaemon, dbus, perlPackages
 , expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
+, nixosTests
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
@@ -17,7 +18,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "avahi${lib.optionalString withLibdnssdCompat "-compat"}-${version}";
+  pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
   version = "0.8";
 
   src = fetchurl {
@@ -32,6 +33,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-mkdir-localstatedir.patch
+    (fetchpatch {
+      url = "https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch";
+      sha256 = "sha256-BXWmrLWUvDxKPoIPRFBpMS3T4gijRw0J+rndp6iDybU=";
+    })
   ];
 
   buildInputs = [ libdaemon dbus glib expat libiconv libevent ]
@@ -76,6 +81,11 @@ stdenv.mkDerivation rec {
     ln -s avahi-compat-howl $out/include/howl
     ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
   */
+
+  passthru.tests = {
+    smoke-test = nixosTests.avahi;
+    smoke-test-resolved = nixosTests.avahi-with-resolved;
+  };
 
   meta = with lib; {
     description = "mDNS/DNS-SD implementation";

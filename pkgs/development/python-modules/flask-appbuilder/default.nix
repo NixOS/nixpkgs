@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, fetchpatch
 , apispec
 , colorama
 , click
@@ -18,23 +18,38 @@
 , marshmallow-enum
 , marshmallow-sqlalchemy
 , python-dateutil
+, pythonOlder
 , prison
 , pyjwt
+, pyyaml
 , sqlalchemy-utils
 }:
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "3.1.1";
+  version = "4.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "076b020b0ba125339a2e710e74eab52648cde2b18599f7cb0fa1eada9bbb648c";
+    hash = "sha256-g+iHUL83PokXPGu7HJ8ffLocQr0uGpMqS5MbfIlZZ2E=";
   };
 
-  checkInputs = [
-    nose
+  patches = [
+    (fetchpatch {
+      # https://github.com/dpgaspar/Flask-AppBuilder/pull/1734
+      name = "flask-appbuilder-wtf3.patch";
+      url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/bccb3d719cd3ceb872fe74a9ab304d74664fbf43.patch";
+      sha256 = "1rsci0ynb7y6k53j164faggjr2g6l5v78w7953qbxcy8f55sb2fv";
+      excludes = [
+        "requirements.txt"
+        "setup.py"
+        "examples/employees/app/views.py"
+      ];
+    })
   ];
 
   propagatedBuildInputs = [
@@ -56,24 +71,29 @@ buildPythonPackage rec {
     python-dateutil
     prison
     pyjwt
+    pyyaml
     sqlalchemy-utils
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=3.3, <4" "apispec" \
-      --replace "Flask-Login>=0.3, <0.5" "Flask-Login" \
-      --replace "Flask-Babel>=1, <2" "Flask-Babel" \
-      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
-      --replace "prison>=0.1.3, <1.0.0" "prison"
+      --replace "apispec[yaml]>=3.3, <4" "apispec[yaml] >=3.3" \
+      --replace "Flask-Login>=0.3, <0.5" "Flask-Login >=0.3" \
+      --replace "Flask-WTF>=0.14.2, <0.15.0" "Flask-WTF" \
+      --replace "WTForms<3.0.0" "WTForms" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
+      --replace "prison>=0.2.1, <1.0.0" "prison"
   '';
 
-
-  # majority of tests require network access or mongo
+  # Majority of tests require network access or mongo
   doCheck = false;
 
+  pythonImportsCheck = [
+    "flask_appbuilder"
+  ];
+
   meta = with lib; {
-    description = "Simple and rapid application development framework, built on top of Flask";
+    description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

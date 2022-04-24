@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "nbd-3.21";
+  pname = "nbd";
+  version = "3.21";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nbd/${name}.tar.xz";
+    url = "mirror://sourceforge/nbd/nbd-${version}.tar.xz";
     sha256 = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
   };
 
@@ -14,11 +15,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config which ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${name}"
-    cp README.md "$out/share/doc/${name}/"
+    mkdir -p "$out/share/doc/nbd-${version}"
+    cp README.md "$out/share/doc/nbd-${version}/"
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    test = nixosTests.nbd;
+  };
 
   # Glib calls `clock_gettime', which is in librt. Linking that library
   # here ensures that a proper rpath is added to the executable so that
@@ -29,7 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://nbd.sourceforge.net";
     description = "Map arbitrary files as block devices over the network";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.peti ];
     platforms = lib.platforms.linux;
   };
 }

@@ -34,17 +34,17 @@ let
         inherit (spec) owner rev sha256;
       }
     )
-    (builtins.fromJSON (builtins.readFile ./deps.json));
+    (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.129.3";
+  version = "1.162.5";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "1sg9wg6w3w0phrnnzpj7h2g22y0x7a3dl57djzydayxmg8fnn2ys";
+    sha256 = "sha256-CQ0TPZH9A37WK+gm7jgCxL5eF+1SxHlsJTTzMVRkHIs=";
   };
 
   postPatch = ''
@@ -99,6 +99,8 @@ stdenv.mkDerivation rec {
     fi
   '') additionalLexers;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Cross-platform code editor";
     longDescription = ''
@@ -106,8 +108,8 @@ stdenv.mkDerivation rec {
       Config system in JSON files. Multi-carets and multi-selections.
       Search and replace with RegEx. Extendable by Python plugins and themes.
     '';
-    homepage = "http://www.uvviewsoft.com/cudatext/";
-    changelog = "http://uvviewsoft.com/cudatext/history.txt";
+    homepage = "https://cudatext.github.io/";
+    changelog = "https://cudatext.github.io/history.txt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

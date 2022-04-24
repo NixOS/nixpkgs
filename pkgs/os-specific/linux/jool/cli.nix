@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "jool-cli-${sourceAttrs.version}";
+  pname = "jool-cli";
+  version = sourceAttrs.version;
 
   src = sourceAttrs.src;
 

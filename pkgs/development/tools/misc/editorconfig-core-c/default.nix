@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchgit, cmake, pcre, doxygen }:
+{ lib, stdenv, fetchFromGitHub, cmake, pcre, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "editorconfig-core-c-${meta.version}";
+  pname = "editorconfig-core-c";
+  version = "0.12.1";
 
-  src = fetchgit {
-    url = "https://github.com/editorconfig/editorconfig-core-c.git";
-    rev = "v${meta.version}";
-    sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
+  src = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-c";
+    rev = "v${version}";
+    sha256 = "sha256-pFsbyqIt7okfaiOwlYN8EXm1SFlCUnsHVbOgyIZZlys=";
     fetchSubmodules = true;
-    inherit name;
   };
 
   buildInputs = [ pcre ];
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
     license = with licenses; [ bsd2 bsd3 ];
-    version = "0.12.1";
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
+    mainProgram = "editorconfig";
   };
 }

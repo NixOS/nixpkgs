@@ -1,7 +1,7 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python2Packages, fetchFromGitHub }:
 
 let
-  pgdbconn = pythonPackages.buildPythonPackage rec {
+  pgdbconn = python2Packages.buildPythonPackage rec {
     pname = "pgdbconn";
     version = "0.8.0";
     src = fetchFromGitHub {
@@ -13,13 +13,13 @@ let
     # The tests are impure (they try to access a PostgreSQL server)
     doCheck = false;
     propagatedBuildInputs = [
-      pythonPackages.psycopg2
-      pythonPackages.pytest
+      python2Packages.psycopg2
+      python2Packages.pytest
     ];
   };
 in
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   pname = "pyrseas";
   version = "0.8.0";
   src = fetchFromGitHub {
@@ -31,9 +31,9 @@ pythonPackages.buildPythonApplication {
   # The tests are impure (they try to access a PostgreSQL server)
   doCheck = false;
   propagatedBuildInputs = [
-    pythonPackages.psycopg2
-    pythonPackages.pytest
-    pythonPackages.pyyaml
+    python2Packages.psycopg2
+    python2Packages.pytest
+    python2Packages.pyyaml
     pgdbconn
   ];
   meta = {

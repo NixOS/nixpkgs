@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , zlib
 , expat
 , cmake
@@ -11,41 +10,22 @@
 , doxygen
 , graphviz
 , libxslt
+, libiconv
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.3";
+  version = "0.27.5";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
 
   src = fetchFromGitHub {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";
-    sha256 = "0d294yhcdw8ziybyd4rp5hzwknzik2sm0cz60ff7fljacv75bjpy";
+    sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
   };
-
-  patches = [
-    # Fix aarch64 build https://github.com/Exiv2/exiv2/pull/1271
-    (fetchpatch {
-      name = "cmake-fix-aarch64.patch";
-      url = "https://github.com/Exiv2/exiv2/commit/bbe0b70840cf28b7dd8c0b7e9bb1b741aeda2efd.patch";
-      sha256 = "13zw1mn0ag0jrz73hqjhdsh1img7jvj5yddip2k2sb5phy04rzfx";
-    })
-
-    # Use correct paths with multiple outputs
-    # https://github.com/Exiv2/exiv2/pull/1275
-    (fetchpatch {
-      url = "https://github.com/Exiv2/exiv2/commit/48f2c9dbbacc0ef84c8ebf4cb1a603327f0b8750.patch";
-      sha256 = "vjB3+Ld4c/2LT7nq6uatYwfHTh+HeU5QFPFXuNLpIPA=";
-    })
-    # https://github.com/Exiv2/exiv2/pull/1294
-    (fetchpatch {
-      url = "https://github.com/Exiv2/exiv2/commit/306c8a6fd4ddd70e76043ab255734720829a57e8.patch";
-      sha256 = "0D/omxYxBPGUu3uSErlf48dc6Ukwc2cEN9/J3e7a9eU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +33,10 @@ stdenv.mkDerivation rec {
     gettext
     graphviz
     libxslt
+    removeReferencesTo
   ];
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   propagatedBuildInputs = [
     expat
@@ -69,6 +52,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEXIV2_ENABLE_NLS=ON"
     "-DEXIV2_BUILD_DOC=ON"
+    "-DEXIV2_ENABLE_BMFF=ON"
   ];
 
   buildFlags = [
@@ -98,6 +82,10 @@ stdenv.mkDerivation rec {
       rm -f ../tests/bugfixes/redmine/test_issue_460.py
       rm -f ../tests/bugfixes/redmine/test_issue_662.py
       rm -f ../tests/bugfixes/github/test_issue_1046.py
+
+      # disable tests that requires loopback networking
+      substituteInPlace  ../tests/bash_tests/testcases.py \
+        --replace "def io_test(self):" "def io_disabled(self):"
      ''}
   '';
 
@@ -109,7 +97,23 @@ stdenv.mkDerivation rec {
       rm *
       mv .exiv2 exiv2
     )
+
+    mkdir -p $static/lib
+    mv $lib/lib/*.a $static/lib/
+
+    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2 $static/lib/*.a
   '';
+
+  postFixup = ''
+    substituteInPlace "$dev"/lib/cmake/exiv2/exiv2Config.cmake --replace \
+      "set(_IMPORT_PREFIX \"$out\")" \
+      "set(_IMPORT_PREFIX \"$static\")"
+    substituteInPlace "$dev"/lib/cmake/exiv2/exiv2Config-*.cmake --replace \
+      "$lib/lib/libexiv2-xmp.a" \
+      "$static/lib/libexiv2-xmp.a"
+  '';
+
+  disallowedReferences = [ stdenv.cc.cc ];
 
   meta = with lib; {
     homepage = "https://www.exiv2.org/";

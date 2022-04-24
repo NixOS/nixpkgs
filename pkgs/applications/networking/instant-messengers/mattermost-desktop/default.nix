@@ -1,98 +1,91 @@
-{ lib, stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
-freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
-libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
-libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
-hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk }:
+{ lib
+, stdenv
+, fetchurl
+, atomEnv
+, systemd
+, pulseaudio
+, libxshmfence
+, libnotify
+, libappindicator-gtk3
+, wrapGAppsHook
+, autoPatchelfHook
+}:
 
 let
-  rpath = lib.makeLibraryPath [
-    alsaLib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gnome2.GConf
-    gtk3
-    pango
-    libuuid
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    nspr
-    nss
-    stdenv.cc.cc
-    udev
-    xorg.libxcb
-  ];
+
+  pname = "mattermost-desktop";
+  version = "5.0.3";
+
+  srcs = {
+    "x86_64-linux" = {
+      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
+      hash = "sha256-KLSWJpNSMGmfugbkFIJLDnxcZtrtBZOGjLlR+kAoMTA=";
+    };
+
+    "i686-linux" = {
+      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
+      hash = "sha256-4ofjOsfGbgO1PSqQpigNp90JsvlGP1kGexVAR/h3/88=";
+    };
+  };
+
+  inherit (stdenv.hostPlatform) system;
 
 in
-  stdenv.mkDerivation rec {
-    pname = "mattermost-desktop";
-    version = "4.5.2";
 
-    src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-          sha256 = "0r9xmhzif1ia1m53yr59q6p3niyq3jv3vgv4703x68jmd46f91n6";
-        }
-      else if stdenv.hostPlatform.system == "i686-linux" then
-        fetchurl {
-          url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
-          sha256 = "1h8lw06p3cqz9dkgbhfmzcrzjsir5cfhx28xm4zrmvkj4yfzbcnv";
-        }
-      else
-        throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
+stdenv.mkDerivation {
+  inherit pname version;
 
-    dontBuild = true;
-    dontConfigure = true;
-    dontPatchELF = true;
+  src = fetchurl (srcs."${system}" or (throw "Unsupported system ${system}"));
 
-    buildInputs = [ wrapGAppsHook gtk3 hicolor-icon-theme ];
+  dontBuild = true;
+  dontConfigure = true;
+  dontStrip = true;
 
-    installPhase = ''
-      mkdir -p $out/share/mattermost-desktop
-      cp -R . $out/share/mattermost-desktop
+  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook ];
 
-      mkdir -p "$out/bin"
-      ln -s $out/share/mattermost-desktop/mattermost-desktop \
-        $out/bin/mattermost-desktop
+  buildInputs = atomEnv.packages ++ [
+    libxshmfence
+  ];
 
-      patchShebangs $out/share/mattermost-desktop/create_desktop_file.sh
-      $out/share/mattermost-desktop/create_desktop_file.sh
-      rm $out/share/mattermost-desktop/create_desktop_file.sh
-      mkdir -p $out/share/applications
-      mv Mattermost.desktop $out/share/applications/Mattermost.desktop
-      substituteInPlace \
-        $out/share/applications/Mattermost.desktop \
-        --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
+  runtimeDependencies = [
+    (lib.getLib systemd)
+    pulseaudio
+    libnotify
+    libappindicator-gtk3
+  ];
 
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpath}:$out/share/mattermost-desktop" \
-        $out/share/mattermost-desktop/mattermost-desktop
-    '';
+  installPhase = ''
+    runHook preInstall
 
-    meta = with lib; {
-      description = "Mattermost Desktop client";
-      homepage    = "https://about.mattermost.com/";
-      license     = licenses.asl20;
-      platforms   = [ "x86_64-linux" "i686-linux" ];
-      maintainers = [ maintainers.joko ];
-    };
-  }
+    # Mattermost tarball comes with executable bit set for everything.
+    # We’ll apply it only to files that need it.
+    find . -type f -print0 | xargs -0 chmod -x
+    find . -type f \( -name '*.so.*' -o -name '*.s[oh]' \) -print0 | xargs -0 chmod +x
+    chmod +x mattermost-desktop chrome-sandbox
+
+    mkdir -p $out/share/mattermost-desktop
+    cp -R . $out/share/mattermost-desktop
+
+    mkdir -p "$out/bin"
+    ln -s $out/share/mattermost-desktop/mattermost-desktop $out/bin/mattermost-desktop
+
+    patchShebangs $out/share/mattermost-desktop/create_desktop_file.sh
+    $out/share/mattermost-desktop/create_desktop_file.sh
+    rm $out/share/mattermost-desktop/create_desktop_file.sh
+    mkdir -p $out/share/applications
+    chmod -x Mattermost.desktop
+    mv Mattermost.desktop $out/share/applications/Mattermost.desktop
+    substituteInPlace $out/share/applications/Mattermost.desktop \
+      --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    description = "Mattermost Desktop client";
+    homepage = "https://about.mattermost.com/";
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = [ maintainers.joko ];
+  };
+}

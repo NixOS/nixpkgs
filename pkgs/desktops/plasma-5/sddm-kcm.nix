@@ -17,8 +17,7 @@
 }:
 
 mkDerivation {
-  name = "sddm-kcm";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
+  pname = "sddm-kcm";
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
     libpthreadstubs

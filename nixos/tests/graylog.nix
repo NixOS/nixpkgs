@@ -1,8 +1,8 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "graylog";
-  meta.maintainers = with lib.maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ];
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
     virtualisation.diskSize = 4096;
 

@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "shGf0P8Z+ik7l+yXsN6OJBeZ4IuGIYUVFnxWi9m1ATU=";
+    sha256 = "sha256-shGf0P8Z+ik7l+yXsN6OJBeZ4IuGIYUVFnxWi9m1ATU=";
   };
 
   nativeBuildInputs = [
@@ -33,17 +33,13 @@ in stdenv.mkDerivation rec {
     gtk3
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-genmon-plugin";
     description = "Generic monitor plugin for the Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

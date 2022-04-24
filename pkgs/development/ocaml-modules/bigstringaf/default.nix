@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigarray-compat }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigarray-compat, pkg-config }:
 
 buildDunePackage rec {
   pname = "bigstringaf";
@@ -15,6 +15,10 @@ buildDunePackage rec {
     sha256 = "1q1sqxzdnlrpl95ccrhl7lwy3zswgd9rbn19ildclh0lyi2vazbj";
   };
 
+  # This currently fails with dune
+  strictDeps = false;
+
+  nativeBuildInputs = [ pkg-config ];
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ bigarray-compat ];
   doCheck = lib.versionAtLeast ocaml.version "4.05";

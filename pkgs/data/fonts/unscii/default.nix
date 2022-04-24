@@ -2,6 +2,11 @@
 , fontforge, SDL, SDL_image, mkfontscale
 }:
 
+let
+  perlenv = perl.withPackages (p: with p; [
+    TextCharWidth
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "unscii";
   version = "1.1";
@@ -12,10 +17,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ (perl.withPackages (p: [ p.TextCharWidth ]))
+    [ perlenv
       bdftopcf fontforge SDL SDL_image
       mkfontscale
     ];
+
+  # Fixes shebang -> wrapper problem on Darwin
+  postPatch = ''
+    for perltool in *.pl; do
+      substituteInPlace Makefile \
+        --replace "./$perltool" "${perlenv}/bin/perl ./$perltool"
+    done
+  '';
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preConfigure = ''
     patchShebangs .
@@ -44,7 +61,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "extra" ];
 
   meta = {
-    inherit version;
     description = "Bitmapped character-art-friendly Unicode fonts";
     # Basically GPL2+ with font exception — because of the Unifont-augmented
     # version. The reduced version is public domain.

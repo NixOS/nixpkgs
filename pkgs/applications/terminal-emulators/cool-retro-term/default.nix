@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
-, qtquickcontrols, qtgraphicaleffects, qmake }:
+, qtquickcontrols, qtgraphicaleffects, qmake, nixosTests }:
 
 mkDerivation rec {
   version = "1.1.1";
@@ -29,7 +29,7 @@ mkDerivation rec {
     ln -s $out/bin/cool-retro-term.app/Contents/MacOS/cool-retro-term $out/bin/cool-retro-term
   '';
 
-  enableParallelBuilding = true;
+  passthru.tests.test = nixosTests.terminal-emulators.cool-retro-term;
 
   meta = {
     description = "Terminal emulator which mimics the old cathode display";

@@ -1,51 +1,50 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , chardet
-, pyyaml
 , requests
+, ruamel-yaml
+, setuptools-scm
 , six
 , semver
 , pytestCheckHook
-, pytestcov
-, pytestrunner
 , openapi-spec-validator
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.20.2";
+  version = "0.21.8.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4ffcddae6218cf6753a02af36ca9fb1c92eec4689441789ee2e9963230882388";
+  src = fetchFromGitHub {
+    owner = "RonnyPfannschmidt";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-kGANMHfWwhW3ZBw2ZVCJZR/bV2EPhcydMKhDeDTVwcQ=";
   };
 
-  buildInputs = [
-    pytestrunner
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     chardet
-    pyyaml
     requests
+    ruamel-yaml
     six
     semver
   ];
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
     openapi-spec-validator
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tests_require = dev_require," "tests_require = None," \
-      --replace "chardet~=4.0" "" \
-      --replace "semver~=2.13" ""
     substituteInPlace setup.cfg \
-      --replace "--cov-fail-under=90" ""
+      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
   '';
 
   # Disable tests that require network
@@ -59,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
-    homepage = "https://github.com/jfinkhaeuser/prance";
+    homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

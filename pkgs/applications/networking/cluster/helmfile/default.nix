@@ -1,30 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.138.7";
+  version = "0.144.0";
 
   src = fetchFromGitHub {
     owner = "roboll";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-LFNsSd+S+mQiTk7bCnSD/Kp/D0Jefxo80eRsGkStBhs=";
+    sha256 = "sha256-mfRPrgnOXqfmbpvaIxJNkgkdTEJKcFycrgFmQ7YDvTU=";
   };
 
-  vendorSha256 = "sha256-WlV6moJymQ7VyZXXuViCNN1WP4NzBUszavxpKjQR8to=";
+  vendorSha256 = "sha256-ddf3m0DGsjubzp/aERvhfJ51UKKSNMC1Xu7ybyif8HA=";
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
-
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/helmfile \
-      --prefix PATH : ${lib.makeBinPath [ kubernetes-helm ]}
-  '';
+  ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
 
   meta = {
     description = "Deploy Kubernetes Helm charts";

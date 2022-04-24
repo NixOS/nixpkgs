@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -8,7 +8,6 @@
 , asciidoc
 , gobject-introspection
 , python3
-, gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 , libxml2
@@ -18,40 +17,26 @@
 , sqlite
 , libxslt
 , libstemmer
-, gnome3
+, gnome
 , icu
 , libuuid
 , libsoup
+, libsoup_3
 , json-glib
 , systemd
 , dbus
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.0.1";
+  version = "3.3.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rhcs75axga7p7hl37h6jzb2az89jddlcwc7ykrnb2khyhka78rr";
+    sha256 = "Bwb5b+f5XfQqzsgSwd57RZOg1kgyHKg1BqnXHiJBe9o=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
-
-    # Fix consistency error with sqlite 3.34
-    # https://gitlab.gnome.org/GNOME/tracker/merge_requests/353
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker/commit/040e22d005985a19a0dc435a7631f91700804ce4.patch";
-      sha256 = "5OZj17XY8ZnXfMMim25HvGfFKUlsVlVHOUjZKfBKHcs=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -63,13 +48,13 @@ stdenv.mkDerivation rec {
     libxslt
     wrapGAppsNoGuiHook
     gobject-introspection
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkg-config to install dbus service/s
-  ];
+  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
+                    # whether tests are enabled
 
   buildInputs = [
     glib
@@ -77,13 +62,14 @@ stdenv.mkDerivation rec {
     sqlite
     icu
     libsoup
+    libsoup_3
     libuuid
     json-glib
     libstemmer
   ];
 
-  checkInputs = [
-    python3.pkgs.pygobject3
+  checkInputs = with python3.pkgs; [
+    pygobject3
   ];
 
   mesonFlags = [
@@ -97,6 +83,7 @@ stdenv.mkDerivation rec {
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
@@ -116,7 +103,9 @@ stdenv.mkDerivation rec {
 
     dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      meson test \
+        --timeout-multiplier 2 \
+        --print-errorlogs
 
     runHook postCheck
   '';
@@ -127,9 +116,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

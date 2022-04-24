@@ -2,7 +2,8 @@
 , libXau, libXdmcp, xcbutil }:
 
 stdenv.mkDerivation {
-  name = "xss-lock-git-2018-05-31";
+  pname = "xss-lock";
+  version = "unstable-2018-05-31";
 
   src = fetchFromGitHub {
     owner = "xdbob";

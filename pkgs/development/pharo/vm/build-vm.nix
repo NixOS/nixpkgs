@@ -8,7 +8,7 @@
 , libGLU, libGL
 , freetype
 , xorg
-, alsaLib
+, alsa-lib
 , cairo
 , libuuid
 , autoreconfHook
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libICE
     xorg.libSM
-    alsaLib
+    alsa-lib
     cairo
     pharo-share
     libuuid
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       freetype
       openssl
       libuuid
-      alsaLib
+      alsa-lib
       xorg.libICE
       xorg.libSM
     ];

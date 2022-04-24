@@ -6,37 +6,47 @@
   # Enable recursion into attribute sets that nix-env normally doesn't look into
   # so that we can get a more complete picture of the available packages for the
   # purposes of the index.
-  packageOverrides = super:
-  let
-    recurseIntoAttrs = sets:
-      super.lib.genAttrs
-        (builtins.filter (set: builtins.hasAttr set super) sets)
-        (set: super.recurseIntoAttrs (builtins.getAttr set super));
-  in recurseIntoAttrs [
-    "roundcubePlugins"
-    "emscriptenfastcompPackages"
-    "fdbPackages"
-    "nodePackages_latest"
-    "nodePackages"
-    "platformioPackages"
-    "haskellPackages"
-    "idrisPackages"
-    "sconsPackages"
-    "gns3Packages"
-    "quicklispPackagesClisp"
-    "quicklispPackagesSBCL"
-    "rPackages"
-    "apacheHttpdPackages_2_4"
-    "zabbix50"
-    "zabbix40"
-    "zabbix30"
-    "fusePackages"
-    "nvidiaPackages"
-    "sourceHanPackages"
-    "atomPackages"
-    "emacs27.pkgs"
-    "steamPackages"
-    "ut2004Packages"
-    "zeroadPackages"
-  ];
+  packageOverrides = super: with super; lib.mapAttrs (_: set: recurseIntoAttrs set) {
+    inherit (super)
+      apacheHttpdPackages
+      atomPackages
+      fdbPackages
+      fusePackages
+      gns3Packages
+      idrisPackages
+      nodePackages
+      nodePackages_latest
+      platformioPackages
+      quicklispPackagesClisp
+      quicklispPackagesSBCL
+      rPackages
+      roundcubePlugins
+      sconsPackages
+      sourceHanPackages
+      steamPackages
+      ut2004Packages
+      zabbix40
+      zabbix50
+      zeroadPackages
+    ;
+
+    haskellPackages = super.haskellPackages // {
+      # mesos, which this depends on, has been removed from nixpkgs. We are keeping
+      # the error message for now, so users will get an error message they can make
+      # sense of, but need to work around it here.
+      # TODO(@sternenseemann): remove this after branch-off of 22.05, along with the
+      # override in configuration-nix.nix
+      hs-mesos = null;
+    };
+
+    # Make sure haskell.compiler is included, so alternative GHC versions show up,
+    # but don't add haskell.packages.* since they contain the same packages (at
+    # least by name) as haskellPackages.
+    haskell = super.haskell // {
+      compiler = recurseIntoAttrs super.haskell.compiler;
+    };
+
+    # This is an alias which we disallow by default; explicitly allow it
+    emacs28Packages = emacs28.pkgs;
+  };
 }

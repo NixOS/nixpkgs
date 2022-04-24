@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mujs";
-  version = "1.0.9";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://mujs.com/downloads/mujs-${version}.tar.xz";
-    sha256 = "sha256-zKjWafQtO2OEPelF370s5KkArbT+gQv3lQQpYdGw6HY=";
+    sha256 = "sha256-ZpdtHgajUnVKI0Kvc9Guy7U8x82uK2jNoBO33c+SMjM=";
   };
 
   buildInputs = [ readline ];
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight, embeddable Javascript interpreter";
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
-    license = licenses.gpl3;
+    license = licenses.isc;
   };
 }

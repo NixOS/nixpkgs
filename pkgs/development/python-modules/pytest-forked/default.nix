@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , py
 , pytest
 , pytestCheckHook
@@ -9,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "1.3.0";
+  version = "1.4.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6aa9ac7e00ad1a539c41bec6d21011332de671e938c7637378ec9710204e37ca";
+    sha256 = "sha256-i2dYfI+Yy7rf3YBFOe1UVbbtA4AiA0hd0vU8FCLXRA4=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [
     pytest

@@ -1,11 +1,11 @@
-{ lib, buildGoModule, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, buildGoPackage, fetchFromGitHub, installShellFiles, pkgsBuildBuild, stdenv }:
 
 let
   # Argo can package a static server in the CLI using the `staticfiles` go module.
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = buildGoPackage rec {
+  staticfiles = pkgsBuildBuild.buildGoPackage rec {
     name = "staticfiles";
     src = fetchFromGitHub {
       owner = "bouk";
@@ -19,16 +19,16 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "2.12.10";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "v${version}";
-    sha256 = "sha256-A4s6D3/1FsqrJ+Jaql4IuyD9ySChL3SXqVvl8wUDRDE=";
+    sha256 = "sha256-tl1UpoXBuIyJyMLHeIhQ6EHG1XqAGE6Tw5jU6rW+DXc=";
   };
 
-  vendorSha256 = "sha256-4XPMixVNj6PUKobNLwpsOBT7Zs/7pkhDtQacLIB5EfE=";
+  vendorSha256 = "sha256-cq452XEGMVbLvfJ/UiVyOvnUSJr196owB3SyBYnAmZ0=";
 
   doCheck = false;
 
@@ -43,18 +43,21 @@ buildGoModule rec {
     ${staticfiles}/bin/staticfiles -o server/static/files.go ui/dist/app
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/argoproj/argo.version=${version}
-      -X github.com/argoproj/argo.gitCommit=${src.rev}
-      -X github.com/argoproj/argo.gitTreeState=clean
-      -X github.com/argoproj/argo.gitTag=${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/argoproj/argo-workflows/v3.buildDate=unknown"
+    "-X github.com/argoproj/argo-workflows/v3.gitCommit=${src.rev}"
+    "-X github.com/argoproj/argo-workflows/v3.gitTag=${src.rev}"
+    "-X github.com/argoproj/argo-workflows/v3.gitTreeState=clean"
+    "-X github.com/argoproj/argo-workflows/v3.version=${version}"
+  ];
 
   postInstall = ''
     for shell in bash zsh; do
-      $out/bin/argo completion $shell > argo.$shell
+      ${if (stdenv.buildPlatform == stdenv.hostPlatform)
+        then "$out/bin/argo"
+        else "${pkgsBuildBuild.argo}/bin/argo"
+      } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done
   '';

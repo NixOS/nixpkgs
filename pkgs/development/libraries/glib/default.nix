@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -45,20 +45,35 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.66.4";
+  version = "2.72.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "l9+GcOMvn9T3OSsJgOZh3WJQEgFdWDUNoeWOND9K+YQ=";
+    sha256 = "177w1MTnpi4I77jl8lKgE1cAe5WIqH/ytGOjhXAR950=";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+
+    # Fix Inkscape compilation with clang++
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2625
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/97d39b745ff1f621424f68a41ce0a7c5bb554c87.patch";
+      sha256 = "wftuyf3ExFfrISngCQpEUpIGfHCCLXeYv/PEb/TE6a8=";
+      revert = true;
+    })
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
+    ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
+
+    # Add support for the GNOME’s default terminal emulator.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
+    ./gnome-console-support.patch
+    # Do the same for Pantheon’s terminal emulator.
+    ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
@@ -91,19 +106,33 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libelf setupHook pcre
+  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-    gtk-doc
   ] ++ optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]);
+  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    # Note: this needs to be both in buildInputs and nativeBuildInputs. The
+    # Meson gtkdoc module uses find_program to look it up (-> build dep), but
+    # glib's own Meson configuration uses the host pkg-config to find its
+    # version (-> host dep). We could technically go and fix this in glib, add
+    # pkg-config to depsBuildBuild, but this would be a futile exercise since
+    # Meson's gtkdoc integration does not support cross compilation[1] anyway
+    # and this derivation disables the docs build when cross compiling.
+    #
+    # [1] https://github.com/mesonbuild/meson/issues/2003
+    gtk-doc
+  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
+    (buildPackages.meson.override {
+      withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
+    })
+    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -123,16 +152,17 @@ stdenv.mkDerivation rec {
     "-DG_DISABLE_CAST_CHECKS"
   ];
 
-  hardeningDisable = [ "pie" ];
-
   postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py
     patchShebangs gio/tests/gengiotypefuncs.py
     chmod +x docs/reference/gio/concat-files-helper.py
     patchShebangs docs/reference/gio/concat-files-helper.py
     patchShebangs glib/gen-unicode-tables.pl
-    patchShebangs tests/gen-casefold-txt.py
-    patchShebangs tests/gen-casemap-txt.py
+    patchShebangs glib/tests/gen-casefold-txt.py
+    patchShebangs glib/tests/gen-casemap-txt.py
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    substituteInPlace gio/win32/meson.build \
+      --replace "libintl, " ""
   '';
 
   DETERMINISTIC_BUILD = 1;
@@ -181,17 +211,24 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
-    makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
+
+    makeSchemaDataDirPath = dir: name: "${dir}/share/gsettings-schemas/${name}";
+    makeSchemaPath = dir: name: "${makeSchemaDataDirPath dir name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
+    getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
+
     inherit flattenInclude;
-    updateScript = gnome3.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript {
+      packageName = "glib";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     platforms   = platforms.unix;
 
     longDescription = ''

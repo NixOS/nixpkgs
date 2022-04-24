@@ -1,14 +1,20 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, sqlalchemy,
-  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
-  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
+, python, twisted, jinja2, zope_interface, sqlalchemy, alembic, python-dateutil
+, txaio, autobahn, pyjwt, pyyaml, unidiff, treq, txrequests, pypugjs, boto3
+, moto, mock, lz4, setuptoolsTrial, isort, pylint, flake8, buildbot-worker
+, buildbot-pkg, buildbot-plugins, parameterized, git, openssh, glibcLocales
+, nixosTests
+}:
 
 let
   withPlugins = plugins: buildPythonPackage {
-    name = "${package.name}-with-plugins";
-    phases = [ "installPhase" "fixupPhase" ];
+    pname = "${package.pname}-with-plugins";
+    inherit (package) version;
+
+    dontUnpack = true;
+    dontBuild = true;
+    doCheck = false;
+
     nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
@@ -25,11 +31,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.0.2";
+    version = "3.5.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0iywcvq1sx9z5f37pw7g9qqm19fr3bymzawb0i2afm737hxr2xfp";
+      sha256 = "sha256-woGHdCan5qTp00toNkWa821EgVQMrPK+OWXoqFcgIDQ=";
     };
 
     propagatedBuildInputs = [
@@ -38,12 +44,13 @@ let
       jinja2
       zope_interface
       sqlalchemy
-      sqlalchemy_migrate
-      dateutil
+      alembic
+      python-dateutil
       txaio
       autobahn
       pyjwt
       pyyaml
+      unidiff
     ]
       # tls
       ++ twisted.extras.tls;
@@ -55,7 +62,7 @@ let
       boto3
       moto
       mock
-      python-lz4
+      lz4
       setuptoolsTrial
       isort
       pylint
@@ -67,9 +74,6 @@ let
       git
       openssh
       glibcLocales
-      # optional dependency that was accidentally made required for tests
-      # https://github.com/buildbot/buildbot/pull/5857
-      ldap3
     ];
 
     patches = [
@@ -88,6 +92,9 @@ let
     preCheck = ''
       export LC_ALL="en_US.UTF-8"
       export PATH="$out/bin:$PATH"
+
+      # remove testfile which is missing configuration file from sdist
+      rm buildbot/test/integration/test_graphql.py
     '';
 
     disabled = !isPy3k;
@@ -95,12 +102,13 @@ let
     passthru = {
       inherit withPlugins;
       tests.buildbot = nixosTests.buildbot;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+      maintainers = with maintainers; [ ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };

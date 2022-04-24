@@ -6,8 +6,7 @@
 }:
 
 mkDerivation {
-  name = "milou";
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
+  pname = "milou";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcoreaddons kdeclarative ki18n kitemmodels krunner kservice plasma-framework

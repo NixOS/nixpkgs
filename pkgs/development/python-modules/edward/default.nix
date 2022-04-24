@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
-, Keras, numpy, scipy, six, tensorflow }:
+, keras, numpy, scipy, six, tensorflow }:
 
 buildPythonPackage rec {
   pname = "edward";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # disabled for now due to Tensorflow trying to create files in $HOME:
   doCheck = false;
 
-  propagatedBuildInputs = [ Keras numpy scipy six tensorflow ];
+  propagatedBuildInputs = [ keras numpy scipy six tensorflow ];
 
   meta = with lib; {
     description = "Probabilistic programming language using Tensorflow";

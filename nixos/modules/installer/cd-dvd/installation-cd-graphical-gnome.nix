@@ -9,11 +9,11 @@ with lib;
 
   isoImage.edition = "gnome";
 
-  services.xserver.desktopManager.gnome3 = {
-    # Add firefox to favorite-apps
+  services.xserver.desktopManager.gnome = {
+    # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
       [org.gnome.shell]
-      favorite-apps=[ 'firefox.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+      favorite-apps=[ 'firefox.desktop', 'nixos-manual.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'gparted.desktop' ]
     '';
     enable = true;
   };

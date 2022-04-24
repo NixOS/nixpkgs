@@ -18,12 +18,28 @@ let
         maintainers = [ adisbladis ];
       };
 
-      machine = { pkgs, lib, ... }: {
+      nodes.machine = { pkgs, lib, ... }:
+        let
+          usersharePath = "/var/lib/samba/usershares";
+        in {
         virtualisation.emptyDiskImages = [ 4096 ];
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.zfs.enableUnstable = enableUnstable;
+
+        services.samba = {
+          enable = true;
+          extraConfig = ''
+            registry shares = yes
+            usershare path = ${usersharePath}
+            usershare allow guests = yes
+            usershare max shares = 100
+            usershare owner only = no
+          '';
+        };
+        systemd.services.samba-smbd.serviceConfig.ExecStartPre =
+          "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
 
         environment.systemPackages = [ pkgs.parted ];
 
@@ -58,8 +74,15 @@ let
             "udevadm settle",
             "zpool create rpool /dev/vdb1",
             "zfs create -o mountpoint=legacy rpool/root",
+            # shared datasets cannot have legacy mountpoint
+            "zfs create rpool/shared_smb",
             "mount -t zfs rpool/root /tmp/mnt",
             "udevadm settle",
+            # wait for samba services
+            "systemctl is-system-running --wait",
+            "zfs set sharesmb=on rpool/shared_smb",
+            "zfs share rpool/shared_smb",
+            "smbclient -gNL localhost | grep rpool_shared_smb",
             "umount /tmp/mnt",
             "zpool destroy rpool",
             "udevadm settle",
@@ -104,4 +127,54 @@ in {
   };
 
   installer = (import ./installer.nix { }).zfsroot;
+
+  expand-partitions = makeTest {
+    name = "multi-disk-zfs";
+    nodes = {
+      machine = { pkgs, ... }: {
+        environment.systemPackages = [ pkgs.parted ];
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "00000000";
+
+        virtualisation = {
+          emptyDiskImages = [ 20480 20480 20480 20480 20480 20480 ];
+        };
+
+        specialisation.resize.configuration = {
+          services.zfs.expandOnBoot = [ "tank" ];
+        };
+      };
+    };
+
+    testScript = { nodes, ... }:
+      ''
+        start_all()
+        machine.wait_for_unit("default.target")
+        print(machine.succeed('mount'))
+
+        print(machine.succeed('parted --script /dev/vdb -- mklabel gpt'))
+        print(machine.succeed('parted --script /dev/vdb -- mkpart primary 1M 70M'))
+
+        print(machine.succeed('parted --script /dev/vdc -- mklabel gpt'))
+        print(machine.succeed('parted --script /dev/vdc -- mkpart primary 1M 70M'))
+
+        print(machine.succeed('zpool create tank mirror /dev/vdb1 /dev/vdc1 mirror /dev/vdd /dev/vde mirror /dev/vdf /dev/vdg'))
+        print(machine.succeed('zpool list -v'))
+        print(machine.succeed('mount'))
+        start_size = int(machine.succeed('df -k --output=size /tank | tail -n1').strip())
+
+        print(machine.succeed("/run/current-system/specialisation/resize/bin/switch-to-configuration test >&2"))
+        machine.wait_for_unit("zpool-expand-pools.service")
+        machine.wait_for_unit("zpool-expand@tank.service")
+
+        print(machine.succeed('zpool list -v'))
+        new_size = int(machine.succeed('df -k --output=size /tank | tail -n1').strip())
+
+        if (new_size - start_size) > 20000000:
+          print("Disk grew appropriately.")
+        else:
+          print(f"Disk went from {start_size} to {new_size}, which doesn't seem right.")
+          exit(1)
+      '';
+  };
 }

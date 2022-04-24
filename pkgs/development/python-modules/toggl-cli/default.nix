@@ -1,70 +1,92 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+{ lib
+, buildPythonPackage
 , click
 , click-completion
 , factory_boy
 , faker
+, fetchPypi
 , inquirer
 , notify-py
 , pbr
 , pendulum
 , ptable
-, pytest
-, pytestcov
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
 , requests
 , twine
 , validate-email
 }:
 
-
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.4.1";
-  disabled = pythonOlder "3.5";
+  version = "2.4.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "19lry8adcznzmzbvghyid3yl4j05db6931bw38af5vrkkyzyf62i";
+    sha256 = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
   };
 
-  postPatch = ''
-   substituteInPlace requirements.txt \
-     --replace "inquirer==2.6.3" "inquirer>=2.6.3" \
-     --replace "notify-py==0.2.2" "notify-py>=0.2.2"
-  '';
-
-  nativeBuildInputs = [ pbr twine ];
-  checkInputs = [ pbr pytest pytestcov pytest-mock faker factory_boy ];
-
-  preCheck = ''
-    export TOGGL_API_TOKEN=your_api_token
-    export TOGGL_PASSWORD=toggl_password
-    export TOGGL_USERNAME=user@example.com
-    '';
-
-  checkPhase = ''
-   runHook preCheck
-   pytest -k "not premium and not TestDateTimeType and not TestDateTimeField" tests/unit --maxfail=20
-   runHook postCheck
-  '';
+  nativeBuildInputs = [
+    pbr
+    twine
+  ];
 
   propagatedBuildInputs = [
     click
     click-completion
     inquirer
     notify-py
+    pbr
     pendulum
     ptable
     requests
-    pbr
     validate-email
   ];
 
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    faker
+    factory_boy
+  ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "notify-py==0.3.1" "notify-py>=0.3.1" \
+      --replace "click==8.0.3" "click>=8.0.3" \
+      --replace "pbr==5.8.0" "pbr>=5.8.0" \
+      --replace "inquirer==2.9.1" "inquirer>=2.9.1"
+    substituteInPlace pytest.ini \
+      --replace ' --cov toggl -m "not premium"' ""
+  '';
+
+  preCheck = ''
+    export TOGGL_API_TOKEN=your_api_token
+    export TOGGL_PASSWORD=toggl_password
+    export TOGGL_USERNAME=user@example.com
+  '';
+
+  disabledTests = [
+    "integration"
+    "premium"
+    "test_parsing"
+    "test_type_check"
+    "test_now"
+  ];
+
+  pythonImportsCheck = [
+    "toggl"
+  ];
+
   meta = with lib; {
-    homepage = "https://toggl.uhlir.dev/";
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
+    homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut ];
   };
 }

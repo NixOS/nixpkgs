@@ -1,19 +1,34 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
-buildGoModule rec {
+let
+  version = "2.4.6";
+  dist = fetchFromGitHub {
+    owner = "caddyserver";
+    repo = "dist";
+    rev = "v${version}";
+    sha256 = "sha256-EXs+LNb87RWkmSWvs8nZIVqRJMutn+ntR241gqI7CUg=";
+  };
+in
+buildGoModule {
   pname = "caddy";
-  version = "2.3.0";
+  inherit version;
 
   subPackages = [ "cmd/caddy" ];
 
   src = fetchFromGitHub {
     owner = "caddyserver";
-    repo = pname;
+    repo = "caddy";
     rev = "v${version}";
-    sha256 = "03cbbr8z9g156lgx7pyn1p1i4mh8ayhhhv24r1z3h1vgq6y4ka7r";
+    sha256 = "sha256-xNCxzoNpXkj8WF9+kYJfO18ux8/OhxygkGjA49+Q4vY=";
   };
 
-  vendorSha256 = "0gpzxjiyv7l1nibh1gas4mvinamiyyfgidd8cy4abz95v6z437lp";
+  vendorSha256 = "sha256-NomgHqIiugSISbEtvIbJDn5GRn6Dn72adLPkAvLbUQU=";
+
+  postInstall = ''
+    install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
+
+    substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+  '';
 
   passthru.tests = { inherit (nixosTests) caddy; };
 

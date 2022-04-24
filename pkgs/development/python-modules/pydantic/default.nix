@@ -1,5 +1,7 @@
 { lib
 , buildPythonPackage
+, cython
+, devtools
 , email_validator
 , fetchFromGitHub
 , pytest-mock
@@ -7,26 +9,29 @@
 , python-dotenv
 , pythonOlder
 , typing-extensions
-, ujson
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.8";
+  version = "1.9.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+HfnM/IrFlUyQJdiOYyaJUNenh8dLtd8CUJWSbn6hwQ=";
+    sha256 = "sha256-C4WP8tiMRFmkDkQRrvP3yOSM2zN8pHJmX9cdANIckpM=";
   };
 
+  nativeBuildInputs = [
+    cython
+  ];
+
   propagatedBuildInputs = [
+    devtools
     email_validator
     python-dotenv
     typing-extensions
-    ujson
   ];
 
   checkInputs = [

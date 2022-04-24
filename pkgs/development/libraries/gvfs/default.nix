@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -17,13 +18,14 @@
 , fuse3
 , libcdio
 , libxml2
+, libsoup_3
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
 , samba
 , libmtp
 , gnomeSupport ? false
-, gnome3
+, gnome
 , gcr
 , glib-networking
 , gnome-online-accounts
@@ -41,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.46.2";
+  version = "1.50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "2D+hYChmcMA+uJAkBgbYr6fqajqBjorRfu7Y2XZIe9c=";
+    sha256 = "y8L1ZNLp8Ax2BnP0LWgDvOPggat/+0RW3v//upM5tN0=";
   };
 
   postPatch = ''
@@ -89,9 +91,8 @@ stdenv.mkDerivation rec {
     libnfs
     openssh
     gsettings-desktop-schemas
-    # TODO: a ligther version of libsoup to have FTP/HTTP support?
+    libsoup_3
   ] ++ lib.optionals gnomeSupport [
-    gnome3.libsoup
     gcr
     glib-networking # TLS support
     gnome-online-accounts
@@ -106,8 +107,9 @@ stdenv.mkDerivation rec {
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
-    "-Dhttp=false"
     "-Dgoogle=false"
+  ] ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"
@@ -117,8 +119,9 @@ stdenv.mkDerivation rec {
   doInstallCheck = doCheck;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -126,6 +129,6 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ teams.gnome.members;
+    maintainers = [ ] ++ teams.gnome.members;
   };
 }

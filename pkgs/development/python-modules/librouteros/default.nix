@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "librouteros";
-  version = "3.1.0";
+  version = "3.2.0";
+  format = "setuptools";
+
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = pname;
     rev = version;
-    sha256 = "1skjwnqa3vcpq9gzgpw93wdmisq15fp0q07kzyq3fgx4yg7b6sql";
+    sha256 = "sha256-Zo9HCjYe9cCkqXhikAjDQKQXGkrMni3f+9KoqhZskNk=";
   };
 
   checkInputs = [
@@ -33,7 +35,9 @@ buildPythonPackage rec {
     "test_generator_ditch"
   ];
 
-  pythonImportsCheck = [ "librouteros" ];
+  pythonImportsCheck = [
+    "librouteros"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the MikroTik RouterOS API";

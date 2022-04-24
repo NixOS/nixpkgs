@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -6,6 +6,7 @@ let
 
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
+  opt = options.services.mediatomb;
   name = cfg.package.pname;
   pkg = cfg.package;
   optionYesNo = option: if option then "yes" else "no";
@@ -216,10 +217,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mediatomb";
         default = pkgs.gerbera;
+        defaultText = literalExpression "pkgs.gerbera";
         description = ''
-          Underlying package to be used with the module (default: pkgs.gerbera).
+          Underlying package to be used with the module.
         '';
       };
 
@@ -260,6 +261,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/${name}";
+        defaultText = literalExpression ''"/var/lib/''${config.${opt.package}.pname}"'';
         description = ''
           The directory where Gerbera/Mediatomb stores its state, data, etc.
         '';
@@ -276,13 +278,13 @@ in {
       user = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "User account under which ${name} runs.";
+        description = "User account under which the service runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "Group account under which ${name} runs.";
+        description = "Group account under which the service runs.";
       };
 
       port = mkOption {
@@ -325,7 +327,7 @@ in {
 
       mediaDirectories = mkOption {
         type = with types; listOf (submodule mediaDirectory);
-        default = {};
+        default = [];
         description = ''
           Declare media directories to index.
         '';
@@ -339,7 +341,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Allow ${name} to create and use its own config file inside the <literal>dataDir</literal> as
+          Allow the service to create and use its own config file inside the <literal>dataDir</literal> as
           configured by <option>services.mediatomb.dataDir</option>.
           Deactivated by default, the service then runs with the configuration generated from this module.
           Otherwise, when enabled, no service configuration is generated. Gerbera/Mediatomb then starts using
@@ -364,6 +366,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
     };
 
     users.groups = optionalAttrs (cfg.group == "mediatomb") {

@@ -13,7 +13,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.nomad;
-        defaultText = "pkgs.nomad";
+        defaultText = literalExpression "pkgs.nomad";
         description = ''
           The package used for the Nomad agent and CLI.
         '';
@@ -25,7 +25,7 @@ in
         description = ''
           Extra packages to add to <envar>PATH</envar> for the Nomad agent process.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           with pkgs; [ cni-plugins ]
         '';
       };
@@ -51,18 +51,30 @@ in
 
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           [ "/etc/nomad-mutable.json" "/run/keys/nomad-with-secrets.json" "/etc/nomad/config.d" ]
         '';
       };
 
+      extraSettingsPlugins = mkOption {
+        type = types.listOf (types.either types.package types.path);
+        default = [ ];
+        description = ''
+          Additional plugins dir used to configure nomad.
+        '';
+        example = literalExpression ''
+          [ "<pluginDir>" "pkgs.<plugins-name>"]
+        '';
+      };
+
+
       settings = mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.
@@ -81,7 +93,7 @@ in
           the <literal>DynamicUser</literal> feature of systemd which directly
           manages and operates on <literal>StateDirectory</literal>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             # A minimal config example:
             server = {
@@ -119,7 +131,7 @@ in
       path = cfg.extraPackages ++ (with pkgs; [
         # Client mode requires at least the following:
         coreutils
-        iproute
+        iproute2
         iptables
       ]);
 
@@ -128,7 +140,8 @@ in
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
+            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
+            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;

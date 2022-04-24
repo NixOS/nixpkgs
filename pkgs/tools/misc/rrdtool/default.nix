@@ -1,11 +1,12 @@
 { fetchurl, lib, stdenv, gettext, perl, pkg-config, libxml2, pango, cairo, groff
 , tcl-8_5, darwin }:
 
-stdenv.mkDerivation rec {
-  name = "rrdtool-1.7.2";
+perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
+  pname = "rrdtool";
+  version = "1.7.2";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
+    url = "https://oss.oetiker.ch/rrdtool/pub/rrdtool-${version}.tar.gz";
     sha256 = "1nsqra0g2nja19akmf9x5y9hhgc35ml3w9dcdz2ayz7zgvmzm6d1";
   };
 
@@ -27,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
-}
+})

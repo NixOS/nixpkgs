@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
        done
+
+       # Fix for glibc-2.34. For some reason, `LIBSEMA="CCC"` is added
+       # if `sem_init` is part of libc which causes errors like
+       # `gcc: error: CCC: No such file or directory` during the build.
+       substituteInPlace configure \
+        --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
     '';
 
   buildInputs =

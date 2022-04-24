@@ -5,16 +5,20 @@
 , colorama
 , requests
 , setuptools
+, pythonOlder
 , XlsxWriter
 }:
 
 buildPythonPackage rec {
   pname = "shodan";
-  version = "1.25.0";
+  version = "1.27.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fivdvBtgv2IAQtABD0t2KoC0MRHb6pwEHXLUMl4mDCM=";
+    sha256 = "sha256-XkrnBuALYxZ6n/f34PM0QvxqxvC08mKci9Mswwf41VA=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +31,10 @@ buildPythonPackage rec {
 
   # The tests require a shodan api key, so skip them.
   doCheck = false;
-  pythonImportsCheck = [ "shodan" ];
+
+  pythonImportsCheck = [
+    "shodan"
+  ];
 
   meta = with lib; {
     description = "Python library and command-line utility for Shodan";

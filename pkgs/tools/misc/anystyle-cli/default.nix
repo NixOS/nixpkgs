@@ -30,7 +30,7 @@ buildRubyGem rec {
   propagatedBuildInputs = [ deps ];
 
   preFixup = ''
-    wrapProgram $out/bin/anystyle --prefix PATH ${poppler_utils}/bin
+    wrapProgram $out/bin/anystyle --prefix PATH : ${poppler_utils}/bin
   '';
 
   meta = with lib; {

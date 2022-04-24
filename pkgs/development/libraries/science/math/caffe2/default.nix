@@ -5,8 +5,8 @@
 , python, future, six, python-protobuf, numpy, pydot
 , eigen
 , doxygen
-, useCuda ? (config.cudaSupport or false), cudatoolkit ? null
-, useCudnn ? (config.cudnnSupport or false), cudnn ? null
+, useCuda ? (config.cudaSupport or false), cudaPackages ? {}
+, useCudnn ? (config.cudnnSupport or false)
 , useOpenmp ? false, openmp ? null
 , useOpencv3 ? true, opencv3 ? null
 , useLeveldb ? false, leveldb ? null
@@ -19,6 +19,10 @@
 #, useNccl ? false
 #, useNnpack ? false
 }:
+
+let
+   inherit (cudaPackages) cudatoolkit cudnn;
+in
 
 assert useCuda -> cudatoolkit != null;
 assert useCudnn -> (useCuda && cudnn != null);
@@ -139,5 +143,9 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yuriaisaka ];
+    # fails to compile with
+    # error: invalid conversion from 'const char*' to 'char*'
+    # TODO: Remove usage of python2, protobuf overwrite
+    broken = true;
   };
 }

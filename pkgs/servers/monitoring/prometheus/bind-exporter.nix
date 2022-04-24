@@ -1,18 +1,17 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "bind_exporter";
-  version = "20161221-${lib.strings.substring 0 7 rev}";
-  rev = "4e1717c7cd5f31c47d0c37274464cbaabdd462ba";
-
-  goPackagePath = "github.com/digitalocean/bind_exporter";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "digitalocean";
+    rev = "v${version}";
+    owner = "prometheus-community";
     repo = "bind_exporter";
-    sha256 = "1nd6pc1z627w4x55vd42zfhlqxxjmfsa9lyn0g6qq19k4l85v1qm";
+    sha256 = "sha256-ta+uy0FUEMcL4SW1K3v2j2bfDRmdAIz42MKPsNj4FbA=";
   };
+
+  vendorSha256 = "sha256-L0jZM83u423tiLf7kcqnXsQi7QBvNEXhuU+IwXXAhE0=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bind; };
 

@@ -1,8 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
-}:
+{ lib, gccStdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "cc65";
   version = "2.19";
 
@@ -13,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://cc65.github.io/";
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

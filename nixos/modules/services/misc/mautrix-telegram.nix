@@ -60,7 +60,7 @@ in {
             };
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             homeserver = {
               address = "http://localhost:8008";
@@ -108,6 +108,9 @@ in {
       serviceDependencies = mkOption {
         type = with types; listOf str;
         default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        defaultText = literalExpression ''
+          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+        '';
         description = ''
           List of Systemd services to require and wait for when starting the application service.
         '';
@@ -128,7 +131,7 @@ in {
         # https://github.com/tulir/mautrix-telegram/issues/584
         [ -f ${settingsFile} ] && rm -f ${settingsFile}
         old_umask=$(umask)
-        umask 0277
+        umask 0177
         ${pkgs.envsubst}/bin/envsubst \
           -o ${settingsFile} \
           -i ${settingsFileUnsubstituted}
@@ -142,7 +145,7 @@ in {
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi
-
+      '' + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
         # run automatic database init and migration scripts
         ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
       '';

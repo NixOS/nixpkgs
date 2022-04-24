@@ -48,7 +48,7 @@ let
       rev = rev-manual;
       sha256 = sha256-manual;
     };
-    phases = [ "unpackPhase" "patchPhase" "buildPhase" ];
+    dontInstall = true;
     nativeBuildInputs = [ asciidoc ];
     patchPhase = ''
       # rsync isnt needed
@@ -115,6 +115,11 @@ buildPythonApplication rec {
       name = "fix-mpv-args.patch";
       url = "https://sources.debian.org/data/main/a/anki/2.1.15+dfsg-3/debian/patches/fix-mpv-args.patch";
       sha256 = "1dimnnawk64m5bbdbjrxw5k08q95l728n94cgkrrwxwavmmywaj2";
+    })
+    (fetchpatch {
+      name = "anki-2.1.15-unescape.patch";
+      url = "https://795309.bugs.gentoo.org/attachment.cgi?id=715200";
+      sha256 = "14rz864kdaba4fd1marwkyz9n1jiqnbjy4al8bvwlhpvp0rm1qk6";
     })
   ];
 

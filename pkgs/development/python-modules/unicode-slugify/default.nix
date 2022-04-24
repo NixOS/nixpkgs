@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "unicode-slugify";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l7nphfdq9rgiczbl8n3mra9gx7pxap0xz540pkyz034zbz3mkrl";
+    sha256 = "25f424258317e4cb41093e2953374b3af1f23097297664731cdb3ae46f6bd6c3";
   };
 
   propagatedBuildInputs = [ six unidecode ];

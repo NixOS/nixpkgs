@@ -9,12 +9,11 @@
    This chapter describes how you can modify and extend NixOS.
   </para>
  </partintro>
- <xi:include href="sources.xml" />
- <xi:include href="writing-modules.xml" />
- <xi:include href="building-parts.xml" />
- <xi:include href="writing-documentation.xml" />
- <xi:include href="building-nixos.xml" />
- <xi:include href="nixos-tests.xml" />
- <xi:include href="testing-installer.xml" />
- <xi:include href="releases.xml" />
+ <xi:include href="../from_md/development/sources.chapter.xml" />
+ <xi:include href="../from_md/development/writing-modules.chapter.xml" />
+ <xi:include href="../from_md/development/building-parts.chapter.xml" />
+ <xi:include href="../from_md/development/what-happens-during-a-system-switch.chapter.xml" />
+ <xi:include href="../from_md/development/writing-documentation.chapter.xml" />
+ <xi:include href="../from_md/development/nixos-tests.chapter.xml" />
+ <xi:include href="../from_md/development/testing-installer.chapter.xml" />
 </part>

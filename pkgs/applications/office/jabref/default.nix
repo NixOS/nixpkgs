@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
-, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsaLib, cairo, freetype, pango, gdk-pixbuf, glib }:
+, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
-  version = "5.1";
+  version = "5.5";
   pname = "jabref";
 
   src = fetchurl {
     url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}-portable_linux.tar.gz";
-    sha256 = "04f612byrq3agzy26byg1sgrjyhcpa8xfj0ssh8dl8d8vnhx9742";
+    sha256 = "sha256-9MHNehyAmu7CiBp1rgb4zTkSqmjXm2tcmiGKFBFapKI=";
   };
 
   preferLocalBuild = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";
-    categories = "Office;";
+    categories = [ "Office" ];
     icon = "jabref";
     exec = "jabref";
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
 
-  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsaLib cairo freetype pango gdk-pixbuf glib ];
+  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib ];
   systemLibPaths = lib.makeLibraryPath systemLibs;
 
   installPhase = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/lib/runtime/bin/java $out/bin/jabref \
       --add-flags '-Djava.library.path=${systemLibPaths}' --add-flags "-p $out/lib/app -m org.jabref/org.jabref.JabRefLauncher" \
-      --run 'export LD_LIBRARY_PATH=${systemLibPaths}:$LD_LIBRARY_PATH'
+      --prefix LD_LIBRARY_PATH : '${systemLibPaths}'
 
     cp -r ${desktopItem}/share/applications $out/share/
 

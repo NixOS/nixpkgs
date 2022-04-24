@@ -1,14 +1,14 @@
-{ alsaLib
+{ alsa-lib
 , bctoolbox
 , bzrtp
 , cmake
 , doxygen
 , fetchFromGitLab
-, fetchpatch
-, ffmpeg_3
+, ffmpeg
 , glew
 , gsm
 , intltool
+, lib
 , libGL
 , libGLU
 , libX11
@@ -24,16 +24,16 @@
 , libvpx
 , ortp
 , pkg-config
-, python
+, python3
 , SDL
 , speex
 , srtp
-, lib, stdenv
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "4.4.35";
+  version = "4.5.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "18qmg678m087k7qsaxwfcv2p875z2kpy91pqryiv955km40drl0g";
+    sha256 = "sha256-n/EuXEQ9nJKC32PMvWkfP1G+E6uQQuu1/A168n8/cIY=";
   };
 
   patches = [
@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
     doxygen
     intltool
     pkg-config
-    python
+    python3
   ];
 
   propagatedBuildInputs = [
-    alsaLib
+    alsa-lib
     bctoolbox
     bzrtp
-    ffmpeg_3
+    ffmpeg
     glew
     gsm
     libGL
@@ -87,22 +87,26 @@ stdenv.mkDerivation rec {
     srtp
   ];
 
+  strictDeps = true;
+
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = [
     "-DGIT_VERSION=\"v${version}\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"
     "-Wno-error=stringop-truncation"
     "-Wno-error=stringop-overflow"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+    "-Wno-error=stringop-overread"
   ];
   NIX_LDFLAGS = "-lXext";
 
   meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

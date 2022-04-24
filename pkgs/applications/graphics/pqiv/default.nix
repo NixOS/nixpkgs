@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config
-, ffmpeg_3, gtk3, imagemagick, libarchive, libspectre, libwebp, poppler
+, ffmpeg, gtk3, imagemagick, libarchive, libspectre, libwebp, poppler
 }:
 
 stdenv.mkDerivation (rec {
@@ -14,14 +14,14 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg_3 gtk3 imagemagick libarchive libspectre libwebp poppler ];
+  buildInputs = [ ffmpeg gtk3 imagemagick libarchive libspectre libwebp poppler ];
 
   prePatch = "patchShebangs .";
 
   meta = with lib; {
     description = "Powerful image viewer with minimal UI";
-    homepage = "http://www.pberndt.com/Programme/Linux/pqiv";
-    license = licenses.gpl3;
+    homepage = "https://www.pberndt.com/Programme/Linux/pqiv";
+    license = licenses.gpl3Plus;
     maintainers = [];
     platforms = platforms.linux;
   };

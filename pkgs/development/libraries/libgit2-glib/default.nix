@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, gnome3, meson, ninja, pkg-config, vala, libssh2
+{ lib, stdenv, fetchurl, gnome, meson, ninja, pkg-config, vala, libssh2
 , gtk-doc, gobject-introspection, libgit2, glib, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
-  version = "0.99.0.1";
+  version = "1.0.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pmrcnsa7qdda73c3dxf47733mwprmj5ljpw3acxbj6r8k27anp0";
+    sha256 = "RgpdaTaVDKCNLYUYv8kMErsYfPbmdN5xX3BV/FgQK1c=";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

@@ -1,4 +1,4 @@
-{ alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
+{ alsa-lib, autoPatchelfHook, fetchurl, gtk3, libnotify
 , makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg-utils
 , xorg
 }:
@@ -16,7 +16,7 @@ let
     icon = "wavebox";
     desktopName = name;
     genericName = name;
-    categories = "Network;";
+    categories = [ "Network" ];
   };
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
   buildInputs = with xorg; [
     libXdmcp libXScrnSaver libXtst
   ] ++ [
-    alsaLib gtk3 nss
+    alsa-lib gtk3 nss
   ];
 
   runtimeDependencies = [ (getLib udev) libnotify ];

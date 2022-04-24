@@ -13,14 +13,14 @@ with lib;
 
 stdenv.mkDerivation (rec {
   version = elk6Version;
-  name = "elasticsearch-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "elasticsearch${optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}.tar.gz";
     sha256 =
       if enableUnfree
-      then "09dy3iyzk460vra6na6vk7d3mzpbv4cl0pl7kjmybxy947j7hh42"
-      else "0s04xz3j4psyhawvy503sp2nl5s0gswmpd9wfvwnavgcrr23wk39";
+      then "1hkcgqsrnnx3zjpgar4424mxfaxrx0zbrp7n7n0dlbhphshwnkmd"
+      else "1pglg60aigy31xmpfchnxcc04nd18zwc3av4m0kyp00yk5mnlyqm";
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -62,9 +62,10 @@ stdenv.mkDerivation (rec {
   };
 } // optionalAttrs enableUnfree {
   dontPatchELF = true;
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional stdenv.isLinux autoPatchelfHook;
   runtimeDependencies = [ zlib ];
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
       echo "patching $exe..."
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"

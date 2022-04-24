@@ -1,15 +1,12 @@
 { lib, stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
 
-let
-  version = "1.3.4";
-  name = "fricas-" + version;
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "fricas";
+  version = "1.3.7";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/fricas/files/fricas/${version}/${name}-full.tar.bz2";
-    sha256 = "156k9az1623y5808j845c56z2nvvdrm48dzg1v0ivpplyl7vp57x";
+    url = "mirror://sourceforge/fricas/fricas/${version}/fricas-${version}-full.tar.bz2";
+    sha256 = "sha256-cOqMvSe3ef/ZeVy5cj/VU/aTRtxgfxZfRbE4lWE5TU4=";
   };
 
   buildInputs = [ sbcl libX11 libXpm libICE libSM libXt libXau libXdmcp ];

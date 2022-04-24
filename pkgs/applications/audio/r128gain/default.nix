@@ -1,9 +1,8 @@
 { lib
 , fetchFromGitHub
-, genericUpdater
+, gitUpdater
 , substituteAll
-, common-updater-scripts
-, ffmpeg_3
+, ffmpeg
 , python3Packages
 , sox
 }:
@@ -20,12 +19,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (
-      substituteAll {
-        src = ./ffmpeg-location.patch;
-        ffmpeg = ffmpeg_3;
-      }
-    )
+    (substituteAll {
+      src = ./ffmpeg-location.patch;
+      inherit ffmpeg;
+    })
   ];
 
   propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];
@@ -35,12 +32,7 @@ python3Packages.buildPythonApplication rec {
   # sandbox to be disabled.
   doCheck = false;
 
-  passthru = {
-    updateScript = genericUpdater {
-      inherit pname version;
-      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-    };
-  };
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";

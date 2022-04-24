@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre, m4
+, fetchpatch
 , buildPackages, nixosTests
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
@@ -23,22 +24,20 @@ let
      ++ lib.optional withLDAP "-lldap");
 
 in stdenv.mkDerivation rec {
-
   pname = "postfix";
-
-  version = "3.5.9";
+  version = "3.6.5";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0avn00drmk9c9mjynfvcmir72ss9s3mckdhjm3mmnhas2sixbkji";
+    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
+    hash = "sha256-MA+ogRzqINAdJcYZ01m/+rgmVucE2qcZ4MmvxOz/SAg=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
-                ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL libmysqlclient
-                ++ lib.optional withSQLite sqlite
-                ++ lib.optional withLDAP openldap;
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withMySQL libmysqlclient
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLDAP openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -48,6 +47,12 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
+
+    # glibc 2.34 compat
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/postfix/raw/2f9d42453e67ebc43f786d98262a249037f80a77/f/postfix-3.6.2-glibc-234-build-fix.patch";
+      sha256 = "sha256-xRUL5gaoIt6HagGlhsGwvwrAfYvzMgydsltYMWvl9BI=";
+    })
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -103,7 +108,6 @@ in stdenv.mkDerivation rec {
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ globin dotlambda lewo ];
   };
-
 }

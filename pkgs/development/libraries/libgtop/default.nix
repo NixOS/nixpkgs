@@ -5,13 +5,15 @@
 , perl
 , gettext
 , gobject-introspection
-, gnome3
+, gnome
 , gtk-doc
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgtop";
   version = "2.40.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -31,8 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

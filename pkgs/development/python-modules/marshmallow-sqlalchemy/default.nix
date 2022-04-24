@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , marshmallow
 , sqlalchemy
@@ -9,16 +10,21 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "0.24.2";
+  version = "0.28.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee3ead3b83de6608c6850ff60515691b0dc556ca226680f8a82b9f785cdb71b1";
+    sha256 = "sha256-+2sGaG84/sLqDsU6XuSXkhlAnisiYPm8keS0MQXRl4I=";
   };
 
   propagatedBuildInputs = [
     marshmallow
     sqlalchemy
+  ];
+
+  pythonImportsCheck = [
+    "marshmallow_sqlalchemy"
   ];
 
   checkInputs = [
@@ -28,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
-    description = "SQLAlchemy integration with marshmallow ";
+    description = "SQLAlchemy integration with marshmallow";
     license = licenses.mit;
   };
 

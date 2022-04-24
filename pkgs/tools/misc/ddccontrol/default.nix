@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = "0.5.1";
-    sha256 = "sha256-e6Rzzz5S+Um2ZBuUkfAJQA4V+zqCqsUHB0f1t/dTU2w=";
+    rev = version;
+    sha256 = "00pmnzvd4l3w6chzw41mrf1pd7lrcwi1n7320bnq20rn8hsnbnxk";
   };
 
   nativeBuildInputs = [
@@ -34,11 +34,22 @@ stdenv.mkDerivation rec {
     ddccontrol-db
   ];
 
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ];
+
   prePatch = ''
-    oldPath="\$""{datadir}/ddccontrol-db"
-    newPath="${ddccontrol-db}/share/ddccontrol-db"
-    sed -i -e "s|$oldPath|$newPath|" configure.ac
-    sed -i -e "s/chmod 4711/chmod 0711/" src/ddcpci/Makefile*
+    substituteInPlace configure.ac              \
+      --replace                                 \
+      "\$""{datadir}/ddccontrol-db"             \
+      "${ddccontrol-db}/share/ddccontrol-db"
+
+    substituteInPlace src/ddcpci/Makefile.am    \
+       --replace "chmod 4711" "chmod 0711"
+  '' + lib.optionalString (lib.versionAtLeast "0.6.0" version) ''
+    # Upstream PR: https://github.com/ddccontrol/ddccontrol/pull/115
+    substituteInPlace src/lib/Makefile.am       \
+      --replace "/etc/" "\$""{sysconfdir}/"
   '';
 
   preConfigure = ''

@@ -8,44 +8,46 @@
 , pytest-vcr
 , pytest-asyncio
 , requests
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "4.8.0";
+  version = "6.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python";
-    rev = "v${version}";
-    sha256 = "16wjal95042kh5fxhvji0rwmw892pacqcnyms520mw15wcwilqir";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HnDCRwGrWYVW2WpCFDySVYzNW4/cNhVqNG2YfF5V3WY=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
     cbor2
     pycryptodomex
     requests
-    six
   ];
 
   checkInputs = [
-    aiohttp
-    pycryptodomex
     pytest-asyncio
-    pytestCheckHook
     pytest-vcr
-
+    pytestCheckHook
   ];
 
-  # Some tests don't pass with recent releases of tornado/twisted
-  pytestFlagsArray = [
-    "--ignore tests/integrational"
-    "--ignore tests/manual/asyncio"
-    "--ignore tests/manual/tornado/test_reconnections.py"
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/integrational"
+    "tests/manual"
+    "tests/functional/push"
   ];
 
-  pythonImportsCheck = [ "pubnub" ];
+  pythonImportsCheck = [
+    "pubnub"
+  ];
 
   meta = with lib; {
     description = "Python-based APIs for PubNub";

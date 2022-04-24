@@ -1,14 +1,16 @@
 { buildDunePackage, ounit, randomconv, mirage-crypto, mirage-crypto-rng
-, cstruct, sexplib, ppx_sexp_conv, zarith, eqaf, rresult, gmp }:
+, cstruct, sexplib0, zarith, eqaf, gmp }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-crypto-pk";
 
   inherit (mirage-crypto) version src useDune2 minimumOCamlVersion;
 
   buildInputs = [ gmp ];
   propagatedBuildInputs = [ cstruct mirage-crypto mirage-crypto-rng
-                            zarith eqaf rresult sexplib ppx_sexp_conv ];
+                            zarith eqaf sexplib0 ];
+
+  strictDeps = !doCheck;
 
   doCheck = true;
   checkInputs = [ ounit randomconv ];

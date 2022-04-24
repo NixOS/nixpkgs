@@ -37,7 +37,7 @@ let
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
         urls = d.urls;
         sha256 = d.sha256;
@@ -112,7 +112,8 @@ let
 
     src = srcDepsSet."java_tools_javac11_${system}-v6.1.zip";
 
-    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ gcc-unwrapped ];
 
     sourceRoot = ".";
@@ -150,7 +151,7 @@ stdenv'.mkDerivation rec {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
-    maintainers = [ maintainers.mboes ];
+    maintainers = lib.teams.bazel.members;
     inherit platforms;
   };
 

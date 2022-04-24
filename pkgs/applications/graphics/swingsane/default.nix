@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontConfigure = true;
 
   installPhase = let
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       desktopName = "SwingSane";
       genericName = "Scan from local or remote SANE servers";
       comment = meta.description;
-      categories = "Office;";
+      categories = [ "Office" ];
     };
 
   in ''

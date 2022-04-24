@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "libf2c-20160102";
+  pname = "libf2c";
+  version = "20160102";
 
   src = fetchurl {
     url = "http://www.netlib.org/f2c/libf2c.zip";
@@ -25,6 +26,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   hardeningDisable = [ "format" ];
+
+  # Makefile is missing depepdencies on generated headers:
+  #   main.c:4:10: fatal error: signal1.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     description = "F2c converts Fortran 77 source code to C";

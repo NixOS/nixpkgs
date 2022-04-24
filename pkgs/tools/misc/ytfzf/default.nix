@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
+, chafa
 , coreutils
 , curl
 , dmenu
@@ -9,36 +10,30 @@
 , gnused
 , jq
 , mpv
-, ncurses
 , ueberzug
-, youtube-dl
+, yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "1.1.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-286rN3g6leSnbZZ0VjWl43nhBAMPJDUMv7DhgVTsjKw=";
+    hash = "sha256-dQq7p/aK9iiyuhuxh5eVXR9GLukwsvosONpQTI0mknw=";
   };
-
-  patches = [
-    # Updates have to be installed through Nix.
-    ./no-update.patch
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}/bin" ];
-
   dontBuild = true;
+
+  installFlags = [ "PREFIX=${placeholder "out"}" "doc" ];
 
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      coreutils curl dmenu fzf gnused jq mpv ncurses ueberzug youtube-dl
+      chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
     ]}
   '';
 

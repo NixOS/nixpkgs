@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "librsb";
-  version = "1.2.0.9";
+  version = "1.2.0.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1ynrsgnvv1jfm8dv3jwjrip9x9icxv7w3qrk149025j6fbaza8gl";
+    sha256 = "sha256-7Enz94p8Q/yeEJdlk9EAqkmxhjMJ7Y+jzLt6rVLS97g=";
   };
 
   # The default configure flags are still present when building
@@ -82,5 +82,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl3Plus ];
     maintainers = with maintainers; [ KarlJoad ];
     platforms = platforms.all;
+    # ./rsb_common.h:56:10: fatal error: 'omp.h' file not found
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,52 +1,71 @@
 { lib
+, async_generator
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, brotli
+, brotlicffi
 , certifi
-, h2
+, charset-normalizer
 , httpcore
 , rfc3986
 , sniffio
+, python
 , pytestCheckHook
 , pytest-asyncio
 , pytest-trio
-, pytestcov
+, typing-extensions
 , trustme
 , uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.17.1";
+  version = "0.22.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P4Uki+vlAgVECBUz9UGvv1ip49jmf0kYbyU2/mkWE3U=";
+    sha256 = "sha256-hQmQodGpVG23IZSsWV7rB1iB6QAudDao/8YshIgpmas=";
   };
 
   propagatedBuildInputs = [
-    brotli
+    brotlicffi
     certifi
-    h2
+    charset-normalizer
     httpcore
     rfc3986
     sniffio
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    async_generator
   ];
 
   checkInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-trio
-    pytestcov
     trustme
+    typing-extensions
     uvicorn
   ];
 
-  pythonImportsCheck = [ "httpx" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
+  '';
+
+  # testsuite wants to find installed packages for testing entrypoint
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # httpcore.ConnectError: [Errno 101] Network is unreachable
@@ -54,6 +73,17 @@ buildPythonPackage rec {
     # httpcore.ConnectError: [Errno -2] Name or service not known
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # sensitive to charset_normalizer output
+    "iso-8859-1"
+    "test_response_no_charset_with_iso_8859_1_content"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_main.py"
+  ];
+
+  pythonImportsCheck = [
+    "httpx"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -62,6 +92,6 @@ buildPythonPackage rec {
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc fab ];
   };
 }

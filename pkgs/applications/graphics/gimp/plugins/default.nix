@@ -5,7 +5,7 @@
 { config, lib, pkgs }:
 
 let
-  inherit (pkgs) stdenv fetchurl pkg-config intltool glib fetchFromGitHub;
+  inherit (pkgs) stdenv fetchurl fetchpatch pkg-config intltool glib fetchFromGitHub;
 in
 
 lib.makeScope pkgs.newScope (self:
@@ -38,7 +38,7 @@ let
   }
   // attrs
   // {
-      name = "${gimp.name}-plugin-${name}";
+      name = "${gimp.pname}-plugin-${name}";
       buildInputs = [
         gimp
         gimp.gtk
@@ -53,13 +53,57 @@ let
   );
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
-    phases = [ "extraLib" "installPhase" ];
-    installPhase = "installScripts ${src}";
+    prePhases = "extraLib";
+    dontUnpack = true;
+    installPhase = ''
+      runHook preInstall
+      installScripts ${src}
+      runHook postInstall
+    '';
   } // attrs);
 in
 {
   # Allow overriding GIMP package in the scope.
   inherit (pkgs) gimp;
+
+  bimp = pluginDerivation rec {
+    /* menu:
+       File/Batch Image Manipulation...
+    */
+    pname = "bimp";
+    version = "2.6";
+
+    src = fetchFromGitHub {
+      owner = "alessandrofrancesconi";
+      repo = "gimp-plugin-bimp";
+      rev = "v${version}";
+      hash = "sha256-IJ3+/9UwxJTRo0hUdzlOndOHwso1wGv7Q4UuhbsFkco=";
+    };
+
+    patches = [
+      # Allow overriding installation path
+      # https://github.com/alessandrofrancesconi/gimp-plugin-bimp/pull/311
+      (fetchpatch {
+        url = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp/commit/098edb5f70a151a3f377478fd6e0d08ed56b8ef7.patch";
+        sha256 = "2Afx9fmdn6ztbsll2f2j7mfffMWYWyr4BuBy9ySV6vM=";
+      })
+    ];
+
+    nativeBuildInputs = with pkgs; [ which ];
+
+    installFlags = [
+      "SYSTEM_INSTALL_DIR=${placeholder "out"}/${gimp.targetPluginDir}/bimp"
+    ];
+
+    installTargets = [ "install-admin" ];
+
+    meta = with lib; {
+      description = "Batch Image Manipulation Plugin for GIMP";
+      homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ samuelgrf ];
+    };
+  };
 
   gap = pluginDerivation {
     /* menu:
@@ -120,6 +164,8 @@ in
     buildInputs = with pkgs; [ fftw ];
 
     postPatch = ''
+      substituteInPlace Makefile --replace '$(GCC)' '$(CC)'
+
       # The tarball contains a prebuilt binary.
       make clean
     '';
@@ -163,15 +209,19 @@ in
   };
 
   texturize = pluginDerivation {
-    name = "texturize-2.2.2017-07-28";
+    pname = "texturize";
+    version = "2.2+unstable=2021-12-03";
     src = fetchFromGitHub {
       owner = "lmanul";
       repo = "gimp-texturize";
-      rev = "de4367f71e40fe6d82387eaee68611a80a87e0e1";
-      sha256 = "1zzvbczly7k456c0y6s92a1i8ph4ywmbvdl8i4rcc29l4qd2z8fw";
+      rev = "9ceff0d411cda018108e5477320669b8d00d811e";
+      sha256 = "haYS0K3oAPlHtHB8phOCX5/gtWq9uiVQhG5ZhAFX0t0=";
     };
-    installPhase = "installPlugin src/texturize";
-    meta.broken = true; # https://github.com/lmanul/gimp-texturize/issues/1
+    nativeBuildInputs = with pkgs; [
+      meson
+      ninja
+      gettext
+    ];
   };
 
   waveletSharpen = pluginDerivation {

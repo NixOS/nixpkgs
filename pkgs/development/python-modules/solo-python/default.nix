@@ -14,18 +14,18 @@
 
  buildPythonPackage rec {
   pname = "solo-python";
-  version = "0.0.27";
+  version = "0.0.31";
   format = "flit";
-  disabled = pythonOlder "3.6"; # only python>=3.6 is supported
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OCiKa6mnqJGoNCC4KqI+hMw22tzhdN63x9/KujNJqcE=";
+    sha256 = "sha256-OguAHeNpom+zthREzdhejy5HJUIumrtwB0WJAwUNiSA=";
   };
 
-  # replaced pinned fido, with unrestricted fido version
   patchPhase = ''
     sed -i '/fido2/c\"fido2",' pyproject.toml
   '';
@@ -41,12 +41,10 @@
     requests
   ];
 
-  # allow for writable directory for darwin
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
-  # repo doesn't contain tests, ensure imports aren't broken
   pythonImportsCheck = [
     "solo"
     "solo.cli"

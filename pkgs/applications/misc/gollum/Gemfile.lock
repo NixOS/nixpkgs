@@ -1,9 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RedCloth (4.3.2)
+    asciidoctor (2.0.15)
+    builder (3.2.4)
     concurrent-ruby (1.1.8)
     crass (1.0.6)
+    creole (0.5.0)
     execjs (2.7.0)
+    expression_parser (0.9.0)
     ffi (1.14.2)
     gemojione (4.3.3)
       json
@@ -36,6 +41,7 @@ GEM
     gollum-rugged_adapter (1.0)
       mime-types (>= 1.15)
       rugged (~> 0.99)
+    htmlentities (4.3.4)
     json (2.5.1)
     kramdown (2.3.0)
       rexml
@@ -59,6 +65,8 @@ GEM
       racc (~> 1.4)
     octicons (12.1.0)
       nokogiri (>= 1.6.3.1)
+    org-ruby (0.9.12)
+      rubypants (~> 0.2)
     racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -71,6 +79,7 @@ GEM
     rss (0.2.9)
       rexml
     ruby2_keywords (0.0.4)
+    rubypants (0.7.1)
     rugged (0.99.0)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -105,12 +114,23 @@ GEM
       unf_ext
     unf_ext (0.0.7.7)
     useragent (0.16.10)
+    wikicloth (0.8.3)
+      builder
+      expression_parser
+      htmlentities
+      nokogiri
+      twitter-text
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
+  asciidoctor
+  creole
   gollum
+  org-ruby
+  wikicloth
 
 BUNDLED WITH
-   2.1.4
+   2.2.20

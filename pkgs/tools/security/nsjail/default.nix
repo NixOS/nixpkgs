@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nsjail";
-  version = "3.0";
+  version = "3.0"; # Bumping? Remove the bison patch.
 
   src = fetchFromGitHub {
     owner           = "google";
@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf bison flex libtool pkg-config which ];
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
+
+  patches = [
+    # To remove after bumping 3.0
+    ./001-fix-bison-link-error.patch
+  ];
 
   preBuild = ''
     makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')

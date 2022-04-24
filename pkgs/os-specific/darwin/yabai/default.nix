@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
+{ lib, stdenv, fetchFromGitHub, darwin, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.3.4";
+  version = "3.3.10";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pvyjdxgy7yxxz4x87f8an0dlxvxbnmv5kya8hkzw2na453ihvab";
+    sha256 = "sha256-8O6//T894C32Pba3F2Z84Z6VWeCXlwml3xsXoIZGqL0=";
   };
 
-  buildInputs = [ Carbon Cocoa ScriptingBridge xxd ];
+  nativeBuildInputs = [ xxd ];
+
+  buildInputs = with darwin.apple_sdk.frameworks; [
+    Carbon
+    Cocoa
+    ScriptingBridge
+    SkyLight
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

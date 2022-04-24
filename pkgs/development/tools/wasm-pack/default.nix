@@ -9,20 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-pack";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
     rev = "v${version}";
-    sha256 = "1rqyfg6ajxxyfx87ar25nf5ck9hd0p12qgv98dicniqag8l4rvsr";
+    sha256 = "sha256-nhO/SLeJTq2viDqsJCRNLbgjyDKRli3RWExUNzKT9ug=";
   };
 
-  cargoPatches = [
-    ./update-deps.patch
-  ];
-
-  cargoSha256 = "0br7r8wz3knzgl3gjpq6z8w33my0yiaq711s1wih9jizhia02y5r";
+  cargoSha256 = "sha256-6qrCHpg92IRPsf/dK6xcLGX8BLmqox3vgLRqsV4ubsY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -32,6 +28,9 @@ rustPlatform.buildRustPackage rec {
     # See: https://github.com/rustwasm/wasm-pack/issues/650
     libressl
   ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.

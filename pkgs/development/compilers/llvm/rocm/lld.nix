@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , cmake
 , libxml2
 , llvm
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the LLVM Linker";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ acowley lovesegfault ];
     platforms = platforms.linux;
   };
 }

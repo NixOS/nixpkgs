@@ -8,7 +8,7 @@
 # TODO: install Noto Sans and Oxygen Mono fonts with plasma-integration
 
 mkDerivation {
-  name = "plasma-integration";
+  pname = "plasma-integration";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     breeze-qt5 kconfig kconfigwidgets kiconthemes kio knotifications kwayland

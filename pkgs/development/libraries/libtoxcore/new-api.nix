@@ -2,7 +2,8 @@
 , libvpx, check, libconfig, pkg-config }:
 
 stdenv.mkDerivation {
-  name = "tox-core-new-20160727";
+  pname = "tox-core-new";
+  version = "unstable-2016-07-27";
 
   src = fetchFromGitHub {
     owner  = "irungentoo";

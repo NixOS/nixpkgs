@@ -1,35 +1,42 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
-, pkg-config
 , libinput
 , libxcb
 , libxkbcommon
+, pixman
+, pkg-config
 , wayland
 , wayland-protocols
 , wlroots
-, enable-xwayland ? true, xwayland, libX11
-, patches ? [ ]
-, conf ? null
 , writeText
+, enable-xwayland ? true, xwayland, libX11
+, conf ? null
+, patches ? [ ]
 }:
+
+let
+  totalPatches = patches ++ [ ];
+in
 
 stdenv.mkDerivation rec {
   pname = "dwl";
-  version = "0.2";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "gUaFTkpIQDswEubllMgvxPfCaEYFO7mODzjPyW7XsGQ=";
+    hash = "sha256-T2GqDehBNO8eublqZUmA5WADjnwElzT+bp9Dp1bqSgg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     libinput
     libxcb
     libxkbcommon
+    pixman
     wayland
     wayland-protocols
     wlroots
@@ -39,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Allow users to set their own list of patches
-  inherit patches;
+  patches = totalPatches;
 
   # Last line of config.mk enables XWayland
   prePatch = lib.optionalString enable-xwayland ''
@@ -52,6 +59,11 @@ stdenv.mkDerivation rec {
                  then conf
                  else writeText "config.def.h" conf;
   in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
+
+  NIX_CFLAGS_COMPILE = [
+    # https://github.com/djpohly/dwl/issues/186
+    "-Wno-error=unused-result"
+  ];
 
   dontConfigure = true;
 
@@ -78,8 +90,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    inherit (wayland.meta) platforms;
   };
 }
 # TODO: custom patches from upstream website
-# TODO: investigate the modifications in the upstream unstable version

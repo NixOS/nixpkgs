@@ -1,38 +1,45 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.10.0";
+  version = "0.29.3";
+  sha256 = "02qdczd8x6dl6gsyjyrmga9i67shm54xixckxvva1lhl33zz5wwm";
+  manifestsSha256 = "0ar73dwz5j19qwcp85cd87gx0kwm7ys4xcyk91gj88s5i3djd9sl";
 
   manifests = fetchzip {
-    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "Der1Ud27eIV450KkxDTF2frmeKEHKsg6vJgdXE+3548=";
+    url =
+      "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    sha256 = manifestsSha256;
     stripRoot = false;
   };
-in
 
-buildGoModule rec {
-  inherit version;
-
+in buildGoModule rec {
   pname = "fluxcd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "iJ6UyHbF4+RvfNoOuHt6X2R6XhpBe+t76deldwY5P2c=";
+    inherit sha256;
   };
 
-  vendorSha256 = "Z0keCr+KZ593c6a/56lYJwOgXu5hrUSn6N3NFf2LDUM=";
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  subPackages = [ "cmd/flux" ];
-
-  buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+  vendorSha256 = "sha256-VWTtHquq/8/nKBGLuIdg2xkpGz1ofhPlQf3NTaQaHBI=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
+
+  patches = [ ./patches/disable-tests-ssh_key.patch ];
+
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+
+  subPackages = [ "cmd/flux" ];
+
+  # Required to workaround test error:
+  #   panic: mkdir /homeless-shelter: permission denied
+  HOME = "$TMPDIR";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -46,8 +53,11 @@ buildGoModule rec {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
-    description = "Open and extensible continuous delivery solution for Kubernetes";
+    description =
+      "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
       Flux is a tool for keeping Kubernetes clusters in sync
       with sources of configuration (like Git repositories), and automating
@@ -55,7 +65,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre bryanasdev000 ];
   };
 }

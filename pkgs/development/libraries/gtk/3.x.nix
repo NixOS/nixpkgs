@@ -2,7 +2,6 @@
 , stdenv
 , substituteAll
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -24,31 +23,29 @@
 , gobject-introspection
 , fribidi
 , xorg
-, epoxy
-, json-glib
+, libepoxy
 , libxkbcommon
 , libxml2
 , gmp
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 , sassc
 , trackerSupport ? stdenv.isLinux
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , wayland
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
+, QuartzCore
 , broadwaySupport ? true
 }:
-
-assert cupsSupport -> cups != null;
 
 let
 
@@ -62,7 +59,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.24";
+  version = "3.24.33";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -74,17 +71,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "12ipk1d376bai9v820qzhxba93kkh5abi6mhyqr4hwjvqmkl77fc";
+    sha256 = "sha256-WIsGUi4l0VeemJtvnYob2/L+E83gGgTpBP80aiJeeAE=";
   };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
-
-    (fetchpatch {
-      name = "Xft-setting-fallback-compute-DPI-properly.patch";
-      url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
-      sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
-    })
+    ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
   ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
@@ -112,8 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
-    json-glib
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -142,8 +133,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # explicitly propagated, always needed
     Cocoa
+    QuartzCore
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
@@ -157,6 +149,8 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
+    "-Dx11_backend=${lib.boolToString x11Support}"
+    "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
   ];
 
   doCheck = false; # needs X11
@@ -168,6 +162,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
+    # See https://github.com/NixOS/nixpkgs/issues/132259
+    substituteInPlace meson.build \
+      --replace "x11_enabled = false" ""
+
     files=(
       build-aux/meson/post-install.py
       demos/gtk-demo/geninclude.py
@@ -188,6 +186,8 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+    # Broadway daemon
+    moveToOutput bin/broadwayd "$out"
 
     # TODO: patch glib directly
     for f in $dev/bin/gtk-encode-symbolic-svg; do
@@ -206,9 +206,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
+      freeze = true;
     };
   };
 
@@ -226,7 +227,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin lethalman worldofpeace ];
+    maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };

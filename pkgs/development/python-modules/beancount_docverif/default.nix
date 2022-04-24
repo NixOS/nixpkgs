@@ -1,18 +1,23 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
+, setuptools-scm
 , beancount
 , pytest, sh
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "1.0.1";
   pname = "beancount_docverif";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kjc0axrxpvm828lqq5m2ikq0ls8xksbmm7312zw867gdx56x5aj";
+    sha256 = "sha256-CFBv1FZP5JO+1MPnD86ttrO42zZlvE157zqig7s4HOg=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     beancount

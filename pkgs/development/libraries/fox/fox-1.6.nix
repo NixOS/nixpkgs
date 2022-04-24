@@ -2,13 +2,9 @@
 , libXrandr, libGLU, libGL, libXft, libXfixes, xinput
 , CoreServices }:
 
-let
-  version = "1.6.57";
-in
-
 stdenv.mkDerivation rec {
   pname = "fox";
-  inherit version;
+  version = "1.6.57";
 
   src = fetchurl {
     url = "ftp://ftp.fox-toolkit.org/pub/${pname}-${version}.tar.gz";

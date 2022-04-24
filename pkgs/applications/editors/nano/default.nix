@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
-, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
+, common-updater-scripts, git, nix, nixfmt, coreutils, gnused, callPackage
 , gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
@@ -16,11 +16,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "5.6.1";
+  version = "6.2";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "02cbxqizbdlfwnz8dpq4fbzmdi4yk6fv0cragvpa0748w1cp03bn";
+    sha256 = "K8oYBL6taq9K15H3VuR0m7Ve2GDuwQWpf7qGS8anfLM=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -41,7 +41,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    tests = { inherit (nixosTests) nano; };
+    tests = {
+      expect = callPackage ./test-with-expect.nix {};
+    };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}

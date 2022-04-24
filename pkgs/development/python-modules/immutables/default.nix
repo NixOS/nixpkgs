@@ -1,21 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, mypy
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.15";
-  disabled = pythonOlder "3.5";
+  version = "0.17";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3713ab1ebbb6946b7ce1387bb9d1d7f5e09c45add58c2a2ee65f963c171e746b";
+  src = fetchFromGitHub {
+    owner = "MagicStack";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-4VuB8eTWHD4hEDj11u/talfv38h2BhogSZmEVyUtnko=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
+
+  checkInputs = [
+    mypy
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Version mismatch
+    "testMypyImmu"
+  ];
 
   pythonImportsCheck = [ "immutables" ];
 

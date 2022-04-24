@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pHash";
-  version = "0.9.4";
+  version = "0.9.6";
 
   buildInputs = [ cimg ];
 
@@ -21,17 +21,15 @@ stdenv.mkDerivation rec {
     owner = "clearscene";
     repo = "pHash";
     rev = version;
-    sha256 = "0y4gknfkns5sssfaj0snyx29752my20xmxajg6xggijx0myabbv0";
+    sha256 = "sha256-frISiZ89ei7XfI5F2nJJehfQZsk0Mlb4n91q/AiZ2vA=";
   };
 
   meta = with lib; {
-    inherit version;
     description = "Compute the perceptual hash of an image";
     license = licenses.gpl3;
     maintainers = [maintainers.imalsogreg];
     platforms = platforms.all;
     homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
-    updateWalker = true;
   };
 }

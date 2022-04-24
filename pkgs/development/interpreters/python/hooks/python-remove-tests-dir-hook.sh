@@ -5,6 +5,7 @@ pythonRemoveTestsDir() {
     echo "Executing pythonRemoveTestsDir"
 
     rm -rf $out/@pythonSitePackages@/tests
+    rm -rf $out/@pythonSitePackages@/test
 
     echo "Finished executing pythonRemoveTestsDir"
 }
@@ -12,4 +13,3 @@ pythonRemoveTestsDir() {
 if [ -z "${dontUsePythonRemoveTestsDir-}" ]; then
     postFixupHooks+=(pythonRemoveTestsDir)
 fi
-

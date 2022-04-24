@@ -9,7 +9,7 @@ let
 in
 {
 
-  meta.maintainers = pkgs.pantheon.maintainers;
+  meta.maintainers = teams.pantheon.members;
 
   ###### interface
 

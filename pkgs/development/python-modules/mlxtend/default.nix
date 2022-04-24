@@ -5,7 +5,7 @@
 , pytestCheckHook
 , scipy
 , numpy
-, scikitlearn
+, scikit-learn
 , pandas
 , matplotlib
 , joblib
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.17.3";
+  version = "0.19.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = pname;
     rev = version;
-    sha256 = "1515wgmj5rhwpmky7apmmvys1630sfg534fai6559s13hp11pdcl";
+    sha256 = "0qawzlzv4zf612n9n03fxnz6gxmzschq0ykh9dgv70l33ihmjbaw";
   };
 
   checkInputs = [ pytestCheckHook ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     scipy
     numpy
-    scikitlearn
+    scikit-learn
     pandas
     matplotlib
     joblib
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     license= licenses.bsd3;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
-    # incompatible with nixpkgs scikitlearn version
+    # incompatible with nixpkgs scikit-learn version
     broken = true;
   };
 }

@@ -5,18 +5,18 @@
 , lv2
 , pkg-config
 , qt5
-, alsaLib
+, alsa-lib
 , libjack2
 }:
 
 stdenv.mkDerivation rec {
-  name = "qmidiarp";
+  pname = "qmidiarp";
   version = "0.6.5";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/qmidiarp/code";
     sha256 = "1g2143gzfbihqr2zi3k2v1yn1x3mwfbb2khmcd4m4cq3hcwhhlx9";
-    rev = "qmidiarp-0.6.5";
+    rev = "qmidiarp-${version}";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     lv2
     libjack2
   ] ++ (with qt5; [

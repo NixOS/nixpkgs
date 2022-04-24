@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , fetchurl
-# Alphabetic ordering below
-, alsaLib
+  # Alphabetic ordering below
+, alsa-lib
 , at-spi2-atk
 , atk
 , autoPatchelfHook
@@ -21,6 +21,7 @@
 , gtk3
 , libpulseaudio
 , libudev0-shim
+, libdrm
 , makeWrapper
 , nspr
 , nss
@@ -58,7 +59,7 @@ let
       let
         version = "v20201206-cjk";
       in
-        "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
+      "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
     sha256 = "sha256-aJXSVNJ+p6wMAislXUn4JQilLhimNSedbc9nAuPVxo4=";
   };
 
@@ -69,13 +70,14 @@ let
     pulseaudio
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "onlyoffice-desktopeditors";
-  version = "6.1.0";
-  minor = "90";
+  version = "6.3.1";
+  minor = null;
   src = fetchurl {
-    url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_${version}-${minor}_amd64.deb";
-    sha256 = "sha256-TUaECChM3GxtB54/zNIKjRIocnAxpBVK7XsX3z7aq8o=";
+    url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
+    sha256 = "sha256-WCjCljA7yB7Zm/I4rDZnfgaUQpDUKwbUvL7hkIG8cVM=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +88,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     atk
     cairo
@@ -101,6 +103,7 @@ in stdenv.mkDerivation rec {
     gtk2
     gtk3
     libpulseaudio
+    libdrm
     nspr
     nss
     qt5.qtbase
@@ -144,23 +147,29 @@ in stdenv.mkDerivation rec {
 
     ln -s $out/share/desktopeditors/DesktopEditors $out/bin/DesktopEditors
 
-    wrapProgram $out/bin/DesktopEditors \
-        --set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${xorg.libX11.out}/share/X11/locale
-
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
       --replace "/usr/bin/onlyoffice-desktopeditor" "$out/bin/DesktopEditor"
 
-    runHook preInstall
+    runHook postInstall
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${runtimeLibs}" )
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QT_QPA_PLATFORM "xcb"
+      # the bundled version of qt does not support wayland
+    )
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
     homepage = "https://www.onlyoffice.com/";
+    downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
+    changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
     platforms = [ "x86_64-linux" ];
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ nh2 gtrunsec ];

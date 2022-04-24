@@ -3,32 +3,37 @@
 , asynctest
 , buildPythonPackage
 , coloredlogs
-, coveralls
 , fetchFromGitHub
+, jsonschema
 , pyserial
 , pyserial-asyncio
 , pytest-asyncio
 , pytest-mock
 , pytest-timeout
-, pytestcov
 , pytestCheckHook
+, pythonOlder
 , voluptuous
-, zigpy }:
+, zigpy
+}:
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.4.0";
+  version = "0.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "zha-ng";
-    repo = "zigpy-znp";
+    owner = "zigpy";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1g5jssdnibhb4i4k1js9iy9w40cipf1gdnyp847x0bv6wblzx8rl";
+    sha256 = "0h6dclz4q4lvmapzpslh8kb0aihdjddbkxc4zc981glbip89li5w";
   };
 
   propagatedBuildInputs = [
     async-timeout
     coloredlogs
+    jsonschema
     pyserial
     pyserial-asyncio
     voluptuous
@@ -36,18 +41,21 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
-    coveralls
     pytest-asyncio
     pytest-mock
     pytest-timeout
-    pytestcov
     pytestCheckHook
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
+  ];
+
+  pythonImportsCheck = [
+    "zigpy_znp"
   ];
 
   meta = with lib; {
-    description = "A library for zigpy which communicates with TI ZNP radios";
-    homepage = "https://github.com/zha-ng/zigpy-znp";
+    description = "Python library for zigpy which communicates with TI ZNP radios";
+    homepage = "https://github.com/zigpy/zigpy-znp";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;

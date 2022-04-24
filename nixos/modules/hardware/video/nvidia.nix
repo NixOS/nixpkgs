@@ -23,6 +23,8 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
+  nvidiaSettings = cfg.nvidiaSettings;
+  busIDType = types.strMatching "([[:print:]]+\:[0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
 in
 
 {
@@ -67,7 +69,7 @@ in
     };
 
     hardware.nvidia.prime.nvidiaBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:1:0:0";
       description = ''
@@ -77,7 +79,7 @@ in
     };
 
     hardware.nvidia.prime.intelBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:0:2:0";
       description = ''
@@ -87,12 +89,12 @@ in
     };
 
     hardware.nvidia.prime.amdgpuBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:4:0:0";
       description = ''
         Bus ID of the AMD APU. You can find it using lspci; for example if lspci
-	shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
+        shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
       '';
     };
 
@@ -143,6 +145,15 @@ in
       '';
     };
 
+    hardware.nvidia.nvidiaSettings = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
+        systemPackages.
+      '';
+    };
+
     hardware.nvidia.nvidiaPersistenced = mkOption {
       default = false;
       type = types.bool;
@@ -155,11 +166,11 @@ in
     hardware.nvidia.package = lib.mkOption {
       type = lib.types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
-      defaultText = "config.boot.kernelPackages.nvidiaPackages.stable";
+      defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
       description = ''
         The NVIDIA X11 derivation to use.
       '';
-      example = "config.boot.kernelPackages.nvidiaPackages.legacy340";
+      example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
     };
   };
 
@@ -169,37 +180,45 @@ in
   in mkIf enabled {
     assertions = [
       {
-        assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
-        message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
-      }
-
-      {
         assertion = primeEnabled -> pCfg.intelBusId == "" || pCfg.amdgpuBusId == "";
         message = ''
           You cannot configure both an Intel iGPU and an AMD APU. Pick the one corresponding to your processor.
         '';
       }
+
       {
         assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
           When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
       }
+
       {
         assertion = offloadCfg.enable -> versionAtLeast nvidia_x11.version "435.21";
         message = "NVIDIA PRIME render offload is currently only supported on versions >= 435.21.";
       }
+
       {
         assertion = !(syncCfg.enable && offloadCfg.enable);
         message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
+
       {
         assertion = !(syncCfg.enable && cfg.powerManagement.finegrained);
         message = "Sync precludes powering down the NVIDIA GPU.";
       }
+
       {
-        assertion = cfg.powerManagement.enable -> offloadCfg.enable;
+        assertion = cfg.powerManagement.finegrained -> offloadCfg.enable;
         message = "Fine-grained power management requires offload to be enabled.";
+      }
+
+      {
+        assertion = cfg.powerManagement.enable -> (
+          builtins.pathExists (cfg.package.out + "/bin/nvidia-sleep.sh") &&
+          builtins.pathExists (cfg.package.out + "/lib/systemd/system-sleep/nvidia")
+        );
+        message = "Required files for driver based power management don't exist.";
       }
     ];
 
@@ -226,7 +245,7 @@ in
       modules = optional (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
         BusID "${igpuBusId}"
-        ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
+        ${optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}
       '';
     } ++ singleton {
       name = "nvidia";
@@ -251,9 +270,15 @@ in
       Option "AllowNVIDIAGPUScreens"
     '';
 
-    services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
+    services.xserver.displayManager.setupCommands = let
+      sinkGpuProviderName = if igpuDriver == "amdgpu" then
+        # find the name of the provider if amdgpu
+        "`${pkgs.xorg.xrandr}/bin/xrandr --listproviders | ${pkgs.gnugrep}/bin/grep -i AMD | ${pkgs.gnused}/bin/sed -n 's/^.*name://p'`"
+      else
+        igpuDriver;
+    in optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
-      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource ${igpuDriver} NVIDIA-0
+      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource "${sinkGpuProviderName}" NVIDIA-0
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
     '';
 
@@ -261,12 +286,21 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
-    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
-    hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
-    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
+    # 'nvidia_x11' installs it's files to /run/opengl-driver/...
+    environment.etc."egl/egl_external_platform.d".source =
+      "/run/opengl-driver/share/egl/egl_external_platform.d/";
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+    hardware.opengl.extraPackages = [
+      nvidia_x11.out
+      pkgs.nvidia-vaapi-driver
+    ];
+    hardware.opengl.extraPackages32 = [
+      nvidia_x11.lib32
+      pkgs.pkgsi686Linux.nvidia-vaapi-driver
+    ];
+
+    environment.systemPackages = [ nvidia_x11.bin ]
+      ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;

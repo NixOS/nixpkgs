@@ -1,9 +1,9 @@
 --- a/aconfigure
 +++ b/aconfigure
-@@ -8945,6 +8945,10 @@
-                                  ac_webrtc_instset=neon
-                                  ac_webrtc_cflags="-DWEBRTC_ARCH_ARMV7 -mfloat-abi=hard -mfpu=neon"
-                                  ;;
+@@ -9174,6 +9174,10 @@
+				 ac_webrtc_instset=neon
+				 ac_webrtc_cflags="-DWEBRTC_ARCH_ARM64"
+			    	 ;;
 +                             arm64*|aarch64*)
 +                                 ac_webrtc_instset=neon
 +                                 ac_webrtc_cflags="-DWEBRTC_ARCH_ARM64"

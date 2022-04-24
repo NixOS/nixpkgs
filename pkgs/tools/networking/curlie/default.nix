@@ -1,19 +1,24 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, curlie, testers }:
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.6.0";
+  version = "1.6.9";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rrwdqaKrC37BaI9RuTTv6EiOZ3ztgd7nGuplmeW02h8=";
+    hash = "sha256-3EKxuEpFm+lp2myMfymYYY9boSXGOF2iAdjtGKnjJK0=";
   };
 
   vendorSha256 = "sha256-tYZtnD7RUurhl8yccXlTIvOxybBJITM+it1ollYJ1OI=";
 
-  doCheck = false;
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = curlie;
+    command = "curlie version";
+  };
 
   meta = with lib; {
     description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";

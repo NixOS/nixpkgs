@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , ptyprocess
-, isPy3k
 }:
 
 buildPythonPackage (rec {

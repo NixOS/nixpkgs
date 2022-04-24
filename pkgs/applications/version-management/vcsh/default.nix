@@ -1,26 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
+{ lib, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, git
+, perlPackages
+}:
 
-stdenv.mkDerivation {
-  version = "1.20170915";       # date of commit we're pulling
+stdenv.mkDerivation rec {
   pname = "vcsh";
+  version = "2.0.4";
 
-  src = fetchFromGitHub {
-    owner = "RichiH";
-    repo = "vcsh";
-    rev = "eadb8df6aa71a76e5be36492edcadb118bd862ac";
-    sha256 = "1wfzp8167lcq6akdpbi8fikjv0z3h1i5minh3423dljc04q0klm1";
+  src = fetchurl {
+    url = "https://github.com/RichiH/vcsh/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-W/Ql2J9HTDQPu0el34mHVzqe85KGWLPph2sHyuEzPPI=";
   };
 
-  buildInputs = [ which git ronn ]
-    ++ (with perlPackages; [ perl ShellCommand TestMost TestDifferences TestDeep TestException TestWarn ]);
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
-  installPhase = "make install PREFIX=$out";
+  buildInputs = [ git ];
+
+  checkInputs = []
+    ++ (with perlPackages; [ perl ShellCommand TestMost ]);
+
+  outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
     description = "Version Control System for $HOME";
     homepage = "https://github.com/RichiH/vcsh";
+    changelog = "https://github.com/RichiH/vcsh/blob/v${version}/changelog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel alerque ];
     platforms = platforms.unix;
   };
 }

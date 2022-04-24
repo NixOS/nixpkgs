@@ -5,7 +5,6 @@
 , pytest-cov
 , pytestCheckHook
 , pythonOlder
-, pyyaml
 , requests
 , requests-mock
 }:

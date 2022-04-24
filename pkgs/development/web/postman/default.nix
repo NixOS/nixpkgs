@@ -1,103 +1,18 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, at-spi2-core, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
-, freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
-, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver
-}:
+{ stdenvNoCC, callPackage, lib }:
 
-stdenv.mkDerivation rec {
+let
   pname = "postman";
-  version = "7.36.1";
-
-  src = fetchurl {
-    url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "sha256-6brThKTAQI3cu3SSqvEIT1nwlQ/jPTP+d/Q/m/Ez5nQ=";
-    name = "${pname}.tar.gz";
-  };
-
-  dontBuild = true; # nothing to build
-  dontConfigure = true;
-
-  desktopItem = makeDesktopItem {
-    name = "postman";
-    exec = "postman";
-    icon = "postman";
-    comment = "API Development Environment";
-    desktopName = "Postman";
-    genericName = "Postman";
-    categories = "Development;";
-  };
-
-  buildInputs = [
-    stdenv.cc.cc.lib
-    atk
-    at-spi2-atk
-    at-spi2-core
-    alsaLib
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    freetype
-    fontconfig
-    nss
-    nspr
-    pango
-    udev
-    libuuid
-    libX11
-    libxcb
-    libXi
-    libXcursor
-    libXdamage
-    libXrandr
-    libXcomposite
-    libXext
-    libXfixes
-    libXrender
-    libXtst
-    libXScrnSaver
-  ];
-
-  nativeBuildInputs = [ wrapGAppsHook ];
-
-
-  installPhase = ''
-    mkdir -p $out/share/postman
-    cp -R app/* $out/share/postman
-    rm $out/share/postman/Postman
-
-    mkdir -p $out/bin
-    ln -s $out/share/postman/_Postman $out/bin/postman
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-
-    iconRootDir=$out/share/icons
-    iconSizeDir=$out/share/icons/hicolor/128x128/apps
-    mkdir -p $iconSizeDir
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconRootDir/postman.png
-    ln -s $out/share/postman/resources/app/assets/icon.png $iconSizeDir/postman.png
-  '';
-
-  postFixup = ''
-    pushd $out/share/postman
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" _Postman
-    for file in $(find . -type f \( -name \*.node -o -name _Postman -o -name \*.so\* \) ); do
-      ORIGIN=$(patchelf --print-rpath $file); \
-      patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
-    done
-    popd
-  '';
-
+  version = "9.14.0";
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";
     license = licenses.postman;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ xurei evanjs ];
+    platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    maintainers = with maintainers; [ johnrichardrinehart evanjs tricktron ];
   };
-}
+
+in
+
+if stdenvNoCC.isDarwin
+then callPackage ./darwin.nix { inherit pname version meta; }
+else callPackage ./linux.nix { inherit pname version meta; }

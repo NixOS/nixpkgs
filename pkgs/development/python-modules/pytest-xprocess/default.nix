@@ -1,20 +1,23 @@
 { lib, buildPythonPackage, fetchPypi
 , psutil
 , pytest
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.17.0";
+  version = "0.18.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2506d637c4f54c65dd195c1d094abdeedacc9bf0689131d847a324ad0fc951c0";
+    sha256 = "fd9f30ed1584b5833bc34494748adf0fb9de3ca7bacc4e88ad71989c21cba266";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ psutil pytest ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ psutil ];
 
   # Remove test QoL package from install_requires
   postPatch = ''

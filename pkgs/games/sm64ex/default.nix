@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sm64ex";
-  version = "unstable-2020-06-19";
+  version = "unstable-2021-11-30";
 
   src = fetchFromGitHub {
     owner = "sm64pc";
     repo = "sm64ex";
-    rev = "f5005418348cf1a53bfa75ff415a513ef0b9b273";
-    sha256 = "0adyshkqk5c4lxhdxc3j6ax4svfka26486qpa5q2gl2nixwg9zxn";
+    rev = "db9a6345baa5acb41f9d77c480510442cab26025";
+    sha256 = "sha256-q7JWDvNeNrDpcKVtIGqB1k7I0FveYwrfqu7ZZK7T8F8=";
   };
 
   nativeBuildInputs = [ python3 pkg-config ];
@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp build/${region}_pc/sm64.${region}.f3dex2e $out/bin/sm64ex
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/sm64pc/sm64ex";

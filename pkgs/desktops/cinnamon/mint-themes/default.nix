@@ -1,5 +1,6 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenv
 , python3
 , sassc
 , sass
@@ -7,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-themes";
-  version = "1.8.6";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # commit is named 1.8.6, tags=404
-    rev = "fa0b9530f6e68c390aecd622b229072fcd08f05f";
-    sha256 = "0pgv5hglsscip5s7nv0mn301vkn0j6wp4rv34vr941yai1jfk2wb";
+    # they don't exactly do tags, it's just a named commit
+    rev = "a833fba6917043bf410dee4364c9a36af1ce4c83";
+    hash = "sha256-8abjjD0XoApvqB8SNlWsqIEp7ozgiERGS0kWglw2DWA=";
   };
 
   nativeBuildInputs = [

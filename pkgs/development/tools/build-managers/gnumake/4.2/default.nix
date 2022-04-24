@@ -2,12 +2,9 @@
 
 assert guileSupport -> ( pkg-config != null && guile != null );
 
-let
-  version = "4.2.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnumake";
-  inherit version;
+  version = "4.2.1";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";
@@ -23,6 +20,7 @@ stdenv.mkDerivation {
     ./pselect.patch
     # Fix support for glibc 2.27's glob, inspired by http://www.linuxfromscratch.org/lfs/view/8.2/chapter05/make.html
     ./glibc-2.27-glob.patch
+    ./glibc-2.33-glob.patch
   ];
 
   nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];

@@ -1,6 +1,6 @@
 { qtModule, qtdeclarative }:
 
 qtModule {
-  name = "qtquickcontrols";
+  pname = "qtquickcontrols";
   qtInputs = [ qtdeclarative ];
 }

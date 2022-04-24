@@ -1,26 +1,47 @@
-{ lib, stdenv, fetchurl, pkg-config, udev, dbus, perl, python3, IOKit }:
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, perl
+, python3
+, dbus
+, polkit
+, systemd
+, IOKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcsclite";
-  version = "1.9.1";
+  version = "1.9.5";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "sha256-c8R4m3h2qDOnD0k82iFlXf6FaJ2bfilwHCQyduVeaDo=";
+    sha256 = "sha256:024x0hadn0kc0m9yz3l2pqzc5mdqyza9lmckg0bn4xak6frzkqwy";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
 
+  postPatch = ''
+    sed -i configure.ac \
+      -e "s@polkit_policy_dir=.*@polkit_policy_dir=$bin/share/polkit-1/actions@"
+  '';
+
   configureFlags = [
+    "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--enable-confdir=/etc"
-  ] ++ lib.optional stdenv.isLinux
-    "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
-  ++ lib.optional (!stdenv.isLinux)
-    "--disable-libsystemd";
+  ]
+  ++ (if stdenv.isLinux then [
+    "--enable-ipcdir=/run/pcscd"
+    "--enable-polkit"
+    "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
+  ] else [
+    "--disable-libsystemd"
+  ]);
 
   postConfigure = ''
     sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
@@ -33,10 +54,12 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
-  nativeBuildInputs = [ pkg-config perl ];
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ udev dbus ]
+    ++ lib.optionals stdenv.isLinux [ dbus polkit systemd ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {

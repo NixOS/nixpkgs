@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0kkz6f9myhjnr3308sdab8q186rd55lapvcp38w8qmakdbhc828j";
   };
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    ncurses flex bison autoconf automake m4
+    ncurses flex bison m4
   ];
 
   preConfigure = ''

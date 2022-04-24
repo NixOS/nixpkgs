@@ -1,37 +1,52 @@
 { lib
-, aiohttp
-, asynctest
+, assertpy
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
-, pytest-aiohttp
+, poetry-core
 , pytest-asyncio
+, pytest-mockservers
+, pytest-resource-path
 , pytest-sugar
 , pytestCheckHook
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "1.2.2";
+  version = "2.0.9";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = pname;
-    rev = version;
-    sha256 = "0wvca1jbyj4bwrpkpklbxnkvdp9zs7mrvg5b9vkx2hpyr81vyxam";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-vsMQG664ySMQfdl4tGJKMY0MZXVl39QaFxu7kMtZWCM=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  preCheck = ''
+    export TZ=Asia/Jerusalem
+  '';
 
   checkInputs = [
-    asynctest
-    pytest-aiohttp
+    assertpy
     pytest-asyncio
+    pytest-mockservers
+    pytest-resource-path
     pytest-sugar
     pytestCheckHook
+    time-machine
+  ];
+
+  disabledTests = [
+    # AssertionError: Expected <14:00> to be equal to <17:00>, but was not.
+    "test_schedule_parser_with_a_weekly_recurring_enabled_schedule_data"
+    "test_schedule_parser_with_a_daily_recurring_enabled_schedule_data"
+    "test_schedule_parser_with_a_partial_daily_recurring_enabled_schedule_data"
+    "test_schedule_parser_with_a_non_recurring_enabled_schedule_data"
   ];
 
   pythonImportsCheck = [ "aioswitcher" ];

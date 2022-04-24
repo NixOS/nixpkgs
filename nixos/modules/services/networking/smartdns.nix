@@ -32,7 +32,7 @@ in {
       type =
       let atom = oneOf [ str int bool ];
       in attrsOf (coercedTo atom toList (listOf atom));
-      example = literalExample ''
+      example = literalExpression ''
         {
           bind = ":5353 -no-rule -group example";
           cache-size = 4096;
@@ -54,6 +54,7 @@ in {
 
     systemd.packages = [ pkgs.smartdns ];
     systemd.services.smartdns.wantedBy = [ "multi-user.target" ];
+    systemd.services.smartdns.restartTriggers = [ confFile ];
     environment.etc."smartdns/smartdns.conf".source = confFile;
     environment.etc."default/smartdns".source =
       "${pkgs.smartdns}/etc/default/smartdns";

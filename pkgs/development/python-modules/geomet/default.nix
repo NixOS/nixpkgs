@@ -1,30 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , click
 , six
 }:
 
 buildPythonPackage rec {
   pname = "geomet";
-  version = "0.2.1";
+  version = "0.3.0";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "geomet";
     repo = "geomet";
     rev = version;
-    sha256 = "0fdi26glsmrsyqk86rnsfcqw79svn2b0ikdv89pq98ihrpwhn85y";
+    sha256 = "1lb0df78gkivsb7hy3ix0xccvcznvskip11hr5sgq5y76qnfc8p0";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "python-3.8-support.patch";
-      url = "https://github.com/geomet/geomet/commit/dc4cb4a856d3ad814b57b4b7487d86d9e0f0fad4.patch";
-      sha256 = "1f1cdfqyp3z01jdjvax77219l3gc75glywqrisqpd2k0m0g7fwh3";
-    })
-  ];
 
   propagatedBuildInputs = [ click six ];
 

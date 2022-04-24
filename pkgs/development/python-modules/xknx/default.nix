@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, cryptography
 , netifaces
 , voluptuous
 , pyyaml
@@ -11,20 +12,21 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "0.17.4";
-  disabled = pythonOlder "3.7";
+  version = "0.20.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-QMtpGd7JFPGTLHbhyjOsan1Ow32v8B2ss84GpHA0qqs=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-uqFS/kveWLEmu+8L9dOprcQcO+Odq9lzfTI9lqIhaSw=";
   };
 
   propagatedBuildInputs = [
-    voluptuous
+    cryptography
     netifaces
-    pyyaml
   ];
 
   checkInputs = [
@@ -32,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "xknx" ];
+  pythonImportsCheck = [
+    "xknx"
+  ];
 
   meta = with lib; {
     description = "KNX Library Written in Python";
@@ -43,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/XKNX/xknx";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

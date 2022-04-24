@@ -1,31 +1,56 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
+, meson
+, ninja
 , udev
 , glib
+, gnome
+, vala
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
-, gnome3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgudev";
-  version = "234";
+  version = "237";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0drf39qhsdz35kwb18hnfj2ig4yfxhfks66m783zlhnvy2narbhv";
+    sha256 = "1al6nr492nzbm8ql02xhzwci2kwb1advnkaky3j9636jf08v41hd";
   };
 
-  nativeBuildInputs = [ pkg-config gobject-introspection ];
-  buildInputs = [ udev glib ];
+  strictDeps = true;
 
-  # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
-  configureFlags = [ "--disable-umockdev" ];
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    vala
+    glib # for glib-mkenums needed during the build
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    udev
+    glib
+  ];
+
+  mesonFlags = [
+    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
+    "-Dtests=disabled"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dvapi=disabled"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

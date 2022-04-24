@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ungoogled-chromium-${version}";
+  pname = "ungoogled-chromium";
 
   version = rev;
 

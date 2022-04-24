@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, runtimeShell }:
 
 let
   baseName = "bbswitch";
@@ -10,9 +10,11 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl {
-    url = "https://github.com/Bumblebee-Project/${baseName}/archive/v${version}.tar.gz";
-    sha256 = "0xql1nv8dafnrcg54f3jsi3ny3cd2ca9iv73pxpgxd2gfczvvjkn";
+  src = fetchFromGitHub {
+    owner = "Bumblebee-Project";
+    repo = "bbswitch";
+    rev = "v${version}";
+    hash = "sha256-FHC8myKnouNDERVds2QCJj1ZstjHrOzFpb+FDiSBjL4=";
   };
 
   patches = [
@@ -35,6 +37,8 @@ stdenv.mkDerivation {
       --replace "\$(shell uname -r)" "${kernel.modDirVersion}" \
       --replace "/lib/modules" "${kernel.dev}/lib/modules"
   '';
+
+  makeFlags = kernel.makeFlags;
 
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
@@ -59,5 +63,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
+    license = licenses.gpl2Plus;
   };
 }

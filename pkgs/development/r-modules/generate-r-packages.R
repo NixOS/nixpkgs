@@ -1,9 +1,16 @@
 #!/usr/bin/env Rscript
 library(data.table)
 library(parallel)
+library(BiocManager)
 cl <- makeCluster(10)
 
-biocVersion <- 3.11
+biocVersion <- BiocManager:::.version_map()
+biocVersion <- biocVersion[biocVersion$R == getRversion()[, 1:2],c("Bioc", "BiocStatus")]
+if ("release" %in% biocVersion$BiocStatus) {
+  biocVersion <-  as.numeric(as.character(biocVersion[biocVersion$BiocStatus == "release", "Bioc"]))
+} else {
+  biocVersion <-  max(as.numeric(as.character(biocVersion$Bioc)))
+}
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
@@ -48,8 +55,7 @@ escapeName <- function(name) {
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
-    name <- escapeName(name)
-    attr <- gsub(".", "_", name, fixed=TRUE)
+    attr <- gsub(".", "_", escapeName(name), fixed=TRUE)
     options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
                     , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)
@@ -76,6 +82,17 @@ pkgs$sha256 <- parApply(cl, pkgs, 1, function(p) nixPrefetch(p[1], p[2]))
 nix <- apply(pkgs, 1, function(p) formatPackage(p[1], p[2], p[18], p[4], p[5], p[6]))
 write("done", stderr())
 
+# Mark deleted packages as broken
+setkey(readFormatted, V2)
+markBroken <- function(name) {
+  str <- paste0(readFormatted[name], collapse='"')
+  if(sum(grep("broken = true;", str)))
+    return(str)
+  write(paste("marked", name, "as broken"), stderr())
+  gsub("};$", "broken = true; };", str)
+}
+broken <- lapply(setdiff(readFormatted[[2]], pkgs[[1]]), markBroken)
+
 cat("# This file is generated from generate-r-packages.R. DO NOT EDIT.\n")
 cat("# Execute the following command to update the file.\n")
 cat("#\n")
@@ -89,6 +106,7 @@ if (mirrorType == "cran") { cat("{ snapshot = \"", paste(snapshotDate), "\"; }",
 cat(";\n")
 cat("in with self; {\n")
 cat(paste(nix, collapse="\n"), "\n", sep="")
+cat(paste(broken, collapse="\n"), "\n", sep="")
 cat("}\n")
 
 stopCluster(cl)
