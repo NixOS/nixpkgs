@@ -419,6 +419,8 @@ let
       inherit (pkgs) ffmpeg;
     };
 
+    fiber = callPackage ../development/ocaml-modules/fiber { };
+
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
