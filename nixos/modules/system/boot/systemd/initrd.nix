@@ -156,37 +156,7 @@ in {
       '';
       visible = false;
       default = {};
-      type = types.attrsOf (types.submodule ({ config, options, name, ... }: {
-        options = {
-          enable = mkEnableOption "copying of this file to initrd and symlinking it" // { default = true; };
-
-          target = mkOption {
-            type = types.path;
-            description = ''
-              Path of the symlink.
-            '';
-            default = name;
-          };
-
-          text = mkOption {
-            default = null;
-            type = types.nullOr types.lines;
-            description = "Text of the file.";
-          };
-
-          source = mkOption {
-            type = types.path;
-            description = "Path of the source file.";
-          };
-        };
-
-        config = {
-          source = mkIf (config.text != null) (
-            let name' = "initrd-" + baseNameOf name;
-            in mkDerivedConfig options.text (pkgs.writeText name')
-          );
-        };
-      }));
+      type = utils.systemdUtils.types.initrdContents;
     };
 
     storePaths = mkOption {

@@ -1266,7 +1266,7 @@
           <literal>systemd-shutdown</literal> is now properly linked on
           shutdown to unmount all filesystems and device mapper devices
           cleanly. This can be disabled using
-          <literal>boot.systemd.shutdown.enable</literal>.
+          <literal>systemd.shutdownRamfs.enable</literal>.
         </para>
       </listitem>
       <listitem>
