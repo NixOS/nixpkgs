@@ -1475,6 +1475,8 @@ let
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
+    xdg = callPackage ../development/ocaml-modules/xdg { };
+
     xenstore = callPackage ../development/ocaml-modules/xenstore { };
 
     xenstore_transport = callPackage ../development/ocaml-modules/xenstore_transport { };
