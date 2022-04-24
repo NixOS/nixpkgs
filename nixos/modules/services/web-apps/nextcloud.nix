@@ -376,7 +376,7 @@ in {
       description = ''
         Extra options which should be appended to nextcloud's config.php file.
       '';
-      example = {
+      example = literalExample '' {
         redis = {
           host = "/run/redis/redis.sock";
           port = 0;
@@ -384,7 +384,7 @@ in {
           password = "secret";
           timeout = 1.5;
         };
-      };
+      } '';
     };
 
     secretFile = mkOption {
@@ -393,7 +393,7 @@ in {
       description = ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
         form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
-        '{"redis":{"password":"secret"}}'.
+        <programlisting>{"redis":{"password":"secret"}}</programlisting>.
       '';
     };
   };
@@ -513,7 +513,11 @@ in {
 
             $EXTRACONFIG = json_decode(file_get_contents("${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}"), true);
 
-            $CONFIG = array_merge($CONFIG, $EXTRACONFIG);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+              throw new \RuntimeException(sprintf("Cannot decode %s, because: %s", $filename, json_last_error_msg()));
+            }
+
+            $CONFIG = array_replace_recursive($CONFIG, $EXTRACONFIG);
             ${optionalString (cfg.secretFile != null) ''
               $CONFIG = array_merge($CONFIG, nix_read_file(
                 ${cfg.secretFile}),
