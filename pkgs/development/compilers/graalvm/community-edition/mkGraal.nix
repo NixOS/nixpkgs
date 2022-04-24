@@ -169,6 +169,8 @@ let
     outputs = [ "out" "lib" ];
 
     installPhase = ''
+      # ensure that $lib/lib exists to avoid breaking builds
+      mkdir -p "$lib/lib"
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
 
@@ -194,7 +196,6 @@ let
           # `native-image -H:CLibraryPath=''${lib.getLib graalvmXX-ce}/lib ...` and reduce
           # closure size by not depending on GraalVM $out (that is much bigger)
           # we always use glibc here, since musl is only supported for static compilation
-          mkdir -p "$lib/lib"
           for f in "${glibc}/lib/"*; do
             ln -s "$f" "$lib/lib/$(basename $f)"
           done

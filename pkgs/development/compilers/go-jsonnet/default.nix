@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testVersion }:
+{ lib, buildGoModule, fetchFromGitHub, testers }:
 
 let self = buildGoModule rec {
   pname = "go-jsonnet";
@@ -17,7 +17,7 @@ let self = buildGoModule rec {
 
   subPackages = [ "cmd/jsonnet*" ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = self;
     version = "v${version}";
   };

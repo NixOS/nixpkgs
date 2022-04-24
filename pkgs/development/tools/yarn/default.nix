@@ -1,4 +1,4 @@
-{ lib, stdenv, nodejs, fetchzip, testVersion, yarn }:
+{ lib, stdenv, nodejs, fetchzip, testers, yarn }:
 
 stdenv.mkDerivation rec {
   pname = "yarn";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarnpkg
   '';
 
-  passthru.tests = testVersion { package = yarn; };
+  passthru.tests = testers.testVersion { package = yarn; };
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";

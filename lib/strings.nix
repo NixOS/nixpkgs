@@ -253,10 +253,7 @@ rec {
       => false
   */
   hasInfix = infix: content:
-    let
-      drop = x: substring 1 (stringLength x) x;
-    in hasPrefix infix content
-      || content != "" && hasInfix infix (drop content);
+    builtins.match ".*${escapeRegex infix}.*" content != null;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,

@@ -8,7 +8,7 @@
 , gdk-pixbuf
 , atk
 , gtk3
-, testVersion
+, testers
 , czkawka
 }:
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     gtk3
   ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = czkawka;
     command = "czkawka_cli --version";
   };

@@ -9,7 +9,6 @@
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
-  "nightthemeswitcher@romainvigier.fr" = callPackage ./night-theme-switcher { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };

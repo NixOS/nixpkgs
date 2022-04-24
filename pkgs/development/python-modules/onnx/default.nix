@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, bash
 , cmake
 , fetchPypi
 , isPy27
@@ -43,8 +44,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     chmod +x tools/protoc-gen-mypy.sh.in
-    patchShebangs tools/protoc-gen-mypy.sh.in tools/protoc-gen-mypy.py
-
+    patchShebangs tools/protoc-gen-mypy.py
+    substituteInPlace tools/protoc-gen-mypy.sh.in \
+      --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace setup.py \
       --replace "setup_requires.append('pytest-runner')" ""
   '';

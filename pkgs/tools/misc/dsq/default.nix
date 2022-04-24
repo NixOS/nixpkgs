@@ -5,22 +5,22 @@
 , runCommand
 , nix-update-script
 , dsq
-, testVersion
+, testers
 , diffutils
 }:
 
 buildGoModule rec {
   pname = "dsq";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "multiprocessio";
     repo = "dsq";
     rev = version;
-    hash = "sha256-BhWcl0yMpTi/6+dFk6wX/rMkH1k9m9eVm40iNwZGrJM=";
+    hash = "sha256-AT5M3o1cvRIZyyA28uX+AI4p9I3SzX3OCdBcIFGKspw=";
   };
 
-  vendorSha256 = "sha256-mSF2oNdTKAg3iRejKkn24hSCJDM6iOkRMruic73ceX4=";
+  vendorSha256 = "sha256-yfhLQBmWkG0ZLjI/ArLZkEGvClmZXkl0o7fEu5JqHM8=";
 
   nativeBuildInputs = [ diffutils ];
 
@@ -30,7 +30,7 @@ buildGoModule rec {
     updateScript = nix-update-script { attrPath = pname; };
 
     tests = {
-      version = testVersion { package = dsq; };
+      version = testers.testVersion { package = dsq; };
 
       pretty-csv = runCommand "${pname}-test" { } ''
         mkdir "$out"

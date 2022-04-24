@@ -1,45 +1,34 @@
 diff --git a/libinput-gestures b/libinput-gestures
-index aca94ac..c2f03ca 100755
+index 78c7c28..1a2c965 100755
 --- a/libinput-gestures
 +++ b/libinput-gestures
-@@ -77,7 +77,7 @@ def get_libinput_vers():
+@@ -87,11 +87,11 @@ def get_libinput_vers():
      'Return the libinput installed version number string'
      # Try to use newer libinput interface then fall back to old
      # (depreciated) interface.
 -    res = run(('libinput', '--version'), check=False)
 +    res = run(('@libinput@', '--version'), check=False)
-     return res.strip() if res else \
-             run(('libinput-list-devices', '--version'), check=False)
- 
-@@ -87,8 +87,8 @@ if not libvers:
-     sys.exit('libinput helper tools do not seem to be installed?')
- 
- if Version(libvers) >= Version('1.8'):
--    cmd_debug_events = 'libinput debug-events'
--    cmd_list_devices = 'libinput list-devices'
-+    cmd_debug_events = '@libinput@ debug-events'
-+    cmd_list_devices = '@libinput@ list-devices'
- else:
-     cmd_debug_events = 'libinput-debug-events'
-     cmd_list_devices = 'libinput-list-devices'
-@@ -199,7 +199,7 @@ class COMMAND_internal(COMMAND):
- 
-     def run(self):
-         'Get list of current workspaces and select next one'
--        stdout = run(('wmctrl', '-d'), check=False)
-+        stdout = run(('@wmctrl@', '-d'), check=False)
-         if not stdout:
-             # This command can fail on GNOME when you have only a single
-             # dynamic workspace using Xorg (probably a GNOME bug) so let's
-@@ -233,7 +233,7 @@ class COMMAND_internal(COMMAND):
- 
-         # Switch to desired workspace
-         if index >= minindex and index < maxindex:
--            run(('wmctrl', '-s', str(index)))
-+            run(('@wmctrl@', '-s', str(index)))
- 
- # Table of gesture handlers
- handlers = OrderedDict()
--- 
-2.19.1
+     if res:
+         return res.strip(), True
 
+-    res = run(('libinput-list-devices', '--version'), check=False)
++    res = run(('@libinput-list-devices@', '--version'), check=False)
+     return res and res.strip(), False
+
+ def get_devices_list(cmd_list_devices, device_list):
+@@ -694,11 +694,11 @@ def main():
+         sys.exit('libinput helper tools do not seem to be installed?')
+
+     if has_subcmd:
+-        cmd_debug_events = 'libinput debug-events'
+-        cmd_list_devices = 'libinput list-devices'
++        cmd_debug_events = '@libinput@ debug-events'
++        cmd_list_devices = '@libinput@ list-devices'
+     else:
+-        cmd_debug_events = 'libinput-debug-events'
+-        cmd_list_devices = 'libinput-list-devices'
++        cmd_debug_events = '@libinput@-debug-events'
++        cmd_list_devices = '@libinput@-list-devices'
+
+     if args.verbose:
+         # Output various info/version info

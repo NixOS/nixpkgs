@@ -4,7 +4,7 @@
 , installShellFiles
 , git
 , nix-update-script
-, testVersion
+, testers
 , git-machete
 }:
 
