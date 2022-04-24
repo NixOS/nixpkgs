@@ -162,7 +162,8 @@
       pyarlo
     ];
     "arris_tg2492lg" = ps: with ps; [
-    ]; # missing inputs: arris-tg2492lg
+      arris-tg2492lg
+    ];
     "aruba" = ps: with ps; [
       pexpect
     ];
