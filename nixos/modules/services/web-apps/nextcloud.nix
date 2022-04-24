@@ -477,8 +477,19 @@ in {
                   throw new \RuntimeException(sprintf($error, $file));
                 }
                 return trim(file_get_contents($file));
+              }''}
+            function nix_decode_json_file($file, $error) {
+              if (!file_exists($file)) {
+                throw new \RuntimeException(sprintf($error, $file));
               }
-            ''}
+              $decoded = json_decode(file_get_contents($file), true);
+
+              if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+              }
+
+              return $decoded;
+            }
             $CONFIG = [
               'apps_paths' => [
                 [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
@@ -511,18 +522,17 @@ in {
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
             ];
 
-            $EXTRACONFIG = json_decode(file_get_contents("${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}"), true);
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-              throw new \RuntimeException(sprintf("Cannot decode %s, because: %s", $filename, json_last_error_msg()));
-            }
+            $EXTRACONFIG = nix_decode_json_file(
+              "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
+              "decoding json extra options file failed"
+            );
 
             $CONFIG = array_replace_recursive($CONFIG, $EXTRACONFIG);
             ${optionalString (cfg.secretFile != null) ''
-              $CONFIG = array_merge($CONFIG, nix_read_file(
-                ${cfg.secretFile}),
+              $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
+                "${cfg.secretFile}",
                 "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
-              );
+              ));
             ''}
           '';
           occInstallCmd = let
