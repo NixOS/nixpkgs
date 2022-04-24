@@ -2930,6 +2930,8 @@ in {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fivem-api = callPackage ../development/python-modules/fivem-api { };
+
   fixerio = callPackage ../development/python-modules/fixerio { };
 
   fixtures = callPackage ../development/python-modules/fixtures { };

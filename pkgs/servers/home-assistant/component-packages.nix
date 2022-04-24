@@ -822,7 +822,8 @@
       fitbit
     ];
     "fivem" = ps: with ps; [
-    ]; # missing inputs: fivem-api
+      fivem-api
+    ];
     "fixer" = ps: with ps; [
       fixerio
     ];
@@ -3281,6 +3282,7 @@
     "filter"
     "fireservicerota"
     "firmata"
+    "fivem"
     "fjaraskupan"
     "flic"
     "flick_electric"
