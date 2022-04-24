@@ -482,14 +482,18 @@ rec {
    *
    * See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
-    ''mkdir -p $out
-      cd $out
-      ${lib.concatMapStrings (x: ''
-          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
-      '') entries}
-    '';
+   linkFarm = name: entries: runCommand name {
+     preferLocalBuild = true;
+     allowSubstitutes = false;
+     passthru = lib.listToAttrs (map (x: lib.nameValuePair x.name x.path) entries);
+   } ''
+    mkdir -p $out
+    cd $out
+    ${lib.concatMapStrings (x: ''
+      mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
+      ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
+    '') entries}
+  '';
 
   /*
    * Easily create a linkFarm from a set of derivations.
