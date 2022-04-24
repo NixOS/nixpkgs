@@ -2099,6 +2099,8 @@ in {
 
   dbutils = callPackage ../development/python-modules/dbutils { };
 
+  db-dtypes = callPackage ../development/python-modules/db-dtypes { };
+
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
   ddt = callPackage ../development/python-modules/ddt { };
