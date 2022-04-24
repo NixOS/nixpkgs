@@ -7,7 +7,7 @@
 
 , x11Support ? false
 
-, useSystemd ? true
+, useSystemd ? !libOnly
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
