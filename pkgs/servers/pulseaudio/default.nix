@@ -7,7 +7,8 @@
 
 , x11Support ? false
 
-, useSystemd ? !libOnly
+, # Remove `native ||` next mass rebuild
+  useSystemd ? stdenv.hostPlatform == stdenv.buildPlatform || !libOnly
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
