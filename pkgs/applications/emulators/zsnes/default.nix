@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
-, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub
+, nasm, pkg-config, autoreconfHook
+, SDL, zlib, libpng, ncurses, libGLU, libGL
+, makeDesktopItem
+}:
 
 let
   desktopItem = makeDesktopItem {
@@ -23,7 +26,7 @@ in stdenv.mkDerivation {
     sha256 = "1gy79d5wdaacph0cc1amw7mqm7i0716n6mvav16p1svi26iz193v";
   };
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [ nasm pkg-config autoreconfHook ];
 
   buildInputs = [ SDL zlib libpng ncurses libGLU libGL ];
 
@@ -34,13 +37,18 @@ in stdenv.mkDerivation {
     done
   '';
 
-  preConfigure = ''
+  preAutoreconf = ''
     cd src
+  '';
+
+  preConfigure = ''
     sed -i "/^STRIP/d" configure
     sed -i "/\$STRIP/d" configure
   '';
 
   configureFlags = [ "--enable-release" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     function installIcon () {
