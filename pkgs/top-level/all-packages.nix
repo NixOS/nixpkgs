@@ -9341,6 +9341,8 @@ with pkgs;
     libpng = libpng12;
   };
 
+  pngtools = callPackage ../tools/graphics/pngtools { };
+
   pngpp = callPackage ../development/libraries/png++ { };
 
   pngquant = callPackage ../tools/graphics/pngquant { };
