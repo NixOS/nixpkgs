@@ -15,6 +15,8 @@
 # batdiff
 , gitMinimal
 , withDelta ? delta != null, delta ? null
+# batman
+, util-linux
 }:
 
 let
@@ -136,7 +138,7 @@ in
 {
   batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
-  batman = script "batman" [];
+  batman = script "batman" [ util-linux ];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
   prettybat = script "prettybat" ([]
     ++ optionalDep withShFmt shfmt
