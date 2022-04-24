@@ -2,7 +2,7 @@
 
 let
   pname = "FreshRSS";
-  version = "1.18.1";
+  version = "1.19.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "189rwfpp5chv11p12bkyr64wpxap03gkhim90vm961qnixbypbdw";
+    sha256 = "sha256-UUDMYgYPvIuL5Jw2fFhJGoJ4KLNUBpk2pPc2UNa+ZSE=";
   };
 
   passthru.tests = nixosTests.freshrss;
