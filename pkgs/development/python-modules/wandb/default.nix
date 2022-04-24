@@ -1,4 +1,6 @@
-{ azure-core
+{ lib
+, stdenv
+, azure-core
 , bokeh
 , buildPythonPackage
 , click
@@ -9,7 +11,6 @@
 , GitPython
 , jsonref
 , jsonschema
-, lib
 , matplotlib
 , nbformat
 , pandas
@@ -22,6 +23,7 @@
 , pytest-xdist
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pyyaml
 , requests
 , scikit-learn
@@ -29,13 +31,15 @@
 , setproctitle
 , setuptools
 , shortuuid
-, stdenv
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "wandb";
   version = "0.12.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -60,6 +64,23 @@ buildPythonPackage rec {
     setproctitle
     setuptools
     shortuuid
+  ];
+
+  checkInputs = [
+    azure-core
+    bokeh
+    flask
+    jsonref
+    jsonschema
+    matplotlib
+    nbformat
+    pandas
+    pydantic
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+    scikit-learn
+    tqdm
   ];
 
   # wandb expects git to be in PATH. See https://gist.github.com/samuela/57aeee710e41ab2bf361b7ed8fbbeabf
@@ -112,26 +133,13 @@ buildPythonPackage rec {
 
   # Disable test that fails on darwin due to issue with python3Packages.psutil:
   # https://github.com/giampaolo/psutil/issues/1219
-  disabledTests = lib.optional stdenv.isDarwin "test_tpu_system_stats";
-
-  checkInputs = [
-    azure-core
-    bokeh
-    flask
-    jsonref
-    jsonschema
-    matplotlib
-    nbformat
-    pandas
-    pydantic
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-    scikit-learn
-    tqdm
+  disabledTests = lib.optional stdenv.isDarwin [
+    "test_tpu_system_stats"
   ];
 
-  pythonImportsCheck = [ "wandb" ];
+  pythonImportsCheck = [
+    "wandb"
+  ];
 
   meta = with lib; {
     description = "A CLI and library for interacting with the Weights and Biases API";

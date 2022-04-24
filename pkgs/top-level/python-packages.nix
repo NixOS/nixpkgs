@@ -2930,6 +2930,8 @@ in {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fivem-api = callPackage ../development/python-modules/fivem-api { };
+
   fixerio = callPackage ../development/python-modules/fixerio { };
 
   fixtures = callPackage ../development/python-modules/fixtures { };
@@ -7744,6 +7746,8 @@ in {
   pysecuritas = callPackage ../development/python-modules/pysecuritas { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
+
+  pysensibo = callPackage ../development/python-modules/pysensibo { };
 
   pysensors = callPackage ../development/python-modules/pysensors { };
 

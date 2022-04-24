@@ -822,7 +822,8 @@
       fitbit
     ];
     "fivem" = ps: with ps; [
-    ]; # missing inputs: fivem-api
+      fivem-api
+    ];
     "fixer" = ps: with ps; [
       fixerio
     ];
@@ -2291,7 +2292,8 @@
       aiosenseme
     ];
     "sensibo" = ps: with ps; [
-    ]; # missing inputs: pysensibo
+      pysensibo
+    ];
     "sensor" = ps: with ps; [
       fnvhash
       lru-dict
@@ -3281,6 +3283,7 @@
     "filter"
     "fireservicerota"
     "firmata"
+    "fivem"
     "fjaraskupan"
     "flic"
     "flick_electric"
@@ -3567,6 +3570,7 @@
     "select"
     "sense"
     "senseme"
+    "sensibo"
     "sensor"
     "sentry"
     "seventeentrack"
