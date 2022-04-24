@@ -631,6 +631,8 @@ in {
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
 
+  arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
+
   arrow = callPackage ../development/python-modules/arrow { };
 
   arviz = callPackage ../development/python-modules/arviz { };
