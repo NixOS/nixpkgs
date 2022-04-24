@@ -25295,6 +25295,8 @@ with pkgs;
 
   btops = callPackage ../applications/window-managers/btops { };
 
+  buho = libsForQt5.callPackage ../applications/office/buho { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   bviplus = callPackage ../applications/editors/bviplus { };
