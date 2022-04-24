@@ -29,7 +29,7 @@
 , curl
 , ApplicationServices
 , Foundation
-, testVersion
+, testers
 , imagemagick
 }:
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.version =
-    testVersion { package = imagemagick; };
+    testers.testVersion { package = imagemagick; };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";

@@ -19,7 +19,7 @@
 , zsync
 , OVMF
 , quickemu
-, testVersion
+, testers
 }:
 let
   runtimePaths = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = testVersion { package = quickemu; };
+  passthru.tests = testers.testVersion { package = quickemu; };
 
   meta = with lib; {
     description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";

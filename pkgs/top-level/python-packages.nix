@@ -3375,6 +3375,8 @@ in {
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
+  glad =  callPackage ../development/python-modules/glad { };
+
   glances-api = callPackage ../development/python-modules/glances-api { };
 
   glasgow = callPackage ../development/python-modules/glasgow { };
@@ -5536,8 +5538,6 @@ in {
   nested-lookup = callPackage ../development/python-modules/nested-lookup { };
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
-
-  net2grid = callPackage ../development/python-modules/net2grid { };
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 

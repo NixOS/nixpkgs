@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testVersion, kube-linter }:
+{ lib, buildGoModule, fetchFromGitHub, testers, kube-linter }:
 
 buildGoModule rec {
   pname = "kube-linter";
@@ -17,7 +17,7 @@ buildGoModule rec {
     "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
   ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = kube-linter;
     command = "kube-linter version";
   };
