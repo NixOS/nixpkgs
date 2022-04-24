@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , future
 , hypothesis
+, packaging
 , parameterized
 , msgpack
 , pyserial
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     msgpack
+    packaging
     pyserial
     typing-extensions
     wrapt
