@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     cp -r binaries/data $out/share/0ad/
   '';
 
+  # Downloading the source archive and extracting it is quicker than
+  # transferring the already extracted data from a binary cache.
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
   meta = with lib; {
     description = "A free, open-source game of ancient warfare -- data files";
     homepage = "https://play0ad.com/";
