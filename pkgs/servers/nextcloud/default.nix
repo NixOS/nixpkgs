@@ -51,13 +51,13 @@ in {
   };
 
   nextcloud22 = generic {
-    version = "22.2.6";
-    sha256 = "0f1d0f0cb000c51b11886be25a8adce478846c3233572fcf28b44c5d4036e235";
+    version = "22.2.7";
+    sha256 = "5ada41cb3e69665e8a13946f71978829c0a0163d0277a49e599c9e8ccf960eab";
   };
 
   nextcloud23 = generic {
-    version = "23.0.3";
-    sha256 = "39401d400fab02a84a175ea6e995b8ed4110fbaea48c876230b4f09755a62986";
+    version = "23.0.4";
+    sha256 = "67191c2b8b41591ae42accfb32216313fde0e107201682cb39029f890712bc6a";
   };
   # tip: get she sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
