@@ -6132,6 +6132,8 @@ in {
 
   pecan = callPackage ../development/python-modules/pecan { };
 
+  peco = callPackage ../development/python-modules/peco { };
+
   peewee = callPackage ../development/python-modules/peewee { };
 
   pefile = callPackage ../development/python-modules/pefile { };
