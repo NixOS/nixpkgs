@@ -1030,6 +1030,7 @@ mapAliases ({
   pinentry_gtk2 = pinentry-gtk2; # Added 2019-10-14
   pinentry_qt = pinentry-qt; # Added 2019-10-14
   pinentry_qt5 = pinentry-qt; # Added 2020-02-11
+  prboom = throw "prboom was removed because it was abandoned by upstream, use prboom-plus instead"; # Added 2022-04-24
   privateer = throw "privateer was removed because it was broken"; # Added 2021-05-18
   processing3 = processing; # Added 2019-08-16
   procps-ng = throw "'procps-ng' has been renamed to/replaced by 'procps'"; # Converted to throw 2022-02-22
