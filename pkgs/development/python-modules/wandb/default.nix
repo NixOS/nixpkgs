@@ -35,13 +35,13 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.14";
+  version = "0.12.15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "client";
     rev = "v${version}";
-    hash = "sha256-60E64ePW+C0C/eG7pLp4SpAFqycOHiCvOvmNOg2yoqY=";
+    hash = "sha256-Fq+JwUEZP1QDFKYVyiR8DUU0GQV6fK50FW78qaWh+Mo=";
   };
 
   # setuptools is necessary since pkg_resources is required at runtime.
