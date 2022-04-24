@@ -4,7 +4,11 @@
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+    && !stdenv.hostPlatform.isAndroid
+    # Avoid Fortran until we can use Flang instead of GFortran
+    && !(stdenv.hostPlatform.useLLVM or false)
+, libpulseaudio
 , OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
