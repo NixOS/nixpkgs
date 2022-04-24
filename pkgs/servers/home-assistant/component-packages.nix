@@ -2243,7 +2243,8 @@
       sqlalchemy
     ];
     "saj" = ps: with ps; [
-    ]; # missing inputs: pysaj
+      pysaj
+    ];
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
