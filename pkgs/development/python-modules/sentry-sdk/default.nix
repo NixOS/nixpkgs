@@ -28,6 +28,7 @@
 , pytest-forked
 , pytest-localserver
 , pytestCheckHook
+, pythonOlder
 , rq
 , sanic
 , sanic-testing
@@ -40,14 +41,16 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.5.8";
+  version = "1.5.10";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    sha256 = "sha256-28MkwQog+Abk1PSDPWbah650YATiGCBWaTbFO52KgzY=";
+    hash = "sha256-f5V2fMvPpyz+pU08Owzxq9xI48ZeZpH5SmUXtshqMm0=";
   };
 
   propagatedBuildInputs = [
@@ -56,10 +59,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    aiohttp
     asttokens
     blinker
     botocore
     bottle
+    celery
     chalice
     django
     executing
@@ -67,25 +72,22 @@ buildPythonPackage rec {
     falcon
     flask_login
     gevent
+    httpx
     jsonschema
     pure-eval
+    pyramid
+    pyspark
     pytest-django
     pytest-forked
     pytest-localserver
     pytestCheckHook
     rq
+    sanic
+    sanic-testing
     sqlalchemy
     tornado
     trytond
     werkzeug
-  ] ++ lib.optionals isPy3k [
-    aiohttp
-    celery
-    httpx
-    pyramid
-    pyspark
-    sanic
-    sanic-testing
   ];
 
   doCheck = !stdenv.isDarwin;
