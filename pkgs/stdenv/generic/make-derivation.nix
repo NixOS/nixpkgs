@@ -118,11 +118,7 @@ makeOverlayable (overrideAttrs:
 , mesonFlags ? []
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
-  #
-  # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
-  configurePlatforms ? lib.optionals
-    (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ "build" "host" ]
+  configurePlatforms ? [ "build" "host" ]
 
 # TODO(@Ericson2314): Make unconditional / resolve #33599
 # Check phase
