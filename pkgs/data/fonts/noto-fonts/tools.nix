@@ -3,7 +3,7 @@
 , defcon, fontmath, fontparts, fontpens, fonttools, lxml
 , mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
 , toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
-, pillow, six, bash, setuptools-scm }:
+, pillow, six, bash, setuptools-scm, setuptools }:
 
 buildPythonPackage rec {
   pname = "nototools";
@@ -40,11 +40,13 @@ buildPythonPackage rec {
     lxml
     mutatormath
     pathspec
+    pillow
     psautohint
     pyclipper
     pytz
     regex
     scour
+    setuptools
     toml
     typed-ast
     ufonormalizer
@@ -54,7 +56,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pillow
     six
     bash
   ];
