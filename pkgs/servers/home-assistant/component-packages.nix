@@ -1055,7 +1055,8 @@
       hangups
     ];
     "harman_kardon_avr" = ps: with ps; [
-    ]; # missing inputs: hkavr
+      hkavr
+    ];
     "harmony" = ps: with ps; [
       aioharmony
     ];
