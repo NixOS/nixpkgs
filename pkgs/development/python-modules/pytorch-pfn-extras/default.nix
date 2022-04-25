@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   checkInputs = [ onnx pytestCheckHook torchvision ];
 
+  # ignore all pytest warnings
   preCheck = ''
-    # ignore all pytest warnings
     rm pytest.ini
   '';
 
