@@ -1,34 +1,14 @@
 [tool.poetry]
-name = "rmfuse"
-version = "0.2.3"
+name = "rmfuse-env"
+version = "0.1.0"
 description = ""
-authors = ["Robert Schroll <rschroll@gmail.com>"]
-license = "MIT"
-repository = "https://github.com/rschroll/rmfuse"
-readme = "README.md"
+authors = []
 
 [tool.poetry.dependencies]
-python = "^3.7"
-bidict = "^0.21.2"
-rmrl = "^0.2.1"
-rmcl = "^0.4.2"
-
-# Need one of the following
-pyfuse3 = { version = "^3.2.0", optional = true }
-llfuse = { version = "^1.4.1", optional = true }
-xdg = "^5.0.1"
+python = "^3.8"
+rmfuse = {git = "https://github.com/rschroll/rmfuse.git", extras = ["pyfuse3"]}
 
 [tool.poetry.dev-dependencies]
-ipython = "^7.20.0"
-jedi = "0.17.2"
-pylint = "^2.6.0"
-
-[tool.poetry.extras]
-pyfuse3 = ["pyfuse3"]
-llfuse = ["llfuse"]
-
-[tool.poetry.scripts]
-rmfuse = "rmfuse.fuse:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
