@@ -193,7 +193,7 @@ in {
       description = ''
         Store paths to copy into the initrd as well.
       '';
-      type = types.listOf types.singleLineStr;
+      type = with types; listOf (oneOf [ singleLineStr package ]);
       default = [];
     };
 
