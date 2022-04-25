@@ -251,6 +251,8 @@ package-maintainers:
     - mattermost-api
     - mattermost-api-qc
     - Unique
+  libjared:
+    - sensei
   maralorn:
     - cabal-fmt
     - ema
