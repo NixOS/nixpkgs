@@ -3,11 +3,17 @@
 , rustPlatform
 , fetchFromGitHub
 , makeWrapper
+, symlinkJoin
+, CoreFoundation
+, openssl
+, pkg-config
 , protobuf
+, Security
 , stdenv
 , xdg-utils
 , nixosTests
 
+, withRdpClient ? true
 , withRoleTester ? true
 }:
 let
@@ -19,6 +25,28 @@ let
     sha256 = "sha256-KQfdeMuZ9LJHhEJLMl58Yb0+gxgDT7VcVnK1JxjVZaI=";
   };
   version = "9.1.2";
+
+  rdpClient = rustPlatform.buildRustPackage rec {
+    name = "teleport-rdpclient";
+    cargoSha256 = "sha256-Jz7bB/f4HRxBhSevmfELSrIm+IXUVlADIgp2qWQd5PY=";
+    inherit version src;
+
+    buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
+
+    buildInputs = [ openssl ]
+      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    nativeBuildInputs = [ pkg-config ];
+
+    # https://github.com/NixOS/nixpkgs/issues/161570 ,
+    # buildRustPackage sets strictDeps = true;
+    checkInputs = buildInputs;
+
+    OPENSSL_NO_VENDOR = "1";
+
+    postInstall = ''
+      cp -r target $out
+    '';
+  };
 
   roleTester = rustPlatform.buildRustPackage {
     name = "teleport-roletester";
@@ -49,9 +77,12 @@ buildGoModule rec {
   vendorSha256 = "sha256-UMgWM7KHag99JR4i4mwVHa6yd9aHQ6Dy+pmUijNL4Ew=";
 
   subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
-  tags = [ "webassets_embed" ] ++
-    lib.optional withRoleTester "roletester";
+  tags = [ "webassets_embed" ]
+    ++ lib.optional withRdpClient "desktop_access_rdp"
+    ++ lib.optional withRoleTester "roletester";
 
+  buildInputs = [ openssl ]
+    ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security ];
   nativeBuildInputs = [ makeWrapper ];
 
   patches = [
@@ -60,20 +91,27 @@ buildGoModule rec {
     # https://github.com/NixOS/nixpkgs/issues/132652
     ./test.patch
     ./0001-fix-add-nix-path-to-exec-env.patch
+    ./rdpclient.patch
   ];
 
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
 
-  preBuild = ''
-    mkdir -p build
-    echo "making webassets"
-    cp -r ${webassets}/* webassets/
-    make lib/web/build/webassets
+  preBuild =
+    let rustDeps = symlinkJoin {
+      name = "teleport-rust-deps";
+      paths = lib.optional withRdpClient rdpClient
+        ++ lib.optional withRoleTester roleTester;
+    };
+    in
+    ''
+      mkdir -p build
+      echo "making webassets"
+      cp -r ${webassets}/* webassets/
+      make lib/web/build/webassets
 
-    ${lib.optionalString withRoleTester
-      "cp -r ${roleTester}/target ."}
-  '';
+      cp -r ${rustDeps}/. .
+    '';
 
   # Multiple tests fail in the build sandbox
   # due to trying to spawn nixbld's shell (/noshell), etc.
