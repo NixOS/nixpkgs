@@ -23985,8 +23985,6 @@ with pkgs;
 
   cldr-annotations = callPackage ../data/misc/cldr-annotations { };
 
-  cldr-emoji-annotation = callPackage ../data/misc/cldr-emoji-annotation { };
-
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
