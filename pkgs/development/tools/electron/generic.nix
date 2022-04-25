@@ -90,7 +90,8 @@ let
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
-        $out/lib/electron/electron
+        $out/lib/electron/electron \
+        ${lib.optionalString (! lib.versionOlder version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
 
       wrapProgram $out/lib/electron/electron \
         --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
