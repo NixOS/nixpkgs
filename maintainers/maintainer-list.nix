@@ -14376,4 +14376,10 @@
     github = "melias122";
     githubId = 1027766;
   };
+  lhh = {
+    name = "lhh";
+    email = "liuxiaobo666233@gmail.com";
+    github = "liuhh666233";
+    githubId = 86147795;
+  };
 }
