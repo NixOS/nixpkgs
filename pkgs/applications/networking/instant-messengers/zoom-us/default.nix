@@ -33,9 +33,12 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
+  # Zoom versions are released at different times for each platform and linux
+  # is stuck on 5.9.6 until https://github.com/NixOS/nixpkgs/pull/166085 is
+  # merged
   version = {
-    aarch64-darwin = "5.10.1.5839";
-    x86_64-darwin = "5.10.1.5839";
+    aarch64-darwin = "5.10.4.6592";
+    x86_64-darwin = "5.10.4.6592";
     x86_64-linux = "5.9.6.2225";
    }.${system} or throwSystem;
 
