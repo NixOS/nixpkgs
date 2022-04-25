@@ -8957,6 +8957,8 @@ in {
     python3 = python;
   });
 
+  rjpl = callPackage ../development/python-modules/rjpl { };
+
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   rki-covid-parser = callPackage ../development/python-modules/rki-covid-parser { };
