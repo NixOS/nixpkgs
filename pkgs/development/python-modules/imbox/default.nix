@@ -12,11 +12,6 @@ buildPythonPackage rec {
     sha256 = "sha256-4qMchhpkZK3cmrtRSd18PLaz/vaIE+jBIjfJnI11SWk=";
   };
 
-  patches = [
-    ./patches/Support-to-connect-163-mail-server.patch
-    ./patches/Support-to-parse-chinese-attachment-file-name.patch
-  ];
-
   propagatedBuildInputs = [ chardet ];
 
   doCheck = false;
