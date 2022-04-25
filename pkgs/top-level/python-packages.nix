@@ -7501,6 +7501,8 @@ in {
 
   pyopnsense = callPackage ../development/python-modules/pyopnsense { };
 
+  pyoppleio = callPackage ../development/python-modules/pyoppleio { };
+
   pyosf = callPackage ../development/python-modules/pyosf { };
 
   pyosmium = callPackage ../development/python-modules/pyosmium {
