@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simplistic yet fancy CPU architecture fetching tool";
-    license = licenses.mit;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/Dr-Noob/cpufetch";
     changelog = "https://github.com/Dr-Noob/cpufetch/releases/tag/v${version}";
     maintainers = with maintainers; [ devhell ];
