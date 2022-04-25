@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calculix";
-  version = "2.17";
+  version = "2.19";
 
   src = fetchurl {
     url = "http://www.dhondt.de/ccx_${version}.src.tar.bz2";
-    sha256 = "0l3fizxfdj2mpdp62wnk9v47q2yc3cy39fpsm629z7bjmba8lw6a";
+    sha256 = "01vdy9sns58hkm39z6d0r5y7gzqf5z493d18jin9krqib1l6jnn7";
   };
 
   nativeBuildInputs = [ gfortran ];
