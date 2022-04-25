@@ -5,12 +5,15 @@
 , pytest
 , setuptools-scm
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
   version = "0.9.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "joseph-roitman";
