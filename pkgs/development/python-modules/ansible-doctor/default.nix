@@ -1,6 +1,7 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
+, pythonOlder
 
 # pythonPackages
 , anyconfig
@@ -18,14 +19,16 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.2.1";
+  version = "1.2.4";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "v${version}";
-    sha256 = "sha256-2Jaf7asU4c7kw9v9dUYDL4/M2Y/2qhMM3m0jqYiobUI=";
+    hash = "sha256-e0FmV4U96TSC/dYJlgo5AeLdXQ7Z7rrP4JCtBxJdkhU=";
   };
 
   postInstall = ''
@@ -34,6 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
       --replace 'environs = "9.5.0"' 'environs = "*"' \
       --replace 'jsonschema = "4.4.0"' 'jsonschema = "*"' \
       --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"'
@@ -58,7 +62,10 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "ansibledoctor" ];
+
+  pythonImportsCheck = [
+    "ansibledoctor"
+  ];
 
   meta = with lib; {
     description = "Annotation based documentation for your Ansible roles";
