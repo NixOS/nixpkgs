@@ -37,6 +37,11 @@ in stdenv.mkDerivation {
     done
   '';
 
+  patches = [
+    # Use pkg-config to find zlib so cross-configure works.
+    ./zlib-pkg-config.diff
+  ];
+
   preAutoreconf = ''
     cd src
   '';

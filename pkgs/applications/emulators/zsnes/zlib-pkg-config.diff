@@ -1,0 +1,112 @@
+--- a/src/acinclude.m4
++++ b/src/acinclude.m4
+@@ -28,106 +28,12 @@ AC_DEFUN([AM_PATH_ZLIB],
+ [dnl
+ dnl
+ dnl
+-AC_ARG_WITH(zlib-prefix,
+-  [  --with-zlib-prefix=PFX  Prefix where zlib is installed (optional)],
+-  zlib_prefix="$withval",
+-  zlib_prefix="")
+ min_zlib_version=ifelse([$1],,1.1.0,$1)
+-AC_MSG_CHECKING(for zlib - version >= $min_zlib_version)
+-
+-tempLIBS="$LIBS"
+-tempCFLAGS="$CFLAGS"
+-if test x$zlib_prefix != x ; then
+-  ZLIB_LIBS="-L$zlib_prefix"
+-  ZLIB_CFLAGS="-I$zlib_prefix"
+-fi
+-ZLIB_LIBS="$ZLIB_LIBS -lz"
+-LIBS="$LIBS $ZLIB_LIBS"
+-CFLAGS="$CFLAGS $ZLIB_CFLAGS"
+-
+-AC_RUN_IFELSE([AC_LANG_SOURCE([[
+-#include <zlib.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-
+-char* my_strdup (char *str)
+-{
+-  char *new_str;
+-
+-  if (str)
+-  {
+-    new_str = (char *)malloc ((strlen (str) + 1) * sizeof(char));
+-    strcpy (new_str, str);
+-  }
+-  else new_str = NULL;
+-
+-  return new_str;
+-}
+-
+-int main (int argc, char *argv[])
+-{
+-  int major, minor, micro, zlib_major_version, zlib_minor_version, zlib_micro_version;
+-
+-  char *zlibver, *tmp_version;
+-
+-  zlibver = ZLIB_VERSION;
+-
+-  FILE *fp = fopen("conf.zlibtest", "a");
+-  if ( fp ) {
+-    fprintf(fp, "%s", zlibver);
+-    fclose(fp);
+-  }
+-
+-  /* HP/UX 9 (%@#!) writes to sscanf strings */
+-  tmp_version = my_strdup("$min_zlib_version");
+-  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+-    printf("%s, bad version string for\n\tmin_zlib_version... ", "$min_zlib_version");
+-    exit(1);
+-  }
+-  if (sscanf(zlibver, "%d.%d.%d", &zlib_major_version, &zlib_minor_version, &zlib_micro_version) != 3) {
+-    printf("%s, bad version string given\n", zlibver);
+-    puts("\tby zlib, sometimes due to very old zlibs that didnt correctly");
+-    printf("\tdefine their version. Please upgrade if you are running an\n\told zlib... ");
+-    exit(1);
+-  }
+-
+-  if ((zlib_major_version > major) ||
+-     ((zlib_major_version == major) && (zlib_minor_version > minor)) ||
+-     ((zlib_major_version == major) && (zlib_minor_version == minor) && (zlib_micro_version >= micro)))
+-  {
+-    return 0;
+-  }
+-  else
+-  {
+-    return 1;
+-  }
+-}
+-]])],
+-  with_zlib=yes,
+-  with_zlib=no,
+-  [AC_MSG_RESULT(cross-compiling)
+-  with_zlib=""
+-  AC_MSG_WARN(Assuming zlib is available)])
+-
+-if test x$with_zlib != x; then
+-  AC_MSG_RESULT($with_zlib)
+-fi
+-if test x$with_zlib = xyes; then
+-  ZLIB_VERSION=$(<conf.zlibtest)
+-  ifelse([$2], , :, [$2])
+-else
+-  ZLIB_CFLAGS=""
+-  ZLIB_LIBS=""
+-  ZLIB_VERSION=""
+-  ifelse([$3], , :, [$3])
+-fi
+-LIBS="$tempLIBS"
+-CFLAGS="$tempCFLAGS"
+-rm conf.zlibtest
++PKG_CHECK_MODULES([ZLIB], [zlib >= $min_zlib_version])
+ AC_SUBST(ZLIB_CFLAGS)
+-AC_SUBST(ZLIB_VERSION)
+ AC_SUBST(ZLIB_LIBS)
++ZLIB_VERSION=`$PKG_CONFIG --modversion zlib`
++AC_SUBST(ZLIB_VERSION)
+ ])
+ dnl -- End zlib autoconf macro
+ 
