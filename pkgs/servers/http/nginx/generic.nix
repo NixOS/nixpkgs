@@ -107,6 +107,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
+  ] ++ optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
   ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
