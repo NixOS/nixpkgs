@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-S25DmXJ7fN0gXLV0IzUdz8hXPTYEHmaSG7Mnli6GQVc=";
   };
 
-  configurePhase = ''
+  postConfigure = ''
    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';
 
