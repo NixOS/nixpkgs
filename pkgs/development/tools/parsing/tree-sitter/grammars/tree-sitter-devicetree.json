@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/joelspadin/tree-sitter-devicetree",
-  "rev": "fa70098cd70393f84785f85cdc6a45299b59cd5b",
-  "date": "2021-03-28T12:08:53-05:00",
-  "path": "/nix/store/6nqsmnd75vwbvkj764vg5slkmjzkmdd9-tree-sitter-devicetree",
-  "sha256": "0mr3q2l7js6csb1fp8xjysikj26l94p3mmsiik4qwnw5kg694yam",
+  "rev": "877adbfa0174d25894c40fa75ad52d4515a36368",
+  "date": "2022-03-23T18:25:46-05:00",
+  "path": "/nix/store/q0rqqm39h4dh17nlrr10kbfcqbdfk5kl-tree-sitter-devicetree",
+  "sha256": "1ds7pa4x1yd54xa2mba37vp8lbi8n4l975lps0249x8xw35r0jrl",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
