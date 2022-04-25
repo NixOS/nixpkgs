@@ -47,6 +47,18 @@ in {
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
       ]);
+      # Restart tailscaled with a single `systemctl restart` at the
+      # end of activation, rather than a `stop` followed by a later
+      # `start`. Activation over Tailscale can hang for tens of
+      # seconds in the stop+start setup, if the activation script has
+      # a significant delay between the stop and start phases
+      # (e.g. script blocked on another unit with a slow shutdown).
+      #
+      # Tailscale is aware of the correctness tradeoff involved, and
+      # already makes its upstream systemd unit robust against unit
+      # version mismatches on restart for compatibility with other
+      # linux distros.
+      stopIfChanged = false;
     };
   };
 }
