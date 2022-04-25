@@ -1,44 +1,36 @@
 { lib, stdenv
 , fetchurl
 , fetchpatch
+, blas
 , boost
 , cmake
 , doxygen
 , eigen
+, gtest
+, hdf5
+, lapack
+, mpi
 , mpi4py
 , numpy
 , pkg-config
+, ply
 , pybind11
 , pytest
-, pythonPackages
-, six
-, sympy
-, gtest
-, hdf5
-, mpi
-, ply
 , python
+, pythonPackages
 , scotch
 , setuptools
+, six
 , sphinx
 , suitesparse
 , swig
+, sympy
 , zlib
-, blas
-, lapack
 , nixosTests
 }:
+
 let
   version = "2019.1.0";
-
-  # TODO: test with newer pytest
-  pytest = pythonPackages.callPackage
-    ../../../../python2-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = pythonPackages.hypothesis.override {
-        doCheck = false;
-      };
-    };
 
   dijitso = pythonPackages.buildPythonPackage {
     pname = "dijitso";
