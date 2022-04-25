@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ arpack spooles blas lapack ];
 
-  NIX_CFLAGS_COMPILE = "-I${spooles}/include/spooles";
+  NIX_CFLAGS_COMPILE = [
+    "-I${spooles}/include/spooles"
+    "-std=legacy"
+  ];
 
   patches = [
     ./calculix.patch
