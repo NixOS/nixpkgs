@@ -216,7 +216,7 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "powerpc64le-linux" ];
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
     maintainers = with lib.maintainers; [
