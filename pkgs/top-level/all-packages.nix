@@ -26022,8 +26022,6 @@ with pkgs;
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
-  fmsynth = callPackage ../applications/audio/fmsynth { };
-
   fnc = callPackage ../applications/version-management/fnc { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
