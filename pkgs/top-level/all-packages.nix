@@ -24465,8 +24465,6 @@ with pkgs;
     noto-fonts-emoji-blob-bin
     noto-fonts-extra;
 
-  nuclear = callPackage ../applications/audio/nuclear { };
-
   nuclei = callPackage ../tools/security/nuclei { };
 
   nullmailer = callPackage ../servers/mail/nullmailer {
