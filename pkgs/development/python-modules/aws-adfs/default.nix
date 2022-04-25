@@ -1,31 +1,42 @@
 { lib
+, boto3
 , botocore
 , buildPythonPackage
 , click
 , configparser
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , fido2
-, glibcLocales
-, isPy27
 , lxml
-, mock
+, poetry-core
 , pyopenssl
 , pytestCheckHook
+, pythonOlder
 , requests
 , requests-kerberos
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
   version = "2.0.1";
-  disabled = isPy27;
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+WMv52JIbh51pqLhDnUCzrcbPD5eutzwFcPOhO+nR7s=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "venth";
+    repo = pname;
+    rev = version;
+    hash = "sha256-0BURXbEOZvb8kszuajLtR+V7HjJycCBAQrm3WqpVB1w=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
+    boto3
     botocore
     click
     configparser
@@ -36,31 +47,38 @@ buildPythonPackage rec {
     requests-kerberos
   ];
 
-  checkInputs = [
-    glibcLocales
-    mock
-    pytestCheckHook
+  patches = [
+    # Switch to poetry-core, https://github.com/venth/aws-adfs/pull/230
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/venth/aws-adfs/commit/da095ccf64629d36a6045ffec2684038378ee690.patch";
+      sha256 = "sha256-xg4c7iIonkUmNN74q/UeGSuYP3to7q4cLW6+TMW9nh4=";
+    })
   ];
 
-  # Relax version constraint
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'coverage < 4' 'coverage' \
-      --replace 'fido2>=0.8.1,<0.9.0' 'fido2>=0.8.1,<1.0.0'
+    substituteInPlace pyproject.toml \
+      --replace 'boto3 = "^1.20.50"' 'boto3 = "*"' \
+      --replace 'botocore = ">=1.12.6"' 'botocore = "*"'
   '';
 
-  # Test suite writes files to $HOME/.aws/, or /homeless-shelter if unset
-  HOME = ".";
+  checkInputs = [
+    pytestCheckHook
+    toml
+  ];
 
-  # Required for python3 tests, along with glibcLocales
-  LC_ALL = "en_US.UTF-8";
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
-  pythonImportsCheck = [ "aws_adfs" ];
+  pythonImportsCheck = [
+    "aws_adfs"
+  ];
 
   meta = with lib; {
-    description = "Command line tool to ease aws cli authentication against ADFS";
+    description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
     license = licenses.psfl;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = with maintainers; [ bhipple ];
   };
 }
