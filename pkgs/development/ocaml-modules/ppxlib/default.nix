@@ -49,7 +49,7 @@ let param = {
 }."${version}"; in
 
 if param ? max_version && lib.versionAtLeast ocaml.version param.max_version
-|| param ? min_version && !lib.versionAtLeast ocaml.version param.min_version
+|| param ? min_version && lib.versionOlder ocaml.version param.min_version
 then throw "ppxlib-${version} is not available for OCaml ${ocaml.version}"
 else
 
