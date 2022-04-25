@@ -2143,7 +2143,8 @@
       praw
     ];
     "rejseplanen" = ps: with ps; [
-    ]; # missing inputs: rjpl
+      rjpl
+    ];
     "remember_the_milk" = ps: with ps; [
       httplib2
     ]; # missing inputs: RtmAPI
