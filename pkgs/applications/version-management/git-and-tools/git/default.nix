@@ -13,7 +13,7 @@
 , pythonSupport ? true
 , withpcre2 ? true
 , sendEmailSupport ? false
-, darwin
+, Security, CoreServices
 , nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.Security ]
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
     ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
