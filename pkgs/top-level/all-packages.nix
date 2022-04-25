@@ -15951,6 +15951,8 @@ with pkgs;
 
   redis-dump = callPackage ../development/tools/redis-dump { };
 
+  redis-plus-plus = callPackage ../development/libraries/redis-plus-plus { };
+
   redo = callPackage ../development/tools/build-managers/redo { };
 
   redo-apenwarr = callPackage ../development/tools/build-managers/redo-apenwarr { };
