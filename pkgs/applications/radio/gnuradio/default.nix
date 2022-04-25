@@ -24,7 +24,7 @@
 , uhd
 , SDL
 , gsl
-, soapysdr
+, soapysdr-with-plugins
 , libsodium
 , libsndfile
 , libunwind
@@ -256,7 +256,7 @@ let
     gr-soapy = {
       cmakeEnableFlag = "GR_SOAPY";
       runtime = [
-        soapysdr
+        soapysdr-with-plugins
       ];
     };
   };
