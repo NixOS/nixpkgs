@@ -6930,6 +6930,8 @@ with pkgs;
     stdenv = gcc8Stdenv;
   };
 
+  hyfetch = callPackage ../tools/misc/hyfetch { };
+
   hylafaxplus = callPackage ../servers/hylafaxplus { };
 
   hyphen = callPackage ../development/libraries/hyphen { };
