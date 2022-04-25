@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "imbox";
-  version = "0.1.0";
+  version = "0.9.6";
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
@@ -17,9 +17,7 @@ buildPythonPackage rec {
     ./patches/Support-to-parse-chinese-attachment-file-name.patch
   ];
 
-  propagatedBuildInputs = [ setuptools chardet ];
-
-  pytestFlagsArray = [ "-n" "$NIX_BUILD_CORES" ];
+  propagatedBuildInputs = [ chardet ];
 
   doCheck = false;
 
