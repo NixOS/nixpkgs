@@ -1119,6 +1119,7 @@ self: super: {
       "coc-flutter"
       "coc-git"
       "coc-go"
+      "coc-haxe"
       "coc-highlight"
       "coc-html"
       "coc-imselect"

@@ -65,26 +65,26 @@
   }
   {
     pname = "microsoft.aspnetcore.app.runtime.win-arm64";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-arm64/6.0.3/microsoft.aspnetcore.app.runtime.win-arm64.6.0.3.nupkg";
-      sha256 = "0wxnwqg43hd1hk07j1wqhfrwbjm5ly7bsy9z2jgy9zf8lya4qs9a";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-arm64/6.0.4/microsoft.aspnetcore.app.runtime.win-arm64.6.0.4.nupkg";
+      sha256 = "1sn2jlqzyiszrxscd3ah7sfvv065xc3vjky34qy81wdmyvxwhkba";
     };
   }
   {
     pname = "microsoft.aspnetcore.app.runtime.win-x64";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-x64/6.0.3/microsoft.aspnetcore.app.runtime.win-x64.6.0.3.nupkg";
-      sha256 = "11kv50kll3iq88kn40f5v5qlq8mydv6y6xz2cbzjw4aadd44njwq";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-x64/6.0.4/microsoft.aspnetcore.app.runtime.win-x64.6.0.4.nupkg";
+      sha256 = "1sqv7vhkm4j11rl7mfvs4mmmclcdps2n4pf31ck2mcx54nr4d2kj";
     };
   }
   {
     pname = "microsoft.aspnetcore.app.runtime.win-x86";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-x86/6.0.3/microsoft.aspnetcore.app.runtime.win-x86.6.0.3.nupkg";
-      sha256 = "1c1qx840hwcp6a26dbx10f24pw9kzlvr15w3s1pakldygng5skwm";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-x86/6.0.4/microsoft.aspnetcore.app.runtime.win-x86.6.0.4.nupkg";
+      sha256 = "0v7bpbl7bif1qlkdc0p10l69amf4vpzdd8bgz2455h6zxwjc1hy4";
     };
   }
   {
@@ -553,50 +553,50 @@
   }
   {
     pname = "microsoft.netcore.app.host.win-arm64";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.host.win-arm64/6.0.3/microsoft.netcore.app.host.win-arm64.6.0.3.nupkg";
-      sha256 = "1dhdr3ccaag3yb803qswkm1zvvwc9q6m3d9nvxvb5f8m94rsbhka";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.host.win-arm64/6.0.4/microsoft.netcore.app.host.win-arm64.6.0.4.nupkg";
+      sha256 = "1bnfb4yxdandddr36j5gkpaqym5pm971rp7gc8nkp3xmff4fnmc0";
     };
   }
   {
     pname = "microsoft.netcore.app.host.win-x64";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.host.win-x64/6.0.3/microsoft.netcore.app.host.win-x64.6.0.3.nupkg";
-      sha256 = "1y428glba68s76icjzfl1v3p61pcz7rd78wybhabs8zq8w9cp2pj";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.host.win-x64/6.0.4/microsoft.netcore.app.host.win-x64.6.0.4.nupkg";
+      sha256 = "1qasm6j25lmcc4xn7f7s3jli1pypz1kfnj7j9dkjlx9mc8r356zp";
     };
   }
   {
     pname = "microsoft.netcore.app.host.win-x86";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.host.win-x86/6.0.3/microsoft.netcore.app.host.win-x86.6.0.3.nupkg";
-      sha256 = "0byyxiv8253zgymn0vwz8zxyasmhdwj891gxg3ydgnc2qf23f16g";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.host.win-x86/6.0.4/microsoft.netcore.app.host.win-x86.6.0.4.nupkg";
+      sha256 = "16chkjf2fc2d4bd7wccxkgb5n44dpb6admchmg8mx3mlg0n24bwa";
     };
   }
   {
     pname = "microsoft.netcore.app.runtime.win-arm64";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.win-arm64/6.0.3/microsoft.netcore.app.runtime.win-arm64.6.0.3.nupkg";
-      sha256 = "022kld62v6npxx27mvllg3nv7rpw142q49zwgprzvrxgnn5zszq1";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.win-arm64/6.0.4/microsoft.netcore.app.runtime.win-arm64.6.0.4.nupkg";
+      sha256 = "1jcfajqq6i06w8a9n2r92f326x3v7avkiv31nsldzjdn1ikiwfzj";
     };
   }
   {
     pname = "microsoft.netcore.app.runtime.win-x64";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.win-x64/6.0.3/microsoft.netcore.app.runtime.win-x64.6.0.3.nupkg";
-      sha256 = "1rjkzs2013razi2xs943q62ys1jh8blhjcnj75qkvirf859d11qw";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.win-x64/6.0.4/microsoft.netcore.app.runtime.win-x64.6.0.4.nupkg";
+      sha256 = "1x4ysack9n57h8w1ybfyczkf3w6jsgz7ila0czm2011w4sjnyqj0";
     };
   }
   {
     pname = "microsoft.netcore.app.runtime.win-x86";
-    version = "6.0.3";
+    version = "6.0.4";
     src = fetchurl {
-      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.win-x86/6.0.3/microsoft.netcore.app.runtime.win-x86.6.0.3.nupkg";
-      sha256 = "0gsk9939f6vrqbgc7cw8g8q9c7669rkfwwlyhiq13piqmj2kni6g";
+      url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.runtime.win-x86/6.0.4/microsoft.netcore.app.runtime.win-x86.6.0.4.nupkg";
+      sha256 = "1ha2w6zh0l1kl36rxy9g38xcq8awhyqiiwi9gbr9kmxig5i5fxfa";
     };
   }
   {

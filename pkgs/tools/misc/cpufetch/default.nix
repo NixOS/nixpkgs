@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpufetch";
-  version = "1.01";
+  version = "1.02";
 
   src = fetchFromGitHub {
     owner = "Dr-Noob";
     repo = "cpufetch";
     rev = "v${version}";
-    sha256 = "sha256-vae/59eEDuZUDsTHE93mi+L8WBr3H4zp+mzXg7WWusA=";
+    sha256 = "sha256-bhw7+z4/50MrC5WyexHhtzmqnovwiA9X6Q2TcznDYZM=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simplistic yet fancy CPU architecture fetching tool";
-    license = licenses.mit;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/Dr-Noob/cpufetch";
     changelog = "https://github.com/Dr-Noob/cpufetch/releases/tag/v${version}";
     maintainers = with maintainers; [ devhell ];
