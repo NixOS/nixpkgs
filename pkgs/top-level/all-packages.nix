@@ -4536,10 +4536,10 @@ with pkgs;
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
-  clementine = libsForQt514.callPackage ../applications/audio/clementine {
+  clementine = libsForQt5.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
-    protobuf = protobuf3_14;
+    protobuf = protobuf3_19;
   };
 
   clementineUnfree = clementine.unfree;
