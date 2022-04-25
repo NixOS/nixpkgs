@@ -68,5 +68,9 @@ rec {
     version = "0.20.1";
   };
 
-  ocamlformat = ocamlformat_0_20_1;
+  ocamlformat_0_21_0 = mkOCamlformat {
+    version = "0.21.0";
+  };
+
+  ocamlformat = ocamlformat_0_21_0;
 }
