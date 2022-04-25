@@ -58,5 +58,7 @@ buildPythonPackage rec {
     description = "MRI intensity normalization tools";
     maintainers = with maintainers; [ bcdarwin ];
     license = licenses.asl20;
+    # depends on simpleitk python wrapper which is not packaged yet
+    broken = true;
   };
 }
