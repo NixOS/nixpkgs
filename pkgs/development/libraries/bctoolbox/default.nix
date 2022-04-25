@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   pname = "bctoolbox";
   version = "5.1.17";
 
-  nativeBuildInputs = [ cmake bcunit ];
-  buildInputs = [ mbedtls ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ mbedtls bcunit ];
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Utilities library for Linphone";
