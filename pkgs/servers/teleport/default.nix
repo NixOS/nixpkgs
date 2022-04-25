@@ -16,17 +16,16 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-ir2NMNIjSpv7l6dVNHczARg6b+doFofinsJy1smEC7o=";
+    sha256 = "sha256-KQfdeMuZ9LJHhEJLMl58Yb0+gxgDT7VcVnK1JxjVZaI=";
   };
-  version = "8.1.3";
+  version = "9.1.2";
 
   roleTester = rustPlatform.buildRustPackage {
     name = "teleport-roletester";
-    inherit version;
+    inherit version src;
 
-    src = "${src}/lib/datalog";
-    cargoSha256 = "sha256-cpW7kel02t/fB2CvDvVqWlzgS3Vg2qLnemF/bW2Ii1A=";
-    sourceRoot = "datalog/roletester";
+    cargoSha256 = "sha256-gCm4ETbXy6tGJQVSzUkoAWUmKD3poYgkw133LtziASI=";
+    buildAndTestSubdir = "lib/datalog/roletester";
 
     PROTOC = "${protobuf}/bin/protoc";
     PROTOC_INCLUDE = "${protobuf}/include";
@@ -39,17 +38,17 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "ea3c67c941c56cfb6c228612e88100df09fb6f9c";
-    sha256 = "sha256-oKvDXkxA73IJOi+ciBFVLkYcmeRUsTC+3rcYf64vDoY=";
+    rev = "67e608db77300d8a6cb17709be67f12c1d3271c3";
+    sha256 = "sha256-o4qjXGaNi5XDSUQrUuU+G77EdRnvJ1WUPWrryZU1CUE=";
   };
 in
 buildGoModule rec {
   pname = "teleport";
 
   inherit src version;
-  vendorSha256 = null;
+  vendorSha256 = "sha256-UMgWM7KHag99JR4i4mwVHa6yd9aHQ6Dy+pmUijNL4Ew=";
 
-  subPackages = [ "tool/tctl" "tool/teleport" "tool/tsh" ];
+  subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
   tags = [ "webassets_embed" ] ++
     lib.optional withRoleTester "roletester";
 
@@ -73,14 +72,12 @@ buildGoModule rec {
     make lib/web/build/webassets
 
     ${lib.optionalString withRoleTester
-      "cp -r ${roleTester}/target lib/datalog/roletester/."}
+      "cp -r ${roleTester}/target ."}
   '';
 
-  doCheck = !stdenv.isDarwin;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # Multiple tests fail in the build sandbox
+  # due to trying to spawn nixbld's shell (/noshell), etc.
+  doCheck = false;
 
   postInstall = ''
     install -Dm755 -t $client/bin $out/bin/tsh
@@ -93,6 +90,7 @@ buildGoModule rec {
   installCheckPhase = ''
     $out/bin/tsh version | grep ${version} > /dev/null
     $client/bin/tsh version | grep ${version} > /dev/null
+    $out/bin/tbot version | grep ${version} > /dev/null
     $out/bin/tctl version | grep ${version} > /dev/null
     $out/bin/teleport version | grep ${version} > /dev/null
   '';

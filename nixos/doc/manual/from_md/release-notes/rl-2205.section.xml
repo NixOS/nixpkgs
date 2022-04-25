@@ -1167,6 +1167,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>teleport</literal> has been upgraded to major version
+          9. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/setup/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/changelog/#900">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
           dependency
           <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
