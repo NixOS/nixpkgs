@@ -526,10 +526,17 @@ class Machine:
         self.run_callbacks()
         self.connect()
 
-        if timeout is not None:
-            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
+        # Always run command with shell opts
+        command = f"set -euo pipefail; {command}"
 
-        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
+        timeout_str = ""
+        if timeout is not None:
+            timeout_str = f"timeout {timeout}"
+
+        out_command = (
+            f"{timeout_str} sh -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
+        )
+
         assert self.shell
         self.shell.send(out_command.encode())
 

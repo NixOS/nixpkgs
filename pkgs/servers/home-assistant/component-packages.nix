@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.6";
+  version = "2022.4.7";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -162,7 +162,8 @@
       pyarlo
     ];
     "arris_tg2492lg" = ps: with ps; [
-    ]; # missing inputs: arris-tg2492lg
+      arris-tg2492lg
+    ];
     "aruba" = ps: with ps; [
       pexpect
     ];
@@ -822,7 +823,8 @@
       fitbit
     ];
     "fivem" = ps: with ps; [
-    ]; # missing inputs: fivem-api
+      fivem-api
+    ];
     "fixer" = ps: with ps; [
       fixerio
     ];
@@ -1957,7 +1959,8 @@
       sqlalchemy
     ];
     "peco" = ps: with ps; [
-    ]; # missing inputs: peco
+      peco
+    ];
     "pencom" = ps: with ps; [
     ]; # missing inputs: pencompy
     "persistent_notification" = ps: with ps; [
@@ -2241,7 +2244,8 @@
       sqlalchemy
     ];
     "saj" = ps: with ps; [
-    ]; # missing inputs: pysaj
+      pysaj
+    ];
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -2291,7 +2295,8 @@
       aiosenseme
     ];
     "sensibo" = ps: with ps; [
-    ]; # missing inputs: pysensibo
+      pysensibo
+    ];
     "sensor" = ps: with ps; [
       fnvhash
       lru-dict
@@ -3122,7 +3127,8 @@
       ifaddr
       url-normalize
       zeroconf
-    ]; # missing inputs: zwave_me_ws
+      zwave-me-ws
+    ];
   };
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
@@ -3281,6 +3287,7 @@
     "filter"
     "fireservicerota"
     "firmata"
+    "fivem"
     "fjaraskupan"
     "flic"
     "flick_electric"
@@ -3505,6 +3512,7 @@
     "p1_monitor"
     "panel_custom"
     "panel_iframe"
+    "peco"
     "persistent_notification"
     "person"
     "philips_js"
@@ -3567,6 +3575,7 @@
     "select"
     "sense"
     "senseme"
+    "sensibo"
     "sensor"
     "sentry"
     "seventeentrack"
@@ -3735,5 +3744,6 @@
     "zodiac"
     "zone"
     "zwave_js"
+    "zwave_me"
   ];
 }

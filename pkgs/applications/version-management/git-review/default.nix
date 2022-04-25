@@ -9,7 +9,7 @@
 
 buildPythonApplication rec {
   pname = "git-review";
-  version = "2.3.0";
+  version = "2.3.1";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -20,7 +20,7 @@ buildPythonApplication rec {
     owner = "opendev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ENrv2jx59iNA/hALFg6+gOz8zxJaoiCwYcAh1xeEOR0=";
+    sha256 = "sha256-C8M4b/paHJB9geizc1eIhXsTuLeeS4dDisCfCQF1RuU=";
   };
 
   outputs = [ "out" "man" ];
