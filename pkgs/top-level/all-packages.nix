@@ -24978,8 +24978,6 @@ with pkgs;
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
-  ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
-
   androidStudioPackages = recurseIntoAttrs
     (callPackage ../applications/editors/android-studio {
       buildFHSUserEnv = buildFHSUserEnvBubblewrap;
