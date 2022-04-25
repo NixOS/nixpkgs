@@ -23612,8 +23612,6 @@ with pkgs;
 
   solo5 = callPackage ../os-specific/solo5 { };
 
-  speedometer = callPackage ../os-specific/linux/speedometer { };
-
   statik = callPackage ../development/tools/statik { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
