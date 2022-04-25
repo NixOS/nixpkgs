@@ -28898,8 +28898,6 @@ with pkgs;
 
   phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
 
-  phwmon = callPackage ../applications/misc/phwmon { };
-
   pianobar = callPackage ../applications/audio/pianobar { };
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
