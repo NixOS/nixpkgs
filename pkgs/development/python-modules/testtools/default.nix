@@ -7,6 +7,7 @@
 , unittest2
 , traceback2
 , testscenarios
+, setuptoolsDepsVersionsHook
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,7 @@ buildPythonPackage rec {
     sha256 = "57c13433d94f9ffde3be6534177d10fb0c1507cc499319128958ca91a65cb23f";
   };
 
+  nativeBuildInputs = [ setuptoolsDepsVersionsHook ];
   propagatedBuildInputs = [ pbr python-mimeparse extras ];
   buildInputs = [ traceback2 ];
 
@@ -25,10 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [ testscenarios ];
 
-  # testtools 2.0.0 and up has a circular run-time dependency on futures
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "fixtures>=1.3.0" ""
-  '';
+  removePythonDeps = [ "fixtures" ];
 
   meta = {
     description = "A set of extensions to the Python standard library's unit testing framework";
