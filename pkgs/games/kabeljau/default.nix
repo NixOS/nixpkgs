@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $out/bin
     cp ${pname}.sh $out/bin/${pname}
-    wrapProgram $out/bin/${pname} --prefix PATH : ${
+    wrapProgram $out/bin/${pname} --suffix PATH : ${
       lib.makeBinPath [ bash dialog ]
     }
 
