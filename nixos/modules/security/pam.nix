@@ -928,7 +928,7 @@ in
           Recommended if your device doesn’t have a tactile trigger.
         '';
       };
-      
+
       prompt = mkOption {
         default = null;
         type = with types; nullOr str;
