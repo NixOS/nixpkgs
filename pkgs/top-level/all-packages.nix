@@ -839,6 +839,8 @@ with pkgs;
 
   srcOnly = callPackage ../build-support/src-only { };
 
+  subnetcalc = callPackage ../tools/networking/subnetcalc { };
+
   substitute = callPackage ../build-support/substitute/substitute.nix { };
 
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
@@ -9488,8 +9490,6 @@ with pkgs;
 
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
-  pydb = callPackage ../development/tools/pydb { };
-
   pydf = callPackage ../applications/misc/pydf { };
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
@@ -17089,7 +17089,9 @@ with pkgs;
   fplll = callPackage ../development/libraries/fplll {};
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
-  freeimage = callPackage ../development/libraries/freeimage { };
+  freeimage = callPackage ../development/libraries/freeimage {
+    libraw = libraw_unstable;
+  };
 
   freetts = callPackage ../development/libraries/freetts {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -17172,7 +17174,6 @@ with pkgs;
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
-    libraw = libraw_0_20;
   };
 
   gensio = callPackage ../development/libraries/gensio {};
@@ -19949,8 +19950,6 @@ with pkgs;
 
   plib = callPackage ../development/libraries/plib { };
 
-  pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
-
   poco = callPackage ../development/libraries/poco { };
 
   podofo = callPackage ../development/libraries/podofo { };
@@ -20577,8 +20576,6 @@ with pkgs;
   sphinx-autobuild = with python3Packages; toPythonApplication sphinx-autobuild;
 
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
-
-  sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
   sphinxsearch = callPackage ../servers/search/sphinxsearch { };
 
@@ -23161,7 +23158,7 @@ with pkgs;
   };
 
   libraw = callPackage ../development/libraries/libraw { };
-  libraw_0_20 = callPackage ../development/libraries/libraw/0_20.nix { };
+  libraw_unstable = callPackage ../development/libraries/libraw/unstable.nix { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
@@ -23566,6 +23563,8 @@ with pkgs;
   rtw89-firmware = callPackage ../os-specific/linux/firmware/rtw89-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
+
+  sasutils = callPackage ../os-specific/linux/sasutils { };
 
   sass = callPackage ../development/tools/sass { };
 
@@ -25296,6 +25295,8 @@ with pkgs;
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
   btops = callPackage ../applications/window-managers/btops { };
+
+  buho = libsForQt5.callPackage ../applications/office/buho { };
 
   bvi = callPackage ../applications/editors/bvi { };
 
@@ -28656,8 +28657,6 @@ with pkgs;
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
 
-  parlatype = callPackage ../applications/audio/parlatype { };
-
   packet = callPackage ../development/tools/packet { };
 
   packet-sd = callPackage ../development/tools/packet-sd { };
@@ -31882,7 +31881,7 @@ with pkgs;
 
   powermanga = callPackage ../games/powermanga { };
 
-  prboom = callPackage ../games/prboom { };
+  prboom-plus = callPackage ../games/prboom-plus { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 

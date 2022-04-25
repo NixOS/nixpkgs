@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
+  # Disable cwd support on darwin, because it requires macOS>=10.15
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    for file in 3rd/bee.lua/bee/subprocess/subprocess_posix.cpp 3rd/luamake/3rd/bee.lua/bee/subprocess/subprocess_posix.cpp; do
+      substituteInPlace $file --replace '#define SUPPORT_CWD 1' ""
+    done
+  '';
+
   preBuild = ''
     cd 3rd/luamake
   ''

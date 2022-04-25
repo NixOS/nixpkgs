@@ -30,7 +30,7 @@ mkDerivation rec {
     description = "KDE utility to scan images and multi-page documents";
     homepage = "https://apps.kde.org/skanpage";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ samuelgrf ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
