@@ -3,7 +3,8 @@
 , buildPythonPackage
 , poetry-core
 , pytestCheckHook
-, pkgs
+, procps
+, tmux
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pkgs.procps
-    pkgs.tmux
+    procps
+    tmux
+
     pytestCheckHook
   ];
 
