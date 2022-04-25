@@ -106,16 +106,21 @@ stdenv.mkDerivation rec {
     cpio
   ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = ''
     runHook preInstall
-    mkdir -p $out/Applications/zoom.us.app
-    cp -R . $out/Applications/zoom.us.app
-    runHook postInstall
-  '' else ''
-    runHook preInstall
-    mkdir $out
-    tar -C $out -xf $src
-    mv $out/usr/* $out/
+    ${rec {
+      aarch64-darwin = ''
+        mkdir -p $out/Applications/zoom.us.app
+        cp -R . $out/Applications/zoom.us.app
+      '';
+      # darwin steps same on both architectures
+      x86_64-darwin = aarch64-darwin;
+      x86_64-linux = ''
+        mkdir $out
+        tar -C $out -xf $src
+        mv $out/usr/* $out/
+      '';
+    }.${stdenv.system}}
     runHook postInstall
   '';
 
