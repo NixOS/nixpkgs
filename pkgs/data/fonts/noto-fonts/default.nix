@@ -11,32 +11,44 @@
 , imagemagick
 , zopfli
 , buildPackages
+, fontconfig
+, python3
 }:
 
 let
-  mkNoto = { pname, weights }:
+  noto-pkg =
     stdenvNoCC.mkDerivation {
-      inherit pname;
-      version = "2020-01-23";
+      pname = "noto-fonts";
+      version = "unstable-2022-04-25";
 
       src = fetchFromGitHub {
         owner = "googlefonts";
         repo = "noto-fonts";
-        rev = "f4726a2ec36169abd02a6d8abe67c8ff0236f6d8";
-        sha256 = "0zc1r7zph62qmvzxqfflsprazjf6x1qnwc2ma27kyzh6v36gaykw";
+        rev = "a19de47f845dbd4c61b884c7ff90ce993555d05d";
+        sparseCheckout = ''
+          unhinted/otf
+          unhinted/variable-ttf
+        '';
+        hash = "sha256-7Jzo7402CiOcn2q++zbAzn2tP/y2x7QJuwjcP1NoyLQ=";
       };
 
+      analyzeScan = ./analyze_scan.py;
+
+      nativeBuildInputs = [ buildPackages.fontconfig.bin buildPackages.python3 ];
+
+      outputs = [ "out" "extra" ];
+
       installPhase = ''
-        # We copy in reverse preference order -- unhinted first, then
-        # hinted -- to get the "best" version of each font while
-        # maintaining maximum coverage.
-        #
-        # TODO: install OpenType, variable versions?
-        local out_ttf=$out/share/fonts/truetype/noto
-        install -m444 -Dt $out_ttf phaseIII_only/unhinted/ttf/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf phaseIII_only/hinted/ttf/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf unhinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf hinted/*/*-${weights}.ttf
+        fc-scan ./unhinted -f '"%{fullname[0]}","%{file}"\n' > scan.csv
+        python $analyzeScan
+        local out_ttf=$out/share/fonts/google-noto
+        while read p; do
+          install -m444 -Dt $out_ttf "$p"
+        done <noto_fonts_list.txt
+        local extra_ttf=$extra/share/fonts/google-noto
+        while read p; do
+          install -m444 -Dt $extra_ttf "$p"
+        done <noto_extra_list.txt
       '';
 
       meta = with lib; {
@@ -54,12 +66,18 @@ let
           Google’s goal is to see “no more tofu”.  Noto has multiple styles and
           weights, and freely available to all.
 
+          noto-fonts contains Regular, Bold, and Light weights and Italic style,
+          and noto-fonts-extra contains the rest.
+
           This package also includes the Arimo, Cousine, and Tinos fonts.
         '';
         license = licenses.ofl;
         platforms = platforms.all;
         maintainers = with maintainers; [ mathnerd314 emily ];
       };
+
+      passthru.tests.noto-fonts = nixosTests.noto-fonts;
+
     };
 
   mkNotoCJK = { typeface, version, rev, sha256 }:
@@ -103,15 +121,8 @@ let
 in
 
 {
-  noto-fonts = mkNoto {
-    pname = "noto-fonts";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
-  };
-
-  noto-fonts-extra = mkNoto {
-    pname = "noto-fonts-extra";
-    weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
-  };
+  noto-fonts = noto-pkg.out;
+  noto-fonts-extra = noto-pkg.extra;
 
   noto-fonts-cjk-sans = mkNotoCJK {
     typeface = "Sans";
@@ -182,6 +193,8 @@ in
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 sternenseemann ];
     };
+
+    passthru.tests.noto-fonts = nixosTests.noto-fonts;
   };
 
   noto-fonts-emoji-blob-bin =

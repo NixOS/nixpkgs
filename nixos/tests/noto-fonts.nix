@@ -26,6 +26,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   testScript =
     # extracted from http://www.clagnut.com/blog/2380/
+    # emoji are from Unicode 14 (latest standard)
     let testText = builtins.toFile "test.txt" ''
       the quick brown fox jumps over the lazy dog
       視野無限廣，窗外有藍天
@@ -33,6 +34,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       いろはにほへと ちりぬるを わかよたれそ つねならむ うゐのおくやま けふこえて あさきゆめみし ゑひもせす
       다람쥐 헌 쳇바퀴에 타고파
       中国智造，慧及全球
+      🫠🫣🫱🏻‍🫲🏿
     ''; in
     ''
       machine.wait_for_x()
