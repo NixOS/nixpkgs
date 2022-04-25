@@ -933,7 +933,7 @@ in
         default = null;
         type = with types; nullOr str;
         description = ''
-            Set individual prompt message for interactive mode. By setting this option, you can override the message shown by the <literal>cue</literal> option.
+            Set individual prompt message for interactive mode. By setting this option, you can set a message to be shown shown by the <literal>interactive</literal> option. Note: Requires <literal>interactive</literal> to be set to <literal>true</literal>.
         '';
       };
 
