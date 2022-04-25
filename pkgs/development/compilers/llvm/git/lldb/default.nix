@@ -90,8 +90,11 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
+  doInstallCheck = false; # python bits are broken, see #166604
+
   installCheckPhase = ''
     if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+        echo 'ERROR: python files not installed where expected!'
         return 1;
     fi
   '';

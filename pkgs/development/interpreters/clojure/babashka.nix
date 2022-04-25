@@ -17,6 +17,8 @@ buildGraalvmNativeImage rec {
     "--native-image-info"
   ];
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/bb --version | grep '${version}'
     $out/bin/bb '(+ 1 2)' | grep '3'

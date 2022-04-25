@@ -218,6 +218,7 @@ let
       "-DDOLFIN_ENABLE_SLEPC=OFF"
       "-DDOLFIN_ENABLE_TRILINOS=OFF"
     ];
+    doInstallCheck = false; # make: *** No rule to make target 'runtests'.  Stop.
     installCheckPhase = ''
       source $out/share/dolfin/dolfin.conf
       make runtests

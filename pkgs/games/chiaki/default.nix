@@ -52,6 +52,7 @@ mkDerivation rec {
 
   doCheck = true;
 
+  doInstallCheck = false; # error, can't connect to display
   installCheckPhase = "$out/bin/chiaki --help";
 
   meta = with lib; {

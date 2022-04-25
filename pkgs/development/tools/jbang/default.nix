@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/jbang --version 2>&1 | grep -q "${version}"
   '';

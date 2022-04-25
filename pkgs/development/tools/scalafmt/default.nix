@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
