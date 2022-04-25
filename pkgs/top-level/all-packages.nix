@@ -3849,6 +3849,8 @@ with pkgs;
 
   meson-tools = callPackage ../misc/meson-tools { };
 
+  meson64-tools = callPackage ../misc/meson64-tools { };
+
   metabase = callPackage ../servers/metabase { };
 
   micropad = callPackage ../applications/office/micropad {
@@ -23747,6 +23749,7 @@ with pkgs;
     ubootNanoPCT4
     ubootNovena
     ubootOdroidC2
+    ubootOdroidC4
     ubootOdroidXU3
     ubootOlimexA64Olinuxino
     ubootOrangePiPc
@@ -23778,6 +23781,12 @@ with pkgs;
     ubootUtilite
     ubootWandboard
     ;
+
+  # Hardkernel Odroid devices firmware:
+  inherit (callPackage ../misc/uboot/hardkernel-firmware.nix {})
+    firmwareOdroidC2
+    firmwareOdroidC4
+  ;
 
   # Upstream Barebox:
   inherit (callPackage ../misc/barebox {})

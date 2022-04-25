@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , bc
 , bison
@@ -9,12 +8,13 @@
 , flex
 , openssl
 , swig
-, meson-tools
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
+, firmwareOdroidC2
+, firmwareOdroidC4
 , buildPackages
 }:
 
@@ -228,27 +228,15 @@ in {
     filesToInstall = ["u-boot-dtb.img" "SPL"];
   };
 
-  # Flashing instructions:
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=1 count=442
-  # dd if=bl1.bin.hardkernel of=<device> conv=fsync bs=512 skip=1 seek=1
-  # dd if=u-boot.gxbb of=<device> conv=fsync bs=512 seek=97
-  ubootOdroidC2 = let
-    firmwareBlobs = fetchFromGitHub {
-      owner = "armbian";
-      repo = "odroidc2-blobs";
-      rev = "47c5aac4bcac6f067cebe76e41fb9924d45b429c";
-      sha256 = "1ns0a130yxnxysia8c3q2fgyjp9k0nkr689dxk88qh2vnibgchnp";
-      meta.license = lib.licenses.unfreeRedistributableFirmware;
-    };
-  in buildUBoot {
+  ubootOdroidC2 = buildUBoot {
     defconfig = "odroid-c2_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["u-boot.bin" "u-boot.gxbb" "${firmwareBlobs}/bl1.bin.hardkernel"];
+
     postBuild = ''
       # BL301 image needs at least 64 bytes of padding after it to place
       # signing headers (with amlbootsig)
       truncate -s 64 bl301.padding.bin
-      cat '${firmwareBlobs}/gxb/bl301.bin' bl301.padding.bin > bl301.padded.bin
+      cat ${firmwareOdroidC2}/bl301.bin bl301.padding.bin > bl301.padded.bin
+
       # The downstream fip_create tool adds a custom TOC entry with UUID
       # AABBCCDD-ABCD-EFEF-ABCD-12345678ABCD for the BL301 image. It turns out
       # that the firmware blob does not actually care about UUIDs, only the
@@ -261,17 +249,62 @@ in {
       #
       # See https://github.com/afaerber/meson-tools/issues/3 for more
       # information.
-      '${buildPackages.armTrustedFirmwareTools}/bin/fiptool' create \
+      ${buildPackages.armTrustedFirmwareTools}/bin/fiptool create \
         --align 0x4000 \
-        --tb-fw '${firmwareBlobs}/gxb/bl30.bin' \
+        --tb-fw ${firmwareOdroidC2}/bl30.bin \
         --scp-fw bl301.padded.bin \
-        --soc-fw '${armTrustedFirmwareS905}/bl31.bin' \
+        --soc-fw ${armTrustedFirmwareS905}/bl31.bin \
         --nt-fw u-boot.bin \
         fip.bin
-      cat '${firmwareBlobs}/gxb/bl2.package' fip.bin > boot_new.bin
-      '${buildPackages.meson-tools}/bin/amlbootsig' boot_new.bin u-boot.img
-      dd if=u-boot.img of=u-boot.gxbb bs=512 skip=96
+      cat ${firmwareOdroidC2}/bl2.package fip.bin > boot_new.bin
+      ${buildPackages.meson-tools}/bin/amlbootsig boot_new.bin u-boot.img
+
+      dd if=u-boot.img of=u-boot.bin bs=512 skip=96
     '';
+
+    filesToInstall = [
+      "u-boot.bin"
+      "${firmwareOdroidC2}/sd_fusing.sh" "${firmwareOdroidC2}/bl1.bin.hardkernel"
+    ];
+    extraMeta.platforms = ["aarch64-linux"];
+  };
+
+  ubootOdroidC4 = buildUBoot {
+    defconfig = "odroid-c4_defconfig";
+
+    postBuild = ''
+      ${buildPackages.meson64-tools}/bin/pkg --type bl30 --output bl30_new.bin \
+        ${firmwareOdroidC4}/bl30.bin ${firmwareOdroidC4}/bl301.bin
+      ${buildPackages.meson64-tools}/bin/pkg --type bl2 --output bl2_new.bin \
+        ${firmwareOdroidC4}/bl2.bin ${firmwareOdroidC4}/acs.bin
+
+      ${buildPackages.meson64-tools}/bin/bl30sig --input bl30_new.bin \
+        --output bl30_new.bin.g12a.enc --level v3
+      ${buildPackages.meson64-tools}/bin/bl3sig --input  bl30_new.bin.g12a.enc \
+        --output bl30_new.bin.enc --level v3 --type bl30
+      ${buildPackages.meson64-tools}/bin/bl3sig --input ${firmwareOdroidC4}/bl31.img \
+        --output bl31.img.enc --level v3 --type bl31
+      ${buildPackages.meson64-tools}/bin/bl3sig --input u-boot.bin --compress lz4 \
+        --output bl33.bin.enc --level v3 --type bl33 --compress lz4
+      ${buildPackages.meson64-tools}/bin/bl2sig --input bl2_new.bin \
+        --output bl2.n.bin.sig
+
+      ${buildPackages.meson64-tools}/bin/bootmk --output u-boot.bin \
+        --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc \
+        --ddrfw1 ${firmwareOdroidC4}/ddr4_1d.fw \
+        --ddrfw2 ${firmwareOdroidC4}/ddr4_2d.fw \
+        --ddrfw3 ${firmwareOdroidC4}/ddr3_1d.fw \
+        --ddrfw4 ${firmwareOdroidC4}/piei.fw \
+        --ddrfw5 ${firmwareOdroidC4}/lpddr4_1d.fw \
+        --ddrfw6 ${firmwareOdroidC4}/lpddr4_2d.fw \
+        --ddrfw7 ${firmwareOdroidC4}/diag_lpddr4.fw \
+        --ddrfw8 ${firmwareOdroidC4}/aml_ddr.fw \
+        --ddrfw9 ${firmwareOdroidC4}/lpddr3_1d.fw \
+        --level v3
+    '';
+
+    filesToInstall = [ "u-boot.bin" "${firmwareOdroidC4}/sd_fusing.sh"];
+    extraMeta.platforms = ["aarch64-linux"];
   };
 
   ubootOdroidXU3 = buildUBoot {

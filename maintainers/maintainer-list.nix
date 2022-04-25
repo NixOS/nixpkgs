@@ -138,6 +138,12 @@
     githubId = 7755101;
     name = "Aaron Andersen";
   };
+  aarapov = {
+    email = "anton@deadbeef.mx";
+    github = "arapov";
+    githubId = 1823164;
+    name = "Anton Arapov";
+  };
   aaronjanse = {
     email = "aaron@ajanse.me";
     matrix = "@aaronjanse:matrix.org";
