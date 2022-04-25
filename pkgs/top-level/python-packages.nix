@@ -3821,6 +3821,8 @@ in {
 
   hjson = callPackage ../development/python-modules/hjson { };
 
+  hkavr = callPackage ../development/python-modules/hkavr { };
+
   hkdf = callPackage ../development/python-modules/hkdf { };
 
   hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
