@@ -23,17 +23,13 @@
 , libdatrie
 , libxkbcommon
 , epoxy
-, dbus_tools
+, dbus
 , downloaderSupport ? true
 , ffmpeg
 , youtube-dl
+, copyDesktopItems
 }:
 
-let
-  downloaderPath = lib.makeBinPath [ ffmpeg youtube-dl ];
-  # Soundux loads pipewire, pulse and libwnck optionally during runtime
-  dynamicLibraries = lib.makeLibraryPath [ libpulseaudio pipewire libwnck3 ];
-in
 stdenv.mkDerivation rec {
   pname = "soundux";
   version = "0.2.7";
@@ -42,7 +38,6 @@ stdenv.mkDerivation rec {
     owner = "Soundux";
     repo = "Soundux";
     rev = version;
-    fetchSubmodules = true;
     sha256 = "15kd9vl7inn8zm5cqzjkb6zb9xk2xxwpkm7fx1za3dy9m61sq839";
   };
 
@@ -53,26 +48,35 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/opt $out/bin $out/share
     cp -r dist soundux-${version} $out/opt
-    ln -s "${desktopItem}/share/applications" $out/share/
   '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    desktopName = "Soundux";
-    genericName = meta.description;
-    categories = [ "Audio" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "Soundux";
+      genericName = meta.description;
+      categories = [ "Audio" ];
+    })
+  ];
 
   postFixup = ''
     makeWrapper $out/opt/soundux-${version} $out/bin/soundux \
-      --prefix LD_LIBRARY_PATH ":" ${dynamicLibraries} \
+      --prefix LD_LIBRARY_PATH ":" ${lib.makeLibraryPath [ libpulseaudio pipewire libwnck3 ]} \
       "''${gappsWrapperArgs[@]}" \
-      ${lib.optionalString downloaderSupport "--prefix PATH \":\" " + downloaderPath}
+      ${lib.optionalString downloaderSupport "--prefix PATH \":\" " + (lib.makeBinPath [ ffmpeg youtube-dl ])}
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+    ninja
+    pkg-config
+    makeWrapper
+    wrapGAppsHook
+  ];
+
   buildInputs = [
     libappindicator-gtk3
     openssl
@@ -90,7 +94,7 @@ stdenv.mkDerivation rec {
     xorg.libXdmcp
     libxkbcommon
     epoxy
-    dbus_tools
+    dbus
   ];
 
   meta = with lib; {
@@ -98,6 +102,6 @@ stdenv.mkDerivation rec {
     description = "cross-platform soundboard";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [ pasqui23 ];
   };
 }
