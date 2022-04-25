@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "v${version}";
-    hash = "sha256-pq/LkyOCS0PnujfN9aIx42aeZ8tw4XvRQ4Vid/nXgWE=";
+    hash = "sha256-w07r95MBAClf0F3SICiZsHLdslzf+JuxC+BVdTACCog=";
   };
 
   propagatedBuildInputs = [
