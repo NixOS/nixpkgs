@@ -56,8 +56,8 @@ let
     args.version;
   version = fetched.version;
   coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
-  versionAtLeast = v: (coq-version == "dev") || (lib.versionAtLeast coq-version v);
-  ideFlags = optionalString (buildIde && !versionAtLeast "8.10")
+  coqAtLeast = v: coq-version == "dev" || versionAtLeast coq-version v;
+  ideFlags = optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
@@ -71,11 +71,11 @@ let
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_12;
   ocamlNativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2;
+    ++ optional (coqAtLeast "8.14") ocamlPackages.dune_2;
   ocamlBuildInputs = []
-    ++ optional (!versionAtLeast "8.10") ocamlPackages.camlp5
-    ++ optional (!versionAtLeast "8.13") ocamlPackages.num
-    ++ optional (versionAtLeast "8.13") ocamlPackages.zarith;
+    ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
+    ++ optional (!coqAtLeast "8.13") ocamlPackages.num
+    ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
 self = stdenv.mkDerivation {
   pname = "coq";
   inherit (fetched) version src;
@@ -134,11 +134,11 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ]
     ++ ocamlNativeBuildInputs
     ++ optional buildIde copyDesktopItems
-    ++ optional (buildIde && versionAtLeast "8.10") wrapGAppsHook
-    ++ optional (!versionAtLeast "8.6") gnumake42;
+    ++ optional (buildIde && coqAtLeast "8.10") wrapGAppsHook
+    ++ optional (!coqAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
-      (if versionAtLeast "8.10"
+      (if coqAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
   ;
@@ -147,7 +147,7 @@ self = stdenv.mkDerivation {
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    ${if !versionAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
+    ${if !coqAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
     ${csdpPatch}
   '';
 
@@ -161,7 +161,7 @@ self = stdenv.mkDerivation {
     addEnvHooks "$targetOffset" addCoqPath
   '';
 
-  preConfigure = if versionAtLeast "8.10" then ''
+  preConfigure = if coqAtLeast "8.10" then ''
     patchShebangs dev/tools/
   '' else ''
     configureFlagsArray=(
@@ -171,7 +171,7 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = [ "revision" "coq" ] ++ optional buildIde "coqide" ++ optional (!versionAtLeast "8.14") "bin/votour";
+  buildFlags = [ "revision" "coq" ] ++ optional buildIde "coqide" ++ optional (!coqAtLeast "8.14") "bin/votour";
   enableParallelBuilding = true;
 
   createFindlibDestdir = true;
@@ -185,10 +185,10 @@ self = stdenv.mkDerivation {
     categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
   });
 
-  postInstall = let suffix = if versionAtLeast "8.14" then "-core" else ""; in ''
+  postInstall = let suffix = if coqAtLeast "8.14" then "-core" else ""; in ''
     cp bin/votour $out/bin/
     ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
-  '' + optionalString (versionAtLeast "8.14") ''
+  '' + optionalString (coqAtLeast "8.14") ''
     ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
   '' + optionalString buildIde ''
     mkdir -p "$out/share/pixmaps"
