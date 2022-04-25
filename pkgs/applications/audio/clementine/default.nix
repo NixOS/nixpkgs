@@ -33,7 +33,6 @@
 , sparsehash
 , config
 , makeWrapper
-, gst_plugins
 
 , util-linux
 , libunwind
@@ -91,6 +90,9 @@ let
     gettext
     glew
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
     gst_all_1.gstreamer
     gvfs
     libechonest
@@ -126,10 +128,7 @@ let
   free = mkDerivation {
     pname = "clementine-free";
     inherit version;
-    inherit src patches nativeBuildInputs postPatch;
-
-    # gst_plugins needed for setup-hooks
-    buildInputs = buildInputs ++ gst_plugins;
+    inherit src patches buildInputs nativeBuildInputs postPatch;
 
     preConfigure = ''
       rm -rf ext/{,lib}clementine-spotifyblob

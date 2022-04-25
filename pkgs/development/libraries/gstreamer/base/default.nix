@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , lib
+, makeWrapperAuto
 , pkg-config
 , meson
 , ninja
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     libjpeg
     tremor
     libGL
-  ] ++ lib.optional (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     pango
@@ -94,6 +95,14 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     gstreamer
   ];
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    inherit buildInputs propagatedBuildInputs;
+    envInfo = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [
+        "@out@/lib/gstreamer-1.0"
+      ];
+    };
+  };
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users

@@ -798,6 +798,8 @@ with pkgs;
       sanitizers = [ ];
     };
 
+  makeWrapperAuto = callPackage ../build-support/setup-hooks/make-wrapper-auto { };
+
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel firmware rootModules allowMissing;
@@ -4536,9 +4538,7 @@ with pkgs;
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
-  clementine = libsForQt514.callPackage ../applications/audio/clementine {
-    gst_plugins =
-      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
+  clementine = libsForQt5.callPackage ../applications/audio/clementine {
     protobuf = protobuf3_14;
   };
 

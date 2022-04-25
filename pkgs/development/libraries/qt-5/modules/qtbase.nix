@@ -1,5 +1,6 @@
 { stdenv, lib
 , src, patches, version, qtCompatVersion
+, makeWrapperAuto
 
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
@@ -33,6 +34,9 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName = if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
   debugSymbols = debug || developerBuild;
+  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 in
 
 stdenv.mkDerivation {
@@ -139,12 +143,15 @@ stdenv.mkDerivation {
     ''
   );
 
-  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
-  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
-  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
-
+  inherit qtPluginPrefix qtQmlPrefix qtDocPrefix;
   setOutputFlags = false;
-  preConfigure = ''
+
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    envInfo = {
+      QT_PLUGIN_PATH = "@bin@/${qtPluginPrefix}";
+      QML2_IMPORT_PATH = "@bin@/${qtQmlPrefix}";
+    };
+  } + ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     ${lib.optionalString (compareVersion "5.9.0" < 0) ''
     # We need to set LD to CXX or otherwise we get nasty compile errors

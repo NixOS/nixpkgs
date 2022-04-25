@@ -17,6 +17,7 @@
 , bash-completion
 , lib
 , CoreServices
+, makeWrapperAuto
 }:
 
 stdenv.mkDerivation rec {
@@ -89,6 +90,9 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  # This can't be replaced with makeWrapperAuto, since wrapping needs to
+  # include paths in $NIX_PROFILES and that isn't yet supported in
+  # makeWrapperAuto.
   postInstall = ''
     for prog in "$bin/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
@@ -99,6 +103,14 @@ stdenv.mkDerivation rec {
   preFixup = ''
     moveToOutput "share/bash-completion" "$bin"
   '';
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    inherit buildInputs propagatedBuildInputs;
+    envInfo = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [
+        "@out@/lib/gstreamer-1.0"
+      ];
+    };
+  };
 
   setupHook = ./setup-hook.sh;
 
