@@ -5145,6 +5145,12 @@
     githubId = 15371828;
     name = "Hugo Lageneste";
   };
+  hykilpikonna = {
+    name = "Azalea";
+    email = "hykilpikonna@gmail.com";
+    github = "hykilpikonna";
+    githubId = 22280294;
+  };
   hypersw = {
     email = "baltic@hypersw.net";
     github = "hypersw";
