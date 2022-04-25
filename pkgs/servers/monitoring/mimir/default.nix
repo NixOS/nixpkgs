@@ -29,7 +29,7 @@ buildGoModule rec {
       "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
     homepage = "https://github.com/grafana/mimir";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ happysalada bryanhonof ];
     platforms = platforms.unix;
   };
 }
