@@ -13,6 +13,7 @@ rec {
     isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
     isPowerPC      = { cpu = cpuTypes.powerpc; };
     isPower        = { cpu = { family = "power"; }; };
+    isPower64      = { cpu = { family = "power"; bits = 64; }; };
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };

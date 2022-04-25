@@ -22539,6 +22539,8 @@ with pkgs;
 
   urserver = callPackage ../servers/urserver { };
 
+  uxplay = callPackage ../servers/uxplay { };
+
   vouch-proxy = callPackage ../servers/vouch-proxy {
     buildGoModule = buildGo116Module;
   };
@@ -23800,6 +23802,9 @@ with pkgs;
   usbguard = callPackage ../os-specific/linux/usbguard {
     libgcrypt = null;
   };
+
+  usbrelay = callPackage ../os-specific/linux/usbrelay { };
+  usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
   usbtop = callPackage ../os-specific/linux/usbtop { };
 
