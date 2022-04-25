@@ -1,11 +1,12 @@
 # Hooks for building Python packages.
-{ python
-, lib
-, makeSetupHook
+{ lib
 , disabledIf
-, isPy3k
 , ensureNewerSourcesForZipFilesHook
 , findutils
+, isPy3k
+, makeSetupHook
+, python
+, pythonOlder
 }:
 
 let
@@ -60,6 +61,16 @@ in rec {
         inherit pythonInterpreter;
       };
     } ./flit-build-hook.sh) {};
+
+  setuptoolsDepsVersionsHook = disabledIf (pythonOlder "3.7") callPackage ({ requirements-parser }:
+    makeSetupHook {
+      name = "fix-python-deps-hook";
+      deps = [ requirements-parser ];
+      substitutions = {
+        inherit pythonInterpreter;
+        setuptoolsRequirementsTxtDepsVersionsHookPy = ./setuptools-requirements-txt-deps-versions-hook.py;
+      };
+    } ./setuptools-deps-versions-hook.sh) {};
 
   pipBuildHook = callPackage ({ pip, wheel }:
     makeSetupHook {

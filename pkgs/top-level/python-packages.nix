@@ -123,6 +123,7 @@ in {
     pythonRemoveTestsDirHook
     setuptoolsBuildHook
     setuptoolsCheckHook
+    setuptoolsDepsVersionsHook
     venvShellHook
     wheelUnpackHook;
 
