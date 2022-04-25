@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "libraw";
-  version = "unstable-2021-12-03";
+  version = "0.20.2.p2";
 
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
-    rev = "52b2fc52e93a566e7e05eaa44cada58e3360b6ad";
-    sha256 = "kW0R4iPuqnFuWYDrl46ok3kaPcGgY2MqZT7mqVX+BDQ=";
+    rev = "fedad11e87daad7b7d389a3ef84ccf10b5e84710"; # current 0.20-stable branch
+    sha256 = "1mklf8lzybzyg75ja34822xlv6h9nw93griyrjjna7darl1dyvja";
   };
 
   outputs = [ "out" "lib" "dev" "doc" ];
