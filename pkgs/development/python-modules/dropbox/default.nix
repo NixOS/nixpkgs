@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sfrijters ];
   };
 }
