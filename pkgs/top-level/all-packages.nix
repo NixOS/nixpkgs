@@ -2163,6 +2163,8 @@ with pkgs;
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
+  gbl = callPackage ../tools/archivers/gbl { };
+
   genann = callPackage ../development/libraries/genann { };
 
   genpass = callPackage ../tools/security/genpass {
