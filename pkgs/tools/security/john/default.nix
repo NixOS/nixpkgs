@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
+{ lib, stdenv, fetchFromGitHub, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
 , gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
 }:
 
@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
   pname = "john";
   version = "1.9.0-jumbo-1";
 
-  src = fetchurl {
-    url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
-    sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
+  src = fetchFromGitHub {
+    owner = "openwall";
+    repo = pname;
+    rev = "1.9.0-Jumbo-1";
+    sha256 = "sha256-O1iPh5QTMjZ78sKvGbvSpaHFbBuVc1z49UKTbMa24Rs=";
   };
 
   patches = [
@@ -77,8 +79,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "John the Ripper password cracker";
-    license = licenses.gpl2;
-    homepage = "https://github.com/magnumripper/JohnTheRipper/";
+    license = licenses.gpl2Plus;
+    homepage = "https://github.com/openwall/john/";
     maintainers = with maintainers; [ offline matthewbauer ];
     platforms = platforms.unix;
   };
