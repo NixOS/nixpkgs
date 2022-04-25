@@ -1,0 +1,27 @@
+diff --git a/assets/CMakeLists.txt b/assets/CMakeLists.txt
+index 1eab62cc..6a742be9 100644
+--- a/assets/CMakeLists.txt
++++ b/assets/CMakeLists.txt
+@@ -41,20 +41,13 @@ endforeach()
+ 
+ if(${CMAKE_SYSTEM} MATCHES Darwin)
+ 	get_target_property(outname SRB2SDL2 OUTPUT_NAME)
+-	install(DIRECTORY "${SRB2_ASSET_DIRECTORY}/"
+-		DESTINATION "${outname}.app/Contents/Resources"
+-	)
+ 	install(FILES ${SRB2_ASSET_DOCS}
+ 		DESTINATION .
+ 		OPTIONAL
+ 	)
+ else()
+-	install(DIRECTORY "${SRB2_ASSET_DIRECTORY}/"
++	install(FILES ${SRB2_ASSET_DOCS}
+ 		DESTINATION .
++		OPTIONAL
+ 	)
+-	# Docs are assumed to be located in SRB2_ASSET_DIRECTORY, so don't install again
+-	#install(FILES ${SRB2_ASSET_DOCS}
+-	#	DESTINATION .
+-	#	OPTIONAL
+-	#)
+ endif()

@@ -32198,6 +32198,8 @@ with pkgs;
 
   srb2 = callPackage ../games/srb2 { };
 
+  srb2kart = callPackage ../games/srb2kart { };
+
   stardust = callPackage ../games/stardust { };
 
   starspace = callPackage ../applications/science/machine-learning/starspace { };
