@@ -34664,6 +34664,8 @@ with pkgs;
 
   vivid = callPackage ../tools/misc/vivid { };
 
+  vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
+
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
   vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {

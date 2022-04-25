@@ -10669,7 +10669,9 @@ in {
 
   vispy = callPackage ../development/python-modules/vispy { };
 
-  vivisect = callPackage ../development/python-modules/vivisect { };
+  vivisect = callPackage ../development/python-modules/vivisect {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
 
   viv-utils = callPackage ../development/python-modules/viv-utils { };
 
