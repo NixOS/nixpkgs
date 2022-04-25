@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "flake8-bugbear";
-  version = "22.3.23";
+  version = "22.4.25";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-s1EnPM2He+R+vafu14XI1Xuft8Rg6W3vPH2Atc6N7I0=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-y/hpBlIQ3aJj3Y1snpArOCIv2w1ncQNMSYJ+G0CeM84=";
   };
 
   propagatedBuildInputs = [
