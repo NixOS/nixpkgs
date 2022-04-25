@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
       'test_write_disk_perms'
       # can't be sure builder will have sparse-capable fs
       'test_sparse_basic'
+      # can't even be sure builder will have hardlink-capable fs
+      'test_write_disk_hardlink'
     )
 
     for test_name in "''${skip_tests[@]}" ; do
