@@ -1,6 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 let
-  version = "2.4.6";
+  version = "2.5.0";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -18,10 +18,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-xNCxzoNpXkj8WF9+kYJfO18ux8/OhxygkGjA49+Q4vY=";
+    sha256 = "sha256-V9iIz/93n6EBJZ9v3MDKD6FivtplRFN9a/e0o7YX0/w=";
   };
 
-  vendorSha256 = "sha256-NomgHqIiugSISbEtvIbJDn5GRn6Dn72adLPkAvLbUQU=";
+  vendorSha256 = "sha256-xu3klc9yb4Ws8fvXRV286IDhi/zQVN1PKCiFKb8VJBo=";
 
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
