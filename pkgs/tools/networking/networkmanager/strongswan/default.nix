@@ -42,9 +42,6 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_LIBNM_VPNSERVICEDIR = "${placeholder "out"}/lib/NetworkManager/VPN";
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
-
   passthru = {
     networkManagerPlugin = "VPN/nm-strongswan-service.name";
   };
