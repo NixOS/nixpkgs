@@ -30,7 +30,6 @@ upgrade_all=
 profile=/nix/var/nix/profiles/system
 buildHost=localhost
 targetHost=
-remoteSudo=
 verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
@@ -113,9 +112,6 @@ while [ "$#" -gt 0 ]; do
         targetHost="$1"
         shift 1
         ;;
-      --use-remote-sudo)
-        remoteSudo=1
-        ;;
       --flake)
         flake="$1"
         flakeFlags=(--extra-experimental-features 'nix-command flakes')
@@ -143,7 +139,7 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
+if [[ "$UID" != 0 ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
