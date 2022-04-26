@@ -55,6 +55,11 @@ buildPythonPackage rec {
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
+  disabledTestPaths = [
+    # Unexpected output fields from running code: {'stderr'}
+    "onnx/examples/np_array_tensorproto.ipynb"
+  ];
+
   # The executables are just utility scripts that aren't too important
   postInstall = ''
     rm -r $out/bin
