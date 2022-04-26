@@ -3014,7 +3014,7 @@ with pkgs;
 
   swaysome = callPackage ../tools/wayland/swaysome { };
 
-  swaytools = callPackage ../tools/wayland/swaytools { };
+  swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
