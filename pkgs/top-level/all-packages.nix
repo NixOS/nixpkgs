@@ -24468,7 +24468,9 @@ with pkgs;
     noto-fonts-emoji-blob-bin
     noto-fonts-extra;
 
-  nuclear = callPackage ../applications/audio/nuclear { };
+  nuclear = callPackage ../applications/audio/nuclear {
+    electron = electron_13;
+  };
 
   nuclei = callPackage ../tools/security/nuclei { };
 

@@ -1,25 +1,39 @@
-{ appimageTools, lib, fetchurl }:
-let
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron }:
+
+# Using mkDerivation to wrap binary as a temporary fix for https://github.com/nukeop/nuclear/issues/1268
+stdenv.mkDerivation rec {
+  # This version works fine compared to the latest stable
   pname = "nuclear";
-  version = "0.6.6";
-  name = "${pname}-v${version}";
+  version = "unstable-2022-04-20";
+  releaseCode = "bc8b7b";
+  name = "${pname}-${releaseCode}";
 
   src = fetchurl {
-    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${name}.AppImage";
-    sha256 = "0c1335m76fv0wfbk07s8r6ln7zbmlqd66052gqfisakl8a1aafl6";
+    url = "https://github.com/nukeop/nuclear/releases/download/${releaseCode}/${name}.AppImage";
+    sha256 = "sha256-JBVr1xnTE/ePX+SZMyZpMCACtz9W/HdweOr96ib4+xk=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
-in appimageTools.wrapType2 {
-  inherit name src;
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+  nativeBuildInputs = [ makeWrapper ];
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
+  dontUnpack = true;
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $out/share/${pname} $out/share/applications
+    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
+    install -m 444 -D ${appimageContents}/nuclear.desktop -t $out/share/applications
+    cp -a ${appimageContents}/usr/share/icons $out/share
+    substituteInPlace $out/share/applications/nuclear.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/resources/app.asar \
+      --add-flags "--no-sandbox"
   '';
 
   meta = with lib; {
