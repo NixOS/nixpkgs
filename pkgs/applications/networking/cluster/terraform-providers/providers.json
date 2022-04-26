@@ -162,6 +162,15 @@
     "vendorSha256": "03761vl8xcirmas38q8xivx2r312c07fmg1y80lklmswbd8d0f71",
     "version": "2.2.0"
   },
+  "buildkite": {
+    "owner": "buildkite",
+    "provider-source-address": "registry.terraform.io/buildkite/buildkite",
+    "repo": "terraform-provider-buildkite",
+    "rev": "v0.8.0",
+    "sha256": "1v4kzsvzkzf0bb6vpyjh0n2kbcfrqa193idvm4jgbcrdb0y3xzn5",
+    "vendorSha256": "12kqjpyy80pfrasicmdi1f43mr846rad3c6xaa4dvzn7hq640q5j",
+    "version": "0.8.0"
+  },
   "checkly": {
     "owner": "checkly",
     "provider-source-address": "registry.terraform.io/checkly/checkly",

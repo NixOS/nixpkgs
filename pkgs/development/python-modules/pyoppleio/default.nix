@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyoppleio";
-  version = "1.0.6";
+  version = "1.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q//uJ+2m9S0r+Jsa5Eye90YSw4cKzd04vPHMm89j8kg=";
+    hash = "sha256-S1w3pPqhX903kkXUq9ALz0+zRvNGOimLughRRVKjV8E=";
   };
 
   propagatedBuildInputs = [
