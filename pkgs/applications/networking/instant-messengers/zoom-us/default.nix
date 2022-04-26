@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
         tar -C $out -xf $src
         mv $out/usr/* $out/
       '';
-    }.${stdenv.system}}
+    }.${stdenv.system} or throwSystem}
     runHook postInstall
   '';
 
