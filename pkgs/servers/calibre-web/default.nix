@@ -53,8 +53,10 @@ python3.pkgs.buildPythonApplication rec {
 
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+      --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
+      --replace "Flask-Login>=0.3.2,<0.5.1" "Flask-Login>=0.3.2" \
       --replace "flask-wtf>=0.14.2,<0.16.0" "flask-wtf>=0.14.2" \
-      --replace "lxml>=3.8.0,<4.7.0" "lxml>=3.8.0" \
+      --replace "lxml>=3.8.0,<4.8.0" "lxml>=3.8.0" \
       --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0" \
       --replace "requests>=2.11.1,<2.25.0" "requests" \
       --replace "unidecode>=0.04.19,<1.3.0" "unidecode>=0.04.19"

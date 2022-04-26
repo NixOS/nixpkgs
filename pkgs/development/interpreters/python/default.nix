@@ -300,11 +300,6 @@ in {
     inherit passthruFun;
   };
 
-  graalpython37 = callPackage ./graalpython/default.nix {
-    self = pythonInterpreters.graalpython37;
-    inherit passthruFun;
-  };
-
   rustpython = callPackage ./rustpython/default.nix {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };

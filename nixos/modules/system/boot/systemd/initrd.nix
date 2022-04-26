@@ -65,7 +65,6 @@ let
     "systemd-kexec.service"
     "systemd-modules-load.service"
     "systemd-poweroff.service"
-    "systemd-random-seed.service"
     "systemd-reboot.service"
     "systemd-sysctl.service"
     "systemd-tmpfiles-setup-dev.service"
@@ -193,7 +192,7 @@ in {
       description = ''
         Store paths to copy into the initrd as well.
       '';
-      type = types.listOf types.singleLineStr;
+      type = with types; listOf (oneOf [ singleLineStr package ]);
       default = [];
     };
 
@@ -396,7 +395,6 @@ in {
         "${cfg.package}/lib/systemd/systemd-journald"
         "${cfg.package}/lib/systemd/systemd-makefs"
         "${cfg.package}/lib/systemd/systemd-modules-load"
-        "${cfg.package}/lib/systemd/systemd-random-seed"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
@@ -507,6 +505,5 @@ in {
     };
 
     boot.kernelParams = lib.mkIf (config.boot.resumeDevice != "") [ "resume=${config.boot.resumeDevice}" ];
-
   };
 }

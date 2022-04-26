@@ -51,24 +51,17 @@ let
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
 
-  # On the update after all 1.4rc, qt5.15 and protobuf 3.15 will be supported.
-  version = "1.4.0rc1";
+  version = "unstable-2022-04-11";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
-    rev = version;
-    sha256 = "1rqk0hrsn8f8bjk0j0vq1af0ygy6xx7qi9fw0jjw2cmj6kzckyi2";
+    rev = "250024e117fbe5fae7c62b9c8e655d66412a6ed7";
+    sha256 = "06fcbs3wig3mh711iypyj49qm5246f7qhvgvv8brqfrd8cqyh6qf";
   };
 
   patches = [
     ./clementine-spotify-blob.patch
-    (fetchpatch {
-      # "short-term" fix for execution on wayland (1.4.0rc1-131-g2179027a6)
-      # for https://github.com/clementine-player/Clementine/issues/6587
-      url = "https://github.com/clementine-player/Clementine/commit/2179027a6d97530c857e43be873baacd696ff332.patch";
-      sha256 = "0344bfcyvjim5ph8w4km6zkg96rj5g9ybp9x14qgyw2gkdksimn6";
-    })
   ];
 
   nativeBuildInputs = [
