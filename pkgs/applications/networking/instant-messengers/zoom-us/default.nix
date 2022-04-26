@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system};
 
-  dontUnpack = if stdenv.isLinux then true else false;
+  dontUnpack = stdenv.isLinux;
   unpackPhase = lib.optionalString stdenv.isDarwin ''
     xar -xf $src
     zcat < zoomus.pkg/Payload | cpio -i
