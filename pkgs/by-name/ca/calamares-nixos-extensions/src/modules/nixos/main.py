@@ -522,7 +522,7 @@ def run():
             cfg += cfgautologin
             if (gs.value("packagechooser_packagechooser") == "gnome"):
                 cfg += cfgautologingdm
-        else:
+        elif (gs.value("autoLoginUser") is not None and gs.value("packagechooser_packagechooser") == ""):
             cfg += cfgautologintty
 
     # Check if unfree packages are allowed
@@ -615,7 +615,7 @@ def run():
                     "{} is marked as unfree, removing from hardware-configuration.nix".format(p))
                 expkgs.remove(pkg)
         hardwareout = re.sub(
-            "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {} ];".format(" ".join(expkgs)), htxt)
+            "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {}];".format(" ".join(map(lambda x: x+" ", expkgs))), htxt)
         # Write the hardware-configuration.nix file
         libcalamares.utils.host_env_process_output(["cp", "/dev/stdin",
                                                     root_mount_point+"/etc/nixos/hardware-configuration.nix"], None, hardwareout)
