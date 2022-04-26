@@ -1,77 +1,18 @@
-{ alsa-lib
-, autoPatchelfHook
-, callPackage
-, fetchzip
-, gtk2
-, gtk3
+{ callPackage
 , lib
-, mesa
-, nss
 , stdenv
-, udev
-, unzip
-, wrapGAppsHook
-, xorg
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "cypress";
-  version = "9.5.4";
-
-  src = fetchzip {
-    url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "F4BSIA3ImXwmmki8/FK0t08Gf5S8KMpXNNBIPPJQNsM=";
-  };
-
-  # don't remove runtime deps
-  dontPatchELF = true;
-
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
-
-  buildInputs = with xorg; [
-    libXScrnSaver
-    libXdamage
-    libXtst
-    libxshmfence
-  ] ++ [
-    nss
-    gtk2
-    alsa-lib
-    gtk3
-    mesa # for libgbm
-  ];
-
-  runtimeDependencies = [ (lib.getLib udev) ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin $out/opt/cypress
-    cp -vr * $out/opt/cypress/
-    # Let's create the file binary_state ourselves to make the npm package happy on initial verification.
-    # Cypress now verifies version by reading bin/resources/app/package.json
-    mkdir -p $out/bin/resources/app
-    printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
-    # Cypress now looks for binary_state.json in bin
-    echo '{"verified": true}' > $out/binary_state.json
-    ln -s $out/opt/cypress/Cypress $out/bin/Cypress
-
-    runHook postInstall
-  '';
-
-  passthru = {
-    updateScript = ./update.sh;
-
-    tests = {
-      example = callPackage ./cypress-example-kitchensink { };
-    };
-  };
-
+  packages = builtins.fromJSON (lib.readFile ./packages.json);
+  version = packages.version;
   meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ tweber mmahut ];
   };
-}
+  package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
+  src = if stdenv.isLinux then packages.packages.linux else packages.packages.darwin;
+  mkPackage = callPackage package {};
+in mkPackage { inherit meta pname src version; }

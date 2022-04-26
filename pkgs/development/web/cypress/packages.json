@@ -1,0 +1,14 @@
+{
+  "name": "Cypress",
+  "version": "9.5.4",
+  "packages": {
+    "darwin": {
+      "url": "https://cdn.cypress.io/desktop/9.5.4/darwin-x64/cypress.zip",
+      "sha256": "02vzkmdnbq1msq7zg85hybgsrhwwhqvq204ga47wmj4vf2994wnd"
+    },
+    "linux": {
+      "url": "https://cdn.cypress.io/desktop/9.5.4/linux-x64/cypress.zip",
+      "sha256": "1hrna3r3qj6h6ibwla5wjizhckxpni9grg28k8k7r6f81lh5500p"
+    }
+  }
+}
