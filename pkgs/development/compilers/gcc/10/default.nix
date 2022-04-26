@@ -67,6 +67,7 @@ let majorVersion = "10";
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
+      ++ optional (targetPlatform.isMusl         && targetPlatform.isPower64) ./backport-libgcc-fix-PR97653.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
