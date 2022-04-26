@@ -1,19 +1,17 @@
-{ lib, fetchFromGitHub, python2Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "volatility";
-  version = "2.6.1";
+  version = "unstable-2022-01-10";
 
   src = fetchFromGitHub {
-    owner = "volatilityfoundation";
+    owner = "koromodako";
     repo = pname;
-    rev = version;
-    sha256 = "1v92allp3cv3akk71kljcwxr27h1k067dsq7j9h8jnlwk9jxh6rf";
+    rev = "923c7160b008753873fa47d82a49b190814eb92e";
+    hash = "sha256-m6LUXOawDXCmyuC2wWtGL9V6MO3SgbyrfIetKcTdwBQ=";
   };
 
-  doCheck = false;
-
-  propagatedBuildInputs = with python2Packages; [ pycrypto distorm3 pillow ];
+  propagatedBuildInputs = with python3Packages; [ pycrypto distorm3 pillow ];
 
   meta = with lib; {
     homepage = "https://www.volatilityfoundation.org/";
