@@ -1,4 +1,5 @@
 { lib
+, pythonOlder
 , buildPythonPackage
 , fetchPypi
 , jsonschema
@@ -11,25 +12,30 @@
 , textfsm
 , ttp
 , xmltodict
+
+# optionals
 , withJunos ? false
 , withNetbox ? false
-
-, version
-, sha256
 }:
 
-buildPythonPackage rec {
+let
   pname = "ansible";
-  inherit version;
+  version = "5.6.0";
+in
+buildPythonPackage {
+  inherit pname version;
   format = "setuptools";
 
+  disabled = pythonOlder "3.8";
+
   src = fetchPypi {
-    inherit pname version sha256;
+    inherit pname version;
+    sha256 = "sha256-rNMHMUNBVNo3bO7rQW7hVBzfuOo8ZIAjpVo0yz7K+fM=";
   };
 
   postPatch = ''
-    # make ansible-base depend on ansible-collection, not the other way around
-    sed -Ei '/ansible-(base|core)/d' setup.py
+    # we make ansible-core depend on ansible, not the other way around
+    sed -Ei '/ansible-core/d' setup.py
   '';
 
   propagatedBuildInputs = lib.unique ([

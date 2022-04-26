@@ -34,6 +34,7 @@ in
 
 mapAliases ({
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
+  ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   asyncio-nats-client = nats-py; # added 2022-02-08
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15

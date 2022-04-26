@@ -15,7 +15,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/hetznercloud/cli/cli.Version=${version}"
+    "-X github.com/hetznercloud/cli/internal/version.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
