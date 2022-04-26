@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "2.4.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = pname;
     rev = version;
-    hash = "sha256-KSYcIdLQ6TZpimxXyV88/V35GbBJ/9k9+UBM2KTMRR4=";
+    hash = "sha256-4Njai0LT72U9Ra4pgHU0ZjF9oZexbijUgLFYaZi/LgE=";
   };
 
   propagatedBuildInputs = [
