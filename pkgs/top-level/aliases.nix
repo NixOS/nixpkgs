@@ -309,6 +309,7 @@ mapAliases ({
   dbus_libs = throw "'dbus_libs' has been renamed to/replaced by 'dbus'"; # Converted to throw 2022-02-22
   dbus_tools = throw "'dbus_tools' has been renamed to/replaced by 'dbus.out'"; # Converted to throw 2022-02-22
   dbvisualizer = throw "dbvisualizer has been removed from nixpkgs, as it's unmaintained"; # Added 2020-09-20
+  dd-agent = throw "dd-agent has been removed in favor of the newer datadog-agent"; # Added 2022-04-26
   ddar = throw "ddar has been removed: abandoned by upstream"; # Added 2022-03-18
   deadbeef-mpris2-plugin = throw "'deadbeef-mpris2-plugin' has been renamed to/replaced by 'deadbeefPlugins.mpris2'"; # Converted to throw 2022-02-22
   deadpixi-sam = deadpixi-sam-unstable;
