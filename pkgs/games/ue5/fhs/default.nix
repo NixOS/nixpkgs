@@ -7,7 +7,7 @@ args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru 
 let
   env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  chrootenv = callPackage ./chrootenv {};
+  chrootenv = callPackage ../../../build-support/build-fhs-userenv/chrootenv {};
 
   init = run: writeScript "${name}-init" ''
     #! ${stdenv.shell}

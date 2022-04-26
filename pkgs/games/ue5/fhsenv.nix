@@ -1,4 +1,4 @@
-{ callPackage ... }:
+{ callPackage, ... }:
 
 (callPackage ./fhs {} {
   name = "build-ue5";
