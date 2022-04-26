@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "svdtools";
-  version = "0.1.21";
+  version = "0.1.22";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0qc94haqkj4dbhify1l3x0ji1dx34m79nfnsk1c7l1kl2zjvz6bz";
+    sha256 = "sha256-5zMuCFCvh7BXr9BbyyDhWw1Lt/Fomv0SALiPJQbxJNQ=";
   };
 
   # remove upon next release
