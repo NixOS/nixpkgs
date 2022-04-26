@@ -73,6 +73,8 @@ let
 
     hardeningDisable = [ "all" ];
 
+    enableParallelBuilding = true;
+
     makeFlags = [
       "DTC=dtc"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -103,9 +105,6 @@ let
 
       runHook postInstall
     '';
-
-    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
-    enableParallelBuilding = false;
 
     dontStrip = true;
 
