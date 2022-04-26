@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cutee }:
+{ lib, stdenv, fetchurl, fetchpatch, cutee }:
 
 stdenv.mkDerivation rec {
   pname = "mimetic";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cutee ];
 
-  patches = lib.optional stdenv.isAarch64 ./narrowing.patch;
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/m/mimetic/0.9.8-10/debian/patches/g%2B%2B-11.patch";
+      sha256 = "sha256-1JW9zPg67BgNsdIjK/jp9j7QMg50eRMz5FsDsbbzBlI=";
+    })
+  ] ++ lib.optional stdenv.isAarch64 ./narrowing.patch;
 
   meta = with lib; {
     description = "MIME handling library";
