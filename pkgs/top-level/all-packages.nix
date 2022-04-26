@@ -30220,6 +30220,8 @@ with pkgs;
 
   uvcdynctrl = callPackage ../os-specific/linux/uvcdynctrl { };
 
+  viper4linux = callPackage ../applications/audio/viper4linux { };
+
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
   vlc = libsForQt5.callPackage ../applications/video/vlc {
