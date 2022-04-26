@@ -22,7 +22,7 @@ rec {
       version = "510.68.02";
       sha256_64bit = "sha256-vSw0SskrL8ErBgQ1kKT+jU6wzLdNDEk1LwBM8tKZ9MU=";
       settingsSha256 = "sha256-4TBA/ITpaaBiVDkpj7/Iydei1knRPpruPL4fRrqFAmU=";
-      persistencedSha256 = "sha256-THgK2GpRcttqSN2WxcuJu5My++Q+Y34jG8hm7daxhAQ=";
+      persistencedSha256 = "sha256-Q1Rk6dAK4pnm6yDK4kmj5Vg4GRbi034C96ypywHYB2I=";
     }
     else legacy_390;
 
