@@ -409,6 +409,8 @@ with pkgs;
 
   protoc-gen-validate = callPackage ../development/tools/protoc-gen-validate { };
 
+  protolint = callPackage ../development/tools/protolint { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
