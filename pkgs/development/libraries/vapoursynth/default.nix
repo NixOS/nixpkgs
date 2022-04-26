@@ -4,16 +4,14 @@
 , ApplicationServices
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R58";
+  version = "58";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
-    rev    = version;
+    rev    = "R${version}";
     sha256 = "sha256-LIjNfyfpyvE+Ec6f4aGzRA4ZGoWPFhjtUw4yrenDsUQ=";
   };
 
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -58,5 +56,4 @@ stdenv.mkDerivation rec {
     platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
   };
-
 }

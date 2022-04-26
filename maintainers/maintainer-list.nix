@@ -11316,6 +11316,12 @@
     githubId = 307899;
     name = "Gurkan Gur";
   };
+  serge = {
+    email = "sb@canva.com";
+    github = "serge-belov";
+    githubId = 38824235;
+    name = "Serge Belov";
+  };
   sersorrel = {
     email = "ash@sorrel.sh";
     github = "sersorrel";
