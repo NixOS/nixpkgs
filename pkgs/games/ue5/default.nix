@@ -23,7 +23,7 @@ let
   };
 
   # From buildDotnetModule
-  _nugetDeps = linkFarmFromDrvs "ue5-nuget-deps" (import ./deps.nix {
+  _nugetDeps = linkFarmFromDrvs "ue5-nuget-deps" (import ./nuget-deps.nix {
     fetchNuGet = { name, version, sha256 }: fetchurl {
       name = "nuget-${name}-${version}.nupkg";
       url = "https://www.nuget.org/api/v2/package/${name}/${version}";
