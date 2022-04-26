@@ -22,11 +22,10 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [
     less
     file
-  ]
-    ++ lib.optionals (imagePreviewSupport) [ python3Packages.pillow ]
-    ++ lib.optionals (neoVimSupport) [ python3Packages.pynvim ]
-    ++ lib.optionals (improvedEncodingDetection) [ python3Packages.chardet ]
-    ++ lib.optionals (rightToLeftTextSupport) [ python3Packages.python-bidi ];
+  ] ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
+    ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
+    ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
+    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
 
   preConfigure = ''
     ${lib.optionalString (highlight != null) ''
