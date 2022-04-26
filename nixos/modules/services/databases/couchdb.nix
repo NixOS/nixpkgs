@@ -183,6 +183,11 @@ in {
 
       preStart = ''
         touch ${cfg.configFile}
+        if ! test -e ${cfg.databaseDir}/.erlang.cookie; then
+          touch ${cfg.databaseDir}/.erlang.cookie
+          chmod 600 ${cfg.databaseDir}/.erlang.cookie
+          dd if=/dev/random bs=16 count=1 | base64 > ${cfg.databaseDir}/.erlang.cookie
+        fi
       '';
 
       environment = {
@@ -192,6 +197,7 @@ in {
         # 3. the extraConfig from the module options
         # 4. the locally writable config file, which couchdb itself writes to
         ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
+        HOME =''${cfg.databaseDir}'';
       };
 
       serviceConfig = {
