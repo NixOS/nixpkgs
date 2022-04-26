@@ -9,11 +9,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.xz";
-    sha256 = "sha256-fRSYwQmyV0WapjUJNG0UGO/tUDNTGUraj/BWq/a1QTo=";
+    url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.gz";
+    hash = "sha256-rIeWZSOT+nPzLf2mDtOkN/wmCGffG4H6PCQb2Vxbxxk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
