@@ -30448,6 +30448,8 @@ with pkgs;
 
   wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/wrapper.nix { };
 
+  wp4nix = callPackage ../development/tools/wp4nix { };
+
   wp-cli = callPackage ../development/tools/wp-cli { };
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
