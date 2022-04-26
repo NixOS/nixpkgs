@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, ansible
+, ansible-core
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    ansible
+    ansible-core
     psutil
     pexpect
     python-daemon
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    ansible # required to place ansible CLI onto the PATH in tests
+    ansible-core # required to place ansible CLI onto the PATH in tests
     pytestCheckHook
     pytest-mock
     pytest-timeout
