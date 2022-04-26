@@ -437,6 +437,15 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRaspberryPiCM4_64bit = buildUBoot {
+    defconfig = "rpi_4_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+    extraConfig = ''
+      CONFIG_USB_XHCI_BRCM=y
+    '';
+  };
+
   ubootRaspberryPiZero = buildUBoot {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
