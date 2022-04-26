@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "malduck";
-  version = "4.1.0";
+  version = "4.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "04d8bhzax9ynbl83hif9i8gcs29zrvcay2r6n7mcxiixlxcqciak";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UgpblcZ/Jxl3U4256YIHzly7igNXwhTdFN4HOqZBVbM=";
   };
 
   propagatedBuildInputs = [
