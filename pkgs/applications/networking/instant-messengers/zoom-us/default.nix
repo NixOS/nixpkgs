@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   pname = "zoom";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system};
+  src = srcs.${system} or throwSystem;
 
   dontUnpack = stdenv.isLinux;
   unpackPhase = lib.optionalString stdenv.isDarwin ''
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
         tar -C $out -xf $src
         mv $out/usr/* $out/
       '';
-    }.${stdenv.system} or throwSystem}
+    }.${system} or throwSystem}
     runHook postInstall
   '';
 
