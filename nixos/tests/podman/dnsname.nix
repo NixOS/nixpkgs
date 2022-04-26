@@ -28,7 +28,7 @@ import ../make-test-python.nix (
         podman.succeed("podman ps | grep webserver")
         podman.succeed("""
           for i in `seq 0 120`; do
-            podman run --rm --name=client -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg ${curl}/bin/curl http://webserver:8000 >/dev/console \
+            podman run --rm --name=client -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg ${curl.exe} http://webserver:8000 >/dev/console \
               && exit 0
             sleep 0.5
           done

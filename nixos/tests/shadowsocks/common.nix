@@ -72,11 +72,11 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
       client.wait_for_unit("shadowsocks-client.service")
 
       client.fail(
-          "${pkgs.curl}/bin/curl 192.168.0.1:80"
+          "${pkgs.curl.exe} 192.168.0.1:80"
       )
 
       msg = client.succeed(
-          "${pkgs.curl}/bin/curl --socks5 localhost:1080 192.168.0.1:80"
+          "${pkgs.curl.exe} --socks5 localhost:1080 192.168.0.1:80"
       )
       assert msg == "It works!", "Could not connect through shadowsocks"
     '';

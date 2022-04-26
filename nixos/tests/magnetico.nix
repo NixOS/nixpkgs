@@ -29,11 +29,11 @@ in
       machine.wait_for_unit("magneticow")
       machine.wait_for_open_port(${toString port})
       machine.succeed(
-          "${pkgs.curl}/bin/curl --fail "
+          "${pkgs.curl.exe} --fail "
           + "-u user:password http://localhost:${toString port}"
       )
       machine.fail(
-          "${pkgs.curl}/bin/curl --fail "
+          "${pkgs.curl.exe} --fail "
           + "-u user:wrongpwd http://localhost:${toString port}"
       )
       machine.shutdown()

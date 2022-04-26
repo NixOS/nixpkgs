@@ -9,9 +9,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
     set -euo pipefail
     echo '[INFO]' "[$2]" 'dns-hook.sh' $*
     if [ "$1" = "present" ]; then
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
+      ${pkgs.curl.exe} --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
     else
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
+      ${pkgs.curl.exe} --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
     fi
   '';
 
