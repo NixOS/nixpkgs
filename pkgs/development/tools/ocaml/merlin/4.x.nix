@@ -48,7 +48,7 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
-  ] ++ lib.optional (!lib.versionAtLeast ocaml.version "4.12")
+  ] ++ lib.optional (lib.versionOlder ocaml.version "4.12")
     # This fixes the test-suite on macOS
     # See https://github.com/ocaml/merlin/pull/1399
     # Fixed in 4.4 for OCaml ≥ 4.12

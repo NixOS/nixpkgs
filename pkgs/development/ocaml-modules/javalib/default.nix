@@ -8,7 +8,7 @@
 , extlib
 }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
+if lib.versionOlder ocaml.version "4.04"
 then throw "javalib is not available for OCaml ${ocaml.version}"
 else
 
