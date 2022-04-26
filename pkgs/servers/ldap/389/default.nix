@@ -13,6 +13,7 @@
 , libevent
 , libkrb5
 , lm_sensors
+, lmdb
 , net-snmp
 , nspr
 , nss
@@ -43,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.0.7";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-aM1qo+yHrCFespPWHv2f25ooqQVCIZGaZS43dY6kiC4=";
+    hash = "sha256-ncSViN3RLzVoMDJ1yM3RCQ73G/G23GCJCal6QuAeBlY=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     libevent
     libkrb5
     lm_sensors
+    lmdb
     net-snmp
     nspr
     nss
