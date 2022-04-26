@@ -1,0 +1,75 @@
+This patch is included upstream in gcc 11.1.0 and later:
+
+  https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=cda41ce0e8414aec59e6b9fbe645d96e6e8193e2
+
+From cda41ce0e8414aec59e6b9fbe645d96e6e8193e2 Mon Sep 17 00:00:00 2001
+From: Jakub Jelinek <jakub@redhat.com>
+Date: Sat, 3 Apr 2021 10:05:32 +0200
+Subject: [PATCH] rs6000: Fix up libgcc ABI when built with
+ --with-long-double-format=ieee [PR97653]
+
+__floatunditf and __fixtfdi and a couple of other libgcc{.a,_s.so}
+entrypoints for backwards compatibility should mean IBM double double
+handling (i.e. IFmode), gcc emits such calls for that format and
+form IEEE long double emits *kf* instead.
+When gcc is configured without --with-long-double-format=ieee ,
+everything is fine, but when it is not, we need to compile those
+libgcc sources with -mno-gnu-attribute -mabi=ibmlongdouble.
+The following snippet in libgcc/config/rs6000/t-linux was attempting
+to ensure that, and for some routines it works fine (e.g. for _powitf2).
+But, due to 4 different types of bugs it doesn't work for most of those
+functions, which means that in --with-long-double-format=ieee
+configured gcc those *tf* entrypoints instead handle the long double
+arguments as if they were KFmode.
+
+The bugs are:
+1) the first few objs properly use $(objext) as suffix, but
+   several other contain a typo and use $(object) instead,
+   which is a variable that isn't set to anything, so we don't
+   add .o etc. extensions
+2) while unsigned fix are properly called _fixuns*, unsigned float
+   are called _floatun* (without s), but the var was using there
+   the extra s and so didn't match
+3) the variable didn't cover any of the TF <-> TI conversions,
+   only TF <-> DI conversions
+4) nothing in libgcc_s.so was handled, as those object files are
+   called *_s.o rather than *.o and IBM128_SHARED_OBJS used wrong
+   syntax of the GNU make substitution reference, which should be
+   $(var:a=b) standing for $(patsubst a,b,$(var)) but it used
+   $(var:a:b) instead
+
+2021-04-03  Jakub Jelinek  <jakub@redhat.com>
+
+	PR target/97653
+	* config/rs6000/t-linux (IBM128_STATIC_OBJS): Fix spelling, use
+	$(objext) instead of $(object).  Use _floatunditf instead of
+	_floatunsditf.  Add tf <-> ti conversion objects.
+	(IBM128_SHARED_OBJS): Use proper substitution reference syntax.
+---
+ libgcc/config/rs6000/t-linux | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/libgcc/config/rs6000/t-linux b/libgcc/config/rs6000/t-linux
+index 72e9c2770a6..500210ddaf2 100644
+--- a/libgcc/config/rs6000/t-linux
++++ b/libgcc/config/rs6000/t-linux
+@@ -11,10 +11,12 @@ HOST_LIBGCC2_CFLAGS += -mno-minimal-toc
+ # the IBM extended double format.  Also turn off gnu attributes on the static
+ # modules.
+ IBM128_STATIC_OBJS	= ibm-ldouble$(objext) _powitf2$(objext) \
+-			  ppc64-fp$(objext) _divtc3$(object) _multc3$(object) \
+-			  _fixtfdi$(object) _fixunstfdi$(object) \
+-	                  _floatditf$(objext) _floatunsditf$(objext)
+-IBM128_SHARED_OBJS	= $(IBM128_STATIC_OBJS:$(objext):_s$(objext))
++			  ppc64-fp$(objext) _divtc3$(objext) _multc3$(objext) \
++			  _fixtfdi$(objext) _fixunstfdi$(objext) \
++	                  _floatditf$(objext) _floatunditf$(objext) \
++			  _fixtfti$(objext) _fixunstfti$(objext) \
++	                  _floattitf$(objext) _floatuntitf$(objext)
++IBM128_SHARED_OBJS	= $(IBM128_STATIC_OBJS:$(objext)=_s$(objext))
+ IBM128_OBJS		= $(IBM128_STATIC_OBJS) $(IBM128_SHARED_OBJS)
+ 
+ IBM128_CFLAGS		= -Wno-psabi -mabi=ibmlongdouble -mno-gnu-attribute
+-- 
+2.27.0
+
