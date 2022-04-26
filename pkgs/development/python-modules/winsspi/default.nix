@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "winsspi";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q8hr8l8d9jxyp55qsrlkyhdhqjc0n18ajzms7hf1xkhdl7rrbd2";
+    sha256 = "sha256-L1qNLEufRZFEQmkJ4mp05VBRLiO2z5r1LCoAADx8P9s=";
   };
   propagatedBuildInputs = [ minikerberos ];
 
