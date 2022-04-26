@@ -20572,6 +20572,21 @@ let
     };
   };
 
+  SubStrictDecl = buildPerlModule {
+    pname = "Sub-StrictDecl";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Sub-StrictDecl-0.005.tar.gz";
+      sha256 = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
+    };
+    propagatedBuildInputs = [ LexicalSealRequireHints ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Detect undeclared subroutines in compilation";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SubUplevel = buildPerlPackage {
     pname = "Sub-Uplevel";
     version = "0.2800";
