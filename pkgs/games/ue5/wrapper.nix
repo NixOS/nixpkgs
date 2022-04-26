@@ -163,7 +163,7 @@ in buildFHSUserEnvBubblewrap {
     mesa
   ];
 
-  multiPkgs = pkgs: with pkgs; [ 
+  multiPkgs = pkgs: with pkgs; [
     linuxPackages.nvidia_x11_beta
     vulkan-loader
     libGL
