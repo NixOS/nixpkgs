@@ -21858,11 +21858,11 @@ with pkgs;
 
   mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
 
-  mailman = callPackage ../servers/mail/mailman/wrapped.nix { };
+  mailmanPackages = callPackage ../servers/mail/mailman { };
+  inherit (mailmanPackages) mailman mailman-hyperkitty;
+  mailman-web = mailmanPackages.web;
 
   mailman-rss = callPackage ../tools/misc/mailman-rss { };
-
-  mailman-web = with python3.pkgs; toPythonApplication mailman-web;
 
   listadmin = callPackage ../applications/networking/listadmin {};
 

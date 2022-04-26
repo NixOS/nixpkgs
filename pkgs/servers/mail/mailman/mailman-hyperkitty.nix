@@ -1,15 +1,9 @@
 { lib
-, buildPythonPackage
-, fetchPypi
+, python3
 , mailman
-, mock
-, nose2
-, python
-, pythonOlder
-, requests
-, zope_interface
 }:
 
+with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
   version = "1.2.0";

@@ -6,10 +6,11 @@ let
 
   cfg = config.services.mailman;
 
-  pythonEnv = pkgs.python3.withPackages (ps:
-    [ps.mailman ps.mailman-web]
-    ++ lib.optional cfg.hyperkitty.enable ps.mailman-hyperkitty
-    ++ cfg.extraPythonPackages);
+  pythonEnv = pkgs.mailmanPackages.buildEnv {
+    withHyperkitty = cfg.hyperkitty.enable;
+  };
+
+  withPostgresql = config.services.postgresql.enable;
 
   # This deliberately doesn't use recursiveUpdate so users can
   # override the defaults.
@@ -72,6 +73,9 @@ in {
       stored in the world-readable Nix store.  To continue using
       Hyperkitty, you must set services.mailman.hyperkitty.enable = true.
     '')
+    (mkRemovedOptionModule [ "services" "mailman" "package" ] ''
+      Didn't have an effect for several years.
+    '')
   ];
 
   options = {
@@ -82,14 +86,6 @@ in {
         type = types.bool;
         default = false;
         description = "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
-      };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mailman;
-        defaultText = literalExpression "pkgs.mailman";
-        example = literalExpression "pkgs.mailman.override { archivers = []; }";
-        description = "Mailman package to use";
       };
 
       enablePostfix = mkOption {
@@ -185,7 +181,7 @@ in {
       mailman.layout = "fhs";
 
       "paths.fhs" = {
-        bin_dir = "${pkgs.python3Packages.mailman}/bin";
+        bin_dir = "${pkgs.mailmanPackages.mailman}/bin";
         var_dir = "/var/lib/mailman";
         queue_dir = "$var_dir/queue";
         template_dir = "$var_dir/templates";
@@ -320,8 +316,10 @@ in {
         description = "GNU Mailman Master Process";
         before = lib.optional cfg.enablePostfix "postfix.service";
         after = [ "network.target" ]
-          ++ lib.optional cfg.enablePostfix "postfix-setup.service";
+          ++ lib.optional cfg.enablePostfix "postfix-setup.service"
+          ++ lib.optional withPostgresql "postgresql.service";
         restartTriggers = [ config.environment.etc."mailman.cfg".source ];
+        requires = optional withPostgresql "postgresql.service";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = "${pythonEnv}/bin/mailman start";
@@ -340,6 +338,8 @@ in {
         before = [ "mailman.service" "mailman-web-setup.service" "mailman-uwsgi.service" "hyperkitty.service" ];
         requiredBy = [ "mailman.service" "mailman-web-setup.service" "mailman-uwsgi.service" "hyperkitty.service" ];
         path = with pkgs; [ jq ];
+        after = optional withPostgresql "postgresql.service";
+        requires = optional withPostgresql "postgresql.service";
         serviceConfig.Type = "oneshot";
         script = ''
           mailmanDir=/var/lib/mailman
@@ -404,7 +404,9 @@ in {
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
         wantedBy = ["multi-user.target"];
-        requires = ["mailman-uwsgi.socket" "mailman-web-setup.service"];
+        after = optional withPostgresql "postgresql.service";
+        requires = ["mailman-uwsgi.socket" "mailman-web-setup.service"]
+          ++ optional withPostgresql "postgresql.service";
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         serviceConfig = {
           # Since the mailman-web settings.py obstinately creates a logs
@@ -462,7 +464,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann qyliss ];
+    maintainers = with lib.maintainers; [ lheckemann qyliss ma27 ];
     doc = ./mailman.xml;
   };
 

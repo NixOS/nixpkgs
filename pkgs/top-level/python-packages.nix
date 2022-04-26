@@ -4017,8 +4017,6 @@ in {
 
   hyperion-py = callPackage ../development/python-modules/hyperion-py { };
 
-  hyperkitty = callPackage ../servers/mail/mailman/hyperkitty.nix { };
-
   hyperlink = callPackage ../development/python-modules/hyperlink { };
 
   hyperopt = callPackage ../development/python-modules/hyperopt { };
@@ -5068,13 +5066,7 @@ in {
 
   mailchimp = callPackage ../development/python-modules/mailchimp { };
 
-  mailman = callPackage ../servers/mail/mailman { };
-
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
-
-  mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
-
-  mailman-web = callPackage ../servers/mail/mailman/web.nix { };
 
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
@@ -6656,8 +6648,6 @@ in {
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
   poster3 = callPackage ../development/python-modules/poster3 { };
-
-  postorius = callPackage ../servers/mail/mailman/postorius.nix { };
 
   pot = callPackage ../development/python-modules/pot { };
 
