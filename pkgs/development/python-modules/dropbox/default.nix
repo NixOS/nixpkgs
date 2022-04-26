@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , requests
-, urllib3
-, mock
-, setuptools
+, six
 , stone
-, pythonOlder
+, mock
+, pytest-mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,15 +21,19 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "v${version}";
-    sha256 = "sha256-pq/LkyOCS0PnujfN9aIx42aeZ8tw4XvRQ4Vid/nXgWE=";
+    hash = "sha256-w07r95MBAClf0F3SICiZsHLdslzf+JuxC+BVdTACCog=";
   };
 
   propagatedBuildInputs = [
     requests
-    urllib3
-    mock
-    setuptools
+    six
     stone
+  ];
+
+  checkInputs = [
+    mock
+    pytest-mock
+    pytestCheckHook
   ];
 
   postPatch = ''
@@ -36,11 +41,32 @@ buildPythonPackage rec {
       --replace "'pytest-runner == 5.2.0'," ""
   '';
 
-  # Set DROPBOX_TOKEN environment variable to a valid token.
-  doCheck = false;
+  doCheck = true;
 
   pythonImportsCheck = [
     "dropbox"
+  ];
+
+  # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
+  disabledTests = [
+    "test_default_oauth2_urls"
+    "test_bad_auth"
+    "test_multi_auth"
+    "test_refresh"
+    "test_app_auth"
+    "test_downscope"
+    "test_rpc"
+    "test_upload_download"
+    "test_bad_upload_types"
+    "test_clone_when_user_linked"
+    "test_with_path_root_constructor"
+    "test_path_root"
+    "test_path_root_err"
+    "test_versioned_route"
+    "test_team"
+    "test_as_user"
+    "test_as_admin"
+    "test_clone_when_team_linked"
   ];
 
   meta = with lib; {
