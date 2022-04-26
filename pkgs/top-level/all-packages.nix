@@ -4036,6 +4036,8 @@ with pkgs;
     electron = electron_14;
   };
 
+  pouf = callPackage ../tools/misc/pouf { };
+
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
