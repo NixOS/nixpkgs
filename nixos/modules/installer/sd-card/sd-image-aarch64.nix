@@ -39,6 +39,17 @@
         # Supported in newer board revisions
         arm_boost=1
 
+        [cm4]
+        kernel=u-boot-rpi4.bin
+        enable_gic=1
+        armstub=armstub8-gic.bin
+        disable_overscan=1
+
+        # Enable host mode on the 2711 built-in XHCI USB controller.
+        # This line should be removed if the legacy DWC2 controller is required
+        # (e.g. for USB device mode) or if USB support is not required.
+        otg_mode=1
+
         [all]
         # Boot in 64-bit mode.
         arm_64bit=1
@@ -65,6 +76,9 @@
         cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
         cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+
+        # Add cm4 specific files
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
       '';
     populateRootCommands = ''
       mkdir -p ./files/boot
