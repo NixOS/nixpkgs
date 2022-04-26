@@ -7272,12 +7272,6 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
-  lunarequest = {
-    email = "nullarequest@vivlaid.net";
-    github = "Lunarequest";
-    githubId = 30698906;
-    name = "Luna D Dragon";
-  };
   LunNova = {
     email = "nixpkgs-maintainer@lunnova.dev";
     github = "LunNova";
