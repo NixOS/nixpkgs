@@ -880,6 +880,7 @@ mapAliases ({
   oauth2_proxy = oauth2-proxy; # Added 2021-04-18
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set"; # Added 2021-01-24
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # Added 2021-07-12
+  odpdown = throw "odpdown has been removed because it lacks python3 support"; # Added 2022-04-25
   ofp = throw "ofp is not compatible with odp-dpdk";
   olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained"; # Added 2021-08-05
   onnxruntime = throw "onnxruntime has been removed due to poor maintainability"; # Added 2020-12-04
