@@ -24912,6 +24912,8 @@ with pkgs;
 
   abook = callPackage ../applications/misc/abook { };
 
+  abra = callPackage ../applications/networking/cluster/coop-cloud/abra.nix { };
+
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python3Packages)
       buildPythonApplication appdirs colorama python-dateutil
