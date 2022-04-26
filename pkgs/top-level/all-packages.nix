@@ -31055,7 +31055,7 @@ with pkgs;
     boost = boost172;
   };
 
-  namecoin  = callPackage ../applications/blockchains/namecoin { withGui = true; };
+  namecoin  = libsForQt5.callPackage ../applications/blockchains/namecoin { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin { withGui = false; };
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };

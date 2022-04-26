@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, qt4, protobuf, qrencode, hexdump
+{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, protobuf, qrencode, hexdump
+, qtbase, qttools, wrapQtAppsHook
 , withGui }:
 
 with lib;
@@ -27,10 +28,14 @@ stdenv.mkDerivation rec {
     miniupnpc
     eject
   ] ++ optionals withGui [
-    qt4
+    wrapQtAppsHook
+    qtbase
+    qttools
     protobuf
     qrencode
   ];
+
+  LRELEASE = "${qttools}/bin/lrelease";
 
   enableParallelBuilding = true;
 
