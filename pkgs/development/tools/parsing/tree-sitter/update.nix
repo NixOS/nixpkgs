@@ -42,6 +42,7 @@ let
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
+    "tree-sitter-toml"
   ];
   knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
@@ -135,10 +136,6 @@ let
     "tree-sitter-yaml" = {
       orga = "ikatyang";
       repo = "tree-sitter-yaml";
-    };
-    "tree-sitter-toml" = {
-      orga = "ikatyang";
-      repo = "tree-sitter-toml";
     };
     "tree-sitter-zig" = {
       orga = "maxxnino";

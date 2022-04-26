@@ -142,6 +142,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
+  maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
+
   mauikit = callPackage ../development/libraries/mauikit { };
 
   mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };

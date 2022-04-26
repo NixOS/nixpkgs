@@ -95,6 +95,11 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r bin/Release/OmniSharp.Stdio.Driver/net6.0 $out/src
+
+    # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
+    rm $out/src/NuGet.*.dll
+    rm $out/src/System.Configuration.ConfigurationManager.dll
+
     makeWrapper $out/src/OmniSharp $out/bin/omnisharp \
       --prefix DOTNET_ROOT : ${dotnet-sdk} \
       --suffix PATH : ${dotnet-sdk}/bin

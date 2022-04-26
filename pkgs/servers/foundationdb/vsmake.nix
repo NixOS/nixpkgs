@@ -84,7 +84,7 @@ let
         makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
-          ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
+          ++ lib.optional (lib.versionOlder version "6.0") [ "fdb_c" ]
           # Needed environment overrides
           ++ [ "KVRELEASE=1"
                "NOSTRIP=1"
@@ -100,7 +100,7 @@ let
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
 
-        '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+        '' + lib.optionalString (lib.versionOlder version "6.0") ''
           # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
         '' + ''
