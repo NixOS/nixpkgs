@@ -35,7 +35,7 @@ let
 
   # Zoom versions are released at different times for each platform and linux
   # is stuck on 5.9.6 until https://github.com/NixOS/nixpkgs/pull/166085 is
-  # merged
+  # resolved
   version = {
     aarch64-darwin = "5.10.4.6592";
     x86_64-darwin = "5.10.4.6592";
