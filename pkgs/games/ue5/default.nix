@@ -39,8 +39,9 @@ in stdenv.mkDerivation rec {
 
   src = requireFile {
     name = "${sourceRoot}.zip";
-    url = "https://github.com/EpicGames/UnrealEngine/releases/tag/${version}";
-    sha256 = lib.fakeSha256;
+    url = "https://github.com/EpicGames/UnrealEngine/releases/tag/${version}-release";
+    sha256 = "1v2rlq8fv95lk4g6r0a4yx47wz9y1ygas1pq71wf4df4y865nm09";
+    
   };
 
   buildInputs = [ dotnetPackages.Nuget ];
