@@ -6,6 +6,7 @@
 , makeDesktopItem
 , makeWrapper
 , unzip
+, xdg-utils
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -47,6 +48,7 @@ stdenvNoCC.mkDerivation rec {
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
       --add-flags "-jar $BASEDIR/${pname}.jar" \
+      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
 

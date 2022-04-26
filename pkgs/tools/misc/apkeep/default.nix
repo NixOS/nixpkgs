@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "apkeep";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "14vm3b2gbmn9pil0aagwchn4kyvi9311id6qv4a376qfb6r1aybf";
+    sha256 = "sha256-kwJ4/jkVVgem5Lb+uFDFPk4/6WWSWJs+SQDSyKkhG/8=";
   };
 
-  cargoSha256 = "0i8wzc58ji317kjdw3ls1908z4bqlh1cgjph0fxsvs5i552qjkzp";
+  cargoSha256 = "sha256-kJ81kY2EmkH3yu8xL1aPxXPMhkDsGKWo0RWn1Ih7z2k=";
 
   prePatch = ''
     rm .cargo/config.toml

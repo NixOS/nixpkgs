@@ -1055,7 +1055,8 @@
       hangups
     ];
     "harman_kardon_avr" = ps: with ps; [
-    ]; # missing inputs: hkavr
+      hkavr
+    ];
     "harmony" = ps: with ps; [
       aioharmony
     ];
@@ -1907,7 +1908,8 @@
       pyopnsense
     ];
     "opple" = ps: with ps; [
-    ]; # missing inputs: pyoppleio
+      pyoppleio
+    ];
     "oru" = ps: with ps; [
     ]; # missing inputs: oru
     "orvibo" = ps: with ps; [
@@ -1962,7 +1964,8 @@
       peco
     ];
     "pencom" = ps: with ps; [
-    ]; # missing inputs: pencompy
+      pencompy
+    ];
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -2143,7 +2146,8 @@
       praw
     ];
     "rejseplanen" = ps: with ps; [
-    ]; # missing inputs: rjpl
+      rjpl
+    ];
     "remember_the_milk" = ps: with ps; [
       httplib2
     ]; # missing inputs: RtmAPI

@@ -1,4 +1,8 @@
-{ lib, stdenv, python3, fetchPypi }:
+{ lib
+, stdenv
+, python3
+, fetchPypi
+}:
 
 let
   defaultOverrides = [
@@ -37,11 +41,12 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.7.1";
+  version = "1.7.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UNGl5Dl/E3+uQ4HIxzHYliHF4lqD3GYdeoL+DtqUwCo=";
+    hash = "sha256-o5dVJDbdKgo6hMMU9mKzoouSgVWl7xSAp+Aq61VcfeU=";
   };
 
   # Relax some dependencies
@@ -54,6 +59,7 @@ buildPythonApplication rec {
       --replace 'python_frontmatter == 0.5.0' 'python_frontmatter' \
       --replace 'requests ==' 'requests >=' \
       --replace 'validators ==' 'validators >=' \
+      --replace 'flask-login == ' 'flask-login >= ' \
       --replace 'tinydb ==' 'tinydb >=' \
       --replace 'Flask_WTF == 0.14.3' 'Flask_WTF' \
       --replace 'Flask ==' 'Flask >='

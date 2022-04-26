@@ -14383,4 +14383,10 @@
     github = "melias122";
     githubId = 1027766;
   };
+  bryanhonof = {
+    name = "Bryan Honof";
+    email = "bryanhonof@gmail.com";
+    github = "bryanhonof";
+    githubId = 5932804;
+  };
 }

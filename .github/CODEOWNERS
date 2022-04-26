@@ -285,3 +285,7 @@
 /nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
 /nixos/tests/matrix-appservice-irc.nix                     @piegamesde
 /nixos/tests/matrix-conduit.nix                            @piegamesde
+
+# Dotnet
+/pkgs/build-support/dotnet          @IvarWithoutBones
+/pkgs/development/compilers/dotnet  @IvarWithoutBones
