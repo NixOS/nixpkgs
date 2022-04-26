@@ -10,6 +10,7 @@
 , openssl
 , swig
 , meson-tools
+, which
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
@@ -19,10 +20,10 @@
 }:
 
 let
-  defaultVersion = "2021.10";
+  defaultVersion = "2022.04";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
+    hash = "sha256-aOBlQTkmd44nbsOr0ouzL6gquqSmiY1XDB9I+9sIvNA=";
   };
   buildUBoot = {
     version ? null
@@ -66,6 +67,7 @@ let
         p.setuptools # for pkg_resources
       ]))
       swig
+      which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -373,14 +375,6 @@ in {
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
     '';
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=268007&state=%2A&archive=both
-      # Remove when upgrading to 2022.01
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/268007/mbox/";
-        sha256 = "sha256-xn4Q959dgoB63zlmJepI41AXAf1kCycIGcmu4IIVjmE=";
-      })
-    ];
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
   };
@@ -401,28 +395,12 @@ in {
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
-    extraPatches = [
-      # Remove when updating to 2022.01
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=273129&archive=both&state=*
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/273129/mbox/";
-        sha256 = "sha256-/Gu7RNvBNYCGqdFRzQ11qPDDxgGVpwKYYw1CpumIGfU=";
-      })
-    ];
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
-    extraPatches = [
-      # Remove when updating to 2022.01
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=273129&archive=both&state=*
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/273129/mbox/";
-        sha256 = "sha256-/Gu7RNvBNYCGqdFRzQ11qPDDxgGVpwKYYw1CpumIGfU=";
-      })
-    ];
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {
