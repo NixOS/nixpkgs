@@ -2877,7 +2877,7 @@ in {
 
   feedparser = callPackage ../development/python-modules/feedparser { };
 
-  fenics = callPackage ../development/libraries/science/math/fenics {
+  fenics = callPackage ../development/python-modules/fenics {
     hdf5 = pkgs.hdf5_1_10;
     boost = pkgs.boost169;
   };

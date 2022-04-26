@@ -461,7 +461,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             '')
           ];
           zendExtension = true;
-          doCheck = !(lib.versionOlder php.version "7.4");
+          doCheck = lib.versionAtLeast php.version "7.4";
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }
@@ -525,7 +525,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
-        { name = "session"; doCheck = !(lib.versionAtLeast php.version "8.0"); }
+        { name = "session"; doCheck = lib.versionOlder php.version "8.0"; }
         { name = "shmop"; }
         {
           name = "simplexml";

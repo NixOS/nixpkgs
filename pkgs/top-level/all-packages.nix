@@ -3014,7 +3014,7 @@ with pkgs;
 
   swaysome = callPackage ../tools/wayland/swaysome { };
 
-  swaytools = callPackage ../tools/wayland/swaytools { };
+  swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
@@ -4035,6 +4035,8 @@ with pkgs;
   pocket-casts = callPackage ../applications/audio/pocket-casts {
     electron = electron_14;
   };
+
+  pouf = callPackage ../tools/misc/pouf { };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
@@ -8810,8 +8812,6 @@ with pkgs;
   obexftp = callPackage ../tools/bluetooth/obexftp { };
 
   objconv = callPackage ../development/tools/misc/objconv {};
-
-  odpdown = callPackage ../tools/typesetting/odpdown { };
 
   odpic = callPackage ../development/libraries/odpic { };
 
@@ -17922,6 +17922,8 @@ with pkgs;
 
   jansson = callPackage ../development/libraries/jansson { };
 
+  jarowinkler-cpp = callPackage ../development/libraries/jarowinkler-cpp { };
+
   jasper = callPackage ../development/libraries/jasper { };
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
@@ -20215,6 +20217,8 @@ with pkgs;
 
   rapidcheck = callPackage ../development/libraries/rapidcheck {};
 
+  rapidfuzz-cpp = callPackage ../development/libraries/rapidfuzz-cpp { };
+
   rapidjson = callPackage ../development/libraries/rapidjson {};
 
   rapidxml = callPackage ../development/libraries/rapidxml {};
@@ -20731,6 +20735,8 @@ with pkgs;
   talloc = callPackage ../development/libraries/talloc { };
 
   tagparser = callPackage ../development/libraries/tagparser { };
+
+  taskflow = callPackage ../development/libraries/taskflow { };
 
   tclap = callPackage ../development/libraries/tclap {};
 

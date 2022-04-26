@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
 
-if !lib.versionAtLeast ocaml.version "4.10"
+if lib.versionOlder ocaml.version "4.10"
 then throw "cpdf is not available for OCaml ${ocaml.version}"
 else
 

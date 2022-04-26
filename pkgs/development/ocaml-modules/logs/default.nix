@@ -8,7 +8,7 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "logs is not available for OCaml ${ocaml.version}"
 else
 
