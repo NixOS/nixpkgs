@@ -40,7 +40,7 @@
         arm_boost=1
 
         [cm4]
-        kernel=u-boot-rpi-cm4.bin
+        kernel=u-boot-rpi4.bin
         enable_gic=1
         armstub=armstub8-gic.bin
         disable_overscan=1
@@ -76,9 +76,6 @@
         cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
         cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
-
-        # Add cm4 specific files
-        cp ${pkgs.ubootRaspberryPiCM4_64bit}/u-boot.bin firmware/u-boot-rpi-cm4.bin
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
       '';
     populateRootCommands = ''

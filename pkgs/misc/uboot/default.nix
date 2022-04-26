@@ -412,12 +412,6 @@ in {
     defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
-  };
-
-  ubootRaspberryPiCM4_64bit = buildUBoot {
-    defconfig = "rpi_4_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["u-boot.bin"];
     extraConfig = ''
       CONFIG_CMD_NVME=y
       CONFIG_NVME=y
