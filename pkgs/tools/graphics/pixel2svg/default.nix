@@ -1,14 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python310Packages }:
+{ lib, buildPythonPackage, fetchurl, python310Packages }:
 
 python310Packages.buildPythonPackage rec {
   pname = "pixel2svg";
-  version = "0.5.0";
+  version = "0.3.0";
 
-  src = fetchFromGitHub {
-    owner = "cyChop";
-    repo = "pixel2svg-fork";
-    rev = "7eb24d3978675c9998c0a8cd3c7cba3e363b98a2";
-    sha256 = "sha256-ZuQ0cgjaunzAjVS23PapBLgCpflU7Qnd7dTVJX9v0fg=";
+  src = fetchurl {
+    url = "https://static.florian-berger.de/pixel2svg-${version}.zip";
+    sha256 = "sha256-aqcTTmZKcdRdVd8GGz5cuaQ4gjPapVJNtiiZu22TZgQ=";
   };
 
   propagatedBuildInputs = with python310Packages; [ pillow svgwrite ];
