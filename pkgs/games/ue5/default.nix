@@ -1,4 +1,4 @@
-{ stdenv, unzip, fetchurl, requireFile, dotnet-sdk_3, lib, writeScript, dotnetPackages, linkFarmFromDrvs, ... }:
+{ callPackage, stdenv, unzip, fetchurl, requireFile, dotnet-sdk_3, lib, writeScript, dotnetPackages, linkFarmFromDrvs, ... }:
 
 
 if !lib.versionAtLeast dotnet-sdk_3.version "3.1" then
@@ -6,7 +6,7 @@ if !lib.versionAtLeast dotnet-sdk_3.version "3.1" then
 else
 
 let
-  fhsenv = import ./fhsenv.nix;
+  fhsenv = callPackage ./fhsenv.nix {};
 
   deps = import ./cdn-deps.nix { inherit fetchurl; };
   linkDeps = writeScript "link-deps.sh" (lib.concatMapStringsSep "\n" (hash:
