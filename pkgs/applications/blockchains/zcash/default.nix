@@ -1,24 +1,37 @@
-{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
-, cargo, pkg-config, curl, coreutils, boost177, db62, hexdump, libsodium
-, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
+{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook
+, makeWrapper, cargo, pkg-config, curl, coreutils, boost178, db62, hexdump
+, libsodium, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
 , withUtils ? true, withWallet ? true, withZmq ? true, zeromq
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
-  version = "4.6.0-2";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "sha256-RvUa8CKPBFfsqzrJkPHePZMqpCfyVafrUbftMdTviHA=";
+    sha256 = "sha256-yF+/QepSiZwsdZydWjvxDIFeFyJbJyqZmCdMyQHmrzI=";
   };
 
-  cargoSha256 = "sha256-qWimataBZ/rLDOLgetNfFAzi/psXcJV54b3WGm9k+b4=";
+  prePatch = lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace .cargo/config.offline \
+      --replace "[target.aarch64-unknown-linux-gnu]" "" \
+      --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
+  '';
+
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/zcash/zcash/commit/61cd19a52d41d60c1987ecf269f7aa8e4d527310.diff";
+      sha256 = "sha256-/7T2yCSVlRN7qfFjrZlfBNMlbVHb/KRjtUBY2xFr0mo=";
+    })
+  ];
+
+  cargoSha256 = "sha256-+BLfO5OnCBqQTIqMXKJdoPCRgtENa+m0WOHKG9gkdMk=";
 
   nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
-  buildInputs = [ boost177 libevent libsodium utf8cpp ]
+  buildInputs = [ boost178 libevent libsodium utf8cpp ]
     ++ lib.optional withWallet db62
     ++ lib.optional withZmq zeromq;
 
@@ -37,7 +50,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost177}/lib"
+    "--with-boost-libdir=${lib.getLib boost178}/lib"
     "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
   ] ++ lib.optional (!withWallet) "--disable-wallet"
@@ -58,8 +71,8 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   meta = with lib; {
     description = "Peer-to-peer, anonymous electronic cash system";
     homepage = "https://z.cash/";
-    maintainers = with maintainers; [ rht tkerber ];
+    maintainers = with maintainers; [ rht tkerber centromere ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
