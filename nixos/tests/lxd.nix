@@ -11,10 +11,12 @@ let
     hash = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
   };
 
-  alpine-rootfs = pkgs.fetchurl {
-    url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
-    hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
-  };
+  alpine-rootfs = {
+    x86_64-linux = pkgs.fetchurl {
+      url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
+      hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
+    };
+  }.${pkgs.system} or (throw "Unsupported system: ${pkgs.system}");
 
   lxd-config = pkgs.writeText "config.yaml" ''
     storage_pools:
