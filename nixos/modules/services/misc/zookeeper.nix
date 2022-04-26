@@ -116,8 +116,8 @@ in {
 
     jre = mkOption {
       description = "The JRE with which to run Zookeeper";
-      default = cfg.package.passthru.jre;
-      defaultText = literalExpression "pkgs.zookeeper.passthru.jre";
+      default = cfg.package.jre;
+      defaultText = literalExpression "pkgs.zookeeper.jre";
       example = literalExpression "pkgs.jre";
       type = types.package;
     };
