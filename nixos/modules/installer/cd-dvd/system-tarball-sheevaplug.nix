@@ -87,19 +87,19 @@ in
   boot.initrd.availableKernelModules =
     [ "mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4" ];
 
-  boot.postBootCommands =
+  boot.postBootCommands = lib.mkIf (!boot.initrd.systemd.enable)
     ''
       mkdir -p /mnt
 
       cp ${dummyConfiguration} /etc/nixos/configuration.nix
     '';
 
-  boot.initrd.extraUtilsCommands =
+  boot.initrd.extraUtilsCommands = lib.mkIf (!boot.initrd.systemd.enable)
     ''
       copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
     '';
 
-  boot.initrd.postDeviceCommands =
+  boot.initrd.postDeviceCommands = lib.mkIf (!boot.initrd.systemd.enable)
     ''
       hwclock -s
     '';

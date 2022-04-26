@@ -116,7 +116,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.7.6";
+    version = "1.7.7";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -125,7 +125,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-fr4VFKy2iNJknOzDktuSkJTaPwPPyYqcD6zKuwhJEvo=";
+      sha256 = "sha256-QUmU06zfZ0qQ9wotoW2k4XalrRH+Y25qs/DhpJ4GKWk=";
     };
 
     patches = [
@@ -153,13 +153,6 @@ let
 
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
-
-      # Drop hard-coded FHS path
-      # https://github.com/fwupd/fwupd/issues/4360
-      (fetchpatch {
-        url = "https://github.com/fwupd/fwupd/commit/14cc2e7ee471b66ee2ef54741f4bec1f92204620.patch";
-        sha256 = "47682oqE66Y6QKPtN2mYpnb2+TIJFqBgsgx60LmC3FM=";
-      })
     ];
 
     nativeBuildInputs = [
@@ -323,7 +316,6 @@ let
     passthru = {
       filesInstalledToEtc = [
         "fwupd/daemon.conf"
-        "fwupd/msr.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
@@ -341,6 +333,8 @@ let
         "fwupd/remotes.d/dell-esrt.conf"
       ] ++ lib.optionals haveRedfish [
         "fwupd/redfish.conf"
+      ] ++ lib.optionals haveMSR [
+        "fwupd/msr.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf
