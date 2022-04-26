@@ -37,6 +37,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/test_config_types.py"
 
     # requires onnxruntime which was removed because of poor maintainability
+    # See https://github.com/NixOS/nixpkgs/pull/105951 https://github.com/NixOS/nixpkgs/pull/155058
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/utils.py"
