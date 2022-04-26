@@ -36,7 +36,7 @@ let
 
       nativeBuildInputs = [ buildPackages.fontconfig.bin buildPackages.python3 ];
 
-      outputs = [ "out" "extra" ];
+      outputs = [ "out" "extra" "croscore" ];
 
       installPhase = ''
         fc-scan ./unhinted -f '"%{fullname[0]}","%{file}"\n' > scan.csv
@@ -49,6 +49,10 @@ let
         while read p; do
           install -m444 -Dt $extra_ttf "$p"
         done <noto_extra_list.txt
+        local croscore_ttf=$croscore/share/fonts/google-croscore
+        install -m444 -Dt $croscore_ttf ./unhinted/otf/Arimo/*
+        install -m444 -Dt $croscore_ttf ./unhinted/otf/Cousine/*
+        install -m444 -Dt $croscore_ttf ./unhinted/otf/Tinos/*
       '';
 
       meta = with lib; {
@@ -69,7 +73,7 @@ let
           noto-fonts contains Regular, Bold, and Light weights and Italic style,
           and noto-fonts-extra contains the rest.
 
-          This package also includes the Arimo, Cousine, and Tinos fonts.
+          This package also outputs croscore-fonts which includes the Arimo, Cousine, and Tinos fonts.
         '';
         license = licenses.ofl;
         platforms = platforms.all;
@@ -123,6 +127,9 @@ in
 {
   noto-fonts = noto-pkg.out;
   noto-fonts-extra = noto-pkg.extra;
+  croscore-fonts = noto-pkg.croscore;
+  # TODO for croscore: use more recent VF versions from
+  # https://github.com/googlefonts/Arimo and similar repos
 
   noto-fonts-cjk-sans = mkNotoCJK {
     typeface = "Sans";

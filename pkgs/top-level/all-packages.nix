@@ -24444,11 +24444,12 @@ with pkgs;
 
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts
+    noto-fonts-extra
+    croscore-fonts
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts-emoji
-    noto-fonts-emoji-blob-bin
-    noto-fonts-extra;
+    noto-fonts-emoji-blob-bin;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 

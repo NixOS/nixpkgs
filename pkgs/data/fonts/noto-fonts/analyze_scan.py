@@ -35,7 +35,11 @@ blacklist = [
   r"\./unhinted/(slim-)?variable-ttf/NotoSansHanifiRohingya-VF\.ttf",
   # duplicate fonts in NotoSansTifinagh
   # https://github.com/googlefonts/noto-fonts/issues/2326
-  r"\./unhinted/otf/NotoSansTifinagh/NotoSansTifinagh[A-Z].*\.otf"
+  r"\./unhinted/otf/NotoSansTifinagh/NotoSansTifinagh[A-Z].*\.otf",
+  # croscore fonts, packaged separately
+  r"\./unhinted/otf/Arimo/.*",
+  r"\./unhinted/otf/Cousine/.*",
+  r"\./unhinted/otf/Tinos/.*"
 ]
 
 blacklist = list(map(re.compile, blacklist))
