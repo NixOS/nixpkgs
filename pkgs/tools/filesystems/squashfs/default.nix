@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
     ./4k-align.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
-  buildInputs = [ zlib xz zstd lz4 lzo which help2man ];
+  strictDeps = true;
+  nativeBuildInputs = [ help2man which ];
+  buildInputs = [ zlib xz zstd lz4 lzo ];
 
   preBuild = ''
     cd squashfs-tools
