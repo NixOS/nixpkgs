@@ -1,9 +1,11 @@
-{ lib, stdenv, callPackage, fetchurl
+{ lib, stdenv, callPackage, fetchurl, linkFarm
 , jdk, cmake, zlib, python3
 , dotnet-sdk_5
 , maven
 , autoPatchelfHook
 , libdbusmenu
+, openssl
+, lzma
 , vmopts ? null
 }:
 
@@ -23,6 +25,11 @@ let
   mkJetBrainsProduct = callPackage package { inherit vmopts; };
 
   # Sorted alphabetically
+
+  openssl-compat = linkFarm "openssl-compat" [
+    { name = "lib/libcrypto.so.10"; path = "${openssl.out}/lib/libcrypto.so"; }
+    { name = "lib/libssl.so.10"; path = "${openssl.out}/lib/libssl.so"; }
+  ];
 
   buildClion = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
@@ -45,6 +52,8 @@ let
         python3
         stdenv.cc.cc
         libdbusmenu
+        openssl-compat
+        lzma
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
