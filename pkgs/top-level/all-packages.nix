@@ -29594,7 +29594,7 @@ with pkgs;
     sublime-merge-dev;
 
   inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
-    subversion_1_10 subversion;
+    subversion;
 
   subversionClient = subversion.override {
     bdbSupport = false;
