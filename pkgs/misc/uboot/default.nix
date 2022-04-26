@@ -425,6 +425,7 @@ in {
       CONFIG_USB_XHCI_BRCM=y
     '';
     extraPatches = [
+      ./rpi-cm4/0002-usb-xhci-reset-endpoint-on-USB-stall.patch
       ./rpi-cm4/0003-rpi-add-NVMe-to-boot-order.patch
       ./rpi-cm4/0004-Revert-nvme-Correct-the-prps-per-page-calculation-me.patch
       ./rpi-cm4/0005-usb-xhci-brcm-Make-driver-compatible-with-downstream.patch
