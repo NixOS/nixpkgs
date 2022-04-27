@@ -6128,6 +6128,8 @@ in {
 
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
 
+  peaqevcore = callPackage ../development/python-modules/peaqevcore { };
+
   pebble = callPackage ../development/python-modules/pebble { };
 
   pecan = callPackage ../development/python-modules/pecan { };
