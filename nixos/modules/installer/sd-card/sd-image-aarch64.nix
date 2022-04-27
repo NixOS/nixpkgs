@@ -40,11 +40,6 @@
         arm_boost=1
 
         [cm4]
-        kernel=u-boot-rpi4.bin
-        enable_gic=1
-        armstub=armstub8-gic.bin
-        disable_overscan=1
-
         # Enable host mode on the 2711 built-in XHCI USB controller.
         # This line should be removed if the legacy DWC2 controller is required
         # (e.g. for USB device mode) or if USB support is not required.
