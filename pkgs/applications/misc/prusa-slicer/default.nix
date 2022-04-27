@@ -18,7 +18,7 @@ let
   wxGTK31-gtk3-override' = if wxGTK31-gtk3-override == null then wxGTK31-gtk3-prusa else wxGTK31-gtk3-override;
 in stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.4.1";
+  version = "2.4.2";
 
   nativeBuildInputs = [
     cmake
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "sha256-4L/x8cMQee3n20iyWEiXd62NtA6BYM1SHkCn8ZlDNWA=";
+    sha256 = "sha256-ThGJ9SxfvaDR98k9g8SPtntDg40CqEYm8j7H+oEz5Z4=";
     rev = "version_${version}";
   };
 
