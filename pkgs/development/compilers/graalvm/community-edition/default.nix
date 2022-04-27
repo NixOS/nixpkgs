@@ -14,7 +14,7 @@ let
     much easier
   */
   graalvm11-ce-release-version = "22.0.0.2";
-  graalvm17-ce-release-version = "22.0.0.2";
+  graalvm17-ce-release-version = "22.1.0";
   graalvm11-ce-dev-version = "22.2.0-dev-20220415_1945";
   graalvm17-ce-dev-version = "22.2.0-dev-20220415_1945";
 
