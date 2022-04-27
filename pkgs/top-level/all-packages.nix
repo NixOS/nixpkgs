@@ -13487,6 +13487,8 @@ with pkgs;
 
   qbe = callPackage ../development/compilers/qbe { };
 
+  harec = callPackage ../development/compilers/hare/harec.nix { };
+
   rasm = callPackage ../development/compilers/rasm { };
 
   rgbds = callPackage ../development/compilers/rgbds { };
