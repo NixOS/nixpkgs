@@ -4,6 +4,7 @@
 , util-linux
 , configurationDirectory ? "/etc/nixos-containers"
 , stateDirectory ? "/var/lib/nixos-containers"
+, nixosTests
 }:
 
 substituteAll {
@@ -16,6 +17,17 @@ substituteAll {
     utillinux = util-linux;
 
     inherit configurationDirectory stateDirectory;
+
+    passthru = {
+      tests = {
+        inherit (nixosTests)
+          containers-imperative
+          containers-ip
+          containers-tmpfs
+          containers-ephemeral
+          ;
+      };
+    };
 
     postInstall = ''
       t=$out/share/bash-completion/completions
