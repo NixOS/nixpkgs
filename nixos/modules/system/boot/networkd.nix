@@ -115,6 +115,27 @@ let
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
       ];
+
+      macvlanChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "SourceMACAddress"
+          "BroadcastMulticastQueueLength"
+        ])
+        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
+        (assertMacAddress "SourceMACAddress")
+        (assertRange "BroadcastMulticastQueueLength" 0 4294967294)
+      ];
+
+      ipvlanChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "Flags"
+        ])
+        (assertValueOneOf "Mode" [ "L2" "L3" "L3S" ])
+        (assertValueOneOf "Flags" [ "bridge" "private" "vepa" ])
+      ];
+
     in {
 
       sectionNetdev = checkUnitConfig "Netdev" [
@@ -167,15 +188,44 @@ let
         (assertMacAddress "MACAddress")
       ];
 
+      sectionBridge = checkUnitConfig "Bridge" [
+        (assertOnlyFields [
+          "HelloTimeSec"
+          "MaxAgeSec"
+          "ForwardDelaySec"
+          "AgeingTimeSec"
+          "Priority"
+          "GroupForwardMask"
+          "DefaultPVID"
+          "MulticastQuerier"
+          "MulticastSnooping"
+          "VLANFiltering"
+          "VLANProtocol"
+          "STP"
+          "MulticastIGMPVersion"
+        ])
+        (assertRange "Priority" 0 65535)
+        (assertValueOneOf "MulticastQuerier" boolValues)
+        (assertValueOneOf "MulticastSnooping" boolValues)
+        (assertValueOneOf "VLANFiltering" boolValues)
+        (assertValueOneOf "VLANProtocol" [ "802.1q" "802.1ad" ])
+        (assertValueOneOf "STP" boolValues)
+        (assertValueOneOf "MulticastIGMPVersion" [ 2 3 ])
+      ];
+
       sectionVLAN = checkUnitConfig "VLAN" [
         (assertOnlyFields [
           "Id"
+          "Protocol"
           "GVRP"
           "MVRP"
           "LooseBinding"
           "ReorderHeader"
+          "EgressQOSMaps"
+          "IngressQOSMaps"
         ])
         (assertInt "Id")
+        (assertValueOneOf "Protocol" [ "802.1q" "802.1ad" ])
         (assertRange "Id" 0 4094)
         (assertValueOneOf "GVRP" boolValues)
         (assertValueOneOf "MVRP" boolValues)
@@ -183,12 +233,13 @@ let
         (assertValueOneOf "ReorderHeader" boolValues)
       ];
 
-      sectionMACVLAN = checkUnitConfig "MACVLAN" [
-        (assertOnlyFields [
-          "Mode"
-        ])
-        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
-      ];
+      sectionMACVLAN = checkUnitConfig "MACVLAN" macvlanChecks;
+
+      sectionMACVTAP = checkUnitConfig "MACVTAP" macvlanChecks;
+
+      sectionIPVLAN = checkUnitConfig "IPVLAN" ipvlanChecks;
+
+      sectionIPVTAP = checkUnitConfig "IPVTAP" ipvlanChecks;
 
       sectionVXLAN = checkUnitConfig "VXLAN" [
         (assertOnlyFields [
@@ -216,6 +267,7 @@ let
           "PortRange"
           "FlowLabel"
           "IPDoNotFragment"
+          "Independent"
         ])
         (assertInt "VNI")
         (assertRange "VNI" 1 16777215)
@@ -235,6 +287,121 @@ let
         (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+        (assertValueOneOf "Independent" boolValues)
+      ];
+
+      sectionGENEVE = checkUnitConfig "GENEVE" [
+        (assertOnlyFields [
+          "Id"
+          "Remote"
+          "TOS"
+          "TTL"
+          "UDPChecksum"
+          "UDP6ZeroChecksumTx"
+          "UDP6ZeroChecksumRx"
+          "DestinationPort"
+          "FlowLabel"
+          "IPDoNotFragment"
+        ])
+        (assertRange "Id" 0 16777215)
+        (assertRange "TOS" 1 255)
+        (assertValueOneOf "UDPChecksum" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+        (assertPort "DestinationPort")
+        (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+      ];
+
+      sectionBareUDP = checkUnitConfig "BareUDP" [
+        (assertOnlyFields [
+          "DestinationPort"
+          "EtherType"
+        ])
+        (assertPort "DestinationPort")
+        (assertValueOneOf "EtherType" [ "ipv4" "ipv6" "mpls-uc" "mpls-mc" ])
+      ];
+
+      sectionL2TP = checkUnitConfig "L2TP" [
+        (assertOnlyFields [
+          "TunnelId"
+          "PeerTunnelId"
+          "Remote"
+          "Local"
+          "EncapsulationType"
+          "UDPSourcePort"
+          "UDPDestinationPort"
+          "UDPChecksum"
+          "UDP6ZeroChecksumTx"
+          "UDP6ZeroChecksumRx"
+        ])
+        (assertRange "TunnelId" 1 4294967295)
+        (assertRange "PeerTunnelId" 1 4294967295)
+        (assertValueOneOf "EncapsulationType" [ "udp" "ip" ])
+        (assertPort "UDPSourcePort")
+        (assertPort "UDPDestinationPort")
+        (assertValueOneOf "UDPChecksum" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+      ];
+
+      sectionL2TPSession = checkUnitConfig "L2TPSession" [
+        (assertOnlyFields [
+          "Name"
+          "SessionId"
+          "PeerSessionId"
+          "Layer2SpecificHeader"
+        ])
+        (assertRange "SessionId" 1 4294967295)
+        (assertRange "PeerSessionId" 1 4294967295)
+        (assertValueOneOf "Layer2SpecificHeader" [ "none" "default" ])
+      ];
+
+      sectionMACsec = checkUnitConfig "MACsec" [
+        (assertOnlyFields [
+          "Port"
+          "Encrypt"
+        ])
+        (assertPort "Port")
+        (assertValueOneOf "Encrypt" boolValues)
+      ];
+
+      sectionMACsecReceiveChannel = checkUnitConfig "MACsecReceiveChannel" [
+        (assertOnlyFields [
+          "Port"
+          "MACAddress"
+        ])
+        (assertPort "Port")
+        (assertMacAddress "MACAddress")
+      ];
+
+      sectionMACsecTransmitAssociation = checkUnitConfig "MACsecTransmitAssociation" [
+        (assertOnlyFields [
+          "PacketNumber"
+          "KeyId"
+          "KeyFile"
+          "Activate"
+          "UseForEncoding"
+        ])
+        (assertValueOneOf "PacketNumber" [ 1 2 3 4 294 967 295 ])
+        (assertRange "KeyId" 0 255)
+        (assertValueOneOf "Activate" boolValues)
+        (assertValueOneOf "UseForEncoding" boolValues)
+      ];
+
+      sectionMACsecReceiveAssociation = checkUnitConfig "MACsecReceiveAssociation" [
+        (assertOnlyFields [
+          "Port"
+          "MACAddress"
+          "PacketNumber"
+          "KeyId"
+          "KeyFile"
+          "Activate"
+        ])
+        (assertPort "Port")
+        (assertMacAddress "MACAddress")
+        (assertValueOneOf "PacketNumber" [ 1 2 3 4 294 967 295 ])
+        (assertRange "KeyId" 0 255)
+        (assertValueOneOf "Activate" boolValues)
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
@@ -283,12 +450,16 @@ let
 
       sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
         (assertOnlyFields [
-          "Port"
           "Encapsulation"
+          "Port"
+          "PeerPort"
           "Protocol"
+          "Peer"
+          "Local"
         ])
-        (assertPort "Port")
         (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+        (assertPort "Port")
+        (assertPort "PeerPort")
       ];
 
       sectionPeer = checkUnitConfig "Peer" [
@@ -297,6 +468,12 @@ let
           "MACAddress"
         ])
         (assertMacAddress "MACAddress")
+      ];
+
+      sectionVXCAN = checkUnitConfig "VXCAN" [
+        (assertOnlyFields [
+          "Peer"
+        ])
       ];
 
       sectionTun = checkUnitConfig "Tun" tunChecks;
@@ -438,6 +615,14 @@ let
         (assertInt "HopPenalty")
         (assertRange "HopPenalty" 0 255)
         (assertValueOneOf "RoutingAlgorithm" ["batman-v" "batman-iv"])
+      ];
+
+      sectionIPoIB = checkUnitConfig "IPoIB" [
+        (assertOnlyFields [
+          "PartitionKey"
+          "Mode"
+          "IgnoreUserspaceMulticastGroup"
+        ])
       ];
     };
 
@@ -999,6 +1184,18 @@ let
       '';
     };
 
+    bridgeConfig = mkOption {
+      default = {};
+      example = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBridge;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Bridge]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vlanConfig = mkOption {
       default = {};
       example = { Id = 4; };
@@ -1023,12 +1220,136 @@ let
       '';
     };
 
+    macvtapConfig = mkOption {
+      default = {};
+      example = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVTAP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACVTAP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipvlanConfig = mkOption {
+      default = {};
+      example = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPVLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipvtapConfig = mkOption {
+      default = {};
+      example = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPVTAP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vxlanConfig = mkOption {
       default = {};
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[VXLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    geneveConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionGENEVE;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[GENEVE]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    bareUDPConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBareUDP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[BareUDP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    l2tpConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[L2TP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    l2tpSessionConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TPSession;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[L2TPSession]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macSecConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsec;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsec]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macSecReceiveChannelConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsecReceiveChannel;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsecReceiveChannel]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macSecTransmitAssociationConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsecTransmitAssociation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsecTransmitAssociation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macSecReceiveAssociationConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsecReceiveAssociation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsecReceiveAssociation]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1065,6 +1386,17 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Peer]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vxcanConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXCAN;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VXCAN]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1183,6 +1515,17 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[BatmanAdvanced]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipoibConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPoIB;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPoIB]</literal> section of the unit. See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1650,6 +1993,10 @@ let
           [NetDev]
           ${attrsToSection def.netdevConfig}
         ''
+        + optionalString (def.bridgeConfig != { }) ''
+          [Bridge]
+          ${attrsToSection def.bridgeConfig}
+        ''
         + optionalString (def.vlanConfig != { }) ''
           [VLAN]
           ${attrsToSection def.vlanConfig}
@@ -1658,9 +2005,53 @@ let
           [MACVLAN]
           ${attrsToSection def.macvlanConfig}
         ''
+        + optionalString (def.macvtapConfig != { }) ''
+          [MACVTAP]
+          ${attrsToSection def.macvtapConfig}
+        ''
+        + optionalString (def.ipvlanConfig != { }) ''
+          [IPVLAN]
+          ${attrsToSection def.ipvlanConfig}
+        ''
+        + optionalString (def.ipvtapConfig != { }) ''
+          [IPVTAP]
+          ${attrsToSection def.ipvtapConfig}
+        ''
         + optionalString (def.vxlanConfig != { }) ''
           [VXLAN]
           ${attrsToSection def.vxlanConfig}
+        ''
+        + optionalString (def.geneveConfig != { }) ''
+          [GENEVE]
+          ${attrsToSection def.geneveConfig}
+        ''
+        + optionalString (def.bareUDPConfig != { }) ''
+          [BareUDP]
+          ${attrsToSection def.bareUDPConfig}
+        ''
+        + optionalString (def.l2tpConfig != { }) ''
+          [L2TP]
+          ${attrsToSection def.l2tpConfig}
+        ''
+        + optionalString (def.l2tpConfig != { }) ''
+          [L2TPSession]
+          ${attrsToSection def.l2tpSessionConfig}
+        ''
+        + optionalString (def.macSecConfig != { }) ''
+          [MACsec]
+          ${attrsToSection def.macSecConfig}
+        ''
+        + optionalString (def.macSecReceiveChannelConfig != { }) ''
+          [MACsecReceiveChannel]
+          ${attrsToSection def.macSecReceiveChannelConfig}
+        ''
+        + optionalString (def.macSecTransmitAssociationConfig != { }) ''
+          [MACsecTransmitAssociation]
+          ${attrsToSection def.macSecTransmitAssociationConfig}
+        ''
+        + optionalString (def.macSecReceiveAssociationConfig != { }) ''
+          [MACsecReceiveAssociation]
+          ${attrsToSection def.macSecReceiveAssociationConfig}
         ''
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
@@ -1673,6 +2064,10 @@ let
         + optionalString (def.peerConfig != { }) ''
           [Peer]
           ${attrsToSection def.peerConfig}
+        ''
+        + optionalString (def.vxcanConfig != { }) ''
+          [VXCAN]
+          ${attrsToSection def.vxcanConfig}
         ''
         + optionalString (def.tunConfig != { }) ''
           [Tun]
@@ -1705,6 +2100,10 @@ let
         + optionalString (def.batmanAdvancedConfig != { }) ''
           [BatmanAdvanced]
           ${attrsToSection def.batmanAdvancedConfig}
+        ''
+        + optionalString (def.ipoibConfig != { }) ''
+          [IPoIB]
+          ${attrsToSection def.ipoibConfig}
         ''
         + def.extraConfig;
     };
