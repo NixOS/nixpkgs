@@ -17829,6 +17829,8 @@ with pkgs;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
+  ikill = callPackage ../tools/misc/ikill { };
+
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
