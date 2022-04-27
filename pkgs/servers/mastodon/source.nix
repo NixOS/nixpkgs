@@ -7,5 +7,5 @@
   };
 in applyPatches {
   inherit src;
-  patches = [];
+  patches = [ ./ruby_version.patch ];
 }
