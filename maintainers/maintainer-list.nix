@@ -6834,12 +6834,6 @@
     githubId = 99639;
     name = "Pawel Kruszewski";
   };
-  ktosiek = {
-    email = "tomasz.kontusz@gmail.com";
-    github = "ktosiek";
-    githubId = 278013;
-    name = "Tomasz Kontusz";
-  };
   kubukoz = {
     email = "kubukoz@gmail.com";
     github = "kubukoz";
