@@ -20,13 +20,13 @@
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2022.03.23-4-android";
+  version = "2022.04.27-2";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
-    rev = version;
-    sha256 = "sha256-4VBsHq8z/odD7Nrk9e0sYMEBBLeTAHsWsdgPIN1KVZo=";
+    rev = "${version}-android";
+    sha256 = "sha256-HsskddXne5xClBZoT3aXP+51VRQQJhlUPda/M20SrH0=";
     fetchSubmodules = true;
   };
 
@@ -35,7 +35,7 @@ mkDerivation rec {
     echo "exit 0" > tools/unix/check_cert.sh
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings ["." "-" "android"] ["" "" ""] version}" > tools/unix/version.sh
+    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
   '';
 
   nativeBuildInputs = [
@@ -64,19 +64,14 @@ mkDerivation rec {
     bash ./configure.sh
   '';
 
+  # Tell the program that the read-only and the read-write data locations
+  # are different, and create the read-write one.
+  # https://github.com/organicmaps/organicmaps/issues/2387
   postInstall = ''
-    install -Dm755 OMaps $out/bin/OMaps
-    # Tell the program that the read-only and the read-write data locations
-    # are different, and create the read-write one.
     wrapProgram $out/bin/OMaps \
       --add-flags "-resources_path $out/share/organicmaps/data" \
       --add-flags '-data_path "''${XDG_DATA_HOME:-''${HOME}/.local/share}/OMaps"' \
       --run 'mkdir -p "''${XDG_DATA_HOME:-''${HOME}/.local/share}/OMaps"'
-
-    mkdir -p $out/share/organicmaps
-    cp -r ../data $out/share/organicmaps/data
-    install -Dm644 ../qt/res/logo.png $out/share/icons/hicolor/96x96/apps/organicmaps.png
-    install -Dm644 ../qt/res/OrganicMaps.desktop $out/share/applications/OrganicMaps.desktop
   '';
 
   meta = with lib; {

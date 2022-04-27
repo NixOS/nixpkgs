@@ -66,11 +66,12 @@ let
     };
     yamerl = builder {
       name = "yamerl";
-      version = "0.8.1";
-      src = fetchHex {
-        pkg = "yamerl";
-        version = "0.8.1";
-        sha256 = "sha256-lssw+dZDRP7Q74qS6fFvIH3mwE3/9PNmdSynn1vOsj8=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "erlang-ls";
+        repo = "yamerl";
+        rev = "9a9f7a2e84554992f2e8e08a8060bfe97776a5b7";
+        sha256 = "1gb44v27paxwxm443m5f554wiziqi2kd300hgjjdg6fyvy3mvhss";
       };
       beamDeps = [ ];
     };
@@ -130,8 +131,8 @@ let
       src = fetchFromGitHub {
         owner = "josefs";
         repo = "gradualizer";
-        rev = "e93db1c6725760def005c69d72f53b1a889b4c2f";
-        sha256 = "0i1mh0dw2qknrjwpbxhgpwspqv12bznylv17sznid3kbb31pslay";
+        rev = "6e89b4e1cd489637a848cc5ca55058c8a241bf7d";
+        sha256 = "1ix0xgd0267ibx6y68fx4pq8q3j0y7rjs7j3cv3v2gdiy190psy9";
       };
       beamDeps = [ ];
     };

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.17.7";
+  version = "0.17.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PZoxI7s3LTb60oXFfsOi5mCaLOKzq6ed2yFKap0Q1Ng=";
+    sha256 = "sha256-ZNlkdubB6E5ak+EaXsEBGa1xpm5ms4Rp3DG/M4/+WOg=";
   };
 
   postPatch = ''

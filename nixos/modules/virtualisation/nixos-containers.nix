@@ -4,6 +4,11 @@ with lib;
 
 let
 
+  configurationPrefix = optionalString (versionAtLeast config.system.stateVersion "22.05") "nixos-";
+  configurationDirectoryName = "${configurationPrefix}containers";
+  configurationDirectory = "/etc/${configurationDirectoryName}";
+  stateDirectory = "/var/lib/${configurationPrefix}containers";
+
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
   containerInit = (cfg:
@@ -77,7 +82,7 @@ let
   startScript = cfg:
     ''
       mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
+      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
@@ -249,11 +254,11 @@ let
 
     SyslogIdentifier = "container %i";
 
-    EnvironmentFile = "-/etc/containers/%i.conf";
+    EnvironmentFile = "-${configurationDirectory}/%i.conf";
 
     Type = "notify";
 
-    RuntimeDirectory = lib.optional cfg.ephemeral "containers/%i";
+    RuntimeDirectory = lib.optional cfg.ephemeral "${configurationDirectoryName}/%i";
 
     # Note that on reboot, systemd-nspawn returns 133, so this
     # unit will be restarted. On poweroff, it returns 0, so the
@@ -737,15 +742,21 @@ in
 
   config = mkIf (config.boot.enableContainers) (let
 
+    warnings = flatten [
+      (optional (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "22.05") ''
+        Enabling both boot.enableContainers & virtualisation.containers on system.stateVersion < 22.05 is unsupported.
+      '')
+    ];
+
     unit = {
       description = "Container '%i'";
 
-      unitConfig.RequiresMountsFor = "/var/lib/containers/%i";
+      unitConfig.RequiresMountsFor = "${stateDirectory}/%i";
 
       path = [ pkgs.iproute2 ];
 
       environment = {
-        root = "/var/lib/containers/%i";
+        root = "${stateDirectory}/%i";
         INSTANCE = "%i";
       };
 
@@ -782,8 +793,8 @@ in
             script = startScript containerConfig;
             postStart = postStartScript containerConfig;
             serviceConfig = serviceDirectives containerConfig;
-            unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "/var/lib/containers/%i";
-            environment.root = if containerConfig.ephemeral then "/run/containers/%i" else "/var/lib/containers/%i";
+            unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
+            environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
           } // (
           if containerConfig.autoStart then
             {
@@ -792,7 +803,7 @@ in
               after = [ "network.target" ];
               restartTriggers = [
                 containerConfig.path
-                config.environment.etc."containers/${name}.conf".source
+                config.environment.etc."${configurationDirectoryName}/${name}.conf".source
               ];
               restartIfChanged = true;
             }
@@ -800,12 +811,12 @@ in
       )) config.containers)
     ));
 
-    # Generate a configuration file in /etc/containers for each
+    # Generate a configuration file in /etc/nixos-containers for each
     # container so that container@.target can get the container
     # configuration.
     environment.etc =
       let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
-      in mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
+      in mapAttrs' (name: cfg: nameValuePair "${configurationDirectoryName}/${name}.conf"
       { text =
           ''
             SYSTEM_PATH=${cfg.path}
@@ -854,7 +865,11 @@ in
       ENV{INTERFACE}=="v[eb]-*", ENV{NM_UNMANAGED}="1"
     '';
 
-    environment.systemPackages = [ pkgs.nixos-container ];
+    environment.systemPackages = [
+      (pkgs.nixos-container.override {
+        inherit stateDirectory configurationDirectory;
+      })
+    ];
 
     boot.kernelModules = [
       "bridge"
