@@ -14928,4 +14928,10 @@
     github = "yisuidenghua";
     githubId = 102890144;
   };
+  shrykewindgrace = {
+    email = "shryke.windgrace@gmail.com";
+    github = "ShrykeWindgrace";
+    githubId = 6421233;
+    name = "Timofey Zakrevskiy";
+  };
 }
