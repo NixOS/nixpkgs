@@ -507,6 +507,7 @@ unsupported-platforms:
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin, aarch64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin, aarch64-darwin ]
+  sensei:                                       [ x86_64-darwin ]
   synthesizer-alsa:                             [ x86_64-darwin, aarch64-darwin ]
   taffybar:                                     [ x86_64-darwin, aarch64-darwin ]
   termonad:                                     [ x86_64-darwin, aarch64-darwin ]
