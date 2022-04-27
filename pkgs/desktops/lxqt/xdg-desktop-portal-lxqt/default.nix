@@ -2,48 +2,38 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
 , kwindowsystem
-, liblxqt
-, libqtxdg
+, libfm-qt
+, qtx11extras
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
-  pname = "lxqt-globalkeys";
-  version = "1.1.0";
+  pname = "xdg-desktop-portal-lxqt";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "6io6gH+n7dodTDQjvCqxjvaafQ4E9H7kx+s2QiAm3mY=";
+    sha256 = "15wld2p07sbf2i2qv86ljm479q0nr9r65wavmabmn3fkzkz5vlgf";
   };
 
   nativeBuildInputs = [
     cmake
-    lxqt-build-tools
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
     kwindowsystem
-    liblxqt
-    libqtxdg
+    libfm-qt
+    qtx11extras
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    homepage = "https://github.com/lxqt/lxqt-globalkeys";
-    description = "LXQt service for global keyboard shortcuts registration";
+    homepage = "https://github.com/lxqt/xdg-desktop-portal-lxqt";
+    description = "Backend implementation for xdg-desktop-portal that is using Qt/KF5/libfm-qt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
