@@ -17,13 +17,13 @@ buildPythonPackage rec {
   version = "2022.04.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-qPk3XA6ciID6h12102AGLxfaTmE63BzKPLvwFn6F1tM=";
+    hash = "sha256-qPk3XA6ciID6h12102AGLxfaTmE63BzKPLvwFn6F1tM=";
   };
 
   nativeBuildInputs = [
