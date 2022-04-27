@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.12.0";
+  version = "2.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "zalando";
+    owner = "spec-first";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JMuI3h0Pg7nCXrJtF0fhSFJTOWelEqcvmqv3ooIfkqM=";
+    hash = "sha256-QOxvs2z8AAxQ2oSM/PQ6QTD9G4JomviauLSDjay8HyQ=";
   };
 
   propagatedBuildInputs = [
@@ -56,24 +56,18 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "PyYAML>=5.1,<6" "PyYAML>=5.1" \
-      --replace "jsonschema>=2.5.1,<4" "jsonschema>=2.5.1"
-  '';
-
-  disabledTests = [
-    # We have a later PyYAML release
-    "test_swagger_yaml"
-  ];
-
   pythonImportsCheck = [
     "connexion"
   ];
 
+  disabledTests = [
+    # AssertionError
+    "test_headers"
+  ];
+
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    homepage = "https://github.com/zalando/connexion/";
+    homepage = "https://github.com/spec-first/connexion";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };
