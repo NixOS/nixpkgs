@@ -304,14 +304,18 @@ in
         binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
-      gcc-unwrapped = super.gcc-unwrapped.override {
+      gcc-unwrapped =
+        let makeStaticLibrariesAndMark = pkg:
+              lib.makeOverridable (pkg.override { stdenv = self.makeStaticLibraries self.stdenv; })
+                .overrideAttrs (a: { pname = "${a.pname}-stage3"; });
+        in super.gcc-unwrapped.override {
         # Link GCC statically against GMP etc.  This makes sense because
         # these builds of the libraries are only used by GCC, so it
         # reduces the size of the stdenv closure.
-        gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
-        mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
-        libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-        isl = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
+        gmp = makeStaticLibrariesAndMark super.gmp;
+        mpfr = makeStaticLibrariesAndMark super.mpfr;
+        libmpc = makeStaticLibrariesAndMark super.libmpc;
+        isl = makeStaticLibrariesAndMark super.isl_0_20;
         # Use a deterministically built compiler
         # see https://github.com/NixOS/nixpkgs/issues/108475 for context
         reproducibleBuild = true;
@@ -349,10 +353,10 @@ in
       # force gmp to rebuild so we have the option of dynamically linking
       # libgmp without creating a reference path from:
       #   stage5.gcc -> stage4.coreutils -> stage3.glibc -> bootstrap
-      gmp = super.gmp.override { stdenv = self.stdenv; };
+      gmp = lib.makeOverridable (super.gmp.override { stdenv = self.stdenv; }).overrideAttrs (a: { pname = "${a.pname}-stage4"; });
 
       # coreutils gets rebuilt both here and also in the final stage; we rename this one to avoid confusion
-      coreutils = super.coreutils.overrideAttrs (_: { pname = "coreutils-stage4"; });
+      coreutils = super.coreutils.overrideAttrs (a: { pname = "${a.pname}-stage4"; });
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
