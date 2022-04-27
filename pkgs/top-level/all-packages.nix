@@ -15433,6 +15433,8 @@ with pkgs;
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
+  mastobooper = callPackage ../tools/audio/mastobooper { };
+
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
 
   maven = maven3;
