@@ -20,6 +20,8 @@ with lib;
 
   programs.command-not-found.enable = mkDefault false;
 
+  services.logrotate.enable = mkDefault false;
+
   xdg.autostart.enable = mkDefault false;
   xdg.icons.enable = mkDefault false;
   xdg.mime.enable = mkDefault false;
