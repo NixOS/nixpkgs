@@ -1506,9 +1506,9 @@ mapAliases ({
 
   inherit (plasma5Packages)
     akonadi akregator ark bluedevil bomber bovo breeze-grub breeze-gtk
-    breeze-icons breeze-plymouth breeze-qt5 discover dolphin dragon elisa
+    breeze-icons breeze-plymouth breeze-qt5 discover dolphin dragon elisa falkon
     ffmpegthumbs filelight granatier gwenview k3b kactivitymanagerd kaddressbook
-    kalzium kapman kapptemplate kate katomic kblackbox kblocks kbounce
+    kalendar kalzium kapman kapptemplate kate katomic kblackbox kblocks kbounce
     kcachegrind kcalc kcharselect kcolorchooser kde-cli-tools kde-gtk-config
     kdenlive kdeplasma-addons kdf kdialog kdiamond keditbookmarks kfind kfloppy
     kgamma5 kget kgpg khelpcenter kig kigo killbots kinfocenter kitinerary
@@ -1521,8 +1521,8 @@ mapAliases ({
     plasma-integration plasma-nano plasma-nm plasma-pa plasma-mobile
     plasma-systemmonitor plasma-thunderbolt plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil qqc2-breeze-style
-    sddm-kcm skanlite spectacle systemsettings xdg-desktop-portal-kde yakuake
-    zanshin
+    sddm-kcm skanlite skanpage spectacle systemsettings xdg-desktop-portal-kde
+    yakuake zanshin
   ;
 
   inherit (plasma5Packages.thirdParty)
