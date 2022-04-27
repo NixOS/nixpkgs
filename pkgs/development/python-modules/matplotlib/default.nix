@@ -5,7 +5,7 @@
 , enableGhostscript ? true, ghostscript, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter
+, enableTk ? !stdenv.isDarwin && !tkinter.meta.broken, tcl, tk, tkinter
 , enableQt ? false, pyqt5
 # required for headless detection
 , libX11, wayland
