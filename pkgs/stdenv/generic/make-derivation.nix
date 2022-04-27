@@ -93,7 +93,7 @@ in
 
 , __contentAddressed ?
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-  && (config.contentAddressedByDefault or false)
+  && config.contentAddressedByDefault
 
 , ... } @ attrs:
 
