@@ -4119,6 +4119,8 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  snazy = callPackage ../development/tools/snazy { };
+
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
   snowcat = callPackage ../tools/security/snowcat { };
