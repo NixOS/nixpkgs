@@ -17,6 +17,7 @@ rec {
     head
     isInt
     isList
+    isAttrs
     isString
     match
     parseDrvName
@@ -323,6 +324,65 @@ rec {
        => "'one' 'two three' 'four'\\''five'"
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
+
+  /* Test whether the given name is a valid POSIX shell variable name.
+
+     Type: string -> bool
+
+     Example:
+       isValidPosixName "foo_bar000"
+       => true
+       isValidPosixName "0-bad.jpg"
+       => false
+  */
+  isValidPosixName = name: match "[a-zA-Z_][a-zA-Z0-9_]*" name != null;
+
+  /* Translate a Nix value into a shell variable declaration, with proper escaping.
+
+     Supported value types are strings (mapped to regular variables), lists of strings
+     (mapped to Bash-style arrays) and attribute sets of strings (mapped to Bash-style
+     associative arrays). Note that "strings" include string-coercible values like paths.
+
+     Strings are translated into POSIX sh-compatible code; lists and attribute sets
+     assume a shell that understands Bash syntax (e.g. Bash or ZSH).
+
+     Type: string -> (string | listOf string | attrsOf string) -> string
+
+     Example:
+       ''
+         ${toShellVar "foo" "some string"}
+         [[ "$foo" == "some string" ]]
+       ''
+  */
+  toShellVar = name: value:
+    lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
+    if isAttrs value then
+      "declare -A ${name}=(${
+        concatStringsSep " " (lib.mapAttrsToList (n: v:
+          "[${escapeShellArg n}]=${escapeShellArg v}"
+        ) value)
+      })"
+    else if isList value then
+      "declare -a ${name}=(${escapeShellArgs value})"
+    else
+      "${name}=${escapeShellArg value}"
+    );
+
+  /* Translate an attribute set into corresponding shell variable declarations
+     using `toShellVar`.
+
+     Type: attrsOf (string | listOf string | attrsOf string) -> string
+
+     Example:
+       let
+         foo = "value";
+         bar = foo;
+       in ''
+         ${toShellVars { inherit foo bar; }}
+         [[ "$foo" == "$bar" ]]
+       ''
+  */
+  toShellVars = vars: concatStringsSep "\n" (lib.mapAttrsToList toShellVar vars);
 
   /* Turn a string into a Nix expression representing that string
 
