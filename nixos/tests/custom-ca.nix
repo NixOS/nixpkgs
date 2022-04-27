@@ -168,6 +168,8 @@ let
               "alice", f"{command} https://good.example.com >&2 &"
           )
           wait_for_window_as("alice", "${browser}")
+          machine.sleep(4)
+          execute_as("alice", "xdotool key ctrl+r")  # reload to be safe
           machine.wait_for_text("It works!")
           machine.screenshot("good${browser}")
           execute_as("alice", "xdotool key ctrl+w")  # close tab
