@@ -26959,6 +26959,8 @@ with pkgs;
 
   sonixd = callPackage ../applications/audio/sonixd { };
 
+  sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
+
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
