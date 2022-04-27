@@ -350,7 +350,7 @@ rec {
 
      Example:
        ''
-         ${toShellVar foo "some string"}
+         ${toShellVar "foo" "some string"}
          [[ "$foo" == "some string" ]]
        ''
   */
