@@ -3111,6 +3111,8 @@ in {
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
+  glyphslib = callPackage ../development/python-modules/glyphslib { };
+
   foobot-async = callPackage ../development/python-modules/foobot-async { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
