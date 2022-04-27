@@ -1134,6 +1134,8 @@ with pkgs;
 
   headsetcontrol = callPackage ../tools/audio/headsetcontrol { };
 
+  httm = callPackage ../tools/filesystems/httm { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   license-generator = callPackage ../tools/misc/license-generator { };
