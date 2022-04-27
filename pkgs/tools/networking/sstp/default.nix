@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     description = "SSTP client for Linux";
     homepage = "http://sstp-client.sourceforge.net/";
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
   };
 }

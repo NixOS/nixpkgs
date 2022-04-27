@@ -89,5 +89,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
+    maintainers = teams.gnome.members;
   };
 }
