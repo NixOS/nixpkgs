@@ -303,14 +303,20 @@ in
       gcc-unwrapped =
         let makeStaticLibrariesAndMark = pkg:
               lib.makeOverridable (pkg.override { stdenv = self.makeStaticLibraries self.stdenv; })
-                .overrideAttrs (a: { pname = "${a.pname}-stage3"; });
+                .overrideAttrs (a: {
+                  # this is an artifact of the bootstrap-files being built prior
+                  # to moving to IEEE doubles on powerpc64le; it would go away
+                  # if we regenerated the bootstrap-files
+                  NIX_CFLAGS_COMPILE = (a.NIX_CFLAGS_COMPILE or "") + " -mlong-double-64";
+                  pname = "${a.pname}-stage3";
+                });
         in super.gcc-unwrapped.override {
         # Link GCC statically against GMP etc.  This makes sense because
         # these builds of the libraries are only used by GCC, so it
         # reduces the size of the stdenv closure.
         gmp = makeStaticLibrariesAndMark super.gmp;
         mpfr = makeStaticLibrariesAndMark super.mpfr;
-        libmpc = makeStaticLibrariesAndMark super.libmpc;
+        libmpc = lib.makeOverridable (makeStaticLibrariesAndMark super.libmpc).overrideAttrs (_: { doCheck = false; });
         isl = makeStaticLibrariesAndMark super.isl_0_20;
         # Use a deterministically built compiler
         # see https://github.com/NixOS/nixpkgs/issues/108475 for context

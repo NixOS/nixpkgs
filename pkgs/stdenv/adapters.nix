@@ -87,6 +87,11 @@ rec {
         ];
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+      } // lib.optionalAttrs stdenv.hostPlatform.isPower64 {
+        # this is an artifact of the bootstrap-files being built prior
+        # to moving to IEEE doubles on powerpc64le; it would go away
+        # if we regenerated the bootstrap-files
+        hardeningDisable = (args.hardeningDisable or []) ++ [ "stackprotector" ];
       });
     });
 
