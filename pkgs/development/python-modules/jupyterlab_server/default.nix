@@ -25,7 +25,11 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "--cov jupyterlab_server --cov-report term-missing --cov-report term:skip-covered" ""
+
+    # translation tests try to install additional packages into read only paths
+    rm -r tests/translations/
   '';
 
   propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
@@ -36,8 +40,6 @@ buildPythonPackage rec {
     pytest-tornasync
     ruamel-yaml
   ];
-
-  pytestFlagsArray = [ "--pyargs" "jupyterlab_server" ];
 
   __darwinAllowLocalNetworking = true;
 

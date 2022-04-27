@@ -67,6 +67,18 @@ let
         };
       };
 
+      adpyke.codesnap = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "codesnap";
+          publisher = "adpyke";
+          version = "1.3.4";
+          sha256 = "sha256-dR6qODSTK377OJpmUqG9R85l1sf9fvJJACjrYhSRWgQ=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       alefragnani.project-manager = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "project-manager";

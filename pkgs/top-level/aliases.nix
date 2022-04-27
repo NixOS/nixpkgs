@@ -74,6 +74,9 @@ mapAliases ({
   amuleGui = throw "amuleGui was renamed to amule-gui"; # Added 2022-02-11
   amsn = throw "amsn has been removed due to being unmaintained"; # Added 2020-12-09
   angelfish = libsForQt5.plasmaMobileGear.angelfish; # Added 2021-10-06
+  ansible_2_11 = throw "Ansible 2.11 goes end of life in 2022/11 and can't be supported throughout the 22.05 release cycle"; # Added 2022-03-30
+  ansible_2_10 = throw "Ansible 2.10 went end of life in 2022/05 and has subsequently been dropped"; # Added 2022-03-30
+  ansible_2_9 = throw "Ansible 2.9 went end of life in 2022/05 and has subsequently been dropped"; # Added 2022-03-30
   antimicro = throw "antimicro has been removed as it was broken, see antimicrox instead"; # Added 2020-08-06
   antimicroX = antimicrox; # Added 2021-10-31
   ardour_5 = throw "ardour_5 has been removed. see https://github.com/NixOS/nixpkgs/issues/139549"; # Added 2021-09-28
@@ -141,6 +144,7 @@ mapAliases ({
 
   ### C ###
 
+  c14 = throw "c14 is deprecated and archived by upstream"; # Added 2022-04-10
   caddy1 = throw "caddy 1.x has been removed from nixpkgs, as it's unmaintained: https://github.com/caddyserver/caddy/blob/master/.github/SECURITY.md#supported-versions"; # Added 2020-10-02
   calibre-py2 = throw "calibre-py2 has been removed from nixpkgs, as calibre has upgraded to python 3. Please use calibre as replacement"; # Added 2021-01-13
   calibre-py3 = throw "calibre-py3 has been removed from nixpkgs, as calibre's default python version is now 3. Please use calibre as replacement"; # Added 2021-01-13
@@ -648,6 +652,7 @@ mapAliases ({
   libgroove = throw "libgroove has been removed, because it depends on an outdated and insecure version of ffmpeg"; # Added 2022-01-21
   libgumbo = throw "'libgumbo' has been renamed to/replaced by 'gumbo'"; # Converted to throw 2022-02-22
   libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # Added 2018-03-14
+  libixp_hg = libixp;
   libjpeg_drop = libjpeg_original; # Added 2020-06-05
   libjson_rpc_cpp = throw "'libjson_rpc_cpp' has been renamed to/replaced by 'libjson-rpc-cpp'"; # Converted to throw 2022-02-22
   libkml = throw "libkml has been removed from nixpkgs, as it's abandoned and no package needed it"; # Added 2021-11-09
@@ -880,6 +885,7 @@ mapAliases ({
   oauth2_proxy = oauth2-proxy; # Added 2021-04-18
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set"; # Added 2021-01-24
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # Added 2021-07-12
+  odpdown = throw "odpdown has been removed because it lacks python3 support"; # Added 2022-04-25
   ofp = throw "ofp is not compatible with odp-dpdk";
   olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained"; # Added 2021-08-05
   onnxruntime = throw "onnxruntime has been removed due to poor maintainability"; # Added 2020-12-04
@@ -1360,6 +1366,7 @@ mapAliases ({
   winpdb = throw "winpdb has been removed: abandoned by upstream"; # Added 2022-04-22
   winusb = throw "'winusb' has been renamed to/replaced by 'woeusb'"; # Converted to throw 2022-02-22
   wireguard = throw "'wireguard' has been renamed to/replaced by 'wireguard-tools'"; # Converted to throw 2022-02-22
+  wmii_hg = wmii;
   wxmupen64plus = throw "wxmupen64plus was removed because the upstream disappeared"; # Added 2022-01-31
 
   ### X ###

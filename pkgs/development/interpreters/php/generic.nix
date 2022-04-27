@@ -272,7 +272,7 @@ let
               export EXTENSION_DIR=$out/lib/php/extensions
             ''
             # PKG_CONFIG need not be a relative path
-            + lib.optionalString (!lib.versionAtLeast version "7.4") ''
+            + lib.optionalString (lib.versionOlder version "7.4") ''
               for i in $(find . -type f -name "*.m4"); do
                 substituteInPlace $i \
                   --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'

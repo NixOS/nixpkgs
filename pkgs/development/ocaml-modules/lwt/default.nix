@@ -4,7 +4,7 @@
 , ocaml-syntax-shims
 }:
 
-let inherit (lib) optional versionAtLeast; in
+let inherit (lib) optional versionOlder; in
 
 buildDunePackage rec {
   pname = "lwt";
@@ -22,9 +22,9 @@ buildDunePackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [ pkg-config cppo ]
-    ++ optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims;
+    ++ optional (versionOlder ocaml.version "4.08") ocaml-syntax-shims;
   buildInputs = [ dune-configurator ]
-    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+    ++ optional (versionOlder ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {

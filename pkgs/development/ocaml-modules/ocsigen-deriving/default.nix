@@ -9,7 +9,7 @@
 , num
 }:
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "ocsigen-deriving is not available of OCaml ${ocaml.version}"
 else
 
