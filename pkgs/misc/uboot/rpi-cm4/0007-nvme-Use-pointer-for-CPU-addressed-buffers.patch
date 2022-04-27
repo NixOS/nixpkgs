@@ -1,10 +1,7 @@
-From e040d976ecbdd8071bbcb73d78e17ababa88c51f Mon Sep 17 00:00:00 2001
-Message-Id: <e040d976ecbdd8071bbcb73d78e17ababa88c51f.1650924333.git.stefan@agner.ch>
-In-Reply-To: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
-References: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
+From fa2fff362077ed6939659b9d5a42ae38cb2c9e24 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Thu, 23 Sep 2021 23:58:35 +0200
-Subject: [PATCH 4/5] nvme: Use pointer for CPU addressed buffers
+Subject: [PATCH 7/8] nvme: Use pointer for CPU addressed buffers
 
 Pass buffers which use CPU addressing as void pointers. This aligns with
 DMA APIs which use void pointers as argument. It will avoid unnecessary
@@ -259,5 +256,5 @@ index 2cdf8ce320..8ff823cd81 100644
  /**
   * nvme_scan_namespace - scan all namespaces attached to NVMe controllers
 -- 
-2.36.0
+2.35.3
 

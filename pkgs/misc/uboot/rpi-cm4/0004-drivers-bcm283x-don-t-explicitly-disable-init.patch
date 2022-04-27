@@ -1,8 +1,7 @@
-From 78704bc154d695ee16fdf8396f4d60b740190014 Mon Sep 17 00:00:00 2001
-Message-Id: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
+From dcb1d1594345d89733559ed2ce19f5cfcf352512 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Thu, 14 Apr 2022 12:15:26 +0200
-Subject: [PATCH 1/5] drivers: bcm283x: don't explicitly disable init
+Subject: [PATCH 4/8] drivers: bcm283x: don't explicitly disable init
 
 It seems that the reason why init doesn't succeed is the lack of clock
 support in U-Boot. Setting the default clock of 48MHz for the PL011
@@ -50,5 +49,5 @@ index e24c94c7d2..98ba4dc052 100644
  /* GPIO */
  #define CONFIG_BCM2835_GPIO
 -- 
-2.36.0
+2.35.3
 

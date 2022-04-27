@@ -1,10 +1,7 @@
-From 78924e9cf8c4af0baafcb2e7224bf04ad65276de Mon Sep 17 00:00:00 2001
-Message-Id: <78924e9cf8c4af0baafcb2e7224bf04ad65276de.1650924333.git.stefan@agner.ch>
-In-Reply-To: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
-References: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
+From 313fb277fae1c8687e93772663e37108363e9e7d Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Thu, 23 Sep 2021 23:52:44 +0200
-Subject: [PATCH 3/5] nvme: improve readability of nvme_setup_prps()
+Subject: [PATCH 6/8] nvme: improve readability of nvme_setup_prps()
 
 Improve readability by introducing consts, reuse consts where
 appropriate and adding variables with discriptive name.
@@ -47,5 +44,5 @@ index 3bda491e12..1601651449 100644
  			prp_pool += page_size;
  		}
 -- 
-2.36.0
+2.35.3
 

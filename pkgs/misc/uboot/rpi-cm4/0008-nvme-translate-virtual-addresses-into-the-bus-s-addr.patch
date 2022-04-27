@@ -1,10 +1,7 @@
-From c4736c35141e519d15430660e17c274e142e886d Mon Sep 17 00:00:00 2001
-Message-Id: <c4736c35141e519d15430660e17c274e142e886d.1650924333.git.stefan@agner.ch>
-In-Reply-To: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
-References: <78704bc154d695ee16fdf8396f4d60b740190014.1650924333.git.stefan@agner.ch>
+From e3c3029de7f7e60e9f0aedd99a8eaf76ed7214ea Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Fri, 24 Sep 2021 00:27:39 +0200
-Subject: [PATCH 5/5] nvme: translate virtual addresses into the bus's address
+Subject: [PATCH 8/8] nvme: translate virtual addresses into the bus's address
  space
 
 So far we've been content with passing physical/CPU addresses when
@@ -194,5 +191,5 @@ index c6aae4da5d..31e6899bca 100644
 +
  #endif /* __DRIVER_NVME_H__ */
 -- 
-2.36.0
+2.35.3
 

@@ -1,10 +1,7 @@
-From b00922ee48987ef91f0ca2aa3a66ad22c6c83d57 Mon Sep 17 00:00:00 2001
-Message-Id: <b00922ee48987ef91f0ca2aa3a66ad22c6c83d57.1645627172.git.stefan@agner.ch>
-In-Reply-To: <24b77460dbfa2497ceb7a1611bf28b6eb88a1d74.1645627172.git.stefan@agner.ch>
-References: <24b77460dbfa2497ceb7a1611bf28b6eb88a1d74.1645627172.git.stefan@agner.ch>
+From bcc994f717e3835c66e5ff85d78f314a427312fa Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan@agner.ch>
 Date: Thu, 7 Oct 2021 12:02:39 +0200
-Subject: [PATCH 5/5] usb: xhci-brcm: Make driver compatible with downstream
+Subject: [PATCH 3/8] usb: xhci-brcm: Make driver compatible with downstream
  device tree
 
 The downstream device tree uses just "generic-xhci" as compatible
@@ -29,5 +26,5 @@ index fe17924028..0c6938187b 100644
  };
  
 -- 
-2.35.1
+2.35.3
 

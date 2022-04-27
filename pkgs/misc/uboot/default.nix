@@ -425,16 +425,14 @@ in {
       CONFIG_USB_XHCI_BRCM=y
     '';
     extraPatches = [
-      ./rpi-cm4/0002-usb-xhci-reset-endpoint-on-USB-stall.patch
-      ./rpi-cm4/0003-rpi-add-NVMe-to-boot-order.patch
-      ./rpi-cm4/0004-Revert-nvme-Correct-the-prps-per-page-calculation-me.patch
-      ./rpi-cm4/0005-usb-xhci-brcm-Make-driver-compatible-with-downstream.patch
-
-      ./rpi-cm4/0001-drivers-bcm283x-don-t-explicitly-disable-init.patch
-      ./rpi-cm4/0002-drivers-bcm283x-allow-to-spawn-any-PL011-UART.patch
-      ./rpi-cm4/0003-nvme-improve-readability-of-nvme_setup_prps.patch
-      ./rpi-cm4/0004-nvme-Use-pointer-for-CPU-addressed-buffers.patch
-      ./rpi-cm4/0005-nvme-translate-virtual-addresses-into-the-bus-s-addr.patch
+      ./rpi-cm4/0001-rpi-add-NVMe-to-boot-order.patch
+      ./rpi-cm4/0002-Revert-nvme-Correct-the-prps-per-page-calculation-me.patch
+      ./rpi-cm4/0003-usb-xhci-brcm-Make-driver-compatible-with-downstream.patch
+      ./rpi-cm4/0004-drivers-bcm283x-don-t-explicitly-disable-init.patch
+      ./rpi-cm4/0005-drivers-bcm283x-allow-to-spawn-any-PL011-UART.patch
+      ./rpi-cm4/0006-nvme-improve-readability-of-nvme_setup_prps.patch
+      ./rpi-cm4/0007-nvme-Use-pointer-for-CPU-addressed-buffers.patch
+      ./rpi-cm4/0008-nvme-translate-virtual-addresses-into-the-bus-s-addr.patch
     ];
   };
 
