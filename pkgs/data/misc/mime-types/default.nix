@@ -4,7 +4,7 @@ let
   version = "9";
 in fetchzip rec {
   name = "mime-types-${version}";
-  url = "https://mirrors.kernel.org/gentoo/distfiles/${name}.tar.bz2";
+  url = "https://oss.neverware.com/app-misc/mime-types/${name}.tar.bz2";
   postFetch = ''
     mkdir -p $out/etc
     tar xjvf $downloadedFile --directory=$out/etc --strip-components=1
