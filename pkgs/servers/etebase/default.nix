@@ -12,7 +12,7 @@ in
 buildPythonPackage rec {
   pname = "etebase-server";
   version = "0.8.3";
-  format = "pyproject";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
