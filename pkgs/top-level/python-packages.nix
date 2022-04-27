@@ -2532,6 +2532,8 @@ in {
 
   dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
 
+  durus = callPackage ../development/python-modules/durus {  };
+
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
   dyn = callPackage ../development/python-modules/dyn { };
