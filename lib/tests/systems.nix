@@ -19,6 +19,7 @@ with lib.systems.doubles; lib.runTests {
   testi686 = mseteq i686 [ "i686-linux" "i686-freebsd" "i686-genode" "i686-netbsd" "i686-openbsd" "i686-cygwin" "i686-windows" "i686-none" "i686-darwin" ];
   testmips = mseteq mips [ "mips64el-linux" "mipsel-linux" "mipsel-netbsd" ];
   testmmix = mseteq mmix [ "mmix-mmixware" ];
+  testriscv = mseteq riscv [ "riscv32-linux" "riscv64-linux" "riscv32-netbsd" "riscv64-netbsd" "riscv32-none" "riscv64-none" ];
   testx86_64 = mseteq x86_64 [ "x86_64-linux" "x86_64-darwin" "x86_64-freebsd" "x86_64-genode" "x86_64-redox" "x86_64-openbsd" "x86_64-netbsd" "x86_64-cygwin" "x86_64-solaris" "x86_64-windows" "x86_64-none" ];
 
   testcygwin = mseteq cygwin [ "i686-cygwin" "x86_64-cygwin" ];
