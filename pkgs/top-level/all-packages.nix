@@ -10953,6 +10953,10 @@ with pkgs;
 
   trytond = with python3Packages; toPythonApplication trytond;
 
+  tun2socks = callPackage ../tools/networking/tun2socks {
+    buildGoModule = buildGo118Module;
+  };
+
   tuntox = callPackage ../tools/networking/tuntox { };
 
   omapd = callPackage ../tools/security/omapd { };
