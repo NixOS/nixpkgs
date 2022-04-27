@@ -1,5 +1,6 @@
 { lib
 , buildPythonApplication
+, pytest
 , fetchFromGitHub
 , installShellFiles
 , git
@@ -21,7 +22,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ git ];
+  checkInputs = [ git pytest ];
 
   postInstall = ''
     installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
