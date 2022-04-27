@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "srvlookup";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zf1v04zd5phabyqh0nhplr5a8vxskzfrzdh4akljnz1yk2n2a0b";
+    sha256 = "sha256-jA2WUB3wEXvOgqwgdqA6HEULykPcTPg+VLAm9sLtXD4=";
   };
 
   propagatedBuildInputs = [ dnspython ];
