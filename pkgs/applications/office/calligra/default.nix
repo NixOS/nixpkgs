@@ -30,7 +30,23 @@ mkDerivation rec {
       sha256 = "11dzrp9q05dmvnwp4vk4ihcibqcf4xyr0ijscpi716cyy730flma";
       excludes = [ "CMakeLists.txt" ];
     })
+    # Fixes for building calligra with modern poppler[-qt5]
+    (fetchpatch {
+      name = "poppler-22.03.0.patch";
+      url = "https://github.com/archlinux/svntogit-packages/raw/8f328bef497a9e3bc628e4e294c1a70b0c8b0eab/trunk/poppler-22.03.0.patch";
+      sha256 = "sha256-bOTnQcavXF49LIshNgzhXhyoEjzLmQJC/U7hO5P0bfY=";
+    })
+    # Fixes for building calligra with gcc11/c++17
+    (fetchpatch {
+      name = "build_c++17_poppler.patch";
+      url = "https://github.com/archlinux/svntogit-packages/raw/bbbe35f97eb1033798f1cf95d427890168598199/trunk/068cd9ae.patch";
+      sha256 = "sha256-d9/ILwSeW+ov11DF191hzIaUafO/rjQrAeONwqDSKbA=";
+    })
   ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
+  '';
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 

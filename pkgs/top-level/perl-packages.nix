@@ -23222,7 +23222,11 @@ let
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz";
       sha256 = "06y79lla8adkqhrs41xdddqjs81dcrh266b50mfbg37bxkawd4f1";
     };
-    buildInputs = [ ListMoreUtils TestDifferences TestException ];
+    nativeBuildInputs = [ shortenPerlShebang ];
+    checkInputs = [ ListMoreUtils TestDifferences TestException ];
+    postInstall = ''
+      shortenPerlShebang $out/bin/Markdown.pl
+    '';
   };
 
   TextMarkdownHoedown = buildPerlModule {

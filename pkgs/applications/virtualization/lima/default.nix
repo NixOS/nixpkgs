@@ -8,18 +8,23 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GS/mzBoVL78U7vMxkbnQfb89U640w8YdA8YhPH4Iwrc=";
+    sha256 = "sha256-xlpNJjSBw1iL8CjbWE6v4u7Vq5PjkGv0tQKU5eRN13w=";
   };
 
-  vendorSha256 = "sha256-funVyM0RhDzGQPyzsABzXu3ETPYJwRosqkQreGBADZc=";
+  vendorSha256 = "sha256-uTkCi969RQ4K0ZJ2vOgqv3OJgzVVRX7b2sXNfmR6qoA=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  # clean fails with read only vendor dir
+  postPatch = ''
+    substituteInPlace Makefile --replace 'binaries: clean' 'binaries:'
+  '';
 
   buildPhase = ''
     runHook preBuild
