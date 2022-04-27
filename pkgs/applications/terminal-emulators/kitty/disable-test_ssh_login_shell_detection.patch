@@ -1,0 +1,13 @@
+diff --git a/kitty_tests/ssh.py b/kitty_tests/ssh.py
+index 1f424146..57620334 100644
+--- a/kitty_tests/ssh.py
++++ b/kitty_tests/ssh.py
+@@ -197,7 +197,7 @@ def test_ssh_login_shell_detection(self):
+         expected_login_shell = pwd.getpwuid(os.geteuid()).pw_shell
+         for m in methods:
+             for sh in self.all_possible_sh:
+-                if 'python' in sh:
++                if 'python' in sh or '/sbin/nologin' in expected_login_shell:
+                     continue
+                 with self.subTest(sh=sh, method=m), tempfile.TemporaryDirectory() as tdir:
+                     pty = self.check_bootstrap(sh, tdir, test_script=f'{m}; echo "$login_shell"; exit 0', SHELL_INTEGRATION_VALUE='')
