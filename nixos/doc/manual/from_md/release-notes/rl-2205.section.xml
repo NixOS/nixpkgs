@@ -477,6 +477,28 @@ Existing 3rd party modules that provided similar functionality, like <literal>pu
       </listitem>
       <listitem>
         <para>
+          The configuration and state directories used by
+          <literal>nixos-containers</literal> have been moved from
+          <literal>/etc/containers</literal> and
+          <literal>/var/lib/containers</literal> to
+          <literal>/etc/nixos-containers</literal> and
+          <literal>/var/lib/nixos-containers</literal>.
+        </para>
+        <para>
+          If you are changing <literal>system.stateVersion</literal> to
+          <literal>&quot;22.05&quot;</literal> manually on an existing
+          system you are responsible for migrating these directories
+          yourself.
+        </para>
+        <para>
+          This is to improve compatibility with
+          <literal>libcontainer</literal> based software such as Podman
+          and Skopeo which assumes they have ownership over
+          <literal>/etc/containers</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>security.klogd</literal> was removed. Logging of
           kernel messages is handled by systemd since Linux 3.5.
         </para>

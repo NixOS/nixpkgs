@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchurl, fetchpatch, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -43,6 +43,7 @@
 , pcre
 , threadweaver
 , x265
+, jasper
 
 # For panorama and focus stacking
 , enblend-enfuse
@@ -55,12 +56,20 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.4.0";
+  version = "7.6.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-0Iq2bacyu0SbwQEG7BHdne+ls1Yt7TdBsEHbuqcVUEo=";
+    sha256 = "sha256-2OHucyHT/DE5FvUVdW4wKaxBh9xFO2kzhI1N5TFLZkE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "akonadi-22.04.patch";
+      url = "https://github.com/archlinux/svntogit-packages/raw/1b3c76a4482055524120f598325d90545ff9c020/trunk/akonadi-22.04.patch";
+      sha256 = "sha256-ittgkl2t/nAD0ci2fNYoAd4E2M6Gg0vqqjxqZugBuko=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
 
@@ -86,6 +95,7 @@ mkDerivation rec {
     opencv
     pcre
     x265
+    jasper
 
     qtbase
     qtxmlpatterns
@@ -115,6 +125,7 @@ mkDerivation rec {
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
     "-DENABLE_APPSTYLES=on"
+    "-DCMAKE_CXX_FLAGS=-I${libksane}/include/KF5" # fix `#include <ksane_version.h>`
   ];
 
   dontWrapGApps = true;

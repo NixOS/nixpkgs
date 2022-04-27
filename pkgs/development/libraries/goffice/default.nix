@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt librsvg ];
 
   enableParallelBuilding = true;
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isPower64;
 
   passthru = {
     updateScript = gnome.updateScript {
