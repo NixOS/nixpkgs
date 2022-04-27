@@ -424,6 +424,9 @@ in {
 
       CONFIG_USB_XHCI_BRCM=y
     '';
+    # These were taken from:
+    # https://github.com/home-assistant/operating-system/tree/dev/buildroot-external/board/raspberrypi/patches/uboot
+    # https://github.com/home-assistant/operating-system/tree/dev/buildroot-external/board/raspberrypi/yellow/patches/uboot
     extraPatches = [
       ./rpi-cm4/0001-rpi-add-NVMe-to-boot-order.patch
       ./rpi-cm4/0002-Revert-nvme-Correct-the-prps-per-page-calculation-me.patch
