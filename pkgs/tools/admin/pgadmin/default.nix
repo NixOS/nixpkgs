@@ -11,9 +11,7 @@
 let
 
   pname = "pgadmin";
-  majorVersion = "6";
-  minorVersion = "8";
-  version = "${majorVersion}.${minorVersion}";
+  version = "6.8";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
@@ -84,7 +82,7 @@ let
       ];
     });
     flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-      # Nothing of interest changed from 0.2 to 0.3
+      # tests fail due to downgrades here
       doCheck = false;
     });
     werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
@@ -185,7 +183,7 @@ pythonPackages.buildPythonApplication rec {
 
   # speaklater3 is seperate because when passing buildDeps
   # to the test, it fails there due to a collision with speaklater
-  propagatedBuildInputs = buildDeps ++ [pythonPackages.speaklater3];
+  propagatedBuildInputs = buildDeps ++ [ pythonPackages.speaklater3 ];
 
   passthru.tests = {
     standalone = nixosTests.pgadmin4-standalone;
@@ -197,7 +195,7 @@ pythonPackages.buildPythonApplication rec {
     description = "Administration and development platform for PostgreSQL";
     homepage = "https://www.pgadmin.org/";
     license = licenses.mit;
-    changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${majorVersion}_${minorVersion}.html";
+    changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major}_${versions.minor}.html";
     maintainers = with maintainers; [ gador ];
   };
 }
