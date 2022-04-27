@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "libvirt";
   version = "8.1.0";
 
-  src = assert version == libvirt.version; fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
     rev = "v${version}";

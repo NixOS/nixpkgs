@@ -35,6 +35,7 @@
 , stdenv
 , xhtml1
 , yajl
+, writeScript
 
   # Linux
 , acl ? null
@@ -324,6 +325,19 @@ stdenv.mkDerivation rec {
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : /run/libvirt/nix-emulators:${binPath}
+  '';
+
+  passthru.updateScript = writeScript "update-libvirt" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+
+    set -eu -o pipefail
+
+    libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
+    sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
+    update-source-version ${pname} "$libvirtVersion"
+    update-source-version python3Packages.${pname} "$libvirtVersion"
+    update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
 
   meta = {
