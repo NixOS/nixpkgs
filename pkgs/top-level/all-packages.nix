@@ -625,8 +625,8 @@ with pkgs;
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost173; # Configure checks for specific version.
-    protobuf = protobuf3_11;
+    boost = boost177; # Configure checks for specific version.
+    protobuf = protobuf3_19;
     icu =  icu67;
     v8 = v8_8_x;
   };
