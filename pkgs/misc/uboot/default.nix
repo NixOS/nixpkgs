@@ -7,6 +7,9 @@
 , bison
 , dtc
 , flex
+, gnutls
+, libuuid
+, ncurses
 , openssl
 , swig
 , meson-tools
@@ -20,10 +23,10 @@
 }:
 
 let
-  defaultVersion = "2022.01";
+  defaultVersion = "2022.04";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-gbRUMifbIowD+KG/XdvIE7C7j2VVzkYGTvchpvxoBBM=";
+    hash = "sha256-aOBlQTkmd44nbsOr0ouzL6gquqSmiY1XDB9I+9sIvNA=";
   };
   buildUBoot = {
     version ? null
@@ -70,6 +73,12 @@ let
       which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+    ];
 
     hardeningDisable = [ "all" ];
 
