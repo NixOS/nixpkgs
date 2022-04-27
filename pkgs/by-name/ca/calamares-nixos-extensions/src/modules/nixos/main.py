@@ -387,7 +387,8 @@ def run():
                 libcalamares.utils.host_env_process_output(
                     ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
             except subprocess.CalledProcessError:
-                libcalamares.utils.error("Failed to create /crypto_keyfile.bin")
+                libcalamares.utils.error(
+                    "Failed to create /crypto_keyfile.bin")
                 return (_("Failed to create /crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
             break
 
@@ -408,7 +409,8 @@ def run():
                 libcalamares.utils.host_env_process_output(
                     ["cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], None, part["luksPassphrase"])
             except subprocess.CalledProcessError:
-                libcalamares.utils.error("Failed to add {} to /crypto_keyfile.bin".format(part["luksMapperName"]))
+                libcalamares.utils.error(
+                    "Failed to add {} to /crypto_keyfile.bin".format(part["luksMapperName"]))
                 return (_("cryptsetup failed"), _("Failed to add {} to /crypto_keyfile.bin".format(part["luksMapperName"])))
 
     status = _("Configuring NixOS")
@@ -469,43 +471,48 @@ def run():
 
         if (gs.value("keyboardVConsoleKeymap") is not None):
             try:
-              subprocess.check_output(["pkexec", "loadkeys", gs.value("keyboardVConsoleKeymap").strip()], stderr=subprocess.STDOUT)
-              catenate(variables, "vconsole", gs.value("keyboardVConsoleKeymap").strip())
+                subprocess.check_output(["pkexec", "loadkeys", gs.value(
+                    "keyboardVConsoleKeymap").strip()], stderr=subprocess.STDOUT)
+                catenate(variables, "vconsole", gs.value(
+                    "keyboardVConsoleKeymap").strip())
             except subprocess.CalledProcessError as e:
-              libcalamares.utils.error("loadkeys: {}".format(e.output))
-              libcalamares.utils.error("Setting vconsole keymap to {} will fail, defaulting to \"us\"".format(gs.value("keyboardVConsoleKeymap").strip()))
-              catenate(variables, "vconsole", "us")
+                libcalamares.utils.error("loadkeys: {}".format(e.output))
+                libcalamares.utils.error("Setting vconsole keymap to {} will fail, defaulting to \"us\"".format(
+                    gs.value("keyboardVConsoleKeymap").strip()))
+                catenate(variables, "vconsole", "us")
         else:
-          kbdmodelmap = open("/run/current-system/sw/share/systemd/kbd-model-map", 'r')
-          kbd = kbdmodelmap.readlines()
-          out = []
-          for line in kbd:
-            if line.startswith("#"):
-              continue
-            out.append(line.split())
-          # Find rows with same layout
-          find = []
-          for row in out:
-            if gs.value("keyboardLayout") in row[1]:
-              find.append(row)
-          vconsole = find[0][0]
-          if gs.value("keyboardVariant") is not None:
-            # Find rows with same variant
-            for row in find:
-              if gs.value("keyboardVariant") in row[3]:
-                vconsole = row[0]
-                break
-          # If none found set to "us"
-          if vconsole == "":
-            vconsole = "us"
-          try:
-              subprocess.check_output(["pkexec", "loadkeys", vconsole], stderr=subprocess.STDOUT)
-              catenate(variables, "vconsole", vconsole)
-          except subprocess.CalledProcessError as e:
-              libcalamares.utils.error("loadkeys: {}".format(e.output))
-              libcalamares.utils.error("Setting vconsole keymap to {} will fail, defaulting to \"us\"".format(gs.value("keyboardVConsoleKeymap")))
-              catenate(variables, "vconsole", "us")
-
+            kbdmodelmap = open(
+                "/run/current-system/sw/share/systemd/kbd-model-map", 'r')
+            kbd = kbdmodelmap.readlines()
+            out = []
+            for line in kbd:
+                if line.startswith("#"):
+                    continue
+                out.append(line.split())
+            # Find rows with same layout
+            find = []
+            for row in out:
+                if gs.value("keyboardLayout") in row[1]:
+                    find.append(row)
+            vconsole = find[0][0]
+            if gs.value("keyboardVariant") is not None:
+                # Find rows with same variant
+                for row in find:
+                    if gs.value("keyboardVariant") in row[3]:
+                        vconsole = row[0]
+                        break
+            # If none found set to "us"
+            if vconsole == "":
+                vconsole = "us"
+            try:
+                subprocess.check_output(
+                    ["pkexec", "loadkeys", vconsole], stderr=subprocess.STDOUT)
+                catenate(variables, "vconsole", vconsole)
+            except subprocess.CalledProcessError as e:
+                libcalamares.utils.error("loadkeys: {}".format(e.output))
+                libcalamares.utils.error("Setting vconsole keymap to {} will fail, defaulting to \"us\"".format(
+                    gs.value("keyboardVConsoleKeymap")))
+                catenate(variables, "vconsole", "us")
 
     cfg += cfgmisc
 
@@ -574,14 +581,16 @@ def run():
                     libcalamares.utils.host_env_process_output(
                         ["swapon", "/dev/mapper/" + part["luksMapperName"]], None)
                 except subprocess.CalledProcessError:
-                    libcalamares.utils.error("Failed to activate swap: " + "/dev/mapper/" + part["luksMapperName"])
+                    libcalamares.utils.error(
+                        "Failed to activate swap: " + "/dev/mapper/" + part["luksMapperName"])
                     return (_("swapon failed to activate swap"), _("failed while activating:" + "/dev/mapper/" + part["luksMapperName"]))
             else:
                 try:
                     libcalamares.utils.host_env_process_output(
                         ["swapon", part["device"]], None)
                 except subprocess.CalledProcessError:
-                    libcalamares.utils.error("Failed to activate swap: " + "/dev/mapper/" + part["device"])
+                    libcalamares.utils.error(
+                        "Failed to activate swap: " + "/dev/mapper/" + part["device"])
                     return (_("swapon failed to activate swap " + part["device"]), _("failed while activating:" + "/dev/mapper/" + part["device"]))
             break
 
@@ -615,7 +624,7 @@ def run():
                     "{} is marked as unfree, removing from hardware-configuration.nix".format(p))
                 expkgs.remove(pkg)
         hardwareout = re.sub(
-            "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {}];".format(" ".join(map(lambda x: x+" ", expkgs))), htxt)
+            "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {}];".format("".join(map(lambda x: x+" ", expkgs))), htxt)
         # Write the hardware-configuration.nix file
         libcalamares.utils.host_env_process_output(["cp", "/dev/stdin",
                                                     root_mount_point+"/etc/nixos/hardware-configuration.nix"], None, hardwareout)
