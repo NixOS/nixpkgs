@@ -399,6 +399,8 @@ in {
 
   aiosignal = callPackage ../development/python-modules/aiosignal { };
 
+  aioslimproto = callPackage ../development/python-modules/aioslimproto { };
+
   aiosmb = callPackage ../development/python-modules/aiosmb { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
