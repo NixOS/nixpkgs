@@ -1071,6 +1071,8 @@ with pkgs;
 
   airspyhf = callPackage ../applications/radio/airspyhf { };
 
+  airwindows-lv2 = callPackage ../applications/audio/airwindows-lv2 { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
