@@ -32,6 +32,10 @@ let
       feature = "run <literal>checkPhase</literal> by default";
     };
 
+    strictDepsByDefault = mkMassRebuild {
+      feature = "set <literal>strictDeps</literal> to true by default";
+    };
+
     allowAliases = mkOption {
       type = types.bool;
       default = true;
