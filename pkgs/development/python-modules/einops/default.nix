@@ -12,11 +12,15 @@
 , mxnet
 , tensorflow
 , keras
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "einops";
   version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
@@ -54,10 +58,14 @@ buildPythonPackage rec {
     nosetests -v -w tests
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "einops"
+  ];
+
+  meta = with lib; {
     description = "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ yl3dy ];
   };
 }
