@@ -4,7 +4,7 @@
 , fetchpatch
 , pkg-config
 , openssl
-, testVersion
+, testers
 , gbl
 }:
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   passthru.tests.version =
-    testVersion { package = gbl; };
+    testers.testVersion { package = gbl; };
 
   meta = with lib; {
     description = "GBL Firmware file manipulation";

@@ -31,7 +31,6 @@
 , CoreServices
 , developer_cmds
 , DarwinTools
-, testVersion
 , mysql-shell
 }:
 
