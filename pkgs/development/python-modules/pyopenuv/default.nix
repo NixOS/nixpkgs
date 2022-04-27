@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2021.11.0";
+  version = "2022.04.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-J0YIq00/GcWEL23UHmN98Jp/imOAz8NLzhMdk8WFozk=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-qPk3XA6ciID6h12102AGLxfaTmE63BzKPLvwFn6F1tM=";
   };
 
   nativeBuildInputs = [
