@@ -1,14 +1,25 @@
-{ config, lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, filelock, protobuf, numpy, pytestCheckHook, mock, typing-extensions
-, cupy, cudaSupport ? config.cudaSupport or false
+{ lib
+, config
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, filelock
+, protobuf
+, numpy
+, pytestCheckHook
+, mock
+, typing-extensions
+, cupy
+, cudaSupport ? config.cudaSupport or false
 }:
 
 buildPythonPackage rec {
   pname = "chainer";
   version = "7.8.1";
-  disabled = !isPy3k; # python2.7 abandoned upstream
+  format = "setuptools";
 
-  # no tests in Pypi tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "chainer";
     repo = "chainer";
@@ -16,19 +27,32 @@ buildPythonPackage rec {
     sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    mock
-  ];
-
   propagatedBuildInputs = [
     filelock
     protobuf
     numpy
     typing-extensions
-  ] ++ lib.optionals cudaSupport [ cupy ];
+  ] ++ lib.optionals cudaSupport [
+    cupy
+  ];
 
-  pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
+
+  postPatch = ''
+    # distutils issue
+    substituteInPlace setup.cfg \
+      --replace "ignore::chainer.warnings.PerformanceWarning" "" \
+      --replace "ignore::chainer.backends.cuda._PerformanceWarning" ""
+  '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+    "tests/chainer_tests/utils_tests"
+  ];
 
   disabledTests = [
     "gpu"
