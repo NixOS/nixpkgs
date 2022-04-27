@@ -202,6 +202,7 @@ class Driver:
         *,
         seconds_interval: float = 2.0,
         description: Optional[str] = None,
+        wait_before_entry: bool = False,
     ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
         driver = self
 
@@ -212,8 +213,15 @@ class Driver:
                     seconds_interval,
                     description,
                 )
+                self.wait_before_entry = wait_before_entry
 
             def __enter__(self) -> None:
+                if self.wait_before_entry:
+                    with rootlog.nested(
+                        f"waiting before entering polling condition {self.condition.description}"
+                    ):
+                        retry(lambda x: self.condition.check(force=True))
+
                 driver.polling_conditions.append(self.condition)
 
             def __exit__(self, a, b, c) -> None:  # type: ignore
