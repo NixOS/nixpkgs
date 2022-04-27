@@ -3109,6 +3109,8 @@ in {
 
   fontmake = callPackage ../development/python-modules/fontmake { };
 
+  openstep-plist = callPackage ../development/python-modules/openstep-plist { };
+
   foobot-async = callPackage ../development/python-modules/foobot-async { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
