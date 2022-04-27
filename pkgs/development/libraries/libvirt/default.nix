@@ -111,19 +111,18 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.1.0";
+  version = "8.4.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
+    sha256 = "sha256-7E4YChbPc2X83+iNPB1A3BD+g9dXG7UqGzFiuRMSrmI=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-    ./0001-qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
   ];
 
   # remove some broken tests
