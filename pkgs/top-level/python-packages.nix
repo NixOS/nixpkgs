@@ -3889,6 +3889,8 @@ in {
 
   http-parser = callPackage ../development/python-modules/http-parser { };
 
+  http-sfv = callPackage ../development/python-modules/http-sfv { };
+
   httpretty = callPackage ../development/python-modules/httpretty { };
 
   httpserver = callPackage ../development/python-modules/httpserver { };
