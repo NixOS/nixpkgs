@@ -112,22 +112,13 @@ stdenv.mkDerivation rec {
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
   version = "8.1.0";
 
-  src =
-    if isDarwin then
-      fetchurl
-        {
-          url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-PGxDvs/+s0o/OXxhYgaqaaiT/4v16CCDk8hOjnU1KTQ=";
-        }
-    else
-      fetchFromGitLab
-        {
-          owner = pname;
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
-          fetchSubmodules = true;
-        };
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
+    fetchSubmodules = true;
+  };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
