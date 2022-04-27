@@ -25,6 +25,10 @@ buildPythonPackage {
     patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
   '';
 
-  meta = py.meta;
+  meta = py.meta // {
+    # This derivation does not build from source.  The binaries for
+    # Power64 are missing.
+    broken = stdenv.hostPlatform.isPower64;
+  };
 
 }
