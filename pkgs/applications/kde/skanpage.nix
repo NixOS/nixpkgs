@@ -6,16 +6,11 @@
 , ktextwidgets
 , libksane
 , qtquickcontrols2
+, kpurpose
 }:
 
 mkDerivation rec {
   pname = "skanpage";
-  version = "1.0.0";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/skanpage/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-kPVAG64oPkKF3ztHB4V7M2xc1AcvwiHnYpMMLMQNYGA=";
-  };
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
@@ -24,6 +19,7 @@ mkDerivation rec {
     ktextwidgets
     libksane
     qtquickcontrols2
+    kpurpose
   ];
 
   meta = with lib; {

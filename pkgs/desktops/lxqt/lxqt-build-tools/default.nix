@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1hb04zgpalxv6da3myf1dxsbjix15dczzfq8a24g5dg2zfhwpx21";
+    sha256 = "vzppKTDwADBG5pOaluT858cWCKFFRaSbHz2Qhe6799E=";
   };
 
   postPatch = ''

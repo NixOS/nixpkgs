@@ -409,6 +409,8 @@ with pkgs;
 
   protoc-gen-validate = callPackage ../development/tools/protoc-gen-validate { };
 
+  protolint = callPackage ../development/tools/protolint { };
+
   ptags = callPackage ../development/tools/misc/ptags { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
@@ -1131,6 +1133,8 @@ with pkgs;
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
   headsetcontrol = callPackage ../tools/audio/headsetcontrol { };
+
+  httm = callPackage ../tools/filesystems/httm { };
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
@@ -4116,6 +4120,8 @@ with pkgs;
   shisho = callPackage ../tools/security/shisho { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
+
+  snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
@@ -7169,6 +7175,8 @@ with pkgs;
     usePipewire = false;
     usePulseaudio = true;
   };
+
+  jasmin-compiler = callPackage ../development/compilers/jasmin-compiler { };
 
   jazzy = callPackage ../development/tools/jazzy { };
 
@@ -10949,6 +10957,10 @@ with pkgs;
 
   trytond = with python3Packages; toPythonApplication trytond;
 
+  tun2socks = callPackage ../tools/networking/tun2socks {
+    buildGoModule = buildGo118Module;
+  };
+
   tuntox = callPackage ../tools/networking/tuntox { };
 
   omapd = callPackage ../tools/security/omapd { };
@@ -12204,8 +12216,8 @@ with pkgs;
 
   colm = callPackage ../development/compilers/colm { };
 
-  colmap = libsForQt5.callPackage ../applications/science/misc/colmap { };
-  colmapWithCuda = colmap.override { cudaSupport = true; cudatoolkit = cudatoolkit_11; };
+  colmap = libsForQt5.callPackage ../applications/science/misc/colmap { cudaSupport = config.cudaSupport or false; };
+  colmapWithCuda = colmap.override { cudaSupport = true; };
 
   chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
   chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
@@ -17829,6 +17841,8 @@ with pkgs;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
+  ikill = callPackage ../tools/misc/ikill { };
+
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
@@ -19262,6 +19276,8 @@ with pkgs;
 
   libviper = callPackage ../development/libraries/libviper { };
 
+  libviperfx = callPackage ../development/libraries/libviperfx { };
+
   libvpx = callPackage ../development/libraries/libvpx { };
   libvpx_1_8 = callPackage ../development/libraries/libvpx/1_8.nix { };
 
@@ -19963,7 +19979,6 @@ with pkgs;
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
-  poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix { lcms = lcms2; };
 
   poppler_gi = lowPrio (poppler.override {
     introspectionSupport = true;
@@ -25343,10 +25358,7 @@ with pkgs;
 
   calibre-web = callPackage ../servers/calibre-web { };
 
-  calligra = libsForQt5.callPackage ../applications/office/calligra {
-    # Must use the same Qt version as Calligra itself:
-    poppler = libsForQt5.poppler_0_61;
-  };
+  calligra = libsForQt5.callPackage ../applications/office/calligra { };
 
   perkeep = callPackage ../applications/misc/perkeep { };
 
@@ -25942,8 +25954,6 @@ with pkgs;
   helix = callPackage ../applications/editors/helix { };
 
   icesl = callPackage ../applications/misc/icesl { };
-
-  kalendar = libsForQt5.callPackage ../applications/office/kalendar { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
@@ -26958,6 +26968,8 @@ with pkgs;
   singularity = callPackage ../applications/virtualization/singularity { };
 
   sonixd = callPackage ../applications/audio/sonixd { };
+
+  sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
@@ -29081,8 +29093,6 @@ with pkgs;
 
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
-
   quodlibet = callPackage ../applications/audio/quodlibet {
     keybinder3 = null;
     libmodplug = null;
@@ -29503,8 +29513,6 @@ with pkgs;
   shntool = callPackage ../applications/audio/shntool { };
 
   sipp = callPackage ../development/tools/misc/sipp { };
-
-  skanpage = libsForQt5.callPackage ../applications/graphics/skanpage { };
 
   soci = callPackage ../development/libraries/soci { };
 
@@ -30214,6 +30222,9 @@ with pkgs;
   };
 
   uvcdynctrl = callPackage ../os-specific/linux/uvcdynctrl { };
+
+  viper4linux = callPackage ../applications/audio/viper4linux { };
+  viper4linux-gui = libsForQt5.callPackage ../applications/audio/viper4linux-gui { };
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
@@ -35248,4 +35259,6 @@ with pkgs;
   honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
 
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
+
+  mictray = callPackage ../tools/audio/mictray { };
 }

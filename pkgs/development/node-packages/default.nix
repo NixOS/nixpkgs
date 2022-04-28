@@ -89,9 +89,6 @@ let
           pkgs.lib.makeBinPath [ pkgs.nodejs ]
         }
       '';
-      # See: https://github.com/NixOS/nixpkgs/issues/142196
-      # [...]/@hyperspace/cli/node_modules/.bin/node-gyp-build: /usr/bin/env: bad interpreter: No such file or directory
-      meta.broken = true;
     };
 
     mdctl-cli = super."@medable/mdctl-cli".override {
@@ -366,7 +363,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-ltCMZAx1i0i9xuPM692Srj8McC665h6E5RqJom999sjtVSccHSD8Z+HSdBN2183h9PJKvC5dapkn78dd0NWMBg==";
+        sha512 = "sha512-oO1auBnBtieGdiN+57IgsA9Vr7Sy4HkILi1KSaUG4mpKfEbnkTGnLOxAqjLed+K2nsG/GtE1tJBtB7JxN1a78Q==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \

@@ -2272,6 +2272,7 @@
       fingerprint = "539F 0655 4D35 38A5 429A  E253 13E7 9449 C052 5215";
     }];
     name = "ckie";
+    matrix = "@ckie:ckie.dev";
   };
   clkamp = {
     email = "c@lkamp.de";
@@ -6833,12 +6834,6 @@
     github = "ktor";
     githubId = 99639;
     name = "Pawel Kruszewski";
-  };
-  ktosiek = {
-    email = "tomasz.kontusz@gmail.com";
-    github = "ktosiek";
-    githubId = 278013;
-    name = "Tomasz Kontusz";
   };
   kubukoz = {
     email = "kubukoz@gmail.com";
@@ -13574,6 +13569,13 @@
     email = "lambdafuzz@tutanota.com";
     github = "wunderbrick";
     githubId = 52174714;
+  };
+  wyndon = {
+    email = "72203260+wyndon@users.noreply.github.com";
+    matrix = "@wyndon:envs.net";
+    github = "wyndon";
+    githubId = 72203260;
+    name = "wyndon";
   };
   wyvie = {
     email = "elijahrum@gmail.com";

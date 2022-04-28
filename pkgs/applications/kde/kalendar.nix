@@ -39,15 +39,6 @@
 
 mkDerivation rec {
   pname = "kalendar";
-  version = "1.0.0";
-
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "pim";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kjtLVU+8wbIa7R6J1XOjuvS3AnJNngxNBCx24Dy1QzM=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -95,7 +86,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
-    homepage = "https://invent.kde.org/pim/kalendar/";
+    homepage = "https://apps.kde.org/kalendar/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chuangzhu ];
     platforms = platforms.linux;

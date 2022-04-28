@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testVersion, kompose }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kompose }:
 
 buildGoModule rec {
   pname = "kompose";
@@ -26,7 +26,7 @@ buildGoModule rec {
     done
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = kompose;
     command = "kompose version";
   };
