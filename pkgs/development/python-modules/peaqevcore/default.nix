@@ -18,8 +18,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "datetime" "" \
-      --replace "statistics" "" \
       --replace "pytest" ""
   '';
 
