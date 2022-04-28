@@ -60,9 +60,12 @@ stdenv.mkDerivation rec {
     substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   '';
 
-  patches = [
+  patches = (if lib.versionOlder version "3.77" then [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
     ./85_security_load.patch
+  ] else [
+    ./85_security_load_3.77+.patch
+  ]) ++ [
     ./ckpem.patch
     ./fix-cross-compilation.patch
   ];
