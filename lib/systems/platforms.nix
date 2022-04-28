@@ -564,7 +564,7 @@ rec {
 
     else if platform.isRiscV then riscv-multiplatform
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then (import ./examples.nix { lib = lib; }).mipsel-linux-gnu
 
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
 
