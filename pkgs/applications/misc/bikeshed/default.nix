@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchPypi
+, setuptoolsDepsVersionsHook
 # build inputs
 , aiofiles
 , aiohttp
@@ -29,12 +30,10 @@ buildPythonApplication rec {
     sha256 = "sha256-vJW4yNbKCZraJ5vx8FheNsBl+zObGoLFgAVqoU0p9QQ=";
   };
 
-  # Relax requirements from "==" to ">="
+  nativeBuildInputs = [ setuptoolsDepsVersionsHook ];
+
   # https://github.com/tabatkins/bikeshed/issues/2178
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "==" ">="
-  '';
+  relaxPythonDeps = true;
 
   propagatedBuildInputs = [
     aiofiles
