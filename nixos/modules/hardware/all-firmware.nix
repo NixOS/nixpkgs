@@ -27,7 +27,8 @@ in {
     };
 
     hardware.enableRedistributableFirmware = mkOption {
-      default = false;
+      default = config.hardware.enableAllFirmware;
+      defaultText = lib.literalExpression "config.hardware.enableAllFirmware";
       type = types.bool;
       description = ''
         Turn on this option if you want to enable all the firmware with a license allowing redistribution.
