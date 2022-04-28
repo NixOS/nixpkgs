@@ -2049,6 +2049,8 @@ in {
 
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
+  dask-yarn = callPackage ../development/python-modules/dask-yarn { };
+
   databases = callPackage ../development/python-modules/databases { };
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
@@ -9404,9 +9406,7 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
-  skein = callPackage ../development/python-modules/skein {
-    jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  skein = callPackage ../development/python-modules/skein { };
 
   skidl = callPackage ../development/python-modules/skidl { };
 
