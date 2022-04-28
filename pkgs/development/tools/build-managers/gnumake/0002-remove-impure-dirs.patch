@@ -1,21 +1,24 @@
-From 795d63d3c8b5c0dbb7e544954f75507b371b7228 Mon Sep 17 00:00:00 2001
+From e86e384c4d164a76c36fec8158f9de3fe3573ced Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Sat, 24 Apr 2021 10:20:16 +0200
 Subject: [PATCH 2/2] remove impure dirs
 
 ---
- src/read.c   | 3 ---
- src/remake.c | 2 --
- 2 files changed, 5 deletions(-)
+ src/read.c   | 6 ------
+ src/remake.c | 4 ----
+ 2 files changed, 10 deletions(-)
 
 diff --git a/src/read.c b/src/read.c
-index fa197fb..defacfb 100644
+index fa197fb8..4f391928 100644
 --- a/src/read.c
 +++ b/src/read.c
-@@ -109,9 +109,6 @@ static const char *default_include_directories[] =
- #endif
-     INCLUDEDIR,
- #ifndef _AMIGA
+@@ -106,12 +106,6 @@ static const char *default_include_directories[] =
+ /* This completely up to the user when they install MSVC or other packages.
+    This is defined as a placeholder.  */
+ # define INCLUDEDIR "."
+-#endif
+-    INCLUDEDIR,
+-#ifndef _AMIGA
 -    "/usr/gnu/include",
 -    "/usr/local/include",
 -    "/usr/include",
@@ -23,18 +26,20 @@ index fa197fb..defacfb 100644
      0
    };
 diff --git a/src/remake.c b/src/remake.c
-index fb237c5..94bff7d 100644
+index fb237c5e..94cf66f0 100644
 --- a/src/remake.c
 +++ b/src/remake.c
-@@ -1601,8 +1601,6 @@ library_search (const char *lib, FILE_TIMESTAMP *mtime_ptr)
+@@ -1600,10 +1600,6 @@ library_search (const char *lib, FILE_TIMESTAMP *mtime_ptr)
+ {
    static const char *dirs[] =
      {
- #ifndef _AMIGA
+-#ifndef _AMIGA
 -      "/lib",
 -      "/usr/lib",
- #endif
+-#endif
  #if defined(WINDOWS32) && !defined(LIBDIR)
  /*
+  * This is completely up to the user at product install time. Just define
 -- 
-2.31.1
+2.35.3
 

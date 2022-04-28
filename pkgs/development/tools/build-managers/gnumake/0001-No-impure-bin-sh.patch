@@ -1,4 +1,4 @@
-From e00a5257a6ca5fedbf68b09eee7df3502971a057 Mon Sep 17 00:00:00 2001
+From d64b63a96986164f6dcb7ed21d6b21c5dfcdf8e9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Sat, 24 Apr 2021 10:11:40 +0200
 Subject: [PATCH 1/2] No impure bin sh
@@ -18,7 +18,7 @@ hard-coded has some advantages:
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/job.c b/src/job.c
-index ae1f18b..6b4ddb3 100644
+index ae1f18b9..6b4ddb36 100644
 --- a/src/job.c
 +++ b/src/job.c
 @@ -77,7 +77,7 @@ char * vms_strsignal (int status);
@@ -31,5 +31,5 @@ index ae1f18b..6b4ddb3 100644
  
  #endif
 -- 
-2.31.1
+2.35.3
 
