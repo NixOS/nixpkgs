@@ -9,12 +9,12 @@
 }:
 
 let
-  version = "2.8.0";
+  version = "2.8.1";
 
   sources = {
     "x86_64-linux" = fetchurl {
       url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-      sha256 = "0bgd4hnpaxrqw0s0y2qiak8lbskfi2cqp147vj1kbhvm8834hwhg";
+      sha256 = "znaM00jM6yrpb+bGTxzJUxViCUzv4G+CYK2EB5dxhfY=";
     };
     "i686-linux" = fetchurl {
       url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
@@ -22,7 +22,7 @@ let
     };
     "aarch64-linux" = fetchurl {
       url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-      sha256 = "0rddafjgdnj3na96x83paq5z14grj46v4iv38qbkvmdllrj26a0a";
+      sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
     };
     "aarch64-darwin" = fetchurl {
       url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
