@@ -56,7 +56,7 @@ stdenv.mkDerivation {
       --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals isNativeCompilation [ "devdoc" ];
   outputBin = "dev";
 
   mesonFlags = [
@@ -71,6 +71,7 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
     (mesonFeatureFlag "introspection" isNativeCompilation)
+    (mesonFeatureFlag "docs" isNativeCompilation)
   ];
 
   nativeBuildInputs = [
@@ -80,6 +81,7 @@ stdenv.mkDerivation {
     libintl
     pkg-config
     python3
+  ] ++ lib.optionals isNativeCompilation [
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
