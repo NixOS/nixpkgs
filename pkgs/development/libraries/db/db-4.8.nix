@@ -7,4 +7,11 @@ import ./generic.nix (args // {
 
   drvArgs.hardeningDisable = [ "format" ];
   drvArgs.doCheck = false;
+
+  # crypto/aes_method.c:270 fails -Wformat-security.  This file is
+  # included only in static builds.  It is not sufficient to add
+  # hardeningDisable=["format"] -- that merely omits the
+  # "-Wformat-security" flag.  To get the static build to complete we
+  # must go further and disable it.
+  drvArgs.NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isStatic [ "-Wno-format-security" ];
 })
