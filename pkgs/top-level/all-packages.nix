@@ -6800,6 +6800,7 @@ with pkgs;
   };
 
   harec = callPackage ../development/compilers/hare/harec.nix { };
+  hare = callPackage ../development/compilers/hare/hare.nix { };
 
   ham = pkgs.perlPackages.ham;
 
