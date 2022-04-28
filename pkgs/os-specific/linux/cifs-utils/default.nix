@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/piastry/cifs-utils/commit/007c07fd91b6d42f8bd45187cf78ebb06801139d.patch";
       sha256 = "sha256-3uoHso2q17r2bcEW+ZjYUWsW4OIGYA7kxYZxQQy0JOg=";
     })
+    (fetchpatch {
+      # Fix disclosure of invalid credential configuration in verbose mode
+      name = "CVE-2022-29869.patch";
+      url = "https://github.com/piastry/cifs-utils/commit/8acc963a2e7e9d63fe1f2e7f73f5a03f83d9c379.patch";
+      sha256 = "sha256-MjfreeL1ME550EYK9LPOUAAjIk1BoMGfb+pQe3A1bz8=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook docutils pkg-config ];
