@@ -11103,8 +11103,10 @@ in {
   yt-dlp = callPackage ../tools/misc/yt-dlp { };
 
   yt-dlp-light = callPackage ../tools/misc/yt-dlp {
+    atomicparsleySupport = false;
     ffmpegSupport = false;
     phantomjsSupport = false;
+    rtmpSupport = false;
   };
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
