@@ -18,9 +18,10 @@ systems[linux_386]=i686-linux
 systems[linux_amd64]=x86_64-linux
 systems[linux_arm64]=aarch64-linux
 systems[darwin_amd64]=x86_64-darwin
+systems[darwin_arm64]=aarch64-darwin
 
 echo '{ fetchurl, fetchzip }:' > "$bins"
-echo '{'        >> "$bins"
+echo '{' >> "$bins"
 
 for asset in $(curl --silent https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest | jq -c '.assets[]') ; do
     url="$(jq -r '.browser_download_url' <<< "$asset")"
@@ -29,7 +30,7 @@ for asset in $(curl --silent https://api.github.com/repos/AdguardTeam/AdGuardHom
         fetch="$(grep '\.zip$' <<< "$url" > /dev/null && echo fetchzip || echo fetchurl)"
         nix_system=${systems[$adg_system]}
         nix_src="$(nix-prefetch -s --output nix $fetch --url $url)"
-        echo "\"$nix_system\" = $fetch $nix_src;" >> $bins
+        echo "$nix_system = $fetch $nix_src;" >> $bins
     fi
 done
 

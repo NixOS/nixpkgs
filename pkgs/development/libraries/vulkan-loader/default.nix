@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-NQu98wA7UK231rpoKDs1yQ6pEyB4wZg7MjFC3JwS2BY=";
     });
 
+  patches = [ ./fix-pkgconfig.patch ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ vulkan-headers ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libxcb libXrandr wayland ];

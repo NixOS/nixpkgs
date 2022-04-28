@@ -69,7 +69,7 @@ in
 , doInstallCheck ? config.doCheckByDefault or false
 
 , # TODO(@Ericson2314): Make always true and remove
-  strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
+  strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -93,7 +93,7 @@ in
 
 , __contentAddressed ?
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-  && (config.contentAddressedByDefault or false)
+  && config.contentAddressedByDefault
 
 , ... } @ attrs:
 
