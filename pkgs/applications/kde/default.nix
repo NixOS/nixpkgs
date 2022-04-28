@@ -154,6 +154,7 @@ let
       kmime = callPackage ./kmime.nix {};
       kmines = callPackage ./kmines.nix {};
       kmix = callPackage ./kmix.nix {};
+      kmousetool = callPackage ./kmousetool.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
