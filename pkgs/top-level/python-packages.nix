@@ -1779,6 +1779,8 @@ in {
 
   codecov = callPackage ../development/python-modules/codecov { };
 
+  codepy = callPackage ../development/python-modules/codepy { };
+
   codespell = callPackage ../development/python-modules/codespell { };
 
   cogapp = callPackage ../development/python-modules/cogapp { };
@@ -1864,6 +1866,8 @@ in {
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
   contextvars = callPackage ../development/python-modules/contextvars { };
+
+  contexttimer = callPackage ../development/python-modules/contexttimer { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
 
@@ -2178,6 +2182,8 @@ in {
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
+
+  devito = callPackage ../development/python-modules/devito { };
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
@@ -6360,6 +6366,8 @@ in {
   pypoint = callPackage ../development/python-modules/pypoint { };
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
+
+  pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
