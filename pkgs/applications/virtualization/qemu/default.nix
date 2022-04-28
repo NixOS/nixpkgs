@@ -102,6 +102,16 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/66fed30c9cd11854fc878a4eceb507e915d7c9cd.patch";
       sha256 = "10za2nag51y4fhc8z7fzw3dfhj37zx8rwg0xcmw5kzmb0gyvvz70";
     })
+    (fetchpatch {
+      name = "CVE-2022-26353.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/abe300d9d894f7138e1af7c8e9c88c04bfe98b37.patch";
+      sha256 = "17s6968qbccsfljqb85wy4zvilwbbyjyb18nqwp3g40a6g4ajnbw";
+    })
+    (fetchpatch {
+      name = "CVE-2022-26354.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/8d1b247f3748ac4078524130c6d7ae42b6140aaf.patch";
+      sha256 = "021d6pk0kh7fxn7rnq8g7cs34qac9qy6an858fxxs31gg9yqcfkl";
+    })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./sigrtminmax.patch
