@@ -134,6 +134,7 @@
 , zeromq4 ? null # Message passing
 , zimg ? null
 , zlib ? null
+, vulkan-headers ? null
 , vulkan-loader ? null
 , glslang ? null
 #, zvbi ? null # Teletext support
@@ -405,8 +406,8 @@ stdenv.mkDerivation rec {
     (enableFeature (zeromq4 != null) "libzmq")
     (enableFeature (zimg != null) "libzimg")
     (enableFeature (zlib != null) "zlib")
-    (enableFeature (isLinux && vulkan-loader != null) "vulkan")
-    (enableFeature (isLinux && vulkan-loader != null && glslang != null) "libglslang")
+    (enableFeature (isLinux && vulkan-headers != null && vulkan-loader != null) "vulkan")
+    (enableFeature (isLinux && vulkan-headers != null && vulkan-loader != null && glslang != null) "libglslang")
     (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
     #(enableFeature (zvbi != null && gplLicensing) "libzvbi")
     /*
@@ -439,7 +440,7 @@ stdenv.mkDerivation rec {
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optional ((isLinux || isFreeBSD) && libdrm != null) libdrm
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
-    ++ optionals isLinux [ alsa-lib libraw1394 libv4l vulkan-loader glslang ]
+    ++ optionals isLinux [ alsa-lib libraw1394 libv4l vulkan-headers vulkan-loader glslang ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
