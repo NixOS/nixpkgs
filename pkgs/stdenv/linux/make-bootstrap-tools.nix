@@ -235,7 +235,7 @@ in with pkgs; rec {
 
   bootstrapTools =
     let extraAttrs = lib.optionalAttrs
-      (config.contentAddressedByDefault or false)
+      config.contentAddressedByDefault
       {
         __contentAddressed = true;
         outputHashAlgo = "sha256";
