@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Br1ght0ne hugoreeves SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     broken = stdenv.isDarwin;
   };
 }
