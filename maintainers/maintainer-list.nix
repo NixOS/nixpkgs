@@ -4716,6 +4716,12 @@
     githubId = 201997;
     name = "Eric Seidel";
   };
+  grindhold = {
+    name = "grindhold";
+    email = "grindhold+nix@skarphed.org";
+    github = "grindhold";
+    githubId = 2592640;
+  };
   gspia = {
     email = "iahogsp@gmail.com";
     github = "gspia";
