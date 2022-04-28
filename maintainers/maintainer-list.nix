@@ -12762,6 +12762,13 @@
     githubId = 90456;
     name = "Rebecca (Bex) Kelly";
   };
+  tpw_rules = {
+    name = "Thomas Watson";
+    email = "twatson52@icloud.com";
+    matrix = "@tpw_rules:matrix.org";
+    github = "tpwrules";
+    githubId = 208010;
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
