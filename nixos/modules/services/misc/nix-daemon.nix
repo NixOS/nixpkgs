@@ -63,7 +63,7 @@ let
         if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
           echo "Ignoring validation for cross-compilation"
         ''
-        else ''
+        else if !cfg.checkConfig then ":" else ''
           echo "Validating generated nix.conf"
           ln -s $out ./nix.conf
           set -e
