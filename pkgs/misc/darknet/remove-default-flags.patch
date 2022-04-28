@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 63e15e6..5332016 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,3 @@
+-GPU=0
+-CUDNN=0
+-OPENCV=0
+-OPENMP=0
+-DEBUG=0
+ 
+ ARCH= -gencode arch=compute_30,code=sm_30 \
+       -gencode arch=compute_35,code=sm_35 \

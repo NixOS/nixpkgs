@@ -33651,6 +33651,8 @@ with pkgs;
 
   colort = callPackage ../applications/misc/colort { };
 
+  darknet = callPackage ../misc/darknet { };
+
   terminal-parrot = callPackage ../applications/misc/terminal-parrot { };
 
   epson-alc1100 = callPackage ../misc/drivers/epson-alc1100 { };
