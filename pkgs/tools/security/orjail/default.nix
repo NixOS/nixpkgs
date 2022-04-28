@@ -5,6 +5,7 @@
 , firejail
 , iptables
 , makeWrapper
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
+  patches = [
+    # Resolve full binary path for firejail support
+    # https://github.com/orjail/orjail/pull/90
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/orjail/orjail/pull/90.patch";
+      sha256 = "sha256-1+pyRAD5crW77tN8srZD5mYcJPwNeEmT0YfZy8GqWI8=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs make-helper.bsh
