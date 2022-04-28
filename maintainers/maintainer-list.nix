@@ -1534,6 +1534,12 @@
     githubId = 185443;
     name = "Alexey Lebedeff";
   };
+  binsky = {
+    email = "timo@binsky.org";
+    github = "binsky08";
+    githubId = 30630233;
+    name = "Timo Triebensky";
+  };
   bjg = {
     email = "bjg@gnu.org";
     name = "Brian Gough";
