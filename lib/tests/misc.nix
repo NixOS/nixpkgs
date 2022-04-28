@@ -251,6 +251,26 @@ runTests {
     expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
   };
 
+  testToShellVars = {
+    expr = ''
+      ${toShellVars {
+        STRing01 = "just a 'string'";
+        _array_ = [ "with" "more strings" ];
+        assoc."with some" = ''
+          strings
+          possibly newlines
+        '';
+      }}
+    '';
+    expected = ''
+      STRing01='just a '\'''string'\''''
+      declare -a _array_=('with' 'more strings')
+      declare -A assoc=(['with some']='strings
+      possibly newlines
+      ')
+    '';
+  };
+
 # LISTS
 
   testFilter = {

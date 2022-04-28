@@ -5,7 +5,6 @@
 , click
 , configparser
 , fetchFromGitHub
-, fetchpatch
 , fido2
 , lxml
 , poetry-core
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.0.1";
+  version = "2.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "venth";
     repo = pname;
     rev = version;
-    hash = "sha256-0BURXbEOZvb8kszuajLtR+V7HjJycCBAQrm3WqpVB1w=";
+    hash = "sha256-T3AmPCOSeu7gvl57aHjnviy5iQAKlWy85fUOVecFRFc=";
   };
 
   nativeBuildInputs = [
@@ -45,15 +44,6 @@ buildPythonPackage rec {
     pyopenssl
     requests
     requests-kerberos
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/venth/aws-adfs/pull/230
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/venth/aws-adfs/commit/da095ccf64629d36a6045ffec2684038378ee690.patch";
-      sha256 = "sha256-xg4c7iIonkUmNN74q/UeGSuYP3to7q4cLW6+TMW9nh4=";
-    })
   ];
 
   postPatch = ''

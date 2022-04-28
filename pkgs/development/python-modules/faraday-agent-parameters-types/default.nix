@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , marshmallow
+, packaging
 , pytestCheckHook
 }:
 
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     marshmallow
+    packaging
   ];
 
   checkInputs = [
@@ -28,7 +30,10 @@ buildPythonPackage rec {
       --replace '"pytest-runner",' ""
   '';
 
-  pythonImportsCheck = [ "faraday_agent_parameters_types" ];
+  pythonImportsCheck = [
+    "faraday_agent_parameters_types"
+    "faraday_agent_parameters_types.utils"
+  ];
 
   meta = with lib; {
     description = "Collection of Faraday agent parameters types";

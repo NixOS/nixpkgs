@@ -24,6 +24,8 @@ rec {
     isMips64n64    = { cpu = { family = "mips"; bits = 64; }; abi = { abi = "64";  }; };
     isMmix         = { cpu = { family = "mmix"; }; };
     isRiscV        = { cpu = { family = "riscv"; }; };
+    isRiscV32      = { cpu = { family = "riscv"; bits = 32; }; };
+    isRiscV64      = { cpu = { family = "riscv"; bits = 64; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isMsp430       = { cpu = { family = "msp430"; }; };
