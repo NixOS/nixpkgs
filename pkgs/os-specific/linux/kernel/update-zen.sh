@@ -18,4 +18,4 @@ sed -i -e "s!modDirVersion = \".*\"!modDirVersion = \"${new}\"!" "$path"
 checksum=$(nix-prefetch "(import ${nixpkgs} {}).linuxPackages_zen.kernel")
 sed -i -e "s!sha256 = \".*\"!sha256 = \"${checksum}\"!" "$path"
 
-git commit -m "linux_zen: ${old} -> ${new}" $path
+git commit -m "linuxKernel.kernels.linux_zen: ${old} -> ${new}" $path

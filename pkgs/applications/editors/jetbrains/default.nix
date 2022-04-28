@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, zlib, python3
-, dotnet-sdk_5
+, jdk, cmake, gdb, zlib, python3
+, dotnet-sdk_6
 , maven
 , autoPatchelfHook
 , libdbusmenu
@@ -53,6 +53,9 @@ let
           # bundled cmake does not find libc
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
+          # bundled gdb does not find libcrypto 10
+          rm -rf bin/gdb/linux
+          ln -s ${gdb} bin/gdb/linux
 
           autoPatchelf $PWD/bin
 
@@ -207,7 +210,7 @@ let
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         mkdir -p lib/ReSharperHost/linux-x64/dotnet/
-        ln -s ${dotnet-sdk_5}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
+        ln -s ${dotnet-sdk_6}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
       '');
     });
 
