@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xow";
-  version = "0.5";
+  version = "unstable-2022-04-24";
 
   src = fetchFromGitHub {
     owner = "medusalix";
     repo = "xow";
-    rev = "v${version}";
-    sha256 = "071r2kx44k1sc49cad3i607xg618mf34ki1ykr5lnfx9y6qyz075";
+    rev = "d335d6024f8380f52767a7de67727d9b2f867871";
+    sha256 = "0q5nr21p4dlx2a99hiivwz6qj9anrqqsdhiz6xi375yqkxis4251";
   };
 
   firmware = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "BUILD=RELEASE"
-    "VERSION=${version}"
+    "VERSION=${version}-${src.rev}"
     "BINDIR=${placeholder "out"}/bin"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
     "MODLDIR=${placeholder "out"}/lib/modules-load.d"
