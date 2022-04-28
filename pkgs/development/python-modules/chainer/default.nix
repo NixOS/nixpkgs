@@ -16,6 +16,10 @@ buildPythonPackage rec {
     sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
   };
 
+  postPatch = ''
+    substituteInPlace chainer/_version.py --replace ",<8.0.0" ""
+  '';
+
   checkInputs = [
     pytestCheckHook
     mock
@@ -39,8 +43,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";
     homepage = "https://chainer.org/";
-    # Un-break me when updating chainer next time!
-    broken = cudaSupport && (lib.versionAtLeast cupy.version "8.0.0");
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };
