@@ -6206,6 +6206,12 @@
     github = "jsierles";
     githubId = 82;
   };
+  jslll135 = {
+    email = "js454554@outlook.com";
+    name = "jslll135";
+    github = "jslll135";
+    githubId = 57320513;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
