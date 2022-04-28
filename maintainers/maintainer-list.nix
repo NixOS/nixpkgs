@@ -13510,7 +13510,7 @@
     name = "Andrei Pampu";
   };
   wolfangaukang = {
-    email = "liquid.query960@4wrd.cc";
+    email = "clone.gleeful135+nixpkgs@anonaddy.me";
     github = "wolfangaukang";
     githubId = 8378365;
     name = "P. R. d. O.";
