@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.4";
+  version = "3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0agis9jh6kjf7k1vf1fiyf5h3lb9p0w9k710wwpsby292ydazr4f";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-iDt1voNcn59bZN/AyKrWFBIymTT618o91kz2AV42hWs=";
   };
 
   propagatedBuildInputs = [
