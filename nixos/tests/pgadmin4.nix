@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], ... }:
+import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ... }:
 
   /*
   This test suite replaces the typical pytestCheckHook function in python
@@ -7,12 +7,13 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], ... }:
 
   To not repeat all the python dependencies needed, this test is called directly
   from the pgadmin4 derivation, which also passes the currently
-  used propagatedBuildInputs.
+  used propagatedBuildInputs and any python overrides.
 
   Unfortunately, there doesn't seem to be an easy way to otherwise include
   the needed packages here.
 
-  Also any python Overrides need to be duplicated here, too.
+  Due the the needed parameters a direct call to "nixosTests.pgadmin4" fails
+  and needs to be called as "pgadmin4.tests"
 
   */
 
@@ -31,30 +32,7 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], ... }:
       # needed because pgadmin 6.8 will fail, if those dependencies get updated
       nixpkgs.overlays = [
         (self: super: {
-          pythonPackages = super.python3.pkgs.overrideScope (final: prev: rec {
-
-            flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-              version = "2.0.3";
-              src = oldAttrs.src.override {
-                inherit version;
-                sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
-              };
-              disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
-                "test_aborting"
-              ];
-            });
-            flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-              # Nothing of interest changed from 0.2 to 0.3
-              doCheck = false;
-            });
-            werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
-              version = "2.0.3";
-              src = oldAttrs.src.override {
-                inherit version;
-                sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
-              };
-            });
-          });
+          pythonPackages = pythonEnv;
         })
       ];
 

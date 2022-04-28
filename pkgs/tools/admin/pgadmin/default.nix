@@ -188,7 +188,7 @@ pythonPackages.buildPythonApplication rec {
   passthru.tests = {
     standalone = nixosTests.pgadmin4-standalone;
     # regression and function tests of the package itself
-    package = (import ../../../../nixos/tests/pgadmin4.nix ({ inherit pkgs; buildDeps = buildDeps; }));
+    package = (import ../../../../nixos/tests/pgadmin4.nix ({ inherit pkgs; buildDeps = buildDeps; pythonEnv = pythonPackages; }));
   };
 
   meta = with lib; {
