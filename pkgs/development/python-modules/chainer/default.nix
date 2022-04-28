@@ -16,10 +16,6 @@ buildPythonPackage rec {
     sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
   };
 
-  postPatch = ''
-    substituteInPlace chainer/_version.py --replace ",<8.0.0" ""
-  '';
-
   checkInputs = [
     pytestCheckHook
     mock
@@ -33,6 +29,11 @@ buildPythonPackage rec {
   ] ++ lib.optionals cudaSupport [ cupy ];
 
   pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
+
+  # cf. https://github.com/chainer/chainer/issues/8621
+  preCheck = ''
+    export CHAINER_WARN_VERSION_MISMATCH=0
+  '';
 
   disabledTests = [
     "gpu"
