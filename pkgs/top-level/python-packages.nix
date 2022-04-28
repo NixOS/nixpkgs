@@ -3616,6 +3616,8 @@ in {
 
   graspologic = callPackage ../development/python-modules/graspologic { };
 
+  great_expectations = callPackage ../development/python-modules/great_expectations { };
+
   greatfet = callPackage ../development/python-modules/greatfet { };
 
   greeclimate = callPackage ../development/python-modules/greeclimate { };
