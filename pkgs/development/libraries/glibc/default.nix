@@ -63,26 +63,6 @@ callPackage ./common.nix { inherit stdenv; } {
         ])
       ]);
 
-    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
-    # any program we run, because the gcc will have been placed at a new
-    # store path than that determined when built (as a source for the
-    # bootstrap-tools tarball)
-    # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will now be at {gcc}/lib, and gcc's libgcc will be found without
-    # any special hack.
-    # TODO: remove this hack. Things that rely on this hack today:
-    # - dejagnu: during linux bootstrap tcl SIGSEGVs
-    # - clang-wrapper in cross-compilation
-    # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = ''
-      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
-          mkdir -p $out/lib
-          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-          # the .so It used to be a symlink, but now it is a script
-          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
-      fi
-    '';
-
     postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
