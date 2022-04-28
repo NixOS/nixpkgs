@@ -2530,6 +2530,8 @@ in {
     inherit (pkgs) duckdb;
   };
 
+  duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
+
   duecredit = callPackage ../development/python-modules/duecredit { };
 
   duet = callPackage ../development/python-modules/duet { };
