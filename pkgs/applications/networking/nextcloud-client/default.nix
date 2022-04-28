@@ -50,15 +50,18 @@ mkDerivation rec {
     done
   '';
 
+  # required to not include inkscape in the wrapper
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
     inkscape
     sphinx
   ];
 
   buildInputs = [
+    extra-cmake-modules
     inotify-tools
     libcloudproviders
     libsecret
