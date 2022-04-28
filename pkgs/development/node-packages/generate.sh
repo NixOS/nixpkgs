@@ -13,7 +13,8 @@ rm -f ./node-env.nix
     -i node-packages.json \
     -o node-packages.nix \
     -c composition.nix \
-    --pkg-name nodejs-14_x
+    -e node-env.nix \
+    --pkg-name nodejs-16_x
 
 # using --no-out-link in nix-build argument would cause the
 # gc to run before the script finishes

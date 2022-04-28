@@ -5,4 +5,4 @@ exec node2nix --nodejs-10 \
      --output node-packages-generated.nix \
      --supplement-input supplement.json \
      --composition node-packages.nix \
-     --node-env ./../../development/node-packages/node-env.nix \
+     --node-env /dev/null \

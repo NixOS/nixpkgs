@@ -3,4 +3,4 @@
 
 node2nix --nodejs-10 -i deps.json \
   --no-copy-node-env \
-  -e ../../../development/node-packages/node-env.nix -c node.nix
+  -e /dev/null -c node.nix

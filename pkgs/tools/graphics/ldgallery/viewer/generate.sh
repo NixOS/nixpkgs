@@ -19,7 +19,7 @@ wget https://github.com/pacien/ldgallery/raw/$1/viewer/package-lock.json
 
 # Development dependencies are required for this Vue application to build
 node2nix \
-  --node-env ../../../../development/node-packages/node-env.nix \
+  --node-env /dev/null \
   --development \
   --input ./package.json \
   --lock ./package-lock.json \

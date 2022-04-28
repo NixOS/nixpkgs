@@ -12,4 +12,4 @@ node2nix \
      --input node-packages.json \
      --output node-packages-generated.nix \
      --composition node-packages.nix \
-     --node-env ../../../development/node-packages/node-env.nix
+     --node-env /dev/null

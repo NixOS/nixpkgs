@@ -11,7 +11,7 @@ curl $u/package-lock.json |
 
 node2nix \
   --nodejs-14 \
-  --node-env ../../development/node-packages/node-env.nix \
+  --node-env /dev/null \
   --input package.json \
   --lock package-lock.json \
   --output node-packages.nix \

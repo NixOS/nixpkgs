@@ -20,7 +20,7 @@ node2nix \
   --lock npm-shrinkwrap.json \
   --development \
   --no-copy-node-env \
-  --node-env ../../development/node-packages/node-env.nix \
+  --node-env /dev/null \
   --nodejs-14 \
   --output node-packages.nix
 

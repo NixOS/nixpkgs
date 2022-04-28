@@ -17,7 +17,7 @@ node2nix \
   --nodejs-14 \
   --development \
   --lock package-lock.json \
-  --node-env ../../../../development/node-packages/node-env.nix \
+  --node-env /dev/null \
   --output node-packages.nix \
   --composition node-composition.nix \
 

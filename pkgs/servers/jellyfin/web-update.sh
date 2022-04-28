@@ -24,7 +24,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 node2nix \
   --nodejs-14 \
   --development \
-  --node-env ../../development/node-packages/node-env.nix \
+  --node-env /dev/null
   --output ./node-deps.nix \
   --input "$store_src/package.json" \
   --composition ./node-composition.nix

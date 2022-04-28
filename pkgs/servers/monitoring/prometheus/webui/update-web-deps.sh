@@ -12,7 +12,6 @@ update() {
     RELEASE_TAG=$1
     GIT_PATH=$2
     OUTPUT_PATH=$3
-    NODE_ENV=$4
 
     PROM_WEB_SRC="https://raw.githubusercontent.com/prometheus/prometheus/$1"
     wget "$PROM_WEB_SRC/$GIT_PATH/package.json" -O package.json
@@ -21,12 +20,12 @@ update() {
     node2nix \
         --lock package-lock.json \
         --development \
-        --node-env $NODE_ENV \
+        --node-env /dev/null \
         --no-copy-node-env
 
     mkdir -p $OUTPUT_PATH
     mv default.nix node-packages.nix package.json package-lock.json $OUTPUT_PATH
 }
 
-update $1 "web/ui/module/codemirror-promql" "codemirror-promql" ../../../../../development/node-packages/node-env.nix
-update $1 "web/ui/react-app" "webui" ../../../../../development/node-packages/node-env.nix
+update $1 "web/ui/module/codemirror-promql" "codemirror-promql"
+update $1 "web/ui/react-app" "webui"

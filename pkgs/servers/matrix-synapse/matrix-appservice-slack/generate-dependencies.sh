@@ -7,7 +7,7 @@ curl https://raw.githubusercontent.com/matrix-org/matrix-appservice-slack/1.11.0
 
 node2nix \
   --nodejs-12 \
-  --node-env ../../../development/node-packages/node-env.nix \
+  --node-env /dev/null \
   --development \
   --input package.json \
   --lock package-lock.json \
