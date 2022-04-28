@@ -4,17 +4,21 @@
 , dnspython
 , idna
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "1.1.3";
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "19n6p75m96kwg38bpfsa7ksj26aki02p5pr5f36q8wv3af84s61c";
+    sha256 = "sha256-2rwTQWYz49ONRZc0UK1VpnheSlux29nz6K3jBEbMw6w=";
   };
 
   propagatedBuildInputs = [
@@ -45,9 +49,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A robust email syntax and deliverability validation library for Python 2.x/3.x.";
-    homepage    = "https://github.com/JoshData/python-email-validator";
-    license     = licenses.cc0;
+    homepage = "https://github.com/JoshData/python-email-validator";
+    license = licenses.cc0;
     maintainers = with maintainers; [ siddharthist ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }
