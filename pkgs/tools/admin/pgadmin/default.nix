@@ -195,7 +195,7 @@ pythonPackages.buildPythonApplication rec {
     description = "Administration and development platform for PostgreSQL";
     homepage = "https://www.pgadmin.org/";
     license = licenses.mit;
-    changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major}_${versions.minor}.html";
+    changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
     maintainers = with maintainers; [ gador ];
   };
 }
