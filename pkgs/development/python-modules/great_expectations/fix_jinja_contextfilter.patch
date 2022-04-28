@@ -1,0 +1,15 @@
+diff --git a/great_expectations/render/view/view.py b/great_expectations/render/view/view.py
+index 2b8e08c04..dfd5474d1 100644
+--- a/great_expectations/render/view/view.py
++++ b/great_expectations/render/view/view.py
+@@ -11,9 +11,9 @@ from jinja2 import (
+     Environment,
+     FileSystemLoader,
+     PackageLoader,
+-    contextfilter,
+     select_autoescape,
+ )
++from jinja2 import pass_context as contextfilter
+ 
+ from great_expectations import __version__ as ge_version
+ from great_expectations.render.types import (
