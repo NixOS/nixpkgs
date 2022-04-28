@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
+, deprecated
 , fetchFromGitHub
 , hiro
+, packaging
 , pymemcache
 , pymongo
 , pytest-asyncio
@@ -10,6 +12,7 @@
 , pythonOlder
 , redis
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -27,17 +30,20 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    deprecated
+    packaging
     setuptools
-    redis
-    pymemcache
-    pymongo
+    typing-extensions
   ];
 
   checkInputs = [
     hiro
+    pymemcache
+    pymongo
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
+    redis
   ];
 
   postPatch = ''
