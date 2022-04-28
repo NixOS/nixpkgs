@@ -1779,6 +1779,8 @@ in {
 
   codecov = callPackage ../development/python-modules/codecov { };
 
+  codepy = callPackage ../development/python-modules/codepy { };
+
   codespell = callPackage ../development/python-modules/codespell { };
 
   cogapp = callPackage ../development/python-modules/cogapp { };
@@ -1864,6 +1866,8 @@ in {
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
   contextvars = callPackage ../development/python-modules/contextvars { };
+
+  contexttimer = callPackage ../development/python-modules/contexttimer { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
 
@@ -2049,6 +2053,8 @@ in {
 
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
+  dask-yarn = callPackage ../development/python-modules/dask-yarn { };
+
   databases = callPackage ../development/python-modules/databases { };
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
@@ -2176,6 +2182,8 @@ in {
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
+
+  devito = callPackage ../development/python-modules/devito { };
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
@@ -2533,6 +2541,8 @@ in {
   dunamai = callPackage ../development/python-modules/dunamai { };
 
   dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
+
+  durus = callPackage ../development/python-modules/durus {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
@@ -6357,6 +6367,8 @@ in {
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
+  pyrevolve = callPackage ../development/python-modules/pyrevolve { };
+
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
@@ -9404,9 +9416,7 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
-  skein = callPackage ../development/python-modules/skein {
-    jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  skein = callPackage ../development/python-modules/skein { };
 
   skidl = callPackage ../development/python-modules/skidl { };
 

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.13.0";
+  version = "2.13.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spec-first";
     repo = pname;
-    rev = version;
-    hash = "sha256-QOxvs2z8AAxQ2oSM/PQ6QTD9G4JomviauLSDjay8HyQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nWhrb2oyBue/Q/dAdSgk3K/JXdgLg1xAEbOtCTRYs/M=";
   };
 
   propagatedBuildInputs = [

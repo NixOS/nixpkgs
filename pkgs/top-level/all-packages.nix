@@ -9056,7 +9056,7 @@ with pkgs;
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_6; };
+  packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_8; };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
@@ -10855,7 +10855,7 @@ with pkgs;
   toml2nix = (callPackage ../tools/toml2nix { }).toml2nix { };
 
   topgrade = callPackage ../tools/misc/topgrade {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
 
   top-git = callPackage ../applications/version-management/git-and-tools/topgit { };
@@ -18737,6 +18737,8 @@ with pkgs;
   libsolv = callPackage ../development/libraries/libsolv { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
+
+  libspecbleach = callPackage ../development/libraries/audio/libspecbleach { };
 
   libspnav = callPackage ../development/libraries/libspnav { };
 

@@ -1,21 +1,21 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps }:
-
+let z = lib.fakeSha256; in
 buildGoModule rec {
   pname = "tailscale";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    sha256 = "12dn2dkk86ni7wqpl7zaxb8n840fnvg8kcjsg1lvf9k432dqhksn";
+    sha256 = "sha256-BO0OBnszKA6EPTa6dqGrmYfVv2sbbQhg8Lf64uVfCqA=V";
   };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  vendorSha256 = "01hh8v3mvl7fgv4w4y78jg50b383lgxfy876lkn7wg0sgg336dc8";
+  vendorSha256 = "sha256-iDUzxnsaPH7spOYg7/qjA40FypPoeMLJfu7QXcdGEAY=";
 
   doCheck = false;
 
