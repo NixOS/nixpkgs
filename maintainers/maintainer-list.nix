@@ -13563,6 +13563,13 @@
     github = "wunderbrick";
     githubId = 52174714;
   };
+  wyndon = {
+    email = "72203260+wyndon@users.noreply.github.com";
+    matrix = "@wyndon:envs.net";
+    github = "wyndon";
+    githubId = 72203260;
+    name = "wyndon";
+  };
   wyvie = {
     email = "elijahrum@gmail.com";
     github = "wyvie";
