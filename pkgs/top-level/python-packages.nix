@@ -6509,6 +6509,8 @@ in {
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
+  poetry-dynamic-versioning = callPackage ../development/python-modules/poetry-dynamic-versioning { };
+
   poetry-semver = callPackage ../development/python-modules/poetry-semver { };
 
   poetry2conda = callPackage ../development/python-modules/poetry2conda { };
