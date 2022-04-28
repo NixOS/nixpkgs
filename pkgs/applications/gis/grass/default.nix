@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [mpickering];
+    maintainers = with lib.maintainers; [ mpickering willcohen ];
   };
 }
