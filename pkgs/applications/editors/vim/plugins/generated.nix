@@ -4786,6 +4786,18 @@ final: prev:
     meta.homepage = "https://github.com/roxma/nvim-completion-manager/";
   };
 
+  nvim-config-local = buildVimPluginFrom2Nix {
+    pname = "nvim-config-local";
+    version = "2022-03-26";
+    src = fetchFromGitHub {
+      owner = "klen";
+      repo = "nvim-config-local";
+      rev = "af59d6344e555917209f7304709bbff7cea9b5cc";
+      sha256 = "1wg6g4rqpj12sjj0g1qxqgcpkzr7x82lk90lf6qczim97r3lj9hy";
+    };
+    meta.homepage = "https://github.com/klen/nvim-config-local/";
+  };
+
   nvim-cursorline = buildVimPluginFrom2Nix {
     pname = "nvim-cursorline";
     version = "2022-04-15";
