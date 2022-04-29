@@ -9,13 +9,13 @@ buildPythonPackage rec {
   version = "2.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-tejsQ6m9XyMGDIEDzWYwSav5Iqa9S/DIYShOpoSlTWo=";
+    hash = "sha256-tejsQ6m9XyMGDIEDzWYwSav5Iqa9S/DIYShOpoSlTWo=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this
