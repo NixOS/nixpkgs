@@ -174,6 +174,7 @@ let
               };
               disabledTestPaths = [
                 "t/unit/backends/test_mongodb.py"
+                "t/unit/backends/test_cassandra.py"
               ];
             });
           }
@@ -250,6 +251,24 @@ let
                 # requires network
                 "test_worker.py"
               ];
+            });
+          }
+        )
+
+         (
+          self: super: {
+            flask-restful = super.flask-restful.overridePythonAttrs (oldAttrs: rec {
+              # remove werkzeug patch
+              patches = [];
+            });
+          }
+        )
+
+        (
+          self: super: {
+            trytond = super.trytond.overridePythonAttrs (oldAttrs: rec {
+              # remove werkzeug patch
+              patches = [];
             });
           }
         )
@@ -406,6 +425,7 @@ let
                     "watchdog"
                     "wrapt"
                     "zeroconf"
+                    "Flask-Login"
                   ];
                 in
                 ''
