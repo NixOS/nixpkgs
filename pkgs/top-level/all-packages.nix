@@ -3476,7 +3476,7 @@ with pkgs;
 
   futhark = haskell.lib.compose.justStaticExecutables haskellPackages.futhark;
 
-  inherit (nodePackages) fx;
+  fx = callPackage ../development/tools/fx { };
 
   tllist = callPackage ../development/libraries/tllist { };
 
