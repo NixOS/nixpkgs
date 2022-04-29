@@ -1,11 +1,13 @@
 { lib
 , attrs
 , buildPythonPackage
+, exceptiongroup
 , fetchFromGitHub
 , hypothesis
 , immutables
 , motor
 , msgpack
+, orjson
 , poetry-core
 , pytest-xdist
 , pytestCheckHook
@@ -18,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "1.10.0";
+  version = "22.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     owner = "python-attrs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VbfQMMDO03eeUHAACxoX6a3DKmzoF9EfLuTpvaY6bWs=";
+    hash = "sha256-C8uIsewpgJfB1yYckWTwF5K32+2AAOrxFKB9I18RENg=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +40,8 @@ buildPythonPackage rec {
     attrs
   ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ];
 
   checkInputs = [
@@ -45,6 +49,7 @@ buildPythonPackage rec {
     immutables
     motor
     msgpack
+    orjson
     pytest-xdist
     pytestCheckHook
     pyyaml
@@ -55,12 +60,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" "" \
-      --replace 'orjson = "^3.5.2"' "" \
-      --replace "[tool.poetry.group.dev.dependencies]" "[tool.poetry.dev-dependencies]"
-    substituteInPlace tests/test_preconf.py \
-      --replace "from orjson import dumps as orjson_dumps" "" \
-      --replace "from orjson import loads as orjson_loads" ""
+      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
   '';
 
   preCheck = ''
@@ -76,8 +76,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # orjson is not available as it requires Rust nightly features to compile its requirements
-    "test_orjson"
     # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
     "test_tomlkit"
   ];
