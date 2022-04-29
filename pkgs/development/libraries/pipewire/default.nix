@@ -2,7 +2,6 @@
 , lib
 , buildPackages
 , fetchFromGitLab
-, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -68,7 +67,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.50";
+    version = "0.3.51";
 
     outputs = [
       "out"
@@ -86,7 +85,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-OMFtHduvSQNeEzQP+PlwfhWC09Jb8HN4SI42Z9KpZHE=";
+      sha256 = "sha256-k5OdKgkQUaelvrGS4KtO0MtSJg6cF2Nf8RrsR8Kf+C8=";
     };
 
     patches = [
@@ -102,12 +101,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Fixes invalid declarations in headers when compiled as ISO C90
-      # Should be removed after the next release
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/d3ea3142e1a4de206e616bc18f63a529e6b4986a.patch";
-        sha256 = "sha256-2MTCOwQEA7UAm/eigHDHA+8oFs4JgQfoMHnfzNBjqvI=";
-      })
     ];
 
     nativeBuildInputs = [
