@@ -145,6 +145,7 @@ let
       nodes.client = { lib, ... }: {
         # Disable test driver default config
         networking.interfaces = lib.mkForce {};
+        networking.useNetworkd = networkd;
         virtualisation.vlans = [ 1 ];
       };
       testScript = ''
