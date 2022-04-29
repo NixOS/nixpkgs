@@ -6285,6 +6285,8 @@ in {
 
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
+  pocketlint = callPackage ../development/python-modules/pocketlint { };
+
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
