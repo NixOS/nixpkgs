@@ -10255,6 +10255,8 @@ in {
 
   translatepy = callPackage ../development/python-modules/translatepy { };
 
+  translation-canary = callPackage ../development/python-modules/translation-canary { };
+
   translationstring = callPackage ../development/python-modules/translationstring { };
 
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
