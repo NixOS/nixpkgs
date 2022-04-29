@@ -33,7 +33,7 @@ let
       };
       enableOCR = true;
       testScript = ''
-        @polling_condition(wait_before_entry=True)
+        @polling_condition
         def codium_running():
             machine.succeed('pgrep -x codium')
 
@@ -42,6 +42,7 @@ let
 
         machine.wait_for_unit('graphical.target')
 
+        codium_running.wait()
         with codium_running:
             # Wait until vscodium is visible. "File" is in the menu bar.
             machine.wait_for_text('Get Started')

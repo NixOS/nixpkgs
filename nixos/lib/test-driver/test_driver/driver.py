@@ -202,7 +202,6 @@ class Driver:
         *,
         seconds_interval: float = 2.0,
         description: Optional[str] = None,
-        wait_before_entry: bool = False,
     ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
         driver = self
 
@@ -213,20 +212,27 @@ class Driver:
                     seconds_interval,
                     description,
                 )
-                self.wait_before_entry = wait_before_entry
 
             def __enter__(self) -> None:
-                if self.wait_before_entry:
-                    with rootlog.nested(
-                        f"waiting before entering polling condition {self.condition.description}"
-                    ):
-                        retry(lambda x: self.condition.check(force=True))
-
                 driver.polling_conditions.append(self.condition)
 
             def __exit__(self, a, b, c) -> None:  # type: ignore
                 res = driver.polling_conditions.pop()
                 assert res is self.condition
+
+            def wait(self, timeout: int = 900) -> None:
+                def condition(last: bool) -> bool:
+                    if last:
+                        rootlog.info(f"Last chance for {self.condition.description}")
+                    ret = self.condition.check(force=True)
+                    if not ret and not last:
+                        rootlog.info(
+                            f"({self.condition.description} failure not fatal yet)"
+                        )
+                    return ret
+
+                with rootlog.nested(f"waiting for {self.condition.description}"):
+                    retry(condition, timeout=timeout)
 
         if fun_ is None:
             return Poll
