@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
+{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, autoPatchelfHook, runtimeShell
@@ -46,12 +46,14 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "0810da5sqsdlssbc73rcml171ghja5bkznpfja35k0d296f33ihy";
+    sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
   };
+  
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
@@ -97,40 +99,7 @@ stdenv.mkDerivation rec {
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
     })
-    (fetchpatch {
-      name = "CVE-2021-4145.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/66fed30c9cd11854fc878a4eceb507e915d7c9cd.patch";
-      sha256 = "10za2nag51y4fhc8z7fzw3dfhj37zx8rwg0xcmw5kzmb0gyvvz70";
-    })
-    (fetchpatch {
-      name = "CVE-2022-26353.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/abe300d9d894f7138e1af7c8e9c88c04bfe98b37.patch";
-      sha256 = "17s6968qbccsfljqb85wy4zvilwbbyjyb18nqwp3g40a6g4ajnbw";
-    })
-    (fetchpatch {
-      name = "CVE-2022-26354.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/8d1b247f3748ac4078524130c6d7ae42b6140aaf.patch";
-      sha256 = "021d6pk0kh7fxn7rnq8g7cs34qac9qy6an858fxxs31gg9yqcfkl";
-    })
-  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ./sigrtminmax.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
-      sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # The Hypervisor.framework support patch converted something that can be applied:
-    # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
-    # The base revision is whatever commit there is before the series starts:
-    # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
-    # The target revision is what patchew has as the series tag from patchwork:
-    # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
-    (fetchpatch {
-      url = "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
-      sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
-    })
-  ];
+  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -161,12 +130,10 @@ stdenv.mkDerivation rec {
       --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace "'VERSION'" "'QEMU_VERSION'"
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags = [
-    "--audio-drv-list=${audio}"
+    "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
     "--enable-guest-agent"
