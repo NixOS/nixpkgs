@@ -9259,6 +9259,10 @@ in {
 
   segments = callPackage ../development/python-modules/segments { };
 
+  segyio = toPythonModule (callPackage ../development/python-modules/segyio {
+    inherit (pkgs) cmake ninja;
+  });
+
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
   selenium = callPackage ../development/python-modules/selenium { };
