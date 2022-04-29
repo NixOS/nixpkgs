@@ -1,0 +1,11 @@
+diff --git a/minihttptestserver.c b/minihttptestserver.c
+index bbfdac3..a43999d 100644
+--- a/minihttptestserver.c
++++ b/minihttptestserver.c
+@@ -1,3 +1,6 @@
++#ifndef INADDR_LOOPBACK
++#define INADDR_LOOPBACK         0x7f000001
++#endif
+ /* $Id: minihttptestserver.c,v 1.17 2015/02/06 10:31:19 nanard Exp $ */
+  /* Project : miniUPnP
+    * Author : Thomas Bernard

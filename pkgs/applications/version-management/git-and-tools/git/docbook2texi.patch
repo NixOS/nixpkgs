@@ -1,0 +1,38 @@
+This patch does two things: (1) use the right name for `docbook2texi',
+and (2) make sure `gitman.info' isn't produced since it's broken (duplicate
+node names).
+
+diff --git a/Documentation/Makefile b/Documentation/Makefile
+index 26a2342bea..ceccd67ebb 100644
+--- a/Documentation/Makefile
++++ b/Documentation/Makefile
+@@ -132,7 +132,7 @@ HTML_REPO = ../../git-htmldocs
+ 
+ MAKEINFO = makeinfo
+ INSTALL_INFO = install-info
+-DOCBOOK2X_TEXI = docbook2x-texi
++DOCBOOK2X_TEXI = docbook2texi
+ DBLATEX = dblatex
+ ASCIIDOC_DBLATEX_DIR = /etc/asciidoc/dblatex
+ DBLATEX_COMMON = -p $(ASCIIDOC_DBLATEX_DIR)/asciidoc-dblatex.xsl -s $(ASCIIDOC_DBLATEX_DIR)/asciidoc-dblatex.sty
+@@ -250,7 +250,7 @@ man1: $(DOC_MAN1)
+ man5: $(DOC_MAN5)
+ man7: $(DOC_MAN7)
+ 
+-info: git.info gitman.info
++info: git.info
+ 
+ pdf: user-manual.pdf
+ 
+@@ -266,10 +266,9 @@ install-man: man
+ 
+ install-info: info
+ 	$(INSTALL) -d -m 755 $(DESTDIR)$(infodir)
+-	$(INSTALL) -m 644 git.info gitman.info $(DESTDIR)$(infodir)
++	$(INSTALL) -m 644 git.info $(DESTDIR)$(infodir)
+ 	if test -r $(DESTDIR)$(infodir)/dir; then \
+ 	  $(INSTALL_INFO) --info-dir=$(DESTDIR)$(infodir) git.info ;\
+-	  $(INSTALL_INFO) --info-dir=$(DESTDIR)$(infodir) gitman.info ;\
+ 	else \
+ 	  echo "No directory found in $(DESTDIR)$(infodir)" >&2 ; \
+ 	fi

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>org.nixos.khd</string>
+  <key>ProgramArguments</key>
+  <array>
+  <string>@out@/bin/khd</string>
+  </array>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProcessType</key>
+  <string>Interactive</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>@out@/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>Sockets</key>
+  <dict>
+    <key>Listeners</key>
+    <dict>
+      <key>SockServiceName</key>
+      <string>3021</string>
+      <key>SockType</key>
+      <string>dgram</string>
+      <key>SockFamily</key>
+      <string>IPv4</string>
+    </dict>
+  </dict>
+</dict>
+</plist>

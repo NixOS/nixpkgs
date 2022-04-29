@@ -1,0 +1,60 @@
+From 80277ce9e24d9efa8dfd6eb775187c823e0e528e Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sat, 26 Feb 2022 12:36:15 +0100
+Subject: [PATCH 2/2] buildconfig/local deps fixes
+
+---
+ build.gradle | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/build.gradle b/build.gradle
+index cbb587f..ad836cf 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -9,10 +9,21 @@ import org.gradle.nativeplatform.platform.internal.ArchitectureInternal
+ import org.gradle.nativeplatform.platform.internal.OperatingSystemInternal
+ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+ 
++buildscript {
++  repositories {
++    maven {
++      url(uri("@deps@"))
++    }
++  }
++  dependencies {
++    classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.0.3"
++  }
++}
++
+ plugins {
+-   id 'com.github.gmazzo.buildconfig' version '3.0.3'
+    id 'application'
+ }
++apply plugin: "com.github.gmazzo.buildconfig"
+ 
+ compileJava.options.encoding = 'UTF-8'
+ 
+@@ -82,7 +93,10 @@ static String getVersion() {
+ 
+ repositories {
+     maven {url "https://gitlab.com/api/v4/groups/6853927/-/packages/maven"} // https://gitlab.com/groups/signald/-/packages
+-    mavenCentral()
++    mavenLocal()
++    maven {
++      url uri("@deps@")
++    }
+ }
+ 
+ dependencies {
+@@ -102,6 +116,8 @@ dependencies {
+     implementation 'io.prometheus:simpleclient_httpserver:0.14.1'
+     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+     implementation 'io.sentry:sentry:5.6.1'
++    implementation 'com.github.gmazzo.buildconfig:com.github.gmazzo.buildconfig.gradle.plugin:3.0.3'
++    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.4.31'
+     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+ }
+ 
+-- 
+2.33.1
+

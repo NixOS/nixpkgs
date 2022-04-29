@@ -1,0 +1,26 @@
+diff --git i/js/jsstr.cpp w/js/jsstr.cpp
+index e662bf1..b18597e 100644
+--- i/js/jsstr.cpp
++++ w/js/jsstr.cpp
+@@ -3040,7 +3040,7 @@ js_InitStringClass(JSContext *cx, JSObject *obj)
+                                  JSVAL_VOID, NULL, NULL,
+                                  JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_SHARED, 0, 0,
+                                  NULL)) {
+-        return JS_FALSE;
++        return NULL;
+     }
+ 
+     return proto;
+diff --git i/js/jsxml.cpp w/js/jsxml.cpp
+index 5621ede..e00c97d 100644
+--- i/js/jsxml.cpp
++++ w/js/jsxml.cpp
+@@ -303,7 +303,7 @@ NewXMLNamespace(JSContext *cx, JSString *prefix, JSString *uri, JSBool declared)
+ 
+     obj = js_NewObject(cx, &js_NamespaceClass.base, NULL, NULL);
+     if (!obj)
+-        return JS_FALSE;
++        return NULL;
+     JS_ASSERT(JSVAL_IS_VOID(obj->fslots[JSSLOT_PREFIX]));
+     JS_ASSERT(JSVAL_IS_VOID(obj->fslots[JSSLOT_URI]));
+     JS_ASSERT(JSVAL_IS_VOID(obj->fslots[JSSLOT_DECLARED]));

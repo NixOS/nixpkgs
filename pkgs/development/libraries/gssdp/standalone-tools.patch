@@ -1,0 +1,42 @@
+diff --git a/libgssdp/gssdp-client-private.h b/libgssdp/gssdp-client-private.h
+index ac31247..241c054 100644
+--- a/libgssdp/gssdp-client-private.h
++++ b/libgssdp/gssdp-client-private.h
+@@ -10,7 +10,11 @@
+ #ifndef GSSDP_CLIENT_PRIVATE_H
+ #define GSSDP_CLIENT_PRIVATE_H
+ 
++#ifdef GSSDP_TOOLS
++#include <libgssdp/gssdp-client.h>
++#else
+ #include "gssdp-client.h"
++#endif
+ 
+ G_BEGIN_DECLS
+ 
+diff --git a/tools/meson.build b/tools/meson.build
+index 40eb8e3..5db545b 100644
+--- a/tools/meson.build
++++ b/tools/meson.build
+@@ -1,3 +1,10 @@
++project('gssdp-tools', 'c', version: '@version@')
++gnome = import('gnome')
++
++gssdp = dependency('gssdp-1.2')
++gtk = dependency('gtk4', version : '>= 4')
++libsoup = dependency('libsoup-2.4', version : '>= 2.26.1')
++
+ resource = gnome.compile_resources(
+     'org.gupnp.GSSDP.DeviceSniffer',
+     'gssdp-device-sniffer.gresource.xml',
+@@ -12,7 +19,9 @@ sniffer = executable(
+         'main-window.h',
+         resource
+     ],
+-    dependencies : [gssdp, gtk],
++    dependencies : [gssdp, gtk, libsoup],
++    c_args: ['-DGSSDP_TOOLS'],
++    include_directories : [include_directories('..')],
+     install: true,
+     export_dynamic : true,
+     gui_app : true

@@ -1,0 +1,36 @@
+{ lib
+, mkDerivation
+
+, cmake
+, extra-cmake-modules
+
+, kconfig
+, ki18n
+, kirigami2
+, qtmultimedia
+, qtquickcontrols2
+}:
+
+mkDerivation rec {
+  pname = "krecorder";
+
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
+
+  buildInputs = [
+    kconfig
+    ki18n
+    kirigami2
+    qtmultimedia
+    qtquickcontrols2
+  ];
+
+  meta = with lib; {
+    description = "Audio recorder for Plasma Mobile";
+    homepage = "https://invent.kde.org/plasma-mobile/krecorder";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ samueldr ];
+  };
+}

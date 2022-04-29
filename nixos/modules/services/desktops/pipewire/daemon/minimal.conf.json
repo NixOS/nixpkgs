@@ -1,0 +1,118 @@
+{
+  "context.properties": {
+    "link.max-buffers": 16,
+    "core.daemon": true,
+    "core.name": "pipewire-0",
+    "settings.check-quantum": true,
+    "settings.check-rate": true,
+    "vm.overrides": {
+      "default.clock.min-quantum": 1024
+    }
+  },
+  "context.spa-libs": {
+    "audio.convert.*": "audioconvert/libspa-audioconvert",
+    "api.alsa.*": "alsa/libspa-alsa",
+    "support.*": "support/libspa-support"
+  },
+  "context.modules": [
+    {
+      "name": "libpipewire-module-rt",
+      "args": {
+        "nice.level": -11
+      },
+      "flags": [
+        "ifexists",
+        "nofail"
+      ]
+    },
+    {
+      "name": "libpipewire-module-protocol-native"
+    },
+    {
+      "name": "libpipewire-module-profiler"
+    },
+    {
+      "name": "libpipewire-module-metadata"
+    },
+    {
+      "name": "libpipewire-module-spa-node-factory"
+    },
+    {
+      "name": "libpipewire-module-client-node"
+    },
+    {
+      "name": "libpipewire-module-access",
+      "args": {}
+    },
+    {
+      "name": "libpipewire-module-adapter"
+    },
+    {
+      "name": "libpipewire-module-link-factory"
+    }
+  ],
+  "context.objects": [
+    {
+      "factory": "metadata",
+      "args": {
+        "metadata.name": "default"
+      }
+    },
+    {
+      "factory": "spa-node-factory",
+      "args": {
+        "factory.name": "support.node.driver",
+        "node.name": "Dummy-Driver",
+        "node.group": "pipewire.dummy",
+        "priority.driver": 20000
+      }
+    },
+    {
+      "factory": "spa-node-factory",
+      "args": {
+        "factory.name": "support.node.driver",
+        "node.name": "Freewheel-Driver",
+        "priority.driver": 19000,
+        "node.group": "pipewire.freewheel",
+        "node.freewheel": true
+      }
+    },
+    {
+      "factory": "adapter",
+      "args": {
+        "factory.name": "api.alsa.pcm.source",
+        "node.name": "system",
+        "node.description": "system",
+        "media.class": "Audio/Source",
+        "api.alsa.path": "hw:0",
+        "node.suspend-on-idle": true,
+        "resample.disable": true,
+        "channelmix.disable": true,
+        "adapter.auto-port-config": {
+          "mode": "dsp",
+          "monitor": false,
+          "position": "unknown"
+        }
+      }
+    },
+    {
+      "factory": "adapter",
+      "args": {
+        "factory.name": "api.alsa.pcm.sink",
+        "node.name": "system",
+        "node.description": "system",
+        "media.class": "Audio/Sink",
+        "api.alsa.path": "hw:0",
+        "node.suspend-on-idle": true,
+        "resample.disable": true,
+        "channelmix.disable": true,
+        "adapter.auto-port-config": {
+          "mode": "dsp",
+          "monitor": false,
+          "position": "unknown"
+        }
+      }
+    }
+  ],
+  "context.exec": []
+}

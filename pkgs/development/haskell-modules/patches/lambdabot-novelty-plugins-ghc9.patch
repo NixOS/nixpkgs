@@ -1,0 +1,58 @@
+diff --git a/lambdabot-novelty-plugins.cabal b/lambdabot-novelty-plugins.cabal
+index 69c8447..50a35f6 100644
+--- a/lambdabot-novelty-plugins.cabal
++++ b/lambdabot-novelty-plugins.cabal
+@@ -36,7 +36,7 @@ homepage:               https://wiki.haskell.org/Lambdabot
+ 
+ build-type:             Simple
+ cabal-version:          >= 1.10
+-tested-with:            GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5, GHC == 8.8.4, GHC == 8.10.4
++tested-with:            GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5, GHC == 8.8.4, GHC == 8.10.4, GHC == 9.0.2
+ 
+ source-repository head
+   type:                 git
+@@ -71,7 +71,8 @@ library
+                         lambdabot-core          >= 5.3 && < 5.4,
+                         misfortune              >= 0.1,
+                         process                 >= 1.1,
+-                        random-fu               >= 0.2.6.2,
++                        random                  >= 1.2,
++                        random-fu               >= 0.3.0.0,
+                         regex-tdfa              >= 1.1,
+ 
+                         -- runtime dependencies
+diff --git a/src/Lambdabot/Plugin/Novelty/Numberwang.hs b/src/Lambdabot/Plugin/Novelty/Numberwang.hs
+index ae41eb4..8321a14 100644
+--- a/src/Lambdabot/Plugin/Novelty/Numberwang.hs
++++ b/src/Lambdabot/Plugin/Novelty/Numberwang.hs
+@@ -7,7 +7,9 @@ import Control.Monad
+ import Data.Random
+ import Data.Random.Distribution.Poisson
+ import Lambdabot.Plugin
++import Lambdabot.Util
+ import Numeric
++import System.Random.Stateful (newIOGenM, newStdGen)
+ 
+ 
+ data NumberwangState = State
+@@ -23,7 +25,9 @@ conDist = poisson (32  :: Double)
+ 
+ numberwangPlugin :: Module NumberwangState
+ numberwangPlugin = newModule
+-    { moduleDefState = sample (State <$> cmdDist <*> conDist)
++    { moduleDefState = do
++        g <- newIOGenM =<< newStdGen
++        sampleFrom g (State <$> cmdDist <*> conDist)
+     , moduleCmds = return
+         [ (command "numberwang")
+             { help = say "@numberwang <number>: Determines if it is Numberwang."
+@@ -61,7 +65,8 @@ checkNumberwang :: (MonadLBState m, LBState m ~ NumberwangState) =>
+ checkNumberwang cmd l = withState cmd $ \ n setN nDist -> do
+     if n <= l
+         then do
+-            setN =<< lb (sample nDist)
++            g <- newIOGenM =<< newStdGen
++            setN =<< sampleFrom g nDist
+             return True
+         else do
+             setN (n - l)

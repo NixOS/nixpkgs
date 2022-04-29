@@ -1,0 +1,12 @@
+diff -Naur libjson-orig/makefile libjson/makefile
+--- libjson-orig/makefile	2012-05-30 05:15:42.000000000 -0400
++++ libjson/makefile	2013-08-15 09:17:41.154245534 -0400
+@@ -266,7 +266,7 @@
+ 	cp -r ./$(srcdir)/JSONDefs $(include_path)/$(libname_hdr)/$(srcdir)
+ 	chmod -R a+r $(include_path)/$(libname_hdr)
+ 	find  $(include_path)/$(libname_hdr) -type d -exec chmod a+x {} \;
+-	cp -rv $(srcdir)/Dependencies/ $(include_path)/$(libname_hdr)/$(srcdir)
++	cp -rv $(srcdir)/../Dependencies/ $(include_path)/$(libname_hdr)/$(srcdir)/..
+ 	@echo "Install header files: Done."
+ 
+ clean: banner

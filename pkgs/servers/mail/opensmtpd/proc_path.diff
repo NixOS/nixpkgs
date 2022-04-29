@@ -1,0 +1,59 @@
+diff --git a/usr.sbin/smtpd/smtpd.c b/usr.sbin/smtpd/smtpd.c
+index e049f07c..a1bd03a0 100644
+--- a/usr.sbin/smtpd/smtpd.c
++++ b/usr.sbin/smtpd/smtpd.c
+@@ -1157,6 +1157,7 @@ fork_proc_backend(const char *key, const char *conf, const char *procname)
+ 	char		path[PATH_MAX];
+ 	char		name[PATH_MAX];
+ 	char		*arg;
++	char		*proc_path;
+ 
+ 	if (strlcpy(name, conf, sizeof(name)) >= sizeof(name)) {
+ 		log_warnx("warn: %s-proc: conf too long", key);
+@@ -1167,7 +1168,12 @@ fork_proc_backend(const char *key, const char *conf, const char *procname)
+ 	if (arg)
+ 		*arg++ = '\0';
+ 
+-	if (snprintf(path, sizeof(path), PATH_LIBEXEC "/%s-%s", key, name) >=
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
++
++	if (snprintf(path, sizeof(path), "%s/%s-%s", proc_path, key, name) >=
+ 	    (ssize_t)sizeof(path)) {
+ 		log_warn("warn: %s-proc: exec path too long", key);
+ 		return (-1);
+diff --git a/usr.sbin/smtpd/table.c b/usr.sbin/smtpd/table.c
+index 9cfdfb99..24dfcca4 100644
+--- a/usr.sbin/smtpd/table.c
++++ b/usr.sbin/smtpd/table.c
+@@ -201,6 +201,7 @@ table_create(const char *backend, const char *name, const char *tag,
+ 	struct table_backend	*tb;
+ 	char			 buf[LINE_MAX];
+ 	char			 path[LINE_MAX];
++	const char		*proc_path;
+ 	size_t			 n;
+ 	struct stat		 sb;
+ 
+@@ -215,11 +216,16 @@ table_create(const char *backend, const char *name, const char *tag,
+ 	if (name && table_find(name, NULL))
+ 		fatalx("table_create: table \"%s\" already defined", name);
+ 
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
++
+ 	if ((tb = table_backend_lookup(backend)) == NULL) {
+-		if ((size_t)snprintf(path, sizeof(path), PATH_LIBEXEC"/table-%s",
+-			backend) >= sizeof(path)) {
+-			fatalx("table_create: path too long \""
+-			    PATH_LIBEXEC"/table-%s\"", backend);
++		if ((size_t)snprintf(path, sizeof(path), "%s/table-%s",
++			proc_path, backend) >= sizeof(path)) {
++			fatalx("table_create: path too long \"%s/table-%s\"",
++				proc_path, backend);
+ 		}
+ 		if (stat(path, &sb) == 0) {
+ 			tb = table_backend_lookup("proc");

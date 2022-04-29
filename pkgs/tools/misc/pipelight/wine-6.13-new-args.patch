@@ -1,0 +1,42 @@
+diff --git a/src/windows/pluginloader/apihook.c b/src/windows/pluginloader/apihook.c
+index 80bf726..6b80f70 100644
+--- a/src/windows/pluginloader/apihook.c
++++ b/src/windows/pluginloader/apihook.c
+@@ -42,7 +42,9 @@
+ #include "common/common.h"
+ #include "pluginloader.h"
+ 
++#define new cnew
+ #include <windows.h>							// for PVOID and other types
++#undef new
+ #include <string.h>								// for memset
+ 
+ void* patchDLLExport(PVOID ModuleBase, const char* functionName, void* newFunctionPtr){
+diff --git a/src/windows/pluginloader/npnfunctions.c b/src/windows/pluginloader/npnfunctions.c
+index e4e38aa..19f29d5 100644
+--- a/src/windows/pluginloader/npnfunctions.c
++++ b/src/windows/pluginloader/npnfunctions.c
+@@ -41,7 +41,9 @@
+ #include "common/common.h"
+ #include "pluginloader.h"
+ 
++#define new cnew
+ #include <windows.h>
++#undef new
+ 
+ /* Shockwave sometimes calls the function with a wrong instance? Is this a wine bug? */
+ NPP shockwaveInstanceBug = NULL;
+diff --git a/src/windows/pluginloader/pluginloader.c b/src/windows/pluginloader/pluginloader.c
+index 8f1170a..99dbceb 100644
+--- a/src/windows/pluginloader/pluginloader.c
++++ b/src/windows/pluginloader/pluginloader.c
+@@ -50,7 +50,9 @@
+ #include "pluginloader.h"
+ #include "apihook.h"
+ 
++#define new cnew
+ #include <windows.h>
++#undef new
+ #include <objbase.h>							// for CoInitializeEx
+ #include <GL/gl.h>
+ 

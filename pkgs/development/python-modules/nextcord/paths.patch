@@ -1,0 +1,26 @@
+diff --git a/nextcord/opus.py b/nextcord/opus.py
+index 97d437a3..755e1a5c 100644
+--- a/nextcord/opus.py
++++ b/nextcord/opus.py
+@@ -213,7 +213,7 @@ def _load_default() -> bool:
+             _filename = os.path.join(_basedir, 'bin', f'libopus-0.{_target}.dll')
+             _lib = libopus_loader(_filename)
+         else:
+-            _lib = libopus_loader(ctypes.util.find_library('opus'))
++            _lib = libopus_loader('@libopus@')
+     except Exception:
+         _lib = None
+ 
+diff --git a/nextcord/player.py b/nextcord/player.py
+index bedefc5a..34de0459 100644
+--- a/nextcord/player.py
++++ b/nextcord/player.py
+@@ -140,7 +140,7 @@ class FFmpegAudio(AudioSource):
+     .. versionadded:: 1.3
+     """
+ 
+-    def __init__(self, source: Union[str, io.BufferedIOBase], *, executable: str = 'ffmpeg', args: Any, **subprocess_kwargs: Any):
++    def __init__(self, source: Union[str, io.BufferedIOBase], *, executable: str = '@ffmpeg@', args: Any, **subprocess_kwargs: Any):
+         piping = subprocess_kwargs.get('stdin') == subprocess.PIPE
+         if piping and isinstance(source, str):
+             raise TypeError("parameter conflict: 'source' parameter cannot be a string when piping to stdin")

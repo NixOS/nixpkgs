@@ -1,0 +1,11 @@
+#!@stdenv_shell@ -e
+
+source @dfInit@
+
+for i in dfhack.init-example dfhack-config/default hack/* stonesense/*; do
+  update_path "$i"
+done
+
+cd "$DF_DIR"
+LD_LIBRARY_PATH="$env_dir/hack/libs:$env_dir/hack${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" \
+  LD_PRELOAD="$env_dir/hack/libdfhack.so:$LD_PRELOAD" exec $env_dir/libs/Dwarf_Fortress "$@"

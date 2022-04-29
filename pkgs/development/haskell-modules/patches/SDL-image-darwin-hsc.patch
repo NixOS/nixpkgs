@@ -1,0 +1,9 @@
+--- SDL-image-0.6.2.0/Graphics/UI/SDL/Image/Version.hsc.orig	2021-08-06 01:21:05.000000000 +0200
++++ SDL-image-0.6.2.0/Graphics/UI/SDL/Image/Version.hsc	2021-08-06 01:21:56.000000000 +0200
+@@ -1,4 +1,6 @@
+ #include "SDL_image.h"
++-- override SDL_main.h redefining main to SDL_main on darwin
++#define main main
+ module Graphics.UI.SDL.Image.Version
+     ( compiledFor
+     , linkedWith

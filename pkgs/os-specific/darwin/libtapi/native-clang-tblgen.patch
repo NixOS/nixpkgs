@@ -1,0 +1,21 @@
+diffprojects/libtapi/CMakeLists.txt b/src/llvm/projects/libtapi/CMakeLists.txt
+index 8ee6d8138..8277be147 100644
+--- a/projects/libtapi/CMakeLists.txt
++++ b/projects/libtapi/CMakeLists.txt
+@@ -193,7 +193,15 @@ if (NOT DEFINED CLANG_VERSION)
+   set(CLANG_VERSION "${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}")
+ endif ()
+ if (NOT DEFINED CLANG_TABLEGEN_EXE)
+-  set(CLANG_TABLEGEN_EXE "${LLVM_TOOLS_BINARY_DIR}/clang-tblgen")
++  if(LLVM_USE_HOST_TOOLS)
++    if (NOT CMAKE_CONFIGURATION_TYPES)
++      set(CLANG_TABLEGEN_EXE "${LLVM_NATIVE_BUILD}/bin/clang-tblgen")
++    else()
++      set(CLANG_TABLEGEN_EXE "${LLVM_NATIVE_BUILD}/Release/bin/clang-tblgen")
++    endif()
++  else()
++    set(CLANG_TABLEGEN_EXE "${LLVM_TOOLS_BINARY_DIR}/clang-tblgen")
++  endif ()
+ endif ()
+ 
+ # Include must go first.

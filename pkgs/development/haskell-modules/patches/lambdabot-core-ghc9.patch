@@ -1,0 +1,95 @@
+diff --git a/lambdabot-core.cabal b/lambdabot-core.cabal
+index 861a28b..87175a3 100644
+--- a/lambdabot-core.cabal
++++ b/lambdabot-core.cabal
+@@ -19,7 +19,7 @@ homepage:               https://wiki.haskell.org/Lambdabot
+ 
+ build-type:             Simple
+ cabal-version:          >= 1.10
+-tested-with:            GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5, GHC == 8.8.4, GHC == 8.10.4
++tested-with:            GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5, GHC == 8.8.4, GHC == 8.10.4, GHC == 9.0.2
+ 
+ extra-source-files:     AUTHORS.md
+                         COMMENTARY.md
+@@ -89,9 +89,8 @@ library
+                         network-bsd             >= 2.7 && < 2.9,
+                         parsec                  >= 3,
+                         prim-uniq               >= 0.2 && < 0.4,
+-                        random                  >= 1,
+-                        random-fu               >= 0.2.6.2,
+-                        random-source           >= 0.3,
++                        random                  >= 1.2,
++                        random-fu               >= 0.3.0.0,
+                         regex-tdfa              >= 1.1 && < 1.4,
+                         SafeSemaphore           >= 0.9,
+                         split                   >= 0.2,
+diff --git a/src/Lambdabot/Bot.hs b/src/Lambdabot/Bot.hs
+index 1b0de2e..833fb4c 100644
+--- a/src/Lambdabot/Bot.hs
++++ b/src/Lambdabot/Bot.hs
+@@ -1,6 +1,5 @@
+ {-# LANGUAGE GADTs #-}
+ {-# LANGUAGE ScopedTypeVariables #-}
+-{-# LANGUAGE TemplateHaskell #-}
+ -- | The guts of lambdabot.
+ --
+ -- The LB/Lambdabot monad
+@@ -37,7 +36,6 @@ import Control.Monad.Error
+ import Control.Monad.Reader
+ import Control.Monad.State
+ import qualified Data.Map as M
+-import Data.Random.Source
+ import qualified Data.Set as S
+ 
+ ------------------------------------------------------------------------
+@@ -136,17 +134,3 @@ ircPrivmsg who msg = do
+ ircPrivmsg' :: Nick -> String -> LB ()
+ ircPrivmsg' who ""  = ircPrivmsg' who " "
+ ircPrivmsg' who msg = send $ privmsg who msg
+-
+-------------------------------------------------------------------------
+-
+-monadRandom [d|
+-
+-    instance MonadRandom LB where
+-        getRandomWord8          = liftIO getRandomWord8
+-        getRandomWord16         = liftIO getRandomWord16
+-        getRandomWord32         = liftIO getRandomWord32
+-        getRandomWord64         = liftIO getRandomWord64
+-        getRandomDouble         = liftIO getRandomDouble
+-        getRandomNByteInteger n = liftIO (getRandomNByteInteger n)
+-
+- |]
+diff --git a/src/Lambdabot/Util.hs b/src/Lambdabot/Util.hs
+index effdf71..259699b 100644
+--- a/src/Lambdabot/Util.hs
++++ b/src/Lambdabot/Util.hs
+@@ -23,14 +23,15 @@ module Lambdabot.Util (
+         randomSuccessMsg
+     ) where
+ 
++import Control.Concurrent.Lifted
+ import Control.Monad.Trans
++import Control.Monad.Trans.Control
+ import Data.Char
+ import Data.List
+ import Data.Random
+-import Control.Concurrent.Lifted
+-import Control.Monad.Trans.Control
+ import Lambdabot.Config
+ import Lambdabot.Config.Core
++import System.Random.Stateful (newIOGenM, newStdGen)
+ 
+ ------------------------------------------------------------------------
+ 
+@@ -63,7 +64,9 @@ listToStr conj (item:items) =
+ 
+ -- | Pick a random element of the list.
+ random :: MonadIO m => [a] -> m a
+-random = io . sample . randomElement
++random l = do
++  g <- newIOGenM =<< newStdGen
++  sampleFrom g (randomElement l)
+ 
+ ------------------------------------------------------------------------
+ 

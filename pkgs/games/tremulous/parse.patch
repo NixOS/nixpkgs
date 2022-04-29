@@ -1,0 +1,21 @@
+diff -ruN Release_1.011-old/src/qcommon/parse.c Release_1.011/src/qcommon/parse.c
+--- Release_1.011-old/src/qcommon/parse.c	2011-12-02 19:11:49.307368651 -0500
++++ Release_1.011/src/qcommon/parse.c	2011-12-02 19:13:27.556836387 -0500
+@@ -981,7 +981,7 @@
+ {
+   if (*string == '\"')
+   {
+-    strcpy(string, string+1);
++    memmove(string, string+1, strlen(string));
+   }
+   if (string[strlen(string)-1] == '\"')
+   {
+@@ -1784,7 +1784,7 @@
+     if ((*ptr == '\\' || *ptr == '/') &&
+         (*(ptr+1) == '\\' || *(ptr+1) == '/'))
+     {
+-      strcpy(ptr, ptr+1);
++      memmove(ptr, ptr+1, strlen(ptr));
+     }
+     else
+     {

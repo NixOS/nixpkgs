@@ -1,0 +1,12 @@
+diff --git a/third_party/python/python.mk b/third_party/python/python.mk
+index f18c15060..b17455bca 100644
+--- a/third_party/python/python.mk
++++ b/third_party/python/python.mk
+@@ -1818,7 +1818,6 @@ THIRD_PARTY_PYTHON_PYTEST_PYMAINS =						\
+ 	third_party/python/Lib/test/test_int_literal.py				\
+ 	third_party/python/Lib/test/test_bisect.py				\
+ 	third_party/python/Lib/test/test_pyexpat.py				\
+-	third_party/python/Lib/test/test_ioctl.py				\
+ 	third_party/python/Lib/test/test_getopt.py				\
+ 	third_party/python/Lib/test/test_sort.py				\
+ 	third_party/python/Lib/test/test_slice.py				\

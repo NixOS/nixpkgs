@@ -1,0 +1,5 @@
+--- a/libcpuid/libcpuid.h
++++ b/libcpuid/libcpuid.h
+@@ -88 +88 @@
+-#include "libcpuid_types.h"
++#include <stdint.h>
