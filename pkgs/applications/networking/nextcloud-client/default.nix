@@ -50,15 +50,18 @@ mkDerivation rec {
     done
   '';
 
+  # required to not include inkscape in the wrapper
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
     inkscape
     sphinx
   ];
 
   buildInputs = [
+    extra-cmake-modules
     inotify-tools
     libcloudproviders
     libsecret
@@ -95,7 +98,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }
