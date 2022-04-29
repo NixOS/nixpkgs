@@ -155,7 +155,7 @@ let
         client.succeed("ping -c 1 192.168.1.1")
         router.succeed("ping -c 1 192.168.1.1")
         router.succeed("ping -c 1 192.168.1.2")
-        router.succeed("ping -c 1 192.168.1.2")
+        client.succeed("ping -c 1 192.168.1.2")
       '';
     };
     dhcpSimple = {
