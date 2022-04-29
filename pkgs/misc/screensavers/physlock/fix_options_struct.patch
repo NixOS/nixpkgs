@@ -1,0 +1,17 @@
+diff --git a/physlock.h b/physlock.h
+index 5d17111..9a3a7ea 100644
+--- a/physlock.h
++++ b/physlock.h
+@@ -58,11 +58,10 @@ typedef struct options_s {
+ 	int staggered;
+ 	int username;
+ 	const char *prompt;
+-	char issue_file[];
+ 	int no_auth;
+-	const char *prompt;
+ 	const char *command_before;
+ 	const char *command_after;
++	char issue_file[];
+ } options_t;
+ 
+ extern const options_t *options;

@@ -1,16 +1,20 @@
 { lib, stdenv, fetchFromGitHub, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  version = "13";
+  version = "2020-07-28";
   pname = "physlock";
   src = fetchFromGitHub {
-    owner = "muennich";
+    owner = "menglishca";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1mz4xxjip5ldiw9jgfq9zvqb6w10bcjfx6939w1appqg8f521a7s";
+    rev = "9618016bee86c7af6121f96b4a54e85d8a49d3d1";
+    sha256 = "sha256-VzwT2aAflmjTWJMxJYQAH/jas/WOljgvrBDXP/bZ7ZU=";
   };
 
   buildInputs = [ pam systemd ];
+
+  patches = [
+    ./fix_options_struct.patch
+  ];
 
   preConfigure = ''
     substituteInPlace Makefile \
