@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
 
     sed -i $out/lib/systemd/{system,user}/dbus-broker.service \
       -e 's,^ExecReload.*busctl,ExecReload=${systemd}/bin/busctl,'
+
+    # patch service units to use config files in /etc/dbus-1/ instead of /usr/share/dbus-1/
+    sed -i $out/lib/systemd/system/dbus-broker.service \
+      -e 's,^\(ExecStart=.*\)bin/dbus-broker-launch ,\1bin/dbus-broker-launch --config-file=/etc/dbus-1/system.conf ,'
+
+    sed -i $out/lib/systemd/user/dbus-broker.service \
+      -e 's,^\(ExecStart=.*\)bin/dbus-broker-launch ,\1bin/dbus-broker-launch --config-file=/etc/dbus-1/session.conf ,'
   '';
 
   doCheck = true;
