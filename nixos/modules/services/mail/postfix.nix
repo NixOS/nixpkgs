@@ -937,14 +937,14 @@ in
             mkKeyVal = opt: val: [ "-o" (opt + "=" + val) ];
           in concatLists (mapAttrsToList mkKeyVal cfg.submissionOptions);
         };
-      } // optionalAttrs useSmtp && !(cfg.enablePostscreen) {
+      } // optionalAttrs (useSmtp && !cfg.enablePostscreen) {
         smtp_inet = {
           name = "smtp";
           type = "inet";
           private = false;
           command = "smtpd";
         };
-      } // optionalAttrs useSmtp && cfg.enablePostscreen {
+      } // optionalAttrs (useSmtp && cfg.enablePostscreen) {
         smtpd = {
           type = "pass";
         };
@@ -952,7 +952,7 @@ in
           name = "smtp";
           type = "inet";
           private = false;
-          command = "smtpd";
+          command = "postscreen";
           maxproc = 1;
         };
         tlsproxy = {
