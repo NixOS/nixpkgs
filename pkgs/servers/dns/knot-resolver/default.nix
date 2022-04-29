@@ -55,7 +55,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
