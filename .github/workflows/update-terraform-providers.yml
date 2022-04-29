@@ -25,7 +25,7 @@ jobs:
           git commit -m "${{ steps.setup.outputs.title }}" providers.json
           popd
       - name: create PR
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           body: |
             Automatic update by [update-terraform-providers](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/update-terraform-providers.yml) action.

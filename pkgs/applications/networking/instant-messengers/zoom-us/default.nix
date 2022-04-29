@@ -110,8 +110,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
     ${rec {
       aarch64-darwin = ''
-        mkdir -p $out/Applications/zoom.us.app
-        cp -R . $out/Applications/zoom.us.app
+        mkdir -p $out/Applications
+        cp -R zoom.us.app $out/Applications/
       '';
       # darwin steps same on both architectures
       x86_64-darwin = aarch64-darwin;

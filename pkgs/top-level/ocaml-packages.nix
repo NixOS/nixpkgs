@@ -46,6 +46,10 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    atdgen-codec-runtime = callPackage ../development/ocaml-modules/atdgen/codec-runtime.nix { };
+
+    atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
+
     awa = callPackage ../development/ocaml-modules/awa { };
 
     awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { };
@@ -104,6 +108,8 @@ let
     };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
+
+    camlp-streams = callPackage ../development/ocaml-modules/camlp-streams { };
 
     camlp4 =
       if lib.versionOlder "4.02" ocaml.version

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = version;
-    hash = "sha256-fpXbp0Tj22flco9Rg4JTWZes6oxY7FhvYD76jA3yVuE=";
+    hash = "sha256-LzrI5pJ3mLaxikqS1eWFvdgneoCnsRTYWbshVX7U8lg=";
   };
 
   propagatedBuildInputs = [

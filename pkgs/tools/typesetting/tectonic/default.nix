@@ -9,25 +9,26 @@
 , pkg-config
 , makeWrapper
 , biber
+, icu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Xw/Rs30mH81b8qqdpmbXjSSYIG08wwRvykzhPpF94uk=";
+    sha256 = "mfIEfue64kG4NmIEdTPRAqt6y22XfcgH6GtvJxuH6TU=";
   };
 
-  cargoSha256 = "sha256-JzYCxsaBuQ5I+FgHVRQPNM32bJlE4H9Fd+48/jXDcr0=";
+  cargoSha256 = "CH1FdZ7cPrE0V0yjauOjDKrRNioC3MjtcnZaOTkMptc=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [ fontconfig harfbuzz openssl ]
+  buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
   # Tectonic runs biber when it detects it needs to run it, see:
@@ -51,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.lluchs maintainers.doronbehar ];
+    maintainers = with maintainers; [ lluchs doronbehar ];
   };
 }
