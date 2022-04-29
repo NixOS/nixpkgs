@@ -1,17 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, zig, ncurses }:
+{ lib, stdenv, fetchurl, zig, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
-  version = "2.0";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Zs2mgEdnsukbeM/cqCX5/a9qCkxuQAYloBrVWVQYR8w=";
+    sha256 = "sha256-ng1u8DYYo8MWcmv0khe37+Rc7HWLLJF86JLe10Myxtw=";
   };
-
-  patches = [
-    ./c-import-order.patch # https://code.blicky.net/yorhel/ncdu/issues/183
-  ];
 
   XDG_CACHE_HOME="Cache"; # FIXME This should be set in stdenv
 

@@ -6,7 +6,7 @@
   cudaArchList ? null,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
 
   # Build inputs
   numactl,
@@ -220,6 +220,7 @@ in buildPythonPackage rec {
     which
     ninja
     pybind11
+    removeReferencesTo
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]
@@ -259,6 +260,8 @@ in buildPythonPackage rec {
     ])
   ];
   postInstall = ''
+    find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
@@ -273,7 +276,8 @@ in buildPythonPackage rec {
       --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
     mkdir $lib
-    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
+    mv $out/${python.sitePackages}/torch/lib     $lib/lib
+    ln -s $lib/lib $out/${python.sitePackages}/torch/lib
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
