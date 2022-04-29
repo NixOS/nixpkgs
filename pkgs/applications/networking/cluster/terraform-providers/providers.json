@@ -17,6 +17,15 @@
     "vendorSha256": "1gpbc72q7mjyjxk75dyfi3j2fk6glgz0a15m2pq7clyc35kapnkc",
     "version": "2.8.0"
   },
+  "age": {
+    "owner": "clementblaise",
+    "provider-source-address": "registry.terraform.io/clementblaise/age",
+    "repo": "terraform-provider-age",
+    "rev": "v0.1.1",
+    "sha256": "sha256-bJrzjvkrCX93bNqCA+FdRibHnAw6cb61StqtwUY5ok4=",
+    "vendorSha256": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk=",
+    "version": "0.1.1"
+  },
   "aiven": {
     "owner": "aiven",
     "provider-source-address": "registry.terraform.io/aiven/aiven",
