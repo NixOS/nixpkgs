@@ -24,6 +24,8 @@ let
     optionals (cfg.dnsBlacklists != [])
       (map (s: "reject_rbl_client " + s) cfg.dnsBlacklists);
 
+  useSmtp = cfg.enableSmtp || cfg.enablePostscreen;
+
   clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
 
   mainCf = let
@@ -274,6 +276,14 @@ in
         type = types.bool;
         default = true;
         description = "Whether to enable smtp in master.cf.";
+      };
+
+      enablePostscreen = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Wether to enable postscreen in master.cf. This implies enableSmtp = true.
+        '';
       };
 
       enableSubmission = mkOption {
@@ -927,13 +937,31 @@ in
             mkKeyVal = opt: val: [ "-o" (opt + "=" + val) ];
           in concatLists (mapAttrsToList mkKeyVal cfg.submissionOptions);
         };
-      } // optionalAttrs cfg.enableSmtp {
+      } // optionalAttrs useSmtp && !(cfg.enablePostscreen) {
         smtp_inet = {
           name = "smtp";
           type = "inet";
           private = false;
           command = "smtpd";
         };
+      } // optionalAttrs useSmtp && cfg.enablePostscreen {
+        smtpd = {
+          type = "pass";
+        };
+        smtp_inet = {
+          name = "smtp";
+          type = "inet";
+          private = false;
+          command = "smtpd";
+          maxproc = 1;
+        };
+        tlsproxy = {
+          maxproc = 0;
+        };
+        dnsblog = {
+          maxproc = 0;
+        };
+      } // optionalAttrs useSmtp {
         smtp = {};
         relay = {
           command = "smtp";
