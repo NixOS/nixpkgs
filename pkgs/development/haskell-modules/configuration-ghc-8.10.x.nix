@@ -133,4 +133,8 @@ self: super: {
 
   # Depends on OneTuple for GHC < 9.0
   universe-base = addBuildDepends [ self.OneTuple ] super.universe-base;
+
+  # Not possible to build in the main GHC 9.0 package set
+  # https://github.com/awakesecurity/spectacle/issues/49
+  spectacle = doDistribute (markUnbroken super.spectacle);
 }

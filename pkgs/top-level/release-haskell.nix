@@ -361,6 +361,9 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
+      spectacle = [
+        compilerNames.ghc8107
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
