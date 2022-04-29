@@ -1,24 +1,32 @@
-{ buildPythonPackage
-, lib
+{ lib
+, azure-core
+, buildPythonPackage
 , fetchPypi
-, six
-, requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
   pname = "azure-cosmos";
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f77cc558fecffac04377ba758ac4e23f076dc1c54e2cf2515f85bc15cbde5c6";
+    extension = "zip";
+    hash = "sha256-hnGR+llmRGEB98o4NPIwYKhXNdC2YDA8o1OGSUXVcrY=";
   };
 
-  propagatedBuildInputs = [ six requests ];
+  propagatedBuildInputs = [
+    azure-core
+  ];
 
-  pythonNamespaces = [ "azure" ];
+  pythonNamespaces = [
+    "azure"
+  ];
 
-  # requires an active Azure Cosmos service
+  # Requires an active Azure Cosmos service
   doCheck = false;
 
   meta = with lib; {
