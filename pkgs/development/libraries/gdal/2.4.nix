@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = with lib.platforms; linux ++ darwin;
+    broken = stdenv.isLinux; #r2000.cpp:824:13: error: expected primary-expression before '}' token
   };
 }
