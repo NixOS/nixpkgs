@@ -8,18 +8,16 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "vit";
-  version = "2.1.0";
-  disabled = lib.versionOlder python.version "3.6";
+  version = "2.2.0";
+  disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd34f0b827953dfdecdc39f8416d41c50c24576c33a512a047a71c1263eb3e0f";
+    sha256 = "sha256-6GbIc5giuecxUqswyaAJw675R1M8BvelyyRNFcTqKW8=";
   };
 
   propagatedBuildInputs = [
-    pytz
     tasklib
-    tzlocal
     urwid
   ];
 

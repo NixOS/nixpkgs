@@ -10,6 +10,7 @@
 , pycryptodomex
 , websockets
 , mutagen
+, atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
@@ -37,11 +38,12 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath = [ atomicparsley ]
+      packagesToBinPath = []
+        ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
-    in
+    in lib.optionalString (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [
