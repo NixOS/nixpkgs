@@ -3,6 +3,7 @@
 , vim
 , vimCommandCheckHook
 , vimGenDocHook
+, neovimRequireCheckHook
 }:
 
 rec {
@@ -31,7 +32,7 @@ rec {
       forceShare= [ "man" "info" ];
 
       nativeBuildInputs = attrs.nativeBuildInputs or []
-      ++ [ vimCommandCheckHook ]
+      ++ [ vimCommandCheckHook neovimRequireCheckHook ]
       ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) vimGenDocHook;
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 

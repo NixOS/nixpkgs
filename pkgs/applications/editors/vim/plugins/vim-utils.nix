@@ -531,8 +531,18 @@ rec {
       };
     } ./vim-command-check-hook.sh) {};
 
+  neovimRequireCheckHook = callPackage ({ neovim-unwrapped }:
+    makeSetupHook {
+      name = "neovim-require-check-hook";
+      deps = [ neovim-unwrapped ];
+      substitutions = {
+        nvimBinary = "${neovim-unwrapped}/bin/nvim";
+        inherit rtpPath;
+      };
+    } ./neovim-require-check-hook.sh) {};
+
   inherit (import ./build-vim-plugin.nix {
-    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook;
+    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook neovimRequireCheckHook;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
 
