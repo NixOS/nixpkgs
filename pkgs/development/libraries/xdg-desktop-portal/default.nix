@@ -14,6 +14,7 @@
 , libxml2
 , nixosTests
 , pipewire
+, python3
 , pkg-config
 , stdenv
 , substituteAll
@@ -59,6 +60,11 @@ stdenv.mkDerivation rec {
     json-glib
     libportal
     pipewire
+
+    # For document-fuse installed test.
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+    ]))
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
   ];
