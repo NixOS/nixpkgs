@@ -13,7 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-1TJ96ilHX+LGkrMLXIK4rAebVxNQpRTYo9RnPE6BmmU=";
 
-  cargoTestFlags = [ # TODO: investigate some more why these tests fail in nix
+  cargoTestFlags = [
+    # TODO: investigate some more why these tests fail in nix
+    # => Tests are known not to run correctly with the default test-runner: see CONTRIBUTING.md in the project repo
     "--"
     "--skip=tests_integration::test_relocated_run"
     "--skip=tests_integration::test_run"
