@@ -206,9 +206,6 @@ with prev;
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
     ];
-    patches = [
-      ./luaexpat.patch
-    ];
   });
 
   # TODO Somehow automatically amend buildInputs for things that need luaffi
