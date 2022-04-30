@@ -248,6 +248,7 @@
   ./programs/xastir.nix
   ./programs/wshowkeys.nix
   ./programs/xfconf.nix
+  ./programs/xfel.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix

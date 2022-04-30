@@ -4811,6 +4811,8 @@ with pkgs;
 
   iotools = callPackage ../tools/misc/iotools { };
 
+  xfel = callPackage ../tools/misc/xfel { };
+
   irpf = callPackage ../applications/finance/irpf { };
 
   jellycli = callPackage ../applications/audio/jellycli { };
