@@ -1,12 +1,6 @@
 { lib, stdenv, fetchurl, openjdk17, makeWrapper, autoPatchelfHook
-, zlib, libzen, libmediainfo, curl, libmms, glib
+, zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
 }:
-
-let
-  # FileBot requires libcurl-gnutls.so to build
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
-
-in
 
 stdenv.mkDerivation rec {
   pname = "filebot";
