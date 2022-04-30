@@ -21,7 +21,8 @@ let
   };
 
 in appimageTools.wrapType2 rec {
-  name = "${pname}-v${version}";
+  inherit pname version;
+
   src = fetchurl {
     url = "https://github.com/klaussinani/tusk/releases/download/v${version}/${pname}-${version}-x86_64.AppImage";
     sha256 = "02q7wsnhlyq8z74avflrm7805ny8fzlmsmz4bmafp4b4pghjh5ky";
@@ -36,7 +37,7 @@ in appimageTools.wrapType2 rec {
   multiPkgs = null; # no 32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
+    mv $out/bin/{${pname}-${version},${pname}}
     mkdir "$out/share"
     ln -s "${desktopItem}/share/applications" "$out/share/"
   '';
