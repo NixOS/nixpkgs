@@ -129,6 +129,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/lib/php/extensions
         cp modules/${name}.so $out/lib/php/extensions/${name}.so
         mkdir -p $dev/include
@@ -137,6 +139,8 @@ lib.makeScope pkgs.newScope (self: with self; {
                               --filter="- *" \
                               --prune-empty-dirs \
                               . $dev/include/
+
+        runHook postInstall
       '';
 
       meta = {
