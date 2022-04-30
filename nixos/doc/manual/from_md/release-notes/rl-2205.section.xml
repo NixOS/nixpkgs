@@ -2349,8 +2349,8 @@
       <listitem>
         <para>
           The Nextcloud module now exposes the
-          <literal>default_locale</literal>
-          <literal>config.php</literal> setting.
+          <literal>default_locale</literal>, and two-factor
+          authentication <literal>config.php</literal> settings.
         </para>
       </listitem>
       <listitem>

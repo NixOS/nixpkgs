@@ -268,7 +268,14 @@ in {
     };
 
 
-    config = {
+    config = let
+      uiClashWarning = ''
+        <warning>
+          <para>Setting this option will prevent changing this via the
+          Nextcloud UI, but it wil still appear editable in the UI.</para>
+        </warning>
+        '';
+    in {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
         default = "sqlite";
@@ -390,6 +397,53 @@ in {
           Further details about this setting and supported locale codes can be found in the
           <link xlink:href="https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/language_configuration.html">upstream documentation</link>.
         '';
+      };
+
+      twofactorEnforced = let
+        twoFactorAuthUpstreamManualUrl = "https://docs.nextcloud.com/server/latest/admin_manual/configuration_user/two_factor-auth.html";
+      in {
+        enabled = mkOption {
+          default = null;
+          type = types.nullOr types.bool;
+          example = true;
+          description = ''
+            ${uiClashWarning}
+
+            Whether to enforce two-factor authentication.
+
+            Further details about this setting and supported locale codes can be found in the
+            <link xlink:href="${twoFactorAuthUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        groups = mkOption {
+          default = null;
+          type = types.nullOr (types.listOf types.str);
+          example = [ "admin" ];
+          description = ''
+            ${uiClashWarning}
+
+            Enforce two-factor authentication for only users in these named
+            groups.  The groups must already exist in the Nextcloud database.
+
+            Further details about this setting and supported locale codes can be found in the
+            <link xlink:href="${twoFactorAuthUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        excludedGroups = mkOption {
+          default = null;
+          type = types.nullOr (types.listOf types.str);
+          example = [ "guests" ];
+          description = ''
+            ${uiClashWarning}
+
+            Do <emphasis>not</emphasis> enforce two-factor authentication for
+            users in these named groups.  The groups must already exist in the
+            Nextcloud database.
+
+            Further details about this setting and supported locale codes can be found in the
+            <link xlink:href="${twoFactorAuthUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
       };
 
       objectstore = {
@@ -733,6 +787,9 @@ in {
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
               ${optionalString (c.defaultLocale != null) "'default_locale' => '${c.defaultLocale}',"}
+              ${optionalString (c.twofactorEnforced.enabled != null) "'twofactor_enforced' => '${lib.boolToString c.twofactorEnforced.enabled}',"}
+              ${optionalString (c.twofactorEnforced.groups != null) "'twofactor_enforced_groups' => ${writePhpArrary c.twofactorEnforced.groups},"}
+              ${optionalString (c.twofactorEnforced.excludedGroups != null) "'twofactor_enforced_excluded_groups' => ${writePhpArrary c.twofactorEnforced.excludedGroups},"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles}"}
               ${objectstoreConfig}
             ];
