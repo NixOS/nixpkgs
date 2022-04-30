@@ -80,13 +80,21 @@ lib.makeScope pkgs.newScope (self: with self; {
       pname = "php-${name}";
       extensionName = name;
 
+      outputs = [ "out" "dev" ];
+
       inherit (php.unwrapped) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
-      inherit configureFlags internalDeps buildInputs
-        zendExtension doCheck;
+
+      nativeBuildInputs = [
+        php.unwrapped
+        autoconf
+        pkg-config
+        re2c
+      ];
+
+      inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
       prePatch = "pushd ../..";
       postPatch = "popd";
@@ -101,18 +109,25 @@ lib.makeScope pkgs.newScope (self: with self; {
         fi
 
         $nullglobRestore
+
         phpize
         ${postPhpize}
-        ${lib.concatMapStringsSep "\n"
+
+        ${lib.concatMapStringsSep
+          "\n"
           (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
-          internalDeps}
+          internalDeps
+        }
       '';
+
       checkPhase = ''
         runHook preCheck
+
         NO_INTERACTON=yes SKIP_PERF_SENSITIVE=yes make test
+
         runHook postCheck
       '';
-      outputs = [ "out" "dev" ];
+
       installPhase = ''
         mkdir -p $out/lib/php/extensions
         cp modules/${name}.so $out/lib/php/extensions/${name}.so
