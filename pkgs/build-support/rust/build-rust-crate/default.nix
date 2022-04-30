@@ -316,7 +316,7 @@ crate_: lib.makeOverridable
       colors = lib.attrByPath [ "colors" ] "always" crate;
       extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or [ ]);
       edition = crate.edition or null;
-      codegenUnits = if crate ? codegenUnits then crate.codegenUnits else "$NIX_BUILD_CORES";
+      codegenUnits = if crate ? codegenUnits then crate.codegenUnits else 1;
       extraRustcOpts =
         lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
           ++ extraRustcOpts_
