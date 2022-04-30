@@ -1349,6 +1349,8 @@ with pkgs;
 
   retrofe = callPackage ../applications/emulators/retrofe { };
 
+  ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
+
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
   ruffle = callPackage ../applications/emulators/ruffle { };
@@ -3527,7 +3529,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  geekbench = callPackage ../tools/misc/geekbench { };
+  geekbench4 = callPackage ../tools/misc/geekbench/4.nix { };
+  geekbench5 = callPackage ../tools/misc/geekbench { };
+  geekbench = geekbench5;
 
   gencfsm = callPackage ../tools/security/gencfsm { };
 
@@ -4839,6 +4843,8 @@ with pkgs;
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
   cloudlist = callPackage ../tools/security/cloudlist { };
+
+  cmdpack = callPackages ../tools/misc/cmdpack { };
 
   cobalt = callPackage ../applications/misc/cobalt {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -7687,6 +7693,8 @@ with pkgs;
 
   mjolnir = callPackage ../servers/mjolnir { };
 
+  mmutils = callPackage ../tools/X11/mmutils { };
+
   mmv = callPackage ../tools/misc/mmv { };
 
   mmv-go = callPackage ../tools/misc/mmv-go { };
@@ -9755,6 +9763,8 @@ with pkgs;
 
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
+  relic = callPackage ../development/tools/relic { };
+
   remarkjs = callPackage ../development/web/remarkjs { };
 
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
@@ -10472,6 +10482,8 @@ with pkgs;
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
 
   svgbob = callPackage ../tools/graphics/svgbob { };
+
+  svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssb = callPackage ../tools/security/ssb { };
 
@@ -20983,7 +20995,9 @@ with pkgs;
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  waylandpp = callPackage ../development/libraries/waylandpp { };
+  waylandpp = callPackage ../development/libraries/waylandpp {
+    graphviz = graphviz-nox;
+  };
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
@@ -21364,6 +21378,9 @@ with pkgs;
   quicklispPackagesABCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp abcl));
   quicklispPackagesGCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp gcl));
   quicklispPackages = quicklispPackagesSBCL;
+
+  # Alternative lisp-modules implementation
+  lispPackages_new = callPackage ../development/lisp-modules-new/lisp-packages.nix {};
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -22294,6 +22311,10 @@ with pkgs;
 
   postgresqlTestHook = callPackage ../build-support/setup-hooks/postgresql-test-hook { };
 
+  redshift_jdbc = callPackage ../development/java-modules/redshift_jdbc { };
+
+  liquibase_redshift_extension = callPackage ../development/java-modules/liquibase_redshift_extension { };
+
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { buildGoModule = buildGo118Module; };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
@@ -22885,6 +22906,8 @@ with pkgs;
   error-inject = callPackages ../os-specific/linux/error-inject { };
 
   extrace = callPackage ../os-specific/linux/extrace { };
+
+  facetimehd-calibration = callPackage ../os-specific/linux/firmware/facetimehd-calibration { };
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
@@ -23943,6 +23966,8 @@ with pkgs;
   ankacoder = callPackage ../data/fonts/ankacoder { };
   ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
 
+  annapurna-sil = callPackage ../data/fonts/annapurna-sil { };
+
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
   ant-theme = callPackage ../data/themes/ant-theme/ant.nix { };
@@ -24155,6 +24180,8 @@ with pkgs;
 
   execline-man-pages = skawarePackages.execline-man-pages;
 
+  ezra-sil = callPackage ../data/fonts/ezra-sil { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
@@ -24181,6 +24208,8 @@ with pkgs;
   freepats = callPackage ../data/misc/freepats { };
 
   g15daemon = callPackage ../os-specific/linux/g15daemon {};
+
+  galatia-sil = callPackage ../data/fonts/galatia-sil { };
 
   gentium = callPackage ../data/fonts/gentium {};
 
@@ -26604,6 +26633,10 @@ with pkgs;
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  LibreArp = callPackage ../applications/audio/LibreArp { };
+
+  LibreArp-lv2 = callPackage ../applications/audio/LibreArp/lv2.nix { };
+
   librespot = callPackage ../applications/audio/librespot {
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
@@ -26916,6 +26949,8 @@ with pkgs;
     };
     extra-packages = [ csound ];
   };
+
+  hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
@@ -27694,8 +27729,6 @@ with pkgs;
   ledger2beancount = callPackage ../tools/text/ledger2beancount { };
 
   lightburn = libsForQt5.callPackage ../applications/graphics/lightburn { };
-
-  lighthouse = callPackage ../applications/misc/lighthouse { };
 
   lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr { };
 
@@ -29610,7 +29643,7 @@ with pkgs;
     sublime-merge-dev;
 
   inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
-    subversion_1_10 subversion;
+    subversion;
 
   subversionClient = subversion.override {
     bdbSupport = false;
@@ -32756,6 +32789,8 @@ with pkgs;
   _4ti2  = callPackage ../applications/science/math/4ti2 { };
 
   almonds = callPackage ../applications/science/math/almonds { };
+
+  adolc = callPackage ../applications/science/math/adolc { };
 
   amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
 

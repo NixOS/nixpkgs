@@ -9,6 +9,7 @@
 , buildPackages
 , docSupport ? true
 , doxygen ? null
+, graphviz ? null
 }:
 
 assert docSupport -> doxygen != null;
@@ -16,13 +17,13 @@ assert docSupport -> doxygen != null;
 with lib;
 stdenv.mkDerivation rec {
   pname = "waylandpp";
-  version = "0.2.9";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "NilsBrause";
     repo = pname;
     rev = version;
-    sha256 = "sha256-c7sayJjQaqJWso2enESBx6OUW9vxxsfuHFolYDIYlXw=";
+    sha256 = "sha256-5/u6tp7/E4tjSfX+QJFmcUYdnyOgl9rB79PDE/SJH1o=";
   };
 
   cmakeFlags = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ optional docSupport doxygen;
+  nativeBuildInputs = [ cmake pkg-config ] ++ optionals docSupport [ doxygen graphviz ];
   buildInputs = [ pugixml wayland libGL libffi ];
 
   outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];

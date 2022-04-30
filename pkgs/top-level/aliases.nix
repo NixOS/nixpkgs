@@ -684,6 +684,7 @@ mapAliases ({
   libva-full = throw "'libva-full' has been renamed to/replaced by 'libva'"; # Converted to throw 2022-02-22
   libva1-full = throw "'libva1-full' has been renamed to/replaced by 'libva1'"; # Converted to throw 2022-02-22
   libwnck3 = libwnck;
+  lighthouse = throw "lighthouse has been removed: abandoned by upstream"; # Added 2022-04-24
   lilypond-unstable = lilypond; # Added 2021-03-11
   lilyterm = throw "lilyterm has been removed from nixpkgs, because it was relying on a vte version that depended on python2"; # Added 2022-01-14
   lilyterm-git = throw "lilyterm-git has been removed from nixpkgs, because it was relying on a vte version that depended on python2"; # Added 2022-01-14
@@ -1227,11 +1228,11 @@ mapAliases ({
   stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
   steam-run-native = steam-run; # added 2022-02-21
   stumpwm-git = throw "stumpwm-git has been broken for a long time and lispPackages.stumpwm follows Quicklisp that is close to git version"; # Added 2021-05-09
+  subversion_1_10 = throw "subversion_1_10 has been removed as it has reached its end of life"; # Added 2022-04-26
   subversion19 = throw "subversion19 has been removed as it has reached its end of life"; # Added 2021-03-31
   sudolikeaboss = throw "sudolikeaboss is no longer maintained by upstream"; # Added 2022-04-16
   sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";
   surf-webkit2 = throw "'surf-webkit2' has been renamed to/replaced by 'surf'"; # Converted to throw 2022-02-22
-  svgcleaner = throw "svgcleaner has been removed"; # Added 2021-11-17
   swec = throw "swec has been removed; broken and abandoned upstream"; # Added 2021-10-14
   swfdec = throw "swfdec has been removed as broken and unmaintained"; # Added 2020-08-23
   swtpm-tpm2 = swtpm; # Added 2021-02-26

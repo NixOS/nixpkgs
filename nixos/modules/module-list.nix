@@ -662,6 +662,7 @@
   ./services/monitoring/longview.nix
   ./services/monitoring/mackerel-agent.nix
   ./services/monitoring/metricbeat.nix
+  ./services/monitoring/mimir.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix

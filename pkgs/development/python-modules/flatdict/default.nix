@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "flatdict";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "gmr";
     repo = pname;
     rev = version;
-    hash = "sha256-qH4MMDSXf92BPavnRdCka6lRoWZg+2KnHpHA8kt5JaM=";
+    hash = "sha256-CWsTiCNdIKSQtjpQC07lhZoU1hXT/MGpXdj649x2GlU=";
   };
 
   pythonImportsCheck = [
