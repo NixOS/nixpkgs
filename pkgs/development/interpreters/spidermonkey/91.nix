@@ -120,6 +120,6 @@ stdenv.mkDerivation rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lostnet ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
