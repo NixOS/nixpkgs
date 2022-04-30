@@ -32191,7 +32191,7 @@ with pkgs;
 
   tibia = pkgsi686Linux.callPackage ../games/tibia { };
 
-  tintin = callPackage ../games/tintin { };
+  tintin = throw "tintin has been removed due to lack of maintainers";
 
   tinyfugue = callPackage ../games/tinyfugue { };
 
