@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WxJj5hOJsRuKUHjpGZWsa0PxRZZJcX88p1/typ+yqEw=";
+    sha256 = "sha256-2PBc5qe2md87u2nvMTx/XZVzLsr8QrvUkw46/6VTlGs=";
   };
 
   patches = [ ./version.patch ];
@@ -31,13 +31,17 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DBUILD_EXCEL_EXTENSION=ON"
     "-DBUILD_FTS_EXTENSION=ON"
     "-DBUILD_HTTPFS_EXTENSION=${enableFeature withHttpFs}"
     "-DBUILD_ICU_EXTENSION=ON"
+    "-DBUILD_JSON_EXTENSION=ON"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_REST_EXTENSION=ON"
+    "-DBUILD_REST=ON"
+    "-DBUILD_SUBSTRAIT_EXTENSION=ON"
     "-DBUILD_TPCDS_EXTENSION=ON"
+    "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
     "-DBUILD_VISUALIZER_EXTENSION=ON"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
