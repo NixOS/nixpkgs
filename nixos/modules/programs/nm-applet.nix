@@ -23,7 +23,7 @@
       description = "Network manager applet";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      serviceConfig.ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet ${lib.optionalString config.programs.nm-applet.indicator "--indicator"}";
+      serviceConfig.ExecStart = "${pkgs.networkmanager-applet}/bin/nm-applet ${lib.optionalString config.programs.nm-applet.indicator "--indicator"}";
     };
 
     services.dbus.packages = [ pkgs.gcr ];

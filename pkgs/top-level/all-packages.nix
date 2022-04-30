@@ -8514,6 +8514,8 @@ with pkgs;
 
   networkmanager = callPackage ../tools/networking/networkmanager { };
 
+  networkmanager-applet = callPackage ../tools/networking/networkmanager/applet { };
+
   networkmanager-iodine = callPackage ../tools/networking/networkmanager/iodine { };
 
   networkmanager-openvpn = callPackage ../tools/networking/networkmanager/openvpn { };
@@ -8529,8 +8531,6 @@ with pkgs;
   networkmanager_strongswan = callPackage ../tools/networking/networkmanager/strongswan { };
 
   networkmanager-sstp = callPackage ../tools/networking/networkmanager/sstp { };
-
-  networkmanagerapplet = callPackage ../tools/networking/networkmanager/applet { };
 
   libnma = callPackage ../tools/networking/networkmanager/libnma { };
 
