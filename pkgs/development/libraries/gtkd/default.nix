@@ -7,8 +7,6 @@ in stdenv.mkDerivation rec {
   pname = "gtkd";
   version = "3.10.0";
 
-  outputs = [ "out" "dev" ];
-
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
     sha256 = "DEKVDexGyg/T3SdnnvRjaHq1LbDo8ekNslxKROpMCCE=";
