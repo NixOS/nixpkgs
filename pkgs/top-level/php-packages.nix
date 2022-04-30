@@ -83,7 +83,6 @@ lib.makeScope pkgs.newScope (self: with self; {
       outputs = [ "out" "dev" ];
 
       inherit (php.unwrapped) version src;
-      sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
 
@@ -96,8 +95,14 @@ lib.makeScope pkgs.newScope (self: with self; {
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
-      prePatch = "pushd ../..";
-      postPatch = "popd";
+      preConfigurePhases = [
+        "cdToExtensionRootPhase"
+      ];
+
+      cdToExtensionRootPhase = ''
+        # Go to extension source root.
+        cd "ext/${name}"
+      '';
 
       preConfigure = ''
         nullglobRestore=$(shopt -p nullglob)
