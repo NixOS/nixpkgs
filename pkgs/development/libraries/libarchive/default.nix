@@ -84,6 +84,10 @@ stdenv.mkDerivation rec {
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
+  checkPhase = ''
+    make check || cat bsdcpio_test*
+    false
+  '';
 
   preFixup = ''
     sed -i $lib/lib/libarchive.la \
