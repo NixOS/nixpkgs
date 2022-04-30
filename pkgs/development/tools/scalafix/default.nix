@@ -2,18 +2,17 @@
 
 let
   baseName = "scalafix";
-  version = "0.9.0";
+  version = "0.10.0";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.12.7:${version} > deps
+      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.13.8:${version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
+    outputHash     = "sha256-lDeg90L484MggtQ2a9OyHv4UcfLPjzG3OJZCaWW2AC8=";
   };
 in
 stdenv.mkDerivation {
