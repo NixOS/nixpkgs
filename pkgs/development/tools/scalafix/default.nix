@@ -1,4 +1,4 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jdk, jre, coursier, makeWrapper, installShellFiles }:
 
 let
   baseName = "scalafix";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
   buildInputs = [ jdk deps ];
 
   dontUnpack = true;
@@ -27,6 +27,10 @@ stdenv.mkDerivation {
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
+
+    installShellCompletion --cmd ${baseName} \
+      --bash <($out/bin/${baseName} --bash) \
+      --zsh  <($out/bin/${baseName} --zsh)
   '';
 
   installCheckPhase = ''
