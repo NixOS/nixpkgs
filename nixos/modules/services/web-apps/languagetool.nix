@@ -3,24 +3,30 @@ with lib;
 let
   cfg = config.services.languageToolHttp;
   format = pkgs.formats.toml { };
+  confDoc = "See languagetool-http-server --help for further details";
 in
 {
   options.services.languageToolHttp = {
     enable = mkEnableOption "the LanguagTool http server";
     allowBrowserPluginAccess = mkEnableOption "access from the browser plugin";
+    public = mkEnableOption ''
+      access this server from anywhere, not only localhost.
+      Note that it is reccomended to run this behind
+      a HTTPS reverse proxy like apache or ngnix
+    '';
     settings = mkOption {
       description = ''
-        Contents of the configuration file.
+        Contents of the configuration file. ${confDoc}
       '';
       inherit (format) type;
       default = { };
     };
     args = mkOption {
       description = ''
-        Arguments to be passed when starting the server.
+        Arguments to be passed when starting the server. ${confDoc}
       '';
       type = types.submodule {
-        freeformType = with types;attrsOf (oneOf [ int str bool ]);
+        freeformType = with types;attrsOf (oneOf [ int str path ]);
         options.port = mkOption {
           description = ''
             The port which the LanguageTool server listen.
@@ -36,12 +42,39 @@ in
   config = mkIf cfg.enable {
     services.languageToolHttp.args = {
       allow-origin = mkIf cfg.allowBrowserPluginAccess (mkDefault "*");
-      config = builtins.toString (format.generate "LanguageTool.cfg" cfg.settings);
+      config = format.generate "LanguageTool.cfg" cfg.settings;
+      public = mkIf cfg.public "";
     };
     systemd.services.languagetool-http = {
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart =
-        "${pkgs.languagetool}/bin/languagetool-http-server ${cli.toGNUCommandLineShell {} cfg.args}";
+      after = [ "network.target" ];
+      description = "LanguageTool HTTP server";
+      serviceConfig = {
+        User = "langtool";
+        Group = "langtool";
+        Type = "simple";
+        ExecStart = "${pkgs.languagetool}/bin/languagetool-http-server ${cli.toGNUCommandLineShell {} cfg.args}";
+        PrivateTmp = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        PrivateNetwork = !cfg.public;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+      };
+      confinement = {
+        enable = true;
+        # besides the config argument, the config file can refer to other
+        # files in some keys, including arbitrary spellcheck dicrtionaries
+        # with the lang-xx-dictPath (eg: lang-tr-dictPath=/path/to/tr.dic)
+        fullUnit = true;
+      };
     };
+    users.users.langtool = {
+      isSystemUser = true;
+      group = "langtool";
+    };
+    users.groups.langtool = { };
   };
 }
