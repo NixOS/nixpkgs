@@ -12,8 +12,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "1QP5a0QjYUDU3JzrIX2rM/DclRfU/ACSXVLd6C7uFCo=";
+    outputHash     = "sha256-1QP5a0QjYUDU3JzrIX2rM/DclRfU/ACSXVLd6C7uFCo=";
   };
 in
 stdenv.mkDerivation {
