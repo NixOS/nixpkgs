@@ -9,6 +9,7 @@
 , launchpadlib
 , testtools
 , pythonOlder
+, installShellFiles
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-GHpuRSCN0F2BdQc2cgyDcQz0gJT1R+xAgcVxJZVZpNU=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     configobj
@@ -39,6 +42,8 @@ buildPythonPackage rec {
   # symlink for bazaar compatibility
   postInstall = ''
     ln -s "$out/bin/brz" "$out/bin/bzr"
+
+    installShellCompletion --cmd brz --bash contrib/bash/brz
   '';
 
   pythonImportsCheck = [ "breezy" ];
