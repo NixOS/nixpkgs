@@ -1,4 +1,4 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jre, coursier, makeWrapper, setJavaClassPath }:
 
 let
   baseName = "scalafix";
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  buildInputs = [ deps ];
 
   dontUnpack = true;
 
