@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  systemdStage1 ? false
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -22,6 +23,8 @@ let
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
+
+        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.version = ${toString grubVersion};
@@ -289,6 +292,8 @@ let
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
           virtualisation.memorySize = 1536;
+
+          boot.initrd.systemd.enable = systemdStage1;
 
           # Use a small /dev/vdb as the root disk for the
           # installer. This ensures the target disk (/dev/vda) is
