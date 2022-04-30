@@ -1,8 +1,8 @@
 {
-  "packageVersion": "99.0.1-3",
+  "packageVersion": "99.0.1-4",
   "source": {
-    "rev": "99.0.1-3",
-    "sha256": "0ag4n86hvyp6kx3hp60yn7q45rgjbx7054frj6226ni2ribjx4ln"
+    "rev": "99.0.1-4",
+    "sha256": "0s0r9smyfr8yhbgp67569ki3lkc2dyv1dw9735njja2gy0nahgni"
   },
   "firefox": {
     "version": "99.0.1",
