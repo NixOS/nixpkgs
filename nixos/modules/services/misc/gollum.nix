@@ -62,6 +62,12 @@ in
       description = "Use the first h1 as page title";
     };
 
+    no-edit = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Disable editing pages";
+    };
+
     branch = mkOption {
       type = types.str;
       default = "master";
@@ -116,6 +122,7 @@ in
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \
             ${optionalString cfg.h1-title "--h1-title"} \
+            ${optionalString cfg.no-edit "--no-edit"} \
             ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
             ${cfg.stateDir}
