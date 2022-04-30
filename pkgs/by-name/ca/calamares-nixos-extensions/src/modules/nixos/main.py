@@ -216,7 +216,8 @@ cfgkeymap = """  # Configure keymap in X11
     xkbVariant = "@@kbvariant@@";
   };
 
-  # Configure console keymap
+"""
+cfgconsole = """  # Configure console keymap
   console.keyMap = "@@vconsole@@";
 
 """
@@ -280,9 +281,8 @@ cfgunfree = """  # Allow unfree packages
 cfgpkgs = """  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    firefox@@pkgs@@
+  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #  wget@@pkgs@@
   ];
 
 """
@@ -473,13 +473,13 @@ def run():
             try:
                 subprocess.check_output(["pkexec", "loadkeys", gs.value(
                     "keyboardVConsoleKeymap").strip()], stderr=subprocess.STDOUT)
+                cfg += cfgconsole
                 catenate(variables, "vconsole", gs.value(
                     "keyboardVConsoleKeymap").strip())
             except subprocess.CalledProcessError as e:
                 libcalamares.utils.error("loadkeys: {}".format(e.output))
-                libcalamares.utils.error("Setting vconsole keymap to {} will fail, defaulting to \"us\"".format(
+                libcalamares.utils.error("Setting vconsole keymap to {} will fail, using default".format(
                     gs.value("keyboardVConsoleKeymap").strip()))
-                catenate(variables, "vconsole", "us")
         else:
             kbdmodelmap = open(
                 "/run/current-system/sw/share/systemd/kbd-model-map", 'r')
@@ -492,27 +492,34 @@ def run():
             # Find rows with same layout
             find = []
             for row in out:
-                if gs.value("keyboardLayout") in row[1]:
+                if gs.value("keyboardLayout") == row[1]:
                     find.append(row)
-            vconsole = find[0][0]
+            if find != []:
+                vconsole = find[0][0]
+            else:
+                vconsole = ""
             if gs.value("keyboardVariant") is not None:
-                # Find rows with same variant
-                for row in find:
-                    if gs.value("keyboardVariant") in row[3]:
-                        vconsole = row[0]
-                        break
-            # If none found set to "us"
-            if vconsole == "":
-                vconsole = "us"
-            try:
-                subprocess.check_output(
-                    ["pkexec", "loadkeys", vconsole], stderr=subprocess.STDOUT)
-                catenate(variables, "vconsole", vconsole)
-            except subprocess.CalledProcessError as e:
-                libcalamares.utils.error("loadkeys: {}".format(e.output))
-                libcalamares.utils.error("Setting vconsole keymap to {} will fail, defaulting to \"us\"".format(
-                    gs.value("keyboardVConsoleKeymap")))
-                catenate(variables, "vconsole", "us")
+                variant = gs.value("keyboardVariant")
+            else:
+                variant = "-"
+            # Find rows with same variant
+            for row in find:
+                if variant in row[3]:
+                    vconsole = row[0]
+                    break
+                # If none found set to "us"
+            if vconsole != "" and vconsole != "us" and vconsole is not None:
+                try:
+                    subprocess.check_output(
+                        ["pkexec", "loadkeys", vconsole], stderr=subprocess.STDOUT)
+                    cfg += cfgconsole
+                    catenate(variables, "vconsole", vconsole)
+                except subprocess.CalledProcessError as e:
+                    libcalamares.utils.error("loadkeys: {}".format(e.output))
+                    libcalamares.utils.error(
+                        "vconsole value: {}".format(vconsole))
+                    libcalamares.utils.error("Setting vconsole keymap to {} will fail, using default".format(
+                        gs.value("keyboardVConsoleKeymap")))
 
     cfg += cfgmisc
 
@@ -540,8 +547,11 @@ def run():
             cfg += cfgunfree
 
     cfg += cfgpkgs
+    # Use firefox as default as a graphical web browser, and add kate to plasma desktop
     if gs.value("packagechooser_packagechooser") == "plasma":
-        catenate(variables, "pkgs", "\n    kate")
+        catenate(variables, "pkgs", "\n    firefox\n    kate")
+    elif gs.value("packagechooser_packagechooser") != "":
+        catenate(variables, "pkgs", "\n    firefox")
     else:
         catenate(variables, "pkgs", "")
 
