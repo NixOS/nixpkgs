@@ -2348,6 +2348,13 @@
       </listitem>
       <listitem>
         <para>
+          The Nextcloud module now exposes the
+          <literal>default_locale</literal>
+          <literal>config.php</literal> setting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>spark3</literal> package has been updated from
           3.1.2 to 3.2.1
           (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/160075">#160075</link>):

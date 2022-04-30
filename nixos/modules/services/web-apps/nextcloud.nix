@@ -374,6 +374,24 @@ in {
         '';
       };
 
+      defaultLocale = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        example = "de_CH";
+        description = ''
+          <warning>
+           <para>This option exists since Nextcloud 21! If older versions are used,
+            this will throw an eval-error!</para>
+          </warning>
+
+          Default locale to use when Nextcloud fails to detect the user's
+          locale.
+
+          Further details about this setting and supported locale codes can be found in the
+          <link xlink:href="https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/language_configuration.html">upstream documentation</link>.
+        '';
+      };
+
       objectstore = {
         s3 = {
           enable = mkEnableOption ''
@@ -714,6 +732,7 @@ in {
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${optionalString (c.defaultLocale != null) "'default_locale' => '${c.defaultLocale}',"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles}"}
               ${objectstoreConfig}
             ];
