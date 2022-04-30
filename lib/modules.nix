@@ -160,7 +160,10 @@ rec {
             type = types.lazyAttrsOf types.raw;
             # Only render documentation once at the root of the option tree,
             # not for all individual submodules.
-            internal = prefix != [];
+            # Allow merging option decls to make this internal regardless.
+            ${if prefix == []
+              then null  # unset => visible
+              else "internal"} = true;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately

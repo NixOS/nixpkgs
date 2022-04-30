@@ -9,28 +9,28 @@
 }:
 
 let
-  version = "2.8.0";
+  version = "2.8.1";
 
   sources = {
     "x86_64-linux" = fetchurl {
       url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-      sha256 = "0bgd4hnpaxrqw0s0y2qiak8lbskfi2cqp147vj1kbhvm8834hwhg";
+      sha256 = "znaM00jM6yrpb+bGTxzJUxViCUzv4G+CYK2EB5dxhfY=";
     };
     "i686-linux" = fetchurl {
       url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-      sha256 = "06lf642m4imz8xvwipflmvjy1ih7k8bx8jpay0xawvilh14pqz8f";
+      sha256 = "QIY4qGm333H5MWhe3CIfEieqTEk8st5A7SJHkwGnnxw=";
     };
     "aarch64-linux" = fetchurl {
       url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-      sha256 = "0rddafjgdnj3na96x83paq5z14grj46v4iv38qbkvmdllrj26a0a";
+      sha256 = "eZbKoKYC2tt4Rxn5OJr7iA1aJlYFC0tpRmbLq7qSrIU=";
     };
     "aarch64-darwin" = fetchurl {
       url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-      sha256 = "YWiZnYdsW7dyQ0IeKeC1U00ZIdJRnzs9keeQTEU2ozA=";
+      sha256 = "tn2vF3v7KfF7CfWqyydL5Iyh5tP9Tez87PJH+URgSIw=";
     };
     "x86_64-darwin" = fetchurl {
       url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-      sha256 = "391b0d239b11095bb8515cb60ee95f02d5862fcb509724081f314819967206b6";
+      sha256 = "CRFlnqpX4j2CMGzS+UvXwNty2mHpONOjym6UJPE2Yg4=";
     };
   };
 in
