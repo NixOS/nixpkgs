@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, buildPackages
 , sqlite
 , libtiff
 , curl
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     "-DUSE_EXTERNAL_GTEST=ON"
     "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
     "-DNLOHMANN_JSON_ORIGIN=external"
+    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
 
   preCheck =
