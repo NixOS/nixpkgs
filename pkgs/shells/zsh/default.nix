@@ -10,7 +10,10 @@
 , texinfo
 , ncurses
 , pcre
-, buildPackages }:
+, buildPackages
+
+, nixosTests
+}:
 
 let
   version = "5.8.1";
@@ -102,5 +105,8 @@ EOF
 
   passthru = {
     shellPath = "/bin/zsh";
+    tests = {
+      inherit (nixosTests) zsh-history oh-my-zsh;
+    };
   };
 }
