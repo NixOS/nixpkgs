@@ -9558,6 +9558,8 @@ with pkgs;
 
   py-spy = callPackage ../development/tools/py-spy { };
 
+  pydeps = with python3Packages; toPythonApplication pydeps;
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;

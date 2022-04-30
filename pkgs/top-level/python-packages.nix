@@ -6993,6 +6993,10 @@ in {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydeps = callPackage ../development/python-modules/pydeps {
+    inherit (pkgs) graphviz;
+  };
+
   pydes = callPackage ../development/python-modules/pydes { };
 
   py-desmume = callPackage ../development/python-modules/py-desmume { };
