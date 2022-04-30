@@ -73,7 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CAN support for Python";
-    homepage = "python-can.readthedocs.io";
+    homepage = "https://python-can.readthedocs.io";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab sorki ];
   };
