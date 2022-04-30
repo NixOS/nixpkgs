@@ -162,7 +162,11 @@ let
       ./patches/widevine-79.patch
     ];
 
-    postPatch = ''
+    postPatch = optionalString (chromiumVersionAtLeast "102") ''
+      # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
+      substituteInPlace BUILD.gn \
+        --replace '"//infra/orchestrator:orchestrator_all",' ""
+    '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
