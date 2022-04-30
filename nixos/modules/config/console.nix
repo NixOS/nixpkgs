@@ -183,7 +183,7 @@ in
         ];
       })
 
-      (mkIf (cfg.earlySetup && !config.boot.inird.systemd.enable) {
+      (mkIf (cfg.earlySetup && !config.boot.initrd.systemd.enable) {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
           ${if substring 0 1 cfg.font == "/" then ''
