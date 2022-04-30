@@ -44,6 +44,12 @@ in
       description = "Enable uploads of external files";
     };
 
+    user-icons = mkOption {
+      type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
+      default = null;
+      description = "User icons for history view";
+    };
+
     emoji = mkOption {
       type = types.bool;
       default = false;
@@ -111,6 +117,7 @@ in
             ${optionalString cfg.emoji "--emoji"} \
             ${optionalString cfg.h1-title "--h1-title"} \
             ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
+            ${optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
             ${cfg.stateDir}
         '';
       };
