@@ -3460,6 +3460,8 @@ with pkgs;
 
   envsubst = callPackage ../tools/misc/envsubst { };
 
+  er-patcher = callPackage ../tools/games/er-patcher { };
+
   errcheck = callPackage ../development/tools/errcheck {
     buildGoModule = buildGo118Module;
   };
