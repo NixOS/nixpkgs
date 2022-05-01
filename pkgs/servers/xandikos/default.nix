@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3Packages
 , nixosTests
 }:
@@ -15,6 +16,14 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-KDDk0QSOjwivJFz3vLk+g4vZMlSuX2FiOgHJfDJkpwg=";
   };
 
+  patches = [
+    # add support for systemd socket activation
+    (fetchpatch {
+      url = "https://github.com/jelmer/xandikos/pull/155.diff";
+      sha256 = "sha256-h2E0DSeWMkuUytMiu+uUsEJI22fszNCOxEqvPlXMYek=";
+    })
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     aiohttp
     dulwich
@@ -23,6 +32,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     multidict
     prometheus-client
+    systemd
   ];
 
   passthru.tests.xandikos = nixosTests.xandikos;
