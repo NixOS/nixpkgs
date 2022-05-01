@@ -19,10 +19,6 @@ with lib;
   };
 
   config = {
-    # Don't build the GRUB menu builder script, since we don't need it
-    # here and it causes a cyclic dependency.
-    boot.loader.grub.enable = false;
-
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
       ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
