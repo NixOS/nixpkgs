@@ -20,7 +20,6 @@ in
   virtualisation.graphics = false;
   documentation.enable = false;
   services.qemuGuest.enable = true;
-  boot.loader.grub.enable = false;
 
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = [
