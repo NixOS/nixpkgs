@@ -100,8 +100,7 @@ in
     boot.loader.grub = {
 
       enable = mkOption {
-        default = !config.boot.isContainer;
-        defaultText = literalExpression "!config.boot.isContainer";
+        default = false;
         type = types.bool;
         description = ''
           Whether to enable the GNU GRUB boot loader.
