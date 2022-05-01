@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   pythonPath = [ python2Packages.pygtk python2Packages.psutil ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"
   '';
 
