@@ -66,7 +66,6 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
-    mainProgram = "k3d";
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "k3d";
   };
