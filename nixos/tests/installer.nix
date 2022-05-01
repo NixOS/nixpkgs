@@ -27,6 +27,7 @@ let
         ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
+          boot.loader.grub.enable = true;
           boot.loader.grub.version = ${toString grubVersion};
           ${optionalString (grubVersion == 1) ''
             boot.loader.grub.splashImage = null;
