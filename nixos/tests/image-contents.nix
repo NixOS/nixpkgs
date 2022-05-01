@@ -18,6 +18,7 @@ let
       ../modules/profiles/qemu-guest.nix
       {
         fileSystems."/".device = "/dev/disk/by-label/nixos";
+        boot.loader.grub.enable = true;
         boot.loader.grub.device = "/dev/vda";
         boot.loader.timeout = 0;
       }
