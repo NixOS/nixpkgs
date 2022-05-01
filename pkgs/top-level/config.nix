@@ -20,6 +20,11 @@ let
 
     /* Internal stuff */
 
+    # Hide built-in module system options from docs.
+    _module.args = mkOption {
+      internal = true;
+    };
+
     warnings = mkOption {
       type = types.listOf types.str;
       default = [];

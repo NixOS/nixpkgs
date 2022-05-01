@@ -23,6 +23,14 @@ let
       <xsl:import href="${./parameters.xml}"/>
     </xsl:stylesheet>
   '';
+
+  # NB: This file describes the Nixpkgs manual, which happens to use module
+  #     docs infra originally developed for NixOS.
+  optionsDoc = pkgs.nixosOptionsDoc {
+    inherit (pkgs.lib.evalModules { modules = [ ../../pkgs/top-level/config.nix ]; }) options;
+    documentType = "none";
+  };
+
 in pkgs.runCommand "doc-support" {}
 ''
   mkdir result
@@ -30,6 +38,7 @@ in pkgs.runCommand "doc-support" {}
     cd result
     ln -s ${locationsXml} ./function-locations.xml
     ln -s ${functionDocs} ./function-docs
+    ln -s ${optionsDoc.optionsDocBook} ./config-options.docbook.xml
 
     ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
     ln -s ${pkgs.docbook_xsl_ns}/xml/xsl ./xsl
