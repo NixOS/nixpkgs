@@ -877,5 +877,14 @@ in
       "tap"
       "tun"
     ];
+
+    assertions = [
+      {
+        assertion = !(config.boot.isContainer && config.boot.loader.grub.enable);
+        message = ''
+          GRUB should not be used in a container.
+        '';
+      }
+    ];
   });
 }
