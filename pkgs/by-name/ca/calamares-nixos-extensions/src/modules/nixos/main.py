@@ -374,7 +374,7 @@ def run():
 
     # Check partitions
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["fs"] != "linuxswap":
+        if part["claimed"] == True and part["fsName"] == "luks":
             cfg += cfgbootcrypt
             if fw_type != "efi":
                 cfg += cfgbootgrubcrypt
@@ -399,7 +399,8 @@ def run():
             if part["fs"] == "linuxswap":
                 cfg += cfgswapcrypt
                 catenate(variables, "swapdev", part["luksMapperName"])
-                catenate(variables, "swapuuid", part["luksUuid"])
+                uuid = part["uuid"]
+                catenate(variables, "swapuuid", uuid)
             else:
                 cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(
                     part["luksMapperName"])
