@@ -1,23 +1,23 @@
-{ lib, buildDunePackage, dune_3, dune-private-libs }:
+{ lib, buildDunePackage, dune_3, stdune, dyn }:
 
 buildDunePackage rec {
-  pname = "dune-glob";
+  pname = "fiber";
   inherit (dune_3) src version;
 
   duneVersion = "3";
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ dune-private-libs ];
+  buildInputs = [ stdune dyn ];
 
   preBuild = ''
     rm -r vendor/csexp
   '';
 
   meta = with lib; {
+    description = "Structured concurrency library";
     inherit (dune_3.meta) homepage;
-    description = "Glob string matching language supported by dune";
-    maintainers = [ maintainers.marsam ];
+    maintainers = with lib.maintainers; [ ];
     license = licenses.mit;
   };
 }

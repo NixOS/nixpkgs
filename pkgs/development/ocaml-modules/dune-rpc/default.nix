@@ -1,21 +1,21 @@
-{ lib, buildDunePackage, dune_3, dune-private-libs }:
+{ lib, buildDunePackage, dune_3, stdune, ordering, pp, xdg, dyn }:
 
 buildDunePackage rec {
-  pname = "dune-site";
+  pname = "dune-rpc";
   inherit (dune_3) src version;
 
   duneVersion = "3";
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ dune-private-libs ];
+  buildInputs = [ stdune ordering pp xdg dyn ];
 
   preBuild = ''
     rm -r vendor/csexp
   '';
 
   meta = with lib; {
-    description = "A library for embedding location information inside executable and libraries";
+    description = "Library to connect and control a running dune instance";
     inherit (dune_3.meta) homepage;
     maintainers = with lib.maintainers; [ ];
     license = licenses.mit;
