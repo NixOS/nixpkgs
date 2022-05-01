@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
     # never be executed (somewhere below in the script).
     sed -i $out/sbin/rabbitmq-env -e "2s|^|RABBITMQ_SCRIPTS_DIR=$out/sbin\n|"
 
+    # Tell RabbitMQ to look for plugins in a location where other packages
+    # are allowed to install files.
+    sed -i $out/sbin/rabbitmq-env -e "2s|^|RABBITMQ_PLUGINS_DIR=/plugins\n|"
+
     # there’s a few stray files that belong into share
     mkdir -p $doc/share/doc/rabbitmq-server
     mv $out/LICENSE* $doc/share/doc/rabbitmq-server
