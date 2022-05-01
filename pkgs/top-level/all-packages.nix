@@ -24519,6 +24519,8 @@ with pkgs;
 
   netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk { };
 
+  newaita-icon-theme = callPackage ../data/icons/newaita-icon-theme { };
+
   nordic = callPackage ../data/themes/nordic { };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
