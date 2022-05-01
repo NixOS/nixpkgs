@@ -130,4 +130,11 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
   inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
+
+  # Depends on OneTuple for GHC < 9.0
+  universe-base = addBuildDepends [ self.OneTuple ] super.universe-base;
+
+  # Not possible to build in the main GHC 9.0 package set
+  # https://github.com/awakesecurity/spectacle/issues/49
+  spectacle = doDistribute (markUnbroken super.spectacle);
 }

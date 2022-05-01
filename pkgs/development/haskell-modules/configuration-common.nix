@@ -687,9 +687,6 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
-  # 2022-03-24: Strict aeson bound: https://github.com/berberman/nvfetcher/pull/63
-  nvfetcher = throwIfNot (super.nvfetcher.version == "0.4.0.0") "nvfetcher: remove jailbreak after update" doJailbreak super.nvfetcher;
-
   # 2022-03-24: Strict aeson bound:
   arch-web = throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
 
@@ -853,6 +850,18 @@ self: super: {
 
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
+
+  # requires git at test-time *and* runtime, but we'll just rely on users to
+  # bring their own git at runtime
+  sensei = overrideCabal (drv: {
+    testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
+  }) (super.sensei.overrideScope (self: super: {
+    hspec-meta = self.hspec-meta_2_9_3;
+    hspec = self.hspec_2_9_7;
+    hspec-core = dontCheck self.hspec-core_2_9_7;
+    hspec-discover = self.hspec-discover_2_9_7;
+  }));
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
@@ -1153,6 +1162,16 @@ self: super: {
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
+
+  # Causes Test.QuickCheck.resize: negative size crashes e.g. in test suites
+  # https://github.com/typeable/generic-arbitrary/issues/14
+  generic-arbitrary = appendPatches [
+    (pkgs.fetchpatch {
+      name = "generic-arbitrary-no-negative-resize.patch";
+      url = "https://github.com/typeable/generic-arbitrary/commit/c13d119d8ad0d43860ecdb93b357b0239e366a6c.patch";
+      sha256 = "1jgbd2jn575icqw9nfdzh57nacm3pn8n53ka52129pnfjqfzyhsi";
+    })
+  ] super.generic-arbitrary;
 
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
@@ -2583,15 +2602,6 @@ self: super: {
 
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
-
-  # Manually upgrade cryptostore to work around
-  # https://github.com/ocheron/cryptostore/issues/7
-  cryptostore = assert super.cryptostore.version == "0.2.1.0"; overrideCabal {
-    version = "0.2.2.0";
-    sha256 = "0n70amg7y2qwfjhj4xaqjia46fbabba9l2g19ry191m7c4zp1skx";
-    revision = null;
-    editedCabalFile = null;
-  } super.cryptostore;
 
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;

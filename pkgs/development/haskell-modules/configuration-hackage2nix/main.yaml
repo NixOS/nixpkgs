@@ -251,6 +251,8 @@ package-maintainers:
     - mattermost-api
     - mattermost-api-qc
     - Unique
+  libjared:
+    - sensei
   maralorn:
     - cabal-fmt
     - ema
@@ -463,6 +465,7 @@ unsupported-platforms:
   libmodbus:                                    [ x86_64-darwin, aarch64-darwin ]
   libsystemd-journal:                           [ x86_64-darwin, aarch64-darwin ]
   libtelnet:                                    [ x86_64-darwin, aarch64-darwin ]
+  libvirt-hs:                                   [ x86_64-darwin ] # spidermonkey is not supported on darwin
   libzfs:                                       [ x86_64-darwin, aarch64-darwin ]
   linearEqSolver:                               [ aarch64-linux ]
   linux-evdev:                                  [ x86_64-darwin, aarch64-darwin ]
@@ -505,6 +508,7 @@ unsupported-platforms:
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin, aarch64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin, aarch64-darwin ]
+  sensei:                                       [ x86_64-darwin ]
   synthesizer-alsa:                             [ x86_64-darwin, aarch64-darwin ]
   taffybar:                                     [ x86_64-darwin, aarch64-darwin ]
   termonad:                                     [ x86_64-darwin, aarch64-darwin ]

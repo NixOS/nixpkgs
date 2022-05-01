@@ -357,7 +357,6 @@ broken-packages:
   - binary-communicator
   - binary-derive
   - binary-ext
-  - binary-generic-combinators
   - binary-indexed-tree
   - binary-protocol
   - binary-tree
@@ -669,6 +668,8 @@ broken-packages:
   - citeproc-hs
   - cjk
   - cj-token
+  - cl3-hmatrix-interface
+  - cl3-linear-interface
   - clang-compilation-database
   - clang-pure
   - clanki
@@ -1048,6 +1049,7 @@ broken-packages:
   - dense-int-set
   - dependent-hashmap
   - dependent-monoidal-map
+  - dep-t
   - dep-t-dynamic
   - deptrack-core
   - derangement
@@ -1208,6 +1210,7 @@ broken-packages:
   - dynamic-object
   - dynamic-pipeline
   - DynamicTimeWarp
+  - dyna-processing
   - dynloader
   - DysFRP
   - dywapitchtrack
@@ -1600,6 +1603,7 @@ broken-packages:
   - gegl
   - gelatin
   - gemcap
+  - gemini-exports
   - gemstone
   - gencheck
   - gender
@@ -1736,6 +1740,7 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
+  - glirc
   - GLMatrix
   - global-variables
   - glob-posix
@@ -1774,6 +1779,7 @@ broken-packages:
   - gpah
   - GPipe
   - GPipe-GLFW4
+  - gpmf
   - gpx-conduit
   - graceful
   - grafana
@@ -1890,6 +1896,7 @@ broken-packages:
   - hakyll-typescript
   - HaLeX
   - halfs
+  - half-space
   - halipeto
   - halive
   - halma
@@ -2103,6 +2110,7 @@ broken-packages:
   - hedgehog-checkers
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-lens
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2894,6 +2902,7 @@ broken-packages:
   - lazify
   - lazyarray
   - lazyboy
+  - lazy-bracket
   - lazy-priority-queue
   - lazyset
   - LazyVault
@@ -3334,7 +3343,6 @@ broken-packages:
   - msgpack
   - msgpack-binary
   - msgpack-persist
-  - msgpack-types
   - msh
   - msi-kb-backlit
   - MTGBuilder
@@ -3600,7 +3608,6 @@ broken-packages:
   - open-signals
   - opensoundcontrol-ht
   - openssh-protocol
-  - opentelemetry-extra
   - opentelemetry-http-client
   - opentheory-char
   - opentok
@@ -4337,7 +4344,6 @@ broken-packages:
   - robin
   - robots-txt
   - roc-cluster
-  - roc-id
   - roku-api
   - rollbar-client
   - rollbar-hs
@@ -4467,7 +4473,6 @@ broken-packages:
   - semigroups-actions
   - sendgrid-haskell
   - sendgrid-v3
-  - sensei
   - sensu-run
   - sentry
   - separated

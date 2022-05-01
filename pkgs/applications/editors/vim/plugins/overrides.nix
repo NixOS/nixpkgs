@@ -450,11 +450,8 @@ self: super: {
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
 
-    doCheck = true;
-    checkPhase = ''
-      ${neovim-unwrapped}/bin/nvim -n -u NONE -i NONE -V1 --cmd "set rtp+=$out" --cmd "runtime! plugin/*.vim" -c "MinimapToggle"  +quit!
-    '';
-
+    doInstallCheck = true;
+    vimCommandCheck = "MinimapToggle";
   });
 
   ncm2 = super.ncm2.overrideAttrs (old: {
