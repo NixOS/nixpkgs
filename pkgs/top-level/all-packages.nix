@@ -2961,6 +2961,8 @@ with pkgs;
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
+  cloudflare-dyndns = python3Packages.cloudflare-dyndns;
+
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
 
   clib = callPackage ../tools/package-management/clib { };
