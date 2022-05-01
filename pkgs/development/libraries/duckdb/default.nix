@@ -49,19 +49,28 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+  installCheckPhase =
+    let
+      excludes = map (pattern: "exclude:'${pattern}'") [
+        "*test_slow"
+        "Test file buffers for reading/writing to file"
+        "[test_slow]"
+        "test/common/test_cast_hugeint.test"
+        "test/sql/copy/csv/test_csv_remote.test"
+        "test/sql/copy/parquet/test_parquet_remote.test"
+      ] ++ lib.optionals stdenv.isAarch64 [
+        "test/sql/aggregate/aggregates/test_kurtosis.test"
+        "test/sql/aggregate/aggregates/test_skewness.test"
+        "test/sql/function/list/aggregates/skewness.test"
+      ];
+    in
+    ''
+      runHook preInstallCheck
 
-    $PWD/test/unittest \
-      'exclude:[test_slow]' \
-      'exclude:*test_slow' \
-      exclude:test/sql/copy/csv/test_csv_remote.test \
-      exclude:test/sql/copy/parquet/test_parquet_remote.test \
-      exclude:test/common/test_cast_hugeint.test \
-      exclude:'Test file buffers for reading/writing to file'
+      $PWD/test/unittest ${toString excludes}
 
-    runHook postInstallCheck
-  '';
+      runHook postInstallCheck
+    '';
 
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = lib.optionals withHttpFs [ openssl ]
