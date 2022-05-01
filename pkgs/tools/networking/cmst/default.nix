@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase, qttools }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase, qttools, gitUpdater }:
 
 mkDerivation rec {
   pname = "cmst";
@@ -20,6 +20,11 @@ mkDerivation rec {
       substituteInPlace $f --replace /etc $out/etc --replace /usr $out
     done
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     description = "QT GUI for Connman with system tray icon";
