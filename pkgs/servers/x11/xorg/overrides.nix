@@ -668,6 +668,13 @@ self: super:
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
+
+          # https://github.com/NixOS/nixpkgs/issues/170856
+          # https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/869
+          (fetchpatch {
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/1743d735ea1ecb6ac9464f78f336cd5c56e83cd7.diff";
+            sha256 = "GVBTh6/p+WpZQAD8ivaZ55iGKjZ1kVyucRnIQtZGrLc=";
+          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
