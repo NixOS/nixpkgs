@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     (if ncurses == null then "--without-curses" else "--with-curses")
-    (if stdenv.hostPlatform.isStatic then "--enable-shared=no" else "--enable-shared=yes")
   ];
 
   # Provide libgpm.so for compatability
