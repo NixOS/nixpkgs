@@ -117,9 +117,6 @@ in
     kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
   };
 
-  # No grub for the tarball.
-  boot.loader.grub.enable = false;
-
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
   fileSystems.fake =
