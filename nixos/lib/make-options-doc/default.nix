@@ -20,6 +20,8 @@
 , lib
 , options
 , transformOptions ? lib.id  # function for additional tranformations of the options
+, documentType ? "appendix" # TODO deprecate "appendix" in favor of "none"
+                            #      and/or rename function to moduleOptionDoc for clean slate
 , revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
@@ -161,6 +163,7 @@ in rec {
 
     ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
+      --stringparam documentType '${documentType}' \
       --stringparam revision '${revision}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
