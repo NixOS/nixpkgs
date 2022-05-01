@@ -36,6 +36,6 @@ mkDerivation rec {
     description = "A terminal emulator widget for Qt 5";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

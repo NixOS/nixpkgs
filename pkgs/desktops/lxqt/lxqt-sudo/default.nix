@@ -48,6 +48,6 @@ mkDerivation rec {
     description = "GUI frontend for sudo/su";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }
