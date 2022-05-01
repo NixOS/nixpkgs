@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
-  version = "4.0.0";
+  version = "4.1.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e43dc777f7db1481db473210101ec2df2bd39a45b149d7218a618e954177eda6";
+    sha256 = "sha256-UrACVglB422b+Ab8olI9x/uFYKKV1fGm4VrC3tenOEA=";
   };
 
   propagatedBuildInputs = [ flake8 pycodestyle six ];
