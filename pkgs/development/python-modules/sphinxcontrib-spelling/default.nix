@@ -6,7 +6,6 @@
 , sphinx
 , pyenchant
 , pbr
-, pythonOlder
 }:
 
 buildPythonPackage rec {
