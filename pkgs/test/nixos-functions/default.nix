@@ -22,7 +22,6 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
 
     nixos-test = (pkgs.nixos {
       system.nixos = dummyVersioning;
-      boot.loader.grub.enable = false;
       fileSystems."/".device = "/dev/null";
     }).toplevel;
 
