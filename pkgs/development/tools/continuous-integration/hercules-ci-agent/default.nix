@@ -23,7 +23,6 @@ in pkg.overrideAttrs (o: {
     passthru = o.passthru // {
       # Does not test the package, but evaluation of the related NixOS module.
       tests.nixos-minimal-config = nixos {
-        boot.loader.grub.enable = false;
         fileSystems."/".device = "bogus";
         services.hercules-ci-agent.enable = true;
       };
