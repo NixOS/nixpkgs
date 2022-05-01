@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "0.1.6.2";
+  version = "0.2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hrjsw53ixgmhsiszdrzzh0wma705nrhq8npzacsyaf43r29zvqy";
+    sha256 = "sha256-RsB8b96aCIBM3aABOuuexB5fIo7H1Kq/XsGvV8b7/sA=";
   };
 
   propagatedBuildInputs = [
