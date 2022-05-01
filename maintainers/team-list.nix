@@ -198,6 +198,18 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  enlightenment = {
+    members = [
+      romildo
+    ];
+    githubTeams = [
+      "enlightenment"
+    ];
+    scope = "Maintain Enlightenment desktop environment and related packages.";
+    shortName = "Enlightenment";
+    enableFeatureFreezePing = true;
+  };
+
   # Dummy group for the "everyone else" section
   feature-freeze-everyone-else = {
     members = [ ];
