@@ -10,11 +10,7 @@
     ./sd-image.nix
   ];
 
-  boot.loader = {
-    grub.enable = false;
-    generic-extlinux-compatible.enable = true;
-  };
-
+  boot.loader.generic-extlinux-compatible.enable = true;
   boot.consoleLogLevel = lib.mkDefault 7;
 
   sdImage = {
