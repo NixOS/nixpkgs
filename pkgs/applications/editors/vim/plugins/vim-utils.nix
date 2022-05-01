@@ -535,6 +535,11 @@ rec {
     inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
+
+  # TODO placeholder to ease working on automatic plugin detection
+  # this should be a luarocks "flat" install with appropriate vim hooks
+  buildNeovimPluginFrom2Nix = buildVimPluginFrom2Nix;
+
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
     packages ? {},
