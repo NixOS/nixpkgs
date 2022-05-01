@@ -80,7 +80,6 @@ in
       pkgs.joe
     ];
 
-  boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "uImage";
 
