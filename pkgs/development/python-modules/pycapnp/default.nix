@@ -20,9 +20,9 @@ buildPythonPackage rec {
     sha256 = "1xi6df93ggkpmwckwbi356v7m32zv5qry8s45hvsps66dz438kmi";
   };
 
-  nativeBuildInputs = [ cython pkgconfig ];
+  nativeBuildInputs = [ cython ];
 
-  buildInputs = [ capnproto ];
+  buildInputs = [ capnproto pkgconfig ];
 
   # Tests depend on schema_capnp which fails to generate
   doCheck = false;
