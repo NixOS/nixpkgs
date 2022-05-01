@@ -446,6 +446,157 @@ in {
         };
       };
 
+      mail = let
+        mailUpstreamManualUrl = "https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/email_configuration.html";
+      in {
+        mode = mkOption {
+          default = null;
+          type = types.nullOr (types.enum [ "smtp" "sendmail" "qmail" ]);
+          example = "smtp";
+          description = ''
+            ${uiClashWarning}
+
+            The mail server mode.
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        host = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          example = "smtp.server.dom";
+          description = ''
+            ${uiClashWarning}
+
+            The mail server hostname or IP address.  Can include a port number instead of using
+            <xref linkend="opt-services.nextcloud.config.mail.port" />
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        port = mkOption {
+          default = null;
+          type = types.nullOr types.port;
+          example = "465";
+          description = ''
+            ${uiClashWarning}
+
+            The mail server port number.
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        timeout = mkOption {
+          default = null;
+          type = types.nullOr types.ints.positive;
+          example = "30";
+          description = ''
+            ${uiClashWarning}
+
+            An optional timeout for the connection with the server.
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        secure = mkOption {
+          default = null;
+          type = types.nullOr (types.enum [ "none" "ssl" "tls" ]);
+          example = "tls";
+          description = ''
+            ${uiClashWarning}
+
+            The type of encryption for the connection to the mail server.
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        fromAddress = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          example = "joe";
+          description = ''
+            ${uiClashWarning}
+
+            The username in the "From" header for outgoing email.
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        fromDomain = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          example = "mail.example.net";
+          description = ''
+            ${uiClashWarning}
+
+            The domain in the "From" header for outgoing email.
+
+            Further details about this setting can be found in the
+            <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+          '';
+        };
+        auth = {
+          enabled = mkOption {
+            default = null;
+            type = types.nullOr types.bool;
+            example = true;
+            description = ''
+              ${uiClashWarning}
+
+              Whether Nextcloud needs to authenticate to the mail server.
+
+              Further details about this setting can be found in the
+              <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+            '';
+          };
+          type = mkOption {
+            default = null;
+            type = types.nullOr (types.enum ["LOGIN" "PLAIN"]);
+            example = "LOGIN";
+            description = ''
+              ${uiClashWarning}
+
+              The authentication method to use with the mail server.
+
+              Further details about this setting can be found in the
+              <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+            '';
+          };
+          username = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            example = "joe";
+            description = ''
+              ${uiClashWarning}
+
+              The username to authenticate as to the mail server.
+
+              Further details about this setting can be found in the
+              <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+            '';
+          };
+          passFile = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              ${uiClashWarning}
+
+              The full path to a file that contains the password for
+              authenticating to the mail server.
+
+              Further details about this setting can be found in the
+              <link xlink:href="${mailUpstreamManualUrl}">upstream documentation</link>.
+            '';
+          };
+        };
+      };
+
       objectstore = {
         s3 = {
           enable = mkEnableOption ''
@@ -699,6 +850,10 @@ in {
       { assertion = cfg.database.createLocally -> cfg.config.dbtype == "mysql";
         message = ''services.nextcloud.config.dbtype must be set to mysql if services.nextcloud.database.createLocally is set to true.'';
       }
+      (with cfg.config.mail; {
+        assertion = auth.enabled != null -> (auth.type != null && auth.username != null && auth.passFile != null);
+        message = "services.nextcloud.config.mail.authentication.{type,username,password} must all be set if services.nextcloud.config.mail.authentication.enabled is set to true.";
+      })
     ]; }
 
     { systemd.timers.nextcloud-cron = {
@@ -790,6 +945,17 @@ in {
               ${optionalString (c.twofactorEnforced.enabled != null) "'twofactor_enforced' => '${lib.boolToString c.twofactorEnforced.enabled}',"}
               ${optionalString (c.twofactorEnforced.groups != null) "'twofactor_enforced_groups' => ${writePhpArrary c.twofactorEnforced.groups},"}
               ${optionalString (c.twofactorEnforced.excludedGroups != null) "'twofactor_enforced_excluded_groups' => ${writePhpArrary c.twofactorEnforced.excludedGroups},"}
+              ${optionalString (c.mail.mode != null) "'mail_smtpmode' => '${c.mail.mode}',"}
+              ${optionalString (c.mail.host != null) "'mail_smtphost' => '${c.mail.host}',"}
+              ${optionalString (c.mail.port != null) "'mail_smtpport' => '${toString c.mail.port}',"}
+              ${optionalString (c.mail.timeout != null) "'mail_smtptimeout' => '${c.mail.timeout}',"}
+              ${optionalString (c.mail.secure != null) "'mail_smtpsecure' => '${if c.mail.secure == "none" then "" else c.mail.secure}',"}
+              ${optionalString (c.mail.fromAddress != null) "'mail_from_address' => '${c.mail.fromAddress}',"}
+              ${optionalString (c.mail.fromDomain != null) "'mail_domain' => '${c.mail.fromDomain}',"}
+              ${optionalString (c.mail.auth.enabled != null) "'mail_smtpauth' => ${lib.boolToString c.mail.auth.enabled},"}
+              ${optionalString (c.mail.auth.type != null) "'mail_smtpauthtype' => '${c.mail.auth.type}',"}
+              ${optionalString (c.mail.auth.username != null) "'mail_smtpname' => '${c.mail.auth.username}',"}
+              ${optionalString (c.mail.auth.passFile != null) "'mail_smtppassword' => nix_read_secret('${c.mail.auth.passFile}'),"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles}"}
               ${objectstoreConfig}
             ];
