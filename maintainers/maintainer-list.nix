@@ -7199,6 +7199,13 @@
     githubId = 1769386;
     name = "Liam Diprose";
   };
+  libjared = {
+    email = "jared@perrycode.com";
+    github = "libjared";
+    githubId = 3746656;
+    matrix = "@libjared:matrix.org";
+    name = "Jared Perry";
+  };
   liff = {
     email = "liff@iki.fi";
     github = "liff";

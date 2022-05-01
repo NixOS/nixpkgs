@@ -80,6 +80,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
+  dbus = super.dbus_1_2_24;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -170,7 +171,7 @@ self: super: {
   ];
 
   # lens >= 5.1 supports 9.2.1
-  lens = super.lens_5_1;
+  lens = doDistribute self.lens_5_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
