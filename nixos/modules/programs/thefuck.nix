@@ -33,7 +33,7 @@ in
       programs.bash.interactiveShellInit = initScript;
       programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript;
       programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
-        ${pkgs.thefuck}/bin/thefuck --alias | source
+        ${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias} | source
       '';
     };
   }
