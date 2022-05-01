@@ -120,7 +120,6 @@ import ./make-test-python.nix (
 
       initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
         boot.initrd.network.enable = true;
-        boot.loader.grub.enable = false;
 
         boot.kernelParams = lib.mkOverride 5 (
           [
