@@ -259,8 +259,6 @@ in {
         }
       ]) (builtins.attrNames cfg.extraFiles);
 
-    boot.loader.grub.enable = mkDefault false;
-
     boot.loader.supportsInitrdSecrets = true;
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
