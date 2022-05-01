@@ -1,10 +1,21 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "6.15.5";
+  version = "7.5.0";
+  format = "setuptools";
 
-  propagatedBuildInputs = with python3Packages; [
+  src = fetchFromGitHub {
+    owner = "snakemake";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-KIKuV6DVHn3dDY/rJG1zNWM79tdDB6GGVH9/kYn6XaE=";
+  };
+
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
     configargparse
     connection-pool
@@ -22,26 +33,21 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     ratelimiter
     requests
+    retry
     smart-open
     stopit
     tabulate
     toposort
     wrapt
+    yte
   ];
-
-  src = fetchFromGitHub {
-    owner = "snakemake";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-i8C7gPLzUzSxNH9xwpr+fUKI1SvpYFsFBlspS74LoWU=";
-  };
 
   # See
   # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
   # for the current basic test suite. Tibanna and Tes require extra
   # setup.
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     pandas
     pytestCheckHook
     requests-mock
@@ -53,7 +59,15 @@ python3Packages.buildPythonApplication rec {
     "tests/test_linting.py"
   ];
 
-  pythonImportsCheck = [ "snakemake" ];
+  disabledTests = [
+    # Tests require network access
+    "test_github_issue1396"
+    "test_github_issue1460"
+  ];
+
+  pythonImportsCheck = [
+    "snakemake"
+  ];
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";
