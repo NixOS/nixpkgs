@@ -663,6 +663,7 @@ dont-distribute-packages:
  - ascii
  - ascii-cows
  - ascii-table
+ - ascii_1_2_0_0
  - asic
  - asif
  - assert4hs-hspec
@@ -1203,6 +1204,8 @@ dont-distribute-packages:
  - delimiter-separated
  - delta
  - delta-h
+ - dep-t-advice
+ - dep-t-value
  - dependent-literals-plugin
  - dependent-state
  - depends
@@ -2811,11 +2814,9 @@ dont-distribute-packages:
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
- - msgpack-arbitrary
  - msgpack-idl
  - msgpack-rpc
  - msgpack-rpc-conduit
- - msgpack-testsuite
  - mtgoxapi
  - mu-avro
  - mu-graphql
@@ -2967,8 +2968,6 @@ dont-distribute-packages:
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
- - opentelemetry-lightstep
- - opentelemetry-lightstep_0_8_0
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -3325,6 +3324,7 @@ dont-distribute-packages:
  - regions-mtl
  - registry-hedgehog
  - registry-hedgehog-aeson
+ - registry-messagepack
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3764,6 +3764,9 @@ dont-distribute-packages:
  - sydtest-servant
  - sydtest-typed-process
  - sydtest-wai
+ - sydtest-webdriver
+ - sydtest-webdriver-screenshot
+ - sydtest-webdriver-yesod
  - sydtest-yesod
  - sylvia
  - sym-plot

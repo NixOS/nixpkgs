@@ -10,12 +10,12 @@ in
 rec {
   thunderbird = (common rec {
     pname = "thunderbird";
-    version = "91.8.0";
+    version = "91.8.1";
     application = "comm/mail";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "147c7ad68b0a32cc0fd4405935836af1fa77bbce6a1e367b51ef9871e7fc2a8fe908a1d200be34326f4f339d272e62f619b75680201fe82d301ddd02e23824d5";
+      sha512 = "1591f3e9c76c1f2ea7fa5e194a7d030c8657a7855a95c8a177e8067c5aa838f0d8ca2652cd049b4bc88d0c9e604285a47b0c8316c190e2ceadfc1130d1e4de6c";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
