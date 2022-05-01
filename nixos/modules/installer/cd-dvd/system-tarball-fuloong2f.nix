@@ -150,7 +150,6 @@ in
   services.openssh.enable = true;
   systemd.services.openssh.wantedBy = lib.mkOverride 50 [];
 
-  boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "vmlinux";
 
