@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2021-12-25";
+  version = "2022-04-29";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1h10yqz3i59bxhkk2r2p8as8g9ibx38bbpdxi7jgg2pxr581mn4f";
+    sha256 = "oFGJ29He7ZmryW/Eg+JLM9C3FzNjmKjzNtyXDHGuhwo=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     patchShebangs .
     mkdir -p $out/share/themes
-    name= ./install.sh -t all -d $out/share/themes
+    name= HOME="$TMPDIR" ./install.sh -t all -d $out/share/themes
     mkdir -p $out/share/doc/${pname}
     cp -a src/firefox $out/share/doc/${pname}
     rm $out/share/themes/*/{AUTHORS,COPYING}
