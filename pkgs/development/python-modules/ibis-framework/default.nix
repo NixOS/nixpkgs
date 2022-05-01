@@ -8,6 +8,9 @@
 , clickhouse-driver
 , click
 , dask
+, datafusion
+, duckdb
+, duckdb-engine
 , graphviz
 , importlib-metadata
 , multipledispatch
@@ -15,50 +18,51 @@
 , pandas
 , parsy
 , poetry-core
+, poetry-dynamic-versioning
 , pyarrow
-, pytest
+, pydantic
+, pytest-benchmark
 , pytest-mock
 , pytest-xdist
+, python
 , pytz
 , regex
 , requests
 , sqlalchemy
-, tables
+, sqlite
+, tabulate
 , toolz
 }:
 let
   # ignore tests for which dependencies are not available
   backends = [
-    "csv"
     "dask"
-    "hdf5"
+    "datafusion"
+    "duckdb"
     "pandas"
-    "parquet"
     "sqlite"
   ];
-
-  backendsString = lib.concatStringsSep " " backends;
 
   ibisTestingData = fetchFromGitHub {
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "743201a35c6b968cf55b054f9d28949ea15d1f0a";
-    sha256 = "sha256-xuSE6wHP3aF8lnEE2SuFbTRBu49ecRmc1F3HPcszptI=";
+    rev = "a88a4b3c3b54a88e7f77e59de70f5bf20fb62f19";
+    sha256 = "sha256-BnRhVwPcWFwiBJ2ySgiiuUdnF4gesnTq1/dLcuvc868=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "2.1.1";
+  version = "3.0.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "ibis";
     owner = "ibis-project";
     rev = version;
-    hash = "sha256-n3fR6wvcSfIo7760seB+5SxtoYSqQmqkzZ9VlNQF200=";
+    hash = "sha256-7ywDMAHQAl39kiHfxVkq7voUEKqbb9Zq8qlaug7+ukI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -68,65 +72,48 @@ buildPythonPackage rec {
     cached-property
     clickhouse-driver
     dask
+    datafusion
+    duckdb
+    duckdb-engine
     graphviz
+    importlib-metadata
     multipledispatch
     numpy
     pandas
     parsy
+    poetry-dynamic-versioning
     pyarrow
+    pydantic
     pytz
     regex
     requests
     sqlalchemy
-    tables
+    tabulate
     toolz
-  ] ++ lib.optionals (pythonOlder "3.8" && lib.versionOlder version "3.0.0") [
-    importlib-metadata
   ];
 
   checkInputs = [
     pytestCheckHook
     click
-    pytest
+    pytest-benchmark
     pytest-mock
     pytest-xdist
+    sqlite
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'atpublic = ">=2.3,<3"' 'atpublic = ">=2.3"' \
-      --replace 'regex = "^2021.7.6"' 'regex = "*"'
-  '';
 
   preBuild = ''
     # setup.py exists only for developer convenience and is automatically generated
     rm setup.py
   '';
 
-  disabledTests = [
-    # These tests are broken upstream: https://github.com/ibis-project/ibis/issues/3291
-    "test_summary_numeric"
-    "test_summary_non_numeric"
-    "test_batting_most_hits"
-    "test_join_with_window_function"
-    "test_where_long"
-    "test_quantile_groupby"
-    "test_summary_numeric"
-    "test_summary_numeric_group_by"
-    "test_summary_non_numeric"
-    "test_searched_case_column"
-    "test_simple_case_column"
-    "test_summary_non_numeric_group_by"
-  ];
-
   pytestFlagsArray = [
-    "ibis/tests"
-    "ibis/backends/tests"
-    "ibis/backends/{${lib.concatStringsSep "," backends}}/tests"
+    "--dist=loadgroup"
+    "-m"
+    "'${lib.concatStringsSep " or " backends} or core'"
   ];
 
   preCheck = ''
-    set -euo pipefail
+    set -eo pipefail
 
     export IBIS_TEST_DATA_DIRECTORY
     IBIS_TEST_DATA_DIRECTORY="$(mktemp -d)"
@@ -138,13 +125,13 @@ buildPythonPackage rec {
     find "$IBIS_TEST_DATA_DIRECTORY" -type f -exec chmod u+rw {} +
 
     # load data
-    for backend in ${backendsString}; do
-      python ci/datamgr.py "$backend" &
+    for backend in ${lib.concatStringsSep " " backends}; do
+      ${python.interpreter} ci/datamgr.py load "$backend"
     done
+  '';
 
-    wait
-  '' + lib.optionalString (lib.versionOlder version "3.0.0") ''
-    export PYTEST_BACKENDS="${backendsString}"
+  postCheck = ''
+    rm -r "$IBIS_TEST_DATA_DIRECTORY"
   '';
 
   pythonImportsCheck = [
