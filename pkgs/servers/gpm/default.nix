@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch, pkgsStatic
-
-# Optional Dependencies
-, ncurses ? null
+, withNcurses ? true, ncurses
 }:
 
 stdenv.mkDerivation rec {
