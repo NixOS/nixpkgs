@@ -63,21 +63,6 @@ let
   };
 
 in {
-  libwebsockets_3_1 = generic {
-    sha256 = "1w1wz6snf3cmcpa3f4dci2nz9za2f5rrylxl109id7bcb36xhbdl";
-    version = "3.1.0";
-  };
-
-  libwebsockets_3_2 = generic {
-    version = "3.2.2";
-    sha256 = "0m1kn4p167jv63zvwhsvmdn8azx3q7fkk8qc0fclwyps2scz6dna";
-  };
-
-  libwebsockets_4_2 = generic {
-    version = "4.2.1";
-    sha256 = "sha256-C+WGfNF4tAgbp/7aRraBgjNOe4I5ihm+8CGelXzfxbU=";
-  };
-
   libwebsockets_4_3 = generic {
     version = "4.3.1";
     sha256 = "sha256-lB3JHh058cQc5rycLnHk3JAOgtku0nRCixN5U6lPKq8=";
