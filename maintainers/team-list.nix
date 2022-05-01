@@ -367,6 +367,18 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  lxqt = {
+    members = [
+      romildo
+    ];
+    githubTeams = [
+      "lxqt"
+    ];
+    scope = "Maintain LXQt desktop environment and related packages.";
+    shortName = "LXQt";
+    enableFeatureFreezePing = true;
+  };
+
   marketing = {
     members = [
       garbas

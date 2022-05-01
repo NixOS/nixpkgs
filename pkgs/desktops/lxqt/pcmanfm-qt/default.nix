@@ -51,6 +51,6 @@ mkDerivation rec {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }
