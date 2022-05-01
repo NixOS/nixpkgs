@@ -692,10 +692,6 @@ in
 
     boot.loader.grub.version = 2;
 
-    # Don't build the GRUB menu builder script, since we don't need it
-    # here and it causes a cyclic dependency.
-    boot.loader.grub.enable = false;
-
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
       ++ optional canx86BiosBoot pkgs.syslinux
     ;
