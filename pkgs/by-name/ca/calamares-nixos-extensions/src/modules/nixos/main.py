@@ -522,7 +522,8 @@ def run():
                     libcalamares.utils.error("Setting vconsole keymap to {} will fail, using default".format(
                         gs.value("keyboardVConsoleKeymap")))
 
-    cfg += cfgmisc
+    if gs.value("packagechooser_packagechooser") is not None and gs.value("packagechooser_packagechooser") != "":
+        cfg += cfgmisc
 
     if (gs.value("username") is not None):
         fullname = gs.value("fullname")
@@ -537,7 +538,7 @@ def run():
             cfg += cfgautologin
             if (gs.value("packagechooser_packagechooser") == "gnome"):
                 cfg += cfgautologingdm
-        elif (gs.value("autoLoginUser") is not None and gs.value("packagechooser_packagechooser") == ""):
+        elif (gs.value("autoLoginUser") is not None):
             cfg += cfgautologintty
 
     # Check if unfree packages are allowed
