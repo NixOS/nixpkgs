@@ -1667,19 +1667,6 @@ self: super: {
 
   lsp = assert super.lsp.version == "1.4.0.0"; dontCheck super.lsp;
 
-  hls-test-utils = assert super.hls-test-utils.version == "1.2.0.0"; appendPatches [
-    (fetchpatch {
-      url = "https://github.com/haskell/haskell-language-server/commit/074593987e9086e308b89ecde336de2c64861dc0.patch";
-      sha256 = "sha256-uTlIbGQKulP3963UPL2V9cqMoIvPscK+s2W/HtBmMWc=";
-      relative = "hls-test-utils";
-    })
-    (fetchpatch {
-      url = "https://github.com/haskell/haskell-language-server/commit/78305f21783807b04baebca4860c255bfe84d4ab.patch";
-      sha256 = "sha256-oe8Q8kBJBkel+pR5imFj43NVpm4afcyLgAUCWhrIoPk=";
-      relative = "hls-test-utils";
-    })
-   ] super.hls-test-utils;
-
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
 
