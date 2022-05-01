@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python library to manage Etekcity Devices and Levoit Air Purifier";
+    description = "Library to get data from the Swedish Transport Administration (Trafikverket) API";
     homepage = "https://github.com/endor-force/pytrafikverket";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
