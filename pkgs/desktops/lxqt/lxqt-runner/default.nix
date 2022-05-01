@@ -56,6 +56,6 @@ mkDerivation rec {
     description = "Tool used to launch programs quickly by typing their names";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

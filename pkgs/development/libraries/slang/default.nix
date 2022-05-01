@@ -44,6 +44,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ncurses ];
 
+  buildFlags = lib.optional stdenv.hostPlatform.isStatic "static";
+  installTargets = lib.optional stdenv.hostPlatform.isStatic "install-static";
+
+  preBuild = ''
+    makeFlagsArray+=(AR_CR="${stdenv.cc.targetPrefix}ar cr")
+  '';
+
   # slang 2.3.2 does not support parallel building
   enableParallelBuilding = false;
 

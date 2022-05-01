@@ -228,6 +228,7 @@ crate_: lib.makeOverridable
         "colors"
         "edition"
         "buildTests"
+        "codegenUnits"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -315,6 +316,7 @@ crate_: lib.makeOverridable
       colors = lib.attrByPath [ "colors" ] "always" crate;
       extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or [ ]);
       edition = crate.edition or null;
+      codegenUnits = if crate ? codegenUnits then crate.codegenUnits else 1;
       extraRustcOpts =
         lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
           ++ extraRustcOpts_
@@ -329,13 +331,13 @@ crate_: lib.makeOverridable
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
           crateFeatures crateRenames libName build workspace_member release libPath crateVersion
           extraLinkFlags extraRustcOptsForBuildRs
-          crateAuthors crateHomepage verbose colors;
+          crateAuthors crateHomepage verbose colors codegenUnits;
       };
       buildPhase = buildCrate {
         inherit crateName dependencies
           crateFeatures crateRenames libName release libPath crateType
           metadata hasCrateBin crateBin verbose colors
-          extraRustcOpts buildTests;
+          extraRustcOpts buildTests codegenUnits;
       };
       installPhase = installCrate crateName metadata buildTests;
 
