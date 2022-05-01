@@ -6,9 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ ttuegel ];
   };
 
-  nodes.machine = { ... }:
-
-  {
+  nodes.machine = { ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
@@ -19,6 +17,8 @@ import ./make-test-python.nix ({ pkgs, ...} :
       user = "alice";
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
+    environment.plasma5.excludePackages =
+      [ pkgs.libsForQt5.kdeGear.elisa ];
   };
 
   testScript = { nodes, ... }: let
@@ -51,6 +51,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
     with subtest("Run systemsettings"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 >&2 &'")
         machine.wait_for_window("Settings")
+
+    with subtest("Should not have excluded packages"):
+        machine.fail("su - ${user.name} -c 'DISPLAY=:0.0 elisa >&2'")
 
     with subtest("Wait to get a screenshot"):
         machine.execute(

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 let
   xcfg = config.services.xserver;
@@ -32,7 +32,8 @@ let
   inherit (lib)
     getBin optionalString
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption types;
+    mkDefault mkIf mkMerge mkOption types literalExpression
+    ;
 
   ini = pkgs.formats.ini { };
 
@@ -222,12 +223,23 @@ in
         is not strictly required for Plasma Mobile to run.
       '';
     };
+
   };
+  options.environment.plasma5.excludePackages = mkOption {
+    default = [ ];
+    example =
+      literalExpression "[ pkgs.plasma5Packages.elisa ]";
+    type = types.listOf types.package;
+    description =
+      "Packages that should be excluded from the default Plasma installation.";
+  };
+
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
   ];
+
 
   config = mkMerge [
     # Common Plasma dependencies
@@ -457,7 +469,7 @@ in
       environment.systemPackages =
         with libsForQt5;
         with plasma5; with kdeGear; with kdeFrameworks;
-        [
+        utils.removePackagesByName [
           ksystemstats
           kinfocenter
           kmenuedit
@@ -476,7 +488,7 @@ in
           elisa
           gwenview
           okular
-        ]
+        ] config.environment.plasma5.excludePackages
       ;
 
       systemd.user.services = {
@@ -515,8 +527,9 @@ in
       ];
 
       environment.systemPackages =
-        with libsForQt5;
+        with libsForQt5; with libsForQt5.plasmaMobileGear;
         with plasma5; with kdeApplications; with kdeFrameworks;
+        utils.removePackagesByName (
         [
           # Basic packages without which Plasma Mobile fails to work properly.
           plasma-mobile
@@ -524,7 +537,7 @@ in
           pkgs.maliit-framework
           pkgs.maliit-keyboard
         ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) [
           # Additional software made for Plasma Mobile.
           alligator
           angelfish
@@ -543,6 +556,7 @@ in
           plasma-settings
           spacebar
         ])
+          config.environment.plasma5.excludePackages
       ;
 
       # The following services are needed or the UI is broken.
