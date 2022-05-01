@@ -21,7 +21,7 @@ in
 , enableGold ? execFormatIsELF stdenv.targetPlatform
 , enableShared ? !stdenv.hostPlatform.isStatic
   # WARN: Enabling all targets increases output size to a multiple.
-, withAllTargets ? false, libbfd, libopcodes
+, withAllTargets ? false
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
@@ -183,11 +183,9 @@ stdenv.mkDerivation {
   # Fails
   doCheck = false;
 
-  postFixup = lib.optionalString (enableShared && withAllTargets) ''
-    rm "$out"/lib/lib{bfd,opcodes}-${version}.so
-    ln -s '${lib.getLib libbfd}/lib/libbfd-${version}.so' "$out/lib/"
-    ln -s '${lib.getLib libopcodes}/lib/libopcodes-${version}.so' "$out/lib/"
-  '';
+  # Remove on next bump. It's a vestige of past conditional. Stays here to avoid
+  # mass rebuild.
+  postFixup = "";
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`

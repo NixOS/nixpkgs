@@ -521,8 +521,19 @@ rec {
       };
     } ./vim-gen-doc-hook.sh) {};
 
-  inherit (import ./build-vim-plugin.nix { inherit lib stdenv rtpPath vim vimGenDocHook; })
-    buildVimPlugin buildVimPluginFrom2Nix;
+  vimCommandCheckHook = callPackage ({ neovim-unwrapped }:
+    makeSetupHook {
+      name = "vim-command-check-hook";
+      deps = [ neovim-unwrapped ];
+      substitutions = {
+        vimBinary = "${neovim-unwrapped}/bin/nvim";
+        inherit rtpPath;
+      };
+    } ./vim-command-check-hook.sh) {};
+
+  inherit (import ./build-vim-plugin.nix {
+    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook;
+  }) buildVimPlugin buildVimPluginFrom2Nix;
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {

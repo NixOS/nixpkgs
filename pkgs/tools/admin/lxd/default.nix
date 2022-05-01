@@ -11,19 +11,21 @@
 
 buildGo118Package rec {
   pname = "lxd";
-  version = "5.0.0";
+  version = "5.1";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-qZt+37UsgZWy3kmIhE0y1zvmQm9s/yhAglBReyOP3vk=";
+    sha256 = "sha256-MZ9Ok1BuIUTtqigLAYX7N8Q3TPfXRopeXIwbZ4GJJQo=";
   };
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
+
+  excludedPackages = [ "test" "lxd/db/generate" ];
 
   preBuild = ''
     # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
@@ -33,9 +35,6 @@ buildGo118Package rec {
   '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
-
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       [ iptables ]
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
