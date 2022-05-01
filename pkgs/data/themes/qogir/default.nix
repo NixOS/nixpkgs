@@ -7,6 +7,7 @@
 , librsvg
 , sassc
 , which
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
     cp -a src/firefox $out/share/doc/${pname}
     rm $out/share/themes/*/{AUTHORS,COPYING}
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";
