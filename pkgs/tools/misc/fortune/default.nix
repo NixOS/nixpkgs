@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
      my_exe(
     --
   '') ];
-  
+
   postFixup = ''
     rm -f $out/share/fortunes/men-women*
   '';
