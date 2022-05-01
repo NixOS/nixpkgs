@@ -409,9 +409,9 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$libPath $TBB_IN_STORE/TorBrowser/Tor/tor --version >/dev/null
 
     echo "Checking tor-browser wrapper ..."
-    DISPLAY="" MOZ_ENABLE_WAYLAND="" WAYLAND_DISPLAY="" XAUTHORITY="" \
-      XCURSOR_PATH="" XDG_RUNTIME_DIR="" XDG_SESSION_TYPE="" \
-      DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+    DISPLAY= MOZ_ENABLE_WAYLAND= WAYLAND_DISPLAY= XAUTHORITY= \
+      XCURSOR_PATH= XDG_RUNTIME_DIR= XDG_SESSION_TYPE= \
+      DBUS_SESSION_BUS_ADDRESS= TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
   '';
 
