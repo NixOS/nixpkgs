@@ -343,6 +343,18 @@ with lib.maintainers; {
     shortName = "Linux Kernel";
   };
 
+  lumina = {
+    members = [
+      romildo
+    ];
+    githubTeams = [
+      "lumina"
+    ];
+    scope = "Maintain lumina desktop environment and related packages.";
+    shortName = "Lumina";
+    enableFeatureFreezePing = true;
+  };
+
   marketing = {
     members = [
       garbas
