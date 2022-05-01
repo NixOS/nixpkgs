@@ -20,6 +20,7 @@ let
 
     hardware.enableAllFirmware = mkForce false;
     documentation.nixos.enable = false;
+    boot.loader.grub.enable = true;
     boot.loader.grub.device = "/dev/vda";
 
     systemd.services.backdoor.conflicts = [ "sleep.target" ];
