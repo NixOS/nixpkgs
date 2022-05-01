@@ -28175,6 +28175,8 @@ with pkgs;
 
   rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
 
+  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
