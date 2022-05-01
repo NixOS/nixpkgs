@@ -4,15 +4,19 @@
 , aiohttp
 , async-timeout
 , lxml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
   version = "0.2.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RsB8b96aCIBM3aABOuuexB5fIo7H1Kq/XsGvV8b7/sA=";
+    hash = "sha256-RsB8b96aCIBM3aABOuuexB5fIo7H1Kq/XsGvV8b7/sA=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +27,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pytrafikverket" ];
+
+  pythonImportsCheck = [
+    "pytrafikverket"
+  ];
 
   meta = with lib; {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";
