@@ -47,6 +47,22 @@ stdenv.mkDerivation rec {
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ];
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $PWD/test/unittest \
+      'exclude:[test_slow]' \
+      'exclude:*test_slow' \
+      exclude:test/sql/copy/csv/test_csv_remote.test \
+      exclude:test/sql/copy/parquet/test_parquet_remote.test \
+      exclude:test/common/test_cast_hugeint.test \
+      exclude:'Test file buffers for reading/writing to file'
+
+    runHook postInstallCheck
+  '';
+
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = lib.optionals withHttpFs [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]
