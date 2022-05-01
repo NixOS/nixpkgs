@@ -103,7 +103,6 @@ import ./make-test-python.nix (
           };
 
           initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
-            boot.loader.grub.enable = false;
             boot.kernelParams = lib.mkOverride 5 (
               [
                 "boot.shell_on_fail"
