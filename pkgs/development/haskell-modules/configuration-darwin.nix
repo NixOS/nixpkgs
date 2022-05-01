@@ -290,4 +290,10 @@ self: super: ({
 
   # https://github.com/haskell-crypto/cryptonite/issues/360
   cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+
+  # tests appear to be failing to link or something:
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  regex-rure = dontCheck super.regex-rure;
 })
