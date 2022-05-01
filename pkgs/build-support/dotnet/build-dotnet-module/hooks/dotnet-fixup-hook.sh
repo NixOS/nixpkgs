@@ -1,4 +1,5 @@
-declare -a makeWrapperArgs gappsWrapperArgs
+# Inherit arguments from the derivation
+makeWrapperArgs=( ${makeWrapperArgs-} )
 
 # First argument is the executable you want to wrap,
 # the second is the destination for the wrapper.
@@ -15,9 +16,9 @@ wrapDotnetProgram() {
 dotnetFixupHook() {
     echo "Executing dotnetFixupPhase"
 
-    if [ "${executables-}" ]; then
+    if [ "${executables}" ]; then
         for executable in ${executables[@]}; do
-            execPath="$out/lib/${pname-}/$executable"
+            execPath="$out/lib/${pname}/$executable"
 
             if [[ -f "$execPath" && -x "$execPath" ]]; then
                 wrapDotnetProgram "$execPath" "$out/bin/$(basename "$executable")"
@@ -27,7 +28,7 @@ dotnetFixupHook() {
             fi
         done
     else
-        for executable in $out/lib/${pname-}/*; do
+        for executable in $out/lib/${pname}/*; do
             if [[ -f "$executable" && -x "$executable" && "$executable" != *"dll"* ]]; then
                 wrapDotnetProgram "$executable" "$out/bin/$(basename "$executable")"
             fi
