@@ -49,21 +49,9 @@ buildPythonApplication rec {
     hash = "sha256-o5dVJDbdKgo6hMMU9mKzoouSgVWl7xSAp+Aq61VcfeU=";
   };
 
-  # Relax some dependencies
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'WTForms ==' 'WTForms >=' \
-      --replace 'attrs == 20.2.0' 'attrs' \
-      --replace 'elasticsearch ==' 'elasticsearch >=' \
-      --replace 'python_dotenv ==' 'python_dotenv >=' \
-      --replace 'python_frontmatter == 0.5.0' 'python_frontmatter' \
-      --replace 'requests ==' 'requests >=' \
-      --replace 'validators ==' 'validators >=' \
-      --replace 'flask-login == ' 'flask-login >= ' \
-      --replace 'tinydb ==' 'tinydb >=' \
-      --replace 'Flask_WTF == 0.14.3' 'Flask_WTF' \
-      --replace 'Flask ==' 'Flask >='
-  '';
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     appdirs
