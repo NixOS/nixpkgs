@@ -9428,6 +9428,10 @@ with pkgs;
 
   poretools = callPackage ../applications/science/biology/poretools { };
 
+  pantum-driver = callPackage ../misc/drivers/pantum-driver {
+    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
+  };
+
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
   povray = callPackage ../tools/graphics/povray {
