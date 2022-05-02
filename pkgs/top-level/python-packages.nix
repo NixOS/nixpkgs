@@ -11153,6 +11153,8 @@ in {
     inherit (pkgs) jq;
   };
 
+  yte = callPackage ../development/python-modules/yte { };
+
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
