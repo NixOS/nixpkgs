@@ -14706,6 +14706,8 @@ with pkgs;
   ansible = ansible_2_12;
   ansible_2_12 = python3Packages.toPythonApplication python3Packages.ansible-core;
 
+  ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
+
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
