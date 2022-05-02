@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Open Source F5 BIG-IP VPN client for Linux, MacOS, FreeBSD and Windows";
+    description = "Open Source F5 BIG-IP VPN client";
     homepage = "https://github.com/kayrus/gof5";
     license = licenses.asl20;
     maintainers = with maintainers; [ leixb ];
