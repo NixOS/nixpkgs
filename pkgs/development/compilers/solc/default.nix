@@ -62,9 +62,12 @@ let
 
     cmakeFlags = [
       "-DBoost_USE_STATIC_LIBS=OFF"
-    ] ++ lib.optionals (!z3Support) [
+
+    ] ++ (if z3Support then [
+      "-DSTRICT_Z3_VERSION=OFF"
+    ] else [
       "-DUSE_Z3=OFF"
-    ] ++ lib.optionals (!cvc4Support) [
+    ]) ++ lib.optionals (!cvc4Support) [
       "-DUSE_CVC4=OFF"
     ];
 
@@ -90,7 +93,7 @@ let
       for i in ./scripts/*.sh ./scripts/*.py ./test/*.sh ./test/*.py; do
         patchShebangs "$i"
       done
-      TERM=xterm ./scripts/tests.sh
+      TERM=xterm ./scripts/tests.sh ${if z3Support then "--no-smt" else ""}
       popd
     '';
 
