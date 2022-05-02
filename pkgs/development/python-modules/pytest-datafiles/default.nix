@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "pytest-datafiles";
-  version = "2.0";
+  version = "2.0.1";
   src = fetchPypi {
     inherit version pname;
-    sha256 = "1yfvaqbqvjfikz215kwn6qiwwn9girka93zq4jphgfyvn75jjcql";
+    sha256 = "sha256-b2VY0qbny95xT2JBHOhOXALM0ZW9elAmO/3YiL5KFUQ=";
   };
 
   buildInputs = [ py pytest ];
