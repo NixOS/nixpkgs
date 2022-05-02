@@ -1,0 +1,52 @@
+name: Packaging request
+description: A project is not yet available in Nixpkgs.
+labels: '0.kind: packaging request'
+
+body:
+  - type: input
+    attributes:
+      label: Project name
+      description: Name of the project which you would like to request a package for.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Project description
+      description: Provide a short description of the project.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Source URL
+      description: Where the source code of the project can be found.
+      placeholder: https://github.com/octocat/Hello-World/
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Homepage URL
+      description: Homepage of the project. Can be its source repository if the project does not have a dedicated homepage.
+      placeholder: https://example.com/
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: License
+      description: License the project is released under.
+      placeholder: mit, bsd, gpl2+, ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    attributes:
+      label: Platforms
+      description: Platforms supported by the project. Please tick at least one.
+      options:
+        - label: Linux
+        - label: Darwin
+    validations:
+      required: true
