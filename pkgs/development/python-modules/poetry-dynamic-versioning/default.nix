@@ -1,15 +1,15 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
 , dunamai
+, fetchFromGitHub
 , jinja2
 , markupsafe
 , poetry-core
-, pytest
+, pytestCheckHook
+, pythonOlder
 , tomlkit
 }:
+
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
   version = "0.15.0";
@@ -24,16 +24,20 @@ buildPythonPackage rec {
     hash = "sha256-RHCP5SakizURg5MwD96Bxs/NvoTdPSCKWVYt5m4meLA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     dunamai
-    tomlkit
     jinja2
     markupsafe
+    tomlkit
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # these require .git, but leaveDotGit = true doesn't help
@@ -41,7 +45,9 @@ buildPythonPackage rec {
     "test__get_version__format_jinja"
   ];
 
-  pythonImportsCheck = [ "poetry_dynamic_versioning" ];
+  pythonImportsCheck = [
+    "poetry_dynamic_versioning"
+  ];
 
   meta = with lib; {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";
