@@ -2,7 +2,7 @@
 # Image file formats
 , libjpeg, libtiff, giflib, libpng, libwebp
 # imlib2 can load images from ID3 tags.
-, libid3tag
+, libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
 , x11Support ? true, xlibsWrapper ? null
 }:
@@ -12,17 +12,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
-  version = "1.7.5";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
-    hash = "sha256-RY2DAKp6bUzjU1GDi7pdn9+wiES9WxU8WTjs/kP/Ngo=";
+    hash = "sha256-Ui4ecOZbwO3f4gdhfRXJo5VmKnwJBmHaqiwpT7fZ/ao=";
   };
 
   buildInputs = [
     libjpeg libtiff giflib libpng libwebp
-    bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper;
+    bzip2 freetype libid3tag libheif
+  ] ++ optional x11Support xlibsWrapper
+  # Compilation error on Darwin with librsvg. For more information see:
+  # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
+  ++ optional (!stdenv.isDarwin) librsvg;
 
   nativeBuildInputs = [ pkg-config ];
 
