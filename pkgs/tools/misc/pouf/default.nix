@@ -6,16 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pouf";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "mothsart";
     repo = pname;
     rev = version;
-    sha256 = "0q7kj6x61xci8piax6vg3bsm9di11li7pm84vj13iwahdydhs1hn";
+    sha256 = "1dgk2g13hz64vdx9sqkixl0321cnfnhrm7hxp68vwfcfx3gvfjv8";
   };
 
-  cargoSha256 = "128fgdp74lyv5k054cdjxzwmyb5cyy0jq0a9l4bsc34122mznnq7";
+  cargoSha256 = "0ipyc9l9kr7izh3dmvczq1i7al56yiaz20yaarz8bpsfcrmgwy3s";
+
+  postInstall = "make PREFIX=$out copy-data";
 
   meta = with lib; {
     description = "A cli program for produce fake datas.";
