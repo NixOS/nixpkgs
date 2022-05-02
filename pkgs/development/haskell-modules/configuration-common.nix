@@ -2308,6 +2308,10 @@ self: super: {
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
 
+  # Necesssary .txt files are not included in sdist.
+  # https://github.com/haskell/haskell-language-server/pull/2887
+  hls-change-type-signature-plugin = dontCheck super.hls-change-type-signature-plugin;
+
   # Too strict bounds on hspec
   # https://github.com/haskell-works/hw-hspec-hedgehog/issues/62
   # https://github.com/haskell-works/hw-prim/issues/132
