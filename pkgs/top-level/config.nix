@@ -70,6 +70,17 @@ let
       '';
     };
 
+    allowBroken = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1"'';
+      description = ''
+        Whether to allow broken packages.
+
+        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken">Installing broken packages</link> in the NixOS manual.
+      '';
+    };
   };
 
 in {

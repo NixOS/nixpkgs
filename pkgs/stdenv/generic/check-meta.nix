@@ -34,7 +34,7 @@ let
   hasBlocklistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && lib.lists.any (l: builtins.elem l blocklist) (lib.lists.toList attrs.meta.license);
 
-  allowBroken = config.allowBroken or false
+  allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
   allowUnsupportedSystem = config.allowUnsupportedSystem or false
