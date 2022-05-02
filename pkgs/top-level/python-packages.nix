@@ -5587,6 +5587,8 @@ in {
 
   nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
 
+  netutils = callPackage ../development/python-modules/netutils { };
+
   networkx = callPackage ../development/python-modules/networkx { };
 
   neuron-mpi = pkgs.neuron-mpi.override { inherit python; };
