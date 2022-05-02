@@ -134,7 +134,7 @@ let
 
     src = fetchurl {
       url = "https://statics.teams.cdn.office.net/production-osx/${version}/Teams_osx.pkg";
-      sha256 = "1mg6a3b3954w4xy5rlcrwxczymygl61dv2rxqp45sjcsh3hp39q0";
+      hash = "sha256-vLUEvOSBUyAJIWHOAIkTqTW/W6TkgmeyRzQbquZP810=";
     };
 
     buildInputs = [ xar cpio makeWrapper ];
