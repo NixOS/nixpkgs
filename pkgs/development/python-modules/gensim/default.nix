@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-mV69KXCjHUfBAKqsECEvR+K/EuKwZTbTiIPJUf807vE=";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     cython
   ];
 
