@@ -24028,6 +24028,8 @@ with pkgs;
   bibata-extra-cursors = callPackage ../data/icons/bibata-cursors/extra.nix { };
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
+  apple-cursor = callPackage ../data/icons/apple-cursor { };
+
   blackbird = callPackage ../data/themes/blackbird { };
 
   brise = callPackage ../data/misc/brise { };
