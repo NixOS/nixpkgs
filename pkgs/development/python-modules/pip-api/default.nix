@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pip-api";
-  version = "0.0.28";
+  version = "0.0.29";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yqu2l/QKLPpnJkBae5DI/ReU7DnqOD+lMTs/8O6I8AE=";
+    hash = "sha256-9wFYTrHD4BAhyEb4nWKauTc7ZiTwYmdXd0rVT8TClXE=";
   };
 
   propagatedBuildInputs = [
