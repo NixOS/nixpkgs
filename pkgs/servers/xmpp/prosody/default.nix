@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ninjatrappeur ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }
