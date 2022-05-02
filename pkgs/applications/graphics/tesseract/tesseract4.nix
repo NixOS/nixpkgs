@@ -26,8 +26,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook autoconf-archive ];
-  buildInputs = [ leptonica libpng libtiff icu pango opencl-headers ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    autoconf-archive
+  ];
+
+  buildInputs = [
+    leptonica
+    libpng
+    libtiff
+    icu
+    pango
+    opencl-headers
+  ];
 
   meta = {
     description = "OCR engine";

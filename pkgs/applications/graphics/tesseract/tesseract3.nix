@@ -14,8 +14,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ leptonica libpng libtiff icu pango opencl-headers ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+
+  buildInputs = [
+    leptonica
+    libpng
+    libtiff
+    icu
+    pango
+    opencl-headers
+  ];
 
   LIBLEPT_HEADERSDIR = "${leptonica}/include";
 
