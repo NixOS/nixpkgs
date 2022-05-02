@@ -48,5 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sigma";
   };
 }
