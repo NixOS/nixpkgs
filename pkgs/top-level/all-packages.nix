@@ -14716,6 +14716,8 @@ with pkgs;
   ansible = ansible_2_12;
   ansible_2_12 = python3Packages.toPythonApplication python3Packages.ansible-core;
 
+  ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
+
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
@@ -20561,10 +20563,6 @@ with pkgs;
 
   smpeg2 = callPackage ../development/libraries/smpeg2 { };
 
-  snack = callPackage ../development/libraries/snack {
-        # optional
-  };
-
   snappy = callPackage ../development/libraries/snappy { };
 
   snow = callPackage ../tools/security/snow { };
@@ -22649,6 +22647,8 @@ with pkgs;
   webdav-server-rs = callPackage ../servers/webdav-server-rs { };
 
   webmetro = callPackage ../servers/webmetro { };
+
+  wishlist = callPackage ../servers/wishlist { };
 
   wsdd = callPackage ../servers/wsdd { };
 
@@ -26356,8 +26356,6 @@ with pkgs;
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
 
   w_scan = callPackage ../applications/video/w_scan { };
-
-  wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 

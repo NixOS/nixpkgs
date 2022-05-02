@@ -4230,6 +4230,8 @@ in {
 
   isodate = callPackage ../development/python-modules/isodate { };
 
+  isoduration = callPackage ../development/python-modules/isoduration { };
+
   isort = callPackage ../development/python-modules/isort { };
 
   isounidecode = callPackage ../development/python-modules/isounidecode { };
@@ -5587,6 +5589,8 @@ in {
   netio = callPackage ../development/python-modules/netio { };
 
   nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
+
+  netutils = callPackage ../development/python-modules/netutils { };
 
   networkx = callPackage ../development/python-modules/networkx { };
 

@@ -4,7 +4,11 @@
 }:
 let
 
-  prebuilt_crt = {
+  choosePlatform =
+    let pname = stdenv.targetPlatform.parsed.cpu.name; in
+    pset: pset.${pname} or (throw "bionic-prebuilt: unsupported platform ${pname}");
+
+  prebuilt_crt = choosePlatform {
     aarch64 = fetchzip {
       url =  "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
       sha256 = "sha256-LLD2OJi78sNN5NulOsJZl7Ei4F1EUYItGG6eUsKWULc=";
@@ -15,9 +19,9 @@ let
       sha256 = "sha256-y7CFLF76pTlj+oYev9taBnL2nlT3+Tx8c6wmicWmKEw=";
       stripRoot = false;
     };
-  }.${stdenv.targetPlatform.parsed.cpu.name};
+  };
 
-  prebuilt_libs = {
+  prebuilt_libs = choosePlatform {
     aarch64 = fetchzip {
       url = "https://android.googlesource.com/platform/prebuilts/ndk/+archive/f2c77d8ba8a7f5c2d91771e31164f29be0b8ff98/platform/platforms/android-30/arch-arm64/usr/lib.tar.gz";
       sha256 = "sha256-TZBV7+D1QvKOCEi+VNGT5SStkgj0xRbyWoLH65zSrjw=";
@@ -28,9 +32,9 @@ let
       sha256 = "sha256-n2EuOKy3RGKmEYofNlm+vDDBuiQRuAJEJT6wq6NEJQs=";
       stripRoot = false;
     };
-  }.${stdenv.targetPlatform.parsed.cpu.name};
+  };
 
-  prebuilt_ndk_crt = {
+  prebuilt_ndk_crt = choosePlatform {
     aarch64 = fetchzip {
       url = "https://android.googlesource.com/toolchain/prebuilts/ndk/r23/+archive/6c5fa4c0d3999b9ee932f6acbd430eb2f31f3151/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30.tar.gz";
       sha256 = "sha256-KHw+cCwAwlm+5Nwp1o8WONqdi4BBDhFaVVr+7GxQ5uE=";
@@ -41,7 +45,7 @@ let
       sha256 = "sha256-XEd7L3cBzn+1pKfji40V92G/uZhHSMMuZcRZaiKkLnk=";
       stripRoot = false;
     };
-  }.${stdenv.targetPlatform.parsed.cpu.name};
+  };
 
   ndk_support_headers = fetchzip {
     url ="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
