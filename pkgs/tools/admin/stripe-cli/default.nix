@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "stripe-cli";
@@ -11,11 +11,17 @@ buildGoModule rec {
     sha256 = "sha256-TP366SozSNfxUGYXIOObfIul0BhQtIGQYZLwH/TPFs0=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   vendorSha256 = "sha256-1c+YtfRy1ey0z117YHHkrCnpb7g+DmM+LR1rjn1YwMQ=";
 
   subPackages = [
     "cmd/stripe"
   ];
+
+  postInstall = ''
+    installShellCompletion stripe-completion.bash
+  '';
 
   meta = with lib; {
     homepage = "https://stripe.com/docs/stripe-cli";
