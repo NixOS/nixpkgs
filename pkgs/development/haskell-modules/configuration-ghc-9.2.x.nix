@@ -90,7 +90,7 @@ self: super: {
     # causing the build-depends to be skipped. Since the dependency
     # list hasn't changed much since 0.6.4, we can just reuse the
     # normal expression.
-    inherit (self.ghc-exactprint_1_4_1) src version;
+    inherit (self.ghc-exactprint_1_5_0) src version;
     revision = null; editedCabalFile = null;
     libraryHaskellDepends = [
       self.fail
