@@ -1360,6 +1360,16 @@ Existing 3rd party modules that provided similar functionality, like <literal>pu
       </listitem>
       <listitem>
         <para>
+          <literal>services.zookeeper</literal> has a new option
+          <literal>jre</literal> for specifying the JRE to start
+          zookeeper with. It defaults to the JRE that
+          <literal>pkgs.zookeeper</literal> was wrapped with, instead of
+          <literal>pkgs.jre</literal>. This changes the JRE to
+          <literal>pkgs.jdk11_headless</literal> by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.pgadmin</literal> now refers to
           <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
           has been removed.

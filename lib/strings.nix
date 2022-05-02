@@ -254,7 +254,7 @@ rec {
       => false
   */
   hasInfix = infix: content:
-    builtins.match ".*${escapeRegex infix}.*" content != null;
+    builtins.match ".*${escapeRegex infix}.*" "${content}" != null;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,

@@ -22,7 +22,7 @@
 
 let
   pname = "teams";
-  version = "1.4.00.26453";
+  version = "1.5.00.10453";
   meta = with lib; {
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
@@ -37,7 +37,7 @@ let
 
     src = fetchurl {
       url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-      sha256 = "0ndqk893l17m42hf5fiiv6mka0v7v8r54kblvb67jsxajdvva5gf";
+      hash = "sha256-fLVw2axSMetuaoRzjg+x4DRYY8WP5TQbL7LbfF6LFfA=";
     };
 
     nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];

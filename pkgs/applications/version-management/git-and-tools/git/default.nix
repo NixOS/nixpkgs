@@ -354,6 +354,8 @@ stdenv.mkDerivation {
     disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    disable_test t7527-builtin-fsmonitor
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
