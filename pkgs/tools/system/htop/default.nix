@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "An interactive process viewer for Linux";
+    description = "An interactive process viewer";
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;
     platforms = platforms.all;
