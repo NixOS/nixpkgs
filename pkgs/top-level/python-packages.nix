@@ -4223,6 +4223,8 @@ in {
 
   isodate = callPackage ../development/python-modules/isodate { };
 
+  isoduration = callPackage ../development/python-modules/isoduration { };
+
   isort = callPackage ../development/python-modules/isort { };
 
   isounidecode = callPackage ../development/python-modules/isounidecode { };
