@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Retrieves an SSH public key and installs it locally";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 viraptor ];
     platforms = platforms.unix;
   };
 }
