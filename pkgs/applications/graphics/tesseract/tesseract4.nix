@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "1ca27zbjpx35nxh9fha410z3jskwyj06i5hqiqdc08s2d7kdivwn";
+    hash = "sha256-lu/Y5mlCI8AajhiWaID0fGo5PghEQZdgt2X0K9c/QrE=";
   };
 
   patches = [
