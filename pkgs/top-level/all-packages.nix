@@ -33959,6 +33959,9 @@ with pkgs;
 
   keynav = callPackage ../tools/X11/keynav { };
 
+  warpd = callPackage ../applications/accessibility/warpd { };
+  warpd-wayland = callPackage ../applications/accessibility/warpd { waylandBuild = true; };
+
   gnome-console = callPackage ../applications/terminal-emulators/gnome-console { };
 
   kmon = callPackage ../tools/system/kmon { };

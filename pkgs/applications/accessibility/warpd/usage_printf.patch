@@ -1,0 +1,13 @@
+diff --git a/src/warpd.c b/src/warpd.c
+index d7a3e81..95e2c2c 100644
+--- a/src/warpd.c
++++ b/src/warpd.c
+@@ -213,7 +213,7 @@ static void print_usage()
+ 		"  --grid                      Start warpd in hint grid and exit after the end of the session.\n"
+ 		;
+ 
+-	printf(usage);
++	printf("%s", usage);
+ }
+ 
+ static void print_version()
