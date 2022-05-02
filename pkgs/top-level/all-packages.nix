@@ -29857,7 +29857,8 @@ with pkgs;
 
   inherit (callPackage ../applications/graphics/tesseract {})
     tesseract3
-    tesseract4;
+    tesseract4
+    tesseract5;
   tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };

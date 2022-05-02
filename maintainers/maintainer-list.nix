@@ -841,6 +841,13 @@
     githubId = 5327697;
     name = "Anatolii Prylutskyi";
   };
+  anselmschueler = {
+    email = "mail@anselmschueler.com";
+    github = "schuelermine";
+    githubId = 48802534;
+    name = "Anselm Schüler";
+    matrix = "@schuelermine:matrix.org";
+  };
   antoinerg = {
     email = "roygobeil.antoine@gmail.com";
     github = "antoinerg";
