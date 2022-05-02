@@ -1137,6 +1137,8 @@ with pkgs;
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
+  gof5 = callPackage ../tools/networking/gof5 { };
+
   goflow = callPackage ../tools/networking/goflow { };
 
   gofu = callPackage ../applications/misc/gofu { };
