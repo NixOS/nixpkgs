@@ -1,0 +1,18 @@
+diff --git a/lib/luks2/luks2_token.c b/lib/luks2/luks2_token.c
+index 88d84418..ed3a079b 100644
+--- a/lib/luks2/luks2_token.c
++++ b/lib/luks2/luks2_token.c
+@@ -151,12 +151,10 @@ crypt_token_load_external(struct crypt_device *cd, const char *name, struct cryp
+ 
+ 	token = &ret->u.v2;
+ 
+-	r = snprintf(buf, sizeof(buf), "%s/libcryptsetup-token-%s.so", crypt_token_external_path(), name);
++	r = snprintf(buf, sizeof(buf), "libcryptsetup-token-%s.so", name);
+ 	if (r < 0 || (size_t)r >= sizeof(buf))
+ 		return -EINVAL;
+ 
+-	assert(*buf == '/');
+-
+ 	log_dbg(cd, "Trying to load %s.", buf);
+ 
+ 	h = dlopen(buf, RTLD_LAZY);

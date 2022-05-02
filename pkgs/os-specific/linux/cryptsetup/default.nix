@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/A35RRiBciZOxb8dC9oIJk+tyKP4VtR+upHzH+NUtQc=";
   };
 
-  # Disable 4 test cases that fail in a sandbox
-  patches = [ ./disable-failing-tests.patch ];
+  patches = [
+    # Disable 4 test cases that fail in a sandbox
+    ./disable-failing-tests.patch
+    # Allow reading tokens from a relative path, see #167994
+    ./relative-token-path.patch
+  ];
 
   postPatch = ''
     patchShebangs tests
