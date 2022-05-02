@@ -1,25 +1,23 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# pythonPackages
 , anyconfig
 , appdirs
+, buildPythonPackage
 , colorama
 , environs
+, fetchFromGitHub
 , jinja2
 , jsonschema
 , nested-lookup
 , pathspec
 , poetry-core
 , python-json-logger
+, pythonOlder
 , ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.2.4";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +26,25 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "v${version}";
-    hash = "sha256-e0FmV4U96TSC/dYJlgo5AeLdXQ7Z7rrP4JCtBxJdkhU=";
+    hash = "sha256-lJKJE9UccknQg8aqt/6qmjKKaICBxaCH5e8fdmie6u8=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    anyconfig
+    appdirs
+    colorama
+    environs
+    jinja2
+    jsonschema
+    nested-lookup
+    pathspec
+    python-json-logger
+    ruamel-yaml
+  ];
 
   postInstall = ''
     rm $out/lib/python*/site-packages/LICENSE
@@ -37,30 +52,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace 'Jinja2 = "3.1.2"' 'Jinja2 = "*"' \
       --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
       --replace 'environs = "9.5.0"' 'environs = "*"' \
       --replace 'jsonschema = "4.4.0"' 'jsonschema = "*"' \
       --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    jinja2
-    colorama
-    python-json-logger
-    pathspec
-    environs
-    jsonschema
-    appdirs
-    ruamel-yaml
-    anyconfig
-    nested-lookup
-  ];
-
-  # no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
