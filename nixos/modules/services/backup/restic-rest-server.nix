@@ -49,6 +49,12 @@ in
       description = "Enable Prometheus metrics at /metrics.";
     };
 
+    prometheusNoAuth = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Disable auth for Prometheus /metrics endpoint.";
+    };
+
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -78,6 +84,7 @@ in
           ${optionalString cfg.appendOnly "--append-only"} \
           ${optionalString cfg.privateRepos "--private-repos"} \
           ${optionalString cfg.prometheus "--prometheus"} \
+          ${optionalString cfg.prometheusNoAuth "--prometheus-no-auth"} \
           ${escapeShellArgs cfg.extraFlags} \
         '';
         Type = "simple";
