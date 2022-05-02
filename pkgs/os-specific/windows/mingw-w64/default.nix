@@ -19,6 +19,7 @@ let
     then [] # maybe autoconf will save us
     else map (arch: lib.enableFeature (arch == enabledArch) "lib${arch}") knownArches;
 
+  crt = stdenv.hostPlatform.libc;
 in stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit version;
@@ -33,6 +34,7 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--enable-idl"
     "--enable-secure-api"
+    "--with-default-msvcrt=${crt}"
   ] ++ archFlags;
 
   enableParallelBuilding = true;
@@ -43,5 +45,6 @@ in stdenv.mkDerivation {
 
   meta = {
     platforms = lib.platforms.windows;
+    broken = !(lib.elem crt [ "msvcrt" "ucrt" ]);
   };
 }

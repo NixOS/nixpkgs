@@ -41,7 +41,7 @@ let
   inherit (stdenv)
     buildPlatform hostPlatform targetPlatform;
 
-  crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
+  crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
