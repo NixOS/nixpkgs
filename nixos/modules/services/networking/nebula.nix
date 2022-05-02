@@ -192,6 +192,7 @@ in
                 Group = networkId;
               })
             ];
+            unitConfig.StartLimitIntervalSec = 0; # ensure Restart=always is always honoured (networks can go down for arbitrarily long)
           };
         }) enabledNetworks);
 
