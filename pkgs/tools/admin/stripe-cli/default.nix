@@ -27,7 +27,7 @@ buildGoModule rec {
     homepage = "https://stripe.com/docs/stripe-cli";
     description = "A command-line tool for Stripe";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ RaghavSood ];
+    maintainers = with maintainers; [ RaghavSood viraptor ];
     mainProgram = "stripe";
   };
 }
