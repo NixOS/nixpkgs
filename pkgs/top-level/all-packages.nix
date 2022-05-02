@@ -20558,10 +20558,6 @@ with pkgs;
 
   smpeg2 = callPackage ../development/libraries/smpeg2 { };
 
-  snack = callPackage ../development/libraries/snack {
-        # optional
-  };
-
   snappy = callPackage ../development/libraries/snappy { };
 
   snow = callPackage ../tools/security/snow { };
@@ -26353,8 +26349,6 @@ with pkgs;
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
 
   w_scan = callPackage ../applications/video/w_scan { };
-
-  wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
