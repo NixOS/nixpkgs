@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ rob relrod ];
-    changelog = "https://github.com/htop-dev/${pname}/blob/${version}/ChangeLog";
+    changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
   };
 }
