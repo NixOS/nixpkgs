@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
@@ -41,12 +42,6 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
-
-    # use absolute paths to reference programs, otherwise artifacts will have undeclared dependencies
-    for f in configure.ac m4/man-check-progs.m4 m4/man-po4a.m4; do
-      substituteInPlace $f \
-        --replace AC_CHECK_PROGS AC_PATH_PROGS
-    done
   '';
 
   configureFlags = [
@@ -72,21 +67,15 @@ stdenv.mkDerivation rec {
     # (multi-call binary). `apropos` is actually just a symlink to whatis. So we need to
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
     find "$out/bin" -type f | while read file; do
-      wrapProgram "$file" --prefix PATH : "${groff}/bin"
+      wrapProgram "$file" \
+        --prefix PATH : "${lib.getBin groff}/bin" \
+        --prefix PATH : "${lib.getBin zstd}/bin"
     done
   '';
 
-  postFixup = lib.optionalString (buildPackages.groff != groff) ''
-    # Check to make sure none of the outputs depend on build-time-only groff:
-    for outName in $outputs; do
-      out=''${!outName}
-      echo "Checking $outName(=$out) for references to build-time groff..."
-      if grep -r '${buildPackages.groff}' $out; then
-        echo "Found an erroneous dependency on groff ^^^" >&2
-        exit 1
-      fi
-    done
-  '';
+  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    buildPackages.groff
+  ];
 
   enableParallelBuilding = true;
 

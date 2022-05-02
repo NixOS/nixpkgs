@@ -37,6 +37,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-G4wL5DDbX0FqaA4cnOlVLZ25ObN8dNsRtxyas29tpDA=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
+
+    declare -a skip_tests=(
+      # test won't work in nix sandbox
+      'test_write_disk_perms'
+      # can't be sure builder will have sparse-capable fs
+      'test_sparse_basic'
+      # can't even be sure builder will have hardlink-capable fs
+      'test_write_disk_hardlink'
+    )
+
+    for test_name in "''${skip_tests[@]}" ; do
+      sed -i "/$test_name/d" Makefile.am
+      rm "libarchive/test/$test_name.c"
+    done
+  '';
+
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
@@ -60,17 +78,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  postPatch = ''
-     substituteInPlace Makefile.am --replace '/bin/pwd' 'pwd'
-  '';
-
   preBuild = lib.optionalString stdenv.isCygwin ''
     echo "#include <windows.h>" >> config.h
   '';
 
-  # 484: test_write_disk_perms FAIL
-  # TODO: how to disable it? Should it be reported upstream?
-  doCheck = false;
+  # https://github.com/libarchive/libarchive/issues/1475
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   preFixup = ''
     sed -i $lib/lib/libarchive.la \

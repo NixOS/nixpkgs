@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, gnumake, imake, makedepend, motif, xorg }:
+{ lib, stdenv, fetchurl, gfortran, imake, makedepend, motif, xorg }:
 
 stdenv.mkDerivation rec {
   version = "2006";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg; [ gfortran motif libX11 libXft libXt ];
-  nativeBuildInputs = [ gnumake imake makedepend ];
+  nativeBuildInputs = [ imake makedepend ];
   sourceRoot = ".";
 
   patches = [ ./patch.patch ./0001-Use-strerror-rather-than-sys_errlist-to-fix-compilat.patch ];
