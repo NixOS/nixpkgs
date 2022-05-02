@@ -17,3 +17,16 @@
 ## Branding
 
 - [nixos](branding/nixos) generic NixOS branding based on the [nixos homepage](https://github.com/NixOS/nixos-homepage)
+
+
+## Licenses
+
+Most code (.py, .cpp, etc) files are licensed under GPL-3.0-or-later, but see specific files for details.
+
+Configuration files in [config](config) are licensed under [CC0-1.0](LICENSES/CC0-1.0.txt)
+
+Images stored in [config/images](config/images) are licensed under [CC-BY-SA-4.0](LICENSES/CC-BY-SA-4.0.txt)
+
+Images [gfx-landing-declarative.png](branding/nixos/gfx-landing-declarative.png), [gfx-landing-reliable.png](branding/nixos/gfx-landing-reliable.png), and [gfx-landing-reproducible.png](branding/nixos/gfx-landing-reproducible.png) are licensed under [CC-BY-SA-4.0](LICENSES/CC-BY-SA-4.0.txt)
+
+Images [nix-snowflake.svg](branding/nixos/nix-snowflake.svg) and [white.png](branding/nixos/white.png) are licensed under [CC-BY-4.0](LICENSES/CC-BY-4.0.txt)
