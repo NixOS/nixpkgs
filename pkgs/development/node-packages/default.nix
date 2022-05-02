@@ -247,44 +247,6 @@ let
 
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
-      # We need to apply a patch to the source, but buildNodePackage doesn't allow patches.
-      # So we pin the patched commit instead. The commit actually contains two other newer commits
-      # since the last (1.9.0) release, but actually this is a good thing since one of them is a
-      # Hydra-specific fix.
-      src = applyPatches {
-        src = fetchFromGitHub {
-          owner = "svanderburg";
-          repo = "node2nix";
-          rev = "node2nix-1.9.0";
-          sha256 = "0l4wp1131nhl9c14cn8bwawb8f77h1nfbnswgi5lp5m3kzkb27jn";
-        };
-
-        patches = [
-          # remove node_ name prefix
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/b54d45207427ff46e90f16f2f32771fdc8bff5a4.patch";
-            sha256 = "sha256-ubUdF0q3l4xxqZ7f9EiQEUQzyqxi9Q6zsRPETHlfzh8=";
-          })
-          # set meta platform
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
-            sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
-          })
-          # Extract common logic from composePackage to a shell function
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/e4c951971df6c9f9584c7252971c13b55c369916.patch";
-            sha256 = "0w8fcyr12g2340rn06isv40jkmz2khmak81c95zpkjgipzx7hp7w";
-          })
-          # handle package alias in dependencies
-          # https://github.com/svanderburg/node2nix/pull/240
-          #
-          # TODO: remove after node2nix 1.10.0
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/644e90c0304038a446ed53efc97e9eb1e2831e71.patch";
-            sha256 = "sha256-sQgVf80H1ouUjzHq+2d9RO4a+o++kh+l+FOTNXfPBH0=";
-          })
-        ];
-      };
       postInstall = ''
         wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
