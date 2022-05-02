@@ -7,6 +7,7 @@
 , fetchpatch
 , fetchzip
 , buildPackages
+, makeBinaryWrapper
 , ninja
 , meson
 , m4
@@ -345,6 +346,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      makeBinaryWrapper
       gperf
       ninja
       meson
@@ -674,7 +676,14 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString withEfi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
-  postFixup = lib.optionalString withEfi ''
+
+  postFixup = ''
+    # Wrap in the correct path for LUKS2 tokens. Must be after the fixup phase
+    # or the rpath cleanup removes the directories again.
+    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+      wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+    done
+  '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
