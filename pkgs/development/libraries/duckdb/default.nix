@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstallCheck
 
-      $PWD/test/unittest ${toString excludes}
+      $PWD/test/unittest ${lib.concatStringsSep " " excludes}
 
       runHook postInstallCheck
     '';
