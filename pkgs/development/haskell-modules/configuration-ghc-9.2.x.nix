@@ -216,18 +216,11 @@ self: super: {
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
   haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
     (appendConfigureFlags [
-    "-f-alternateNumberFormat"
-    "-f-class"
-    "-f-eval"
     "-f-haddockComments"
-    "-f-hlint"
     "-f-retrie"
     "-f-splice"
     "-f-tactics"
   ] (super.haskell-language-server.override {
-    hls-alternate-number-format-plugin = null;
-    hls-class-plugin = null;
-    hls-eval-plugin = null;
     hls-haddock-comments-plugin = null;
     hls-hlint-plugin = null;
     hls-retrie-plugin = null;
