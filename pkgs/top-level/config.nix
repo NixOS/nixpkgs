@@ -58,6 +58,18 @@ let
       '';
     };
 
+    allowUnfree = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
+      description = ''
+        Whether to allow unfree packages.
+
+        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree">Installing unfree packages</link> in the NixOS manual.
+      '';
+    };
+
   };
 
 in {
