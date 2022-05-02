@@ -453,7 +453,6 @@ stdenv.mkDerivation rec {
       build --extra_toolchains=@bazel_tools//tools/jdk:nonprebuilt_toolchain_definition
       build --verbose_failures
       build --curses=no
-      build --sandbox_debug
       build --features=-layering_check
       EOF
 
@@ -493,7 +492,6 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
           -e "/\$command \\\\$/a --features=-layering_check \\\\" \
-          -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
