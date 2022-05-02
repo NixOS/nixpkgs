@@ -484,7 +484,6 @@ stdenv.mkDerivation rec {
       build --host_java_toolchain='${javaToolchain}'
       build --verbose_failures
       build --curses=no
-      build --sandbox_debug
       EOF
 
       # add the same environment vars to compile.sh
@@ -498,7 +497,6 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
-          -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
