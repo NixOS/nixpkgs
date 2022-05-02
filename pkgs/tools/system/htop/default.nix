@@ -9,13 +9,13 @@ assert systemdSupport -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RKYS8UYZTVKMR/3DG31eqkG4knPRl8WXsZU/XGmGmAg=";
+    sha256 = "sha256-p/lc7G/XFllulXrM47mPE6W5vVuoi4uXB8To36PIgZo=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
