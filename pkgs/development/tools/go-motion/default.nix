@@ -32,6 +32,7 @@ buildGoPackage rec {
     homepage = "https://github.com/fatih/motion";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "motion";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
