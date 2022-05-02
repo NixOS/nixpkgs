@@ -6,18 +6,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "3.2.0";
+  version = "4.1.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-l3DS2DhExTeKc+FBMNy3YKvIVlZsqgpB/FuXoN7V2SY=";
+    sha256 = "sha256-C0ks9IzxyPEq3BEuQt9QSFcIg2PwNvQAvJMw+A/wCJM=";
   };
+
+  format = "pyproject";
 
   checkInputs = with python3Packages; [
     pytestCheckHook
     mock
     requests-mock
     freezegun
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    versioningit
   ];
 
   propagatedBuildInputs = (with python3Packages; [
