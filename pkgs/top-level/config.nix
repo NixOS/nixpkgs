@@ -81,6 +81,19 @@ let
         See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken">Installing broken packages</link> in the NixOS manual.
       '';
     };
+
+    allowUnsupportedSystem = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"'';
+      description = ''
+        Whether to allow unsupported packages.
+
+        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system">Installing packages on unsupported systems</link> in the NixOS manual.
+      '';
+    };
+
   };
 
 in {
