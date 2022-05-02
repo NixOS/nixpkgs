@@ -313,7 +313,7 @@ checkConfigOutput "bar" config.priorities ./raw.nix
 
 ## Option collision
 checkConfigError \
-  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integers. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
+  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integer. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 
