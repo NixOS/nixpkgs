@@ -11,8 +11,8 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2022.04.18",
-    "sha256": "sha256-Bp/pkbTPLiVaDSstzTaNjKb+msPw8Tuny75n/aYBpUc="
+    "rev": "2022.04.30",
+    "sha256": "sha256-lmxwacOYM3E+sHoFkmstWQymXZfC3raC4B1zxHp/H08="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
@@ -31,8 +31,8 @@
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2022.04.11",
-    "sha256": "sha256-wzE6lNhrXsBOP+Zx+qAcj6Hhf87qqDaqKf9up7I3ZUo="
+    "rev": "2022.05.01",
+    "sha256": "sha256-9RSGvxhaFRXRZLgng7RBOjzh70SkO1hZTLBZAeME8lg="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
