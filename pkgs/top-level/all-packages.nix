@@ -39521,6 +39521,8 @@ with pkgs;
 
   coq2html = callPackage ../tools/typesetting/coq2html { };
 
+  coq-kernel = callPackage ../applications/editors/jupyter-kernels/coq { };
+
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
   crypto-org-wallet = callPackage ../applications/blockchains/crypto-org-wallet { };
