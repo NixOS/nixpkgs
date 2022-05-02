@@ -38,8 +38,8 @@ let
 
         extraNativeBuildInputs = [ which ];
         mlPlugin = true;
-        extraBuildInputs = [ equations coq.ocamlPackages.zarith ];
-        propagatedBuildInputs = metacoq-deps;
+        extraBuildInputs = [ coq.ocamlPackages.zarith ];
+        propagatedBuildInputs = [ equations ] ++ metacoq-deps;
 
         patchPhase =  ''
           patchShebangs ./configure.sh
