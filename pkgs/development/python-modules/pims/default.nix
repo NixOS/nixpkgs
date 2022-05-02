@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5";
+  version = "0.6.0";
   pname = "PIMS";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a02cdcbb153e2792042fb0bae7df4f30878bbba1f2d176114a87ee0dc18715a0";
+    sha256 = "sha256-EQJ0LWQsi4rMcQ011QK11whe4SiMNhg3PvjEcgMLxoM=";
   };
 
   checkInputs = [ nose ];
