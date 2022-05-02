@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
+  '';
+
   installCheckPhase =
     let
       excludes = map (pattern: "exclude:'${pattern}'") [
