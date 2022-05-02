@@ -76,24 +76,19 @@ cfgswapcrypt = """  # Enable swap on luks
 cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
 """
 
-cfgnetworkenlightenment = """  networking.hostName = "@@hostname@@"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+cfgnetworkmanager = """  # Enable networking
+  networking.networkmanager.enable = true;
 
-  # Enable networking
+"""
+
+cfgconnman = """  # Enable networking
   services.connman.enable = true;
-  
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
 """
 
@@ -246,8 +241,7 @@ cfgmisc = """  # Enable CUPS to print documents.
   # services.xserver.libinput.enable = true;
 
 """
-cfgusers = """
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+cfgusers = """  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.@@username@@ = {
     isNormalUser = true;
     description = "@@fullname@@";
@@ -417,10 +411,11 @@ def run():
     status = _("Configuring NixOS")
     libcalamares.job.setprogress(0.18)
 
+    cfg += cfgnetwork
     if gs.value("packagechooser_packagechooser") == "enlightenment":
-        cfg += cfgnetworkenlightenment
-    else:
-        cfg += cfgnetwork
+        cfg += cfgconnman
+    elif gs.value("packagechooser_packagechooser") != "":
+        cfg += cfgnetworkmanager
 
     if (gs.value("packagechooser_packagechooser") == "mate") | (gs.value("packagechooser_packagechooser") == "lxqt") | (gs.value("packagechooser_packagechooser") == "lumina"):
         cfg += cfgnmapplet
@@ -534,7 +529,7 @@ def run():
         catenate(variables, "fullname", fullname)
         catenate(variables, "groups", (" ").join(
             ["\"" + s + "\"" for s in groups]))
-        if (gs.value("autoLoginUser") is not None and gs.value("packagechooser_packagechooser") != "" and gs.value("packagechooser_packagechooser") is not None):
+        if (gs.value("autoLoginUser") is not None and gs.value("packagechooser_packagechooser") is not None and gs.value("packagechooser_packagechooser") != ""):
             cfg += cfgautologin
             if (gs.value("packagechooser_packagechooser") == "gnome"):
                 cfg += cfgautologingdm
