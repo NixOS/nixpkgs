@@ -25,7 +25,7 @@ else
                    >&2 echo "Invalid tessdataRev: $tessdataRev"
                    exit 1
                })
-    langCodes=$(echo $(echo "$repoPage" | grep -ohP "(?<=/)[^/]+?(?=\.traineddata)" | sort))
+    langCodes=$(echo $(echo "$repoPage" | grep -ohP "(?<=/)[^/ ]+?(?=\.traineddata)" | sort -u))
 fi
 
 for lang in $langCodes; do
