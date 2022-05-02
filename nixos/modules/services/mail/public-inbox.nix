@@ -48,78 +48,98 @@ let
     let proto = removeSuffix "d" srv;
         needNetwork = builtins.hasAttr proto cfg && cfg.${proto}.port == null;
     in {
-    # Enable JIT-compiled C (via Inline::C)
-    Environment = [ "PERL_INLINE_DIRECTORY=/run/public-inbox-${srv}/perl-inline" ];
-    # NonBlocking is REQUIRED to avoid a race condition
-    # if running simultaneous services.
-    NonBlocking = true;
-    #LimitNOFILE = 30000;
-    User = config.users.users."public-inbox".name;
-    Group = config.users.groups."public-inbox".name;
-    RuntimeDirectory = [
-      "public-inbox-${srv}/perl-inline"
-      # Create RootDirectory= in the host's mount namespace.
-      "public-inbox-${srv}/root"
-    ];
-    RuntimeDirectoryMode = "700";
-    # Avoid mounting RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
-    InaccessiblePaths = ["-+/run/public-inbox-${srv}/root"];
-    # This is for BindPaths= and BindReadOnlyPaths=
-    # to allow traversal of directories they create in RootDirectory=.
-    UMask = "0066";
-    RootDirectory = "/run/public-inbox-${srv}/root";
-    RootDirectoryStartOnly = true;
-    WorkingDirectory = stateDir;
-    MountAPIVFS = true;
-    BindReadOnlyPaths = [
-      builtins.storeDir
-      "/etc"
-      "/run"
-      # For Inline::C
-      "/bin/sh"
-    ];
-    BindPaths = [
-      stateDir
-    ];
-    # The following options are only for optimizing:
-    # systemd-analyze security public-inbox-'*'
-    AmbientCapabilities = "";
-    CapabilityBoundingSet = "";
-    # ProtectClock= adds DeviceAllow=char-rtc r
-    DeviceAllow = "";
-    LockPersonality = true;
-    MemoryDenyWriteExecute = true;
-    NoNewPrivileges = true;
-    PrivateDevices = true;
-    PrivateMounts = true;
-    PrivateNetwork = mkDefault (!needNetwork);
-    PrivateTmp = true;
-    PrivateUsers = true;
-    ProcSubset = "pid";
-    ProtectClock = true;
-    ProtectControlGroups = true;
-    ProtectHome = mkDefault true;
-    ProtectHostname = true;
-    ProtectKernelLogs = true;
-    ProtectKernelModules = true;
-    ProtectKernelTunables = true;
-    ProtectProc = "invisible";
-    ProtectSystem = "strict";
-    RemoveIPC = true;
-    RestrictAddressFamilies = [ "AF_UNIX" ]
-      ++ optionals needNetwork [ "AF_INET" "AF_INET6" ];
-    RestrictNamespaces = true;
-    RestrictRealtime = true;
-    RestrictSUIDSGID = true;
-    SystemCallFilter = [
-      "@system-service"
-      "~@aio" "~@chown" "~@keyring" "~@memlock" "~@resources"
-      # Not removing @setuid and @privileged
-      # because Inline::C needs them.
-      # Not removing @timer
-      # because git upload-pack needs it.
-    ];
-    SystemCallArchitectures = "native";
+    serviceConfig = {
+      # Enable JIT-compiled C (via Inline::C)
+      Environment = [ "PERL_INLINE_DIRECTORY=/run/public-inbox-${srv}/perl-inline" ];
+      # NonBlocking is REQUIRED to avoid a race condition
+      # if running simultaneous services.
+      NonBlocking = true;
+      #LimitNOFILE = 30000;
+      User = config.users.users."public-inbox".name;
+      Group = config.users.groups."public-inbox".name;
+      RuntimeDirectory = [
+          "public-inbox-${srv}/perl-inline"
+        ];
+      RuntimeDirectoryMode = "700";
+      # This is for BindPaths= and BindReadOnlyPaths=
+      # to allow traversal of directories they create inside RootDirectory=
+      UMask = "0066";
+      StateDirectory = ["public-inbox"];
+      StateDirectoryMode = "0750";
+      WorkingDirectory = stateDir;
+      BindReadOnlyPaths = [
+          "/etc"
+          "/run/systemd"
+          "${config.i18n.glibcLocales}"
+        ] ++
+        mapAttrsToList (name: inbox: inbox.description) cfg.inboxes ++
+        # Without confinement the whole Nix store
+        # is made available to the service
+        optionals (!config.systemd.services."public-inbox-${srv}".confinement.enable) [
+          "${pkgs.dash}/bin/dash:/bin/sh"
+          builtins.storeDir
+        ];
+      # The following options are only for optimizing:
+      # systemd-analyze security public-inbox-'*'
+      AmbientCapabilities = "";
+      CapabilityBoundingSet = "";
+      # ProtectClock= adds DeviceAllow=char-rtc r
+      DeviceAllow = "";
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      NoNewPrivileges = true;
+      PrivateNetwork = mkDefault (!needNetwork);
+      ProcSubset = "pid";
+      ProtectClock = true;
+      ProtectHome = mkDefault true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectProc = "invisible";
+      #ProtectSystem = "strict";
+      RemoveIPC = true;
+      RestrictAddressFamilies = [ "AF_UNIX" ] ++
+        optionals needNetwork [ "AF_INET" "AF_INET6" ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      SystemCallFilter = [
+        "@system-service"
+        "~@aio" "~@chown" "~@keyring" "~@memlock" "~@resources"
+        # Not removing @setuid and @privileged because Inline::C needs them.
+        # Not removing @timer because git upload-pack needs it.
+      ];
+      SystemCallArchitectures = "native";
+
+      # The following options are redundant when confinement is enabled
+      RootDirectory = "/var/empty";
+      TemporaryFileSystem = "/";
+      PrivateMounts = true;
+      MountAPIVFS = true;
+      PrivateDevices = true;
+      PrivateTmp = true;
+      PrivateUsers = true;
+      ProtectControlGroups = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+    };
+    confinement = {
+      # Until we agree upon doing it directly here in NixOS
+      # https://github.com/NixOS/nixpkgs/pull/104457#issuecomment-1115768447
+      # let the user choose to enable the confinement with:
+      # systemd.services.public-inbox-httpd.confinement.enable = true;
+      # systemd.services.public-inbox-imapd.confinement.enable = true;
+      # systemd.services.public-inbox-init.confinement.enable = true;
+      # systemd.services.public-inbox-nntpd.confinement.enable = true;
+      #enable = true;
+      mode = "full-apivfs";
+      # Inline::C needs a /bin/sh, and dash is enough
+      binSh = "${pkgs.dash}/bin/dash";
+      packages = [
+          pkgs.iana-etc
+          (getLib pkgs.nss)
+          pkgs.tzdata
+        ];
+    };
   };
 in
 
@@ -168,6 +188,7 @@ in
           type = types.str;
           example = "user/dev discussion of public-inbox itself";
           description = "User-visible description for the repository.";
+          apply = pkgs.writeText "public-inbox-description-${name}";
         };
         options.newsgroup = mkOption {
           type = with types; nullOr str;
@@ -409,24 +430,24 @@ in
       ) [ "imap" "http" "nntp" ]);
     systemd.services = mkMerge [
       (mkIf cfg.imap.enable
-        { public-inbox-imapd = {
+        { public-inbox-imapd = mkMerge [(serviceConfig "imapd") {
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
-          serviceConfig = mkMerge [(serviceConfig "imapd") {
+          serviceConfig = {
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-imapd" ] ++
               cfg.imap.args ++
               optionals (cfg.imap.cert != null) [ "--cert" cfg.imap.cert ] ++
               optionals (cfg.imap.key != null) [ "--key" cfg.imap.key ]
             );
-          }];
-        };
+          };
+        }];
       })
       (mkIf cfg.http.enable
-        { public-inbox-httpd = {
+        { public-inbox-httpd = mkMerge [(serviceConfig "httpd") {
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
-          serviceConfig = mkMerge [(serviceConfig "httpd") {
+          serviceConfig = {
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-httpd" ] ++
               cfg.http.args ++
@@ -458,41 +479,41 @@ in
                 }
               '') ]
             );
-          }];
-        };
+          };
+        }];
       })
       (mkIf cfg.nntp.enable
-        { public-inbox-nntpd = {
+        { public-inbox-nntpd = mkMerge [(serviceConfig "nntpd") {
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
-          serviceConfig = mkMerge [(serviceConfig "nntpd") {
+          serviceConfig = {
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-nntpd" ] ++
               cfg.nntp.args ++
               optionals (cfg.nntp.cert != null) [ "--cert" cfg.nntp.cert ] ++
               optionals (cfg.nntp.key != null) [ "--key" cfg.nntp.key ]
             );
-          }];
-        };
+          };
+        }];
       })
       (mkIf (any (inbox: inbox.watch != []) (attrValues cfg.inboxes)
         || cfg.settings.publicinboxwatch.watchspam != null)
-        { public-inbox-watch = {
+        { public-inbox-watch = mkMerge [(serviceConfig "watch") {
           inherit (cfg) path;
           wants = [ "public-inbox-init.service" ];
           requires = [ "public-inbox-init.service" ] ++
             optional (cfg.settings.publicinboxwatch.spamcheck == "spamc") "spamassassin.service";
           wantedBy = [ "multi-user.target" ];
-          serviceConfig = mkMerge [(serviceConfig "watch") {
+          serviceConfig = {
             ExecStart = "${cfg.package}/bin/public-inbox-watch";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          }];
-        };
+          };
+        }];
       })
       ({ public-inbox-init = let
           PI_CONFIG = gitIni.generate "public-inbox.ini"
             (filterAttrsRecursive (n: v: v != null) cfg.settings);
-          in {
+          in mkMerge [(serviceConfig "init") {
           wantedBy = [ "multi-user.target" ];
           restartIfChanged = true;
           restartTriggers = [ PI_CONFIG ];
@@ -520,7 +541,7 @@ in
                 rm -rf $conf_dir
               fi
 
-              ln -sf ${pkgs.writeText "description" inbox.description} \
+              ln -sf ${inbox.description} \
                 ${stateDir}/inboxes/${escapeShellArg name}/description
 
               export GIT_DIR=${stateDir}/inboxes/${escapeShellArg name}/all.git
@@ -540,18 +561,16 @@ in
               ${cfg.package}/bin/public-inbox-index "$inbox"
             done
           '';
-          serviceConfig = mkMerge [(serviceConfig "init") {
+          serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
             StateDirectory = [
-              "public-inbox"
               "public-inbox/.public-inbox"
               "public-inbox/.public-inbox/emergency"
               "public-inbox/inboxes"
             ];
-            StateDirectoryMode = "0750";
-          }];
-        };
+          };
+        }];
       })
     ];
     environment.systemPackages = with pkgs; [ cfg.package ];
