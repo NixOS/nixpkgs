@@ -191,6 +191,8 @@ let
         };
       } ../hooks/qmake-hook.sh;
 
+      inherit stdenv;
+
       wrapQtAppsHook = makeSetupHook {
         deps = [ self.qtbase.dev makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
