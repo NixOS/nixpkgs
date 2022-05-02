@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "ghp-import";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lHs3cfEb6FDIUsZLVhxgD93feUurNjBghUwe560F4HE=";
+    hash = "sha256-nFNcTGEZPC34hxIiVn1/1+UBTYNfl9x7dDkGniQT00M=";
   };
 
   propagatedBuildInputs = [ python-dateutil ];
