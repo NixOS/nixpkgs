@@ -2530,6 +2530,8 @@ in {
     inherit (pkgs) duckdb;
   };
 
+  duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
+
   duecredit = callPackage ../development/python-modules/duecredit { };
 
   duet = callPackage ../development/python-modules/duet { };
@@ -4192,6 +4194,8 @@ in {
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
   ipython = callPackage ../development/python-modules/ipython { };
+
+  ipython-sql = callPackage ../development/python-modules/ipython-sql { };
 
   ipyvue = callPackage ../development/python-modules/ipyvue { };
 
@@ -6508,6 +6512,8 @@ in {
   poetry = callPackage ../development/python-modules/poetry { };
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
+
+  poetry-dynamic-versioning = callPackage ../development/python-modules/poetry-dynamic-versioning { };
 
   poetry-semver = callPackage ../development/python-modules/poetry-semver { };
 

@@ -43,6 +43,6 @@ mkDerivation rec {
     description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

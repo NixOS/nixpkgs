@@ -31,6 +31,7 @@ let
       name = "${old.pname}-${version}";
       hash = "sha256-sBFXcLXpAkX+HzRKrLKaHhi5ieS8Yc/Uf30WcXyWrok=";
     };
+    patches = [ ./libdeltachat-darwin-dylib.patch ] ++ old.patches;
   });
   electronExec = if stdenv.isDarwin then
     "${electron_16}/Applications/Electron.app/Contents/MacOS/Electron"
