@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rob relrod ];
+    maintainers = with maintainers; [ rob relrod SuperSandro2000 ];
     changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
   };
 }
