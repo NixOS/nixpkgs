@@ -1,33 +1,32 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "exoscale-cli";
-  version = "1.52.1";
+  version = "1.54.0";
 
   src = fetchFromGitHub {
-    owner  = "exoscale";
-    repo   = "cli";
-    rev    = "v${version}";
-    sha256 = "sha256-CSltvSdKLAH711ubT6ROgkmq2EcFJplPmavsJa9xupM=";
+    owner = "exoscale";
+    repo = "cli";
+    rev = "v${version}";
+    sha256 = "sha256-uvPJ1cOKMpDf1KfEPkSTWMIMNojUlfpqI1ESomX1MlM=";
   };
 
-  goPackagePath = "github.com/exoscale/cli";
+  vendorSha256 = null;
+
+  excludedPackages = [ "./completion" "./docs" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
-
-  # ensures only the cli binary is built and we don't clutter bin/ with submodules
-  subPackages = [ "." ];
 
   # we need to rename the resulting binary but can't use buildFlags with -o here
   # because these are passed to "go install" which does not recognize -o
   postBuild = ''
-    mv go/bin/cli go/bin/exo
+    mv $GOPATH/bin/cli $GOPATH/bin/exo
   '';
 
   meta = {
     description = "Command-line tool for everything at Exoscale: compute, storage, dns";
-    homepage    = "https://github.com/exoscale/cli";
-    license     = lib.licenses.asl20;
+    homepage = "https://github.com/exoscale/cli";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dramaturg ];
     mainProgram = "exo";
   };
