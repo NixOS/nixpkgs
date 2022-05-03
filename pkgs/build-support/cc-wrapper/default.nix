@@ -17,6 +17,7 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, isCompilerRT ? false
 }:
 
 with lib;
@@ -145,7 +146,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang isCompilerRT;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
