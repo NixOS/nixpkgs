@@ -32,12 +32,11 @@ let
       "-DLWS_WITH_PLUGINS=ON"
       "-DLWS_WITH_IPV6=ON"
       "-DLWS_WITH_SOCKS5=ON"
+      "-DDISABLE_WERROR=ON"
       # Required since v4.2.0
       "-DLWS_BUILD_HASH=no_hash"
     ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
       ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
-
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
     postInstall = ''
       rm -r ${placeholder "out"}/share/libwebsockets-test-server
