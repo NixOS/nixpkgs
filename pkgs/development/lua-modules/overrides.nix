@@ -254,6 +254,12 @@ with prev;
     ];
   });
 
+  luaunbound = prev.lib.overrideLuarocks prev.luaunbound(drv: {
+    externalDeps = [
+      { name = "libunbound"; dep = pkgs.unbound; }
+    ];
+  });
+
   luuid = (prev.lib.overrideLuarocks prev.luuid (drv: {
     externalDeps = [
       { name = "LIBUUID"; dep = pkgs.libuuid; }

@@ -1952,6 +1952,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+luaunbound = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "luaunbound";
+  version = "1.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/luaunbound-1.0.0-1.rockspec";
+    sha256 = "1zlkibdwrj5p97nhs33cz8xx0323z3kiq5x7v0h3i7v6j0h8ppvn";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://code.zash.se/dl/luaunbound/luaunbound-1.0.0.tar.gz";
+    sha256 = "1lsh0ylp5xskygxl5qdv6mhkm1x8xp0vfd5prk5hxkr19jk5mr3d";
+  };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://www.zash.se/luaunbound.html";
+    description = "A binding to libunbound";
+    license.fullName = "MIT";
+  };
+}) {};
+
 luautf8 = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:
