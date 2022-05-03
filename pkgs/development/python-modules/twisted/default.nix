@@ -28,7 +28,7 @@
 , typing-extensions
 , zope_interface
 
-# for passthru.tests
+  # for passthru.tests
 , cassandra-driver
 , klein
 , magic-wormhole
@@ -45,10 +45,9 @@
 buildPythonPackage rec {
   pname = "twisted";
   version = "22.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
-
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Twisted";
@@ -67,15 +66,6 @@ buildPythonPackage rec {
     typing-extensions
     zope_interface
   ];
-
-  passthru.extras-require = rec {
-    tls = [ pyopenssl service-identity idna ];
-    conch = [ pyasn1 cryptography appdirs bcrypt ];
-    conch_nacl = conch ++ [ pynacl ];
-    serial = [ pyserial ];
-    http2 = [ h2 priority ];
-    contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
-  };
 
   postPatch = ''
     echo 'ListingTests.test_localeIndependent.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
@@ -127,8 +117,8 @@ buildPythonPackage rec {
     git
     glibcLocales
     pyhamcrest
-  ] ++ passthru.extras.conch
-  ++ passthru.extras.tls;
+  ] ++ passthru.extras-require.conch
+  ++ passthru.extras-require.tls;
 
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800
@@ -137,19 +127,29 @@ buildPythonPackage rec {
     ${python.interpreter} -m twisted.trial twisted
   '';
 
-  passthru.tests = {
-    inherit
-      cassandra-driver
-      klein
-      magic-wormhole
-      scrapy
-      treq
-      txaio
-      txamqp
-      txrequests
-      txtorcon
-      thrift;
-    inherit (nixosTests) buildbot matrix-synapse;
+  passthru = {
+    extras-require = {
+      conch = [ appdirs bcrypt cryptography pyasn1 ];
+      contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
+      http2 = [ h2 priority ];
+      serial = [ pyserial ];
+      tls = [ idna pyopenssl service-identity ];
+    };
+
+    tests = {
+      inherit
+        cassandra-driver
+        klein
+        magic-wormhole
+        scrapy
+        treq
+        txaio
+        txamqp
+        txrequests
+        txtorcon
+        thrift;
+      inherit (nixosTests) buildbot matrix-synapse;
+    };
   };
 
   meta = with lib; {
