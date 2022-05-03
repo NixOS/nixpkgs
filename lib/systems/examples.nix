@@ -301,6 +301,15 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  # 64 bit mingw-w64 with a llvm-based toolchain targetting ucrt
+  #
+  # Inspired by mstorsjo/llvm-mingw
+  mingwW64-llvm = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt";
+    useLLVM = true;
+  };
+
   # BSDs
 
   amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
