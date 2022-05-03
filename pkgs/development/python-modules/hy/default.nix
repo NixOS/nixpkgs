@@ -5,8 +5,10 @@
 , fetchFromGitHub
 , funcparserlib
 , pytestCheckHook
+, python
 , pythonOlder
 , rply
+, hyDefinedPythonPackages ? python-packages: [] /* Packages like with python.withPackages */
 }:
 
 buildPythonPackage rec {
@@ -27,9 +29,13 @@ buildPythonPackage rec {
     colorama
     funcparserlib
     rply # TODO: remove on the next release
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
     astor
-  ];
+  ]
+  # for backwards compatibility with removed pkgs/development/interpreters/hy
+  # See: https://github.com/NixOS/nixpkgs/issues/171428
+  ++ (hyDefinedPythonPackages python.pkgs);
 
   checkInputs = [
     pytestCheckHook
@@ -48,6 +54,6 @@ buildPythonPackage rec {
     description = "Python to/from Lisp layer";
     homepage = "https://github.com/hylang/hy";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab thiagokokada ];
+    maintainers = with maintainers; [ fab mazurel nixy thiagokokada ];
   };
 }
