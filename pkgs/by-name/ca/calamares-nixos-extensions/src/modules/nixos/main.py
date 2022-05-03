@@ -414,7 +414,7 @@ def run():
     cfg += cfgnetwork
     if gs.value("packagechooser_packagechooser") == "enlightenment":
         cfg += cfgconnman
-    elif gs.value("packagechooser_packagechooser") != "":
+    else:
         cfg += cfgnetworkmanager
 
     if (gs.value("packagechooser_packagechooser") == "mate") | (gs.value("packagechooser_packagechooser") == "lxqt") | (gs.value("packagechooser_packagechooser") == "lumina"):
