@@ -14,7 +14,7 @@
 , duckdb-engine
 , geoalchemy2
 , geopandas
-, graphviz
+, graphviz-nox
 , importlib-metadata
 , lz4
 , multipledispatch
