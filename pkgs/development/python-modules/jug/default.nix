@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "Jug";
-  version = "2.1.1";
+  version = "2.2.0";
   buildInputs = [ nose numpy ];
   propagatedBuildInputs = [
     bottle
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ae7bb45d4495cf3d0dc5dd9df104a35bba2ca83eb4576732cadf8469e7cf1a1";
+    sha256 = "sha256-2Y9xRr5DyV9UqG6tiq9rYET2Z7LaPXfzwYKKGwR3OSs=";
   };
 
   checkInputs = [ pytestCheckHook ];
