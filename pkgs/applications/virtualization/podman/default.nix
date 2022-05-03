@@ -88,6 +88,7 @@ buildGoModule rec {
       podman-tls-ghostunnel
       podman-dnsname
       ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
   };
 
   meta = with lib; {
