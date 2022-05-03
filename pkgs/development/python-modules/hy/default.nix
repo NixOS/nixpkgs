@@ -10,7 +10,8 @@
 , pythonOlder
 , rply
 , testers
-, hyDefinedPythonPackages ? python-packages: [] /* Packages like with python.withPackages */
+, toPythonApplication
+, hyDefinedPythonPackages ? python-packages: [ ] /* Packages like with python.withPackages */
 }:
 
 buildPythonPackage rec {
@@ -55,9 +56,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hy" ];
 
-  passthru.tests.version =  testers.testVersion {
-    package = hy;
-    command = "hy -v";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = hy;
+      command = "hy -v";
+    };
+    # also for backwards compatibility with removed pkgs/development/interpreters/hy
+    withPackages = python-packages: (toPythonApplication hy).override {
+      hyDefinedPythonPackages = python-packages;
+    };
   };
 
   meta = with lib; {
