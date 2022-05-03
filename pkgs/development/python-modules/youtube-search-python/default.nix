@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "youtube-search-python";
-  version = "1.6.4";
+  version = "1.6.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ZAZaLkJb2mEg0rstBxOvs9/L4wtbLuCTdFDOuxMqN0=";
+    hash = "sha256-1B7rppa+s/oE8w91Ca7ogjkNHu5pFSnNmDyUopCWEY8=";
   };
 
   propagatedBuildInputs = [
