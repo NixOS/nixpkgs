@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
-  ];
+  ] ++ lib.optional stdenv.cc.isCompilerRT
+    "-DLIBCXXABI_USE_COMPILER_RT=ON";
 
   installPhase = if stdenv.isDarwin
     then ''
