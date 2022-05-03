@@ -236,6 +236,7 @@ with pkgs;
 
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
+  auth0-cli = callPackage ../applications/misc/auth0-cli { };
 
   authy = callPackage ../applications/misc/authy { };
 
