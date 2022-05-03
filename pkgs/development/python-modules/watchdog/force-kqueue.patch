@@ -1,0 +1,69 @@
+diff --git a/setup.py b/setup.py
+index 072dfc8..64732bb 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,7 +39,7 @@ _apple_devices = ('appletv', 'iphone', 'ipod', 'ipad', 'watch')
+ is_macos = sys.platform == 'darwin' and not machine().lower().startswith(_apple_devices)
+ 
+ ext_modules = []
+-if is_macos or os.getenv('FORCE_MACOS_MACHINE', '0') == '1':
++if False:
+     ext_modules = [
+         Extension(
+             name='_watchdog_fsevents',
+diff --git a/tests/test_emitter.py b/tests/test_emitter.py
+index bec052c..ed5c465 100644
+--- a/tests/test_emitter.py
++++ b/tests/test_emitter.py
+@@ -42,13 +42,11 @@ if platform.is_linux():
+         InotifyEmitter as Emitter,
+         InotifyFullEmitter,
+     )
+-elif platform.is_darwin():
+-    from watchdog.observers.fsevents import FSEventsEmitter as Emitter
+ elif platform.is_windows():
+     from watchdog.observers.read_directory_changes import (
+         WindowsApiEmitter as Emitter
+     )
+-elif platform.is_bsd():
++elif platform.is_darwin() or platform.is_bsd():
+     from watchdog.observers.kqueue import (
+         KqueueEmitter as Emitter
+     )
+@@ -57,12 +55,6 @@ logging.basicConfig(level=logging.DEBUG)
+ logger = logging.getLogger(__name__)
+ 
+ 
+-if platform.is_darwin():
+-    # enable more verbose logs
+-    fsevents_logger = logging.getLogger("fsevents")
+-    fsevents_logger.setLevel(logging.DEBUG)
+-
+-
+ @pytest.fixture(autouse=True)
+ def setup_teardown(tmpdir):
+     global p, emitter, event_queue
+@@ -85,9 +77,6 @@ def start_watching(path=None, use_full_emitter=False, recursive=True):
+     else:
+         emitter = Emitter(event_queue, ObservedWatch(path, recursive=recursive))
+ 
+-    if platform.is_darwin():
+-        emitter.suppress_history = True
+-
+     emitter.start()
+ 
+ 
+diff --git a/tests/test_fsevents.py b/tests/test_fsevents.py
+index 4a4fabf..49886a1 100644
+--- a/tests/test_fsevents.py
++++ b/tests/test_fsevents.py
+@@ -3,8 +3,7 @@
+ import pytest
+ from watchdog.utils import platform
+ 
+-if not platform.is_darwin():  # noqa
+-    pytest.skip("macOS only.", allow_module_level=True)
++pytest.skip("doesn't work with Nix yet", allow_module_level=True)
+ 
+ import logging
+ import os

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
-    ./watchdog-force-kqueue.patch
+    ./force-kqueue.patch
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
