@@ -50,6 +50,9 @@ let
     hasLicense attrs &&
     isUnfree (lib.lists.toList attrs.meta.license);
 
+  hasNoMaintainers = attrs:
+    attrs ? meta.maintainers && (lib.length attrs.meta.maintainers) == 0;
+
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
   hasUnsupportedPlatform = attrs:
@@ -95,6 +98,7 @@ let
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
+    maintainerless = x: "";
   };
   remediation_env_var = allow_attr: {
     Unfree = "NIXPKGS_ALLOW_UNFREE";
@@ -302,6 +306,11 @@ let
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
       { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    # --- warnings ---
+    # Please also update the type in /pkgs/top-level/config.nix alongside this.
+    else if hasNoMaintainers attrs then
+      { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
+    # -----
     else { valid = "yes"; });
 
   assertValidity = { meta, attrs }: let
