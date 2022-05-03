@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "svdtools";
-  version = "0.1.22";
+  version = "0.1.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-5zMuCFCvh7BXr9BbyyDhWw1Lt/Fomv0SALiPJQbxJNQ=";
+    hash = "sha256-LuursRuUZEDLbk9Wbnq/S0dsZHbzIJo1YCSVFMUoiog=";
   };
 
   propagatedBuildInputs = [

@@ -131,7 +131,7 @@
 , "flood"
 , "forever"
 , "fx"
-, "ganache-cli"
+, "ganache"
 , "gatsby-cli"
 , "generator-code"
 , "get-graphql-schema"
@@ -223,7 +223,6 @@
 , "npm"
 , "npm-check-updates"
 , "npm-merge-driver"
-, {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
 , "nrm"
 , "ocaml-language-server"
 , "parcel-bundler"

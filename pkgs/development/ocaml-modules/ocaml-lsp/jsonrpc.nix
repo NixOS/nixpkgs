@@ -10,10 +10,14 @@
 }:
 
 let params =
-  if lib.versionAtLeast ocaml.version "4.13"
+  if lib.versionAtLeast ocaml.version "4.14"
   then {
-    version = "1.10.3";
-    sha256 = "sha256-o6wQc7Byi5T0vbARF3LAq69/9wMkOZRQ6rcVa/rBUfE=";
+    version = "1.11.3";
+    sha256 = "sha256-KlMFh05O04I0Xil2B+nL2hUxZw0jaDMUnI23oUwGyhs=";
+  } else if lib.versionAtLeast ocaml.version "4.13"
+  then {
+    version = "1.10.5";
+    sha256 = "sha256-TeJS6t1ruWhWPvWNatrnSUWI6T17XKiosHLYizBDDcw=";
   } else if lib.versionAtLeast ocaml.version "4.12"
   then {
     version = "1.9.0";
@@ -32,7 +36,7 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  useDune2 = true;
+  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
   minimalOCamlVersion = "4.06";
 
   buildInputs =

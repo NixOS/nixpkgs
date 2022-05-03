@@ -1735,6 +1735,8 @@ in {
 
   cloudflare = callPackage ../development/python-modules/cloudflare { };
 
+  cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
+
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cloudscraper = callPackage ../development/python-modules/cloudscraper { };
@@ -2530,6 +2532,8 @@ in {
     inherit (pkgs) duckdb;
   };
 
+  duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
+
   duecredit = callPackage ../development/python-modules/duecredit { };
 
   duet = callPackage ../development/python-modules/duet { };
@@ -3165,6 +3169,8 @@ in {
   fpylll = callPackage ../development/python-modules/fpylll { };
 
   fpyutils = callPackage ../development/python-modules/fpyutils { };
+
+  fqdn = callPackage ../development/python-modules/fqdn { };
 
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
@@ -4193,6 +4199,8 @@ in {
 
   ipython = callPackage ../development/python-modules/ipython { };
 
+  ipython-sql = callPackage ../development/python-modules/ipython-sql { };
+
   ipyvue = callPackage ../development/python-modules/ipyvue { };
 
   ipyvuetify = callPackage ../development/python-modules/ipyvuetify { };
@@ -4222,6 +4230,8 @@ in {
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
   isodate = callPackage ../development/python-modules/isodate { };
+
+  isoduration = callPackage ../development/python-modules/isoduration { };
 
   isort = callPackage ../development/python-modules/isort { };
 
@@ -5581,6 +5591,8 @@ in {
 
   nettigo-air-monitor = callPackage ../development/python-modules/nettigo-air-monitor { };
 
+  netutils = callPackage ../development/python-modules/netutils { };
+
   networkx = callPackage ../development/python-modules/networkx { };
 
   neuron-mpi = pkgs.neuron-mpi.override { inherit python; };
@@ -6509,6 +6521,8 @@ in {
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
+  poetry-dynamic-versioning = callPackage ../development/python-modules/poetry-dynamic-versioning { };
+
   poetry-semver = callPackage ../development/python-modules/poetry-semver { };
 
   poetry2conda = callPackage ../development/python-modules/poetry2conda { };
@@ -6984,6 +6998,10 @@ in {
   pydelijn = callPackage ../development/python-modules/pydelijn { };
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
+
+  pydeps = callPackage ../development/python-modules/pydeps {
+    inherit (pkgs) graphviz;
+  };
 
   pydes = callPackage ../development/python-modules/pydes { };
 
@@ -7462,7 +7480,7 @@ in {
   pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
   pync = callPackage ../development/python-modules/pync {
-    inherit (pkgs) coreutils which;
+    inherit (pkgs) which;
   };
 
   pynello = callPackage ../development/python-modules/pynello { };
@@ -11144,6 +11162,8 @@ in {
   yq = callPackage ../development/python-modules/yq {
     inherit (pkgs) jq;
   };
+
+  yte = callPackage ../development/python-modules/yte { };
 
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 

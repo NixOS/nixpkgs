@@ -49,6 +49,6 @@ mkDerivation rec {
     description = "The image viewer and screenshot tool for lxqt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

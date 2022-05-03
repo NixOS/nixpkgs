@@ -22,6 +22,15 @@ in
 
 runTests {
 
+# FLAKES
+
+  testCallLocklessFlake = {
+    expr = callLocklessFlake {
+      path = ./flakes/subflakeTest;
+      inputs = { subflake = ./flakes/subflakeTest/subflake; inherit callLocklessFlake; };
+    };
+    expected = { x = 1; outPath = ./flakes/subflakeTest; };
+  };
 
 # TRIVIAL
 
@@ -269,6 +278,36 @@ runTests {
       possibly newlines
       ')
     '';
+  };
+
+  testHasInfixFalse = {
+    expr = hasInfix "c" "abde";
+    expected = false;
+  };
+
+  testHasInfixTrue = {
+    expr = hasInfix "c" "abcde";
+    expected = true;
+  };
+
+  testHasInfixDerivation = {
+    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expected = true;
+  };
+
+  testHasInfixPath = {
+    expr = hasInfix "tests" ./.;
+    expected = true;
+  };
+
+  testHasInfixPathStoreDir = {
+    expr = hasInfix builtins.storeDir ./.;
+    expected = true;
+  };
+
+  testHasInfixToString = {
+    expr = hasInfix "a" { __toString = _: "a"; };
+    expected = true;
   };
 
 # LISTS

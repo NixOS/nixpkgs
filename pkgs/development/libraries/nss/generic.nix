@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    ./85_security_load.patch
+    (if (lib.versionOlder version "3.77") then
+      ./85_security_load.patch
+    else
+      ./85_security_load_3.77+.patch
+    )
     ./ckpem.patch
     ./fix-cross-compilation.patch
   ];

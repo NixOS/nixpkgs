@@ -78,6 +78,6 @@ mkDerivation rec {
     description = "The LXQt desktop panel";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

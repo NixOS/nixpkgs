@@ -10,7 +10,7 @@ For those who develop and maintain fetchers, a similar problem arises with chang
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
-Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of fetchurl is provided below.
+Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
 
 ```nix
 { stdenv, fetchurl }:
@@ -24,9 +24,9 @@ stdenv.mkDerivation {
 }
 ```
 
-The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
+The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand, will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
 
-`fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
+`fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example, it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
 
 Most other fetchers return a directory rather than a single file.
 
@@ -38,9 +38,9 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `sha25
 
 Used with Git. Expects `url` to a Git repo, `rev`, and `sha256`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
-Additionally the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
+Additionally, the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
 
-If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) and [git clone --filter](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt) for more infomation:
+If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) and [git clone --filter](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt) for more information:
 
 ```nix
 { stdenv, fetchgit }:
@@ -78,17 +78,17 @@ A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are m
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
-`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `sha256` is currently preferred.
+`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `sha256` is currently preferred.
 
 `fetchFromGitHub` uses `fetchzip` to download the source archive generated by GitHub for the specified revision. If `leaveDotGit`, `deepClone` or `fetchSubmodules` are set to `true`, `fetchFromGitHub` will use `fetchgit` instead. Refer to its section for documentation of these options.
 
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
-This is used with GitLab repositories. The arguments expected are very similar to fetchFromGitHub above.
+This is used with GitLab repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
 ## `fetchFromGitiles` {#fetchfromgitiles}
 
-This is used with Gitiles repositories. The arguments expected are similar to fetchgit.
+This is used with Gitiles repositories. The arguments expected are similar to `fetchgit`.
 
 ## `fetchFromBitbucket` {#fetchfrombitbucket}
 
@@ -96,11 +96,11 @@ This is used with BitBucket repositories. The arguments expected are very simila
 
 ## `fetchFromSavannah` {#fetchfromsavannah}
 
-This is used with Savannah repositories. The arguments expected are very similar to fetchFromGitHub above.
+This is used with Savannah repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
 ## `fetchFromRepoOrCz` {#fetchfromrepoorcz}
 
-This is used with repo.or.cz repositories. The arguments expected are very similar to fetchFromGitHub above.
+This is used with repo.or.cz repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
 ## `fetchFromSourcehut` {#fetchfromsourcehut}
 
@@ -111,4 +111,4 @@ or "hg"), `domain` and `fetchSubmodules`.
 
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
-respectively. Otherwise the fetcher uses `fetchzip`.
+respectively. Otherwise, the fetcher uses `fetchzip`.

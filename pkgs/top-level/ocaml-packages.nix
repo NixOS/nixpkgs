@@ -336,6 +336,8 @@ let
       inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
     };
 
+    dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
+
     dune-site = callPackage ../development/ocaml-modules/dune-site { };
 
     duration =  callPackage ../development/ocaml-modules/duration { };
@@ -422,6 +424,8 @@ let
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
       inherit (pkgs) ffmpeg;
     };
+
+    fiber = callPackage ../development/ocaml-modules/fiber { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
@@ -1417,6 +1421,8 @@ let
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
+
+    xdg = callPackage ../development/ocaml-modules/xdg { };
 
     xenstore = callPackage ../development/ocaml-modules/xenstore { };
 
