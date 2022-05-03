@@ -511,6 +511,19 @@
       </listitem>
       <listitem>
         <para>
+          For new installations
+          <literal>virtualisation.oci-containers.backend</literal> is
+          now set to <literal>podman</literal> by default. If you still
+          want to use Docker on systems where
+          <literal>system.stateVersion</literal> is set to to
+          <literal>&quot;22.05&quot;</literal> set
+          <literal>virtualisation.oci-containers.backend = &quot;docker&quot;;</literal>.Old
+          systems with older <literal>stateVersion</literal>s stay with
+          <quote>docker</quote>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>security.klogd</literal> was removed. Logging of
           kernel messages is handled by systemd since Linux 3.5.
         </para>
