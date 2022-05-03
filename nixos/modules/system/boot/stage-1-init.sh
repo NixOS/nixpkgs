@@ -318,11 +318,7 @@ checkFS() {
 
     echo "checking $device..."
 
-    fsckFlags=
-    if test "$fsType" != "btrfs"; then
-        fsckFlags="-V -a"
-    fi
-    fsck $fsckFlags "$device"
+    fsck -V -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then
