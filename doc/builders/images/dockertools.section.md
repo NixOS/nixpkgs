@@ -58,7 +58,7 @@ After the new layer has been created, its closure (to which `contents`, `config`
 
 At the end of the process, only one new single layer will be produced and added to the resulting image.
 
-The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage) it would be `redis/latest`.
+The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage), it would be `redis/latest`.
 
 It is possible to inspect the arguments with which an image was built using its `buildArgs` attribute.
 
@@ -87,7 +87,7 @@ pkgs.dockerTools.buildImage {
 }
 ```
 
-and now the Docker CLI will display a reasonable date and sort the images as expected:
+Now the Docker CLI will display a reasonable date and sort the images as expected:
 
 ```ShellSession
 $ docker images
@@ -95,7 +95,7 @@ REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ```
 
-however, the produced images will not be binary reproducible.
+However, the produced images will not be binary reproducible.
 
 ## buildLayeredImage {#ssec-pkgs-dockerTools-buildLayeredImage}
 
@@ -119,13 +119,13 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `contents` _optional_
 
-: Top level paths in the container. Either a single derivation, or a list of derivations.
+: Top-level paths in the container. Either a single derivation, or a list of derivations.
 
     *Default:* `[]`
 
 `config` _optional_
 
-: Run-time configuration of the container. A full list of the options are available at in the [ Docker Image Specification v1.2.0 ](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+: Run-time configuration of the container. A full list of the options are available at in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
     *Default:* `{}`
 
@@ -195,9 +195,9 @@ pkgs.dockerTools.buildLayeredImage {
 
 Increasing the `maxLayers` increases the number of layers which have a chance to be shared between different images.
 
-Modern Docker installations support up to 128 layers, however older versions support as few as 42.
+Modern Docker installations support up to 128 layers, but older versions support as few as 42.
 
-If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However it will be impossible to extend the image further.
+If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However, it will be impossible to extend the image further.
 
 The first (`maxLayers-2`) most "popular" paths will have their own individual layers, then layer \#`maxLayers-1` will contain all the remaining "unpopular" paths, and finally layer \#`maxLayers` will contain the Image configuration.
 
@@ -213,7 +213,7 @@ The image produced by running the output script can be piped directly into `dock
 $(nix-build) | docker load
 ```
 
-Alternatively, the image be piped via `gzip` into `skopeo`, e.g. to copy it into a registry:
+Alternatively, the image be piped via `gzip` into `skopeo`, e.g., to copy it into a registry:
 
 ```ShellSession
 $(nix-build) | gzip --fast | skopeo copy docker-archive:/dev/stdin docker://some_docker_registry/myimage:tag

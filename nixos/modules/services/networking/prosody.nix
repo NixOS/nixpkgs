@@ -820,6 +820,7 @@ in
         '') cfg.muc}
 
       ${ lib.optionalString (cfg.uploadHttp != null) ''
+        -- TODO: think about migrating this to mod-http_file_share instead.
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
             http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
             http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
