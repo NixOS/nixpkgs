@@ -33,7 +33,7 @@ pypy2Packages.buildPythonApplication  rec {
   meta = with lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
     homepage = "https://github.com/mhagger/cvs2svn";
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ makefu viraptor ];
     platforms = platforms.unix;
     license = licenses.asl20;
   };
