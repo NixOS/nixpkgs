@@ -97,6 +97,11 @@ let
     in
       map (x: "${mountPoint x}.mount") (getPoolFilesystems pool);
 
+  getKeyLocations = pool:
+    if isBool cfgZfs.requestEncryptionCredentials
+    then "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}"
+    else "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}";
+
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
@@ -137,13 +142,11 @@ let
           ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
                             then cfgZfs.requestEncryptionCredentials
                             else cfgZfs.requestEncryptionCredentials != []) ''
-            ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
+            ${getKeyLocations pool} | while IFS=$'\t' read ds kl ks; do
               {
-                ${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
-                   if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
-                     continue
-                   fi
-                 ''}
+              if [[ "$ks" != unavailable ]]; then
+                continue
+              fi
               case "$kl" in
                 none )
                   ;;
