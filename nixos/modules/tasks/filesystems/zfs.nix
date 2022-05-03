@@ -461,7 +461,7 @@ in
                 zfs load-key -a
               ''
               else concatMapStrings (fs: ''
-                zfs load-key ${fs}
+                zfs load-key -- ${escapeShellArg fs}
               '') cfgZfs.requestEncryptionCredentials}
         '') rootPools));
       };
