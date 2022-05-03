@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
-    rev = version;
-    hash = "sha256-kR2PG2eivBfqu67hXr8/RRvo5EzI75e8NmG15NPGo1E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cJsu8BrDrJqotkXH5jPbAMsftWCbF8tbpH/4CCzWWI0=";
   };
 
   # Module has no tests
