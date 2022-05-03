@@ -12,7 +12,7 @@ setuptoolsBuildPhase() {
         args+="$setupPyGlobalFlags"
     fi
     if [ -n "$enableParallelBuilding" ]; then
-        setupPyBuildFlags+="--parallel $NIX_BUILD_CORES"
+        setupPyBuildFlags+=" --parallel $NIX_BUILD_CORES"
     fi
     if [ -n "$setupPyBuildFlags" ]; then
         args+="build_ext $setupPyBuildFlags"
