@@ -25,14 +25,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.0.0";
+  version = "2.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JHRUYugptbsbqyXy5IxBVQq1NNbTR1xdt791ZQ2jP7s=";
+    hash = "sha256-ji61783imVlvoBaDMTxQwbf1L1G4lJbOFZ1FjcNOT/8=";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +54,12 @@ buildPythonApplication rec {
     "pip_audit"
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
   disabledTestPaths = [
+    # Tests require network access
     "test/dependency_source/test_requirement.py"
     "test/dependency_source/test_resolvelib.py"
     "test/service/test_pypi.py"
@@ -62,8 +67,11 @@ buildPythonApplication rec {
   ];
 
   disabledTests = [
+    # Tests requrire network access
     "test_get_pip_cache"
     "test_virtual_env"
+    "test_pyproject_source"
+    "test_pyproject_source_duplicate_deps"
   ];
 
   meta = with lib; {
