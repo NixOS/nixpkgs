@@ -4486,7 +4486,6 @@ broken-packages:
   - servant-auth-hmac
   - servant-avro
   - servant-benchmark
-  - servant-cassava
   - servant-client-js
   - servant-db
   - servant-dhall
