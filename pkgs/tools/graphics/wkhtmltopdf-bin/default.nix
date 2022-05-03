@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nbr ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ "x86_64-darwin", "aarch64-darwin" ];
   };
 }
