@@ -1,4 +1,5 @@
 { lib
+, fetchFromGitHub
 , python3
 , openssl
   # Many Salt modules require various Python modules to be installed,
@@ -22,11 +23,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004.1";
+  # Unstable because 3004.1 is not compatible with jinja2 3.1
+  version = "unstable-2022-05-03";
 
-  src = py.pkgs.fetchPypi {
-    inherit pname version;
-    hash = "sha256-fzRKJDJkik8HjapazMaNzf/hCVzqE+wh5QQTVg8Ewpg=";
+  src = fetchFromGitHub {
+    owner = "saltstack";
+    repo = pname;
+    rev = "72a673ba2c24651dcd88c825f0a60f081b4ae665";
+    hash = "sha256-dqYbU1pu/K+yQZX7AlS7N5dz/Dm22GTTD5Tzs4k7TPI=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
