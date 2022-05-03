@@ -13,12 +13,12 @@
 }: buildPythonPackage rec
 {
   pname = "psygnal";
-  version = "0.3.3";
+  version = "0.3.4";
   src = fetchFromGitHub {
     owner = "tlambert03";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BQmcA1gD2i4sxROH+a7gStcNK1mXYVerIZ2y6gn8vI8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-QyHbLOseHtEx6I/OiNufYGKrXUJ5eOmtGE8V4Lvtq9s=";
   };
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ typing-extensions ];
