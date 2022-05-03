@@ -13,7 +13,7 @@ let
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
 
-  allowUnfree = config.allowUnfree or false
+  allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
@@ -34,10 +34,10 @@ let
   hasBlocklistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && lib.lists.any (l: builtins.elem l blocklist) (lib.lists.toList attrs.meta.license);
 
-  allowBroken = config.allowBroken or false
+  allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-  allowUnsupportedSystem = config.allowUnsupportedSystem or false
+  allowUnsupportedSystem = config.allowUnsupportedSystem
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
   isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;

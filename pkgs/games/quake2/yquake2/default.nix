@@ -1,63 +1,55 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, cmake, makeWrapper
+{ stdenv, lib, fetchFromGitHub, buildEnv, makeWrapper
 , SDL2, libGL, curl
-, oggSupport ? true, libogg, libvorbis
 , openalSupport ? true, openal
-, zipSupport ? true, zlib
 , Cocoa, OpenAL
 }:
 
 let
-  mkFlag = b: if b then "ON" else "OFF";
+  mkFlag = b: if b then "yes" else "no";
 
-  games = import ./games.nix { inherit stdenv lib fetchFromGitHub cmake; };
+  games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
   wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.00";
+    version = "8.01";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "0xnpmh0pl1095dykhc76rp242x587yh9zh6wayqzaam6cn3xlz3w";
+      sha256 = "1dll5lx4bnls5w5f2zwjhwpcpxa97rjn6ymb2v3vrjm19jbd16yd";
     };
 
     postPatch = ''
-      substituteInPlace src/common/filesystem.c \
-        --replace /usr/share/games/quake2 $out/share/games/quake2
+      substituteInPlace src/client/curl/qcurl.c \
+        --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
+    '' + lib.optionalString (openalSupport && !stdenv.isDarwin) ''
+      substituteInPlace Makefile \
+        --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
     '';
-
-    nativeBuildInputs = [ cmake ];
 
     buildInputs = [ SDL2 libGL curl ]
       ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
-      ++ lib.optionals oggSupport [ libogg libvorbis ]
-      ++ lib.optional openalSupport openal
-      ++ lib.optional zipSupport zlib;
+      ++ lib.optional openalSupport openal;
 
-    cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DOGG_SUPPORT=${mkFlag oggSupport}"
-      "-DOPENAL_SUPPORT=${mkFlag openalSupport}"
-      "-DZIP_SUPPORT=${mkFlag zipSupport}"
-      "-DSYSTEMWIDE_SUPPORT=ON"
+    makeFlags = [
+      "WITH_OPENAL=${mkFlag openalSupport}"
+      "WITH_SYSTEMWIDE=yes"
+      "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
     ];
 
-    preConfigure = ''
-      # Since we can't expand $out in `cmakeFlags`
-      cmakeFlags="$cmakeFlags -DSYSTEMDIR=$out/share/games/quake2"
-    '';
+    enableParallelBuilding = true;
 
     installPhase = ''
       # Yamagi Quake II expects all binaries (executables and libs) to be in the
       # same directory.
-      mkdir -p $out/bin $out/lib/yquake2 $out/share/games/quake2
+      mkdir -p $out/bin $out/lib/yquake2 $out/share/games/quake2/baseq2
       cp -r release/* $out/lib/yquake2
       ln -s $out/lib/yquake2/quake2 $out/bin/yquake2
       ln -s $out/lib/yquake2/q2ded $out/bin/yq2ded
-      cp $src/stuff/yq2.cfg $out/share/games/quake2
+      cp $src/stuff/yq2.cfg $out/share/games/quake2/baseq2
     '';
 
     meta = with lib; {

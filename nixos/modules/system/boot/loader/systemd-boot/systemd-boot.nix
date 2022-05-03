@@ -33,7 +33,7 @@ let
     netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
 
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-      empty_file=$(mktemp)
+      empty_file=$(${pkgs.coreutils}/bin/mktemp)
 
       ${concatStrings (mapAttrsToList (n: v: ''
         ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
