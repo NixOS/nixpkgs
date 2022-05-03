@@ -30966,6 +30966,8 @@ with pkgs;
 
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
+  bchn = callPackage ../applications/blockchains/bchn { };
+
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
     boost = boost17x;
     miniupnpc = miniupnpc_2;
