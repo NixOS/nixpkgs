@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     passlib
     vobject
     python-dateutil
-  ];
+  ] ++ passlib.extras-require.bcrypt;
 
   checkInputs = with python3.pkgs; [
     pytestCheckHook
