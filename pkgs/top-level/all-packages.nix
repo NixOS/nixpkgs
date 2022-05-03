@@ -22535,8 +22535,6 @@ with pkgs;
 
   check-wmiplus = callPackage ../servers/monitoring/plugins/wmiplus { };
 
-  uchiwa = callPackage ../servers/monitoring/uchiwa { };
-
   shishi = callPackage ../servers/shishi {
       pam = if stdenv.isLinux then pam else null;
       # see also openssl, which has/had this same trick
