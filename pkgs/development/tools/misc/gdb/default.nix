@@ -35,12 +35,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-DheTv48rVNU/Rt6oTM/URvSPgbKXsoxPf8AXuBjWn+0=";
   };
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else if stdenv.hostPlatform.isMusl then ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
     substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
-  '' else null;
+  '';
 
   patches = [
     ./debug-info-from-env.patch
