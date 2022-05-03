@@ -27,7 +27,7 @@
     simpleUefiGrubSpecialisation
     simpleUefiSystemdBoot
     # swraid
-    # zfsroot
+    zfsroot
     ;
 
 }
