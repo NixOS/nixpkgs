@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytest-asyncio
     sqlalchemy
     trio
-  ];
+  ] ++ passlib.extras-require.bcrypt;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
