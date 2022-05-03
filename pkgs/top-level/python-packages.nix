@@ -2555,6 +2555,8 @@ in {
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
+  django-hcaptcha = callPackage ../development/python-modules/django-hcaptcha { };
+
   django-health-check = callPackage ../development/python-modules/django-health-check { };
 
   django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
