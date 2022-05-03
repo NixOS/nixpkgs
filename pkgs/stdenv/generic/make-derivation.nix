@@ -370,7 +370,7 @@ else let
     } // {
       # Expose the result of the checks for everyone to see.
       inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid
+      available = validity.valid != "no"
                && (if config.checkMetaRecursively or false
                    then lib.all (d: d.meta.available or true) references
                    else true);
