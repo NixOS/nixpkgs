@@ -122,7 +122,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     threadpoolctl
     tika
     tqdm
-    twisted.extras.tls
+    twisted.extras-require.tls
     txaio
     tzlocal
     urllib3

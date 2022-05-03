@@ -20,7 +20,7 @@ buildPythonPackage rec {
     requests
     incremental
     twisted
-  ] ++ twisted.extras.tls;
+  ] ++ twisted.extras-require.tls;
 
   checkInputs = [
     httpbin
