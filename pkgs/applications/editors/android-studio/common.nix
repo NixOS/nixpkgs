@@ -115,7 +115,7 @@ let
           libXi
           libXrender
           libXtst
-          
+
           # No crash, but attempted to load at startup
           e2fsprogs
 
