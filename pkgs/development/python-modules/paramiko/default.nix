@@ -22,6 +22,15 @@ buildPythonPackage rec {
     sha256 = "sha256-3bGXeFOu+CgEs11yoOWXskT6MmxATDUL0AxbAdv+5xo=";
   };
 
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+  ];
+
   propagatedBuildInputs = [
     bcrypt
     cryptography
@@ -51,15 +60,6 @@ buildPythonPackage rec {
     "paramiko"
   ];
 
-  patches = [
-    # Fix usage of dsa keys
-    # https://github.com/paramiko/paramiko/pull/1606/
-    (fetchpatch {
-      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
-      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
-    })
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
@@ -72,6 +72,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
