@@ -103,7 +103,7 @@ rec {
   forAllSystems = genAttrs supportedSystems;
 
 
-  # Generate attributes for all sytems matching at least one of the given
+  # Generate attributes for all systems matching at least one of the given
   # patterns
   forMatchingSystems = metaPatterns: genAttrs (supportedMatches metaPatterns);
 
