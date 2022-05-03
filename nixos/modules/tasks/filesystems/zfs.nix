@@ -666,7 +666,7 @@ in
           # expand every pool. Otherwise we want to enumerate
           # just the specifically provided list of pools.
           poolListProvider = if cfgExpandOnBoot == "all"
-            then "$(zpool list -H | awk '{print $1}')"
+            then "$(zpool list -H -o name)"
             else lib.escapeShellArgs cfgExpandOnBoot;
         in
         {
