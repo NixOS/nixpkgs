@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   src = requireFile {
     name = "${sourceRoot}.zip";
     url = "https://github.com/EpicGames/UnrealEngine/releases/tag/${version}-release";
-    sha256 = "1v2rlq8fv95lk4g6r0a4yx47wz9y1ygas1pq71wf4df4y865nm09";
+    sha256 = "062y2cgxj4q8h7vw7a4rv314amhibvlkrcjk02bgy7ld7xpnwa8w";
   };
 
   buildInputs = [ dotnetPackages.Nuget ];
