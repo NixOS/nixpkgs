@@ -277,28 +277,31 @@ let
       insecure = isMarkedInsecure attrs;
     }
     // (if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
-      { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
+      { valid = "no"; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlocklistedLicense attrs then
-      { valid = false; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
+      { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
-      { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
+      { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
-      { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
+      { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
     else if checkOutputsToInstall attrs then
-      { valid = false; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
+      { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
-    else { valid = true; });
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    else { valid = "yes"; });
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
     in validity // {
-      # Throw an error if trying to evaluate an non-valid derivation
-      handled = if !validity.valid
-        then handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
-        else true;
+      # Throw an error if trying to evaluate a non-valid derivation
+      # or, alternatively, just output a warning message.
+      handled =
+        {
+          no = handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; };
+          yes = true;
+        }.${validity.valid};
   };
 
 in assertValidity
