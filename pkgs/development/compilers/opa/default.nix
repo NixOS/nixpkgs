@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ which perl jdk openssl coreutils zlib ncurses
     makeWrapper gcc binutils gnumake nodejs
   ] ++ (with ocamlPackages; [
-    ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
+    ocaml findlib ssl camlzip ulex ocamlgraph camlp4
   ]);
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
