@@ -4,10 +4,12 @@
 , colorama
 , fetchFromGitHub
 , funcparserlib
+, hy
 , pytestCheckHook
 , python
 , pythonOlder
 , rply
+, testers
 , hyDefinedPythonPackages ? python-packages: [] /* Packages like with python.withPackages */
 }:
 
@@ -24,6 +26,9 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-MBzp3jqBg/kH233wcgYYHc+Yg9GuOaBsXIfjFDihD1E=";
   };
+
+  # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
+  HY_VERSION = version;
 
   propagatedBuildInputs = [
     colorama
@@ -49,6 +54,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "hy" ];
+
+  passthru.tests.version =  testers.testVersion {
+    package = hy;
+    command = "hy -v";
+  };
 
   meta = with lib; {
     description = "Python to/from Lisp layer";
