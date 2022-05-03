@@ -11,21 +11,22 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.0a3";
+  version = "1.0a4";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = pname;
     rev = version;
-    sha256 = "1dqw24rvsps2nab1pbjjm1c81vrs34r4kkk691h3xdyxnv9hb84b";
+    sha256 = "sha256-MBzp3jqBg/kH233wcgYYHc+Yg9GuOaBsXIfjFDihD1E=";
   };
 
   propagatedBuildInputs = [
     colorama
     funcparserlib
-    rply
+    rply # TODO: remove on the next release
   ] ++ lib.optionals (pythonOlder "3.9") [
     astor
   ];
@@ -47,6 +48,6 @@ buildPythonPackage rec {
     description = "Python to/from Lisp layer";
     homepage = "https://github.com/hylang/hy";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab thiagokokada ];
   };
 }
