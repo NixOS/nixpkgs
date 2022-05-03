@@ -42,6 +42,8 @@ let
 
   nativeComp = emacs.nativeComp or false;
 
+  withAutoloads = emacs.withAutoloads or false;
+
 in
 
 packagesFun: # packages explicitly requested by the user
@@ -199,10 +201,12 @@ runCommand
       local progname=$(basename "$prog")
       local autoloadExpression=""
       rm -f "$out/bin/$progname"
-      if [[ $progname == emacs ]]; then
-        # progs other than "emacs" do not understand the `-l` switches
-        autoloadExpression="-l cl-loaddefs -l nix-generated-autoload"
-      fi
+      ${optionalString withAutoloads ''
+        if [[ $progname == emacs ]]; then
+          # progs other than "emacs" do not understand the `-l` switches
+          autoloadExpression="-l cl-loaddefs -l nix-generated-autoload"
+        fi
+      ''}
 
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
@@ -228,7 +232,8 @@ runCommand
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
-        --subst-var-by autoloadExpression "-l cl-loaddefs -l nix-generated-autoload" \
+        --subst-var-by autoloadExpression \
+          '"${optionalString withAutoloads "-l cl-loaddefs -l nix-generated-autoload"}"' \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi

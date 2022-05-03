@@ -38,6 +38,7 @@
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
+, withAutoloads ? false
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -215,7 +216,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   ];
 
   passthru = {
-    inherit nativeComp;
+    inherit nativeComp withAutoloads;
     pkgs = dontRecurseIntoAttrs (emacsPackagesFor emacs);
     tests = { inherit (nixosTests) emacs-daemon; };
   };
