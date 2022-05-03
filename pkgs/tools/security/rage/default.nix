@@ -1,20 +1,29 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
-, Foundation, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, Foundation
+, Security
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0OQnYc1IWYscvSw5YZH54Fh8cBasLlcVqrQcQ4MAsU8=";
+    sha256 = "sha256-ra68q5gwcbod5iajPIWEIGQceMK8ikSq/UKUfIEYaGE=";
   };
 
-  cargoSha256 = "sha256-31s70pgEQDw3uifmhv1iWQuzKQVc2q+f76PPnGKIYdc=";
+  cargoSha256 = "sha256-o5HVMRWSIrCsbOEOeUvCvj+mkmjqRY3XaHx82IY73Cc=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Foundation

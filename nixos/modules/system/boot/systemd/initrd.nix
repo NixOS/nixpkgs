@@ -342,6 +342,7 @@ in {
         "/etc/fstab".source = fstab;
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
+        "/lib/firmware".source = "${modulesClosure}/lib/firmware";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 

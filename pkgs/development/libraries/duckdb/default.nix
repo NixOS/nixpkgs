@@ -47,6 +47,35 @@ stdenv.mkDerivation rec {
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ];
 
+  doInstallCheck = true;
+
+  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
+  '';
+
+  installCheckPhase =
+    let
+      excludes = map (pattern: "exclude:'${pattern}'") [
+        "*test_slow"
+        "Test file buffers for reading/writing to file"
+        "[test_slow]"
+        "test/common/test_cast_hugeint.test"
+        "test/sql/copy/csv/test_csv_remote.test"
+        "test/sql/copy/parquet/test_parquet_remote.test"
+      ] ++ lib.optionals stdenv.isAarch64 [
+        "test/sql/aggregate/aggregates/test_kurtosis.test"
+        "test/sql/aggregate/aggregates/test_skewness.test"
+        "test/sql/function/list/aggregates/skewness.test"
+      ];
+    in
+    ''
+      runHook preInstallCheck
+
+      $PWD/test/unittest ${lib.concatStringsSep " " excludes}
+
+      runHook postInstallCheck
+    '';
+
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = lib.optionals withHttpFs [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]

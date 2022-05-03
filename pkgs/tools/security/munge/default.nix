@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "munge";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15h805rwcb9f89dyrkxfclzs41n3ff8x7cc1dbvs8mb0ds682c4j";
   };
 
-  nativeBuildInputs = [ autoreconfHook gawk gnused ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libgcrypt zlib bzip2 ];
 
   preAutoreconf = ''

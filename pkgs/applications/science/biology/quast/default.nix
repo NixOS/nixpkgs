@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, zlib, bash, coreutils }:
+{ lib, stdenv, fetchurl, python3Packages, zlib, bash }:
 
 let
   pythonPackages = python3Packages;
@@ -15,8 +15,6 @@ pythonPackages.buildPythonApplication rec {
   };
 
   pythonPath = with pythonPackages; [ simplejson joblib setuptools matplotlib ];
-
-  nativeBuildInputs = [ coreutils ];
 
   buildInputs = [ zlib ] ++ pythonPath;
 

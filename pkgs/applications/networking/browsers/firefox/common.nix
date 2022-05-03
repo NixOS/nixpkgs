@@ -24,7 +24,6 @@
 # build time
 , autoconf
 , cargo
-, gnused
 , makeWrapper
 , nodejs
 , perl
@@ -112,7 +111,6 @@
 ## other
 
 , crashreporterSupport ? false
-, safeBrowsingSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -208,7 +206,6 @@ buildStdenv.mkDerivation ({
   nativeBuildInputs = [
     autoconf
     cargo
-    gnused
     llvmPackages.llvm # llvm-objdump
     makeWrapper
     nodejs

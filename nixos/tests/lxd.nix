@@ -6,15 +6,46 @@ let
   #
   # I've chosen to import Alpine Linux, because its image is turbo-tiny and,
   # generally, sufficient for our tests.
-  alpine-meta = pkgs.fetchurl {
+  alpine-meta-x86 = pkgs.fetchurl {
     url = "https://tarballs.nixos.org/alpine/3.12/lxd.tar.xz";
     hash = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
   };
+  alpine-meta-for = arch: pkgs.stdenv.mkDerivation {
+    name = "alpine-meta-${arch}";
+    version = "3.12";
+    unpackPhase = "true";
+    buildPhase = ''
+      runHook preBuild
 
-  alpine-rootfs = pkgs.fetchurl {
-    url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
-    hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
+      tar xvf ${alpine-meta-x86}
+      sed -i 's/architecture: .*/architecture: ${arch}/' metadata.yaml
+
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+
+      tar czRf $out *
+
+      runHook postInstall
+    '';
   };
+
+  alpine-meta = {
+    x86_64-linux = alpine-meta-x86;
+    aarch64-linux = alpine-meta-for "aarch64";
+  }.${pkgs.system} or (throw "Unsupported system: ${pkgs.system}");
+
+  alpine-rootfs = {
+    x86_64-linux = pkgs.fetchurl {
+      url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
+      hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
+    };
+    aarch64-linux = pkgs.fetchurl {
+      url = "https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/aarch64/alpine-minirootfs-3.15.4-aarch64.tar.gz";
+      hash = "sha256-9kBz8Jwmo8XepJhTMt5zilCaHHpflnUH7y9+0To39Us=";
+    };
+  }.${pkgs.system} or (throw "Unsupported system: ${pkgs.system}");
 
   lxd-config = pkgs.writeText "config.yaml" ''
     storage_pools:
