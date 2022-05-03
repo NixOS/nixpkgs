@@ -335,6 +335,11 @@ stdenv.mkDerivation {
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
+    # lld's MinGW driver (e.g. `ld.lld -m i386pep`) does not support the `-z` flag.
+    + optionalString (targetPlatform.isWindows && isLld) ''
+      hardening_unsupported_flags+=" relro bindnow"
+    ''
+
     ##
     ## GNU specific extra strip flags
     ##
