@@ -7,6 +7,10 @@ let
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
+  # Allow the user to opt-into additional warnings, e.g.
+  # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
+  showWarnings = config.showDerivationWarnings;
+
   getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
 
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
@@ -199,6 +203,14 @@ let
         else throw;
     in handler msg;
 
+  handleEvalWarning = { meta, attrs }: { reason , errormsg ? "" }:
+    let
+      remediationMsg = (builtins.getAttr reason remediation) attrs;
+      msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
+        else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
+             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+      isEnabled = lib.findFirst (x: x == reason) null showWarnings;
+    in if isEnabled != null then builtins.trace msg true else true;
 
   metaTypes = with lib.types; rec {
     # These keys are documented
@@ -300,6 +312,7 @@ let
       handled =
         {
           no = handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; };
+          warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
           yes = true;
         }.${validity.valid};
   };
