@@ -1137,6 +1137,8 @@ with pkgs;
 
   gobgp = callPackage ../tools/networking/gobgp { };
 
+  gof5 = callPackage ../tools/networking/gof5 { };
+
   goflow = callPackage ../tools/networking/goflow { };
 
   gofu = callPackage ../applications/misc/gofu { };
@@ -9428,6 +9430,10 @@ with pkgs;
 
   poretools = callPackage ../applications/science/biology/poretools { };
 
+  pantum-driver = callPackage ../misc/drivers/pantum-driver {
+    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
+  };
+
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
   povray = callPackage ../tools/graphics/povray {
@@ -9557,6 +9563,8 @@ with pkgs;
   };
 
   py-spy = callPackage ../development/tools/py-spy { };
+
+  pydeps = with python3Packages; toPythonApplication pydeps;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
@@ -12446,7 +12454,7 @@ with pkgs;
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isDarwin) then 11
-        else if (stdenv.targetPlatform.isx86_64) then 11
+        else if (stdenv.targetPlatform.isx86_64 || stdenv.targetPlatform.isRiscV) then 11
         else if stdenv.targetPlatform.isAarch64 then 9
         else 10;
       numS = toString num;
@@ -14694,6 +14702,8 @@ with pkgs;
 
   actionlint = callPackage ../development/tools/analysis/actionlint { };
 
+  adreaper = callPackage ../tools/security/adreaper { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   inherit (callPackage ../development/tools/alloy {
@@ -14999,7 +15009,11 @@ with pkgs;
   libodb = callPackage ../development/libraries/libodb { };
   libodb-sqlite = callPackage ../development/libraries/libodb-sqlite { };
   bdep = callPackage ../development/tools/build-managers/build2/bdep.nix { };
-  bore-cli = callPackage ../tools/networking/bore-cli/default.nix {};
+
+  bore-cli = callPackage ../tools/networking/bore-cli/default.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   bpkg = callPackage ../development/tools/build-managers/build2/bpkg.nix { };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
@@ -24379,6 +24393,8 @@ with pkgs;
 
   layan-kde = callPackage ../data/themes/layan-kde { };
 
+  lao = callPackage ../data/fonts/lao {};
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
@@ -26074,6 +26090,8 @@ with pkgs;
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
+
+  ff2mpv = callPackage ../applications/misc/ff2mpv { };
 
   fff = callPackage ../applications/misc/fff { };
 
@@ -29856,7 +29874,8 @@ with pkgs;
 
   inherit (callPackage ../applications/graphics/tesseract {})
     tesseract3
-    tesseract4;
+    tesseract4
+    tesseract5;
   tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
