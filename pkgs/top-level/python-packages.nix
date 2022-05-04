@@ -10662,6 +10662,8 @@ in {
 
   validictory = callPackage ../development/python-modules/validictory { };
 
+  validobj = callPackage ../development/python-modules/validobj { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
