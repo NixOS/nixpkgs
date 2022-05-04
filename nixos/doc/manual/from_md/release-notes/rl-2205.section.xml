@@ -850,6 +850,11 @@
           to the new location if the <literal>stateVersion</literal> is
           updated.
         </para>
+        <para>
+          As of Synapse 1.58.0, the old groups/communities feature has
+          been disabled by default. It will be completely removed with
+          Synapse 1.61.0.
+        </para>
       </listitem>
       <listitem>
         <para>
