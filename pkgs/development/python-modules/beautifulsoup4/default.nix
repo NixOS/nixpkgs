@@ -6,12 +6,14 @@
 , pytestCheckHook
 , pythonOlder
 , soupsieve
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
   version = "4.11.1";
   format = "setuptools";
+  outputs = ["out" "doc"];
 
   disabled = pythonOlder "3.6";
 
@@ -29,6 +31,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+  nativeBuildInputs = [ sphinxHook ];
 
   pythonImportsCheck = [
     "bs4"
