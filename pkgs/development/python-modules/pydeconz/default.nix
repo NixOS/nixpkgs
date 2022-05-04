@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aioresponses
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-aiohttp
@@ -10,20 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "90";
+  version = "91";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DojTqgv3Dr+th2n/gPM70r/5QE487OgyYOBVxVzvcXE=";
+    hash = "sha256-JoQapWQZPjP9TD6gnIGE23hzBt22kAWDKreTzq3GBWQ=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
   ];
 
   checkInputs = [
