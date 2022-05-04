@@ -342,6 +342,10 @@ Alternatively, set the number of processes to a lower count to avoid rate-limiti
 ./pkgs/applications/editors/vim/plugins/update.py --proc 1
 ```
 
+### Plugins with Rust dependencies
+
+Some plugins contain Rust dependencies, so they have a `cargoSha256` that also needs to be updated. The update script will attempt to build these plugins and will output a list of plugins that failed to build. Try building these using `nix-build -A vimPlugins.<failed_plugin>`, then troubleshoot the build from there. Often it will just be that the plugin's `cargoSha256` needs to be updated in `pkgs/applications/editors/vim/plugins/overrides.nix`.
+
 ## Important repositories {#important-repositories}
 
 - [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository
