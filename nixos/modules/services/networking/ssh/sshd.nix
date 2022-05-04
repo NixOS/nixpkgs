@@ -441,6 +441,7 @@ in
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
                   if ! [ -s "${k.path}" ]; then
+                      rm -f "${k.path}"
                       ssh-keygen \
                         -t "${k.type}" \
                         ${if k ? bits then "-b ${toString k.bits}" else ""} \
