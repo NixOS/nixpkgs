@@ -47,6 +47,16 @@ stdenv.mkDerivation rec {
       name = "CVE-2021-3781.patch";
       sha256 = "FvbH7cb3ZDCbNRz9DF0kDmLdF7OWNYk90wv44pimU58=";
     })
+    (fetchpatch {
+      name = "CVE-2021-45944.patch";
+      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=7861fcad13c497728189feafb41cd57b5b50ea25";
+      sha256 = "146v70c0bdjvwffdymnjkq7c5bkwwffbzggamf59xh9lzs3p6nv4";
+    })
+    (fetchpatch {
+      name = "CVE-2021-45949.patch";
+      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=2a3129365d3bc0d4a41f107ef175920d1505d1f7";
+      sha256 = "032wbzm43n5gj1fcbqcl3v5qsdr7iqcb1dfzd7b0zp6vrcyjh8r7";
+    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
   ];

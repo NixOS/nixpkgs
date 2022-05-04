@@ -55,6 +55,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
+    # https://curl.se/docs/CVE-2022-22576.html
+    ./CVE-2022-22576.patch
+    # https://curl.se/docs/CVE-2022-27776.html
+    ./CVE-2022-27776.patch
+    # https://curl.se/docs/CVE-2022-27774.html (requires code from CVE-2022-27776.patch, hence the ordering)
+    ./CVE-2022-27774-0.patch
+    ./CVE-2022-27774-1.patch
+    ./CVE-2022-27774-2.patch
+    # https://curl.se/docs/CVE-2022-27775.html
+    ./CVE-2022-27775.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
