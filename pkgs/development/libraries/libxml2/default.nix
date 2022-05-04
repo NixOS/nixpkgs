@@ -35,6 +35,26 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/libxml2/commit/85b1792e37b131e7a51af98a37f92472e8de5f3f.patch";
       sha256 = "epqlNs2S0Zczox3KyCB6R2aJKh87lXydlZ0x6tLHweE=";
     })
+
+    # Fix [CVE-2022-23308] Use-after-free of ID and IDREF attributes
+    # See https://gitlab.gnome.org/GNOME/libxml2/-/releases/v2.9.13
+    # TODO: Remove once this package is >= v2.9.13
+    (fetchpatch {
+      name = "libxml2-CVE-2022-23308-Use-after-free-of-ID-and-IDREF-attributes.patch";
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/652dd12a858989b14eed4e84e453059cd3ba340e.patch";
+      sha256 = "1rwb2xbvddkqgigdq9vjzqqaj6hhrhzk8m6hkcicqrc4ik9d636r";
+    })
+
+    # Fix [CVE-2022-29824] Integer overflow in xmlBuf and xmlBuffer
+    # See https://gitlab.gnome.org/GNOME/libxml2/-/releases/v2.9.14
+    # Page https://nvd.nist.gov/vuln/detail/CVE-2022-29824 links the fix commits for
+    # `libxml2` master and the 2.9.14 backport we use here.
+    # TODO: Remove once this package is >= v2.9.14
+    (fetchpatch {
+      name = "libxml2-CVE-2022-29824-Fix-integer-overflows-in-xmlBuf-and-xmlBuffer.patch";
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/2554a2408e09f13652049e5ffb0d26196b02ebab.patch";
+      sha256 = "1kyzxh8fp5sfyqi9zghd7c2d32ld0mvp8hrk55mnvkg7aq42j0nz";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
