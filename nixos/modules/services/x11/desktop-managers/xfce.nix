@@ -113,7 +113,7 @@ in
 
       (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
+      ++ optional config.networking.networkmanager.enable networkmanager-applet
       ++ optional config.powerManagement.enable xfce4-power-manager
       ++ optionals config.hardware.pulseaudio.enable [
         pavucontrol
