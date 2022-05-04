@@ -10,12 +10,12 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.11.2";
+    version = "2.12.0";
 
     src = fetchPypi {
       pname = "Pygments";
       inherit version;
-      sha256 = "4e426f72023d88d03b2fa258de560726ce890ff3b630f88c21cbb8b2503b8c6a";
+      sha256 = "sha256-XrEWEY+WEv8e6JrJZDe7a0no8E2KE7UUuib2ICCOJus=";
     };
 
     propagatedBuildInputs = [
@@ -28,6 +28,11 @@ let pygments = buildPythonPackage
       lxml
       pytestCheckHook
       wcag-contrast-ratio
+    ];
+
+    disabledTestPaths = [
+      # 5 lines diff, including one nix store path in 20000+ lines
+      "tests/examplefiles/bash/ltmain.sh"
     ];
 
     pythonImportsCheck = [ "pygments" ];
