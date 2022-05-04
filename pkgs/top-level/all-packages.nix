@@ -2312,6 +2312,8 @@ with pkgs;
 
   hp2p = callPackage ../tools/networking/hp2p { };
 
+  hp-printer-app = callPackage ../applications/printing/hp-printer-app { };
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
