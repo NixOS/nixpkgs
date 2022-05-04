@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "02dfsrfmr297cxpyd5m3746ihcgjyfnb3d42ng9m4ljdvh0dxgim";
+    sha256 = "sha256-QMh9m6Xc0BeprZHrOgcmSireWb8Ja7Td0COYMgYw+5M=";
   };
 
   nativeBuildInputs = [
@@ -46,18 +45,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugs-path-env.patch
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard/pull/214
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard/commit/8d6b5f4cbbaf134880252afbf1e25d70033e6402.patch";
-      sha256 = "0gwq3wwj45jrnlhsmxfclbjw6xjr8kf6pp3a84vbnrazw76lg5nc";
-    })
-    # Fix build with meson 0.61
-    # https://github.com/elementary/switchboard/pull/226
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard/commit/ecf2a6c42122946cc84150f6927ef69c1f67c909.patch";
-      sha256 = "sha256-J62tMeDfOpliBLHMSa3uBGTc0RBNzC6eDjDBDYySL+0=";
-    })
   ];
 
   postPatch = ''
