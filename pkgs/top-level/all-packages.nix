@@ -2376,6 +2376,8 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  pdepend = callPackage ../development/php-packages/pdepend/default.nix { };
+
   platformsh = callPackage ../misc/platformsh { };
 
   inherd-quake = callPackage ../applications/misc/inherd-quake {
