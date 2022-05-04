@@ -46,6 +46,8 @@ buildPythonPackage rec {
   disabledTests = [
     # probably failing because of an encoding related issue
     "test_create_wrong_encoding"
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    "test_delete"
   ];
 
   disabledTestPaths = [
