@@ -1,20 +1,20 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, xorg, imlib2, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (final: {
   pname = "xteddy";
   version = "2.2-5";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "games-team";
-    repo = pname;
-    rev = "debian/${version}";
+    repo = "xteddy";
+    rev = "debian/${final.version}";
     sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ imlib2 xorg.libX11 xorg.libXext ];
 
-  patches = [ "${src}/debian/patches/10_libXext.patch" "${src}/debian/patches/wrong-man-page-section.patch" ];
+  patches = [ "${final.src}/debian/patches/10_libXext.patch" "${final.src}/debian/patches/wrong-man-page-section.patch" ];
 
   postPatch = ''
     sed -i "s:/usr/games/xteddy:$out/bin/xteddy:" xtoys
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.linux;
   };
-}
+})
