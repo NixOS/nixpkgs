@@ -10254,6 +10254,8 @@ with pkgs;
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
+  playwright = with python3Packages; toPythonApplication playwright;
+
   please = callPackage ../tools/security/please { };
 
   plecost = callPackage ../tools/security/plecost { };
