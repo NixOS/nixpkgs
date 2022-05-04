@@ -9578,6 +9578,8 @@ with pkgs;
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
 
+  pylint = with python3Packages; toPythonApplication pylint;
+
   pympress = callPackage ../applications/office/pympress { };
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
