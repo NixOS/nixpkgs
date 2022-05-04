@@ -52,6 +52,7 @@
 , xkeyboard_config
 , zlib
 , makeDesktopItem
+, tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -80,6 +81,7 @@ let
         --set-default JAVA_HOME "$out/jre" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
         --set FONTCONFIG_FILE ${fontsConf} \
         --prefix PATH : "${lib.makeBinPath [
 
