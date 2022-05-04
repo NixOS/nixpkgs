@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, glibcLocales
-, entrypoints
+{ beautifulsoup4
 , bleach
-, beautifulsoup4
+, buildPythonPackage
+, defusedxml
+, entrypoints
+, fetchPypi
+, ipykernel
+, ipywidgets
+, jinja2
+, jupyter_core
+, jupyter-client
+, jupyterlab-pygments
+, lib
 , mistune
 , nbclient
-, jinja2
-, pygments
-, traitlets
-, testpath
-, jupyter_core
-, jupyterlab-pygments
 , nbformat
-, ipykernel
 , pandocfilters
+, pygments
+, pyppeteer
+, pytestCheckHook
+, testpath
+, tinycss2
 , tornado
-, jupyter-client
-, defusedxml
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.4.5";
+  version = "6.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IRY6jiBzwHEJyo85iDbkXv26KqzqaNb3WopUX+8HDU4=";
+    hash = "sha256-Ij5G4nq+hZa4rtVDAfrbukM7f/6oGWpo/Xsf9Qnu6Z0=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -41,46 +44,55 @@ buildPythonPackage rec {
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
   '';
 
-  checkInputs = [ pytestCheckHook glibcLocales ];
-
   propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
-    defusedxml beautifulsoup4
     (nbclient.override { doCheck = false; }) # avoid infinite recursion
+    beautifulsoup4
+    bleach
+    defusedxml
+    entrypoints
+    ipykernel
+    jinja2
+    jupyter_core
+    jupyter-client
     jupyterlab-pygments
+    mistune
+    nbformat
+    pandocfilters
+    pygments
+    testpath
+    tinycss2
+    tornado
+    traitlets
   ];
 
-  # disable preprocessor tests for ipython 7
-  # see issue https://github.com/jupyter/nbconvert/issues/898
   preCheck = ''
-    export LC_ALL=en_US.UTF-8
-    HOME=$(mktemp -d)
+    export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "--ignore=nbconvert/preprocessors/tests/test_execute.py"
-    # can't resolve template paths within sandbox
-    "--ignore=nbconvert/tests/base.py"
-    "--ignore=nbconvert/tests/test_nbconvertapp.py"
+  checkInputs = [
+    ipywidgets
+    pyppeteer
+    pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # DeprecationWarning: Support for bleach <5 will be removed in a future version of nbconvert
+    "-W ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
+    # Attempts network access (Failed to establish a new connection: [Errno -3] Temporary failure in name resolution)
     "test_export"
-    "test_webpdf_without_chromium"
-    #"test_cell_tag_output"
-    #"test_convert_from_stdin"
-    #"test_convert_full_qualified_name"
+    "test_webpdf_with_chromium"
   ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Converting Jupyter Notebooks";
     homepage = "https://jupyter.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }
