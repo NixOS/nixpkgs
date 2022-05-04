@@ -30889,6 +30889,8 @@ with pkgs;
 
   xmountains = callPackage ../applications/graphics/xmountains { };
 
+  xmppc = callPackage ../applications/networking/instant-messengers/xmppc {};
+
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { };
