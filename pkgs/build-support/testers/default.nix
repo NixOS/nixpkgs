@@ -20,11 +20,11 @@
     { package
     , command ? "${package.meta.mainProgram or package.pname or package.name}"
     , expectedText ? "File" # Very very common in menu bars.
-    }: nixosTest ({ pkgs, ... }: {
+    }: pkgs.nixosTest ({ pkgs, ... }: {
       name = "${package.name}-test-graphical";
 
-      machine = { ... }: {
-        imports = [ ../../nixos/tests/common/wayland-cage.nix ];
+      nodes.machine = { ... }: {
+        imports = [ ../../../nixos/tests/common/wayland-cage.nix ];
         environment.systemPackages = [ package ];
         services.cage.program = "${package}/bin/${command}";
       };
