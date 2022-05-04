@@ -9,27 +9,33 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
-  # Disable GHC 8.7.x core libraries.
+  # Disable GHC core libraries.
   array = null;
   base = null;
   binary = null;
   bytestring = null;
   Cabal = null;
+  Cabal-syntax = null;
   containers = null;
   deepseq = null;
   directory = null;
+  exceptions = null;
   filepath = null;
+  ghc-bignum = null;
   ghc-boot = null;
   ghc-boot-th = null;
-  ghc-bignum = null;
   ghc-compact = null;
   ghc-heap = null;
-  ghci = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hpc = null;
   integer-gmp = null;
@@ -47,7 +53,6 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
-  exceptions = null;
 
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
@@ -74,4 +79,9 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
+  # https://github.com/fpco/inline-c/pull/131
+  # and/or https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7739
+  inline-c-cpp =
+    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
+    super.inline-c-cpp;
 }

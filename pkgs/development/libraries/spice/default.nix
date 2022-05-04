@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     install ${doxygen_sh} doxygen.sh
     patchShebangs build-aux
+
+    # https://gitlab.freedesktop.org/spice/spice-common/-/issues/5
+    substituteInPlace subprojects/spice-common/meson.build \
+      --replace \
+      "cmd = run_command(python, '-m', module)" \
+      "cmd = run_command(python, '-c', 'import @0@'.format(module))"
   '';
 
   nativeBuildInputs = [

@@ -6316,12 +6316,12 @@ let
   };
 in
 {
-  "onlykey-git://github.com/trustcrypto/OnlyKey-App.git#v5.3.3" = nodeEnv.buildNodePackage {
+  "onlykey-git+https://github.com/trustcrypto/OnlyKey-App.git#v5.3.3" = nodeEnv.buildNodePackage {
     name = "OnlyKey";
     packageName = "OnlyKey";
     version = "5.3.3";
     src = fetchgit {
-      url = "git://github.com/trustcrypto/OnlyKey-App.git";
+      url = "https://github.com/trustcrypto/OnlyKey-App.git";
       rev = "0bd08ef5828d9493cd4c5f4909e9a4fc4c59a494";
       sha256 = "d2386369fd9d9b7d5ea5d389434848c33fa34e26d713d439e8e2f2e447237bb0";
     };

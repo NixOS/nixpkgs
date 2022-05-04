@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lunatic";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RX8JarGpY6dhPGpvOX1FuUjirEPff0wGqLkGFxOa+bc=";
+    sha256 = "sha256-HqDrGoyYzdx8OTanlRd95L1wAtFeew7Xs2rZ7nK2Zus=";
   };
 
-  cargoSha256 = "sha256-UvrDqxaZSgUJ/a6abigTuiUOfw+C7UolBApt5kVR+yo=";
+  cargoSha256 = "sha256-t3EwVYrKx7dvUcSp0B1iUAklg7WdQDld/T0O1HgHw54=";
 
   nativeBuildInputs = [ cmake ];
 

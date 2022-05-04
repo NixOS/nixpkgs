@@ -1,28 +1,19 @@
-{ lib, fetchFromGitHub, rustPlatform, tree-sitter }:
+{ lib, fetchFromGitHub, rustPlatform, tree-sitter, difftastic, testers }:
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.12.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-A6Z3g6fbYBynyN4OhRrZNO0ZghvT3XnIahdUQ8SE8tU=";
+    sha256 = "sha256-jdkyDsuOOG1dJmgRmMp2KhY9ermccjrxK2JAIzpO6nw=";
   };
 
-  cargoSha256 = "sha256-6/JwrPymtpj/CXqx3Pe43v+MJTNONArU2WEo/zgJhT4=";
+  cargoSha256 = "sha256-qHG3ve8HoMWBS/x6mRbXMsrpcqNqfVcbAkfYOk7Su/0=";
 
-  postPatch = ''
-    pushd vendor
-    for grammar in */; do
-      if [ -d "${tree-sitter.grammars}/$grammar" ]; then
-        rm -r "$grammar"
-        ln -s "${tree-sitter.grammars}/$grammar"
-      fi
-    done
-    popd
-  '';
+  passthru.tests.version = testers.testVersion { package = difftastic; };
 
   meta = with lib; {
     description = "A syntax-aware diff";

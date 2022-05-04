@@ -39,7 +39,7 @@ in
       comment = "Kode Studio is an IDE for Kha based on Visual Studio Code";
       desktopName = "Kode Studio";
       genericName = "Text Editor";
-      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+      categories = [ "GNOME" "GTK" "Utility" "TextEditor" "Development" ];
     };
 
     sourceRoot = ".";
@@ -57,7 +57,7 @@ in
           $out/kodestudio
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsa-lib}/lib:${libGL}/lib:${libGLU}/lib:${openssl.out}/lib" \
+          --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsa-lib}/lib:${libGL}/lib:${libGLU}/lib:${lib.getLib openssl}/lib" \
           $out/resources/app/extensions/krom/Krom/linux/Krom
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

@@ -1,23 +1,52 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.31.1";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3V8qBgRIogZNisUshhs9Va9cbZ5D2hBJwqXPvqSmEWw=";
+    sha256 = "sha256-8bU7vuTbPoHGCoXiCc4p0rPzCSsYuXM3A2NAgIaHuIw=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  vendorSha256 = "sha256-/Z0tRzd7v84h8TSfbT4EqwyHWpAb30VNr4EDrNlHyd4=";
+  vendorSha256 = "sha256-Dn3lDdwUK+C7pQwN3uq7p4WkyG5tXTPd18rQGpwqcPI=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
-    "-s" "-w" "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-X github.com/anchore/grype/internal/version.gitDescription=v${version}"
+    "-X github.com/anchore/grype/internal/version.gitTreeState=clean"
   ];
+
+  preBuild = ''
+    # grype version also displays the version of the syft library used
+    # we need to grab it from the go.sum and add an ldflag for it
+    SYFT_VERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
+    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFT_VERSION"
+    ldflags+=" -X github.com/anchore/grype/internal/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   # Tests require a running Docker instance
   doCheck = false;

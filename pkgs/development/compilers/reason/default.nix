@@ -1,16 +1,14 @@
-{ lib, callPackage, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
+{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_2
 , fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
-  version = "3.7.0";
+  version = "3.8.0";
 
-  src = fetchFromGitHub {
-    owner = "facebook";
-    repo = "reason";
-    rev = "daa11255cb4716ce1c370925251021bd6e3bd974";
-    sha256 = "0m6ldrci1a4j0qv1cbwh770zni3al8qxsphl353rv19f6rblplhs";
+  src = fetchurl {
+    url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
+    sha256 = "sha256:0yc94m3ddk599crg33yxvkphxpy54kmdsl599c320wvn055p4y4l";
   };
 
   nativeBuildInputs = [
@@ -39,11 +37,13 @@ stdenv.mkDerivation rec {
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
   installPhase = ''
+    runHook preInstall
     dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
       --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \
       --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
+    runHook postInstall
   '';
 
   passthru.tests = {

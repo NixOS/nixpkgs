@@ -8,38 +8,55 @@ if [ -z "${GITHUB_TOKEN}" ]; then
   exit 1
 fi
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.22.1"
+VERSION="3.31.0"
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.
 
 declare -a pulumi_repos
 pulumi_repos=(
+  "aiven"
+  "akamai"
+  "alicloud"
+  "artifactory"
   "auth0"
   "aws"
   "azure"
+  "azuread"
+  "azuredevops"
   "cloudflare"
   "consul"
   "datadog"
   "digitalocean"
   "docker"
   "equinix-metal"
+  "fastly"
   "gcp"
   "github"
   "gitlab"
+  "google-native"
   "hcloud"
   "kubernetes"
   "linode"
   "mailgun"
   "mysql"
   "openstack"
-  "packet"
   "postgresql"
   "random"
+  "snowflake"
+  "spotinst"
+  "sumologic"
+  "tailscale"
+  "tls"
   "vault"
+  "venafi"
   "vsphere"
+  "wavefront"
+  "yandex"
 )
 
 # Contains latest release ${VERSION} from
@@ -142,4 +159,4 @@ EOF
   echo "  };"
   echo "}"
 
-} > data.nix
+} > "${SCRIPT_DIR}/data.nix"

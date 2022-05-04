@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ PCSC IOKit CoreFoundation AppKit ];
 
   postInstall = ''
+    install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
     installShellCompletion target/*/release/solo2.{bash,fish,zsh}
   '';
 
@@ -44,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/solokeys/solo2-cli";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ lukegb ];
+    mainProgram = "solo2";
   };
 }

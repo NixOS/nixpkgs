@@ -13,7 +13,7 @@ buildGraalvmNativeImage rec {
   jar = "${src}/HentaiAtHome.jar";
   dontUnpack = true;
 
-  graalvm = graalvm17-ce;
+  graalvmDrv = graalvm17-ce;
   extraNativeImageBuildArgs = [
     "--enable-url-protocols=http,https"
     "--install-exit-handlers"

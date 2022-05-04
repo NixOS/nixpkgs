@@ -11,14 +11,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gettext ncurses ];
 
-  # Needed with GCC 8
   NIX_CFLAGS_COMPILE = with lib; toString ((optionals stdenv.cc.isGNU [
+    # Needed with GCC 8
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
     "-Wno-error=restrict"
     "-Wno-error=format-truncation"
     # Needed with GCC 10
     "-Wno-error=maybe-uninitialized"
+    # Needed with GCC 11
+    "-Wno-error=misleading-indentation"
    ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = lib.optionalString stdenv.isDarwin ''

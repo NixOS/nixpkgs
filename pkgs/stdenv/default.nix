@@ -53,6 +53,7 @@ in
     armv8m-linux = stagesLinux;
     aarch64-linux = stagesLinux;
     mipsel-linux = stagesLinux;
+    mips64el-linux = stagesLinux;
     powerpc-linux = /* stagesLinux */ stagesNative;
     powerpc64-linux = stagesLinux;
     powerpc64le-linux = stagesLinux;

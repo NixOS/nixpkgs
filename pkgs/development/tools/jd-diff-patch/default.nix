@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "jd-diff-patch";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner  = "josephburnett";
     repo   = "jd";
     rev    = "v${version}";
-    sha256 = "sha256-OAy4IS2JZYYPeJITNHZKiYEapzGqqYPDBCLflLYetzg=";
+    sha256 = "sha256-nYV72EgYgXWyGp2s09BlaRmOy6aSMtmrTvWCxk9znp0=";
   };
 
   # not including web ui
   excludedPackages = [ "gae" "pack" ];
 
-  vendorSha256 = "sha256-w3mFra7Je+8qIDQMSyUYucoLZ6GtrZmr56O6xmihIYc=";
+  vendorSha256 = "sha256-uoMOkCmJY417zxkTsXHGy+BZ/BH29nH4MhFaIKofh4k=";
 
   doCheck = true;
 

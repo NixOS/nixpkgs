@@ -2,29 +2,35 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2021.12.25";
+  version = "2022.01.15";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "RmXKv/admC1w26z/ClNhH11J8n87WTfDr2lYOF6Fx7I=";
+    sha256 = "sha256-bK3McF/wTjT9q6luihPaEXjx7Lu6+ZbQ9G61Mc4KoB0=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  strictDeps = true;
 
-  buildInputs = [
-    z3
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
   ] ++ (with ocamlPackages; [
     ocaml
     findlib
     ocamlbuild
+    menhir
+  ]);
+
+  buildInputs = [
+    z3
+  ] ++ (with ocamlPackages; [
     batteries
     zarith
     stdint
     yojson
     fileutils
-    menhir
     menhirLib
     pprint
     sedlex_2

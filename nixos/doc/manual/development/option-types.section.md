@@ -16,13 +16,14 @@ merging is handled.
 
 `types.path`
 
-:   A filesystem path, defined as anything that when coerced to a string
-    starts with a slash. Even if derivations can be considered as path,
-    the more specific `types.package` should be preferred.
+:   A filesystem path is anything that starts with a slash when
+    coerced to a string. Even if derivations can be considered as
+    paths, the more specific `types.package` should be preferred.
 
 `types.package`
 
-:   A derivation or a store path.
+:   A top-level store path. This can be an attribute set pointing
+    to a store path, like a derivation or a flake input.
 
 `types.anything`
 
@@ -62,6 +63,24 @@ merging is handled.
     }
     ```
     :::
+
+`types.raw`
+
+:   A type which doesn't do any checking, merging or nested evaluation. It
+    accepts a single arbitrary value that is not recursed into, making it
+    useful for values coming from outside the module system, such as package
+    sets or arbitrary data. Options of this type are still evaluated according
+    to priorities and conditionals, so `mkForce`, `mkIf` and co. still work on
+    the option value itself, but not for any value nested within it. This type
+    should only be used when checking, merging and nested evaluation are not
+    desirable.
+
+`types.optionType`
+
+:   The type of an option's type. Its merging operation ensures that nested
+    options have the correct file location annotated, and that if possible,
+    multiple option definitions are correctly merged together. The main use
+    case is as the type of the `_module.freeformType` option.
 
 `types.attrs`
 
@@ -249,6 +268,12 @@ Composed types are types that take a type as parameter. `listOf
 
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
     definitions are declared only once.
+
+`types.unique` `{ message = m }` *`t`*
+
+:   Ensures that type *`t`* cannot be merged. Prints the message *`m`*, after
+    the line `The option <option path> is defined multiple times.` and before
+    a list of definition locations.
 
 `types.either` *`t1 t2`*
 

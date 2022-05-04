@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
-    makeWrapper
     libpulseaudio
     typescript
   ];
 
   nativeBuildInputs = [
+    makeWrapper
     qtmultimedia
     qtbase
     qtdeclarative

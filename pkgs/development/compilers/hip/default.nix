@@ -16,7 +16,7 @@
 , makeWrapper
 , numactl
 , perl
-, python2
+, python3
 , rocclr
 , rocm-comgr
 , rocm-device-libs
@@ -31,13 +31,13 @@
 let
   hip = stdenv.mkDerivation rec {
     pname = "hip";
-    version = "4.5.2";
+    version = "5.0.2";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
       rev = "rocm-${version}";
-      sha256 = "sha256-AuA5ubRPywXaBBrjdHg5AT8rrVKULKog6Lh8jPaUcXY=";
+      hash = "sha256-w023vBLJaiFbRdvz9UfZLPasRjk3VqM9zwctCIJ5hGU=";
     };
 
     # - fix bash paths
@@ -56,7 +56,7 @@ let
       substituteInPlace bin/hip_embed_pch.sh \
         --replace '$LLVM_DIR/bin/' ""
 
-      sed 's,#!/usr/bin/python,#!${python2}/bin/python,' -i hip_prof_gen.py
+      sed 's,#!/usr/bin/python,#!${python3.interpreter},' -i hip_prof_gen.py
 
       sed -e 's,$ROCM_AGENT_ENUM = "''${ROCM_PATH}/bin/rocm_agent_enumerator";,$ROCM_AGENT_ENUM = "${rocminfo}/bin/rocm_agent_enumerator";,' \
           -e 's,^\($DEVICE_LIB_PATH=\).*$,\1"${rocm-device-libs}/amdgcn/bitcode";,' \
@@ -68,14 +68,14 @@ let
           -e 's,`file,`${file}/bin/file,g' \
           -e 's,`readelf,`${binutils-unwrapped}/bin/readelf,' \
           -e 's, ar , ${binutils-unwrapped}/bin/ar ,g' \
-          -i bin/hipcc
+          -i bin/hipcc.pl
 
       sed -e 's,^\($HSA_PATH=\).*$,\1"${rocm-runtime}";,' \
           -e 's,^\($HIP_CLANG_PATH=\).*$,\1"${clang}/bin";,' \
           -e 's,^\($HIP_PLATFORM=\).*$,\1"amd";,' \
           -e 's,$HIP_CLANG_PATH/llc,${llvm}/bin/llc,' \
           -e 's, abs_path, Cwd::abs_path,' \
-          -i bin/hipconfig
+          -i bin/hipconfig.pl
 
       sed -e 's, abs_path, Cwd::abs_path,' -i bin/hipvars.pm
     '';
@@ -102,16 +102,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hip";
-  version = "4.5.2";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
     rev = "rocm-${version}";
-    sha256 = "WvOuQu/EN81Kwcoc3ZtGlhb996edQJ3OWFsmPuqeNXE=";
+    hash = "sha256-hhTwKG0wDpbIBI8S61AhdNldX+STO8C66xi2EzmJSBs=";
   };
 
-  nativeBuildInputs = [ cmake python2 makeWrapper perl ];
+  nativeBuildInputs = [ cmake python3 makeWrapper perl ];
   buildInputs = [ libxml2 numactl libglvnd libX11 ];
   propagatedBuildInputs = [
     clang
@@ -135,6 +135,7 @@ stdenv.mkDerivation rec {
     "-DAMD_OPENCL_PATH=${rocm-opencl-runtime.src}"
     "-DHIP_COMMON_DIR=${hip}"
     "-DROCCLR_PATH=${rocclr}"
+    "-DHIP_VERSION_BUILD_ID=0"
   ];
 
   postInstall = ''

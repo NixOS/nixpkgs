@@ -20,7 +20,7 @@ in {
       write = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable writing to the Nix store as a remote store via SSH. Note: the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the nix.trustedUsers option in most use cases, such as allowing remote building of derivations.";
+        description = "Whether to enable writing to the Nix store as a remote store via SSH. Note: the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the <option>nix.settings.trusted-users</option> option in most use cases, such as allowing remote building of derivations.";
       };
 
       keys = mkOption {

@@ -13,7 +13,7 @@
 # Outputs
 , alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
-, icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
+, icu, sqlite, avahi, dbus, pcre2, libgcrypt, expat
 # Services
 , yajl
 # Client support
@@ -79,7 +79,7 @@ let
     dbus          = [ dbus ];
     expat         = [ expat ];
     icu           = [ icu ];
-    pcre          = [ pcre ];
+    pcre          = [ pcre2 ];
     sqlite        = [ sqlite ];
     syslog        = [ ];
     systemd       = [ systemd ];
@@ -116,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.4";
+      version = "0.23.6";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-siMFLV1fKdRt8To6AhLXmAAsgqZCA/bbvmlhbb6hLic=";
+        sha256 = "sha256-pVIbaCg3qDw7bjhLQHz6Rr3m498LeKNQVhRk4m5tpVQ=";
       };
 
       buildInputs = [
@@ -156,6 +156,10 @@ let
 
       outputs = [ "out" "doc" ]
         ++ lib.optional (builtins.elem "documentation" features_) "man";
+
+      CXXFLAGS = lib.optionals stdenv.isDarwin [
+        "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+      ];
 
       mesonFlags = [
         "-Dtest=true"

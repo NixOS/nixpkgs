@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.0";
+  version = "0.9.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "reclosedev";
     repo = "requests-cache";
     rev = "v${version}";
-    sha256 = "0gz6fyc6lgbab9k92cihrp3711r1wcp4xhs25qp176zbzgccbj43";
+    hash = "sha256-9OlWMom/0OMlbPd3evjIaX75Gjlu+F8vKBJwX4Z58qQ=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,10 @@ buildPythonPackage rec {
     rich
     timeout-decorator
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   pytestFlagsArray = [
     # Integration tests require local DBs

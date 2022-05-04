@@ -33,6 +33,29 @@ import ./make-test-python.nix ({ pkgs, ... } : let
   testUser = "alice";
   testPassword = "alicealice";
   testEmail = "alice@example.com";
+
+  listeners = [ {
+    port = 8448;
+    bind_addresses = [
+      "127.0.0.1"
+      "::1"
+    ];
+    type = "http";
+    tls = true;
+    x_forwarded = false;
+    resources = [ {
+      names = [
+        "client"
+      ];
+      compress = true;
+    } {
+      names = [
+        "federation"
+      ];
+      compress = false;
+    } ];
+  } ];
+
 in {
 
   name = "matrix-synapse";
@@ -48,22 +71,24 @@ in {
     {
       services.matrix-synapse = {
         enable = true;
-        database_type = "psycopg2";
-        tls_certificate_path = "${cert}";
-        tls_private_key_path = "${key}";
-        database_args = {
-          password = "synapse";
+        settings = {
+          inherit listeners;
+          database = {
+            name = "psycopg2";
+            args.password = "synapse";
+          };
+          tls_certificate_path = "${cert}";
+          tls_private_key_path = "${key}";
+          registration_shared_secret = registrationSharedSecret;
+          public_baseurl = "https://example.com";
+          email = {
+            smtp_host = mailerDomain;
+            smtp_port = 25;
+            require_transport_security = true;
+            notif_from = "matrix <matrix@${mailerDomain}>";
+            app_name = "Matrix";
+          };
         };
-        registration_shared_secret = registrationSharedSecret;
-        public_baseurl = "https://example.com";
-        extraConfig = ''
-          email:
-            smtp_host: "${mailerDomain}"
-            smtp_port: 25
-            require_transport_security: true
-            notif_from: "matrix <matrix@${mailerDomain}>"
-            app_name: "Matrix"
-        '';
       };
       services.postgresql = {
         enable = true;
@@ -165,9 +190,12 @@ in {
     serversqlite = args: {
       services.matrix-synapse = {
         enable = true;
-        database_type = "sqlite3";
-        tls_certificate_path = "${cert}";
-        tls_private_key_path = "${key}";
+        settings = {
+          inherit listeners;
+          database.name = "sqlite3";
+          tls_certificate_path = "${cert}";
+          tls_private_key_path = "${key}";
+        };
       };
     };
   };

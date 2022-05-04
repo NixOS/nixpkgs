@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "fits-cloudctl";
-  version = "0.10.5";
+  version = "0.10.13";
 
   src = fetchFromGitHub {
     owner = "fi-ts";
     repo = "cloudctl";
     rev = "v${version}";
-    sha256 = "sha256-l01c1tjS0L+T/kHreYx3A5/N/oRDuDywXS/GAvUCxSk=";
+    sha256 = "sha256-8MSX8A/3FY95rrWuYfGYFynSi76JPcHX+N8VF9BWktM=";
   };
 
-  vendorSha256 = "sha256-iJlNNovsIgTOPfAzwqkumrmCQu2xI/neqH+Z4tvSXeY=";
+  vendorSha256 = "sha256-K6HI7aSDbrhqm2XVor7sRwHnqQPQlpZYGLgaf3SFNrU=";
 
   meta = with lib; {
     description = "Command-line client for FI-TS Finance Cloud Native services";

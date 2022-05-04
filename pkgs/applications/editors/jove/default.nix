@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Jonathan's Own Version or Emacs";
+    description = "Jonathan's Own Version of Emacs";
     homepage = "https://github.com/jonmacs/jove";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];

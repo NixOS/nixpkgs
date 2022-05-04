@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "sha256-ng8/Cgo54MRtrYHRRU9b1v+O1yN5ji/VuV87BWABIMM=";
+    sha256 = "sha256-V82UdCG0J04sZP3FTVQqANrez/LCwOLQY6zzFOoIeNo=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ libcap acl ];

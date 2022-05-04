@@ -13,8 +13,6 @@
 , granite
 , libgee
 , libhandy
-, elementary-icon-theme
-, elementary-gtk-theme
 , gettext
 , wrapGAppsHook
 , appstream
@@ -24,11 +22,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-feedback";
   version = "6.1.0";
 
-  repoName = "feedback";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "feedback";
     rev = version;
     sha256 = "02wydbpa5qaa4xmmh4m7rbj4djbrn2i44zjakj5i6mzwjlj6sv5n";
   };
@@ -42,12 +38,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     gettext
     meson
@@ -60,10 +50,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-icon-theme
     granite
     gtk3
-    elementary-gtk-theme
     libgee
     libhandy
     glib
@@ -73,6 +61,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "GitHub Issue Reporter designed for elementary OS";

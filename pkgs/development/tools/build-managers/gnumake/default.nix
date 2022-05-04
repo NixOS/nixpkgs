@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
   outputs = [ "out" "man" "info" ];
+  separateDebugInfo = true;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/make/";

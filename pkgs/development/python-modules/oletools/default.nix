@@ -39,6 +39,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyparsing>=2.1.0,<3" "pyparsing>=2.1.0"
+  '';
+
   disabledTests = [
     # Test fails with AssertionError: Tuples differ: ('MS Word 2007+...
     "test_all"

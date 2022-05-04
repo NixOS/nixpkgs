@@ -1,22 +1,22 @@
-{ lib, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
-  unidecode, mock, pytest , backports-shutil-which, configargparse,
-  python-daemon, pymsgbox }:
+{ lib, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic
+, unidecode, mock, pytest , backports-shutil-which, configargparse
+, python-daemon, pymsgbox, pynacl }:
 
 # XXX: when changing this package, please test the package onlykey-agent.
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.14.1";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
     rev = "v${version}";
-    sha256 = "16y1y9ahcv3wj7f0v4mfiwzkmn2hz1iv7y13cgr57sxa3ymyqx6c";
+    sha256 = "1ksv494xpga27ifrjyn1bkqaya5h769lqb9rx1ng0n4kvmnrqr3l";
   };
 
   propagatedBuildInputs = [ unidecode backports-shutil-which configargparse
-    python-daemon pymsgbox ecdsa ed25519 mnemonic semver ];
+    python-daemon pymsgbox ecdsa ed25519 mnemonic semver pynacl ];
 
   checkInputs = [ mock pytest ];
 

@@ -10,35 +10,43 @@ let
   # Our generic constructor to build new providers.
   #
   # Is designed to combine with the terraform.withPlugins implementation.
-  mkProvider =
-    { owner
-    , repo
-    , rev
-    , version
-    , sha256
-    , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
-    , deleteVendor ? false
-    , proxyVendor ? false
-    , provider-source-address
-    }@attrs:
-    buildGoModule {
-      pname = repo;
-      inherit vendorSha256 version deleteVendor proxyVendor;
-      subPackages = [ "." ];
-      doCheck = false;
-      # https://github.com/hashicorp/terraform-provider-scaffolding/blob/a8ac8375a7082befe55b71c8cbb048493dd220c2/.goreleaser.yml
-      # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
-      CGO_ENABLED = 0;
-      ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
-      src = fetchFromGitHub {
-        inherit owner repo rev sha256;
-      };
+  mkProvider = lib.makeOverridable
+    ({ owner
+     , repo
+     , rev
+     , version
+     , sha256
+     , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
+     , deleteVendor ? false
+     , proxyVendor ? false
+     , # Looks like "registry.terraform.io/vancluever/acme"
+       provider-source-address
+     }@attrs:
+      buildGoModule {
+        pname = repo;
+        inherit vendorSha256 version deleteVendor proxyVendor;
+        subPackages = [ "." ];
+        doCheck = false;
+        # https://github.com/hashicorp/terraform-provider-scaffolding/blob/a8ac8375a7082befe55b71c8cbb048493dd220c2/.goreleaser.yml
+        # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
+        CGO_ENABLED = 0;
+        ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
+        src = fetchFromGitHub {
+          name = "source-${rev}";
+          inherit owner repo rev sha256;
+        };
 
-      # Terraform allow checking the provider versions, but this breaks
-      # if the versions are not provided via file paths.
-      postBuild = "mv $NIX_BUILD_TOP/go/bin/${repo}{,_v${version}}";
-      passthru = attrs;
-    };
+        # Move the provider to libexec
+        postInstall = ''
+          dir=$out/libexec/terraform-providers/${provider-source-address}/${version}/''${GOOS}_''${GOARCH}
+          mkdir -p "$dir"
+          mv $out/bin/* "$dir/terraform-provider-$(basename ${provider-source-address})_${version}"
+          rmdir $out/bin
+        '';
+
+        # Keep the attributes around for later consumption
+        passthru = attrs;
+      });
 
   list = lib.importJSON ./providers.json;
 
@@ -61,9 +69,8 @@ let
       archived = date: throw "the provider has been archived by upstream on ${date}";
       removed = date: throw "removed from nixpkgs on ${date}";
     in
-    lib.optionalAttrs (config.allowAliases or false) {
+    lib.optionalAttrs config.allowAliases {
       arukas = archived "2022/01";
-      bitbucket = archived "2022/01";
       chef = archived "2022/01";
       cherryservers = archived "2022/01";
       clc = archived "2022/01";
@@ -98,5 +105,8 @@ let
       ultradns = archived "2022/01";
       vthunder = throw "provider was renamed to thunder on 2022/01";
     };
+
+  # excluding aliases, used by terraform-full
+  actualProviders = automated-providers // special-providers;
 in
-automated-providers // special-providers // removed-providers // { inherit mkProvider; }
+actualProviders // removed-providers // { inherit actualProviders mkProvider; }

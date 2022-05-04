@@ -2,13 +2,13 @@
 with python.pkgs;
 buildPythonApplication rec {
   pname = "deepTools";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
     rev = version;
-    sha256 = "1bz8ln32mfc9k8l9wgp034vw80dxh6f92dfqxhcrpggk4akwj6ml";
+    sha256 = "07v8vb2x4b0mgw0mvcj91vj1fqbcwizwsniysl2cvmv93gad8gbp";
   };
 
   propagatedBuildInputs = [

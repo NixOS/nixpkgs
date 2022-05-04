@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bftpd";
-  version = "6.0";
+  version = "6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-t+YCys67drYKcD3GXxSVzZo4HTRZArIpA6EofeyPAlw=";
+    sha256 = "sha256-lyHQYU4aXQ/muAyaigStqO/ULL393SOelagFmuKDqm8=";
   };
 
   preConfigure = ''

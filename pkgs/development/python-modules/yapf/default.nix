@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QI+5orJUwwL0nbg8WfmqC0sP0OwlvjpcURgTJ5Iv9j0=";
+    hash = "sha256-o/UIXTfvfj4ATEup+bPkDFT/GQHNER8FFFrjE6fGfRs=";
   };
 
   checkInputs = [

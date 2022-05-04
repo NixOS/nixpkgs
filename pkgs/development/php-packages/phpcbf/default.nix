@@ -16,10 +16,12 @@ mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpcbf/phpcbf.phar
     makeWrapper ${php}/bin/php $out/bin/phpcbf \
       --add-flags "$out/libexec/phpcbf/phpcbf.phar"
+    runHook postInstall
   '';
 
   meta = with lib; {

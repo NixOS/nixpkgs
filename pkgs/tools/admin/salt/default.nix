@@ -22,11 +22,11 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004";
+  version = "3004.1";
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
+    hash = "sha256-fzRKJDJkik8HjapazMaNzf/hCVzqE+wh5QQTVg8Ewpg=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -46,7 +46,7 @@ py.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
+      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto.so"
     substituteInPlace requirements/base.txt \
       --replace contextvars ""
   '';

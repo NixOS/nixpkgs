@@ -62,6 +62,13 @@ checkConfigError() {
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
 
+checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
+checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
+checkConfigOutput '^42$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
+checkConfigOutput '^420$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
+checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix ./define-shorthandOnlyDefinesConfig-true.nix
+checkConfigError 'The option .bare-submodule.deep. in .*/declare-bare-submodule-deep-option.nix. is already declared in .*/declare-bare-submodule-deep-option-duplicate.nix' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix  ./declare-bare-submodule-deep-option-duplicate.nix
+
 # Check integer types.
 # unsigned
 checkConfigOutput '^42$' config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
@@ -240,6 +247,11 @@ checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
+# submodules in freeformTypes should have their locations annotated
+checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
+# freeformTypes can get merged using `types.type`, including submodules
+checkConfigOutput '^10$' config.free.xxx.foo ./freeform-submodules.nix
+checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
 
 ## types.anything
 # Check that attribute sets are merged recursively
@@ -281,8 +293,43 @@ checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
-checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
+checkConfigOutput '^"a b y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
+
+## emptyValue's
+checkConfigOutput "[ ]" config.list.a ./emptyValues.nix
+checkConfigOutput "{ }" config.attrs.a ./emptyValues.nix
+checkConfigOutput "null" config.null.a ./emptyValues.nix
+checkConfigOutput "{ }" config.submodule.a ./emptyValues.nix
+# These types don't have empty values
+checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+
+## types.raw
+checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
+checkConfigOutput "10" config.processedToplevel ./raw.nix
+checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
+checkConfigOutput "bar" config.priorities ./raw.nix
+
+## Option collision
+checkConfigError \
+  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integers. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
+  config.set \
+  ./declare-set.nix ./declare-enable-nested.nix
+
+# Test that types.optionType merges types correctly
+checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
+checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
+
+# Test that types.optionType correctly annotates option locations
+checkConfigError 'The option .theOption.nested. in .other.nix. is already declared in .optionTypeFile.nix.' config.theOption.nested ./optionTypeFile.nix
+
+# Test that types.optionType leaves types untouched as long as they don't need to be merged
+checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survives-type-merge.nix
+
+# Anonymous submodules don't get nixed by import resolution/deduplication
+# because of an `extendModules` bug, issue 168767.
+checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
 cat <<EOF
 ====== module tests ======

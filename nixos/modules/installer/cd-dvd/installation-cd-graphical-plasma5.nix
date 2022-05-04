@@ -1,9 +1,7 @@
 # This module defines a NixOS installation CD that contains X11 and
 # Plasma 5.
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];

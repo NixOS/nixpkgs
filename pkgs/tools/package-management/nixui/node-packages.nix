@@ -70,12 +70,12 @@ let
   };
 in
 {
-  "nixui-git://github.com/matejc/nixui.git#0.2.1" = nodeEnv.buildNodePackage {
+  "nixui-git+https://github.com/matejc/nixui.git#0.2.1" = nodeEnv.buildNodePackage {
     name = "nixui";
     packageName = "nixui";
     version = "0.2.1";
     src = fetchgit {
-      url = "git://github.com/matejc/nixui.git";
+      url = "https://github.com/matejc/nixui.git";
       rev = "845a5f4a33f1d0c509c727c130d0792a5b450a38";
       sha256 = "2a2b1dcd9201e306242688c6c86f520ac47ef5de841ae0d7ea6ae8ff2889c3ab";
     };

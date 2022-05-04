@@ -82,6 +82,7 @@ stdenv.mkDerivation (rec {
   '');
 
   outputs = [ "out" "info" ];
+  separateDebugInfo = true;
 
   nativeBuildInputs = [ perl xz.bin autoreconfHook ] # autoreconfHook is due to patch, normally only needed for cygwin
     ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ];  # due to patch
@@ -112,8 +113,10 @@ stdenv.mkDerivation (rec {
   # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
+  # On aarch64+musl, test-init.sh fails due to a segfault in diff.
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.isMusl)
+    && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
     && !stdenv.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.

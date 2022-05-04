@@ -12,7 +12,7 @@
 , polkit
 , gnutls
 , ppp
-, dhcp
+, dhcpcd
 , iptables
 , nftables
 , python3
@@ -54,11 +54,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.32.12";
+  version = "1.36.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-qKs2oKUC/nPNjjustlhfl/u5Tr73nids268Rwz/49Us=";
+    sha256 = "YTBOk33ZJkcdVnFb3t57q3zKyCc1bmfycA00MxfNPFk=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -96,9 +96,9 @@ stdenv.mkDerivation rec {
     "-Dresolvconf=${openresolv}/bin/resolvconf"
 
     # DHCP clients
-    "-Ddhclient=${dhcp}/bin/dhclient"
-    # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    "-Ddhcpcd=no"
+    # ISC DHCP client has reached it's end of life, so stop using it
+    "-Ddhclient=no"
+    "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
     "-Ddhcpcanon=no"
 
     # Miscellaneous

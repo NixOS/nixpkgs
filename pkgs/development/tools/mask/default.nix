@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mask";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "jakedeichert";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gsfs837nzh71df6p6klcsgxp471c8hq14xqd62q5bsv7jg9dygc";
+    sha256 = "sha256-qRN9M/DxkxcF1/dmYqmf3qB8yHzuaN3LRENy1ehgg0c=";
   };
 
-  cargoSha256 = "1h4sasqdl3rli0v6lizdci0vvr2fvbyhllddxwv8vx8r7w9ry963";
+  cargoSha256 = "sha256-7ts63n9aGtaK8INBh11TShOQCVpV+82VADmNbKURv+g=";
 
   # tests require mask to be installed
   doCheck = false;

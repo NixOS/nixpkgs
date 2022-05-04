@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
-    updateWalker = true;
     homepage = "https://www.gnu.org/software/barcode/";
     license = licenses.gpl3;
   };

@@ -1602,25 +1602,33 @@ buildLuarocksPackage {
 }) {};
 
 luaexpat = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+, fetchgit, lua
 }:
 buildLuarocksPackage {
   pname = "luaexpat";
-  version = "1.3.0-1";
+  version = "1.4.1-1";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/luaexpat-1.3.0-1.rockspec";
-    sha256 = "14f7y2acycbgrx95w3darx5l1qm52a09f7njkqmhyk10w615lrw4";
+    url    = "https://luarocks.org/luaexpat-1.4.1-1.rockspec";
+    sha256 = "1abwd385x7wnza7qqz5s4aj6m2l1c23pjmbgnpq73q0s17pn1h0c";
   }).outPath;
-  src = fetchurl {
-    url    = "http://matthewwild.co.uk/projects/luaexpat/luaexpat-1.3.0.tar.gz";
-    sha256 = "1hvxqngn0wf5642i5p3vcyhg3pmp102k63s9ry4jqyyqc1wkjq6h";
-  };
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lunarmodules/luaexpat.git",
+  "rev": "7d99eec9685087e6b3a57a09d672591c2aa0f4f6",
+  "date": "2022-04-01T17:08:05+02:00",
+  "path": "/nix/store/b6jyh79ggjdqgizk9amzh74lq4lwm3nm-luaexpat",
+  "sha256": "0yia3xpf6pwmy10yg2dnyfg3v774jay24qfyvm9pj21h2ad7ckm1",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://www.keplerproject.org/luaexpat/";
+    homepage = "https://lunarmodules.github.io/luaexpat";
     description = "XML Expat parsing";
     maintainers = with lib.maintainers; [ arobyn flosse ];
     license.fullName = "MIT/X11";
@@ -1944,6 +1952,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+luaunbound = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "luaunbound";
+  version = "1.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/luaunbound-1.0.0-1.rockspec";
+    sha256 = "1zlkibdwrj5p97nhs33cz8xx0323z3kiq5x7v0h3i7v6j0h8ppvn";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://code.zash.se/dl/luaunbound/luaunbound-1.0.0.tar.gz";
+    sha256 = "1lsh0ylp5xskygxl5qdv6mhkm1x8xp0vfd5prk5hxkr19jk5mr3d";
+  };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://www.zash.se/luaunbound.html";
+    description = "A binding to libunbound";
+    license.fullName = "MIT";
+  };
+}) {};
+
 luautf8 = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:
@@ -2028,22 +2061,32 @@ buildLuarocksPackage {
   };
 }) {};
 
-luv = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchurl, lua
+luv = callPackage ({ buildLuarocksPackage, luaOlder, luaAtLeast
+, cmake, fetchurl, lua
 }:
 buildLuarocksPackage {
   pname = "luv";
-  version = "1.42.0-0";
+  version = "1.43.0-0";
   knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/luv-1.42.0-0.rockspec";
-    sha256 = "0pr2gjjnm60w0csb0dacrjalan7ifsfw4lki4ykxx1f4m5snam09";
+    url    = "https://luarocks.org/luv-1.43.0-0.rockspec";
+    sha256 = "0z5a7yp20xbb3f9w73skm9fj89gxxqv72nrxjq3kycsc6c2v3m8f";
   }).outPath;
-  src = fetchurl {
-    url    = "https://github.com/luvit/luv/releases/download/1.42.0-0/luv-1.42.0-0.tar.gz";
-    sha256 = "0dkzjkkm0h516ag6sfz5iji761y9slrcfw325f39zkda1sfql8mm";
-  };
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/luvit/luv.git",
+  "rev": "1.43.0-0",
+  "date": "2022-03-12T16:05:50+08:00",
+  "path": "/nix/store/d7f3sdw5l0cm8xkjdm4m6jkmx794w48j-luv",
+  "sha256": "sha256-CcUX69XzgWlJEwHUhhtqs9sDA5TNIusKek5yV2Nt3Wc=",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ lua ];
 
   meta = {

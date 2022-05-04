@@ -4,7 +4,7 @@
 , defusedxml
 , fetchFromGitHub
 , hypothesis
-, isPy3k
+, pythonOlder
 , jbig2dec
 , lxml
 , mupdf
@@ -25,8 +25,10 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "4.3.1";
-  disabled = ! isPy3k;
+  version = "5.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -38,7 +40,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-u/NDDJGCcctWL3ivxtU+8CSlQH+5qkmXUcF4RkQOiPI=";
+    hash = "sha256-VR2/+XCQb62FdkGZBxP2XTqatdFYZO1ngb8gvoJEvzs=";
   };
 
   patches = [

@@ -41,8 +41,11 @@ let
     dontStrip = true;
     dontPatchShebangs = true;
 
-    buildInputs = [
+    nativeBuildInputs = [
       makeWrapper
+    ];
+
+    buildInputs = [
       jre
     ];
 

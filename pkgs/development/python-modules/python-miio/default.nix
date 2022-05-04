@@ -1,45 +1,41 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry
-, click
-, cryptography
-, construct
-, zeroconf
-, attrs
-, pytz
-, appdirs
-, tqdm
-, netifaces
 , android-backup
-, importlib-metadata
+, appdirs
+, attrs
+, buildPythonPackage
+, click
+, construct
 , croniter
+, cryptography
 , defusedxml
-, pytestCheckHook
+, fetchPypi
+, importlib-metadata
+, netifaces
+, poetry-core
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pytz
 , pyyaml
+, tqdm
+, zeroconf
 }:
 
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.9.2";
-  disabled = pythonOlder "3.6.5";
+  version = "0.5.11";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AFwarRhFknfwTSvSDGoWE+/mv1KUD2XnWK/xCBqrN4o=";
+    sha256 = "sha256-1hC7yE/hGLx9g3NXqU45yC/6dcW6/0oZwgYW5bj/37c=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'defusedxml = "^0"' 'defusedxml = "*"' \
-  '';
-
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -56,14 +52,26 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
-
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
+  ] ++ lib.optional (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  pythonImportsCheck = [ "miio" ];
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'defusedxml = "^0"' 'defusedxml = "*"'
+    # Will be fixed with the next release, https://github.com/rytilahti/python-miio/pull/1378
+    substituteInPlace miio/integrations/vacuum/roborock/vacuum_cli.py \
+      --replace "resultcallback" "result_callback"
+  '';
+
+  pythonImportsCheck = [
+    "miio"
+  ];
 
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";

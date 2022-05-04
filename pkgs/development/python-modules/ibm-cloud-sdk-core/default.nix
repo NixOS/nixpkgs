@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.13.2";
+  version = "3.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c615b3a6e9d9dc1c69d8f38742b156e12408521fa180a66558bbb7b850bbbc2";
+    sha256 = "sha256-bGTr8Qf7ywlbsl6/FEJEjFB/bqyyMwfmjVVAsrgmkTg=";
   };
 
   propagatedBuildInputs = [

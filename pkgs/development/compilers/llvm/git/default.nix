@@ -21,16 +21,16 @@ let
   release_version = "14.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "ee65938357d5fffe9e586fa155b37268b5a358ac"; # When using a Git commit
-  rev-version = "unstable-2021-08-13"; # When using a Git commit
+  rev = "fb1582f6c54422995c6fb61ba4c55126b357f64e"; # When using a Git commit
+  rev-version = "unstable-2022-01-07"; # When using a Git commit
   version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
   targetConfig = stdenv.targetPlatform.config;
 
-  src = fetchFromGitHub {
+  monorepoSrc = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "10ahc108wbg2rsp50j3mc8h018a453ykg1rivjkhizng80pyllm1";
+    sha256 = "1pkgdsscvf59i22ix763lp2z3sg0v2z2ywh0n07k3ki7q1qpqbhk";
   };
 
   llvm_meta = {
@@ -40,7 +40,7 @@ let
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version src buildLlvmTools; });
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc buildLlvmTools; });
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
@@ -93,7 +93,11 @@ let
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
 
-    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+    # pick clang appropriate for package set we are targeting
+    clang =
+      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
+      else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
@@ -214,7 +218,7 @@ let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version src; });
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc; });
   in {
 
     compiler-rt-libc = callPackage ./compiler-rt {

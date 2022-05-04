@@ -175,6 +175,40 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
 
 NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
+Alternatively, you can specify other derivations as tests. You can make use of
+the optional parameter to inject the correct package without
+relying on non-local definitions, even in the presence of `overrideAttrs`.
+Here that's `finalAttrs.finalPackage`, but you could choose a different name if
+`finalAttrs` already exists in your scope.
+
+`(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
+definition of `tests` does not rely on the original `mypkg` or overrides it in
+all places.
+
+```nix
+# my-package/default.nix
+{ stdenv, callPackage }:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
+})
+```
+
+```nix
+# my-package/example.nix
+{ runCommand, lib, my-package, ... }:
+runCommand "my-package-test" {
+  nativeBuildInputs = [ my-package ];
+  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
+} ''
+  my-package --help
+  my-package <example.in >example.actual
+  diff -U3 --color=auto example.expected example.actual
+  mkdir $out
+''
+```
+
+
 ### `timeout` {#var-meta-timeout}
 
 A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
@@ -191,10 +225,6 @@ meta.hydraPlatforms = [];
 ### `broken` {#var-meta-broken}
 
 If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
-
-### `updateWalker` {#var-meta-updateWalker}
-
-If set to `true`, the package is tested to be updated correctly by the `update-walker.sh` script without additional settings. Such packages have `meta.version` set and their homepage (or the page specified by `meta.downloadPage`) contains a direct link to the package tarball.
 
 ## Licenses {#sec-meta-license}
 

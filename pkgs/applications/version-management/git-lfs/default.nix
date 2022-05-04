@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "git-lfs";
-  version = "3.0.2";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "0k2pzbhd95xixh5aqdwf5pafilg85wl46d04xbb4lx6k3gkfv0f3";
+    sha256 = "sha256-dGqb7gw7l2SPGwhHIFbEq6XqMB9QRw3+3Pfbk2S4kW4=";
   };
 
   goPackagePath = "github.com/git-lfs/git-lfs";
@@ -18,6 +18,12 @@ buildGoPackage rec {
   ldflags = [ "-s" "-w" "-X ${goPackagePath}/config.Vendor=${version}" "-X ${goPackagePath}/config.GitCommit=${src.rev}" ];
 
   subPackages = [ "." ];
+
+  preBuild = ''
+    pushd go/src/github.com/git-lfs/git-lfs
+      go generate ./commands
+    popd
+  '';
 
   postBuild = ''
     make -C go/src/${goPackagePath} man

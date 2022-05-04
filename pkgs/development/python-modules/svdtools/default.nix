@@ -11,13 +11,14 @@
 
 buildPythonPackage rec {
   pname = "svdtools";
-  version = "0.1.20";
+  version = "0.1.23";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "028s1bn50mfpaygf1wc2mvf06s50wqfplqrkhrjz6kx8vzrmwj72";
+    hash = "sha256-LuursRuUZEDLbk9Wbnq/S0dsZHbzIJo1YCSVFMUoiog=";
   };
 
   propagatedBuildInputs = [
@@ -27,14 +28,18 @@ buildPythonPackage rec {
     lxml
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "svdtools" ];
+  pythonImportsCheck = [
+    "svdtools"
+  ];
 
   meta = with lib; {
     description = "Python package to handle vendor-supplied, often buggy SVD files";
     homepage = "https://github.com/stm32-rs/svdtools";
-    changelog = "https://github.com/stm32-rs/svdtools/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/stm32-rs/svdtools/blob/v${version}/CHANGELOG-python.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ newam ];
   };

@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "garden-of-coloured-lights";
   version = "1.0.9";
 
-  buildInputs = [ allegro autoconf automake ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ allegro ];
 
   prePatch = ''
     noInline='s/inline //'

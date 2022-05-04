@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "zope-deferredimport";
-  version = "4.3.1";
+  version = "4.4";
 
   src = fetchPypi {
     pname = "zope.deferredimport";
     inherit version;
-    sha256 = "57b2345e7b5eef47efcd4f634ff16c93e4265de3dcf325afc7315ade48d909e1";
+    sha256 = "2ae3257256802787e52ad840032f39c1496d3ce0b7e11117f663420e4a4c9add";
   };
 
   propagatedBuildInputs = [ zope_proxy ];

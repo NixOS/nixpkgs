@@ -15,7 +15,6 @@
 , clutter-gst
 , clutter-gtk
 , gst_all_1
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -40,21 +39,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     clutter-gst
     clutter-gtk
-    elementary-icon-theme
     granite
+    gtk3
+    libgee
+    libhandy
+  ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    libgee
-    libhandy
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "5.0.1";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "tomerfiliba";
     repo = pname;
     rev = version;
-    sha256 = "1g75k4valfjgab00xri4pf8c8bb2zxkhgkpyy44fjk7s5j66daa1";
+    sha256 = "sha256-Xeot4QEgTZjvdO0ydmKjccp6zwC93Yp/HkRlSgyDf8k=";
   };
 
   propagatedBuildInputs = [

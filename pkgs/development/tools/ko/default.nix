@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.9.3";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cIrlhhk5Lt0Qt7q7rKw8EXrJqZWZEjrEUyHOvHiT6bs=";
+    sha256 = "sha256-BwK49dSt3D2BrYvluDOBYIH5qEt59HC1hssHl1D2Heg=";
   };
   vendorSha256 = null;
 
@@ -40,8 +40,9 @@ buildGoModule rec {
 
   postInstall = ''
     installShellCompletion --cmd ko \
-      --bash <($out/bin/ko completion) \
-      --zsh <($out/bin/ko completion --zsh)
+      --bash <($out/bin/ko completion bash) \
+      --fish <($out/bin/ko completion fish) \
+      --zsh <($out/bin/ko completion zsh)
   '';
 
   meta = with lib; {

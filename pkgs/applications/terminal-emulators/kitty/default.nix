@@ -1,36 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
-  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  lcms2,
-  librsync,
-  installShellFiles,
-  dbus,
-  darwin,
-  Cocoa,
-  CoreGraphics,
-  Foundation,
-  IOKit,
-  Kernel,
-  OpenGL,
-  libcanberra,
-  libicns,
-  libpng,
-  python3,
-  zlib,
+{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring
+, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel
+, libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
+, libxkbcommon, libXi, libXext, wayland-protocols, wayland
+, lcms2
+, librsync
+, installShellFiles
+, dbus
+, darwin
+, Cocoa
+, CoreGraphics
+, Foundation
+, IOKit
+, Kernel
+, OpenGL
+, libcanberra
+, libicns
+, libpng
+, python3
+, zlib
+, bashInteractive
+, zsh
+, fish
+, fetchpatch
+, nixosTests
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.24.1";
+  version = "0.24.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-WPkyub7CwNXRksUmqiZeznnSqEPFpyHTeFLQ+D4Fb5c=";
+    sha256 = "sha256-c6XM/xeGZ68srf8xQJA1iYCUR3kXNceTMxsZAnbFmug=";
   };
 
   buildInputs = [
@@ -74,6 +79,24 @@ buildPythonApplication rec {
 
   outputs = [ "out" "terminfo" "shell_integration" ];
 
+  patches = [
+    (fetchpatch {
+      name = "fix-zsh-completion-test-1.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/297592242c290a81ca4ba08802841f4c33a4de25.patch";
+      sha256 = "sha256-/V6y/4AaJsZvx1KS5UFZ+0zyAoZuLgbgFORZ1dX/1qE=";
+    })
+    (fetchpatch {
+      name = "fix-zsh-completion-test-2.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/d8ed42ae8e014d9abf9550a65ae203468f8bfa43.patch";
+      sha256 = "sha256-Azgzqf5atW999FVn9rSGKMyZLsI692dYXhJPx07GBO0=";
+    })
+    (fetchpatch {
+      name = "fix-build-with-non-framework-python-on-darwin.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/57cffc71b78244e6a9d49f4c9af24d1a88dbf537.patch";
+      sha256 = "sha256-1IGONSVCVo5SmLKw90eqxaI5Mwc764O1ur+aMsc7h94=";
+    })
+  ];
+
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
@@ -101,7 +124,14 @@ buildPythonApplication rec {
     runHook postBuild
   '';
 
-  checkInputs = [ pillow ];
+  checkInputs = [
+    pillow
+
+    # Shells needed for shell integration tests
+    bashInteractive
+    zsh
+    fish
+  ];
 
   checkPhase =
     let buildBinPath =
@@ -132,9 +162,9 @@ buildPythonApplication rec {
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
-      --bash <("$out/bin/kitty" + complete setup bash) \
-      --fish <("$out/bin/kitty" + complete setup fish) \
-      --zsh  <("$out/bin/kitty" + complete setup zsh)
+      --bash <("$out/bin/kitty" +complete setup bash) \
+      --fish <("$out/bin/kitty" +complete setup fish2) \
+      --zsh  <("$out/bin/kitty" +complete setup zsh)
 
     terminfo_src=${if stdenv.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
@@ -151,6 +181,8 @@ buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";

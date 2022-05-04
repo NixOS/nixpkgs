@@ -8,7 +8,7 @@ fi
 
 pkg_dir="$(dirname "$0")"
 
-src="$(nix-build . --no-out-link -A coreboot-toolchain.src)"
+src="$(nix-build . --no-out-link -A coreboot-toolchain.i386.src)"
 urls=$($src/util/crossgcc/buildgcc -u)
 
 tmp=$(mktemp)

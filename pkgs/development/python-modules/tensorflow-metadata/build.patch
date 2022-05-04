@@ -2,15 +2,6 @@ diff --git a/setup.py b/setup.py
 index 7a09b2f..94c5aa6 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -125,7 +125,7 @@ setup(
-     ],
-     namespace_packages=[],
-     install_requires=[
--        'absl-py>=0.9,<0.13',
-+        'absl-py>=0.9',
-         'googleapis-common-protos>=1.52.0,<2',
-         'protobuf>=3.13,<4',
-     ],
 @@ -137,8 +137,5 @@ setup(
      long_description_content_type='text/markdown',
      keywords='tensorflow metadata tfx',

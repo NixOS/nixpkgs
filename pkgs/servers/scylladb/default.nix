@@ -1,6 +1,6 @@
 {
   lib,
-  fetchgit,
+  fetchFromGitHub,
   python3Packages,
   pkg-config,
   gcc8Stdenv,
@@ -34,10 +34,11 @@ gcc8Stdenv.mkDerivation {
   pname = "scylladb";
   version = "3.0.5";
 
-  src = fetchgit {
-    url = "https://github.com/scylladb/scylla.git";
+  src = fetchFromGitHub {
+    owner = "scylladb";
+    repo = "scylla";
     rev = "403f66ecad6bc773712c69c4a80ebd172eb48b13";
-    sha256 = "14mg0kzpkrxvwqyiy19ndy4rsc7s5gnv2gwd3xdwm1lx1ln8ywsi";
+    sha256 = "sha256-UXOPLA2dhspbH40/se0r+jCdiW82BR895rvnef8Er5I=";
     fetchSubmodules = true;
   };
 

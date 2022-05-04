@@ -30,6 +30,8 @@ self: super: ({
 
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
+  streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
+
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
@@ -285,6 +287,13 @@ self: super: ({
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
 
-  # https://github.com/fpco/inline-c/issues/127
-  inline-c-cpp = dontCheck super.inline-c-cpp;
+
+  # https://github.com/haskell-crypto/cryptonite/issues/360
+  cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+
+  # tests appear to be failing to link or something:
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  regex-rure = dontCheck super.regex-rure;
 })

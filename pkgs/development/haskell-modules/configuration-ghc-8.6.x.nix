@@ -2,6 +2,10 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -81,9 +85,6 @@ self: super: {
   # cabal2spec needs a recent version of Cabal
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
 
-  # Builds only with ghc-8.8.x and beyond.
-  policeman = markBroken super.policeman;
-
   # https://github.com/pikajude/stylish-cabal/issues/12
   stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
   haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
@@ -107,4 +108,6 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
+  # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
+  inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
 }

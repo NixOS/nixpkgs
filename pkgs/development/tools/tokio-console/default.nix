@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokio-console";
-  version = "0.1.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "tokio-rs";
     repo = "console";
     rev = "tokio-console-v${version}";
-    sha256 = "sha256-1wxRTdDmgTlGJ3W1txDA/3Rnccs3KBw55vprrGaVnkg=";
+    sha256 = "sha256-v9BxfBLRJug/1AgvDV7P5AOXwZfCu1mNgJjhbipoZNg=";
   };
 
-  cargoSha256 = "sha256-RScu5V55OowwWHi3MLjW8DPlTMA/IEBYFt4VUDUHPKo=";
+  cargoSha256 = "sha256-584EC9x7tJE3pHqgQVh6LWKuCgLXuBBEnaPvo1A8RIs=";
 
   nativeBuildInputs = [ protobuf ];
 

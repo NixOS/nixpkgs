@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , gettext
@@ -11,6 +12,10 @@
 , glib
 , gtk3
 , python3
+, lua
+, opencc
+, libsoup
+, json-glib
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +36,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
+  configureFlags = [
+    "--enable-cloud-input-mode"
+    "--enable-opencc"
+  ];
+
   buildInputs = [
     ibus
     glib
@@ -42,6 +52,10 @@ stdenv.mkDerivation rec {
     ]))
     gtk3
     db
+    lua
+    opencc
+    libsoup
+    json-glib
   ];
 
   meta = with lib; {

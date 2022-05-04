@@ -1,16 +1,12 @@
-{ lib, python39Packages, fetchFromGitHub }:
+{ lib, python3Packages }:
 
-python39Packages.buildPythonPackage rec {
-  name = "gay";
+python3Packages.buildPythonApplication rec {
+  pname = "gay";
   version = "1.2.8";
 
-  src = fetchFromGitHub {
-    owner = "ms-jpq";
-    repo = "gay";
-    # The repo doesn't have any tags
-    # This references version 1.2.8
-    rev = "1e3e96815c68214533a925c86a52b0acf832a359";
-    sha256 = "sha256-vouEFybcz27bcw/CpAGjFY8NYWQC+V0IE7h1a8XufZ0=";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-/4IHqAoJthKvNyKqUgnGOQkgbC0aBEZ+x6dmKWUHXh0=";
   };
 
   meta = with lib; {
@@ -21,6 +17,5 @@ python39Packages.buildPythonPackage rec {
     homepage = "https://github.com/ms-jpq/gay";
     maintainers = with maintainers; [ CodeLongAndProsper90 ];
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }

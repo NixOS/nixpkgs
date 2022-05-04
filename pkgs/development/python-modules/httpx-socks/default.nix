@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wigmkhn4ymfr12z9vhdaimjcma9llicwrr29q0cc8xmy23f3445";
+    sha256 = "11wnhx9nfsg5lsnlgh33zngyhc2klichpfrkwajbbyq95fdqj8ri";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "httpx_socks"
+  ];
+
+  disabledTests = [
+    # Tests don't work in the sandbox
+    "test_proxy"
+    "test_secure_proxy"
   ];
 
   meta = with lib; {

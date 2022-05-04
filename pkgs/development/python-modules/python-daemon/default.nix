@@ -51,6 +51,11 @@ buildPythonPackage rec {
     })
   ];
 
+  disabledTestPaths = [
+    # requires removed distutils.command
+    "test_version.py"
+  ];
+
   disabledTests = [
     "begin_with_TestCase"
     "changelog_TestCase"

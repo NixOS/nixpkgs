@@ -1,24 +1,25 @@
-{ lib, stdenv, fetchurl, nixosTests
+{ lib, stdenv, fetchurl, nixosTests, buildPackages
 # Native buildInputs components
 , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
 # Common components
 , curl, libiconv, ncurses, openssl, pcre, pcre2
 , libkrb5, libaio, liburing, systemd
 , CoreServices, cctools, perl
-, jemalloc, less
+, jemalloc, less, libedit
 # Server components
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
 , linux-pam, numactl, pmdk
+, fmt_8
 , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
 , withStorageRocks ? true
 }:
 
-let # in mariadb # spans the whole file
+let
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-mytopEnv = perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
+mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
 
 mariadbPackage = packageSettings: (server packageSettings) // {
   client = client packageSettings; # MariaDB Client
@@ -42,7 +43,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
   ] ++ (packageSettings.extraBuildInputs or [])
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
     ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
 
@@ -141,7 +142,7 @@ in stdenv.mkDerivation (common // {
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
     "-DWITHOUT_SERVER=ON"
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
@@ -173,7 +174,8 @@ in stdenv.mkDerivation (common // {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
-    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ];
+    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
+    ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
   patches = common.patches;
 
@@ -205,9 +207,14 @@ in stdenv.mkDerivation (common // {
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
     "-DWITH_JEMALLOC=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
+    "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -231,17 +238,27 @@ in stdenv.mkDerivation (common // {
 in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
-    version = "10.4.22";
-    sha256 = "000ca1hdnj2jg051cjgdd2ralgwgh2p8nwb1x6b85202xdpc7ga4";
+    version = "10.4.24";
+    sha256 = "0ipqilri8isn0mfvwg8imwf36zm3jsw0wf2yx905c2bznd8mb5zy";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
-    version = "10.5.13";
-    sha256 = "0n0w1pyypv6wsknaqyykj3lc9zv6smji4q5jcf90w4rid330iw0n";
+    version = "10.5.15";
+    sha256 = "0nfvyxb157qsbl0d1i5gfzr2hb1nm0iv58f7qcbk5kkhz0vyv049";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.5";
-    sha256 = "13qaqb2h6kysfdi3h1l9zbb2qlpjgxb1n8mxnj5jm96r50209gp0";
+    version = "10.6.7";
+    sha256 = "1idjnkjfkjvyr6r899xbiwq9wwbs84cm85mbc725yxjshqghzvkm";
+  };
+  mariadb_107 = mariadbPackage {
+    # Supported until 2023-02
+    version = "10.7.3";
+    sha256 = "1m2wa67vvdm61ap8spl18b9vqkmsnq4rfd0248l17jf9zwcnja6s";
+  };
+  mariadb_108 = mariadbPackage {
+    # Supported until 2023-05
+    version = "10.8.2";
+    sha256 = "0v4mms3mihylnqlc0ifvwzykah6lkdd39lmxbv5vnhbsh7wggq0l";
   };
 }

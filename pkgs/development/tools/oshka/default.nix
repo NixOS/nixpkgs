@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "oshka";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1niyy7yiynpwa2cvcj4r3305v8ca4324q512839y79s3izd6a1lf";
+    sha256 = "sha256-fpWhqFK5h/U7DCC/SyhAlMyCMhjZHRLMlwakvlhOd3w=";
   };
 
-  vendorSha256 = "08aj3nmj8angizkd3rbwbm7qzqxwrgfm1rka2x2a096z6mc3f4k4";
+  vendorSha256 = "sha256-ZBI3WDXfJKBEF2rmUN3LvOOPT1185dHmj88qJKsdUiE=";
 
   ldflags = [
     "-w"

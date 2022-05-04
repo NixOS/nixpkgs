@@ -3,11 +3,10 @@ let
     wayland = { pkgs, ... }: {
       imports = [ ./common/wayland-cage.nix ];
 
-      services.cage.program = ''
-        ${pkgs.vscodium}/bin/codium \
-          --enable-features=UseOzonePlatform \
-          --ozone-platform=wayland
-      '';
+      services.cage.program = "${pkgs.vscodium}/bin/codium";
+
+      environment.variables.NIXOS_OZONE_WL = "1";
+      environment.variables.DISPLAY = "do not use";
 
       fonts.fonts = with pkgs; [ dejavu_fonts ];
     };

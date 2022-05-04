@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/AcademySoftwareFoundation/openexr/commit/2f19a01923885fda75ec9d19332de080ec7102bd.patch";
       sha256 = "1yxmrdzq1x1911wdzwnzr29jmg2r4wd4yx3vhjn0y5dpny0ri5y5";
     })
+    (fetchpatch {
+      name = "CVE-2021-45942.patch";
+      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/11cad77da87c4fa2aab7d58dd5339e254db7937e.patch";
+      stripLen = 4;
+      extraPrefix = "OpenEXR/IlmImf/";
+      sha256 = "1wa2jn6sa0n3phaqvklnlbgk1bz60y756ad4jk4d757pzpnannsy";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];

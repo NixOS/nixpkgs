@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.2.20220103095339";
+  version = "8.2.20220204150214";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "051690a2f89b98e35100cd2cb489406a5169a60c2f27a716f3f287a42d45be2d";
+    hash = "sha256-PlPb/nE3eWueUTWSDpa7JxPe2ee+KFna5VTR3IsClwQ=";
   };
 
   propagatedBuildInputs = [
@@ -37,9 +37,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # setup for these tests requires network access
+    # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"
+    # Test requires network
+    "test_yaml_tab_error"
   ];
 
   pythonImportsCheck = [

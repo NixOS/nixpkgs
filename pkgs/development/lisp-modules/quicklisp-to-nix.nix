@@ -297,6 +297,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "wild-package-inferred-system" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."wild-package-inferred-system" or (x: {}))
+       (import ./quicklisp-to-nix-output/wild-package-inferred-system.nix {
+         inherit fetchurl;
+           "fiveam" = quicklisp-to-nix-packages."fiveam";
+       }));
+
+
   "parseq" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."parseq" or (x: {}))
@@ -345,6 +354,16 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "quasiquote-2_dot_0" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."quasiquote-2_dot_0" or (x: {}))
+       (import ./quicklisp-to-nix-output/quasiquote-2_dot_0.nix {
+         inherit fetchurl;
+           "fiveam" = quicklisp-to-nix-packages."fiveam";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+       }));
+
+
   "lfarm-common" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."lfarm-common" or (x: {}))
@@ -359,6 +378,43 @@ let quicklisp-to-nix-packages = rec {
            "usocket" = quicklisp-to-nix-packages."usocket";
        }));
 
+  "simple-inferiors" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."simple-inferiors" or (x: {}))
+       (import ./quicklisp-to-nix-output/simple-inferiors.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+       }));
+
+
+  "lambda-fiddle" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lambda-fiddle" or (x: {}))
+       (import ./quicklisp-to-nix-output/lambda-fiddle.nix {
+         inherit fetchurl;
+       }));
+
+
+  "iolib_dot_grovel" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib_dot_grovel" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_dot_grovel.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "iolib_dot_asdf" = quicklisp-to-nix-packages."iolib_dot_asdf";
+           "iolib_dot_base" = quicklisp-to-nix-packages."iolib_dot_base";
+           "iolib_dot_common-lisp" = quicklisp-to-nix-packages."iolib_dot_common-lisp";
+           "iolib_dot_conf" = quicklisp-to-nix-packages."iolib_dot_conf";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+       }));
 
   "trivia_dot_quasiquote" = buildLispPackage
     ((f: x: (x // (f x)))
@@ -2328,6 +2384,14 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "slynk" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."slynk" or (x: {}))
+       (import ./quicklisp-to-nix-output/slynk.nix {
+         inherit fetchurl;
+       }));
+
+
   "simple-date-time" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."simple-date-time" or (x: {}))
@@ -2655,6 +2719,18 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "nbd" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."nbd" or (x: {}))
+       (import ./quicklisp-to-nix-output/nbd.nix {
+         inherit fetchurl;
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "lisp-binary" = quicklisp-to-nix-packages."lisp-binary";
+           "wild-package-inferred-system" = quicklisp-to-nix-packages."wild-package-inferred-system";
+       }));
+
+
   "named-readtables" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."named-readtables" or (x: {}))
@@ -2689,6 +2765,20 @@ let quicklisp-to-nix-packages = rec {
        (import ./quicklisp-to-nix-output/moptilities.nix {
          inherit fetchurl;
            "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+       }));
+
+
+  "mmap" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."mmap" or (x: {}))
+       (import ./quicklisp-to-nix-output/mmap.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
        }));
 
 
@@ -2836,6 +2926,24 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "lisp-binary" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lisp-binary" or (x: {}))
+       (import ./quicklisp-to-nix-output/lisp-binary.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "moptilities" = quicklisp-to-nix-packages."moptilities";
+           "quasiquote-2_dot_0" = quicklisp-to-nix-packages."quasiquote-2_dot_0";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
+       }));
+
+
   "lift" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."lift" or (x: {}))
@@ -2918,6 +3026,22 @@ let quicklisp-to-nix-packages = rec {
            "alexandria" = quicklisp-to-nix-packages."alexandria";
            "anaphora" = quicklisp-to-nix-packages."anaphora";
            "lift" = quicklisp-to-nix-packages."lift";
+       }));
+
+
+  "legit" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."legit" or (x: {}))
+       (import ./quicklisp-to-nix-output/legit.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "lambda-fiddle" = quicklisp-to-nix-packages."lambda-fiddle";
+           "simple-inferiors" = quicklisp-to-nix-packages."simple-inferiors";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+           "uiop" = quicklisp-to-nix-packages."uiop";
        }));
 
 
@@ -3251,6 +3375,27 @@ let quicklisp-to-nix-packages = rec {
     ((f: x: (x // (f x)))
        (qlOverrides."form-fiddle" or (x: {}))
        (import ./quicklisp-to-nix-output/form-fiddle.nix {
+         inherit fetchurl;
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+       }));
+
+
+  "flow" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."flow" or (x: {}))
+       (import ./quicklisp-to-nix-output/flow.nix {
+         inherit fetchurl;
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+       }));
+
+
+  "float-features" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."float-features" or (x: {}))
+       (import ./quicklisp-to-nix-output/float-features.nix {
          inherit fetchurl;
            "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
            "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";

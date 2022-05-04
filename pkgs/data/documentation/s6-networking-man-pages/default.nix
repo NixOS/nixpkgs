@@ -2,8 +2,8 @@
 
 buildManPages {
   pname = "s6-networking-man-pages";
-  version = "2.5.0.0.2";
-  sha256 = "1ix8qrivp9prw0m401d7s9vkxhw16a4sxfhrs7abf9qqhs2zkd1r";
+  version = "2.5.1.0.1";
+  sha256 = "1h87s3wixsms8ys7gvm1s9d8pzn73q5j4sgybpi3gmr55d4cwra4";
   description = "Port of the documentation for the s6-networking suite to mdoc";
   maintainers = [ lib.maintainers.sternenseemann ];
 }

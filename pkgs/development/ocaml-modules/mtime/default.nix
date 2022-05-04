@@ -16,16 +16,18 @@ let param =
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-mtime-${param.version}";
+  pname = "ocaml${ocaml.version}-mtime";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://erratique.ch/software/mtime/releases/mtime-${param.version}.tbz";
     inherit (param) sha256;
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg ]
-  ++ optional jsooSupport js_of_ocaml;
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ] ++ optional jsooSupport js_of_ocaml;
+
+  strictDeps = true;
 
   buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";
 

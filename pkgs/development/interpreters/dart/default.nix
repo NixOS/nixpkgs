@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , unzip
-, version ? "2.14.3"
+, version ? "2.15.1"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
@@ -10,24 +10,28 @@
     aarch64 = "arm64";
     # Make sure that if the user overrides version parameter they're
     # also need to override sources, to avoid mistakes
-    version = "2.14.3";
+    version = "2.15.1";
   in
   {
+    "${version}-aarch64-darwin" = fetchurl {
+      url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${aarch64}-release.zip";
+      sha256 = "sha256-DDE4DpA2m8wKkUZuQDn4NpXVvtaJ6sIHeKNjk3RbpYE=";
+    };
     "${version}-x86_64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "0is4gz99i06yb4jisxcz2c15jqkaz6ayhg9b8zb3s0s8yp59r2iq";
+      sha256 = "sha256-s6bkwh2m5KdRr/WxWXwItO9YaDpp/HI3xjnS2UHmN+I=";
     };
     "${version}-x86_64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "0wg1mnj4qrv22z510032jnwb3z39gvzlrv5wic2ci5mg7316xlya";
+      sha256 = "sha256-D0XcqlO0CQtpsne4heqaTLOkFYnJEZET4bl4rVXOM18=";
     };
     "${version}-i686-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "0gnjk3lh63m0naaw67g9w7wys5cgx2ipzd1dznqnlvxp2vj1gj5p";
+      sha256 = "sha256-SRq5TtxS+bwCqVxa0U2Zhn8J1Wtm4Onq+3uQS+951sw=";
     };
     "${version}-aarch64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "1j7snnf3a0jly85njq8npqikrdhz9lkirhvik1hkpd9sv7qfbvd6";
+      sha256 = "sha256-iDbClCNDUsxT6K6koc4EQuu7dppTbOfzCVedpQIKI5U=";
     };
   }
 }:
@@ -47,6 +51,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
+  '' + lib.optionalString(stdenv.isLinux) ''
     find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
@@ -63,7 +68,7 @@ stdenv.mkDerivation {
       with C-style syntax. It offers compilation to JavaScript, interfaces,
       mixins, abstract classes, reified generics, and optional typing.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     license = licenses.bsd3;
   };
 }

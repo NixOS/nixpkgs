@@ -1,24 +1,24 @@
-{ lib, buildGo117Module, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "grafana";
-  version = "8.3.4";
+  version = "8.5.1";
 
-  excludedPackages = "\\(alert_webhook_listener\\|clean-swagger\\|release_publisher\\|slow_proxy\\|slow_proxy_mac\\|macaron\\)";
+  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-Ikvl8jsStMGDIc0y4cKWwyXJHTu4V4nCKiLUyERjRsw=";
+    sha256 = "sha256-GwvJA+lcbUuVbzniDW6gYbxQO5uXSP6rjzgmcJ5YYxk=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-UI+NouSRwQVmAgx19OHhWcoDLj9KD05xh57/1gLvWmA=";
+    sha256 = "030zl5k8b4hcay06a2lvlmq8swbix88ii4gz9yd4kywcjy5vhnyf";
   };
 
-  vendorSha256 = "sha256-gaY6liueEmngxjPSegmycrLpfsB0p1YWWrNGbzpHHOc=";
+  vendorSha256 = "sha256-ZL+A6Sz0uHg7ZzYHmA4EU5ZxfRXBLyKglk135iQT600=";
 
   nativeBuildInputs = [ wire ];
 
@@ -66,7 +66,10 @@ buildGo117Module rec {
     cp ./conf/defaults.ini $out/share/grafana/conf/
   '';
 
-  passthru.tests = { inherit (nixosTests) grafana; };
+  passthru = {
+    tests = { inherit (nixosTests) grafana; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";

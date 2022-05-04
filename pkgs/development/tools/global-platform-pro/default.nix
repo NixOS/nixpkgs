@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/martinpaljak/GlobalPlatformPro";
     license = with licenses; [ lgpl3 ];
     maintainers = with maintainers; [ ekleog ];
+    mainProgram = "gp";
     platforms = platforms.all;
   };
 }

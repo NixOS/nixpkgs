@@ -16,15 +16,20 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.7.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
+    hash = "sha256-fCxLobQuCnUzfFS3d78GcQVrRWllDj/5J+S5s4WvyOw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "redis<4.2.0" "redis"
+  '';
 
   propagatedBuildInputs = [
     aioredis
@@ -40,11 +45,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # AttributeError: 'AsyncGenerator' object has no attribute XXXX
-    "test/test_aioredis2.py"
   ];
 
   pythonImportsCheck = [

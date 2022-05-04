@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
     comment = "Views Adobe PDF files";
     icon = "xpdf";
     exec = "xpdf %f";
-    categories = "Office;";
-    terminal = "false";
+    categories = [ "Office" ];
   };
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''

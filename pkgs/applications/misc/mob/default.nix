@@ -1,21 +1,21 @@
 { lib
 , buildGoPackage
 , fetchFromGitHub
-
-, withSpeech ? true
+, stdenv
+, withSpeech ? !stdenv.isDarwin
 , makeWrapper
 , espeak-ng
 }:
 
 buildGoPackage rec {
   pname = "mob";
-  version = "2.2.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "remotemobprogramming";
     repo = pname;
-    sha256 = "sha256-nf0FSaUi8qX1f4Luo0cP4ZLoOKbyvgmpilMOWXbzzIM=";
+    sha256 = "sha256-silAgScvhl388Uf6HkWqEkNmr/K6aUt/lj/rxzkk/f0=";
   };
 
   nativeBuildInputs = [

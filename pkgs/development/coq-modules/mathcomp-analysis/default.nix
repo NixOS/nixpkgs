@@ -8,6 +8,7 @@ let mca = mkCoqDerivation {
   pname = "analysis";
   owner = "math-comp";
 
+  release."0.3.13".sha256 = "sha256-Yaztew79KWRC933kGFOAUIIoqukaZOdNOdw4XszR1Hg=";
   release."0.3.10".sha256 = "sha256-FBH2c8QRibq5Ycw/ieB8mZl0fDiPrYdIzZ6W/A3pIhI=";
   release."0.3.9".sha256 = "sha256-uUU9diBwUqBrNRLiDc0kz0CGkwTZCUmigPwLbpDOeg4=";
   release."0.3.6".sha256 = "0g2j7b2hca4byz62ssgg90bkbc8wwp7xkb2d3225bbvihi92b4c5";
@@ -18,6 +19,7 @@ let mca = mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
+      { cases = [ (isGe "8.13") (isGe "1.12.0") ];      out = "0.3.13"; }
       { cases = [ (range "8.11" "8.14") (isGe "1.12.0") ];      out = "0.3.10"; }
       { cases = [ (range "8.11" "8.13") "1.11.0" ];             out = "0.3.4"; }
       { cases = [ (range "8.10" "8.12") "1.11.0" ];             out = "0.3.3"; }

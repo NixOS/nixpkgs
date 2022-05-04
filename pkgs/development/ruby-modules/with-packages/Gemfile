@@ -93,6 +93,7 @@ source 'https://rubygems.org' do
   gem 'nokogiri'
   gem 'opus-ruby'
   gem 'ovirt-engine-sdk'
+  gem 'pandocomatic'
   gem 'pango'
   gem 'patron'
   gem 'pcaprub'

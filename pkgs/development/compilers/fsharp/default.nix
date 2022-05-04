@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dgTEM2aL8lVjVMuW0+HLc+TUA39IiuBv/RfHYNURh5s=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ mono dotnetbuildhelpers autoconf automake which ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ mono dotnetbuildhelpers which ];
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets

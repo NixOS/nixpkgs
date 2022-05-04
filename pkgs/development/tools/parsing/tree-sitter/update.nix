@@ -42,6 +42,7 @@ let
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
     "tree-sitter-tsq"
+    "tree-sitter-toml"
   ];
   knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
@@ -105,7 +106,7 @@ let
       repo = "tree-sitter-latex";
     };
     "tree-sitter-lua" = {
-      orga = "nvim-treesitter";
+      orga = "MunifTanjim";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
@@ -117,7 +118,7 @@ let
       repo = "tree-sitter-make";
     };
     "tree-sitter-markdown" = {
-      orga = "ikatyang";
+      orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
     "tree-sitter-rst" = {
@@ -135,10 +136,6 @@ let
     "tree-sitter-yaml" = {
       orga = "ikatyang";
       repo = "tree-sitter-yaml";
-    };
-    "tree-sitter-toml" = {
-      orga = "ikatyang";
-      repo = "tree-sitter-toml";
     };
     "tree-sitter-zig" = {
       orga = "maxxnino";
@@ -183,6 +180,10 @@ let
     "tree-sitter-graphql" = {
       orga = "bkegley";
       repo = "tree-sitter-graphql";
+    };
+    "tree-sitter-pgn" = {
+      orga = "rolandwalker";
+      repo = "tree-sitter-pgn";
     };
     "tree-sitter-perl" = {
       orga = "ganezdragon";
@@ -280,6 +281,10 @@ let
       orga = "uyha";
       repo = "tree-sitter-cmake";
     };
+    "tree-sitter-janet-simple" = {
+      orga = "sogaiu";
+      repo = "tree-sitter-janet-simple";
+    };
     "tree-sitter-json5" = {
       orga = "joakker";
       repo = "tree-sitter-json5";
@@ -304,9 +309,17 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
-    "tree-sitter-org" = {
+    "tree-sitter-org-nvim" = {
       orga = "milisims";
       repo = "tree-sitter-org";
+    };
+    "tree-sitter-hcl" = {
+      orga = "MichaHoffmann";
+      repo = "tree-sitter-hcl";
+    };
+    "tree-sitter-scheme" = {
+      orga = "6cdh";
+      repo = "tree-sitter-scheme";
     };
   };
 
@@ -366,7 +379,7 @@ let
     set -euo pipefail
 
     args=( '--silent' )
-    if [ -n "$GITHUB_TOKEN" ]; then
+    if [ -n "''${GITHUB_TOKEN:-}" ]; then
       args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
     fi
     args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
@@ -376,7 +389,7 @@ let
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
-    release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
+    release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name' | tr -d \")"
     # github sometimes returns an empty list even tough there are releases
     if [ "$release" = "null" ]; then
       echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
@@ -390,7 +403,7 @@ let
     set -euo pipefail
 
     args=( '--silent' )
-    if [ -n "$GITHUB_TOKEN" ]; then
+    if [ -n "''${GITHUB_TOKEN:-}" ]; then
       args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
     fi
     args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
@@ -398,7 +411,11 @@ let
     res=$(${curl}/bin/curl "''${args[@]}")
 
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2   #
+      echo "rate limited" >&2
+      exit 1
+    elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
+      echo "bad credentials" >&2
+      exit 1
     fi
 
     printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
@@ -432,7 +449,8 @@ let
     mkdir -p "$outputDir"
     ${foreachSh allGrammars
       ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
-    ( echo "{"
+    ( echo "{ lib }:"
+      echo "{"
       ${foreachSh allGrammars
         ({name, ...}: ''
            # indentation hack

@@ -61,6 +61,19 @@ let
         '';
       };
 
+      usshAuth = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set, users with an SSH certificate containing an authorized principal
+          in their SSH agent are able to log in. Specific options are controlled
+          using the <option>security.pam.ussh</option> options.
+
+          Note that the  <option>security.pam.ussh.enable</option> must also be
+          set for this option to take effect.
+        '';
+      };
+
       yubicoAuth = mkOption {
         default = config.security.pam.yubico.enable;
         defaultText = literalExpression "config.security.pam.yubico.enable";
@@ -444,15 +457,15 @@ let
             account sufficient ${pam_krb5}/lib/security/pam_krb5.so
           '' +
           optionalString cfg.googleOsLoginAccountVerification ''
-            account [success=ok ignore=ignore default=die] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so
-            account [success=ok default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so
+            account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
+            account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
           '' +
           ''
 
             # Authentication management.
           '' +
           optionalString cfg.googleOsLoginAuthentication ''
-            auth [success=done perm_denied=bad default=ignore] ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so
+            auth [success=done perm_denied=die default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
           '' +
           optionalString cfg.rootOK ''
             auth sufficient pam_rootok.so
@@ -475,6 +488,9 @@ let
           optionalString cfg.usbAuth ''
             auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so
           '' +
+          (let ussh = config.security.pam.ussh; in optionalString (config.security.pam.ussh.enable && cfg.usshAuth) ''
+            auth ${ussh.control} ${pkgs.pam_ussh}/lib/security/pam_ussh.so ${optionalString (ussh.caFile != null) "ca_file=${ussh.caFile}"} ${optionalString (ussh.authorizedPrincipals != null) "authorized_principals=${ussh.authorizedPrincipals}"} ${optionalString (ussh.authorizedPrincipalsFile != null) "authorized_principals_file=${ussh.authorizedPrincipalsFile}"} ${optionalString (ussh.group != null) "group=${ussh.group}"}
+          '') +
           (let oath = config.security.pam.oath; in optionalString cfg.oathAuth ''
             auth requisite ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}
           '') +
@@ -518,7 +534,7 @@ let
                 auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly " store-only"}
               '' +
               optionalString cfg.googleAuthenticator.enable ''
-                auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
+                auth required ${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
               '' +
               optionalString cfg.duoSecurity.enable ''
                 auth required ${pkgs.duo-unix}/lib/security/pam_duo.so
@@ -594,6 +610,7 @@ let
             session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
           '' +
           optionalString cfg.pamMount ''
+            session [success=1 default=ignore] ${pkgs.pam}/lib/security/pam_succeed_if.so service = systemd-user quiet
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
           '' +
           optionalString use_ldap ''
@@ -926,6 +943,96 @@ in
       };
     };
 
+    security.pam.ussh = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enables Uber's USSH PAM (<literal>pam-ussh</literal>) module.
+
+          This is similar to <literal>pam-ssh-agent</literal>, except that
+          the presence of a CA-signed SSH key with a valid principal is checked
+          instead.
+
+          Note that this module must both be enabled using this option and on a
+          per-PAM-service level as well (using <literal>usshAuth</literal>).
+
+          More information can be found <link
+          xlink:href="https://github.com/uber/pam-ussh">here</link>.
+        '';
+      };
+
+      caFile = mkOption {
+        default = null;
+        type = with types; nullOr path;
+        description = ''
+          By default <literal>pam-ussh</literal> reads the trusted user CA keys
+          from <filename>/etc/ssh/trusted_user_ca</filename>.
+
+          This should be set the same as your <literal>TrustedUserCAKeys</literal>
+          option for sshd.
+        '';
+      };
+
+      authorizedPrincipals = mkOption {
+        default = null;
+        type = with types; nullOr commas;
+        description = ''
+          Comma-separated list of authorized principals to permit; if the user
+          presents a certificate with one of these principals, then they will be
+          authorized.
+
+          Note that <literal>pam-ussh</literal> also requires that the certificate
+          contain a principal matching the user's username. The principals from
+          this list are in addition to those principals.
+
+          Mutually exclusive with <literal>authorizedPrincipalsFile</literal>.
+        '';
+      };
+
+      authorizedPrincipalsFile = mkOption {
+        default = null;
+        type = with types; nullOr path;
+        description = ''
+          Path to a list of principals; if the user presents a certificate with
+          one of these principals, then they will be authorized.
+
+          Note that <literal>pam-ussh</literal> also requires that the certificate
+          contain a principal matching the user's username. The principals from
+          this file are in addition to those principals.
+
+          Mutually exclusive with <literal>authorizedPrincipals</literal>.
+        '';
+      };
+
+      group = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        description = ''
+          If set, then the authenticating user must be a member of this group
+          to use this module.
+        '';
+      };
+
+      control = mkOption {
+        default = "sufficient";
+        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        description = ''
+          This option sets pam "control".
+          If you want to have multi factor authentication, use "required".
+          If you want to use the SSH certificate instead of the regular password,
+          use "sufficient".
+
+          Read
+          <citerefentry>
+            <refentrytitle>pam.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for better understanding of this option.
+        '';
+      };
+    };
+
     security.pam.yubico = {
       enable = mkOption {
         default = false;
@@ -1035,7 +1142,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        source = "${pkgs.pam}/bin/unix_chkpwd";
       };
     };
 
@@ -1091,11 +1198,11 @@ in
         mr ${pam_ccreds}/lib/security/pam_ccreds.so,
       '' +
       optionalString (isEnabled (cfg: cfg.googleOsLoginAccountVerification)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so,
       '' +
       optionalString (isEnabled (cfg: cfg.googleOsLoginAuthentication)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
+        mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
       '' +
       optionalString (config.security.pam.enableSSHAgentAuth
                      && isEnabled (cfg: cfg.sshAgentAuth)) ''
@@ -1109,6 +1216,9 @@ in
       '' +
       optionalString (isEnabled (cfg: cfg.usbAuth)) ''
         mr ${pkgs.pam_usb}/lib/security/pam_usb.so,
+      '' +
+      optionalString (isEnabled (cfg: cfg.usshAuth)) ''
+        mr ${pkgs.pam_ussh}/lib/security/pam_ussh.so,
       '' +
       optionalString (isEnabled (cfg: cfg.oathAuth)) ''
         "mr ${pkgs.oathToolkit}/lib/security/pam_oath.so,

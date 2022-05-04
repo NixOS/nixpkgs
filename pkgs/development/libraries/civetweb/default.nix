@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -13,32 +15,28 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Qh6BGPk7a01YzCeX42+Og9M+fjXRs7kzNUCyT4mYab4=";
   };
 
-  makeFlags = [
-    "WITH_CPP=1"
-    "PREFIX=${placeholder "out"}"
-    "LIBDIR=${placeholder "out"}/lib"
-    "INCLUDEDIR=${placeholder "dev"}/include"
-  ];
-
-  patches = [
-    ./0001-allow-setting-paths-in-makefile.patch
-  ];
+  outputs = [ "out" "dev" ];
 
   strictDeps = true;
 
-  outputs = [ "out" "dev" ];
-
-  installTargets = [
-    "install-headers"
-    "install-lib"
-    "install-slib"
-    "install"
+  nativeBuildInputs = [
+    cmake
   ];
 
-  preInstall = ''
-    mkdir -p $dev/include
-    mkdir -p $out/lib
+  # The existence of the "build" script causes `mkdir -p build` to fail:
+  #   mkdir: cannot create directory 'build': File exists
+  preConfigure = ''
+    rm build
   '';
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DCIVETWEB_ENABLE_CXX=ON"
+    "-DCIVETWEB_ENABLE_IPV6=ON"
+
+    # The civetweb unit tests rely on downloading their fork of libcheck.
+    "-DCIVETWEB_BUILD_TESTING=OFF"
+  ];
 
   meta = {
     description = "Embedded C/C++ web server";

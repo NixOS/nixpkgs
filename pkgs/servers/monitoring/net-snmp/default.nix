@@ -1,7 +1,14 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
-, file, openssl, perl, perlPackages, unzip, nettools, ncurses }:
+, file, openssl, perl, perlPackages, nettools
+, withPerlTools ? false }: let
 
-stdenv.mkDerivation rec {
+  perlWithPkgs = perl.withPackages (ps: with ps; [
+    JSON
+    TermReadKey
+    Tk
+  ]);
+
+in stdenv.mkDerivation rec {
   pname = "net-snmp";
   version = "5.9.1";
 
@@ -37,15 +44,16 @@ stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo unzip ];
-  buildInputs = with perlPackages; [ file perl openssl ncurses JSON Tk TermReadKey ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo file ];
+  buildInputs = [ openssl ]
+    ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
   doCheck = false;  # tries to use networking
 
   postInstall = ''
     for f in "$lib/lib/"*.la $bin/bin/net-snmp-config $bin/bin/net-snmp-create-v3-user; do
-      sed 's|-L${openssl.dev}|-L${openssl.out}|g' -i $f
+      sed 's|-L${openssl.dev}|-L${lib.getLib openssl}|g' -i $f
     done
     mkdir $dev/bin
     mv $bin/bin/net-snmp-config $dev/bin
@@ -56,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
-    homepage = "http://net-snmp.sourceforge.net/";
+    homepage = "http://www.net-snmp.org/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

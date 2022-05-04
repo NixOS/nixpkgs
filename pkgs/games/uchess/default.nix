@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "1njl3f41gshdpj431zkvpv2b7zmh4m2m5q6xsijb0c0058dk46mz";
   };
 
-  vendorSha256 = "0dkq240ch1z3gihn8yc5d723nnvfxirk2nhw12r1c2hj1ga088g3";
+  vendorSha256 = "sha256-4yEE1AsSChayCBxaMXPsbls7xGmFeWRhfOMHyAAReDY=";
 
   # package does not contain any tests as of v0.2.1
   doCheck = false;

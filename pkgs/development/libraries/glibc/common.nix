@@ -43,9 +43,9 @@
 } @ args:
 
 let
-  version = "2.33";
-  patchSuffix = "-59";
-  sha256 = "sha256-LiVWAA4QXb1X8Layoy/yzxc73k8Nhd/8z9i35RoGd/8=";
+  version = "2.34";
+  patchSuffix = "-115";
+  sha256 = "sha256-RNJqH+ILiFOkj0cOrQHkJ56GmsFJsZXdpORKGV2YGrI=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -62,14 +62,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
-          glibc-2.33-59-gf9592d65f2
-          $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.34/master && git describe
+          glibc-2.34-115-gd5d1c95aaf
+          $ git show --minimal --reverse glibc-2.34.. | gzip -9n --rsyncable - > 2.34-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.33-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.33-master.patch.gz
+          $ zdiff -u 2.34-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.34-master.patch.gz
        */
-      ./2.33-master.patch.gz
+      ./2.34-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -125,6 +125,15 @@ stdenv.mkDerivation ({
 
       /* https://github.com/NixOS/nixpkgs/pull/137601 */
       ./nix-nss-open-files.patch
+
+      ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Fix segfault in getpwuid when stat fails
+         https://sourceware.org/bugzilla/show_bug.cgi?id=28752 */
+      (fetchurl {
+        url = "https://patchwork.sourceware.org/project/glibc/patch/20220314175316.3239120-2-sam@gentoo.org/raw/";
+        sha256 = "sq0BoPqXHQ69Vq4zJobCspe4XRfnAiuac/wqzVQJESc=";
+      })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -138,6 +147,10 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+
+      # Ensure that `__nss_files_fopen` can still be wrapped by `libredirect`.
+      sed -i -e '/libc_hidden_def (__nss_files_fopen)/d' nss/nss_files_fopen.c
+      sed -i -e '/libc_hidden_proto (__nss_files_fopen)/d' include/nss_files.h
     ''
     # FIXME: find a solution for infinite recursion in cross builds.
     # For now it's hopefully acceptable that IDN from libc doesn't reliably work.

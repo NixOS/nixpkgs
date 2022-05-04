@@ -1,5 +1,5 @@
 diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
-index bc5ccfc4..c6d119bc 100644
+index bc5f6a81..0fcd38d3 100644
 --- a/tools/yabridgectl/src/config.rs
 +++ b/tools/yabridgectl/src/config.rs
 @@ -23,6 +23,7 @@ use std::collections::{BTreeMap, BTreeSet, HashSet};
@@ -10,7 +10,7 @@ index bc5ccfc4..c6d119bc 100644
  use std::path::{Path, PathBuf};
  use which::which;
  use xdg::BaseDirectories;
-@@ -233,34 +234,24 @@ impl Config {
+@@ -235,34 +236,27 @@ impl Config {
                  }
              }
              None => {
@@ -20,6 +20,8 @@ index bc5ccfc4..c6d119bc 100644
 -                // in the error message when `libyabridge-vst2.so` can't be found.
 -                let system_path = Path::new("/usr/lib");
 +                // Search through NIX_PROFILES & data home directory if no path was set explicitly.
++                // NIX_PROFILES is iterated in reverse from the most specific (the user profile) to
++                // the least specific (the system profile).
 +                let nix_profiles = env::var("NIX_PROFILES");
                  let user_path = xdg_dirs.get_data_home();
 -                let lib_directories = [
@@ -35,6 +37,7 @@ index bc5ccfc4..c6d119bc 100644
 -                ];
 +                let lib_directories = nix_profiles.iter()
 +                    .flat_map(|profiles| profiles.split(' ')
++                              .rev()
 +                              .map(|profile| Path::new(profile).join("lib")))
 +                    .chain(iter::once(user_path.clone()));
 +
@@ -56,12 +59,12 @@ index bc5ccfc4..c6d119bc 100644
                          ));
                      }
 diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
-index 8c273f92..432619ec 100644
+index 48cce4fa..209e40e4 100644
 --- a/tools/yabridgectl/src/main.rs
 +++ b/tools/yabridgectl/src/main.rs
-@@ -148,7 +148,7 @@ fn main() -> Result<()> {
-                         .about("Path to the directory containing 'libyabridge-{vst2,vst3}.so'")
-                         .long_about(
+@@ -151,7 +151,7 @@ fn main() -> Result<()> {
+                         .help("Path to the directory containing 'libyabridge-{vst2,vst3}.so'")
+                         .long_help(
                              "Path to the directory containing 'libyabridge-{vst2,vst3}.so'. If this \
 -                             is not set, then yabridgectl will look in both '/usr/lib' and \
 +                             is not set, then yabridgectl will look through 'NIX_PROFILES' and \

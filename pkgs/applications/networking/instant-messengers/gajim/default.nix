@@ -63,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools
+    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
@@ -87,7 +87,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin abbradar ];
     downloadPage = "http://gajim.org/downloads.php";
-    updateWalker = true;
     platforms = lib.platforms.linux;
   };
 }

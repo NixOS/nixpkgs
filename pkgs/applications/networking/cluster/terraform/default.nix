@@ -62,10 +62,11 @@ let
           babariviere
           kalbasit
           marsam
+          maxeaubrey
           timstott
           zimbatm
-          maxeaubrey
           zowoq
+          techknowlogick
         ];
       };
     } // attrs');
@@ -76,39 +77,6 @@ let
         let
           actualPlugins = plugins terraform.plugins;
 
-          # Make providers available in Terraform 0.13 and 0.12 search paths.
-          pluginDir = lib.concatMapStrings
-            (pl:
-              let
-                inherit (pl) version GOOS GOARCH;
-
-                pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
-
-                # This is just the name, without the terraform-provider- prefix
-                plugin_name = lib.removePrefix "terraform-provider-" pname;
-
-                slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
-
-                shim = writeText "shim" ''
-                  #!${runtimeShell}
-                  exec ${pl}/bin/${pname}_v${version} "$@"
-                '';
-              in
-              ''
-                TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
-                mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
-
-                cp ${shim} "$TF_0_13_PROVIDER_PATH"
-                chmod +x "$TF_0_13_PROVIDER_PATH"
-
-                TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
-
-                cp ${shim} "$TF_0_12_PROVIDER_PATH"
-                chmod +x "$TF_0_12_PROVIDER_PATH"
-              ''
-            )
-            actualPlugins;
-
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
           wrapperInputs = lib.unique (lib.flatten
             (lib.catAttrs "propagatedBuildInputs"
@@ -117,9 +85,28 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
-            # Ouch
+            # Expose wrappers around the override* functions of the terraform
+            # derivation.
+            #
+            # Note that this does not behave as anyone would expect if plugins
+            # are specified. The overrides are not on the user-visible wrapper
+            # derivation but instead on the function application that eventually
+            # generates the wrapper. This means:
+            #
+            # 1. When using overrideAttrs, only `passthru` attributes will
+            #    become visible on the wrapper derivation. Other overrides that
+            #    modify the derivation *may* still have an effect, but it can be
+            #    difficult to follow.
+            #
+            # 2. Other overrides may work if they modify the terraform
+            #    derivation, or they may have no effect, depending on what
+            #    exactly is being changed.
+            #
+            # 3. Specifying overrides on the wrapper is unsupported.
+            #
+            # See nixpkgs#158620 for details.
             overrideDerivation = f:
               (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f:
@@ -138,14 +125,35 @@ let
             inherit (terraform) name meta;
             nativeBuildInputs = [ makeWrapper ];
 
-            buildCommand = pluginDir + ''
+            # Expose the passthru set with the override functions
+            # defined above, as well as any passthru values already
+            # set on `terraform` at this point (relevant in case a
+            # user overrides attributes).
+            passthru = terraform.passthru // passthru;
+
+            buildCommand = ''
+              # Create wrappers for terraform plugins because Terraform only
+              # walks inside of a tree of files.
+              for providerDir in ${toString actualPlugins}
+              do
+                for file in $(find $providerDir/libexec/terraform-providers -type f)
+                do
+                  relFile=''${file#$providerDir/}
+                  mkdir -p $out/$(dirname $relFile)
+                  cat <<WRAPPER > $out/$relFile
+              #!${runtimeShell}
+              exec "$file" "$@"
+              WRAPPER
+                  chmod +x $out/$relFile
+                done
+              done
+
+              # Create a wrapper for terraform to point it to the plugins dir.
               mkdir -p $out/bin/
               makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
-                --set NIX_TERRAFORM_PLUGIN_DIR $out/plugins \
+                --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
-
-            inherit passthru;
           });
     in
     withPlugins (_: [ ]);
@@ -184,9 +192,9 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.1.4";
-    sha256 = "sha256-PzBdo4zqWB9ma+uYFGmZtJNCXlRnAHxQmzWxZFPzHH0=";
-    vendorSha256 = "sha256-Rk2hHtJfaS553MJIea6n51irMas3qcBrWAD+adzTi1Y=";
+    version = "1.1.9";
+    sha256 = "sha256-6dyP3Y5cK+/qLoC2QPZW3QNgqOeVXegC06Pa7pSv1iE=";
+    vendorSha256 = "sha256-YI/KeoOIxgCAS3Q6SXaW8my0PyFD+pyksshQEAknsz4=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

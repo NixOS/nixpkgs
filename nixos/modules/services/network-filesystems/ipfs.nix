@@ -1,16 +1,16 @@
-{ config, lib, pkgs, options, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.ipfs;
-  opt = options.services.ipfs;
 
-  ipfsFlags = toString ([
-    (optionalString cfg.autoMount "--mount")
-    (optionalString cfg.enableGC "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline") "--offline")
-    (optionalString (cfg.defaultMode == "norouting") "--routing=none")
-  ] ++ cfg.extraFlags);
+  ipfsFlags = utils.escapeSystemdExecArgs (
+    optional cfg.autoMount "--mount" ++
+    optional cfg.enableGC "--enable-gc" ++
+    optional (cfg.serviceFdlimit != null) "--manage-fdlimit=false" ++
+    optional (cfg.defaultMode == "offline") "--offline" ++
+    optional (cfg.defaultMode == "norouting") "--routing=none" ++
+    cfg.extraFlags
+  );
 
   profile =
     if cfg.localDiscovery
@@ -239,7 +239,10 @@ in
       "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.packages = [ cfg.package ];
+    # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
+    systemd.packages = if cfg.autoMount
+      then [ cfg.package.systemd_unit ]
+      else [ cfg.package.systemd_unit_hardened ];
 
     systemd.services.ipfs = {
       path = [ "/run/wrappers" cfg.package ];
@@ -251,37 +254,36 @@ in
         else
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"
-
+      '' + optionalString cfg.autoMigrate ''
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
+      '' + ''
           ipfs --offline config profile apply ${profile}
         fi
       '' + optionalString cfg.autoMount ''
         ipfs --offline config Mounts.FuseAllowOther --json true
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
-      '' + optionalString cfg.autoMigrate ''
-        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -y
-      '' + concatStringsSep "\n" (collect
-        isString
-        (mapAttrsRecursive
-          (path: value:
-            # Using heredoc below so that the value is never improperly quoted
-            ''
-              read value <<EOF
-              ${builtins.toJSON value}
-              EOF
-              ipfs --offline config --json "${concatStringsSep "." path}" "$value"
-            '')
-          ({
-            Addresses.API = cfg.apiAddress;
-            Addresses.Gateway = cfg.gatewayAddress;
-            Addresses.Swarm = cfg.swarmAddress;
-          } //
-          cfg.extraConfig))
-      );
+      '' + ''
+        ipfs --offline config show \
+          | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${
+              escapeShellArg (builtins.toJSON (
+                recursiveUpdate
+                  {
+                    Addresses.API = cfg.apiAddress;
+                    Addresses.Gateway = cfg.gatewayAddress;
+                    Addresses.Swarm = cfg.swarmAddress;
+                  }
+                  cfg.extraConfig
+              ))
+            } \
+          | ipfs --offline config replace -
+      '';
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}" ];
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = "";
+        ReadWritePaths = [ "" cfg.dataDir ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];
@@ -313,6 +315,9 @@ in
         in
         [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
+  };
 
+  meta = {
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

@@ -14,16 +14,16 @@
 let
 
   pname = "hplip";
-  version = "3.20.11";
+  version = "3.21.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    sha256 = "CxZ1s9jnCaEyX+hj9arOO9NxB3mnPq6Gj3su6aVv2xE=";
+    sha256 = "sha256-fvRSPvgbztcVFeHIhA72xoxgJjjBWebdmpJpHO7GT5w=";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
-    sha256 = "r8PoQQFfjdHKySPCFwtDR8Tl6v5Eag9gXpBAp6sCF9Q=";
+    sha256 = "sha256-eyYNhuff8mM4IpRfn/fLBjQJ23JrTdsHBQ/EH7Ug0gw=";
   };
 
   hplipState = substituteAll {
@@ -83,17 +83,13 @@ python3Packages.buildPythonApplication {
     dbus-python
   ] ++ lib.optionals withQt5 [
     pyqt5
+    pyqt5_sip
     enum-compat
   ];
 
   makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
   patches = [
-    # remove ImageProcessor usage, it causes segfaults, see
-    # https://bugs.launchpad.net/hplip/+bug/1788706
-    # https://bugs.launchpad.net/hplip/+bug/1787289
-    ./image-processor.patch
-
     # HPLIP's getSystemPPDs() function relies on searching for PPDs below common FHS
     # paths, and hp-setup crashes if none of these paths actually exist (which they
     # don't on NixOS).  Add the equivalent NixOS path, /var/lib/cups/path/share.
@@ -123,19 +119,25 @@ python3Packages.buildPythonApplication {
       {} +
   '';
 
-  configureFlags = let out = placeholder "out"; in [
-    "--with-hpppddir=${out}/share/cups/model/HP"
-    "--with-cupsfilterdir=${out}/lib/cups/filter"
-    "--with-cupsbackenddir=${out}/lib/cups/backend"
-    "--with-icondir=${out}/share/applications"
-    "--with-systraydir=${out}/xdg/autostart"
-    "--with-mimedir=${out}/etc/cups"
-    "--enable-policykit"
-    "--disable-qt4"
-  ]
+  configureFlags = let out = placeholder "out"; in
+    [
+      "--with-hpppddir=${out}/share/cups/model/HP"
+      "--with-cupsfilterdir=${out}/lib/cups/filter"
+      "--with-cupsbackenddir=${out}/lib/cups/backend"
+      "--with-icondir=${out}/share/applications"
+      "--with-systraydir=${out}/xdg/autostart"
+      "--with-mimedir=${out}/etc/cups"
+      "--enable-policykit"
+      "--disable-qt4"
+
+      # remove ImageProcessor usage, it causes segfaults, see
+      # https://bugs.launchpad.net/hplip/+bug/1788706
+      # https://bugs.launchpad.net/hplip/+bug/1787289
+      "--disable-imageProcessor-build"
+    ]
     ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
     ++ lib.optional withQt5 "--enable-qt5"
-    ;
+  ;
 
   # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
   # generation of '*.ppd' files.

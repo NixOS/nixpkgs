@@ -1,7 +1,7 @@
 { lib, stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkg-config
-, file, findutils
+, file
 , gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
-, withGnome ? true, libnma }:
+, withGnome ? true, libnma, glib }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ networkmanager ppp ]
+  buildInputs = [ networkmanager ppp glib ]
     ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ autoreconfHook libtool intltool pkg-config file findutils ];
+  nativeBuildInputs = [ autoreconfHook libtool intltool pkg-config file ];
 
   preConfigure = ''
     intltoolize -f
@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    networkManagerPlugin = "VPN/nm-l2tp-service.name";
+  };
 
   meta = with lib; {
     description = "L2TP plugin for NetworkManager";

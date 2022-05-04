@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "django-timezone-field";
-  version = "4.2.1";
+  version = "4.2.3";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mfogel";
     repo = pname;
     rev = version;
-    sha256 = "0swld4168pfhppr9q3i9r062l832cmmx792kkvlcvxfbdhk6qz9h";
+    sha256 = "sha256-purzXzPvnYNVsASsK6s9m4XieUL80FOjeSbUP4bpRj8=";
   };
 
   nativeBuildInputs = [

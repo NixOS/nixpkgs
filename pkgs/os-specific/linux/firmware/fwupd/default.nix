@@ -3,7 +3,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , gtk-doc
 , pkg-config
@@ -12,6 +11,7 @@
 , libgudev
 , polkit
 , libxmlb
+, glib
 , gusb
 , sqlite
 , libarchive
@@ -50,6 +50,11 @@
 , nixosTests
 , runCommand
 , unstableGitUpdater
+, modemmanager
+, libqmi
+, libmbim
+, libcbor
+, xz
 }:
 
 let
@@ -112,7 +117,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.7.2";
+    version = "1.8.0";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -121,7 +126,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-hjLfacO6/Fk4fNy1F8POMaWXoJAm5E9ZB9g4RnG5+DQ=";
+      sha256 = "LAliLnOSowtORQQ0M4z2cNQzKMLyE/RsX//xAWifrps=";
     };
 
     patches = [
@@ -139,9 +144,6 @@ let
       # Installed tests are installed to different output
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
       ./installed-tests-path.patch
-
-      # Tests detect fwupd is installed when prefix is /usr.
-      ./fix-install-detection.patch
 
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
@@ -187,15 +189,22 @@ let
       efivar
       fwupd-efi
       protobufc
+      modemmanager
+      libmbim
+      libcbor
+      libqmi
+      xz # for liblzma.
     ] ++ lib.optionals haveDell [
       libsmbios
+    ] ++ lib.optionals haveFlashrom [
+      flashrom
     ];
 
     mesonFlags = [
       "-Ddocs=gtkdoc"
       "-Dplugin_dummy=true"
       # We are building the official releases.
-      "-Dsupported_build=true"
+      "-Dsupported_build=enabled"
       # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
       # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
       "-Dsoup_session_compat=false"
@@ -206,6 +215,7 @@ let
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
+      "-Dplugin_modem_manager=enabled"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
@@ -213,14 +223,14 @@ let
       # against libfwupdplugin which is in $out/lib.
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
     ] ++ lib.optionals (!haveDell) [
-      "-Dplugin_dell=false"
-      "-Dplugin_synaptics=false"
+      "-Dplugin_dell=disabled"
+      "-Dplugin_synaptics_mst=disabled"
     ] ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=false"
-    ] ++ lib.optionals haveFlashrom [
-      "-Dplugin_flashrom=true"
+      "-Dplugin_redfish=disabled"
+    ] ++ lib.optionals (!haveFlashrom) [
+      "-Dplugin_flashrom=disabled"
     ] ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=false"
+      "-Dplugin_msr=disabled"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -250,6 +260,9 @@ let
         contrib/generate-version-script.py \
         meson_post_install.sh \
         po/test-deps
+
+      substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
+        --replace "gdbus" ${glib.bin}/bin/gdbus
     '';
 
     preCheck = ''
@@ -276,7 +289,7 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ] ++ lib.optional haveFlashrom flashrom;
+      ];
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -318,6 +331,8 @@ let
         "fwupd/remotes.d/dell-esrt.conf"
       ] ++ lib.optionals haveRedfish [
         "fwupd/redfish.conf"
+      ] ++ lib.optionals haveMSR [
+        "fwupd/msr.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf

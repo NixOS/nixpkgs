@@ -1,20 +1,16 @@
 { lib, stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkg-config, wordnet }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "artha";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/artha/1.0.3/artha-1.0.3.tar.bz2";
-    sha256 = "0qr4ihl7ma3cq82xi1fpzvf74mm9vsg0j035xvmcp3r6rmw2fycx";
+    url = "mirror://sourceforge/artha/${version}/artha-${version}.tar.bz2";
+    sha256 = "034r7vfk5y7705k068cdlq52ikp6ip10w6047a5zjdakbn55c3as";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ dbus-glib gtk2 wordnet ];
-
-  patches = [
-    ./gio-underlink.patch
-  ];
 
   meta = with lib; {
     description = "An offline thesaurus based on WordNet";

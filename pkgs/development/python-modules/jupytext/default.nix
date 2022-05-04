@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , GitPython
+, isort
 , jupyter-client
 , jupyter-packaging
 , jupyterlab
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.13.5";
+  version = "1.13.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -25,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0rapp2baqml1z3n8k7ijf5461b3p8wgr45y3njz54q75v0jk7v45";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ebe5sQJxA8QE6eJp6vPUyMaEvZUPqzCmQ6damzo1BVo=";
   };
 
   buildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     GitPython
+    isort
     jupyter-client
     notebook
     pytestCheckHook
@@ -63,6 +65,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # Pre-commit tests expect the source directory to be a Git repository
     "--ignore-glob='tests/test_pre_commit_*.py'"
+  ];
+
+  disabledTests = [
+    "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
   ];
 
   pythonImportsCheck = [

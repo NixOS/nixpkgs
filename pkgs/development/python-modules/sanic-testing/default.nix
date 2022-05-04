@@ -1,29 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , httpx
-, pytest-asyncio
 , sanic
 , websockets
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "v${version}";
-    sha256 = "0ib6rf1ly1059lfprc3hpmy377c3wfgfhnar6n4jgbxiyin7vzm7";
+    sha256 = "17fbb78gvic5s9nlcgwj817fq1f9j9d1d7z6n2ahhinmvyzl9gc8";
   };
 
+  outputs = [
+    "out"
+    "testsout"
+  ];
+
   postPatch = ''
-    # https://github.com/sanic-org/sanic-testing/issues/19
     substituteInPlace setup.py \
-      --replace '"websockets==8.1",' '"websockets>=9.1",' \
-      --replace "httpx==0.18.*" "httpx"
+      --replace "httpx>=0.18,<0.22" "httpx"
   '';
 
   propagatedBuildInputs = [
@@ -32,18 +34,18 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  postInstall = ''
+    mkdir $testsout
+    cp -R tests $testsout/tests
+  '';
 
-  # `sanic` is explicitly set to null when building `sanic` itself
-  # to prevent infinite recursion.  In that case we skip running
-  # the package at all.
-  doCheck = sanic != null;
-  dontUsePythonImportsCheck = sanic == null;
+  # check in passthru.tests.pytest to escape infinite recursion with sanic
+  doCheck = false;
+  doInstallCheck = false;
 
-  pythonImportsCheck = [ "sanic_testing" ];
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Core testing clients for the Sanic web framework";

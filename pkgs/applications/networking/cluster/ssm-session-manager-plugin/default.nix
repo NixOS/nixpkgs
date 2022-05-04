@@ -17,9 +17,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl source;
 
-  nativeBuildInputs = [ autoPatchelfHook ] ++ (if stdenv.isDarwin then [ unzip ] else [ dpkg ]);
-
-  buildInputs = [ awscli ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+    dpkg
+  ] ++ lib.optionals stdenv.isDarwin [
+    unzip
+  ];
 
   unpackPhase = if stdenv.isDarwin then "unzip $src" else "dpkg-deb -x $src .";
 

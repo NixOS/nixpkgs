@@ -28,7 +28,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "An implementation of blockchain technology, leveraging familiar and proven technologies";
-    homepage = "https://wiki.hyperledger.org/projects/Fabric";
+    homepage = "https://wiki.hyperledger.org/display/fabric";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

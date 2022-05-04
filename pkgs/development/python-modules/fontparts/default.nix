@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ lib, buildPythonPackage, fetchPypi, python, pythonOlder
 , fonttools, lxml, fs, unicodedata2
 , defcon, fontpens, fontmath, booleanoperations
 , pytest, setuptools-scm
@@ -6,11 +6,13 @@
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.10.2";
+  version = "0.10.4";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3a3926e977f82ae19e6823760b59f2338085973da1eaad5badaf969f261a737";
+    sha256 = "1ic453q86s5hsw8mxnclk1vr4qp69fd67gywhv23zqwz9a7kb7lh";
     extension = "zip";
   };
 

@@ -15,15 +15,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
       services.httpd.adminAddr = "webmaster@site.local";
       services.httpd.logPerVirtualHost = true;
 
-      services.wordpress = {
-        # Test support for old interface
+      services.wordpress.sites = {
         "site1.local" = {
           database.tablePrefix = "site1_";
         };
-        sites = {
-          "site2.local" = {
-            database.tablePrefix = "site2_";
-          };
+        "site2.local" = {
+          database.tablePrefix = "site2_";
         };
       };
 

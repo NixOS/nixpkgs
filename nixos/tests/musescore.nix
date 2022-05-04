@@ -17,7 +17,7 @@ in
     maintainers = [ turion ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [

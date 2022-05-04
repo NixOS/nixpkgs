@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "markup";
-  version = "1.0.0";
+  version = "1.0.2";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "aantron";
     repo = "markup.ml";
     rev = version;
-    sha256 = "sha256-yapjqAcn0XSC6Guoj69sXNpLZ2urXANkWhcafpPLEyY=";
+    sha256 = "sha256-FcN9EBap93gFeOwSrRxs2sQrjZGs8/YnaEX7zHLmeM8=";
   };
 
   propagatedBuildInputs = [ uchar uutf ];

@@ -46,7 +46,7 @@ index c92e745..f265f03 100644
  
  FetchContent_Declare(QOnlineTranslator
 -    GIT_REPOSITORY https://github.com/crow-translate/QOnlineTranslator
--    GIT_TAG 1.5.2
+-    GIT_TAG 1.5.3
 +    SOURCE_DIR @qonlinetranslator@
  )
  

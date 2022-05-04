@@ -164,8 +164,6 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.undervolt = {
-      path = [ pkgs.undervolt ];
-
       description = "Intel Undervolting Service";
 
       # Apply undervolt on boot, nixos generation switch and resume
@@ -175,7 +173,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
-        ExecStart = "${pkgs.undervolt}/bin/undervolt ${toString cliArgs}";
+        ExecStart = "${cfg.package}/bin/undervolt ${toString cliArgs}";
       };
     };
 

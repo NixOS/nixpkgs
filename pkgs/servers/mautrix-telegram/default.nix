@@ -6,11 +6,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.25.0a1";
+        version = "1.25.0a7";
         pname = "tulir-telethon";
         src = oldAttrs.src.override {
           inherit pname version;
-          sha256 = "sha256-TFZRmhCrQ9IccGFcYxwdbD2ReSCWZ2n33S1ank1Bn1k=";
+          sha256 = "sha256-+wHRrBluM0ejdHjIvSk28wOIfCfIyibBcmwG/ksbiac=";
         };
       });
     };
@@ -25,22 +25,17 @@ let
 
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.11.0";
-  disabled = python.pythonOlder "3.7";
+  version = "0.11.3";
+  disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "v${version}";
-    sha256 = "sha256-s0UCl0FJWO53hvHJhpeSQVGCBKEH7COFLXFCFitpDjw=";
+    sha256 = "sha256-PfER/wqJ607w0xVrFZadzmxYyj72O10c2lIvCW7LT8Y=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "telethon>=1.22,<1.23" "telethon"
-  '';
-
 
   propagatedBuildInputs = with python.pkgs; ([
     Mako

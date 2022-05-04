@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       that makes no assumptions about what you want to launch.
       Comes with agreety, a simple, text-based greeter.
     '';
-    homepage = "https://kl.wtf/projects/greetd/";
+    homepage = "https://sr.ht/~kennylevinsen/greetd/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.linux;

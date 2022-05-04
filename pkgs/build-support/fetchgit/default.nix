@@ -15,6 +15,7 @@ in
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
+, sparseCheckout ? ""
 , name ? urlToName url rev
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
@@ -26,6 +27,7 @@ in
 , # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
   # needed for netrcPhase
   netrcImpureEnvVars ? []
+, meta ? {}
 }:
 
 /* NOTE:
@@ -74,7 +76,7 @@ stdenvNoCC.mkDerivation {
   else
     lib.fakeSha256;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName sparseCheckout postFetch;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -89,5 +91,5 @@ stdenvNoCC.mkDerivation {
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
-  inherit preferLocalBuild;
+  inherit preferLocalBuild meta;
 }

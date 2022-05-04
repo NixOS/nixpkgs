@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "2022-01-10";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
-    rev = "eebfbe49fc699806e1d71becf261ba0995c91f60";
-    hash = "sha256-zfsuoPySIRAAmsSL0NUUVH7k+xV7rZOHOkIvBQdVe0A=";
+    rev = "v${version}";
+    hash = "sha256-Yc8W8A11dnXrJdLtu/rJHTVlu2pEawXn5xuT8Ez+h9U=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

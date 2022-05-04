@@ -1,0 +1,12 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index d310d36..e15d398 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -252,6 +252,7 @@ def project_no_init(tmp_path, mocker):
+     old_config_map = Config._config_map.copy()
+     tmp_path.joinpath("caches").mkdir(parents=True)
+     p.global_config["cache_dir"] = tmp_path.joinpath("caches").as_posix()
++    p.global_config["check_update"] = False
+     do_use(p, getattr(sys, "_base_executable", sys.executable))
+     with temp_environ():
+         os.environ.pop("VIRTUAL_ENV", None)

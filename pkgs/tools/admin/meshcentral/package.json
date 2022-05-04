@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "0.9.56",
+  "version": "0.9.98",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -41,13 +41,13 @@
     "compression": "^1.7.4",
     "cookie-session": "^1.4.0",
     "express": "^4.17.0",
-    "express-handlebars": "^3.1.0",
+    "express-handlebars": "^5.3.5",
     "express-ws": "^4.0.0",
     "ipcheck": "^0.1.0",
     "minimist": "^1.2.5",
     "multiparty": "^4.2.1",
     "@yetzt/nedb": "^1.8.0",
-    "node-forge": "^0.10.0",
+    "node-forge": "^1.0.0",
     "ws": "^5.2.3",
     "yauzl": "^2.10.0"
   },

@@ -2,27 +2,19 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2022.01.22-01.31.09";
+  version = "2022.04.18-00.59.32";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-xQSOJRKKjX3AfQsYe4UNhFlLgWPkoY8NOPXCO1oc3BI=";
+    sha256 = "sha256-14EsJIKYl8TWbDqM9PyVrbs/4EssqXp0EK70RrFz+RE=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "sha256-le0+ZmGyhM/UfGUV05FHyx5PlARxL/T2aC8UhiPYjxw";
+    sha256 = "d78094b015bd9e671eea2eb89ca0bb3ec58d39802ad1bfdf875b50e1cdd4995e";
   };
-
-  # https://github.com/clojure-lsp/clojure-lsp/blob/2022.01.22-01.31.09/cli/graalvm/native-unix-compile.sh#L18-L27
-  # Needs to be inject on `nativeImageBuildArgs` inside shell environment,
-  # otherwise we can't expand to the value set in `mktemp -d` call
-  preBuild = ''
-    export DTLV_LIB_EXTRACT_DIR="$(mktemp -d)"
-    nativeImageBuildArgs+=("-H:CLibraryPath=$DTLV_LIB_EXTRACT_DIR")
-  '';
 
   extraNativeImageBuildArgs = [
     "--no-fallback"
@@ -50,9 +42,9 @@ buildGraalvmNativeImage rec {
 
     latest_version=$(curl -s https://api.github.com/repos/clojure-lsp/clojure-lsp/releases/latest | jq --raw-output .tag_name)
 
-    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp-standalone.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
+    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
 
-    curl -o clojure-lsp.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
+    curl -o clojure-lsp-standalone.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
     new_jar_hash=$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | sed -re 's|[+]|\\&|g')
 
     rm -f clojure-lsp-standalone.jar
@@ -68,8 +60,5 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo babariviere ];
-    # Depends on datalevin that is x86_64 only
-    # https://github.com/juji-io/datalevin/blob/bb7d9328f4739cddea5d272b5cd6d6dcb5345da6/native/src/java/datalevin/ni/Lib.java#L86-L102
-    broken = !stdenv.isx86_64;
   };
 }

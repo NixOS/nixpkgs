@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "frameworkintegration";
+  pname = "frameworkintegration";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kbookmarks kcompletion kconfig ki18n kio knewstuff knotifications kpackage

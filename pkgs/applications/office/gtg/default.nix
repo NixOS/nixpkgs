@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , meson
 , python3Packages
 , ninja
@@ -25,6 +26,13 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0b2slm7kjq6q8c7v4m7aqc8m1ynjxn3bl7445srpv1xc0dilq403";
   };
 
+  patches = [
+    # fix build with meson 0.60 (https://github.com/getting-things-gnome/gtg/pull/729)
+    (fetchpatch {
+      url = "https://github.com/getting-things-gnome/gtg/commit/1809d10663ae3d8f69c04138b66f9b4e66ee14f6.patch";
+      sha256 = "sha256-bYr5PAsuvcSqTf0vaJj2APtuBrwHdhXJxtXoAb7CfGk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

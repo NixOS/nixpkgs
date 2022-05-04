@@ -1,31 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
-, isodate
-, pyparsing
-, html5lib
 , keepalive
 }:
 
 buildPythonPackage rec {
-  pname = "SPARQLWrapper";
-  version = "1.8.5";
+  pname = "sparqlwrapper";
+  version = "2.0.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "d6a66b5b8cda141660e07aeb00472db077a98d22cb588c973209c7336850fb3c";
+    pname = "SPARQLWrapper";
+    inherit version;
+    sha256 = "sha256-P+0+vMd2F6SnTSZEuG/Yjg8y5/cAOseyszTAJiAXMfE=";
   };
 
   # break circular dependency loop
   patchPhase = ''
-    sed -i '/rdflib/d' requirements.txt
+    sed -i '/rdflib/d' setup.cfg
   '';
 
   # Doesn't actually run tests
   doCheck = false;
 
-  propagatedBuildInputs = [ six isodate pyparsing html5lib keepalive ];
+  propagatedBuildInputs = [ keepalive ];
 
   meta = with lib; {
     description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format";

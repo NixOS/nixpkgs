@@ -1,14 +1,11 @@
 { lib, stdenv, fetchurl, unzip }:
 
-let baseName = "premake";
+stdenv.mkDerivation rec {
+  pname = "premake";
   version  = "4.3";
-in
-
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${baseName}/${baseName}-${version}-src.zip";
+    url = "mirror://sourceforge/premake/premake-${version}-src.zip";
     sha256 = "1017rd0wsjfyq2jvpjjhpszaa7kmig6q1nimw76qx3cjz2868lrn";
   };
 

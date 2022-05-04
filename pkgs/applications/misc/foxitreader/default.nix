@@ -74,6 +74,7 @@ mkDerivation rec {
     description = "A viewer for PDF documents";
     homepage = "https://www.foxitsoftware.com/";
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ p-h rhoriguchi ];
   };
 }

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = with pkgs.lib.maintainers; [ delroth ];
   };
 
-  machine = {
+  nodes.machine = {
     services.nginx.sso = {
       enable = true;
       configuration = {

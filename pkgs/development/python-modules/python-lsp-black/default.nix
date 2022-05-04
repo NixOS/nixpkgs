@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-black";
-  version = "1.0.1";
+  version = "1.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-black";
     rev = "v${version}";
-    sha256 = "03k32m4jfqfzrawj69yxhk9kwzsdcwginip77kxdbra2xwgqfc3w";
+    sha256 = "sha256-WIQf1oz3b1PLIcXfQsu4hQ58nfp7l3J7zkcWNT6RbUY=";
   };
 
   checkInputs = [ pytestCheckHook ];

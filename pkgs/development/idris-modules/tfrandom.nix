@@ -4,7 +4,7 @@
 }:
 
 build-idris-package  {
-  name = "tf-random";
+  pname = "tf-random";
   version = "2020-01-15";
 
   src = fetchFromGitHub {

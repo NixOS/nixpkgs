@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.20.0";
+  version = "0.21.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mingrammer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lcqsy3bvlnlnakjysp8qjhy26bhkp1izi5dvzq2fpsffgxk4si4";
+    sha256 = "sha256-YoXV5ikkBCSVyGmzEqp+7JLy82d7z9sbwS+U/EN3BFk=";
   };
 
   postPatch = ''

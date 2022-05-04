@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "xdg-desktop-portal-kde";
+  pname = "xdg-desktop-portal-kde";
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools ];
   buildInputs = [
     cups libepoxy mesa pcre pipewire wayland wayland-protocols

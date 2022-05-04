@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.4.6";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-xODOKKMGlpMePwO3A4IVReqsR1Kx0CwBjrhsvN+uDR4=";
+    sha256 = "sha256-SiOaPgwcdYrZBk7vzs6icN+pP0Yc+ImLz5lVtHaXgDc=";
   };
 
-  vendorSha256 = "sha256-W882fD4O4lPVH27KWmkRsS58R6qw7ENhKA2UgpNKvTw=";
+  vendorSha256 = "sha256-N3LqPnBq+jOUj4yDhY0GS4a4FTOntY4xu1TVac6va+Q=";
 
   subPackages = [
     "cmd/dyff"

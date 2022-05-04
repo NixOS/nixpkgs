@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kjobwidgets";
+  pname = "kjobwidgets";
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [ kcoreaddons kwidgetsaddons qtx11extras ];
 }

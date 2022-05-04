@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.8.9";
+  version = "1.8.11";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-b+MZuZQB/sl0HcioU1KCxH3TNiXYSPBfC9dBKqCVeXk=";
+    sha256 = "sha256-DULXfkddBdCvTWkuWXjSTEujRZ3mVVzy//qeB3j0Vz8=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ systemd ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isLinux [ systemd ];
 
   cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];
 

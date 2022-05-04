@@ -305,7 +305,7 @@ let
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = "Wether to enable wol on this interface.";
+          description = "Whether to enable wol on this interface.";
         };
       };
     };
@@ -402,6 +402,15 @@ let
      '') tempaddrValues)}
     </itemizedlist>
   '';
+
+  hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
+      hi="${cfg.hostId}"
+      ${if pkgs.stdenv.isBigEndian then ''
+        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
+      '' else ''
+        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
+      ''}
+    '';
 
 in
 
@@ -1020,6 +1029,14 @@ in
             local = "10.0.0.22";
             dev = "enp4s0f0";
             type = "tap";
+            ttl = 255;
+          };
+          gre6Tunnel = {
+            remote = "fd7a:5634::1";
+            local = "fd7a:5634::2";
+            dev = "enp4s0f0";
+            type = "tun6";
+            ttl = 255;
           };
         }
       '';
@@ -1057,11 +1074,25 @@ in
             '';
           };
 
+          ttl = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            example = 255;
+            description = ''
+              The time-to-live/hoplimit of the connection to the remote tunnel endpoint.
+            '';
+          };
+
           type = mkOption {
-            type = with types; enum [ "tun" "tap" ];
+            type = with types; enum [ "tun" "tap" "tun6" "tap6" ];
             default = "tap";
             example = "tap";
-            apply = v: if v == "tun" then "gre" else "gretap";
+            apply = v: {
+              tun = "gre";
+              tap = "gretap";
+              tun6 = "ip6gre";
+              tap6 = "ip6gretap";
+            }.${v};
             description = ''
               Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
             '';
@@ -1325,20 +1356,11 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
-    # Capabilities won't work unless we have at-least a 4.3 Linux
-    # kernel because we need the ambient capability
-    security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
+    security.wrappers = {
       ping = {
         owner = "root";
         group = "root";
         capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
-    } else {
-      ping = {
-        setuid = true;
-        owner = "root";
-        group = "root";
         source = "${pkgs.iputils.out}/bin/ping";
       };
     };
@@ -1370,16 +1392,8 @@ in
         domainname "${cfg.domain}"
       '';
 
-    environment.etc.hostid = mkIf (cfg.hostId != null)
-      { source = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
-          hi="${cfg.hostId}"
-          ${if pkgs.stdenv.isBigEndian then ''
-            echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
-          '' else ''
-            echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
-          ''}
-        '';
-      };
+    environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
+    boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };
 
     # static hostname configuration needed for hostnamectl and the
     # org.freedesktop.hostname1 dbus service (both provided by systemd)
@@ -1438,7 +1452,7 @@ in
           sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
         in ''
           # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/%k/use_tempaddr'"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/$name/use_tempaddr'"
         '';
       })
       (pkgs.writeTextFile rec {

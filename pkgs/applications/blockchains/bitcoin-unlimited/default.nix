@@ -6,7 +6,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "bitcoin" + (toString (optional (!withGui) "d")) + "-unlimited-" + version;
+  pname = "bitcoin" + optionalString (!withGui) "d" + "-unlimited";
   version = "1.9.2.0";
 
   src = fetchFromGitHub {

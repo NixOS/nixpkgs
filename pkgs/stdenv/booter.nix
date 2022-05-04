@@ -124,7 +124,13 @@ stageFuns: let
       if buildPackages.stdenv.hasCC
       then
         if buildPackages.stdenv.cc.isClang or false
-        then buildPackages.clang
+        # buildPackages.clang checks targetPackages.stdenv.cc (i. e. this
+        # attribute) to get a sense of the its set's default compiler and
+        # chooses between libc++ and libstdc++ based on that. If we hit this
+        # code here, we'll cause an infinite recursion. Since a set with
+        # clang as its default compiler always means libc++, we can infer this
+        # decision statically.
+        then buildPackages.llvmPackages.libcxxClang
         else buildPackages.gcc
       else
         # This will blow up if anything uses it, but that's OK. The `if

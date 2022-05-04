@@ -6,7 +6,7 @@
 , superqt
 , typing-extensions
 , tifffile
-, napari-plugin-engine
+, napari-npe2
 , pint
 , pyyaml
 , numpydoc
@@ -28,16 +28,25 @@
 , wrapQtAppsHook
 }: mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.4.12";
+  version = "0.4.15";
+
+  format = "pyproject";
+
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0QSI0mgDjF70/X58fE7uWwlBUCGY5gsvbCm4oJkp2Yk=";
+    sha256 = "sha256-52TDMU6box7TA26P0F9ZgPr8fyzYM646lPUfOektOuE=";
   };
-  nativeBuildInputs = [ setuptools-scm wrapQtAppsHook ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+    wrapQtAppsHook
+  ];
   propagatedBuildInputs = [
-    napari-plugin-engine
+    napari-npe2
     cachey
     napari-svg
     napari-console
@@ -60,7 +69,7 @@
     jsonschema
     scipy
   ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   dontUseSetuptoolsCheck = true;
   postFixup = ''
     wrapQtApp $out/bin/napari

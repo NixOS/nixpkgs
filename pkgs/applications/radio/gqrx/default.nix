@@ -5,7 +5,6 @@
 , qt5
 , gnuradio3_8Minimal
 , thrift
-, log4cpp
 , mpir
 , fftwFloat
 , alsa-lib
@@ -24,13 +23,13 @@ assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.15.4";
+  version = "2.15.9";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-iQlrnkc1EMR8sUUAHh+7RfS/05unrcDm/kJ/Q4Vst2Q=";
+    sha256 = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    log4cpp
+    gnuradio3_8Minimal.unwrapped.log4cpp
     mpir
     fftwFloat
     alsa-lib
@@ -67,11 +66,6 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     in [
       "-DLINUX_AUDIO_BACKEND=${audioBackend}"
     ];
-
-  postInstall = ''
-    install -vD $src/gqrx.desktop -t "$out/share/applications/"
-    install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
-  '';
 
   meta = with lib; {
     description = "Software defined radio (SDR) receiver";

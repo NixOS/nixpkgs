@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
-  version = "21.11.0";
+  version = "22.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "1nmmwp9m38b75lz51ypcj0qxnxm9wq4id5cggl0pn2rx6gwnbw9n";
+    sha256 = "sha256-QZm8FlUm17Vv80hB3iai54QcVlhSrq2AvbdBaRWDyok=";
   };
 
   propagatedBuildInputs = [

@@ -2,19 +2,17 @@
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "0.12.0";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
     rev = "v${version}";
-    sha256 = "sha256-ApY3h6CqOJMWmIindp5TqWczSU50TBiS89lYzSzj8EM=";
+    sha256 = "sha256-Qq8i/uU2TtrEpvTPFmnZdku2vNo5O240dAT2OQKel1U=";
   };
 
-  vendorSha256 = "sha256-ikmcayOy87u6XMYjxxzFv35Rlp9oTteEKFOPr/+xc2Y=";
-
-  # tests are failing for no obvious reasons
-  doCheck = false;
+  vendorSha256 = "sha256-pEQG9BHhsVDVSOoKJBocLXMLjmP72RM+GXz4nYD4D7s=";
+  proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
 

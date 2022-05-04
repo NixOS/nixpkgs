@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     comment = "Fast-paced one button platformer";
     desktopName = "Sienna";
     genericName = "sienna";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   nativeBuildInputs = [ makeWrapper ];

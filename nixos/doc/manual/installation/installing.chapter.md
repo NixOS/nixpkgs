@@ -296,6 +296,11 @@ Use the following commands:
         specify on which disk the GRUB boot loader is to be installed.
         Without it, NixOS cannot boot.
 
+    :   If there are other operating systems running on the machine before
+        installing NixOS, the [](#opt-boot.loader.grub.useOSProber)
+        option can be set to `true` to automatically add them to the grub
+        menu.
+
     UEFI systems
 
     :   You *must* set the option [](#opt-boot.loader.systemd-boot.enable)
@@ -306,11 +311,6 @@ Use the following commands:
         [`boot.loader.efi`](#opt-boot.loader.efi.canTouchEfiVariables) and
         [`boot.loader.systemd-boot`](#opt-boot.loader.systemd-boot.enable)
         as well.
-
-    If there are other operating systems running on the machine before
-    installing NixOS, the [](#opt-boot.loader.grub.useOSProber)
-    option can be set to `true` to automatically add them to the grub
-    menu.
 
     If you need to configure networking for your machine the
     configuration options are described in [](#sec-networking). In

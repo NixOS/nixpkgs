@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xxHash";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
     rev = "v${version}";
-    sha256 = "0hpbzdd6kfki5f61g103vp7pfczqkdj0js63avl0ss552jfb8h96";
+    sha256 = "sha256-2WoYCO6QRHWrbGP2mK04/sLNTyQLOuL3urVktilAwMA=";
   };
 
   # Upstream Makefile does not anticipate that user may not want to
@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];
+
+  # pkgs/build-support/setup-hooks/compress-man-pages.sh hook fails
+  # to compress symlinked manpages. Avoid compressing manpages until
+  # it's fixed.
+  dontGzipMan = true;
 
   meta = with lib; {
     description = "Extremely fast hash algorithm";

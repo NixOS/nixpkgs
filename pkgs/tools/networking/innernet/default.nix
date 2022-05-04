@@ -8,20 +8,20 @@
 , Security
 , libiconv
 , innernet
-, testVersion
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = "innernet";
     rev = "v${version}";
-    sha256 = "141zjfl125m5lrimam1dbpk40dqfq4vnaz42sbiq1v1avyg684fq";
+    sha256 = "sha256-CcZ4241EU+ktPbFsuR/sF4yP6xAOFg+oW8thtAQZr/4=";
   };
-  cargoSha256 = "0559d0ayysvqs4k46fhgd4r8wa89abgx6rvhlh0gnlnga8vacpw5";
+  cargoSha256 = "sha256-7APUSDxw6X4KJnFvm6xhiHL1D4NTNS2pC/4UVGyjJYY=";
 
   nativeBuildInputs = with llvmPackages; [
     llvm
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.tests = {
-    serverVersion = testVersion { package = innernet; command = "innernet-server --version"; };
-    version = testVersion { package = innernet; command = "innernet --version"; };
+    serverVersion = testers.testVersion { package = innernet; command = "innernet-server --version"; };
+    version = testers.testVersion { package = innernet; command = "innernet --version"; };
   };
 
   meta = with lib; {

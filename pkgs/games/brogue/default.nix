@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
     comment = "Brave the Dungeons of Doom!";
     icon = "brogue";
     exec = "brogue";
-    categories = "Game;AdventureGame;";
-    terminal = "false";
+    categories = [ "Game" "AdventureGame" ];
   };
 
   installPhase = ''

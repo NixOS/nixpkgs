@@ -140,6 +140,12 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     deployer = callPackage ../development/php-packages/deployer { };
 
+    grumphp = callPackage ../development/php-packages/grumphp { };
+
+    phing = callPackage ../development/php-packages/phing { };
+
+    phive = callPackage ../development/php-packages/phive { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
@@ -174,6 +180,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
 
     couchbase = callPackage ../development/php-packages/couchbase { };
+
+    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+
+    ds = callPackage ../development/php-packages/ds { };
 
     event = callPackage ../development/php-packages/event { };
 
@@ -451,7 +461,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             '')
           ];
           zendExtension = true;
-          doCheck = !(lib.versionOlder php.version "7.4");
+          doCheck = lib.versionAtLeast php.version "7.4";
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }
@@ -515,7 +525,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
-        { name = "session"; doCheck = !(lib.versionAtLeast php.version "8.0"); }
+        { name = "session"; doCheck = lib.versionOlder php.version "8.0"; }
         { name = "shmop"; }
         {
           name = "simplexml";
@@ -540,7 +550,10 @@ lib.makeScope pkgs.newScope (self: with self; {
             ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
           doCheck = false;
         }
-        { name = "sockets"; doCheck = false; }
+        {
+          name = "sockets";
+          doCheck = false;
+        }
         { name = "sodium"; buildInputs = [ libsodium ]; }
         { name = "sqlite3"; buildInputs = [ sqlite ]; }
         { name = "sysvmsg"; }

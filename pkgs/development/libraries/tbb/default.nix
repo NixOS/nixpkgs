@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   postInstall = let
     pcTemplate = fetchurl {
-      url = "https://github.com/oneapi-src/oneTBB/raw/master/integration/pkg-config/tbb.pc.in";
+      url = "https://github.com/oneapi-src/oneTBB/raw/478de5b1887c928e52f029d706af6ea640a877be/integration/pkg-config/tbb.pc.in";
       sha256 = "2pCad9txSpNbzac0vp/VY3x7HNySaYkbH3Rx8LK53pI=";
     };
   in ''

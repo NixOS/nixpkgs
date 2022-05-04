@@ -266,7 +266,7 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${kubernetes}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 

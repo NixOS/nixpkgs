@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
-, mailutils ? null
 , aclSupport ? true, acl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +18,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-compress-command=${gzip}/bin/gzip"
     "--with-uncompress-command=${gzip}/bin/gunzip"
-  ] ++ lib.optionals (mailutils != null) [
-    "--with-default-mail-command=${mailutils}/bin/mail"
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
+
+  passthru.tests = {
+    nixos-logrotate = nixosTests.logrotate;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/logrotate/logrotate";

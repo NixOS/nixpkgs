@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flash";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s49q8x0iscy9rgn9zgymyg39cqm251a99m341znjn55lap3pdl8";
+    sha256 = "sha256-bd0TY8bdpLHLCdDQgJeJvqjAcSF67+LGSNx8yafYbys=";
   };
 
-  cargoSha256 = "0rb4s5bwjs7hri636r2viva96a6z9qjv9if6i220j9yglrvi7c8i";
+  cargoSha256 = "sha256-bx2N8zP7BmqU6oM/7Nf2i9S1uNWItReQMD59vtG1RKE=";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];

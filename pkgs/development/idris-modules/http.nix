@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "http";
+  pname = "http";
   version = "2018-02-25";
 
   idrisDeps = [ contrib lightyear bytes ];

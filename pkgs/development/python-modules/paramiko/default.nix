@@ -1,48 +1,77 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, cryptography
+{ lib
 , bcrypt
+, buildPythonPackage
+, cryptography
+, fetchPypi
 , invoke
-, pynacl
-, pyasn1
-, pytestCheckHook
-, pytest-relaxed
 , mock
+, pyasn1
+, pynacl
+, pytest-relaxed
+, pytestCheckHook
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.8.1";
+  version = "2.10.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "85b1245054e5d7592b9088cc6d08da22445417912d3a3e48138675c7a8616438";
+    sha256 = "sha256-3bGXeFOu+CgEs11yoOWXskT6MmxATDUL0AxbAdv+5xo=";
   };
 
-  propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
+  propagatedBuildInputs = [
+    bcrypt
+    cryptography
+    pyasn1
+    pynacl
+  ];
+
+  checkInputs = [
+    invoke
+    mock
+    pytest-relaxed
+    pytestCheckHook
+  ];
 
   # with python 3.9.6+, the deprecation warnings will fail the test suite
   # see: https://github.com/pyinvoke/invoke/issues/829
+  # pytest-relaxed does not work with pytest 6
+  # see: https://github.com/bitprophet/pytest-relaxed/issues/12
   doCheck = false;
-  checkInputs = [ invoke pytestCheckHook pytest-relaxed mock ];
 
   disabledTestPaths = [
     "tests/test_sftp.py"
     "tests/test_config.py"
   ];
 
+  pythonImportsCheck = [
+    "paramiko"
+  ];
+
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
     longDescription = ''
-      This is a library for making SSH2 connections (client or server).
-      Emphasis is on using SSH2 as an alternative to SSL for making secure
-      connections between python scripts. All major ciphers and hash methods
-      are supported. SFTP client and server mode are both supported too.
+      Library for making SSH2 connections (client or server). Emphasis is
+      on using SSH2 as an alternative to SSL for making secure connections
+      between python scripts. All major ciphers and hash methods are
+      supported. SFTP client and server mode are both supported too.
     '';
+    maintainers = with maintainers; [ ];
   };
 }

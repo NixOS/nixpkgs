@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , lz4
 , keyring
 , pbkdf2
@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
-  version = "0.13.0";
+  version = "0.14.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f8e5ddf5a6641a1fdca12d82b0923777ba59a988b68c9bcf358bfb7c42ef25b";
+    hash = "sha256-kWYMl/JZxonLfT0u/13bXz0MlC36jssWWq/i05FDpOA=";
   };
-
-  disabled = !isPy3k;
 
   propagatedBuildInputs = [
     lz4

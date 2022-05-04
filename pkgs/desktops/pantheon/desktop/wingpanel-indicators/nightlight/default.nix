@@ -34,12 +34,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     libxml2
     meson
@@ -54,6 +48,12 @@ stdenv.mkDerivation rec {
     libgee
     wingpanel
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Night Light Indicator for Wingpanel";

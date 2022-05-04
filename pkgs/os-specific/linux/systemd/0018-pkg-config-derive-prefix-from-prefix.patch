@@ -1,4 +1,4 @@
-From 50f2ada6cbfafa75b628410e8834f29581854e6f Mon Sep 17 00:00:00 2001
+From 968bd0c7bc058a4b05b6457f9ff20d02b70c9852 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Sun, 6 Dec 2020 08:34:19 +0100
 Subject: [PATCH 18/19] pkg-config: derive prefix from --prefix
@@ -29,5 +29,5 @@ index 162432e77f..2fc20daf03 100644
  rootprefix=${root_prefix}
  sysconf_dir={{SYSCONF_DIR}}
 -- 
-2.33.1
+2.34.0
 

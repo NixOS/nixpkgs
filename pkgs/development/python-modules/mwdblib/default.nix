@@ -8,18 +8,22 @@
 , keyring
 , python
 , python-dateutil
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "mwdblib";
-  version = "3.4.1";
+  version = "4.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jCtK3Fk725EaA26GG6j6xqEMFH4Qq92QWrJ7sxcWRaY=";
+    hash = "sha256-Wkqvi/buYKDoGi+4C9zkxWEiGynk9Ds8gLsdoaZCdKg=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +42,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "mwdblib" ];
+  pythonImportsCheck = [
+    "mwdblib"
+  ];
 
   meta = with lib; {
     description = "Python client library for the mwdb service";

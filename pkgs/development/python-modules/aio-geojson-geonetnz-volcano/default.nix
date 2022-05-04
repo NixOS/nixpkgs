@@ -8,17 +8,21 @@
 , pytest-asyncio
 , pytestCheckHook
 , pytz
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
-  version = "0.6";
+  version = "0.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     rev = "v${version}";
-    sha256 = "0n97kij2fprzajh57sy1z57kaqiil7pd5y67lq2hqm2cnvkar5ci";
+    sha256 = "sha256-2iVUHMk4ydmGmmGS6lJV5pvxJHyP9bRSeh/dOXbquE0=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +38,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aio_geojson_geonetnz_volcano" ];
+  pythonImportsCheck = [
+    "aio_geojson_geonetnz_volcano"
+  ];
 
   meta = with lib; {
     description = "Python module for accessing the GeoNet NZ Volcanic GeoJSON feeds";

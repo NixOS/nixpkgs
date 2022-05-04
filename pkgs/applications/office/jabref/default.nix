@@ -2,12 +2,12 @@
 , zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
-  version = "5.1";
+  version = "5.5";
   pname = "jabref";
 
   src = fetchurl {
     url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}-portable_linux.tar.gz";
-    sha256 = "04f612byrq3agzy26byg1sgrjyhcpa8xfj0ssh8dl8d8vnhx9742";
+    sha256 = "sha256-9MHNehyAmu7CiBp1rgb4zTkSqmjXm2tcmiGKFBFapKI=";
   };
 
   preferLocalBuild = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";
-    categories = "Office;";
+    categories = [ "Office" ];
     icon = "jabref";
     exec = "jabref";
   };

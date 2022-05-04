@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "types-futures";
-  version = "3.3.7";
+  version = "3.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d286db818fb67e3ce5c28acd9058c067329b91865acc443ac3cf91497fa36f05";
+    sha256 = "6fe8ccc2c2af7ef2fdd9bf73eab6d617074f09f30ad7d373510b4043d39c42de";
   };
 
   meta = with lib; {

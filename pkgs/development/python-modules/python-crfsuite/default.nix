@@ -2,16 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "python-crfsuite";
-  version = "0.9.7";
+  version = "0.9.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ryfcdfpqbrf8rcd2rlay2gfiba3px3q508543jf81shrv93hi9v";
+    sha256 = "sha256-DgPPbro2KHF8zwbfoPSiuoYohgrbF0y/0lCnpGkoZaE=";
   };
 
   preCheck = ''
@@ -32,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapinghub/python-crfsuite";
     license = licenses.mit;
     maintainers = teams.tts.members;
+    broken = pythonAtLeast "3.10"; # https://github.com/scrapinghub/python-crfsuite/issues/130
   };
 }

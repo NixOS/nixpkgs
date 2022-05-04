@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudatoolkit, libpthreadstubs, lapack, blas }:
+{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
+
+let
+  inherit (cudaPackages) cudatoolkit;
+in
 
 assert let majorIs = lib.versions.major cudatoolkit.version;
        in majorIs == "9" || majorIs == "10" || majorIs == "11";
 
 let
-  version = "2.5.4";
+  version = "2.6.2";
 
   # We define a specific set of CUDA compute capabilities here,
   # because CUDA 11 does not support compute capability 3.0. Also,
@@ -41,7 +45,7 @@ in stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "0rrvd21hczxlm8awc9z54fj7iqpjmsb518fy32s6ghz0g90znd3p";
+    hash = "sha256-dbVU2rAJA+LRC5cskT5Q5/iMvGLzrkMrWghsfk7aCnE=";
     name = "magma-${version}.tar.gz";
   };
 
@@ -59,23 +63,6 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding=true;
   buildFlags = [ "magma" "magma_sparse" ];
-
-  # MAGMA's default CMake setup does not care about installation. So we copy files directly.
-  installPhase = ''
-    mkdir -p $out
-    mkdir -p $out/include
-    mkdir -p $out/lib
-    mkdir -p $out/lib/pkgconfig
-    cp -a ../include/*.h $out/include
-    #cp -a sparse-iter/include/*.h $out/include
-    cp -a lib/*.so $out/lib
-    cat ../lib/pkgconfig/magma.pc.in                   | \
-    sed -e s:@INSTALL_PREFIX@:"$out":          | \
-    sed -e s:@CFLAGS@:"-I$out/include":    | \
-    sed -e s:@LIBS@:"-L$out/lib -lmagma -lmagma_sparse": | \
-    sed -e s:@MAGMA_REQUIRED@::                       \
-        > $out/lib/pkgconfig/magma.pc
-  '';
 
   meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";

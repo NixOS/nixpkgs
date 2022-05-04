@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, gen, ppx_tools_versioned, ocaml-migrate-parsetree }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VhzlDTYBFXgKWT69PqZYLuHkiaDwzhmyX2XfaqzHFl4=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
 
   propagatedBuildInputs = [ gen ocaml-migrate-parsetree ppx_tools_versioned ];
+
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 

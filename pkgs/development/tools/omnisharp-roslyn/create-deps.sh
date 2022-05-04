@@ -1,13 +1,19 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../.. -i bash -p msbuild dotnet-sdk_3 jq xmlstarlet curl
+#!nix-shell -I nixpkgs=../../../.. -i bash -p dotnet-sdk_6 jq xmlstarlet curl
 set -euo pipefail
 
 cat << EOL
 { fetchurl }: [
 EOL
 
+# enter a temporary directory containing the source code, copied from the derivation
+srcdir="$(mktemp -d)"
+cp -r "$(nix-build -A omnisharp-roslyn.src ../../../..)"/. "$srcdir"
+rm -f "$srcdir"/global.json
+
+pushd $srcdir >&2
+
 tmpdir="$(mktemp -d -p "$(pwd)")" # must be under source root
-trap 'rm -rf "$tmpdir"' EXIT
 
 mapfile -t repos < <(
     xmlstarlet sel -t -v 'configuration/packageSources/add/@value' -n NuGet.Config |
@@ -18,9 +24,9 @@ mapfile -t repos < <(
         done
     )
 
-msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
+dotnet msbuild -t:restore -p:Configuration=Release -p:RestorePackagesPath="$tmpdir" \
         -p:RestoreNoCache=true -p:RestoreForce=true \
-        src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj >&2
+        "$srcdir/src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj" >&2
 
 cd "$tmpdir"
 for package in *
@@ -48,7 +54,7 @@ do
         sha256=$(nix-prefetch-url "$url" 2>/dev/null)
         cat << EOL
   {
-    name = "$package";
+    pname = "$package";
     version = "$version";
     src = fetchurl {
       url = "$url";
@@ -64,3 +70,5 @@ cd ..
 cat << EOL
 ]
 EOL
+
+popd >&2

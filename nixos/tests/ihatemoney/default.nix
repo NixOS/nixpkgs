@@ -7,7 +7,7 @@ let
   inherit (import ../../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   f = backend: makeTest {
     name = "ihatemoney-${backend}";
-    machine = { nodes, lib, ... }: {
+    nodes.machine = { nodes, lib, ... }: {
       services.ihatemoney = {
         enable = true;
         enablePublicProjectCreation = true;

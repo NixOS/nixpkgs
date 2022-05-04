@@ -6,7 +6,7 @@
   </para>
   <programlisting>
 $ nix-build . -A nixosTests.login.driverInteractive
-$ ./result/bin/nixos-test-driver --interactive
+$ ./result/bin/nixos-test-driver
 [...]
 &gt;&gt;&gt;
 </programlisting>
@@ -30,7 +30,7 @@ $ ./result/bin/nixos-test-driver --interactive
     the <literal>--keep-vm-state</literal> flag.
   </para>
   <programlisting>
-$ ./result/bin/nixos-test-driver --interactive --keep-vm-state
+$ ./result/bin/nixos-test-driver --keep-vm-state
 </programlisting>
   <para>
     The machine state is stored in the

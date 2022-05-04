@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -14,7 +13,6 @@
 , granite
 , libgee
 , libhandy
-, elementary-icon-theme
 , appstream
 , wrapGAppsHook
 }:
@@ -43,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee

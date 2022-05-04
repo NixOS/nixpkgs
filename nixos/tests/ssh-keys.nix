@@ -10,6 +10,6 @@ pkgs:
   snakeOilPublicKey = pkgs.lib.concatStrings [
     "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHA"
     "yNTYAAABBBChdA2BmwcG49OrQN33f/sj+OHL5sJhwVl2Qim0vkUJQCry1zFpKTa"
-    "9ZcDMiWaEhoAR6FGoaGI04ff7CS+1yybQ= sakeoil"
+    "9ZcDMiWaEhoAR6FGoaGI04ff7CS+1yybQ= snakeoil"
   ];
 }

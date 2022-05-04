@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.6.9";
+  version = "0.4.6.10";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "1ad99k4wysxrnlaprv7brxr2nc0h5zdnrh0rma10pqlck2037sf7";
+    sha256 = "lMzWDgTlWPM75zAyvITqJBZg+S9Yz7iHib2miTc54xw=";
   };
 
   outputs = [ "out" "geoip" ];
@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.torproject.org/";
-    repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
 
     longDescription = ''

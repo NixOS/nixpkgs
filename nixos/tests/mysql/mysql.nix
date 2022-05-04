@@ -142,7 +142,7 @@ let
 in
   lib.mapAttrs (_: package: makeMySQLTest {
     inherit package;
-    hasRocksDB = false; hasMroonga = false;
+    hasRocksDB = false; hasMroonga = false; useSocketAuth = false;
   }) mysqlPackages
   // (lib.mapAttrs (_: package: makeMySQLTest {
     inherit package;

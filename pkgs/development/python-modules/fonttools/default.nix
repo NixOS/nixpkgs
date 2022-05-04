@@ -17,16 +17,15 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.26.2";
+  version = "4.30.0";
 
-  # Bump to 3.7 when https://github.com/fonttools/fonttools/pull/2417 is merged
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "1zp9idjkn4bn1a4pn8x64vi8j1ijdsd4qvgf1f70dfwqvw6ak1i6";
+    sha256 = "1y9f071bdl66rsx42j16j5v53h85xra5qlg860rz3m054s2rmin9";
   };
 
   # all dependencies are optional, but

@@ -48,15 +48,16 @@ let
       lxml
       pillow
       scour
+      pyserial
     ]);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rsoLnTO1sc+pqnBDO97mqMPQIP+vwubwyaYO7Xp5eK8=";
+    sha256 = "sha256-P/5UoG0LJaTNi260JFNu8e0gW+E0Q6Oc1DfIx7ibltE=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -73,27 +74,11 @@ stdenv.mkDerivation rec {
       python3 = "${python3Env}/bin/python";
     })
 
-    # Fix parsing paths by Python extensions.
-    # https://gitlab.com/inkscape/extensions/-/merge_requests/342
+    # Fix build with poppler 22.03
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/4187
     (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
-      sha256 = "YWrgjCnQ9q6BUsxSLQojIXnDzPxM/SgrIfj1gxQ/JKM=";
-      stripLen = 1;
-      extraPrefix = "share/extensions/";
-    })
-    # Remove mandatory break from end of paragraphs, added in Pango 1.49
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3630
-    # TODO: Remove in Inkscape 1.1.2
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/b3dabef2245d4e4e977ee9d6776be9a134493515.patch";
-      sha256 = "YhqUlRBKL1vJ/iCM/DvdwbmPIsAHQpcgf4TPpjlnBng=";
-    })
-    # Fix build against gcc-12
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3683
-    (fetchpatch {
-      name = "gcc-12.patch";
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/3825abc637ac2d3bc6ff997503b0631ac14e16b5.patch";
-      sha256 = "sha256-VzKrWCkcVA1Co/xBTyh28Zhm2zFE/2jfZ3LveK0raO4=";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/a18c57ffff313fd08bc8a44f6b6bf0b01d7e9b75.patch";
+      sha256 = "UZb8ZTtfA5667uo5ZlVQ5vPowiSgd4ItAJ9U1BOsRQg=";
     })
   ];
 

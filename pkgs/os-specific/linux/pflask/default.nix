@@ -1,18 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, python2, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "pflask";
-  version = "unstable-2015-12-17";
+  version = "unstable-2018-01-23";
 
   src = fetchFromGitHub {
     owner = "ghedo";
-    repo = "pflask";
-    rev = "599418bb6453eaa0ccab493f9411f13726c1a636";
-    hash = "sha256-0RjitZd2JUK7WUEJuw4qhUx3joY5OI0Hh74mTzp7GmY=";
+    repo = pname;
+    rev = "9ac31ffe2ed29453218aac89ae992abbd6e7cc69";
+    hash = "sha256-bAKPUj/EipZ98kHbZiFZZI3hLVMoQpCrYKMmznpSDhg=";
   };
 
-  nativeBuildInputs = [ wafHook ];
-  buildInputs = [ python2 ];
+  nativeBuildInputs = [ python3 wafHook ];
+
+  postInstall = ''
+    mkdir -p $out/bin
+    cp build/pflask $out/bin
+  '';
 
   meta = {
     description = "Lightweight process containers for Linux";

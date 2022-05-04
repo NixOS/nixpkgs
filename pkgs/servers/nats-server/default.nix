@@ -1,21 +1,23 @@
-{  buildGoPackage, fetchFromGitHub, lib  }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-with lib;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname   = "nats-server";
-  version = "2.7.0";
-
-  goPackagePath = "github.com/nats-io/${pname}";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "nats-io";
     repo   = pname;
-    sha256 = "sha256-LQ817nZrFkF1zdj2m2SQK58BqDbUPSnncSWR+Woi+Ao=";
+    sha256 = "sha256-lMwFh+njzQr1hOJFbO3LnPdBK7U4XmX4F/6MlIRILlU=";
   };
 
-  meta = {
+  vendorSha256 = "sha256-EEOvDOqMbqfB0S3Nf7RQMKGSZX802eqa3eGaNjUHxQ4=";
+
+  doCheck = false;
+
+  passthru.tests.nats = nixosTests.nats;
+
+  meta = with lib; {
     description = "High-Performance server for NATS";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop derekcollison ];

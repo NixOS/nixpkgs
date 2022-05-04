@@ -1,13 +1,10 @@
 { lib
-, stdenv
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, rustPlatform
   # Python requirements
-, cython
 , dill
-, fastjsonschema
-, jsonschema
 , numpy
 , networkx
 , ply
@@ -17,6 +14,8 @@
 , retworkx
 , scipy
 , scikit-quant ? null
+, setuptools-rust
+, stevedore
 , symengine
 , sympy
 , tweedledum
@@ -56,23 +55,27 @@ in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.18.3";
+  version = "0.20.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Qiskit";
+    owner = "qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-w/EnkdlC1hvmLqm4I8ajEYADxqMYGdHKrySLcb/yWGs=";
+    sha256 = "sha256-spKLPUlUXBmnIo/rnBPUFf72Vxd53xFhh409KzytpkI=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ rust.rustc rust.cargo cargoSetupHook ]);
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "sha256-KNx7c5Jc1AWIpldMQ1AcWYuMb4W+yLY/cgB87hzPuVY=";
+  };
 
   propagatedBuildInputs = [
     dill
-    fastjsonschema
-    jsonschema
     numpy
     networkx
     ply
@@ -82,6 +85,7 @@ buildPythonPackage rec {
     retworkx
     scipy
     scikit-quant
+    stevedore
     symengine
     sympy
     tweedledum
@@ -99,7 +103,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "qiskit"
-    "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
+    "qiskit.pulse"
   ];
 
   disabledTestPaths = [
@@ -112,6 +116,12 @@ buildPythonPackage rec {
   ];
   pytestFlagsArray = [ "--durations=10" ];
   disabledTests = [
+    "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure
+    # matplotlib tests seems to fail non-deterministically
+    "TestMatplotlibDrawer"
+    "TestGraphMatplotlibDrawer"
+    "test_copy" # assertNotIn doesn't seem to work as expected w/ pytest vs unittest
+
     # Flaky tests
     "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
     "test_cx_equivalence"  # Fails due to flaky test
@@ -153,7 +163,14 @@ buildPythonPackage rec {
     "test_two_qubit_weyl_decomposition_ab0"
     "test_sample_counts_memory_superposition"
     "test_piecewise_polynomial_function"
+    "test_piecewise_chebyshev_mutability"
+    "test_bit_conditional_no_cregbundle"
+    "test_gradient_wrapper2"
+    "test_two_qubit_weyl_decomposition_abmb"
+    "test_two_qubit_weyl_decomposition_abb"
     "test_vqe_qasm"
+    "test_dag_from_networkx"
+    "test_defaults_to_dict_46"
   ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding
@@ -163,7 +180,6 @@ buildPythonPackage rec {
     echo "Moving Qiskit test files to package directory"
     cp -r $TMP/$sourceRoot/test $PACKAGEDIR
     cp -r $TMP/$sourceRoot/examples $PACKAGEDIR
-    cp -r $TMP/$sourceRoot/qiskit/schemas/examples $PACKAGEDIR/qiskit/schemas/
 
     # run pytest from Nix's $out path
     pushd $PACKAGEDIR

@@ -46,5 +46,6 @@ in stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = [ ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/libtorrent-rasterbar-1_1_x.x86_64-darwin
   };
 }

@@ -146,15 +146,11 @@ in
 
     services.logrotate = {
       enable = true;
-      extraConfig = ''
-        /var/log/waagent.log {
-            compress
-            monthly
-            rotate 6
-            notifempty
-            missingok
-        }
-      '';
+      settings."/var/log/waagent.log" = {
+        compress = true;
+        frequency = "monthly";
+        rotate = 6;
+      };
     };
 
     systemd.targets.provisioned = {

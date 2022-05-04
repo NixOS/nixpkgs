@@ -137,6 +137,8 @@ fast-io
 file-attributes
 fiveam
 flexi-streams
+float-features
+flow
 form-fiddle
 fset
 generic-cl
@@ -156,12 +158,14 @@ iterate
 jonathan
 jsown
 lack
+legit
 let-plus
 lev
 lfarm-client
 lfarm-server
 lfarm-ssl
 lift
+lisp-binary
 lisp-namespace
 lla
 local-time
@@ -176,10 +180,12 @@ mgl-pax
 minheap
 misc-extensions
 mk-string-metrics
+mmap
 moptilities
 more-conditions
 mt19937
 named-readtables
+nbd
 net-telent-date
 nibbles
 optima
@@ -205,6 +211,7 @@ salza2
 serapeum
 simple-date
 simple-date-time
+slynk
 smart-buffer
 smug
 spinneret

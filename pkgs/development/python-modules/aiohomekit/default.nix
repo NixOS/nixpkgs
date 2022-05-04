@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.6.10";
+  version = "0.7.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
-    rev = version;
-    sha256 = "03p6waxz9pqh0faq0lifwgz0ivdlk9di2wa9gv81iljs6v0vr85v";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-vgRiqA3xNvuw3nIzl45RXdmcbDW6OTxvReSH5SVcNEs=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,8 @@ buildPythonPackage rec {
     cryptography
     zeroconf
   ];
+
+  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
 
   checkInputs = [
     pytest-aiohttp

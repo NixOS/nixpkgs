@@ -2,33 +2,34 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.8";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-8XS30fRxHPady/snr3gfo8Ryiw9O7EeDezcYYZjod1w=";
+    sha256 = "sha256-JYC5wsv3JIqzv2woHits3wMpvPZ70lVrAZDh/DB1SVE=";
   };
-  vendorSha256 = "sha256-8r7v3526kY+rFHkl1+KEwNbFrSnXPlpZD6kiK4ea+Zg=";
+  vendorSha256 = "sha256-/B3hXHRNk6DJ6iC0RalsoWsb6vK0md8asnLkhSAeHXU=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
-  # Install completions post-install
+  subPackages = [ "cmd/infracost" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ terraform ];
-  # Short only runs the unit-tests tagged short
-  checkFlags = [ "-v" "-short" ];
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    # Feed in all tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    unset subPackages
 
-    # Remove tests that require networking
-    rm cmd/infracost/{breakdown_test,diff_test}.go
-    # ldflags are required for some of the version testing
-    go test ./... $checkFlags ''${ldflags:+-ldflags="$ldflags"}
+    # checkFlags aren't correctly passed through via buildGoModule so we use buildFlagsArray
+    # -short only runs the unit-tests tagged short
+    buildFlagsArray+="-short"
 
-    runHook postCheck
+    # remove tests that require networking
+    rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
   '';
 
   postInstall = ''

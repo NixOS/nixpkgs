@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.4.12";
+  version = "1.4.13";
 
   bloop-coursier-channel = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
-    sha256 = "bf3uHuGfmJukf0Qeudv8ZXz/9Uql/qsmvPS0XBb7oTQ=";
+    sha256 = "VbvBAz7mXhgQtbrlB6uCSmZXLcdYaROJRSREbazAReo=";
   };
 
   bloop-bash = fetchurl {
@@ -60,13 +60,14 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "jqcecAM51qEDmTim2VBNm8IO8wQmwU19R57Zk4pxwSA="
-    else if stdenv.isDarwin && stdenv.isx86_64 then "15m2rahf9kihw29hp6bwd9xqav6dcr17w5c2rsw0ijpchr2av72q"
+    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "sha256-AiF/ih15Jd0WuDP/0vU0vdaSo3FGjWXos+hNVBayFz4="
+    else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-LD23YpcNhWfioGDMqb1plqLy87ZHzT0zvIyc4O4WP5g="
     else throw "unsupported platform";
   };
 
   dontUnpack = true;
-  nativeBuildInputs = [ autoPatchelfHook installShellFiles makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ stdenv.cc.cc.lib zlib ];
   propagatedBuildInputs = [ jre ];
 

@@ -1,10 +1,9 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.10.0";
-  _build = "480";
+  _version = "2.10.1";
+  _build = "482";
   version = "${_version}-${_build}";
-  name = "jameica-${version}";
 
   swtSystem = if stdenv.hostPlatform.system == "i686-linux" then "linux"
   else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
@@ -17,11 +16,13 @@ let
     comment = "Free Runtime Environment for Java Applications.";
     desktopName = "Jameica";
     genericName = "Jameica";
-    categories = "Office;";
+    icon = "jameica";
+    categories = [ "Office" ];
   };
 in
 stdenv.mkDerivation rec {
-  inherit name version;
+  pname = "jameica";
+  inherit version;
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "0rzhbskzzvr9aan6fwxd2kmzg79ranx7aym5yn1i37z3ra67d1nz";
+    sha256 = "0pzcfqsf7flzipwivpinpkfb2xisand1sfjm00wif4pyj3f4qfh1";
   };
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries
@@ -41,12 +42,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,${name},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
 
     # copy libraries except SWT
-    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/${name}/
+    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
     # copy platform-specific SWT
-    cp lib/swt/${swtSystem}/swt.jar $out/share/${name}/
+    cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
 
     install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
@@ -54,11 +55,11 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications/
 
     makeWrapper ${jre}/bin/java $out/bin/jameica \
-      --add-flags "-cp $out/share/java/jameica.jar:$out/share/${name}/* ${
+      --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
         lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
-      --run "cd $out/share/java/"
+      --chdir "$out/share/java/"
   '';
 
   meta = with lib; {
@@ -70,6 +71,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli r3dl3g ];
   };
 }

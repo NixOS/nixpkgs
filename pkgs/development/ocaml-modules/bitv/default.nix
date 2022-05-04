@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, which, ocaml, findlib }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "bitv is not available for OCaml ${ocaml.version}"
 else
 
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sZwq6c10hBBS9tGvKlWD9GE3JBrZPByfDrXE6xIPcG4=";
   };
 
-  buildInputs = [ autoreconfHook which ocaml findlib ];
+  nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

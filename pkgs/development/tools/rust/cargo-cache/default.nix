@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cache";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "matthiaskrgr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MPU+hmYfmWftVEkdT/sZx9ESgCPTb7m4lEnYf5bOSYU=";
+    sha256 = "sha256-1/h9o8ldxI/Q1E6AurGfZ1xruf12g1OO5QlzMJLcEGo=";
   };
 
-  cargoSha256 = "sha256-6Ffgg5/B1IFnTlSjzhAsnhxz8jBcgk01RIkwgLqlsvc=";
+  cargoSha256 = "sha256-yUa40j1yOrczCbp9IsL1e5FlHcSEeHPAmbrA8zpuTpI=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

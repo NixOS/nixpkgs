@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, makeDesktopItem
 , fetchFromGitHub
 , cmake
 , jdk8
@@ -12,25 +11,25 @@
 , libpulseaudio
 , qtbase
 , libGL
+, glfw
+, openal
 , msaClientID ? ""
 }:
 
 mkDerivation rec {
   pname = "polymc";
-  version = "1.0.4";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-8aya0KfV9F+i2qBpweWcR9hwyTSQkqn2wHdtkCEeNvk=";
+    sha256 = "sha256-pnMmmeIKAaX+z1YzzowotjaG/HKdiqcz2tJ5eGRR77I=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake file makeWrapper ];
-  buildInputs = [ qtbase jdk8 zlib ];
-
-  patches = [ ./0001-pick-latest-java-first.patch ];
+  buildInputs = [ qtbase jdk zlib ];
 
   postPatch = ''
     # hardcode jdk paths
@@ -39,21 +38,8 @@ mkDerivation rec {
       --replace 'scanJavaDir("/usr/lib32/jvm")' 'javas.append("${jdk8}/lib/openjdk/bin/java")'
   '';
 
-  cmakeFlags = [ "-DLauncher_LAYOUT=lin-system" ] ++
+  cmakeFlags = [ "-DLauncher_PORTABLE=0" ] ++
                lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "polymc";
-      desktopName = "PolyMC";
-      genericName = "Minecraft Launcher";
-      comment = "Free, open source launcher and instance manager for Minecraft.";
-      icon = "launcher";
-      exec = "polymc";
-      categories = "Game";
-      terminal = "false";
-    })
-  ];
 
   dontWrapQtApps = true;
 
@@ -66,10 +52,10 @@ mkDerivation rec {
       libXxf86vm
       libpulseaudio
       libGL
+      glfw
+      openal
     ];
   in ''
-    install -Dm644 ../launcher/resources/multimc/scalable/launcher.svg $out/share/pixmaps/polymc.svg
-
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
     wrapProgram $out/bin/polymc \
       "''${qtWrapperArgs[@]}" \
@@ -86,6 +72,7 @@ mkDerivation rec {
       their associated options with a simple interface.
     '';
     platforms = platforms.linux;
+    changelog = "https://github.com/PolyMC/PolyMC/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };

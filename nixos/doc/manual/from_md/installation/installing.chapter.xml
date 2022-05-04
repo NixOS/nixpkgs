@@ -411,6 +411,13 @@ OK
                 specify on which disk the GRUB boot loader is to be
                 installed. Without it, NixOS cannot boot.
               </para>
+              <para>
+                If there are other operating systems running on the
+                machine before installing NixOS, the
+                <xref linkend="opt-boot.loader.grub.useOSProber" />
+                option can be set to <literal>true</literal> to
+                automatically add them to the grub menu.
+              </para>
             </listitem>
           </varlistentry>
           <varlistentry>
@@ -436,13 +443,6 @@ OK
             </listitem>
           </varlistentry>
         </variablelist>
-        <para>
-          If there are other operating systems running on the machine
-          before installing NixOS, the
-          <xref linkend="opt-boot.loader.grub.useOSProber" /> option can
-          be set to <literal>true</literal> to automatically add them to
-          the grub menu.
-        </para>
         <para>
           If you need to configure networking for your machine the
           configuration options are described in

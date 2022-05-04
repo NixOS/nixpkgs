@@ -6,15 +6,15 @@
 , libelf, libvdpau
 , libglvnd, libunwind
 , galliumDrivers ? ["auto"]
-, driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
-, withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , libclc
+, jdupes
 }:
 
 /** Packaging design:
@@ -33,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.3.3";
+  version = "22.0.2";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -47,7 +47,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "08c118j440xpfbjjxmwzm6dfnv4y35q540mmzkchhpbwx89lczxd";
+    sha256 = "11b8mcplvis7nadcwi1jf3529i2za2q1bkb7609q0rnfvihaakyz";
   };
 
   # TODO:
@@ -55,10 +55,7 @@ self = stdenv.mkDerivation {
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
     # fixes pkgsMusl.mesa build
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl.patch";
-      sha256 = "sha256-Jyl7ILLhn8hBJG7afnEjE8H56Wz/1bxkvlqfrXK5U7I=";
-    })
+    ./musl.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
       sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
@@ -116,7 +113,6 @@ self = stdenv.mkDerivation {
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
     "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Ddri-drivers=${concatStringsSep "," driDrivers}"
     "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
     "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
 
@@ -156,6 +152,7 @@ self = stdenv.mkDerivation {
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
+    jdupes
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
@@ -231,6 +228,9 @@ self = stdenv.mkDerivation {
       fi
     done
 
+    # NAR doesn't support hard links, so convert them to symlinks to save space.
+    jdupes --hard-links --link-soft --recurse "$drivers"
+
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files
     for lib in $drivers/lib/*.so* $drivers/lib/*/*.so*; do
@@ -250,12 +250,14 @@ self = stdenv.mkDerivation {
     inherit (libglvnd) driverLink;
     inherit llvmPackages;
 
-    tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
-      name = "mesa-dev-does-not-depend-on-llvm";
-      buildCommand = ''
-        echo ${self.dev} >>$out
-      '';
-      disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+    tests = lib.optionalAttrs stdenv.isLinux {
+      devDoesNotDependOnLLVM = stdenv.mkDerivation {
+        name = "mesa-dev-does-not-depend-on-llvm";
+        buildCommand = ''
+          echo ${self.dev} >>$out
+        '';
+        disallowedRequisites = [ llvmPackages.llvm self.drivers ];
+      };
     };
   };
 

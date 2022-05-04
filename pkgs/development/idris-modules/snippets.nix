@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "snippets";
+  pname = "snippets";
   version = "2018-03-17";
 
   ipkgName = "idris-snippets";

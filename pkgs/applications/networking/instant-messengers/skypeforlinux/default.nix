@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome
+, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon, libxshmfence }:
 
@@ -7,7 +7,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.79.0.95";
+  version = "8.82.0.403";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -26,7 +26,6 @@ let
     libsecret
     libuuid
 
-    gnome2.GConf
     gdk-pixbuf
     gtk3
     libappindicator-gtk3
@@ -69,7 +68,7 @@ let
           "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
-        sha256 = "sha256-a6ZtgA0cMAuNVQWAeiIDJ2noPhXjV8KPE8ibkGR7Dns=";
+        sha256 = "sha256-45aHb6BI0kUnJOlRsglyGdZ6+8sLmHZK3FN8nYpuHXM=";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";

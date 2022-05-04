@@ -30,8 +30,8 @@
 let
 
   pname = "hylafaxplus";
-  version = "7.0.4";
-  sha256 = "1y4b178rxa4ivxm8cnypnnyc8db7cjqyyzy60hiw215x4cyyj4i5";
+  version = "7.0.5";
+  sha256 = "1blv251r0yhnhxk9wgkjgr35al50q23hiskjkcbs8lmqqrz0cm8f";
 
   configSite = substituteAll {
     name = "${pname}-config.site";
@@ -87,11 +87,16 @@ stdenv.mkDerivation {
     openldap  # optional
     pam  # optional
   ];
+  # Disable parallel build, errors:
+  #  *** No rule to make target '../util/libfaxutil.so.7.0.4', needed by 'faxmsg'.  Stop.
+  enableParallelBuilding = false;
+
   postPatch = ". ${postPatch}";
   dontAddPrefix = true;
   postInstall = ". ${postInstall}";
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
+    changelog = "https://hylafax.sourceforge.io/news/${version}.php";
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";

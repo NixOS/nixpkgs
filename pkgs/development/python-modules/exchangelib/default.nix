@@ -17,7 +17,7 @@
 , pyyaml
 , requests
 , requests_ntlm
-, requests_oauthlib
+, requests-oauthlib
 , requests-kerberos
 , requests-mock
 , tzdata
@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.7.1";
+  version = "4.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "ecederstrand";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kwb5ixlmxg0xxm4wms5r4kym220vbncr9afi9qc25g8npkbs860";
+    hash = "sha256-fdYc+fJEePgCzAkUWz7pmL/CI/O9zm5G9xh1f4bhrH4=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pygments
     requests
     requests_ntlm
-    requests_oauthlib
+    requests-oauthlib
     requests-kerberos
     tzdata
     tzlocal

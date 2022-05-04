@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     name = "jellyfin";
     meta.maintainers = with lib.maintainers; [ minijackson ];
 
-    machine =
+    nodes.machine =
       { ... }:
       {
         services.jellyfin.enable = true;

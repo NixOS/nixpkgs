@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ patryk27 ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
@@ -62,7 +62,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed(
               tmpfs_cmd("touch /root/test.file"),
               tmpfs_cmd("ls -l  /root | grep -q test.file"),
-              "test -e /var/lib/containers/tmpfs/root/test.file",
+              "test -e /var/lib/nixos-containers/tmpfs/root/test.file",
           )
 
       with subtest(
@@ -73,7 +73,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
               tmpfs_cmd("touch /some/random/path/test.file"),
               tmpfs_cmd("test -e /some/random/path/test.file"),
           )
-          machine.fail("test -e /var/lib/containers/tmpfs/some/random/path/test.file")
+          machine.fail("test -e /var/lib/nixos-containers/tmpfs/some/random/path/test.file")
 
       with subtest(
           "files created in the hosts container dir in a path where a tmpfs "
@@ -81,9 +81,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           + "the do not exist in the tmpfs"
       ):
           machine.succeed(
-              "touch /var/lib/containers/tmpfs/var/test.file",
-              "test -e /var/lib/containers/tmpfs/var/test.file",
-              "ls -l /var/lib/containers/tmpfs/var/ | grep -q test.file 2>/dev/null",
+              "touch /var/lib/nixos-containers/tmpfs/var/test.file",
+              "test -e /var/lib/nixos-containers/tmpfs/var/test.file",
+              "ls -l /var/lib/nixos-containers/tmpfs/var/ | grep -q test.file 2>/dev/null",
           )
           machine.fail(tmpfs_cmd("ls -l /var | grep -q test.file"))
     '';

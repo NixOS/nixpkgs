@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
 , meson
 , ninja
@@ -16,21 +16,25 @@
 , libpeas
 , gnome-online-accounts
 , gsettings-desktop-schemas
-, libportal
+, libportal-gtk4
 , evolution-data-server
 , libical
 , librest
 , json-glib
 , itstool
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-todo";
-  version = "41.0";
+  version = "unstable-2022-04-07";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1r94880d4khbjhhfnhaba3y3d4hv2bri82rzfzxn27s5iybpqras";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-todo";
+    rev = "ebc683746c705faa7c080aa96eecb83e523a8c15";
+    sha256 = "YMRol1XSQUuwdlpOKNgjUnTZthbMvV/l4dqtBoBnjSU=";
   };
 
   patches = [
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
 
     # Plug-ins
-    libportal # background
+    libportal-gtk4 # background
     evolution-data-server # eds
     libical
     librest # todoist
@@ -77,9 +81,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+    updateScript = unstableGitUpdater {
+      url = "https://gitlab.gnome.org/GNOME/gnome-todo.git";
     };
   };
 

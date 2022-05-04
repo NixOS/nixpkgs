@@ -17,6 +17,13 @@ let
         description = "The IP addresses of the interface.";
       };
 
+      autostart = mkOption {
+        description = "Whether to bring up this interface automatically during boot.";
+        default = true;
+        example = false;
+        type = types.bool;
+      };
+
       dns = mkOption {
         example = [ "192.168.2.2" ];
         default = [];
@@ -247,7 +254,7 @@ let
         description = "wg-quick WireGuard Tunnel - ${name}";
         requires = [ "network-online.target" ];
         after = [ "network.target" "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
         path = [ pkgs.kmod pkgs.wireguard-tools ];
 

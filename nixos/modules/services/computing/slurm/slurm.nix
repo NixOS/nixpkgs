@@ -362,6 +362,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-tmpfiles-clean.service" ];
+      requires = [ "network.target" ];
 
       serviceConfig = {
         Type = "forking";
@@ -371,11 +372,11 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitMEMLOCK = "infinity";
       };
-
-      preStart = ''
-        mkdir -p /var/spool
-      '';
     };
+
+    systemd.tmpfiles.rules = mkIf cfg.client.enable [
+      "d /var/spool/slurmd 755 root root -"
+    ];
 
     services.openssh.forwardX11 = mkIf cfg.client.enable (mkDefault true);
 

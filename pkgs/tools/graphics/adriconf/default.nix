@@ -8,26 +8,25 @@
 , atkmm
 , pcre
 , gtkmm3
-, boost
-, libxmlxx3
+, pugixml
 , mesa
 , pciutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "adriconf";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "hZy+FpKKBKuho/fALu2O+44zzK6s/M8CTbhrO00ANgo=";
+    sha256 = "sha256-nxqrs8c1sRruZLwFwK/JfXQPfpEq08Pe2n7ojQkH3SM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm3 boost libxmlxx3 mesa pciutils ];
+  buildInputs = [ libdrm libGL atkmm pcre gtkmm3 pugixml mesa pciutils ];
 
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 

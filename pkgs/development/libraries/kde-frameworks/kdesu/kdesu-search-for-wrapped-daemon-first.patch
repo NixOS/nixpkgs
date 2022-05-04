@@ -13,18 +13,18 @@ diff --git a/src/client.cpp b/src/client.cpp
 index 44fbacd..6b5abf5 100644
 --- a/src/client.cpp
 +++ b/src/client.cpp
-@@ -378,11 +378,14 @@ int KDEsuClient::stopServer()
+@@ -384,11 +384,14 @@ int KDEsuClient::stopServer()
  
  static QString findDaemon()
  {
--    QString daemon = QFile::decodeName(KDE_INSTALL_FULL_LIBEXECDIR_KF5 "/kdesud");
+-    QString daemon = QFile::decodeName(KDE_INSTALL_FULL_LIBEXECDIR_KF "/kdesud");
 -    if (!QFile::exists(daemon)) { // if not in libexec, find it in PATH
 -        daemon = QStandardPaths::findExecutable(QStringLiteral("kdesud"));
 -        if (daemon.isEmpty()) {
 -            qCWarning(KSU_LOG) << "kdesud daemon not found.";
 +    QString daemon = QFile::decodeName("/run/wrappers/bin/kdesud");
 +    if (!QFile::exists(daemon)) { // if not in wrappers
-+        daemon = QFile::decodeName(KDE_INSTALL_FULL_LIBEXECDIR_KF5 "/kdesud");
++        daemon = QFile::decodeName(KDE_INSTALL_FULL_LIBEXECDIR_KF "/kdesud");
 +        if (!QFile::exists(daemon)) { // if not in libexec, find it in PATH
 +            daemon = QStandardPaths::findExecutable(QStringLiteral("kdesud"));
 +            if (daemon.isEmpty()) {

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.14.0";
+  version = "0.17.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "164x92k3rs47ihkmwq5av396576dxp4rzv6557pwgc1ign2ikqy1";
+    sha256 = "sha256-66wPVnBLy2HK4p0m/b/DRxy12sk8AsVFZoFVcWRkL4s=";
   };
 
   outputs = [

@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
     description = "XML Security Library in C based on libxml2";
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux ++ darwin;
-    updateWalker = true;
   };
 }
 )

@@ -18,10 +18,9 @@
 , opt-einsum
 , backports_weakref
 , tensorflow-estimator
-, tensorflow-tensorboard
+, tensorboard
 , cudaSupport ? false
-, cudatoolkit
-, cudnn
+, cudaPackages ? {}
 , patchelfUnstable
 , zlib
 , python
@@ -43,12 +42,14 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
+  inherit (cudaPackages) cudatoolkit cudnn;
 in buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
-  disabled = pythonAtLeast "3.10";
+  # See https://github.com/tensorflow/tensorflow/issues/55581#issuecomment-1101890383
+  disabled = pythonAtLeast "3.10" && !cudaSupport;
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
@@ -74,7 +75,7 @@ in buildPythonPackage {
     google-pasta
     wrapt
     tensorflow-estimator
-    tensorflow-tensorboard
+    tensorboard
     keras-applications
     keras-preprocessing
     h5py
@@ -97,11 +98,11 @@ in buildPythonPackage {
     (
       cd unpacked/tensorflow*
       # Adjust dependency requirements:
-      # - Relax gast version requirement that doesn't match what we have packaged
+      # - Relax tensorflow-estimator version requirement that doesn't match what we have packaged
       # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
       # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
       sed -i *.dist-info/METADATA \
-        -e "s/Requires-Dist: gast.*/Requires-Dist: gast/" \
+        -e "s/Requires-Dist: tf-estimator-nightly.*/Requires-Dist: tensorflow-estimator/" \
         -e "/Requires-Dist: libclang/d" \
         -e "/Requires-Dist: keras/d" \
         -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
@@ -168,7 +169,7 @@ in buildPythonPackage {
     '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorflow-tensorboard, which causes environment collisions.
+  # and the propagated input tensorboard, which causes environment collisions.
   # Another possibility would be to have tensorboard only in the buildInputs
   # See https://github.com/NixOS/nixpkgs/pull/44381 for more information.
   postInstall = ''
@@ -177,10 +178,13 @@ in buildPythonPackage {
 
   pythonImportsCheck = [
     "tensorflow"
-    "tensorflow.keras"
     "tensorflow.python"
     "tensorflow.python.framework"
   ];
+
+  passthru = {
+    inherit cudaPackages;
+  };
 
   meta = with lib; {
     description = "Computation using data flow graphs for scalable machine learning";

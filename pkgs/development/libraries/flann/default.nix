@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals enablePython [ python3 ];
 
   meta = {
-    homepage = "http://people.cs.ubc.ca/~mariusm/flann/";
+    homepage = "https://github.com/flann-lib/flann";
     license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
     maintainers = with lib.maintainers; [viric];

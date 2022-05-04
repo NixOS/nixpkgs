@@ -1,25 +1,29 @@
 { buildPythonPackage
 , fetchFromGitHub
+, jaxlib
 , keras
 , lib
 , matplotlib
 , msgpack
 , numpy
 , optax
+, pytest-xdist
 , pytestCheckHook
 , tensorflow
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.3.6";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zvq0vl88hiwmss49bnm7gdmndr1dfza2bcs1fj88a9r7w9dmlsr";
+    sha256 = "0j5ngdndm9nm49gcda7m36qzwk5lcbi4jnij9fi96vld54ip6f6v";
   };
+
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     matplotlib
@@ -34,8 +38,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     keras
+    pytest-xdist
     pytestCheckHook
     tensorflow
+  ];
+
+  pytestFlagsArray = [
+    "-W ignore::FutureWarning"
+    "-W ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

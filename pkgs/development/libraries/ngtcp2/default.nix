@@ -1,22 +1,24 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
-, cunit, file
-, jemalloc, libev, nghttp3, quictls
+, cunit, file, ncurses
+, libev, nghttp3, quictls
+, withJemalloc ? false, jemalloc
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "unstable-2021-12-19";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
-    rev = "20c710a8789ec910455ae4e588c72e9e39f8cec9";
-    sha256 = "sha256-uBmD26EYT8zxmHD5FuHCbEuTdWxer/3uhRp8PhUT87M=";
+    rev = "v${version}";
+    sha256 = "sha256-nmVVK2lpz01hgSxPAMmBfF+nNVZu9PWRGzCWh/5yhj8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config cunit file ];
-  buildInputs = [ jemalloc libev nghttp3 quictls ];
+  nativeBuildInputs = [ autoreconfHook pkg-config file ];
+  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
+  checkInputs = [ cunit ncurses ];
 
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -25,12 +27,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   doCheck = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";
     description = "ngtcp2 project is an effort to implement QUIC protocol which is now being discussed in IETF QUICWG for its standardization.";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];
   };
 }

@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "apcupsd-exporter";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "apcupsd_exporter";
     rev = "v${version}";
-    sha256 = "0gjj23qdjs7rqimq95rbfw43m4l6g73j840svxjlmpd1vzzz2v2q";
+    sha256 = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
   };
 
-  vendorSha256 = "09x8y8pmgfn897hvnk122ry460y12b8a7y5fafri5wn9vxab9r82";
-
-  doCheck = false;
+  vendorSha256 = "sha256-bvLwHLviIAGmxYY1O0wFDWAMginEUklicrbjIbbPuUw=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) apcupsd; };
 

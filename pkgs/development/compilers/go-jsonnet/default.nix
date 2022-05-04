@@ -1,6 +1,6 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers }:
 
-buildGoModule rec {
+let self = buildGoModule rec {
   pname = "go-jsonnet";
   version = "0.18.0";
 
@@ -15,12 +15,19 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/jsonnet" "cmd/jsonnetfmt" ];
+  subPackages = [ "cmd/jsonnet*" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = self;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "An implementation of Jsonnet in pure Go";
     homepage = "https://github.com/google/go-jsonnet";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nshalman ];
+    maintainers = with maintainers; [ nshalman aaronjheng ];
+    mainProgram = "jsonnet";
   };
-}
+};
+in self

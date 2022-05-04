@@ -155,8 +155,8 @@ in
         default = 1200;
         description = ''
           When <literal>usePercentageForPolicy</literal> is
-          <literal>false</literal>, the time remaining at which UPower will
-          consider the battery low.
+          <literal>false</literal>, the time remaining in seconds at which
+          UPower will consider the battery low.
 
           If any value (of <literal>timeLow</literal>,
           <literal>timeCritical</literal> and <literal>timeAction</literal>) is
@@ -169,8 +169,8 @@ in
         default = 300;
         description = ''
           When <literal>usePercentageForPolicy</literal> is
-          <literal>false</literal>, the time remaining at which UPower will
-          consider the battery critical.
+          <literal>false</literal>, the time remaining in seconds at which
+          UPower will consider the battery critical.
 
           If any value (of <literal>timeLow</literal>,
           <literal>timeCritical</literal> and <literal>timeAction</literal>) is
@@ -183,8 +183,8 @@ in
         default = 120;
         description = ''
           When <literal>usePercentageForPolicy</literal> is
-          <literal>false</literal>, the time remaining at which UPower will
-          take action for the critical battery level.
+          <literal>false</literal>, the time remaining in seconds at which
+          UPower will take action for the critical battery level.
 
           If any value (of <literal>timeLow</literal>,
           <literal>timeCritical</literal> and <literal>timeAction</literal>) is

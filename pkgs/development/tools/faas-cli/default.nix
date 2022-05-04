@@ -9,15 +9,13 @@ let
 in
 buildGoModule rec {
   pname = "faas-cli";
-  # When updating version change rev.
-  version = "0.14.1";
-  rev = "d94600d2d2be52a66e0a15c219634f3bcac27318";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "132m9kv7a4vv65n8y3sq1drks6n1pci9fhvq0s637imf2vxccxqr";
+    sha256 = "sha256-hpQn1lEJP0FmU1jhmXDgV/11RbMdEqblLPIrTQLKLOc=";
   };
 
   CGO_ENABLED = 0;
@@ -28,7 +26,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/openfaas/faas-cli/version.GitCommit=${rev}"
+    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.targetPlatform}"
   ];
@@ -37,14 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/openfaas/faas-cli";
     description = "Official CLI for OpenFaaS ";
     license = licenses.mit;
-    maintainers = with maintainers; [ welteki ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "aarch64-darwin"
-      "armv7l-linux"
-      "armv6l-linux"
-    ];
+    maintainers = with maintainers; [ welteki techknowlogick ];
   };
 }

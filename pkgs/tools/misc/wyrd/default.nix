@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
   };
 
-  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
-
   preConfigure = ''
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
   '';

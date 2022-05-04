@@ -46,7 +46,7 @@ buildPythonPackage rec {
     param
     pyct
     scipy
-  ];
+  ] ++ dask.extras-require.complete;
 
   checkInputs = [
     pytestCheckHook
@@ -70,7 +70,6 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
     "datashader"
   ];
 

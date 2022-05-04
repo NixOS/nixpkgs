@@ -1,4 +1,4 @@
-# Used by pkgs/misc/vim-plugins/update.py and pkgs/applications/editors/kakoune/plugins/update.py
+# Used by pkgs/applications/editors/vim/plugins/update.py and pkgs/applications/editors/kakoune/plugins/update.py
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -8,6 +8,7 @@
 # $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265 update.py
 
 import argparse
+import csv
 import functools
 import http
 import json
@@ -28,7 +29,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union, Any, Callable
 from urllib.parse import urljoin, urlparse
 from tempfile import NamedTemporaryFile
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 import git
 
@@ -73,28 +74,43 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
     return deco_retry
 
+@dataclass
+class FetchConfig:
+    proc: int
+    github_token: str
 
-def make_request(url: str) -> urllib.request.Request:
-    token = os.getenv("GITHUB_API_TOKEN")
+
+def make_request(url: str, token=None) -> urllib.request.Request:
     headers = {}
     if token is not None:
         headers["Authorization"] = f"token {token}"
     return urllib.request.Request(url, headers=headers)
 
+
+# a dictionary of plugins and their new repositories
+Redirects = Dict['PluginDesc', 'Repo']
+
 class Repo:
     def __init__(
-        self, uri: str, branch: str, alias: Optional[str]
+        self, uri: str, branch: str
     ) -> None:
         self.uri = uri
         '''Url to the repo'''
-        self.branch = branch
-        self.alias = alias
-        self.redirect: Dict[str, str] = {}
+        self._branch = branch
+        # Redirect is the new Repo to use
+        self.redirect: Optional['Repo'] = None
+        self.token = "dummy_token"
 
     @property
     def name(self):
         return self.uri.split('/')[-1]
 
+    @property
+    def branch(self):
+        return self._branch or "HEAD"
+
+    def __str__(self) -> str:
+        return f"{self.uri}"
     def __repr__(self) -> str:
         return f"Repo({self.name}, {self.uri})"
 
@@ -104,6 +120,7 @@ class Repo:
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
+        log.debug("Latest commit")
         loaded = self._prefetch(None)
         updated = datetime.strptime(loaded['date'], "%Y-%m-%dT%H:%M:%S%z")
 
@@ -119,6 +136,7 @@ class Repo:
         return loaded
 
     def prefetch(self, ref: Optional[str]) -> str:
+        print("Prefetching")
         loaded = self._prefetch(ref)
         return loaded["sha256"]
 
@@ -132,25 +150,27 @@ class Repo:
 
 class RepoGitHub(Repo):
     def __init__(
-            self, owner: str, repo: str, branch: str, alias: Optional[str]
+        self, owner: str, repo: str, branch: str
     ) -> None:
         self.owner = owner
         self.repo = repo
+        self.token = None
         '''Url to the repo'''
-        super().__init__(self.url(""), branch, alias)
-        log.debug("Instantiating github repo %s/%s", self.owner, self.repo)
+        super().__init__(self.url(""), branch)
+        log.debug("Instantiating github repo owner=%s and repo=%s", self.owner, self.repo)
 
     @property
     def name(self):
         return self.repo
 
     def url(self, path: str) -> str:
-        return urljoin(f"https://github.com/{self.owner}/{self.name}/", path)
+        res = urljoin(f"https://github.com/{self.owner}/{self.repo}/", path)
+        return res
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def has_submodules(self) -> bool:
         try:
-            req = make_request(self.url(f"blob/{self.branch}/.gitmodules"))
+            req = make_request(self.url(f"blob/{self.branch}/.gitmodules"), self.token)
             urllib.request.urlopen(req, timeout=10).close()
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -162,7 +182,8 @@ class RepoGitHub(Repo):
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
         commit_url = self.url(f"commits/{self.branch}.atom")
-        commit_req = make_request(commit_url)
+        log.debug("Sending request to %s", commit_url)
+        commit_req = make_request(commit_url, self.token)
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
@@ -185,12 +206,9 @@ class RepoGitHub(Repo):
             new_owner, new_name = (
                 urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
             )
-            end_line = "\n" if self.alias is None else f" as {self.alias}\n"
-            plugin_line = "{owner}/{name}" + end_line
 
-            old_plugin = plugin_line.format(owner=self.owner, name=self.name)
-            new_plugin = plugin_line.format(owner=new_owner, name=new_name)
-            self.redirect[old_plugin] = new_plugin
+            new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self.branch)
+            self.redirect = new_repo
 
 
     def prefetch(self, commit: str) -> str:
@@ -201,9 +219,9 @@ class RepoGitHub(Repo):
         return sha256
 
     def prefetch_github(self, ref: str) -> str:
-        data = subprocess.check_output(
-            ["nix-prefetch-url", "--unpack", self.url(f"archive/{ref}.tar.gz")]
-        )
+        cmd = ["nix-prefetch-url", "--unpack", self.url(f"archive/{ref}.tar.gz")]
+        log.debug("Running %s", cmd)
+        data = subprocess.check_output(cmd)
         return data.strip().decode("utf-8")
 
     def as_nix(self, plugin: "Plugin") -> str:
@@ -220,7 +238,7 @@ class RepoGitHub(Repo):
     }}'''
 
 
-@dataclass
+@dataclass(frozen=True)
 class PluginDesc:
     repo: Repo
     branch: str
@@ -233,21 +251,38 @@ class PluginDesc:
         else:
             return self.alias
 
+    def __lt__(self, other):
+        return self.repo.name < other.repo.name
 
+    @staticmethod
+    def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> 'PluginDesc':
+        branch = row["branch"]
+        repo = make_repo(row['repo'], branch.strip())
+        repo.token = config.github_token
+        return PluginDesc(repo, branch.strip(), row["alias"])
+
+
+    @staticmethod
+    def load_from_string(config: FetchConfig, line: str) -> 'PluginDesc':
+        branch = "HEAD"
+        alias = None
+        uri = line
+        if " as " in uri:
+            uri, alias = uri.split(" as ")
+            alias = alias.strip()
+        if "@" in uri:
+            uri, branch = uri.split("@")
+        repo = make_repo(uri.strip(), branch.strip())
+        repo.token = config.github_token
+        return PluginDesc(repo, branch.strip(), alias)
+
+@dataclass
 class Plugin:
-    def __init__(
-        self,
-        name: str,
-        commit: str,
-        has_submodules: bool,
-        sha256: str,
-        date: Optional[datetime] = None,
-    ) -> None:
-        self.name = name
-        self.commit = commit
-        self.has_submodules = has_submodules
-        self.sha256 = sha256
-        self.date = date
+    name: str
+    commit: str
+    has_submodules: bool
+    sha256: str
+    date: Optional[datetime] = None
 
     @property
     def normalized_name(self) -> str:
@@ -263,6 +298,27 @@ class Plugin:
         del copy["date"]
         return copy
 
+
+def load_plugins_from_csv(config: FetchConfig, input_file: Path,) -> List[PluginDesc]:
+    log.debug("Load plugins from csv %s", input_file)
+    plugins = []
+    with open(input_file, newline='') as csvfile:
+        log.debug("Writing into %s", input_file)
+        reader = csv.DictReader(csvfile,)
+        for line in reader:
+            plugin = PluginDesc.load_from_csv(config, line)
+            plugins.append(plugin)
+
+    return plugins
+
+def run_nix_expr(expr):
+    with CleanEnvironment():
+        cmd = ["nix", "eval", "--extra-experimental-features",
+                "nix-command", "--impure", "--json", "--expr", expr]
+        log.debug("Running command %s", cmd)
+        out = subprocess.check_output(cmd)
+    data = json.loads(out)
+    return data
 
 
 class Editor:
@@ -287,19 +343,45 @@ class Editor:
         self.deprecated = deprecated or root.joinpath("deprecated.json")
         self.cache_file = cache_file or f"{name}-plugin-cache.json"
 
-    def get_current_plugins(self):
+    def get_current_plugins(self) -> List[Plugin]:
         """To fill the cache"""
-        return get_current_plugins(self)
+        data = run_nix_expr(self.get_plugins)
+        plugins = []
+        for name, attr in data.items():
+            print("get_current_plugins: name %s" % name)
+            p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
+            plugins.append(p)
+        return plugins
 
-    def load_plugin_spec(self, plugin_file) -> List[PluginDesc]:
-        return load_plugin_spec(plugin_file)
+    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
+        '''CSV spec'''
+        return load_plugins_from_csv(config, plugin_file)
 
     def generate_nix(self, plugins, outfile: str):
         '''Returns nothing for now, writes directly to outfile'''
         raise NotImplementedError()
 
-    def get_update(self, input_file: str, outfile: str, proc: int):
-        return get_update(input_file, outfile, proc, editor=self)
+    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+        cache: Cache = Cache(self.get_current_plugins(), self.cache_file)
+        _prefetch = functools.partial(prefetch, cache=cache)
+
+        def update() -> dict:
+            plugins = self.load_plugin_spec(config, input_file)
+
+            try:
+                pool = Pool(processes=config.proc)
+                results = pool.map(_prefetch, plugins)
+            finally:
+                cache.store()
+
+            plugins, redirects = check_results(results)
+
+            self.generate_nix(plugins, outfile)
+
+            return redirects
+
+        return update
+
 
     @property
     def attr_path(self):
@@ -345,7 +427,15 @@ class Editor:
             dest="proc",
             type=int,
             default=30,
-            help="Number of concurrent processes to spawn. Export GITHUB_API_TOKEN allows higher values.",
+            help="Number of concurrent processes to spawn. Setting --github-token allows higher values.",
+        )
+        parser.add_argument(
+            "--github-token",
+            "-t",
+            type=str,
+            default=os.getenv("GITHUB_API_TOKEN"),
+            help="""Allows to set --proc to higher values.
+            Uses GITHUB_API_TOKEN environment variables as the default value.""",
         )
         parser.add_argument(
             "--no-commit", "-n", action="store_true", default=False,
@@ -375,23 +465,10 @@ class CleanEnvironment(object):
         self.empty_config.close()
 
 
-def get_current_plugins(editor: Editor) -> List[Plugin]:
-    with CleanEnvironment():
-        cmd = ["nix", "eval", "--extra-experimental-features", "nix-command", "--impure", "--json", "--expr", editor.get_plugins]
-        log.debug("Running command %s", cmd)
-        out = subprocess.check_output(cmd)
-    data = json.loads(out)
-    plugins = []
-    for name, attr in data.items():
-        p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
-        plugins.append(p)
-    return plugins
-
-
 def prefetch_plugin(
     p: PluginDesc,
     cache: "Optional[Cache]" = None,
-) -> Tuple[Plugin, Dict[str, str]]:
+) -> Tuple[Plugin, Optional[Repo]]:
     repo, branch, alias = p.repo, p.branch, p.alias
     name = alias or p.repo.name
     commit = None
@@ -405,7 +482,7 @@ def prefetch_plugin(
         return cached_plugin, repo.redirect
 
     has_submodules = repo.has_submodules()
-    print(f"prefetch {name}")
+    log.debug(f"prefetch {name}")
     sha256 = repo.prefetch(commit)
 
     return (
@@ -414,12 +491,7 @@ def prefetch_plugin(
     )
 
 
-def fetch_plugin_from_pluginline(plugin_line: str) -> Plugin:
-    plugin, _ = prefetch_plugin(parse_plugin_line(plugin_line))
-    return plugin
-
-
-def print_download_error(plugin: str, ex: Exception):
+def print_download_error(plugin: PluginDesc, ex: Exception):
     print(f"{plugin}: {ex}", file=sys.stderr)
     ex_traceback = ex.__traceback__
     tb_lines = [
@@ -428,20 +500,22 @@ def print_download_error(plugin: str, ex: Exception):
     ]
     print("\n".join(tb_lines))
 
-
 def check_results(
-    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Dict[str, str]]]
-) -> Tuple[List[Tuple[PluginDesc, Plugin]], Dict[str, str]]:
+    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]
+) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
     ''' '''
-    failures: List[Tuple[str, Exception]] = []
+    failures: List[Tuple[PluginDesc, Exception]] = []
     plugins = []
-    redirects: Dict[str, str] = {}
+    redirects: Redirects = {}
     for (pdesc, result, redirect) in results:
         if isinstance(result, Exception):
-            failures.append((pdesc.name, result))
+            failures.append((pdesc, result))
         else:
-            plugins.append((pdesc, result))
-            redirects.update(redirect)
+            new_pdesc = pdesc
+            if redirect is not None:
+                redirects.update({pdesc: redirect})
+                new_pdesc = PluginDesc(redirect, pdesc.branch, pdesc.alias)
+            plugins.append((new_pdesc, result))
 
     print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
@@ -455,40 +529,16 @@ def check_results(
 
         sys.exit(1)
 
-def make_repo(uri, branch, alias) -> Repo:
+def make_repo(uri: str, branch) -> Repo:
     '''Instantiate a Repo with the correct specialization depending on server (gitub spec)'''
     # dumb check to see if it's of the form owner/repo (=> github) or https://...
-    res = uri.split('/')
-    if len(res) <= 2:
-        repo = RepoGitHub(res[0], res[1], branch, alias)
+    res = urlparse(uri)
+    if res.netloc in [ "github.com", ""]:
+        res = res.path.strip('/').split('/')
+        repo = RepoGitHub(res[0], res[1], branch)
     else:
-        repo = Repo(uri.strip(), branch, alias)
+        repo = Repo(uri.strip(), branch)
     return repo
-
-def parse_plugin_line(line: str) -> PluginDesc:
-    branch = "HEAD"
-    alias = None
-    uri = line
-    if " as " in uri:
-        uri, alias = uri.split(" as ")
-        alias = alias.strip()
-    if "@" in uri:
-        uri, branch = uri.split("@")
-
-    repo = make_repo(uri.strip(), branch.strip(), alias)
-
-    return PluginDesc(repo, branch.strip(), alias)
-
-
-def load_plugin_spec(plugin_file: str) -> List[PluginDesc]:
-    plugins = []
-    with open(plugin_file) as f:
-        for line in f:
-            if line.startswith("#"):
-                continue
-            plugin = parse_plugin_line(line)
-            plugins.append(plugin)
-    return plugins
 
 
 def get_cache_path(cache_file_name: str) -> Optional[Path]:
@@ -546,35 +596,37 @@ class Cache:
 
 def prefetch(
     pluginDesc: PluginDesc, cache: Cache
-) -> Tuple[PluginDesc, Union[Exception, Plugin], dict]:
+) -> Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]:
     try:
         plugin, redirect = prefetch_plugin(pluginDesc, cache)
         cache[plugin.commit] = plugin
         return (pluginDesc, plugin, redirect)
     except Exception as e:
-        return (pluginDesc, e, {})
+        return (pluginDesc, e, None)
+
 
 
 def rewrite_input(
+    config: FetchConfig,
     input_file: Path,
     deprecated: Path,
-    redirects: Dict[str, str] = None,
-    append: Tuple = (),
+    # old pluginDesc and the new
+    redirects: Redirects = {},
+    append: List[PluginDesc] = [],
 ):
-    with open(input_file, "r") as f:
-        lines = f.readlines()
+    plugins = load_plugins_from_csv(config, input_file,)
 
-    lines.extend(append)
+    plugins.extend(append)
 
     if redirects:
-        lines = [redirects.get(line, line) for line in lines]
 
         cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
-        for old, new in redirects.items():
-            old_plugin = fetch_plugin_from_pluginline(old)
-            new_plugin = fetch_plugin_from_pluginline(new)
+        for pdesc, new_repo in redirects.items():
+            new_pdesc = PluginDesc(new_repo, pdesc.branch, pdesc.alias)
+            old_plugin, _ = prefetch_plugin(pdesc)
+            new_plugin, _ = prefetch_plugin(new_pdesc)
             if old_plugin.normalized_name != new_plugin.normalized_name:
                 deprecations[old_plugin.normalized_name] = {
                     "new": new_plugin.normalized_name,
@@ -584,10 +636,14 @@ def rewrite_input(
             json.dump(deprecations, f, indent=4, sort_keys=True)
             f.write("\n")
 
-    lines = sorted(lines, key=str.casefold)
-
     with open(input_file, "w") as f:
-        f.writelines(lines)
+        log.debug("Writing into %s", input_file)
+        # fields = dataclasses.fields(PluginDesc)
+        fieldnames = ['repo', 'branch', 'alias']
+        writer = csv.DictWriter(f, fieldnames, dialect='unix', quoting=csv.QUOTE_NONE)
+        writer.writeheader()
+        for plugin in sorted(plugins):
+            writer.writerow(asdict(plugin))
 
 
 def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
@@ -600,40 +656,21 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
         print("no changes in working tree to commit")
 
 
-def get_update(input_file: str, outfile: str, proc: int, editor: Editor):
-    cache: Cache = Cache(editor.get_current_plugins(), editor.cache_file)
-    _prefetch = functools.partial(prefetch, cache=cache)
-
-    def update() -> dict:
-        plugin_names = editor.load_plugin_spec(input_file)
-
-        try:
-            pool = Pool(processes=proc)
-            results = pool.map(_prefetch, plugin_names)
-        finally:
-            cache.store()
-
-        plugins, redirects = check_results(results)
-
-        editor.generate_nix(plugins, outfile)
-
-        return redirects
-
-    return update
-
 
 def update_plugins(editor: Editor, args):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
     log.setLevel(LOG_LEVELS[args.debug])
     log.info("Start updating plugins")
-    update = editor.get_update(args.input_file, args.outfile, args.proc)
+    fetch_config = FetchConfig(args.proc, args.github_token)
+    update = editor.get_update(args.input_file, args.outfile, fetch_config)
 
     redirects = update()
-    editor.rewrite_input(args.input_file, editor.deprecated, redirects)
+    editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
+    nixpkgs_repo = None
     if autocommit:
         nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
         commit(nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
@@ -648,9 +685,11 @@ def update_plugins(editor: Editor, args):
             )
 
     for plugin_line in args.add_plugins:
-        editor.rewrite_input(args.input_file, editor.deprecated, append=(plugin_line + "\n",))
+        pdesc = PluginDesc.load_from_string(fetch_config, plugin_line)
+        append = [ pdesc ]
+        editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, append=append)
         update()
-        plugin = fetch_plugin_from_pluginline(plugin_line)
+        plugin, _ = prefetch_plugin(pdesc, )
         if autocommit:
             commit(
                 nixpkgs_repo,

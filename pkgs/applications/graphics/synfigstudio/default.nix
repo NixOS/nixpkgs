@@ -103,10 +103,10 @@ stdenv.mkDerivation {
 
   preConfigure = "./bootstrap.sh";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook gettext ];
+  nativeBuildInputs = [ pkg-config autoreconfHook gettext makeWrapper ];
   buildInputs = [
     ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
-    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
+    libjack2 libsigcxx libxmlxx mlt-qt5
     synfig which gnome.adwaita-icon-theme
   ];
 

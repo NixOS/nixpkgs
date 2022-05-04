@@ -75,7 +75,7 @@ rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+  } // lib.optionalAttrs config.contentAddressedByDefault {
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -398,6 +398,8 @@ rec {
     let
       persistent = self: super: with prevStage; {
         cmake = super.cmakeMinimal;
+
+        curl = super.curlMinimal;
 
         inherit pbzx cpio;
 
@@ -755,6 +757,9 @@ rec {
         darwin.binutils
         darwin.binutils.bintools
         curl.out
+        zstd.out
+        libidn2.out
+        libunistring.out
         openssl.out
         libssh2.out
         nghttp2.lib

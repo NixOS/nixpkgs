@@ -1,18 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.11.1";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "sha256-mqtlxQDIFee93wpdn8oNWmMPDyjYTCmVqF6IJvJbRBM=";
+    sha256 = "sha256-snp9+PlffU9Ay8o42PM8SqyP60hu9nozp457HM+0bM8=";
   };
 
   patches = [
     ./fix-aarch64.patch
+    (fetchpatch {
+      name = "CVE-2022-24764.patch";
+      url = "https://github.com/pjsip/pjproject/commit/560a1346f87aabe126509bb24930106dea292b00.patch";
+      sha256 = "1fy78v3clm0gby7qcq3ny6f7d7f4qnn01lkqq67bf2s85k2phisg";
+    })
   ];
 
   buildInputs = [ openssl libsamplerate ]
@@ -38,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ olynch ];
+    mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

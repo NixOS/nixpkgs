@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-xKfRLdfeD7lWdmC0iiq4dOIv2SmzbKH7HcAISCJgdug=";
   };
 
-  vendorSha256 = "sha256-8fmbv5uPRfzUqsYU95YzsnuFkq4cwj+LN2X3W/yBHyA=";
+  vendorSha256 = "sha256-Vg0k+YSMg6Ree/jkVV2VQ8RbSbQFUhmUN2MeTBxPeLo=";
 
   proxyVendor = true;
 

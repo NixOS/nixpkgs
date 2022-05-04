@@ -24,14 +24,7 @@ let
   unmanaged = clangStdenv.mkDerivation rec {
     inherit src pname version;
 
-    nativeBuildInputs = [ cmake ];
-
-    # Building the "unmanaged part" still involves compiling C# code.
-    preBuild = ''
-      export HOME=$(mktemp -d)
-      export DOTNET_CLI_TELEMETRY_OPTOUT=1
-      export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-    '';
+    nativeBuildInputs = [ cmake dotnet-sdk ];
 
     hardeningDisable = [ "strictoverflow" ];
 

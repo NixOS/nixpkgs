@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "flask-paranoid";
-  version = "0.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0WWc/ktAOuTk4A75xI1jCj/aef2+1TjLKBA9+PRfJO0=";
+    sha256 = "sha256-tikD8efc3Q3xIQnaC3SSBaCRQxMI1HzXxeupvYeNnE4=";
   };
 
   postPatch = ''

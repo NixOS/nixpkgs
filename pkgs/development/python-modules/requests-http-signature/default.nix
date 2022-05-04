@@ -1,25 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, cryptography
+, http-message-signatures
+, http-sfv
 , requests
 , pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "requests-http-signature";
-  version = "0.2.0";
+  version = "0.7.1";
+  format = "setuptools";
 
-  # .pem files for tests aren't present on PyPI
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jsplqrxadjsc86f0kb6dgpblgwplxrpi0ql1a714w8pbbz4z3h7";
+    hash = "sha256-sW2vYqT/nY27DvEKHdptc3dUpuqKmD7PLMs+Xp+cpeU=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
-    cryptography
+    http-message-signatures
+    http-sfv
     requests
   ];
 
@@ -27,17 +39,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  pytestFlagsArray = [
+    "test/test.py"
+  ];
 
   disabledTests = [
     # Test require network access
     "test_readme_example"
   ];
 
-  pythonImportsCheck = [ "requests_http_signature" ];
+  pythonImportsCheck = [
+    "requests_http_signature"
+  ];
 
   meta = with lib; {
-    description = "A Requests auth module for HTTP Signature";
+    description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = licenses.asl20;
     maintainers = with maintainers; [ mmai ];

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8jzYqo9LXF66pQ1EIusm+gba2VbTYpJz2K3NVlA3QxY=";
   };
 
-  buildInputs = [ zlib automake autoconf libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ zlib libtool ];
 
   installPhase = ''
       install -vD kssd $out/bin/kssd

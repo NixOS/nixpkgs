@@ -17,8 +17,7 @@
 , qtgraphicaleffects
 , qmake
 , qttools
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
@@ -76,9 +75,8 @@ mkDerivation rec {
     cp -r src/qml $out/share/shotcut/
   '';
 
-  passthru.updateScript = genericUpdater {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
     rev-prefix = "v";
   };
 

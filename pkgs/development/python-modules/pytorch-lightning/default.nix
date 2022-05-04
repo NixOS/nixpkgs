@@ -6,12 +6,12 @@
 , pytestCheckHook
 , pytorch
 , pyyaml
-, tensorflow-tensorboard
+, tensorboard
 , tqdm }:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "0.8.5";
+  version = "1.5.10";
 
   disabled = isPy27;
 
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "PyTorchLightning";
     repo = pname;
     rev = version;
-    sha256 = "12zhq4pnfcwbgcx7cs99c751gp3w0ysaf5ykv2lv8f4i360w3r5a";
+    sha256 = "sha256-GP6/VZuRv8dS5wKQW7RbtOSa2vV9Af2Jp+ioEW3bIgc=";
   };
 
   propagatedBuildInputs = [
     future
     pytorch
     pyyaml
-    tensorflow-tensorboard
+    tensorboard
     tqdm
   ];
 

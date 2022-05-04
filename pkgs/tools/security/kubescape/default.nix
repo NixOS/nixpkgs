@@ -6,35 +6,55 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.141";
+  version = "2.0.152";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4HVxPM+2SaFrhZiaRKwNuultE2df58aJMm9YSwbJBPM=";
+    hash = "sha256-hibXmA2JerfnkGiSnBUCMHGPm4Tefnsl/x2VAS5z0Fo=";
   };
+  vendorSha256 = "sha256-HfsQfoz1n3FEd2eVBBz3Za2jYCSrozXpL34Z8CgQsTA=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  vendorSha256 = "sha256-1TupDdiG8hnbAM+JJRTJWCYQBGN/o+C3H2e0w9muYog=";
-
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/clihandler/cmd.BuildNumber=v${version}"
+    "-X github.com/armosec/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
+  subPackages = [ "." ];
+
+  preCheck = ''
+    # Feed in all but the integration tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    # Skip httphandler tests - the checkPhase doesn't care about excludedPackages
+    getGoDirs() {
+      go list ./... | grep -v httphandler
+    }
+
+    rm core/pkg/resourcehandler/{repositoryscanner,urlloader}_test.go
+  '';
+
   postInstall = ''
-    # Running kubescape to generate completions outputs error warnings
-    # but does not crash and completes successfully
-    # https://github.com/armosec/kubescape/issues/200
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
       --zsh <($out/bin/kubescape completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/kubescape --help
+    # `--version` vs `version` shows the version without checking for latest
+    # if the flag is missing the BuildNumber may have moved
+    $out/bin/kubescape --version | grep "v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

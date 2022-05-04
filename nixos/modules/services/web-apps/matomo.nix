@@ -192,6 +192,7 @@ in {
             # Copy config folder
             chmod g+s "${dataDir}"
             cp -r "${cfg.package}/share/config" "${dataDir}/"
+            mkdir -p "${dataDir}/misc"
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done

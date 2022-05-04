@@ -5,9 +5,7 @@
 buildDunePackage {
   pname = "macaddr-cstruct";
 
-  inherit (macaddr) version src minimumOCamlVersion;
-
-  useDune2 = true;
+  inherit (macaddr) version src;
 
   propagatedBuildInputs = [ macaddr cstruct ];
 

@@ -20,18 +20,19 @@ stdenv.mkDerivation rec {
     "CPPFLAGS=-DNDEBUG"
     "CFLAGS=-O3"
     "CXXFLAGS=-O3"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    "CXX=${stdenv.cc.targetPrefix}c++";
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   setupHook = ./lzip-setup-hook.sh;
 
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/lzip.html";
     description = "A lossless data compressor based on the LZMA algorithm";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;
   };
 }

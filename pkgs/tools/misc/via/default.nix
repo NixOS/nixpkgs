@@ -35,7 +35,7 @@ in appimageTools.wrapType2 {
     description = "Yet another keyboard configurator";
     homepage = "https://caniusevia.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" ];
   };
 }

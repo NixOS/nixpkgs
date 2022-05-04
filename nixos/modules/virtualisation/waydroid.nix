@@ -56,8 +56,6 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ getent iptables iproute kmod nftables util-linux which ];
-
       unitConfig = {
         ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
       };
@@ -68,6 +66,10 @@ in
         ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ];
   };
 
 }

@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Fix build with vala 0.56
+    # https://github.com/bleakgrey/tootle/pull/346
+    substituteInPlace src/Application.vala \
+      --replace "public const GLib.ActionEntry[] app_entries" "private const GLib.ActionEntry[] app_entries"
+
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';

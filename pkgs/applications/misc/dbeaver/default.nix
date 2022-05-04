@@ -16,44 +16,24 @@
 , maven
 , webkitgtk
 , glib-networking
+, javaPackages
 }:
 
-stdenv.mkDerivation rec {
+(javaPackages.mavenfod.override {
+  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
+}) rec {
   pname = "dbeaver";
-  version = "21.3.2"; # When updating also update fetchedMavenDeps.sha256
+  version = "22.0.2"; # When updating also update mvnSha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "SifnnzuETFKtnEwLjJtB7CV2QZaToex3MjKGuiShlwo=";
+    sha256 = "sha256-3tIxHw4734ggIUDjZO2EGIMbyPNP3yvy9QgnMLw+/fc=";
   };
 
-  fetchedMavenDeps = stdenv.mkDerivation {
-    name = "dbeaver-${version}-maven-deps";
-    inherit src;
-
-    buildInputs = [
-      maven
-    ];
-
-    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms";
-
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
-        -delete
-    '';
-
-    # don't do any fixup
-    dontFixup = true;
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "grSFtkohTlLtK8qE4A4wVppC6UHcyaXRQlGnrOmQDC4=";
-  };
+  mvnSha256 = "os3eb+In8XreHwdZMacXafIVgOAeSSfCIkO5pwaO6MI=";
+  mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -84,17 +64,9 @@ stdenv.mkDerivation rec {
       desktopName = "dbeaver";
       comment = "SQL Integrated Development Environment";
       genericName = "SQL Integrated Development Environment";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 -P desktop,all-platforms
-
-    runHook postBuild
-  '';
 
   installPhase =
     let

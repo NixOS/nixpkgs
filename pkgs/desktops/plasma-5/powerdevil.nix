@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "powerdevil";
+  pname = "powerdevil";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kdbusaddons knotifyconfig solid udev bluez-qt kactivities kauth

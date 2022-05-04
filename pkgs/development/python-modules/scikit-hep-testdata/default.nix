@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.11";
+  version = "0.4.12";
   format = "pyproject";
 
   # fetch from github as we want the data files
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18r5nk8d5y79ihzjkjm5l0hiw2sjgj87px7vwb0bxbs73f5v353b";
+    sha256 = "sha256-ZnsOmsajW4dDv53I/Cuu97mPJywGiwFhNGpT1WRfxSw=";
   };
 
   nativeBuildInputs = [

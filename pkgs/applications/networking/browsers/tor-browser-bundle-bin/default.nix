@@ -87,7 +87,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "11.0.4";
+  version = "11.0.10";
 
   lang = "en-US";
 
@@ -96,16 +96,18 @@ let
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0pz1v5ig031wgnq3191ja08a4brdrbzziqnkpcrlra1wcdnzv985";
+      sha256 = "1j39v01bb97hkhkfvz7xyfmv6y0sjjcymvn3sa9ahz2av1xlrplp";
     };
 
     i686-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0ykdgbm8f5lcv7p54f3ffxsaw2cdzbhk6sv7d2hm7d81fcnhmjq4";
+      sha256 = "0vh913z828ncb8pwz461xx61ylxqp44rf9iah7n6lzda7hcw79r3";
     };
   };
 in
@@ -125,7 +127,7 @@ stdenv.mkDerivation rec {
     desktopName = "Tor Browser";
     genericName = "Web Browser";
     comment = meta.description;
-    categories = "Network;WebBrowser;Security;";
+    categories = [ "Network" "WebBrowser" "Security" ];
   };
 
   buildCommand = ''
@@ -364,6 +366,11 @@ stdenv.mkDerivation rec {
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
       \
+      MOZ_ENABLE_WAYLAND=\$MOZ_ENABLE_WAYLAND \
+      WAYLAND_DISPLAY="\$WAYLAND_DISPLAY" \
+      XDG_RUNTIME_DIR="\$XDG_RUNTIME_DIR" \
+      XCURSOR_PATH="\$XCURSOR_PATH" \
+      \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
@@ -402,7 +409,9 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$libPath $TBB_IN_STORE/TorBrowser/Tor/tor --version >/dev/null
 
     echo "Checking tor-browser wrapper ..."
-    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+    DISPLAY="" MOZ_ENABLE_WAYLAND="" WAYLAND_DISPLAY="" XAUTHORITY="" \
+      XCURSOR_PATH="" XDG_RUNTIME_DIR="" XDG_SESSION_TYPE="" \
+      DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
   '';
 

@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "RAxML";
+  pname = "RAxML${lib.optionalString useMpi "-mpi"}";
   version = "8.2.12";
 
   src = fetchFromGitHub {
     owner = "stamatak";
-    repo = "standard-${pname}";
+    repo = "standard-RAxML";
     rev = "v${version}";
     sha256 = "1jqjzhch0rips0vp04prvb8vmc20c5pdmsqn8knadcf91yy859fh";
   };

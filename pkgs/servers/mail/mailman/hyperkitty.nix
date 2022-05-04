@@ -43,6 +43,9 @@ buildPythonPackage rec {
   postPatch = ''
     # isort is a development dependency
     sed -i '/isort/d' setup.py
+    # Fix mistune imports for mistune >= 2.0.0
+    # https://gitlab.com/mailman/hyperkitty/-/merge_requests/379
+    sed -i 's/mistune.scanner/mistune.util/' hyperkitty/lib/renderer.py
   '';
 
   propagatedBuildInputs = [

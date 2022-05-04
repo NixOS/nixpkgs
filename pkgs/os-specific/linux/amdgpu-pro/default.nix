@@ -11,6 +11,7 @@
 , expat
 , libffi
 , libselinux
+, libdrm
 , udev
 , kernel ? null
 }:
@@ -204,6 +205,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    libdrm
     patchelf
     perl
   ];

@@ -1,22 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "delve";
-  version = "1.8.0";
-
-  goPackagePath = "github.com/go-delve/delve";
-  excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-NihlBFZ5xu+DMBtUiGyjxpgob2hoLlFJ7MfnM55feuw=";
+    sha256 = "sha256-rW3uKf5T+ZCjZxVuSFWWXw0mhAW9Y9L83xtU98JTuik=";
   };
+
+  vendorSha256 = null;
 
   subPackages = [ "cmd/dlv" ];
 
   nativeBuildInputs = [ makeWrapper ];
+
+  checkFlags = [ "-short" ];
 
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0

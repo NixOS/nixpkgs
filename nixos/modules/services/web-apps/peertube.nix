@@ -320,6 +320,7 @@ in {
         };
         storage = {
           tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";
+          bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
           videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
@@ -332,6 +333,15 @@ in {
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
+        };
+        import = {
+          videos = {
+            http = {
+              youtube_dl_release = {
+                python_path = "${pkgs.python3}/bin/python";
+              };
+            };
+          };
         };
       }
       (lib.mkIf cfg.redis.enableUnixSocket { redis = { socket = "/run/redis/redis.sock"; }; })
@@ -380,7 +390,7 @@ in {
 
       environment = env;
 
-      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn youtube-dl ];
+      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn python3 ];
 
       script = ''
         #!/bin/sh

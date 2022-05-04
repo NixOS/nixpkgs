@@ -57,7 +57,7 @@ in
     services.udev.packages = [ pkgs.libmtp.out ];
 
     # Needed for unwrapped applications
-    environment.variables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
+    environment.sessionVariables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
 
   };
 

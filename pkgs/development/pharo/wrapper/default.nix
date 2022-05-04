@@ -11,11 +11,9 @@ stdenv.mkDerivation rec {
     genericName = "Pharo Virtual Machine";
     exec = "pharo %F";
     icon = "pharo";
-    terminal = "false";
-    type="Application";
-    startupNotify = "false";
-    categories = "Development;";
-    mimeType = "application/x-pharo-image";
+    startupNotify = false;
+    categories = [ "Development" ];
+    mimeTypes = [ "application/x-pharo-image" ];
   };
   unpackPhase = ''
     cp $src ./pharo-vm.sh

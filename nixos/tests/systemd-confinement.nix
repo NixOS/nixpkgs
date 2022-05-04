@@ -1,7 +1,7 @@
 import ./make-test-python.nix {
   name = "systemd-confinement";
 
-  machine = { pkgs, lib, ... }: let
+  nodes.machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
       #!${pkgs.runtimeShell}
       export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
@@ -17,15 +17,19 @@ import ./make-test-python.nix {
       exit "''${ret:-1}"
     '';
 
-    mkTestStep = num: { config ? {}, testScript }: {
-      systemd.sockets."test${toString num}" = {
+    mkTestStep = num: {
+      testScript,
+      config ? {},
+      serviceName ? "test${toString num}",
+    }: {
+      systemd.sockets.${serviceName} = {
         description = "Socket for Test Service ${toString num}";
         wantedBy = [ "sockets.target" ];
         socketConfig.ListenStream = "/run/test${toString num}.sock";
         socketConfig.Accept = true;
       };
 
-      systemd.services."test${toString num}@" = {
+      systemd.services."${serviceName}@" = {
         description = "Confined Test Service ${toString num}";
         confinement = (config.confinement or {}) // { enable = true; };
         serviceConfig = (config.serviceConfig or {}) // {
@@ -135,6 +139,16 @@ import ./make-test-python.nix {
               machine.succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" = eek')
         '';
       }
+      { serviceName = "shipped-unitfile";
+        config.confinement.mode = "chroot-only";
+        testScript = ''
+          with subtest("check if shipped unit file still works"):
+              machine.succeed(
+                  'chroot-exec \'kill -9 $$ 2>&1 || :\' | '
+                  'grep -q "Too many levels of symbolic links"'
+              )
+        '';
+      }
     ];
 
     options.__testSteps = lib.mkOption {
@@ -143,6 +157,15 @@ import ./make-test-python.nix {
     };
 
     config.environment.systemPackages = lib.singleton testClient;
+    config.systemd.packages = lib.singleton (pkgs.writeTextFile {
+      name = "shipped-unitfile";
+      destination = "/etc/systemd/system/shipped-unitfile@.service";
+      text = ''
+        [Service]
+        SystemCallFilter=~kill
+        SystemCallErrorNumber=ELOOP
+      '';
+    });
 
     config.users.groups.chroot-testgroup = {};
     config.users.users.chroot-testuser = {

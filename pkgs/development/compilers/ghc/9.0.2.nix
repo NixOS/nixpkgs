@@ -5,6 +5,7 @@
 , autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
 , autoSignDarwinBinariesHook
 , bash
+, fetchpatch
 
 , libiconv ? null, ncurses
 , glibcLocales ? null
@@ -20,9 +21,10 @@
   # build-time dependency too.
   buildTargetLlvmPackages, llvmPackages
 
-, # If enabled, GHC will be built with the GPL-free but slower integer-simple
-  # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
+, # If enabled, GHC will be built with the GPL-free but slightly slower native
+  # bignum backend instead of the faster but GPLed gmp backend.
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -32,7 +34,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
 
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
@@ -61,7 +63,7 @@
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
-assert !enableIntegerSimple -> gmp != null;
+assert !enableNativeBignum -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
@@ -98,15 +100,19 @@ let
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
+    BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
-  '' + lib.optionalString enableRelocatedStaticLibs ''
-    GhcLibHcOpts += -fPIC
-    GhcRtsHcOpts += -fPIC
+  '' +
+  # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
+  # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
+  # This solution was described in https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+  lib.optionalString enableRelocatedStaticLibs ''
+    GhcLibHcOpts += -fPIC -fexternal-dynamic-refs
+    GhcRtsHcOpts += -fPIC -fexternal-dynamic-refs
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
   '';
@@ -114,7 +120,7 @@ let
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
     ++ [libffi]
-    ++ lib.optional (!enableIntegerSimple) gmp
+    ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
@@ -152,7 +158,7 @@ let
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
     (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
-    (lib.optionalString enableIntegerSimple "-integer-simple")
+    (lib.optionalString enableNativeBignum "-native-bignum")
   ];
 
 in
@@ -176,6 +182,26 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [
+    # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
+    (fetchpatch {
+      name = "ghc-9.0.2-fcompact-unwind.patch";
+      # Note that the test suite is not packaged.
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
+      sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
+    })
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./cabal-paths.patch
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -251,7 +277,7 @@ stdenv.mkDerivation (rec {
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
     "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
-  ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
@@ -325,6 +351,10 @@ stdenv.mkDerivation (rec {
 
     inherit llvmPackages;
     inherit enableShared;
+
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";

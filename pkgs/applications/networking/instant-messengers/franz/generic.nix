@@ -13,7 +13,6 @@
 , freetype
 , fontconfig
 , gtk3
-, gnome2
 , dbus
 , nss
 , nspr
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
     freetype
     fontconfig
     dbus
-    gnome2.GConf
     nss
     nspr
     alsa-lib

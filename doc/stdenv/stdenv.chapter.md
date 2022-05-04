@@ -125,7 +125,7 @@ The extension of `PATH` with dependencies, alluded to above, proceeds according 
 A dependency is said to be **propagated** when some of its other-transitive (non-immediate) downstream dependencies also need it as an immediate dependency.
 [^footnote-stdenv-propagated-dependencies]
 
-It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`), representing how respectively its host and target platforms are "offset" from the depending derivation’s platforms. The following table summarize the different combinations that can be obtained:
+It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
 | `host → target`     | attribute name      | offset   |
 | ------------------- | ------------------- | -------- |
@@ -317,11 +317,71 @@ The script will be usually run from the root of the Nixpkgs repository but you s
 
 For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
 
+### Recursive attributes in `mkDerivation`
+
+If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
+
+```nix
+mkDerivation (finalAttrs: {
+  pname = "hello";
+  withFeature = true;
+  configureFlags =
+    lib.optionals finalAttrs.withFeature ["--with-feature"];
+})
+```
+
+Note that this does not use the `rec` keyword to reuse `withFeature` in `configureFlags`.
+The `rec` keyword works at the syntax level and is unaware of overriding.
+
+Instead, the definition references `finalAttrs`, allowing users to change `withFeature`
+consistently with `overrideAttrs`.
+
+`finalAttrs` also contains the attribute `finalPackage`, which includes the output paths, etc.
+
+Let's look at a more elaborate example to understand the differences between
+various bindings:
+
+```nix
+# `pkg` is the _original_ definition (for illustration purposes)
+let pkg =
+  mkDerivation (finalAttrs: {
+    # ...
+
+    # An example attribute
+    packages = [];
+
+    # `passthru.tests` is a commonly defined attribute.
+    passthru.tests.simple = f finalAttrs.finalPackage;
+
+    # An example of an attribute containing a function
+    passthru.appendPackages = packages':
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
+        packages = super.packages ++ packages';
+      });
+
+    # For illustration purposes; referenced as
+    # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
+    passthru.finalAttrs = finalAttrs;
+    passthru.original = pkg;
+  });
+in pkg
+```
+
+Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
+
+See also the section about [`passthru.tests`](#var-meta-tests).
+
 ## Phases {#sec-stdenv-phases}
 
-The generic builder has a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries). Furthermore, it allows a nicer presentation of build logs in the Nix build farm.
+`stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
+
+This generic command invokes a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
 
 Each phase can be overridden in its entirety either by setting the environment variable `namePhase` to a string containing some shell commands to be executed, or by redefining the shell function `namePhase`. The former is convenient to override a phase from the derivation, while the latter is convenient from a build script. However, typically one only wants to *add* some commands to a phase, e.g. by defining `postInstall` or `preFixup`, as skipping some of the default actions may have unexpected consequences. The default script for each phase is defined in the file `pkgs/stdenv/generic/setup.sh`.
+
+When overriding a phase, for example `installPhase`, it is important to start with `runHook preInstall` and end it with `runHook postInstall`, otherwise `preInstall` and `postInstall` will not be run. Even if you don't use them directly, it is good practice to do so anyways for downstream users who would want to add a `postInstall` by overriding your derivation.
+
+While inside an interactive `nix-shell`, if you wanted to run all phases in the order they would be run in an actual build, you can invoke `genericBuild` yourself.
 
 ### Controlling phases {#ssec-controlling-phases}
 
@@ -333,7 +393,8 @@ There are a number of variables that control what phases are executed and in wha
 
 Specifies the phases. You can change the order in which phases are executed, or add new phases, by setting this variable. If it’s not set, the default value is used, which is `$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase fixupPhase installCheckPhase $preDistPhases distPhase $postPhases`.
 
-Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`), as you then don’t specify all the normal phases.
+It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
+Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`).
 
 ##### `prePhases` {#var-stdenv-prePhases}
 
@@ -790,7 +851,7 @@ Hook executed at the start of the distribution phase.
 
 Hook executed at the end of the distribution phase.
 
-## Shell functions {#ssec-stdenv-functions}
+## Shell functions and utilities {#ssec-stdenv-functions}
 
 The standard environment provides a number of useful functions.
 
@@ -813,6 +874,19 @@ There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/bui
 `wrapProgram` is a convenience function you probably want to use most of the time, implemented by both `makeWrapper` and `makeBinaryWrapper`.
 
 Using the `makeBinaryWrapper` implementation is usually preferred, as it creates a tiny _compiled_ wrapper executable, that can be used as a shebang interpreter. This is needed mostly on Darwin, where shebangs cannot point to scripts, [due to a limitation with the `execve`-syscall](https://stackoverflow.com/questions/67100831/macos-shebang-with-absolute-path-not-working). Compiled wrappers generated by `makeBinaryWrapper` can be inspected with `less <path-to-wrapper>` - by scrolling past the binary data you should be able to see the shell command that generated the executable and there see the environment variables that were injected into the wrapper.
+
+### `remove-references-to -t` \<storepath\> [ `-t` \<storepath\> ... ] \<file\> ... {#fun-remove-references-to}
+
+Removes the references of the specified files to the specified store files. This is done without changing the size of the file by replacing the hash by `eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, and should work on compiled executables. This is meant to be used to remove the dependency of the output on inputs that are known to be unnecessary at runtime. Of course, reckless usage will break the patched programs.
+To use this, add `removeReferencesTo` to `nativeBuildInputs`.
+
+As `remove-references-to` is an actual executable and not a shell function, it can be used with `find`.
+Example removing all references to the compiler in the output:
+```nix
+postInstall = ''
+  find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+'';
+```
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
@@ -1023,7 +1097,7 @@ You can also specify a `runtimeDependencies` variable which lists dependencies t
 
 In certain situations you may want to run the main command (`autoPatchelf`) of the setup hook on a file or a set of directories instead of unconditionally patching all outputs. This can be done by setting the `dontAutoPatchelf` environment variable to a non-empty value.
 
-By default `autoPatchelf` will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the `autoPatchelfIgnoreMissingDeps` environment variable to a non-empty value.
+By default `autoPatchelf` will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the `autoPatchelfIgnoreMissingDeps` environment variable to a non-empty value. `autoPatchelfIgnoreMissingDeps` can be set to a list like `autoPatchelfIgnoreMissingDeps = [ "libcuda.so.1" "libcudart.so.1" ];` or to simply `[ "*" ]` to ignore all missing dependencies.
 
 The `autoPatchelf` command also recognizes a `--no-recurse` command line flag, which prevents it from recursing into subdirectories.
 

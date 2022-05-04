@@ -9,7 +9,7 @@
 }:
 
 mkDerivation {
-  name = "kinfocenter";
+  pname = "kinfocenter";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kcompletion kconfig kconfigwidgets kcoreaddons kdbusaddons

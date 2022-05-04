@@ -4,9 +4,7 @@
 let
   version = "0.0.9";
 
-  makePluginPath = plugins: builtins.concatStringsSep ":" (map (p: p + "/lib/gstreamer-1.0") plugins);
-
-  pluginPath = makePluginPath [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ];
+  pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ];
 in
   stdenv.mkDerivation {
     pname = "gmrender-resurrect";

@@ -1,8 +1,5 @@
 { config, lib, pkgs, ... }:
 with lib;
-let
-  gce = pkgs.google-compute-engine;
-in
 {
   imports = [
     ../profiles/headless.nix
@@ -40,19 +37,14 @@ in
   security.googleOsLogin.enable = true;
 
   # Use GCE udev rules for dynamic disk volumes
-  services.udev.packages = [ gce ];
+  services.udev.packages = [ pkgs.google-guest-configs ];
+  services.udev.path = [ pkgs.google-guest-configs ];
 
   # Force getting the hostname from Google Compute.
   networking.hostName = mkDefault "";
 
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
-
-  # Make sure GCE image does not replace host key that NixOps sets
-  environment.etc."default/instance_configs.cfg".text = lib.mkDefault ''
-    [InstanceSetup]
-    set_host_keys = false
-  '';
 
   # Rely on GCP's firewall instead
   networking.firewall.enable = mkDefault false;
@@ -69,105 +61,42 @@ in
   # GC has 1460 MTU
   networking.interfaces.eth0.mtu = 1460;
 
-  # Used by NixOps
-  systemd.services.fetch-instance-ssh-keys = {
-    description = "Fetch host keys and authorized_keys for root user";
-
-    wantedBy = [ "sshd.service" ];
-    before = [ "sshd.service" ];
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    path = [ pkgs.wget ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = pkgs.runCommand "fetch-instance-ssh-keys" { } ''
-        cp ${./fetch-instance-ssh-keys.bash} $out
-        chmod +x $out
-        ${pkgs.shfmt}/bin/shfmt -i 4 -d $out
-        ${pkgs.shellcheck}/bin/shellcheck $out
-        patchShebangs $out
-      '';
-      PrivateTmp = true;
-      StandardError = "journal+console";
-      StandardOutput = "journal+console";
-    };
-  };
-
-  systemd.services.google-instance-setup = {
-    description = "Google Compute Engine Instance Setup";
-    after = [ "network-online.target" "network.target" "rsyslog.service" ];
-    before = [ "sshd.service" ];
-    path = with pkgs; [ coreutils ethtool openssh ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_instance_setup";
-      StandardOutput="journal+console";
-      Type = "oneshot";
-    };
-    wantedBy = [ "sshd.service" "multi-user.target" ];
-  };
-
-  systemd.services.google-network-daemon = {
-    description = "Google Compute Engine Network Daemon";
-    after = [ "network-online.target" "network.target" "google-instance-setup.service" ];
-    path = with pkgs; [ iproute2 ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_network_daemon";
-      StandardOutput="journal+console";
-      Type="simple";
-    };
+  systemd.packages = [ pkgs.google-guest-agent ];
+  systemd.services.google-guest-agent = {
     wantedBy = [ "multi-user.target" ];
+    restartTriggers = [ config.environment.etc."default/instance_configs.cfg".source ];
+    path = lib.optional config.users.mutableUsers pkgs.shadow;
   };
+  systemd.services.google-startup-scripts.wantedBy = [ "multi-user.target" ];
+  systemd.services.google-shutdown-scripts.wantedBy = [ "multi-user.target" ];
 
-  systemd.services.google-clock-skew-daemon = {
-    description = "Google Compute Engine Clock Skew Daemon";
-    after = [ "network.target" "google-instance-setup.service" "google-network-daemon.service" ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_clock_skew_daemon";
-      StandardOutput="journal+console";
-      Type = "simple";
-    };
-    wantedBy = ["multi-user.target"];
-  };
+  security.sudo.extraRules = mkIf config.users.mutableUsers [
+    { groups = [ "google-sudoers" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
+  ];
 
+  users.groups.google-sudoers = mkIf config.users.mutableUsers { };
 
-  systemd.services.google-shutdown-scripts = {
-    description = "Google Compute Engine Shutdown Scripts";
-    after = [
-      "network-online.target"
-      "network.target"
-      "rsyslog.service"
-      "google-instance-setup.service"
-      "google-network-daemon.service"
-    ];
-    serviceConfig = {
-      ExecStart = "${pkgs.coreutils}/bin/true";
-      ExecStop = "${gce}/bin/google_metadata_script_runner --script-type shutdown";
-      RemainAfterExit = true;
-      StandardOutput="journal+console";
-      TimeoutStopSec = "0";
-      Type = "oneshot";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
+  boot.extraModprobeConfig = lib.readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
 
-  systemd.services.google-startup-scripts = {
-    description = "Google Compute Engine Startup Scripts";
-    after = [
-      "network-online.target"
-      "network.target"
-      "rsyslog.service"
-      "google-instance-setup.service"
-      "google-network-daemon.service"
-    ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_metadata_script_runner --script-type startup";
-      KillMode = "process";
-      StandardOutput = "journal+console";
-      Type = "oneshot";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
+  environment.etc."sysctl.d/60-gce-network-security.conf".source = "${pkgs.google-guest-configs}/etc/sysctl.d/60-gce-network-security.conf";
 
-  environment.etc."sysctl.d/11-gce-network-security.conf".source = "${gce}/sysctl.d/11-gce-network-security.conf";
+  environment.etc."default/instance_configs.cfg".text = ''
+    [Accounts]
+    useradd_cmd = useradd -m -s /run/current-system/sw/bin/bash -p * {user}
+
+    [Daemons]
+    accounts_daemon = ${boolToString config.users.mutableUsers}
+
+    [InstanceSetup]
+    # Make sure GCE image does not replace host key that NixOps sets.
+    set_host_keys = false
+
+    [MetadataScripts]
+    default_shell = ${pkgs.stdenv.shell}
+
+    [NetworkInterfaces]
+    dhclient_script = ${pkgs.google-guest-configs}/bin/google-dhclient-script
+    # We set up network interfaces declaratively.
+    setup = false
+  '';
 }

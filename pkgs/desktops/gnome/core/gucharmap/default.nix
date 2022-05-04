@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , gtk3
-, adwaita-icon-theme
+, pcre2
 , glib
 , desktop-file-utils
 , gtk-doc
@@ -45,7 +45,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "14.0.0";
+  version = "14.0.3";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d283zVRH42NZNq+vGmItN3ZBrRrl9gpYDco7osm3RoY=";
+    sha256 = "sha256-xO34CR+SWxtHuP6G8m0jla0rivVp3ddrsODNo50MhHw=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     gtk3
     glib
     gsettings-desktop-schemas
-    adwaita-icon-theme
+    pcre2
   ];
 
   mesonFlags = [

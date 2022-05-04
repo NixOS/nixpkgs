@@ -1,20 +1,22 @@
-{ lib, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "alertmanager";
-  version = "0.21.0";
+  version = "0.24.0";
   rev = "v${version}";
-
-  goPackagePath = "github.com/prometheus/alertmanager";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "0zrzyaqs73pz4rmj4xaj15x4n1542m0nb7jqm2j77k07j75r5w41";
+    sha256 = "sha256-hoCE0wD9/Sh/oBce7kCg/wG44FmMs6dAKnEYP+2sH0w=";
   };
 
-  ldflags = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in [
+  vendorSha256 = "sha256-ePb9qdCTEHHIV6JlbrBlaZjD5APwQuoGloO88W5S7Oc=";
+
+  subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
+
+  ldflags = let t = "github.com/prometheus/common/version"; in [
     "-X ${t}.Version=${version}"
     "-X ${t}.Revision=${src.rev}"
     "-X ${t}.Branch=unknown"
@@ -28,6 +30,8 @@ buildGoPackage rec {
   postInstall = ''
     $out/bin/amtool --completion-script-bash > amtool.bash
     installShellCompletion amtool.bash
+    $out/bin/amtool --completion-script-zsh > amtool.zsh
+    installShellCompletion amtool.zsh
   '';
 
   meta = with lib; {

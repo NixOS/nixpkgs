@@ -10,6 +10,7 @@
 , libnotify
 , libdmapsharing
 , gnome
+, gobject-introspection
 , totem-pl-parser
 , tdb
 , json-glib
@@ -65,6 +66,9 @@ in stdenv.mkDerivation rec {
     totem-pl-parser
     gnome.adwaita-icon-theme
 
+    gobject-introspection
+    python3.pkgs.pygobject3
+
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -82,6 +86,12 @@ in stdenv.mkDerivation rec {
     "--enable-libnotify"
     "--with-libsecret"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+    )
+  '';
 
   enableParallelBuilding = true;
 

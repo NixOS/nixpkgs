@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ sumnerevans ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.airsonic = {

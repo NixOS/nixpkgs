@@ -13,13 +13,16 @@
 , linkFarmFromDrvs
 , lttng-ust
 , makeWrapper
-, nodejs-12_x
 , nodejs-16_x
 , openssl
 , stdenv
 , zlib
 , writeShellApplication
 , nuget-to-nix
+# Keeping this option until upstream removes support for EoL Node.js 12 entirely
+# Also refer to: https://github.com/actions/runner/pull/1716
+, withNode12 ? false
+, nodejs-12_x
 }:
 let
   nugetSource = linkFarmFromDrvs "nuget-packages" (
@@ -43,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.286.0";
+  version = "2.290.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-a3Kh65NTpVlKUer59rna7NWIQSxh1edU9MwguakzydI=";
+    hash = "sha256-YUV66yiUdS2/ORZS7a7coqyzoXM/tnK0egEeXWLPNl0=";
   };
 
   nativeBuildInputs = [
@@ -77,9 +80,6 @@ stdenv.mkDerivation rec {
     ./patches/use-get-directory-for-diag.patch
     # Don't try to install systemd service
     ./patches/dont-install-systemd-service.patch
-    # Prevent the runner from starting a self-update for new versions
-    # (upstream issue: https://github.com/actions/runner/issues/485)
-    ./patches/prevent-self-update.patch
   ];
 
   postPatch = ''
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     # Disable specific tests
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
+                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" (map (x: "FullyQualifiedName!=${x}") disabledTests)}'"
 
     # We don't use a Git checkout
     substituteInPlace src/dir.proj \
@@ -105,10 +105,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    # Set up Nuget dependencies
     export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
 
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
@@ -137,18 +134,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  disabledTests = [
-    # Self-updating is patched out, hence this test will fail
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_ValidateHash"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
-  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-    # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
-  ] ++ map
-    # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
+  # Fully qualified name of disabled tests
+  disabledTests =
+    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
+      "Cancel_CloneHashTask_WhenNotNeeded"
+      "CloneHash_RuntimeAndExternals"
+      "DownloadRetry"
+      "FallbackToFullPackage"
+      "NoUpdateOnOldVersion"
+      "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
+      "UseExternalsRuntimeTrimmedPackage"
+      "UseExternalsTrimmedPackage"
+      "ValidateHash"
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"
       "CompositeActionWithActionfile_CompositePrestepNested"
       "CompositeActionWithActionfile_MaxLimit"
@@ -178,21 +178,34 @@ stdenv.mkDerivation rec {
       "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
       "RepositoryActionWithWrapperActionfile_PreSteps"
       "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
       "EnsureDotnetsdkBashDownloadScriptUpToDate"
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+    ]
+    ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+      "RunnerLayoutParts_CheckExternalsHash"
+      "RunnerLayoutParts_CheckDotnetRuntimeHash"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+    ]
+    ++ lib.optionals (!withNode12) [
+      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     ];
-
   checkInputs = [ git ];
 
   checkPhase = ''
     runHook preCheck
 
     mkdir -p _layout/externals
-    ln -s ${nodejs-12_x} _layout/externals/node12
+    ${lib.optionalString withNode12 "ln -s ${nodejs-12_x} _layout/externals/node12"}
     ln -s ${nodejs-16_x} _layout/externals/node16
+
+    printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
 
     # BUILDCONFIG needs to be "Debug"
     dotnet msbuild \
@@ -238,7 +251,7 @@ stdenv.mkDerivation rec {
     # externals/node{12,16}. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/externals
-    ln -s ${nodejs-12_x} $out/externals/node12
+    ${lib.optionalString withNode12 "ln -s ${nodejs-12_x} $out/externals/node12"}
     ln -s ${nodejs-16_x} $out/externals/node16
 
     # Install Nodejs scripts called from workflows
@@ -290,6 +303,9 @@ stdenv.mkDerivation rec {
     name = "create-deps-file";
     runtimeInputs = [ dotnetSdk nuget-to-nix ];
     text = ''
+      # Disable telemetry data
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
       rundir=$(pwd)
 
       printf "\n* Setup workdir\n"

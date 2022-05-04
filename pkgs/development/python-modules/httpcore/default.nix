@@ -12,6 +12,7 @@
 , pytest-cov
 , pytest-httpbin
 , sniffio
+, socksio
 , trio
 , trustme
 , uvicorn
@@ -19,15 +20,20 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.14.3";
+  version = "0.14.7";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jPsbMhY1lWKBXlh6hsX6DGKXi/g7VQSU00tF6H7qkOo=";
+    sha256 = "sha256-h+3MfP1p/ifN0mF/xxrOKPTjD4Q7WzRh94YO4DYSuXE=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "h11>=0.11,<0.13" "h11>=0.11,<0.14"
+  '';
 
   propagatedBuildInputs = [
     anyio
@@ -35,6 +41,7 @@ buildPythonPackage rec {
     h11
     h2
     sniffio
+    socksio
   ];
 
   checkInputs = [

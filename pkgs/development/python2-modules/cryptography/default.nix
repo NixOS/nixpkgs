@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, callPackage
 , buildPythonPackage
 , fetchPypi
 , isPy27
 , ipaddress
 , openssl
-, cryptography_vectors
 , darwin
 , packaging
 , six
@@ -18,6 +19,9 @@
 , enum34
 }:
 
+let
+  cryptography-vectors = callPackage ./vectors.nix { };
+in
 buildPythonPackage rec {
   pname = "cryptography";
   version = "3.3.2"; # Also update the hash in vectors-3.3.nix
@@ -36,18 +40,19 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ openssl ]
-             ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
   ] ++ lib.optionals (!isPyPy) [
     cffi
   ] ++ lib.optionals isPy27 [
-    ipaddress enum34
+    ipaddress
+    enum34
   ];
 
   checkInputs = [
-    cryptography_vectors
+    cryptography-vectors
     hypothesis
     iso8601
     pretend

@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "0dz9x0r5021bhk1kjh29m1q13xbslwb8yn9qzcp7b9m1lrnvi2ap";
+    sha256 = "sha256-80aOyvsdf5rXtR/R23rr8XzridLvqKBc8vObTUBUAq4=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -36,10 +36,7 @@ stdenv.mkDerivation rec {
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
   ];
   postPatch = ''
-    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
-    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
-    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
-    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
+    sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
   '' + lib.optionalString (stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
@@ -96,5 +93,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ fpletz vrthra ];
     platforms = platforms.all;
+    mainProgram = "gpg";
   };
 }

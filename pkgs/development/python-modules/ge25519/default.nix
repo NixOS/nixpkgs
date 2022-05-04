@@ -7,16 +7,19 @@
 , nose
 , parts
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0M9RF8tlEoLyduvY3RvltGAnsus3HF6FEy22b6w6aUs=";
+    hash = "sha256-8GsNY62SusUmQcaqlhKOPHbd0jvZulCaxMxeob37JJM=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +33,12 @@ buildPythonPackage rec {
     nose
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=ge25519 --cov-report term-missing" ""
+  '';
+
 
   pythonImportsCheck = [
     "ge25519"

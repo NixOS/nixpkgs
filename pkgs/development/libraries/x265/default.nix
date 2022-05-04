@@ -1,103 +1,138 @@
-{ lib, stdenv, fetchFromBitbucket, cmake, nasm, numactl
-, numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
-, debugSupport ? false # Run-time sanity checks (debugging)
-, werrorSupport ? false # Warnings as errors
-, ppaSupport ? false # PPA profiling instrumentation
-, vtuneSupport ? false # Vtune profiling instrumentation
-, custatsSupport ? false # Internal profiling of encoder work
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, nasm
+
+# NUMA support enabled by default on NUMA platforms:
+, numaSupport ? (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64))
+, numactl
+
+# Multi bit-depth support (8bit+10bit+12bit):
+, multibitdepthSupport ? (stdenv.is64bit && !(stdenv.isAarch64 && stdenv.isLinux))
+
+# Other options:
 , cliSupport ? true # Build standalone CLI application
-, unittestsSupport ? false # Unit tests
+, custatsSupport ? false # Internal profiling of encoder work
+, debugSupport ? false # Run-time sanity checks (debugging)
+, ppaSupport ? false # PPA profiling instrumentation
+, unittestsSupport ? (stdenv.is64bit && !(stdenv.isDarwin && stdenv.isAarch64)) # Unit tests - only testing x64 assembly
+, vtuneSupport ? false # Vtune profiling instrumentation
+, werrorSupport ? false # Warnings as errors
 }:
 
 let
   mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
-  inherit (stdenv) is64bit;
 
-  cmakeFlagsAll = [
-    "-DSTATIC_LINK_CRT=OFF"
+  cmakeCommonFlags = [
+    "-Wno-dev"
+    (mkFlag custatsSupport "DETAILED_CU_STATS")
     (mkFlag debugSupport "CHECKED_BUILD")
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
-    (mkFlag custatsSupport "DETAILED_CU_STATS")
-    (mkFlag unittestsSupport "ENABLE_TESTS")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ] ++ lib.optionals stdenv.hostPlatform.isPower [
-    "-DENABLE_ALTIVEC=OFF"
   ];
 
-  version = "3.4";
+  cmakeStaticLibFlags = [
+    "-DHIGH_BIT_DEPTH=ON"
+    "-DENABLE_CLI=OFF"
+    "-DENABLE_SHARED=OFF"
+    "-DEXPORT_C_API=OFF"
+  ] ++ lib.optionals stdenv.hostPlatform.isPower [
+    "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
+  ];
 
-  src = fetchFromBitbucket {
-    owner = "multicoreware";
-    repo = "x265_git";
-    rev = version;
-    sha256 = "1jzgv2hxhcwmsdf6sbgyzm88a46dp09ll1fqj92g9vckvh9a7dsn";
-  };
-
-  buildLib = has12Bit: stdenv.mkDerivation rec {
-    name = "libx265-${if has12Bit then "12" else "10"}-${version}";
-    inherit src;
-
-    postPatch = ''
-      sed -i 's/unknown/${version}/g' source/cmake/version.cmake
-      sed -i 's/0.0/${version}/g' source/cmake/version.cmake
-    '';
-
-    cmakeLibFlags = [
-      "-DENABLE_CLI=OFF"
-      "-DENABLE_SHARED=OFF"
-      "-DENABLE_HDR10_PLUS=ON"
-      "-DEXPORT_C_API=OFF"
-      "-DHIGH_BIT_DEPTH=ON"
-    ];
-    cmakeFlags = [(mkFlag has12Bit "MAIN12")] ++ cmakeLibFlags ++ cmakeFlagsAll;
-
-    preConfigure = ''
-      cd source
-    '';
-
-    nativeBuildInputs = [cmake nasm] ++ lib.optional numaSupport numactl;
-  };
-
-  libx265-10 = buildLib false;
-  libx265-12 = buildLib true;
 in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  inherit version src;
+  version = "3.5";
+
+  outputs = [ "out" "dev" ];
+
+  # Check that x265Version.txt contains the expected version number
+  # whether we fetch a source tarball or a tag from the git repo
+  src = fetchurl {
+    url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${version}.tar.gz";
+    hash = "sha256-5wozNcrKy7oLOiDsb+zWeDkyKI68gWOtdLzJYGR3yug=";
+  };
+
+  sourceRoot = "x265_${version}/source";
+
+  patches = [
+    # More aliases for ARM platforms + do not force CLFAGS for ARM :
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/arm-r1.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
+      sha256 = "1hgzq5vxkwh0nyikxjfz8gz3jvx2nq3yy12mz3fn13qvzdlb5ilp";
+    })
+    # use proper check to avoid undefined symbols when enabling assembly on ARM :
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/neon.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
+      sha256 = "1mmshpbyldrfqxfmdajqal4l647zvlrwdai8pxw99qg4v8gajfii";
+    })
+    # More complete PPC64 matches :
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/x265-3.3-ppc64.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
+      sha256 = "1mvw678xfm0vr59n5jilq56qzcgk1gmcip2afyafkqiv21nbms8c";
+    })
+    # Namespace functions for multi-bitdepth builds so that libraries are self-contained (and tests succeeds) :
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/test-ns.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
+      sha256 = "0zg3g53l07yh7ar5c241x50y5zp7g8nh8rh63ad4bdpchpc2f52d";
+    })
+  ];
 
   postPatch = ''
-    sed -i 's/unknown/${version}/g' source/cmake/version.cmake
-    sed -i 's/0.0/${version}/g' source/cmake/version.cmake
+    substituteInPlace cmake/Version.cmake \
+      --replace "unknown" "${version}" \
+      --replace "0.0" "${version}"
   '';
 
-  cmakeFlags = [
+  nativeBuildInputs = [ cmake nasm ] ++ lib.optionals (numaSupport) [ numactl ];
+
+  # Builds 10bits and 12bits static libs on the side if multi bit-depth is wanted
+  # (we are in x265_<version>/source/build)
+  preBuild = lib.optionalString (multibitdepthSupport) ''
+    cmake -S ../ -B ../build-10bits ${toString cmakeCommonFlags} ${toString cmakeStaticLibFlags}
+    make -C ../build-10bits -j $NIX_BUILD_CORES
+    cmake -S ../ -B ../build-12bits ${toString cmakeCommonFlags} ${toString cmakeStaticLibFlags} -DMAIN12=ON
+    make -C ../build-12bits -j $NIX_BUILD_CORES
+    ln -s ../build-10bits/libx265.a ./libx265-10.a
+    ln -s ../build-12bits/libx265.a ./libx265-12.a
+  '';
+
+  cmakeFlags = cmakeCommonFlags ++ [
+    "-DGIT_ARCHETYPE=1" # https://bugs.gentoo.org/814116
     "-DENABLE_SHARED=ON"
     "-DHIGH_BIT_DEPTH=OFF"
-    "-DENABLE_HDR10_PLUS=OFF"
-  ] ++ lib.optionals (is64bit && !(stdenv.isAarch64 && stdenv.isLinux)) [
-    "-DEXTRA_LIB=${libx265-10}/lib/libx265.a;${libx265-12}/lib/libx265.a"
-    "-DLINKED_10BIT=ON"
-    "-DLINKED_12BIT=ON"
+    "-DENABLE_HDR10_PLUS=ON"
   ] ++ [
     (mkFlag cliSupport "ENABLE_CLI")
-  ] ++ cmakeFlagsAll;
+    (mkFlag unittestsSupport "ENABLE_TESTS")
+  ] ++ lib.optionals (multibitdepthSupport) [
+    "-DEXTRA_LIB=x265-10.a;x265-12.a"
+    "-DEXTRA_LINK_FLAGS=-L."
+    "-DLINKED_10BIT=ON"
+    "-DLINKED_12BIT=ON"
+  ];
 
-  preConfigure = ''
-    cd source
+  doCheck = unittestsSupport;
+  checkPhase = ''
+    runHook preCheck
+    ./test/TestBench
+    runHook postCheck
   '';
 
   postInstall = ''
-    rm $out/lib/*.a
+    rm -f ${placeholder "out"}/lib/*.a
   '';
-
-  nativeBuildInputs = [ cmake nasm ] ++ lib.optional numaSupport numactl;
 
   meta = with lib; {
     description = "Library for encoding H.265/HEVC video streams";
     homepage    = "https://www.x265.org/";
-    license     = licenses.gpl2;
+    changelog   = "https://x265.readthedocs.io/en/master/releasenotes.html#version-${lib.strings.replaceStrings ["."] ["-"] version}";
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
   };

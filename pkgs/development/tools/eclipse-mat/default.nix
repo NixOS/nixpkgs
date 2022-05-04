@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     comment = "Eclipse Memory Analyzer";
     desktopName = "Eclipse MAT";
     genericName = "Java Memory Analyzer";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
 
   unpackPhase = ''

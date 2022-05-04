@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1256";
+  version = "1268";
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
     rev = version;
-    sha256 = "sha256-lOsU0X4K6jYcbkTzwQV+KAerQh9odE4zCLtSgZrYH6s=";
+    sha256 = "sha256-9yzeLg3xporl32sZ1Ks8s63jXJNGUiI64XyQmhbQF4M=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Genomic sequence aligner";
-    homepage = "http://last.cbrc.jp/";
-    license = licenses.gpl3;
+    homepage = "https://gitlab.com/mcfrith/last";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.x86_64;
   };

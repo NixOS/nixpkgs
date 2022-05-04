@@ -2,51 +2,63 @@
 , buildPythonPackage
 , chardet
 , fetchPypi
-, inflect
 , jinja2
 , jinja2_pluralize
+, pluggy
 , pycodestyle
 , pyflakes
 , pygments
 , pylint
+, pytest-datadir
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "5.5.0";
+  version = "6.5.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    sha256 = "e2d36131c13f571d9f5c4109b9e08b71ed00757eabec0156de74e33f6ef5627f";
+    sha256 = "sha256-N2O0/C75EGO6crUCFGUiJLLQqfMVRNVQRZb1xKhHzXs=";
   };
 
   propagatedBuildInputs = [
     chardet
-    inflect
     jinja2
     jinja2_pluralize
+    pluggy
     pygments
+    tomli
   ];
 
   checkInputs = [
     pycodestyle
     pyflakes
     pylint
+    pytest-datadir
     pytest-mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    "added_file_pylint_console"
+    # Tests check for flake8
     "file_does_not_exist"
+    # AssertionError: assert '.c { color:...
+    "test_style_defs"
+    # uses pytest.approx in a boolean context, which is unsupported since pytest7
+    "test_percent_covered"
   ];
 
-  pythonImportsCheck = [ "diff_cover" ];
+  pythonImportsCheck = [
+    "diff_cover"
+  ];
 
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";

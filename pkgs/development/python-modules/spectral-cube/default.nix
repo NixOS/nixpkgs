@@ -12,6 +12,7 @@
 , pytestCheckHook
 , pytest-astropy
 , astropy-helpers
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1c0pp82wgl680w2vcwlrrz46sy83z1qs74w5bd691wg0512hv2jx";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [ astropy casa-formats-io radio_beam joblib six dask ];
   checkInputs = [ pytestCheckHook aplpy pytest-astropy ];

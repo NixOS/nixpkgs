@@ -13,7 +13,7 @@ let
     (iniFmt.generate "PackageKit.conf" (recursiveUpdate
       {
         Daemon = {
-          DefaultBackend = "test_nop";
+          DefaultBackend = "nix";
           KeepCache = false;
         };
       }
@@ -35,7 +35,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "The only backend that doesn't blow up is `test_nop`.")
+    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to Nix.")
   ];
 
   options.services.packagekit = {
@@ -61,6 +61,8 @@ in
   config = mkIf cfg.enable {
 
     services.dbus.packages = with pkgs; [ packagekit ];
+
+    environment.systemPackages = with pkgs; [ packagekit ];
 
     systemd.packages = with pkgs; [ packagekit ];
 

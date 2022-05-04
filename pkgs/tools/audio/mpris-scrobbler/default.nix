@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpris-scrobbler";
-  version = "0.4.0.1";
+  version = "0.4.90";
 
   src = fetchFromGitHub {
     owner  = "mariusor";
     repo   = "mpris-scrobbler";
     rev    = "v${version}";
-    sha256 = "0jzmgcb9a19hl8y7iwy8l3cc2vgzi0scw7r5q72kszfyxn0yk2gs";
+    sha256 = "sha256-+Y5d7yFOnSk2gQS/m/01ofbNeDCLXb+cTTlHj4bgO0M=";
   };
 
   postPatch = ''
@@ -52,9 +52,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Minimalistic scrobbler for libre.fm & last.fm";
-    homepage    = "https://github.com/mariusor/mpris-scrobbler";
-    license     = licenses.mit;
+    homepage = "https://github.com/mariusor/mpris-scrobbler";
+    license = licenses.mit;
     maintainers = with maintainers; [ emantor ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/mpris-scrobbler.x86_64-darwin
   };
 }

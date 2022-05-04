@@ -16,7 +16,6 @@
 , libnotify
 , vte
 , libgee
-, elementary-icon-theme
 , appstream
 , pcre2
 , wrapGAppsHook
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -86,7 +84,7 @@ stdenv.mkDerivation rec {
       smart copy/paste, and little to no configuration.
     '';
     homepage = "https://github.com/elementary/terminal";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.terminal";

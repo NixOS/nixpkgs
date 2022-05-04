@@ -2,6 +2,7 @@
 , callPackage
 , fetchPypi
 , buildPythonPackage
+, dataclasses
 , pytorch
 , pythonOlder
 , spacy
@@ -12,18 +13,15 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.1.3";
+  version = "1.1.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4f553d3d2a065147a8c1292b5d9adf050c0f78dd15bb05c9614341cf88c5574";
+    hash = "sha256-nxbmnFyHptbe5M7rQi2ECGoBpxUuutdCtY20eHsGDPI=";
   };
-
-  postPatch = ''
-    sed -i 's/transformers>=3.4.0,<4.12.0/transformers/' setup.cfg
-  '';
 
   propagatedBuildInputs = [
     pytorch
@@ -31,12 +29,16 @@ buildPythonPackage rec {
     spacy-alignments
     srsly
     transformers
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
   ];
 
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
 
-  pythonImportsCheck = [ "spacy_transformers" ];
+  pythonImportsCheck = [
+    "spacy_transformers"
+  ];
 
   passthru.tests.annotation = callPackage ./annotation-test { };
 

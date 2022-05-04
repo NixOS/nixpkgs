@@ -2,6 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchurl
+, isPy37
+, isPy38
+, isPy39
+, isPy310
 , python
 , pytorch-bin
 , pythonOlder
@@ -10,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "wheel";
 
   src =
@@ -19,7 +23,7 @@ buildPythonPackage rec {
         srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
     in fetchurl srcs;
 
-  disabled = ! (pythonAtLeast "3.7" && pythonOlder "3.10");
+  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
 
   propagatedBuildInputs = [
     pytorch-bin

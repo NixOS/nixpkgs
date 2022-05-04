@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.10.9";
+  version = "0.10.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "scarface-4711";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Y0sFRKnKZAdP95EyE3h1g92AJeT0Xkshjjwfv/vnfW8=";
+    hash = "sha256-RY1XRGuwSFL429foEjEN93fBucUyyYc6cmpzYmYRorc=";
   };
 
   propagatedBuildInputs = [
@@ -40,11 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-httpx
     pytest-timeout
-  ];
-
-  disabledTestPaths = [
-    # https://github.com/ol-iver/denonavr/issues/228
-    "tests/test_denonavr.py"
   ];
 
   pythonImportsCheck = [

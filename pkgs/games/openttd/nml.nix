@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "openttd-nml";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
     repo = "nml";
     rev = version;
-    sha256 = "0kfnkshff3wrxsj1wpfbbw2mmgww2q80v63p5d2pp1f38x8j33w9";
+    sha256 = "0z0n4lqvnqigfjjhmmz7mvis7iivd4a8d287ya2yscfg5hznnqh2";
   };
 
   propagatedBuildInputs = with python3Packages; [ply pillow];

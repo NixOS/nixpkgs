@@ -1,14 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-let
-  name = "cccc";
+stdenv.mkDerivation rec {
+  pname = "cccc";
   version = "3.1.4";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${version}/${name}-${version}.tar.gz";
+    url = "mirror://sourceforge/cccc/${version}/cccc-${version}.tar.gz";
     sha256 = "1gsdzzisrk95kajs3gfxks3bjvfd9g680fin6a9pjrism2lyrcr7";
   };
 

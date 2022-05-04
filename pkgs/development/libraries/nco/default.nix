@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nco";
-  version = "5.0.4";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "nco";
     repo = "nco";
     rev = version;
-    sha256 = "sha256-hE3TSfZoKqiUEcLO+Q3xAjhyDPNqoq7+FGlKNpm8hjY=";
+    sha256 = "sha256-LmxHgSBBqXK5M4KOthd8R+H5EY3O5lueb2gnw5mK8Xw=";
   };
 
   nativeBuildInputs = [ flex which antlr2 ];

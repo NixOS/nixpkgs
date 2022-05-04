@@ -2,31 +2,36 @@
 let
   inherit (pkgs) callPackage fetchurl;
   versions = if stdenv.isLinux then {
-    stable = "0.0.16";
-    ptb = "0.0.27";
-    canary = "0.0.132";
+    stable = "0.0.17";
+    ptb = "0.0.29";
+    canary = "0.0.135";
   } else {
     stable = "0.0.264";
-    ptb = "0.0.58";
-    canary = "0.0.280";
+    ptb = "0.0.59";
+    canary = "0.0.283";
   };
   version = versions.${branch};
-  srcs = {
+  srcs = let
+    darwin-ptb = fetchurl {
+      url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
+      sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
+    };
+  in {
     x86_64-linux = {
       stable = fetchurl {
         url =
           "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "UTVKjs/i7C/m8141bXBsakQRFd/c//EmqqhKhkr1OOk=";
+        sha256 = "058k0cmbm4y572jqw83bayb2zzl2fw2aaz0zj1gvg6sxblp76qil";
       };
       ptb = fetchurl {
         url =
           "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "0yphs65wpyr0ap6y24b0nbhq7sm02dg5c1yiym1fxjbynm1mdvqb";
+        sha256 = "d78NnQZ3MkLje8mHrI6noH2iD2oEvSJ3cDnsmzQsUYc=";
       };
       canary = fetchurl {
         url =
           "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "1jjbd9qllgcdpnfxg5alxpwl050vzg13rh17n638wha0vv4mjhyv";
+        sha256 = "sha256-dmG+3BWS1BMHHQAv4fsXuObVeAJBeD+TqnyQz69AMac=";
       };
     };
     x86_64-darwin = {
@@ -34,25 +39,15 @@ let
         url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
         sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
       };
-      ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-GwYUoPBbx9lSaRP1JwzI0UE9gEU+rV4a9BNPVSxHki0=";
-      };
+      ptb = darwin-ptb;
       canary = fetchurl {
         url =
           "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        sha256 = "0ccchsywry68vv81pqzzxmh1r19lnvxr429iwvgfr9y82lyjvz06";
+        sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
       };
     };
     # Only PTB bundles a MachO Universal binary with ARM support.
-    aarch64-darwin = {
-      ptb = fetchurl {
-        url =
-          "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-GwYUoPBbx9lSaRP1JwzI0UE9gEU+rV4a9BNPVSxHki0=";
-      };
-    };
+    aarch64-darwin = { ptb = darwin-ptb; };
   };
   src = srcs.${stdenv.hostPlatform.system}.${branch};
 
@@ -66,24 +61,24 @@ let
       ++ lib.optionals (branch == "ptb") [ "aarch64-darwin" ];
   };
   package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
-  packages = {
-    stable = callPackage package rec {
-      inherit src version meta;
-      pname = "discord";
-      binaryName = "Discord";
-      desktopName = "Discord";
-    };
-    ptb = callPackage package rec {
-      inherit src version meta;
-      pname = "discord-ptb";
-      binaryName = "DiscordPTB";
-      desktopName = "Discord PTB";
-    };
-    canary = callPackage package rec {
-      inherit src version meta;
-      pname = "discord-canary";
-      binaryName = "DiscordCanary";
-      desktopName = "Discord Canary";
-    };
-  };
+  packages = (builtins.mapAttrs
+    (_: value: callPackage package (value // { inherit src version; meta = meta // { mainProgram = value.binaryName; }; }))
+    {
+      stable = rec {
+        pname = "discord";
+        binaryName = "Discord";
+        desktopName = "Discord";
+      };
+      ptb = rec {
+        pname = "discord-ptb";
+        binaryName = "DiscordPTB";
+        desktopName = "Discord PTB";
+      };
+      canary = rec {
+        pname = "discord-canary";
+        binaryName = "DiscordCanary";
+        desktopName = "Discord Canary";
+      };
+    }
+  );
 in packages.${branch}

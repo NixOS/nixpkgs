@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "avrdudess";
-  version = "2.2.20140102";
+  version = "2.13";
 
   src = fetchurl {
-    url = "http://blog.zakkemble.co.uk/download/avrdudess_20140102.zip";
-    sha256 = "18llpvjsfhypzijrvfbzmcg3g141f307mzsrg11wcdxh9syxqak6";
+    url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.13/AVRDUDESS-2.13-portable.zip";
+    sha256 = "0fpvc19fb14ppqfb2yg821szmhyanxcp5chfldf8yh51f64zihv9";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -36,7 +36,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
-    homepage = "https://github.com/zkemble/AVRDUDESS";
+    homepage = "https://blog.zakkemble.net/avrdudess-a-gui-for-avrdude/";
+    changelog = "https://github.com/ZakKemble/AVRDUDESS/blob/v${version}/Changelog.txt";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

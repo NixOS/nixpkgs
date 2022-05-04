@@ -68,6 +68,14 @@ stdenv.mkDerivation rec {
     pango
   ];
 
+  postInstall = ''
+    # elementary/dock/master is missing a Meson post
+    # install script that does this. This has been
+    # resolved after the dock rewrite (the `main` branch).
+    # https://github.com/elementary/default-settings/issues/267
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
   meta = with lib; {
     description = "Elegant, simple, clean dock";
     homepage = "https://github.com/elementary/dock";

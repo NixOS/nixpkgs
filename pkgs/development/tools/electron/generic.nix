@@ -15,11 +15,12 @@
 , libxkbcommon
 , libappindicator-gtk3
 , libxshmfence
+, libglvnd
 }:
 
 version: hashes:
 let
-  name = "electron-${version}";
+  pname = "electron";
 
   meta = with lib; {
     description = "Cross platform desktop application shell";
@@ -28,7 +29,7 @@ let
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ]
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ];
-    knownVulnerabilities = optional (versionOlder version "13.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "15.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -54,16 +55,17 @@ let
     "Unsupported system: ${platform.system}";
 
   common = platform: {
-    inherit name version meta;
+    inherit pname version meta;
     src = fetcher version (get tags platform) (get hashes platform);
     passthru.headers = headersFetcher version hashes.headers;
   };
 
   electronLibPath = with lib; makeLibraryPath (
     [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
-    ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
-    ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
-    ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
+    ++ optionals (versionAtLeast version "9.0.0") [ libdrm mesa ]
+    ++ optionals (versionAtLeast version "11.0.0") [ libxkbcommon ]
+    ++ optionals (versionAtLeast version "12.0.0") [ libxshmfence ]
+    ++ optionals (versionAtLeast version "17.0.0") [ libglvnd ]
   );
 
   linux = {
@@ -90,7 +92,8 @@ let
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
-        $out/lib/electron/electron
+        $out/lib/electron/electron \
+        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
 
       wrapProgram $out/lib/electron/electron \
         --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \

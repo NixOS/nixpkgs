@@ -1,12 +1,41 @@
 { config, lib, options, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.system.nixos;
   opt = options.system.nixos;
-in
 
+  inherit (lib)
+    concatStringsSep mapAttrsToList toLower
+    literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
+
+  needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
+  escapeIfNeccessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
+  attrsToText = attrs:
+    concatStringsSep "\n" (
+      mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
+    );
+
+  osReleaseContents = {
+    NAME = "NixOS";
+    ID = "nixos";
+    VERSION = "${cfg.release} (${cfg.codeName})";
+    VERSION_CODENAME = toLower cfg.codeName;
+    VERSION_ID = cfg.release;
+    BUILD_ID = cfg.version;
+    PRETTY_NAME = "NixOS ${cfg.release} (${cfg.codeName})";
+    LOGO = "nix-snowflake";
+    HOME_URL = "https://nixos.org/";
+    DOCUMENTATION_URL = "https://nixos.org/learn.html";
+    SUPPORT_URL = "https://nixos.org/community.html";
+    BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
+  };
+
+  initrdReleaseContents = osReleaseContents // {
+    PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
+  };
+  initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
+
+in
 {
   imports = [
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
@@ -101,22 +130,22 @@ in
     # Generate /etc/os-release.  See
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
-    environment.etc.os-release.text =
-      ''
-        NAME=NixOS
-        ID=nixos
-        VERSION="${cfg.release} (${cfg.codeName})"
-        VERSION_CODENAME=${toLower cfg.codeName}
-        VERSION_ID="${cfg.release}"
-        BUILD_ID="${cfg.version}"
-        PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
-        LOGO="nix-snowflake"
-        HOME_URL="https://nixos.org/"
-        DOCUMENTATION_URL="https://nixos.org/learn.html"
-        SUPPORT_URL="https://nixos.org/community.html"
-        BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
-      '';
+    environment.etc = {
+      "lsb-release".text = attrsToText {
+        LSB_VERSION = "${cfg.release} (${cfg.codeName})";
+        DISTRIB_ID = "nixos";
+        DISTRIB_RELEASE = cfg.release;
+        DISTRIB_CODENAME = toLower cfg.codeName;
+        DISTRIB_DESCRIPTION = "NixOS ${cfg.release} (${cfg.codeName})";
+      };
 
+      "os-release".text = attrsToText osReleaseContents;
+    };
+
+    boot.initrd.systemd.contents = {
+      "/etc/os-release".source = initrdRelease;
+      "/etc/initrd-release".source = initrdRelease;
+    };
   };
 
   # uses version info nixpkgs, which requires a full nixpkgs path

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     description = "Scientific and numerical computing benchmark (ANSI C version)";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "scimark4";
     platforms = platforms.all;
   };
 }

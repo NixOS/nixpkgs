@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2Packages, installShellFiles }:
+{ lib, stdenv, fetchurl, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     installShellFiles
-    python2Packages.wrapPython
+    python3.pkgs.wrapPython
   ];
 
   dontConfigure = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # Upstream doesn't provide a setup.py or alike, so we follow:
   # http://fungi.yuggoth.org/weather/doc/install.rst#id3
   installPhase = ''
-    site_packages=$out/${python2Packages.python.sitePackages}
+    site_packages=$out/${python3.sitePackages}
     install -Dt $out/bin -m 755 weather
     install -Dt $site_packages weather.py
     install -Dt $out/share/weather-util \

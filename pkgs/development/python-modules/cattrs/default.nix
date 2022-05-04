@@ -7,27 +7,27 @@
 , motor
 , msgpack
 , poetry-core
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , tomlkit
+, typing-extensions
 , ujson
 }:
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "1.8.0";
+  version = "1.10.0";
   format = "pyproject";
 
-  # https://cattrs.readthedocs.io/en/latest/history.html#id33:
-  # "Python 2, 3.5 and 3.6 support removal. If you need it, use a version below 1.1.0."
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Tinche";
+    owner = "python-attrs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CKAsvRKS8kmLcyPA753mh6d3S04ObzO7xLPpmlmxrxI=";
+    hash = "sha256-VbfQMMDO03eeUHAACxoX6a3DKmzoF9EfLuTpvaY6bWs=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing-extensions
   ];
 
   checkInputs = [
@@ -43,17 +45,19 @@ buildPythonPackage rec {
     immutables
     motor
     msgpack
+    pytest-xdist
     pytestCheckHook
     pyyaml
     tomlkit
     ujson
   ];
 
+
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace pyproject.toml \
-      --replace 'orjson = "^3.5.2"' ""
+      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" "" \
+      --replace 'orjson = "^3.5.2"' "" \
+      --replace "[tool.poetry.group.dev.dependencies]" "[tool.poetry.dev-dependencies]"
     substituteInPlace tests/test_preconf.py \
       --replace "from orjson import dumps as orjson_dumps" "" \
       --replace "from orjson import loads as orjson_loads" ""
@@ -74,13 +78,17 @@ buildPythonPackage rec {
   disabledTests = [
     # orjson is not available as it requires Rust nightly features to compile its requirements
     "test_orjson"
+    # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
+    "test_tomlkit"
   ];
 
-  pythonImportsCheck = [ "cattr" ];
+  pythonImportsCheck = [
+    "cattr"
+  ];
 
   meta = with lib; {
     description = "Python custom class converters for attrs";
-    homepage = "https://github.com/Tinche/cattrs";
+    homepage = "https://github.com/python-attrs/cattrs";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

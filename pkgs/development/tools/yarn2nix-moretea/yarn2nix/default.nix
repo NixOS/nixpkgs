@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
-, allowAliases ? pkgs.config.allowAliases or true
+, allowAliases ? pkgs.config.allowAliases
 }:
 
 let
@@ -74,11 +74,17 @@ in rec {
     preBuild ? "",
     postBuild ? "",
     workspaceDependencies ? [], # List of yarn packages
+    packageResolutions ? {},
   }:
     let
-      extraBuildInputs = (lib.flatten (builtins.map (key:
-        pkgConfig.${key}.buildInputs or []
-      ) (builtins.attrNames pkgConfig)));
+      extraNativeBuildInputs =
+        lib.concatMap
+          (key: pkgConfig.${key}.nativeBuildInputs or [])
+          (builtins.attrNames pkgConfig);
+      extraBuildInputs =
+        lib.concatMap
+          (key: pkgConfig.${key}.buildInputs or [])
+          (builtins.attrNames pkgConfig);
 
       postInstall = (builtins.map (key:
         if (pkgConfig.${key} ? postInstall) then
@@ -93,7 +99,7 @@ in rec {
 
       workspaceJSON = pkgs.writeText
         "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; }); # scoped packages need second splat
+        (builtins.toJSON { private = true; workspaces = ["deps/**"]; resolutions = packageResolutions; }); # scoped packages need second splat
 
       workspaceDependencyLinks = lib.concatMapStringsSep "\n"
         (dep: ''
@@ -106,7 +112,8 @@ in rec {
       inherit preBuild postBuild name;
       dontUnpack = true;
       dontInstall = true;
-      buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
+      nativeBuildInputs = [ yarn nodejs git ] ++ extraNativeBuildInputs;
+      buildInputs = extraBuildInputs;
 
       configurePhase = lib.optionalString (offlineCache ? outputHash) ''
         if ! cmp -s ${yarnLock} ${offlineCache}/yarn.lock; then
@@ -168,7 +175,9 @@ in rec {
   let
     package = lib.importJSON packageJSON;
 
-    packageGlobs = package.workspaces;
+    packageGlobs = if lib.isList package.workspaces then package.workspaces else package.workspaces.packages;
+
+    packageResolutions = package.resolutions or {};
 
     globElemToRegex = lib.replaceStrings ["*"] [".*"];
 
@@ -217,7 +226,7 @@ in rec {
         inherit name;
         value = mkYarnPackage (
           builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock workspaceDependencies; }
+          // { inherit src packageJSON yarnLock packageResolutions workspaceDependencies; }
           // lib.attrByPath [name] {} packageOverrides
         );
       })
@@ -239,6 +248,7 @@ in rec {
     extraBuildInputs ? [],
     publishBinsFor ? null,
     workspaceDependencies ? [], # List of yarnPackages
+    packageResolutions ? {},
     ...
   }@attrs:
     let
@@ -258,7 +268,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig;
+        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig packageResolutions;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
@@ -292,7 +302,7 @@ in rec {
         '')
         workspaceDependenciesTransitive;
 
-    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies"] // {
+    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
       inherit src pname;
 
       name = baseName;

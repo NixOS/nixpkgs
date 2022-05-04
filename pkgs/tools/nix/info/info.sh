@@ -84,7 +84,7 @@ desc_host_os() {
         (
             # shellcheck disable=SC1091
             . /etc/os-release
-            printf ", %s, %s" "${NAME:-$(uname -v)}" "${VERSION:-noversion}"
+            printf ", %s, %s, %s" "${NAME:-$(uname -v)}" "${VERSION:-noversion}" "${BUILD_ID:-nobuild}"
         )
     fi
 }

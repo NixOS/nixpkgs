@@ -1,21 +1,21 @@
 { lib, stdenv, fetchurl, cmake, pkg-config, SDL2, SDL2_image , curl
 , libogg, libvorbis, libGLU, libGL, openal, boost, glew
-, libpng, freetype
+, libpng, freetype, glm
 }:
 
 stdenv.mkDerivation rec {
   pname = "supertux";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchurl {
     url = "https://github.com/SuperTux/supertux/releases/download/v${version}/SuperTux-v${version}-Source.tar.gz";
-    sha256 = "167m3z4m8n76dvbv42m1fnvabpbpsxvr28zk9641916jl9pfba96";
+    sha256 = "1xkr3ka2sxp5s0spp84iv294i29s1vxqzazb6kmjc0n415h0x57p";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ SDL2 SDL2_image curl libogg libvorbis libGLU libGL openal boost glew
-    libpng freetype
+    libpng freetype glm
   ];
 
   cmakeFlags = [ "-DENABLE_BOOST_STATIC_LIBS=OFF" ];

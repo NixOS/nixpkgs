@@ -3,17 +3,19 @@
 , fetchFromGitHub
 , pytestCheckHook
 , six
+, pytest-mypy
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.7.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gns9v5144cj03p7qbb3822scb6pwrlgr6niixpkynwqkcwjfg4c";
+    sha256 = "sha256-+NgcVIDM9f2OKBpJNWlSyFxEONltPWJSWIu400/5RkQ=
+";
   };
 
   # disable coverage and linting
@@ -27,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytest-mypy
     pytestCheckHook
   ];
 

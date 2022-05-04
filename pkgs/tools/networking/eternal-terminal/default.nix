@@ -7,6 +7,7 @@
 , openssl
 , protobuf
 , zlib
+, catch2
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,10 @@ stdenv.mkDerivation rec {
     rev = "et-v${version}";
     hash = "sha256-cCZbG0CD5V/FTj1BuVr083EJ+BCgIcKHomNtpJb3lOo=";
   };
+
+  preBuild = ''
+    cp ${catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -42,15 +47,13 @@ stdenv.mkDerivation rec {
     "-std=c++17"
   ];
 
-  LDFLAGS = lib.optional stdenv.cc.isClang [
-    "-lc++fs"
-  ];
+  doCheck = true;
 
   meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dezgeg pingiun ];
+    maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

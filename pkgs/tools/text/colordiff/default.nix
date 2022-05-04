@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto }:
+{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto, diffutils }:
 
 stdenv.mkDerivation rec {
   pname = "colordiff";
-  version = "1.0.19";
+  version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "daveewart";
     repo = "colordiff";
     rev = "v${version}";
-    sha256 = "1v7s1yn0qvn08iwm5js8mxn442392qyr7s9ij506byfd497ag7qk";
+    sha256 = "sha256-+TtVnUX88LMd8zmhLsKTyR9JlgR7IkUB18PF3LRgPB0=";
   };
 
   nativeBuildInputs = [ docbook_xml_dtd_412 docbook_xsl perl w3m xmlto ];
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace 'TMPDIR=colordiff-''${VERSION}' ""
+
+    substituteInPlace colordiff.pl \
+      --replace '= "diff";' '= "${diffutils}/bin/diff";'
   '';
 
   installFlags = [

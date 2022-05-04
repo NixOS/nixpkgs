@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, gfortran }:
+{ lib, stdenv, fetchurl, cmake, gfortran
+# Wether to build with ILP64 interface
+, blas64 ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "blas";
@@ -9,50 +12,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LjYNmcm9yEB6YYiMQKqFP7QhlCDruCZNtIbLiGBGirM=";
   };
 
-  nativeBuildInputs = [ gfortran ];
+  passthru = { inherit blas64; };
 
-  configurePhase = ''
-    echo >make.inc  "SHELL = ${stdenv.shell}"
-    echo >>make.inc "PLAT = _LINUX"
-    echo >>make.inc "FORTRAN = gfortran"
-    echo >>make.inc "OPTS = -O2 -fPIC"
-    echo >>make.inc "DRVOPTS = $$(OPTS)"
-    echo >>make.inc "NOOPT = -O0 -fPIC"
-    echo >>make.inc "LOADER = gfortran"
-    echo >>make.inc "LOADOPTS ="
-    echo >>make.inc "AR = gfortran"
-    echo >>make.inc "ARFLAGS = -shared -o"
-    echo >>make.inc "RANLIB = echo"
-    echo >>make.inc "BLASLIB = libblas.so.${version}"
-  '';
+  nativeBuildInputs = [ cmake gfortran ];
 
-  buildPhase = ''
-    make
-    echo >>make.inc "ARFLAGS = "
-    echo >>make.inc "BLASLIB = libblas.a"
-    echo >>make.inc "AR = ar rcs"
-    echo >>make.inc "RANLIB = ranlib"
-    make
-  '';
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ]
+    ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
 
-  installPhase =
-    # FreeBSD's stdenv doesn't use Coreutils.
-    let dashD = if stdenv.isFreeBSD then "" else "-D"; in
-    (lib.optionalString stdenv.isFreeBSD "mkdir -p $out/lib ;")
-    + ''
-    install ${dashD} -m755 libblas.a "$out/lib/libblas.a"
-    install ${dashD} -m755 libblas.so.${version} "$out/lib/libblas.so.${version}"
-    ln -s libblas.so.${version} "$out/lib/libblas.so.3"
-    ln -s libblas.so.${version} "$out/lib/libblas.so"
-    # Write pkg-config alias.
-    # See also openblas/default.nix
-    mkdir $out/lib/pkgconfig
-    cat <<EOF > $out/lib/pkgconfig/blas.pc
-Name: blas
-Version: ${version}
-Description: blas provided by the BLAS package.
-Libs: -L$out/lib -lblas
-EOF
+  postInstall = let
+    canonicalExtension = if stdenv.hostPlatform.isLinux
+                       then "${stdenv.hostPlatform.extensions.sharedLibrary}.${lib.versions.major version}"
+                       else stdenv.hostPlatform.extensions.sharedLibrary;
+  in lib.optionalString blas64 ''
+    ln -s $out/lib/libblas64${canonicalExtension} $out/lib/libblas${canonicalExtension}
   '';
 
   preFixup = lib.optionalString stdenv.isDarwin ''
@@ -62,10 +34,11 @@ EOF
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.markuskowa ];
     homepage = "http://www.netlib.org/blas/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

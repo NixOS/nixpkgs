@@ -43,7 +43,7 @@ let
             maintainers = tested.meta.maintainers;
           };
 
-          machine = { ... }: {
+          nodes.machine = { ... }: {
             imports = [
               testConfig
             ] ++ optional withX11 ../common/x11.nix;
@@ -84,6 +84,8 @@ let
 in
 
 {
+  appstream = callInstalledTest ./appstream.nix {};
+  appstream-qt = callInstalledTest ./appstream-qt.nix {};
   colord = callInstalledTest ./colord.nix {};
   flatpak = callInstalledTest ./flatpak.nix {};
   flatpak-builder = callInstalledTest ./flatpak-builder.nix {};

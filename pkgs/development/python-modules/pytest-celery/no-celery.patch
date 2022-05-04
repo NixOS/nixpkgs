@@ -1,9 +1,0 @@
-This plugin is needed to test celery itself, so it can't depend on celery.
-
---- a/setup.py
-+++ b/setup.py
-@@ -6,3 +6,3 @@ from distutils.core import setup
- install_requires = \
--['celery >= 4.4.0']
-+[]
- 

@@ -1,15 +1,31 @@
-{ lib, stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkg-config, file, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome, kmod, libnma }:
+{ stdenv
+, lib
+, fetchurl
+, substituteAll
+, openvpn
+, intltool
+, libxml2
+, pkg-config
+, file
+, networkmanager
+, libsecret
+, glib
+, gtk3
+, gtk4
+, withGnome ? true
+, gnome
+, kmod
+, libnma
+, libnma-gtk4
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "NetworkManager-openvpn";
-  version = "1.8.16";
-in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  version = "1.8.18";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "iSDeCceuXx9SDIP4REVduPrsMUJzUCaP4t2VuGD5H7U=";
+    url = "mirror://gnome/sources/NetworkManager-openvpn/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "U9+wrPZEeK3HKAdPFi9i5gv/YqYFvYl+uIsmfnBXkno=";
   };
 
   patches = [
@@ -19,13 +35,28 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ openvpn networkmanager ]
-    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
+  nativeBuildInputs = [
+    intltool
+    pkg-config
+    file
+    libxml2
+  ];
 
-  nativeBuildInputs = [ intltool pkg-config file libxml2 ];
+  buildInputs = [
+    openvpn
+    networkmanager
+    glib
+  ] ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];
@@ -36,6 +67,7 @@ in stdenv.mkDerivation {
       attrPath = "networkmanager-openvpn";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-openvpn-service.name";
   };
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.7.1";
+  version = "3.8.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05hj2mw3ppfjaig5zdk5db9vfrbbq5gmv5rzggmvvrj0yyfpr0pd";
+    sha256 = "sha256-BaSpw7TiBymCvoP0/z1zynWKQJH/PjbbGf85ZI9LOZw=";
   };
 
   format = "pyproject";
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   patches = [
     # Don't try to install cmake and ninja using pip
     ./no-pypi-build-tools.patch
+
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
   ];
@@ -84,6 +85,8 @@ buildPythonPackage rec {
     # aarch64-only (?) failure, unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
+  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_type1mm_inputs"
   ];
 
   passthru.tests = {

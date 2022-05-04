@@ -176,6 +176,10 @@ let
               if test -e $out/bin/phpdbg; then
                 wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
               fi
+
+              if test -e $out/bin/php-cgi; then
+                wrapProgram $out/bin/php-cgi --set PHP_INI_SCAN_DIR $out/lib
+              fi
             '';
           };
         in
@@ -268,7 +272,7 @@ let
               export EXTENSION_DIR=$out/lib/php/extensions
             ''
             # PKG_CONFIG need not be a relative path
-            + lib.optionalString (!lib.versionAtLeast version "7.4") ''
+            + lib.optionalString (lib.versionOlder version "7.4") ''
               for i in $(find . -type f -name "*.m4"); do
                 substituteInPlace $i \
                   --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'

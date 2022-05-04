@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://cmpg.unibe.ch/software/BayeScan";
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
+    mainProgram = "bayescan_${version}";
     platforms = lib.platforms.all;
   };
 }

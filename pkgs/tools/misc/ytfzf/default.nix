@@ -16,30 +16,32 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.0";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-JuLfFC3oz2FvCaD+XPuL1N8tGKmv4atyZIBeDKWYgT8=";
+    hash = "sha256-zfoICi1VChmrRHZ3dSHGTcXkVf/zirQTycFz98xj+QY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}/bin" ];
-
   dontBuild = true;
 
-  postInstall = ''
-    wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
-    ]}
+  installFlags = [
+    "PREFIX="
+    "DESTDIR=${placeholder "out"}"
+    "doc"
+    "addons"
+  ];
 
-    gzip -c docs/man/ytfzf.1 > docs/man/ytfzf.1.gz
-    gzip -c docs/man/ytfzf.5 > docs/man/ytfzf.5.gz
-    install -Dt "$out/share/man/man1" docs/man/ytfzf.1.gz
-    install -Dt "$out/share/man/man5" docs/man/ytfzf.5.gz
+  postInstall = ''
+    wrapProgram "$out/bin/ytfzf" \
+      --prefix PATH : ${lib.makeBinPath [
+        chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+      ]} \
+      --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
   meta = with lib; {

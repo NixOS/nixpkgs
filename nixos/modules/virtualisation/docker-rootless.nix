@@ -76,7 +76,11 @@ in
       # needs newuidmap from pkgs.shadow
       path = [ "/run/wrappers" ];
       environment = proxy_env;
-      unitConfig.StartLimitInterval = "60s";
+      unitConfig = {
+        # docker-rootless doesn't support running as root.
+        ConditionUser = "!root";
+        StartLimitInterval = "60s";
+      };
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/dockerd-rootless --config-file=${daemonSettingsFile}";

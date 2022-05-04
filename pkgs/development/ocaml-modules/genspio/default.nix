@@ -6,6 +6,8 @@ buildDunePackage rec {
   pname = "genspio";
   version = "0.0.2";
 
+  useDune2 = false;
+
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = pname;
@@ -13,7 +15,7 @@ buildDunePackage rec {
     sha256 = "0cp6p1f713sfv4p2r03bzvjvakzn4ili7hf3a952b3w1k39hv37x";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   propagatedBuildInputs = [ nonstd sosa ];
 

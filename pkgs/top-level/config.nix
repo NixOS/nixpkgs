@@ -32,17 +32,80 @@ let
       feature = "run <literal>checkPhase</literal> by default";
     };
 
-    path = mkOption {
-      type = types.path;
-      default = ../..;
-      defaultText = lib.literalDocBook "a path expression";
-      internal = true;
-      description = ''
-        A reference to Nixpkgs' own sources.
+    strictDepsByDefault = mkMassRebuild {
+      feature = "set <literal>strictDeps</literal> to true by default";
+    };
 
-        This is overridable in order to avoid copying sources unnecessarily,
-        as a path expression that references a store path will not short-circuit
-        to the store path itself, but copy the store path instead.
+    contentAddressedByDefault = mkMassRebuild {
+      feature = "set <literal>__contentAddressed</literal> to true by default";
+    };
+
+    allowAliases = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to expose old attribute names for compatibility.
+
+        The recommended setting is to enable this, as it
+        improves backward compatibity, easing updates.
+
+        The only reason to disable aliases is for continuous
+        integration purposes. For instance, Nixpkgs should
+        not depend on aliases in its internal code. Projects
+        that aren't Nixpkgs should be cautious of instantly
+        removing all usages of aliases, as migrating too soon
+        can break compatibility with the stable Nixpkgs releases.
+      '';
+    };
+
+    allowUnfree = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
+      description = ''
+        Whether to allow unfree packages.
+
+        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree">Installing unfree packages</link> in the NixOS manual.
+      '';
+    };
+
+    allowBroken = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1"'';
+      description = ''
+        Whether to allow broken packages.
+
+        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken">Installing broken packages</link> in the NixOS manual.
+      '';
+    };
+
+    allowUnsupportedSystem = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"'';
+      description = ''
+        Whether to allow unsupported packages.
+
+        See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system">Installing packages on unsupported systems</link> in the NixOS manual.
+      '';
+    };
+
+    showDerivationWarnings = mkOption {
+      type = types.listOf (types.enum [ "maintainerless" ]);
+      default = [];
+      description = ''
+        Which warnings to display for potentially dangerous
+        or deprecated values passed into `stdenv.mkDerivation`.
+
+        A list of warnings can be found in
+        <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix">/pkgs/stdenv/generic/check-meta.nix</link>.
+
+        This is not a stable interface; warnings may be added, changed
+        or removed without prior notice.
       '';
     };
 

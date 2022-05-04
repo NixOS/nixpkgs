@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-swagger";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "go-swagger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Bw84HQxrI8cSBEM1cxXmWCPqKZa5oGsob2iuUsiAZ+A=";
+    sha256 = "sha256-sahInHXv1GtylsY8kpw1dDjKiENmq4myx+7mq60vJAI=";
   };
 
-  vendorSha256 = "sha256-ZNRJZQ7DwT/+scsbSud/IpSX06veOtJ5Aszj0RbS870=";
+  vendorSha256 = "sha256-KLV6ABo1K+KtAzAQ4FcFiK1LAZEsKup+BtgjRJfonAY=";
 
   doCheck = false;
 
@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/go-swagger/go-swagger";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "swagger";
   };
 }

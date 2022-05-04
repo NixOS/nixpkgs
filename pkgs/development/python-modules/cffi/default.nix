@@ -19,11 +19,12 @@ if isPyPy then null else buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycparser ];
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove setup.py impurities
-    substituteInPlace setup.py --replace "'-iwithsysroot/usr/include/ffi'" ""
-    substituteInPlace setup.py --replace "'/usr/include/ffi'," ""
-    substituteInPlace setup.py --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
+    substituteInPlace setup.py \
+      --replace "'-iwithsysroot/usr/include/ffi'" "" \
+      --replace "'/usr/include/ffi'," "" \
+      --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
   '';
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.

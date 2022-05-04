@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, six
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,30 @@ buildPythonPackage rec {
     sha256 = "21hABRiY8CTKkpFjePgBAtjs4/G5eFS3aPNMCBC41CY=";
   };
 
+  preBuild = ''
+    export PYGRADLE_PROJECT_VERSION=${version};
+  '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   checkInputs = [
     git
     mock
     pep440
     pytestCheckHook
-    setuptools-scm
+    six
   ];
+
+  preCheck = ''
+    unset PYGRADLE_PROJECT_VERSION
+  '';
 
   disabledTests = [
     # Tests want to scan site-packages
     "test_check_dependencies"
+    "test_clean"
     "test_scenario"
     "test_git_versioning"
   ];

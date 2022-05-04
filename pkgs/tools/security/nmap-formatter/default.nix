@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nmap-formatter";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r8l7ajcb436b60ir6xgy53wafk6rw1cil326yg6mhcngz9sazbk";
+    sha256 = "sha256-tG91Cutk+RCBPv4Rf8CVnZa5Wh8qgsxEL0C6WIoEdsw=";
   };
 
-  vendorSha256 = "0c1b4iw28qj8iq55lg32xqw69jjdv5ial495j0gz68s17kydbwhb";
+  vendorSha256 = "sha256-WXX1b8fPcwIE40w+Kzd7ZuSRXPiYtolRXC/Z8Kc9H2s=";
 
   postPatch = ''
     # Fix hard-coded release

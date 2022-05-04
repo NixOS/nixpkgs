@@ -1,21 +1,32 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "hostctl";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "guumaster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VjFjGvIoymGVVRiZUk/qoq/PTYoklp+Jz89zndX0e5A=";
+    hash = "sha256-rvUm31WRSLusM9VGsIHKGTH6Vs8LWPtzPDs3azA710w=";
   };
 
   vendorSha256 = "sha256-rGDWrivIdl5FTu/kNR8nAfE2+1hE4cm3uDg7oBobE9M=";
 
-  ldflags = [ "-s" "-w" "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}" ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}"
+  ];
+
   postInstall = ''
     installShellCompletion --cmd hostctl \
       --bash <($out/bin/hostctl completion bash) \
@@ -23,7 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Your dev tool to manage /etc/hosts like a pro!";
+    description = "CLI tool to manage the /etc/hosts file";
     longDescription = ''
       This tool gives you more control over the use of your hosts file.
       You can have multiple profiles and switch them on/off as you need.
