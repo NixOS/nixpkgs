@@ -5622,6 +5622,11 @@ in {
 
   nextcord = callPackage ../development/python-modules/nextcord { };
 
+  nftables = toPythonModule (pkgs.nftables.override {
+    python3 = python;
+    withPython = true;
+  });
+
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
     inherit (self) python cython setuptools;
     inherit (pkgs) ncurses;

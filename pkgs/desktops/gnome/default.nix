@@ -379,7 +379,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   dconf = throw "The ‘gnome.dconf’ alias was removed on 2022-01-13. Please use ‘pkgs.dconf’ directly."; # added 2019-11-30
 
-  networkmanagerapplet = throw "The ‘gnome.networkmanagerapplet’ alias was removed on 2022-01-13. Please use ‘pkgs.networkmanagerapplet’ directly."; # added 2019-12-12
+  networkmanagerapplet = throw "The ‘gnome.networkmanagerapplet’ alias was removed on 2022-01-13. Please use ‘pkgs.networkmanager-applet’ directly."; # added 2019-12-12
 
   glade = throw "The ‘gnome.glade’ alias was removed on 2022-01-13. Please use ‘pkgs.glade’ directly."; # added 2020-05-15
 
