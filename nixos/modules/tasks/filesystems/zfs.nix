@@ -60,7 +60,7 @@ let
   importLib = {zpoolCmd, awkCmd, cfgZfs}: ''
     for o in $(cat /proc/cmdline); do
       case $o in
-        zfs_force|zfs_force=1)
+        zfs_force|zfs_force=1|zfs_force=y)
           ZFS_FORCE="-f"
           ;;
       esac
