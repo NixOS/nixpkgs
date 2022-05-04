@@ -296,4 +296,7 @@ self: super: ({
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9
   regex-rure = dontCheck super.regex-rure;
+  # same
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  jacinda = dontCheck super.jacinda;
 })
