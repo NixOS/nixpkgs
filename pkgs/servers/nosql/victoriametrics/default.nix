@@ -2,16 +2,22 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.59.0";
+  version = "1.76.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2i9rmk9aAnjTJY+w/NKJOaLX+tpkt3vG07iLCsSGzdU=";
+    sha256 = "sha256-4cgSJi53EGK6YUwO4HlhNs4T07US94A/sPZi2QCx0aw=";
   };
 
   vendorSha256 = null;
+
+  postPatch = ''
+    # main module (github.com/VictoriaMetrics/VictoriaMetrics) does not contain package
+    # github.com/VictoriaMetrics/VictoriaMetrics/app/vmui/packages/vmui/web
+    rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
+  '';
 
   ldflags = [ "-s" "-w" "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
 
@@ -21,7 +27,7 @@ buildGoModule rec {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = licenses.asl20;
-    maintainers = [ maintainers.yorickvp ];
+    maintainers = with maintainers; [ yorickvp ivan ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
     platforms = [ "x86_64-linux" ];
   };
