@@ -5,13 +5,11 @@
 , glibcLocales
 , entrypoints
 , bleach
-, beautifulsoup4
 , mistune
 , nbclient
 , jinja2
 , pygments
 , traitlets
-, testpath
 , jupyter_core
 , jupyterlab-pygments
 , nbformat
@@ -20,15 +18,18 @@
 , tornado
 , jupyter-client
 , defusedxml
+, tinycss2
+, beautifulsoup4
 }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.4.5";
+  version = "6.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IRY6jiBzwHEJyo85iDbkXv26KqzqaNb3WopUX+8HDU4=";
+    hash = "sha256-Ij5G4nq+hZa4rtVDAfrbukM7f/6oGWpo/Xsf9Qnu6Z0=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -44,9 +45,9 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
+    entrypoints bleach mistune jinja2 pygments traitlets
     jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
-    defusedxml beautifulsoup4
+    defusedxml tinycss2 beautifulsoup4
     nbclient
     jupyterlab-pygments
   ];
