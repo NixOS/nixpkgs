@@ -46,8 +46,20 @@ let
       aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
+      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
+      });
+      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pynws = super.pynws.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pytomorrowio = super.pytomorrowio.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
       rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires pytest-aiohttp>=1.0.0
