@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.13.5";
+  version = "2.13.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6.2";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FB99vmUtoTc0cTjDUSbx80Tesh0vASigSpPktrDYk08=";
+    sha256 = "sha256-43L6G15zXGgQeWLdJgzNeAX9rVdRbQP/HS3ec4uAg/E=";
   };
 
   nativeBuildInputs = [
@@ -74,14 +74,14 @@ buildPythonPackage rec {
   '';
 
   disabledTestPaths = [
-    # tests miss multiple input files
-    # FileNotFoundError: [Errno 2] No such file or directory
+    # Tests fail due to missing input files with error message:
+    # FileNotFoundError: [Errno 2] No such file or directory: ...
     "tests/pyreverse/test_writer.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_parallel_execution"
-    "test_py3k_jobs_option"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Fail with error message:
+    # 'timeout' not found in `markers` configuration option
+    "tests/checkers/unittest_refactoring.py"
+    "tests/test_regr.py"
   ];
 
   meta = with lib; {
