@@ -200,6 +200,7 @@ rec {
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
             outputSpecified = true;
+            meta = drv.meta // { outputsToInstall = [ outputName ]; };
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           };
