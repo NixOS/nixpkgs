@@ -79,6 +79,7 @@ mapAliases ({
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  loo-py = loopy; # added 2022-05-03
   Markups = markups; # added 2022-02-14
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   net2grid = gridnet; # add 2022-04-22

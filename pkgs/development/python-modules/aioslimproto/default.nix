@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "1.0.1";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -15,11 +16,12 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    hash = "sha256-kR2PG2eivBfqu67hXr8/RRvo5EzI75e8NmG15NPGo1E=";
+    hash = "sha256-7xFbxWay2aPCBkf3pBUGshROtssbi//PxxsI8ELeS+c=";
   };
 
-  # Module has no tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "aioslimproto"
