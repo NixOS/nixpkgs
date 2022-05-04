@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kdash";
-  version = "0.2.4";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "kdash-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09f9qkab2scass4p2vxkhyqslcf32kvpxi1zfa23p72v681jp0c8";
+    sha256 = "08ca638kvs98xhbc9g1szw0730cjk9g01qqaja8j413n2h1pr8yq";
   };
 
   nativeBuildInputs = [ perl python3 pkg-config ];
 
   buildInputs = [ openssl xorg.xcbutil ];
 
-  cargoSha256 = "0jbyvjgxcjw610nd2i6d3jfmhv1lwsl8ss4fd3kwczsms28frx5c";
+  cargoSha256 = "0nb554y8r7gvw7ls6gnrg98xxbws0mc6zdsc6ss3p2x9z8xwx204";
 
   meta = with lib; {
     description = "A simple and fast dashboard for Kubernetes";
