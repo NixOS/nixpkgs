@@ -88,6 +88,6 @@ buildPythonPackage rec {
     homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ totoroot ];
   };
 }
