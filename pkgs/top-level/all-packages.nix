@@ -406,6 +406,8 @@ with pkgs;
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc { };
 
+  protoc-gen-entgrpc = callPackage ../development/tools/protoc-gen-entgrpc { };
+
   protoc-gen-go = callPackage ../development/tools/protoc-gen-go { };
 
   protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
