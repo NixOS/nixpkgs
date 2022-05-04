@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "exoscale-cli";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  excludedPackages = [ "./completion" "./docs" ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
@@ -21,6 +21,19 @@ buildGoModule rec {
   # because these are passed to "go install" which does not recognize -o
   postBuild = ''
     mv $GOPATH/bin/cli $GOPATH/bin/exo
+
+    mkdir -p manpage
+    $GOPATH/bin/docs --man-page
+    rm $GOPATH/bin/docs
+
+    $GOPATH/bin/completion bash
+    $GOPATH/bin/completion zsh
+    rm $GOPATH/bin/completion
+  '';
+
+  postInstall = ''
+    installManPage manpage/*
+    installShellCompletion --cmd exo --bash bash_completion --zsh zsh_completion
   '';
 
   meta = {
