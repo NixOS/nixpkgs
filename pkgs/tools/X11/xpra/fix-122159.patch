@@ -1,0 +1,15 @@
+--- a/xpra/scripts/main.py
++++ b/xpra/scripts/main.py
+@@ -90,6 +90,12 @@
+ 
+ 
+ def main(script_file, cmdline):
++    # Nixpkgs contortion:
++    # script_file points to a shell wrapper, not to the python script.
++    dirname, basename = os.path.split(script_file)
++    script_file = os.path.join(dirname, "."+basename+"-wrapped")
++    cmdline[0] = script_file
++
+     ml = envint("XPRA_MEM_USAGE_LOGGER")
+     if ml>0:
+         from xpra.util import start_mem_watcher

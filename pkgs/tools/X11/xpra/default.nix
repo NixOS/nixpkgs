@@ -56,6 +56,7 @@ in buildPythonApplication rec {
       inherit libfakeXinerama;
     })
     ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
+    ./fix-122159.patch  # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
   INCLUDE_DIRS = "${pam}/include";
