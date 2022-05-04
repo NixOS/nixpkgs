@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv }:
+{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv, tiling_wm ? false }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -7,6 +7,7 @@ let
     };
     inherit (gnome2) GConf gnome_vfs;
     inherit buildFHSUserEnv;
+    inherit tiling_wm;
   };
   stableVersion = {
     version = "2021.1.1.23"; # "Android Studio Bumblebee (2021.1.1 Patch 3)"

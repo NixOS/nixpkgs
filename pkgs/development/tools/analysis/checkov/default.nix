@@ -32,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1102";
+  version = "2.0.1110";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-OPYlgj8jdgCQJddy9UUXMjHJtQcoMrZbghgPUdyUV5Y=";
+    hash = "sha256-HtXJGi20SbbOofL8TAZDZ9L3aFVx33Xz+QS/f7NxYFI=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -89,6 +89,7 @@ buildPythonApplication rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    responses
   ];
 
   postPatch = ''

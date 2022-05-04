@@ -45,6 +45,33 @@
       </listitem>
       <listitem>
         <para>
+          <literal>stdenv.mkDerivation</literal> now supports a
+          self-referencing <literal>finalAttrs:</literal> parameter
+          containing the final <literal>mkDerivation</literal> arguments
+          including overrides. <literal>drv.overrideAttrs</literal> now
+          supports two parameters
+          <literal>finalAttrs: previousAttrs:</literal>. This allows
+          packaging configuration to be overridden in a consistent
+          manner by providing an alternative to
+          <literal>rec {}</literal> syntax.
+        </para>
+        <para>
+          Additionally, <literal>passthru</literal> can now reference
+          <literal>finalAttrs.finalPackage</literal> containing the
+          final package, including attributes such as the output paths
+          and <literal>overrideAttrs</literal>.
+        </para>
+        <para>
+          New language integrations can be simplified by overriding a
+          <quote>prototype</quote> package containing the
+          language-specific logic. This removes the need for a extra
+          layer of overriding for the <quote>generic builder</quote>
+          arguments, thus removing a usability problem and source of
+          error.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 8.1 is now available
         </para>
       </listitem>
@@ -849,6 +876,11 @@
           <literal>22.05</literal>. Files will need to be manually moved
           to the new location if the <literal>stateVersion</literal> is
           updated.
+        </para>
+        <para>
+          As of Synapse 1.58.0, the old groups/communities feature has
+          been disabled by default. It will be completely removed with
+          Synapse 1.61.0.
         </para>
       </listitem>
       <listitem>
