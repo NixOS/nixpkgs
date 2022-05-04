@@ -136,7 +136,7 @@ in
         # session requirements
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
-        networkmanager-applet # session requirement - also nm-applet not needed
+        networkmanagerapplet # session requirement - also nm-applet not needed
 
         # For a polkit authentication agent
         polkit_gnome
