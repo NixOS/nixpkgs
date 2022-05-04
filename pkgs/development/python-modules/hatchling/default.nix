@@ -32,6 +32,11 @@ buildPythonPackage {
     hash = "sha256-zmdl9bW688tX0vgBlsUOIB43KMrNlTU/XJtPA9/fTrk=";
   };
 
+  postPatch = ''
+    substituteInPlace ./src/hatchling/ouroboros.py --replace 'tomli>=1.2.2' 'tomli>=1.2.0'
+    substituteInPlace ./src/hatchling/ouroboros.py --replace 'packaging>=21.3' 'packaging>=20.9'
+  '';
+
   # listed in backend/src/hatchling/ouroboros.py
   propagatedBuildInputs = [
     editables
