@@ -105,13 +105,13 @@ in
 
   vicious = luaLib.toLuaModule( stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.5.0";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
-      owner = "Mic92";
+      owner = "vicious-widgets";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "0lb90334mz0my8ydsmnsnkki0xr58kinsg0hf9d6k4b0vjfi0r0a";
+      sha256 = "sha256-geu/g/dFAVxtY1BuJYpZoVtFS/oL66NFnqiLAnJELtI=";
     };
 
     buildInputs = [ lua ];
@@ -124,9 +124,9 @@ in
 
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
-      homepage    = "https://github.com/Mic92/vicious";
-      license     = licenses.gpl2;
-      maintainers = with maintainers; [ makefu mic92 ];
+      homepage    = "https://vicious.rtfd.io";
+      license     = licenses.gpl2Plus;
+      maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms   = platforms.linux;
     };
   });
