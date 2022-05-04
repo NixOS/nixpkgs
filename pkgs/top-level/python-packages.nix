@@ -2840,6 +2840,8 @@ in {
 
   fastavro = callPackage ../development/python-modules/fastavro { };
 
+  fastbencode = callPackage ../development/python-modules/fastbencode { };
+
   fastcache = callPackage ../development/python-modules/fastcache { };
 
   fastcore = callPackage ../development/python-modules/fastcore { };
