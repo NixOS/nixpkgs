@@ -1874,6 +1874,8 @@ with pkgs;
 
   awless = callPackage ../tools/virtualization/awless { };
 
+  bashblog = callPackage ../tools/text/bashblog { };
+
   berglas = callPackage ../tools/admin/berglas { };
 
   betterdiscordctl = callPackage ../tools/misc/betterdiscordctl { };
@@ -2865,6 +2867,8 @@ with pkgs;
     python = python3;
     boost = boost.override { enablePython = true; python = python3; };
   };
+  calamares-nixos = lowPrio (calamares.override { nixos-extensions = true; });
+  calamares-nixos-extensions = callPackage ../tools/misc/calamares-nixos-extensions {};
 
   calendar-cli = callPackage ../tools/networking/calendar-cli { };
 
@@ -9745,6 +9749,8 @@ with pkgs;
 
   redmine = callPackage ../applications/version-management/redmine { };
 
+  redpanda = callPackage ../servers/redpanda { };
+
   redsocks = callPackage ../tools/networking/redsocks { };
 
   rep = callPackage ../development/tools/rep { };
@@ -13813,7 +13819,6 @@ with pkgs;
   metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
@@ -22531,8 +22536,6 @@ with pkgs;
     sensu-go-cli;
 
   check-wmiplus = callPackage ../servers/monitoring/plugins/wmiplus { };
-
-  uchiwa = callPackage ../servers/monitoring/uchiwa { };
 
   shishi = callPackage ../servers/shishi {
       pam = if stdenv.isLinux then pam else null;

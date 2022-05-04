@@ -74,8 +74,20 @@
         </para>
       </listitem>
       <listitem>
-<literallayout>Pulseaudio has been upgraded to version 15.0 and now optionally <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/15.0/#supportforldacandaptxbluetoothcodecsplussbcxqsbcwithhigher-qualityparameters">supports additional Bluetooth audio codecs</link> like aptX or LDAC, with codec switching support being available in <literal>pavucontrol</literal>. This feature is disabled by default but can be enabled by using <literal>hardware.pulseaudio.package = pkgs.pulseaudioFull;</literal>.
-Existing 3rd party modules that provided similar functionality, like <literal>pulseaudio-modules-bt</literal> or <literal>pulseaudio-hsphfpd</literal> are deprecated and have been removed.</literallayout>
+        <para>
+          Pulseaudio has been upgraded to version 15.0 and now
+          optionally
+          <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/15.0/#supportforldacandaptxbluetoothcodecsplussbcxqsbcwithhigher-qualityparameters">supports
+          additional Bluetooth audio codecs</link> like aptX or LDAC,
+          with codec switching support being available in
+          <literal>pavucontrol</literal>. This feature is disabled by
+          default but can be enabled by using
+          <literal>hardware.pulseaudio.package = pkgs.pulseaudioFull;</literal>.
+          Existing 3rd party modules that provided similar
+          functionality, like <literal>pulseaudio-modules-bt</literal>
+          or <literal>pulseaudio-hsphfpd</literal> are deprecated and
+          have been removed.
+        </para>
       </listitem>
       <listitem>
         <para>
@@ -110,6 +122,14 @@ Existing 3rd party modules that provided similar functionality, like <literal>pu
           <literal>pkgs.haskellPackages</literal> and
           <literal>pkgs.ghc</literal> will now use this version by
           default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The GNOME and Plasma installation CDs now use
+          <literal>pkgs.calamares</literal> and
+          <literal>pkgs.calamares-nixos-extensions</literal> to allow
+          users to easily install and set up NixOS with a GUI.
         </para>
       </listitem>
     </itemizedlist>
@@ -495,6 +515,19 @@ Existing 3rd party modules that provided similar functionality, like <literal>pu
           <literal>libcontainer</literal> based software such as Podman
           and Skopeo which assumes they have ownership over
           <literal>/etc/containers</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For new installations
+          <literal>virtualisation.oci-containers.backend</literal> is
+          now set to <literal>podman</literal> by default. If you still
+          want to use Docker on systems where
+          <literal>system.stateVersion</literal> is set to to
+          <literal>&quot;22.05&quot;</literal> set
+          <literal>virtualisation.oci-containers.backend = &quot;docker&quot;;</literal>.Old
+          systems with older <literal>stateVersion</literal>s stay with
+          <quote>docker</quote>.
         </para>
       </listitem>
       <listitem>

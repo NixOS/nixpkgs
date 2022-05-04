@@ -311,6 +311,16 @@ def load_plugins_from_csv(config: FetchConfig, input_file: Path,) -> List[Plugin
 
     return plugins
 
+def run_nix_expr(expr):
+    with CleanEnvironment():
+        cmd = ["nix", "eval", "--extra-experimental-features",
+                "nix-command", "--impure", "--json", "--expr", expr]
+        log.debug("Running command %s", cmd)
+        out = subprocess.check_output(cmd)
+    data = json.loads(out)
+    return data
+
+
 class Editor:
     """The configuration of the update script."""
 
@@ -333,13 +343,9 @@ class Editor:
         self.deprecated = deprecated or root.joinpath("deprecated.json")
         self.cache_file = cache_file or f"{name}-plugin-cache.json"
 
-    def get_current_plugins(editor) -> List[Plugin]:
+    def get_current_plugins(self) -> List[Plugin]:
         """To fill the cache"""
-        with CleanEnvironment():
-            cmd = ["nix", "eval", "--extra-experimental-features", "nix-command", "--impure", "--json", "--expr", editor.get_plugins]
-            log.debug("Running command %s", cmd)
-            out = subprocess.check_output(cmd)
-        data = json.loads(out)
+        data = run_nix_expr(self.get_plugins)
         plugins = []
         for name, attr in data.items():
             print("get_current_plugins: name %s" % name)

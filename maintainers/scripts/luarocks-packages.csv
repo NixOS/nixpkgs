@@ -64,6 +64,7 @@ luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
 luasystem,,,,,,
+luaunbound,,,,,
 luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn

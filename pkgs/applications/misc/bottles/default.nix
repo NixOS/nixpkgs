@@ -20,13 +20,13 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.4.28-trento";
+  version = "2022.5.2-trento";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PVtjKAwCA9GliUDIoAFMqeVFZYPo2dxCWhW9lSotC6w=";
+    sha256 = "sha256-9auQm8rmySjPQmhueGMRj4DsQiKhCGtE97byc/h+v84=";
   };
 
   postPatch = ''
