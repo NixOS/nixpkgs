@@ -177,6 +177,10 @@ in
         # users.users.jane = {
         #   isNormalUser = true;
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+        #   packages = with pkgs; [
+        #     firefox
+        #     thunderbird
+        #   ];
         # };
 
         # List packages installed in system profile. To search, run:
@@ -184,7 +188,6 @@ in
         # environment.systemPackages = with pkgs; [
         #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
         #   wget
-        #   firefox
         # ];
 
         # Some programs need SUID wrappers, can be configured further or are
