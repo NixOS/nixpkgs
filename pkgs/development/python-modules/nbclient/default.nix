@@ -6,8 +6,6 @@
 buildPythonPackage rec {
   pname = "nbclient";
   version = "0.6.2";
-  # As of version 0.6.2, there is both a setup.py and pyproject.toml. However,
-  # the pyproject.toml does not appear to be the main entry point.
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
