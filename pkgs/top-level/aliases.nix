@@ -850,7 +850,6 @@ mapAliases ({
   neap = throw "neap was removed from nixpkgs, as it relies on python2"; # Added 2022-01-12
   netcat-openbsd = throw "'netcat-openbsd' has been renamed to/replaced by 'libressl.nc'"; # Converted to throw 2022-02-22
   netease-cloud-music = throw "netease-cloud-music has been removed together with deepin"; # Added 2020-08-31
-  networkmanagerapplet = networkmanager-applet; # Added 2022-04-30
   networkmanager_fortisslvpn = throw "'networkmanager_fortisslvpn' has been renamed to/replaced by 'networkmanager-fortisslvpn'"; # Converted to throw 2022-02-22
   networkmanager_iodine = throw "'networkmanager_iodine' has been renamed to/replaced by 'networkmanager-iodine'"; # Converted to throw 2022-02-22
   networkmanager_l2tp = throw "'networkmanager_l2tp' has been renamed to/replaced by 'networkmanager-l2tp'"; # Converted to throw 2022-02-22

@@ -11,7 +11,7 @@
 , granite
 , gtk3
 , networkmanager
-, networkmanager-applet
+, networkmanagerapplet
 , libnma
 , switchboard
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      networkmanagerapplet = networkmanager-applet;
+      inherit networkmanagerapplet;
     })
   ];
 

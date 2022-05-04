@@ -42,7 +42,7 @@
 , modemmanager
 , mutter
 , networkmanager
-, networkmanager-applet
+, networkmanagerapplet
 , libnma-gtk4
 , ninja
 , pkg-config
@@ -76,9 +76,8 @@ stdenv.mkDerivation rec {
       src = ./paths.patch;
       gcm = gnome-color-manager;
       gnome_desktop = gnome-desktop;
-      networkmanagerapplet = networkmanager-applet;
       inherit glibc libgnomekbd tzdata;
-      inherit cups;
+      inherit cups networkmanagerapplet;
     })
 
     # Fix Online Accounts configuration on X11

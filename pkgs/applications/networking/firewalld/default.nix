@@ -12,7 +12,7 @@
 , libnotify
 , libxml2
 , libxslt
-, networkmanager-applet
+, networkmanagerapplet
 , pkg-config
 , python3
 , wrapGAppsNoGuiHook
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     done
   '' + lib.optionalString withGui ''
     substituteInPlace src/firewall-applet.in \
-      --replace "/usr/bin/nm-connection-editor" "${networkmanager-applet}/bin/nm-conenction-editor"
+      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-conenction-editor"
   '';
 
   nativeBuildInputs = [
