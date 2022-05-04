@@ -1,6 +1,6 @@
 { go, cacert, git, lib, stdenv }:
 
-{ name ? "${args'.pname}-${args'.version}"
+{ name ? null
 , src
 , buildInputs ? []
 , nativeBuildInputs ? []
@@ -51,7 +51,7 @@
 , buildFlags ? ""
 , buildFlagsArray ? ""
 
-, ... }@args':
+, ... }@args:
 
 with builtins;
 
@@ -60,93 +60,107 @@ assert runVend != false -> throw "`runVend` has been replaced by `proxyVendor`";
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
+  package = stdenv.mkDerivation (finalAttrs: let
+    # Create local variables that coerce "null" to the default value for several
+    # attributes for use in subsequent expressions. This keeps those attributes
+    # "null" to avoid rebuilds.
+    #
+    finalTags = finalAttrs.tags or tags;
+    finalOverrideModAttrs = finalAttrs.overrideModAttrs or overrideModAttrs;
+    finalModRoot = finalAttrs.modRoot or modRoot;
+    finalProxyVendor = finalAttrs.proxyVendor or proxyVendor;
+    finalDeleteVendor = finalAttrs.deleteVendor or deleteVendor;
+    finalAllowGoReference = finalAttrs.allowGoReference or allowGoReference;
 
-  go-modules = if vendorSha256 != null then stdenv.mkDerivation (let modArgs = {
+    go-modules = if finalAttrs.vendorSha256 != null then
+      stdenv.mkDerivation (let modArgs = {
+        name = "${finalAttrs.name}-go-modules";
 
-    name = "${name}-go-modules";
+        nativeBuildInputs = finalAttrs.nativeBuildInputs ++ [ git cacert ];
 
-    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
+        inherit (finalAttrs) src;
+        inherit (go) GOOS GOARCH;
 
-    inherit (args) src;
-    inherit (go) GOOS GOARCH;
+        patches = finalAttrs.patches or patches;
+        patchFlags = finalAttrs.patchFlags or [];
+        preBuild = finalAttrs.preBuild or "";
+        sourceRoot = finalAttrs.sourceRoot or "";
 
-    patches = args.patches or [];
-    patchFlags = args.patchFlags or [];
-    preBuild = args.preBuild or "";
-    sourceRoot = args.sourceRoot or "";
+        GO111MODULE = "on";
 
-    GO111MODULE = "on";
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+          "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+        ];
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
-    ];
+        configurePhase = finalAttrs.modConfigurePhase or ''
+          runHook preConfigure
 
-    configurePhase = args.modConfigurePhase or ''
-      runHook preConfigure
+          export GOCACHE=$TMPDIR/go-cache
+          export GOPATH="$TMPDIR/go"
+          cd "${finalModRoot}"
+          runHook postConfigure
+        '';
 
-      export GOCACHE=$TMPDIR/go-cache
-      export GOPATH="$TMPDIR/go"
-      cd "${modRoot}"
-      runHook postConfigure
-    '';
+        buildPhase = finalAttrs.modBuildPhase or ''
+          runHook preBuild
+        '' + lib.optionalString (finalDeleteVendor == true) ''
+          if [ ! -d vendor ]; then
+            echo "vendor folder does not exist, 'deleteVendor' is not needed"
+            exit 10
+          else
+            rm -rf vendor
+          fi
+        '' + ''
+          if [ -d vendor ]; then
+            echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
+            exit 10
+          fi
 
-    buildPhase = args.modBuildPhase or ''
-      runHook preBuild
-    '' + lib.optionalString (deleteVendor == true) ''
-      if [ ! -d vendor ]; then
-        echo "vendor folder does not exist, 'deleteVendor' is not needed"
-        exit 10
-      else
-        rm -rf vendor
-      fi
-    '' + ''
-      if [ -d vendor ]; then
-        echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
-        exit 10
-      fi
+        ${if finalProxyVendor then ''
+          mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+          go mod download
+        '' else ''
+          go mod vendor
+        ''}
 
-    ${if proxyVendor then ''
-      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
-      go mod download
-    '' else ''
-      go mod vendor
-    ''}
+          mkdir -p vendor
 
-      mkdir -p vendor
+          runHook postBuild
+        '';
 
-      runHook postBuild
-    '';
+        installPhase = finalAttrs.modInstallPhase or ''
+          runHook preInstall
 
-    installPhase = args.modInstallPhase or ''
-      runHook preInstall
+        ${if finalProxyVendor then ''
+          rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
+          cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+        '' else ''
+          cp -r --reflink=auto vendor $out
+        ''}
 
-    ${if proxyVendor then ''
-      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-      cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
-    '' else ''
-      cp -r --reflink=auto vendor $out
-    ''}
+          runHook postInstall
+        '';
 
-      runHook postInstall
-    '';
+        dontFixup = true;
+      }; in modArgs // (
+        {
+          outputHashMode = "recursive";
+          outputHashAlgo = "sha256";
+          outputHash = finalAttrs.vendorSha256;
+        }
+      ) // finalOverrideModAttrs modArgs)
+    else "";
 
-    dontFixup = true;
-  }; in modArgs // (
-      {
-        outputHashMode = "recursive";
-        outputHashAlgo = "sha256";
-        outputHash = vendorSha256;
-      }
-  ) // overrideModAttrs modArgs) else "";
+  in args // {
+    name = args.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
-  package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
-    GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    GOFLAGS = lib.optionals (!finalProxyVendor) [ "-mod=vendor" ]
+      ++ lib.optionals (!finalAllowGoReference) [ "-trimpath" ];
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -156,8 +170,8 @@ let
       export GOPROXY=off
       export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString (vendorSha256 != null) ''
-      ${if proxyVendor then ''
+    '' + lib.optionalString (finalAttrs.vendorSha256 != null) ''
+      ${if finalProxyVendor then ''
         export GOPROXY=file://${go-modules}
       '' else ''
         rm -rf vendor
@@ -186,7 +200,7 @@ let
         d="$2"
         . $TMPDIR/buildFlagsArray
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," tags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," finalTags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -240,6 +254,7 @@ let
     '';
 
     doCheck = args.doCheck or true;
+
     checkPhase = args.checkPhase or ''
       runHook preCheck
 
@@ -262,9 +277,12 @@ let
 
     strictDeps = true;
 
-    disallowedReferences = lib.optional (!allowGoReference) go;
+    disallowedReferences = lib.optional (!finalAllowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules vendorSha256 ; };
+    passthru = passthru // {
+      inherit go go-modules;
+      inherit (finalAttrs) vendorSha256;
+    };
 
     enableParallelBuilding = enableParallelBuilding;
 
