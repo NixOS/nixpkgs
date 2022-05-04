@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.11.2"; # Check whether the version is compatible with pylint
+  version = "2.11.4"; # Check whether the version is compatible with pylint
 
   disabled = pythonOlder "3.6.2";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-adnvJCchsMWQxsIlenndUb6Mw1MgCNAanZcTmssmsEc=";
+    sha256 = "sha256-NJ8TzxK+PjMRScwptl2zwvcTSdmd2OX3LQLP3JUFjNQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
