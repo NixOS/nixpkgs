@@ -3140,6 +3140,14 @@ in {
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
+  fontmake = callPackage ../development/python-modules/fontmake { };
+
+  skia-pathops = callPackage ../development/python-modules/skia-pathops { };
+
+  openstep-plist = callPackage ../development/python-modules/openstep-plist { };
+
+  glyphslib = callPackage ../development/python-modules/glyphslib { };
+
   foobot-async = callPackage ../development/python-modules/foobot-async { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
