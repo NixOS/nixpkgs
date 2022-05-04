@@ -6314,6 +6314,8 @@ in {
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
+  pip-api = callPackage ../development/python-modules/pip-api { };
+
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
   pipx = callPackage ../development/python-modules/pipx { };
