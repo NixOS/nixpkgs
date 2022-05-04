@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.3.3";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "01j6khn60mdmz32xkpqrzwdqibmpdpi2wvwzxgdnaim9sq0fdqws";
+    sha256 = "sha256-Z/jbr9o0WKPjkAsfZzxuwAKKdwYV3rLGkUMlMgyC5s0=";
     fetchSubmodules = true;
   };
 
