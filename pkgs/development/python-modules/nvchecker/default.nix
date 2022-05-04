@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.7";
+  version = "2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OPUqkHLG8PUlD5NP7q/BpKUvmAA8Jk1NvsPPVbImv0A=";
+    hash = "sha256-ikpjR1fEZBsSOE20jxTyarb9Pqn3Fz+TYOzXp0g4G9c=";
   };
 
   nativeBuildInputs = [
