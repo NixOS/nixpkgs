@@ -10838,6 +10838,8 @@ in {
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
+  wcag-contrast-ratio = callPackage ../development/python-modules/wcag-contrast-ratio { };
+
   wcmatch = callPackage ../development/python-modules/wcmatch { };
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
