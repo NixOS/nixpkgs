@@ -8,6 +8,7 @@
 , mock
 , pytest-mock
 , pytestCheckHook
+, sphinxHook
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+  outputs = ["out" "doc"];
 
   src = fetchFromGitHub {
     owner = "dropbox";
@@ -46,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "dropbox"
   ];
+  nativeBuildInputs = [ sphinxHook ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
   disabledTests = [

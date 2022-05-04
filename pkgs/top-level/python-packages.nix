@@ -106,6 +106,7 @@ in {
   inherit buildSetupcfg;
 
   inherit (callPackage ../development/interpreters/python/hooks { })
+    sphinxHook
     condaInstallHook
     condaUnpackHook
     eggUnpackHook

@@ -94,6 +94,21 @@ let
       '';
     };
 
+    showDerivationWarnings = mkOption {
+      type = types.listOf (types.enum [ "maintainerless" ]);
+      default = [];
+      description = ''
+        Which warnings to display for potentially dangerous
+        or deprecated values passed into `stdenv.mkDerivation`.
+
+        A list of warnings can be found in
+        <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix">/pkgs/stdenv/generic/check-meta.nix</link>.
+
+        This is not a stable interface; warnings may be added, changed
+        or removed without prior notice.
+      '';
+    };
+
   };
 
 in {
