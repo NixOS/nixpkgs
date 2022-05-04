@@ -177,17 +177,17 @@ OK
             the boot partition.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary 512MiB -8GiB
+# parted /dev/sda -- mkpart primary 512MB -8GB
 </programlisting>
         </listitem>
         <listitem>
           <para>
             Next, add a <emphasis>swap</emphasis> partition. The size
-            required will vary according to needs, here a 8GiB one is
+            required will vary according to needs, here a 8GB one is
             created.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 </programlisting>
           <note>
             <para>
@@ -204,7 +204,7 @@ OK
             reserved 512MiB at the start of the disk.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+# parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 </programlisting>
         </listitem>
@@ -242,7 +242,7 @@ OK
             live.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary 1MiB -8GiB
+# parted /dev/sda -- mkpart primary 1MB -8GB
 </programlisting>
         </listitem>
         <listitem>
@@ -252,7 +252,7 @@ OK
             created.
           </para>
           <programlisting>
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 </programlisting>
           <note>
             <para>
