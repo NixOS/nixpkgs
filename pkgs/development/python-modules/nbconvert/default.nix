@@ -47,7 +47,7 @@ buildPythonPackage rec {
     entrypoints bleach mistune jinja2 pygments traitlets testpath
     jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
     defusedxml beautifulsoup4
-    (nbclient.override { doCheck = false; }) # avoid infinite recursion
+    nbclient
     jupyterlab-pygments
   ];
 
