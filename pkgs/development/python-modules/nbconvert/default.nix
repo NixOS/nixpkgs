@@ -4,6 +4,7 @@
 , pytestCheckHook
 , glibcLocales
 , entrypoints
+, beautifulsoup4
 , bleach
 , mistune
 , nbclient
@@ -45,8 +46,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     entrypoints bleach mistune jinja2 pygments traitlets testpath
     jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
-    defusedxml
-    (nbclient.override { doCheck = false; }) # avoid infinite recursion
+    defusedxml beautifulsoup4
+    nbclient
     jupyterlab-pygments
   ];
 

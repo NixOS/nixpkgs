@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder,
   async_generator, traitlets, nbformat, nest-asyncio, jupyter-client,
   pytest, xmltodict, nbconvert, ipywidgets
-, doCheck ? true
 }:
 
 buildPythonPackage rec {
@@ -14,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-QMUsm148MfrsruafICs/U+ONfBxWPeD63enX7aD9r+g=";
   };
 
-  inherit doCheck;
+  doCheck = false; # Avoid infinite recursion
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
 
