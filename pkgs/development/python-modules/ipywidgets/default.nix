@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "IPython HTML widgets for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };
