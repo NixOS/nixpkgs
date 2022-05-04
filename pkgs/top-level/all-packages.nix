@@ -12697,7 +12697,7 @@ with pkgs;
   gcc_latest = gcc11;
 
   # Use the same GCC version as the one from stdenv by default
-  gfortran = wrapCC (gccStdenv.cc.cc.override {
+  gfortran = wrapCC (gcc.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
