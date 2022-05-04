@@ -12,6 +12,10 @@ with lib;
         type = types.bool;
         default = false;
         description = ''
+          DEPRECATED, please use <literal>security.pam.services.*.oathAuth</literal>
+          instead, as this option is very coarse-grained.
+          I.e. <literal>security.pam.services.login.oathAuth = true</literal>
+
           Enable the OATH (one-time password) PAM module.
         '';
       };
