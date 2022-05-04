@@ -1,30 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, gevent
 , click
 , colorama
 , configparser
 , distro
+, fetchFromGitHub
+, gevent
 , jinja2
 , paramiko
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pywinrm
+, pyyaml
 , setuptools
-, six
 }:
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.0.2";
+  version = "2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-AW2pOyLqyugTSM7PE4oR9ZwD1liNpdD636QA3ElafG0=";
+  src = fetchFromGitHub {
+    owner = "Fizzadar";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-frjPxSATvXgeACT4kThoiPu04Ez8bs8FIPdf5PVuiSg=";
   };
 
   propagatedBuildInputs = [
@@ -37,14 +40,21 @@ buildPythonPackage rec {
     paramiko
     python-dateutil
     pywinrm
+    pyyaml
     setuptools
-    six
   ];
 
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pyinfra"
+  ];
+
+  disabledTests = [
+    # Test requires SSH binary
+    "test_load_ssh_config"
   ];
 
   meta = with lib; {
