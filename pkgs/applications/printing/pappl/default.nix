@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-m9tGD1SN15dxBiqYcEWFC+YfZXGsflrKaIhdeznt3r8=";
   };
 
+  patches = [
+    ./0001-config.h.in-Configure-PAPPL_SOCKDIR-for-NixOS.patch
+  ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [

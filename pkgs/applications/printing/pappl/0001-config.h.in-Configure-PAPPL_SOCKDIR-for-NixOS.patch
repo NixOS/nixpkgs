@@ -1,0 +1,25 @@
+From d36ff8efa2bcc14580c6c98d654dfe578ff8651f Mon Sep 17 00:00:00 2001
+From: ckie <git-525ff67@ckie.dev>
+Date: Wed, 4 May 2022 11:21:09 +0300
+Subject: [PATCH] config.h.in: Configure PAPPL_SOCKDIR for NixOS
+
+---
+ config.h.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.h.in b/config.h.in
+index 828aaf5..7ff4a24 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -18,7 +18,7 @@
+ 
+ 
+ // Location of PAPPL domain socket (when run as root)
+-#define PAPPL_SOCKDIR		"/usr/local/var/run"
++#define PAPPL_SOCKDIR		"/run"
+ 
+ 
+ // Location of CUPS config files
+-- 
+2.35.1
+
