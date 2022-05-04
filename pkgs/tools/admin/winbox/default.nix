@@ -70,7 +70,7 @@ symlinkJoin {
     homepage = "https://mikrotik.com";
     downloadPage = "https://mikrotik.com/download";
     changelog = "https://wiki.mikrotik.com/wiki/Winbox_changelog";
-    license = licenses.gpl3Plus;
+    license = licenses.unfree;
     maintainers = with maintainers; [ yrd ];
   };
 }
