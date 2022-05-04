@@ -209,6 +209,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
     });
 
+    openswoole = callPackage ../development/php-packages/openswoole { };
+
     pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };

@@ -2376,6 +2376,8 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  pdepend = callPackage ../development/php-packages/pdepend/default.nix { };
+
   platformsh = callPackage ../misc/platformsh { };
 
   inherd-quake = callPackage ../applications/misc/inherd-quake {
@@ -30341,6 +30343,8 @@ with pkgs;
   vmpk = libsForQt5.callPackage ../applications/audio/vmpk { };
 
   vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
+
+  vmware-workstation = callPackage ../applications/virtualization/vmware-workstation { };
 
   vocproc = callPackage ../applications/audio/vocproc { };
 
