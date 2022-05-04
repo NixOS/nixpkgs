@@ -136,7 +136,7 @@ let
 
       ${optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
         mkdir -p $out/share/bash-completion/completions/
-        $out/bin/npm completion > $out/share/bash-completion/completions/npm || :
+        HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
           mkdir -p $out/share/man/$(basename "$dir")
           for page in "$dir"/*; do
