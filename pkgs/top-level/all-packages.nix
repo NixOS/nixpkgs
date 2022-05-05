@@ -6376,6 +6376,8 @@ with pkgs;
 
   gitty = callPackage ../applications/version-management/git-and-tools/gitty { };
 
+  gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
+
   gitui = callPackage ../applications/version-management/git-and-tools/gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
