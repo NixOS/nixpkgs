@@ -1086,6 +1086,11 @@ in
           };
         })
       ];
+      extraServices.gitsrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "2s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.gitsrht}/bin/gitsrht-api -b ${cfg.listenAddress}:${toString (cfg.git.port + 100)}";
+      };
       extraServices.gitsrht-fcgiwrap = mkIf cfg.nginx.enable {
         serviceConfig = {
           # Socket is passed by gitsrht-fcgiwrap.socket
