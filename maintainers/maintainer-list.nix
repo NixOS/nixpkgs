@@ -1409,6 +1409,12 @@
     githubId = 164148;
     name = "Ben Darwin";
   };
+  bdd = {
+    email = "bdd@mindcast.org";
+    github = "bdd";
+    githubId = 11135;
+    name = "Berk D. Demir";
+  };
   bdesham = {
     email = "benjamin@esham.io";
     github = "bdesham";

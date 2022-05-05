@@ -8,13 +8,14 @@ let
     { self
     , drv
     , attr
+    , extraAttrs ? [ ]
     }:
     let
       buildSystem = if attr == "cython" then self.python.pythonForBuild.pkgs.cython else self.${attr};
     in
     (
       # Flit only works on Python3
-      if (attr == "flit-core" || attr == "flit") && !self.isPy3k then drv
+      if (attr == "flit-core" || attr == "flit" || attr == "hatchling") && !self.isPy3k then drv
       else
         drv.overridePythonAttrs (
           old:
@@ -23,7 +24,7 @@ let
             { }
           else
             {
-              nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.${attr} ];
+              nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.${attr} ] ++ map (a: self.${a}) extraAttrs;
             }
         )
     );
@@ -54,6 +55,16 @@ lib.composeManyExtensions [
         super.${attr}
         systems)
       buildSystems)
+
+  # Build systems with conditionals
+  (self: super: {
+
+    platformdirs =
+      if lib.versionAtLeast super.platformdirs.version "2.5.2"
+      then addBuildSystem { inherit self; drv = super.platformdirs; attr = "hatchling"; extraAttrs = [ "hatch-vcs" ]; }
+      else super.platformdirs;
+
+  })
 
   # Build fixes
   (self: super:
@@ -436,6 +447,17 @@ lib.composeManyExtensions [
           buildInputs = (old.buildInputs or [ ]) ++ pkgs.dlib.buildInputs;
         }
       );
+
+      # Setuptools >= 60 broke build_py_2to3
+      docutils =
+        if lib.versionOlder super.docutils.version "0.16" && lib.versionAtLeast super.setuptools.version "60" then
+          (
+            super.docutils.overridePythonAttrs (
+              old: {
+                SETUPTOOLS_USE_DISTUTILS = "stdlib";
+              }
+            )
+          ) else super.docutils;
 
       # Environment markers are not always included (depending on how a dep was defined)
       enum34 = if self.pythonAtLeast "3.4" then null else super.enum34;
@@ -844,6 +866,17 @@ lib.composeManyExtensions [
         }
       );
 
+      lsassy =
+        if super.lsassy.version == "3.1.1" then
+          super.lsassy.overridePythonAttrs
+            (old: {
+              # pyproject.toml contains a constraint `rich = "^10.6.0"` which is not replicated in setup.py
+              # hence pypi misses it and poetry pins rich to 11.0.0
+              preConfigure = (old.preConfigure or "") + ''
+                rm pyproject.toml
+              '';
+            }) else super.lsassy;
+
       lxml = super.lxml.overridePythonAttrs (
         old: {
           nativeBuildInputs = with pkgs.buildPackages; (old.nativeBuildInputs or [ ]) ++ [ pkg-config libxml2.dev libxslt.dev ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
@@ -1143,12 +1176,55 @@ lib.composeManyExtensions [
         }
       );
 
+      orjson =
+        let
+          getCargoHash = version: {
+            "3.6.7" = "sha256-sz2k9podPB6QSptkyOu7+BoVTrKhefizRtYU+MICPt4=";
+            "3.6.8" = "sha256-vpfceVtYkU09xszNIihY1xbqGWieqDquxwsAmDH8jd4=";
+          }.${version} or null;
+        in
+        super.orjson.overridePythonAttrs (old: {
+          cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+            inherit (old) src;
+            name = "${old.pname}-${old.version}";
+            hash = getCargoHash old.version;
+          };
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.rustPlatform.cargoSetupHook
+            pkgs.rustPlatform.maturinBuildHook
+          ];
+          buildInputs = (old.buildInputs or [ ]) ++ lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
+        });
+
       osqp = super.osqp.overridePythonAttrs (
         old: {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
           dontUseCmakeConfigure = true;
         }
       );
+
+
+      pandas = super.pandas.overridePythonAttrs (old: {
+
+        buildInputs = old.buildInputs or [ ] ++ lib.optional stdenv.isDarwin pkgs.libcxx;
+
+        # Doesn't work with -Werror,-Wunused-command-line-argument
+        # https://github.com/NixOS/nixpkgs/issues/39687
+        hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+
+        # For OSX, we need to add a dependency on libcxx, which provides
+        # `complex.h` and other libraries that pandas depends on to build.
+        postPatch = lib.optionalString stdenv.isDarwin ''
+          cpp_sdk="${lib.getDev pkgs.libcxx}/include/c++/v1";
+          echo "Adding $cpp_sdk to the setup.py common_include variable"
+          substituteInPlace setup.py \
+            --replace "['pandas/src/klib', 'pandas/src']" \
+                      "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
+        '';
+
+
+        enableParallelBuilding = true;
+      });
 
       pantalaimon = super.pantalaimon.overridePythonAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.installShellFiles ];
@@ -1196,8 +1272,12 @@ lib.composeManyExtensions [
 
       pillow = super.pillow.overridePythonAttrs (
         old: {
-          nativeBuildInputs = [ pkg-config self.pytest-runner ] ++ (old.nativeBuildInputs or [ ]);
-          buildInputs = with pkgs; [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ] ++ (old.buildInputs or [ ]);
+          nativeBuildInputs = (old.nativeBuildInputs or [ ])
+            ++ [ pkg-config self.pytest-runner ];
+          buildInputs = with pkgs; (old.buildInputs or [ ])
+            ++ [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ]
+            ++ lib.optionals (lib.versionAtLeast old.version "7.1.0") [ xorg.libxcb ]
+            ++ lib.optionals (self.isPyPy) [ tk xorg.libX11 ];
         }
       );
 
@@ -1239,6 +1319,14 @@ lib.composeManyExtensions [
       );
 
       psycopg2-binary = super.psycopg2-binary.overridePythonAttrs (
+        old: {
+          buildInputs = (old.buildInputs or [ ])
+            ++ lib.optional stdenv.isDarwin pkgs.openssl;
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.postgresql ];
+        }
+      );
+
+      psycopg2cffi = super.psycopg2cffi.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ])
             ++ lib.optional stdenv.isDarwin pkgs.openssl;
@@ -1858,6 +1946,12 @@ lib.composeManyExtensions [
           pkgs.shellcheck
         ];
 
+      });
+
+      soundfile = super.soundfile.overridePythonAttrs (old: {
+        postPatch = ''
+          substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${pkgs.libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        '';
       });
 
       systemd-python = super.systemd-python.overridePythonAttrs (old: {

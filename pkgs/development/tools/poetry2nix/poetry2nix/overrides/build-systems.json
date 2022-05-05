@@ -29,6 +29,9 @@
   "aioflo": [
     "poetry-core"
   ],
+  "aiogithubapi": [
+    "poetry-core"
+  ],
   "aioguardian": [
     "poetry-core"
   ],
@@ -89,7 +92,19 @@
   "amqtt": [
     "poetry-core"
   ],
+  "ansible-doctor": [
+    "poetry-core"
+  ],
+  "ansible-later": [
+    "poetry-core"
+  ],
+  "ansible-runner": [
+    "pbr"
+  ],
   "apache-beam": [
+    "cython"
+  ],
+  "aplpy": [
     "cython"
   ],
   "argon2_cffi": [
@@ -114,13 +129,22 @@
   "atomman": [
     "cython"
   ],
+  "atpublic": [
+    "pdm-pep517"
+  ],
   "autarco": [
     "poetry-core"
   ],
   "authcaptureproxy": [
     "poetry-core"
   ],
+  "av": [
+    "cython"
+  ],
   "awesomeversion": [
+    "poetry-core"
+  ],
+  "aws-adfs": [
     "poetry-core"
   ],
   "aws-error-utils": [
@@ -146,6 +170,9 @@
   ],
   "boltztrap2": [
     "cython"
+  ],
+  "bsblan": [
+    "poetry-core"
   ],
   "build": [
     "flit-core"
@@ -183,6 +210,9 @@
   "clikit": [
     "poetry-core"
   ],
+  "cloudflare-dyndns": [
+    "poetry"
+  ],
   "collections-extended": [
     "poetry-core"
   ],
@@ -210,7 +240,8 @@
     "poetry-core"
   ],
   "cssselect2": [
-    "flit"
+    "flit",
+    "flit-core"
   ],
   "cwcwidth": [
     "cython"
@@ -224,8 +255,14 @@
   "cypari2": [
     "cython"
   ],
+  "cypherpunkpay": [
+    "poetry-core"
+  ],
   "cysignals": [
     "cython"
+  ],
+  "datadog": [
+    "hatchling"
   ],
   "datrie": [
     "cython"
@@ -259,6 +296,9 @@
   ],
   "doc8": [
     "pbr"
+  ],
+  "docstring-parser": [
+    "poetry-core"
   ],
   "dtlssocket": [
     "cython"
@@ -301,13 +341,21 @@
     "poetry-core"
   ],
   "entrypoints": [
-    "flit"
+    "flit",
+    "flit-core"
   ],
   "enturclient": [
     "poetry-core"
   ],
   "enumatch": [
     "poetry"
+  ],
+  "exceptiongroup": [
+    "flit-core",
+    "flitBuildHook"
+  ],
+  "falcon": [
+    "cython"
   ],
   "fastapi": [
     "flitBuildHook"
@@ -377,6 +425,9 @@
   ],
   "generic": [
     "poetry-core"
+  ],
+  "gensim": [
+    "cython"
   ],
   "glances-api": [
     "poetry-core"
@@ -492,8 +543,14 @@
   "ipwhl": [
     "flitBuildHook"
   ],
+  "iso8601": [
+    "poetry-core"
+  ],
   "isort": [
     "poetry-core"
+  ],
+  "jarowinkler": [
+    "cython"
   ],
   "jedi-language-server": [
     "poetry"
@@ -519,6 +576,12 @@
   "jupyterlab": [
     "jupyter-packaging"
   ],
+  "jupyterlab-code-formatter": [
+    "jupyter-packaging"
+  ],
+  "jupyterlab-pygments": [
+    "jupyter-packaging"
+  ],
   "keystoneauth1": [
     "pbr"
   ],
@@ -536,6 +599,9 @@
   ],
   "ldappool": [
     "pbr"
+  ],
+  "levenshtein": [
+    "cython"
   ],
   "libgpuarray": [
     "cython"
@@ -564,6 +630,9 @@
   "lockfile": [
     "pbr"
   ],
+  "lsassy": [
+    "poetry-core"
+  ],
   "luftdaten": [
     "poetry-core"
   ],
@@ -584,6 +653,9 @@
   ],
   "marisa-trie": [
     "cython"
+  ],
+  "markdown-it-py": [
+    "flit-core"
   ],
   "mask-rcnn": [
     "cython"
@@ -607,6 +679,9 @@
   "memory-allocator": [
     "cython"
   ],
+  "meteofrance-api": [
+    "poetry"
+  ],
   "metprint": [
     "poetry-core"
   ],
@@ -618,6 +693,7 @@
     "poetry"
   ],
   "mkdocs-jupyter": [
+    "ipython_genutils",
     "poetry-core"
   ],
   "mkdocs-literate-nav": [
@@ -674,6 +750,9 @@
   "netdata": [
     "poetry-core"
   ],
+  "netutils": [
+    "poetry-core"
+  ],
   "newversion": [
     "poetry-core"
   ],
@@ -688,6 +767,9 @@
   ],
   "nkdfu": [
     "flitBuildHook"
+  ],
+  "notebook-shim": [
+    "jupyter-packaging"
   ],
   "notus-scanner": [
     "poetry-core"
@@ -727,6 +809,9 @@
   ],
   "openvino": [
     "cython"
+  ],
+  "ordered-set": [
+    "flit-core"
   ],
   "ormar": [
     "poetry-core"
@@ -805,6 +890,9 @@
     "poetry-core"
   ],
   "poetry": [
+    "poetry-core"
+  ],
+  "poetry-dynamic-versioning": [
     "poetry-core"
   ],
   "poetry2conda": [
@@ -930,6 +1018,9 @@
   "pymaven-patch": [
     "pbr"
   ],
+  "pymdown-extensions": [
+    "hatchling"
+  ],
   "pymfy": [
     "poetry-core"
   ],
@@ -953,6 +1044,9 @@
   ],
   "pyoverkiz": [
     "poetry-core"
+  ],
+  "pyparsing": [
+    "flit-core"
   ],
   "pypass": [
     "pbr"
@@ -978,10 +1072,19 @@
   "pyproject-flake8": [
     "flit-core"
   ],
+  "pypsrp": [
+    "poetry-core"
+  ],
   "pyquil": [
     "poetry-core"
   ],
+  "pyrad": [
+    "poetry-core"
+  ],
   "pyregion": [
+    "cython"
+  ],
+  "pyrevolve": [
     "cython"
   ],
   "pyrmvtransport": [
@@ -999,6 +1102,9 @@
   "pysigma": [
     "poetry-core"
   ],
+  "pysigma-backend-insightidr": [
+    "poetry-core"
+  ],
   "pysigma-backend-splunk": [
     "poetry-core"
   ],
@@ -1008,14 +1114,30 @@
   "pysigma-pipeline-sysmon": [
     "poetry-core"
   ],
+  "pysigma-pipeline-windows": [
+    "poetry-core"
+  ],
+  "pyslurm": [
+    "cython"
+  ],
   "pysmf": [
     "cython"
   ],
   "pysml": [
     "poetry-core"
   ],
+  "pysnmp-pyasn1": [
+    "poetry-core"
+  ],
+  "pysnmp-pysmi": [
+    "poetry-core"
+  ],
+  "pysnmplib": [
+    "poetry-core"
+  ],
   "pysnow": [
-    "poetry"
+    "poetry",
+    "poetry-core"
   ],
   "pysptk": [
     "cython"
@@ -1033,6 +1155,9 @@
     "flitBuildHook"
   ],
   "pytest-httpserver": [
+    "poetry-core"
+  ],
+  "pytest-isort": [
     "poetry-core"
   ],
   "pytest-mockservers": [
@@ -1096,6 +1221,9 @@
   ],
   "python-openstackclient": [
     "pbr"
+  ],
+  "python-pae": [
+    "poetry-core"
   ],
   "python-pkcs11": [
     "cython"
@@ -1215,7 +1343,8 @@
     "poetry-core"
   ],
   "rokuecp": [
-    "poetry"
+    "poetry",
+    "poetry-core"
   ],
   "roombapy": [
     "poetry-core"
@@ -1280,6 +1409,9 @@
   "sentinel": [
     "poetry-core"
   ],
+  "seventeentrack": [
+    "poetry-core"
+  ],
   "sfepy": [
     "cython"
   ],
@@ -1301,8 +1433,14 @@
   "slowapi": [
     "poetry-core"
   ],
+  "socksio": [
+    "flit-core"
+  ],
   "solo-python": [
     "flitBuildHook"
+  ],
+  "soupsieve": [
+    "hatchling"
   ],
   "spacy-pkuseg": [
     "cython"
@@ -1425,7 +1563,8 @@
     "cython"
   ],
   "testpath": [
-    "flit"
+    "flit",
+    "flit-core"
   ],
   "testrepository": [
     "pbr"
@@ -1505,6 +1644,9 @@
   "typing-extensions": [
     "flit-core"
   ],
+  "uharfbuzz": [
+    "cython"
+  ],
   "unpaddedbase64": [
     "poetry-core"
   ],
@@ -1550,8 +1692,14 @@
   "yoda": [
     "cython"
   ],
+  "yte": [
+    "poetry-core"
+  ],
   "zeversolarlocal": [
     "flit-core",
     "flitBuildHook"
+  ],
+  "zwave-me-ws": [
+    "poetry-core"
   ]
 }

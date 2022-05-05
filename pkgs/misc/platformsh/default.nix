@@ -2,14 +2,14 @@
 
 let
   pname = "platformsh";
-  version = "3.79.0";
+  version = "3.79.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/platformsh/platformsh-cli/releases/download/v${version}/platform.phar";
-    sha256 = "sha256-gTh1VS/b+D8E67w6Q4u9h0EhpFZiA2gBGe4mo49+9KY=";
+    sha256 = "sha256-STGMKWgI4C6ccg8DGUhdnEENOB2//gtpU0ljM4cQCXI=";
   };
 
   dontUnpack = true;
