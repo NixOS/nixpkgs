@@ -39,6 +39,16 @@
         "sha256": "1466557034q1fzvpy8vwj8ps3cv2q8s7z76af9y1jz4kgaqmsd1n",
         "version": "5.15.36"
     },
+    "5.17": {
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-5.17.5-hardened1.patch",
+            "sha256": "1cv43sp2amai7r75dw07bd2ys6fz1ri9pfra3kaajap55sbalsw0",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.17.5-hardened1/linux-hardened-5.17.5-hardened1.patch"
+        },
+        "sha256": "11z95wsgmj97pg77yck26l0383gncbla0zwpzv4gjdj4p62x3g4v",
+        "version": "5.17.5"
+    },
     "5.4": {
         "patch": {
             "extra": "-hardened1",
