@@ -16,6 +16,7 @@
 , makeWrapper
 , symlinkJoin
 , thunarPlugins ? []
+, testGraphical
 }:
 
 let unwrapped = mkXfceDerivation {
@@ -57,6 +58,13 @@ let unwrapped = mkXfceDerivation {
   postPatch = ''
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
+
+  passthru.tests = {
+    graphical = testGraphical {
+      package = unwrapped;
+      expectedText = "File";
+    };
+  };
 
   meta = with lib; {
     description = "Xfce file manager";

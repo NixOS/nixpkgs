@@ -57,6 +57,7 @@
 , CoreAudioKit ? null
 , CoreServices ? null
 , wxmac
+, testers
 }:
 
 # TODO
@@ -83,7 +84,7 @@ let
   wxmac' = wxmac.overrideAttrs (oldAttrs: rec {
     src = wxWidgets_src;
   });
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (final: {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -171,6 +172,12 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # Test fails
 
+  passthru.tests = with testers; {
+    graphical = testGraphical {
+      package = final.finalPackage;
+      expectedText = "Welcome to Audacity version ${final.version}";
+    };
+  };
   # Replace audacity's wrapper, to:
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
@@ -202,4 +209,4 @@ in stdenv.mkDerivation rec {
     # https://logs.nix.ci/?attempt_id=5cbc4581-09b4-4148-82fe-0326411a56b3&key=nixos%2Fnixpkgs.152273.
     broken = stdenv.isDarwin;
   };
-}
+})

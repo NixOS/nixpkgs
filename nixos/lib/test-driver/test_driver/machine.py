@@ -827,10 +827,12 @@ class Machine:
     def get_screen_text(self) -> str:
         return self._get_screen_text_variants([2])[0]
 
-    def wait_for_text(self, regex: str) -> None:
+    def wait_for_text(self, regex: str, verbose: bool = False) -> None:
         def screen_matches(last: bool) -> bool:
             variants = self.get_screen_text_variants()
             for text in variants:
+                if verbose:
+                    self.log(f"Screen text variant: {text!r}")
                 if re.search(regex, text) is not None:
                     return True
 

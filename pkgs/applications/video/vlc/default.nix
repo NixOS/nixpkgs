@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, testers
 , fetchurl
 , fetchpatch
 , SDL
@@ -80,12 +81,12 @@ let
   inherit (lib) optionalString optional optionals;
   hostIsAarch = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (final: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.17";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
+    url = "http://get.videolan.org/vlc/${final.version}/vlc-${final.version}.tar.xz";
     sha256 = "sha256-SL2b8zeqEHoVJOulfFLcSpHin1qX+97pL2pNupA4PNA=";
   };
 
@@ -240,6 +241,13 @@ stdenv.mkDerivation rec {
     cp -R share/hrtfs $out/share/vlc
   '';
 
+  passthru.tests = with testers; {
+    graphical = testGraphical {
+      package = final.finalPackage;
+      expectedText = "Media";
+    };
+  };
+
   meta = with lib; {
     description = "Cross-platform media player and streaming server";
     homepage = "http://www.videolan.org/vlc/";
@@ -247,4 +255,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+})
