@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, awscli, unzip }:
 let
-  ver = "1.2.54.0";
+  ver = "1.2.312.0";
   source =
     if stdenv.isDarwin then {
       url = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
-      sha256 = "kgxoQrtu2tsV5t/3oA+Z2juY24hPOznPGjlQMsqOIZg=";
+      sha256 = "50aac34a4dedddf20c20be24989ee5d33b46a72187791715fb9b395b54db8ef9";
     } else {
       url = "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
-      sha256 = "uug1cT4yRxNQcf+zWz0mi72G4EGa3eZHVuG36INSqrM=";
+      sha256 = "2e51ce5bf8f23a1e590fff866bbdadcf82aa03c5054c671d9115482a1b263cc7";
     };
   archivePath = if stdenv.isDarwin then "sessionmanager-bundle" else "usr/local/sessionmanagerplugin";
 in

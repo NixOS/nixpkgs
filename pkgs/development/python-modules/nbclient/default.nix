@@ -1,20 +1,21 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder,
   async_generator, traitlets, nbformat, nest-asyncio, jupyter-client,
   pytest, xmltodict, nbconvert, ipywidgets
-, doCheck ? true
 }:
 
 buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.5.13";
+  version = "0.6.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QMUsm148MfrsruafICs/U+ONfBxWPeD63enX7aD9r+g=";
+    hash = "sha256-i0dVPxztB3zXxFN/1dcB1G92gfJLKCdeXMHTR+fJtGs=";
   };
 
-  inherit doCheck;
+  doCheck = false; # Avoid infinite recursion
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
 

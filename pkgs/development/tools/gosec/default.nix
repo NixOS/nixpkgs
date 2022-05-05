@@ -20,8 +20,6 @@ buildGoModule rec {
     "cmd/gosec"
   ];
 
-  doCheck = false;
-
   ldflags = [
     "-s"
     "-w"
