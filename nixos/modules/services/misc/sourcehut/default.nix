@@ -1252,6 +1252,10 @@ in
       inherit configIniOfService;
       port = 5000;
       webhooks = true;
+      extraTimers.metasrht-daily.timerConfig = {
+        OnCalendar = ["daily"];
+        AccuracySec = "1h";
+      };
       extraServices.metasrht-api = {
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = "2s";
@@ -1267,10 +1271,6 @@ in
           ''
           ) cfg.settings));
         serviceConfig.ExecStart = "${pkgs.sourcehut.metasrht}/bin/metasrht-api -b ${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
-      };
-      extraTimers.metasrht-daily.timerConfig = {
-        OnCalendar = ["daily"];
-        AccuracySec = "1h";
       };
       extraConfig = mkMerge [
         {
