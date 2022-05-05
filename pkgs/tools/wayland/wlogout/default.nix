@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "cTscfx+erHVFHwwYpN7pADQWt5sq75sQSyXSP/H8kOs=";
   };
 
+  strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [
