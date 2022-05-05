@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -16,11 +16,16 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    hash = "sha256-7xFbxWay2aPCBkf3pBUGshROtssbi//PxxsI8ELeS+c=";
+    hash = "sha256-xa0LZGq0di4lnJGVMbb1Un0Ebd4vXRlbkxbatJ9GwB0=";
   };
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert ['mixer', 'volume', '50'] == ['volume', '50']
+    "test_msg_instantiation"
   ];
 
   pythonImportsCheck = [

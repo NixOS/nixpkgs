@@ -3268,6 +3268,8 @@ in {
 
   gbulb = callPackage ../development/python-modules/gbulb { };
 
+  gcal-sync = callPackage ../development/python-modules/gcal-sync { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcsfs = callPackage ../development/python-modules/gcsfs { };
@@ -4147,6 +4149,8 @@ in {
   insegel = callPackage ../development/python-modules/insegel { };
 
   installer = callPackage ../development/python-modules/installer { };
+
+  insteon-frontend-home-assistant = callPackage ../development/python-modules/insteon-frontend-home-assistant { };
 
   intake = callPackage ../development/python-modules/intake { };
 
