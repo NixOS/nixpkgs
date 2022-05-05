@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "babeld";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "https://www.irif.fr/~jch/software/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-mTFa6vLqIH8XfBaFX/o0/DVK8bWYjAcODy/KOg1ND6U=";
+    sha256 = "sha256-gy7wgMOA/2wNcVxr+IrCL8rofcDwRWbmC+zbjYce/7k=";
   };
 
   preBuild = ''
