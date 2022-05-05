@@ -25,7 +25,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "A fast and powerful alternative to grep";
     homepage = "https://sift-tool.org";
-    maintainers = [ maintainers.carlsverre ];
+    maintainers = with maintainers; [ carlsverre viraptor ];
     license = licenses.gpl3;
   };
 }
