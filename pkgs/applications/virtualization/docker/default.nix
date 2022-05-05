@@ -186,7 +186,7 @@ rec {
       export BUILDTIME="1970-01-01T00:00:00Z"
       source ./scripts/build/.variables
       export CGO_ENABLED=1
-      go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
+      go build -tags pkcs11 --ldflags "$GO_LDFLAGS" github.com/docker/cli/cmd/docker
       cd -
     '';
 
@@ -243,19 +243,19 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.14";
+    version = "20.10.15";
     rev = "v${version}";
-    sha256 = "sha256-eDwgqFx4io++SMOjhxMxVzqzcOgOnv6Xe/qmmPCvZts=";
+    sha256 = "sha256-uzwnXDomho5/Px4Ou/zP8Vedo2J9hVfcaFzM9vWh2Mo=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "sha256-I5oxpFLH789I2Sb29OXDaM4fCbQT/KvPq0DYcAVp0aI=";
+      sha256 = "sha256-+Eds5WI+Ujz/VxkWb1ToaGLk7wROTwWwJYpiZRIxAf0";
     };
-    runcRev = "v1.0.3";
-    runcSha256 = "sha256-Tl/JKbIpao+FCjngPzaVkxse50zo3XQ9Mg/AdkblMcI=";
-    containerdRev = "v1.5.11";
-    containerdSha256 = "sha256-YzFtv6DIjImSK0SywxhZrEeEmCnHTceAi3pfwnPubKg=";
+    runcRev = "v1.1.1";
+    runcSha256 = "sha256-6g2km+Y45INo2MTWMFFQFhfF8DAR5Su+YrJS8k3LYBY=";
+    containerdRev = "v1.6.4";
+    containerdSha256 = "sha256-425BcVHCliAHFQqGn6sWH/ahDX3JR6l/sYZWHpgmZW0=";
     tiniRev = "v0.19.0";
     tiniSha256 = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
