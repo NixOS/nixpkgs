@@ -84,6 +84,11 @@ mkDerivation rec {
       url = "https://github.com/scribusproject/scribus/commit/48263954a7dee0be815b00f417ae365ab26cdd85.patch";
       sha256 = "1WE9kALFw79bQH88NUafXaZ1Y/vJEKTIWxlk5c+opsQ=";
     })
+    # For Poppler 22.04
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/f2237b8f0b5cf7690e864a22ef7a63a6d769fa36.patch";
+      sha256 = "FXpLoX/a2Jy3GcfzrUUyVUfEAp5wAy2UfzfVA5lhwJw=";
+    })
   ];
 
   nativeBuildInputs = [

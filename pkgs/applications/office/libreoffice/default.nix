@@ -90,6 +90,9 @@ in (mkDrv rec {
       url = "https://github.com/archlinux/svntogit-packages/raw/f82958b9538f86e41b51f1ba7134968d2f3788d1/trunk/poppler-22.03.0.patch";
       sha256 = "5h4qJmx6Q3Q3dHUlSi8JXBziN2mAswGVWk5aDTLTwls=";
     })
+
+    # Fix build with poppler 22.04
+    ./poppler-22-04-0.patch
   ];
 
   ### QT/KDE

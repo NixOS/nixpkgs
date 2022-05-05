@@ -80,6 +80,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/inkscape/inkscape/-/commit/a18c57ffff313fd08bc8a44f6b6bf0b01d7e9b75.patch";
       sha256 = "UZb8ZTtfA5667uo5ZlVQ5vPowiSgd4ItAJ9U1BOsRQg=";
     })
+
+    # Fix build with poppler 22.04
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/4266
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/d989cdf1059c78bc3bb6414330242073768d640b.patch";
+      sha256 = "2cJZdunbRgPIwhJgz1dQoQRw3ZYZ2Fp6c3hpVBV2PbE=";
+    })
   ];
 
   postPatch = ''
