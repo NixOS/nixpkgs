@@ -17,10 +17,10 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}"
-    "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000"
-    "-X github.com/superfly/flyctl/flyctl.Environment=production"
-    "-X github.com/superfly/flyctl/flyctl.Version=${version}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.commit=${src.rev}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00+0000"
+    "-X github.com/superfly/flyctl/internal/buildinfo.environment=production"
+    "-X github.com/superfly/flyctl/internal/buildinfo.version=${version}"
   ];
 
   preBuild = ''
