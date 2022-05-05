@@ -4392,6 +4392,12 @@
     githubId = 74379;
     name = "Florian Pester";
   };
+  flyx = {
+    email = "contact@flyx.org";
+    github = "flyx";
+    githubId = 791710;
+    name = "Felix Krause";
+  };
   fmthoma = {
     email = "f.m.thoma@googlemail.com";
     github = "fmthoma";
