@@ -34,12 +34,6 @@ stdenv.mkDerivation rec {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
   ];
 
-  prePatch = ''
-    substituteInPlace ./test/CMakeLists.txt \
-      --replace 'SPIRV-Tools' 'SPIRV-Tools-shared'
-  '';
-
-
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
 
