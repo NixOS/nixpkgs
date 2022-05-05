@@ -3362,6 +3362,10 @@ with pkgs;
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
+  easycrypt = callPackage ../applications/science/logic/easycrypt { };
+
+  easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
+
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
 
   ecasound = callPackage ../applications/audio/ecasound { };
@@ -8733,10 +8737,6 @@ with pkgs;
 
   nmap = callPackage ../tools/security/nmap { };
 
-  nmap-graphical = nmap.override {
-    graphicalSupport = true;
-  };
-
   nmap-formatter = callPackage ../tools/security/nmap-formatter { };
 
   nmapsi4 = libsForQt5.callPackage ../tools/security/nmap/qt.nix { };
@@ -8827,7 +8827,7 @@ with pkgs;
 
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
-  oathToolkit = callPackage ../tools/security/oath-toolkit { };
+  oath-toolkit = callPackage ../tools/security/oath-toolkit { };
 
   oatpp = callPackage ../development/libraries/oatpp { };
 
@@ -11799,10 +11799,6 @@ with pkgs;
 
   xprite-editor = callPackage ../tools/misc/xprite-editor {
     inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
-
-  xpf = callPackage ../tools/text/xml/xpf {
-    libxml2 = libxml2Python;
   };
 
   xsecurelock = callPackage ../tools/X11/xsecurelock { };
@@ -25265,11 +25261,10 @@ with pkgs;
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
 
-  awesome-4-0 = callPackage ../applications/window-managers/awesome {
+  awesome = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
     inherit (texFunctions) fontsConf;
   };
-  awesome = awesome-4-0;
 
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
@@ -29363,7 +29358,7 @@ with pkgs;
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = python3.pkgs.callPackage ../applications/misc/udiskie { };
+  udiskie = callPackage ../applications/misc/udiskie { };
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
@@ -30076,10 +30071,6 @@ with pkgs;
   tuxguitar = callPackage ../applications/editors/music/tuxguitar {
     jre = jre8;
     swt = swt_jdk8;
-  };
-
-  twister = callPackage ../applications/networking/p2p/twister {
-    boost = boost16x;
   };
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
@@ -34477,6 +34468,8 @@ with pkgs;
   runiq = callPackage ../tools/text/runiq { };
 
   runit = callPackage ../tools/system/runit { };
+
+  runitor = callPackage ../tools/system/runitor { };
 
   refind = callPackage ../tools/bootloaders/refind { };
 

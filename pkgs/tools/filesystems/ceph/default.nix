@@ -9,7 +9,7 @@
 , gtest
 , cunit, snappy
 , makeWrapper
-, leveldb, oathToolkit
+, leveldb, oath-toolkit
 , libnl, libcap_ng
 , rdkafka
 , nixosTests
@@ -161,7 +161,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
