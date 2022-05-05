@@ -1516,7 +1516,8 @@
       pymazda
     ];
     "meater" = ps: with ps; [
-    ]; # missing inputs: meater-python
+      meater-python
+    ];
     "media_extractor" = ps: with ps; [
       aiohttp-cors
       youtube-dl-light
@@ -3451,6 +3452,7 @@
     "manual_mqtt"
     "maxcube"
     "mazda"
+    "meater"
     "media_player"
     "media_source"
     "melcloud"
