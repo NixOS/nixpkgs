@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "parameter-expansion-patched";
-  version = "0.2.1b4";
+  version = "0.3.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vhshscjifi78qapzwn29gln6p8jhyc7cccszl8ai2jamhcph5zs";
+    sha256 = "sha256-/128ifveWC8zNlYtGWtxB3HpK6p7bVk1ahSwhaC2dAs=";
   };
 
   checkInputs = [
