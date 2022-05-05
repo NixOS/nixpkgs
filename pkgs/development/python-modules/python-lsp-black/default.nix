@@ -1,10 +1,11 @@
 { lib
-, black
+, pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, black
 , python-lsp-server
-, pythonOlder
+, toml
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [ black python-lsp-server ];
+  propagatedBuildInputs = [ black python-lsp-server toml ];
 
   meta = with lib; {
     homepage = "https://github.com/python-lsp/python-lsp-black";
