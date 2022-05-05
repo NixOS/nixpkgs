@@ -1,0 +1,25 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 64d748d..32bfb30 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -793,8 +793,7 @@ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
+ [[package]]
+ name = "conv"
+ version = "0.3.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "78ff10625fd0ac447827aa30ea8b861fead473bb60aeb73af6c1c58caf0d1299"
++source = "git+https://github.com/DanielKeep/rust-conv.git?rev=9b7e41a5e1c0508ed58cf41066744d706bba10ed#9b7e41a5e1c0508ed58cf41066744d706bba10ed"
+ dependencies = [
+  "custom_derive",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index 27e6f3c..bf26c97 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -108,3 +108,6 @@ opt-level=3
+ debug=0
+ lto=true
+ 
++[patch.crates-io.conv]
++git = 'https://github.com/DanielKeep/rust-conv.git'
++rev = '9b7e41a5e1c0508ed58cf41066744d706bba10ed'
