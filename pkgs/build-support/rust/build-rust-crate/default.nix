@@ -277,9 +277,14 @@ crate_: lib.makeOverridable
 
       # Create a list of features that are enabled by the crate itself and
       # through the features argument of buildRustCrate. Exclude features
-      # with a forward slash, since they are passed through to dependencies.
+      # with a forward slash, since they are passed through to dependencies,
+      # and dep: features, since they're internal-only and do nothing except
+      # enable optional dependencies.
       crateFeatures = lib.optionals (crate ? features)
-        (builtins.filter (f: !lib.hasInfix "/" f) (crate.features ++ features));
+        (builtins.filter
+          (f: !(lib.hasInfix "/" f || lib.hasPrefix "dep:" f))
+          (crate.features ++ features)
+        );
 
       libName = if crate ? libName then crate.libName else crate.crateName;
       libPath = if crate ? libPath then crate.libPath else "";

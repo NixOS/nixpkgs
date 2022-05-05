@@ -3112,10 +3112,10 @@ let
     "matrix-org-irc-1.2.0" = {
       name = "matrix-org-irc";
       packageName = "matrix-org-irc";
-      version = "1.2.0";
+      version = "1.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/matrix-org-irc/-/matrix-org-irc-1.2.0.tgz";
-        sha512 = "RnfeR9FimJJD/iOWw0GiV7NIPRmBJobvFasUgjVmGre9A4qJ9klHIDOlQ5vXIoPPMjzG8XXuAf4WHgMCNBfZkQ==";
+        url = "https://registry.npmjs.org/matrix-org-irc/-/matrix-org-irc-1.2.1.tgz";
+        sha256 = "sha256-H+MDx3PftBtglgHThT7UJ5ePf6QXPDWCygydEUbMj7E=";
       };
     };
     "media-typer-0.3.0" = {
