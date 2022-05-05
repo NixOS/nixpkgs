@@ -1134,6 +1134,11 @@ in
         timerConfig.OnCalendar = ["daily"];
         timerConfig.AccuracySec = "1h";
       };
+      extraServices.hgsrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "2s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.hgsrht}/bin/hgsrht-api -b ${cfg.listenAddress}:${toString (cfg.hg.port + 100)}";
+      };
       extraConfig = mkMerge [
         {
           users.users.${cfg.hg.user}.shell = pkgs.bash;
