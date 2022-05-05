@@ -1516,7 +1516,8 @@
       pymazda
     ];
     "meater" = ps: with ps; [
-    ]; # missing inputs: meater-python
+      meater-python
+    ];
     "media_extractor" = ps: with ps; [
       aiohttp-cors
       youtube-dl-light
@@ -2121,9 +2122,11 @@
       radiotherm
     ];
     "rainbird" = ps: with ps; [
-    ]; # missing inputs: pyrainbird
+      pyrainbird
+    ];
     "raincloud" = ps: with ps; [
-    ]; # missing inputs: raincloudy
+      raincloudy
+    ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
       ueagle
@@ -3451,6 +3454,7 @@
     "manual_mqtt"
     "maxcube"
     "mazda"
+    "meater"
     "media_player"
     "media_source"
     "melcloud"

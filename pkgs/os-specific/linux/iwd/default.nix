@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.26";
+  version = "1.27";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-+BciYfb9++u9Ux4AdvPFFIFVq8j+TVoTLKqxzmn5p3o=";
+    sha256 = "sha256-gN9+9Cc6zjZBXDhcHBH5wyucO5/vL7bKSLWM5laFqaA=";
   };
 
   outputs = [ "out" "man" "doc" ]
