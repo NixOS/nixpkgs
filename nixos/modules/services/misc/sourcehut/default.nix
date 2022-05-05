@@ -905,6 +905,11 @@ in
       inherit configIniOfService;
       srvsrht = "buildsrht";
       port = 5002;
+      extraServices.buildsrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "2s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.buildsrht}/bin/buildsrht-api -b ${cfg.listenAddress}:${toString (cfg.builds.port + 100)}";
+      };
       # TODO: a celery worker on the master and worker are apparently needed
       extraServices.buildsrht-worker = let
         qemuPackage = pkgs.qemu_kvm;
@@ -928,13 +933,13 @@ in
           fi
         '';
         serviceConfig = {
-          ExecStart = "${pkgs.sourcehut.buildsrht}/bin/builds.sr.ht-worker";
+          ExecStart = "${pkgs.sourcehut.buildsrht}/bin/buildsrht-worker";
           BindPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
           LogsDirectory = [ "sourcehut/${serviceName}" ];
           RuntimeDirectory = [ "sourcehut/${serviceName}/subdir" ];
           StateDirectory = [ "sourcehut/${serviceName}" ];
           TimeoutStartSec = "1800s";
-          # builds.sr.ht-worker looks up ../config.ini
+          # buildsrht-worker looks up ../config.ini
           WorkingDirectory = "-"+"/run/sourcehut/${serviceName}/subdir";
         };
       };
@@ -952,12 +957,12 @@ in
           ) cfg.builds.images
         );
         image_dir_pre = pkgs.symlinkJoin {
-          name = "builds.sr.ht-worker-images-pre";
+          name = "buildsrht-worker-images-pre";
           paths = image_dirs;
             # FIXME: not working, apparently because ubuntu/latest is a broken link
             # ++ [ "${pkgs.sourcehut.buildsrht}/lib/images" ];
         };
-        image_dir = pkgs.runCommand "builds.sr.ht-worker-images" { } ''
+        image_dir = pkgs.runCommand "buildsrht-worker-images" { } ''
           mkdir -p $out/images
           cp -Lr ${image_dir_pre}/* $out/images
         '';
