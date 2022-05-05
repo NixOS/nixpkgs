@@ -1,5 +1,6 @@
 { lib
 , fetchFromSourcehut
+, buildGoModule
 , buildPythonPackage
 , srht
 , asyncpg
@@ -8,23 +9,35 @@
 , emailthreads
 , redis
 , python
+, unzip
 }:
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.51.7";
+  version = "0.51.9";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-oNY5A98oVoL2JKO0fU/8YVl8u7ywmHb/RHD8A6z9yIM=";
+    sha256 = "sha256-6iyt0XXAHvyp4bA+VW9uA9YP9wq2Rf/WYVZxylSRf7k=";
   };
+
+  listssrht-api = buildGoModule ({
+    inherit src version;
+    pname = "listssrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
+  } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
 
   patches = [
     # Revert change breaking Unix socket support for Redis
     patches/redis-socket/lists/0001-Revert-Add-webhook-queue-monitoring.patch
   ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -40,6 +53,10 @@ buildPythonPackage rec {
   preBuild = ''
     export PKGVER=${version}
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  '';
+
+  postInstall = ''
+    ln -s ${listssrht-api}/bin/api $out/bin/listssrht-api
   '';
 
   pythonImportsCheck = [ "listssrht" ];

@@ -1199,6 +1199,11 @@ in
       inherit configIniOfService;
       port = 5006;
       webhooks = true;
+      extraServices.listssrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "2s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.listssrht}/bin/listssrht-api -b ${cfg.listenAddress}:${toString (cfg.lists.port + 100)}";
+      };
       # Receive the mail from Postfix and enqueue them into Redis and PostgreSQL
       extraServices.listssrht-lmtp = {
         wants = [ "postfix.service" ];
