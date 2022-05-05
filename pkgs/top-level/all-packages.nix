@@ -12400,8 +12400,6 @@ with pkgs;
 
   dictu = callPackage ../development/compilers/dictu { };
 
-  dotty = callPackage ../development/compilers/scala/dotty.nix { };
-
   ecl = callPackage ../development/compilers/ecl { };
   ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
@@ -13805,6 +13803,9 @@ with pkgs;
   scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
   scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
+  scala_3 = callPackage ../development/compilers/scala { };
+  # deprecated
+  dotty = scala_3;
 
   scala = scala_2_13;
   scala-runners = callPackage ../development/compilers/scala-runners {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.1.0";
-  pname = "dotty-bare";
+  pname = "scala-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/scala3-${version}.tar.gz";
