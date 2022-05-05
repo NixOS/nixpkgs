@@ -67,15 +67,15 @@ let
   in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
-      version = "unstable-2021-06-22";
+      version = "unstable-2022-03-16";
 
       inherit passthru;
 
       src = fetchFromGitHub {
         owner = "intel";
         repo = "opencl-clang";
-        rev = "fd68f64b33e67d58f6c36b9e25c31c1178a1962a";
-        sha256 = "sha256-q1YPBb/LY67iEuQx1fMUQD/I7OsNfobW3yNfJxLXx3E=";
+        rev = "bbdd1587f577397a105c900be114b56755d1f7dc";
+        sha256 = "sha256-qEZoQ6h4XAvSnJ7/gLXBb1qrzeYa6Jp6nij9VFo8MwQ=";
       };
 
       patches = [
