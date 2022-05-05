@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "3.9.1";
+  version = "4.7.1";
   pname = "timeular";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    sha256 = "103hy443p697jdkz6li8s1n6kg1r55jmiw2vbjz12kskf7njg4y4";
+    sha256 = "sha256:0k8ywbdb41imq10ya9y27zks67a6drjb1h0hn8ycd7a6z6703rjz";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -35,7 +35,7 @@ in appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
     install -m 444 -D ${appimageContents}/timeular.png $out/share/icons/hicolor/512x512/apps/timeular.png
     substituteInPlace $out/share/applications/timeular.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace "Exec=AppRun --no-sandbox %U" "Exec=$out/bin/${pname}"
   '';
 
   meta = with lib; {

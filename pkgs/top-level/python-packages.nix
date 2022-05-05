@@ -345,6 +345,8 @@ in {
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
+  aiolimiter = callPackage ../development/python-modules/aiolimiter { };
+
   aiolip = callPackage ../development/python-modules/aiolip { };
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
@@ -5168,6 +5170,8 @@ in {
 
   measurement = callPackage ../development/python-modules/measurement { };
 
+  meater-python = callPackage ../development/python-modules/meater-python { };
+
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
   mechanicalsoup = callPackage ../development/python-modules/mechanicalsoup { };
@@ -7700,6 +7704,8 @@ in {
 
   py-radix = callPackage ../development/python-modules/py-radix { };
 
+  pyrainbird = callPackage ../development/python-modules/pyrainbird { };
+
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
@@ -8819,6 +8825,8 @@ in {
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
 
   rainbowstream = callPackage ../development/python-modules/rainbowstream { };
+
+  raincloudy = callPackage ../development/python-modules/raincloudy { };
 
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
