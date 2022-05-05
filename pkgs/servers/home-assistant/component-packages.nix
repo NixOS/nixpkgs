@@ -2122,7 +2122,8 @@
       radiotherm
     ];
     "rainbird" = ps: with ps; [
-    ]; # missing inputs: pyrainbird
+      pyrainbird
+    ];
     "raincloud" = ps: with ps; [
     ]; # missing inputs: raincloudy
     "rainforest_eagle" = ps: with ps; [
