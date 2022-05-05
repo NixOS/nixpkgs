@@ -9499,7 +9499,9 @@ with pkgs;
 
   proxify = callPackage ../tools/networking/proxify { };
 
-  proxysql = callPackage ../servers/sql/proxysql { };
+  proxysql = callPackage ../servers/sql/proxysql {
+    stdenv = if stdenv.targetPlatform.isx86_64 then gcc10Stdenv else stdenv;
+  };
 
   prs = callPackage ../tools/security/prs { };
 
@@ -27835,8 +27837,6 @@ with pkgs;
     inherit (luajitPackages) luafilesystem;
   };
 
-  lookatme = callPackage ../tools/misc/lookatme {};
-
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
@@ -33422,13 +33422,6 @@ with pkgs;
   } // (config.caffe or {}));
 
   caffeWithCuda = caffe.override { cudaSupport = true; };
-
-  caffe2 = callPackage ../development/libraries/science/math/caffe2 (rec {
-    inherit (python3Packages) python future six numpy pydot;
-    protobuf = protobuf3_1;
-    python-protobuf = python3Packages.protobuf.override { inherit protobuf; };
-    opencv3 = opencv3WithoutCuda; # Used only for image loading.
-  });
 
   caffeine-ng = callPackage ../tools/X11/caffeine-ng {};
 
