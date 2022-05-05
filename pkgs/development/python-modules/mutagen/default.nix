@@ -25,10 +25,7 @@ buildPythonPackage rec {
     sha256 = "6397602efb3c2d7baebd2166ed85731ae1c1d475abca22090b7141ff5034b3e1";
   };
 
-  outputs = [
-    "doc"
-    "out"
-  ];
+  outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [
     sphinx
@@ -69,6 +66,5 @@ buildPythonPackage rec {
     homepage = "https://mutagen.readthedocs.io";
     changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = licenses.gpl2Plus;
-    platforms = platforms.all;
   };
 }

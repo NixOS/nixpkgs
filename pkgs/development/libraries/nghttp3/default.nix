@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "unstable-2021-12-22";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
-    rev = "8d8184acf850b06b53157bba39022bc7b7b5f1cd";
-    sha256 = "sha256-pV1xdQa5RBz17jDINC2uN1Q+jpa2edDwqTqf8D5VU3E=";
+    rev = "v${version}";
+    sha256 = "sha256-toGTkgJLdSLNWCPJFpT63IxF3xANbvtkhJo5NUg/ZBg=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];

@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = [ maintainers.leenaars ];
+    mainProgram = "kfcgi";
   };
 }

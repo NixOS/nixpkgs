@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook coreutils pkg-config python3Packages.docutils ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3Packages.docutils ];
   buildInputs = [ jansson ] ++ lib.optional stdenv.isDarwin libiconv;
 
   # to generate makefile.in

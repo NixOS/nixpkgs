@@ -1,13 +1,25 @@
-{ lib, python3 }:
+{ lib, python3, fetchpatch }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.19";
+  version = "1.21";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "def7c0210bf0ce8dfffdb46ce21b3efcf71eba5a4e903565258419e4c53c2d43";
+    sha256 = "sha256-0aFCKEjmXn6yddgNMi9t4rzqHcN7VBLoz3LEg9apmNY=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Update werkzeug compatibility
+      url = "https://github.com/beancount/fava/commit/5a99417a42e1d739b1e57fae2d01ff1d146dcbc2.patch";
+      hash = "sha256-Y6IcxZAcFJEYgT8/xBIABdkP+pUdQX1EgSS5uNdSJUE=";
+      excludes = [
+        ".pre-commit-config.yaml"
+      ];
+    })
+  ];
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 

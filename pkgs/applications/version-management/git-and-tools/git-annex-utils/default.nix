@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://git-annex.mysteryvortex.com/git-annex-utils.html";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ woffs ];
+    mainProgram = "gadu";
     platforms = lib.platforms.all;
   };
 }

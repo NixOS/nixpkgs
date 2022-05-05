@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -47,7 +47,7 @@ in
     # Debugging
     environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-    environment.systemPackages = pkgs.gnome.removePackagesByName
+    environment.systemPackages = utils.removePackagesByName
       (pkgs.mate.basePackages ++
       pkgs.mate.extraPackages ++
       [
@@ -73,6 +73,7 @@ in
     services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.xserver.libinput.enable = mkDefault true;
 
     security.pam.services.mate-screensaver.unixAuth = true;
 

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     cd ../build
   '';
 
-  autoPatchelfIgnoreMissingDeps = true;
+  autoPatchelfIgnoreMissingDeps = [ "libngraph_backend.so" ];
 
   nativeBuildInputs = [
     cmake

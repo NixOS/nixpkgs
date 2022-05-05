@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flycast";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
     rev = "v${version}";
-    sha256 = "sha256-MzHAGK++oukIs84OR/l6gBwCJssdi8Iyte5Rtro2+Q0=";
+    sha256 = "sha256-FAHm8Fu/yv2rJvWCY+g50TYH4zOT6rO7F+jTL2T6EOU=";
     fetchSubmodules = true;
   };
 

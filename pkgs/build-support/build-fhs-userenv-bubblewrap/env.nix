@@ -178,7 +178,7 @@ let
         chmod -R 755 share
         cp -rLTf ${staticUsrProfileTarget}/share share
       else
-        cp -rLf ${staticUsrProfileTarget}/share share
+        cp -rsHf ${staticUsrProfileTarget}/share share
       fi
     fi
     for i in bin sbin include; do

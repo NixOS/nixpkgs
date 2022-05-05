@@ -8,14 +8,14 @@
 with lib;
 
 let
-  inherit (lib) optionals versionAtLeast;
+  inherit (lib) optionals versionOlder;
 
   pname = "vg";
   version = "0.9.4";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !versionAtLeast ocaml.version "4.03"
+if versionOlder ocaml.version "4.03"
 then throw "vg is not available for OCaml ${ocaml.version}"
 else
 

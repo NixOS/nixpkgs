@@ -56,7 +56,7 @@ let
     , stdenvOverride ? stdenv
     , src ? (getCoreSrc core)
     , broken ? false
-    , version ? "unstable-2022-04-08"
+    , version ? "unstable-2022-04-21"
     , platforms ? retroarch.meta.platforms
       # The resulting core file is based on core name
       # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
@@ -359,6 +359,7 @@ in
     core = "dosbox";
     description = "Port of DOSBox to libretro";
     license = lib.licenses.gpl2Only;
+    stdenvOverride = gcc10Stdenv;
   };
 
   eightyone = mkLibRetroCore {

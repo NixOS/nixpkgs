@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     "--enable-threads=multiple"
     "--enable-hybrid"
     "--enable-shared"
+    "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
   ] ++ optional useSlurm "--with-pm=slurm"
     ++ optional (network == "ethernet") "--with-device=ch3:sock"
     ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" ]

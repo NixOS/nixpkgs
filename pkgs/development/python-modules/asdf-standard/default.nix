@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-standard";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "asdf_standard";
     inherit version;
-    hash = "sha256-HK8GceEm9K7DETreG1BjhYNpp2klXPu7vNLWfazFtZI=";
+    hash = "sha256-Ic/AXdghVZtn37xU0DsrzArYtstcydFNdZH3OrNFFwA=";
   };
 
   nativeBuildInputs = [

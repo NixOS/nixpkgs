@@ -1,19 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, Cocoa
+, Foundation
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "8.3.0";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iFS8Bf2IF0GoW168DwfBbkiPd7IGJhGShofFnBESpUc=";
+    sha256 = "sha256-EsC17VUQDgrhCU26fsqf2zXOTKa/WeKHiWG0Zn1Qao4=";
   };
 
-  cargoSha256 = "sha256-8Ag4rDXnDZgxdwFpiWnYNjDeau9vr9EIfbJzeQlqSDM=";
+  cargoSha256 = "sha256-e5QJw5yY+ZkijqoqRauA5ncvLWiRlalYZCwSG5U7uDk=";
 
-  buildInputs = lib.optional stdenv.isDarwin Foundation;
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Foundation ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Br1ght0ne hugoreeves SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
+    broken = stdenv.isDarwin;
   };
 }

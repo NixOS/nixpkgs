@@ -126,13 +126,6 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
-    qtwayland = [
-      ./qtwayland-libdrm-build.patch
-      # NixOS-specific, ensure that app_id is correctly determined for
-      # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
-      # context).  Beware: shared among different Qt5 versions.
-      ../modules/qtwayland-app_id.patch
-    ];
   };
 
   addPackages = self: with self;
@@ -151,7 +144,7 @@ let
         }
         { inherit self srcs patches; };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -194,6 +187,7 @@ let
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};

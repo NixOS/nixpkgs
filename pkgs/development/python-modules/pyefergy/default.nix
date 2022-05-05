@@ -1,11 +1,9 @@
 { lib
 , aiohttp
-, aresponses
 , buildPythonPackage
 , fetchFromGitHub
 , iso4217
 , pytest-asyncio
-, pytestCheckHook
 , pythonOlder
 , pytz
 }:
@@ -21,7 +19,7 @@ buildPythonPackage rec {
     owner = "tkdrob";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AdoM+PcVoajxhnEfkyN9UuNufChu8XGmZDLNC3mjrps=";
+    hash = "sha256-AdoM+PcVoajxhnEfkyN9UuNufChu8XGmZDLNC3mjrps=";
   };
 
   propagatedBuildInputs = [
@@ -30,11 +28,8 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  # Tests require network access
+  doCheck  =false;
 
   pythonImportsCheck = [
     "pyefergy"

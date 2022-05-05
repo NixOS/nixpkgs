@@ -27,10 +27,10 @@ buildPythonPackage rec {
       src = ./dont_fetch_dependencies.patch;
       pybind11_src = pybind11.src;
       relic_src = fetchFromGitHub {
-        owner = "relic-toolkit";
+        owner = "Chia-Network";
         repo = "relic";
-        rev = "1885ae3b681c423c72b65ce1fe70910142cf941c"; # pinned by blspy
-        hash = "sha256-tsSZTcssl8t7Nqdex4BesgQ+ACPgTdtHnJFvS9josN0=";
+        rev = "1d98e5abf3ca5b14fd729bd5bcced88ea70ecfd7"; # pinned by blspy
+        hash = "sha256-IfTD8DvTEXeLUoKe4Ejafb+PEJW5DV/VXRYuutwGQHU=";
       };
       sodium_src = fetchFromGitHub {
         owner = "AmineKhaldi";

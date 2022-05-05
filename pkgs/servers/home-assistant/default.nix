@@ -50,6 +50,9 @@ let
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
+      rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
       snitun = super.snitun.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
@@ -57,19 +60,6 @@ let
         doCheck = false; # requires aiohttp>=1.0.0
       });
     })
-
-    (self: super: {
-      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.3";
-        src = fetchFromGitHub {
-          owner = "Noltari";
-          repo = "aioairzone";
-          rev = version;
-          hash = "sha256-vy6NqtlWv2El259rC+Nm0gs/rsY+s8xe7Z+wXvT1Ing=";
-        };
-      });
-    })
-
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -178,7 +168,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.4.0";
+  hassVersion = "2022.4.7";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -196,7 +186,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-b/YwcbcQuRIue4fr4+yF2EEXLvmnI7e3xfyz52flwJw=";
+    hash = "sha256-1m3t+AeHyuEyu3gT8P37A+L28mBdNKGmycU6eNOyb4M=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -293,8 +283,6 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    # parallelize test run
-    "--numprocesses $NIX_BUILD_CORES"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # retry racy tests that end in "RuntimeError: Event loop is closed"

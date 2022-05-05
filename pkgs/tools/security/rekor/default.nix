@@ -4,22 +4,43 @@ let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.5.0";
+      version = "0.6.0";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "sha256-y8klkb0hyITxLhcNWF7RYRVwF8rclDKzQF/MJs6y//Y=";
+        sha256 = "sha256-cihue4DMqHLFVz5kLZf17EcwbkfBxlxtqmto5K11sIo=";
+        # populate values that require us to use git. By doing this in postFetch we
+        # can delete .git afterwards and maintain better reproducibility of the src.
+        leaveDotGit = true;
+        postFetch = ''
+          cd "$out"
+          git rev-parse HEAD > $out/COMMIT
+          # '0000-00-00T00:00:00Z'
+          date -u -d "@$(git log -1 --pretty=%ct)" "+'%Y-%m-%dT%H:%M:%SZ'" > $out/SOURCE_DATE_EPOCH
+          find "$out" -name .git -print0 | xargs -0 rm -rf
+        '';
       };
 
-      vendorSha256 = "sha256-0PPdnE3ND/YNIk50XkgBROpe5OhFiFre5Lwsml02DQU=";
+      vendorSha256 = "sha256-bJOWSf2MHeLdI1smFXCjN3PIFRcO76cDnxks+FgqZdY=";
 
       nativeBuildInputs = [ installShellFiles ];
 
       subPackages = [ packageToBuild ];
 
-      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/pkg/api.GitVersion=v${version}" ];
+      ldflags = [
+        "-s"
+        "-w"
+        "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+        "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
+      ];
+
+      # ldflags based on metadata from git and source
+      preBuild = ''
+        ldflags+=" -X sigs.k8s.io/release-utils/version.gitCommit=$(cat COMMIT)"
+        ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+      '';
 
       postInstall = ''
         installShellCompletion --cmd ${pname} \

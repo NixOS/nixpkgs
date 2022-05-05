@@ -4,18 +4,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "14.0.02";
+  version = "14.0.03";
 
   ttf = fetchurl {
-    # Unfortunately the 14.0.02 TTF file is not available on the GNU mirror.
-    # Restore this for next version: "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
-    url = "https://unifoundry.com/pub/unifont/${pname}-${version}/font-builds/${pname}-${version}.ttf";
-    sha256 = "1c8rdk3xg6j8lrzxddd73jppfgpk253jdkch63rr7n2d7ljp9gc3";
+    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
+    sha256 = "1qyc7nqyhjnarwgpkah52qv7hr0yfzak7084ilrj7z0nii4f5y57";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    sha256 = "0hcl1zihm91xwvh5ds01sybgs0j8zsrrhn4wlz5j6ji99rh797jr";
+    sha256 = "1sgvxpr4ydjnbk70j0lpgxz5x851lmrmxjb5x8lsz0i2hm32jdbc";
   };
 
   nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];

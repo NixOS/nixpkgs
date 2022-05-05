@@ -70,7 +70,6 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
     "datashader"
   ];
 

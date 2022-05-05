@@ -14,17 +14,17 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1j75ivy7lwxjpfhwsikk517a9bxhrbwfy8f8liql392839qryblj";
-    x86_64-darwin = "0sjsrm31rbgq9j6hnry8f69mhhwlsd7drzz5jr31ljk75vgx3j8f";
-    aarch64-linux = "1ll28djzf5xvc0yin1irxzn3nkizpgfz0azknaycjar261q3akdp";
-    aarch64-darwin = "0mfhbdmz0db851mab83dmq654gwgdz9p20igwm9g5h4y6zrvdhg6";
-    armv7l-linux = "1vicvzdj83vcj64rla9v5n9bmi0wgz507xxch3anjszah3n7ld89";
+    x86_64-linux = "1si0r8nww5m3yn3vzw0pk3nykfvxnlwna4pp11bsli4vqj1ym2nz";
+    x86_64-darwin = "002rkvc8fa7r9x2dsjhkwzmc1sp5mq998frrw5xd6bym0cp4j76l";
+    aarch64-linux = "0w9gjk2a5z8cqlg43jn2r588asymiklm1b28l54gvqp7jawlb0fd";
+    aarch64-darwin = "18h2kk6fcdz38xzyn37brbbj4nbrjgzv9xsz7c7iai8d01vh7s33";
+    armv7l-linux = "16cs2ald40nh76m3fxxfd233hr687dhwbqdkvjz4s6xxwi0rhvwc";
   }.${system};
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.66.1";
+    version = "1.66.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";

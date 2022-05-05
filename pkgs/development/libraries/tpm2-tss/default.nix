@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
       --replace '@PREFIX@' $out/lib
+    substituteInPlace ./configure.ac \
+      --replace 'm4_esyscmd_s([git describe --tags --always --dirty])' '${version}'
   '';
 
   configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [

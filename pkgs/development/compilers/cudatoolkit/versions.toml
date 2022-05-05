@@ -44,16 +44,18 @@ gcc = "gcc9"
 version = "11.4.2"
 url = "https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda_11.4.2_470.57.02_linux.run"
 sha256 = "sha256-u9h8oOkT+DdFSnljZ0c1E83e9VUILk2G7Zo4ZZzIHwo="
-gcc = "gcc10" # can bump to 11 along with stdenv.cc
+gcc = "gcc10"
 
 ["11.5"]
 version = "11.5.0"
 url = "https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run"
 sha256 = "sha256-rgoWk9lJfPPYHmlIlD43lGNpANtxyY1Y7v2sr38aHkw="
-gcc = "gcc10" # can bump to 11 along with stdenv.cc
+# cuda 11.5 has problems with glibc 2.4 -> keeping gcc10
+# cf. https://forums.developer.nvidia.com/t/cuda-11-5-samples-throw-multiple-error-attribute-malloc-does-not-take-arguments/192750/15
+gcc = "gcc10"
 
 ["11.6"]
 version = "11.6.1"
 url = "https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/cuda_11.6.1_510.47.03_linux.run"
 sha256 = "sha256-qyGa/OALdCABEyaYZvv/derQN7z8I1UagzjCaEyYTX4="
-gcc = "gcc10" # can bump to 11 along with stdenv.cc
+gcc = "gcc11"

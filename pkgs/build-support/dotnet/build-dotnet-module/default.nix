@@ -74,13 +74,16 @@ let
     inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
-  _nugetDeps = mkNugetDeps { name = "${name}-nuget-deps"; nugetDeps = import nugetDeps; };
-  _localDeps = linkFarmFromDrvs "${name}-local-nuget-deps" projectReferences;
+  localDeps = if (projectReferences != [])
+    then linkFarmFromDrvs "${name}-project-references" projectReferences
+    else null;
+
+  _nugetDeps = mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
 
   nuget-source = mkNugetSource {
-    name = "${args.pname}-nuget-source";
-    description = "A Nuget source with the dependencies for ${args.pname}";
-    deps = [ _nugetDeps _localDeps ];
+    name = "${name}-nuget-source";
+    description = "A Nuget source with the dependencies for ${name}";
+    deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
 in stdenvNoCC.mkDerivation (args // {
@@ -103,6 +106,8 @@ in stdenvNoCC.mkDerivation (args // {
   dontWrapGApps = args.dontWrapGApps or true;
 
   passthru = {
+    inherit nuget-source;
+
     fetch-deps = writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
       cd "$(dirname "''${BASH_SOURCE[0]}")"

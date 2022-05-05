@@ -192,9 +192,9 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.1.8";
-    sha256 = "sha256-U3RuLnDQD1EbPZG/wPuVMbSKmR3EqspkoK0Ky8aZb7k=";
-    vendorSha256 = "sha256-Jy9o0O80OjagrHG25CSPblI49zKx0N8pwvEotk9qm3s=";
+    version = "1.1.9";
+    sha256 = "sha256-6dyP3Y5cK+/qLoC2QPZW3QNgqOeVXegC06Pa7pSv1iE=";
+    vendorSha256 = "sha256-YI/KeoOIxgCAS3Q6SXaW8my0PyFD+pyksshQEAknsz4=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

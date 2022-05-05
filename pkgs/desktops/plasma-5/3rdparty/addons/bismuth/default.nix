@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "bismuth";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "Bismuth-Forge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6kSqZtJijQBqvYcyAoSRLl/RxgUubst2SJw/adiBIj4=";
+    sha256 = "sha256-SGeqTmU603gKlzCUJ6AMaG7++9JvMw5EpSATwJEqNq8=";
   };
 
   cmakeFlags = [

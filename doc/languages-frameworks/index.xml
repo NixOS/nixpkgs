@@ -9,6 +9,7 @@
  <xi:include href="android.section.xml" />
  <xi:include href="beam.section.xml" />
  <xi:include href="bower.section.xml" />
+ <xi:include href="chicken.section.xml" />
  <xi:include href="coq.section.xml" />
  <xi:include href="crystal.section.xml" />
  <xi:include href="cuda.section.xml" />

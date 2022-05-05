@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "kiln";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~adnano";
     repo = pname;
     rev = version;
-    hash = "sha256-c6ed62Nn++qw+U/DCiYeGwF77YsBxexWKZ7UQ3LE4fI=";
+    hash = "sha256-owON9ZNi8BufkeARjC6SwxzM81YJYu+bakhH5quzMrA=";
   };
 
   nativeBuildInputs = [ scdoc ];
 
-  vendorSha256 = "sha256-bMpzebwbVHAbBtw0uuGyWd4wnM9z6tlsEQN4S/iucgk=";
+  vendorSha256 = "sha256-C1ueL/zmPzFbpNo5BF56/t74nwCUvb2Vu1exssPqOPE=";
 
   installPhase = ''
     runHook preInstall

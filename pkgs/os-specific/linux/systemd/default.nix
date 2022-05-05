@@ -666,6 +666,18 @@ stdenv.mkDerivation {
     rm -rf $out/share/doc
   '';
 
+  # Avoid *.EFI binary stripping. At least on aarch64-linux strip
+  # removes too much from PE32+ files:
+  #   https://github.com/NixOS/nixpkgs/issues/169693
+  # The hack is to move EFI file out of lib/ before doStrip
+  # run and return it after doStrip run.
+  preFixup = lib.optionalString withEfi ''
+    mv $out/lib/systemd/boot/efi $out/dont-strip-me
+  '';
+  postFixup = lib.optionalString withEfi ''
+    mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '';
+
   passthru = {
     # The interface version prevents NixOS from switching to an
     # incompatible systemd at runtime.  (Switching across reboots is
@@ -675,7 +687,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup util-linux;
+    inherit withCryptsetup util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;
@@ -687,6 +699,8 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
+    broken = stdenv.hostPlatform.isStatic;
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk mic92 ];
   };

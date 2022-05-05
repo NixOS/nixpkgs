@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, kubectl, stdenv }:
 
 buildGoModule rec {
   pname = "gsctl";
@@ -13,10 +13,16 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-NeRABlKUpD2ZHRid/vu34Dh9uHZ+7IXWFPX8jkexUog=";
 
-  ldflags =
-    [ "-s" "-w" "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}" ];
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}"
+  ];
 
-  doCheck = false;
+  checkInputs = [
+    kubectl
+  ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "The Giant Swarm command line interface";

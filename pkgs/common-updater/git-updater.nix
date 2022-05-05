@@ -1,4 +1,5 @@
-{ genericUpdater
+{ lib
+, genericUpdater
 , common-updater-scripts
 }:
 
@@ -9,9 +10,12 @@
 , rev-prefix ? ""
 , odd-unstable ? false
 , patchlevel-unstable ? false
+# an explicit url is needed when src.meta.homepage or src.url don't
+# point to a git repo (eg. when using fetchurl, fetchzip, ...)
+, url ? null
 }:
 
 genericUpdater {
   inherit pname version attrPath ignoredVersions rev-prefix odd-unstable patchlevel-unstable;
-  versionLister = "${common-updater-scripts}/bin/list-git-tags";
+  versionLister = "${common-updater-scripts}/bin/list-git-tags ${lib.optionalString (url != null) "--url=${url}"}";
 }

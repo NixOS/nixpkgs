@@ -5,6 +5,7 @@
 , pyserial
 , pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    six
   ];
 
   pythonImportsCheck = [

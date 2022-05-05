@@ -10,18 +10,18 @@
 , z3
 }:
 
-if !lib.versionAtLeast ocaml.version "4.08"
+if lib.versionOlder ocaml.version "4.08"
 then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-bap";
-  version = "2.2.0";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0c53sps6ba9n5cjdmapi8ylzlpcc11pksijp9swzlwgxyz5d276f";
+    sha256 = "1xc8zfcwm40zihs3ajcrh2x32xd08qnygay03qy3qxhybr5hqngr";
   };
 
   sigs = fetchurl {
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   disableIda = "--disable-ida";
+  disableGhidra = "--disable-ghidra";
 
   patches = [ ./curses_is_ncurses.patch ];
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
   '';
 
-  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];
+  configureFlags = [ "--enable-everything ${disableIda} ${disableGhidra}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];
 
   meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";

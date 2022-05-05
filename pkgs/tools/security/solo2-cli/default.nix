@@ -45,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/solokeys/solo2-cli";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ lukegb ];
+    mainProgram = "solo2";
   };
 }

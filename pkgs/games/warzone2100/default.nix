@@ -26,7 +26,7 @@
 , vulkan-loader
 , shaderc
 
-, testVersion
+, testers
 , warzone2100
 
 , withVideos ? false
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    version = testVersion {
+    version = testers.testVersion {
       package = warzone2100;
       # The command always exits with code 1
       command = "(warzone2100 --version || [ $? -eq 1 ])";

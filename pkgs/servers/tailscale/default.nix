@@ -2,26 +2,25 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "1.22.2";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    sha256 = "sha256-W4BcUDMxUZKFXueSI/Xlml17Jabi/hnnOyXgitao76A=";
+    sha256 = "sha256-PBYxbi7KqwZedP1m3W3gbhFR+9UhvTAftGi6eTv05ro=";
   };
+  vendorSha256 = "sha256-WjAd7EV/9IbrJMGGVbmSkfEUxqmwWEPkB0Yp3rrjCRU=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  vendorSha256 = "sha256-Bu0a9JI0rlsA4wvvX9Mj4+QH0ot6Jdl+t246HbXu6OA=";
-
-  doCheck = false;
-
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
   ldflags = [ "-X tailscale.com/version.Long=${version}" "-X tailscale.com/version.Short=${version}" ];
+
+  doCheck = false;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/tailscaled --prefix PATH : ${lib.makeBinPath [ iproute2 iptables ]}
@@ -35,6 +34,6 @@ buildGoModule rec {
     homepage = "https://tailscale.com";
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ danderson mbaillie ];
+    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk ];
   };
 }

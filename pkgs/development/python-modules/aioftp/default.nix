@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.20.1";
+  version = "0.21.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6p3n5tNNQrbwHqGRXYNL4+cf31Blx2e9elxX6/wxj/4=";
+    sha256 = "sha256-JWzeBdCPXLYMmKkvCqQQF/mHoRbdRvj0vKVF4+D8LSI=";
   };
 
   propagatedBuildInputs = [

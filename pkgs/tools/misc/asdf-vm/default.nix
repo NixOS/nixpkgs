@@ -37,13 +37,13 @@ ${asdfReshimFile}
   '';
 in stdenv.mkDerivation rec {
   pname = "asdf-vm";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
     rev = "v${version}";
-    sha256 = "sha256-uvf3WVflUdh+M90zMDVFVAXi7TZytc8oZ/DexJqpNV4=";
+    sha256 = "sha256-yWQ74tVYBZszuuE3PaDB758kCjKO6oBOG/Z+T3+82po=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://asdf-vm.com/";
     license = licenses.mit;
     maintainers = [ maintainers.c4605 ];
+    mainProgram = "asdf";
     platforms = platforms.unix;
   };
 }

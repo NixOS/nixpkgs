@@ -301,6 +301,9 @@ let
       azure-mgmt-servicefabric = overrideAzureMgmtPackage super.azure-mgmt-servicefabric "1.0.0" "zip"
         "de35e117912832c1a9e93109a8d24cab94f55703a9087b2eb1c5b0655b3b1913";
 
+      azure-mgmt-servicelinker = overrideAzureMgmtPackage super.azure-mgmt-servicelinker "1.0.0b1" "zip"
+        "sha256-T3DTvNmLpTm/74cOPEl+vcXv7TIAwmJ6YXGLqpqyGmE=";
+
       azure-mgmt-hdinsight = overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0" "zip"
         "41ebdc69c0d1f81d25dd30438c14fff4331f66639f55805b918b9649eaffe78a";
 

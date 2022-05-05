@@ -25,14 +25,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     adb-shell
-    aiofiles
     pure-python-adb
   ];
+
+  passthru.extras-require = {
+    async = [
+      aiofiles
+    ];
+    inherit (adb-shell.extras-require) usb;
+  };
 
   checkInputs = [
     mock
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.extras-require.async
+  ++ passthru.extras-require.usb;
 
   disabledTests = [
     # Requires git but fails anyway

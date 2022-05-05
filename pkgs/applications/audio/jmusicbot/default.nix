@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "JMusicBot";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchurl {
     url = "https://github.com/jagrosh/MusicBot/releases/download/${version}/JMusicBot-${version}.jar";
-    sha256 = "sha256-Hc3dsOADC+jVZScY19OYDkHimntMjdw/BoB3EUS/d0k=";
+    sha256 = "sha256-wzmrh9moY6oo3RqOy9Zl1X70BZlvbJkQmz8BaBIFtIM=";
   };
 
   dontUnpack = true;

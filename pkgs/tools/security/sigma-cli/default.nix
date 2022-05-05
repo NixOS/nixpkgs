@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.3.4";
+  version = "0.4.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FWcPHtEYqS+81dU4lB+4BLFOXtFumcyhucwvmu2TAt8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3LFakeS3aQaacm7HqeAJPMJhi3Wf8zbJc//SEWUA1Rg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -24,8 +24,10 @@ python3.pkgs.buildPythonApplication rec {
     prettytable
     pysigma
     pysigma-backend-splunk
+    pysigma-backend-insightidr
     pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
+    pysigma-pipeline-windows
   ];
 
   checkInputs = with python3.pkgs; [
@@ -46,5 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sigma";
   };
 }

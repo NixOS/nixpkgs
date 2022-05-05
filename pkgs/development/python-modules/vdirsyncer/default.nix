@@ -28,6 +28,13 @@ buildPythonPackage rec {
     hash = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "click-log>=0.3.0, <0.4.0" "click-log>=0.3.0, <0.5.0"
+
+    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
+  '';
+
   propagatedBuildInputs = [
     atomicwrites
     click
@@ -48,10 +55,6 @@ buildPythonPackage rec {
     pytest-localserver
     pytest-subtesthack
   ];
-
-  postPatch = ''
-    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
-  '';
 
   preCheck = ''
     export DETERMINISTIC_TESTS=true

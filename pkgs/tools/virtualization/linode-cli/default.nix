@@ -13,8 +13,8 @@
 let
   sha256 = "1f0nrdg8hf650qxz79i3a1d2zyf24niyrcnbnhc9i7hzbnqbp5qg";
   # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
-  specVersion = "4.119.0";
-  specSha256 = "0q5cqx9w44a85r8h9an4iz4m3s7x3b0nyk188i3hsh3r1wf1nryv";
+  specVersion = "4.119.4";
+  specSha256 = "057qzpy8da0r0av8wmm640mqqhl4qynqxqalkf3ylsa3xnch5c9m";
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
     sha256 = specSha256;

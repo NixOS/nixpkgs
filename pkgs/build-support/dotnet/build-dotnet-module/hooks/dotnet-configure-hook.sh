@@ -1,4 +1,8 @@
-declare -a projectFile testProjectFile dotnetRestoreFlags dotnetFlags
+declare -a projectFile testProjectFile
+
+# inherit arguments from derivation
+dotnetFlags=( ${dotnetFlags[@]-} )
+dotnetRestoreFlags=( ${dotnetRestoreFlags[@]-} )
 
 dotnetConfigureHook() {
     echo "Executing dotnetConfigureHook"

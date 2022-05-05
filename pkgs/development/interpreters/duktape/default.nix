@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://duktape.org/download.html";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
+    mainProgram = "duk";
     platforms = platforms.all;
   };
 }

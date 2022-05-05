@@ -1,8 +1,14 @@
 { stdenv
 , lib
-, cudatoolkit
+, zlib
+, useCudatoolkitRunfile ? false
+, cudaVersion
+, cudaMajorVersion
+, cudatoolkit # if cuda>=11: only used for .cc
+, libcublas ? null # cuda <11 doesn't ship redist packages
+, autoPatchelfHook
+, autoAddOpenGLRunpathHook
 , fetchurl
-, addOpenGLRunpath
 , # The distributed version of CUDNN includes both dynamically liked .so files,
   # as well as statically linked .a files.  However, CUDNN is quite large
   # (multiple gigabytes), so you can save some space in your nix store by
@@ -17,43 +23,52 @@
 , url
 , hash ? null
 , sha256 ? null
-, supportedCudaVersions ? []
+, supportedCudaVersions ? [ ]
 }:
 
 assert (hash != null) || (sha256 != null);
 
+assert useCudatoolkitRunfile || (libcublas != null);
+
 let
+  inherit (cudatoolkit) cc;
+
   majorMinorPatch = version: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   version = majorMinorPatch fullVersion;
-in stdenv.mkDerivation {
-  name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
+  cudatoolkit_root =
+    if useCudatoolkitRunfile
+    then cudatoolkit
+    else libcublas;
+in
+stdenv.mkDerivation {
+  pname = "cudatoolkit-${cudaMajorVersion}-cudnn";
   inherit version;
-  # It's often the case that the src depends on the version of cudatoolkit it's
-  # being linked against, so we pass in `cudatoolkit` as an argument to `mkSrc`.
+
   src = fetchurl {
     inherit url hash sha256;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath ];
+  # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
+  # Prepend /run/opengl-driver/lib using addOpenGLRunpath for dlopen("libcudacuda.so")
+  nativeBuildInputs = [
+    autoPatchelfHook
+    autoAddOpenGLRunpathHook
+  ];
 
-  # Some cuDNN libraries depend on things in cudatoolkit, eg.
-  # libcudnn_ops_infer.so.8 tries to load libcublas.so.11. So we need to patch
-  # cudatoolkit into RPATH. See also https://github.com/NixOS/nixpkgs/blob/88a2ad974692a5c3638fcdc2c772e5770f3f7b21/pkgs/development/python-modules/jaxlib/bin.nix#L78-L98.
+  # Used by autoPatchelfHook
+  buildInputs = [
+    cc.cc.lib # libstdc++
+    zlib
+    cudatoolkit_root
+  ];
+
+  # We used to patch Runpath here, but now we use autoPatchelfHook
   #
   # Note also that version <=8.3.0 contained a subdirectory "lib64/" but in
   # version 8.3.2 it seems to have been renamed to simply "lib/".
   installPhase = ''
     runHook preInstall
-
-    function fixRunPath {
-      p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "''${p:+$p:}${lib.makeLibraryPath [ stdenv.cc.cc cudatoolkit.lib ]}:${cudatoolkit}/lib:\$ORIGIN/" $1
-    }
-
-    for sofile in {lib,lib64}/lib*.so; do
-      fixRunPath $sofile
-    done
 
     mkdir -p $out
     cp -a include $out/include
@@ -66,20 +81,20 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = ''
-    for lib in $out/lib/lib*.so; do
-      addOpenGLRunpath $lib
-    done
+  # Without --add-needed autoPatchelf forgets $ORIGIN on cuda>=8.0.5.
+  postFixup = lib.optionalString (lib.versionAtLeast fullVersion "8.0.5") ''
+    patchelf $out/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
   '';
 
-  propagatedBuildInputs = [
-    cudatoolkit
-  ];
-
   passthru = {
-    inherit cudatoolkit;
+    inherit useCudatoolkitRunfile;
+
+    cudatoolkit = lib.warn ''
+      cudnn.cudatoolkit passthru attribute is deprecated;
+      if your derivation uses cudnn directly, it should probably consume cudaPackages instead
+    ''
+      cudatoolkit;
+
     majorVersion = lib.versions.major version;
   };
 
@@ -89,9 +104,10 @@ in stdenv.mkDerivation {
     # official version constraints (as recorded in default.nix). In some cases
     # you _may_ be able to smudge version constraints, just know that you're
     # embarking into unknown and unsupported territory when doing so.
-    broken = !(elem cudatoolkit.majorMinorVersion supportedCudaVersions);
+    broken = !(elem cudaVersion supportedCudaVersions);
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
     homepage = "https://developer.nvidia.com/cudnn";
+    # TODO: consider marking unfreRedistributable when not using runfile
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mdaiter samuela ];

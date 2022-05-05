@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ wxGTK30 boost lua zlib bzip2 xylib readline
     gnuplot swig3 ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+  ];
+
   meta = {
     description = "Curve fitting and peak fitting software";
     license = lib.licenses.gpl2;

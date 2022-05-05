@@ -1,15 +1,15 @@
 { stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl }:
 
 let
-  version = "0.1.3";
+  version = "0.1.5";
   assets = {
     x86_64-darwin = {
       asset = "scala-cli-x86_64-apple-darwin.gz";
-      sha256 = "UlDF2Eaaet62zZV0z6XOZvg/YeB//AXPDni8h3Wc6rw=";
+      sha256 = "1sczbvvhh1ff8mdb6zj4q3fnrz1qsqmr58jlb1s3fy1wv2p5ywxl";
     };
     x86_64-linux = {
       asset = "scala-cli-x86_64-pc-linux.gz";
-      sha256 = "086fi7ma4j9xy6gs0k7i06ql8ranjkjlrir2860q74kinfisk79a";
+      sha256 = "1ahvjgcghh1pmgfsajg0b8bf5aaqxdx0f6b6qgljs0xfqm7zs05v";
     };
   };
 in

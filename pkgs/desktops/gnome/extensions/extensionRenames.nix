@@ -9,8 +9,14 @@
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
+  "fullscreen-hot-corner@sorrow.about.alice.pm.me" = "fullscreen-hot-corner";
+  "fullscreen-hot-corner@richardblaha.cz" = "fullscreen-hot-corner-2";
+
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
+
+  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
+  "volume_scroller@noskoski" = "volume-scroller-2";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
@@ -56,9 +62,6 @@
 
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
-
-  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
-  "volume_scroller@noskoski" = "volume-scroller-2";
 
   # ####### GNOME 3.38 #######
 

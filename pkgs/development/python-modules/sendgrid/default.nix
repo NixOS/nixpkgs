@@ -7,6 +7,7 @@
 , pythonOlder
 , pyyaml
 , starkbank-ecdsa
+, six
 , werkzeug
 }:
 
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     python-http-client
     starkbank-ecdsa
+    six
   ];
 
   checkInputs = [

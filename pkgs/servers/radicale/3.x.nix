@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.1.5";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "v${version}";
-    hash = "sha256-PGPUV0oOWmzc7Lih6D0sCwIuUB8FOyOrYUEIvMpr4HE=";
+    hash = "sha256-D/JPq8p+iLmm0XaoXvNonRHr9PIhQ11yTDqur3DiYdc=";
   };
 
   postPatch = ''
@@ -20,7 +20,6 @@ python3.pkgs.buildPythonApplication rec {
     passlib
     vobject
     python-dateutil
-    setuptools
   ];
 
   checkInputs = with python3.pkgs; [

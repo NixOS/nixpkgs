@@ -13,7 +13,6 @@
 , ffmpeg
 , gdk-pixbuf
 , glib
-, gnused
 , graphviz
 , gtk2
 , intltool
@@ -49,9 +48,25 @@
 , zlib
 }:
 
+# How to update Linphone? (The Qt desktop app)
+#
+# Belledonne Communications (BC), the company making Linphone, has split the
+# project into several sub-projects that they maintain, plus some third-party
+# dependencies that they also extend with commits of their own, specific to
+# Linphone and not (yet?) upstreamed.
+#
+# All of this is organised in a Software Development Kit (SDK) meta-repository
+# with git submodules to pin all those repositories into a coherent whole.
+#
+# The Linphone Qt desktop app uses this SDK as submodule as well.
+#
+# So, in order to update the desktop app to a new release, one has to follow
+# the submodule chain and update the corresponding derivations here, in nixpkgs,
+# with the corresponding version number (or commit hash)
+
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "4.2.5";
+  version = "4.4.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -59,12 +74,13 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1gq4l9p21rbrcksa7fbkzn9fzbbynqmn6ni6lhnvzk359sb1xvbz";
+    sha256 = "sha256-BBOTyKMZikkxMJSmzAuChVHpVeCvbAimn1K3REGbqEg=";
   };
 
   patches = [
     ./do-not-build-linphone-sdk.patch
     ./remove-bc_compute_full_version-usage.patch
+    ./no-store-path-in-autostart.patch
   ];
 
   # See: https://gitlab.linphone.org/BC/public/linphone-desktop/issues/21
@@ -78,12 +94,21 @@ mkDerivation rec {
   # there might be some build inputs here that aren't needed for
   # linphone-desktop.
   buildInputs = [
+    # Made by BC
     bcg729
     bctoolbox
     belcard
     belle-sip
     belr
     bzrtp
+    liblinphone
+    mediastreamer
+    mediastreamer-openh264
+    ortp
+
+    # Vendored by BC but we use upstream, might cause problems
+    libmatroska
+
     cairo
     cyrus_sasl
     ffmpeg
@@ -92,19 +117,14 @@ mkDerivation rec {
     gtk2
     libX11
     libexosip
-    liblinphone
-    libmatroska
     libnotify
     libosip
     libsoup
     libupnp
     libxml2
     mbedtls
-    mediastreamer
-    mediastreamer-openh264
     minizip2
     openldap
-    ortp
     pango
     qtbase
     qtgraphicaleffects
@@ -118,9 +138,10 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    # Made by BC
     bcunit
+
     cmake
-    gnused
     graphviz
     intltool
     makeWrapper
@@ -128,7 +149,6 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
     "-DMINIZIP_LIBRARIES=minizip"
   ];
@@ -162,18 +182,25 @@ mkDerivation rec {
   # Linphone will randomly crash when it tries to access those files. Then,
   # those just need to be copied manually below.
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/lib
     cp linphone-app/linphone $out/bin/
+    cp linphone-app/libapp-plugin.so $out/lib/
+    mkdir -p $out/lib/mediastreamer/plugins
+    ln -s ${mediastreamer-openh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
+    ln -s ${mediastreamer}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     wrapProgram $out/bin/linphone \
       --set MEDIASTREAMER_PLUGINS_DIR \
-            ${mediastreamer-openh264}/lib/mediastreamer/plugins
+            $out/lib/mediastreamer/plugins
     mkdir -p $out/share/applications
     cp linphone-app/linphone.desktop $out/share/applications/
-    cp -r ../linphone-app/assets/icons $out/share/
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp ../linphone-app/assets/images/linphone_logo.svg $out/share/icons/hicolor/scalable/apps/linphone.svg
     mkdir -p $out/share/belr/grammars
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
+    ln -s ${belle-sip}/share/belr/grammars/* $out/share/belr/grammars/
     mkdir -p $out/share/linphone
     ln -s ${liblinphone}/share/linphone/* $out/share/linphone/
+    ln -s ${liblinphone}/share/sounds $out/share/sounds
   '';
 
   meta = with lib; {

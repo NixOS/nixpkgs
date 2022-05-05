@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swaysome";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchFromGitLab {
     owner = "hyask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eX2Pzn5It4yf94ZWH/7yAJjwpayVYvpvbrvk7qvbimg=";
+    sha256 = "sha256-hI6XPND05m67dxo9EwIDhFTyC2UrL4Ll1V/WcBoJymU=";
   };
 
-  cargoSha256 = "sha256-WXjmXwqeWnQVyFs51t81kHHMMn9HQQjBRw1g1cU+6/M=";
+  cargoSha256 = "sha256-jG6HZiL2almALyEnQRmbeCTRG11URP3+Bxqyn8hLs7w=";
 
   meta = with lib; {
     description = "Helper to make sway behave more like awesomewm";

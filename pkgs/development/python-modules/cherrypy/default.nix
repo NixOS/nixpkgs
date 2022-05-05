@@ -6,7 +6,7 @@
 , jaraco_collections
 , more-itertools
 , objgraph
-, pathpy
+, path
 , portend
 , pytest-forked
 , pytest-services
@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     objgraph
-    pathpy
+    path
     pytest-forked
     pytest-services
     pytestCheckHook

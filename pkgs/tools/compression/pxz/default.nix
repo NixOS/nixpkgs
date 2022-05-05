@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, testVersion
+, testers
 , pxz
 , xz
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "MANDIR=${placeholder "out"}/share/man"
   ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = pxz;
   };
 

@@ -2,22 +2,27 @@
 , lib
 , fetchurl
 
+  # Only used for x86/x86_64
 , uasm
-, useUasm ? stdenv.isx86_64
+, useUasm ? stdenv.hostPlatform.isx86
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
 , enableUnfree ? false
+
+  # For tests
+, _7zz
+, testers
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  platformSuffix =
-    if useUasm then
-      {
-        x86_64-linux = "_x64";
-      }.${system} or (throw "`useUasm` is not supported for system ${system}")
-    else "";
+  platformSuffix = {
+    aarch64-linux = "_arm64";
+    i686-linux = "_x86";
+    x86_64-linux = "_x64";
+  }.${system} or
+    (builtins.trace "`platformSuffix` not available for `${system}.` Making a generic `7zz` build." "");
 in
 stdenv.mkDerivation rec {
   pname = "7zz";
@@ -49,6 +54,10 @@ stdenv.mkDerivation rec {
   sourceRoot = "CPP/7zip/Bundles/Alone2";
 
   makeFlags =
+    [
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "CXX=${stdenv.cc.targetPrefix}c++"
+    ] ++
     lib.optionals useUasm [ "MY_ASM=uasm" ] ++
     # it's the compression code with the restriction, see DOC/License.txt
     lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ];
@@ -68,17 +77,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/7zz --help | grep ${version}
-
-    runHook postInstallCheck
-  '';
-
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      package = _7zz;
+      command = "7zz --help";
+    };
+  };
 
   meta = with lib; {
     description = "Command line archiver utility";

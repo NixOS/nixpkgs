@@ -74,6 +74,8 @@ in {
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
+  riscv32       = filterDoubles predicates.isRiscV32;
+  riscv64       = filterDoubles predicates.isRiscV64;
   vc4           = filterDoubles predicates.isVc4;
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;

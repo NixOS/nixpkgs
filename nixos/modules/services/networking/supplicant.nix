@@ -43,7 +43,7 @@ let
         path = [ pkgs.coreutils ];
 
         preStart = ''
-          ${optionalString (suppl.configFile.path!=null) ''
+          ${optionalString (suppl.configFile.path!=null && suppl.configFile.writable) ''
             (umask 077 && touch -a "${suppl.configFile.path}")
           ''}
           ${optionalString suppl.userControlled.enable ''

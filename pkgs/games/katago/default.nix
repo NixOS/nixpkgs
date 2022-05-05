@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     eigen
   ] ++ lib.optionals (enableGPU && enableCuda) [
     cudaPackages.cudnn
+    cudaPackages.cudatoolkit
     mesa.drivers
   ] ++ lib.optionals (enableGPU && !enableCuda) [
     opencl-headers

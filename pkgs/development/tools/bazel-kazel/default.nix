@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes/repo-infra";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "kazel";
   };
 }

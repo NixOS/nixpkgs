@@ -37,7 +37,17 @@ buildPythonApplication rec {
     sha256 = "sha256-qIZMkgOm5jXmxTFLTqMBhpLBhfCL8xvUxxqpS6NjcVw=";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+    six
+  ];
+
+  disabledTests = [
+    # https://github.com/d0c-s4vage/lookatme/issues/126
+    "test_sanity_check_that_errors_are_detected"
+    "test_styles_defaults"
+  ];
 
   propagatedBuildInputs = [
     click

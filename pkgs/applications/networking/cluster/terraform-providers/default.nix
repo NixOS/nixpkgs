@@ -32,6 +32,7 @@ let
         CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
         src = fetchFromGitHub {
+          name = "source-${rev}";
           inherit owner repo rev sha256;
         };
 

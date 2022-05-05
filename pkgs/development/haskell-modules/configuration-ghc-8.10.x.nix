@@ -89,20 +89,22 @@ self: super: {
   mime-string = disableOptimization super.mime-string;
 
   # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
+  hls-hlint-plugin = addBuildDepend self.ghc-lib (overrideCabal (drv: {
+      # Workaround for https://github.com/haskell/haskell-language-server/issues/2728
+      postPatch = ''
+        sed -i 's/(GHC.RealSrcSpan x,/(GHC.RealSrcSpan x Nothing,/' src/Ide/Plugin/Hlint.hs
+      '';
+    })
+     super.hls-hlint-plugin);
 
   haskell-language-server = appendConfigureFlags [
-      "-f-fourmolu"
       "-f-stylishhaskell"
       "-f-brittany"
-      "-f-hlint"
     ]
-  (super.haskell-language-server.override {
-    # Not buildable on 8.10
-    hls-fourmolu-plugin = null;
-    # https://github.com/haskell/haskell-language-server/issues/2728
-    hls-hlint-plugin = null;
-  });
+  super.haskell-language-server;
+
+  # has a restrictive lower bound on Cabal
+  fourmolu = doJailbreak super.fourmolu;
 
   # ormolu 0.3 requires Cabal == 3.4
   ormolu = super.ormolu_0_2_0_0;
@@ -128,4 +130,11 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
   inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
+
+  # Depends on OneTuple for GHC < 9.0
+  universe-base = addBuildDepends [ self.OneTuple ] super.universe-base;
+
+  # Not possible to build in the main GHC 9.0 package set
+  # https://github.com/awakesecurity/spectacle/issues/49
+  spectacle = doDistribute (markUnbroken super.spectacle);
 }

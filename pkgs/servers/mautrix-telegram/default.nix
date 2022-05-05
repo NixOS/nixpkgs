@@ -6,11 +6,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.25.0a5";
+        version = "1.25.0a7";
         pname = "tulir-telethon";
         src = oldAttrs.src.override {
           inherit pname version;
-          sha256 = "sha256-WFiWczuw6eVVid2Z1LsnGE6BCEhqeCuiQ/p0d2Ahbi8=";
+          sha256 = "sha256-+wHRrBluM0ejdHjIvSk28wOIfCfIyibBcmwG/ksbiac=";
         };
       });
     };
@@ -25,14 +25,14 @@ let
 
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.11.2";
-  disabled = python.pythonOlder "3.7";
+  version = "0.11.3";
+  disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "v${version}";
-    sha256 = "sha256-ZECTHAP5l9tAk9Ies8XuPpH9jqYDJSRSHVKz1lA6Sjg=";
+    sha256 = "sha256-PfER/wqJ607w0xVrFZadzmxYyj72O10c2lIvCW7LT8Y=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ];

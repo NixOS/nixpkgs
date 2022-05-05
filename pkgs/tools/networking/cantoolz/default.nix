@@ -1,26 +1,18 @@
 { lib
-, bitstring
-, buildPythonApplication
 , fetchFromGitHub
 , fetchpatch
-, flask
-, mido
-, numpy
-, pyserial
-, pytestCheckHook
-, pythonOlder
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CANToolz";
     repo = "CANToolz";
     rev = "v${version}";
-    sha256 = "0xkj7zyx6pz866q61c84mdagpgdyd633v85hk7qxhamca33rc4yi";
+    sha256 = "sha256-0ROWx1CsKtjxmbCgPYZpvr37VKsEsWCwMehf0/0/cnY=";
   };
 
   patches = [
@@ -31,7 +23,7 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     flask
     pyserial
     mido
@@ -39,9 +31,19 @@ buildPythonApplication rec {
     bitstring
   ];
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_process" ];
-  pythonImportsCheck = [ "cantoolz" ];
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_process"
+    # Sandbox issue
+    "test_server"
+  ];
+
+  pythonImportsCheck = [
+    "cantoolz"
+  ];
 
   meta = with lib; {
     description = "Black-box CAN network analysis framework";

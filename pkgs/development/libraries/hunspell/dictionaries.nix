@@ -45,8 +45,7 @@ let
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
       };
-      nativeBuildInputs = [ unzip ];
-      buildInputs = [ bash coreutils which zip ];
+      nativeBuildInputs = [ bash coreutils which zip unzip ];
       patchPhase = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
            --replace /bin/bash bash \
@@ -234,7 +233,7 @@ let
         sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
       };
 
-      buildInputs = [ ispell perl hunspell ];
+      nativeBuildInputs = [ ispell perl hunspell ];
 
       dontBuild = true;
 

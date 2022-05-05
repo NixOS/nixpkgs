@@ -18,6 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/apache/cloudstack-cloudmonkey";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.womfoo ];
+    mainProgram = "cloudstack-cloudmonkey";
   };
 
 }

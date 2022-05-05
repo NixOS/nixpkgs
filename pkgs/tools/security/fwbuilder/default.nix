@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=misleading-indentation"
+  ];
+
   meta = with lib; {
     description = "GUI Firewall Management Application";
     homepage    = "https://github.com/fwbuilder/fwbuilder";

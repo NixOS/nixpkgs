@@ -14,13 +14,14 @@ in
 , lib
 , noSysDirs
 , perl
+, substitute
 , texinfo
 , zlib
 
 , enableGold ? execFormatIsELF stdenv.targetPlatform
 , enableShared ? !stdenv.hostPlatform.isStatic
   # WARN: Enabling all targets increases output size to a multiple.
-, withAllTargets ? false, libbfd, libopcodes
+, withAllTargets ? false
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
@@ -91,7 +92,14 @@ stdenv.mkDerivation {
   # comment for more information:
   # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
   ++ lib.optional (targetPlatform.isAarch32 && hostPlatform.system != targetPlatform.system) ./R_ARM_COPY.patch
-  ++ lib.optional targetPlatform.isWindows ./windres-locate-gcc.patch;
+  ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
+  ++ lib.optional stdenv.targetPlatform.isMips64n64
+     # this patch is from debian:
+     # https://sources.debian.org/data/main/b/binutils/2.38-3/debian/patches/mips64-default-n64.diff
+     (if stdenv.targetPlatform.isMusl
+      then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
+      else ./mips64-default-n64.patch)
+  ;
 
   outputs = [ "out" "info" "man" ];
 
@@ -102,7 +110,7 @@ stdenv.mkDerivation {
     texinfo
   ]
   ++ lib.optionals targetPlatform.isiOS [ autoreconfHook ]
-  ++ lib.optionals targetPlatform.isDarwin [ autoconf269 automake gettext libtool ]
+  ++ lib.optionals buildPlatform.isDarwin [ autoconf269 automake gettext libtool ]
   ++ lib.optionals targetPlatform.isVc4 [ flex ]
   ;
 
@@ -110,7 +118,7 @@ stdenv.mkDerivation {
 
   inherit noSysDirs;
 
-  preConfigure = (lib.optionalString targetPlatform.isDarwin ''
+  preConfigure = (lib.optionalString buildPlatform.isDarwin ''
     for i in */configure.ac; do
       pushd "$(dirname "$i")"
       echo "Running autoreconf in $PWD"
@@ -175,11 +183,9 @@ stdenv.mkDerivation {
   # Fails
   doCheck = false;
 
-  postFixup = lib.optionalString (enableShared && withAllTargets) ''
-    rm "$out"/lib/lib{bfd,opcodes}-${version}.so
-    ln -s '${lib.getLib libbfd}/lib/libbfd-${version}.so' "$out/lib/"
-    ln -s '${lib.getLib libopcodes}/lib/libopcodes-${version}.so' "$out/lib/"
-  '';
+  # Remove on next bump. It's a vestige of past conditional. Stays here to avoid
+  # mass rebuild.
+  postFixup = "";
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`

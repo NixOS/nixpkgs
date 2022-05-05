@@ -1,4 +1,5 @@
-declare -a projectFile testProjectFile dotnetBuildFlags dotnetFlags
+# inherit arguments from derivation
+dotnetBuildFlags=( ${dotnetBuildFlags[@]-} )
 
 dotnetBuildHook() {
     echo "Executing dotnetBuildHook"

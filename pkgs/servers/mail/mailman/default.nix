@@ -5,12 +5,18 @@ let
   # Mailman does not support sqlalchemy >= 1.4 https://gitlab.com/mailman/mailman/-/issues/845
   pythonOverride = python3.override {
     packageOverrides = self: super: {
+      alembic = super.alembic.overridePythonAttrs (oldAttrs:  {
+        # does not find tests
+        doCheck = false;
+      });
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "06bmxzssc66cblk1hamskyv5q3xf1nh1py3vi6dka4lkpxy7gfzb";
+          hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
+        # does not find tests
+        doCheck = false;
       });
     };
   };

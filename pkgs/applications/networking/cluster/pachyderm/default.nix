@@ -20,5 +20,6 @@ buildGoPackage rec {
     homepage = "https://github.com/pachyderm/pachyderm";
     license = licenses.asl20;
     maintainers = with maintainers; [offline];
+    mainProgram = "pachctl";
   };
 }

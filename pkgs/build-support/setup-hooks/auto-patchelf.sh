@@ -53,10 +53,18 @@ autoPatchelf() {
         esac
     done
 
+    local ignoreMissingDepsArray=($autoPatchelfIgnoreMissingDeps)
+    if [ "$autoPatchelfIgnoreMissingDeps" == "1" ]; then
+        echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
+             "= true;' is deprecated and will be removed in a future release." \
+             "Use 'autoPatchelfIgnoreMissingDeps = [ \"*\" ];' instead." >&2
+        ignoreMissingDepsArray=( "*" )
+    fi
+
     local runtimeDependenciesArray=($runtimeDependencies)
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
-        ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}              \
+        --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
         --paths "$@"                                                    \
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \

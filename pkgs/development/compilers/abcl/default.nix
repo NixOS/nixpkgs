@@ -18,13 +18,18 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     ant
   '';
+  # Fix for https://github.com/armedbear/abcl/issues/484
+  javaOpts =
+    lib.optionalString
+      (lib.versionAtLeast jre.version "17")
+      "--add-opens=java.base/java.util.jar=ALL-UNNAMED";
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/abcl,lib/abcl}
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
 
     echo "#! ${stdenv.shell}" >> "$out/bin/abcl"
-    echo "${jre}/bin/java -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
+    echo "${jre}/bin/java $javaOpts -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
     chmod a+x "$out"/bin/*
   '';
   buildInputs = [jre ant jdk jre];

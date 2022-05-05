@@ -26,6 +26,7 @@ buildGoModule rec {
     homepage    = "https://github.com/johnkerl/miller";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ mstarzyk ];
+    mainProgram = "mlr";
     platforms   = platforms.all;
   };
 }

@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
-, e2fsprogs, findutils, gzip, cdrtools, xorriso
+, e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -35,10 +35,20 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3 ipaddress libvirt libxml2 requests cdrtools
   ];
 
-  patchPhase = ''
+  prePatch = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
     sed -i "/'install_egg_info'/d" setup.py
   '';
+
+   patches = [
+     # due to a recent change in setuptools-61, "packages=[]" needs to be included
+     # this patch can hopefully be removed, once virt-manager has an upstream version bump
+    (fetchpatch {
+      name = "fix-for-setuptools-61.patch";
+      url = "https://github.com/virt-manager/virt-manager/commit/46dc0616308a73d1ce3ccc6d716cf8bbcaac6474.patch";
+      sha256 = "sha256-/RZG+7Pmd7rmxMZf8Fvg09dUggs2MqXZahfRQ5cLcuM=";
+    })
+  ];
 
   postConfigure = ''
     ${python3.interpreter} setup.py configure --prefix=$out

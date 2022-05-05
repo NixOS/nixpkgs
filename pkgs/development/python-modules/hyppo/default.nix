@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
+, autograd
 , numba
 , numpy
 , scikit-learn
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    autograd
     numba
     numpy
     scikit-learn
@@ -40,8 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";
-    description = "Indepedence testing in Python";
-    license = licenses.asl20;
+    description = "Python package for multivariate hypothesis testing";
+    license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

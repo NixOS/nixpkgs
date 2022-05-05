@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   pname = "plantuml";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";
-    sha256 = "sha256-u40P3YFiWd419Bz1NvhIsPa7nASl/I9z/L2Q5v9eOAo=";
+    url = "https://github.com/plantuml/plantuml/releases/download/v${version}/plantuml-pdf-${version}.jar";
+    sha256 = "sha256-6ad6CUz1UAvNkhdUJhOME7OsLpIXiBoERfTmowzTz64=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

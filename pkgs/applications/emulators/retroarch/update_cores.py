@@ -107,10 +107,16 @@ def get_repo_hash_fetchFromGitHub(
     extra_args = []
     if deep_clone:
         extra_args.append("--deep-clone")
+    else:
+        extra_args.append("--no-deep-clone")
     if fetch_submodules:
         extra_args.append("--fetch-submodules")
+    else:
+        extra_args.append("--no-fetch-submodules")
     if leave_dot_git:
         extra_args.append("--leave-dot-git")
+    else:
+        extra_args.append("--no-leave-dot-git")
     if rev:
         extra_args.append("--rev")
         extra_args.append(rev)

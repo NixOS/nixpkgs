@@ -1,29 +1,62 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, aiohttp
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+
+# propagates:
 , requests
 , websocket-client
+
+# extras: async
+, aiohttp
 , websockets
+
+# extras: encrypted
+, cryptography
+, py3rijndael
+
+# tests
+, aioresponses
+, pytest-asyncio
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "samsungtvws";
   version = "2.5.0";
+  format = "setuptools";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-AFCN1b80GZ24g3oWe1qqc72yWQy4+/sorL8zwOYM7vo=";
+  src = fetchFromGitHub {
+    owner = "xchwarze";
+    repo = "samsung-tv-ws-api";
+    rev = "v${version}";
+    hash = "sha256-AimG5tyTRBETpivC2BwCuoR4o7y98YT6u5sogJlcmoo=";
   };
 
   propagatedBuildInputs = [
-    aiohttp
     requests
     websocket-client
-    websockets
   ];
 
-  # no tests
-  doCheck = false;
+  passthru.extras-require = {
+    async = [
+      aiohttp
+      websockets
+    ];
+    encrypted = [
+      cryptography
+      py3rijndael
+    ];
+  };
+
+  checkInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ passthru.extras-require.async
+  ++ passthru.extras-require.encrypted;
 
   pythonImportsCheck = [ "samsungtvws" ];
 

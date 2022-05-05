@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.9.0";
+  version = "0.10.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7cdac1b2a5460f37477a329712c3a5d4af4ddf876b064731995663621be4308b";
+    sha256 = "sha256-hePGbO7eTOZo9HOzzzd/yyqjxI4k8oqqN3roYATM4hE=";
   };
 
   nativeBuildInputs = [

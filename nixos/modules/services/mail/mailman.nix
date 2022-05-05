@@ -192,7 +192,6 @@ in {
         log_dir = "/var/log/mailman";
         lock_dir = "$var_dir/lock";
         etc_dir = "/etc";
-        ext_dir = "$etc_dir/mailman.d";
         pid_file = "/run/mailman/master.pid";
       };
 
@@ -319,7 +318,9 @@ in {
     systemd.services = {
       mailman = {
         description = "GNU Mailman Master Process";
-        after = [ "network.target" ];
+        before = lib.optional cfg.enablePostfix "postfix.service";
+        after = [ "network.target" ]
+          ++ lib.optional cfg.enablePostfix "postfix-setup.service";
         restartTriggers = [ config.environment.etc."mailman.cfg".source ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {

@@ -3,7 +3,7 @@
 , python3Packages
 , nix-update-script
 , s-tui
-, testVersion
+, testers
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -22,7 +22,7 @@ python3Packages.buildPythonPackage rec {
 
   passthru = {
     updateScript = nix-update-script { attrPath = pname; };
-    tests = testVersion { package = s-tui; };
+    tests = testers.testVersion { package = s-tui; };
   };
 
   meta = with lib; {

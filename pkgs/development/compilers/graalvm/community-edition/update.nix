@@ -1,13 +1,14 @@
-{ javaVersion
-, graalVersion
+{ config
 , defaultVersion
-, config
-, sourcesFilename
-, name
-, lib
-, writeShellScript
-, jq
+, forceUpdate
 , gnused
+, graalVersion
+, javaVersion
+, jq
+, lib
+, name
+, sourcesPath
+, writeShellScript
 }:
 
 /*
@@ -52,6 +53,7 @@ let
   getArchString = nixArchString:
     {
       "aarch64-linux" = "linux-aarch64";
+      "aarch64-darwin" = "darwin-aarch64";
       "x86_64-linux" = "linux-amd64";
       "x86_64-darwin" = "darwin-amd64";
     }.${nixArchString};
@@ -184,7 +186,7 @@ let
 
   newVersion = getLatestVersion graalVersion;
   sourcesJson = genSources javaVersion defaultVersion config;
-  sourcesJsonPath = lib.strings.escapeShellArg ./. + "/${sourcesFilename}";
+  sourcesJsonPath = lib.strings.escapeShellArg sourcesPath;
 
   # versionKeyInDefaultNix String -> String
   versionKeyInDefaultNix = graalVersion:
@@ -199,7 +201,7 @@ let
   */
   updateScriptText = newVersion: currentVersion:
 
-    if isNew newVersion currentVersion
+    if (forceUpdate || (isNew newVersion currentVersion))
     then
       let
         versionKey = versionKeyInDefaultNix currentVersion;

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , brotli
+, certifi
 , ffmpeg
 , rtmpdump
 , phantomjs2
@@ -9,6 +10,7 @@
 , pycryptodomex
 , websockets
 , mutagen
+, atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
@@ -20,15 +22,15 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2022.3.8.2";
+  version = "2022.04.08";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-aFRleMGObOh0ULU3adXVt/WiPlIJeEl222x8y/eVSyE=";
+    sha256 = "sha256-h1jQFlCdRXS5D73pdapwra73HtXnoZUUFYj21pRSBbo=";
   };
 
-  propagatedBuildInputs = [ brotli mutagen pycryptodomex websockets ];
+  propagatedBuildInputs = [ brotli certifi mutagen pycryptodomex websockets ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -36,11 +38,12 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath = [ atomicparsley ]
+      packagesToBinPath = []
+        ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
-    in
+    in lib.optionalString (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [

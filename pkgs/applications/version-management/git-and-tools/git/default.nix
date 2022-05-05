@@ -4,20 +4,21 @@
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, svnSupport ? false, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
 , osxkeychainSupport ? stdenv.isDarwin
-, guiSupport
+, guiSupport ? false
 , withManual ? true
 , pythonSupport ? true
 , withpcre2 ? true
-, sendEmailSupport
-, darwin
+, sendEmailSupport ? false
+, Security, CoreServices
 , nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
+, withSsh ? false
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -25,9 +26,8 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.35.1";
+  version = "2.36.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
-
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "100h37cpw49pmlpf6lcpm1xi578gllf6y9in60h5mxj3cj754s6p";
+    sha256 = "sha256-r16/wWWEZPXQ1For/YhMk1+2B6EMwCHZW8gHeIYcwdM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -49,28 +49,27 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  ## Patch
-
   patches = [
     ./docbook2texi.patch
     ./git-sh-i18n.patch
-    ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+  ] ++ lib.optionals withSsh [
+    ./ssh-path.patch
   ];
 
   postPatch = ''
-    for x in connect.c git-gui/lib/remote_add.tcl ; do
-      substituteInPlace "$x" \
-        --subst-var-by ssh "${openssh}/bin/ssh"
-    done
-
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
 
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
+  '' + lib.optionalString withSsh ''
+    for x in connect.c git-gui/lib/remote_add.tcl ; do
+      substituteInPlace "$x" \
+        --subst-var-by ssh "${openssh}/bin/ssh"
+    done
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
@@ -80,7 +79,7 @@ stdenv.mkDerivation {
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.Security ]
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
     ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
@@ -355,6 +354,8 @@ stdenv.mkDerivation {
     disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    disable_test t7527-builtin-fsmonitor
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit

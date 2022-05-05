@@ -4,15 +4,15 @@ buildPythonPackage rec {
   pname = "yanc";
   version = "0.3.3";
 
-  # Tests fail on Python>=3.5. See: https://github.com/0compute/yanc/issues/10
-  disabled = !(pythonOlder "3.5");
-
-  checkInputs = [ nose ];
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "0z35bkk9phs40lf5061k1plhjdl5fskm0dmdikrsqi1bjihnxp8w";
   };
+
+  # Tests fail on Python>=3.5. See: https://github.com/0compute/yanc/issues/10
+  doCheck = pythonOlder "3.5";
+
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests .

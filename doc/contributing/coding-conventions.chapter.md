@@ -214,15 +214,15 @@ Most of the time, these are the same. For instance, the package `e2fsprogs` has 
 
 There are a few naming guidelines:
 
-- The `name` attribute _should_ be identical to the upstream package name.
+- The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `name` attribute _must not_ contain uppercase letters — e.g., `"mplayer-1.0rc2"` instead of `"MPlayer-1.0rc2"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
 
-- The version part of the `name` attribute _must_ start with a digit (following a dash) — e.g., `"hello-0.3.1rc2"`.
+- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
 
-- If a package is not a release but a commit from a repository, then the version part of the name _must_ be the date of that (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format. Also append `"unstable"` to the name - e.g., `"pkgname-unstable-2014-09-23"`.
+- If a package is not a release but a commit from a repository, then the `version` attribute _must_ be the date of that (fetched) commit. The date _must_ be in `"unstable-YYYY-MM-DD"` format.
 
-- Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
 - If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
 

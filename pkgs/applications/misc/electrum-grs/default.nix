@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "4.1.5";
+  version = "4.2.0";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -19,19 +19,6 @@ let
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
-  };
 
 in
 
@@ -43,17 +30,12 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
-    sha256 = "0wvbjj80r1zxpz24adkicxsdjnv3nciga6rl1wfmky463w03rca2";
+    sha256 = "15n6snrs1kgdqkhp4wgs0bxxdz6mzl8dvf8h7s0jzc6r4b74vv3n";
   };
-
-  postPatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
-  '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx

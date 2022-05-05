@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "dist-client" "dist-server" ];
+  # sccache-dist is only supported on x86_64 Linux machines.
+  buildFeatures = lib.optionals (stdenv.system == "x86_64-linux") [ "dist-client" "dist-server" ];
 
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460

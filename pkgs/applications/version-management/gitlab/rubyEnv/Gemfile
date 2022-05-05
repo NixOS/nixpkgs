@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.4.6'
+gem 'rails', '~> 6.1.4.7'
 
 gem 'bootsnap', '~> 1.9.1', require: false
 
@@ -41,6 +41,7 @@ gem 'omniauth-azure-activedirectory-v2', '~> 1.0'
 gem 'omniauth-azure-oauth2', '~> 0.0.9' # Deprecated v1 version
 gem 'omniauth-cas3', '~> 1.1.4'
 gem 'omniauth-dingtalk-oauth2', '~> 1.0'
+gem 'omniauth-alicloud', '~> 1.0.1'
 gem 'omniauth-facebook', '~> 4.0.0'
 gem 'omniauth-github', '~> 1.4'
 gem 'omniauth-gitlab', '~> 1.0.2'
@@ -163,7 +164,7 @@ gem 'org-ruby', '~> 0.9.12'
 gem 'creole', '~> 0.5.0'
 gem 'wikicloth', '0.8.1'
 gem 'asciidoctor', '~> 2.0.10'
-gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
+gem 'asciidoctor-include-ext', '~> 0.4.0', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.12'
 gem 'asciidoctor-kroki', '~> 0.5.0', require: false
 gem 'rouge', '~> 3.27.0'
@@ -285,7 +286,7 @@ gem 'fast_blank'
 gem 'gitlab-chronic', '~> 0.10.5'
 gem 'gitlab_chronic_duration', '~> 0.10.6.2'
 
-gem 'rack-proxy', '~> 0.6.0'
+gem 'rack-proxy', '~> 0.7.2'
 
 gem 'sassc-rails', '~> 2.1.0'
 gem 'autoprefixer-rails', '10.2.5.1'
@@ -344,7 +345,7 @@ gem 'warning', '~> 1.2.0'
 
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
-  gem 'solargraph', '~> 0.43', require: false
+  gem 'solargraph', '~> 0.44.3', require: false
 
   gem 'letter_opener_web', '~> 2.0.0'
 
@@ -389,7 +390,7 @@ group :development, :test do
   gem 'knapsack', '~> 1.21.1'
   gem 'crystalball', '~> 0.7.0', require: false
 
-  gem 'simple_po_parser', '~> 1.1.2', require: false
+  gem 'simple_po_parser', '~> 1.1.6', require: false
 
   gem 'timecop', '~> 0.9.1'
 
@@ -403,7 +404,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 2.11.0', require: false
+  gem 'gitlab-dangerfiles', '~> 3.0', require: false
 end
 
 group :development, :test, :coverage do
@@ -481,7 +482,7 @@ gem 'ssh_data', '~> 1.2'
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.9.0.pre.rc4'
+gem 'gitaly', '~> 14.10.0-rc1'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
@@ -497,7 +498,7 @@ gem 'flipper', '~> 0.21.0'
 gem 'flipper-active_record', '~> 0.21.0'
 gem 'flipper-active_support_cache_store', '~> 0.21.0'
 gem 'unleash', '~> 3.2.2'
-gem 'gitlab-experiment', '~> 0.7.0'
+gem 'gitlab-experiment', '~> 0.7.1'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -542,4 +543,4 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'parslet', '~> 1.8'
 
-gem 'ipynbdiff', '0.4.4'
+gem 'ipynbdiff', '0.4.5'

@@ -54,19 +54,18 @@ assert zstdSupport -> zstd != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.82.0";
+  version = "7.83.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-RtmgQAozQI/ZkncLBKRKdDSzA28ugImsKLV1c9WdNx8=";
+    sha256 = "sha256-JHx+x1IcQljmVjTlKScNIU/jKWmXHMy3KEXnqkaDH5Y=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    ./7.82.0-openssl-fix-CN-check.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -108,10 +107,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
       # Build without manual
       "--disable-manual"
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
-      # to nss-cacert from the default profile.
-      "--without-ca-bundle"
-      "--without-ca-path"
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
@@ -135,6 +130,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"
       "--enable-static"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
+      # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
+      # https://github.com/curl/curl/issues/8696 - fallback is not supported by HTTP3
+      (if http3Support then "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" else "--without-ca-bundle")
+      "--without-ca-path"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";

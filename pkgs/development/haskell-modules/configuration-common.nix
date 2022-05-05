@@ -252,7 +252,7 @@ self: super: {
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   binary-search = dontCheck super.binary-search;
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
-  bloodhound = dontCheck super.bloodhound;
+  bloodhound = dontCheck super.bloodhound;              # https://github.com/plow-technologies/quickcheck-arbitrary-template/issues/10
   buildwrapper = dontCheck super.buildwrapper;
   burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
   cabal-meta = dontCheck super.cabal-meta;              # http://hydra.cryp.to/build/497892/log/raw
@@ -687,9 +687,6 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
-  # 2022-03-24: Strict aeson bound: https://github.com/berberman/nvfetcher/pull/63
-  nvfetcher = throwIfNot (super.nvfetcher.version == "0.4.0.0") "nvfetcher: remove jailbreak after update" doJailbreak super.nvfetcher;
-
   # 2022-03-24: Strict aeson bound:
   arch-web = throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
 
@@ -853,6 +850,18 @@ self: super: {
 
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
+
+  # requires git at test-time *and* runtime, but we'll just rely on users to
+  # bring their own git at runtime
+  sensei = overrideCabal (drv: {
+    testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
+  }) (super.sensei.overrideScope (self: super: {
+    hspec-meta = self.hspec-meta_2_9_3;
+    hspec = self.hspec_2_9_7;
+    hspec-core = dontCheck self.hspec-core_2_9_7;
+    hspec-discover = self.hspec-discover_2_9_7;
+  }));
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
@@ -1154,6 +1163,16 @@ self: super: {
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
+  # Causes Test.QuickCheck.resize: negative size crashes e.g. in test suites
+  # https://github.com/typeable/generic-arbitrary/issues/14
+  generic-arbitrary = appendPatches [
+    (pkgs.fetchpatch {
+      name = "generic-arbitrary-no-negative-resize.patch";
+      url = "https://github.com/typeable/generic-arbitrary/commit/c13d119d8ad0d43860ecdb93b357b0239e366a6c.patch";
+      sha256 = "1jgbd2jn575icqw9nfdzh57nacm3pn8n53ka52129pnfjqfzyhsi";
+    })
+  ] super.generic-arbitrary;
+
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
 
@@ -1190,8 +1209,29 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch ./patches/xattr-fix-build.patch super.xattr;
 
-  # Some tests depend on a postgresql instance
-  esqueleto = dontCheck super.esqueleto;
+  esqueleto =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPatch or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          sed -i test/PostgreSQL/Test.hs \
+            -e s^host=localhost^^
+        '';
+        # Match the test suite defaults (or hardcoded values?)
+        preCheck = drv.preCheck or "" + ''
+          PGUSER=esqutest
+          PGDATABASE=esqutest
+        '';
+        testFlags = drv.testFlags or [] ++ [
+          # We don't have a MySQL test hook yet
+          "--skip=/Esqueleto/MySQL"
+        ];
+        testToolDepends = drv.testToolDepends or [] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      super.esqueleto;
 
   # Requires API keys to run tests
   algolia = dontCheck super.algolia;
@@ -1310,7 +1350,25 @@ self: super: {
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
-  persistent-postgresql = dontCheck super.persistent-postgresql;
+  persistent-postgresql =
+    overrideCabal
+      (drv: {
+        postPatch = drv.postPath or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          # NOTE: upstream host variable takes only two values...
+          sed -i test/PgInit.hs \
+            -e s^'host=" <> host <> "'^^
+        '';
+        preCheck = drv.preCheck or "" + ''
+          PGDATABASE=test
+          PGUSER=test
+        '';
+        testToolDepends = drv.testToolDepends or [] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      super.persistent-postgresql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
   # https://github.com/robdockins/edison/pull/16
@@ -1515,8 +1573,13 @@ self: super: {
   };
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
-    # wants a running DB to check against
-    doCheck = false;
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.postgresql pkgs.postgresqlTestHook
+    ];
+    preCheck = drv.preCheck or "" + ''
+      # empty string means use default connection
+      export DATABASE_URL=""
+    '';
   }) (super.pg-client.override {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;

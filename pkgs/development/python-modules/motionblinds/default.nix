@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "motionblinds";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "motion-blinds";
-    rev = version;
-    sha256 = "sha256-k0o6zGhuQPCh9bxXd7v9Hfjo1vKmf5kpw7MGJ31/1Mw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-RAGsVHi/f+0gIzVomhC8h3JvoD4EEe6dK9PBi5daTgU=";
   };
 
   propagatedBuildInputs = [

@@ -754,13 +754,13 @@ in
     );
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
-    boot.initrd.extraUtilsCommands =
+    boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
       ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
       '';
 
-    boot.initrd.postDeviceCommands =
+    boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
       ''
         # If the disk image appears to be empty, run mke2fs to
         # initialise.
@@ -770,7 +770,7 @@ in
         fi
       '';
 
-    boot.initrd.postMountCommands =
+    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
       ''
         # Mark this as a NixOS machine.
         mkdir -p $targetRoot/etc
@@ -788,6 +788,11 @@ in
             -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
         ''}
       '';
+
+    systemd.tmpfiles.rules = lib.mkIf config.boot.initrd.systemd.enable [
+      "f /etc/NIXOS 0644 root root -"
+      "d /boot 0644 root root -"
+    ];
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
@@ -853,8 +858,12 @@ in
       (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
         "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
       ])
-      (mkIf (!cfg.useBootLoader) [
-        "-kernel \${NIXPKGS_QEMU_KERNEL_${config.system.name}:-${config.system.build.toplevel}/kernel}"
+      (let
+        alphaNumericChars = lowerChars ++ upperChars ++ (map toString (range 0 9));
+        # Replace all non-alphanumeric characters with underscores
+        sanitizeShellIdent = s: concatMapStrings (c: if builtins.elem c alphaNumericChars then c else "_") (stringToCharacters s);
+      in mkIf (!cfg.useBootLoader) [
+        "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
         "-initrd ${config.system.build.toplevel}/initrd"
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])

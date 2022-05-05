@@ -1,36 +1,58 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# propagates
+, allpairspy
 , beautifulsoup4
 , empty-files
-, numpy
 , pyperclip
 , pytest
+
+# tests
+, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "5.0.1";
   pname = "approvaltests";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6.1";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    rev = "v${version}";
-    sha256 = "sha256-4dg5xTswqLFRBaZagKrkilCvsAnky9donb03MT/PiWM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lmH/nw/7woLCDepR/rDQUqwrhuLFY+TO8sdgK1+apgc=";
   };
 
   propagatedBuildInputs = [
+    allpairspy
     beautifulsoup4
     empty-files
-    numpy
     pyperclip
     pytest
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace bs4 beautifulsoup4 \
-      --replace "pyperclip==1.5.27" "pyperclip>=1.5.27"
-  '';
+  checkInputs = [
+    numpy
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # tests expects paths below ApprovalTests.Python directory
+    "test_received_filename"
+    "test_pytest_namer"
+  ];
+
+  pythonImportsCheck = [
+    "approvaltests.approvals"
+    "approvaltests.reporters.generic_diff_reporter_factory"
+  ];
 
   meta = with lib; {
     description = "Assertion/verification library to aid testing";

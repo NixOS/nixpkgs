@@ -163,7 +163,7 @@ convertIconTheme() {
     }
 
     iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
-    if [[ -n "$(ls -1 "$iconsdir/"*)" ]]; then
+    if [[ -n "$(ls -A1 "$iconsdir")" ]]; then
         icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
     else
         echo "Warning: no icons were found. Creating an empty icon for ${iconName}.icns."
@@ -171,21 +171,41 @@ convertIconTheme() {
     fi
 }
 
+processExecFieldCodes() {
+  local -r file=$1
+  local -r execRaw=$(getDesktopParam "${file}" "Exec")
+  local -r execNoK="${execRaw/\%k/${file}}"
+  local -r execNoKC="${execNoK/\%c/$(getDesktopParam "${file}" "Name")}"
+  local -r icon=$(getDesktopParam "${file}" "Icon")
+  local -r execNoKCI="${execNoKC/\%i/${icon:+--icon }${icon}}"
+  local -r execNoKCIfu="${execNoKCI/\%[fu]/\$1}"
+  local -r exec="${execNoKCIfu/\%[FU]/\$@}"
+  if [[ "$exec" != "$execRaw" ]]; then
+    echo 1>&2 "desktopToDarwinBundle: Application bundles do not understand desktop entry field codes. Changed '$execRaw' to '$exec'."
+  fi
+  echo "$exec"
+}
+
 # For a given .desktop file, generate a darwin '.app' bundle for it.
 convertDesktopFile() {
     local -r file=$1
     local -r sharePath=$(dirname "$(dirname "$file")")
     local -r name=$(getDesktopParam "${file}" "^Name")
-    local -r exec=$(getDesktopParam "${file}" "Exec")
+    local -r macOSExec=$(getDesktopParam "${file}" "X-macOS-Exec")
+    if [[ "$macOSExec" ]]; then
+      local -r exec="$macOSExec"
+    else
+      local -r exec=$(processExecFieldCodes "${file}")
+    fi
     local -r iconName=$(getDesktopParam "${file}" "^Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
-    mkdir -p "$out/Applications/${name}.app/Contents/MacOS"
-    mkdir -p "$out/Applications/${name}.app/Contents/Resources"
+    mkdir -p "${!outputBin}/Applications/${name}.app/Contents/MacOS"
+    mkdir -p "${!outputBin}/Applications/${name}.app/Contents/Resources"
 
-    convertIconTheme "$out/Applications/${name}.app/Contents/Resources" "$sharePath" "$iconName"
+    convertIconTheme "${!outputBin}/Applications/${name}.app/Contents/Resources" "$sharePath" "$iconName"
 
-    write-darwin-bundle "$out" "$name" "$exec" "$iconName" "$squircle"
+    write-darwin-bundle "${!outputBin}" "$name" "$exec" "$iconName" "$squircle"
 }
 
 convertDesktopFiles() {

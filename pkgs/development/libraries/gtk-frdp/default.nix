@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2022-04-07";
+  version = "unstable-2022-04-11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "70cd7598cb201d58575445d4361263df9b864e73";
-    sha256 = "ZyJoJl0WAwalPSkAQNkwDPnP+zLfMMP+ZdIKu2kdXVI=";
+    rev = "d7f408fb23adc01db14c708b35b74a317418de4b";
+    sha256 = "EyReJX3f7G5+EEB/gbLTnrxdltedbzm7Bg02hCb+XO0=";
   };
 
   nativeBuildInputs = [

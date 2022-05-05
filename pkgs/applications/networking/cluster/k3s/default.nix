@@ -46,12 +46,12 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.23.4+k3s1";     # k3s git tag
-  k3sCommit = "43b1cb48200d8f6af85c16ed944d68fcc96b6506"; # k3s git commit at the above version
-  k3sRepoSha256 = "1sn7rd5hqfqvwj036blk0skmq6r8igbmiqk1dnpaqnkkddpzdgmc";
-  k3sVendorSha256 = "sha256-1/kQvNqFUWwch1JH+twWzBdjNYseoZyVObB1+s9WPM4=";
+  k3sVersion = "1.23.5+k3s1";     # k3s git tag
+  k3sCommit = "313aaca547f030752788dce696fdf8c9568bc035"; # k3s git commit at the above version
+  k3sRepoSha256 = "0vk72609cyyh64irp14jp2zspnxw34jm710cbwgklx0ch6kiz88d";
+  k3sVendorSha256 = "sha256-d7kQsJi/eQbaTUDglp3gFpc5Im6CyD9coKeM3kMrbjI=";
 
-  k3sServerVendorSha256 = "sha256-2KIFff43jfqWdxX61aWofrjmc5mMkr5aEJRFdGpLyU8=";
+  k3sServerVendorSha256 = "sha256-E3USXNuXY0lzZH+t3O7BOQ8rKNNQ6avOMItgOEi1cEg=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
@@ -68,8 +68,8 @@ let
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
-  containerdVersion = "1.5.9-k3s1";
-  containerdSha256 = "09wfy20z3c9fnla353pibpsb10xzl0f4xwp8qdjh3fwa1q2626gg";
+  containerdVersion = "1.5.10-k3s1";
+  containerdSha256 = "1ff2sfaqpjimq7w0lprci6ibyi6v65ap6b9sr6b0j12gqr2sqwa5";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion = "1.22.0-k3s1";
@@ -228,8 +228,23 @@ buildGoModule rec {
 
   patches = [
     ./patches/0001-scrips-download-strip-downloading-just-package-CRD.patch
-    ./patches/0002-Don-t-build-a-static-binary-in-package-cli.patch
   ];
+
+  postPatch = ''
+    # Nix prefers dynamically linked binaries over static binary.
+
+    substituteInPlace scripts/package-cli \
+      --replace '"$LDFLAGS $STATIC" -o' \
+                '"$LDFLAGS" -o' \
+      --replace "STATIC=\"-extldflags \'-static\'\"" \
+                ""
+
+    # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
+
+    substituteInPlace scripts/package-cli \
+      --replace '"''${GO}" generate' \
+                'GOFLAGS="" "''${GO}" generate'
+  '';
 
   # Important utilities used by the kubelet, see
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494

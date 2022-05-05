@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out kernel/x86/microcode
     iucode_tool -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
-    echo kernel/x86/microcode/GenuineIntel.bin | bsdcpio -o -H newc -R 0:0 > $out/intel-ucode.img
+    touch -d @$SOURCE_DATE_EPOCH kernel/x86/microcode/GenuineIntel.bin
+    echo kernel/x86/microcode/GenuineIntel.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/intel-ucode.img
 
     runHook postInstall
   '';

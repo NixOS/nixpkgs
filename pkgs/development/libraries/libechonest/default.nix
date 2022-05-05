@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0xbavf9f355dl1d3qv59x4ryypqrdanh9xdvw2d0q66l008crdkq";
   };
 
+  # Fix build with GCC 11.
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+
   patches = [
     (fetchpatch {
       url = "https://github.com/lfranchi/libechonest/commit/009514f65044823ef29045397d4b58dd04d09977.patch";

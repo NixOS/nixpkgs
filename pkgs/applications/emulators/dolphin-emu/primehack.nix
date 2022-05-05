@@ -14,7 +14,6 @@
 , gettext
 , libXrandr
 , libusb1
-, lzo
 , libpthreadstubs
 , libXext
 , libXxf86vm
@@ -34,6 +33,7 @@
 , soundtouch
 , sfml
 , fmt
+, xz
 , vulkan-loader
 , libpulseaudio
 
@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     readline
     openal
     libXdmcp
-    lzo
     portaudio
     libusb1
     libpng
@@ -92,6 +91,7 @@ stdenv.mkDerivation rec {
     soundtouch
     sfml
     fmt
+    xz
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
     bluez

@@ -8,11 +8,12 @@
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
-, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
+, libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
-, dontRecurseIntoAttrs ,emacsPackagesFor
+, dontRecurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
+, fetchFromSavannah
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -22,7 +23,8 @@
 , withMotif ? false, motif ? null
 , withSQLite3 ? false
 , withCsrc ? true
-, srcRepo ? false, autoreconfHook ? null, texinfo ? null
+, withWebP ? false
+, srcRepo ? true, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
 , withAthena ? false
@@ -58,8 +60,9 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   patches = patches fetchpatch;
 
-  src = fetchurl {
-    url = "mirror://gnu/emacs/${name}.tar.xz";
+  src = fetchFromSavannah {
+    repo = "emacs";
+    rev = version;
     inherit sha256;
   };
 
@@ -134,6 +137,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (withX && withMotif) motif
     ++ lib.optional withSQLite3 sqlite
+    ++ lib.optional withWebP libwebp
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]

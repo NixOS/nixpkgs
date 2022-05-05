@@ -9,7 +9,7 @@
 , configText ? ""
 }:
 let
-  version = "2111";
+  version = "2203";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -33,8 +33,8 @@ let
     name = "vmwareHorizonClientFiles";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/view/viewclients/CART22FH2/VMware-Horizon-Client-Linux-2111-8.4.0-18957622.tar.gz";
-      sha256 = "2f79d2d8d34e6f85a5d21a3350618c4763d60455e7d68647ea40715eaff486f7";
+      url = "https://download3.vmware.com/software/CART23FQ1_LIN_2203_TARBALL/VMware-Horizon-Client-Linux-2203-8.5.0-19586897.tar.gz";
+      sha256 = "27429dddaeedfa8b701d7aa7868f60ad58efa42687d7f27e84375fda9f5cd137";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''

@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aQrfsiPuNrEMscZrOoONiN665KlNmnOiYj9ZIyzW304=";
   };
 
+  postPatch = ''
+    for F in tools/discoverer_acceptance_tests.c tools/discoverer.c; do
+      substituteInPlace "$F" --replace "/usr/bin/nm" "nm"
+    done
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {

@@ -257,17 +257,17 @@ let
 
 in {
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "5" "";
-    sha256 = "1wc1hwmz4m6iqlmqag8liyld917p6a8dvnhnpd1v8d8jl80bjm97";
+    version = rubyVersion "2" "7" "6" "";
+    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "3" "";
-    sha256 = "1b4j39zyyvdkf1ax2c6qfa40b4mxfkr87zghhw19fmnzn8f8d1im";
+    version = rubyVersion "3" "0" "4" "";
+    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "1" "";
-    sha256 = "sha256-/m5Hgt6XRDl43bqLpL440iKqJNw+PwKmqOdwHA7rYZ0=";
+    version = rubyVersion "3" "1" "2" "";
+    sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
   };
 }

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -31,21 +30,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "42.0";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BUSG03dAc3BqdqmBQXl40VG+O3Ik1yN3W74xbvoked8=";
+    sha256 = "sha256-CC+ElBAf080xvU8a6YgXEOMqUz+y3belcSJ5bJRm0q4=";
   };
-
-  patches = [
-    # Do not pin to GWeather 3.0, the used API did not change in 4.0.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/commit/759d3087b70341b2c5f1af575ce44338d926690e.patch";
-      sha256 = "Qp9Hta00TLf2lOb9+g9vnPoK17mP3eHpCG2i1ewaw+w=";
-      revert = true;
-    })
-  ];
 
   doCheck = true;
 
@@ -66,7 +56,6 @@ stdenv.mkDerivation rec {
     geocode-glib
     gjs
     gnome-online-accounts
-    gnome.adwaita-icon-theme
     gobject-introspection
     gsettings-desktop-schemas
     gtk3

@@ -1018,7 +1018,7 @@ in
       inherit configIniOfService;
       mainService = mkMerge [ baseService {
         serviceConfig.StateDirectory = [ "sourcehut/gitsrht" "sourcehut/gitsrht/repos" ];
-        preStart = mkIf (!versionAtLeast config.system.stateVersion "22.05") (mkBefore ''
+        preStart = mkIf (versionOlder config.system.stateVersion "22.05") (mkBefore ''
           # Fix Git hooks of repositories pre-dating https://github.com/NixOS/nixpkgs/pull/133984
           (
           set +f

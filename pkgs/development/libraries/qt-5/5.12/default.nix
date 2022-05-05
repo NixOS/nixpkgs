@@ -84,12 +84,6 @@ let
     qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwayland = [
-      # NixOS-specific, ensure that app_id is correctly determined for
-      # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
-      # context).  Beware: shared among different Qt5 versions.
-      ../modules/qtwayland-app_id.patch
-    ];
     qtwebengine = [
       # glibc 2.34 compat
       (fetchpatch {
@@ -152,7 +146,7 @@ let
         }
         { inherit self srcs patches; };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;

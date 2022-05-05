@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     ln -sf requirements.in requirements.txt
 
     # remove dependency constraints
-    sed 's/[>=]=.*//' -i requirements.txt
+    sed 's/[~<>=].*//' -i requirements.txt
 
     # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
     # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
@@ -35,6 +35,8 @@ python3Packages.buildPythonApplication rec {
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
+    click
+    colorama
     feedparser
     guessit
     html5lib
@@ -62,6 +64,7 @@ python3Packages.buildPythonApplication rec {
     flask-restx
     flask
     pyparsing
+    werkzeug
     zxcvbn
 
     # Plugins requirements

@@ -317,6 +317,60 @@ The script will be usually run from the root of the Nixpkgs repository but you s
 
 For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
 
+### Recursive attributes in `mkDerivation`
+
+If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
+
+```nix
+mkDerivation (finalAttrs: {
+  pname = "hello";
+  withFeature = true;
+  configureFlags =
+    lib.optionals finalAttrs.withFeature ["--with-feature"];
+})
+```
+
+Note that this does not use the `rec` keyword to reuse `withFeature` in `configureFlags`.
+The `rec` keyword works at the syntax level and is unaware of overriding.
+
+Instead, the definition references `finalAttrs`, allowing users to change `withFeature`
+consistently with `overrideAttrs`.
+
+`finalAttrs` also contains the attribute `finalPackage`, which includes the output paths, etc.
+
+Let's look at a more elaborate example to understand the differences between
+various bindings:
+
+```nix
+# `pkg` is the _original_ definition (for illustration purposes)
+let pkg =
+  mkDerivation (finalAttrs: {
+    # ...
+
+    # An example attribute
+    packages = [];
+
+    # `passthru.tests` is a commonly defined attribute.
+    passthru.tests.simple = f finalAttrs.finalPackage;
+
+    # An example of an attribute containing a function
+    passthru.appendPackages = packages':
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
+        packages = super.packages ++ packages';
+      });
+
+    # For illustration purposes; referenced as
+    # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
+    passthru.finalAttrs = finalAttrs;
+    passthru.original = pkg;
+  });
+in pkg
+```
+
+Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
+
+See also the section about [`passthru.tests`](#var-meta-tests).
+
 ## Phases {#sec-stdenv-phases}
 
 `stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
@@ -1043,7 +1097,7 @@ You can also specify a `runtimeDependencies` variable which lists dependencies t
 
 In certain situations you may want to run the main command (`autoPatchelf`) of the setup hook on a file or a set of directories instead of unconditionally patching all outputs. This can be done by setting the `dontAutoPatchelf` environment variable to a non-empty value.
 
-By default `autoPatchelf` will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the `autoPatchelfIgnoreMissingDeps` environment variable to a non-empty value.
+By default `autoPatchelf` will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the `autoPatchelfIgnoreMissingDeps` environment variable to a non-empty value. `autoPatchelfIgnoreMissingDeps` can be set to a list like `autoPatchelfIgnoreMissingDeps = [ "libcuda.so.1" "libcudart.so.1" ];` or to simply `[ "*" ]` to ignore all missing dependencies.
 
 The `autoPatchelf` command also recognizes a `--no-recurse` command line flag, which prevents it from recursing into subdirectories.
 

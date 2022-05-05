@@ -18,6 +18,7 @@
 
   # Apache
   apache = [
+    "https://dlcdn.apache.org/"
     "https://www-eu.apache.org/dist/"
     "https://ftp.wayne.edu/apache/"
     "https://www.apache.org/dist/"

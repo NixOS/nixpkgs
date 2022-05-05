@@ -142,6 +142,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
+  maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
+
   mauikit = callPackage ../development/libraries/mauikit { };
 
   mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };
@@ -166,15 +168,12 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
     suffix = "qt5";
   };
 
-  poppler_0_61 = callPackage ../development/libraries/poppler/0.61.nix {
-    lcms = pkgs.lcms2;
-    qt5Support = true;
-    suffix = "qt5";
-  };
-
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
   qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+
+  # Until macOS SDK allows for Qt 5.15, darwin is limited to 2.3.2
+  qca-qt5_2_3_2 = callPackage ../development/libraries/qca-qt5/2.3.2.nix { };
 
   qcoro = callPackage ../development/libraries/qcoro { };
 

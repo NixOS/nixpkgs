@@ -3,27 +3,39 @@
 , fetchFromSourcehut
 , pkg-config
 , zig
+, makeWrapper
 , curl
 , SDL2
 , SDL2_gfx
 , SDL2_image
 , SDL2_ttf
+, jq
+, ncurses
+, inconsolata-nerdfont
+, dmenu
+, xdotool
+, bemenu
+, withX11 ? false
 }:
 
-stdenv.mkDerivation rec {
+let
+  menuInputs = if withX11 then [ dmenu xdotool ] else [ bemenu ];
+in stdenv.mkDerivation rec {
   pname = "mepo";
-  version = "0.3";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = pname;
     rev = version;
-    hash = "sha256-B7BOAFhiOTILUdzh49hTMrNNHZpCNRDLW2uekXyptqQ=";
+    hash = "sha256-soIAQgo8Cyii/zzJapgJmC5hN/ySnHKoSbOg/XgTnGg=";
   };
 
-  nativeBuildInputs = [ pkg-config zig ];
+  nativeBuildInputs = [ pkg-config zig makeWrapper ];
 
-  buildInputs = [ curl SDL2 SDL2_gfx SDL2_image SDL2_ttf ];
+  buildInputs = [
+    curl SDL2 SDL2_gfx SDL2_image SDL2_ttf inconsolata-nerdfont jq ncurses
+  ] ++ menuInputs;
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -46,12 +58,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/mepo_dl.sh\
+      --suffix PATH : ${lib.makeBinPath [ jq ncurses ]}
+    wrapProgram $out/bin/mepo_ui_helper_menu.sh\
+      --suffix PATH : ${lib.makeBinPath menuInputs}
+    for script in $(grep -l jq out/bin/mepo_ui_menu_*.sh); do
+      wrapProgram $script --suffix PATH : $out/bin:${lib.makeBinPath [ jq ]}
+    done
+    for prog in $out/bin/mepo*; do
+      if [ ! -f $out/bin/.$(basename $prog)-wrapped ]; then
+        wrapProgram $prog --suffix PATH : $out/bin
+      fi
+    done
+  '';
+
   meta = with lib; {
     description = "Fast, simple, and hackable OSM map viewer";
     homepage = "https://sr.ht/~mil/mepo/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin; # See https://github.com/NixOS/nixpkgs/issues/86299
+    maintainers = with maintainers; [ sikmir McSinyx ];
+    platforms = platforms.linux;
   };
 }

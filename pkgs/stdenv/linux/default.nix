@@ -16,6 +16,7 @@
       armv7l-linux = import ./bootstrap-files/armv7l.nix;
       aarch64-linux = import ./bootstrap-files/aarch64.nix;
       mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+      powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
       riscv64-linux = import ./bootstrap-files/riscv64.nix;
     };
     musl = {
@@ -65,7 +66,7 @@ let
   bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
     inherit system bootstrapFiles;
     extraAttrs = lib.optionalAttrs
-      (config.contentAddressedByDefault or false)
+      config.contentAddressedByDefault
       {
         __contentAddressed = true;
         outputHashAlgo = "sha256";

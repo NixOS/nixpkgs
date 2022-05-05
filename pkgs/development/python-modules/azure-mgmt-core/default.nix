@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , azure-core
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     azure-core
+    typing-extensions
   ];
 
   pythonNamespaces = "azure.mgmt";

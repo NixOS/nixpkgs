@@ -6,6 +6,7 @@
 , python3Packages
 , extraPythonPackages ? [ ]
 , coreutils
+, hadoopSupport ? true
 , hadoop
 , RSupport ? true
 , R
@@ -17,12 +18,13 @@ let
   spark = { pname, version, sha256, extraMeta ? {} }:
     stdenv.mkDerivation rec {
       inherit pname version;
+      jdk = if hadoopSupport then hadoop.jdk else jdk8;
       src = fetchzip {
         url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
         sha256 = sha256;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ jdk8 python3Packages.python ]
+      buildInputs = [ jdk python3Packages.python ]
         ++ extraPythonPackages
         ++ optional RSupport R;
 
@@ -34,9 +36,11 @@ let
         cp $out/lib/${untarDir}/conf/log4j.properties{.template,}
 
         cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
-        export JAVA_HOME="${jdk8}"
+        export JAVA_HOME="${jdk}"
         export SPARK_HOME="$out/lib/${untarDir}"
+      '' + optionalString hadoopSupport ''
         export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
+      '' + ''
         export PYSPARK_PYTHON="${python3Packages.python}/bin/${python3Packages.python.executable}"
         export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
         ${optionalString RSupport ''
