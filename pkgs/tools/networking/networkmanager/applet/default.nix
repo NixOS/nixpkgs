@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "networkmanager-applet";
+      attrPath = "networkmanagerapplet";
       versionPolicy = "odd-unstable";
     };
   };
