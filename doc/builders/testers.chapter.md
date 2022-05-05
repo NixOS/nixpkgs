@@ -85,7 +85,7 @@ tests.fetchgit = invalidateFetcherByDrvHash fetchgit {
 
 Run a NixOS VM network test using this evaluation of Nixpkgs.
 
-NOTE: This function is primarily for external use. NixOS itself uses `make-test-python.nix` directly.
+NOTE: This function is primarily for external use. NixOS itself uses `make-test-python.nix` directly. Packages defined in Nixpkgs [reuse NixOS tests via `nixosTests`, plural](#ssec-nixos-tests-linking).
 
 It is mostly equivalent to the function `import ./make-test-python.nix` from the
 [NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests),
