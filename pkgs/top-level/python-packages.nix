@@ -344,6 +344,8 @@ in {
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
+  aiolimiter = callPackage ../development/python-modules/aiolimiter { };
+
   aiolip = callPackage ../development/python-modules/aiolip { };
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
