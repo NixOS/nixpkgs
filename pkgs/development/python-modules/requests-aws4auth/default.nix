@@ -24,14 +24,17 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    httpx
     requests
     six
   ];
 
+  passthru.extras-require = {
+    httpx = [ httpx ];
+  };
+
   checkInputs = [
     pytestCheckHook
-  ];
+  ] ++ passthru.extras-require.httpx;
 
   pythonImportsCheck = [
     "requests_aws4auth"
