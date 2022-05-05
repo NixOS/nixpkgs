@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
     "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
-    "-DINSTALL_SPIRVDLL=0"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
     "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"
