@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.56";
+  version = "3.2.57";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "e1402d7693659b85c5e553481a7252d91350c3f33ffea413488d7712d3281e03";
+    sha256 = "ef7f564ec2cd8baaf94a44982ce1db88c1192696617f21538d0b8472a63b4c2b";
   };
 
   patches = lib.optionals nixos-extensions [
@@ -28,9 +28,6 @@ mkDerivation rec {
     ./nonroot.patch
     # Adds unfree qml to packagechooserq
     ./unfreeq.patch
-    # Adds config to change name of packagechooserq
-    # Upstreamed in PR: https://github.com/calamares/calamares/pull/1932
-    ./packagechooserq.patch
     # Modifies finished module to add some NixOS resources
     # Modifies packagechooser module to change the UI
     ./uimod.patch
