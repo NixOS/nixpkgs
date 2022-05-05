@@ -455,6 +455,7 @@ broken-packages:
   - bower-json
   - bowntz
   - bpath
+  - BPS
   - braid
   - brain-bleep
   - Bravo
@@ -511,6 +512,7 @@ broken-packages:
   - bytestring-substring
   - bytestring-time
   - bytestring-typenats
+  - bzlib-conduit-jappie
   - c10k
   - c2ats
   - cab
@@ -523,6 +525,7 @@ broken-packages:
   - cabal-constraints
   - cabal-db
   - cabal-dependency-licenses
+  - cabal-detailed-quickcheck
   - cabal-dev
   - cabal-dir
   - cabal-edit
@@ -854,6 +857,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - core-haskell
+  - core-webserver-warp
   - Coroutine
   - coroutine-object
   - CouchDB
@@ -1236,6 +1240,7 @@ broken-packages:
   - ede
   - edenmodules
   - edis
+  - EdisonAPI
   - EdisonCore
   - edit
   - edit-lenses
@@ -2100,6 +2105,7 @@ broken-packages:
   - hdo
   - hdph-closure
   - hdr-histogram
+  - HDRUtils
   - headergen
   - heap-console
   - heapsort
@@ -3932,6 +3938,7 @@ broken-packages:
   - polysemy-mocks
   - polysemy-readline
   - polysemy-req
+  - polysemy-scoped-fs
   - polysemy-zoo
   - polytypeable
   - polyvariadic
@@ -4221,6 +4228,7 @@ broken-packages:
   - Referees
   - references
   - refined-http-api-data
+  - refined-with
   - reflection-extras
   - reflex-basic-host
   - reflex-dom-ace
@@ -5268,6 +5276,7 @@ broken-packages:
   - typalyze
   - typeable-mock
   - typeable-th
+  - typecheck-plugin-nat-simple
   - type-combinators
   - typed-digits
   - typed-encoding
@@ -5387,6 +5396,7 @@ broken-packages:
   - utf8-prelude
   - utf8-validator
   - UTFTConverter
+  - util
   - util-logict
   - util-plus
   - util-primitive
@@ -5803,3 +5813,4 @@ broken-packages:
   - Zwaluw
   - zxcvbn-hs
   - zydiskell
+  - zyre2
