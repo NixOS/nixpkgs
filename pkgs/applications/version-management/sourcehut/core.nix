@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromSourcehut
 , fetchNodeModules
 , buildPythonPackage
 , pgpy
@@ -29,12 +29,13 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.68.14";
+  version = "0.68.24";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "core.sr.ht";
     rev = version;
-    sha256 = "sha256-BY3W2rwrg0mhH3CltgUqg6Xv8Ve5VZNY/lI1cfbAjYM=";
+    sha256 = "sha256-ipukga6vfBgDIXOQCejCkU/iTmBt5egIjB+NlJyL2yo=";
     fetchSubmodules = true;
   };
 
