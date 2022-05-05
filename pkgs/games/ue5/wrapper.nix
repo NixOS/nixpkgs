@@ -41,6 +41,7 @@
 , gio-sharp
 , at-spi2-core
 , ue5-unwrapped
+, bashInteractive
 , ... }:
 
 let
@@ -94,7 +95,7 @@ let
 in buildFHSUserEnvBubblewrap {
   name = "UnrealEditor";
 
-  # Adapated from Steam wrapper
+  # Adapted from Steam wrapper
   extraBuildCommands = ''
     if [ -f $out/usr/share/vulkan/icd.d/nvidia_icd.json ]; then
       cp $out/usr/share/vulkan/icd.d/nvidia_icd{,32}.json
@@ -110,7 +111,6 @@ in buildFHSUserEnvBubblewrap {
     export UE_USE_SYSTEM_MONO=1
     export UE_USE_SYSTEM_DOTNET=1
     export DOTNET_ROOT=$(dirname $(realpath $(which dotnet)))
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json:/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json:/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd32.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json:/usr/share/vulkan/icd.d/radeon_icd.i686.json
     export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 
     sharedir="${ue5-unwrapped}"
@@ -135,6 +135,8 @@ in buildFHSUserEnvBubblewrap {
   targetPkgs = pkgs: with pkgs; [
     dotnet-sdk_3
     pkg-config
+    coreutils
+    which
     git
     python2
     mono
