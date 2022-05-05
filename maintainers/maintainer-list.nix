@@ -13976,6 +13976,13 @@
     githubId = 6191421;
     name = "Edward d'Albon";
   };
+  zebreus = {
+    matrix = "@lennart:cicen.net";
+    email = "lennarteichhorn+nixpkgs@gmail.com";
+    github = "Zebreus";
+    githubId = 1557253;
+    name = "Lennart Eichhorn";
+  };
   zef = {
     email = "zef@zef.me";
     name = "Zef Hemel";
