@@ -20,6 +20,10 @@ buildPythonPackage rec {
     sha256 = "0gm5dz088v3d2k1dkcp9b3nnqpkk0fp2jly870hijj2xhc5nbv6c";
   };
 
+  patches = [
+    ./werkzeug-2.1.0-compat.patch
+  ];
+
   propagatedBuildInputs = [
     aniso8601
     flask

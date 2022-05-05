@@ -206,9 +206,6 @@ with prev;
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
     ];
-    patches = [
-      ./luaexpat.patch
-    ];
   });
 
   # TODO Somehow automatically amend buildInputs for things that need luaffi
@@ -257,6 +254,12 @@ with prev;
     ];
   });
 
+  luaunbound = prev.lib.overrideLuarocks prev.luaunbound(drv: {
+    externalDeps = [
+      { name = "libunbound"; dep = pkgs.unbound; }
+    ];
+  });
+
   luuid = (prev.lib.overrideLuarocks prev.luuid (drv: {
     externalDeps = [
       { name = "LIBUUID"; dep = pkgs.libuuid; }
@@ -295,7 +298,8 @@ with prev;
 
       buildInputs = [ pkgs.libuv ];
 
-      nativeBuildInputs = [ pkgs.pkg-config pkgs.fixDarwinDylibNames pkgs.cmake ];
+      nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake ]
+        ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
   };
 
   luv = prev.lib.overrideLuarocks prev.luv (drv: {

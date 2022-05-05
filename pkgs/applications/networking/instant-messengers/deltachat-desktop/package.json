@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "1.28.1",
+  "version": "1.28.2",
   "dependencies": {
     "@blueprintjs/core": "^3.22.3",
     "@deltachat/message_parser_wasm": "^0.3.0",
@@ -51,7 +51,7 @@
     "@types/react-window": "^1.8.4",
     "@types/react-window-infinite-loader": "^1.0.4",
     "@types/url-parse": "^1.4.3",
-    "electron": "^14.2.6",
+    "electron": "^14.2.9",
     "esbuild": "^0.12.29",
     "glob-watcher": "^5.0.5",
     "sass": "^1.26.5",

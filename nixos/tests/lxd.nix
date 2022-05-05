@@ -1,48 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ... } :
 
 let
-  # Since we don't have access to the internet during the tests, we have to
-  # pre-fetch lxd containers beforehand.
-  #
-  # I've chosen to import Alpine Linux, because its image is turbo-tiny and,
-  # generally, sufficient for our tests.
-  alpine-meta = pkgs.fetchurl {
-    url = "https://tarballs.nixos.org/alpine/3.12/lxd.tar.xz";
-    hash = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
+  lxd-image = import ../release.nix {
+    configuration = {
+      # Building documentation makes the test unnecessarily take a longer time:
+      documentation.enable = lib.mkForce false;
+
+      # Our tests require `grep` & friends:
+      environment.systemPackages = with pkgs; [ busybox ];
+    };
   };
 
-  alpine-rootfs = pkgs.fetchurl {
-    url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
-    hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
-  };
-
-  lxd-config = pkgs.writeText "config.yaml" ''
-    storage_pools:
-      - name: default
-        driver: dir
-        config:
-          source: /var/lxd-pool
-
-    networks:
-      - name: lxdbr0
-        type: bridge
-        config:
-          ipv4.address: auto
-          ipv6.address: none
-
-    profiles:
-      - name: default
-        devices:
-          eth0:
-            name: eth0
-            network: lxdbr0
-            type: nic
-          root:
-            path: /
-            pool: default
-            type: disk
-  '';
-
+  lxd-image-metadata = lxd-image.lxdMeta.${pkgs.system};
+  lxd-image-rootfs = lxd-image.lxdImage.${pkgs.system};
 
 in {
   name = "lxd";
@@ -53,6 +23,8 @@ in {
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
+      diskSize = 2048;
+
       # Since we're testing `limits.cpu`, we've gotta have a known number of
       # cores to lean on
       cores = 2;
@@ -77,61 +49,66 @@ in {
     machine.succeed("mkdir /var/lxd-pool")
 
     machine.succeed(
-        "cat ${lxd-config} | lxd init --preseed"
+        "cat ${./common/lxd/config.yaml} | lxd init --preseed"
     )
 
     machine.succeed(
-        "lxc image import ${alpine-meta} ${alpine-rootfs} --alias alpine"
+        "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs}/*/*.tar.xz --alias nixos"
     )
 
-    with subtest("Containers can be launched and destroyed"):
-        machine.succeed("lxc launch alpine test")
-        machine.succeed("lxc exec test true")
-        machine.succeed("lxc delete -f test")
+    with subtest("Container can be managed"):
+        machine.succeed("lxc launch nixos container")
+        machine.sleep(5)
+        machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
+        machine.succeed("lxc exec container true")
+        machine.succeed("lxc delete -f container")
 
-    with subtest("Containers are being mounted with lxcfs inside"):
-        machine.succeed("lxc launch alpine test")
+    with subtest("Container is mounted with lxcfs inside"):
+        machine.succeed("lxc launch nixos container")
+        machine.sleep(5)
 
         ## ---------- ##
         ## limits.cpu ##
 
-        machine.succeed("lxc config set test limits.cpu 1")
-        machine.succeed("lxc restart test")
+        machine.succeed("lxc config set container limits.cpu 1")
+        machine.succeed("lxc restart container")
+        machine.sleep(5)
 
-        # Since Alpine doesn't have `nproc` pre-installed, we've gotta resort
-        # to the primal methods
         assert (
             "1"
-            == machine.succeed("lxc exec test grep -- -c ^processor /proc/cpuinfo").strip()
+            == machine.succeed("lxc exec container grep -- -c ^processor /proc/cpuinfo").strip()
         )
 
-        machine.succeed("lxc config set test limits.cpu 2")
-        machine.succeed("lxc restart test")
+        machine.succeed("lxc config set container limits.cpu 2")
+        machine.succeed("lxc restart container")
+        machine.sleep(5)
 
         assert (
             "2"
-            == machine.succeed("lxc exec test grep -- -c ^processor /proc/cpuinfo").strip()
+            == machine.succeed("lxc exec container grep -- -c ^processor /proc/cpuinfo").strip()
         )
 
         ## ------------- ##
         ## limits.memory ##
 
-        machine.succeed("lxc config set test limits.memory 64MB")
-        machine.succeed("lxc restart test")
+        machine.succeed("lxc config set container limits.memory 64MB")
+        machine.succeed("lxc restart container")
+        machine.sleep(5)
 
         assert (
             "MemTotal:          62500 kB"
-            == machine.succeed("lxc exec test grep -- MemTotal /proc/meminfo").strip()
+            == machine.succeed("lxc exec container grep -- MemTotal /proc/meminfo").strip()
         )
 
-        machine.succeed("lxc config set test limits.memory 128MB")
-        machine.succeed("lxc restart test")
+        machine.succeed("lxc config set container limits.memory 128MB")
+        machine.succeed("lxc restart container")
+        machine.sleep(5)
 
         assert (
             "MemTotal:         125000 kB"
-            == machine.succeed("lxc exec test grep -- MemTotal /proc/meminfo").strip()
+            == machine.succeed("lxc exec container grep -- MemTotal /proc/meminfo").strip()
         )
 
-        machine.succeed("lxc delete -f test")
+        machine.succeed("lxc delete -f container")
   '';
 })

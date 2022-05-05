@@ -11,7 +11,7 @@
 , cdrtools
 , usbutils
 , util-linux
-, spicy
+, spice-gtk
 , swtpm
 , wget
 , xdg-user-dirs
@@ -19,7 +19,7 @@
 , zsync
 , OVMF
 , quickemu
-, testVersion
+, testers
 }:
 let
   runtimePaths = [
@@ -32,7 +32,7 @@ let
     cdrtools
     usbutils
     util-linux
-    spicy
+    spice-gtk
     swtpm
     wget
     xdg-user-dirs
@@ -43,13 +43,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "3.14";
+  version = "3.15";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256="sha256-7zaXazGzb36Nwk/meJ3lGD+l+fylWZYnhttDL1CXN9s=";
+    sha256="sha256-ako/eh8cMWKvdrgm9VTgSH67nA2igKUlJZtBeH1bu4Y=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = testVersion { package = quickemu; };
+  passthru.tests = testers.testVersion { package = quickemu; };
 
   meta = with lib; {
     description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";

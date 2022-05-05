@@ -85,7 +85,7 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.ethminer = {
-      path = optional (cfg.toolkit == "cuda") [ pkgs.cudatoolkit ];
+      path = optional (cfg.toolkit == "cuda") [ pkgs.cudaPackages.cudatoolkit ];
       description = "ethminer ethereum mining service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

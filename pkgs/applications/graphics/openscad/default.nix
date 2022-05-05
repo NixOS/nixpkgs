@@ -59,6 +59,10 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preBuild = ''
+    make objects/parser.cxx
+  '';
+
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications

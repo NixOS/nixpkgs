@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "powerdns";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "sha256-eRKxSIfWKEUYX3zktH21gOqnuLiX3LHJVV3+D6xe+uM=";
+    hash = "sha256-9EOEiUS7Ebu0hQIhYTs6Af+1f+vyZx2myqVzYu4LGbg=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost mariadb-connector-c postgresql lua openldap sqlite protobuf geoip
     libyamlcpp libsodium curl unixODBC openssl systemd lmdb tinycdb
+  ];
+
+  # Configure phase requires 64-bit time_t even on 32-bit platforms.
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.is32bit [
+    "-D_TIME_BITS=64" "-D_FILE_OFFSET_BITS=64"
   ];
 
   configureFlags = [

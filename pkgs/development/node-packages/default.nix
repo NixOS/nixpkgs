@@ -89,9 +89,6 @@ let
           pkgs.lib.makeBinPath [ pkgs.nodejs ]
         }
       '';
-      # See: https://github.com/NixOS/nixpkgs/issues/142196
-      # [...]/@hyperspace/cli/node_modules/.bin/node-gyp-build: /usr/bin/env: bad interpreter: No such file or directory
-      meta.broken = true;
     };
 
     mdctl-cli = super."@medable/mdctl-cli".override {
@@ -250,44 +247,14 @@ let
 
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
-      # We need to apply a patch to the source, but buildNodePackage doesn't allow patches.
-      # So we pin the patched commit instead. The commit actually contains two other newer commits
-      # since the last (1.9.0) release, but actually this is a good thing since one of them is a
-      # Hydra-specific fix.
-      src = applyPatches {
-        src = fetchFromGitHub {
-          owner = "svanderburg";
-          repo = "node2nix";
-          rev = "node2nix-1.9.0";
-          sha256 = "0l4wp1131nhl9c14cn8bwawb8f77h1nfbnswgi5lp5m3kzkb27jn";
-        };
-
-        patches = [
-          # remove node_ name prefix
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/b54d45207427ff46e90f16f2f32771fdc8bff5a4.patch";
-            sha256 = "sha256-ubUdF0q3l4xxqZ7f9EiQEUQzyqxi9Q6zsRPETHlfzh8=";
-          })
-          # set meta platform
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
-            sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
-          })
-          # Extract common logic from composePackage to a shell function
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/e4c951971df6c9f9584c7252971c13b55c369916.patch";
-            sha256 = "0w8fcyr12g2340rn06isv40jkmz2khmak81c95zpkjgipzx7hp7w";
-          })
-          # handle package alias in dependencies
-          # https://github.com/svanderburg/node2nix/pull/240
-          #
-          # TODO: remove after node2nix 1.10.0
-          (fetchpatch {
-            url = "https://github.com/svanderburg/node2nix/commit/644e90c0304038a446ed53efc97e9eb1e2831e71.patch";
-            sha256 = "sha256-sQgVf80H1ouUjzHq+2d9RO4a+o++kh+l+FOTNXfPBH0=";
-          })
-        ];
+      # We need to use master because of a fix that replaces git:// url to https://.
+      src = fetchFromGitHub {
+        owner = "svanderburg";
+        repo = "node2nix";
+        rev = "68f5735f9a56737e3fedceb182705985e3ab8799";
+        sha256 = "sha256-NK6gDTkGx0GG7yPTwgtFC4ttQZPfcLaLp8W8OOMO6bg=";
       };
+
       postInstall = ''
         wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
@@ -366,7 +333,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-ltCMZAx1i0i9xuPM692Srj8McC665h6E5RqJom999sjtVSccHSD8Z+HSdBN2183h9PJKvC5dapkn78dd0NWMBg==";
+        sha512 = "sha512-oO1auBnBtieGdiN+57IgsA9Vr7Sy4HkILi1KSaUG4mpKfEbnkTGnLOxAqjLed+K2nsG/GtE1tJBtB7JxN1a78Q==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
@@ -455,6 +422,14 @@ let
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/tsun" \
+        --prefix NODE_PATH : ${self.typescript}/lib/node_modules
+      '';
+    });
+
+    ts-node = super.ts-node.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/ts-node" \
         --prefix NODE_PATH : ${self.typescript}/lib/node_modules
       '';
     });

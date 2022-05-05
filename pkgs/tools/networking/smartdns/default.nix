@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl, testVersion, smartdns }:
+{ lib, stdenv, fetchFromGitHub, openssl, testers, smartdns }:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version = "36";
+  version = "36.1";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
-    sha256 = "sha256-sjrRPmTJRCUnMrA08M/VdYhL7/OfQY30/t1loLPSrlQ=";
+    sha256 = "sha256-5pAt7IjgbCCGaHeSoQvuoc6KPD9Yn5iXL1CAawgBeY0=";
   };
 
   buildInputs = [ openssl ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   passthru.tests = {
-    version = testVersion { package = smartdns; };
+    version = testers.testVersion { package = smartdns; };
   };
 
   meta = with lib; {

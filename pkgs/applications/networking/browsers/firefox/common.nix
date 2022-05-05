@@ -19,12 +19,10 @@
 
 { lib
 , stdenv
-, fetchpatch
 
 # build time
 , autoconf
 , cargo
-, gnused
 , makeWrapper
 , nodejs
 , perl
@@ -61,7 +59,8 @@
 , libwebp
 , nasm
 , nspr
-, nss
+, nss_esr
+, nss_latest
 , pango
 , xorg
 , zip
@@ -111,7 +110,6 @@
 ## other
 
 , crashreporterSupport ? false
-, safeBrowsingSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -179,14 +177,6 @@ buildStdenv.mkDerivation ({
   ];
 
   patches = [
-    (fetchpatch {
-      # RDD Sandbox paths for NixOS, remove with Firefox>=100
-      # https://hg.mozilla.org/integration/autoland/rev/5ac6a69a01f47ca050d90704a9791b8224d30f14
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1761692
-      name = "mozbz-1761692-rdd-sandbox-paths.patch";
-      url = "https://hg.mozilla.org/integration/autoland/raw-rev/5ac6a69a01f47ca050d90704a9791b8224d30f14";
-      hash = "sha256-+NGRUxXA7HGvPaAwvDveqRsdXof5nBIc+l4hdf7cC/Y=";
-    })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
@@ -207,7 +197,6 @@ buildStdenv.mkDerivation ({
   nativeBuildInputs = [
     autoconf
     cargo
-    gnused
     llvmPackages.llvm # llvm-objdump
     makeWrapper
     nodejs
@@ -356,7 +345,6 @@ buildStdenv.mkDerivation ({
     libwebp
     nasm
     nspr
-    nss
     pango
     perl
     xorg.libX11
@@ -373,6 +361,7 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
+  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gssSupport libkrb5

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
-, fetchpatch
 , pikepdf
 , pillow
 , stdenv
@@ -19,22 +18,13 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.4.3";
+  version = "0.4.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jlHFBD76lddRSBtRYHGgBvh8KkBZlhqaxD7COJFd4J8=";
+    sha256 = "8ec898a9646523fd3862b154f3f47cd52609c24cc3e2dc1fb5f0168f0cbe793c";
   };
-
-  patches = [
-    # Disable tests broken by Pillow 9.0.0
-    # https://gitlab.mister-muffin.de/josch/img2pdf/issues/130#issuecomment-586
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/img2pdf/-/raw/f77fefc81e7c4b235c47ae6777d222d391c59536/debian/patches/pillow9";
-      sha256 = "sha256-8giZCuv5PzSbrBQqslNqiLOhgxbg3LsdBVwt+DWnvh4=";
-    })
-  ];
 
   propagatedBuildInputs = [
     pikepdf

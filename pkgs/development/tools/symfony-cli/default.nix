@@ -12,6 +12,10 @@ buildGoModule rec {
     sha256 = "sha256-xYNq5hnkk6OIsnDHhN/vh1LNuP7isTNgtTY2WUwC8x4=";
   };
 
+  postInstall = ''
+    mv $out/bin/symfony-cli $out/bin/symfony
+  '';
+
   # Tests requires network access
   doCheck = false;
 

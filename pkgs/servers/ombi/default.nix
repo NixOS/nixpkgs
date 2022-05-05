@@ -26,7 +26,8 @@ in stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ]
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ stdenv.cc.cc zlib krb5 ];
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
 
     makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl icu ]} \
-      --run "cd $out/share/${pname}-${version}"
+      --chdir "$out/share/${pname}-${version}"
   '';
 
   passthru = {

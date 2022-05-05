@@ -127,6 +127,13 @@ stdenv.mkDerivation ({
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Fix segfault in getpwuid when stat fails
+         https://sourceware.org/bugzilla/show_bug.cgi?id=28752 */
+      (fetchurl {
+        url = "https://patchwork.sourceware.org/project/glibc/patch/20220314175316.3239120-2-sam@gentoo.org/raw/";
+        sha256 = "sq0BoPqXHQ69Vq4zJobCspe4XRfnAiuac/wqzVQJESc=";
+      })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;

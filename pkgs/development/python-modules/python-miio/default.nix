@@ -1,24 +1,24 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, click
-, cryptography
-, construct
-, zeroconf
-, attrs
-, pytz
-, appdirs
-, tqdm
-, netifaces
 , android-backup
-, importlib-metadata
+, appdirs
+, attrs
+, buildPythonPackage
+, click
+, construct
 , croniter
+, cryptography
 , defusedxml
-, pytestCheckHook
+, fetchPypi
+, importlib-metadata
+, netifaces
+, poetry-core
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pytz
 , pyyaml
+, tqdm
+, zeroconf
 }:
 
 
@@ -57,13 +57,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
     pytest-mock
+    pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'defusedxml = "^0"' 'defusedxml = "*"' \
+      --replace 'defusedxml = "^0"' 'defusedxml = "*"'
+    # Will be fixed with the next release, https://github.com/rytilahti/python-miio/pull/1378
+    substituteInPlace miio/integrations/vacuum/roborock/vacuum_cli.py \
+      --replace "resultcallback" "result_callback"
   '';
 
   pythonImportsCheck = [

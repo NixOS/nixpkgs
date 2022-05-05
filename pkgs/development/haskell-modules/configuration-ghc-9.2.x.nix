@@ -80,6 +80,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
+  dbus = super.dbus_1_2_24;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -170,7 +171,7 @@ self: super: {
   ];
 
   # lens >= 5.1 supports 9.2.1
-  lens = super.lens_5_1;
+  lens = doDistribute self.lens_5_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -213,7 +214,9 @@ self: super: {
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
-  fourmolu = super.fourmolu_0_5_0_1;
+  fourmolu = super.fourmolu_0_6_0_0;
+  # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
+  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.2.0"; doJailbreak super.hls-fourmolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;

@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "whodap";
-  version = "0.1.4";
+  version = "0.1.5";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-L8fSf9AhmWbRvLKvf0aowKoal+5dG1SJXcA7Ssrhj6o=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Jm3+WMGuYc910TNDVzHjYcbNcts668D3xYORXxozWqA=";
   };
 
   propagatedBuildInputs = [

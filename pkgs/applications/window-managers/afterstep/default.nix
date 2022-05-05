@@ -45,7 +45,19 @@ stdenv.mkDerivation rec {
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
-     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
+    # binutils 2.37 fix
+    # https://github.com/afterstep/afterstep/issues/2
+    fixupList=(
+      "autoconf/Makefile.defines.in"
+      "libAfterImage/aftershow/Makefile.in"
+      "libAfterImage/apps/Makefile.in"
+      "libAfterBase/Makefile.in"
+      "libAfterImage/Makefile.in"
+    )
+    for toFix in "''${fixupList[@]}"; do
+      substituteInPlace "$toFix" --replace "clq" "cq"
+    done
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   # Parallel build fails due to missing dependencies between private libaries:

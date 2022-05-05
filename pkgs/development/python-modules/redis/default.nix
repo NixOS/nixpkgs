@@ -4,35 +4,52 @@
 , pythonOlder
 
 # propagates
-, cryptography
+, async-timeout
 , deprecated
-, hiredis
 , importlib-metadata
 , packaging
+, typing-extensions
+
+# extras: hiredis
+, hiredis
+
+# extras: ocsp
+, cryptography
+, pyopenssl
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "4.1.4";
+  version = "4.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HZoM34n92T+EJhcz4k9Vp7vUE6myGf2vVuPnKMqaIwY=";
+    sha256 = "sha256-/kVROIEinb7mEGILnggXsfSMR7pjWHAyD9RKcSIEu90=";
   };
 
   propagatedBuildInputs = [
-    cryptography
+    async-timeout
     deprecated
-    hiredis
     packaging
-    requests
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
+
+  passthru.extras-require = {
+    hidredis = [
+      hiredis
+    ];
+    ocsp = [
+      cryptography
+      pyopenssl
+      requests
+    ];
+  };
 
   pythonImportsCheck = [
     "redis"

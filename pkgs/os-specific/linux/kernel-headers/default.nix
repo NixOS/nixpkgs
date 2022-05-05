@@ -81,12 +81,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.16"; in
+  linuxHeaders = let version = "5.17"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "1fq86dbx2p124vi4j8nan68gj4zyw4xnqh4jxq9aqsdvi24pwz82";
+        sha256 = "1cdi43x4c3l4chznh57gm55szycj4wjlxl1dss1ilnfvvmhyypsm";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

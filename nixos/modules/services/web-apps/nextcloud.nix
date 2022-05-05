@@ -251,6 +251,23 @@ in {
       '';
     };
 
+    database = {
+
+      createLocally = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Create the database and database user locally. Only available for
+          mysql database.
+          Note that this option will use the latest version of MariaDB which
+          is not officially supported by Nextcloud. As for now a workaround
+          is used to also support MariaDB version >= 10.6.
+        '';
+      };
+
+    };
+
+
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
@@ -505,6 +522,29 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
+    globalProfiles = mkEnableOption "global profiles" // {
+      description = ''
+        Makes user-profiles globally available under <literal>nextcloud.tld/u/user.name</literal>.
+        Even though it's enabled by default in Nextcloud, it must be explicitly enabled
+        here because it has the side-effect that personal information is even accessible to
+        unauthenticated users by default.
+
+        By default, the following properties are set to <quote>Show to everyone</quote>
+        if this flag is enabled:
+        <itemizedlist>
+        <listitem><para>About</para></listitem>
+        <listitem><para>Full name</para></listitem>
+        <listitem><para>Headline</para></listitem>
+        <listitem><para>Organisation</para></listitem>
+        <listitem><para>Profile picture</para></listitem>
+        <listitem><para>Role</para></listitem>
+        <listitem><para>Twitter</para></listitem>
+        <listitem><para>Website</para></listitem>
+        </itemizedlist>
+
+        Only has an effect in Nextcloud 23 and later.
+      '';
+    };
 
     nginx.recommendedHttpHeaders = mkOption {
       type = types.bool;
@@ -583,6 +623,12 @@ in {
         else pkgs.php80;
     }
 
+    { assertions = [
+      { assertion = cfg.database.createLocally -> cfg.config.dbtype == "mysql";
+        message = ''services.nextcloud.config.dbtype must be set to mysql if services.nextcloud.database.createLocally is set to true.'';
+      }
+    ]; }
+
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
@@ -627,6 +673,8 @@ in {
               if x == null then "false"
               else boolToString x;
 
+          nextcloudGreaterOrEqualThan = req: versionAtLeast cfg.package.version req;
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
             ${optionalString requiresReadSecretFunction ''
@@ -666,6 +714,7 @@ in {
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles}"}
               ${objectstoreConfig}
             ];
           '';
@@ -810,6 +859,32 @@ in {
       users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
 
       environment.systemPackages = [ occ ];
+
+      services.mysql = lib.mkIf cfg.database.createLocally {
+        enable = true;
+        package = lib.mkDefault pkgs.mariadb;
+        ensureDatabases = [ cfg.config.dbname ];
+        ensureUsers = [{
+          name = cfg.config.dbuser;
+          ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
+        }];
+        # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
+        # this is a workaround.
+        # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
+        settings = {
+          mysqld = {
+            innodb_read_only_compressed = 0;
+          };
+        };
+        initialScript = pkgs.writeText "mysql-init" ''
+          CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
+          CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
+          GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER,
+            CREATE TEMPORARY TABLES ON ${cfg.config.dbname}.* TO '${cfg.config.dbuser}'@'localhost'
+            IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
+          FLUSH privileges;
+        '';
+      };
 
       services.nginx.enable = mkDefault true;
 

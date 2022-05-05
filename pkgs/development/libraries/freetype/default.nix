@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetype";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MzOufP2ohCnJenrmO30BqzmAdsO2cYLpYOVoQFDyxcg=";
+    sha256 = "sha256-71wzaqzBoHn/kmLWMI1sKgZt1NKpBTAcSt2ps1Q5kDM=";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype

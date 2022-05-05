@@ -1,4 +1,9 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
 # for passthru.tests
@@ -6,14 +11,15 @@
 }@args:
 
 import ./generic.nix (rec {
-  pname = "Pillow";
-  version = "9.0.1";
+  pname = "pillow";
+  version = "9.1.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "bIvII4p9/a96dfXsWmY/QXP4w2flo5+H5yBJXh7tdfo=";
+    pname = "Pillow";
+    inherit version;
+    sha256 = "f401ed2bbb155e1ade150ccc63db1a4f6c1909d3d378f7d1235a44e90d75fb97";
   };
 
   passthru.tests = {

@@ -1,16 +1,21 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "0.5.15";
+  version = "1.0.0";
   pname = "python-vagrant";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ikrh6canhcxg5y7pzmkcnnydikppv7s6sm9prfx90nk0ac8m6mg";
+    sha256 = "sha256-qP6TzPL/N+zJXsL0nqdKkabOc6TbShapjdJtOXz9CeU=";
   };
 
   # The tests try to connect to qemu
   doCheck = false;
+
+  pythonImportsCheck = [
+    "vagrant"
+  ];
 
   meta = {
     description = "Python module that provides a thin wrapper around the vagrant command line executable";

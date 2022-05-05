@@ -77,6 +77,7 @@ let
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
+      metacoq = callPackage ../development/coq-modules/metacoq { };
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
@@ -91,10 +92,12 @@ let
       serapi = callPackage ../development/coq-modules/serapi {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
+      smtcoq = callPackage ../development/coq-modules/smtcoq { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
       topology = callPackage ../development/coq-modules/topology {};
+      trakt = callPackage ../development/coq-modules/trakt {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       VST = callPackage ../development/coq-modules/VST {};

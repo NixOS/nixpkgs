@@ -12,13 +12,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${optionalString interactive "-interactive"}";
-  version = "3.38.1";
+  version = "3.38.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "sha256-jjqM65eU2Wg5lZDS3fnVwESpfdg9OLlhM2SiReyKL8Q=";
+    sha256 = "sha256-55dKoUMLrWkKXp95pu5chJKtqCadxnWHWtD7dH18raQ=";
   };
 
   outputs = [ "bin" "dev" "out" ];

@@ -40,6 +40,10 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
+  patches = [
+    ./fix-configure-issue-cross.patch
+  ];
+
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;

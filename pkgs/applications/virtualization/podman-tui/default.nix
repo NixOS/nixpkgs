@@ -6,18 +6,18 @@
 , gpgme
 , libassuan
 , lvm2
-, testVersion
+, testers
 , podman-tui
 }:
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-1WbDmnKyFosp4Kz9QINr3lOR/wD0UW2QZf7nAAaoClM=";
+    sha256 = "sha256-Xc6F87evQiv4jRbxxRBzJBeI8653HvlQL+UwcVWY0wk=";
   };
 
   vendorSha256 = null;
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = podman-tui;
     command = "podman-tui version";
     version = "v${version}";

@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ toschmidt doronbehar ];
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
-    platforms = platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
   };
 }

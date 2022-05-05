@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
-  updateScript = writeShellScript "hubstaff-updater" ''
+  passthru.updateScript = writeShellScript "hubstaff-updater" ''
     set -eu -o pipefail
 
     installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)

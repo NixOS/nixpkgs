@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, nixosTests, which
 , pcre2
-, withPython2 ? false, python2
 , withPython3 ? true, python3, ncurses
 , withPHP74 ? false, php74
 , withPHP80 ? true, php80
@@ -42,7 +41,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
 
   buildInputs = [ pcre2.dev ]
-    ++ optional withPython2 python2
     ++ optionals withPython3 [ python3 ncurses ]
     ++ optional withPHP74 php74-unit
     ++ optional withPHP80 php80-unit
@@ -66,7 +64,6 @@ in stdenv.mkDerivation rec {
   usedPhp80 = optionals withPHP80 php80-unit;
 
   postConfigure = ''
-    ${optionalString withPython2    "./configure python --module=python2  --config=python2-config  --lib-path=${python2}/lib"}
     ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
     ${optionalString withPHP74      "./configure php    --module=php74    --config=${php74-unit.unwrapped.dev}/bin/php-config --lib-path=${php74-unit}/lib"}
     ${optionalString withPHP80      "./configure php    --module=php80    --config=${php80-unit.unwrapped.dev}/bin/php-config --lib-path=${php80-unit}/lib"}

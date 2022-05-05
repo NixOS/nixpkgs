@@ -4,8 +4,9 @@
 , buildPythonPackage
 , flake8-import-order
 , pyflakes
-, mock
+, tomli
 , setuptools
+, mock
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,10 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   propagatedBuildInputs = [
-    pyflakes
     flake8-import-order
+    pyflakes
     setuptools
+    tomli
   ];
 
   checkInputs = [

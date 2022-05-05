@@ -46,13 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "5";
+  minor = "6";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-TWCXLoS+ImKNd2zkxMks4FXsQMvGKgcW5/MW8S1Y1TY=";
+  sourceSha256 = "sha256-0JODgv9MNOkHDQYTVCZMzjr/G542+NvGP9wlH9iwLeg=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -133,6 +133,12 @@ let
         libsndfile
       ];
       cmakeEnableFlag = "GRC";
+    };
+    jsonyaml_blocks = {
+      pythonRuntime = [
+        python.pkgs.jsonschema
+      ];
+      cmakeEnableFlag = "JSONYAML_BLOCKS";
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";

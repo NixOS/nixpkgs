@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage {
   pname = "faircamp";
-  version = "unstable-2022-01-19";
+  version = "unstable-2022-03-20";
 
   # TODO when switching to a stable release, use fetchFromGitea and add a
   # version test. Meanwhile, fetchgit is used to make unstableGitUpdater work.
   src = fetchgit {
     url = "https://codeberg.org/simonrepp/faircamp.git";
-    rev = "f8ffc7a35a12251b83966b35c63f72b4912f75a9";
-    sha256 = "sha256-9t42+813IPLUChbLkcwzoCr7FXSL1g+ZG6I3d+7pmec=";
+    rev = "863cecb468a58a774bd2d1d93f99f3c8ecd8205c";
+    sha256 = "sha256-JodIo601BYesbiHarnBk4/GuFR/bpCswxQbaysRP+CI=";
   };
 
-  cargoHash = "sha256-24ALBede3W8rjlBRdtL0aazRyK1RmNLdHF/bt5i4S5Y=";
+  cargoHash = "sha256-XqsUUc+s01t4KHtktbNhm52r0NeLbcBg5DVw3Xn0oZk=";
 
   nativeBuildInputs = [
     makeWrapper

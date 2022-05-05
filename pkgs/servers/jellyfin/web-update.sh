@@ -22,7 +22,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 # TODO: use package-lock.json on the next major release
 # https://github.com/jellyfin/jellyfin-web/commit/6efef9680d55a93f4333ef8bfb65a8a650c99a49
 node2nix \
-  --nodejs-12 \
+  --nodejs-14 \
   --development \
   --node-env ../../development/node-packages/node-env.nix \
   --output ./node-deps.nix \

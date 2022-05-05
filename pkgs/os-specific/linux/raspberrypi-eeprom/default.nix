@@ -3,18 +3,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2021.12.02";
-  # From 3fdf703f3f7bbe57eacceada3b558031229a34b0 Mon Sep 17 00:00:00 2001
-  # From: Peter Harper <peter.harper@raspberrypi.com>
-  # Date: Mon, 13 Dec 2021 11:56:11 +0000
-  # Subject: [PATCH] 2021-12-02: Promote the 2021-12-02 beta release to LATEST/STABLE
-  commit = "3fdf703f3f7bbe57eacceada3b558031229a34b0";
+  version = "unstable-2022-03-10";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = commit;
-    sha256 = "sha256-JTL2ziOkT0tnOrOS08ttNtxj3qegsacP73xZBVur7xM=";
+    rev = "e8927007e3800db3a72100ee6cd38b0d9b687c16";
+    hash = "sha256-/hn6l5gheh6E3zoANwU1SXYgdry2IjOT9Muw2jkrtCU=";
   };
 
   buildInputs = [ python3 ];

@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "doit";
-  version = "0.34.2";
+  version = "0.35.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OIER+Kals7RGIM7rKH0FhZJ8hdDW0/h5DTT7tFwM9sM=";
+    sha256 = "sha256-cVoyLIdMTLhiOU46DWn/MlcrUln1cDb7/cEFPEwB00g=";
   };
 
   propagatedBuildInputs = [

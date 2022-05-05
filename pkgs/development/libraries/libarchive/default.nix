@@ -1,36 +1,76 @@
-{
-  fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, acl
+, attr
+, autoreconfHook
+, bzip2
+, e2fsprogs
+, lzo
+, openssl
+, pkg-config
+, sharutils
+, xz
+, zlib
+, zstd
+# Optional but increases closure only negligibly. Also, while libxml2 builds
+# fine on windows, libarchive has trouble linking windows things it depends on
+# for some reason.
+, xarSupport ? stdenv.hostPlatform.isUnix, libxml2
 
-  # Optional but increases closure only negligibly. Also, while libxml2
-  # builds fine on windows, but libarchive has trouble linking windows
-  # things it depends on for some reason.
-  xarSupport ? stdenv.hostPlatform.isUnix,
-
-  # for passthru.tests
-  cmake, nix, samba
+# for passthru.tests
+, cmake
+, nix
+, samba
 }:
 
 assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "sha256-u6Zeu9yTjhx5U7KZVUkuuUsQPjWN71mE5egG4T+FGfY=";
+    hash = "sha256-G4wL5DDbX0FqaA4cnOlVLZ25ObN8dNsRtxyas29tpDA=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
+
+    declare -a skip_tests=(
+      # test won't work in nix sandbox
+      'test_write_disk_perms'
+      # can't be sure builder will have sparse-capable fs
+      'test_sparse_basic'
+      # can't even be sure builder will have hardlink-capable fs
+      'test_write_disk_hardlink'
+    )
+
+    for test_name in "''${skip_tests[@]}" ; do
+      sed -i "/$test_name/d" Makefile.am
+      rm "libarchive/test/$test_name.c"
+    done
+  '';
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs =
-    lib.optional stdenv.hostPlatform.isUnix sharutils
-    ++ [ zlib bzip2 openssl xz lzo zstd ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs =  [
+    bzip2
+    lzo
+    openssl
+    xz
+    zlib
+    zstd
+  ] ++ lib.optional stdenv.hostPlatform.isUnix sharutils
+    ++ lib.optionals stdenv.isLinux [ acl attr e2fsprogs ]
     ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
@@ -38,11 +78,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  preBuild = if stdenv.isCygwin then ''
+  preBuild = lib.optionalString stdenv.isCygwin ''
     echo "#include <windows.h>" >> config.h
-  '' else null;
+  '';
 
-  doCheck = false; # fails
+  # https://github.com/libarchive/libarchive/issues/1475
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   preFixup = ''
     sed -i $lib/lib/libarchive.la \
@@ -52,21 +93,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit cmake nix samba;
-  };
-
-  meta = {
+  meta = with lib; {
+    homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
     longDescription = ''
-      This library has code for detecting and reading many archive formats and
-      compressions formats including (but not limited to) tar, shar, cpio, zip, and
-      compressed with gzip, bzip2, lzma, xz, ...
+      The libarchive project develops a portable, efficient C library that can
+      read and write streaming archives in a variety of formats. It also
+      includes implementations of the common tar, cpio, and zcat command-line
+      tools that use the libarchive library.
     '';
-    homepage = "http://libarchive.org";
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
-    platforms = with lib.platforms; all;
-    maintainers = with lib.maintainers; [ jcumming ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jcumming AndersonTorres ];
+    platforms = platforms.all;
+  };
+
+  passthru.tests = {
+    inherit cmake nix samba;
   };
 }

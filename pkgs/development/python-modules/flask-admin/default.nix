@@ -62,6 +62,11 @@ buildPythonPackage rec {
     wtf-peewee
   ];
 
+  disabledTests = [
+    # Incompatible with werkzeug 2.1
+    "test_mockview"
+  ];
+
   disabledTestPaths = [
     # Tests have additional requirements
     "flask_admin/tests/geoa/test_basic.py"

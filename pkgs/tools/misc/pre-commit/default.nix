@@ -6,6 +6,7 @@
 , dotnet-sdk
 , git
 , go
+, libiconv
 , nodejs
 }:
 
@@ -54,6 +55,11 @@ buildPythonPackage rec {
     re-assert
   ];
 
+  buildInputs = [
+    # Required for rust test on x86_64-darwin
+    libiconv
+  ];
+
   doCheck = true;
 
   postPatch = ''
@@ -68,7 +74,6 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
     "--forked"
   ];
 

@@ -30,7 +30,6 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
-    (mkOverride "voluptuous" "0.12.2" "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=")
 
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
@@ -47,8 +46,23 @@ let
       aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
+      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
+      });
+      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pynws = super.pynws.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pytomorrowio = super.pytomorrowio.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
       snitun = super.snitun.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
@@ -57,19 +71,6 @@ let
         doCheck = false; # requires aiohttp>=1.0.0
       });
     })
-
-    (self: super: {
-      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.3";
-        src = fetchFromGitHub {
-          owner = "Noltari";
-          repo = "aioairzone";
-          rev = version;
-          hash = "sha256-vy6NqtlWv2El259rC+Nm0gs/rsY+s8xe7Z+wXvT1Ing=";
-        };
-      });
-    })
-
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -120,7 +121,7 @@ let
         src = fetchFromGitHub {
           owner = "ManneW";
           repo = "vilfo-api-client-python";
-          rev = "v$version}";
+          rev = "v${version}";
           sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
         };
       });
@@ -178,7 +179,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.4.0";
+  hassVersion = "2022.5.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -196,7 +197,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-b/YwcbcQuRIue4fr4+yF2EEXLvmnI7e3xfyz52flwJw=";
+    hash = "sha256-xlotye/8oeCs/ntNV4osGjcl7fo05ke7nFLQeee/USY=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -293,8 +294,6 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    # parallelize test run
-    "--numprocesses $NIX_BUILD_CORES"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # retry racy tests that end in "RuntimeError: Event loop is closed"

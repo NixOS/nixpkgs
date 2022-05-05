@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/buildkite/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ groodt ];
+    mainProgram = "bk";
   };
 }

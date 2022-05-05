@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security
-, testVersion, mdbook-linkcheck }:
+, testers, mdbook-linkcheck }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-linkcheck";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # tries to access network to test broken web link functionality
 
-  passthru.tests.version = testVersion { package = mdbook-linkcheck; };
+  passthru.tests.version = testers.testVersion { package = mdbook-linkcheck; };
 
   meta = with lib; {
     description = "A backend for `mdbook` which will check your links for you.";

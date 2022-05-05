@@ -5,6 +5,7 @@
 , numpy
 , setuptools-scm
 , six
+, glibcLocales
 , pytestCheckHook
 }:
 
@@ -27,16 +28,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    glibcLocales
     nose
     numpy
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # PyPI releases don't ship all the needed files for the tests
-    "test_index_zero_length"
-    "test_fetch_zero_length"
-    "test_read_back_index"
+  disabledTestPaths = [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'data/genes.fasta.gz'
+    "tests/test_Fasta_bgzip.py"
   ];
 
   pythonImportsCheck = [

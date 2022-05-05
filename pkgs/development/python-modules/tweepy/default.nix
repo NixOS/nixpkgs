@@ -3,11 +3,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , oauthlib
-, requests
-, pythonOlder
-, vcrpy
 , pytestCheckHook
-, requests_oauthlib
+, pythonOlder
+, requests
+, requests-oauthlib
+, vcrpy
 }:
 
 buildPythonPackage rec {
@@ -20,15 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-RaM2JN2WOHyZY+AxzgQLvhXg6UnevDbSFSR4jFLsYrc=";
+    rev = "v${version}";
+    hash = "sha256-RaM2JN2WOHyZY+AxzgQLvhXg6UnevDbSFSR4jFLsYrc=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     oauthlib
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   checkInputs = [

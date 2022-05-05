@@ -3,7 +3,7 @@
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg
-, testVersion, dunst
+, testers, dunst
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  passthru.tests.version = testVersion { package = dunst; };
+  passthru.tests.version = testers.testVersion { package = dunst; };
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";

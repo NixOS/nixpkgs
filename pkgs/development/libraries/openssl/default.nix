@@ -69,6 +69,12 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         riscv64-linux = "./Configure linux64-riscv64";
+        mips64el-linux =
+          if stdenv.hostPlatform.isMips64n64
+          then "./Configure linux64-mips64"
+          else if stdenv.hostPlatform.isMips64n32
+          then "./Configure linux-mips64"
+          else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -187,8 +193,8 @@ in {
   };
 
   openssl_3_0 = common {
-    version = "3.0.2";
-    sha256 = "sha256-mOkczq1NR1auPJzeXgkZGo5YbZ9NUIOOfsCdZBHf22M=";
+    version = "3.0.3";
+    sha256 = "sha256-7gB4rc7x3l8APGLIDMllJ3IWCcbzu0K3eV3zH4tVjAs=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

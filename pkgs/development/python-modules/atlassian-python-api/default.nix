@@ -4,7 +4,7 @@
 , deprecated
 , oauthlib
 , requests
-, requests_oauthlib
+, requests-oauthlib
 , six
 , pytestCheckHook
 , pythonOlder
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     deprecated
     oauthlib
     requests
-    requests_oauthlib
+    requests-oauthlib
     six
   ];
 

@@ -69,6 +69,13 @@ stdenv.mkDerivation rec {
       sha256 = "0qjq41ridyamajz9v9nyplgq7f8nn3fxw375s9sa5a0igsrx9pm0";
       excludes = [ "ChangeLog" ];
     })
+    # Fix pending upstream inclusion for linux-headers-5.17 support:
+    #  https://github.com/linux-audit/audit-userspace/pull/253
+    (fetchpatch {
+      name = "ignore-flexible-array.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/beed138222421a2eb4212d83cb889404bd7efc49.patch";
+      sha256 = "1hf02zaxv6x0wmn4ca9fj48y2shks7vfna43i1zz58xw9jq7sza0";
+    })
   ];
 
   postPatch = ''

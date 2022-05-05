@@ -13,12 +13,15 @@
 
 # CUDA-only dependencies:
 , addOpenGLRunpath ? null
-, cudatoolkit ? null
+, cudaPackages ? {}
 
 # CUDA flags:
 , cudaSupport ? false
 }:
-buildPythonPackage rec {
+
+let
+  inherit (cudaPackages) cudatoolkit;
+in buildPythonPackage rec {
   version = "0.55.1";
   pname = "numba";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.10";

@@ -169,4 +169,10 @@ in rec {
       name = "wheel-unpack-hook.sh";
       deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
+
+  sphinxHook = callPackage ({ sphinx }:
+    makeSetupHook {
+      name = "python${python.pythonVersion}-sphinx-hook";
+      deps = [ sphinx ];
+    } ./sphinx-hook.sh) {};
 }

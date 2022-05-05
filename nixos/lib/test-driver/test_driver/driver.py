@@ -86,7 +86,7 @@ class Driver:
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
-        with rootlog.nested(name):
+        with rootlog.nested("subtest: " + name):
             try:
                 yield
                 return True

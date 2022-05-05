@@ -124,7 +124,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   smartmontools = all;
   sqlite = unix; # Cygwin builds fail
   squid = linux;
-  ssmtp = linux;
+  msmtp = linux;
   stdenv = all;
   strace = linux;
   su = linux;

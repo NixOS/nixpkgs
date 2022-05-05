@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "qwt";
   version = "6.2.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "mirror://sourceforge/qwt/qwt-${version}.tar.bz2";
     sha256 = "sha256-kZT2UTlV0P1zAPZxWBdQZEYBl6urGpL6EnpnpLC3FTA=";

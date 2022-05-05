@@ -204,7 +204,7 @@ let
         if [ -n "$subPackages" ]; then
           echo "$subPackages" | sed "s,\(^\| \),\1./,g"
         else
-          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique
+          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
         fi
       }
 
@@ -221,7 +221,6 @@ let
           export NIX_BUILD_CORES=1
       fi
       for pkg in $(getGoDirs ""); do
-        grep -q "$exclude" <<<$pkg && continue
         echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done

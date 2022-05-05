@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}/${pname}.jar" \
-      --run "cd $out/share/java/${pname}"
+      --chdir "$out/share/java/${pname}"
   '';
 
   meta = with lib; {

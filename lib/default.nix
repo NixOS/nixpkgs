@@ -11,6 +11,9 @@ let
     callLibs = file: import file { lib = self; };
   in {
 
+    # interacting with flakes
+    flakes = callLibs ./flakes.nix;
+
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
@@ -59,6 +62,7 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
+    inherit (self.flakes) callLocklessFlake;
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
@@ -94,7 +98,8 @@ let
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs escapeRegex escapeXML replaceChars lowerChars
+      escapeShellArg escapeShellArgs isValidPosixName toShellVar toShellVars
+      escapeRegex escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
@@ -108,7 +113,7 @@ let
       makeScope makeScopeWithSplicing;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId;
+      hiPrioSet getLicenseFromSpdxId getExe;
     inherit (self.sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext

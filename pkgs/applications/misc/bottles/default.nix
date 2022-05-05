@@ -20,21 +20,23 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.3.28-trento-1";
-  sha256 = "1mpvym7b88pb0xxij32arj31q5m6b3z47p8zv9njvkfs0151b2v4";
-  # Note: Update via pkgs/applications/misc/bottles/update.py
-  # mostly copypasted from pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
+  version = "2022.5.2-trento";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    inherit sha256;
+    sha256 = "sha256-9auQm8rmySjPQmhueGMRj4DsQiKhCGtE97byc/h+v84=";
   };
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/backend/wine/winecommand.py \
+      --replace \
+        'self.__get_runner()' \
+        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
   '';
 
   nativeBuildInputs = [
@@ -89,21 +91,9 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
   dontWrapGApps = true; # prevent double wrapping
 
-  preConfigure = ''
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace src/backend/wine/winecommand.py \
-      --replace \
-        'self.__get_runner()' \
-        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
-  '';
-
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = ./update.py;
-  };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";

@@ -2,25 +2,22 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "9.5.2";
+  version = "9.5.5";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ha84frbyRDxCRIDezlKeA+Fv9+rmpCoU+EAgMBkf3fo=";
+    sha256 = "sha256-YBg7mY8po7yVrSX1GaoI9/E3zFbdWWQEVCuR0H0DgJ4=";
   };
 
-  vendorSha256 = "sha256-uaSDder/uzy708YE1xqpL9Te4629JD2IiVSCYhYzPwg=";
-
-  doCheck = false;
+  vendorSha256 = "sha256-kaqTJMRbLSF1zy6qXqdOSzmbcV35rzrou4X0WzoQoGc=";
 
   subPackages = [ "." ];
 
   passthru = {
     tests = {
-      # test fails
-      #local-relay = callPackage ./test-local-relay.nix { };
+      local-relay = callPackage ./test-local-relay.nix { };
     };
   };
   meta = with lib; {

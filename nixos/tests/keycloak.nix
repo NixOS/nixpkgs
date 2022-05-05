@@ -4,7 +4,7 @@
 
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
-  frontendUrl = "https://${certs.domain}/auth";
+  frontendUrl = "https://${certs.domain}";
   initialAdminPassword = "h4IhoJFnt2iQIR9";
 
   keycloakTest = import ./make-test-python.nix (
@@ -27,20 +27,23 @@ let
 
           services.keycloak = {
             enable = true;
-            inherit frontendUrl initialAdminPassword;
-            sslCertificate = certs.${certs.domain}.cert;
-            sslCertificateKey = certs.${certs.domain}.key;
+            settings = {
+              hostname = certs.domain;
+            };
+            inherit initialAdminPassword;
+            sslCertificate = "${certs.${certs.domain}.cert}";
+            sslCertificateKey = "${certs.${certs.domain}.key}";
             database = {
               type = databaseType;
               username = "bogus";
-              passwordFile = pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH";
+              name = "also bogus";
+              passwordFile = "${pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH"}";
             };
             plugins = with config.services.keycloak.package.plugins; [
               keycloak-discord
               keycloak-metrics-spi
             ];
           };
-
           environment.systemPackages = with pkgs; [
             xmlstarlet
             html-tidy
@@ -99,8 +102,8 @@ let
         in ''
           keycloak.start()
           keycloak.wait_for_unit("keycloak.service")
+          keycloak.wait_for_open_port(443)
           keycloak.wait_until_succeeds("curl -sSf ${frontendUrl}")
-
 
           ### Realm Setup ###
 
@@ -117,8 +120,8 @@ let
           # Register the metrics SPI
           keycloak.succeed(
               "${pkgs.jre}/bin/keytool -import -alias snakeoil -file ${certs.ca.cert} -storepass aaaaaa -keystore cacert.jks -noprompt",
-              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' ${pkgs.keycloak}/bin/kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password '${initialAdminPassword}'",
-              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' ${pkgs.keycloak}/bin/kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'",
+              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password '${initialAdminPassword}'",
+              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'",
               "curl -sSf '${frontendUrl}/realms/master/metrics' | grep '^keycloak_admin_event_UPDATE'"
           )
 
@@ -172,5 +175,6 @@ let
 in
 {
   postgres = keycloakTest { databaseType = "postgresql"; };
+  mariadb = keycloakTest { databaseType = "mariadb"; };
   mysql = keycloakTest { databaseType = "mysql"; };
 }

@@ -66,6 +66,12 @@ in
         default = true;
         description = "Enable the XFWM (default) window manager.";
       };
+
+      enableScreensaver = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable the XFCE screensaver.";
+      };
     };
   };
 
@@ -99,7 +105,6 @@ in
       ristretto
       xfce4-appfinder
       xfce4-notifyd
-      xfce4-screensaver
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
@@ -123,7 +128,7 @@ in
       ] ++ optionals (!cfg.noDesktop) [
         xfce4-panel
         xfdesktop
-      ];
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -169,6 +174,6 @@ in
       xfce4-notifyd
     ];
 
-    security.pam.services.xfce4-screensaver.unixAuth = true;
+    security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
   };
 }

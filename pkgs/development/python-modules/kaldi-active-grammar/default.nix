@@ -5,12 +5,18 @@
 , cmake
 , ush
 , requests
+, six
 , numpy
 , cffi
 , openfst
 , substituteAll
 , callPackage
 }:
+
+#
+# Maintainer note: only in-tree dependant is `dragonfly`, try to
+# update the two alongside eachother.
+#
 
 let
   kaldi = callPackage ./fork.nix { };
@@ -48,7 +54,7 @@ buildPythonPackage rec {
 
   buildInputs = [ openfst kaldi ];
   nativeBuildInputs = [ scikit-build cmake ];
-  propagatedBuildInputs = [ ush requests numpy cffi ];
+  propagatedBuildInputs = [ ush requests numpy cffi six ];
 
   doCheck = false;  # no tests exist
 

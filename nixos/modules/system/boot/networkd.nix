@@ -10,6 +10,36 @@ let
 
   check = {
 
+    global = {
+      sectionNetwork = checkUnitConfig "Network" [
+        (assertOnlyFields [
+          "SpeedMeter"
+          "SpeedMeterIntervalSec"
+          "ManageForeignRoutingPolicyRules"
+          "ManageForeignRoutes"
+          "RouteTable"
+        ])
+        (assertValueOneOf "SpeedMeter" boolValues)
+        (assertInt "SpeedMeterIntervalSec")
+        (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
+        (assertValueOneOf "ManageForeignRoutes" boolValues)
+      ];
+
+      sectionDHCPv4 = checkUnitConfig "DHCPv4" [
+        (assertOnlyFields [
+          "DUIDType"
+          "DUIDRawData"
+        ])
+      ];
+
+      sectionDHCPv6 = checkUnitConfig "DHCPv6" [
+        (assertOnlyFields [
+          "DUIDType"
+          "DUIDRawData"
+        ])
+      ];
+    };
+
     link = {
 
       sectionLink = checkUnitConfig "Link" [
@@ -871,6 +901,44 @@ let
     };
   };
 
+  networkdOptions = {
+    networkConfig = mkOption {
+      default = {};
+      example = { SpeedMeter = true; ManageForeignRoutingPolicyRules = false; };
+      type = types.addCheck (types.attrsOf unitOption) check.global.sectionNetwork;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Network]</literal> section of the networkd config.
+        See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpV4Config = mkOption {
+      default = {};
+      example = { DUIDType = "vendor"; };
+      type = types.addCheck (types.attrsOf unitOption) check.global.sectionDHCPv4;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv4]</literal> section of the networkd config.
+        See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpV6Config = mkOption {
+      default = {};
+      example = { DUIDType = "vendor"; };
+      type = types.addCheck (types.attrsOf unitOption) check.global.sectionDHCPv6;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6]</literal> section of the networkd config.
+        See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+  };
+
   linkOptions = commonNetworkOptions // {
     # overwrite enable option from above
     enable = mkOption {
@@ -1519,6 +1587,39 @@ let
     };
   };
 
+  networkdConfig = { config, ... }: {
+    options = {
+      routeTables = mkOption {
+        default = {};
+        example = { foo = 27; };
+        type = with types; attrsOf int;
+        description = ''
+          Defines route table names as an attrset of name to number.
+          See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+
+      addRouteTablesToIPRoute2 = mkOption {
+        default = true;
+        example = false;
+        type = types.bool;
+        description = ''
+          If true and routeTables are set, then the specified route tables
+          will also be installed into /etc/iproute2/rt_tables.
+        '';
+      };
+    };
+
+    config = {
+      networkConfig = optionalAttrs (config.routeTables != { }) {
+        RouteTable = mapAttrsToList
+          (name: number: "${name}:${toString number}")
+          config.routeTables;
+      };
+    };
+  };
+
   commonMatchText = def: optionalString (def.matchConfig != { }) ''
     [Match]
     ${attrsToSection def.matchConfig}
@@ -1599,6 +1700,20 @@ let
         ''
         + def.extraConfig;
     };
+
+  renderConfig = def:
+    { text = ''
+        [Network]
+        ${attrsToSection def.networkConfig}
+      ''
+      + optionalString (def.dhcpV4Config != { }) ''
+        [DHCPv4]
+        ${attrsToSection def.dhcpV4Config}
+      ''
+      + optionalString (def.dhcpV6Config != { }) ''
+        [DHCPv6]
+        ${attrsToSection def.dhcpV6Config}
+      ''; };
 
   networkToUnit = name: def:
     { inherit (def) enable;
@@ -1732,6 +1847,12 @@ in
       description = "Definition of systemd networks.";
     };
 
+    systemd.network.config = mkOption {
+      default = {};
+      type = with types; submodule [ { options = networkdOptions; } networkdConfig ];
+      description = "Definition of global systemd network config.";
+    };
+
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
@@ -1823,7 +1944,9 @@ in
       systemd.services.systemd-networkd = {
         wantedBy = [ "multi-user.target" ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles);
+        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+          config.environment.etc."systemd/networkd.conf".source
+        ];
       };
 
       systemd.services.systemd-networkd-wait-online = {
@@ -1844,6 +1967,17 @@ in
           RemainAfterExit = true;
           ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
         };
+      };
+
+      environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
+
+      networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
+        enable = mkDefault true;
+        rttablesExtraConfig = ''
+
+          # Extra tables defined in NixOS systemd.networkd.config.routeTables.
+          ${concatStringsSep "\n" (mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables)}
+        '';
       };
 
       services.resolved.enable = mkDefault true;

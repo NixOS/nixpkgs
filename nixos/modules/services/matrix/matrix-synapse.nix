@@ -81,7 +81,7 @@ in {
     (mkRemovedOptionModule [ "services" "matrix-synapse" "verbose" ] "Use a log config instead." )
 
     # options that were moved into rfc42 style settigns
-    (mkRemovedOptionModule [ "services" "matrix-synapse" "app_service_config_files" ] "Use settings.app_service_config_Files instead" )
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "app_service_config_files" ] "Use settings.app_service_config_files instead" )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "database_args" ] "Use settings.database.args instead" )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "database_name" ] "Use settings.database.args.database instead" )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "database_type" ] "Use settings.database.name instead" )

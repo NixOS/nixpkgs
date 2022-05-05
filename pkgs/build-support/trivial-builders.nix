@@ -515,15 +515,19 @@ rec {
    * # setup hook that depends on the hello package and runs ./myscript.sh
    * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
    *
-   * # wrotes a setup hook where @bash@ myscript.sh is substituted for the
+   * # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
    * # bash interpreter.
    * myhellohookSub = makeSetupHook {
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *                 meta.platforms = lib.platforms.linux;
    *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {} }: script:
-    runCommand name substitutions
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {} }: script:
+    runCommand name
+      (substitutions // {
+        inherit meta;
+      })
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
@@ -780,37 +784,4 @@ rec {
     outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
     preferLocalBuild = true;
   } "mkdir $out";
-
-  /* Checks the command output contains the specified version
-   *
-   * Although simplistic, this test assures that the main program
-   * can run. While there's no substitute for a real test case,
-   * it does catch dynamic linking errors and such. It also provides
-   * some protection against accidentally building the wrong version,
-   * for example when using an 'old' hash in a fixed-output derivation.
-   *
-   * Examples:
-   *
-   * passthru.tests.version = testVersion { package = hello; };
-   *
-   * passthru.tests.version = testVersion {
-   *   package = seaweedfs;
-   *   command = "weed version";
-   * };
-   *
-   * passthru.tests.version = testVersion {
-   *   package = key;
-   *   command = "KeY --help";
-   *   # Wrong '2.5' version in the code. Drop on next version.
-   *   version = "2.5";
-   * };
-   */
-  testVersion =
-    { package,
-      command ? "${package.meta.mainProgram or package.pname or package.name} --version",
-      version ? package.version,
-    }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      ${command} |& grep -Fw ${version}
-      touch $out
-    '';
 }

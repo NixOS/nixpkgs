@@ -8,24 +8,20 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.4";
+        version = "0.13.5";
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256:1cmfkcv2zzirxsb989vx1hvna9nv24pghcvypl0zaxsjphv97mka";
+          sha256 = "sha256-dUNljMKsbl6eByhEYivWgRJczTBw3N1RVl8r3e898mg=";
         };
       });
-
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        # Releases: https://github.com/boto/botocore/commits/v2
-        version = "2.0.0dev155";
-        src = fetchFromGitHub {
-          owner = "boto";
-          repo = "botocore";
-          rev = "7083e5c204e139dc41f646e0ad85286b5e7c0c23";
-          sha256 = "sha256-aiCc/CXoTem0a9wI/AMBRK3g2BXJi7LpnUY/BxBEKVM=";
+      jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.0";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-uF0FZ7hmYUmpMXJxLmiSBzQzPAzn6Jt4s+mH9x5e1Pk=";
         };
-        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [ py.pkgs.awscrt ];
       });
     };
   };
@@ -33,19 +29,18 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.4.23"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.5.6"; # N.B: if you change this, check if overrides are still up-to-date
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-zpkphlIfmexqZm0lZgDP3RoQJqTpFdT+5dGtaLiRr/U=";
+    sha256 = "sha256-NANdm2RK4U5sXPuGbC8KUGXsbYl/WwAoUep4JxJA5lI=";
   };
 
   propagatedBuildInputs = [
     awscrt
     bcdoc
-    botocore
     colorama
     cryptography
     distro
@@ -57,6 +52,9 @@ with py.pkgs; buildPythonApplication rec {
     rsa
     ruamel-yaml
     wcwidth
+    python-dateutil
+    jmespath
+    urllib3
   ];
 
   checkInputs = [

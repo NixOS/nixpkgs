@@ -51,9 +51,10 @@ in
       (isYes "KALLSYMS_ALL")
     ];
 
-    boot.initrd.extraUdevRulesCommands = ''
+    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       cp -v ${package}/etc/udev/rules.d/*.rules $out/
     '';
+    boot.initrd.services.udev.packages = [ package ];
 
     environment.systemPackages =
       [ package.vulkan ] ++

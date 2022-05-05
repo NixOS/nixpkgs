@@ -23,20 +23,19 @@
 , Foundation
 , libiconv
 , nixosTests
+, runCommand
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220319-142410-0fcdea07";
-
-  outputs = [ "out" "terminfo" ];
+  version = "20220408-101518-b908e2dd";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-KmIlfzSbVY003WesodN5srJ7qEQaU93izmrZW1MobCo=";
+    sha256 = "sha256-kuuoD+hqgj7QXFRIxa112oc4idtcK0ptFACDpI0bzGY=";
   };
 
   postPatch = ''
@@ -46,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-+Iu6/pd14O1QIsLkHe7fTP30XyI+8J0GiRY8cnRPS5I=";
+  cargoSha256 = "sha256-iIb2zLUZpn23ooEiOP+yQMYUUmvef/KqvjzgLOFmjs0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -75,10 +74,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    # terminfo
-    mkdir -p $terminfo/share/terminfo/w $out/nix-support
-    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    mkdir -p $out/nix-support
+    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
     # desktop icon
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
@@ -100,7 +97,21 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
 
-  passthru.tests.test = nixosTests.terminal-emulators.wezterm;
+  passthru = {
+    tests = {
+      all-terminfo = nixosTests.allTerminfo;
+      terminal-emulators = nixosTests.terminal-emulators.wezterm;
+    };
+    terminfo = runCommand "wezterm-terminfo"
+      {
+        nativeBuildInputs = [
+          ncurses
+        ];
+      } ''
+      mkdir -p $out/share/terminfo $out/nix-support
+      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+    '';
+  };
 
   meta = with lib; {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";

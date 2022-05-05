@@ -32,6 +32,7 @@ let
         CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
         src = fetchFromGitHub {
+          name = "source-${rev}";
           inherit owner repo rev sha256;
         };
 
@@ -104,5 +105,8 @@ let
       ultradns = archived "2022/01";
       vthunder = throw "provider was renamed to thunder on 2022/01";
     };
+
+  # excluding aliases, used by terraform-full
+  actualProviders = automated-providers // special-providers;
 in
-automated-providers // special-providers // removed-providers // { inherit mkProvider; }
+actualProviders // removed-providers // { inherit actualProviders mkProvider; }

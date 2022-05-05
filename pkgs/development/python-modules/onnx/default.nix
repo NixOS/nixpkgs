@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, bash
 , cmake
 , fetchPypi
 , isPy27
@@ -43,8 +44,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     chmod +x tools/protoc-gen-mypy.sh.in
-    patchShebangs tools/protoc-gen-mypy.sh.in tools/protoc-gen-mypy.py
-
+    patchShebangs tools/protoc-gen-mypy.py
+    substituteInPlace tools/protoc-gen-mypy.sh.in \
+      --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace setup.py \
       --replace "setup_requires.append('pytest-runner')" ""
   '';
@@ -52,6 +54,11 @@ buildPythonPackage rec {
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
+
+  disabledTestPaths = [
+    # Unexpected output fields from running code: {'stderr'}
+    "onnx/examples/np_array_tensorproto.ipynb"
+  ];
 
   # The executables are just utility scripts that aren't too important
   postInstall = ''

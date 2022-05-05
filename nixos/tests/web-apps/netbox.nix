@@ -5,7 +5,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
     maintainers = [ n0emis ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.netbox = {
       enable = true;
       secretKeyFile = pkgs.writeText "secret" ''

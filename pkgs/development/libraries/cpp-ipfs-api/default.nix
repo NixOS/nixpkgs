@@ -15,6 +15,10 @@ stdenv.mkDerivation {
   buildInputs = [ curl ];
   propagatedBuildInputs = [ nlohmann_json ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=range-loop-construct"
+  ];
+
   meta = with lib; {
     description = "IPFS C++ API client library";
     homepage = "https://github.com/vasild/cpp-ipfs-api";

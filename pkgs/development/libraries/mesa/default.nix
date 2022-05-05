@@ -6,11 +6,10 @@
 , libelf, libvdpau
 , libglvnd, libunwind
 , galliumDrivers ? ["auto"]
-, driDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , OpenGL, Xplugin
-, withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
@@ -34,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.3.8";
+  version = "22.0.2";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -48,7 +47,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "19wx5plk6z0hhi0zdzxjx8ynl3lhlc5mbd8vhwqyk92kvhxjf3g7";
+    sha256 = "11b8mcplvis7nadcwi1jf3529i2za2q1bkb7609q0rnfvihaakyz";
   };
 
   # TODO:
@@ -114,7 +113,6 @@ self = stdenv.mkDerivation {
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
     "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Ddri-drivers=${concatStringsSep "," driDrivers}"
     "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
     "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
 
@@ -154,6 +152,7 @@ self = stdenv.mkDerivation {
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
+    jdupes
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];
@@ -230,7 +229,7 @@ self = stdenv.mkDerivation {
     done
 
     # NAR doesn't support hard links, so convert them to symlinks to save space.
-    ${jdupes}/bin/jdupes --hard-links --link-soft --recurse "$drivers"
+    jdupes --hard-links --link-soft --recurse "$drivers"
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
     # moved here to avoid problems with stripping patchelfed files

@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "sqlitedict";
-  version = "1.7.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "sqlitedict";
-    rev = version;
-    sha256 = "08fr81rz1fz35d35kravg7vl234aqagr9wqb09x6wi9lx9zkkh28";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-8dmGn5h3NigCdDtnDYjpjntRpyjk7ivRp1B8x8nUgpE=";
   };
 
   preCheck = ''

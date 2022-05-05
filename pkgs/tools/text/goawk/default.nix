@@ -1,4 +1,5 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, stdenv }:
+
 buildGoModule rec {
   pname = "goawk";
   version = "1.16.0";
@@ -12,8 +13,18 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
-  # checks do not pass at the moment
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace goawk_test.go \
+      --replace "TestCommandLine" "SkipCommandLine" \
+      --replace "TestDevStdout" "SkipDevStdout" \
+      --replace "TestFILENAME" "SkipFILENAME" \
+      --replace "TestWildcards" "SkipWildcards"
+
+    substituteInPlace interp/interp_test.go \
+      --replace "TestShellCommand" "SkipShellCommand"
+  '';
+
+  doCheck = (stdenv.system != "aarch64-darwin");
 
   meta = with lib; {
     description = "A POSIX-compliant AWK interpreter written in Go";

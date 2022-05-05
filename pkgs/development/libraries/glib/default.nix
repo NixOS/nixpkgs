@@ -45,29 +45,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.72.0";
+  version = "2.72.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "177w1MTnpi4I77jl8lKgE1cAe5WIqH/ytGOjhXAR950=";
+    sha256 = "wH5XFHslTO+SzoCgN43AwCpDWOfeRwLp9AMGl4EJX+I=";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-
-    # Fix Inkscape compilation with clang++
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/2625
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/97d39b745ff1f621424f68a41ce0a7c5bb554c87.patch";
-      sha256 = "wftuyf3ExFfrISngCQpEUpIGfHCCLXeYv/PEb/TE6a8=";
-      revert = true;
-    })
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
+
+    # Add support for the GNOME’s default terminal emulator.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
+    ./gnome-console-support.patch
+    # Do the same for Pantheon’s terminal emulator.
+    ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:

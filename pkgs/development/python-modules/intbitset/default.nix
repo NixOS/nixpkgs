@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "intbitset";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tDG3CAlTZvz9Pi2pLq0TEPhl3DyYuWQS1N6VNNNokEE=";
+    sha256 = "sha256-8ebQPGcpkioiPFGEnfZbnpFuYlrvuRF4Tn+azUwgfVM=";
   };
 
   checkInputs = [

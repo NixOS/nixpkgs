@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     # launcher with `cd` is required b/c otherwise the model library isn't usable
     makeWrapper "${jre}/bin/java" "$out/bin/netlogo" \
-      --run "cd $out/share/netlogo/app" \
+      --chdir "$out/share/netlogo/app" \
       --add-flags "-jar netlogo-${version}.jar"
 
     cp $src1 $out/share/icons/hicolor/256x256/apps/netlogo.png

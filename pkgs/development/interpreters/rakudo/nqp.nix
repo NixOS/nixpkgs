@@ -2,16 +2,26 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2022.02";
+  version = "2022.03";
 
   src = fetchurl {
     url = "https://github.com/raku/nqp/releases/download/${version}/nqp-${version}.tar.gz";
-    sha256 = "sha256-JdPJl0XNhPQEmpvZzya7XcgXklq6r+ccm9tohBzbGLE=";
+    sha256 = "sha256-qV53iXDE0JwJHSqimcBQNiCM5LSw06evNzGYwSJYswY=";
   };
 
   buildInputs = [ perl ];
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
+
+  # Fix for issue where nqp expects to find files from moarvm in the same output:
+  # https://github.com/Raku/nqp/commit/e6e069507de135cc71f77524455fc6b03b765b2f
+  #
+  preBuild = ''
+    share_dir="share/nqp/lib/MAST"
+    mkdir -p $out/$share_dir
+    ln -fs ${moarvm}/$share_dir/{Nodes,Ops}.nqp $out/$share_dir
+  '';
+
   configureFlags = [
     "--backends=moar"
     "--with-moar=${moarvm}/bin/moar"

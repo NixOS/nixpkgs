@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , installShellFiles
+, ansible
 , cryptography
 , jinja2
 , junit-xml
@@ -21,19 +22,13 @@
 , xmltodict
 }:
 
-let
-  ansible-collections = callPackage ./collections.nix {
-    version = "5.5.0";
-    sha256 = "sha256-uKdtc3iJyb/Q5rDyJ23PjYNtpmcGejVXdvNQTXpm1Rg=";
-  };
-in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.12.3";
+  version = "2.12.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ihNan3TJfKtndZKTdErTQ1D3GVI+i9m7kAjfTPlTryA=";
+    sha256 = "sha256-HMyZRPEBMxra0e1A1axmqBSRMwUq402wJnp0qnO+67M=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -49,8 +44,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # depend on ansible-collections instead of the other way around
-    ansible-collections
+    # depend on ansible instead of the other way around
+    ansible
     # from requirements.txt
     cryptography
     jinja2
@@ -76,10 +71,6 @@ buildPythonPackage rec {
 
   # internal import errors, missing dependencies
   doCheck = false;
-
-  passthru = {
-    collections = ansible-collections;
-  };
 
   meta = with lib; {
     description = "Radically simple IT automation";

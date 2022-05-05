@@ -26,6 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-PjOMNUnrz0kDfYEXv5Ni/9RIHn4Yylle6NJOK1Rb3SY=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" "" \
+      --replace "MarkupSafe==2.0.1" "MarkupSafe"
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -43,11 +49,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   disabledTests = [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1741668

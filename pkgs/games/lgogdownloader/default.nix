@@ -11,7 +11,7 @@
 , rhash
 , tinyxml-2
 , help2man
-, testVersion
+, testers
 , lgogdownloader
 }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    version = testVersion { package = lgogdownloader; };
+    version = testers.testVersion { package = lgogdownloader; };
   };
 
   meta = with lib; {

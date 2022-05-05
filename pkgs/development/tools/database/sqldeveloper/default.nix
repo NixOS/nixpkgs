@@ -62,7 +62,7 @@ in
 
     makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
       --set JAVA_HOME ${jdk.home} \
-      --run "cd $out/libexec/sqldeveloper/bin"
+      --chdir "$out/libexec/sqldeveloper/bin"
   '';
 
   meta = with lib; {

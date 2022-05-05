@@ -12,8 +12,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-xGCK8biTYcrmKbsl6ZyCjpRrVP9x5xGrC3VcMsR7ETo=";
 
-  doCheck = false;
-
   meta = with lib; {
     description = "A pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";

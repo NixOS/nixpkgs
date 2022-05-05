@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2022.02";
+  version = "2022.03";
 
   src = fetchurl {
     url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "sha256-T5PNzmuKVloyKCuzjMlxzv63H10CLIUMM47oFFV07pY=";
+    sha256 = "sha256-+3HNE5EkZEgrmbM/DAbp/XxRoVHG5jKpIgz5PFhV/a8=";
   };
 
   postPatch = ''

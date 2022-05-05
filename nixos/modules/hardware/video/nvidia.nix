@@ -24,6 +24,7 @@ let
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
   nvidiaSettings = cfg.nvidiaSettings;
+  busIDType = types.strMatching "([[:print:]]+\:[0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
 in
 
 {
@@ -68,7 +69,7 @@ in
     };
 
     hardware.nvidia.prime.nvidiaBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:1:0:0";
       description = ''
@@ -78,7 +79,7 @@ in
     };
 
     hardware.nvidia.prime.intelBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:0:2:0";
       description = ''
@@ -88,7 +89,7 @@ in
     };
 
     hardware.nvidia.prime.amdgpuBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:4:0:0";
       description = ''
@@ -360,11 +361,12 @@ in
     services.udev.extraRules =
       ''
         # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
-        KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 255'"
-        KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 254'"
-        KERNEL=="card*", SUBSYSTEM=="drm", DRIVERS=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%n c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) %n'"
+        KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
+        KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c 195 254'"
+        KERNEL=="card*", SUBSYSTEM=="drm", DRIVERS=="nvidia", PROGRAM="${pkgs.gnugrep}/bin/grep 'Device Minor:' /proc/driver/nvidia/gpus/%b/information", \
+          RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%c{3} c 195 %c{3}"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
-        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
       '' + optionalString cfg.powerManagement.finegrained ''
         # Remove NVIDIA USB xHCI Host Controller devices, if present
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{remove}="1"

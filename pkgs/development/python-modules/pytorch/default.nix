@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
+  cudaSupport ? false, cudaPackages, magma,
   mklDnnSupport ? true, useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
   cudaArchList ? null,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
 
   # Build inputs
   numactl,
@@ -28,6 +28,10 @@
   pillow, six, future, tensorboard, protobuf,
 
   isPy3k, pythonOlder }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
+in
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
@@ -216,6 +220,7 @@ in buildPythonPackage rec {
     which
     ninja
     pybind11
+    removeReferencesTo
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]
@@ -255,6 +260,8 @@ in buildPythonPackage rec {
     ])
   ];
   postInstall = ''
+    find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
@@ -269,7 +276,8 @@ in buildPythonPackage rec {
       --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
     mkdir $lib
-    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
+    mv $out/${python.sitePackages}/torch/lib     $lib/lib
+    ln -s $lib/lib $out/${python.sitePackages}/torch/lib
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
@@ -300,7 +308,7 @@ in buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit cudaSupport;
+    inherit cudaSupport cudaPackages;
     cudaArchList = final_cudaArchList;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;

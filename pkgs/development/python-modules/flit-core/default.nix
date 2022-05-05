@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "flit-core";
-  version = "3.6.0";
+  inherit (flit) version;
   format = "pyproject";
 
   outputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distribution-building parts of Flit. See flit package for more information";
-    homepage = "https://github.com/takluyver/flit";
+    homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh SuperSandro2000 ];
   };

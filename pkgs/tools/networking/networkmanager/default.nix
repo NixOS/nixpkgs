@@ -12,7 +12,7 @@
 , polkit
 , gnutls
 , ppp
-, dhcp
+, dhcpcd
 , iptables
 , nftables
 , python3
@@ -96,9 +96,9 @@ stdenv.mkDerivation rec {
     "-Dresolvconf=${openresolv}/bin/resolvconf"
 
     # DHCP clients
-    "-Ddhclient=${dhcp}/bin/dhclient"
-    # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    "-Ddhcpcd=no"
+    # ISC DHCP client has reached it's end of life, so stop using it
+    "-Ddhclient=no"
+    "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
     "-Ddhcpcanon=no"
 
     # Miscellaneous

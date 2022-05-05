@@ -209,6 +209,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
     });
 
+    openswoole = callPackage ../development/php-packages/openswoole { };
+
     pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };
@@ -461,7 +463,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             '')
           ];
           zendExtension = true;
-          doCheck = !(lib.versionOlder php.version "7.4");
+          doCheck = lib.versionAtLeast php.version "7.4";
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }
@@ -525,7 +527,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
-        { name = "session"; doCheck = !(lib.versionAtLeast php.version "8.0"); }
+        { name = "session"; doCheck = lib.versionOlder php.version "8.0"; }
         { name = "shmop"; }
         {
           name = "simplexml";

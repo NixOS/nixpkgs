@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
-  version = "0.8.10";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
     rev = "v${version}";
-    sha256 = "0dma4cjgbrpy16x63zvfr0xss4lryl0zw7nvixvhq2f6z8day1ds";
+    sha256 = "sha256-S8eIkmfjwpcILZc+by0Mk4VPRUlbJT0GBe8NlJ1F9EI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

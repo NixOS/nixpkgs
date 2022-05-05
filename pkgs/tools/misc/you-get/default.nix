@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "you-get";
-  version = "0.4.1555";
+  version = "0.4.1602";
 
   # Tests aren't packaged, but they all hit the real network so
   # probably aren't suitable for a build environment anyway.
@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "99282aca720c7ee1d9ef4b63bbbd226e906ea170b789a459fafd5b0627b0b15f";
+    sha256 = "sha256-RwbAbMS5CA6pO08TuaTb67YM/hLRkceOF7D6iV0XcI8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

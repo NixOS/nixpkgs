@@ -124,19 +124,19 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "11";
+        patch = "12";
         suffix = "";
       };
-      sha256 = "sha256-ZnZ6NTCdck83DfnlA8FytO5ET0nWK5i8TspyUSPibEk=";
+      sha256 = "sha256-LNlLIGcOQVnG2atX+R2/JVuX2MGhRR0cNfTsGWit+XE=";
     };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "3";
+        patch = "4";
         suffix = "";
       };
-      sha256 = "sha256-WWxy3pmNw5IFvE9w7w2/ft7HQKMG0JtJqb0Kd4BnMNw=";
+      sha256 = "sha256-gL+SX1cdpDazUhCIbPefbrX6XWxXExa3NWg0NFH3ehk=";
     };
   };
 
@@ -199,9 +199,9 @@ in {
       major = "3";
       minor = "11";
       patch = "0";
-      suffix = "a6";
+      suffix = "a7";
     };
-    sha256 = "sha256-HFOi/3WHljPjDKwp0qpregEONVuV8L+axpG+zPX50So=";
+    sha256 = "sha256-t8Vt10wvRy1Ja1qNNWvWrZ75sD8mKIwyN9P/aYqwPXQ=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -297,11 +297,6 @@ in {
     };
     sha256 = "sha256-Xe43x8PLixYAKPveOlkBxoBD36VFoWeUUCuJfUvEDX4="; # linux64
     pythonVersion = "3.8";
-    inherit passthruFun;
-  };
-
-  graalpython37 = callPackage ./graalpython/default.nix {
-    self = pythonInterpreters.graalpython37;
     inherit passthruFun;
   };
 

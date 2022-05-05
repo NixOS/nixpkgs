@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       ${fixBin "${placeholder "out"}/Bridge/RoonBridgeHelper"}
 
       mkdir -p $out/bin
-      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --run "cd $out"
+      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --chdir "$out"
 
       runHook postInstall
     '';

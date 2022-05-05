@@ -14,10 +14,6 @@ gappsWrapperArgsHook() {
         gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
     fi
 
-    if [ -n "$XDG_ICON_DIRS" ]; then
-        gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS")
-    fi
-
     if [ -n "$GSETTINGS_SCHEMAS_PATH" ]; then
         gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH")
     fi

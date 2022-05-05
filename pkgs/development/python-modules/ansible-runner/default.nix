@@ -1,10 +1,11 @@
 { lib
 , stdenv
-, ansible
+, ansible-core
 , buildPythonPackage
 , fetchPypi
 , mock
 , openssh
+, pbr
 , pexpect
 , psutil
 , pytest-mock
@@ -26,8 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-2m5dD+gGDL5LnY7QbDYiGdu4GYu0C49WU29GZY2bnBo=";
   };
 
+  nativeBuildInputs = [
+    pbr
+  ];
+
   propagatedBuildInputs = [
-    ansible
+    ansible-core
     psutil
     pexpect
     python-daemon
@@ -36,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    ansible # required to place ansible CLI onto the PATH in tests
+    ansible-core # required to place ansible CLI onto the PATH in tests
     pytestCheckHook
     pytest-mock
     pytest-timeout

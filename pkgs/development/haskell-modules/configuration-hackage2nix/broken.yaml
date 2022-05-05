@@ -433,7 +433,6 @@ broken-packages:
   - blockfrost-api
   - blockhash
   - Blogdown
-  - bloodhound
   - bloomfilter-redis
   - blubber-server
   - bludigon
@@ -453,6 +452,7 @@ broken-packages:
   - botpp
   - bottom
   - boundingboxes
+  - bower-json
   - bowntz
   - bpath
   - braid
@@ -668,6 +668,8 @@ broken-packages:
   - citeproc-hs
   - cjk
   - cj-token
+  - cl3-hmatrix-interface
+  - cl3-linear-interface
   - clang-compilation-database
   - clang-pure
   - clanki
@@ -1047,6 +1049,7 @@ broken-packages:
   - dense-int-set
   - dependent-hashmap
   - dependent-monoidal-map
+  - dep-t
   - dep-t-dynamic
   - deptrack-core
   - derangement
@@ -1207,6 +1210,7 @@ broken-packages:
   - dynamic-object
   - dynamic-pipeline
   - DynamicTimeWarp
+  - dyna-processing
   - dynloader
   - DysFRP
   - dywapitchtrack
@@ -1318,6 +1322,7 @@ broken-packages:
   - ert
   - escape-artist
   - escoger
+  - espial
   - esqueleto-pgcrypto
   - ess
   - essence-of-live-coding-gloss-example
@@ -1598,6 +1603,7 @@ broken-packages:
   - gegl
   - gelatin
   - gemcap
+  - gemini-exports
   - gemstone
   - gencheck
   - gender
@@ -1686,6 +1692,7 @@ broken-packages:
   - ghcup
   - ghc-usage
   - gh-labeler
+  - gi-adwaita
   - giak
   - gi-cogl
   - Gifcurry
@@ -1733,6 +1740,7 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
+  - glirc
   - GLMatrix
   - global-variables
   - glob-posix
@@ -1771,6 +1779,7 @@ broken-packages:
   - gpah
   - GPipe
   - GPipe-GLFW4
+  - gpmf
   - gpx-conduit
   - graceful
   - grafana
@@ -1887,6 +1896,7 @@ broken-packages:
   - hakyll-typescript
   - HaLeX
   - halfs
+  - half-space
   - halipeto
   - halive
   - halma
@@ -1925,6 +1935,7 @@ broken-packages:
   - haquery
   - harchive
   - HARM
+  - HarmTrace-Base
   - haroonga
   - harp
   - harpy
@@ -2099,6 +2110,7 @@ broken-packages:
   - hedgehog-checkers
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-lens
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2108,6 +2120,7 @@ broken-packages:
   - heidi
   - hein
   - heist-async
+  - heist-emanote
   - helic
   - helisp
   - hell
@@ -2542,6 +2555,7 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
+  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
@@ -2733,6 +2747,7 @@ broken-packages:
   - json-extra
   - json-fu
   - json-litobj
+  - jsonlogic
   - jsonnet
   - json-pointer
   - json-pointy
@@ -2774,6 +2789,7 @@ broken-packages:
   - kangaroo
   - karabiner-config
   - katip-datadog
+  - katip-elasticsearch
   - katip-kafka
   - katip-logzio
   - katip-scalyr-scribe
@@ -2886,6 +2902,7 @@ broken-packages:
   - lazify
   - lazyarray
   - lazyboy
+  - lazy-bracket
   - lazy-priority-queue
   - lazyset
   - LazyVault
@@ -2953,6 +2970,7 @@ broken-packages:
   - lifetimes
   - lifted-protolude
   - lifter
+  - lifx-lan
   - ligature
   - light
   - lilypond
@@ -4019,6 +4037,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
@@ -4454,7 +4473,6 @@ broken-packages:
   - semigroups-actions
   - sendgrid-haskell
   - sendgrid-v3
-  - sensei
   - sensu-run
   - sentry
   - separated
@@ -4668,6 +4686,7 @@ broken-packages:
   - smtps-gmail
   - smuggler
   - smuggler2
+  - snack
   - snake
   - snake-game
   - snap-accept
@@ -5595,7 +5614,6 @@ broken-packages:
   - wsdl
   - wsedit
   - wsjtx-udp
-  - wstunnel
   - wtk
   - wumpus-core
   - wxdirect

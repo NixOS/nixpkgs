@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  version = "1.2.198.0";
+  version = "1.3.211.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "sdk-${version}";
-    sha256 = "sha256-8EJbTPY5dvsqx32POf2HcCV3j2fA68GtGZA66l9V4TI=";
+    sha256 = "sha256-DoE+UCJOTB8JidC208wgfV1trZC4r9uFvwRPUhJVaII=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

@@ -26,12 +26,12 @@
 }:
 
 let
-  version = "5.0.0";
+  version = "5.1.1";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "By3WLSN9vBHgusAuEY2MLbTQujugnxoOseKkYPuEGds=";
+    sha256 = "f107wdNEaSskAPN2X9S1wLY26056insXkjCVx7VqT3g=";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -300,12 +300,7 @@ stdenv.mkDerivation rec {
       # fixed-output hashes of the fetch phase need to be spot-checked manually
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      }
-          # dm-sonnet is only packaged for linux
-      // (lib.optionalAttrs stdenv.isLinux {
-          # TODO(timokau) dm-sonnet is broken currently
-          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
-      }));
+      });
     };
 
   src_for_updater = stdenv.mkDerivation rec {
@@ -458,7 +453,6 @@ stdenv.mkDerivation rec {
       build --extra_toolchains=@bazel_tools//tools/jdk:nonprebuilt_toolchain_definition
       build --verbose_failures
       build --curses=no
-      build --sandbox_debug
       build --features=-layering_check
       EOF
 
@@ -498,7 +492,6 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
           -e "/\$command \\\\$/a --features=-layering_check \\\\" \
-          -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
@@ -525,7 +518,6 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
-    coreutils
     installShellFiles
     makeWrapper
     python3

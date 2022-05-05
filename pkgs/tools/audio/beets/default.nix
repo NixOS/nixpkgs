@@ -129,7 +129,7 @@ in pythonPackages.buildPythonApplication rec {
     gobject-introspection
   ] ++ lib.optional enableAbsubmit         essentia-extractor
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
-    ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
+    ++ lib.optional enableBeatport         pythonPackages.requests-oauthlib
     ++ lib.optional enableConvert          ffmpeg
     ++ lib.optional enableDiscogs          pythonPackages.discogs-client
     ++ lib.optional (enableFetchart

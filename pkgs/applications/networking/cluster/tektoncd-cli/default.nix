@@ -61,5 +61,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk mstrangfeld vdemeester ];
+    mainProgram = "tkn";
   };
 }

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "driftctl";
-  version = "0.27.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "driftctl";
     rev = "v${version}";
-    sha256 = "sha256-C+3eXdSU4FdJVlFvZw8LH768Yx6xvlElV1wsKgoju4o=";
+    sha256 = "sha256-v6NtnCwIAqzlbtvwmWr39wauPxT0I/m5HOykQfmAexQ=";
   };
 
-  vendorSha256 = "sha256-verxBwk83Xgg3XEMZpOXD3j3IgE7G4rHWJTj09BW74g=";
+  vendorSha256 = "sha256-2mAPOUAv0ORRCMxesmcwZZh9SCa12k94y/iiN/rzUbs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

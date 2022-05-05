@@ -18,6 +18,7 @@ assertExecutable() {
 # --set-default VAR VAL : like --set, but only adds VAR if not already set in
 #                         the environment
 # --unset       VAR     : remove VAR from the environment
+# --chdir       DIR     : change working directory (use instead of --run "cd DIR")
 # --run         COMMAND : run command before the executable
 # --add-flags   FLAGS   : add FLAGS to invocation of executable
 
@@ -126,6 +127,10 @@ makeWrapper() {
             varName="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "unset $varName" >> "$wrapper"
+        elif [[ "$p" == "--chdir" ]]; then
+            dir="${params[$((n + 1))]}"
+            n=$((n + 1))
+            echo "cd ${dir@Q}" >> "$wrapper"
         elif [[ "$p" == "--run" ]]; then
             command="${params[$((n + 1))]}"
             n=$((n + 1))

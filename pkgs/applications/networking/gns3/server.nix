@@ -1,23 +1,20 @@
-{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+, commonOverrides
+}:
 
-{ lib, python3, fetchFromGitHub, packageOverrides ? self: super: {}
- }:
+{ lib
+, python3
+, fetchFromGitHub
+, packageOverrides ? self: super: {}
+}:
 
 let
   defaultOverrides = commonOverrides ++ [
     (self: super: {
-      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
-        pname = "aiofiles";
-        version = "0.7.0";
-        src = fetchFromGitHub {
-          owner = "Tinche";
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "sha256-njQ7eRYJO+dUrwO5pZwKHXn9nVSGYcEhwhs3x5BMc28=";
-        };
-        doCheck = false;
-      });
-
       jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
         version = "3.2.0";
 
@@ -51,16 +48,33 @@ in python.pkgs.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
-      --replace "Jinja2==3.0.1" "Jinja2>=3.0.1" \
-      --replace "sentry-sdk==1.3.1" "sentry-sdk>=1.3.1" \
-      --replace "async-timeout==3.0.1" "async-timeout>=3.0.1" \
+      --replace "aiohttp==" "aiohttp>=" \
+      --replace "aiofiles==" "aiofiles>=" \
+      --replace "Jinja2==" "Jinja2>=" \
+      --replace "sentry-sdk==" "sentry-sdk>=" \
+      --replace "async-timeout==" "async-timeout>=" \
+      --replace "psutil==" "psutil>=" \
+      --replace "distro==" "distro>=" \
+      --replace "py-cpuinfo==" "py-cpuinfo>=" \
+      --replace "setuptools==" "setuptools>="
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt-toolkit py-cpuinfo
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async_generator
+    distro
+    jinja2
+    jsonschema
+    multidict
+    prompt-toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    setuptools
+    yarl
+    zipstream
   ];
 
   # Requires network access

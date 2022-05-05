@@ -16,7 +16,7 @@
 , xkeyboard_config
 , glib
 , libarchive
-, python
+, python2
 }:
 
 let
@@ -155,7 +155,7 @@ buildFHSUserEnv {
     glib
     libarchive
     xdg-utils # xdg-open needed to open URLs
-    python
+    python2
     # currently they want python 3.6 which is EOL
     #python3
   ];

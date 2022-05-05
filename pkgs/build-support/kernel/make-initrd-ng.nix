@@ -8,7 +8,7 @@ let
   # compression type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
-{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, patchelf, runCommand, glibc
+{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, patchelf, runCommand
 # Name of the derivation (not of the resulting file!)
 , name ? "initrd"
 
@@ -66,14 +66,28 @@ in
     compressorArgs = _compressorArgsReal;
   };
 
+  inherit extension makeUInitrd uInitrdArch prepend;
+  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
+
   passAsFile = ["contents"];
   contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${if symlink == null then "" else symlink}") contents + "\n";
 
-  nativeBuildInputs = [makeInitrdNGTool patchelf glibc cpio];
+  nativeBuildInputs = [makeInitrdNGTool patchelf cpio] ++ lib.optional makeUInitrd ubootTools;
 } ''
   mkdir ./root
   make-initrd-ng "$contentsPath" ./root
   mkdir "$out"
   (cd root && find * .[^.*] -exec touch -h -d '@1' '{}' +)
+  for PREP in $prepend; do
+    cat $PREP >> $out/initrd
+  done
   (cd root && find * .[^.*] -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
+
+  if [ -n "$makeUInitrd" ]; then
+      mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
+      # Compatibility symlink
+      ln -sf "initrd.img" "$out/initrd"
+  else
+      ln -s "initrd" "$out/initrd$extension"
+  fi
 ''

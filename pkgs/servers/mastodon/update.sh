@@ -9,29 +9,29 @@ while [[ $# -gt 0 ]]; do
 
     case $key in
         --url)
-        URL="$2"
-        shift # past argument
-        shift # past value
-        ;;
+            URL="$2"
+            shift # past argument
+            shift # past value
+            ;;
         --ver)
-        VERSION="$2"
-        shift # past argument
-        shift # past value
-        ;;
-    --rev)
-    REVISION="$2"
-        shift # past argument
-        shift # past value
-        ;;
-    --patches)
-    PATCHES="$2"
-        shift # past argument
-        shift # past value
-        ;;
-        *)    # unknown option
-        POSITIONAL+=("$1")
-        shift # past argument
-        ;;
+            VERSION="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        --rev)
+            REVISION="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        --patches)
+            PATCHES="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        *)  # unknown option
+            POSITIONAL+=("$1")
+            shift # past argument
+            ;;
     esac
 done
 

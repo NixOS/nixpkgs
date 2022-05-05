@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "8.2";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    sha256 = "sha256-WRrPd/GuXHJ9uYvhwjwp9AEtvbfMlpV0xdgNyfx43ok=";
+    sha256 = "sha256-eSNUqvKXTxcuvICxo8BmVWL1ESXQuU7VhOl7aONrhwM=";
   };
 
   checkInputs = [ fzf fd util-linux ];

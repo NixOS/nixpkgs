@@ -41,7 +41,8 @@
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
-/pkgs/build-support/setup-hooks/auto-patchelf.sh @aszlig
+/pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
+/pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
@@ -284,3 +285,7 @@
 /nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
 /nixos/tests/matrix-appservice-irc.nix                     @piegamesde
 /nixos/tests/matrix-conduit.nix                            @piegamesde
+
+# Dotnet
+/pkgs/build-support/dotnet          @IvarWithoutBones
+/pkgs/development/compilers/dotnet  @IvarWithoutBones

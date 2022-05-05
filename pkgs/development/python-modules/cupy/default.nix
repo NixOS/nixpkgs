@@ -1,22 +1,20 @@
 { lib, buildPythonPackage
 , fetchPypi, isPy3k, cython
 , fastrlock, numpy, six, wheel, pytestCheckHook, mock, setuptools
-, cudatoolkit, cudnn, cutensor, nccl
+, cudaPackages
 , addOpenGLRunpath
 }:
 
-assert cudnn.cudatoolkit == cudatoolkit;
-assert cutensor.cudatoolkit == cudatoolkit;
-assert nccl.cudatoolkit == cudatoolkit;
-
-buildPythonPackage rec {
+let
+  inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
+in buildPythonPackage rec {
   pname = "cupy";
-  version = "10.2.0";
+  version = "10.3.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5ovvA76QGOsOnVztMfDgLerks5nJrKR08rLc+ArmWA8=";
+    sha256 = "sha256-c8BOKI1AWU+zN8lhliRus55PUAgvFm+TlxKToYn7jWc=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both

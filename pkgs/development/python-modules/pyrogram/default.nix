@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , pyaes
 , pysocks
 , async-lru
@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "pyrogram";
-  version = "1.4.12";
+  version = "2.0.16";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Pyrogram";
-    inherit version;
-    hash = "sha256-rNGdWnZuhCU0Kg/CkeNjazKb76h8/VanZdF4yi0KWGU=";
+  src = fetchFromGitHub {
+    owner = "pyrogram";
+    repo = "pyrogram";
+    rev = "v${version}";
+    hash = "sha256-uRGLk8XTHimKtkVjPPe2ohTPv3UiaxmkRywQY4iPHyg=";
   };
 
   propagatedBuildInputs = [

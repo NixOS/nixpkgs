@@ -1,9 +1,13 @@
 { config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
 , opencv3, gtest, blas, gomp, llvmPackages, perl
-, cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
-, cudnnSupport ? cudaSupport, cudnn
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, nvidia_x11
+, cudnnSupport ? cudaSupport
 , cudaCapabilities ? [ "3.7" "5.0" "6.0" "7.0" "7.5" "8.0" "8.6" ]
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
 assert cudnnSupport -> cudaSupport;
 

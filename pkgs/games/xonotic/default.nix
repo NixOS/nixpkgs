@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchpatch, fetchzip, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
@@ -63,6 +63,15 @@ let
       url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
       sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
+
+    patches = [
+      # Fix to make darkplaces compile under GCC 11
+      (fetchpatch {
+        name = "fix-darkplaces-gcc11";
+        url = "https://gitlab.com/xonotic/darkplaces/-/commit/5e9e998c1759bc0085c3273fc39f9ea6f72a7dc8.patch";
+        sha256 = "sha256-s0JettSg0AYr8V2mXKJ2QU125bBcX1BAu/yDciTWC5o=";
+      })
+    ];
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl gmp ]

@@ -31,7 +31,7 @@ done
 # By default we set url to src.url or src.meta.homepage
 if [[ -z "$url" ]]; then
     url="$(nix-instantiate $systemArg --eval -E \
-               "with import ./. {}; $UPDATE_NIX_ATTR_PATH.src.url or $UPDATE_NIX_ATTR_PATH.src.meta.homepage" \
+               "with import ./. {}; $UPDATE_NIX_ATTR_PATH.src.meta.homepage or $UPDATE_NIX_ATTR_PATH.src.url" \
         | tr -d '"')"
 fi
 

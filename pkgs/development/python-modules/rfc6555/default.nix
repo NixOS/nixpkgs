@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, selectors2
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -10,16 +10,14 @@ buildPythonPackage rec {
   version = "0.1.0";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "Lmwgusc4EQlF0GHmMTUxWzUCjBk19cvurNwbOnT+1jM=";
+    hash = "sha256-Lmwgusc4EQlF0GHmMTUxWzUCjBk19cvurNwbOnT+1jM=";
   };
-
-  propagatedBuildInputs = [
-    selectors2
-  ];
 
   checkInputs = [
     pytestCheckHook

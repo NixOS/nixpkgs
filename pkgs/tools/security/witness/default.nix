@@ -2,16 +2,15 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "testifysec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/35hIA6Wm/F5hwyLZbt4JXpwWISWbzVAWrX29r6pejY=";
+    sha256 = "sha256-fkY3/UmHzggmysrae8VCY3NMBxC/LcWoQcXBELEzJlM=";
   };
-
-  vendorSha256 = "sha256-vXDsHHJknw9hsHx1mJA2c0CWwFbRXjCjitNWPh6V4yw=";
+  vendorSha256 = "sha256-ajWIjQXLvFQB1AVYyGjyWMrWIyue/d1uU5HHNf4/UcU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,6 +35,14 @@ buildGoModule rec {
       --bash <($out/bin/witness completion bash) \
       --fish <($out/bin/witness completion fish) \
       --zsh <($out/bin/witness completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/witness --help
+    $out/bin/witness version | grep "v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

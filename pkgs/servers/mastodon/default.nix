@@ -1,7 +1,6 @@
 { lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
-, fetchpatch
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
@@ -19,16 +18,8 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-Ngfs15YKLfSBOKju3BzpZFnenB370jId2G1g9Qy1y5w=";
+    sha256 = "sha256-FCwyJJwZ3/CVPT8LUid+KJcWCmFQet8Cftl7DVYhZ6I=";
   };
-
-  patches = [
-    # Fix indexing statuses in ElasticSearch
-    (fetchpatch {
-      url = "https://github.com/mastodon/mastodon/commit/ef196c913c77338be5ebb1e02af2f6225f857080.patch";
-      sha256 = "sha256-uw8m6j4BzMQtev0LNLeIHW0xOJEmj3JikT/6gVfmvzs=";
-    })
-  ];
 
   mastodon-gems = bundlerEnv {
     name = "${pname}-gems-${version}";

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2021-11-02";
+  version = "2021-12-06";
 
   srcs = [
     (fetchFromGitHub {
@@ -10,14 +10,14 @@ stdenv.mkDerivation {
       owner = "RPi-Distro";
       repo = "bluez-firmware";
       rev = "e7fd166981ab4bb9a36c2d1500205a078a35714d";
-      sha256 = "1dkg8mzn7n4afi50ibrda2s33nw2qj52jjjdv9w560q601gms47b";
+      hash = "sha256-6xBdXwAGA1N42k1KKYrEgtsxtFAtrwhKdIrYY39Fb7Y=";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "54ffdd6e2ea6055d46656b78e148fe7def3ec9d8";
-      sha256 = "4WTrs/tUyOugufRrrh0qsEmhPclQD64ypYysxsnOyS8=";
+      rev = "99d5c588e95ec9c9b86d7e88d3cf85b4f729d2bc";
+      hash = "sha256-xg6fYQvg7t2ikyLI8/XfpiNaNTf7CNFQlAzpTldTz10=";
     })
   ];
 
@@ -32,19 +32,18 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
-    shopt -s extglob
-    for filename in firmware-nonfree/brcm/brcmfmac434??{,s}-sdio.*; do
-      cp "$filename" "$out/lib/firmware/brcm"
-    done
+    cp -rv "$NIX_BUILD_TOP/firmware-nonfree/debian/config/brcm80211/." "$out/lib/firmware/"
 
     # Bluetooth firmware
-    cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+
+    # CM4 symlink must be added since it's missing from upstream
+    pushd $out/lib/firmware/brcm &>/dev/null
+    ln -s "./brcmfmac43455-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt"
+    popd &>/dev/null
+
     runHook postInstall
   '';
-
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "l+7VOq7CV5QA8/FWjMBGDcxq8Qe7NFf6E2Y42htZEgE=";
 
   meta = with lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";

@@ -58,7 +58,7 @@ in
 
       address = mkOption {
         type = types.str;
-        default = "127.0.0.1";
+        default = "[::1]";
         description = ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
@@ -202,7 +202,7 @@ in
   config = mkIf cfg.enable {
 
     services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
-      forwardZonesRecurse.bit = "127.0.0.1:${toString cfg.port}";
+      forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
         if cfg.dnssec.enable
           then ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''

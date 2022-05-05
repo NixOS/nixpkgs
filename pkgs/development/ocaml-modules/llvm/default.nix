@@ -1,4 +1,4 @@
-{ stdenv, lib, python2, cmake, libllvm, ocaml, findlib, ctypes }:
+{ stdenv, lib, python3, cmake, libllvm, ocaml, findlib, ctypes }:
 
 let version = lib.getVersion libllvm; in
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   inherit (libllvm) src;
 
-  nativeBuildInputs = [ cmake python2 ocaml findlib ];
+  nativeBuildInputs = [ cmake python3 ocaml findlib ];
   buildInputs = [ ctypes ];
   propagatedBuildInputs = [ libllvm ];
 

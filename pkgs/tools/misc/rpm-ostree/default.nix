@@ -29,7 +29,7 @@
 , bubblewrap
 , pcre
 , check
-, python2
+, python3
 , json_c
 , zchunk
 , libmodulemd
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    python3
     pkg-config
     which
     autoconf
@@ -82,7 +83,6 @@ stdenv.mkDerivation rec {
     librepo
     pcre
     check
-    python2
 
     # libdnf # vendored unstable branch
     # required by vendored libdnf

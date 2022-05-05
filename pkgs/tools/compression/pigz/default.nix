@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, zlib, util-linux }:
+{ lib, stdenv, fetchFromGitHub, zlib, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "pigz";
   version = "2.6";
 
-  src = fetchurl {
-    url = "https://www.zlib.net/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Lu17DXRJ0dcJA/KmLNYAXSYus6jJ6YaHvIy7WAnbKn0=";
+  src = fetchFromGitHub {
+      owner = "madler";
+      repo = "${pname}";
+      rev = "refs/tags/v${version}";
+      sha256 = "146qkmzi199xwmmf6bllanqfyl702fm1rnad8cd5r5yyrp5ks115";
   };
 
   enableParallelBuilding = true;

@@ -179,7 +179,7 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
-          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+          --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 
@@ -193,7 +193,7 @@ let
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
-          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+          --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 

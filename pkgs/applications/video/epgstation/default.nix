@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, common-updater-scripts
-, genericUpdater
+, gitUpdater
 , writers
 , makeWrapper
 , bash
@@ -115,7 +114,7 @@ let
       ln -sfT /var/lib/epgstation/thumbnail thumbnail
 
       makeWrapper ${nodejs}/bin/npm $out/bin/epgstation \
-       --run "cd $out/lib/node_modules/epgstation" \
+       --chdir "$out/lib/node_modules/epgstation" \
        --prefix PATH : ${lib.makeBinPath runtimeDeps} \
        --set APP_ROOT_PATH "$out/lib/node_modules/epgstation"
 
@@ -130,8 +129,7 @@ let
       inherit
         pname
         version
-        common-updater-scripts
-        genericUpdater
+        gitUpdater
         writers
         jq
         yq;

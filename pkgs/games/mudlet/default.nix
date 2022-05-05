@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
-      --run "cd $out";
+      --chdir "$out";
 
     runHook postInstall
   '';

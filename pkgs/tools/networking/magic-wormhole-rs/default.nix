@@ -4,7 +4,7 @@
 , rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
-  name = "magic-wormhole-rs";
+  pname = "magic-wormhole-rs";
   version = "0.3.0";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/30742
   # and can probably be removed once the issue is resolved
   cargoPatches = [ ./Cargo.toml.patch ];
-  cargoSha256 = "sha256-DG1kyukgzDbolX9Mg9hK1TRyzIWbAX6f54jSM8clj/c=";
+  cargoSha256 = "sha256-ujwvwr4GR/rQWnXFfL8sqPyz4QvGeOxwBrT+gf+vjsI=";
 
   # all tests involve networking and are bound fail
   doCheck = false;

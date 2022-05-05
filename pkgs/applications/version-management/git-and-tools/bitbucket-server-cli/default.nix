@@ -16,6 +16,7 @@ bundlerEnv rec {
     homepage    = "https://bitbucket.org/atlassian/bitbucket-server-cli";
     license     = licenses.mit;
     maintainers = with maintainers; [ jgertm nicknovitski ];
+    mainProgram = "stash";
     platforms   = platforms.unix;
   };
 }

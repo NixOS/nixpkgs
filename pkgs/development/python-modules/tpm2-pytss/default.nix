@@ -1,36 +1,57 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pkg-config, swig
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, asn1crypto
+, cffi
+, cryptography
+, ibm-sw-tpm2
+, pkg-config
+, pkgconfig
+, pycparser
+, pytestCheckHook
+, python
+, setuptools-scm
 , tpm2-tss
-, cryptography, ibm-sw-tpm2
 }:
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-
-  # Last version on github is 0.2.4, but it looks
-  # like a mistake (it's missing commits from 0.1.9)
-  version = "1.0.0";
-  disabled = pythonOlder "3.5";
+  version = "1.1.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Gx1nIXYuhTmQva9LmtTYvd1nyRH/pBQZ5bJ8OLcc1lo=";
+    sha256 = "sha256-O0d1b99/V8b3embg8veerTrJGSVb/prlPVb7qSHErdQ=";
   };
-  postPatch = ''
-    substituteInPlace tpm2_pytss/config.py --replace \
-      'SYSCONFDIR = CONFIG.get("sysconfdir", "/etc")' \
-      'SYSCONFDIR = "${tpm2-tss}/etc"'
-  '';
 
-  nativeBuildInputs = [ pkg-config swig ];
-  # The TCTI is dynamically loaded from tpm2-tss, we have to provide the library to the end-user
-  propagatedBuildInputs = [ tpm2-tss ];
+  nativeBuildInputs = [
+    cffi
+    pkgconfig
+    # somehow propagating from pkgconfig does not work
+    pkg-config
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    tpm2-tss
+  ];
+
+  propagatedBuildInputs = [
+    cffi
+    asn1crypto
+    cryptography
+  ];
+
+  # https://github.com/tpm2-software/tpm2-pytss/issues/341
+  doCheck = false;
 
   checkInputs = [
-    cryptography
-    # provide tpm_server used as simulator for the tests
     ibm-sw-tpm2
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "tpm2_pytss" ];
 
   meta = with lib; {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";

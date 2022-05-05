@@ -11,8 +11,8 @@
 let
   version = {
     feature = "17";
-    interim = ".0.1";
-    build = "12";
+    interim = ".0.3";
+    build = "7";
   };
 
   openjdk = stdenv.mkDerivation {
@@ -23,7 +23,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "1l1jgbz8q7zq66npfg88r0l5xga427vrz35iys09j44b6qllrldd";
+      sha256 = "qxiKz8HCNZXFdfgfiA16q5z0S65cZE/u7e+QxLlplWo=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];

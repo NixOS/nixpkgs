@@ -35,6 +35,7 @@ in
   agate = handleTest ./web-servers/agate.nix {};
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
+  allTerminfo = handleTest ./all-terminfo.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   apfs = handleTest ./apfs.nix {};
   apparmor = handleTest ./apparmor.nix {};
@@ -195,8 +196,12 @@ in
   hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };
   hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
   haka = handleTest ./haka.nix {};
+  haste-server = handleTest ./haste-server.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
+  hbase1 = handleTest ./hbase.nix { package=pkgs.hbase1; };
+  hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
+  hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
@@ -207,6 +212,7 @@ in
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
   hibernate = handleTestOn ["x86_64-linux"] ./hibernate.nix {};
+  hibernate-systemd-stage-1 = handleTestOn ["x86_64-linux"] ./hibernate.nix { systemdStage1 = true; };
   hitch = handleTest ./hitch {};
   hledger-web = handleTest ./hledger-web.nix {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
@@ -229,6 +235,7 @@ in
   input-remapper = handleTest ./input-remapper.nix {};
   inspircd = handleTest ./inspircd.nix {};
   installer = handleTest ./installer.nix {};
+  installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix {};
   invoiceplane = handleTest ./invoiceplane.nix {};
   iodine = handleTest ./iodine.nix {};
   ipfs = handleTest ./ipfs.nix {};
@@ -277,7 +284,6 @@ in
   loki = handleTest ./loki.nix {};
   lvm2 = handleTest ./lvm2 {};
   lxd = handleTest ./lxd.nix {};
-  lxd-image = handleTest ./lxd-image.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
   lxd-image-server = handleTest ./lxd-image-server.nix {};
   #logstash = handleTest ./logstash.nix {};
@@ -362,8 +368,9 @@ in
   nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
+  nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
   nitter = handleTest ./nitter.nix {};
-  nix-ld = handleTest ./nix-ld {};
+  nix-ld = handleTest ./nix-ld.nix {};
   nix-serve = handleTest ./nix-serve.nix {};
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
@@ -398,9 +405,10 @@ in
   pam-file-contents = handleTest ./pam/pam-file-contents.nix {};
   pam-oath-login = handleTest ./pam/pam-oath-login.nix {};
   pam-u2f = handleTest ./pam/pam-u2f.nix {};
+  pam-ussh = handleTest ./pam/pam-ussh.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
-  paperless-ng = handleTest ./paperless-ng.nix {};
+  paperless = handleTest ./paperless.nix {};
   parsedmarc = handleTest ./parsedmarc {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
@@ -516,7 +524,12 @@ in
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-escaping = handleTest ./systemd-escaping.nix {};
+  systemd-initrd-btrfs-raid = handleTest ./systemd-initrd-btrfs-raid.nix {};
+  systemd-initrd-luks-keyfile = handleTest ./systemd-initrd-luks-keyfile.nix {};
+  systemd-initrd-luks-password = handleTest ./systemd-initrd-luks-password.nix {};
+  systemd-initrd-shutdown = handleTest ./systemd-shutdown.nix { systemdStage1 = true; };
   systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix {};
+  systemd-initrd-swraid = handleTest ./systemd-initrd-swraid.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
@@ -525,6 +538,7 @@ in
   systemd-networkd-ipv6-prefix-delegation = handleTest ./systemd-networkd-ipv6-prefix-delegation.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
+  systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
   taskserver = handleTest ./taskserver.nix {};
@@ -585,6 +599,7 @@ in
   xautolock = handleTest ./xautolock.nix {};
   xfce = handleTest ./xfce.nix {};
   xmonad = handleTest ./xmonad.nix {};
+  xmonad-xdg-autostart = handleTest ./xmonad-xdg-autostart.nix {};
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   xterm = handleTest ./xterm.nix {};

@@ -3,7 +3,7 @@
 , xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
-, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
+, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales
 , autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
 , rpcsvc-proto }:
 
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh
   ];
   nativeBuildInputs = [
-    bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
+    bison ncompress autoPatchelfHook makeWrapper fakeroot
     rpcsvc-proto
   ];
   # build fails otherwise
@@ -55,6 +55,19 @@ in stdenv.mkDerivation rec {
     "IMAKECPP=cpp"
     "LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive"
   ];
+
+  preConfigure = ''
+    # binutils 2.37 fix
+    fixupList=(
+      "config/cf/Imake.tmpl"
+      "config/util/crayar.sh"
+      "config/util/crayar.sh"
+      "programs/dtwm/Makefile.tmpl"
+    )
+    for toFix in "''${fixupList[@]}"; do
+      substituteInPlace "$toFix" --replace "clq" "cq"
+    done
+  '';
 
   preBuild = ''
     while IFS= read -r -d ''$'\0' i; do

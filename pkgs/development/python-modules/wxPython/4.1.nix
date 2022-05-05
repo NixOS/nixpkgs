@@ -48,12 +48,14 @@ buildPythonPackage rec {
     doxygen
     wxGTK.gtk
     pkg-config
+  ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
   ];
 
   buildInputs = [
     wxGTK.gtk
     ncurses
+  ] ++ lib.optionals stdenv.isLinux [
     libXinerama
     libSM
     libXxf86vm

@@ -17,22 +17,27 @@
 , vulkan-loader
 , copyDesktopItems
 , makeDesktopItem
+, openssl
+, libobjc
+, Security
+, CoreServices
+, ApplicationServices
+, Carbon
+, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.0.10";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = pname;
     rev = "v${version}";
-    sha256 = "tOVFm4DFQurFU4DtpPwxXQLbTGCZnrV1FfYKtvkRxRE=";
+    sha256 = "sha256-ZFQjQ5+G0b0Fgg3+du/drt+62rC/TCNR5MIdJXAkTrE=";
   };
 
-  cargoPatches = [ ./fix-version.patch ];
-
-  cargoSha256 = "BwB3KgmI5XnZ5uHv6f+kGKBzpyxPWcoKvF7qw90eorI=";
+  cargoSha256 = "sha256-sMTootPsenaWzLLFImo6HWC1pcm2uFupPhVWsUJp1Ak=";
 
   nativeBuildInputs = [
     cmake
@@ -42,7 +47,12 @@ rustPlatform.buildRustPackage rec {
     copyDesktopItems
   ];
 
+  # Get openssl-sys to use pkg-config
+  OPENSSL_NO_VENDOR = 1;
+
   buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [
     freetype
     fontconfig
     libxkbcommon
@@ -52,10 +62,17 @@ rustPlatform.buildRustPackage rec {
     libXrandr
     libXi
     vulkan-loader
+  ] ++ lib.optionals stdenv.isDarwin [
+    libobjc
+    Security
+    CoreServices
+    ApplicationServices
+    Carbon
+    AppKit
   ];
 
   # Add missing vulkan dependency to rpath
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf --add-needed ${vulkan-loader}/lib/libvulkan.so.1 $out/bin/lapce
   '';
 
@@ -78,6 +95,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lapce/lapce";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
-    broken = stdenv.isDarwin;
   };
 }

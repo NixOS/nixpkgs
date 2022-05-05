@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/dbus/dbus/-/commit/6bfaea0707ba1a7788c4b6d30c18fb094f3a1dd4.patch";
       sha256 = "1d8ay55n2ksw5faqx3hsdpfni3xl3gq9hnjl65073xcfnx67x8d2";
     })
+
+    # Fix dbus-daemon crashing when running tests due to long XDG_DATA_DIRS.
+    # https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/302
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/dbus/dbus/-/commit/b551b3e9737958216a1a9d359150a4110a9d0549.patch";
+      sha256 = "kOVjlklZzKvBZXmmrE1UiO4XWRoBLViGwdn6/eDH+DY=";
+    })
   ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''

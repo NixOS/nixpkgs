@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testVersion, odo }:
+{ lib, buildGoModule, fetchFromGitHub, testers, odo }:
 
 buildGoModule rec {
   pname = "odo";
@@ -22,7 +22,7 @@ buildGoModule rec {
     cp -a odo $out/bin
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = odo;
     command = "odo version";
     version = "v${version}";

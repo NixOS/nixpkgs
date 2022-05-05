@@ -13,13 +13,16 @@
 , linkFarmFromDrvs
 , lttng-ust
 , makeWrapper
-, nodejs-12_x
 , nodejs-16_x
 , openssl
 , stdenv
 , zlib
 , writeShellApplication
 , nuget-to-nix
+# Keeping this option until upstream removes support for EoL Node.js 12 entirely
+# Also refer to: https://github.com/actions/runner/pull/1716
+, withNode12 ? false
+, nodejs-12_x
 }:
 let
   nugetSource = linkFarmFromDrvs "nuget-packages" (
@@ -43,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.289.2";
+  version = "2.290.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-yISJ/qGJ+tGnJOqpTUe+rkG4UGzTZ5tIXix6wuDKXO0=";
+    hash = "sha256-YUV66yiUdS2/ORZS7a7coqyzoXM/tnK0egEeXWLPNl0=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +104,8 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     runHook preConfigure
+
+    export HOME=$(mktemp -d)
 
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
@@ -187,15 +192,17 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+    ]
+    ++ lib.optionals (!withNode12) [
+      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     ];
-
   checkInputs = [ git ];
 
   checkPhase = ''
     runHook preCheck
 
     mkdir -p _layout/externals
-    ln -s ${nodejs-12_x} _layout/externals/node12
+    ${lib.optionalString withNode12 "ln -s ${nodejs-12_x} _layout/externals/node12"}
     ln -s ${nodejs-16_x} _layout/externals/node16
 
     printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
@@ -244,7 +251,7 @@ stdenv.mkDerivation rec {
     # externals/node{12,16}. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/externals
-    ln -s ${nodejs-12_x} $out/externals/node12
+    ${lib.optionalString withNode12 "ln -s ${nodejs-12_x} $out/externals/node12"}
     ln -s ${nodejs-16_x} $out/externals/node16
 
     # Install Nodejs scripts called from workflows

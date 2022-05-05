@@ -11851,6 +11851,19 @@ let
     };
   };
 
+  LexicalSealRequireHints = buildPerlModule {
+    pname = "Lexical-SealRequireHints";
+    version = "0.0011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Lexical-SealRequireHints-0.011.tar.gz";
+      sha256 = "sha256-npGO0RjvaF1uCdqxzW5m7gox13b+JLumPlJDkG9WATo=";
+    };
+    meta = {
+      description = "Prevent leakage of lexical hints";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   libapreq2 = buildPerlPackage {
     pname = "libapreq2";
     version = "2.16";
@@ -17133,7 +17146,6 @@ let
       sha256 = "0xl8lcv9gfv0nn8vrrxa4az359whqdhmzw4r51nn3add8pn3s9ip";
     };
     buildInputs = [ pkgs.zookeeper_mt ];
-    nativeBuildInputs = [ pkgs.gnused ];
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
     hardeningDisable = [ "format" ];
     # Make the async API accessible
@@ -20559,6 +20571,21 @@ let
     };
   };
 
+  SubStrictDecl = buildPerlModule {
+    pname = "Sub-StrictDecl";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Sub-StrictDecl-0.005.tar.gz";
+      sha256 = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
+    };
+    propagatedBuildInputs = [ LexicalSealRequireHints ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Detect undeclared subroutines in compilation";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SubUplevel = buildPerlPackage {
     pname = "Sub-Uplevel";
     version = "0.2800";
@@ -23223,7 +23250,11 @@ let
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz";
       sha256 = "06y79lla8adkqhrs41xdddqjs81dcrh266b50mfbg37bxkawd4f1";
     };
-    buildInputs = [ ListMoreUtils TestDifferences TestException ];
+    nativeBuildInputs = [ shortenPerlShebang ];
+    checkInputs = [ ListMoreUtils TestDifferences TestException ];
+    postInstall = ''
+      shortenPerlShebang $out/bin/Markdown.pl
+    '';
   };
 
   TextMarkdownHoedown = buildPerlModule {

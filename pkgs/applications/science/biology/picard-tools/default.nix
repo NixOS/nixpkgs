@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://broadinstitute.github.io/picard/";
     maintainers = with maintainers; [ jbedo ];
+    mainProgram = "picard";
     platforms = platforms.all;
   };
 }

@@ -4,7 +4,7 @@
 
 with lib;
 
-if !versionAtLeast ocaml.version "4.05"
+if versionOlder ocaml.version "4.05"
 then throw "notty is not available for OCaml ${ocaml.version}"
 else
 

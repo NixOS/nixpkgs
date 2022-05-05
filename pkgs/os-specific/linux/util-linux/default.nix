@@ -1,10 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
+, ncursesSupport ? true
+, ncurses, pam
+, systemdSupport ? stdenv.isLinux
+, systemd
 , nlsSupport ? true
 }:
 
 stdenv.mkDerivation rec {
-  pname = "util-linux" + lib.optionalString ( !nlsSupport && ncurses == null && systemd == null ) "-minimal";
+  pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
   version = "2.37.4";
 
   src = fetchurl {
@@ -40,9 +43,9 @@ stdenv.mkDerivation rec {
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.enableFeature nlsSupport "nls")
-    (lib.withFeature (ncurses != null) "ncursesw")
-    (lib.withFeature (systemd != null) "systemd")
-    (lib.withFeatureAs (systemd != null)
+    (lib.withFeature ncursesSupport "ncursesw")
+    (lib.withFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -56,9 +59,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd ];
+  buildInputs = [ zlib pam libcap_ng ]
+    ++ lib.optionals ncursesSupport [ ncurses ]
+    ++ lib.optionals systemdSupport [ systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 

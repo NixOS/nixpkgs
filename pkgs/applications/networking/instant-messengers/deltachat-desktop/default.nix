@@ -31,6 +31,7 @@ let
       name = "${old.pname}-${version}";
       hash = "sha256-sBFXcLXpAkX+HzRKrLKaHhi5ieS8Yc/Uf30WcXyWrok=";
     };
+    patches = [ ./libdeltachat-darwin-dylib.patch ] ++ old.patches;
   });
   electronExec = if stdenv.isDarwin then
     "${electron_16}/Applications/Electron.app/Contents/MacOS/Electron"
@@ -47,13 +48,13 @@ let
   });
 in nodejs-14_x.pkgs.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-i2Cb2HfapYTaxg5IUl4pGWYUM6o/4mWgMO7QsBqDHoU=";
+    hash = "sha256-jhtriDnt8Yl8eCmUTEyoPjccZV8RNAchMykkkiRpF60=";
   };
 
   nativeBuildInputs = [

@@ -1,26 +1,21 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
-, makeWrapper
-, runtimeShell
 , iproute2
 , lzo
 , openssl
 , pam
 , useSystemd ? stdenv.isLinux
 , systemd
+, update-systemd-resolved
 , util-linux
 , pkcs11Support ? false
 , pkcs11helper
 }:
 
-with lib;
 let
-  # Check if the script needs to have other binaries wrapped when changing this.
-  update-resolved = fetchurl {
-    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.3.0/update-systemd-resolved";
-    sha256 = "021qzv1k0zxgv1rmyfpqj3zlzqr28xa7zff1n7vrbjk36ijylpsc";
-  };
+  inherit (lib) versionOlder optional optionals optionalString;
 
   generic = { version, sha256 }:
     let
@@ -36,7 +31,7 @@ let
           inherit sha256;
         };
 
-        nativeBuildInputs = [ makeWrapper pkg-config ];
+        nativeBuildInputs = [ pkg-config ];
 
         buildInputs = [ lzo openssl ]
           ++ optional stdenv.isLinux pam
@@ -52,15 +47,15 @@ let
         ++ optional pkcs11Support "--enable-pkcs11"
         ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
 
+        # We used to vendor the update-systemd-resolved script inside libexec,
+        # but a separate package was made, that uses libexec/openvpn. Copy it
+        # into libexec in case any consumers expect it to be there even though
+        # they should use the update-systemd-resolved package instead.
         postInstall = ''
           mkdir -p $out/share/doc/openvpn/examples
-          cp -r sample/sample-config-files/ $out/share/doc/openvpn/examples
-          cp -r sample/sample-keys/ $out/share/doc/openvpn/examples
-          cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
+          cp -r sample/sample-{config-files,keys,scripts}/ $out/share/doc/openvpn/examples
         '' + optionalString useSystemd ''
-          install -Dm555 ${update-resolved} $out/libexec/update-systemd-resolved
-          wrapProgram $out/libexec/update-systemd-resolved \
-            --prefix PATH : ${makeBinPath [ runtimeShell iproute2 systemd util-linux ]}
+          install -Dm555 -t $out/libexec ${update-systemd-resolved}/libexec/openvpn/*
         '';
 
         enableParallelBuilding = true;
@@ -69,7 +64,7 @@ let
           description = "A robust and highly flexible tunneling application";
           downloadPage = "https://openvpn.net/community-downloads/";
           homepage = "https://openvpn.net/";
-          license = licenses.gpl2;
+          license = licenses.gpl2Only;
           maintainers = with maintainers; [ viric peterhoeg ];
           platforms = platforms.unix;
         };

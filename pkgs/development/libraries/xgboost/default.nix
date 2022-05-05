@@ -6,9 +6,8 @@
 , gtest
 , doCheck ? true
 , cudaSupport ? config.cudaSupport or false
-, cudatoolkit
 , ncclSupport ? false
-, nccl
+, cudaPackages
 , llvmPackages
 }:
 
@@ -28,12 +27,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudatoolkit
-                ++ lib.optional ncclSupport nccl;
+  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+                ++ lib.optional ncclSupport cudaPackages.nccl;
 
   cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
-    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc" ]
-    ++ lib.optionals (cudaSupport && lib.versionAtLeast cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
+    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc" ]
+    ++ lib.optionals (cudaSupport && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
 
   inherit doCheck;

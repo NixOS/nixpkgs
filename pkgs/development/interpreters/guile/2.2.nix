@@ -40,7 +40,6 @@ builder rec {
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     pkgsBuildBuild.guile;
   nativeBuildInputs = [
-    gawk
     makeWrapper
     pkg-config
   ];

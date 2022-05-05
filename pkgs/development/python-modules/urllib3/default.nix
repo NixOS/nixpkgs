@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.8";
+  version = "1.26.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dnwz2aY+fd/LhngKrIe+/C+930bFjbtIfghV987sKDw=";
+    hash = "sha256-qrrxZHeAal4d0ZqkH4wreVDdPHRjYtfjIj2+beasRI4=";
   };
 
   propagatedBuildInputs = [

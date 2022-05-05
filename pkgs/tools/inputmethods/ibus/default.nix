@@ -27,7 +27,6 @@
 , python3
 , json-glib
 , libnotify ? null
-, enablePython2Library ? false
 , enableUI ? true
 , withWayland ? false
 , libxkbcommon ? null
@@ -100,8 +99,6 @@ stdenv.mkDerivation rec {
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
-    (enableFeature enablePython2Library "python-library")
-    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
     "--enable-gtk4"
     "--enable-install-tests"

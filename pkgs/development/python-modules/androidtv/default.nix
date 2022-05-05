@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.66";
+  version = "0.0.67";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,19 +20,27 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "python-androidtv";
     rev = "v${version}";
-    hash = "sha256-gSbckVjM49nVfzpk9sfynJDx15+zQ/KgaI7oxEkXQpo=";
+    hash = "sha256-MAlKD2PDQJQaKPiMQDu1CMvn4xnxb8FmeYqzcW4hso0=";
   };
 
   propagatedBuildInputs = [
     adb-shell
-    aiofiles
     pure-python-adb
   ];
+
+  passthru.extras-require = {
+    async = [
+      aiofiles
+    ];
+    inherit (adb-shell.extras-require) usb;
+  };
 
   checkInputs = [
     mock
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.extras-require.async
+  ++ passthru.extras-require.usb;
 
   disabledTests = [
     # Requires git but fails anyway

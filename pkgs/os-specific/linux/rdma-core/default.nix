@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rdma-core";
-  version = "39.1";
+  version = "40.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "19jfrb0jv050abxswzh34nx2zr8if3rb2k5a7n5ydvi3x9r8827w";
+    sha256 = "0pcpbri50y5gzrmdqx90wngfd6cfas3m7zlfhz9lqr583fp08vfw";
   };
 
   strictDeps = true;
@@ -21,12 +21,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
-  ];
-
-  patches = [
-    # this has been fixed in master. As soon as it gets into a release, this
-    # patch won't apply anymore and can be removed.
-    ./pkg-config-template.patch
   ];
 
   postPatch = ''
