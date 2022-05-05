@@ -1,15 +1,37 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchurl
 
-stdenv.mkDerivation rec {
-  pname = "zerotierone";
-  version = "1.8.4";
+, buildPackages
+, iproute2
+, lzo
+, openssl
+, pkg-config
+, ronn
+, zlib
+}:
+
+let
+  version = "1.8.9";
+
+  owner = "zerotier";
+  repo = "ZeroTierOne";
 
   src = fetchFromGitHub {
-    owner = "zerotier";
-    repo = "ZeroTierOne";
+    inherit owner repo;
     rev = version;
-    sha256 = "sha256-aM0FkcrSd5dEJVdJryIGuyWNFwvKH0SBfOuy4dIMK4A=";
+    sha256 = "sha256-N1VqzjaFJRJiSG4qHqRy4Fs8TlkUqyDoq0/3JQdGwfA=";
   };
+
+  lockFile = fetchurl {
+    url = "https://raw.githubusercontent.com/${owner}/${repo}/${version}/zeroidc/Cargo.lock";
+    sha256 = "sha256:1lczzz7dhdfagrxa4yr9ivbkdfb9i85cp6q5s7mmwijcfcax3z6b";
+  };
+in stdenv.mkDerivation {
+  pname = "zerotierone";
+  inherit version src;
 
   preConfigure = ''
     patchShebangs ./doc/build.sh
@@ -20,9 +42,22 @@ stdenv.mkDerivation rec {
       --replace 'armv5' 'armv6'
   '';
 
+  cargoDeps = rustPlatform.importCargoLock { inherit lockFile; };
+  postPatch = "cp ${lockFile} Cargo.lock";
 
-  nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute2 ];
+  nativeBuildInputs = [
+    pkg-config
+    ronn
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+  ];
+  buildInputs = [
+    iproute2
+    lzo
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
