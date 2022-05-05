@@ -49,6 +49,7 @@
 , audiofile
 , libiconv
 , withStatic ? false
+, buildPackages
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -75,6 +76,15 @@ stdenv.mkDerivation rec {
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
     ./find-headers.patch
   ];
+
+  postPatch = ''
+    # Fix running wayland-scanner for the build platform when cross-compiling.
+    # See comment here: https://github.com/libsdl-org/SDL/issues/4860#issuecomment-1119003545
+    substituteInPlace configure \
+      --replace '$(WAYLAND_SCANNER)' "${buildPackages.wayland-scanner}/bin/wayland-scanner"
+  '';
+
+  strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
 
