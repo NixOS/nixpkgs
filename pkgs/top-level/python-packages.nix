@@ -8774,6 +8774,8 @@ in {
 
   qscintilla = self.qscintilla-qt5;
 
+  qstylizer = callPackage ../development/python-modules/qstylizer { };
+
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
   qtawesome = callPackage ../development/python-modules/qtawesome { };
