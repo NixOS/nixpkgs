@@ -1,28 +1,29 @@
 { lib
 , stdenv
 , fetchFromGitHub
+
+# buildtime
 , autoreconfHook
 , autoconf-archive
-, git
-, pkg-config
-, glib
-, jsoncpp
-, libcap_ng
-, libnl
-, libuuid
-, lz4
-, openssl
-, protobuf
-, python3
-, tinyxml
-
 , docutils
 , jinja2
+, git
+, pkg-config
+, lz4
+, jsoncpp
+, glib
+, libuuid
+, libcap_ng
+, openssl
+, tinyxml-2
+
+# runtime
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  version = "13_beta";
+  version = "17_beta";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
@@ -30,35 +31,42 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     fetchSubmodules = true;
     leaveDotGit = true;
-    sha256 = "087y3j8ndfbw71igv5gk4i7qmyga2ly74v62wpjyfwx0p4cp8wky";
-  };
+    sha256 = "0cfb1zffrgwlgvwlxv48051w31hyyv5yfnbvy494axp0a8fw9dpl";
+    postFetch = ''
+      cd "$out"
 
-  postPatch = ''
-    ./update-version-m4.sh
-    patchShebangs ./openvpn3-core/scripts/version
-  '';
+      substituteInPlace "./update-version-m4.sh" \
+        --replace '$(git describe --always --tags)' "v${version}"
+
+      patchShebangs ./openvpn3-core/scripts/version
+
+      ./update-version-m4.sh
+      ./openvpn3-core/scripts/version | tee ./openvpn3-core-version
+
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
+  };
 
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
     docutils
-    git
     jinja2
     pkg-config
   ];
-  propagatedBuildInputs = [
-    python3
-  ];
+
   buildInputs = [
-    glib
-    jsoncpp
-    libcap_ng
-    libnl
-    libuuid
     lz4
+    jsoncpp
+    glib
+    libuuid
+    libcap_ng
     openssl
-    protobuf
-    tinyxml
+    tinyxml-2
+  ];
+
+  propagatedbuildinputs = [
+    python3
   ];
 
   configureFlags = [ "--disable-selinux-build" ];
