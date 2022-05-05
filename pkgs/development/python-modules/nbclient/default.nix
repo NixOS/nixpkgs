@@ -1,9 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder,
-  async_generator, traitlets, nbformat, nest-asyncio, jupyter-client,
-  pytest, xmltodict, nbconvert, ipywidgets
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, async_generator
+, traitlets
+, nbformat
+, nest-asyncio
+, jupyter-client
+, pytestCheckHook
+, xmltodict
+, nbconvert
+, ipywidgets
 }:
 
-buildPythonPackage rec {
+let nbclient = buildPythonPackage rec {
   pname = "nbclient";
   version = "0.6.2";
   format = "setuptools";
@@ -15,9 +25,20 @@ buildPythonPackage rec {
     hash = "sha256-i0dVPxztB3zXxFN/1dcB1G92gfJLKCdeXMHTR+fJtGs=";
   };
 
-  doCheck = false; # Avoid infinite recursion
-  checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
+
+  # circular dependencies if enabled by default
+  doCheck = false;
+
+  checkInputs = [ pytestCheckHook xmltodict nbconvert ipywidgets ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  passthru.tests = {
+    check = nbclient.overridePythonAttrs (_: { doCheck = true; });
+  };
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbclient";
@@ -25,4 +46,5 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.erictapen ];
   };
-}
+};
+in nbclient

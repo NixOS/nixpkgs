@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.0.16";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-V0niLQAplN/uZ0YeN6g8uax3U/d0LUT4aXxe3ENXIHc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YoDCvYpbw06MXx371SNarrtQ0t4xlhwm1CBbl524P7c=";
   };
 
   propagatedBuildInputs = [
