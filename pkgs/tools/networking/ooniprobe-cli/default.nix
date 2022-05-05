@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://ooni.org/install/cli";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "ooniprobe";
   };
 }

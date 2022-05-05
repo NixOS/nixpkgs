@@ -52,10 +52,11 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update-bin.sh;
 
   meta = with lib; {
-    homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+    homepage = "https://www.vaultproject.io";
     license = licenses.mpl20;
     maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man techknowlogick ];
+    mainProgram = "vault";
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }
