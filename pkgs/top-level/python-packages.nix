@@ -7210,7 +7210,7 @@ in {
 
   pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
 
-  pygments = callPackage ../development/python-modules/Pygments { };
+  pygments = callPackage ../development/python-modules/pygments { };
 
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
@@ -10861,6 +10861,8 @@ in {
   wavinsentio = callPackage ../development/python-modules/wavinsentio { };
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
+
+  wcag-contrast-ratio = callPackage ../development/python-modules/wcag-contrast-ratio { };
 
   wcmatch = callPackage ../development/python-modules/wcmatch { };
 
