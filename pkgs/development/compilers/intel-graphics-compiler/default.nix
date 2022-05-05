@@ -56,17 +56,17 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./external/SPIRV-Tools/CMakeLists.txt \
-            --replace '$'''{SPIRV-Tools_DIR}../../..' \
-                      '${spirv-tools}' \
-            --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
-                      'SPIRV-Headers_INCLUDE_DIR "${spirv-headers}/include"' \
-            --replace 'set_target_properties(SPIRV-Tools' \
-                      'set_target_properties(SPIRV-Tools-shared' \
-            --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
-                      'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
-          substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
-            --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
-            --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
+      --replace '$'''{SPIRV-Tools_DIR}../../..' \
+                '${spirv-tools}' \
+      --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
+                'SPIRV-Headers_INCLUDE_DIR "${spirv-headers}/include"' \
+      --replace 'set_target_properties(SPIRV-Tools' \
+                'set_target_properties(SPIRV-Tools-shared' \
+      --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
+                'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
+    substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
+      --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
+      --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
   '';
 
   # Handholding the braindead build script
