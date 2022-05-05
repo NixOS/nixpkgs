@@ -540,7 +540,8 @@ in
               db = if cfg.database.type == "postgresql" then "postgres" else cfg.database.type;
               db-username = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
               db-password._secret = cfg.database.passwordFile;
-              db-url-host = "${cfg.database.host}:${toString cfg.database.port}";
+              db-url-host = cfg.database.host;
+              db-url-port = toString cfg.database.port;
               db-url-database = if databaseActuallyCreateLocally then "keycloak" else cfg.database.name;
               db-url-properties = prefixUnlessEmpty "?" dbProps;
               db-url = null;
