@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+  doCheck = true;
+
   postInstall =
     let
       binPath = lib.makeBinPath [
