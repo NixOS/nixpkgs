@@ -11,7 +11,7 @@
 
   documentation.man.enable = lib.mkOverride 500 true;
 
-  fonts.fontconfig.enable = false;
+  fonts.fontconfig.enable = lib.mkForce false;
 
-  isoImage.edition = "minimal";
+  isoImage.edition = lib.mkForce "minimal";
 }
