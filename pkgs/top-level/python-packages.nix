@@ -5167,6 +5167,8 @@ in {
 
   measurement = callPackage ../development/python-modules/measurement { };
 
+  meater-python = callPackage ../development/python-modules/meater-python { };
+
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
   mechanicalsoup = callPackage ../development/python-modules/mechanicalsoup { };
