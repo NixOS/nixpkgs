@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   # https://github.com/intel/intel-graphics-compiler/issues/98
   doCheck = false;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./external/SPIRV-Tools/CMakeLists.txt \
       --replace '$'''{SPIRV-Tools_DIR}../../..' \
                 '${spirv-tools}' \
