@@ -1368,6 +1368,11 @@ in
       inherit configIniOfService;
       port = 5003;
       webhooks = true;
+      extraServices.todosrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "2s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.todosrht}/bin/todosrht-api -b ${cfg.listenAddress}:${toString (cfg.todo.port + 100)}";
+      };
       extraServices.todosrht-lmtp = {
         wants = [ "postfix.service" ];
         unitConfig.JoinsNamespaceOf = optional cfg.postfix.enable "postfix.service";
