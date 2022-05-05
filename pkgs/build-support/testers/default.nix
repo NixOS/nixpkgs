@@ -1,4 +1,4 @@
-{ pkgs, lib, callPackage, runCommand }:
+{ pkgs, lib, callPackage, runCommand, stdenv }:
 # Documentation is in doc/builders/testers.chapter.md
 {
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
@@ -32,5 +32,32 @@
         then throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
         else salted;
     in checked;
+
+  # See doc/builders/testers.chapter.md or
+  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  nixosTest =
+    let
+      /* The nixos/lib/testing-python.nix module, preapplied with arguments that
+       * make sense for this evaluation of Nixpkgs.
+       */
+      nixosTesting =
+        (import ../../../nixos/lib/testing-python.nix {
+          inherit (stdenv.hostPlatform) system;
+          inherit pkgs;
+          extraConfigurations = [(
+            { lib, ... }: {
+              config.nixpkgs.pkgs = lib.mkDefault pkgs;
+            }
+          )];
+        });
+    in
+      test:
+        let
+          loadedTest = if builtins.typeOf test == "path"
+            then import test
+            else test;
+          calledTest = lib.toFunction loadedTest pkgs;
+        in
+          nixosTesting.makeTest calledTest;
 
 }
