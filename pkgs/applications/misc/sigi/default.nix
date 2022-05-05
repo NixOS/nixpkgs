@@ -2,25 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "3.0.2";
+  version = "3.2.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-N+8DdokiYW5mHIQJisdTja8xMVGip37X6c/xBYnQaRU=";
+    sha256 = "sha256-1eZ6i0CvjNyYlWb7c0OPlGtvVSFpi8hiOl/7qeeE9wA=";
   };
 
+  cargoSha256 = "sha256-Tyrcu/BYt9k4igiEIiZ2I7VIGiBZ3D2i6XfT/XGlU+U=";
   nativeBuildInputs = [ installShellFiles ];
 
-  # As part of its tests, sigi hard-codes a location to BATS based on git
-  # submodules. The tests are recommeded to skip for Linux packaging. They'll
-  # move to Rust after this issue: https://github.com/hiljusti/sigi/issues/19
-  checkFlags = [ "SKIP_BATS_TESTS=1" ];
+  # In case anything goes wrong.
+  checkFlags = [ "RUST_BACKTRACE=1" ];
 
   postInstall = ''
     installManPage sigi.1
   '';
-
-  cargoSha256 = "sha256-vO9ocTDcGt/T/sLCP+tCHXihV1H2liFDjI7OhhmPd3I=";
 
   passthru.tests.version = testVersion { package = sigi; };
 
