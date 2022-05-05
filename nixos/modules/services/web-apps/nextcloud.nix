@@ -153,11 +153,11 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud22" "nextcloud23" ];
+      relatedPackages = [ "nextcloud22" "nextcloud23" "nextcloud24"];
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php74" "php80" ];
+      relatedPackages = [ "php74" "php80" "php81"];
       defaultText = "pkgs.php";
       description = ''
         PHP package to use for Nextcloud.
@@ -555,7 +555,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 23;
+        latest = 24;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -613,14 +613,15 @@ in {
             ''
           else if versionOlder stateVersion "21.11" then nextcloud21
           else if versionOlder stateVersion "22.05" then nextcloud22
-          else nextcloud23
+          else nextcloud24
         );
 
       services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "21" then pkgs.php74
-        else pkgs.php80;
+        else if versionOlder cfg.package.version "24" then pkgs.php80
+        else pkgs.php81;
     }
 
     { assertions = [
