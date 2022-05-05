@@ -16,6 +16,8 @@ buildGoModule rec {
   postPatch = ''
     # main module (github.com/VictoriaMetrics/VictoriaMetrics) does not contain package
     # github.com/VictoriaMetrics/VictoriaMetrics/app/vmui/packages/vmui/web
+    #
+    # This appears to be some of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
   '';
 
