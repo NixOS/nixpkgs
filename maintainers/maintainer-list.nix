@@ -1360,6 +1360,12 @@
       fingerprint = "A3E1 C409 B705 50B3 BF41  492B 5684 0A61 4DBE 37AE";
     }];
   };
+  basicer = {
+    email = "basicer@gmail.com";
+    github = "basicer";
+    githubId = 671513;
+    name = "Rob Blanckaert";
+  };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
     github = "basvandijk";

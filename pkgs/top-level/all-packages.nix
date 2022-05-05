@@ -14252,6 +14252,8 @@ with pkgs;
     lua = lua5_1; # doesn't work with any other :(
   };
 
+  luau = callPackage ../development/interpreters/luau { };
+
   ### END OF LUA
 
   ### CuboCore
