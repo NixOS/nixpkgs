@@ -1,6 +1,6 @@
-{lib, stdenv, fetchurl}:
+{lib, gcc10Stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
+gcc10Stdenv.mkDerivation rec {
   version = "3.99-u4-b5";
   pname = "monkeys-audio";
 
