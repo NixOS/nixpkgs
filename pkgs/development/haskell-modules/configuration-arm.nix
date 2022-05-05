@@ -105,6 +105,7 @@ self: super: {
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-rename-plugin = dontCheck super.hls-rename-plugin;
+  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
 
 
   # https://github.com/ekmett/half/issues/35
