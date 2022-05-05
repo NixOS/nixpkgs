@@ -10597,6 +10597,8 @@ with pkgs;
 
   swagger-codegen3 = callPackage ../tools/networking/swagger-codegen3 { };
 
+  swaggerhole = callPackage ../tools/security/swaggerhole { };
+
   swapview = callPackage ../os-specific/linux/swapview { };
 
   swtpm = callPackage ../tools/security/swtpm { };
