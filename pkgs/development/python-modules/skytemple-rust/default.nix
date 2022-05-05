@@ -1,4 +1,11 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, libiconv, rustPlatform, setuptools-rust }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, libiconv
+, Foundation
+, rustPlatform
+, setuptools-rust }:
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
@@ -17,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "sha256-lXPCxRbaqUC5EfyeBPtJDuGADYOA+DWMaOZRwXppP8E=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
   nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
 
   GETTEXT_SYSTEM = true;
