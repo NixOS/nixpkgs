@@ -8823,6 +8823,8 @@ in {
 
   rainbowstream = callPackage ../development/python-modules/rainbowstream { };
 
+  raincloudy = callPackage ../development/python-modules/raincloudy { };
+
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   random2 = callPackage ../development/python-modules/random2 { };

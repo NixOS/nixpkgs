@@ -2125,7 +2125,8 @@
       pyrainbird
     ];
     "raincloud" = ps: with ps; [
-    ]; # missing inputs: raincloudy
+      raincloudy
+    ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
       ueagle
