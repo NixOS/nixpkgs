@@ -22,6 +22,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_multiple_workspaces"
+    "test_option_overrides_dmypy"
   ];
 
   checkInputs = [ pytestCheckHook mock ];
