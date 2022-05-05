@@ -104,6 +104,7 @@ self: super: {
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
 
 
   # https://github.com/ekmett/half/issues/35
