@@ -40,10 +40,39 @@ rec {
     || any (hasPrefix a'.mountPoint) b'.depends;
 
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
-  # becomes dev-xyzzy.  FIXME: slow.
-  escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+  # becomes dev-xyzzy.
+  #
+  # NOTE: this implementation is not fully compliant with
+  # the specification in systemd.unit(5).
+  # For example, duplicate path separator characters aren't coelesced,
+  # and non-ASCII characters aren't escaped, as per `escapeSystemd`.
+  escapeSystemdPath = arg:
+    let
+      s = if builtins.isPath arg then "${arg}"
+        else if builtins.isString arg then arg
+        else throw "`escapeSystemdPath` applied to ${builtins.typeOf arg} value while a string or path was expected";
+    in
+      if s == "" || s == "/" then "-"
+      else escapeSystemd (removePrefix "/" (removeSuffix "/" s));
+
+  # Escape a string according to the rules described in systemd.unit(5).
+  # e.g. "My Container 1" becomes "My\x20Container\x201".
+  #
+  # NOTE: this implementation is not fully compliant with systemd.
+  # Many characters which aren't ASCII alphanumerics are incorrectly
+  # passed through unescaped.
+  escapeSystemd = str: let
+    okRegex = builtins.match "[[:alnum:]_:\\./\\ +=\\\\,-]*";
+    checked = traceIf (builtins.isString str && okRegex str == null)
+      "Warning: `escapeSystemd` could not properly escape \"${str}\"" str;
+    res = replaceStrings
+      [ "/"     " "     "+"     "="     "\\"   ","    "-"     ]
+      [ "-"     "\\x20" "\\x2b" "\\x3d" "\x5c" "\x2c" "\\x2d" ]
+      checked;
+   in
+     if substring 0 1 res == "."
+     then "\\x2e" + substring 1 (stringLength res) res
+     else res;
 
   # Quotes an argument for use in Exec* service lines.
   # systemd accepts "-quoted strings with escape sequences, toJSON produces
