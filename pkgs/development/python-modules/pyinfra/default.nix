@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.0.2";
+  version = "2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AW2pOyLqyugTSM7PE4oR9ZwD1liNpdD636QA3ElafG0=";
+    sha256 = "sha256-lbX1KzWv2T2p7HlxSw9eBIWOO2QJ4rzTU1Tyyhwp5Yk=";
   };
 
   propagatedBuildInputs = [
