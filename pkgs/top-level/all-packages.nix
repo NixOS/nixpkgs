@@ -4711,6 +4711,8 @@ with pkgs;
 
   usbview = callPackage ../tools/misc/usbview { };
 
+  usbimager = callPackage ../tools/misc/usbimager { };
+
   uwuify = callPackage ../tools/misc/uwuify { };
 
   anthy = callPackage ../tools/inputmethods/anthy { };
