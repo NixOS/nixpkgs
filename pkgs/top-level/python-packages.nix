@@ -9668,6 +9668,8 @@ in {
 
   spinners = callPackage ../development/python-modules/spinners { };
 
+  sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
+
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
 
   sphinxcontrib-apidoc = callPackage ../development/python-modules/sphinxcontrib-apidoc { };
