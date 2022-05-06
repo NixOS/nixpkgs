@@ -175,6 +175,8 @@ stdenv.mkDerivation rec {
     pythonEnv
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=overlength-strings";
+
   mesonFlags = [
     "-Dgtk_doc=true"
   ];

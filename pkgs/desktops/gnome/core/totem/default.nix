@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=overlength-strings";
+
   mesonFlags = [
     # TODO: https://github.com/NixOS/nixpkgs/issues/36468
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
