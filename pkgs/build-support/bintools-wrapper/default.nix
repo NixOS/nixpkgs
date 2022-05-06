@@ -385,6 +385,24 @@ stdenv.mkDerivation {
     )
 
     ##
+    ## Set the default machine type so that $prefix-ld.lld uses the COFF driver for --help
+    ##
+    ## Needed because autotools parses --help for linker features...
+    ##
+    + optionalString (isLld && stdenv.targetPlatform.isWindows) (let
+      mtype =
+        /**/ if targetPlatform.isx86_32 then "i386pe"
+        else if targetPlatform.isx86_64 then "i386pep"
+        else if targetPlatform.isAarch32 then "thumb2pe"
+        else if targetPlatform.isAarch64 then "arm64pe"
+        else throw "unsupported target arch for lld";
+    in ''
+      export mtype=${mtype}
+      substituteAll ${./add-lld-ldflags-before.sh} add-local-ldflags-before.sh
+      cat add-local-ldflags-before.sh >> $out/nix-support/add-local-ldflags-before.sh
+    '')
+
+    ##
     ## Code signing on Apple Silicon
     ##
     + optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
