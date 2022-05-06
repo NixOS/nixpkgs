@@ -37,9 +37,6 @@ stdenv.mkDerivation rec {
     longDescription = ''
       The Infinite Noise TRNG is a USB key hardware true random number generator.
       It can either provide rng for userland applications, or provide rng for the OS entropy.
-      Add the following to your system configuration for plug and play support, adding to the OS entropy:
-      systemd.packages = [ pkgs.infnoise ];
-      services.udev.packages = [ pkgs.infnoise ];
     '';
     license = licenses.cc0;
     maintainers = with maintainers; [ StijnDW zhaofengli ];

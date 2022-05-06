@@ -40,12 +40,19 @@
   </section>
   <section xml:id="sec-release-22.11-new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
           Nix based app VMs. Available as
           <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
+          a hardware True Random Number Generator dongle. Available as
+          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
         </para>
       </listitem>
     </itemizedlist>
