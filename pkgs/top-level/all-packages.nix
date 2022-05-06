@@ -8336,6 +8336,7 @@ with pkgs;
   pandoc-eqnos = python3Packages.callPackage ../tools/misc/pandoc-eqnos { };
   pandoc-fignos = python3Packages.callPackage ../tools/misc/pandoc-fignos { };
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
+  pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
   patray = callPackage ../tools/audio/patray { };
 
