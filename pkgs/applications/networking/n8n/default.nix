@@ -1,4 +1,4 @@
-{ pkgs, nodejs-16_x, stdenv, lib }:
+{ pkgs, nodejs-16_x, stdenv, lib, nixosTests }:
 
 let
   nodePackages = import ./node-composition.nix {
@@ -18,7 +18,10 @@ nodePackages.n8n.override {
     ln -s $out/lib/node_modules/n8n/bin/n8n $out/bin/n8n
   '';
 
-  passthru.updateScript = ./generate-dependencies.sh;
+  passthru = {
+    updateScript = ./generate-dependencies.sh;
+    tests = nixosTests.n8n;
+  };
 
   meta = with lib; {
     description = "Free and open fair-code licensed node based Workflow Automation Tool";
