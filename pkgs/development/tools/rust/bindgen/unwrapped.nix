@@ -46,7 +46,8 @@ in rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
-    platforms = platforms.unix;
     maintainers = with maintainers; [ johntitor ralith ];
+    mainProgram = "bindgen";
+    platforms = platforms.unix;
   };
 }

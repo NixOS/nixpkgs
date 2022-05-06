@@ -45,6 +45,7 @@ let
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ joko peterhoeg andrew-d ];
+        mainProgram = target;
         platforms = platforms.unix;
       };
     };

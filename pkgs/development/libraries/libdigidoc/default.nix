@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     description = "Library for creating DigiDoc signature files";
     homepage = "https://github.com/open-eid/libdigidoc";
     license = licenses.lgpl2;
-    platforms = platforms.unix;
     maintainers = [ maintainers.jagajaga ];
+    mainProgram = "cdigidoc";
+    platforms = platforms.unix;
   };
 }

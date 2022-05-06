@@ -31,10 +31,11 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An entity framework for Go";
+    homepage = "https://entgo.io/";
     downloadPage = "https://github.com/ent/ent";
     license = licenses.asl20;
-    homepage = "https://entgo.io/";
     maintainers = with maintainers; [ superherointj ];
+    mainProgram = "ent";
   };
 }
 

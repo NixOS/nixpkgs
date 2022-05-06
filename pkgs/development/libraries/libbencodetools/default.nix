@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/heikkiorsila/bencodetools";
     license = licenses.bsd2;
     maintainers = with maintainers; [ OPNA2608 ];
+    mainProgram = "bencat";
     platforms = platforms.unix;
   };
 }

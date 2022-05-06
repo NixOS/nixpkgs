@@ -38,9 +38,10 @@ stdenv.mkDerivation rec {
       access serialized data without unpacking/parsing it first, while still
       having great forwards/backwards compatibility.
     '';
-    maintainers = [ maintainers.teh ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
     homepage = "https://google.github.io/flatbuffers/";
+    license = licenses.asl20;
+    maintainers = [ maintainers.teh ];
+    mainProgram = "flatc";
+    platforms = platforms.unix;
   };
 }

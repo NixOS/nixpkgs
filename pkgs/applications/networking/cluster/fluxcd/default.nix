@@ -66,5 +66,6 @@ in buildGoModule rec {
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ bryanasdev000 jlesquembre superherointj ];
+    mainProgram = "flux";
   };
 }

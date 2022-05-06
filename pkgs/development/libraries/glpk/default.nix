@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     maintainers = with maintainers; [ bjg ] ++ teams.sage.members;
+    mainProgram = "glpsol";
     platforms = platforms.all;
   };
 }

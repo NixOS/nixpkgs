@@ -146,6 +146,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
+    mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
 }
