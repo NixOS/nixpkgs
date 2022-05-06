@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation {
   pname = "uhk-udev-rules";
-  version = uhk-agent.meta.version;
+  inherit (uhk-agent)version;
+
   dontUnpack = true;
   dontBuild = true;
   installPhase = ''
