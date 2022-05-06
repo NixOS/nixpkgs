@@ -16566,6 +16566,8 @@ with pkgs;
     aspell = aspell.override { searchNixProfiles = false; };
   };
 
+  atl = callPackage ../development/libraries/atl { };
+
   attr = callPackage ../development/libraries/attr { };
 
   at-spi2-core = callPackage ../development/libraries/at-spi2-core { };
