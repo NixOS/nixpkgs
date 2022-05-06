@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , django
-, memcached
+, python-memcached
 , txamqp
 , django_tagging
 , gunicorn
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    memcached
+    python-memcached
     txamqp
     django_tagging
     gunicorn
