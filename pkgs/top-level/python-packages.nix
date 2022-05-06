@@ -8763,6 +8763,8 @@ in {
 
   qnap-qsw = callPackage ../development/python-modules/qnap-qsw{ };
 
+  qnapstats = callPackage ../development/python-modules/qnapstats { };
+
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
@@ -8774,6 +8776,8 @@ in {
   };
 
   qscintilla = self.qscintilla-qt5;
+
+  qstylizer = callPackage ../development/python-modules/qstylizer { };
 
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 

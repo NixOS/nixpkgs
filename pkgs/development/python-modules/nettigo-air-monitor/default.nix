@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gHgFEDUji43vTBZp5FLK90H+D44sfH2AuCc7Gu2T1pg=";
+    sha256 = "sha256-aCDw3JwX8LVrJp3jYvuYQ3ycRHjSnWU0n1LdTjV08VA=";
   };
 
   propagatedBuildInputs = [

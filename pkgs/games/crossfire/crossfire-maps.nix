@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "crossfire-maps";
-  version = "r${toString rev}";
+  version = rev;
 
   src = fetchsvn {
     url = "http://svn.code.sf.net/p/crossfire/code/maps/trunk/";
-    sha256 = sha256;
-    rev = rev;
+    inherit sha256;
+    rev = "r${rev}";
   };
 
   installPhase = ''

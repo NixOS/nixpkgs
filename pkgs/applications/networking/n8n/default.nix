@@ -1,9 +1,8 @@
-{ pkgs, nodejs-14_x, stdenv, lib }:
+{ pkgs, nodejs-16_x, stdenv, lib }:
 
 let
   nodePackages = import ./node-composition.nix {
     inherit pkgs;
-    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
 in
@@ -11,6 +10,13 @@ nodePackages.n8n.override {
   nativeBuildInputs = with pkgs.nodePackages; [
     node-pre-gyp
   ];
+
+  dontNpmInstall = true;
+
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/lib/node_modules/n8n/bin/n8n $out/bin/n8n
+  '';
 
   passthru.updateScript = ./generate-dependencies.sh;
 

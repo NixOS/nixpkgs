@@ -455,6 +455,12 @@
           <link xlink:href="options.html#opt-services.nifi.enable">services.nifi</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://kanidm.github.io/kanidm/stable/">kanidm</link>,
+          an identity management server written in Rust.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
