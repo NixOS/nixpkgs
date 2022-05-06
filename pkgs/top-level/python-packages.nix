@@ -5741,6 +5741,8 @@ in {
 
   notifications-python-client = callPackage ../development/python-modules/notifications-python-client { };
 
+  notify-events = callPackage ../development/python-modules/notify-events { };
+
   notify-py = callPackage ../development/python-modules/notify-py { };
 
   notify2 = callPackage ../development/python-modules/notify2 { };

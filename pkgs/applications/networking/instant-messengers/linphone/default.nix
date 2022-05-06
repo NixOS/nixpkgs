@@ -1,51 +1,18 @@
-{ bcg729
-, bctoolbox
-, bcunit
+{ bctoolbox
 , belcard
 , belle-sip
 , belr
-, bzrtp
-, cairo
 , cmake
-, cyrus_sasl
 , fetchFromGitLab
-, fetchurl
-, ffmpeg
-, gdk-pixbuf
-, glib
-, graphviz
-, gtk2
-, intltool
 , lib
-, libexosip
 , liblinphone
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, makeWrapper
-, mbedtls
 , mediastreamer
 , mediastreamer-openh264
 , minizip2
 , mkDerivation
-, openldap
-, ortp
-, pango
-, pkg-config
-, qtbase
 , qtgraphicaleffects
 , qtquickcontrols2
 , qttranslations
-, readline
-, speex
-, sqlite
-
-, udev
-, zlib
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -95,57 +62,22 @@ mkDerivation rec {
   # linphone-desktop.
   buildInputs = [
     # Made by BC
-    bcg729
     bctoolbox
     belcard
     belle-sip
     belr
-    bzrtp
     liblinphone
     mediastreamer
     mediastreamer-openh264
-    ortp
 
-    # Vendored by BC but we use upstream, might cause problems
-    libmatroska
-
-    cairo
-    cyrus_sasl
-    ffmpeg
-    gdk-pixbuf
-    glib
-    gtk2
-    libX11
-    libexosip
-    libnotify
-    libosip
-    libsoup
-    libupnp
-    libxml2
-    mbedtls
     minizip2
-    openldap
-    pango
-    qtbase
     qtgraphicaleffects
     qtquickcontrols2
     qttranslations
-    readline
-    speex
-    sqlite
-    udev
-    zlib
   ];
 
   nativeBuildInputs = [
-    # Made by BC
-    bcunit
-
     cmake
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
   ];
 
   cmakeFlags = [

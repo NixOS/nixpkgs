@@ -37,10 +37,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   meta = with lib; {
-    homepage = "https://www.gnu.org/software/make/";
     description = "A tool to control the generation of non-source files from sources";
-    license = licenses.gpl3Plus;
-
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -51,8 +48,11 @@ stdenv.mkDerivation rec {
       should write a makefile for it, so that it is possible to use Make
       to build and install the program.
     '';
+    homepage = "https://www.gnu.org/software/make/";
 
-    platforms = platforms.all;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.vrthra ];
+    mainProgram = "make";
+    platforms = platforms.all;
   };
 }

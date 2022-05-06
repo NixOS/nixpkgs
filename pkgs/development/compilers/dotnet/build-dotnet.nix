@@ -87,10 +87,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://dotnet.github.io/";
     description = builtins.getAttr type descriptions;
-    platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ kuznero ];
+    homepage = "https://dotnet.github.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ kuznero ];
+    mainProgram = "dotnet";
+    platforms = builtins.attrNames srcs;
   };
 }

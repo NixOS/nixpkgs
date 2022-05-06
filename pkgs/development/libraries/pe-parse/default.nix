@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     description = "A principled, lightweight parser for Windows portable executable files";
     homepage = "https://github.com/trailofbits/pe-parse";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
+    mainProgram = "dump-pe";
+    platforms = platforms.unix;
   };
 }

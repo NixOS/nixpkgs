@@ -54,19 +54,19 @@ stdenv.mkDerivation rec {
   # https://github.com/intel/intel-graphics-compiler/issues/98
   doCheck = false;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./external/SPIRV-Tools/CMakeLists.txt \
-            --replace '$'''{SPIRV-Tools_DIR}../../..' \
-                      '${spirv-tools}' \
-            --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
-                      'SPIRV-Headers_INCLUDE_DIR "${spirv-headers}/include"' \
-            --replace 'set_target_properties(SPIRV-Tools' \
-                      'set_target_properties(SPIRV-Tools-shared' \
-            --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
-                      'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
-          substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
-            --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
-            --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
+      --replace '$'''{SPIRV-Tools_DIR}../../..' \
+                '${spirv-tools}' \
+      --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
+                'SPIRV-Headers_INCLUDE_DIR "${spirv-headers}/include"' \
+      --replace 'set_target_properties(SPIRV-Tools' \
+                'set_target_properties(SPIRV-Tools-shared' \
+      --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \
+                'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools-shared'
+    substituteInPlace ./IGC/AdaptorOCL/igc-opencl.pc.in \
+      --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
+      --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
   '';
 
   # Handholding the braindead build script
@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
     "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
-    "-DINSTALL_SPIRVDLL=0"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
     "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"

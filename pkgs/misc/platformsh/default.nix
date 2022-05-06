@@ -42,9 +42,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "The unified tool for managing your Platform.sh services from the command line.";
-    license = licenses.mit;
     homepage = "https://github.com/platformsh/platformsh-cli";
+    license = licenses.mit;
     maintainers = with maintainers; [ shyim ];
+    mainProgram = "platform";
     platforms = platforms.all;
   };
 }

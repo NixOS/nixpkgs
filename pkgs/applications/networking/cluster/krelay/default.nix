@@ -27,5 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/knight42/krelay/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ivankovnatsky ];
+    mainProgram = "kubectl-relay";
   };
 }
