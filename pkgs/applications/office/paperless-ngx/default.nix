@@ -106,7 +106,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     python-dotenv
     python-gnupg
     python-Levenshtein
-    python_magic
+    python-magic
     pytz
     pyyaml
     redis
