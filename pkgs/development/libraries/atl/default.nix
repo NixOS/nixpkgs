@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "kbFyO4nl8v4vW8pmbdfrXWHbw7ZYhaXj46svhGU8LYg=";
   };
 
+  nativeBuildInputs = [
+    cmake
+  ];
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
 
