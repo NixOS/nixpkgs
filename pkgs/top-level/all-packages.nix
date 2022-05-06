@@ -20499,6 +20499,8 @@ with pkgs;
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
+  seacas-exodus = callPackage ../development/libraries/seacas-exodus { };
+
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
 
   seasocks = callPackage ../development/libraries/seasocks { };
