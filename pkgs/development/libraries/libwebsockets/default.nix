@@ -32,12 +32,11 @@ let
       "-DLWS_WITH_PLUGINS=ON"
       "-DLWS_WITH_IPV6=ON"
       "-DLWS_WITH_SOCKS5=ON"
+      "-DDISABLE_WERROR=ON"
       # Required since v4.2.0
       "-DLWS_BUILD_HASH=no_hash"
     ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
       ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
-
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
     postInstall = ''
       rm -r ${placeholder "out"}/share/libwebsockets-test-server
@@ -63,21 +62,6 @@ let
   };
 
 in {
-  libwebsockets_3_1 = generic {
-    sha256 = "1w1wz6snf3cmcpa3f4dci2nz9za2f5rrylxl109id7bcb36xhbdl";
-    version = "3.1.0";
-  };
-
-  libwebsockets_3_2 = generic {
-    version = "3.2.2";
-    sha256 = "0m1kn4p167jv63zvwhsvmdn8azx3q7fkk8qc0fclwyps2scz6dna";
-  };
-
-  libwebsockets_4_2 = generic {
-    version = "4.2.1";
-    sha256 = "sha256-C+WGfNF4tAgbp/7aRraBgjNOe4I5ihm+8CGelXzfxbU=";
-  };
-
   libwebsockets_4_3 = generic {
     version = "4.3.1";
     sha256 = "sha256-lB3JHh058cQc5rycLnHk3JAOgtku0nRCixN5U6lPKq8=";

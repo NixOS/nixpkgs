@@ -28,6 +28,8 @@ in stdenv.mkDerivation rec {
 
   pname = "rocm-llvm";
 
+  sourceRoot = "${src.name}/llvm";
+
   outputs = [ "out" "python" ]
     ++ lib.optional enableSharedLibraries "lib";
 

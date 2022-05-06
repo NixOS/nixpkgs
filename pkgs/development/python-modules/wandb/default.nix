@@ -12,7 +12,7 @@
 , jsonref
 , jsonschema
 , matplotlib
-, nbconvert
+, nbclient
 , nbformat
 , pandas
 , pathtools
@@ -88,9 +88,7 @@ buildPythonPackage rec {
     jsonref
     jsonschema
     matplotlib
-    # Oddly enough, nbclient does not provide the `nbclient` module. Rather it's
-    # available in nbconvert. See https://github.com/NixOS/nixpkgs/issues/171493#issuecomment-1116960488.
-    nbconvert
+    nbclient
     nbformat
     pandas
     pydantic

@@ -2091,7 +2091,8 @@
       georss-qld-bushfire-alert-client
     ];
     "qnap" = ps: with ps; [
-    ]; # missing inputs: qnapstats
+      qnapstats
+    ];
     "qnap_qsw" = ps: with ps; [
       aioqsw
     ];
