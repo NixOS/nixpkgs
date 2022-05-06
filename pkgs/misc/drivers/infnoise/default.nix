@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libftdi
+{ lib, stdenv, fetchFromGitHub, fetchpatch, libftdi
 , infnoise, testers }:
 
 stdenv.mkDerivation rec {
@@ -12,18 +12,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9MKG1InkV+yrQPBTgi2gZJ3y9Fokb6WbxuAnM7n7FyA=";
   };
 
-  # Patch makefile so we can set defines from the command line instead of it depending on .git
-  patches = [ ./makefile.patch ];
+  patches = [
+    # Patch makefile so we can set defines from the command line instead of it depending on .git
+    ./makefile.patch
+
+    # Fix getc return type
+    (fetchpatch {
+      url = "https://github.com/leetronics/infnoise/commit/7ed7014e14253311c07e530c8f89f1c8f4705c2b.patch";
+      sha256 = "sha256-seB/fJaxQ/rXJp5iPtnobXXOccQ2KUAk6HFx31dhOhs=";
+    })
+  ];
+
   GIT_COMMIT = src.rev;
   GIT_VERSION = version;
   GIT_DATE = "2019-08-12";
 
   buildInputs = [ libftdi ];
 
-  sourceRoot = "source/software";
   makefile = "Makefile.linux";
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''
+    cd software
     substituteInPlace init_scripts/infnoise.service --replace "/usr/local" "$out"
   '';
 
