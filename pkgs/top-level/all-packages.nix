@@ -24451,6 +24451,8 @@ with pkgs;
 
   linux-manual = callPackage ../data/documentation/linux-manual { };
 
+  lklug-sinhala = callPackage ../data/fonts/lklug-sinhala {};
+
   lmmath = callPackage ../data/fonts/lmmath {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
