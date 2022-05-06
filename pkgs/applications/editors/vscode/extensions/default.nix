@@ -79,6 +79,18 @@ let
         };
       };
 
+      alefragnani.bookmarks = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "bookmarks";
+          publisher = "alefragnani";
+          version = "13.0.1";
+          sha256 = "sha256-4IZCPNk7uBqPw/FKT5ypU2QxadQzYfwbGxxT/bUnKdE=";
+        };
+        meta = {
+          license = lib.licenses.gpl3;
+        };
+      };
+
       alefragnani.project-manager = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "project-manager";
