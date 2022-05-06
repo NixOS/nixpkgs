@@ -24756,6 +24756,8 @@ with pkgs;
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
+  sil-padauk = callPackage ../data/fonts/sil-padauk { };
+
   snap7 = callPackage ../development/libraries/snap7 {};
 
   snowblind = callPackage ../data/themes/snowblind { };
