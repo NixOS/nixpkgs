@@ -9291,6 +9291,8 @@ in {
 
   scs = callPackage ../development/python-modules/scs { };
 
+  sdds = callPackage ../development/python-modules/sdds { };
+
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
   seaborn = callPackage ../development/python-modules/seaborn { };
