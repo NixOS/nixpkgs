@@ -8,14 +8,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-RcqqNNNCR4cxETUCyjChkpq+cQ1QzNOHHzdqBLtOc6g=";
+    sha256 = "sha256-x8j/2Eot/EEHsedgZntB5MPxlYMNDlFyZtmiMdhcS7U=";
   };
 
   preFixup = if (cookieFile != null) then ''
