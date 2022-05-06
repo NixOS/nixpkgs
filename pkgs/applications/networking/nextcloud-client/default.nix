@@ -6,6 +6,7 @@
 , inotify-tools
 , installShellFiles
 , libcloudproviders
+, librsvg
 , libsecret
 , openssl
 , pcre
@@ -20,7 +21,6 @@
 , plasma5Packages
 , sphinx
 , sqlite
-, inkscape
 , xdg-utils
 }:
 
@@ -54,7 +54,7 @@ mkDerivation rec {
     pkg-config
     cmake
     extra-cmake-modules
-    inkscape
+    librsvg
     sphinx
   ];
 
