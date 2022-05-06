@@ -17076,6 +17076,8 @@ with pkgs;
 
   eventlog = callPackage ../development/libraries/eventlog { };
 
+  evpath = callPackage ../development/libraries/evpath { };
+
   faac = callPackage ../development/libraries/faac { };
 
   faad2 = callPackage ../development/libraries/faad2 { };
