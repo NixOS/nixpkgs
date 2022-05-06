@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; linux ++ darwin ++ windows;
+    platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
