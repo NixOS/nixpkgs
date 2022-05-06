@@ -19055,6 +19055,21 @@ let
     };
   };
 
+  ReadonlyX = buildPerlModule {
+    pname = "ReadonlyX";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SANKO/ReadonlyX-1.04.tar.gz";
+      sha256 = "81bb97dba93ac6b5ccbce04a42c3590eb04557d75018773ee18d5a30fcf48188";
+    };
+    buildInputs = [ ModuleBuildTiny TestFatal ];
+    meta = {
+      homepage = "https://github.com/sanko/readonly";
+      description = "Faster facility for creating read-only scalars, arrays, hashes";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   ReadonlyXS = buildPerlPackage {
     pname = "Readonly-XS";
     version = "1.05";

@@ -2,15 +2,18 @@
 
 {
   hydra-unstable = callPackage ./common.nix {
-    version = "2021-08-11";
+    version = "2021-12-17";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "hydra";
-      rev = "9bce425c3304173548d8e822029644bb51d35263";
-      sha256 = "sha256-tGzwKNW/odtAYcazWA9bPVSmVXMGKfXsqCA1UYaaxmU=";
+      rev = "e1e5fafdff63c1e1595d2edb8c9854710211a0d7";
+      sha256 = "sha256-JPkw3heasqX9iWju7BWjKDsyoS+HmLIKM2ibwHq5+Ko=";
     };
-    patches = [ ./eval.patch ];
-    nix = nixVersions.unstable;
+    patches = [
+      ./eval.patch
+      ./missing-std-string.patch
+    ];
+    nix = nixVersions.nix_2_4;
 
     tests = {
       basic = nixosTests.hydra.hydra-unstable;
