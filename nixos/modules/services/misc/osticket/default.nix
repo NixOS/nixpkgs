@@ -138,7 +138,7 @@ in
         };
 
         # Provide php for patch-shebangs
-        buildInputs = [ myPhp fakeGit ];
+        nativeBuildInputs = [ myPhp fakeGit ];
 
         patchPhase = ''
           # Patch the location of the config file and the version
