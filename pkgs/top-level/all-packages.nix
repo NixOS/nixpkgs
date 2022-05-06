@@ -11018,6 +11018,8 @@ with pkgs;
 
   trousers = callPackage ../tools/security/trousers { };
 
+  trueseeing = callPackage ../tools/security/trueseeing { };
+
   trx = callPackage ../tools/audio/trx { };
 
   tryton = callPackage ../applications/office/tryton { };
