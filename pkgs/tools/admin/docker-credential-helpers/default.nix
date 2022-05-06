@@ -45,5 +45,7 @@ buildGoPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.linux ++ platforms.darwin;
+  } // lib.optionalAttrs stdenv.isDarwin {
+    mainProgram = "docker-credential-osxkeychain";
   };
 }
