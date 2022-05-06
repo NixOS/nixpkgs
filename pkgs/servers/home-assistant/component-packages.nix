@@ -311,7 +311,8 @@
     "browser" = ps: with ps; [
     ];
     "brunt" = ps: with ps; [
-    ]; # missing inputs: brunt
+      brunt
+    ];
     "bsblan" = ps: with ps; [
       bsblan
     ];
@@ -3218,6 +3219,7 @@
     "braviatv"
     "broadlink"
     "brother"
+    "brunt"
     "bsblan"
     "buienradar"
     "button"
