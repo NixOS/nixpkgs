@@ -9,6 +9,8 @@
 , foreman
 , python3
 , libressl
+, cacert
+, glibcLocales
 }:
 
 with stdenv;
@@ -22,19 +24,19 @@ let
     name = "hydra-perl-deps";
     paths = with perlPackages; lib.closePropagation
       [ ModulePluggable
+        AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
+        CatalystAuthenticationStoreLDAP
         CatalystDevel
-        CatalystDispatchTypeRegex
         CatalystPluginAccessLog
         CatalystPluginAuthorizationRoles
         CatalystPluginCaptcha
         CatalystPluginPrometheusTiny
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
-        CatalystPluginSmartURI
         CatalystPluginStackTrace
-        CatalystRuntime
+        CatalystPluginUnicodeEncoding
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -52,8 +54,10 @@ let
         EmailMIME
         EmailSender
         FileSlurper
+        FileWhich
         IOCompress
         IPCRun
+        IPCRun3
         JSON
         JSONMaybeXS
         JSONXS
@@ -75,16 +79,18 @@ let
         StringCompareConstantTime
         SysHostnameLong
         TermSizeAny
+        TermReadKey
         Test2Harness
+        TestMore
         TestPostgreSQL
         TextDiff
         TextTable
+        UUID4Tiny
         XMLSimple
         YAML
         nix
         nix.perl-bindings
         git
-        boehmgc
       ];
   };
 in stdenv.mkDerivation rec {
@@ -110,7 +116,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config mdbook autoconf automake ];
 
   checkInputs = [
+    cacert
     foreman
+    glibcLocales
     python3
     libressl.nc
   ];
