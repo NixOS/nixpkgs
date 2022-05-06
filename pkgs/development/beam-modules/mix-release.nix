@@ -95,12 +95,8 @@ stdenv.mkDerivation (overridable // {
     if [ -e "$out/bin/${pname}.bat" ]; then # absent in special cases, i.e. elixir-ls
       rm "$out/bin/${pname}.bat" # windows file
     fi
-    # contains secrets and should not be in the nix store
-    # TODO document how to handle RELEASE_COOKIE
-    # secrets should not be in the nix store.
-    # This is only used for connecting multiple nodes
     if [ -e $out/releases/COOKIE ]; then # absent in special cases, i.e. elixir-ls
-      rm $out/releases/COOKIE
+      echo "NIXOS-$pname-$version" > $out/releases/COOKIE
     fi
     # removing unused erlang reference from resulting derivation to reduce
     # closure size
