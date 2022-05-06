@@ -30,8 +30,7 @@ let
       };
     };
 
-    aws-azure-login = super.aws-azure-login.override {
-      meta.platforms = pkgs.lib.platforms.linux;
+    aws-azure-login = super.aws-azure-login.override (oldAttrs: {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
         export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
@@ -40,11 +39,12 @@ let
         wrapProgram $out/bin/aws-azure-login \
             --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
       '';
-    };
+      meta = oldAttrs.meta // { platforms = pkgs.lib.platforms.linux; };
+    });
 
-    bitwarden-cli = super."@bitwarden/cli".override (drv: {
-      name = "bitwarden-cli-${drv.version}";
-      meta.mainProgram = "bw";
+    bitwarden-cli = super."@bitwarden/cli".override (oldAttrs: {
+      name = "bitwarden-cli";
+      meta = oldAttrs.meta // { mainProgram = "bw"; };
     });
 
     bower2nix = super.bower2nix.override {
@@ -67,39 +67,35 @@ let
       '';
     };
 
-    coc-imselect = super.coc-imselect.override {
-      meta.broken = since "10";
-    };
+    coc-imselect = super.coc-imselect.override (oldAttrs: {
+      meta = oldAttrs.meta // { broken = since "10"; };
+    });
 
-    dat = super.dat.override {
+    dat = super.dat.override (oldAttrs: {
       buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-      meta.broken = since "12";
-    };
+      meta = oldAttrs.meta // { broken = since "12"; };
+    });
 
-    deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
-      meta.broken = true; # use the top-level package instead
-    };
+    deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override (oldAttrs: {
+      meta = oldAttrs.meta // { broken = true; }; # use the top-level package instead
+    });
 
     # NOTE: this is a stub package to fetch npm dependencies for
     # ../../applications/video/epgstation
-    epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
+    epgstation = super."epgstation-../../applications/video/epgstation".override (oldAttrs: {
       buildInputs = [ self.node-pre-gyp self.node-gyp-build ];
-      meta = drv.meta // {
-        platforms = pkgs.lib.platforms.none;
-      };
+      meta = oldAttrs.meta // { platforms = pkgs.lib.platforms.none; };
     });
 
     # NOTE: this is a stub package to fetch npm dependencies for
     # ../../applications/video/epgstation/client
-    epgstation-client = super."epgstation-client-../../applications/video/epgstation/client".override (drv: {
-      meta = drv.meta // {
-        platforms = pkgs.lib.platforms.none;
-      };
+    epgstation-client = super."epgstation-client-../../applications/video/epgstation/client".override (oldAttrs: {
+      meta = oldAttrs.meta // { platforms = pkgs.lib.platforms.none; };
     });
 
-    expo-cli = super."expo-cli".override (attrs: {
+    expo-cli = super."expo-cli".override (oldAttrs: {
       # The traveling-fastlane-darwin optional dependency aborts build on Linux.
-      dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
+      dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
     });
 
     fast-cli = super.fast-cli.override {
@@ -113,15 +109,15 @@ let
       '';
     };
 
-    flood = super.flood.override {
+    flood = super.flood.override (oldAttrs: {
       buildInputs = [ self.node-pre-gyp ];
-      meta.mainProgram = "flood";
-    };
+      meta = oldAttrs.meta // { mainProgram = "flood"; };
+    });
 
-    git-ssb = super.git-ssb.override {
+    git-ssb = super.git-ssb.override (oldAttrs: {
       buildInputs = [ self.node-gyp-build ];
-      meta.broken = since "10";
-    };
+      meta = oldAttrs.meta // { broken = since "10"; };
+    });
 
     hsd = super.hsd.override {
       buildInputs = [ self.node-gyp-build pkgs.unbound ];
@@ -152,13 +148,13 @@ let
       buildInputs = oldAttrs.buildInputs ++ [ self.node-gyp-build pkgs.zeromq ];
     });
 
-    insect = super.insect.override (drv: {
-      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
+    insect = super.insect.override (oldAttrs: {
+      nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
-    intelephense = super.intelephense.override {
-      meta.license = pkgs.lib.licenses.unfree;
-    };
+    intelephense = super.intelephense.override (oldAttrs: {
+      meta = oldAttrs.meta // { license = pkgs.lib.licenses.unfree; };
+    });
 
     joplin = super.joplin.override {
       nativeBuildInputs = [ pkgs.pkg-config ];
@@ -176,7 +172,7 @@ let
       ];
     };
 
-    jsonplaceholder = super.jsonplaceholder.override (drv: {
+    jsonplaceholder = super.jsonplaceholder.override {
       buildInputs = [ nodejs ];
       postInstall = ''
         exe=$out/bin/jsonplaceholder
@@ -187,7 +183,7 @@ let
         EOF
         chmod a+x $exe
       '';
-    });
+    };
 
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
@@ -214,9 +210,9 @@ let
       '';
     };
 
-    markdownlint-cli = super.markdownlint-cli.override {
-      meta.mainProgram = "markdownlint";
-    };
+    markdownlint-cli = super.markdownlint-cli.override (oldAttrs: {
+      meta = oldAttrs.meta // { mainProgram = "markdownlint"; };
+    });
 
     mdctl-cli = super."@medable/mdctl-cli".override {
       nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
@@ -267,10 +263,10 @@ let
       '';
     };
 
-    node-inspector = super.node-inspector.override {
+    node-inspector = super.node-inspector.override (oldAttrs: {
       buildInputs = [ self.node-pre-gyp ];
-      meta.broken = since "10";
-    };
+      meta = oldAttrs.meta // { broken = since "10"; };
+    });
 
     node-red = super.node-red.override {
       buildInputs = [ self.node-pre-gyp ];
@@ -317,7 +313,7 @@ let
       '';
     };
 
-    postcss-cli = super.postcss-cli.override {
+    postcss-cli = super.postcss-cli.override (oldAttrs: {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/postcss" \
@@ -330,11 +326,11 @@ let
           inherit (self) postcss-cli;
         };
       };
-      meta = {
+      meta = oldAttrs.meta // {
         mainProgram = "postcss";
         maintainers = with lib.maintainers; [ Luflosi ];
       };
-    };
+    });
 
     # To update prisma, please first update prisma-engines to the latest
     # version. Then change the correct hash to this package. The PR should hold
@@ -389,16 +385,16 @@ let
       }
     );
 
-    ssb-server = super.ssb-server.override {
+    ssb-server = super.ssb-server.override (oldAttrs: {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
-      meta.broken = since "10";
-    };
+      meta = oldAttrs.meta // { broken = since "10"; };
+    });
 
-    stf = super.stf.override {
-      meta.broken = since "10";
-    };
+    stf = super.stf.override (oldAttrs: {
+      meta = oldAttrs.meta // { broken = since "10"; };
+    });
 
-    tailwindcss = super.tailwindcss.overrideAttrs (oldAttrs: {
+    tailwindcss = super.tailwindcss.override {
       plugins = [ ];
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -415,7 +411,7 @@ let
       passthru.tests = {
         simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
       };
-    });
+    };
 
     teck-programmer = super.teck-programmer.override {
       nativeBuildInputs = [ self.node-gyp-build ];
@@ -430,15 +426,15 @@ let
       '';
     };
 
-    thelounge = super.thelounge.override {
+    thelounge = super.thelounge.override (oldAttrs: {
       buildInputs = [ self.node-pre-gyp ];
       postInstall = ''
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
         patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
       '';
       passthru.tests = { inherit (nixosTests) thelounge; };
-      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
-    };
+      meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ winter ]; };
+    });
 
     thelounge-plugin-closepms = super.thelounge-plugin-closepms.override {
       nativeBuildInputs = [ self.node-pre-gyp ];
@@ -459,7 +455,7 @@ let
       '';
     };
 
-    ts-node = super.ts-node.overrideAttrs (oldAttrs: {
+    ts-node = super.ts-node.override (oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/ts-node" \
@@ -467,7 +463,7 @@ let
       '';
     });
 
-    tsun = super.tsun.overrideAttrs (oldAttrs: {
+    tsun = super.tsun.override (oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/tsun" \
@@ -475,7 +471,7 @@ let
       '';
     });
 
-    typescript = super.typescript.overrideAttrs (oldAttrs: {
+    typescript = super.typescript.override (oldAttrs: {
       meta = oldAttrs.meta // { mainProgram = "tsc"; };
     });
 
