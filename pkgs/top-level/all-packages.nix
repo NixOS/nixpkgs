@@ -3254,6 +3254,8 @@ with pkgs;
 
   dibbler = callPackage ../tools/networking/dibbler { };
 
+  dieharder = callPackage ../tools/security/dieharder { };
+
   diesel-cli = callPackage ../development/tools/diesel-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
