@@ -17066,6 +17066,8 @@ with pkgs;
 
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
+  exodusII = callPackage ../development/libraries/exodusII { };
+
   expat = callPackage ../development/libraries/expat { };
 
   exprtk = callPackage ../development/libraries/exprtk { };
@@ -20500,8 +20502,6 @@ with pkgs;
   };
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
-
-  seacas-exodus = callPackage ../development/libraries/seacas-exodus { };
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
 

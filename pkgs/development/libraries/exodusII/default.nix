@@ -10,7 +10,7 @@ let
   fortranSupport = false;
 in
 stdenv.mkDerivation rec {
-  pname = "exodus";
+  pname = "exodusII";
   version = "2022-01-27";
 
   src = fetchFromGitHub {
