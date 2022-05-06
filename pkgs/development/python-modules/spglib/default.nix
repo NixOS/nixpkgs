@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "1.16.3";
+  version = "1.16.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff1420967d64c2d4f0d747886116a6836d9b473454cdd73d560dbfe973a8a038";
+    sha256 = "sha256-Lqzv1TzGRLqakMRoH9bJNLa92BjBE9fzGZBOB41dq5M=";
   };
 
   propagatedBuildInputs = [ numpy ];
