@@ -4002,6 +4002,8 @@ in {
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
+  hyrule = callPackage ../development/python-modules/hyrule { };
+
   i2c-tools = callPackage ../development/python-modules/i2c-tools {
     inherit (pkgs) i2c-tools;
   };
