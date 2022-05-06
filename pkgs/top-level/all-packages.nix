@@ -16968,6 +16968,8 @@ with pkgs;
 
   dclib = callPackage ../development/libraries/dclib { };
 
+  dill = callPackage ../development/libraries/dill { };
+
   dillo = callPackage ../applications/networking/browsers/dillo {
     fltk = fltk13;
   };
