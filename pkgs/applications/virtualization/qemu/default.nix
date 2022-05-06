@@ -103,6 +103,11 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
       revert = true;
     })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+      revert = true;
+    })
   ]
     ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
