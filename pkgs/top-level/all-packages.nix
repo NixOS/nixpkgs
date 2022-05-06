@@ -30300,6 +30300,8 @@ with pkgs;
   scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
   scribus = scribus_1_5;
 
+  seafdav = callPackage ../applications/networking/seafdav { };
+
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seahub = callPackage ../applications/networking/seahub { };
