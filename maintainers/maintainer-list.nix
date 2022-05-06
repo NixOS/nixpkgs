@@ -7744,6 +7744,12 @@
     githubId = 1651325;
     name = "Malte Brandy";
   };
+  marcosrdac = {
+    name = "Marcos Conceição";
+    email = "marcosrdac@gmail.com";
+    github = "marcosrdac";
+    githubId = 7348840;
+  };
   marcweber = {
     email = "marco-oweber@gmx.de";
     github = "marcweber";
